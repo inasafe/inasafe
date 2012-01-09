@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riab.ui'
 #
-# Created: Mon Jan  9 17:18:52 2012
+# Created: Mon Jan  9 17:47:58 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -32,6 +32,12 @@ class Ui_Riab(object):
         self.lstLayers = QtGui.QListWidget(self.groupBox_3)
         self.lstLayers.setObjectName(_fromUtf8("lstLayers"))
         self.gridLayout_3.addWidget(self.lstLayers, 0, 0, 1, 1)
+        self.label_4 = QtGui.QLabel(self.groupBox_3)
+        self.label_4.setText(_fromUtf8(""))
+        self.label_4.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/riab/logo.png")))
+        self.label_4.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_4.setObjectName(_fromUtf8("label_4"))
+        self.gridLayout_3.addWidget(self.label_4, 1, 0, 1, 1)
         self.layoutWidget = QtGui.QWidget(self.splitter)
         self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.layoutWidget)
@@ -116,3 +122,4 @@ class Ui_Riab(object):
         pass
 
 from PyQt4 import QtWebKit
+import resources_rc
