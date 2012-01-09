@@ -27,19 +27,6 @@
        <item row="0" column="0">
         <widget class="QListWidget" name="lstLayers"/>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resources.qrc">:/plugins/riab/logo.png</pixmap>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="layoutWidget">
@@ -161,7 +148,7 @@
            <widget class="QWebView" name="wvResults">
             <property name="url">
              <url>
-              <string>qrc:/plugins/riab/home.html</string>
+              <string>about:blank</string>
              </url>
             </property>
            </widget>
@@ -192,9 +179,7 @@
    <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

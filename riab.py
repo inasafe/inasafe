@@ -53,7 +53,7 @@ class Riab:
     def run(self):
 
         # create and show the dialog
-        dlg = RiabDialog(self.iface)
+        dlg = RiabDialog()
         # show the dialog
         dlg.show()
         result = dlg.exec_()
