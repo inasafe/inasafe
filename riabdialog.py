@@ -1,23 +1,24 @@
 """
-/***************************************************************************
- RiabDialog
-                                 A QGIS plugin
- Disaster risk assessment tool developed by AusAid
-                             -------------------
-        begin                : 2012-01-09
-        copyright            : (C) 2012 by Australia Indonesia Facility for
-                                           Disaster Reduction
-        email                : ole.moller.nielsen@gmail.com
- ***************************************************************************/
+ Disaster risk assessment tool developed by AusAid - GUI Dialog.
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+ Contact : ole.moller.nielsen@gmail.com
+"""
+
+__author__ = 'tim@linfiniti.com'
+__version__ = '0.0.1'
+__date__ = '10/01/2011'
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
+
+"""
+***************************************************************************
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************
 """
 
 from PyQt4 import QtCore, QtGui
@@ -31,6 +32,7 @@ if DEBUG:
   
 class RiabDialog(QtGui.QDialog):
     """Dialog implementation class for the Risk In A Box plugin."""
+    
     def __init__(self,iface):
         """Constructor for the dialog.
         
@@ -54,6 +56,18 @@ class RiabDialog(QtGui.QDialog):
         self.getLayers()
        
     def getLayers(self):
+        """Helper function to obtain a list of layers currently loaded in QGIS..
+        
+        On invocation, this method will populate the lstLayers on the dialog with a 
+        list of available layers.
+        
+        Args:
+           None.
+        Returns:
+           None
+        Raises:
+           no
+        """
         for i in range(len(self.iface.mapCanvas().layers())):
             myLayer = self.iface.mapCanvas().layer(i)
             if myLayer.type() == myLayer.VectorLayer and myLayer.isUsingRendererV2():
