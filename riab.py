@@ -21,11 +21,8 @@
 """
 
 # Import the PyQt and QGIS libraries
-# FIXME (Ole): I want to replace the import * form with import <name> to
-# be more explicit about namespaces.
 from PyQt4.QtCore import QObject, SIGNAL
 from PyQt4.QtGui import QAction, QIcon
-from qgis.core import *
 
 # Initialize Qt resources from file resources.py
 import resources
@@ -35,7 +32,7 @@ from riabdialog import RiabDialog
 
 
 class Riab:
-
+    
     def __init__(self, iface):
         # Save reference to the QGIS interface
         self.iface = iface
