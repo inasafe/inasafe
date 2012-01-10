@@ -1,7 +1,13 @@
 """
- Disaster risk assessment tool developed by AusAid - QGIS plugin implementation.
+Disaster risk assessment tool developed by AusAid - **QGIS plugin implementation.**
 
- Contact : ole.moller.nielsen@gmail.com
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or 
+     (at your option) any later version.
+
 """
 
 __author__ = 'tim@linfiniti.com'
@@ -9,17 +15,6 @@ __version__ = '0.0.1'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
-
-"""
-***************************************************************************
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-***************************************************************************
-"""
 
 # Import the PyQt and QGIS libraries
 from PyQt4.QtCore import QObject, SIGNAL
