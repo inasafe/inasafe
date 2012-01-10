@@ -27,6 +27,13 @@
        <item row="0" column="0">
         <widget class="QListWidget" name="lstLayers"/>
        </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblLogo">
+         <property name="text">
+          <string>Logo</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="layoutWidget">
