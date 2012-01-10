@@ -10,3 +10,7 @@ management.
 
 For more information about Risk In a Box please look at
 our documentation on TBA
+
+Contact:
+Ole.Moller.Nielsen@gmail.com
+
