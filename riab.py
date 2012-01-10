@@ -4,9 +4,9 @@
                                  A QGIS plugin
  Disaster risk assessment tool developed by AusAid
                               -------------------
-        begin                : 2012-01-09
-        copyright            : (C) 2012 by Australia Indonesia Facility for Disaster Reduction
-        email                : ole.moller.nielsen@gmail.com
+ begin     : 2012-01-09
+ copyright : (C) 2012 by Australia Indonesia Facility for Disaster Reduction
+ email     : ole.moller.nielsen@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -27,6 +27,7 @@ import resources
 # Import the code for the dialog
 from riabdialog import RiabDialog
 
+
 class Riab:
 
     def __init__(self, iface):
@@ -46,7 +47,7 @@ class Riab:
 
     def unload(self):
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu("&Risk In A Box",self.action)
+        self.iface.removePluginMenu("&Risk In A Box", self.action)
         self.iface.removeToolBarIcon(self.action)
 
     # run method that performs all the real work
