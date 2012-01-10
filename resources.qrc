@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/riab" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>

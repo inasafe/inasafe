@@ -1,0 +1,39 @@
+# This file contains metadata for your plugin. Beginning
+# with version 1.8 this is the preferred way to supply information about a
+# plugin. The current method of embedding metadata in __init__.py will
+# be supported until version 2.0
+
+# This file should be included when you package your plugin.
+
+# Mandatory items:
+
+
+[general]
+name=Risk in a box
+qgisMinimumVersion=1.8
+description=Disaster risk assessment tool developed by AusAid
+version=0.1
+
+# end of mandatory metadata
+
+# Optional items:
+
+ # Uncomment the following line and add your changelog entries:
+# changelog=
+
+# tags are comma separated with spaces allowed
+tags=risk disaster flood
+
+homepage=http://www.aifdr.org/
+tracker=to be defined
+repository=https://github.com/AIFDR/risk_in_a_box
+icon=icon.png
+# experimental flag
+experimental=True
+
+# deprecated flag (applies to the whole plugin, not just a single version
+deprecated=False
+
+# Author contact information
+author=Australia Indonesia Facility for Disaster Reduction
+email=ole.moller.nielsen@gmail.com
