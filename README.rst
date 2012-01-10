@@ -8,3 +8,7 @@ The latest source code is available in https://github.com/AIFDR/risk_in_a_box wh
 
 For more information about Risk In a Box please look at
 our documentation on TBA
+
+Contact:
+Ole.Moller.Nielsen@gmail.com
+
