@@ -2,3 +2,7 @@
 *.*~
 docs/build/doctrees
 pydevpath.txt
+.project
+.pydevproject
+build
+
