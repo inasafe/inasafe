@@ -38,6 +38,13 @@ Place the local repository under `~/.qgis/python/plugins` and then restart QGIS.
 an IDE for development, please refer to `this article <http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/>`_ 
 for detailed information on how you can do so. 
 
+If you wish to debug the plugin, (referring once again to the above article), make a copy 
+of pydevpath.txt.templ to pydevpath.txt e.g.::
+
+  cp pydevpath.txt.templ pydevpath.txt
+
+Then replace the path to your pydevd module as described in the above article.
+
 Contact:
 Ole.Moller.Nielsen@gmail.com
 

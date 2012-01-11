@@ -20,12 +20,29 @@ __copyright__ += 'Disaster Reduction'
 
 from PyQt4 import QtCore, QtGui
 from ui_riab import Ui_Riab
+import os
+
+# Check if a settings.txt file exists in the plugin folder (you
+# need to rename it from settings.txt.templ in the standard plugin
+# distribution) and if it does, read the pydevd path from it and 
+# enable the debug flag to true. Please see:
+# http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/
+# for notes on setting up the debugging environment.
+ROOT = os.path.dirname(__file__)
+PATH = os.path.abspath(os.path.join(ROOT,'pydevpath.txt'))
 DEBUG=False
-if DEBUG:
-    import sys 
-    #todo: softcode this path!
-    sys.path.append("/home/timlinux/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev.debug_2.3.0.2011121518/pysrc/")
-    from pydevd import *
+if os.path.isfile(PATH):
+    try:
+        PYDEVD_PATH = file(PATH,'rt').readline()
+        DEBUG = True
+        import sys 
+        sys.path.append(PYDEVD_PATH)
+        from pydevd import *
+        print 'Debuggin is enabled.'
+        print sys.path
+    except:
+        #fail silently
+        pass 
   
 class RiabDialog(QtGui.QDialog):
     """Dialog implementation class for the Risk In A Box plugin."""
@@ -43,7 +60,8 @@ class RiabDialog(QtGui.QDialog):
         Raises:
            no exceptions explicitly raised
         """
-        settrace()
+        if DEBUG: 
+            settrace()
         QtGui.QDialog.__init__(self)
         # Save reference to the QGIS interface
         self.iface = iface
