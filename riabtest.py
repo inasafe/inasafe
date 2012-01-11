@@ -33,7 +33,7 @@ class RiabTest(unittest.TestCase):
     '''Test the risk in a box plugin stub'''
     
     def setUp(self):
-        '''Create the GUI'''
+        '''Create an app that all tests can use'''
         myGuiFlag = True #we need to enable qgis app in gui mode
         self.app = QgsApplication(sys.argv, True)
         #todo - softcode these paths
@@ -43,16 +43,19 @@ class RiabTest(unittest.TestCase):
 
 
     def tearDown(self):
+        """Tear down - destroy the QGIS app"""
         self.app.exitQgis()
         
   
     def test_load(self):
+        '''Test if we are able to load our plugin'''
         print 'Testing load'
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
         myStub = Riab(myIface)
-        myStub.run()
+        #myStub.run()
+        
 
 if __name__ == "__main__":
     unittest.main()        

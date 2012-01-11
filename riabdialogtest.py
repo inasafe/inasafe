@@ -17,19 +17,33 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import sys
+import sys
+#todo - softcode in a configuration file
+sys.path.append("/usr/local/share/qgis/python/")
 import unittest
-from PyQt4.QtGui import QApplication
+from PyQt4.QtGui import QWidget
 from PyQt4.QtTest import QTest
 from PyQt4.QtCore import Qt
+from qgis.core import QgsApplication
+from qgis.gui import QgsMapCanvas
+from qgisinterface import QgisInterface
 from riabdialog import RiabDialog
 
 class RiabDialogTest(unittest.TestCase):
     '''Test the risk in a box GUI'''
     
     def setUp(self):
-        '''Create the GUI'''
-        self.app = QApplication(sys.argv)
-        self.form = RiabDialog()
+        '''Create an app that all tests can use'''
+        myGuiFlag = True #we need to enable qgis app in gui mode
+        self.app = QgsApplication(sys.argv, True)
+        #todo - softcode these paths
+        self.app.setPrefixPath('/usr/local')
+        self.app.setPluginPath('/usr/local/lib/qgis/providers')
+        self.app.initQgis()
+        self.parent = QWidget()
+        self.canvas = QgsMapCanvas(self.parent)
+        self.iface = QgisInterface(self.canvas)
+        self.form = RiabDialog(self.iface)
 
     def clearForm(self):
         '''Set all form elements to default state'''
