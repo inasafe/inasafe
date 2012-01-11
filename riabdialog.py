@@ -20,7 +20,7 @@ __copyright__ += 'Disaster Reduction'
 
 from PyQt4 import QtCore, QtGui
 from ui_riab import Ui_Riab
-DEBUG=True
+DEBUG=False
 if DEBUG:
     import sys 
     #todo: softcode this path!
