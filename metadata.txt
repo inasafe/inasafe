@@ -10,7 +10,7 @@
 
 [general]
 name=Risk in a box
-qgisMinimumVersion=1.8
+qgisMinimumVersion=1.7
 description=Disaster risk assessment tool developed by AusAid
 version=0.1
 

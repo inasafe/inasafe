@@ -28,7 +28,7 @@ def version():
 def icon():
     return "icon.png"
 def qgisMinimumVersion():
-    return "1.8"
+    return "1.7"
 def classFactory(iface):
     # load Riab class from file Riab
     from riab import Riab
