@@ -21,9 +21,38 @@ import sys
 #todo - softcode in a configuration file
 sys.path.append("/usr/local/share/qgis/python/")
 from qgis.core import QgsApplication
-from qgis.gui import QgisInterface
-from qgis.utils import iface
+from qgis.gui import QgsMapCanvas
+from qgisinterface import QgisInterface
+import unittest
+from PyQt4.QtGui import QApplication, QWidget
+from PyQt4.QtTest import QTest
+from PyQt4.QtCore import Qt
+from riab import Riab
 
-QgsApplication.initQgis()
+class RiabTest(unittest.TestCase):
+    '''Test the risk in a box plugin stub'''
+    
+    def setUp(self):
+        '''Create the GUI'''
+        myGuiFlag = True #we need to enable qgis app in gui mode
+        self.app = QgsApplication(sys.argv, True)
+        #todo - softcode these paths
+        self.app.setPrefixPath('/usr/local')
+        self.app.setPluginPath('/usr/local/lib/qgis/providers')
+        self.app.initQgis()
 
 
+    def tearDown(self):
+        self.app.exitQgis()
+        
+  
+    def test_load(self):
+        print 'Testing load'
+        myParent = QWidget()
+        myCanvas = QgsMapCanvas(myParent)
+        myIface = QgisInterface(myCanvas)
+        myStub = Riab(myIface)
+        myStub.run()
+
+if __name__ == "__main__":
+    unittest.main()        

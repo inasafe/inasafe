@@ -38,7 +38,7 @@ if os.path.isfile(PATH):
         import sys 
         sys.path.append(PYDEVD_PATH)
         from pydevd import *
-        print 'Debuggin is enabled.'
+        print 'Debugging is enabled.'
         print sys.path
     except:
         #fail silently
