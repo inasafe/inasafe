@@ -6,6 +6,12 @@
 Welcome to Risk-In-A-Box's documentation!
 =========================================
 
+Risk-In-A-Box is a Quantum GIS plugin that enables you to perform risk scenario 
+analysis in the even of a natural disaster such as a flood, tsunami, earthquake 
+etc.
+
+You can find out more about the Risk-In-A-Box project by visiting `riskinabox.org <http://riskinabox.org/>`_.
+
 Contents:
 
 .. toctree::
