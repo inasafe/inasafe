@@ -19,6 +19,8 @@ Contents:
 
    README
    riab
+   riabtest
+   qgsinterface
    riabdialog
    riabdialogtest
 

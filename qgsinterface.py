@@ -21,6 +21,8 @@ __date__ = '10/01/2011'
 __copyright__ = 'Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
 __copyright__ += 'Copyright (c) 2011 German Carrillo, geotux_tuxman@linuxmail.org'
 
+from PyQt4.QtCore import QObject
+
 class QgisInterface(QObject):
     """ Class to expose qgis objects and functionalities to plugins. This class is 
         here for enabling us to run unit tests only, and so most methods are 
