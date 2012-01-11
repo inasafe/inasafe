@@ -45,6 +45,13 @@ of pydevpath.txt.templ to pydevpath.txt e.g.::
 
 Then replace the path to your pydevd module as described in the above article.
 
+.. note:
+
+   If you are running with remote debugging enabled, be sure to start the 
+   PyDev debug server first before launching the Risk-in-a-box QGIS plugin 
+   otherwise QGIS will likely crash when it can't find the debug server.
+
+
 Contact:
 Ole.Moller.Nielsen@gmail.com
 
