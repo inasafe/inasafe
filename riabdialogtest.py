@@ -17,17 +17,19 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import sys
-import sys
+import os
 #todo - softcode in a configuration file
 sys.path.append("/usr/local/share/qgis/python/")
 import unittest
 from PyQt4.QtGui import QWidget
 from PyQt4.QtTest import QTest
-from PyQt4.QtCore import Qt
-from qgis.core import QgsApplication
+from PyQt4.QtCore import Qt, QFileInfo
+from qgis.core import QgsApplication, QgsVectorLayer, QgsRasterLayer, QgsMapLayerRegistry
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from riabdialog import RiabDialog
+
+ROOT = os.path.dirname(__file__)
 
 class RiabDialogTest(unittest.TestCase):
     '''Test the risk in a box GUI'''
@@ -46,7 +48,7 @@ class RiabDialogTest(unittest.TestCase):
         self.form = RiabDialog(self.iface)
 
     def clearForm(self):
-        '''Set all form elements to default state'''
+        '''Helper function to  set all form elements to default state'''
         self.form.ui.lstLayers.clear()
         self.form.ui.cboHazard.setCurrentIndex(0)
         self.form.ui.cboExposure.setCurrentIndex(0)
@@ -64,6 +66,25 @@ class RiabDialogTest(unittest.TestCase):
         QTest.mouseClick(myOkWidget, Qt.LeftButton)
         #QTest.keyClicks(
         #  self.form.ui.buttonBox.button(self.form.ui.buttonBox.Cancel), " ")
+
+    def test_loadLayers(self):
+        '''Load some layers in the canvas, call load layers 
+         and verify that the list widget was update appropriately'''
+        self.clearForm()
+        myVectorPath = os.path.join(ROOT, 'testdata', 'Jakarta_sekolah.shp')
+        myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
+        assert myVectorLayer.isValid()
+        myRasterPath = os.path.join(ROOT, 'testdata', 'current_flood_depth_jakarta.asc')
+        myFileInfo = QFileInfo(myRasterPath)
+        myBaseName = myFileInfo.baseName()
+        myRasterLayer = QgsRasterLayer(myRasterPath, myBaseName)
+        assert myRasterLayer.isValid()
+        QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+        myVectorCanvasLayer = QgsMapCanvas(myVectorLayer)
+        QgsMapLayerRegistry.instance().addMapLayer(myRasterLayer)
+        myRasterCanvasLayer = QgsMapCanvas(myRasterLayer)
+        self.form.getLayers()
+        self.assertEqual(self.form.ui.lstLayers.count(), 2)
 
 
 if __name__ == "__main__":
