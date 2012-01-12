@@ -31,7 +31,7 @@
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
-      <div class="header"><h1 class="heading"><a href="../index.html">
+      <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
           <span>Risk-In-A-Box 0.0.1 documentation</span></a></h1>
         <h2 class="heading"><span>riabdialog</span></h2>
       </div>
@@ -46,7 +46,7 @@
         
         
   <h1>Source code for riabdialog</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">Disaster risk assessment tool developed by AusAid - **GUI Dialog.**</span>
 
 <span class="sd">Contact : ole.moller.nielsen@gmail.com</span>
@@ -56,7 +56,7 @@
 <span class="sd">     the Free Software Foundation; either version 2 of the License, or </span>
 <span class="sd">     (at your option) any later version.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&#39;&#39;&#39;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;tim@linfiniti.com&#39;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.0.1&#39;</span>
@@ -93,10 +93,10 @@
         <span class="k">pass</span> 
   
 <div class="viewcode-block" id="RiabDialog"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog">[docs]</a><span class="k">class</span> <span class="nc">RiabDialog</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Dialog implementation class for the Risk In A Box plugin.&quot;&quot;&quot;</span>
+    <span class="sd">&#39;&#39;&#39;Dialog implementation class for the Risk In A Box plugin.&#39;&#39;&#39;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">iface</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Constructor for the dialog.</span>
+        <span class="sd">&#39;&#39;&#39;Constructor for the dialog.</span>
 <span class="sd">        </span>
 <span class="sd">        This dialog will allow the user to select layers and scenario details and subsequently</span>
 <span class="sd">        run their model.</span>
@@ -107,7 +107,7 @@
 <span class="sd">           not applicable</span>
 <span class="sd">        Raises:</span>
 <span class="sd">           no exceptions explicitly raised</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span> 
             <span class="n">settrace</span><span class="p">()</span>
         <span class="n">QtGui</span><span class="o">.</span><span class="n">QDialog</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -119,7 +119,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">getLayers</span><span class="p">()</span>
        
 <div class="viewcode-block" id="RiabDialog.getLayers"><a class="viewcode-back" href="../riabdialog.html#riabdialog.RiabDialog.getLayers">[docs]</a>    <span class="k">def</span> <span class="nf">getLayers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Helper function to obtain a list of layers currently loaded in QGIS..</span>
+        <span class="sd">&#39;&#39;&#39;Helper function to obtain a list of layers currently loaded in QGIS..</span>
 <span class="sd">        </span>
 <span class="sd">        On invocation, this method will populate the lstLayers on the dialog with a </span>
 <span class="sd">        list of available layers.</span>
@@ -130,7 +130,7 @@
 <span class="sd">           None</span>
 <span class="sd">        Raises:</span>
 <span class="sd">           no</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mapCanvas</span><span class="p">()</span><span class="o">.</span><span class="n">layers</span><span class="p">())):</span>
             <span class="n">myLayer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mapCanvas</span><span class="p">()</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">myLayer</span><span class="o">.</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">myLayer</span><span class="o">.</span><span class="n">VectorLayer</span> <span class="ow">and</span> <span class="n">myLayer</span><span class="o">.</span><span class="n">isUsingRendererV2</span><span class="p">():</span>

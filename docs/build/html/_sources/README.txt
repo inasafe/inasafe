@@ -1,6 +1,6 @@
-===================
-About Risk-in-a-box
-===================
+===========================
+Risk-in-a-box User Documentation
+===========================
 
 This is the project: Risk in a Box - QGIS plugin
 

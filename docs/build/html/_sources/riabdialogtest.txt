@@ -1,7 +1,7 @@
 Class: RiabDialogTest
 ===============================
 
-This page contains the documentation for the Risk-In-A-Box **riabdialogtest** unit tests.
+This page contains the documentation for the Risk-In-A-Box **RiabDialogTest** unit tests.
 
-.. automodule:: riabdialogtest
+.. autoclass:: riabdialogtest.RiabDialogTest
       :members:

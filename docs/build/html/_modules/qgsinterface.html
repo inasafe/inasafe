@@ -31,7 +31,7 @@
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
-      <div class="header"><h1 class="heading"><a href="../index.html">
+      <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
           <span>Risk-In-A-Box 0.0.1 documentation</span></a></h1>
         <h2 class="heading"><span>qgsinterface</span></h2>
       </div>
@@ -46,7 +46,7 @@
         
         
   <h1>Source code for qgsinterface</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">Disaster risk assessment tool developed by AusAid - **QGIS plugin implementation.**</span>
 
 <span class="sd">Contact : ole.moller.nielsen@gmail.com</span>
@@ -61,7 +61,7 @@
 <span class="sd">     Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk</span>
 <span class="sd">     Copyright (c) 2011 German Carrillo, geotux_tuxman@linuxmail.org</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&#39;&#39;&#39;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;tim@linfiniti.com&#39;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.0.1&#39;</span>
@@ -72,72 +72,72 @@
 <span class="kn">from</span> <span class="nn">PyQt4.QtCore</span> <span class="kn">import</span> <span class="n">QObject</span>
 
 <div class="viewcode-block" id="QgisInterface"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface">[docs]</a><span class="k">class</span> <span class="nc">QgisInterface</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Class to expose qgis objects and functionalities to plugins. This class is </span>
+    <span class="sd">&#39;&#39;&#39; Class to expose qgis objects and functionalities to plugins. This class is </span>
 <span class="sd">        here for enabling us to run unit tests only, and so most methods are </span>
-<span class="sd">        simply stubs.&quot;&quot;&quot;</span>
+<span class="sd">        simply stubs.&#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">myApp</span><span class="p">,</span> <span class="n">canvas</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Constructor &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Constructor &#39;&#39;&#39;</span>
         <span class="n">QObject</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">myApp</span> <span class="o">=</span> <span class="n">myApp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">canvas</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarPlugins</span> <span class="o">=</span> <span class="bp">None</span>
 
 <div class="viewcode-block" id="QgisInterface.zoomFull"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.zoomFull">[docs]</a>    <span class="k">def</span> <span class="nf">zoomFull</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Zoom to the map full extent &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Zoom to the map full extent &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">zoomToFullExtent</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.zoomToPrevious"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.zoomToPrevious">[docs]</a>    <span class="k">def</span> <span class="nf">zoomToPrevious</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Zoom to previous view extent &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Zoom to previous view extent &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">zoomToPreviousExtent</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.zoomToNext"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.zoomToNext">[docs]</a>    <span class="k">def</span> <span class="nf">zoomToNext</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Zoom to next view extent &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Zoom to next view extent &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">zoomToNextExtent</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.addVectorLayer"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.addVectorLayer">[docs]</a>    <span class="k">def</span> <span class="nf">addVectorLayer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorLayerPath</span><span class="p">,</span> <span class="n">baseName</span><span class="p">,</span> <span class="n">providerKey</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Add a vector layer &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Add a vector layer &#39;&#39;&#39;</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="n">QgsVectorLayer</span><span class="p">(</span><span class="n">vectorLayerPath</span><span class="p">,</span> <span class="n">baseName</span><span class="p">,</span> <span class="n">providerKey</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">myApp</span><span class="o">.</span><span class="n">addLayer</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.addRasterLayer"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.addRasterLayer">[docs]</a>    <span class="k">def</span> <span class="nf">addRasterLayer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rasterLayerPath</span><span class="p">,</span> <span class="n">baseName</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Add a raster layer given a raster layer file name &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Add a raster layer given a raster layer file name &#39;&#39;&#39;</span>
         <span class="n">layer</span> <span class="o">=</span> <span class="n">QgsRasterLayer</span><span class="p">(</span><span class="n">rasterLayerPath</span><span class="p">,</span> <span class="n">baseName</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">myApp</span><span class="o">.</span><span class="n">addLayer</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.activeLayer"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.activeLayer">[docs]</a>    <span class="k">def</span> <span class="nf">activeLayer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Get pointer to the active layer (layer selected in the legend) &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Get pointer to the active layer (layer selected in the legend) &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">myApp</span><span class="o">.</span><span class="n">activeLayer</span><span class="p">():</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">myApp</span><span class="o">.</span><span class="n">activeLayer</span><span class="p">()</span><span class="o">.</span><span class="n">layer</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">None</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.addToolBarIcon"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.addToolBarIcon">[docs]</a>    <span class="k">def</span> <span class="nf">addToolBarIcon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qAction</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Add an icon to the plugins toolbar &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Add an icon to the plugins toolbar &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">toolBarPlugins</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toolBarPlugins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">addToolBar</span><span class="p">(</span><span class="s">&quot;Plugins&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarPlugins</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">qAction</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.removeToolBarIcon"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.removeToolBarIcon">[docs]</a>    <span class="k">def</span> <span class="nf">removeToolBarIcon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qAction</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Remove an action (icon) from the plugin toolbar &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Remove an action (icon) from the plugin toolbar &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">toolBarPlugins</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">toolBarPlugins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">addToolBar</span><span class="p">(</span><span class="s">&quot;Plugins&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolBarPlugins</span><span class="o">.</span><span class="n">removeAction</span><span class="p">(</span><span class="n">qAction</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.addToolBar"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.addToolBar">[docs]</a>    <span class="k">def</span> <span class="nf">addToolBar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Add toolbar with specified name &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Add toolbar with specified name &#39;&#39;&#39;</span>
         <span class="n">toolBar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">myApp</span><span class="o">.</span><span class="n">addToolBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">toolBar</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">toolBar</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.mapCanvas"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.mapCanvas">[docs]</a>    <span class="k">def</span> <span class="nf">mapCanvas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return a pointer to the map canvas &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Return a pointer to the map canvas &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.mainWindow"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.mainWindow">[docs]</a>    <span class="k">def</span> <span class="nf">mainWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return a pointer to the main window (instance of QgisApp in case of QGIS) &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Return a pointer to the main window (instance of QgisApp in case of QGIS) &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">myApp</span>
 </div>
 <div class="viewcode-block" id="QgisInterface.addDockWidget"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.QgisInterface.addDockWidget">[docs]</a>    <span class="k">def</span> <span class="nf">addDockWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">area</span><span class="p">,</span> <span class="n">dockwidget</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Add a dock widget to the main window &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Add a dock widget to the main window &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">myApp</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">dockwidget</span><span class="p">)</span>
         <span class="n">dockwidget</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -146,7 +146,7 @@
 
 </div></div>
 <div class="viewcode-block" id="Plugins"><a class="viewcode-back" href="../qgsinterface.html#qgsinterface.Plugins">[docs]</a><span class="k">class</span> <span class="nc">Plugins</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot; Class to manage plugins (Read and load existing plugins) &quot;&quot;&quot;</span>
+    <span class="sd">&#39;&#39;&#39; Class to manage plugins (Read and load existing plugins) &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">myApp</span><span class="p">,</span> <span class="n">canvas</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">dbname</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">passwd</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qgisInterface</span> <span class="o">=</span> <span class="n">QgisInterface</span><span class="p">(</span><span class="n">myApp</span><span class="p">,</span> <span class="n">canvas</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">myApp</span> <span class="o">=</span> <span class="n">myApp</span>
@@ -154,7 +154,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pluginsDirName</span> <span class="o">=</span> <span class="s">&#39;plugins&#39;</span>
         <span class="n">regExpString</span> <span class="o">=</span> <span class="s">&#39;^def +classFactory\(.*iface.*(\):)$&#39;</span> <span class="c"># To find the classFactory line</span>
 
-        <span class="sd">&quot;&quot;&quot; Validate that it is a plugins folder and loads them into the application &quot;&quot;&quot;</span>
+        <span class="sd">&#39;&#39;&#39; Validate that it is a plugins folder and loads them into the application &#39;&#39;&#39;</span>
         <span class="n">dir_plugins</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">pluginsDirName</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dir_plugins</span><span class="p">):</span>

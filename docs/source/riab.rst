@@ -1,7 +1,7 @@
 Class: Riab
 ===============================
 
-This page contains the documentation for the  Risk-In-A-Box code **riab** class.
+This page contains the documentation for the  Risk-In-A-Box code **Riab** class.
 
-.. automodule:: riab
+.. autoclass:: riab.Riab
       :members:

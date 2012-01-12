@@ -3,26 +3,34 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Risk-In-A-Box's documentation!
-=========================================
+Risk-In-A-Box's API documentation
+=================================
 
-Risk-In-A-Box is a Quantum GIS plugin that enables you to perform risk scenario 
-analysis in the even of a natural disaster such as a flood, tsunami, earthquake 
-etc.
+This is the API documentation for the Risk-In-A-Box project.
 
 You can find out more about the Risk-In-A-Box project by visiting `riskinabox.org <http://riskinabox.org/>`_.
 
-Contents
-=========
+Implementation
+--------------
+.. toctree::
+   :maxdepth: 2
+   
+   init
+   riab
+   riabdialog
+   qgsinterface
+   
+Unit Tests
+----------
 
 .. toctree::
-   :maxdepth: 1
-   
-   README
-   risk_in_a_box
+   :maxdepth: 2
+      
+   riabtest   
+   riabdialogtest
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

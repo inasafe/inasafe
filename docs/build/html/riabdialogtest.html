@@ -28,17 +28,18 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/theme_extras.js"></script>
     <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="index.html" />
-    <link rel="prev" title="Class RiabDialog" href="riabdialog.html" /> 
+    <link rel="up" title="Risk-In-A-Box’s API documentation" href="risk_in_a_box.html" />
+    <link rel="prev" title="Class: RiabTest" href="riabtest.html" /> 
   </head>
   <body>
-      <div class="header"><h1 class="heading"><a href="index.html">
+      <div class="header"><img class="rightlogo" src="_static/icon.png" alt="Logo"/><h1 class="heading"><a href="index.html">
           <span>Risk-In-A-Box 0.0.1 documentation</span></a></h1>
         <h2 class="heading"><span>Class: RiabDialogTest</span></h2>
       </div>
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="riabdialog.html">Class RiabDialog</a>
+        «&#160;&#160;<a href="riabtest.html">Class: RiabTest</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         </p>
@@ -49,16 +50,7 @@
         
   <div class="section" id="class-riabdialogtest">
 <h1>Class: RiabDialogTest<a class="headerlink" href="#class-riabdialogtest" title="Permalink to this headline">¶</a></h1>
-<p>This page contains the documentation for the Risk-In-A-Box <strong>riabdialogtest</strong> unit tests.</p>
-<span class="target" id="module-riabdialogtest"></span><p>Disaster risk assessment tool developed by AusAid - <strong>GUI Test Cases.</strong></p>
-<p>Contact : <a class="reference external" href="mailto:ole&#46;moller&#46;nielsen&#37;&#52;&#48;gmail&#46;com">ole<span>&#46;</span>moller<span>&#46;</span>nielsen<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or 
-(at your option) any later version.</p>
-</div>
+<p>This page contains the documentation for the Risk-In-A-Box <strong>RiabDialogTest</strong> unit tests.</p>
 <dl class="class">
 <dt id="riabdialogtest.RiabDialogTest">
 <em class="property">class </em><tt class="descclassname">riabdialogtest.</tt><tt class="descname">RiabDialogTest</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/riabdialogtest.html#RiabDialogTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialogtest.RiabDialogTest" title="Permalink to this definition">¶</a></dt>
@@ -66,19 +58,26 @@ the Free Software Foundation; either version 2 of the License, or
 <dl class="method">
 <dt id="riabdialogtest.RiabDialogTest.clearForm">
 <tt class="descname">clearForm</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/riabdialogtest.html#RiabDialogTest.clearForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialogtest.RiabDialogTest.clearForm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set all form elements to default state</p>
+<dd><p>Helper function to  set all form elements to default state</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="riabdialogtest.RiabDialogTest.setUp">
 <tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/riabdialogtest.html#RiabDialogTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialogtest.RiabDialogTest.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create the GUI</p>
+<dd><p>Create an app that all tests can use</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="riabdialogtest.RiabDialogTest.test_defaults">
 <tt class="descname">test_defaults</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/riabdialogtest.html#RiabDialogTest.test_defaults"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialogtest.RiabDialogTest.test_defaults" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test the GUI in its default state</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="riabdialogtest.RiabDialogTest.test_loadLayers">
+<tt class="descname">test_loadLayers</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialogtest.RiabDialogTest.test_loadLayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load some layers in the canvas, call load layers
+and verify that the list widget was update appropriately</p>
 </dd></dl>
 
 </dd></dl>
@@ -90,7 +89,7 @@ the Free Software Foundation; either version 2 of the License, or
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="riabdialog.html">Class RiabDialog</a>
+        «&#160;&#160;<a href="riabtest.html">Class: RiabTest</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         </p>
