@@ -1,10 +1,10 @@
 
 # To help with testing
 import os
+import sys
 import time
 import types
 import numpy
-#from django.conf import settings
 from io import get_bounding_box, get_metadata
 
 TESTDATA = os.path.join(os.environ['RIAB_HOME'], 'risiko_test_data')
@@ -23,6 +23,12 @@ GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
                  (105.29857, 0.0112, 0.0, -5.565233000000001, 0.0, -0.0112),
                  (96.956, 0.03074106, 0.0, 2.2894972560001, 0.0, -0.03074106)]
 
+
+# A maximum floating point number for this package
+MAXFLOAT = float(sys.maxint)
+
+# Mandatory keywords that must be present in layers
+REQUIRED_KEYWORDS = ['category', 'subcategory']
 
 def _same_API(X, Y, exclude=None):
     """Check that public methods of X also exist in Y
