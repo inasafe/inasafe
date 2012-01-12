@@ -46,7 +46,7 @@ if os.path.isfile(PATH):
         pass
 
 from qgis.core import QGis, QgsMapLayer
-
+from impactcalculator import ImpactCalculator
 
 class RiabDialog(QtGui.QDialog):
     '''Dialog implementation class for the Risk In A Box plugin.'''
@@ -97,6 +97,7 @@ class RiabDialog(QtGui.QDialog):
             myLayer = self.iface.mapCanvas().layer(i)
             '''
             .. todo:: check raster is single band
+                      store uuid in user property of list widget for layers
             '''
             if myLayer.type() == QgsMapLayer.RasterLayer:
                 self.ui.lstHazardLayers.addItem(myLayer.name())
@@ -107,3 +108,10 @@ class RiabDialog(QtGui.QDialog):
                 pass  # skip the layer
 
         return
+
+    def accept(self):
+        '''Execute analysis when ok button is clicked.'''
+        #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
+        myCalculator = ImpactCalculator()
+        myCalculator.setHazardLayer('')
+        myCalculator.setExposureLayer('')

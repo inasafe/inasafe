@@ -84,6 +84,8 @@ class RiabDialogTest(unittest.TestCase):
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), 0)
         self.assertEqual(self.form.ui.cboFunction.currentIndex(), 0)
 
+    def test_run(self):
+        '''Test that the ok button works as expected'''
         # Push OK with the left mouse button
         myOkWidget = self.form.ui.buttonBox.button(self.form.ui.buttonBox.Ok)
         QTest.mouseClick(myOkWidget, Qt.LeftButton)

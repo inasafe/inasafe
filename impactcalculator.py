@@ -23,12 +23,43 @@ import unicodedata
 class ImpactCalculator:
     '''A class to compute an impact scenario.'''
 
-    def __init__(self, iface):
-        """ Save reference to the QGIS interface
-        """
-        self.layers = None
-        self.hazard_layers = None
-        self.exposure_layers = None
+    def __init__(self):
+        '''Constructor for the impact calculator.'''
+        self._hazard_layer = None
+        self._exposure_layer = None
+
+    def getHazardLayer(self):
+        '''Accessor: hazard layer.'''
+        return self.__hazard_layer
+
+    def getExposureLayer(self):
+        '''Accessor: exposure layer.'''
+        return self.__exposure_layer
+
+    def setHazardLayer(self, value):
+        '''Mutator: hazard layer.'''
+        self.__hazard_layer = value
+
+    def setExposureLayer(self, value):
+        '''Mutator: exposure layer.'''
+        self.__exposure_layer = value
+
+    def delHazardLayer(self):
+        '''Delete: hazard layer.'''
+        del self.__hazard_layer
+
+    def delExposureLayer(self):
+        '''Delete: exposure layer.'''
+        del self.__exposure_layer
+
+    _hazard_layer = property(getHazardLayer, setHazardLayer,
+        delHazardLayer, '''Hazard layer property  (e.g. a flood depth
+        raster).''')
+    _exposure_layer = property(getExposureLayer, setExposureLayer,
+        delExposureLayer, '''Exposure layer property (e.g. buildings or
+        features that will be affected).''')
+
+
 
     def make_ascii(self, x):
         '''Convert QgsString to ASCII'''
