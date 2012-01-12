@@ -38,6 +38,8 @@ WFS_TEMPLATE = '%s?service=WFS&version=1.0.0' + \
     '&request=GetFeature&typeName=%s' + \
     '&outputFormat=SHAPE-ZIP&bbox=%s'
 
+# Mandatory keywords that must be present in layers
+REQUIRED_KEYWORDS = ['category', 'subcategory']
 
 # Miscellaneous auxiliary functions
 def unique_filename(**kwargs):

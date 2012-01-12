@@ -27,9 +27,6 @@ GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
 # A maximum floating point number for this package
 MAXFLOAT = float(sys.maxint)
 
-# Mandatory keywords that must be present in layers
-REQUIRED_KEYWORDS = ['category', 'subcategory']
-
 def _same_API(X, Y, exclude=None):
     """Check that public methods of X also exist in Y
     """
