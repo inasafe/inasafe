@@ -16,21 +16,37 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+
+
 import sys
 import os
-
-# TODO - softcode in a configuration file
-sys.path.append('/usr/local/share/qgis/python/')
-
 import unittest
 from PyQt4.QtGui import QWidget
 from PyQt4.QtTest import QTest
 from PyQt4.QtCore import Qt, QFileInfo
+from riabexceptions import QgisPathException
+
+# Check if a qgispath.txt file exists in the plugin folder (you
+# need to rename it from qgispath.txt.templ in the standard plugin
+# distribution) and if it does, read the qgis path
+
+ROOT = os.path.dirname(__file__)
+PATH = os.path.abspath(os.path.join(ROOT, 'qgispath.txt'))
+QGIS_PATH = None #e.g. /usr/local if QGIS is installed under there
+if os.path.isfile(PATH):
+    try:
+        QGIS_PATH = file(PATH, 'rt').readline().rstrip()
+        sys.path.append(os.path.join(QGIS_PATH, 'share', 'qgis', 'python'))
+        print sys.path
+    except Exception, e:
+        raise QgisPathException
+
+
 from qgis.core import QgsApplication
 from qgis.core import QgsVectorLayer
 from qgis.core import QgsRasterLayer
 from qgis.core import QgsMapLayerRegistry
-from qgis.gui import QgsMapCanvas
+from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
 from riabdialog import RiabDialog
 
@@ -46,8 +62,8 @@ class RiabDialogTest(unittest.TestCase):
         myGuiFlag = True  # We need to enable qgis app in gui mode
         self.app = QgsApplication(sys.argv, True)
         #todo - softcode these paths
-        self.app.setPrefixPath('/usr/local')
-        self.app.setPluginPath('/usr/local/lib/qgis/providers')
+        self.app.setPrefixPath(QGIS_PATH)
+        self.app.setPluginPath(os.path.join(QGIS_PATH, 'lib', 'qgis', 'providers'))
         self.app.initQgis()
         self.parent = QWidget()
         self.canvas = QgsMapCanvas(self.parent)
@@ -95,11 +111,14 @@ class RiabDialogTest(unittest.TestCase):
         assert myRasterLayer.isValid(), msg
 
         QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
-        myVectorCanvasLayer = QgsMapCanvas(myVectorLayer)
+        myVectorCanvasLayer = QgsMapCanvasLayer(myVectorLayer)
         QgsMapLayerRegistry.instance().addMapLayer(myRasterLayer)
-        myRasterCanvasLayer = QgsMapCanvas(myRasterLayer)
+        myRasterCanvasLayer = QgsMapCanvasLayer(myRasterLayer)
+        self.canvas.setLayerSet([myVectorCanvasLayer, myRasterCanvasLayer])
         self.form.getLayers()
-        self.assertEqual(self.form.ui.lstLayers.count(), 2)
+        # We expect one layer only because currently we are listing only 
+        # vector layers
+        self.assertEqual(self.form.ui.lstLayers.count(), 1)
 
 
 if __name__ == '__main__':

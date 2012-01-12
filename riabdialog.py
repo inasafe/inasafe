@@ -21,7 +21,7 @@ from PyQt4 import QtCore, QtGui
 from ui_riab import Ui_Riab
 import os
 
-# Check if a settings.txt file exists in the plugin folder (you
+# Check if a pydevpath.txt file exists in the plugin folder (you
 # need to rename it from settings.txt.templ in the standard plugin
 # distribution) and if it does, read the pydevd path from it and
 # enable the debug flag to true. Please see:

@@ -19,6 +19,7 @@ Implementation
    riab
    riabdialog
    qgsinterface
+   riabexceptions
    
 Unit Tests
 ----------

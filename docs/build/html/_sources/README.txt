@@ -14,9 +14,9 @@ our documentation under docs/build/html.
 Quick Installation Guide - Users
 ================================
 
-.. note: 
+.. note::
    
-   This is a plugin for `Quantum GIS <http://qgis.org>` (QGIS). It requires version 1.8 of QGIS
+   This is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS). It requires version 1.7 of QGIS
    (or newer).
 
 To install the plugin, use the plugin manager in QGIS::
@@ -45,11 +45,20 @@ of pydevpath.txt.templ to pydevpath.txt e.g.::
 
 Then replace the path to your pydevd module as described in the above article.
 
-.. note:
+
+.. note::
 
    If you are running with remote debugging enabled, be sure to start the 
    PyDev debug server first before launching the Risk-in-a-box QGIS plugin 
    otherwise QGIS will likely crash when it can't find the debug server.
+
+
+If you wish to run the unit tests, please make a local copy of the qgispath.txt.templ template 
+and adjust the path contained in that file to match your QGIS installation path e.g.::
+
+  cp qgispath.txt.templ qgispath.txt
+
+
 
 
 Contact:

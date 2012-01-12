@@ -60,6 +60,11 @@ management.</p>
 our documentation under docs/build/html.</p>
 <div class="section" id="quick-installation-guide-users">
 <h2>Quick Installation Guide - Users<a class="headerlink" href="#quick-installation-guide-users" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a plugin for <a class="reference external" href="http://qgis.org">Quantum GIS</a> (QGIS). It requires version 1.7 of QGIS
+(or newer).</p>
+</div>
 <p>To install the plugin, use the plugin manager in QGIS:</p>
 <div class="highlight-python"><pre>Plugins -&gt; Fetch Python Plugins</pre>
 </div>
@@ -80,6 +85,16 @@ of pydevpath.txt.templ to pydevpath.txt e.g.:</p>
 <div class="highlight-python"><pre>cp pydevpath.txt.templ pydevpath.txt</pre>
 </div>
 <p>Then replace the path to your pydevd module as described in the above article.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are running with remote debugging enabled, be sure to start the
+PyDev debug server first before launching the Risk-in-a-box QGIS plugin
+otherwise QGIS will likely crash when it can&#8217;t find the debug server.</p>
+</div>
+<p>If you wish to run the unit tests, please make a local copy of the qgispath.txt.templ template
+and adjust the path contained in that file to match your QGIS installation path e.g.:</p>
+<div class="highlight-python"><pre>cp qgispath.txt.templ qgispath.txt</pre>
+</div>
 <p>Contact:
 <a class="reference external" href="mailto:Ole&#46;Moller&#46;Nielsen&#37;&#52;&#48;gmail&#46;com">Ole<span>&#46;</span>Moller<span>&#46;</span>Nielsen<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 </div>
