@@ -16,6 +16,7 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import sys
 import os
 from riabexceptions import QgisPathException
 
@@ -25,7 +26,7 @@ from riabexceptions import QgisPathException
 
 ROOT = os.path.dirname(__file__)
 PATH = os.path.abspath(os.path.join(ROOT, 'qgispath.txt'))
-QGIS_PATH = None #e.g. /usr/local if QGIS is installed under there
+QGIS_PATH = None  # e.g. /usr/local if QGIS is installed under there
 if os.path.isfile(PATH):
     try:
         QGIS_PATH = file(PATH, 'rt').readline().rstrip()
@@ -33,15 +34,14 @@ if os.path.isfile(PATH):
         print sys.path
     except Exception, e:
         raise QgisPathException
-    
+
 from qgis.core import QgsApplication
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
+from PyQt4.QtGui import QWidget
 import unittest
-from PyQt4.QtGui import QApplication, QWidget
-from PyQt4.QtTest import QTest
-from PyQt4.QtCore import Qt
 from riab import Riab
+
 
 class RiabTest(unittest.TestCase):
     """Test the risk in a box plugin stub"""
@@ -49,7 +49,7 @@ class RiabTest(unittest.TestCase):
     def setUp(self):
         """Create an app that all tests can use"""
         myGuiFlag = True  # We need to enable qgis app in gui mode
-        self.app = QgsApplication(sys.argv, True)
+        self.app = QgsApplication(sys.argv, myGuiFlag)
         #todo - softcode these paths
         self.app.setPrefixPath('/usr/local')
         self.app.setPluginPath('/usr/local/lib/qgis/providers')
@@ -65,8 +65,7 @@ class RiabTest(unittest.TestCase):
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
-        myStub = Riab(myIface)
-        #myStub.run()
+        Riab(myIface)
 
 
 if __name__ == "__main__":

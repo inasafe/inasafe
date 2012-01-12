@@ -16,8 +16,6 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
-
 import sys
 import os
 import unittest
@@ -32,7 +30,7 @@ from riabexceptions import QgisPathException
 
 ROOT = os.path.dirname(__file__)
 PATH = os.path.abspath(os.path.join(ROOT, 'qgispath.txt'))
-QGIS_PATH = None #e.g. /usr/local if QGIS is installed under there
+QGIS_PATH = None  # e.g. /usr/local if QGIS is installed under there
 if os.path.isfile(PATH):
     try:
         QGIS_PATH = file(PATH, 'rt').readline().rstrip()
@@ -60,7 +58,7 @@ class RiabDialogTest(unittest.TestCase):
         '''Create an app that all tests can use'''
 
         myGuiFlag = True  # We need to enable qgis app in gui mode
-        self.app = QgsApplication(sys.argv, True)
+        self.app = QgsApplication(sys.argv, myGuiFlag)
         #todo - softcode these paths
         self.app.setPrefixPath(QGIS_PATH)
         self.app.setPluginPath(os.path.join(QGIS_PATH, 'lib', 'qgis', 'providers'))
