@@ -20,7 +20,7 @@ import sys
 import os
 
 # TODO - softcode in a configuration file
-sys.path.append("/usr/local/share/qgis/python/")
+sys.path.append('/usr/local/share/qgis/python/')
 
 import unittest
 from PyQt4.QtGui import QWidget
@@ -83,13 +83,17 @@ class RiabDialogTest(unittest.TestCase):
         self.clearForm()
         myVectorPath = os.path.join(ROOT, 'testdata', 'Jakarta_sekolah.shp')
         myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
-        assert myVectorLayer.isValid()
+        msg = 'Vector layer "%s" is not valid' % str(myVectorLayer.source())
+        assert myVectorLayer.isValid(), msg
+
         myRasterPath = os.path.join(ROOT, 'testdata',
                                     'current_flood_depth_jakarta.asc')
         myFileInfo = QFileInfo(myRasterPath)
         myBaseName = myFileInfo.baseName()
         myRasterLayer = QgsRasterLayer(myRasterPath, myBaseName)
-        assert myRasterLayer.isValid()
+        msg = 'Raster layer "%s" is not valid' % str(myRasterLayer.source())
+        assert myRasterLayer.isValid(), msg
+
         QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
         myVectorCanvasLayer = QgsMapCanvas(myVectorLayer)
         QgsMapLayerRegistry.instance().addMapLayer(myRasterLayer)
