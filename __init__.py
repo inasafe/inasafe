@@ -1,4 +1,4 @@
-"""
+'''
 /***************************************************************************
  Riab
                                  A QGIS plugin
@@ -19,7 +19,7 @@
  *                                                                         *
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
-"""
+'''
 
 
 def name():
@@ -43,7 +43,7 @@ def qgisMinimumVersion():
 
 
 def classFactory(iface):
-    """Load Riab class from file Riab"""
+    '''Load Riab class from file Riab'''
 
     from riab import Riab
     return Riab(iface)

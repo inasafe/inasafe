@@ -1,4 +1,4 @@
-"""
+'''
 Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
 
 Contact : ole.moller.nielsen@gmail.com
@@ -8,7 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 
-"""
+'''
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.0.1'
@@ -45,10 +45,10 @@ if os.path.isfile(PATH):
 
 
 class RiabDialog(QtGui.QDialog):
-    """Dialog implementation class for the Risk In A Box plugin."""
+    '''Dialog implementation class for the Risk In A Box plugin.'''
 
     def __init__(self, iface):
-        """Constructor for the dialog.
+        '''Constructor for the dialog.
 
         This dialog will allow the user to select layers and scenario details
         and subsequently run their model.
@@ -59,7 +59,7 @@ class RiabDialog(QtGui.QDialog):
            not applicable
         Raises:
            no exceptions explicitly raised
-        """
+        '''
         if DEBUG:
             settrace()
         QtGui.QDialog.__init__(self)
@@ -73,7 +73,7 @@ class RiabDialog(QtGui.QDialog):
         self.getLayers()
 
     def getLayers(self):
-        """Helper function to obtain a list of layers currently loaded in QGIS.
+        '''Helper function to obtain a list of layers currently loaded in QGIS.
 
         On invocation, this method will populate the lstLayers on the dialog
         with a list of available layers.
@@ -84,7 +84,7 @@ class RiabDialog(QtGui.QDialog):
            None
         Raises:
            no
-        """
+        '''
         for i in range(len(self.iface.mapCanvas().layers())):
             myLayer = self.iface.mapCanvas().layer(i)
             if myLayer.type() == myLayer.VectorLayer and \

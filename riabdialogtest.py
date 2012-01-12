@@ -1,4 +1,4 @@
-"""
+'''
 Disaster risk assessment tool developed by AusAid - **GUI Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
@@ -8,7 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 
-"""
+'''
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.0.1'
@@ -38,10 +38,10 @@ ROOT = os.path.dirname(__file__)
 
 
 class RiabDialogTest(unittest.TestCase):
-    """Test the risk in a box GUI"""
+    '''Test the risk in a box GUI'''
 
     def setUp(self):
-        """Create an app that all tests can use"""
+        '''Create an app that all tests can use'''
 
         myGuiFlag = True  # We need to enable qgis app in gui mode
         self.app = QgsApplication(sys.argv, True)
@@ -55,14 +55,14 @@ class RiabDialogTest(unittest.TestCase):
         self.form = RiabDialog(self.iface)
 
     def clearForm(self):
-        """Helper function to  set all form elements to default state"""
+        '''Helper function to  set all form elements to default state'''
         self.form.ui.lstLayers.clear()
         self.form.ui.cboHazard.setCurrentIndex(0)
         self.form.ui.cboExposure.setCurrentIndex(0)
         self.form.ui.cboFunction.setCurrentIndex(0)
 
     def test_defaults(self):
-        """Test the GUI in its default state"""
+        '''Test the GUI in its default state'''
         # Note you can also use almostEqual for inexact comparisons
         self.assertEqual(self.form.ui.lstLayers.count(), 0)
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), 0)
@@ -76,9 +76,9 @@ class RiabDialogTest(unittest.TestCase):
         #  self.form.ui.buttonBox.button(self.form.ui.buttonBox.Cancel), " ")
 
     def test_loadLayers(self):
-        """Load some layers in the canvas, call load layers
+        '''Load some layers in the canvas, call load layers
          and verify that the list widget was update appropriately
-        """
+        '''
 
         self.clearForm()
         myVectorPath = os.path.join(ROOT, 'testdata', 'Jakarta_sekolah.shp')
