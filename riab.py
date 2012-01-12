@@ -5,7 +5,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 .. note:: This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or 
+     the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 
 '''
@@ -31,7 +31,7 @@ class Riab:
     '''The QGIS interface implementation for the Risk in a box plugin.
     
     This class acts as the 'glue' between QGIS and our custom logic.
-    It creates a toolbar and menubar entry and launches the RIAB user 
+    It creates a toolbar and menubar entry and launches the RIAB user
     interface if these are activated.
     ''' 
     
@@ -41,10 +41,10 @@ class Riab:
         On instantiation, the plugin instance will be assigned a copy 
         of the QGIS iface object which will allow this plugin to access and
         manipulate the running QGIS instance that spawned it.
-        
+
         Args:
-           iface - a Quantum GIS QGisAppInterface instance. This instance 
-           is automatically passed to the plugin by QGIS when it loads the 
+           iface - a Quantum GIS QGisAppInterface instance. This instance
+           is automatically passed to the plugin by QGIS when it loads the
            plugin.
         Returns:
            None.
@@ -61,7 +61,7 @@ class Riab:
         any graphical user interface elements that should appear in QGIS by 
         default (i.e. before the user performs any explicit action with the
         plugin).
-        
+
         Args:
            None.
         Returns:
@@ -84,7 +84,7 @@ class Riab:
         
         This method is called by QGIS and should be used to *remove* 
         any graphical user interface elements that should appear in QGIS.
-        
+
         Args:
            None.
         Returns:
@@ -102,9 +102,9 @@ class Riab:
         
         This slot is called when the user clicks the toolbar icon or 
         menu item associated with this plugin.
-        
-        .. seealso:: :func:`Riab.initGui`.
-        
+
+        .. see also:: :func:`Riab.initGui`.
+
         Args:
            None.
         Returns:

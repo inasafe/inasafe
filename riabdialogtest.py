@@ -118,7 +118,8 @@ class RiabDialogTest(unittest.TestCase):
         self.form.getLayers()
         # We expect one layer only because currently we are listing only 
         # vector layers
-        self.assertEqual(self.form.ui.lstLayers.count(), 1)
+        msg = 'Expect 1 layer in list widget but got %s' % self.form.ui.lstLayers.count()
+        self.assertEqual(self.form.ui.lstLayers.count(), 1), msg
 
 
 if __name__ == '__main__':

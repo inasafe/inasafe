@@ -5,4 +5,6 @@ pydevpath.txt
 .project
 .pydevproject
 build
-
+*.orig
+*.*.orig
+qgispath.txt
