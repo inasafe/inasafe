@@ -1,8 +1,10 @@
-===========================
+================================
 Risk-in-a-box User Documentation
-===========================
+================================
 
 This is the project: Risk in a Box - QGIS plugin
+
+.. image:: ../../img/screenshot.jpg
 
 The latest source code is available in https://github.com/AIFDR/risk_in_a_box
 which contains modules for risk calculations, gis functionality and plugin
