@@ -1,11 +1,9 @@
-Custom Exceptions
+Module: riabexceptions
 ===============================
 
-This page contains the documentation for the  Risk-In-A-Box code **Exception** classes.
+This page contains the documentation for the  Risk-In-A-Box code **riabexceptions** module.
 
-.. autoclass:: riabexceptions.QgisPathException
+.. automodule:: riabexceptions
       :members:
 
-.. autoclass:: riabexceptions.TestNotImplementedException
-      :members:
       

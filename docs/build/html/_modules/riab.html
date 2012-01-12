@@ -47,7 +47,8 @@
         
   <h1>Source code for riab</h1><div class="highlight"><pre>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">Disaster risk assessment tool developed by AusAid - **QGIS plugin implementation.**</span>
+<span class="sd">Disaster risk assessment tool developed by AusAid -</span>
+<span class="sd">  **QGIS plugin implementation.**</span>
 
 <span class="sd">Contact : ole.moller.nielsen@gmail.com</span>
 
@@ -68,25 +69,24 @@
 <span class="kn">from</span> <span class="nn">PyQt4.QtCore</span> <span class="kn">import</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">SIGNAL</span>
 <span class="kn">from</span> <span class="nn">PyQt4.QtGui</span> <span class="kn">import</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QIcon</span>
 
-<span class="c"># Initialize Qt resources from file resources.py</span>
-<span class="kn">import</span> <span class="nn">resources</span>
-
 <span class="c"># Import the code for the dialog</span>
 <span class="kn">from</span> <span class="nn">riabdialog</span> <span class="kn">import</span> <span class="n">RiabDialog</span>
+<span class="c"># </span>
+<span class="kn">import</span> <span class="nn">resources</span>
 
 
 <div class="viewcode-block" id="Riab"><a class="viewcode-back" href="../riab.html#riab.Riab">[docs]</a><span class="k">class</span> <span class="nc">Riab</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;The QGIS interface implementation for the Risk in a box plugin.</span>
-<span class="sd">    </span>
+
 <span class="sd">    This class acts as the &#39;glue&#39; between QGIS and our custom logic.</span>
 <span class="sd">    It creates a toolbar and menubar entry and launches the RIAB user</span>
 <span class="sd">    interface if these are activated.</span>
-<span class="sd">    &#39;&#39;&#39;</span> 
-    
+<span class="sd">    &#39;&#39;&#39;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iface</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Class constructor.</span>
-<span class="sd">        </span>
-<span class="sd">        On instantiation, the plugin instance will be assigned a copy </span>
+
+<span class="sd">        On instantiation, the plugin instance will be assigned a copy</span>
 <span class="sd">        of the QGIS iface object which will allow this plugin to access and</span>
 <span class="sd">        manipulate the running QGIS instance that spawned it.</span>
 
@@ -104,9 +104,9 @@
 
 <div class="viewcode-block" id="Riab.initGui"><a class="viewcode-back" href="../riab.html#riab.Riab.initGui">[docs]</a>    <span class="k">def</span> <span class="nf">initGui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Gui initialisation procedure (for QGIS plugin api).</span>
-<span class="sd">        </span>
-<span class="sd">        This method is called by QGIS and should be used to set up </span>
-<span class="sd">        any graphical user interface elements that should appear in QGIS by </span>
+
+<span class="sd">        This method is called by QGIS and should be used to set up</span>
+<span class="sd">        any graphical user interface elements that should appear in QGIS by</span>
 <span class="sd">        default (i.e. before the user performs any explicit action with the</span>
 <span class="sd">        plugin).</span>
 
@@ -129,8 +129,8 @@
 </div>
 <div class="viewcode-block" id="Riab.unload"><a class="viewcode-back" href="../riab.html#riab.Riab.unload">[docs]</a>    <span class="k">def</span> <span class="nf">unload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Gui breakdown procedure (for QGIS plugin api).</span>
-<span class="sd">        </span>
-<span class="sd">        This method is called by QGIS and should be used to *remove* </span>
+
+<span class="sd">        This method is called by QGIS and should be used to *remove*</span>
 <span class="sd">        any graphical user interface elements that should appear in QGIS.</span>
 
 <span class="sd">        Args:</span>
@@ -147,8 +147,8 @@
     <span class="c"># Run method that performs all the real work</span></div>
 <div class="viewcode-block" id="Riab.run"><a class="viewcode-back" href="../riab.html#riab.Riab.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Gui run procedure.</span>
-<span class="sd">        </span>
-<span class="sd">        This slot is called when the user clicks the toolbar icon or </span>
+
+<span class="sd">        This slot is called when the user clicks the toolbar icon or</span>
 <span class="sd">        menu item associated with this plugin.</span>
 
 <span class="sd">        .. see also:: :func:`Riab.initGui`.</span>

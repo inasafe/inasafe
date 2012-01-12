@@ -1,7 +1,7 @@
-Class RiabDialog
-================
+Module:  riabdialog
+===================
 
-This page contains the documentation for the Risk-In-A-Box **RiabDialog** class.
+This page contains the documentation for the Risk-In-A-Box **riabdialog** module.
 
-.. autoclass:: riab.RiabDialog
+.. automodule:: riabdialog
       :members:

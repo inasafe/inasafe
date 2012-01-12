@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Class RiabDialog &mdash; Risk-In-A-Box 0.0.1 documentation</title>
+    <title>Module: riabdialog &mdash; Risk-In-A-Box 0.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -29,41 +29,57 @@
     <script type="text/javascript" src="_static/theme_extras.js"></script>
     <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="index.html" />
     <link rel="up" title="Risk-In-A-Box’s API documentation" href="risk_in_a_box.html" />
-    <link rel="next" title="Class: QgsInterface" href="qgsinterface.html" />
-    <link rel="prev" title="Class: Riab" href="riab.html" /> 
+    <link rel="next" title="Module: qgsinterface" href="qgsinterface.html" />
+    <link rel="prev" title="Module: riab" href="riab.html" /> 
   </head>
   <body>
       <div class="header"><img class="rightlogo" src="_static/icon.png" alt="Logo"/><h1 class="heading"><a href="index.html">
           <span>Risk-In-A-Box 0.0.1 documentation</span></a></h1>
-        <h2 class="heading"><span>Class RiabDialog</span></h2>
+        <h2 class="heading"><span>Module: riabdialog</span></h2>
       </div>
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="riab.html">Class: Riab</a>
+        «&#160;&#160;<a href="riab.html">Module: riab</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="qgsinterface.html">Class: QgsInterface</a>&#160;&#160;»
+        <a href="qgsinterface.html">Module: qgsinterface</a>&#160;&#160;»
         </p>
 
       </div>
       <div class="content">
         
         
-  <div class="section" id="class-riabdialog">
-<h1>Class RiabDialog<a class="headerlink" href="#class-riabdialog" title="Permalink to this headline">¶</a></h1>
-<p>This page contains the documentation for the Risk-In-A-Box <strong>RiabDialog</strong> class.</p>
+  <div class="section" id="module-riabdialog">
+<h1>Module:  riabdialog<a class="headerlink" href="#module-riabdialog" title="Permalink to this headline">¶</a></h1>
+<p>This page contains the documentation for the Risk-In-A-Box <strong>riabdialog</strong> module.</p>
+<span class="target" id="module-riabdialog"></span><p>Disaster risk assessment tool developed by AusAid - <strong>GUI Dialog.</strong></p>
+<p>Contact : <a class="reference external" href="mailto:ole&#46;moller&#46;nielsen&#37;&#52;&#48;gmail&#46;com">ole<span>&#46;</span>moller<span>&#46;</span>nielsen<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.</p>
+</div>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Check raster is single band</p>
+</div>
 <dl class="class">
-<dt id="riab.RiabDialog">
-<em class="property">class </em><tt class="descclassname">riab.</tt><tt class="descname">RiabDialog</tt><big>(</big><em>iface</em><big>)</big><a class="headerlink" href="#riab.RiabDialog" title="Permalink to this definition">¶</a></dt>
+<dt id="riabdialog.RiabDialog">
+<em class="property">class </em><tt class="descclassname">riabdialog.</tt><tt class="descname">RiabDialog</tt><big>(</big><em>iface</em><big>)</big><a class="reference internal" href="_modules/riabdialog.html#RiabDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialog.RiabDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dialog implementation class for the Risk In A Box plugin.</p>
 <dl class="method">
-<dt id="riab.RiabDialog.getLayers">
-<tt class="descname">getLayers</tt><big>(</big><big>)</big><a class="headerlink" href="#riab.RiabDialog.getLayers" title="Permalink to this definition">¶</a></dt>
+<dt id="riabdialog.RiabDialog.getLayers">
+<tt class="descname">getLayers</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/riabdialog.html#RiabDialog.getLayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialog.RiabDialog.getLayers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper function to obtain a list of layers currently loaded in QGIS.</p>
-<p>On invocation, this method will populate the lstLayers on the dialog
-with a list of available layers.</p>
+<p>On invocation, this method will populate lstHazardLayers and
+lstExposureLayers on the dialog with a list of available layers. Only
+<strong>singleband raster</strong> layers will be added to the hazard layer list,
+and only <strong>point vector</strong> layers will be added to the exposure layer
+list.</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd>None.</dd>
@@ -83,11 +99,11 @@ with a list of available layers.</p>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="riab.html">Class: Riab</a>
+        «&#160;&#160;<a href="riab.html">Module: riab</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="qgsinterface.html">Class: QgsInterface</a>&#160;&#160;»
+        <a href="qgsinterface.html">Module: qgsinterface</a>&#160;&#160;»
         </p>
 
       </div>

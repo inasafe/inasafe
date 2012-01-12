@@ -1,7 +1,7 @@
-Class: ImpactCalculator
-======================
+Module: impactcalculator
+========================
 
-This page contains the documentation for the Risk-In-A-Box **ImpactCalculator** class.
+This page contains the documentation for the Risk-In-A-Box **impactcalculator** module.
 
-.. autoclass:: impactcalculator.ImpactCalculator
+.. automodule:: impactcalculator
       :members:

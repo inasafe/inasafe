@@ -1,7 +1,7 @@
-Class: RiabTest
+Module: test_riab
 ===============
 
-This page contains the documentation for the  Risk-In-A-Box code **RiabTest** class.
+This page contains the documentation for the  Risk-In-A-Box code **test_riab** module.
 
-.. autoclass:: test_riab.RiabTest
+.. automodule:: test_riab
       :members:

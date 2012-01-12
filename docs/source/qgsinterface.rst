@@ -1,7 +1,7 @@
-Class: QgsInterface
+Module: qgsinterface
 ===================
 
-This page contains the documentation for the  Risk-In-A-Box code **QgsInterface** class.
+This page contains the documentation for the  Risk-In-A-Box code **qgsinterface** module.
 
-.. autoclass:: qgsinterface.QgisInterface
+.. automodule:: qgsinterface
       :members:

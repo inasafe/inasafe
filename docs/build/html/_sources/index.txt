@@ -20,7 +20,8 @@ Contents
    
    README
    risk_in_a_box
-
+   todo
+   
 Indices and tables
 ==================
 

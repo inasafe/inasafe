@@ -23,6 +23,12 @@ from PyQt4.QtGui import QAction, QIcon
 
 # Import the code for the dialog
 from riabdialog import RiabDialog
+'''
+..todo:: Find out how to suppress warnings as this import is needed
+  but not used directly.
+'''
+
+import resources
 
 
 class Riab:

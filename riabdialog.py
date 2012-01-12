@@ -8,6 +8,8 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 
+.. todo:: Check raster is single band
+
 '''
 
 __author__ = 'tim@linfiniti.com'
@@ -93,8 +95,9 @@ class RiabDialog(QtGui.QDialog):
         '''
         for i in range(len(self.iface.mapCanvas().layers())):
             myLayer = self.iface.mapCanvas().layer(i)
-            '''.. todo::
-                  check raster is single band
+            '''
+            .. todo:: check raster is single band
+               
             '''
             if myLayer.type() == QgsMapLayer.RasterLayer:
                 self.ui.lstHazardLayers.addItem(myLayer.name())
