@@ -95,6 +95,12 @@ otherwise QGIS will likely crash when it can&#8217;t find the debug server.</p>
 and adjust the path contained in that file to match your QGIS installation path e.g.:</p>
 <div class="highlight-python"><pre>cp qgispath.txt.templ qgispath.txt</pre>
 </div>
+<p>In order to run the tests, you should install &#8216;discover&#8217; e.g.:</p>
+<div class="highlight-python"><pre>sudo pip install discover</pre>
+</div>
+<p>Then you can run the tests (from within the risk_in_a_box toplevel directory) like this:</p>
+<div class="highlight-python"><pre>python -m discover</pre>
+</div>
 <p>Contact:
 <a class="reference external" href="mailto:Ole&#46;Moller&#46;Nielsen&#37;&#52;&#48;gmail&#46;com">Ole<span>&#46;</span>Moller<span>&#46;</span>Nielsen<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 </div>

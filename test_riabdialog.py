@@ -35,7 +35,7 @@ if os.path.isfile(PATH):
     try:
         QGIS_PATH = file(PATH, 'rt').readline().rstrip()
         sys.path.append(os.path.join(QGIS_PATH, 'share', 'qgis', 'python'))
-        print sys.path
+        #print sys.path
     except Exception, e:
         raise QgisPathException
 
@@ -48,8 +48,6 @@ from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
 from riabdialog import RiabDialog
 
-ROOT = os.path.dirname(__file__)
-
 
 class RiabDialogTest(unittest.TestCase):
     '''Test the risk in a box GUI'''
@@ -61,7 +59,8 @@ class RiabDialogTest(unittest.TestCase):
         self.app = QgsApplication(sys.argv, myGuiFlag)
         #todo - softcode these paths
         self.app.setPrefixPath(QGIS_PATH)
-        self.app.setPluginPath(os.path.join(QGIS_PATH, 'lib', 'qgis', 'providers'))
+        self.app.setPluginPath(os.path.join(QGIS_PATH, 'lib', \
+                                            'qgis', 'providers'))
         self.app.initQgis()
         self.parent = QWidget()
         self.canvas = QgsMapCanvas(self.parent)
@@ -114,9 +113,10 @@ class RiabDialogTest(unittest.TestCase):
         myRasterCanvasLayer = QgsMapCanvasLayer(myRasterLayer)
         self.canvas.setLayerSet([myVectorCanvasLayer, myRasterCanvasLayer])
         self.form.getLayers()
-        # We expect one layer only because currently we are listing only 
+        # We expect one layer only because currently we are listing only
         # vector layers
-        msg = 'Expect 1 layer in list widget but got %s' % self.form.ui.lstLayers.count()
+        msg = 'Expect 1 layer in list widget but got %s' % \
+              self.form.ui.lstLayers.count()
         self.assertEqual(self.form.ui.lstLayers.count(), 1), msg
 
 

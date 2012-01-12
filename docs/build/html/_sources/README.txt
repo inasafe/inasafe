@@ -58,7 +58,13 @@ and adjust the path contained in that file to match your QGIS installation path 
 
   cp qgispath.txt.templ qgispath.txt
 
+In order to run the tests, you should install 'discover' e.g.::
 
+  sudo pip install discover
+  
+Then you can run the tests (from within the risk_in_a_box toplevel directory) like this::
+
+  python -m discover
 
 
 Contact:

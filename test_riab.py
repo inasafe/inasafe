@@ -31,7 +31,7 @@ if os.path.isfile(PATH):
     try:
         QGIS_PATH = file(PATH, 'rt').readline().rstrip()
         sys.path.append(os.path.join(QGIS_PATH, 'share', 'qgis', 'python'))
-        print sys.path
+        #print sys.path
     except Exception, e:
         raise QgisPathException
 

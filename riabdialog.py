@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtGui
 from ui_riab import Ui_Riab
 import os
 
@@ -38,7 +38,7 @@ if os.path.isfile(PATH):
         sys.path.append(PYDEVD_PATH)
         from pydevd import *
         print 'Debugging is enabled.'
-        print sys.path
+        #print sys.path
     except:
         #fail silently
         pass

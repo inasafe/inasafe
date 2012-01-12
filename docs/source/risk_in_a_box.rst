@@ -27,8 +27,8 @@ Unit Tests
 .. toctree::
    :maxdepth: 2
       
-   riabtest   
-   riabdialogtest
+   test_riab
+   test_riabdialog
 
 Indices and tables
 ------------------
