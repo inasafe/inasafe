@@ -97,7 +97,6 @@ class RiabDialog(QtGui.QDialog):
             myLayer = self.iface.mapCanvas().layer(i)
             '''
             .. todo:: check raster is single band
-               
             '''
             if myLayer.type() == QgsMapLayer.RasterLayer:
                 self.ui.lstHazardLayers.addItem(myLayer.name())
