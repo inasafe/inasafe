@@ -43,6 +43,8 @@ if os.path.isfile(PATH):
         #fail silently
         pass
 
+from qgis.core import QGis, QgsMapLayer
+
 
 class RiabDialog(QtGui.QDialog):
     '''Dialog implementation class for the Risk In A Box plugin.'''
@@ -61,7 +63,8 @@ class RiabDialog(QtGui.QDialog):
            no exceptions explicitly raised
         '''
         if DEBUG:
-            settrace()
+            # settrace()
+            pass
         QtGui.QDialog.__init__(self)
 
         # Save reference to the QGIS interface
@@ -75,8 +78,11 @@ class RiabDialog(QtGui.QDialog):
     def getLayers(self):
         '''Helper function to obtain a list of layers currently loaded in QGIS.
 
-        On invocation, this method will populate the lstLayers on the dialog
-        with a list of available layers.
+        On invocation, this method will populate lstHazardLayers and
+        lstExposureLayers on the dialog with a list of available layers. Only
+        **singleband raster** layers will be added to the hazard layer list,
+        and only **point vector** layers will be added to the exposure layer
+        list.
 
         Args:
            None.
@@ -87,8 +93,15 @@ class RiabDialog(QtGui.QDialog):
         '''
         for i in range(len(self.iface.mapCanvas().layers())):
             myLayer = self.iface.mapCanvas().layer(i)
-            if myLayer.type() == myLayer.VectorLayer and \
-                    myLayer.isUsingRendererV2():
-                #if myLayer.geometryType() == QGis.Polygon:
-                self.ui.lstLayers.addItem(myLayer.name())  # ,myLayer.id())
+            '''.. todo::
+                  check raster is single band
+            '''
+            if myLayer.type() == QgsMapLayer.RasterLayer:
+                self.ui.lstHazardLayers.addItem(myLayer.name())
+            elif myLayer.type() == QgsMapLayer.VectorLayer and \
+            myLayer.geometryType() == QGis.Point:
+                self.ui.lstExposureLayers.addItem(myLayer.name())
+            else:
+                pass  # skip the layer
+
         return

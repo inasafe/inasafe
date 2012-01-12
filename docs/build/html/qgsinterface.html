@@ -29,7 +29,7 @@
     <script type="text/javascript" src="_static/theme_extras.js"></script>
     <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="index.html" />
     <link rel="up" title="Risk-In-A-Box’s API documentation" href="risk_in_a_box.html" />
-    <link rel="next" title="Class: RiabTest" href="riabtest.html" />
+    <link rel="next" title="Custom Exceptions" href="riabexceptions.html" />
     <link rel="prev" title="Class RiabDialog" href="riabdialog.html" /> 
   </head>
   <body>
@@ -44,7 +44,7 @@
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="riabtest.html">Class: RiabTest</a>&#160;&#160;»
+        <a href="riabexceptions.html">Custom Exceptions</a>&#160;&#160;»
         </p>
 
       </div>
@@ -56,79 +56,79 @@
 <p>This page contains the documentation for the  Risk-In-A-Box code <strong>QgsInterface</strong> class.</p>
 <dl class="class">
 <dt id="qgsinterface.QgisInterface">
-<em class="property">class </em><tt class="descclassname">qgsinterface.</tt><tt class="descname">QgisInterface</tt><big>(</big><em>myApp</em>, <em>canvas</em><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">qgsinterface.</tt><tt class="descname">QgisInterface</tt><big>(</big><em>myApp</em>, <em>canvas</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to expose qgis objects and functionalities to plugins. This class is 
 here for enabling us to run unit tests only, and so most methods are 
 simply stubs.</p>
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.activeLayer">
-<tt class="descname">activeLayer</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.activeLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.activeLayer" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">activeLayer</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.activeLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get pointer to the active layer (layer selected in the legend)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.addDockWidget">
-<tt class="descname">addDockWidget</tt><big>(</big><em>area</em>, <em>dockwidget</em><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.addDockWidget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.addDockWidget" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">addDockWidget</tt><big>(</big><em>area</em>, <em>dockwidget</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addDockWidget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a dock widget to the main window</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.addRasterLayer">
-<tt class="descname">addRasterLayer</tt><big>(</big><em>rasterLayerPath</em>, <em>baseName</em><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.addRasterLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.addRasterLayer" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">addRasterLayer</tt><big>(</big><em>rasterLayerPath</em>, <em>baseName</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addRasterLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a raster layer given a raster layer file name</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.addToolBar">
-<tt class="descname">addToolBar</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.addToolBar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.addToolBar" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">addToolBar</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addToolBar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add toolbar with specified name</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.addToolBarIcon">
-<tt class="descname">addToolBarIcon</tt><big>(</big><em>qAction</em><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.addToolBarIcon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.addToolBarIcon" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">addToolBarIcon</tt><big>(</big><em>qAction</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addToolBarIcon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an icon to the plugins toolbar</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.addVectorLayer">
-<tt class="descname">addVectorLayer</tt><big>(</big><em>vectorLayerPath</em>, <em>baseName</em>, <em>providerKey</em><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.addVectorLayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.addVectorLayer" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">addVectorLayer</tt><big>(</big><em>vectorLayerPath</em>, <em>baseName</em>, <em>providerKey</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addVectorLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a vector layer</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.mainWindow">
-<tt class="descname">mainWindow</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.mainWindow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.mainWindow" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">mainWindow</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.mainWindow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a pointer to the main window (instance of QgisApp in case of QGIS)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.mapCanvas">
-<tt class="descname">mapCanvas</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.mapCanvas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.mapCanvas" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">mapCanvas</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.mapCanvas" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a pointer to the map canvas</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.removeToolBarIcon">
-<tt class="descname">removeToolBarIcon</tt><big>(</big><em>qAction</em><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.removeToolBarIcon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.removeToolBarIcon" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">removeToolBarIcon</tt><big>(</big><em>qAction</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.removeToolBarIcon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove an action (icon) from the plugin toolbar</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.zoomFull">
-<tt class="descname">zoomFull</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.zoomFull"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.zoomFull" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">zoomFull</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.zoomFull" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zoom to the map full extent</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.zoomToNext">
-<tt class="descname">zoomToNext</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.zoomToNext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.zoomToNext" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">zoomToNext</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.zoomToNext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zoom to next view extent</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="qgsinterface.QgisInterface.zoomToPrevious">
-<tt class="descname">zoomToPrevious</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/qgsinterface.html#QgisInterface.zoomToPrevious"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#qgsinterface.QgisInterface.zoomToPrevious" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">zoomToPrevious</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.zoomToPrevious" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zoom to previous view extent</p>
 </dd></dl>
 
@@ -145,7 +145,7 @@ simply stubs.</p>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="riabtest.html">Class: RiabTest</a>&#160;&#160;»
+        <a href="riabexceptions.html">Custom Exceptions</a>&#160;&#160;»
         </p>
 
       </div>

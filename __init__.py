@@ -17,7 +17,8 @@ __version__ = '0.0.1'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
- 
+
+
 def name():
     '''A user friendly name for the plugin.'''
     return 'Risk in a box'
@@ -39,7 +40,8 @@ def icon():
 
 
 def qgisMinimumVersion():
-    '''Minimum version of QGIS needed to run this plugin - currently set to 1.7.'''
+    '''Minimum version of QGIS needed to run this plugin -
+    currently set to 1.7.'''
     return '1.7'
 
 

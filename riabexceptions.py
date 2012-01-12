@@ -18,6 +18,12 @@ __date__ = '12/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+
 class QgisPathException(Exception):
-  '''Custom exception for when qgispath.txt could not be read.'''
-  pass
+    '''Custom exception for when qgispath.txt could not be read.'''
+    pass
+
+
+class TestNotImplementedException(Exception):
+    '''Custom exception for when a test exists only as a stub.'''
+    pass

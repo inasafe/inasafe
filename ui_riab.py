@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riab.ui'
 #
-# Created: Tue Jan 10 09:20:17 2012
+# Created: Thu Jan 12 15:00:00 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -25,17 +25,26 @@ class Ui_Riab(object):
         self.splitter.setOrientation(QtCore.Qt.Horizontal)
         self.splitter.setObjectName(_fromUtf8("splitter"))
         self.groupBox_3 = QtGui.QGroupBox(self.splitter)
-        self.groupBox_3.setTitle(QtGui.QApplication.translate("Riab", "Layers", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_3.setTitle(QtGui.QApplication.translate("Riab", "Input layers", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_3.setObjectName(_fromUtf8("groupBox_3"))
         self.gridLayout_3 = QtGui.QGridLayout(self.groupBox_3)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
-        self.lstLayers = QtGui.QListWidget(self.groupBox_3)
-        self.lstLayers.setObjectName(_fromUtf8("lstLayers"))
-        self.gridLayout_3.addWidget(self.lstLayers, 0, 0, 1, 1)
-        self.lblLogo = QtGui.QLabel(self.groupBox_3)
-        self.lblLogo.setText(QtGui.QApplication.translate("Riab", "Logo", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblLogo.setObjectName(_fromUtf8("lblLogo"))
-        self.gridLayout_3.addWidget(self.lblLogo, 1, 0, 1, 1)
+        self.label_4 = QtGui.QLabel(self.groupBox_3)
+        self.label_4.setText(QtGui.QApplication.translate("Riab", "&Hazard layer", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_4.setObjectName(_fromUtf8("label_4"))
+        self.gridLayout_3.addWidget(self.label_4, 0, 0, 1, 1)
+        self.lstHazardLayers = QtGui.QListWidget(self.groupBox_3)
+        self.lstHazardLayers.setAlternatingRowColors(True)
+        self.lstHazardLayers.setObjectName(_fromUtf8("lstHazardLayers"))
+        self.gridLayout_3.addWidget(self.lstHazardLayers, 1, 0, 1, 1)
+        self.label_5 = QtGui.QLabel(self.groupBox_3)
+        self.label_5.setText(QtGui.QApplication.translate("Riab", "E&xposure layer", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_5.setObjectName(_fromUtf8("label_5"))
+        self.gridLayout_3.addWidget(self.label_5, 2, 0, 1, 1)
+        self.lstExposureLayers = QtGui.QListWidget(self.groupBox_3)
+        self.lstExposureLayers.setAlternatingRowColors(True)
+        self.lstExposureLayers.setObjectName(_fromUtf8("lstExposureLayers"))
+        self.gridLayout_3.addWidget(self.lstExposureLayers, 3, 0, 1, 1)
         self.layoutWidget = QtGui.QWidget(self.splitter)
         self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.layoutWidget)
@@ -47,7 +56,7 @@ class Ui_Riab(object):
         self.gridLayout = QtGui.QGridLayout(self.groupBox)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.label = QtGui.QLabel(self.groupBox)
-        self.label.setText(QtGui.QApplication.translate("Riab", "Hazard", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("Riab", "Ha&zard", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.cboHazard = QtGui.QComboBox(self.groupBox)
@@ -70,7 +79,7 @@ class Ui_Riab(object):
         self.cboHazard.setItemText(7, QtGui.QApplication.translate("Riab", "Gede VEI4 Scenario", None, QtGui.QApplication.UnicodeUTF8))
         self.gridLayout.addWidget(self.cboHazard, 0, 1, 1, 1)
         self.label_2 = QtGui.QLabel(self.groupBox)
-        self.label_2.setText(QtGui.QApplication.translate("Riab", "Exposure", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("Riab", "Ex&posure", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
         self.cboExposure = QtGui.QComboBox(self.groupBox)
@@ -85,7 +94,7 @@ class Ui_Riab(object):
         self.cboExposure.setItemText(3, QtGui.QApplication.translate("Riab", "Indonesia Highway", None, QtGui.QApplication.UnicodeUTF8))
         self.gridLayout.addWidget(self.cboExposure, 1, 1, 1, 1)
         self.label_3 = QtGui.QLabel(self.groupBox)
-        self.label_3.setText(QtGui.QApplication.translate("Riab", "Function", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("Riab", "&Function", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.gridLayout.addWidget(self.label_3, 2, 0, 1, 1)
         self.cboFunction = QtGui.QComboBox(self.groupBox)
@@ -110,11 +119,22 @@ class Ui_Riab(object):
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Close|QtGui.QDialogButtonBox.Ok|QtGui.QDialogButtonBox.Reset)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
         self.gridLayout_4.addWidget(self.buttonBox, 1, 0, 1, 1)
+        self.label_4.setBuddy(self.lstHazardLayers)
+        self.label_5.setBuddy(self.lstExposureLayers)
+        self.label.setBuddy(self.cboHazard)
+        self.label_2.setBuddy(self.cboExposure)
+        self.label_3.setBuddy(self.cboFunction)
 
         self.retranslateUi(Riab)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), Riab.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), Riab.reject)
         QtCore.QMetaObject.connectSlotsByName(Riab)
+        Riab.setTabOrder(self.lstHazardLayers, self.lstExposureLayers)
+        Riab.setTabOrder(self.lstExposureLayers, self.cboHazard)
+        Riab.setTabOrder(self.cboHazard, self.cboExposure)
+        Riab.setTabOrder(self.cboExposure, self.cboFunction)
+        Riab.setTabOrder(self.cboFunction, self.wvResults)
+        Riab.setTabOrder(self.wvResults, self.buttonBox)
 
     def retranslateUi(self, Riab):
         pass

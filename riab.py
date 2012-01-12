@@ -1,5 +1,6 @@
 '''
-Disaster risk assessment tool developed by AusAid - **QGIS plugin implementation.**
+Disaster risk assessment tool developed by AusAid -
+  **QGIS plugin implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -20,25 +21,22 @@ __copyright__ += 'Disaster Reduction'
 from PyQt4.QtCore import QObject, SIGNAL
 from PyQt4.QtGui import QAction, QIcon
 
-# Initialize Qt resources from file resources.py
-import resources
-
 # Import the code for the dialog
 from riabdialog import RiabDialog
 
 
 class Riab:
     '''The QGIS interface implementation for the Risk in a box plugin.
-    
+
     This class acts as the 'glue' between QGIS and our custom logic.
     It creates a toolbar and menubar entry and launches the RIAB user
     interface if these are activated.
-    ''' 
-    
+    '''
+
     def __init__(self, iface):
         '''Class constructor.
-        
-        On instantiation, the plugin instance will be assigned a copy 
+
+        On instantiation, the plugin instance will be assigned a copy
         of the QGIS iface object which will allow this plugin to access and
         manipulate the running QGIS instance that spawned it.
 
@@ -56,9 +54,9 @@ class Riab:
 
     def initGui(self):
         '''Gui initialisation procedure (for QGIS plugin api).
-        
-        This method is called by QGIS and should be used to set up 
-        any graphical user interface elements that should appear in QGIS by 
+
+        This method is called by QGIS and should be used to set up
+        any graphical user interface elements that should appear in QGIS by
         default (i.e. before the user performs any explicit action with the
         plugin).
 
@@ -81,8 +79,8 @@ class Riab:
 
     def unload(self):
         '''Gui breakdown procedure (for QGIS plugin api).
-        
-        This method is called by QGIS and should be used to *remove* 
+
+        This method is called by QGIS and should be used to *remove*
         any graphical user interface elements that should appear in QGIS.
 
         Args:
@@ -99,8 +97,8 @@ class Riab:
     # Run method that performs all the real work
     def run(self):
         '''Gui run procedure.
-        
-        This slot is called when the user clicks the toolbar icon or 
+
+        This slot is called when the user clicks the toolbar icon or
         menu item associated with this plugin.
 
         .. see also:: :func:`Riab.initGui`.

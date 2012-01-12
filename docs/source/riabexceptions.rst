@@ -5,3 +5,7 @@ This page contains the documentation for the  Risk-In-A-Box code **Exception** c
 
 .. autoclass:: riabexceptions.QgisPathException
       :members:
+
+.. autoclass:: riabexceptions.TestNotImplementedException
+      :members:
+      

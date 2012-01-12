@@ -19,6 +19,7 @@ Implementation
    riab
    riabdialog
    qgsinterface
+   impactcalculator
    riabexceptions
    
 Unit Tests
@@ -29,6 +30,7 @@ Unit Tests
       
    test_riab
    test_riabdialog
+   test_impactcalculator
 
 Indices and tables
 ------------------

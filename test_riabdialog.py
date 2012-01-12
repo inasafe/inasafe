@@ -57,7 +57,7 @@ class RiabDialogTest(unittest.TestCase):
 
         myGuiFlag = True  # We need to enable qgis app in gui mode
         self.app = QgsApplication(sys.argv, myGuiFlag)
-        #todo - softcode these paths
+        # todo - softcode these paths
         self.app.setPrefixPath(QGIS_PATH)
         self.app.setPluginPath(os.path.join(QGIS_PATH, 'lib', \
                                             'qgis', 'providers'))
@@ -69,7 +69,8 @@ class RiabDialogTest(unittest.TestCase):
 
     def clearForm(self):
         '''Helper function to  set all form elements to default state'''
-        self.form.ui.lstLayers.clear()
+        self.form.ui.lstHazardLayers.clear()
+        self.form.ui.lstExposureLayers.clear()
         self.form.ui.cboHazard.setCurrentIndex(0)
         self.form.ui.cboExposure.setCurrentIndex(0)
         self.form.ui.cboFunction.setCurrentIndex(0)
@@ -77,7 +78,8 @@ class RiabDialogTest(unittest.TestCase):
     def test_defaults(self):
         '''Test the GUI in its default state'''
         # Note you can also use almostEqual for inexact comparisons
-        self.assertEqual(self.form.ui.lstLayers.count(), 0)
+        self.assertEqual(self.form.ui.lstHazardLayers.count(), 0)
+        self.assertEqual(self.form.ui.lstExposureLayers.count(), 0)
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), 0)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), 0)
         self.assertEqual(self.form.ui.cboFunction.currentIndex(), 0)
@@ -113,12 +115,13 @@ class RiabDialogTest(unittest.TestCase):
         myRasterCanvasLayer = QgsMapCanvasLayer(myRasterLayer)
         self.canvas.setLayerSet([myVectorCanvasLayer, myRasterCanvasLayer])
         self.form.getLayers()
-        # We expect one layer only because currently we are listing only
-        # vector layers
-        msg = 'Expect 1 layer in list widget but got %s' % \
-              self.form.ui.lstLayers.count()
-        self.assertEqual(self.form.ui.lstLayers.count(), 1), msg
+        msg = 'Expect 1 layer in hazard list widget but got %s' % \
+              self.form.ui.lstHazardLayers.count()
+        self.assertEqual(self.form.ui.lstHazardLayers.count(), 1), msg
 
+        msg = 'Expect 1 layer in exposure list widget but got %s' % \
+              self.form.ui.lstExposureLayers.count()
+        self.assertEqual(self.form.ui.lstExposureLayers.count(), 1), msg
 
 if __name__ == '__main__':
     unittest.main()
