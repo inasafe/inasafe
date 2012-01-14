@@ -93,20 +93,9 @@ class ImpactCalculator:
         if not self._exposure_layer:
             msg = 'Error: Exposure layer not set.'
             raise InsufficientParametersException(msg)
+
+
         '''
-        hazard_index = dlg.ui.comboBox.currentIndex()
-        hazard_layer = self.hazard_layers[hazard_index]
-        # Get the layer by index from the previous stored list
-
-        exposure_index = dlg.ui.comboBox_2.currentIndex()
-        exposure_layer = self.exposure_layers[exposure_index]
-        # Get the layer by index from the previous stored list
-
-
-        # Get the layer source filenames
-        hazard_filename = hazard_layer.source()
-        exposure_filename = exposure_layer.source()
-
         print 'Hazard:', hazard_filename
         print 'Exposure:', exposure_filename
 

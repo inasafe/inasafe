@@ -87,17 +87,15 @@ class RiabDialogTest(unittest.TestCase):
     def test_run(self):
         '''Test that the ok button works as expected'''
         # Push OK with the left mouse button
+        self.clearForm()
+        self.loadLayers()
         myOkWidget = self.form.ui.buttonBox.button(self.form.ui.buttonBox.Ok)
         QTest.mouseClick(myOkWidget, Qt.LeftButton)
         #QTest.keyClicks(
         #  self.form.ui.buttonBox.button(self.form.ui.buttonBox.Cancel), " ")
 
-    def test_loadLayers(self):
-        '''Load some layers in the canvas, call load layers
-         and verify that the list widget was update appropriately
-        '''
-
-        self.clearForm()
+    def loadLayers(self):
+        '''Helper function to load layers into the dialog.'''
         myVectorPath = os.path.join(ROOT, 'testdata', 'Jakarta_sekolah.shp')
         myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
         msg = 'Vector layer "%s" is not valid' % str(myVectorLayer.source())
@@ -117,6 +115,14 @@ class RiabDialogTest(unittest.TestCase):
         myRasterCanvasLayer = QgsMapCanvasLayer(myRasterLayer)
         self.canvas.setLayerSet([myVectorCanvasLayer, myRasterCanvasLayer])
         self.form.getLayers()
+
+    def test_loadLayers(self):
+        '''Load some layers in the canvas, call load layers
+         and verify that the list widget was update appropriately
+        '''
+
+        self.clearForm()
+        self.loadLayers()
         msg = 'Expect 1 layer in hazard list widget but got %s' % \
               self.form.ui.lstHazardLayers.count()
         self.assertEqual(self.form.ui.lstHazardLayers.count(), 1), msg
@@ -124,6 +130,7 @@ class RiabDialogTest(unittest.TestCase):
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
               self.form.ui.lstExposureLayers.count()
         self.assertEqual(self.form.ui.lstExposureLayers.count(), 1), msg
+
 
 if __name__ == '__main__':
     unittest.main()

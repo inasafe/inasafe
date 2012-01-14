@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 from ui_riab import Ui_Riab
 import os
 
@@ -100,10 +100,15 @@ class RiabDialog(QtGui.QDialog):
                       store uuid in user property of list widget for layers
             '''
             if myLayer.type() == QgsMapLayer.RasterLayer:
-                self.ui.lstHazardLayers.addItem(myLayer.name())
+                myItem = QtGui.QListWidgetItem(myLayer.name())
+                myItem.setData(QtCore.Qt.UserRole, myLayer.source())
+                self.ui.lstHazardLayers.addItem(myItem)
+
             elif myLayer.type() == QgsMapLayer.VectorLayer and \
             myLayer.geometryType() == QGis.Point:
-                self.ui.lstExposureLayers.addItem(myLayer.name())
+                myItem = QtGui.QListWidgetItem(myLayer.name())
+                myItem.setData(QtCore.Qt.UserRole, myLayer.source())
+                self.ui.lstExposureLayers.addItem(myItem)
             else:
                 pass  # skip the layer
 
@@ -113,5 +118,11 @@ class RiabDialog(QtGui.QDialog):
         '''Execute analysis when ok button is clicked.'''
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myCalculator = ImpactCalculator()
-        myCalculator.setHazardLayer('')
-        myCalculator.setExposureLayer('')
+        myHazardItem = self.ui.lstHazardLayers.currentItem()
+        myExposureItem = self.ui.lstExposureLayers.currentItem()
+        myHazardFileName = myHazardItem.data(QtCore.Qt.UserRole)
+        myExposureFileName = myExposureItem.data(QtCore.Qt.UserRole)
+
+        myCalculator.setHazardLayer(myHazardFileName)
+        myCalculator.setExposureLayer(myExposureFileName)
+        myCalculator.run()
