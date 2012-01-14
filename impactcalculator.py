@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 import unicodedata
+from riabexceptions import InsufficientParametersException
 
 
 class ImpactCalculator:
@@ -55,21 +56,43 @@ class ImpactCalculator:
     _hazard_layer = property(getHazardLayer, setHazardLayer,
         delHazardLayer, '''Hazard layer property  (e.g. a flood depth
         raster).''')
+
     _exposure_layer = property(getExposureLayer, setExposureLayer,
         delExposureLayer, '''Exposure layer property (e.g. buildings or
         features that will be affected).''')
 
-
-
     def make_ascii(self, x):
         '''Convert QgsString to ASCII'''
-
         x = unicode(x)
         x = unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
         return x
 
     def run(self):
-        ''' Main function for hazard impact calculation '''
+        ''' Main function for hazard impact calculation.
+        Requires three parameters to be set before execution
+        can take place:
+        * Hazard layer - a path to a raster,
+        * Exposure layer - a path to a vector points layer.
+        * Function - a function that defines how the Hazard assessment
+            will be computed.
+        Args:
+           None.
+        Returns:
+           A two tuple containing:
+           * a raster output layer's path
+           * a string (probably in html markup) containing reporting
+             information summarising the analysis result
+        Raises:
+           InsufficientParametersException if not all parameters are
+           set.
+        '''
+        if not self._hazard_layer:
+            msg = 'Error: Hazard layer not set.'
+            raise InsufficientParametersException(msg)
+
+        if not self._exposure_layer:
+            msg = 'Error: Exposure layer not set.'
+            raise InsufficientParametersException(msg)
         '''
         hazard_index = dlg.ui.comboBox.currentIndex()
         hazard_layer = self.hazard_layers[hazard_index]

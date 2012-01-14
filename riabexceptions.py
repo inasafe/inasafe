@@ -27,3 +27,8 @@ class QgisPathException(Exception):
 class TestNotImplementedException(Exception):
     '''Custom exception for when a test exists only as a stub.'''
     pass
+
+
+class InsufficientParametersException(Exception):
+    '''Custom exception for when a test exists only as a stub.'''
+    pass

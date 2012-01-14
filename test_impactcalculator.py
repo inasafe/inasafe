@@ -21,6 +21,7 @@ import os
 import unittest
 from impactcalculator import ImpactCalculator
 #from riabexceptions import TestNotImplementedException
+from riabexceptions import InsufficientParametersException
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -50,9 +51,17 @@ class ImpactCalculatorTest(unittest.TestCase):
         assert(self.calculator.getHazardLayer() ==
                self.rasterPath), msg
 
-    def test_run(self):
-        '''Test that run works.'''
-        self.calculator.run()
+    def test_runWithNoParameters(self):
+        '''Test that run raises an error properly
+           when no parameters are defined.'''
+        try:
+            self.calculator.run()
+        except InsufficientParametersException, e:
+            pass # expected outcome
+        except:
+            msg = 'Missing parameters not raised as error.'
+            assert(), msg 
+
 
 
 if __name__ == "__main__":
