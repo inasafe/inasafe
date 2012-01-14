@@ -120,6 +120,11 @@ class RiabDialog(QtGui.QDialog):
         myCalculator = ImpactCalculator()
         myHazardItem = self.ui.lstHazardLayers.currentItem()
         myExposureItem = self.ui.lstExposureLayers.currentItem()
+        if not myHazardItem or not myExposureItem():
+            myMessage = 'Please ensure both Hazard layer and ' + \
+            'Exposure layer are set before clicking OK.'
+            self.ui.wvResults.setHtml(myMessage)
+            return
         myHazardFileName = myHazardItem.data(QtCore.Qt.UserRole)
         myExposureFileName = myExposureItem.data(QtCore.Qt.UserRole)
 
