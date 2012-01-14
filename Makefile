@@ -47,6 +47,7 @@ deploy: compile
 	cp -vf $(PY_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vf $(UI_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vf $(RESOURCE_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
+
 	cp -vf $(EXTRAS) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 
 # Create a zip package of the plugin named $(PLUGINNAME).zip. 
@@ -58,3 +59,6 @@ package: compile
 		rm -f $(PLUGINNAME).zip
 		git archive --prefix=$(PLUGINNAME)/ -o $(PLUGINNAME).zip $(VERSION)
 		echo "Created package: $(PLUGINNAME).zip"
+
+docs: compile
+	cd docs; make html; cd ..
