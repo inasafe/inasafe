@@ -73,7 +73,7 @@ the Free Software Foundation; either version 2 of the License, or
 <dd><p>Dialog implementation class for the Risk In A Box plugin.</p>
 <dl class="method">
 <dt id="riabdialog.RiabDialog.accept">
-<tt class="descname">accept</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialog.RiabDialog.accept" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">accept</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/riabdialog.html#RiabDialog.accept"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialog.RiabDialog.accept" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute analysis when ok button is clicked.</p>
 </dd></dl>
 
@@ -93,6 +93,39 @@ list.</p>
 <dd>None</dd>
 <dt>Raises:</dt>
 <dd>no</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="riabdialog.RiabDialog.validate">
+<tt class="descname">validate</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/riabdialog.html#RiabDialog.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialog.RiabDialog.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method to evaluate the current state of the dialog and
+determine if it is appropriate for the OK button to be enabled
+or not.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The enabled state of the OK button on the dialog will
+NOT be updated (set True or False) depending on the outcome of
+the UI readiness tests performed - <strong>only</strong> True or False
+will be returned by the function.</p>
+</div>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>None.</dd>
+<dt>Returns:</dt>
+<dd><p class="first">A two-tuple consisting of:</p>
+<ul class="simple">
+<li>Boolean reflecting the results of the valudation tests.</li>
+<li>A message indicating any reason why the validation may
+have failed.</li>
+</ul>
+<p>Example:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">flag</span><span class="p">,</span><span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+<dt>Raises:</dt>
+<dd>no exceptions explicitly raised</dd>
 </dl>
 </dd></dl>
 
