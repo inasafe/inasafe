@@ -48,6 +48,7 @@ if os.path.isfile(PATH):
 from qgis.core import QGis, QgsMapLayer
 from impactcalculator import ImpactCalculator
 
+
 class RiabDialog(QtGui.QDialog):
     '''Dialog implementation class for the Risk In A Box plugin.'''
 
@@ -76,6 +77,54 @@ class RiabDialog(QtGui.QDialog):
         self.ui = Ui_Riab()
         self.ui.setupUi(self)
         self.getLayers()
+        self.setOkButtonStatus()
+
+    def validate(self):
+        '''Helper method to evaluate the current state of the dialog and
+        determine if it is appropriate for the OK button to be enabled
+        or not.
+
+        .. note:: The enabled state of the OK button on the dialog will
+           NOT be updated (set True or False) depending on the outcome of
+           the UI readiness tests performed - **only** True or False
+           will be returned by the function.
+
+        Args:
+           None.
+        Returns:
+           A two-tuple consisting of:
+
+           * Boolean reflecting the results of the valudation tests.
+           * A message indicating any reason why the validation may
+             have failed.
+
+           Example::
+
+               flag,msg = self.ui.validate()
+
+        Raises:
+           no exceptions explicitly raised
+        '''
+        myHazardItem = self.ui.lstHazardLayers.currentItem()
+        myExposureItem = self.ui.lstExposureLayers.currentItem()
+        if not myHazardItem or not myExposureItem:
+            myMessage = 'Please ensure both Hazard layer and ' + \
+            'Exposure layer are set before clicking OK.'
+            return (False, myMessage)
+
+    def setOkButtonStatus(self):
+        '''Helper function to set the ok button status if the
+        form is valid and disable it if it is not.
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.'''
+        myButton = self.ui.buttonBox.button(self.ui.buttonBox.Ok)
+        myFlag, myMessage = self.validate()
+        myButton.setEnabled(myFlag)
+        self.ui.wvResults.setHtml(myMessage)
 
     def getLayers(self):
         '''Helper function to obtain a list of layers currently loaded in QGIS.
@@ -93,6 +142,7 @@ class RiabDialog(QtGui.QDialog):
         Raises:
            no
         '''
+
         for i in range(len(self.iface.mapCanvas().layers())):
             myLayer = self.iface.mapCanvas().layer(i)
             '''

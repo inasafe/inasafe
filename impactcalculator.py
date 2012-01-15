@@ -71,17 +71,21 @@ class ImpactCalculator:
         ''' Main function for hazard impact calculation.
         Requires three parameters to be set before execution
         can take place:
+
         * Hazard layer - a path to a raster,
         * Exposure layer - a path to a vector points layer.
         * Function - a function that defines how the Hazard assessment
-            will be computed.
+          will be computed.
+
         Args:
            None.
         Returns:
            A two tuple containing:
+
            * a raster output layer's path
            * a string (probably in html markup) containing reporting
              information summarising the analysis result
+
         Raises:
            InsufficientParametersException if not all parameters are
            set.
@@ -93,7 +97,6 @@ class ImpactCalculator:
         if not self._exposure_layer:
             msg = 'Error: Exposure layer not set.'
             raise InsufficientParametersException(msg)
-
 
         '''
         print 'Hazard:', hazard_filename

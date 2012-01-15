@@ -75,6 +75,15 @@ class RiabDialogTest(unittest.TestCase):
         self.form.ui.cboExposure.setCurrentIndex(0)
         self.form.ui.cboFunction.setCurrentIndex(0)
 
+    def populateForm(self):
+        '''A helper function to populate the form and set it to a
+        valid state.'''
+        self.loadLayers()
+        myHazardItem = self.ui.lstHazardLayers.item(0)
+        myExposureItem = self.ui.lstExposureLayers.item(0)
+        QTest.mouseClick(myHazardItem, Qt.LeftButton)
+        QTest.mouseClick(myExposureItem, Qt.LeftButton)
+
     def test_defaults(self):
         '''Test the GUI in its default state'''
         # Note you can also use almostEqual for inexact comparisons
@@ -83,6 +92,33 @@ class RiabDialogTest(unittest.TestCase):
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), 0)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), 0)
         self.assertEqual(self.form.ui.cboFunction.currentIndex(), 0)
+
+    def test_validate(self):
+        '''Test that the validate function works as expected.'''
+        # First check that we DONT validate a clear form
+        self.clearForm()
+        myFlag = self.form.validate()
+        msg = 'Validation expected to fail on a cleared form.'
+        assert(not myFlag), msg
+        # Now check we DO validate a populated form
+        self.populateForm()
+        myFlag = self.form.validate()
+        msg = 'Validation expected to pass on a populated for with selctions.'
+        assert(not myFlag), msg
+
+    def test_setOkButtonStatus(self):
+        '''Test that the OK button changes properly according to
+        form validity.'''
+        # First check that we ok ISNT enabled on a clear form
+        self.clearForm()
+        myFlag = self.form.validate()
+        msg = 'Validation expected to fail on a cleared form.'
+        assert(not myFlag), msg
+        # Now check OK IS enabled on a populated form
+        self.populateForm()
+        myFlag = self.form.validate()
+        msg = 'Validation expected to pass on a populated for with selctions.'
+        assert(not myFlag), msg
 
     def test_run(self):
         '''Test that the ok button works as expected'''
