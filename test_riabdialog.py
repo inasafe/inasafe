@@ -79,8 +79,8 @@ class RiabDialogTest(unittest.TestCase):
         '''A helper function to populate the form and set it to a
         valid state.'''
         self.loadLayers()
-        myHazardItem = self.ui.lstHazardLayers.item(0)
-        myExposureItem = self.ui.lstExposureLayers.item(0)
+        myHazardItem = self.form.ui.lstHazardLayers.item(0)
+        myExposureItem = self.form.ui.lstExposureLayers.item(0)
         QTest.mouseClick(myHazardItem, Qt.LeftButton)
         QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
@@ -97,28 +97,32 @@ class RiabDialogTest(unittest.TestCase):
         '''Test that the validate function works as expected.'''
         # First check that we DONT validate a clear form
         self.clearForm()
-        myFlag = self.form.validate()
-        msg = 'Validation expected to fail on a cleared form.'
-        assert(not myFlag), msg
+        myFlag, myMessage = self.form.validate()
+        self.assertIsNot(myMessage, None, 'No reason for failure given')
+        myMessage = 'Validation expected to fail on a cleared form.'
+        self.assertEquals(myFlag, False, myMessage)
         # Now check we DO validate a populated form
         self.populateForm()
         myFlag = self.form.validate()
-        msg = 'Validation expected to pass on a populated for with selctions.'
-        assert(not myFlag), msg
+        myMessage = ('Validation expected to pass on' +
+                     ' a populated for with selctions.')
+        assert(myFlag), myMessage
 
     def test_setOkButtonStatus(self):
         '''Test that the OK button changes properly according to
         form validity.'''
         # First check that we ok ISNT enabled on a clear form
         self.clearForm()
-        myFlag = self.form.validate()
-        msg = 'Validation expected to fail on a cleared form.'
-        assert(not myFlag), msg
+        myFlag, myMessage = self.form.validate()
+        self.assertIsNot(myMessage, None, 'No reason for failure given')
+        myMessage = 'Validation expected to fail on a cleared form.'
+        self.assertEquals(myFlag, False, myMessage)
         # Now check OK IS enabled on a populated form
         self.populateForm()
         myFlag = self.form.validate()
-        msg = 'Validation expected to pass on a populated for with selctions.'
-        assert(not myFlag), msg
+        myMessage = ('Validation expected to pass on a ' +
+                     'populated form with selections.')
+        assert(myFlag), myMessage
 
     def test_run(self):
         '''Test that the ok button works as expected'''
