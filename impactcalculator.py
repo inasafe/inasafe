@@ -90,11 +90,11 @@ class ImpactCalculator:
            InsufficientParametersException if not all parameters are
            set.
         '''
-        if not self._hazard_layer:
+        if not self.__hazard_layer:
             msg = 'Error: Hazard layer not set.'
             raise InsufficientParametersException(msg)
 
-        if not self._exposure_layer:
+        if not self.__exposure_layer:
             msg = 'Error: Exposure layer not set.'
             raise InsufficientParametersException(msg)
 

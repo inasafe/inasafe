@@ -107,10 +107,12 @@ class RiabDialog(QtGui.QDialog):
         '''
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myExposureIndex = self.ui.cboExposure.currentIndex()
-        if myHazardIndex > -1 and myExposureIndex > -1:
+        if myHazardIndex == -1 or myExposureIndex == -1:
             myMessage = 'Please ensure both Hazard layer and ' + \
             'Exposure layer are set before clicking OK.'
             return (False, myMessage)
+        else:
+            return (True, '')
 
     def setOkButtonStatus(self):
         '''Helper function to set the ok button status if the
@@ -172,13 +174,15 @@ class RiabDialog(QtGui.QDialog):
         if not myFlag:
             self.ui.wvResults.setHtml(myMessage)
             return
+        settrace()
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
-                             QtCore.Qt.UserRole)
+                             QtCore.Qt.UserRole).toString()
         myCalculator.setHazardLayer(myHazardFileName)
 
         myExposureIndex = self.ui.cboExposure.currentIndex()
         myExposureFileName = self.ui.cboExposure.itemData(myExposureIndex,
-                             QtCore.Qt.UserRole)
+                             QtCore.Qt.UserRole).toString()
         myCalculator.setExposureLayer(myExposureFileName)
+        
         myCalculator.run()
