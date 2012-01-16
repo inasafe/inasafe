@@ -174,7 +174,6 @@ class RiabDialog(QtGui.QDialog):
         if not myFlag:
             self.ui.wvResults.setHtml(myMessage)
             return
-        settrace()
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
                              QtCore.Qt.UserRole).toString()

@@ -19,9 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import sys
 import os
 import unittest
-from PyQt4.QtGui import QWidget
+from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
-from PyQt4.QtCore import Qt, QFileInfo
 from riabexceptions import QgisPathException
 
 # Check if a qgispath.txt file exists in the plugin folder (you
@@ -60,8 +59,9 @@ class RiabDialogTest(unittest.TestCase):
         myUseDefaultPathFlag = True
         self.app.setPrefixPath('/usr/local', myUseDefaultPathFlag)
         self.app.initQgis()
-        self.parent = QWidget()
+        self.parent = QtGui.QWidget()
         self.canvas = QgsMapCanvas(self.parent)
+        self.canvas.resize(QtCore.QSize(400,400))
         self.iface = QgisInterface(self.canvas)
         self.form = RiabDialog(self.iface)
 
@@ -128,7 +128,7 @@ class RiabDialogTest(unittest.TestCase):
         self.clearForm()
         self.loadLayers()
         myOkWidget = self.form.ui.buttonBox.button(self.form.ui.buttonBox.Ok)
-        QTest.mouseClick(myOkWidget, Qt.LeftButton)
+        QTest.mouseClick(myOkWidget, QtCore.Qt.LeftButton)
         #QTest.keyClicks(
         #  self.form.ui.buttonBox.button(self.form.ui.buttonBox.Cancel), " ")
 
@@ -141,7 +141,7 @@ class RiabDialogTest(unittest.TestCase):
 
         myRasterPath = os.path.join(ROOT, 'testdata',
                                     'current_flood_depth_jakarta.asc')
-        myFileInfo = QFileInfo(myRasterPath)
+        myFileInfo = QtCore.QFileInfo(myRasterPath)
         myBaseName = myFileInfo.baseName()
         myRasterLayer = QgsRasterLayer(myRasterPath, myBaseName)
         msg = 'Raster layer "%s" is not valid' % str(myRasterLayer.source())
