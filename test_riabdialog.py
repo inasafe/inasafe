@@ -61,7 +61,7 @@ class RiabDialogTest(unittest.TestCase):
         self.app.initQgis()
         self.parent = QtGui.QWidget()
         self.canvas = QgsMapCanvas(self.parent)
-        self.canvas.resize(QtCore.QSize(400,400))
+        self.canvas.resize(QtCore.QSize(400, 400))
         self.iface = QgisInterface(self.canvas)
         self.form = RiabDialog(self.iface)
 

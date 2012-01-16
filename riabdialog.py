@@ -72,11 +72,12 @@ class RiabDialog(QtGui.QDialog):
 
         # Save reference to the QGIS interface
         self.iface = iface
-
+        self.calculator = ImpactCalculator()
         # Set up the user interface from Designer.
         self.ui = Ui_Riab()
         self.ui.setupUi(self)
         self.getLayers()
+        self.getFunctions()
         self.setOkButtonStatus()
 
     def validate(self):
@@ -131,8 +132,8 @@ class RiabDialog(QtGui.QDialog):
     def getLayers(self):
         '''Helper function to obtain a list of layers currently loaded in QGIS.
 
-        On invocation, this method will populate lstHazardLayers and
-        lstExposureLayers on the dialog with a list of available layers. Only
+        On invocation, this method will populate cboHazard and
+        cboExposure on the dialog with a list of available layers. Only
         **singleband raster** layers will be added to the hazard layer list,
         and only **point vector** layers will be added to the exposure layer
         list.
@@ -166,10 +167,27 @@ class RiabDialog(QtGui.QDialog):
 
         return
 
+    def getFunctions(self):
+        '''Helper function to obtain a list of impact functions from
+        the impact calculator.
+
+        Args:
+           None.
+        Returns:
+           None
+        Raises:
+           no
+        '''
+        try:
+            myList = self.calculator.availableFunctions()
+            for myFunction in myList:
+                self.ui.cboFunction.addItem(myFunction)
+        except Exception, e:
+            QtGui.QMessageBox(e.message())
+
     def accept(self):
         '''Execute analysis when ok button is clicked.'''
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
-        myCalculator = ImpactCalculator()
         myFlag, myMessage = self.validate()
         if not myFlag:
             self.ui.wvResults.setHtml(myMessage)
@@ -177,11 +195,12 @@ class RiabDialog(QtGui.QDialog):
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
                              QtCore.Qt.UserRole).toString()
-        myCalculator.setHazardLayer(myHazardFileName)
+        self.calculator.setHazardLayer(myHazardFileName)
 
         myExposureIndex = self.ui.cboExposure.currentIndex()
         myExposureFileName = self.ui.cboExposure.itemData(myExposureIndex,
                              QtCore.Qt.UserRole).toString()
-        myCalculator.setExposureLayer(myExposureFileName)
+        self.calculator.setExposureLayer(myExposureFileName)
 
-        myCalculator.run()
+        self.calculator.setFunction(self.ui.cboCalculator.currentText())
+        self.calculator.run()

@@ -37,6 +37,7 @@ class ImpactCalculatorTest(unittest.TestCase):
                                     'current_flood_depth_jakarta.asc')
         self.calculator.setHazardLayer(self.rasterPath)
         self.calculator.setExposureLayer(self.vectorPath)
+        self.calculator.setFunction('Test')
 
     def tearDown(self):
         '''Tear down - destroy the QGIS app'''
@@ -50,6 +51,9 @@ class ImpactCalculatorTest(unittest.TestCase):
         msg = 'Raster property incorrect.'
         assert(self.calculator.getHazardLayer() ==
                self.rasterPath), msg
+        msg = 'Function property incorrect.'
+        assert(self.calculator.getFunction() ==
+               'Test'), msg
 
     def test_runWithNoParameters(self):
         '''Test that run raises an error properly
@@ -62,6 +66,11 @@ class ImpactCalculatorTest(unittest.TestCase):
             msg = 'Missing parameters not raised as error.'
             assert(), msg
 
+    def test_availableFunctions(self):
+        '''Test that we can get the available functions from
+        the impactcalculator.'''
+        myList = self.calculator.availableFunctions()
+        assert(myList > 1)
 
 if __name__ == "__main__":
     unittest.main()

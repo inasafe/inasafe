@@ -29,6 +29,12 @@ To install the plugin, use the plugin manager in QGIS::
 Then search for 'Risk In A Box', select it and click the install button. The plugin will
 now be added to your plugins menu.
 
+Whilst under development, you will need to install scipy into your python 
+installation too (we are working to remove this if possible)::
+
+	sudo apt-get install python-scipy
+
+
 Quick Installation Guide - Developers
 =====================================
 

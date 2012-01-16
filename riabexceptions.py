@@ -32,3 +32,9 @@ class TestNotImplementedException(Exception):
 class InsufficientParametersException(Exception):
     '''Custom exception for when a test exists only as a stub.'''
     pass
+
+
+class NoFunctionsFoundException(Exception):
+    '''Custom exception for when a no impact calculation
+    functions can be found.'''
+    pass

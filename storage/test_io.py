@@ -869,7 +869,7 @@ class Test_IO(unittest.TestCase):
         # http://trac.osgeo.org/gdal/wiki/rfc33_gtiff_pixelispoint
 
         # Get gdal version number
-        x = gdal.VersionInfo('').split()
+        x = gdal.VersionInfo('').replace('dev','').split()
         y = x[1].split('.')
         z = ''.join(y)[:-1]  # Turn into number and strip trailing comma
 

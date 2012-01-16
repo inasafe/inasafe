@@ -18,7 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 import unicodedata
-from riabexceptions import InsufficientParametersException
+from riabexceptions import (InsufficientParametersException,
+     NoFunctionsFoundException)
+from impact_functions.core import get_plugins
 
 
 class ImpactCalculator:
@@ -28,30 +30,43 @@ class ImpactCalculator:
         '''Constructor for the impact calculator.'''
         self._hazard_layer = None
         self._exposure_layer = None
-
-    def getHazardLayer(self):
-        '''Accessor: hazard layer.'''
-        return self.__hazard_layer
+        self._function = None
 
     def getExposureLayer(self):
         '''Accessor: exposure layer.'''
         return self.__exposure_layer
 
-    def setHazardLayer(self, value):
-        '''Mutator: hazard layer.'''
-        self.__hazard_layer = value
-
     def setExposureLayer(self, value):
         '''Mutator: exposure layer.'''
         self.__exposure_layer = value
+
+    def delExposureLayer(self):
+        '''Delete: exposure layer.'''
+        del self.__exposure_layer
+
+    def getHazardLayer(self):
+        '''Accessor: hazard layer.'''
+        return self.__hazard_layer
+
+    def setHazardLayer(self, value):
+        '''Mutator: hazard layer.'''
+        self.__hazard_layer = value
 
     def delHazardLayer(self):
         '''Delete: hazard layer.'''
         del self.__hazard_layer
 
-    def delExposureLayer(self):
-        '''Delete: exposure layer.'''
-        del self.__exposure_layer
+    def getFunction(self):
+        '''Accessor: function layer.'''
+        return self.__function_layer
+
+    def setFunction(self, value):
+        '''Mutator: function layer.'''
+        self.__function_layer = value
+
+    def delFunction(self):
+        '''Delete: function layer.'''
+        del self.__function_layer
 
     _hazard_layer = property(getHazardLayer, setHazardLayer,
         delHazardLayer, '''Hazard layer property  (e.g. a flood depth
@@ -60,6 +75,26 @@ class ImpactCalculator:
     _exposure_layer = property(getExposureLayer, setExposureLayer,
         delExposureLayer, '''Exposure layer property (e.g. buildings or
         features that will be affected).''')
+
+    _function = property(getFunction, setFunction,
+        delFunction, '''Function property (specifies which
+        riab function to use to process the hazard and exposure
+        layers with.''')
+
+    def availableFunctions(self):
+        ''' Query the riab engine to see what plugins are available.
+        Args:
+           None.
+        Returns:
+           A list of strings where each is a plugin name.
+        Raises:
+           NoFunctionsFoundException if not all parameters are
+           set.
+        '''
+        myList = get_plugins()
+        if len(myList) < 1:
+            myMessage = 'No RIAB functions could be found'
+            raise NoFunctionsFoundException(myMessage)
 
     def make_ascii(self, x):
         '''Convert QgsString to ASCII'''
@@ -98,40 +133,5 @@ class ImpactCalculator:
             msg = 'Error: Exposure layer not set.'
             raise InsufficientParametersException(msg)
 
-        '''
-        print 'Hazard:', hazard_filename
-        print 'Exposure:', exposure_filename
 
-
-        hazard_filename = make_ascii(hazard_filename)
-        exposure_filename = make_ascii(exposure_filename)
-
-
-        # Code from Risiko
-        from impact.engine.core import calculate_impact
-        from impact.storage.io import read_layer
-
-        from impact.storage.io import write_vector_data
-        from impact.storage.io import write_raster_data
-        from impact.plugins import get_plugins
-
-        plugin_name = 'Flood Building Impact Function'
-
-        # Get layers using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
-
-        plugin_list = get_plugins(plugin_name)
-
-        IF = plugin_list[0][plugin_name]
-
-        print 'H', H
-        print 'E', E
-
-        # Call impact calculation engine
-        impact_filename = calculate_impact(layers=[H, E],
-                                           impact_fcn=IF)
-
-
-        print 'Result', impact_filename '''
         pass
