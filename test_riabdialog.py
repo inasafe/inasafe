@@ -59,8 +59,6 @@ class RiabDialogTest(unittest.TestCase):
         self.app = QgsApplication(sys.argv, myGuiFlag)
         myUseDefaultPathFlag = True
         self.app.setPrefixPath('/usr/local', myUseDefaultPathFlag)
-        #self.app.setPluginPath(os.path.join(QGIS_PATH, 'lib', \
-        #                                    'qgis', 'providers'))
         self.app.initQgis()
         self.parent = QWidget()
         self.canvas = QgsMapCanvas(self.parent)

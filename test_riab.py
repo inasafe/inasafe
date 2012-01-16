@@ -53,7 +53,6 @@ class RiabTest(unittest.TestCase):
         #todo - softcode these paths
         myUseDefaultPathFlag = True
         self.app.setPrefixPath('/usr/local', myUseDefaultPathFlag)
-        #self.app.setPluginPath('/usr/local/lib/qgis/providers')
         self.app.initQgis()
 
     def tearDown(self):
