@@ -4,10 +4,8 @@ import numpy
 import unittest
 
 # Add parent directory to path to make test aware of other modules
-
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
-print sys.path
 
 # Import Risk in a Box modules
 from interpolation2d import interpolate2d, interpolate_raster

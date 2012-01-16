@@ -4,6 +4,7 @@
 import os
 import time
 import types
+import numpy
 
 # Location of test data
 TESTDATANAME = 'riab_test_data'
