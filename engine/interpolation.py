@@ -5,9 +5,9 @@ using the underlying interpolation algorithm in interpolate2d.py
 """
 
 import numpy
-from impact.engine.interpolation2d import interpolate_raster
-from impact.storage.vector import Vector
-from impact.storage.vector import convert_polygons_to_centroids
+from engine.interpolation2d import interpolate_raster
+from storage.vector import Vector
+from storage.vector import convert_polygons_to_centroids
 
 
 def interpolate_raster_vector_points(R, V, name=None):

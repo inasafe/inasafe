@@ -1,8 +1,13 @@
 import unittest
 import numpy
+import sys
 import os
 
 from osgeo import gdal
+
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
 
 from raster import Raster
 from vector import Vector
