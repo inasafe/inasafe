@@ -3,18 +3,18 @@ import numpy
 import sys
 import os
 
-from core import calculate_impact, get_bounding_boxes
-from interpolation2d import interpolate_raster
-from io import read_layer
+from impact.engine.core import calculate_impact, get_bounding_boxes
+from impact.engine.interpolation2d import interpolate_raster
+from impact.storage.io import read_layer
 
-from utilities import unique_filename
-from io import write_vector_data
-from io import write_raster_data
-from impact_functions import get_plugins
+from impact.storage.utilities import unique_filename
+from impact.storage.io import write_vector_data
+from impact.storage.io import write_raster_data
+from impact.plugins import get_plugins
 
-from utilities_test import TESTDATA
-#from ests.plugins import empirical_fatality_model
-#from impact.tests.plugins import NEXIS_building_impact_model
+from impact.tests.utilities import TESTDATA
+from impact.tests.plugins import empirical_fatality_model
+from impact.tests.plugins import NEXIS_building_impact_model
 
 
 def linear_function(x, y):

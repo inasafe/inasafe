@@ -6,7 +6,7 @@ import numpy
 from osgeo import gdal
 from projection import Projection
 from utilities import DRIVER_MAP
-#from ne.interpolation import interpolate_raster_vector
+#from engine.interpolation import interpolate_raster_vector
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import nanallclose

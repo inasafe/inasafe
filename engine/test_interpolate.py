@@ -1,9 +1,16 @@
-import unittest
+import os
+import sys
 import numpy
+import unittest
 
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
+# Import Risk in a Box modules
 from interpolation2d import interpolate2d, interpolate_raster
-from utilities_test import combine_coordinates
-from utilities import nanallclose
+from storage.utilities_test import combine_coordinates
+from storage.utilities import nanallclose
 
 
 def linear_function(x, y):

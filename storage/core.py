@@ -10,6 +10,7 @@ import numpy
 import urllib2
 import tempfile
 import contextlib
+from zipfile import ZipFile
 
 from vector import Vector
 from raster import Raster
@@ -21,12 +22,6 @@ from utilities import unique_filename
 from utilities import write_keywords
 from utilities import extract_WGS84_geotransform
 from utilities import geotransform2resolution
-
-#from owslib.wcs import WebCoverageService
-#from owslib.wfs import WebFeatureService
-
-#from geonode.maps.utils import file_upload  #, GeoNodeException
-#from django.conf import settings
 
 import logging
 logger = logging.getLogger('risiko')
@@ -448,6 +443,136 @@ def check_bbox_string(bbox_string):
            '%.5f of bounding box %s' % (miny, maxy, bbox_string))
     assert miny < maxy, msg
 
+
+def download(server_url, layer_name, bbox, resolution=None):
+    """Download the source data of a given layer.
+
+    Input
+        server_url: String such as 'http://www.aifdr.org:8080/geoserver/ows'
+        layer_name: Layer identifier of the form workspace:name,
+                    e.g 'geonode:Earthquake_Ground_Shaking'
+        bbox: Bounding box for layer. This can either be a string or a list
+              with format [west, south, east, north], e.g.
+              '87.998242,-8.269822,117.046094,5.097895'
+        resolution: Optional argument specifying resolution in case of
+                    raster layers.
+                    Resolution can be a tuple (resx, resy) signifying the
+                    spacing in decimal degrees in the longitude, latitude
+                    direction respectively.
+                    If resolution is just one number it is used for both resx
+                    and resy.
+                    If resolution is None, the 'native' resolution of
+                    the dataset is used.
+
+    Layer geometry type must be either 'vector' or 'raster'
+    """
+
+    # Input checks
+    assert isinstance(server_url, basestring)
+    try:
+        urllib2.urlopen(server_url)
+    except Exception, e:
+        msg = ('Argument server_url doesn\'t appear to be a valid URL'
+               'I got %s. Error message was: %s' % (server_url, str(e)))
+        raise Exception(msg)
+
+    msg = ('Expected layer_name to be a basestring. '
+           'Instead got %s which is of type %s' % (layer_name,
+                                                   type(layer_name)))
+    assert isinstance(layer_name, basestring), msg
+
+    msg = ('Argument layer name must have the form'
+           'workspace:name. I got %s' % layer_name)
+    assert len(layer_name.split(':')) == 2, msg
+
+    if isinstance(bbox, list) or isinstance(bbox, tuple):
+        bbox_string = bboxlist2string(bbox)
+    elif isinstance(bbox, basestring):
+        # Remove spaces if any (GeoServer freaks if string has spaces)
+        bbox_string = ','.join([x.strip() for x in bbox.split(',')])
+    else:
+        msg = ('Bounding box must be a string or a list of coordinates with '
+               'format [west, south, east, north]. I got %s' % str(bbox))
+        raise Exception(msg)
+
+    # Check integrity of bounding box
+    check_bbox_string(bbox_string)
+
+    # Check resolution
+    if resolution is not None:
+
+        # Make sure it is a list or a tuple
+        if not is_sequence(resolution):
+            # Replicate single value twice
+            resolution = (resolution, resolution)
+
+        # Check length
+        msg = ('Specified resolution must be either a number or a 2-tuple. '
+               'I got %s' % str(resolution))
+        assert len(resolution) == 2, msg
+
+        # Check floating point
+        for res in resolution:
+            try:
+                float(res)
+            except ValueError, e:
+                msg = ('Expecting number for resolution, but got %s: %s'
+                       % (res, str(e)))
+                raise RisikoException(msg)
+
+    # Create REST request and download file
+    template = None
+    layer_metadata = get_metadata(server_url, layer_name)
+
+    data_type = layer_metadata['layer_type']
+    if data_type == 'vector':
+
+        if resolution is not None:
+            msg = ('Resolution was requested for Vector layer %s. '
+                   'This can only be done for raster layers.' % layer_name)
+            raise RisikoException(msg)
+
+        template = WFS_TEMPLATE
+        suffix = '.zip'
+        download_url = template % (server_url, layer_name, bbox_string)
+        thefilename = get_file(download_url, suffix)
+        dirname = os.path.dirname(thefilename)
+        t = open(thefilename, 'r')
+        zf = ZipFile(t)
+        namelist = zf.namelist()
+        zf.extractall(path=dirname)
+        (shpname,) = [name for name in namelist if '.shp' in name]
+        filename = os.path.join(dirname, shpname)
+    elif data_type == 'raster':
+
+        if resolution is None:
+            # Get native resolution and use that
+            resolution = layer_metadata['resolution']
+            #resolution = (resolution, resolution)  #FIXME (Ole): Make nicer
+
+        # Download raster using specified bounding box and resolution
+        template = WCS_TEMPLATE
+        suffix = '.tif'
+        download_url = template % (server_url, layer_name, bbox_string,
+                                   resolution[0], resolution[1])
+        filename = get_file(download_url, suffix)
+
+    # Write keywords file
+    keywords = layer_metadata['keywords']
+    write_keywords(keywords, os.path.splitext(filename)[0] + '.keywords')
+
+    # Instantiate layer from file
+    lyr = read_layer(filename)
+
+    # FIXME (Ariel) Don't monkeypatch the layer object
+    lyr.metadata = layer_metadata
+    return lyr
+
+
+def dummy_save(filename, title, user, metadata=''):
+    """Take a file-like object and uploads it to a GeoNode
+    """
+    return 'http://dummy/data/geonode:' + filename + '_by_' + user.username
 
 
 #--------------------------------------------------------------------

@@ -9,9 +9,9 @@ from vector import Vector
 from vector import convert_polygons_to_centroids
 from projection import Projection
 from projection import DEFAULT_PROJECTION
-from io import read_layer
-from io import write_vector_data
-from io import write_raster_data
+from core import read_layer
+from core import write_vector_data
+from core import write_raster_data
 from utilities import unique_filename
 from utilities import write_keywords
 from utilities import read_keywords
@@ -25,10 +25,10 @@ from utilities import points_along_line
 from utilities import geotransform2bbox
 from utilities import geotransform2resolution
 from utilities import nanallclose
-from io import get_bounding_box
-from io import bboxlist2string, bboxstring2list
+from core import get_bounding_box
+from core import bboxlist2string, bboxstring2list
 from utilities_test import same_API
-from utilities_test import TESTDATA
+from utilities_test import TESTREPO, TESTDATA
 from utilities_test import FEATURE_COUNTS
 from utilities_test import GEOTRANSFORMS
 
@@ -1558,6 +1558,11 @@ class Test_IO(unittest.TestCase):
 
 
 if __name__ == '__main__':
+
+    # Update test data
+    cmd = 'svn co %s %s' % (TESTREPO, TESTDATA)
+    os.system(cmd)
+
     suite = unittest.makeSuite(Test_IO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
