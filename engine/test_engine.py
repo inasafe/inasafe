@@ -3,18 +3,23 @@ import numpy
 import sys
 import os
 
-from impact.engine.core import calculate_impact, get_bounding_boxes
-from impact.engine.interpolation2d import interpolate_raster
-from impact.storage.io import read_layer
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
 
-from impact.storage.utilities import unique_filename
-from impact.storage.io import write_vector_data
-from impact.storage.io import write_raster_data
-from impact.plugins import get_plugins
+# Import Risk in a Box modules
+from engine.core import calculate_impact, get_bounding_boxes
+from engine.interpolation2d import interpolate_raster
+from storage.core import read_layer
 
-from impact.tests.utilities import TESTDATA
-from impact.tests.plugins import empirical_fatality_model
-from impact.tests.plugins import NEXIS_building_impact_model
+from storage.utilities import unique_filename
+from storage.core import write_vector_data
+from storage.core import write_raster_data
+from impact_functions import get_plugins
+
+from storage.utilities_test import TESTDATA
+from impact_functions_for_testing import empirical_fatality_model
+from impact_functions_for_testing import NEXIS_building_impact_model
 
 
 def linear_function(x, y):
@@ -649,20 +654,6 @@ class Test_Engine(unittest.TestCase):
                 assert impact == 3
             else:
                 assert impact == 0
-
-    def test_package_metadata(self):
-        """Test that riab package loads
-        """
-
-        import impact
-
-        impact.VERSION
-        impact.__version__
-        impact.__author__
-        impact.__contact__
-        impact.__homepage__
-        impact.__docformat__
-        assert impact.__license__ == 'GPL'
 
     def test_interpolation_wrapper(self):
         """Interpolation library works for linear function

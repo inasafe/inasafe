@@ -7,16 +7,16 @@ import os
 import sys
 import numpy
 
-from impact.storage.projection import Projection
-from impact.storage.projection import DEFAULT_PROJECTION
-from impact.storage.utilities import unique_filename
-from impact.storage.utilities import bbox_intersection
-from impact.storage.utilities import buffered_bounding_box
-from impact.storage.utilities import is_sequence
-from impact.storage.io import bboxlist2string, bboxstring2list
-from impact.storage.io import check_bbox_string
-from impact.storage.io import get_metadata
-from impact.engine.utilities import REQUIRED_KEYWORDS
+from storage.projection import Projection
+from storage.projection import DEFAULT_PROJECTION
+from storage.utilities import unique_filename
+from storage.utilities import bbox_intersection
+from storage.utilities import buffered_bounding_box
+from storage.utilities import is_sequence
+from storage.core import bboxlist2string, bboxstring2list
+from storage.core import check_bbox_string
+from storage.core import get_metadata
+from utilities import REQUIRED_KEYWORDS
 
 import logging
 logger = logging.getLogger('risiko')

@@ -880,3 +880,9 @@ def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
     # Compare non NaN's and return
     return numpy.allclose(x, y, rtol=rtol, atol=atol)
 
+
+def ugettext(s):
+    """Dummy placeholder for translation
+    """
+
+    return s
