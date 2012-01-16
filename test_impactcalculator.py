@@ -56,12 +56,11 @@ class ImpactCalculatorTest(unittest.TestCase):
            when no parameters are defined.'''
         try:
             self.calculator.run()
-        except InsufficientParametersException, e:
-            pass # expected outcome
+        except InsufficientParametersException:
+            pass  # expected outcome
         except:
             msg = 'Missing parameters not raised as error.'
-            assert(), msg 
-
+            assert(), msg
 
 
 if __name__ == "__main__":
