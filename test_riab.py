@@ -51,8 +51,9 @@ class RiabTest(unittest.TestCase):
         myGuiFlag = True  # We need to enable qgis app in gui mode
         self.app = QgsApplication(sys.argv, myGuiFlag)
         #todo - softcode these paths
-        self.app.setPrefixPath('/usr/local')
-        self.app.setPluginPath('/usr/local/lib/qgis/providers')
+        myUseDefaultPathFlag = True
+        self.app.setPrefixPath('/usr/local', myUseDefaultPathFlag)
+        #self.app.setPluginPath('/usr/local/lib/qgis/providers')
         self.app.initQgis()
 
     def tearDown(self):

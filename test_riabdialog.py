@@ -57,10 +57,10 @@ class RiabDialogTest(unittest.TestCase):
 
         myGuiFlag = True  # We need to enable qgis app in gui mode
         self.app = QgsApplication(sys.argv, myGuiFlag)
-        # todo - softcode these paths
-        self.app.setPrefixPath(QGIS_PATH)
-        self.app.setPluginPath(os.path.join(QGIS_PATH, 'lib', \
-                                            'qgis', 'providers'))
+        myUseDefaultPathFlag = True
+        self.app.setPrefixPath('/usr/local', myUseDefaultPathFlag)
+        #self.app.setPluginPath(os.path.join(QGIS_PATH, 'lib', \
+        #                                    'qgis', 'providers'))
         self.app.initQgis()
         self.parent = QWidget()
         self.canvas = QgsMapCanvas(self.parent)
