@@ -184,5 +184,5 @@ class RiabDialog(QtGui.QDialog):
         myExposureFileName = self.ui.cboExposure.itemData(myExposureIndex,
                              QtCore.Qt.UserRole).toString()
         myCalculator.setExposureLayer(myExposureFileName)
-        
+
         myCalculator.run()
