@@ -67,10 +67,12 @@ class RiabDialogTest(unittest.TestCase):
         self.iface = QgisInterface(self.canvas)
         self.form = RiabDialog(self.iface)
 
+    def tearDown(self):
+        '''Tear down - destroy the QGIS app'''
+        self.app.exitQgis()
+
     def clearForm(self):
         '''Helper function to  set all form elements to default state'''
-        self.form.ui.lstHazardLayers.clear()
-        self.form.ui.lstExposureLayers.clear()
         self.form.ui.cboHazard.setCurrentIndex(0)
         self.form.ui.cboExposure.setCurrentIndex(0)
         self.form.ui.cboFunction.setCurrentIndex(0)
@@ -79,16 +81,14 @@ class RiabDialogTest(unittest.TestCase):
         '''A helper function to populate the form and set it to a
         valid state.'''
         self.loadLayers()
-        myHazardItem = self.form.ui.lstHazardLayers.item(0)
-        myExposureItem = self.form.ui.lstExposureLayers.item(0)
-        QTest.mouseClick(myHazardItem, Qt.LeftButton)
-        QTest.mouseClick(myExposureItem, Qt.LeftButton)
+        self.form.ui.cboHazard.setCurrentIndex(0)
+        self.form.ui.cboExposure.setCurrentIndex(0)
+        #QTest.mouseClick(myHazardItem, Qt.LeftButton)
+        #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
     def test_defaults(self):
         '''Test the GUI in its default state'''
         # Note you can also use almostEqual for inexact comparisons
-        self.assertEqual(self.form.ui.lstHazardLayers.count(), 0)
-        self.assertEqual(self.form.ui.lstExposureLayers.count(), 0)
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), 0)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), 0)
         self.assertEqual(self.form.ui.cboFunction.currentIndex(), 0)
@@ -164,12 +164,12 @@ class RiabDialogTest(unittest.TestCase):
         self.clearForm()
         self.loadLayers()
         msg = 'Expect 1 layer in hazard list widget but got %s' % \
-              self.form.ui.lstHazardLayers.count()
-        self.assertEqual(self.form.ui.lstHazardLayers.count(), 1), msg
+              self.form.ui.cboHazard.count()
+        self.assertEqual(self.form.ui.cboExposure.count(), 1), msg
 
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
-              self.form.ui.lstExposureLayers.count()
-        self.assertEqual(self.form.ui.lstExposureLayers.count(), 1), msg
+              self.form.ui.cboExposure.count()
+        self.assertEqual(self.form.ui.cboExposure.count(), 1), msg
 
 
 if __name__ == '__main__':

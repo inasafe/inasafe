@@ -19,47 +19,6 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QGroupBox" name="groupBox_3">
-      <property name="title">
-       <string>Input layers</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>&amp;Hazard layer</string>
-         </property>
-         <property name="buddy">
-          <cstring>lstHazardLayers</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QListWidget" name="lstHazardLayers">
-         <property name="alternatingRowColors">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>E&amp;xposure layer</string>
-         </property>
-         <property name="buddy">
-          <cstring>lstExposureLayers</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QListWidget" name="lstExposureLayers">
-         <property name="alternatingRowColors">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -79,48 +38,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QComboBox" name="cboHazard">
-            <item>
-             <property name="text">
-              <string>Flood Depth (design) Jakarta</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Sumatran Fault Magnitude 7.8 Scenario</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Yogyakarta 2006 Earthquake</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Padang 2009 Earthquake</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Mentawai Magnitude 9.0 Scenario</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Indonesian Earthquake Hazard Map</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Maumere Tsunami Inundation</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Gede VEI4 Scenario</string>
-             </property>
-            </item>
-           </widget>
+           <widget class="QComboBox" name="cboHazard"/>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_2">
@@ -133,28 +51,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QComboBox" name="cboExposure">
-            <item>
-             <property name="text">
-              <string>Population Density Estimate (5kmx5km)</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>OSM Building Footprints 2011-11-10</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>AIBEP Schools</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Indonesia Highway</string>
-             </property>
-            </item>
-           </widget>
+           <widget class="QComboBox" name="cboExposure"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_3">
@@ -167,13 +64,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QComboBox" name="cboFunction">
-            <item>
-             <property name="text">
-              <string>Flood Building Impact Function</string>
-             </property>
-            </item>
-           </widget>
+           <widget class="QComboBox" name="cboFunction"/>
           </item>
          </layout>
         </widget>
@@ -220,8 +111,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>lstHazardLayers</tabstop>
-  <tabstop>lstExposureLayers</tabstop>
   <tabstop>cboHazard</tabstop>
   <tabstop>cboExposure</tabstop>
   <tabstop>cboFunction</tabstop>
@@ -237,8 +126,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>401</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -253,8 +142,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>401</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
