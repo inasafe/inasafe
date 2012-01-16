@@ -62,3 +62,6 @@ package: compile
 
 docs: compile
 	cd docs; make html; cd ..
+
+test: compile
+	python -m discover

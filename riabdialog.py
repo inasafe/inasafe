@@ -105,12 +105,14 @@ class RiabDialog(QtGui.QDialog):
         Raises:
            no exceptions explicitly raised
         '''
-        myHazardItem = self.ui.lstHazardLayers.currentItem()
-        myExposureItem = self.ui.lstExposureLayers.currentItem()
-        if not myHazardItem or not myExposureItem:
+        myHazardIndex = self.ui.cboHazard.currentIndex()
+        myExposureIndex = self.ui.cboExposure.currentIndex()
+        if myHazardIndex == -1 or myExposureIndex == -1:
             myMessage = 'Please ensure both Hazard layer and ' + \
             'Exposure layer are set before clicking OK.'
             return (False, myMessage)
+        else:
+            return (True, '')
 
     def setOkButtonStatus(self):
         '''Helper function to set the ok button status if the
@@ -150,15 +152,15 @@ class RiabDialog(QtGui.QDialog):
                       store uuid in user property of list widget for layers
             '''
             if myLayer.type() == QgsMapLayer.RasterLayer:
-                myItem = QtGui.QListWidgetItem(myLayer.name())
-                myItem.setData(QtCore.Qt.UserRole, myLayer.source())
-                self.ui.lstHazardLayers.addItem(myItem)
+                myName = myLayer.name()
+                mySource = myLayer.source()
+                self.ui.cboHazard.addItem(myName, mySource)
 
             elif myLayer.type() == QgsMapLayer.VectorLayer and \
             myLayer.geometryType() == QGis.Point:
-                myItem = QtGui.QListWidgetItem(myLayer.name())
-                myItem.setData(QtCore.Qt.UserRole, myLayer.source())
-                self.ui.lstExposureLayers.addItem(myItem)
+                myName = myLayer.name()
+                mySource = myLayer.source()
+                self.ui.cboExposure.addItem(myName, mySource)
             else:
                 pass  # skip the layer
 
@@ -168,16 +170,19 @@ class RiabDialog(QtGui.QDialog):
         '''Execute analysis when ok button is clicked.'''
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myCalculator = ImpactCalculator()
-        myHazardItem = self.ui.lstHazardLayers.currentItem()
-        myExposureItem = self.ui.lstExposureLayers.currentItem()
-        if not myHazardItem or not myExposureItem():
-            myMessage = 'Please ensure both Hazard layer and ' + \
-            'Exposure layer are set before clicking OK.'
+        myFlag, myMessage = self.validate()
+        if not myFlag:
             self.ui.wvResults.setHtml(myMessage)
             return
-        myHazardFileName = myHazardItem.data(QtCore.Qt.UserRole)
-        myExposureFileName = myExposureItem.data(QtCore.Qt.UserRole)
-
+        settrace()
+        myHazardIndex = self.ui.cboHazard.currentIndex()
+        myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
+                             QtCore.Qt.UserRole).toString()
         myCalculator.setHazardLayer(myHazardFileName)
+
+        myExposureIndex = self.ui.cboExposure.currentIndex()
+        myExposureFileName = self.ui.cboExposure.itemData(myExposureIndex,
+                             QtCore.Qt.UserRole).toString()
         myCalculator.setExposureLayer(myExposureFileName)
+
         myCalculator.run()
