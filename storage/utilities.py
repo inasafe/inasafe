@@ -889,4 +889,3 @@ def ugettext(s):
     """
 
     return s
-
