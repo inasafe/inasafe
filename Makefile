@@ -64,7 +64,14 @@ docs: compile
 	cd docs; make html; cd ..
 
 test: compile
+	echo "-----------"
+	echo "PEP8 issues"
+	echo "-----------"
 	pep8 --repeat --ignore=E203 --exclude loader.py,ui_riab.py,resources.py .
-	nosetests -v --with-id --with-coverage .
+	echo
+	echo "----------------------"
+	echo "Regresssion Test Suite"
+	echo "----------------------"
+	nosetests -v --with-id --with-coverage --cover-package=.,engine,storage
 	#python -m discover
 
