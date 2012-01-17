@@ -73,12 +73,17 @@ our documentation under docs/build/html.</p>
 </div>
 <p>Then search for &#8216;Risk In A Box&#8217;, select it and click the install button. The plugin will
 now be added to your plugins menu.</p>
+<p>Whilst under development, you will need to install scipy into your python
+installation too (we are working to remove this if possible):</p>
+<div class="highlight-python"><pre>sudo apt-get install python-scipy</pre>
+</div>
 </div>
 <div class="section" id="quick-installation-guide-developers">
 <h2>Quick Installation Guide - Developers<a class="headerlink" href="#quick-installation-guide-developers" title="Permalink to this headline">¶</a></h2>
 <p>To develop on the plugin, you first need to copy it to your local system. If you are a developer,
 the simplest way to do that is to clone it from our GitHub repository page like this:</p>
-<div class="highlight-python"><pre>git clone git://github.com/AIFDR/risk_in_a_box.git</pre>
+<div class="highlight-python"><pre>git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
+git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)</pre>
 </div>
 <p>Place the local repository under <cite>~/.qgis/python/plugins</cite> and then restart QGIS. If you wish to
 an IDE for development, please refer to <a class="reference external" href="http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/">this article</a>

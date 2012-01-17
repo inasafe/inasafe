@@ -78,11 +78,26 @@ the Free Software Foundation; either version 2 of the License, or
 </dd></dl>
 
 <dl class="method">
+<dt id="riabdialog.RiabDialog.getFunctions">
+<tt class="descname">getFunctions</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialog.RiabDialog.getFunctions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to obtain a list of impact functions from
+the impact calculator.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>None.</dd>
+<dt>Returns:</dt>
+<dd>None</dd>
+<dt>Raises:</dt>
+<dd>no</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="riabdialog.RiabDialog.getLayers">
 <tt class="descname">getLayers</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/riabdialog.html#RiabDialog.getLayers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialog.RiabDialog.getLayers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper function to obtain a list of layers currently loaded in QGIS.</p>
-<p>On invocation, this method will populate lstHazardLayers and
-lstExposureLayers on the dialog with a list of available layers. Only
+<p>On invocation, this method will populate cboHazard and
+cboExposure on the dialog with a list of available layers. Only
 <strong>singleband raster</strong> layers will be added to the hazard layer list,
 and only <strong>point vector</strong> layers will be added to the exposure layer
 list.</p>
@@ -93,6 +108,22 @@ list.</p>
 <dd>None</dd>
 <dt>Raises:</dt>
 <dd>no</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="riabdialog.RiabDialog.setOkButtonStatus">
+<tt class="descname">setOkButtonStatus</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialog.RiabDialog.setOkButtonStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to set the ok button status if the
+form is valid and disable it if it is not.
+Args:</p>
+<blockquote>
+<div>None.</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None.</dd>
+<dt>Raises:</dt>
+<dd>no exceptions explicitly raised.</dd>
 </dl>
 </dd></dl>
 
