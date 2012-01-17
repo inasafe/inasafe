@@ -65,4 +65,6 @@ docs: compile
 
 test: compile
 	pep8 --repeat --ignore=E203 --exclude loader.py,ui_riab.py,resources.py .
-	python -m discover
+	nosetests -v --with-id --with-coverage .
+	#python -m discover
+
