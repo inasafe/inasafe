@@ -28,7 +28,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/theme_extras.js"></script>
     <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="index.html" />
-    <link rel="next" title="Risk-In-A-Box’s API documentation" href="risk_in_a_box.html" />
+    <link rel="next" title="Software Dependencies for Risk in a Box" href="development.html" />
     <link rel="prev" title="Welcome to Risk-In-A-Box’s documentation!" href="index.html" /> 
   </head>
   <body>
@@ -43,7 +43,7 @@
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="risk_in_a_box.html">Risk-In-A-Box&#8217;s API documentation</a>&#160;&#160;»
+        <a href="development.html">Software Dependencies for Risk in a Box</a>&#160;&#160;»
         </p>
 
       </div>
@@ -73,42 +73,6 @@ our documentation under docs/build/html.</p>
 </div>
 <p>Then search for &#8216;Risk In A Box&#8217;, select it and click the install button. The plugin will
 now be added to your plugins menu.</p>
-<p>Whilst under development, you will need to install scipy into your python
-installation too (we are working to remove this if possible):</p>
-<div class="highlight-python"><pre>sudo apt-get install python-scipy</pre>
-</div>
-</div>
-<div class="section" id="quick-installation-guide-developers">
-<h2>Quick Installation Guide - Developers<a class="headerlink" href="#quick-installation-guide-developers" title="Permalink to this headline">¶</a></h2>
-<p>To develop on the plugin, you first need to copy it to your local system. If you are a developer,
-the simplest way to do that is to clone it from our GitHub repository page like this:</p>
-<div class="highlight-python"><pre>git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
-git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)</pre>
-</div>
-<p>Place the local repository under <cite>~/.qgis/python/plugins</cite> and then restart QGIS. If you wish to
-an IDE for development, please refer to <a class="reference external" href="http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/">this article</a>
-for detailed information on how you can do so.</p>
-<p>If you wish to debug the plugin, (referring once again to the above article), make a copy
-of pydevpath.txt.templ to pydevpath.txt e.g.:</p>
-<div class="highlight-python"><pre>cp pydevpath.txt.templ pydevpath.txt</pre>
-</div>
-<p>Then replace the path to your pydevd module as described in the above article.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If you are running with remote debugging enabled, be sure to start the
-PyDev debug server first before launching the Risk-in-a-box QGIS plugin
-otherwise QGIS will likely crash when it can&#8217;t find the debug server.</p>
-</div>
-<p>If you wish to run the unit tests, please make a local copy of the qgispath.txt.templ template
-and adjust the path contained in that file to match your QGIS installation path e.g.:</p>
-<div class="highlight-python"><pre>cp qgispath.txt.templ qgispath.txt</pre>
-</div>
-<p>In order to run the tests, you should install &#8216;discover&#8217; e.g.:</p>
-<div class="highlight-python"><pre>sudo pip install discover</pre>
-</div>
-<p>Then you can run the tests (from within the risk_in_a_box toplevel directory) like this:</p>
-<div class="highlight-python"><pre>python -m discover</pre>
-</div>
 <p>Contact:
 <a class="reference external" href="mailto:Ole&#46;Moller&#46;Nielsen&#37;&#52;&#48;gmail&#46;com">Ole<span>&#46;</span>Moller<span>&#46;</span>Nielsen<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 </div>
@@ -123,7 +87,7 @@ and adjust the path contained in that file to match your QGIS installation path 
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
-        <a href="risk_in_a_box.html">Risk-In-A-Box&#8217;s API documentation</a>&#160;&#160;»
+        <a href="development.html">Software Dependencies for Risk in a Box</a>&#160;&#160;»
         </p>
 
       </div>

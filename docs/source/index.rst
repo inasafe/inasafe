@@ -12,6 +12,10 @@ etc.
 
 You can find out more about the Risk-In-A-Box project by visiting `riskinabox.org <http://riskinabox.org/>`_.
 
+.. figure::  ../../img/screenshot.jpg
+   :align:   center
+
+
 Contents
 =========
 
@@ -19,8 +23,7 @@ Contents
    :maxdepth: 1
    
    README
-   risk_in_a_box
-   todo
+   development
    
 Indices and tables
 ==================
