@@ -45,7 +45,8 @@ if os.path.isfile(PATH):
         #fail silently
         pass
 
-from qgis.core import QGis, QgsMapLayer
+from qgis.core import QGis, QgsMapLayer, QgsVectorLayer, QgsMapLayerRegistry
+from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from impactcalculator import ImpactCalculator
 
 
@@ -215,6 +216,12 @@ class RiabDialog(QtGui.QDialog):
 
         self.calculator.setFunction(self.ui.cboFunction.currentText())
         myFilename = self.calculator.run()
-        QtGui.QMessageBox.information(self,
-                  'Risk-in-a-box', myFilename)
-        
+        self.ui.wvResults.setHtml(myFilename)
+                # Now go ahead and load our layers
+        myVectorPath = os.path.join('/tmp/', myFilename)
+        myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
+        if not myVectorLayer.isValid():
+            msg = 'Vector layer "%s" is not valid' % myFilename
+            self.ui.wvResults.setHtml(msg)
+            return
+        QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
