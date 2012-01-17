@@ -68,5 +68,5 @@ test: compile
 	pep8 --repeat --ignore=E203 --exclude loader.py,ui_riab.py,resources.py .
 	echo
 	echo "Regresssion Test Suite"
-	nosetests -v --with-id --with-coverage --cover-package=.,engine,storage
+	nosetests -v --with-id --with-coverage --cover-package=engine,storage
 

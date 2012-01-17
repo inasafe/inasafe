@@ -87,13 +87,12 @@ class RiabDialogTest(unittest.TestCase):
 
     def test_defaults(self):
         """Test the GUI in its default state"""
-        # Note you can also use almostEqual for inexact comparisons
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboFunction.currentIndex(), -1)
 
-    def test_validate(self):  # Disabled for now as it blocks tests
-        '''Test that the validate function works as expected.'''
+    def test_validate(self):
+        """Test that the validate function works as expected."""
         # First check that we DONT validate a clear form
         self.clearForm()
         myFlag, myMessage = self.form.validate()
@@ -176,4 +175,6 @@ class RiabDialogTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.makeSuite(RiabDialogTest, 'test_XXX')
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)
