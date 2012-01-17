@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unicodedata
 from riabexceptions import (InsufficientParametersException,
-     NoFunctionsFoundException)
+                            NoFunctionsFoundException)
 from impact_functions.core import get_plugins
 
 
@@ -93,8 +93,10 @@ class ImpactCalculator:
         """
         myList = get_plugins()
         if len(myList) < 1:
-            myMessage = 'No RIAB functions could be found'
+            myMessage = 'No RIAB impact functions could be found'
             raise NoFunctionsFoundException(myMessage)
+
+        return myList
 
     def make_ascii(self, x):
         """Convert QgsString to ASCII"""
