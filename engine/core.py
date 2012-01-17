@@ -15,7 +15,6 @@ from storage.utilities import buffered_bounding_box
 from storage.utilities import is_sequence
 from storage.core import bboxlist2string, bboxstring2list
 from storage.core import check_bbox_string
-from storage.core import get_metadata
 from utilities import REQUIRED_KEYWORDS
 
 import logging
