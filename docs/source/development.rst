@@ -1,34 +1,45 @@
 Risk-in-a-box Developer Documentation
 =====================================
 
-   api-docs
-   todo
+Code documentation
+------------------
 
-To use Risk-in-a-Box with QGIS
-------------------------------
-
-* python-numpy
-* python-gdal
+* :doc:`api-docs`
+* :doc:`todo`
 
 
-To develop Risk-in-a-Box
-------------------------
+
+Requirements to develop Risk-in-a-Box
+-------------------------------------
+
+Risk-in-a-box is built in python and runs as a plugin in `QGIS
+<http://qgis.org>`_.  The Graphical User Interface components are built using
+`PyQt4 <http://www.riverbankcomputing.co.uk/software/pyqt/intro>`_ and the QGIS
+plugin API.  As such it is helpful if you are familiar with these technologies
+(python, Qt4, PyQt4, QGIS). In addition, the following are needed on your
+machine in order to work effectively with the code base:
 
 * git
 * subversion
 * pep8
 * nosetests (with coverage plugin)
+* python-numpy 
+* python-gdal
 * ...
+
 
 On an ubuntu system you can install these requirements using apt::
 
-  sudo apt-get install git subversion pep8 python-nose python-coverage
+  sudo apt-get install git subversion pep8 python-nose python-coverage \
+  python-gdal python-numpy
 
 Whilst under development, you will need to install scipy into your python 
 installation too (we are working to remove this if possible)::
 
   sudo apt-get install python-scipy
 
+In some cases these dependencies may already be on your system via installation 
+process you followed for QGIS.
 
 Quick Installation Guide - Developers
 -------------------------------------
@@ -71,4 +82,12 @@ Then you can run the tests (from within the risk_in_a_box toplevel directory) li
 
   python -m discover
 
+Coding Standards
+================
+
+Please observe the following coding standards when working on the codebase:
+
+* PEP8
+* Docstrings quoted with :samp:`"""`
+* Strings in source code should be quoted with :samp:`'`
 
