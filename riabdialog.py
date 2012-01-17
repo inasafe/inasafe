@@ -183,7 +183,8 @@ class RiabDialog(QtGui.QDialog):
             for myFunction in myList:
                 self.ui.cboFunction.addItem(myFunction)
         except Exception, e:
-            QtGui.QMessageBox('No impact functions found:', str(e))
+            QtGui.QMessageBox.critical(self,
+                'Function list retireval error', str(e))
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
