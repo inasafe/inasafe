@@ -19,6 +19,7 @@ from impact_functions import get_plugins
 
 from storage.utilities_test import TESTDATA
 from impact_functions_for_testing import empirical_fatality_model
+from impact_functions_for_testing import unspecific_building_impact_model
 from impact_functions_for_testing import NEXIS_building_impact_model
 
 
@@ -39,6 +40,58 @@ def lembang_damage_function(x):
                  509.0 * x +
                  714.4)
     return value
+
+
+def padang_check_results(mmi, building_class):
+    """Check calculated results through a lookup table
+    returns False if the lookup fails and
+    an exception if more than one lookup returned"""
+
+    # Reference table established from plugin as of 28 July 2011
+    # It was then manually verified against an Excel table by Abbie Baca
+    # and Ted Dunstone. Format is
+    # MMI, Building class, impact [%]
+    padang_verified_results = [
+        [7.50352, 1, 50.17018],
+        [7.49936, 1, 49.96942],
+        [7.63961, 2, 20.35277],
+        [7.09855, 2, 5.895076],
+        [7.49990, 3, 7.307292],
+        [7.80284, 3, 13.71306],
+        [7.66337, 4, 3.320895],
+        [7.12665, 4, 0.050489],
+        [7.12665, 5, 1.013092],
+        [7.85400, 5, 7.521769],
+        [7.54040, 6, 4.657564],
+        [7.48122, 6, 4.167858],
+        [7.31694, 6, 3.008460],
+        [7.54057, 7, 1.349811],
+        [7.12753, 7, 0.177422],
+        [7.61912, 7, 1.866942],
+        [7.64828, 8, 1.518264],
+        [7.43644, 8, 0.513577],
+        [7.12665, 8, 0.075070],
+        [7.64828, 9, 1.731623],
+        [7.48122, 9, 1.191497],
+        [7.12665, 9, 0.488944]]
+
+    impact_array = [verified_impact
+        for verified_mmi, verified_building_class, verified_impact
+               in padang_verified_results
+                    if numpy.allclose(verified_mmi, mmi, rtol=1.0e-6) and
+                    numpy.allclose(verified_building_class, building_class,
+                                   rtol=1.0e-6)]
+
+    if len(impact_array) == 0:
+        return False
+    elif len(impact_array) == 1:
+        return impact_array[0]
+
+    msg = 'More than one lookup result returned. May be precision error.'
+    assert len(impact_array) < 2, msg
+
+    # FIXME (Ole): Count how many buildings were damaged in each category?
+
 
 
 class Test_Engine(unittest.TestCase):
@@ -1088,6 +1141,94 @@ class Test_Engine(unittest.TestCase):
                 msg = 'Missing keyword should have raised exception'
                 raise Exception(msg)
 
+    def test_padang_building_examples(self):
+        """Padang building impact calculation works through the API
+        """
+
+        plugin_name = 'Padang Earthquake Building Damage Function'
+
+        # Test for a range of hazard layers
+        for mmi_filename in ['Shakemap_Padang_2009.asc']:
+                               #'Lembang_Earthquake_Scenario.asc']:
+
+            # Upload input data
+            hazard_filename = os.path.join(TESTDATA, mmi_filename)
+            exposure_filename = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+
+            # Call calculation routine
+            bbox = '96.956, -5.51, 104.63933, 2.289497'
+
+            # Get layers using API
+            H = read_layer(hazard_filename)
+            E = read_layer(exposure_filename)
+
+            plugin_list = get_plugins(plugin_name)
+            assert len(plugin_list) == 1
+            assert plugin_list[0].keys()[0] == plugin_name
+            IF = plugin_list[0][plugin_name]
+
+            # Call impact calculation engine
+            impact_filename = calculate_impact(layers=[H, E],
+                                               impact_fcn=IF)
+
+
+
+            # Read hazard data for reference
+            hazard_raster = read_layer(hazard_filename)
+            A = hazard_raster.get_data()
+            mmi_min, mmi_max = hazard_raster.get_extrema()
+
+            # Read calculated result
+            impact_vector = read_layer(impact_filename)
+            coordinates = impact_vector.get_geometry()
+            attributes = impact_vector.get_data()
+
+            # Verify calculated result
+            count = 0
+            verified_count = 0
+            for i in range(len(attributes)):
+                lon, lat = coordinates[i][:]
+                calculated_mmi = attributes[i]['MMI']
+
+                if calculated_mmi == 0.0:
+                    # FIXME (Ole): Some points have MMI==0 here.
+                    # Weird but not a show stopper
+                    continue
+
+                # Check that interpolated points are within range
+                msg = ('Interpolated mmi %f was outside extrema: '
+                       '[%f, %f] at location '
+                       '[%f, %f]. ' % (calculated_mmi,
+                                       mmi_min, mmi_max,
+                                       lon, lat))
+                assert mmi_min <= calculated_mmi <= mmi_max, msg
+
+                building_class = attributes[i]['TestBLDGCl']
+
+                # Check calculated damage
+                calculated_dam = attributes[i]['DAMAGE']
+                verified_dam = padang_check_results(calculated_mmi,
+                                                    building_class)
+                #print calculated_mmi, building_class, calculated_dam
+                if verified_dam:
+                    msg = ('Calculated damage was not as expected '
+                             'for hazard layer %s. I got %f '
+                           'but expected %f' % (hazard_filename,
+                                                calculated_dam,
+                                                verified_dam))
+                    assert numpy.allclose(calculated_dam, verified_dam,
+                                          rtol=1.0e-4), msg
+                    verified_count += 1
+                count += 1
+
+            msg = ('No points was verified in output. Please create '
+                   'table withe reference data')
+            assert verified_count > 0, msg
+
+            msg = 'Number buildings was not 3896.'
+            assert count == 3896, msg
+
+
     def test_flood_on_roads(self):
         """Jakarta flood impact on roads calculated correctly
         """
@@ -1107,8 +1248,6 @@ class Test_Engine(unittest.TestCase):
 
         impact_filename = calculate_impact(layers=[H, E],
                                                    impact_fcn=IF)
-
-        print impact_filename
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Engine, 'test')

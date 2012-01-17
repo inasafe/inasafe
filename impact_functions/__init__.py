@@ -12,7 +12,9 @@ dirname = os.path.dirname(__file__)
 # Import all the subdirectories
 for f in os.listdir(dirname):
     if os.path.isdir(os.path.join(dirname, f)):
-        exec('from impact_functions.%s import *' % f, locals(), globals())
+        cmd = 'from impact_functions.%s import *' % f
+        #print cmd
+        exec(cmd, locals(), globals())
 
 
 from impact_functions.core import FunctionProvider
