@@ -9,6 +9,7 @@ sys.path.append(pardir)
 
 # Import Risk in a Box modules
 from interpolation2d import interpolate2d, interpolate_raster
+from interpolation1d import interpolate1d
 from storage.utilities_test import combine_coordinates
 from storage.utilities import nanallclose
 
@@ -446,6 +447,38 @@ class Test_interpolate(unittest.TestCase):
                                   mode='linear')
         refs = linear_function(points[:, 0], points[:, 1])
 
+        assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
+
+    #-----------------------
+    # 1D interpolation tests
+    #-----------------------
+
+    def test_1d_linear_interpolation_basic(self):
+        """Interpolation library works for a 1D linear function - basic test
+        """
+
+        # Define pixel centers along each direction
+        x = [1.0, 2.0, 4.0]
+
+        # Define array with corresponding values
+        A = numpy.zeros((len(x)))
+
+        # Define values for each xas a linear function
+        for i in range(len(x)):
+            A[i] = linear_function(x[i], 0)
+
+        # Test first that original points are reproduced correctly
+        for i, xi in enumerate(x):
+            val = interpolate1d(x, A, [xi], mode='linear')[0]
+            ref = linear_function(xi, 0)
+            assert numpy.allclose(val, ref, rtol=1e-12, atol=1e-12)
+
+        # Then test that genuinly interpolated points are correct
+        xis = numpy.linspace(x[0], x[-1], 10)
+        points = xis
+
+        vals = interpolate1d(x, A, points, mode='linear')
+        refs = linear_function(points, 0)
         assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
 

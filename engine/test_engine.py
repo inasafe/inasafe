@@ -93,7 +93,6 @@ def padang_check_results(mmi, building_class):
     # FIXME (Ole): Count how many buildings were damaged in each category?
 
 
-
 class Test_Engine(unittest.TestCase):
 
     def test_earthquake_fatality_estimation_allen(self):
@@ -1171,8 +1170,6 @@ class Test_Engine(unittest.TestCase):
             impact_filename = calculate_impact(layers=[H, E],
                                                impact_fcn=IF)
 
-
-
             # Read hazard data for reference
             hazard_raster = read_layer(hazard_filename)
             A = hazard_raster.get_data()
@@ -1227,7 +1224,6 @@ class Test_Engine(unittest.TestCase):
 
             msg = 'Number buildings was not 3896.'
             assert count == 3896, msg
-
 
     def test_flood_on_roads(self):
         """Jakarta flood impact on roads calculated correctly

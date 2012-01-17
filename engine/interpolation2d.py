@@ -1,4 +1,4 @@
-"""Module 2D interpolation over a rectangular mesh
+"""Module for 2D interpolation over a rectangular mesh
 
 This module
 * provides piecewise constant (nearest neighbour) and bilinear interpolation
@@ -147,7 +147,7 @@ def interpolate_raster(x, y, Z, points, mode='linear', bounds_error=False):
     See interpolate2d for details of the interpolation routine
     """
 
-    # Flip matrix Z up-down so that scipy will interpret latitudes correctly.
+    # Flip matrix Z up-down to interpret latitudes ordered from south to north
     Z = numpy.flipud(Z)
 
     # Transpose Z to have y coordinates along the first axis and x coordinates
