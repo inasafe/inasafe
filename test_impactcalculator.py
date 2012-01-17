@@ -58,12 +58,27 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_run(self):
         """Test that run works as expected."""
         try:
-            myFilename, myMessage = self.calculator.run()
+            self.calculator.run()
+            myMessage = self.calculator.result()
+            myFilename = self.calculator.filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
-
         except:
             msg = 'Calculator run failed.'
+            assert(), msg
+
+    def test_thread(self):
+        """Test that starting it in a thread works as expected."""
+        try:
+            self.calculator.start()
+            # wait until the thread is done
+            self.calculator.join()
+            myMessage = self.calculator.result()
+            myFilename = self.calculator.filename()
+            assert(myFilename and not myFilename == '')
+            assert(myMessage and not myMessage == '')
+        except Exception, e:
+            msg = 'Calculator run failed:\n' + str(e)
             assert(), msg
 
     def test_runWithNoParameters(self):

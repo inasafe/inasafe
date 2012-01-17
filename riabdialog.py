@@ -79,6 +79,9 @@ class RiabDialog(QtGui.QDialog):
         self.iface = iface
         self.suppressDialogsFlag = guiContext
         self.calculator = ImpactCalculator()
+        QtCore.QObject.connect(self.calculator.notifier(),
+                               QtCore.SIGNAL('done()'),
+                                self.completed)
         # Set up the user interface from Designer.
         self.ui = Ui_Riab()
         self.ui.setupUi(self)
@@ -170,8 +173,7 @@ class RiabDialog(QtGui.QDialog):
                 mySource = myLayer.source()
                 self.ui.cboHazard.addItem(myName, mySource)
 
-            elif myLayer.type() == QgsMapLayer.VectorLayer and \
-            myLayer.geometryType() == QGis.Point:
+            elif myLayer.type() == QgsMapLayer.VectorLayer:
                 myName = myLayer.name()
                 mySource = myLayer.source()
                 self.ui.cboExposure.addItem(myName, mySource)
@@ -222,9 +224,15 @@ class RiabDialog(QtGui.QDialog):
         self.calculator.setExposureLayer(myExposureFileName)
 
         self.calculator.setFunction(self.ui.cboFunction.currentText())
-        myFilename, myMessage = self.calculator.run()
+        # start it in its own thread
+        self.calculator.start()
+
+    def completed(self):
+        """Slot activated when the process is done."""
+        myMessage = self.calculator.result()
+        myFilename = self.calculator.filename()
         if myMessage:
-            self.ui.wvResults.setHtml(myMessage)
+            self.ui.wvResults.setHtml(myMessage + '\n' + myFilename)
         if myFilename:
             myVectorPath = os.path.join('/tmp/', myFilename)
             myName = (self.ui.cboExposure.currentText() + 'X' +
