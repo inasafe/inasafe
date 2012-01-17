@@ -46,7 +46,6 @@ if os.path.isfile(PATH):
         pass
 
 from qgis.core import QGis, QgsMapLayer, QgsVectorLayer, QgsMapLayerRegistry
-from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from impactcalculator import ImpactCalculator
 
 
@@ -86,6 +85,13 @@ class RiabDialog(QtGui.QDialog):
         self.getLayers()
         self.getFunctions()
         self.setOkButtonStatus()
+        myButton = self.ui.buttonBox.button(self.ui.buttonBox.Help)
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                                self.showHelp)
+        self.showHelp()
+        myButton = self.ui.buttonBox.button(self.ui.buttonBox.Reset)
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                                self.resetForm)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -198,11 +204,12 @@ class RiabDialog(QtGui.QDialog):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
-
+        self.enableBusyCursor()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
         if not myFlag:
             self.ui.wvResults.setHtml(myMessage)
+            self.disableBusyCursor()
             return
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
@@ -215,13 +222,40 @@ class RiabDialog(QtGui.QDialog):
         self.calculator.setExposureLayer(myExposureFileName)
 
         self.calculator.setFunction(self.ui.cboFunction.currentText())
-        myFilename = self.calculator.run()
-        self.ui.wvResults.setHtml(myFilename)
-                # Now go ahead and load our layers
-        myVectorPath = os.path.join('/tmp/', myFilename)
-        myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
-        if not myVectorLayer.isValid():
-            msg = 'Vector layer "%s" is not valid' % myFilename
-            self.ui.wvResults.setHtml(msg)
-            return
-        QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+        myFilename, myMessage = self.calculator.run()
+        if myMessage:
+            self.ui.wvResults.setHtml(myMessage)
+        if myFilename:
+            myVectorPath = os.path.join('/tmp/', myFilename)
+            myName = (self.ui.cboExposure.currentText() + 'X' +
+                      self.ui.cboHazard.currentText() + 'X' +
+                      self.ui.cboFunction.currentText())
+            myVectorLayer = QgsVectorLayer(myVectorPath, myName, 'ogr')
+            if not myVectorLayer.isValid():
+                msg = 'Vector layer "%s" is not valid' % myFilename
+                self.ui.wvResults.setHtml(msg)
+                self.disableBusyCursor()
+                return
+            QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+        self.disableBusyCursor()
+
+    def showHelp(self):
+        """Load the help text into the wvResults widget"""
+        myPath = os.path.abspath(os.path.join(ROOT, 'docs', 'build',
+                                            'html', 'README.html'))
+        self.ui.wvResults.setUrl(QtCore.QUrl('file:///' + myPath))
+
+    def resetForm(self):
+        """Reset the form contents to their onload state."""
+        self.ui.cboFunction.setCurrentIndex(0)
+        self.ui.cboHazard.setCurrentIndex(0)
+        self.ui.cboExposure.setCurrentIndex(0)
+        self.showHelp()
+
+    def enableBusyCursor(self):
+        """Set the hourglass enabled."""
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+
+    def disableBusyCursor(self):
+        """Disable the hourglass cursor"""
+        QtGui.qApp.restoreOverrideCursor()

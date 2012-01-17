@@ -154,6 +154,9 @@ class ImpactCalculator:
         myLayers = [myHazardLayer, myExposureLayer]
         myFunctions = get_plugins(self.make_ascii(self.__function))
         myFunction = myFunctions[0][self.make_ascii(self.__function)]
-        myFilename = calculate_impact(layers=myLayers,
+        try:
+            myFilename = calculate_impact(layers=myLayers,
                                       impact_fcn=myFunction)
-        return myFilename
+        except Exception, e:
+            return(None, str(e))
+        return (myFilename, 'Completed successfully')
