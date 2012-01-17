@@ -17,10 +17,16 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+import sys
+import os
 import unicodedata
 from riabexceptions import (InsufficientParametersException,
                             NoFunctionsFoundException)
-from impact_functions.core import get_plugins
+
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(pardir)
+from impact_functions import get_plugins
 
 
 class ImpactCalculator:
