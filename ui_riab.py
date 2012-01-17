@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riab.ui'
 #
-# Created: Tue Jan 17 09:19:15 2012
+# Created: Tue Jan 17 09:44:53 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -35,21 +35,21 @@ class Ui_Riab(object):
         self.gridLayout = QtGui.QGridLayout(self.groupBox)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.label = QtGui.QLabel(self.groupBox)
-        self.label.setText(QtGui.QApplication.translate("Riab", "Ha&zard", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("Riab", "If this occurs", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.cboHazard = QtGui.QComboBox(self.groupBox)
         self.cboHazard.setObjectName(_fromUtf8("cboHazard"))
         self.gridLayout.addWidget(self.cboHazard, 0, 1, 1, 1)
         self.label_2 = QtGui.QLabel(self.groupBox)
-        self.label_2.setText(QtGui.QApplication.translate("Riab", "Ex&posure", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("Riab", "How many", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
         self.cboExposure = QtGui.QComboBox(self.groupBox)
         self.cboExposure.setObjectName(_fromUtf8("cboExposure"))
         self.gridLayout.addWidget(self.cboExposure, 1, 1, 1, 1)
         self.label_3 = QtGui.QLabel(self.groupBox)
-        self.label_3.setText(QtGui.QApplication.translate("Riab", "&Function", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("Riab", "&Will be affected by", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.gridLayout.addWidget(self.label_3, 2, 0, 1, 1)
         self.cboFunction = QtGui.QComboBox(self.groupBox)

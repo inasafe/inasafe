@@ -89,6 +89,9 @@ class RiabDialog(QtGui.QDialog):
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                 self.showHelp)
         self.showHelp()
+        myButton = self.ui.buttonBox.button(self.ui.buttonBox.Reset)
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                                self.resetForm)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -234,3 +237,10 @@ class RiabDialog(QtGui.QDialog):
         myPath = os.path.abspath(os.path.join(ROOT, 'docs', 'build',
                                             'html', 'README.html'))
         self.ui.wvResults.setUrl(QtCore.QUrl('file:///' + myPath))
+
+    def resetForm(self):
+        """Reset the form contents to their onload state."""
+        self.ui.cboFunction.setCurrentIndex(0)
+        self.ui.cboHazard.setCurrentIndex(0)
+        self.ui.cboExposure.setCurrentIndex(0)
+        self.showHelp()
