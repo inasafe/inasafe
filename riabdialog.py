@@ -221,16 +221,17 @@ class RiabDialog(QtGui.QDialog):
         self.calculator.setExposureLayer(myExposureFileName)
 
         self.calculator.setFunction(self.ui.cboFunction.currentText())
-        myFilename = self.calculator.run()
-        self.ui.wvResults.setHtml(myFilename)
-                # Now go ahead and load our layers
-        myVectorPath = os.path.join('/tmp/', myFilename)
-        myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
-        if not myVectorLayer.isValid():
-            msg = 'Vector layer "%s" is not valid' % myFilename
-            self.ui.wvResults.setHtml(msg)
-            return
-        QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+        myFilename, myMessage = self.calculator.run()
+        if myMessage:
+            self.ui.wvResults.setHtml(myMessage)
+        if myFilename:
+            myVectorPath = os.path.join('/tmp/', myFilename)
+            myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
+            if not myVectorLayer.isValid():
+                msg = 'Vector layer "%s" is not valid' % myFilename
+                self.ui.wvResults.setHtml(msg)
+                return
+            QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""

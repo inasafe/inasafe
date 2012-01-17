@@ -58,7 +58,10 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_run(self):
         """Test that run works as expected."""
         try:
-            self.calculator.run()
+            myFilename, myMessage = self.calculator.run()
+            assert(myFilename and not myFilename == '')
+            assert(myMessage and not myMessage == '')
+
         except:
             msg = 'Calculator run failed.'
             assert(), msg
