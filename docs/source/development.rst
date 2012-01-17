@@ -25,7 +25,7 @@ on your machine in order to work effectively with the code base:
 * subversion
 * pep8
 * nosetests (with coverage plugin)
-* python-numpy 
+* python-numpy
 * python-gdal
 * ...
 
@@ -35,12 +35,8 @@ On an ubuntu system you can install these requirements using apt::
   sudo apt-get install git subversion pep8 python-nose python-coverage \
   python-gdal python-numpy
 
-Whilst under development, you will need to install scipy into your python 
-installation too (we are working to remove this if possible)::
 
-  sudo apt-get install python-scipy
-
-In some cases these dependencies may already be on your system via installation 
+In some cases these dependencies may already be on your system via installation
 process you followed for QGIS.
 
 Quick Installation Guide - Developers
