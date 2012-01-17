@@ -1,13 +1,13 @@
 #/***************************************************************************
 # Riab
-# 
+#
 # Disaster risk assessment tool developed by AusAid
 #                             -------------------
 #        begin                : 2012-01-09
 #        copyright            : (C) 2012 by Australia Indonesia Facility for Disaster Reduction
 #        email                : ole.moller.nielsen@gmail.com
 # ***************************************************************************/
-# 
+#
 #/***************************************************************************
 # *                                                                         *
 # *   This program is free software; you can redistribute it and/or modify  *
@@ -17,13 +17,13 @@
 # *                                                                         *
 # ***************************************************************************/
 
-# Makefile for a PyQGIS plugin 
+# Makefile for a PyQGIS plugin
 
 PLUGINNAME = riab
 
 PY_FILES = riab.py riabdialog.py __init__.py
 
-EXTRAS = icon.png 
+EXTRAS = icon.png
 
 UI_FILES = ui_riab.py
 
@@ -50,8 +50,8 @@ deploy: compile
 
 	cp -vf $(EXTRAS) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 
-# Create a zip package of the plugin named $(PLUGINNAME).zip. 
-# This requires use of git (your plugin development directory must be a 
+# Create a zip package of the plugin named $(PLUGINNAME).zip.
+# This requires use of git (your plugin development directory must be a
 # git repository).
 # To use, pass a valid commit or tag as follows:
 #   make package VERSION=Version_0.3.2
@@ -64,4 +64,5 @@ docs: compile
 	cd docs; make html; cd ..
 
 test: compile
+	pep8 --repeat --ignore=E203 --exclude loader.py,ui_riab.py,resources.py .
 	python -m discover

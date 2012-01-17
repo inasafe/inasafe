@@ -311,7 +311,9 @@ class Vector:
                                                 copy=False))
                 #elif self.geometry_type == ogr.wkbMultiPolygon:
                 #    # FIXME: Unpact multiple polygons to simple polygons
-                #    # For hints on how to unpact see http://osgeo-org.1803224.n2.nabble.com/gdal-dev-Shapefile-Multipolygon-with-interior-rings-td5391090.html
+                #    # For hints on how to unpack see
+#http://osgeo-org.1803224.n2.nabble.com/
+#gdal-dev-Shapefile-Multipolygon-with-interior-rings-td5391090.html
 
                 #    ring = G.GetGeometryRef(0)
                 #    M = ring.GetPointCount()
