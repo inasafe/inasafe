@@ -1,10 +1,9 @@
+import numpy
+
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.raster import Raster
-
-import scipy
-import scipy.stats
-import numpy
+from engine.numerics import cdf
 
 
 class EmpiricalFatalityFunction(FunctionProvider):
@@ -36,12 +35,12 @@ class EmpiricalFatalityFunction(FunctionProvider):
         P = population.get_data(nan=0)
 
         # Calculate impact
-        logHazard = 1 / beta * scipy.log(H / teta)
+        logHazard = 1 / beta * numpy.log(H / teta)
 
         # Convert array to be standard floats expected by cdf
         arrayout = numpy.array([[float(value) for value in row]
                                for row in logHazard])
-        F = scipy.stats.norm.cdf(arrayout * P)
+        F = cdf(arrayout * P)
 
         # Create new layer and return
         R = Raster(F,

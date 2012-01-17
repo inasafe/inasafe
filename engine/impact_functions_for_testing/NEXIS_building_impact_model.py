@@ -1,8 +1,5 @@
-
 import numpy
-import scipy
 
-#from django.template.loader import render_to_string
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 

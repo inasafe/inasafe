@@ -272,31 +272,6 @@ def get_layer_descriptors(url):
     return x
 
 
-def get_file(download_url, suffix):
-    """Download a file from an HTTP server.
-    """
-
-    tempdir = '/tmp/%s' % str(time.time())
-    os.mkdir(tempdir)
-    t = tempfile.NamedTemporaryFile(delete=False,
-                                    suffix=suffix,
-                                    dir=tempdir)
-
-    with contextlib.closing(urllib2.urlopen(download_url)) as f:
-        data = f.read()
-
-    if '<ServiceException>' in data:
-        msg = ('File download failed.\n'
-               'URL: %s\n'
-               'Error message: %s' % (download_url, data))
-        raise Exception(msg)
-
-    # Write and return filename
-    t.write(data)
-    filename = os.path.abspath(t.name)
-    return filename
-
-
 def check_bbox_string(bbox_string):
     """Check that bbox string is valid
     """
@@ -335,29 +310,9 @@ def check_bbox_string(bbox_string):
     assert miny < maxy, msg
 
 
-def dummy_save(filename, title, user, metadata=''):
-    """Take a file-like object and uploads it to a GeoNode
-    """
-    return 'http://dummy/data/geonode:' + filename + '_by_' + user.username
-
-
 #--------------------------------------------------------------------
 # Functionality to upload layers to GeoNode and check their integrity
 #--------------------------------------------------------------------
-
-class RisikoException(Exception):
-    pass
-
-
-def console_log():
-    """Reconfigure logging to output to the console.
-    """
-
-    for _module in ["risiko"]:
-        _logger = logging.getLogger(_module)
-        _logger.addHandler(logging.StreamHandler())
-        _logger.setLevel(logging.INFO)
-
 
 def run(cmd, stdout=None, stderr=None):
     """Run command with stdout and stderr optionally redirected

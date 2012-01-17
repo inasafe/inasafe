@@ -7,7 +7,6 @@ from impact_functions.utilities import PointZoomSize
 from impact_functions.utilities import PointClassColor
 from impact_functions.utilities import PointSymbol
 from storage.vector import convert_line_to_points
-import scipy.stats
 
 
 class FloodRoadImpactFunction(FunctionProvider):
