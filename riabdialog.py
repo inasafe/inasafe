@@ -52,14 +52,19 @@ from impactcalculator import ImpactCalculator
 class RiabDialog(QtGui.QDialog):
     """Dialog implementation class for the Risk In A Box plugin."""
 
-    def __init__(self, iface):
+    def __init__(self, iface, guiContext=True):
         """Constructor for the dialog.
 
         This dialog will allow the user to select layers and scenario details
         and subsequently run their model.
 
         Args:
-           iface - a Quantum GIS QGisAppInterface instance.
+
+           * iface - a Quantum GIS QGisAppInterface instance.
+           * guidContext - an optional paramter, defaults to True. Set to
+             False if you do not wish to see popup messages etc. Used
+             mainly by init tests.
+
         Returns:
            not applicable
         Raises:
@@ -72,6 +77,7 @@ class RiabDialog(QtGui.QDialog):
 
         # Save reference to the QGIS interface
         self.iface = iface
+        self.suppressDialogsFlag = guiContext
         self.calculator = ImpactCalculator()
         # Set up the user interface from Designer.
         self.ui = Ui_Riab()
@@ -183,8 +189,11 @@ class RiabDialog(QtGui.QDialog):
             for myFunction in myList:
                 self.ui.cboFunction.addItem(myFunction)
         except Exception, e:
-            QtGui.QMessageBox.critical(self,
-                'Function list retireval error', str(e))
+            if not self.suppressDialogsFlag:
+                raise e
+            else:
+                QtGui.QMessageBox.critical(self,
+                  'Function list retireval error', str(e))
 
     def accept(self):
         """Execute analysis when ok button is clicked."""

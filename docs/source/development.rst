@@ -15,9 +15,11 @@ Requirements to develop Risk-in-a-Box
 Risk-in-a-box is built in python and runs as a plugin in `QGIS
 <http://qgis.org>`_.  The Graphical User Interface components are built using
 `PyQt4 <http://www.riverbankcomputing.co.uk/software/pyqt/intro>`_ and the QGIS
-plugin API.  As such it is helpful if you are familiar with these technologies
-(python, Qt4, PyQt4, QGIS). In addition, the following are needed on your
-machine in order to work effectively with the code base:
+plugin API (useful resources: `the QGIS Python Cookbook
+<http://qgis.org/pyqgis-cookbook/>`_ and `the QGIS C++ API documentation
+<http://qgis.org/api/>`_).  As such it is helpful if you are familiar with these
+technologies (python, Qt4, PyQt4, QGIS). In addition, the following are needed
+on your machine in order to work effectively with the code base:
 
 * git
 * subversion

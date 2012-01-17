@@ -63,7 +63,8 @@ class RiabDialogTest(unittest.TestCase):
         self.canvas = QgsMapCanvas(self.parent)
         self.canvas.resize(QtCore.QSize(400, 400))
         self.iface = QgisInterface(self.canvas)
-        self.form = RiabDialog(self.iface)
+        myGuiContextFlag = False
+        self.form = RiabDialog(self.iface, myGuiContextFlag)
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""
@@ -91,7 +92,7 @@ class RiabDialogTest(unittest.TestCase):
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboFunction.currentIndex(), -1)
 
-    def _test_validate(self):  # Disabled for now as it blocks tests
+    def test_validate(self):  # Disabled for now as it blocks tests
         '''Test that the validate function works as expected.'''
         # First check that we DONT validate a clear form
         self.clearForm()
@@ -103,7 +104,7 @@ class RiabDialogTest(unittest.TestCase):
         self.populateForm()
         myFlag = self.form.validate()
         myMessage = ('Validation expected to pass on' +
-                     ' a populated for with selctions.')
+                     ' a populated for with selections.')
         assert(myFlag), myMessage
 
     def test_setOkButtonStatus(self):
@@ -134,6 +135,10 @@ class RiabDialogTest(unittest.TestCase):
 
     def loadLayers(self):
         """Helper function to load layers into the dialog."""
+        # First unload any layers that may already be loaded
+        for myLayer in QgsMapLayerRegistry.instance().mapLayers():
+            QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
+        # Now go ahead and load our layers
         myVectorPath = os.path.join(ROOT, 'testdata', 'Jakarta_sekolah.shp')
         myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
         msg = 'Vector layer "%s" is not valid' % str(myVectorLayer.source())
