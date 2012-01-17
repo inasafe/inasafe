@@ -50,30 +50,33 @@ from riabdialog import RiabDialog
 
 class RiabDialogTest(unittest.TestCase):
     """Test the risk in a box GUI"""
+    app = None
 
     def setUp(self):
         """Create an app that all tests can use"""
-
-        myGuiFlag = True  # We need to enable qgis app in gui mode
-        self.app = QgsApplication(sys.argv, myGuiFlag)
-        myUseDefaultPathFlag = True
-        self.app.setPrefixPath('/usr/local', myUseDefaultPathFlag)
-        self.app.initQgis()
-        self.parent = QtGui.QWidget()
-        self.canvas = QgsMapCanvas(self.parent)
-        self.canvas.resize(QtCore.QSize(400, 400))
-        self.iface = QgisInterface(self.canvas)
-        myGuiContextFlag = False
-        self.form = RiabDialog(self.iface, myGuiContextFlag)
+        print 'RiabDialogTest - setUp called'
+        if not self.app:
+            myGuiFlag = True  # We need to enable qgis app in gui mode
+            self.app = QgsApplication(sys.argv, myGuiFlag)
+            myUseDefaultPathFlag = True
+            self.app.setPrefixPath(QGIS_PATH, myUseDefaultPathFlag)
+            self.app.initQgis()
+            self.parent = QtGui.QWidget()
+            self.canvas = QgsMapCanvas(self.parent)
+            self.canvas.resize(QtCore.QSize(400, 400))
+            self.iface = QgisInterface(self.canvas)
+            myGuiContextFlag = False
+            self.form = RiabDialog(self.iface, myGuiContextFlag)
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""
-        self.app.exitQgis()
+        print 'RiabDialogTest tearDown called'
+        #self.app.exitQgis()
 
     def clearForm(self):
         """Helper function to  set all form elements to default state"""
-        self.form.ui.cboHazard.setCurrentIndex(0)
-        self.form.ui.cboExposure.setCurrentIndex(0)
+        self.form.ui.cboHazard.clear()
+        self.form.ui.cboExposure.clear()
         self.form.ui.cboFunction.setCurrentIndex(0)
 
     def populateForm(self):
@@ -89,7 +92,7 @@ class RiabDialogTest(unittest.TestCase):
         """Test the GUI in its default state"""
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
-        self.assertEqual(self.form.ui.cboFunction.currentIndex(), -1)
+        self.assertNotEqual(self.form.ui.cboFunction.currentIndex(), -1)
 
     def test_validate(self):
         """Test that the validate function works as expected."""
@@ -175,6 +178,7 @@ class RiabDialogTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(RiabDialogTest, 'test_XXX')
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suite)
+    unittest.main()
+    #suite = unittest.makeSuite(RiabDialogTest, 'test_defaults')
+    #runner = unittest.TextTestRunner(verbosity=2)
+    #runner.run(suite)
