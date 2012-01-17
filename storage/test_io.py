@@ -870,8 +870,8 @@ class Test_IO(unittest.TestCase):
 
         # Get gdal version number
         x = gdal.VersionInfo('').replace('dev', '').split()
-        y = x[1].split('.')
-        z = ''.join(y)[:-1]  # Turn into number and strip trailing comma
+        y = x[1].split('.')[:-1]
+        z = ''.join(y)  # Turn into number
 
         # Reference bbox for vector data
         ref_bbox = {'tsunami_exposure_BB.shp': [150.124,
@@ -880,7 +880,7 @@ class Test_IO(unittest.TestCase):
                                                 -35.6546]}
 
         # Select correct reference bbox for rasters
-        if float(z) < 170:
+        if float(z) < 17:
             ref_bbox['Earthquake_Ground_Shaking_clip.tif'] = [99.3641696,
                                                               -2.2031806,
                                                               102.2411696,
