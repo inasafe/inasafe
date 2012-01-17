@@ -10,7 +10,7 @@ import warnings
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-# Must use fully qualified path for these
+# FIXME (Ole): Must use fully qualified path for these
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_plugins
 
