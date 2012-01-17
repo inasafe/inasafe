@@ -213,5 +213,7 @@ class RiabDialog(QtGui.QDialog):
                              QtCore.Qt.UserRole).toString()
         self.calculator.setExposureLayer(myExposureFileName)
 
-        self.calculator.setFunction(self.ui.cboCalculator.currentText())
-        self.calculator.run()
+        self.calculator.setFunction(self.ui.cboFunction.currentText())
+        myFilename = self.calculator.run()
+        QtGui.QMessageBox.information(self,
+                  'Risk-in-a-box', myFilename)
