@@ -33,7 +33,7 @@ class FloodRoadImpactFunction(FunctionProvider):
         R = get_exposure_layer(layers)  # Building locations
 
         # Make the delta 10 times the size of the resolution.
-        delta = abs(H.get_geotransform()[1])*10
+        delta = abs(H.get_geotransform()[1]) * 10
         min_value, max_value = H.get_extrema()
 
         E = convert_line_to_points(R, delta)
@@ -99,10 +99,10 @@ class FloodRoadImpactFunction(FunctionProvider):
         symbol_keys = [None, '']
         symbol_values = [DEFAULT_SYMBOL, DEFAULT_SYMBOL]
 
-        scale_keys = [10000000000,]
-        scale_values = [4,]
+        scale_keys = [10000000000]
+        scale_values = [4]
 
-        class_keys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',]
+        class_keys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         class_values = [{'min': 0, 'max': 1,
                          'color': '#50BBE6', 'opacity': '0.0'},
                         {'min': 1, 'max': 2,
@@ -123,10 +123,6 @@ class FloodRoadImpactFunction(FunctionProvider):
                          'color': '#234AE8', 'opacity': '0.9'},
                         {'min': 9, 'max': 10,
                          'color': '#234AE8', 'opacity': '1.0'}]
-
-
-
-
 
         params = dict(name=data.get_name(),
                       damage_field=self.target_field,

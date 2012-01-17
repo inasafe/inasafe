@@ -679,6 +679,7 @@ class Vector:
     def is_polygon_data(self):
         return self.is_vector and self.geometry_type == ogr.wkbPolygon
 
+
 #----------------------------------
 # Helper functions for class Vector
 #----------------------------------
@@ -715,6 +716,7 @@ def convert_line_to_points(V, delta):
                name='%s_point_data' % V.get_name(),
                keywords=V.get_keywords())
     return V
+
 
 def convert_polygons_to_centroids(V):
     """Convert polygon vector data to point vector data

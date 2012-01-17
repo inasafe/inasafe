@@ -1,4 +1,4 @@
-'''
+"""
 Disaster risk assessment tool developed by AusAid - **Exception Classes.**
 
 Custom exception classes for the Riab application.
@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 
-'''
+"""
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.0.1'
@@ -20,21 +20,21 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 class QgisPathException(Exception):
-    '''Custom exception for when qgispath.txt could not be read.'''
+    """Custom exception for when qgispath.txt could not be read."""
     pass
 
 
 class TestNotImplementedException(Exception):
-    '''Custom exception for when a test exists only as a stub.'''
+    """Custom exception for when a test exists only as a stub."""
     pass
 
 
 class InsufficientParametersException(Exception):
-    '''Custom exception for when a test exists only as a stub.'''
+    """Custom exception for when a test exists only as a stub."""
     pass
 
 
 class NoFunctionsFoundException(Exception):
-    '''Custom exception for when a no impact calculation
-    functions can be found.'''
+    """Custom exception for when a no impact calculation
+    functions can be found."""
     pass

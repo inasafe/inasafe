@@ -869,7 +869,7 @@ class Test_IO(unittest.TestCase):
         # http://trac.osgeo.org/gdal/wiki/rfc33_gtiff_pixelispoint
 
         # Get gdal version number
-        x = gdal.VersionInfo('').replace('dev','').split()
+        x = gdal.VersionInfo('').replace('dev', '').split()
         y = x[1].split('.')
         z = ''.join(y)[:-1]  # Turn into number and strip trailing comma
 
@@ -1385,7 +1385,6 @@ class Test_IO(unittest.TestCase):
                    name='Test centroid')
         V.write_to_file(out_filename)
 
-
     def test_line_to_points(self):
         """Points along line are computed correctly
         """
@@ -1397,7 +1396,7 @@ class Test_IO(unittest.TestCase):
         expected_V = [[0, 0], [1, 0], [2, 0]]
         msg = ('Calculated points were %s, expected '
                '%s' % (V, expected_V))
-        assert numpy.allclose(V,expected_V), msg
+        assert numpy.allclose(V, expected_V), msg
 
         # Not starting at zero
         # Create line
@@ -1420,19 +1419,19 @@ class Test_IO(unittest.TestCase):
         C = points_along_line(P, delta)
 
         # Check against reference centroid
-        expected_v = [[ 106.7168975 ,   -6.15530081],
-                      [ 106.85224176,   -6.15344678],
-                      [ 106.93660016,   -6.21370279]]
+        expected_v = [[106.7168975, -6.15530081],
+                      [106.85224176, -6.15344678],
+                      [106.93660016, -6.21370279]]
         assert numpy.allclose(C, expected_v, rtol=1.0e-8)
 
         # Store points to file (to e.g. check with qgis)
-        out_filename = unique_filename(prefix='test_points_along_line', suffix='.shp')
+        out_filename = unique_filename(prefix='test_points_along_line',
+                                       suffix='.shp')
         V = Vector(data=None,
                    projection=DEFAULT_PROJECTION,
                    geometry=[C],
                    name='Test points_along_line')
         V.write_to_file(out_filename)
-
 
     def test_geotransform2bbox(self):
         """Bounding box can be extracted from geotransform
@@ -1464,8 +1463,6 @@ class Test_IO(unittest.TestCase):
             res = geotransform2resolution(gt, isotropic=True)
             assert numpy.allclose(res, gt[1], rtol=0, atol=1.0e-12)
             assert numpy.allclose(res, - gt[5], rtol=0, atol=1.0e-12)
-
-
 
     def test_reading_and_writing_of_vector_line_data(self):
         """Vector line data can be read and written correctly

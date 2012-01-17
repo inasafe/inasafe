@@ -280,10 +280,10 @@ def compatible_layers(func, layer_descriptors):
 
     return layers
 
+
 #-------------------------------
 # Helpers for individual plugins
 #-------------------------------
-
 def get_hazard_layers(layers):
     """Get list of layers that have category=='hazard'
     """

@@ -78,7 +78,8 @@ class USGSFatalityFunction(FunctionProvider):
             # Generate text with result for this study
             number_of_people_affected[mmi] = numpy.nansum(I.flat)
 
-        # Calculate impact according to equation (1) in the Kishor and Wald 2010
+        # Calculate impact according to equation (1) in the
+        # Kishor and Wald 2010
         logHazard = 1 / beta * scipy.log(H / teta)
 
         # Convert array to be standard floats expected by cdf

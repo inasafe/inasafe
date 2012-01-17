@@ -87,11 +87,12 @@ class TephraImpactFunction(FunctionProvider):
                                          '0.5 - 2 kg/m2', count1,
                                          '2 - 10 kg/m2', count2,
                                          '> 10 kg/m2', count3))
-                    #'</table>' % ('Beban abu', 'Gedung dampak',
-                    #              'Gangguan (< 90 kg/m2)', count0,
-                    #              'Kerusakan kosmetik (90 - 150 kg/m2', count1,
-                    #              'parsial runtuhnya (150 - 300 kg/m2', count2,
-                    #              'runtuhnya lengkap (> 300 kg/m2', count3))
+                    #'</table>' %
+                    # ('Beban abu', 'Gedung dampak',
+                    # 'Gangguan (< 90 kg/m2)', count0,
+                    # 'Kerusakan kosmetik (90 - 150 kg/m2', count1,
+                    # 'parsial runtuhnya (150 - 300 kg/m2', count2,
+                    # 'runtuhnya lengkap (> 300 kg/m2', count3))
 
         V = Vector(data=result,
                    projection=E.get_projection(),

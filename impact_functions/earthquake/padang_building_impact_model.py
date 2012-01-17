@@ -100,9 +100,11 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
 
             building_type = str(int(building_class))
             damage_params = damage_curves[building_type]
+            beta = damage_params['beta']
+            median = damage_params['median']
             percent_damage = scipy.stats.lognorm.cdf(mmi,
-                                                     damage_params['beta'],
-                                                     scale=damage_params['median']) * 100
+                                                     beta,
+                                                     scale=median) * 100
 
             # Collect shake level and calculated damage
             result_dict = {self.target_field: percent_damage,

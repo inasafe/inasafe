@@ -258,7 +258,8 @@ def get_bounding_boxes(haz_metadata, exp_metadata, req_bbox):
         vpt_bbox = bboxstring2list(x)
     else:
         msg = ('Invalid bounding box %s (%s). '
-               'It must be a string or a list' % (str(req_bbox), type(req_bbox)))
+               'It must be a string or a list' % (str(req_bbox),
+                                                  type(req_bbox)))
         raise Exception(msg)
 
     # Get bounding boxes for layers

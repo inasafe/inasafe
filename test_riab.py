@@ -1,4 +1,4 @@
-'''
+"""
 Disaster risk assessment tool developed by AusAid - **QGIS plugin test suite.**
 
 Contact : ole.moller.nielsen@gmail.com
@@ -8,7 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 
-'''
+"""
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.0.1'
@@ -56,7 +56,7 @@ class RiabTest(unittest.TestCase):
         self.app.initQgis()
 
     def tearDown(self):
-        '''Tear down - destroy the QGIS app'''
+        """Tear down - destroy the QGIS app"""
         self.app.exitQgis()
 
     def test_load(self):

@@ -1,4 +1,4 @@
-'''
+"""
 Disaster risk assessment tool developed by AusAid -
 **Impact calculator test suite.**
 
@@ -9,7 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 
-'''
+"""
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.0.1'
@@ -40,11 +40,11 @@ class ImpactCalculatorTest(unittest.TestCase):
         self.calculator.setFunction('Test')
 
     def tearDown(self):
-        '''Tear down - destroy the QGIS app'''
+        """Tear down - destroy the QGIS app"""
         pass
 
     def test_properties(self):
-        '''Test if the properties work as expected.'''
+        """Test if the properties work as expected."""
         msg = 'Vector property incorrect.'
         assert(self.calculator.getExposureLayer() ==
                self.vectorPath), msg
@@ -56,8 +56,8 @@ class ImpactCalculatorTest(unittest.TestCase):
                'Test'), msg
 
     def test_runWithNoParameters(self):
-        '''Test that run raises an error properly
-           when no parameters are defined.'''
+        """Test that run raises an error properly
+           when no parameters are defined."""
         try:
             self.calculator.run()
         except InsufficientParametersException:
@@ -67,8 +67,8 @@ class ImpactCalculatorTest(unittest.TestCase):
             assert(), msg
 
     def test_availableFunctions(self):
-        '''Test that we can get the available functions from
-        the impactcalculator.'''
+        """Test that we can get the available functions from
+        the impactcalculator."""
         myList = self.calculator.availableFunctions()
         assert(myList > 1)
 

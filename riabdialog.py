@@ -1,4 +1,4 @@
-'''
+"""
 Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
 
 Contact : ole.moller.nielsen@gmail.com
@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 .. todo:: Check raster is single band
 
-'''
+"""
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.0.1'
@@ -50,10 +50,10 @@ from impactcalculator import ImpactCalculator
 
 
 class RiabDialog(QtGui.QDialog):
-    '''Dialog implementation class for the Risk In A Box plugin.'''
+    """Dialog implementation class for the Risk In A Box plugin."""
 
     def __init__(self, iface):
-        '''Constructor for the dialog.
+        """Constructor for the dialog.
 
         This dialog will allow the user to select layers and scenario details
         and subsequently run their model.
@@ -64,7 +64,7 @@ class RiabDialog(QtGui.QDialog):
            not applicable
         Raises:
            no exceptions explicitly raised
-        '''
+        """
         if DEBUG:
             # settrace()
             pass
@@ -81,7 +81,7 @@ class RiabDialog(QtGui.QDialog):
         self.setOkButtonStatus()
 
     def validate(self):
-        '''Helper method to evaluate the current state of the dialog and
+        """Helper method to evaluate the current state of the dialog and
         determine if it is appropriate for the OK button to be enabled
         or not.
 
@@ -105,7 +105,7 @@ class RiabDialog(QtGui.QDialog):
 
         Raises:
            no exceptions explicitly raised
-        '''
+        """
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myExposureIndex = self.ui.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
@@ -116,21 +116,21 @@ class RiabDialog(QtGui.QDialog):
             return (True, '')
 
     def setOkButtonStatus(self):
-        '''Helper function to set the ok button status if the
+        """Helper function to set the ok button status if the
         form is valid and disable it if it is not.
         Args:
            None.
         Returns:
            None.
         Raises:
-           no exceptions explicitly raised.'''
+           no exceptions explicitly raised."""
         myButton = self.ui.buttonBox.button(self.ui.buttonBox.Ok)
         myFlag, myMessage = self.validate()
         myButton.setEnabled(myFlag)
         self.ui.wvResults.setHtml(myMessage)
 
     def getLayers(self):
-        '''Helper function to obtain a list of layers currently loaded in QGIS.
+        """Helper function to obtain a list of layers currently loaded in QGIS.
 
         On invocation, this method will populate cboHazard and
         cboExposure on the dialog with a list of available layers. Only
@@ -144,14 +144,14 @@ class RiabDialog(QtGui.QDialog):
            None
         Raises:
            no
-        '''
+        """
 
         for i in range(len(self.iface.mapCanvas().layers())):
             myLayer = self.iface.mapCanvas().layer(i)
-            '''
+            """
             .. todo:: check raster is single band
                       store uuid in user property of list widget for layers
-            '''
+            """
             if myLayer.type() == QgsMapLayer.RasterLayer:
                 myName = myLayer.name()
                 mySource = myLayer.source()
@@ -168,7 +168,7 @@ class RiabDialog(QtGui.QDialog):
         return
 
     def getFunctions(self):
-        '''Helper function to obtain a list of impact functions from
+        """Helper function to obtain a list of impact functions from
         the impact calculator.
 
         Args:
@@ -177,7 +177,7 @@ class RiabDialog(QtGui.QDialog):
            None
         Raises:
            no
-        '''
+        """
         try:
             myList = self.calculator.availableFunctions()
             for myFunction in myList:
@@ -186,7 +186,8 @@ class RiabDialog(QtGui.QDialog):
             QtGui.QMessageBox(e.message())
 
     def accept(self):
-        '''Execute analysis when ok button is clicked.'''
+        """Execute analysis when ok button is clicked."""
+
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
         if not myFlag:

@@ -116,4 +116,3 @@ def combine_coordinates(x, y):
     points = numpy.array(points)
 
     return points
-

@@ -338,6 +338,7 @@ def extract_native_geotransform(layer):
     return (adjusted_top_left_x, we_pixel_res, x_rotation,
             adjusted_top_left_y, y_rotation, ns_pixel_res)
 
+
 def geotransform2bbox(geotransform, columns, rows):
     """Convert geotransform to bounding box
 
@@ -778,6 +779,7 @@ def calculate_polygon_centroid(polygon):
     C = numpy.array([Cx, Cy]) + P_origin
     return C
 
+
 def points_between_points(point1, point2, delta):
     """Creates an array of points between two points given a delta
 
@@ -790,14 +792,15 @@ def points_between_points(point1, point2, delta):
     """
     x0, y0 = point1
     x1, y1 = point2
-    L = math.sqrt(math.pow((x1-x0),2) + math.pow((y1-y0), 2))
+    L = math.sqrt(math.pow((x1 - x0), 2) + math.pow((y1 - y0), 2))
     pieces = int(L / delta)
-    uu = numpy.array([x1 - x0, y1 -y0]) / L
+    uu = numpy.array([x1 - x0, y1 - y0]) / L
     points = [point1]
     for nn in range(pieces):
         point = point1 + uu * (nn + 1) * delta
         points.append(point)
     return numpy.array(points)
+
 
 def points_along_line(line, delta):
     """Calculate a list of points along a line with a given delta
@@ -817,8 +820,8 @@ def points_along_line(line, delta):
     # Make sure it is numeric
     P = numpy.array(line)
     points = []
-    for i in range(len(P)-1):
-        pts = points_between_points(P[i], P[i+1], delta)
+    for i in range(len(P) - 1):
+        pts = points_between_points(P[i], P[i + 1], delta)
         # If the first point of this list is the same
         # as the last one recorded, do not use it
         if len(points) > 0:

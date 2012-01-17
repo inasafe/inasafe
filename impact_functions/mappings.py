@@ -110,6 +110,7 @@ def osm2padang(E):
                keywords=E.get_keywords())
     return V
 
+
 def sigab2padang(E):
     """Map SIGAB attributes to Padang vulnerability classes
 
@@ -343,8 +344,6 @@ def sigab2bnpb(E, target_attribute='VCLASS'):
                keywords=E.get_keywords())
     return V
 
-
-
 def XX_printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
     """Map SIGAB point data to BNPB vulnerability classes
 
@@ -360,11 +359,10 @@ def XX_printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
     """
 
     # Input check
-    #required = ['Bangunan', 'Halaman', 'Struktur_B', 'Level', 'Lantai', 'Atap', 'Dinding', 'Tingkat']
+    #required = ['Bangunan', 'Halaman', 'Struktur_B', 'Level',
+    #            'Lantai', 'Atap', 'Dinding', 'Tingkat']
     actual = E.get_attribute_names()
     #print actual
-
-
 
     #msg = ('Input data to osm2bnpb must have attributes %s. '
     #       'It has %s' % (str(required), str(actual)))
@@ -378,7 +376,7 @@ def XX_printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
     attributes = E.get_data()
     count = 0
     for i in range(N):
-        for key in actual: #required:
+        for key in actual:  # Required:
             if key not in fields:
                 fields[key] = {}
 
@@ -389,9 +387,8 @@ def XX_printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
             # Count incidences of each value
             fields[key][val] += 1
 
-
     fid = open('/home/nielso/sigab_stats.txt', 'w')
-    for key in actual:  #required:
+    for key in actual:  # Required:
         print
         print key
         fid.write('\n%s\n' % key)
@@ -400,5 +397,3 @@ def XX_printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
             fid.write('    %s: %i\n' % (str(val), fields[key][val]))
 
     fid.close()
-
-

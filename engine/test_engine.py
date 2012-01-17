@@ -981,9 +981,6 @@ class Test_Engine(unittest.TestCase):
         """Non overlapping bounding boxes causes exception to be raised
         """
 
-
-
-
         # Reduced versions of metadata dictionaries
         haz_metadata = {'layer_type': 'raster',
                         'title': 'lembang_earthquake_scenario',
@@ -1013,7 +1010,7 @@ class Test_Engine(unittest.TestCase):
         view_port = '94.972335,-11.009721,141.014002,6.073612'
         bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
 
-        view_port = [94.972335,-11.009721,141.014002,6.073612]
+        view_port = [94.972335, -11.009721, 141.014002, 6.073612]
         bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
 
         view_port = [105.3000035,
@@ -1023,7 +1020,7 @@ class Test_Engine(unittest.TestCase):
         bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
 
         # Then one where boxes don't overlap
-        view_port = [105.3,-4.3,110.29,-2.5]
+        view_port = [105.3, -4.3, 110.29, -2.5]
         try:
             bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
         except Exception, e:
@@ -1033,7 +1030,6 @@ class Test_Engine(unittest.TestCase):
             msg = ('Non ovelapping bounding boxes should have raised '
                    'an exception')
             raise Exception(msg)
-
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
@@ -1092,10 +1088,6 @@ class Test_Engine(unittest.TestCase):
                 msg = 'Missing keyword should have raised exception'
                 raise Exception(msg)
 
-
-
-
-
     def test_flood_on_roads(self):
         """Jakarta flood impact on roads calculated correctly
         """
@@ -1117,9 +1109,6 @@ class Test_Engine(unittest.TestCase):
                                                    impact_fcn=IF)
 
         print impact_filename
-
-
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Engine, 'test')

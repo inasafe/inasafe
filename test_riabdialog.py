@@ -1,4 +1,4 @@
-'''
+"""
 Disaster risk assessment tool developed by AusAid - **GUI Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
@@ -8,7 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 
-'''
+"""
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.0.1'
@@ -49,10 +49,10 @@ from riabdialog import RiabDialog
 
 
 class RiabDialogTest(unittest.TestCase):
-    '''Test the risk in a box GUI'''
+    """Test the risk in a box GUI"""
 
     def setUp(self):
-        '''Create an app that all tests can use'''
+        """Create an app that all tests can use"""
 
         myGuiFlag = True  # We need to enable qgis app in gui mode
         self.app = QgsApplication(sys.argv, myGuiFlag)
@@ -66,18 +66,18 @@ class RiabDialogTest(unittest.TestCase):
         self.form = RiabDialog(self.iface)
 
     def tearDown(self):
-        '''Tear down - destroy the QGIS app'''
+        """Tear down - destroy the QGIS app"""
         self.app.exitQgis()
 
     def clearForm(self):
-        '''Helper function to  set all form elements to default state'''
+        """Helper function to  set all form elements to default state"""
         self.form.ui.cboHazard.setCurrentIndex(0)
         self.form.ui.cboExposure.setCurrentIndex(0)
         self.form.ui.cboFunction.setCurrentIndex(0)
 
     def populateForm(self):
-        '''A helper function to populate the form and set it to a
-        valid state.'''
+        """A helper function to populate the form and set it to a
+        valid state."""
         self.loadLayers()
         self.form.ui.cboHazard.setCurrentIndex(0)
         self.form.ui.cboExposure.setCurrentIndex(0)
@@ -85,14 +85,14 @@ class RiabDialogTest(unittest.TestCase):
         #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
     def test_defaults(self):
-        '''Test the GUI in its default state'''
+        """Test the GUI in its default state"""
         # Note you can also use almostEqual for inexact comparisons
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboFunction.currentIndex(), -1)
 
     def test_validate(self):
-        '''Test that the validate function works as expected.'''
+        """Test that the validate function works as expected."""
         # First check that we DONT validate a clear form
         self.clearForm()
         myFlag, myMessage = self.form.validate()
@@ -107,8 +107,8 @@ class RiabDialogTest(unittest.TestCase):
         assert(myFlag), myMessage
 
     def test_setOkButtonStatus(self):
-        '''Test that the OK button changes properly according to
-        form validity.'''
+        """Test that the OK button changes properly according to
+        form validity."""
         # First check that we ok ISNT enabled on a clear form
         self.clearForm()
         myFlag, myMessage = self.form.validate()
@@ -123,7 +123,7 @@ class RiabDialogTest(unittest.TestCase):
         assert(myFlag), myMessage
 
     def test_run(self):
-        '''Test that the ok button works as expected'''
+        """Test that the ok button works as expected"""
         # Push OK with the left mouse button
         self.clearForm()
         self.loadLayers()
@@ -133,7 +133,7 @@ class RiabDialogTest(unittest.TestCase):
         #  self.form.ui.buttonBox.button(self.form.ui.buttonBox.Cancel), " ")
 
     def loadLayers(self):
-        '''Helper function to load layers into the dialog.'''
+        """Helper function to load layers into the dialog."""
         myVectorPath = os.path.join(ROOT, 'testdata', 'Jakarta_sekolah.shp')
         myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
         msg = 'Vector layer "%s" is not valid' % str(myVectorLayer.source())
@@ -155,9 +155,9 @@ class RiabDialogTest(unittest.TestCase):
         self.form.getLayers()
 
     def test_loadLayers(self):
-        '''Load some layers in the canvas, call load layers
+        """Load some layers in the canvas, call load layers
          and verify that the list widget was update appropriately
-        '''
+        """
 
         self.clearForm()
         self.loadLayers()
