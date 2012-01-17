@@ -36,7 +36,7 @@ class EmpiricalFatalityFunction(FunctionProvider):
         P = population.get_data(nan=0)
 
         # Calculate impact
-        logHazard = 1 / beta * scipy.log(H / teta)
+        logHazard = 1 / beta * numpy.log(H / teta)
 
         # Convert array to be standard floats expected by cdf
         arrayout = numpy.array([[float(value) for value in row]
