@@ -27,10 +27,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/theme_extras.js"></script>
-    <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="index.html" />
-    <link rel="up" title="Risk-In-A-Box’s API documentation" href="api-docs.html" />
-    <link rel="next" title="Module: qgsinterface" href="qgsinterface.html" />
-    <link rel="prev" title="Module: riab" href="riab.html" /> 
+    <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="index.html" /> 
   </head>
   <body>
       <div class="header"><img class="rightlogo" src="_static/icon.png" alt="Logo"/><h1 class="heading"><a href="index.html">
@@ -40,11 +37,7 @@
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="riab.html">Module: riab</a>
-        &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
-        &#160;&#160;::&#160;&#160;
-        <a href="qgsinterface.html">Module: qgsinterface</a>&#160;&#160;»
         </p>
 
       </div>
@@ -69,12 +62,30 @@ the Free Software Foundation; either version 2 of the License, or
 </div>
 <dl class="class">
 <dt id="riabdialog.RiabDialog">
-<em class="property">class </em><tt class="descclassname">riabdialog.</tt><tt class="descname">RiabDialog</tt><big>(</big><em>iface</em><big>)</big><a class="reference internal" href="_modules/riabdialog.html#RiabDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialog.RiabDialog" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">riabdialog.</tt><tt class="descname">RiabDialog</tt><big>(</big><em>iface</em>, <em>guiContext=True</em><big>)</big><a class="reference internal" href="_modules/riabdialog.html#RiabDialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialog.RiabDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dialog implementation class for the Risk In A Box plugin.</p>
 <dl class="method">
 <dt id="riabdialog.RiabDialog.accept">
 <tt class="descname">accept</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/riabdialog.html#RiabDialog.accept"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riabdialog.RiabDialog.accept" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute analysis when ok button is clicked.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="riabdialog.RiabDialog.completed">
+<tt class="descname">completed</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialog.RiabDialog.completed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slot activated when the process is done.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="riabdialog.RiabDialog.disableBusyCursor">
+<tt class="descname">disableBusyCursor</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialog.RiabDialog.disableBusyCursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable the hourglass cursor</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="riabdialog.RiabDialog.enableBusyCursor">
+<tt class="descname">enableBusyCursor</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialog.RiabDialog.enableBusyCursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the hourglass enabled.</p>
 </dd></dl>
 
 <dl class="method">
@@ -112,6 +123,12 @@ list.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="riabdialog.RiabDialog.resetForm">
+<tt class="descname">resetForm</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialog.RiabDialog.resetForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the form contents to their onload state.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="riabdialog.RiabDialog.setOkButtonStatus">
 <tt class="descname">setOkButtonStatus</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialog.RiabDialog.setOkButtonStatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper function to set the ok button status if the
@@ -125,6 +142,12 @@ Args:</p>
 <dt>Raises:</dt>
 <dd>no exceptions explicitly raised.</dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="riabdialog.RiabDialog.showHelp">
+<tt class="descname">showHelp</tt><big>(</big><big>)</big><a class="headerlink" href="#riabdialog.RiabDialog.showHelp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the help text into the wvResults widget</p>
 </dd></dl>
 
 <dl class="method">
@@ -169,11 +192,7 @@ have failed.</li>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="riab.html">Module: riab</a>
-        &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
-        &#160;&#160;::&#160;&#160;
-        <a href="qgsinterface.html">Module: qgsinterface</a>&#160;&#160;»
         </p>
 
       </div>
