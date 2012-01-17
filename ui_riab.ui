@@ -62,7 +62,13 @@
       <item row="0" column="2" rowspan="3">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>TextLabel</string>
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>logo-flower.png</pixmap>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
