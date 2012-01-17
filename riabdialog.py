@@ -217,3 +217,4 @@ class RiabDialog(QtGui.QDialog):
         myFilename = self.calculator.run()
         QtGui.QMessageBox.information(self,
                   'Risk-in-a-box', myFilename)
+        

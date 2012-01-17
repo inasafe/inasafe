@@ -136,15 +136,15 @@ class ImpactCalculator:
            set.
         """
 
-        if not self.__hazard_layer:
+        if not self.__hazard_layer or self.__hazard_layer == '':
             msg = 'Error: Hazard layer not set.'
             raise InsufficientParametersException(msg)
 
-        if not self.__exposure_layer:
+        if not self.__exposure_layer or self.__exposure_layer == '':
             msg = 'Error: Exposure layer not set.'
             raise InsufficientParametersException(msg)
 
-        if not self.__function:
+        if not self.__function or self.__function == '':
             msg = 'Error: Function not set.'
             raise InsufficientParametersException(msg)
 
