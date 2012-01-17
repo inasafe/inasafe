@@ -18,10 +18,6 @@ from core import requirements_collect
 from core import requirement_check
 from core import compatible_layers
 
-from storage.core import get_layer_descriptors
-
-from storage.core import save_to_geonode, check_layer
-from storage.core import download
 from storage.core import read_layer
 from storage.utilities_test import TESTDATA
 

@@ -2,8 +2,7 @@
 """
 
 import numpy
-from scipy.interpolate import interp1d
-
+from engine.interpolation1d import interpolate1d
 
 class Damage_curve:
     """Class for implementation of damage curves based on point data
@@ -23,13 +22,12 @@ class Damage_curve:
         msg = 'Damage curve data must have two columns'
         assert data.shape[1] == 2, msg
 
-        x = data[:, 0]
-        y = data[:, 1]
+        self.x = data[:, 0]
+        self.y = data[:, 1]
 
-        self.curve = interp1d(x, y)
+    def __call__(self, zeta):
 
-    def __call__(self, x):
-        return self.curve(x)
+        return interpolate1d(self.x, self.y, [zeta], mode='linear')[0]
 
 
 class ColorMapEntry:
