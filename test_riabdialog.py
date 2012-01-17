@@ -85,13 +85,13 @@ class RiabDialogTest(unittest.TestCase):
         #QTest.mouseClick(myHazardItem, Qt.LeftButton)
         #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
-    def test_defaults(self):
+    def Xtest_defaults(self):
         """Test the GUI in its default state"""
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboFunction.currentIndex(), -1)
 
-    def test_validate(self):
+    def Xtest_validate(self):
         """Test that the validate function works as expected."""
         # First check that we DONT validate a clear form
         self.clearForm()
@@ -106,7 +106,7 @@ class RiabDialogTest(unittest.TestCase):
                      ' a populated for with selections.')
         assert(myFlag), myMessage
 
-    def test_setOkButtonStatus(self):
+    def Xtest_setOkButtonStatus(self):
         """Test that the OK button changes properly according to
         form validity."""
         # First check that we ok ISNT enabled on a clear form
@@ -122,7 +122,7 @@ class RiabDialogTest(unittest.TestCase):
                      'populated form with selections.')
         assert(myFlag), myMessage
 
-    def test_run(self):
+    def Xtest_run(self):
         """Test that the ok button works as expected"""
         # Push OK with the left mouse button
         self.clearForm()
@@ -158,7 +158,7 @@ class RiabDialogTest(unittest.TestCase):
         self.canvas.setLayerSet([myVectorCanvasLayer, myRasterCanvasLayer])
         self.form.getLayers()
 
-    def test_loadLayers(self):
+    def Xtest_loadLayers(self):
         """Load some layers in the canvas, call load layers
          and verify that the list widget was update appropriately
         """
@@ -175,6 +175,6 @@ class RiabDialogTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(RiabDialogTest, 'test_XXX')
+    suite = unittest.makeSuite(RiabDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
