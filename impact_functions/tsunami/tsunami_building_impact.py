@@ -5,7 +5,6 @@ from storage.utilities import ugettext as _
 from impact_functions.utilities import PointZoomSize
 from impact_functions.utilities import PointClassColor
 from impact_functions.utilities import PointSymbol
-import scipy.stats
 
 
 class TsunamiBuildingImpactFunction(FunctionProvider):

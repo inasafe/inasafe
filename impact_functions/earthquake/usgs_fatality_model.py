@@ -1,9 +1,8 @@
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.raster import Raster
+from engine.numerics import cdf
 
-import scipy
-import scipy.stats
 import numpy
 
 
@@ -80,12 +79,12 @@ class USGSFatalityFunction(FunctionProvider):
 
         # Calculate impact according to equation (1) in the
         # Kishor and Wald 2010
-        logHazard = 1 / beta * scipy.log(H / teta)
+        logHazard = 1 / beta * numpy.log(H / teta)
 
         # Convert array to be standard floats expected by cdf
         arrayout = numpy.array([[float(value) for value in row]
                                for row in logHazard])
-        F = scipy.stats.norm.cdf(arrayout * P)
+        F = cdf(arrayout * P)
 
         # Stats
         total = numpy.nansum(P.flat)
