@@ -19,6 +19,7 @@ from impact_functions import get_plugins
 
 from storage.utilities_test import TESTDATA
 from impact_functions_for_testing import empirical_fatality_model
+from impact_functions_for_testing import unspecific_building_impact_model
 from impact_functions_for_testing import NEXIS_building_impact_model
 
 
@@ -1248,11 +1249,7 @@ class Test_Engine(unittest.TestCase):
         impact_filename = calculate_impact(layers=[H, E],
                                                    impact_fcn=IF)
 
-        print impact_filename
-
-        print 'ALL', get_plugins()
-
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_flood_on')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
