@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riab.ui'
 #
-# Created: Mon Jan 16 06:53:15 2012
+# Created: Tue Jan 17 09:19:15 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -69,7 +69,7 @@ class Ui_Riab(object):
         self.gridLayout_4.addWidget(self.splitter, 0, 0, 1, 1)
         self.buttonBox = QtGui.QDialogButtonBox(Riab)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Close|QtGui.QDialogButtonBox.Ok|QtGui.QDialogButtonBox.Reset)
+        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Close|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Ok|QtGui.QDialogButtonBox.Reset)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
         self.gridLayout_4.addWidget(self.buttonBox, 1, 0, 1, 1)
         self.label.setBuddy(self.cboHazard)

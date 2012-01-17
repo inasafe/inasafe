@@ -46,7 +46,6 @@ if os.path.isfile(PATH):
         pass
 
 from qgis.core import QGis, QgsMapLayer, QgsVectorLayer, QgsMapLayerRegistry
-from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from impactcalculator import ImpactCalculator
 
 
@@ -86,6 +85,10 @@ class RiabDialog(QtGui.QDialog):
         self.getLayers()
         self.getFunctions()
         self.setOkButtonStatus()
+        myButton = self.ui.buttonBox.button(self.ui.buttonBox.Help)
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                                self.showHelp)
+        self.showHelp()
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -225,3 +228,9 @@ class RiabDialog(QtGui.QDialog):
             self.ui.wvResults.setHtml(msg)
             return
         QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+
+    def showHelp(self):
+        """Load the help text into the wvResults widget"""
+        myPath = os.path.abspath(os.path.join(ROOT, 'docs', 'build',
+                                            'html', 'index.html'))
+        self.ui.wvResults.setUrl(QtCore.QUrl('file:///' + myPath))
