@@ -178,13 +178,6 @@ class RiabDialogTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-    suite = unittest.makeSuite(RiabDialogTest, 'test')
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suite)
-=======
     unittest.main()
-    #suite = unittest.makeSuite(RiabDialogTest, 'test_defaults')
-    #runner = unittest.TextTestRunner(verbosity=2)
-    #runner.run(suite)
->>>>>>> cfabbbeac6ca824a725ffbaaf47b9d6fd638c8dc
+
+
