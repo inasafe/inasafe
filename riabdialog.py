@@ -204,11 +204,12 @@ class RiabDialog(QtGui.QDialog):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
-
+        self.enableBusyCursor()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
         if not myFlag:
             self.ui.wvResults.setHtml(myMessage)
+            self.disableBusyCursor()
             return
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
@@ -226,12 +227,17 @@ class RiabDialog(QtGui.QDialog):
             self.ui.wvResults.setHtml(myMessage)
         if myFilename:
             myVectorPath = os.path.join('/tmp/', myFilename)
-            myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
+            myName = (self.ui.cboExposure.currentText() + 'X' +
+                      self.ui.cboHazard.currentText() + 'X' +
+                      self.ui.cboFunction.currentText())
+            myVectorLayer = QgsVectorLayer(myVectorPath, myName, 'ogr')
             if not myVectorLayer.isValid():
                 msg = 'Vector layer "%s" is not valid' % myFilename
                 self.ui.wvResults.setHtml(msg)
+                self.disableBusyCursor()
                 return
             QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+        self.disableBusyCursor()
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
@@ -245,3 +251,11 @@ class RiabDialog(QtGui.QDialog):
         self.ui.cboHazard.setCurrentIndex(0)
         self.ui.cboExposure.setCurrentIndex(0)
         self.showHelp()
+
+    def enableBusyCursor(self):
+        """Set the hourglass enabled."""
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+
+    def disableBusyCursor(self):
+        """Disable the hourglass cursor"""
+        QtGui.qApp.restoreOverrideCursor()
