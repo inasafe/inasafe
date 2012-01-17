@@ -70,6 +70,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test that we can get the available functions from
         the impactcalculator."""
         myList = self.calculator.availableFunctions()
+        print myList
         assert(myList > 1)
 
 if __name__ == "__main__":

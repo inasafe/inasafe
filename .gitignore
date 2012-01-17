@@ -1,5 +1,6 @@
 *.pyc
 *.*~
+*~
 docs/build/doctrees
 pydevpath.txt
 .project
