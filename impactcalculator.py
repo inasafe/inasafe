@@ -27,6 +27,8 @@ from riabexceptions import (InsufficientParametersException,
 pardir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(pardir)
 from impact_functions import get_plugins
+from engine.core import calculate_impact
+from storage.core import read_layer
 
 
 class ImpactCalculator:
@@ -64,15 +66,15 @@ class ImpactCalculator:
 
     def getFunction(self):
         """Accessor: function layer."""
-        return self.__function_layer
+        return self.__function
 
     def setFunction(self, value):
         """Mutator: function layer."""
-        self.__function_layer = value
+        self.__function = value
 
     def delFunction(self):
         """Delete: function layer."""
-        del self.__function_layer
+        del self.__function
 
     _hazard_layer = property(getHazardLayer, setHazardLayer,
         delHazardLayer, """Hazard layer property  (e.g. a flood depth
@@ -134,12 +136,24 @@ class ImpactCalculator:
            set.
         """
 
-        if not self.__hazard_layer:
+        if not self.__hazard_layer or self.__hazard_layer == '':
             msg = 'Error: Hazard layer not set.'
             raise InsufficientParametersException(msg)
 
-        if not self.__exposure_layer:
+        if not self.__exposure_layer or self.__exposure_layer == '':
             msg = 'Error: Exposure layer not set.'
             raise InsufficientParametersException(msg)
 
-        pass
+        if not self.__function or self.__function == '':
+            msg = 'Error: Function not set.'
+            raise InsufficientParametersException(msg)
+
+        # Call impact calculation engine
+        myHazardLayer = read_layer(self.make_ascii(self.__hazard_layer))
+        myExposureLayer = read_layer(self.make_ascii(self.__exposure_layer))
+        myLayers = [myHazardLayer, myExposureLayer]
+        myFunctions = get_plugins(self.make_ascii(self.__function))
+        myFunction = myFunctions[0][self.make_ascii(self.__function)]
+        myFilename = calculate_impact(layers=myLayers,
+                                      impact_fcn=myFunction)
+        return myFilename

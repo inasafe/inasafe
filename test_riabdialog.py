@@ -66,12 +66,28 @@ class RiabDialogTest(unittest.TestCase):
             self.canvas.resize(QtCore.QSize(400, 400))
             self.iface = QgisInterface(self.canvas)
             myGuiContextFlag = False
-            self.form = RiabDialog(self.iface, myGuiContextFlag)
+
+        self.form = RiabDialog(self.iface, myGuiContextFlag)
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""
         print 'RiabDialogTest tearDown called'
-        #self.app.exitQgis()
+        self.form.destroy()
+
+    def __del__(self):
+        """Destructor reimplemented to gracefully exit QGIS."""
+        print 'Destoying dialog'
+        self.form.destroy()
+        print 'Destroying canvas'
+        self.canvas.destroy()
+        print 'Destroying parent widget'
+        self.parent.destroy()
+        print 'Unloading all layers'
+        for myLayer in QgsMapLayerRegistry.instance().mapLayers():
+            QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
+
+        print 'Exiting QGIS'
+        self.app.exitQgis()
 
     def clearForm(self):
         """Helper function to  set all form elements to default state"""
@@ -179,5 +195,3 @@ class RiabDialogTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
-
