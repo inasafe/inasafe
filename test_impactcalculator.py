@@ -21,7 +21,8 @@ import os
 import unittest
 from impactcalculator import ImpactCalculator
 #from riabexceptions import TestNotImplementedException
-from riabexceptions import InsufficientParametersException
+from riabexceptions import (InsufficientParametersException,
+                             KeywordNotFoundException)
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -46,13 +47,13 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_properties(self):
         """Test if the properties work as expected."""
         msg = 'Vector property incorrect.'
-        assert(self.calculator.getExposureLayer() ==
+        assert(self.calculator.getExposureLayer() == 
                self.vectorPath), msg
         msg = 'Raster property incorrect.'
-        assert(self.calculator.getHazardLayer() ==
+        assert(self.calculator.getHazardLayer() == 
                self.rasterPath), msg
         msg = 'Function property incorrect.'
-        assert(self.calculator.getFunction() ==
+        assert(self.calculator.getFunction() == 
                'Flood Building Impact Function'), msg
 
     def test_run(self):
@@ -102,6 +103,23 @@ class ImpactCalculatorTest(unittest.TestCase):
         myList = self.calculator.availableFunctions()
         print myList
         assert(myList > 1)
+
+    def test_getMetadata(self):
+        """Test that we can get keyword data from a file with
+        a .keyword metadata file associated with it."""
+        myKeyword = self.calculator.getMetadata(self.vectorPath, 'title')
+        msg = 'Keyword request returned an empty string'
+        assert(myKeyword is not ''), msg
+        # Test we get an exception if keyword is not found
+        try:
+            myKeyword = self.calculator.getMetadata(
+                            self.vectorPath, 'boguskeyword')
+        except KeywordNotFoundException:
+            pass  # this is good
+        except Exception, e:
+            msg = ('Request for bogus keyword raised incorrect exception' +
+                    ' type: \n %s') % str(e)
+            assert(), msg
 
 if __name__ == "__main__":
     unittest.main()

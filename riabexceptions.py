@@ -38,3 +38,8 @@ class NoFunctionsFoundException(Exception):
     """Custom exception for when a no impact calculation
     functions can be found."""
     pass
+
+
+class KeywordNotFoundException(Exception):
+    """Custom exception for when a no keyword can be found."""
+    pass

@@ -21,7 +21,8 @@ import sys
 import os
 import unicodedata
 from riabexceptions import (InsufficientParametersException,
-                            NoFunctionsFoundException)
+                            NoFunctionsFoundException,
+                            KeywordNotFoundException)
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.dirname(__file__))
@@ -150,6 +151,24 @@ class ImpactCalculator(threading.Thread):
             raise NoFunctionsFoundException(myMessage)
 
         return myList
+
+    def getMetadata(self, layerpath, keyword):
+        """Get metadata from the keywords file associated with a layer."""
+        """ ..todo::
+               cache the layer if io is too slow
+
+        """
+        try:
+            myValue = (read_layer(self.make_ascii(self.__hazard_layer))
+              .get_keywords(keyword))
+        except Exception, e:
+            msg = 'Keyword retrieval failed for %s (%s) \n %s' % (
+                        layerpath, keyword, str(e))
+            raise KeywordNotFoundException(msg)
+        if not myValue or myValue == '':
+            msg = 'No value was found for keyword %s in layer %s' % (
+                        layerpath, keyword)
+            raise KeywordNotFoundException(msg)
 
     def make_ascii(self, x):
         """Convert QgsString to ASCII"""
