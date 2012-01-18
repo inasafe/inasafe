@@ -51,10 +51,6 @@ def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
     # Input checks
     x, y, Z, xi, eta = check_inputs(x, y, Z, points, mode, bounds_error)
 
-    # If there is only one pixel, assign that value to all points
-    #if len(x) == 1 and len(y) == 1:
-    #    return numpy.array([Z[0, 0]] * len(points))
-
     # Identify elements that are outside interpolation domain or NaN
     outside = (xi < x[0]) + (eta < y[0]) + (xi > x[-1]) + (eta > y[-1])
     outside += numpy.isnan(xi) + numpy.isnan(eta)
@@ -87,8 +83,10 @@ def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
     z11 = Z[idx, idy]
 
     # Coefficients for weighting between lower and upper bounds
+    oldset = numpy.seterr(invalid='ignore')  # Suppress warnings
     alpha = (xi - x0) / (x1 - x0)
     beta = (eta - y0) / (y1 - y0)
+    numpy.seterr(**oldset)  # Restore
 
     if mode == 'linear':
         # Bilinear interpolation formula

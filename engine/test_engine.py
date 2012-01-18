@@ -1343,11 +1343,17 @@ class Test_Engine(unittest.TestCase):
         R = scipy.stats.lognorm.cdf(A)
         """
 
+        # Suppress warnings about invalid value in multiply and divide zero
+        # http://comments.gmane.org/gmane.comp.python.numeric.general/43218
+        # http://docs.scipy.org/doc/numpy/reference/generated/numpy.seterr.html
+        old_numpy_setting = numpy.seterr(divide='ignore')
+
         # Simple tests
         x = cdf(0.0, kind='lognormal')
         r = cdf(numpy.log(0.0))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
+        numpy.seterr(**old_numpy_setting)
 
         x = cdf(0.5, kind='lognormal')
         r = cdf(numpy.log(0.5))
@@ -1364,6 +1370,7 @@ class Test_Engine(unittest.TestCase):
         r = cdf(numpy.log(10))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Engine, 'test')

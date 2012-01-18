@@ -76,6 +76,6 @@ test: compile
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	pep8 --repeat --ignore=E203 --exclude loader.py,ui_riab.py,resources.py .
+	pep8 --repeat --ignore=E203 --exclude loader.py,ui_riab.py,resources.py,resources_rc.py .
 
 
