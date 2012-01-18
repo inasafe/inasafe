@@ -50,6 +50,10 @@ repository page like this::
   git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
   git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)
 
+NOTE FOR TREVOR: Temporarily, to download the test data the first time, do::
+  python storage/test_io.py
+(If asked for a username or password use: anonymous and <blank>)
+
 To verify that the installation works you can run the test suite from the command line::
 
   make test
