@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>702</width>
-    <height>411</height>
+    <height>493</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -65,7 +65,10 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="resources.qrc">:/plugins/riab/logo-flower.png</pixmap>
+         <pixmap resource="resources.qrc">:/plugins/riab/bnpb_logo.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

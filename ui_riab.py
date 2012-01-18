@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riab.ui'
 #
-# Created: Wed Jan 18 04:44:09 2012
+# Created: Wed Jan 18 09:08:15 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_Riab(object):
     def setupUi(self, Riab):
         Riab.setObjectName(_fromUtf8("Riab"))
-        Riab.resize(702, 411)
+        Riab.resize(702, 493)
         Riab.setWindowTitle(QtGui.QApplication.translate("Riab", "Riab", None, QtGui.QApplication.UnicodeUTF8))
         self.gridLayout_3 = QtGui.QGridLayout(Riab)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
@@ -49,7 +49,8 @@ class Ui_Riab(object):
         self.gridLayout.addWidget(self.cboFunction, 2, 1, 1, 1)
         self.label_5 = QtGui.QLabel(self.groupBox)
         self.label_5.setText(_fromUtf8(""))
-        self.label_5.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/riab/logo-flower.png")))
+        self.label_5.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/riab/bnpb_logo.png")))
+        self.label_5.setScaledContents(False)
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.gridLayout.addWidget(self.label_5, 0, 2, 3, 1)
