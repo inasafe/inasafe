@@ -35,9 +35,13 @@ compile: $(UI_FILES) $(RESOURCE_FILES)
 
 %.py : %.qrc
 	pyrcc4 -o $@  $<
+	#this is ugly but the resource referenced by the rc
+	#looks for a file generated with a different name
+	cp resources.py resources_rc.py
 
 %.py : %.ui
 	pyuic4 -o $@ $<
+
 
 # The deploy  target only works on unix like operating system where
 # the Python plugin directory is located at:
@@ -47,7 +51,6 @@ deploy: compile
 	cp -vf $(PY_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vf $(UI_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 	cp -vf $(RESOURCE_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
-
 	cp -vf $(EXTRAS) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
 
 # Create a zip package of the plugin named $(PLUGINNAME).zip.
