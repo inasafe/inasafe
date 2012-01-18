@@ -26,6 +26,12 @@ class EmpiricalFatalityFunction(FunctionProvider):
           E: Numerical array of exposure data
         """
 
+        # Suppress warnings about invalid value in multiply and divide zero
+        # http://comments.gmane.org/gmane.comp.python.numeric.general/43218
+        # http://docs.scipy.org/doc/numpy/reference/generated/numpy.seterr.html
+        old_numpy_setting = numpy.seterr(invalid='ignore')
+        numpy.seterr(divide='ignore')
+
         # Identify input layers
         intensity = get_hazard_layer(layers)
         population = get_exposure_layer(layers)
@@ -40,7 +46,10 @@ class EmpiricalFatalityFunction(FunctionProvider):
         # Convert array to be standard floats expected by cdf
         arrayout = numpy.array([[float(value) for value in row]
                                for row in logHazard])
-        F = cdf(arrayout * P)
+        x = arrayout * P
+        F = cdf(x)
+
+        numpy.seterr(**old_numpy_setting)
 
         # Create new layer and return
         R = Raster(F,

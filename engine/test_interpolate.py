@@ -481,6 +481,50 @@ class Test_interpolate(unittest.TestCase):
         refs = linear_function(points, 0)
         assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
+    def test_1d_constant_interpolation_basic(self):
+        """Interpolation library works for 1D piecewise constant function
+        """
+
+        # Define pixel centers along each direction
+        x = numpy.array([1.0, 2.0, 4.0])
+
+        # Define ny by nx array with corresponding values
+        A = numpy.zeros((len(x)))
+
+        # Define values for each x, y pair as a linear function
+        for i in range(len(x)):
+            A[i] = linear_function(x[i], 0)
+
+        # Then test that interpolated points are always assigned value of
+        # closest neighbour
+        xis = numpy.linspace(x[0], x[-1], 10)
+        points = xis
+
+        vals = interpolate1d(x, A, points, mode='constant')
+
+        # Find upper neighbours for each interpolation point
+        xi = points[:]
+        idx = numpy.searchsorted(x, xi, side='left')
+
+        # Get the neighbours for each interpolation point
+        x0 = x[idx - 1]
+        x1 = x[idx]
+
+        z0 = A[idx - 1]
+        z1 = A[idx]
+
+        # Location coefficients
+        alpha = (xi - x0) / (x1 - x0)
+
+        refs = numpy.zeros(len(vals))
+        for i in range(len(refs)):
+            if alpha[i] < 0.5:
+                refs[i] = z0[i]
+
+            if alpha[i] >= 0.5:
+                refs[i] = z1[i]
+
+        assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_interpolate, 'test')

@@ -31,7 +31,9 @@ def cdf(x, mu=0, sigma=1, kind='normal'):
         return cdf(numpy.log(x), mu=mu, sigma=sigma, kind='normal')
 
     arg = (x - mu) / (sigma * numpy.sqrt(2))
-    return (1 + erf(arg)) / 2
+    res = (1 + erf(arg)) / 2
+
+    return res
 
 
 def cdf_table(z):
