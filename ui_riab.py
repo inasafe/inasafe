@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riab.ui'
 #
-# Created: Tue Jan 17 14:25:33 2012
+# Created: Wed Jan 18 04:34:36 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -22,12 +22,12 @@ class Ui_Riab(object):
         self.gridLayout_3 = QtGui.QGridLayout(Riab)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
         self.groupBox = QtGui.QGroupBox(Riab)
-        self.groupBox.setTitle(QtGui.QApplication.translate("Riab", "Calculation", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox.setTitle(QtGui.QApplication.translate("Riab", "Question", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
         self.gridLayout = QtGui.QGridLayout(self.groupBox)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.label = QtGui.QLabel(self.groupBox)
-        self.label.setText(QtGui.QApplication.translate("Riab", "If this occurs", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("Riab", "In the event of", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setObjectName(_fromUtf8("label"))
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.cboHazard = QtGui.QComboBox(self.groupBox)
@@ -41,14 +41,16 @@ class Ui_Riab(object):
         self.cboExposure.setObjectName(_fromUtf8("cboExposure"))
         self.gridLayout.addWidget(self.cboExposure, 1, 1, 1, 1)
         self.label_3 = QtGui.QLabel(self.groupBox)
-        self.label_3.setText(QtGui.QApplication.translate("Riab", "&Will be", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("Riab", "&Will", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.gridLayout.addWidget(self.label_3, 2, 0, 1, 1)
         self.cboFunction = QtGui.QComboBox(self.groupBox)
         self.cboFunction.setObjectName(_fromUtf8("cboFunction"))
         self.gridLayout.addWidget(self.cboFunction, 2, 1, 1, 1)
         self.label_5 = QtGui.QLabel(self.groupBox)
-        self.label_5.setText(QtGui.QApplication.translate("Riab", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_5.setText(_fromUtf8(""))
+        self.label_5.setPixmap(QtGui.QPixmap(_fromUtf8("logo-flower.png")))
+        self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.gridLayout.addWidget(self.label_5, 0, 2, 3, 1)
         self.gridLayout_3.addWidget(self.groupBox, 0, 0, 1, 1)
