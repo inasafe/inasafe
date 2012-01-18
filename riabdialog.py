@@ -47,6 +47,7 @@ if os.path.isfile(PATH):
 
 from qgis.core import QGis, QgsMapLayer, QgsVectorLayer, QgsMapLayerRegistry
 from impactcalculator import ImpactCalculator
+import tempfile
 
 
 class RiabDialog(QtGui.QDialog):
@@ -239,6 +240,7 @@ class RiabDialog(QtGui.QDialog):
 
     def completed(self):
         """Slot activated when the process is done."""
+        settrace()
         myMessage = self.runner.result()
         myFilename = self.runner.filename()
         myReport = ''
@@ -246,8 +248,9 @@ class RiabDialog(QtGui.QDialog):
             try:
                 myReport = self.calculator.getMetadata(
                                             myFilename, 'caption')
-                self.ui.wvResults.setHtml(myMessage + '\n' + myFilename)
-                myVectorPath = os.path.join('/tmp/', myFilename)
+                self.ui.wvResults.setHtml(myMessage + '\n' + myFilename +
+                                          '\n' + myReport)
+                myVectorPath = os.path.join(tempfile.gettempdir(), myFilename)
                 myName = (self.ui.cboExposure.currentText() + 'X' +
                           self.ui.cboHazard.currentText() + 'X' +
                           self.ui.cboFunction.currentText())

@@ -129,6 +129,7 @@ class ImpactCalculator():
             cache the layer if io is too slow
 
         """
+        myValue = None
         try:
             myValue = (read_layer(self.make_ascii(layerpath))
               .get_keywords(keyword))
@@ -140,6 +141,7 @@ class ImpactCalculator():
             msg = 'No value was found for keyword %s in layer %s' % (
                         layerpath, keyword)
             raise KeywordNotFoundException(msg)
+        return myValue
 
     def make_ascii(self, x):
         """Convert QgsString to ASCII"""
