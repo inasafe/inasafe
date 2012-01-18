@@ -47,21 +47,23 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_properties(self):
         """Test if the properties work as expected."""
         msg = 'Vector property incorrect.'
-        assert(self.calculator.getExposureLayer() == 
+        assert(self.calculator.getExposureLayer() ==
                self.vectorPath), msg
         msg = 'Raster property incorrect.'
-        assert(self.calculator.getHazardLayer() == 
+        assert(self.calculator.getHazardLayer() ==
                self.rasterPath), msg
         msg = 'Function property incorrect.'
-        assert(self.calculator.getFunction() == 
+        assert(self.calculator.getFunction() ==
                'Flood Building Impact Function'), msg
 
     def test_run(self):
-        """Test that run works as expected."""
+        """Test that run works as expected in non threading mode"""
         try:
-            self.calculator.run()
-            myMessage = self.calculator.result()
-            myFilename = self.calculator.filename()
+            myRunner = self.calculator.getRunner()
+            # run non threaded
+            myRunner.run()
+            myMessage = myRunner.result()
+            myFilename = myRunner.filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
         except:
@@ -71,24 +73,27 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_thread(self):
         """Test that starting it in a thread works as expected."""
         try:
-            self.calculator.start()
+            myRunner = self.calculator.getRunner()
+            myRunner.start()
             # wait until the thread is done
-            self.calculator.join()
-            myMessage = self.calculator.result()
-            myFilename = self.calculator.filename()
+            myRunner.join()
+            myMessage = myRunner.result()
+            myFilename = myRunner.filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
         except Exception, e:
             msg = 'Calculator run failed:\n' + str(e)
             assert(), msg
 
-    def test_runWithNoParameters(self):
+    def test_startWithNoParameters(self):
         """Test that run raises an error properly
            when no parameters are defined."""
         try:
             self.calculator.setExposureLayer(None)
             self.calculator.setHazardLayer(None)
-            self.calculator.run()
+            #next line should raise an error
+            myRunner = self.calculator.getRunner()
+            myRunner.start()
         except InsufficientParametersException:
             return  # expected outcome
         except:

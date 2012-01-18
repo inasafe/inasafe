@@ -34,39 +34,14 @@ import threading
 from PyQt4.QtCore import QObject, pyqtSignal
 
 
-class CalculatorNotifier(QObject):
-    """A simple notification class so that we can
-    listen for signals indicating when processing is
-    done.
-
-    Example:
-
-      from impactcalculator import *
-      n = CalculatorNotifier()
-      n.done.connect(n.showMessage)
-      n.done.emit()
-
-    Prints 'hello' to the console
-"""
-    done = pyqtSignal()
-
-    def showMessage(self):
-        print "hello"
-
-
-class ImpactCalculator(threading.Thread):
+class ImpactCalculator():
     """A class to compute an impact scenario."""
 
     def __init__(self):
         """Constructor for the impact calculator."""
-        threading.Thread.__init__(self)
-        self.__notifier = CalculatorNotifier()
-        self.__runningFlag = False
         self.__hazard_layer = None
         self.__exposure_layer = None
         self.__function = None
-        self.__filename = None
-        self.__result = None
 
     def getExposureLayer(self):
         """Accessor: exposure layer."""
@@ -104,24 +79,6 @@ class ImpactCalculator(threading.Thread):
         """Delete: function layer."""
         del self.__function
 
-    def isRunning(self):
-        """Accessor: runningFlag."""
-        return self.__runningFlag
-
-    def filename(self):
-        """Return the filename of the output from the
-        last run."""
-        return self.__filename
-
-    def result(self):
-        """Return the result of the last run."""
-        return self.__result
-
-    def notifier(self):
-        """Return a qobject that will emit a 'done' signal when the
-        thread completes."""
-        return self.__notifier
-
     _hazard_layer = property(getHazardLayer, setHazardLayer,
         delHazardLayer, """Hazard layer property  (e.g. a flood depth
         raster).""")
@@ -139,8 +96,10 @@ class ImpactCalculator(threading.Thread):
         """ Query the riab engine to see what plugins are available.
         Args:
            None.
+
         Returns:
            A list of strings where each is a plugin name.
+
         Raises:
            NoFunctionsFoundException if not all parameters are
            set.
@@ -153,13 +112,25 @@ class ImpactCalculator(threading.Thread):
         return myList
 
     def getMetadata(self, layerpath, keyword):
-        """Get metadata from the keywords file associated with a layer."""
-        """ ..todo::
-               cache the layer if io is too slow
+        """Get metadata from the keywords file associated with a layer.
+        Args:
+
+           * layerpath - a string containing a path to a layer (raster
+            or vector)
+           * keyword - the metadata keyword to retrieve e.g. 'title'
+
+        Returns:
+           A list of strings where each is a plugin name.
+
+        Raises:
+           KeywordNotFoundException if the keyword is not recognised.
+
+         .. todo::
+            cache the layer if io is too slow
 
         """
         try:
-            myValue = (read_layer(self.make_ascii(self.__hazard_layer))
+            myValue = (read_layer(self.make_ascii(layerpath))
               .get_keywords(keyword))
         except Exception, e:
             msg = 'Keyword retrieval failed for %s (%s) \n %s' % (
@@ -176,34 +147,15 @@ class ImpactCalculator(threading.Thread):
         x = unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
         return x
 
-    def run(self):
-        """ Main function for hazard impact calculation.
+    def getRunner(self):
+        """ Factory to create a new runner thread.
         Requires three parameters to be set before execution
         can take place:
 
-        * Hazard layer - a path to a raster,
-        * Exposure layer - a path to a vector points layer.
-        * Function - a function that defines how the Hazard assessment
-          will be computed.
-
-        After the thread is complete, you can use the filename and
-        result accessors to determine what the result of the analysis was::
-
-          calculator = ImpactCalculator()
-          myRoot = os.path.dirname(__file__)
-          vectorPath = os.path.join(myRoot, 'testdata',
-                                     'Jakarta_sekolah.shp')
-          rasterPath = os.path.join(myRoot, 'testdata',
-                                    'current_flood_depth_jakarta.asc')
-          calculator.setHazardLayer(self.rasterPath)
-          calculator.setExposureLayer(self.vectorPath)
-          calculator.setFunction('Flood Building Impact Function')
-          calculator.run()
-          #wait till completion
-          calculator.join()
-          myResult = calculator.result()
-          myFilename = calculator.filename()
-
+        * Hazard layer - a path to a raster (string)
+        * Exposure layer - a path to a vector hazard layer (string).
+        * Function - a function name that defines how the Hazard assessment
+          will be computed (string).
 
         Args:
            None.
@@ -227,21 +179,131 @@ class ImpactCalculator(threading.Thread):
             msg = 'Error: Function not set.'
             raise InsufficientParametersException(msg)
 
-        self.__runningFlag = True
         # Call impact calculation engine
         myHazardLayer = read_layer(self.make_ascii(self.__hazard_layer))
         myExposureLayer = read_layer(self.make_ascii(self.__exposure_layer))
-        myLayers = [myHazardLayer, myExposureLayer]
         myFunctions = get_plugins(self.make_ascii(self.__function))
         myFunction = myFunctions[0][self.make_ascii(self.__function)]
-        try:
-            self.__filename = calculate_impact(layers=myLayers,
-                                      impact_fcn=myFunction)
-        except Exception, e:
-            self.__running = False
-            self.__result = 'Error encountered:\n' + str(e)
+        return ImpactCalculatorThread(myHazardLayer,
+                                      myExposureLayer,
+                                      myFunction)
 
-        self.__result = 'Completed successfully'
-        self.__running = False
+
+class CalculatorNotifier(QObject):
+    """A simple notification class so that we can
+    listen for signals indicating when processing is
+    done.
+
+    Example::
+
+      from impactcalculator import *
+      n = CalculatorNotifier()
+      n.done.connect(n.showMessage)
+      n.done.emit()
+
+    Prints 'hello' to the console
+"""
+    done = pyqtSignal()
+
+    def showMessage(self):
+        print "hello"
+
+
+class ImpactCalculatorThread(threading.Thread):
+    """A threaded class to compute an impact scenario. Under
+        python a thread can only be run once, so the instances
+        based on this class are designed to be short lived.
+        """
+
+    def __init__(self, theHazardLayer, theExposureLayer,
+                 theFunction):
+        """Constructor for the impact calculator thread.
+
+        Args:
+
+          * Hazard layer - a RIAB read_layer object containing the Hazard data.
+          * Exposure layer - a RIAB read_layer object containing the Exposure
+            data.
+          * Function - a RIAB function that defines how the Hazard assessment
+            will be computed.
+
+        Returns:
+           None
+        Raises:
+           InsufficientParametersException if not all parameters are
+           set.
+
+        Requires three parameters to be set before execution
+        can take place:
+        """
+
+        threading.Thread.__init__(self)
+        self._hazardLayer = theHazardLayer
+        self._exposureLayer = theExposureLayer
+        self._function = theFunction
+        self._notifier = CalculatorNotifier()
+        self._filename = None
+        self._message = None
+
+    def notifier(self):
+        """Return a qobject that will emit a 'done' signal when the
+        thread completes."""
+        return self._notifier
+
+    def filename(self):
+        """Return the filename of the output from the
+        last run."""
+        return self._filename
+
+    def result(self):
+        """Return the result of the last run."""
+        return self._result
+
+    def run(self):
+        """ Main function for hazard impact calculation thread.
+        Requires three properties to be set before execution
+        can take place:
+
+        * Hazard layer - a path to a raster,
+        * Exposure layer - a path to a vector points layer.
+        * Function - a function that defines how the Hazard assessment
+          will be computed.
+
+        After the thread is complete, you can use the filename and
+        result accessors to determine what the result of the analysis was::
+
+          calculator = ImpactCalculator()
+          myRoot = os.path.dirname(__file__)
+          vectorPath = os.path.join(myRoot, 'testdata',
+                                     'Jakarta_sekolah.shp')
+          rasterPath = os.path.join(myRoot, 'testdata',
+                                    'current_flood_depth_jakarta.asc')
+          calculator.setHazardLayer(self.rasterPath)
+          calculator.setExposureLayer(self.vectorPath)
+          calculator.setFunction('Flood Building Impact Function')
+          myRunner = calculator.getRunner()
+          #wait till completion
+          myRunner.join()
+          myResult = myRunner.result()
+          myFilename = myRunner.filename()
+
+
+        Args:
+           None.
+        Returns:
+           None
+        Raises:
+           None
+           set.
+        """
+
+        try:
+            myLayers = [self._hazardLayer, self._exposureLayer]
+            self._filename = calculate_impact(layers=myLayers,
+                                      impact_fcn=self._function)
+        except Exception, e:
+            self._result = 'Error encountered:\n' + str(e)
+
+        self._result = 'Completed successfully'
         #  let any listending slots know we are done
-        self.__notifier.done.emit()
+        self._notifier.done.emit()

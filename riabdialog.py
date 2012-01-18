@@ -79,9 +79,7 @@ class RiabDialog(QtGui.QDialog):
         self.iface = iface
         self.suppressDialogsFlag = guiContext
         self.calculator = ImpactCalculator()
-        QtCore.QObject.connect(self.calculator.notifier(),
-                               QtCore.SIGNAL('done()'),
-                                self.completed)
+        self.runner = None
         # Set up the user interface from Designer.
         self.ui = Ui_Riab()
         self.ui.setupUi(self)
@@ -213,38 +211,57 @@ class RiabDialog(QtGui.QDialog):
             self.ui.wvResults.setHtml(myMessage)
             self.disableBusyCursor()
             return
-        myHazardIndex = self.ui.cboHazard.currentIndex()
-        myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
-                             QtCore.Qt.UserRole).toString()
-        self.calculator.setHazardLayer(myHazardFileName)
+        try:
+            myHazardIndex = self.ui.cboHazard.currentIndex()
+            myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
+                                 QtCore.Qt.UserRole).toString()
+            self.calculator.setHazardLayer(myHazardFileName)
 
-        myExposureIndex = self.ui.cboExposure.currentIndex()
-        myExposureFileName = self.ui.cboExposure.itemData(myExposureIndex,
-                             QtCore.Qt.UserRole).toString()
-        self.calculator.setExposureLayer(myExposureFileName)
+            myExposureIndex = self.ui.cboExposure.currentIndex()
+            myExposureFileName = self.ui.cboExposure.itemData(myExposureIndex,
+                                 QtCore.Qt.UserRole).toString()
+            self.calculator.setExposureLayer(myExposureFileName)
 
-        self.calculator.setFunction(self.ui.cboFunction.currentText())
-        # start it in its own thread
-        self.calculator.start()
+            self.calculator.setFunction(self.ui.cboFunction.currentText())
+            # start it in its own thread
+            self.runner = self.calculator.getRunner()
+
+            QtCore.QObject.connect(self.runner.notifier(),
+                               QtCore.SIGNAL('done()'),
+                               self.completed)
+            self.runner.start()
+
+        except Exception, e:
+            self.disableBusyCursor()
+            msg = 'An exception occurred when starting the model: %s' % (
+                    (str(e)))
+            self.ui.wvResults.setHtml(msg)
 
     def completed(self):
         """Slot activated when the process is done."""
-        myMessage = self.calculator.result()
-        myFilename = self.calculator.filename()
-        if myMessage:
-            self.ui.wvResults.setHtml(myMessage + '\n' + myFilename)
+        myMessage = self.runner.result()
+        myFilename = self.runner.filename()
+        myReport = ''
         if myFilename:
-            myVectorPath = os.path.join('/tmp/', myFilename)
-            myName = (self.ui.cboExposure.currentText() + 'X' +
-                      self.ui.cboHazard.currentText() + 'X' +
-                      self.ui.cboFunction.currentText())
-            myVectorLayer = QgsVectorLayer(myVectorPath, myName, 'ogr')
-            if not myVectorLayer.isValid():
-                msg = 'Vector layer "%s" is not valid' % myFilename
-                self.ui.wvResults.setHtml(msg)
-                self.disableBusyCursor()
-                return
-            QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+            try:
+                myReport = self.calculator.getMetadata(
+                                            myFilename, 'caption')
+                self.ui.wvResults.setHtml(myMessage + '\n' + myFilename)
+                myVectorPath = os.path.join('/tmp/', myFilename)
+                myName = (self.ui.cboExposure.currentText() + 'X' +
+                          self.ui.cboHazard.currentText() + 'X' +
+                          self.ui.cboFunction.currentText())
+                myVectorLayer = QgsVectorLayer(myVectorPath, myName, 'ogr')
+                if not myVectorLayer.isValid():
+                    msg = 'Vector layer "%s" is not valid' % myFilename
+                    self.ui.wvResults.setHtml(msg)
+                    self.disableBusyCursor()
+                    return
+                QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+            except Exception, e:
+                self.ui.wvResults.setHtml(myMessage + '\n' + myFilename +
+                                 '\nError:\n' + str(e))
+
         self.disableBusyCursor()
 
     def showHelp(self):
