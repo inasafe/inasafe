@@ -240,7 +240,7 @@ class RiabDialog(QtGui.QDialog):
 
     def completed(self):
         """Slot activated when the process is done."""
-        settrace()
+
         myMessage = self.runner.result()
         myFilename = self.runner.filename()
         myReport = ''

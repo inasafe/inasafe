@@ -3,17 +3,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>riab &mdash; Risk-In-A-Box 0.0.1 documentation</title>
-    
+    <title>riab &mdash; Risk-In-A-Box v0.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/print.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -27,12 +24,12 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/theme_extras.js"></script>
-    <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="../index.html" />
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
       <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
-          <span>Risk-In-A-Box 0.0.1 documentation</span></a></h1>
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
         <h2 class="heading"><span>riab</span></h2>
       </div>
       <div class="topnav">
@@ -46,7 +43,7 @@
         
         
   <h1>Source code for riab</h1><div class="highlight"><pre>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Disaster risk assessment tool developed by AusAid -</span>
 <span class="sd">  **QGIS plugin implementation.**</span>
 
@@ -57,7 +54,7 @@
 <span class="sd">     the Free Software Foundation; either version 2 of the License, or</span>
 <span class="sd">     (at your option) any later version.</span>
 
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;tim@linfiniti.com&#39;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.0.1&#39;</span>
@@ -71,24 +68,24 @@
 
 <span class="c"># Import the code for the dialog</span>
 <span class="kn">from</span> <span class="nn">riabdialog</span> <span class="kn">import</span> <span class="n">RiabDialog</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">..todo:: Find out how to suppress warnings as this import is needed</span>
 <span class="sd">  but not used directly.</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">resources</span>
 
 
 <div class="viewcode-block" id="Riab"><a class="viewcode-back" href="../riab.html#riab.Riab">[docs]</a><span class="k">class</span> <span class="nc">Riab</span><span class="p">:</span>
-    <span class="sd">&#39;&#39;&#39;The QGIS interface implementation for the Risk in a box plugin.</span>
+    <span class="sd">&quot;&quot;&quot;The QGIS interface implementation for the Risk in a box plugin.</span>
 
 <span class="sd">    This class acts as the &#39;glue&#39; between QGIS and our custom logic.</span>
 <span class="sd">    It creates a toolbar and menubar entry and launches the RIAB user</span>
 <span class="sd">    interface if these are activated.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iface</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Class constructor.</span>
+        <span class="sd">&quot;&quot;&quot;Class constructor.</span>
 
 <span class="sd">        On instantiation, the plugin instance will be assigned a copy</span>
 <span class="sd">        of the QGIS iface object which will allow this plugin to access and</span>
@@ -102,12 +99,12 @@
 <span class="sd">           None.</span>
 <span class="sd">        Raises:</span>
 <span class="sd">           no exceptions explicitly raised.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># Save reference to the QGIS interface</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iface</span> <span class="o">=</span> <span class="n">iface</span>
 
 <div class="viewcode-block" id="Riab.initGui"><a class="viewcode-back" href="../riab.html#riab.Riab.initGui">[docs]</a>    <span class="k">def</span> <span class="nf">initGui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Gui initialisation procedure (for QGIS plugin api).</span>
+        <span class="sd">&quot;&quot;&quot;Gui initialisation procedure (for QGIS plugin api).</span>
 
 <span class="sd">        This method is called by QGIS and should be used to set up</span>
 <span class="sd">        any graphical user interface elements that should appear in QGIS by</span>
@@ -120,7 +117,7 @@
 <span class="sd">           None.</span>
 <span class="sd">        Raises:</span>
 <span class="sd">           no exceptions explicitly raised.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># Create action that will start plugin configuration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s">&#39;:/plugins/riab/icon.png&#39;</span><span class="p">),</span> \
             <span class="s">&#39;Risk In A Box&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mainWindow</span><span class="p">())</span>
@@ -132,7 +129,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">addPluginToMenu</span><span class="p">(</span><span class="s">&#39;&amp;Risk In A Box&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Riab.unload"><a class="viewcode-back" href="../riab.html#riab.Riab.unload">[docs]</a>    <span class="k">def</span> <span class="nf">unload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Gui breakdown procedure (for QGIS plugin api).</span>
+        <span class="sd">&quot;&quot;&quot;Gui breakdown procedure (for QGIS plugin api).</span>
 
 <span class="sd">        This method is called by QGIS and should be used to *remove*</span>
 <span class="sd">        any graphical user interface elements that should appear in QGIS.</span>
@@ -143,14 +140,14 @@
 <span class="sd">           None.</span>
 <span class="sd">        Raises:</span>
 <span class="sd">           no exceptions explicitly raised.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># Remove the plugin menu item and icon</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">removePluginMenu</span><span class="p">(</span><span class="s">&#39;&amp;Risk In A Box&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">removeToolBarIcon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">)</span>
 
     <span class="c"># Run method that performs all the real work</span></div>
 <div class="viewcode-block" id="Riab.run"><a class="viewcode-back" href="../riab.html#riab.Riab.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Gui run procedure.</span>
+        <span class="sd">&quot;&quot;&quot;Gui run procedure.</span>
 
 <span class="sd">        This slot is called when the user clicks the toolbar icon or</span>
 <span class="sd">        menu item associated with this plugin.</span>
@@ -163,7 +160,7 @@
 <span class="sd">           None.</span>
 <span class="sd">        Raises:</span>
 <span class="sd">           no exceptions explicitly raised.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># Create and show the dialog</span>
         <span class="n">dlg</span> <span class="o">=</span> <span class="n">RiabDialog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="p">)</span>
 
@@ -189,7 +186,7 @@
 
     <div class="footer">
         &copy; Copyright 2012, Ole Moller.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>
