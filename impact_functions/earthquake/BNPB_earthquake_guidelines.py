@@ -108,7 +108,8 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
             building_damage.append(result_dict)
 
         # Create report
-        caption = ('<table border="0" width="320px">'
+        caption = ('WITH STYLE'
+                   '<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
                     '   <tr><td>%s&#58;</td><td>%i</td></tr>'
@@ -121,12 +122,23 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
                                   _('Medium damage'), count2,
                                   _('High damage'), count3))
 
+        # Create style
+        style_classes = [dict(label=_('Low damage'), min=0.5, max=1.5,
+                              colour='#fecc5c', opacity=1),
+                         dict(label=_('Medium damage'), min=1.5, max=2.5,
+                              colour='#fd8d3c', opacity=1),
+                         dict(label=_('High damage'), min=2.5, max=3.5,
+                              colour='#f31a1c', opacity=1)]
+        style_info = dict(target_field=self.target_field,
+                          style_classes=style_classes)
+
         # Create vector layer and return
         V = Vector(data=building_damage,
                    projection=E.get_projection(),
                    geometry=coordinates,
                    name='Estimated damage level',
-                   keywords={'caption': caption})
+                   keywords={'caption': caption},
+                   style_info=style_info)
 
         return V
 

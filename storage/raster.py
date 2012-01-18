@@ -18,7 +18,7 @@ class Raster:
     """
 
     def __init__(self, data=None, projection=None, geotransform=None,
-                 name='Raster layer', keywords=None):
+                 name='Raster layer', keywords=None, style_info=None):
         """Initialise object with either data or filename
 
         Input
@@ -71,6 +71,14 @@ class Raster:
                        'dictionary. I got %s' % keywords)
                 assert isinstance(keywords, dict), msg
                 self.keywords = keywords
+
+            if style_info is None:
+                self.style_info = {}
+            else:
+                msg = ('Specified style_info must be either None or a '
+                       'dictionary. I got %s' % style_info)
+                assert isinstance(style_info, dict), msg
+                self.style_info = style_info
 
             self.data = numpy.array(data, dtype='d', copy=False)
 
@@ -149,6 +157,11 @@ class Raster:
                 msg = ('Keyword "%s" does not exist in %s: Options are '
                        '%s' % (key, self.get_name(), self.keywords.keys()))
                 raise Exception(msg)
+
+    def get_style_info(self):
+        """Return style_info dictionary
+        """
+        return self.style_info
 
     def get_caption(self):
         """Return 'caption' keyword if present. Otherwise ''.
