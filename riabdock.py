@@ -45,7 +45,9 @@ if os.path.isfile(PATH):
         #fail silently
         pass
 
-from qgis.core import QGis, QgsMapLayer, QgsVectorLayer, QgsMapLayerRegistry
+from qgis.core import (QgsMapLayer, QgsVectorLayer,
+                QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
+                QgsSymbolV2, QgsRendererRangeV2)
 from impactcalculator import ImpactCalculator
 import tempfile
 
@@ -271,10 +273,38 @@ class RiabDock(QtGui.QDockWidget):
                     self.ui.wvResults.setHtml(msg)
                     self.hideBusy()
                     return
-                QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+
                 myStyle = myImpactLayer.get_style_info()
-                QtGui.QMessageBox.information(
-                                self, 'Risk in a box', str(myStyle))
+                myTargetField = myStyle['target_field']
+                myClasses = myStyle['style_classes']
+                myRangeList = []
+                for myClass in myClasses:
+                    myOpacity = myClass['opacity']
+                    myMax = myClass['max']
+                    myMin = myClass['min']
+                    myColour = myClass['colour']
+                    myLabel = myClass['label']
+                    myColour = QtGui.QColor(myColour)
+                    mySymbol = QgsSymbolV2.defaultSymbol(
+                                myVectorLayer.geometryType())
+                    mySymbol.setColor(myColour)
+                    mySymbol.setAlpha(myOpacity)
+                    myRange = QgsRendererRangeV2(
+                                myMin,
+                                myMax,
+                                mySymbol,
+                                myLabel)
+                    myRangeList.append(myRange)
+                myRenderer = QgsGraduatedSymbolRendererV2(
+                                '', myRangeList)
+                myRenderer.setMode(
+                        QgsGraduatedSymbolRendererV2.EqualInterval)
+                myRenderer.setClassAttribute(myTargetField)
+
+                myVectorLayer.setRendererV2(myRenderer)
+                QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+                #QtGui.QMessageBox.information(
+                #                self, 'Risk in a box', str(myStyle))
             except Exception, e:
                 self.ui.wvResults.setHtml(myMessage + '\n' + myFilename +
                                  '\nError:\n' + str(e))
