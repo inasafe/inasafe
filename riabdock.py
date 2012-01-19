@@ -250,13 +250,13 @@ class RiabDock(QtGui.QDockWidget):
         """Slot activated when the process is done."""
         #settrace()
         myMessage = self.runner.result()
-        impactLayer = self.runner.impactLayer()
+        myImpactLayer = self.runner.impactLayer()
         myReport = ''
-        if impactLayer:
-            myFilename = impactLayer.get_filename()
+        if myImpactLayer:
+            myFilename = myImpactLayer.get_filename()
             try:
                 myReport = self.calculator.getMetadata(
-                                            impactLayer, 'caption')
+                                            myImpactLayer, 'caption')
                 self.ui.wvResults.setHtml(myMessage + '\n' +
                         myFilename +
                         '\n' + myReport)
@@ -272,6 +272,9 @@ class RiabDock(QtGui.QDockWidget):
                     self.hideBusy()
                     return
                 QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+                myStyle = myImpactLayer.get_style_info()
+                QtGui.QMessageBox.information(
+                                self, 'Risk in a box', str(myStyle))
             except Exception, e:
                 self.ui.wvResults.setHtml(myMessage + '\n' + myFilename +
                                  '\nError:\n' + str(e))

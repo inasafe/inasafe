@@ -33,13 +33,13 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Create shared resources that all tests can use"""
         self.calculator = ImpactCalculator()
         myRoot = os.path.dirname(__file__)
-        self.vectorPath = os.path.join(myRoot, 'testdata',
-                                   'Jakarta_sekolah.shp')
-        self.rasterPath = os.path.join(myRoot, 'testdata',
-                                    'current_flood_depth_jakarta.asc')
+        self.vectorPath = os.path.join(myRoot, 'riab_test_data',
+                                   'Padang_WGS84.shp')
+        self.rasterPath = os.path.join(myRoot, 'riab_test_data',
+                                    'Shakemap_Padang_2009.asc')
         self.calculator.setHazardLayer(self.rasterPath)
         self.calculator.setExposureLayer(self.vectorPath)
-        self.calculator.setFunction('Flood Building Impact Function')
+        self.calculator.setFunction('Earthquake Guidelines Function')
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""
