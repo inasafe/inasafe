@@ -158,25 +158,23 @@ class ImpactCalculator():
 
            * StyleInfoNotFoundException if the style is not found.
            * InvalidParameterException if the paramers are not correct.
-         .. todo::
-            cache the layer if io is too slow
-
         """
-        myValue = theImpactLayer.get_style_info()
-        return myValue
-        myValue = None
+
         if not theImpactLayer:
             raise InvalidParameterException()
+
         try:
             myValue = theImpactLayer.get_style_info()
         except Exception, e:
             msg = 'Styleinfo retrieval failed for %s\n %s' % (
                         theImpactLayer.get_filename(), str(e))
             raise StyleInfoNotFoundException(msg)
+
         if not myValue or myValue == '':
-            msg = 'No styleInfo was found for layer %s' % (
-                        theImpactLayer.get_filename())
+            msg = ('No styleInfo was found for layer %s' % (
+                    theImpactLayer.get_filename()))
             raise StyleInfoNotFoundException(msg)
+
         return myValue
 
     def make_ascii(self, x):

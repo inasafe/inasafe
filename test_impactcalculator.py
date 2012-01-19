@@ -109,8 +109,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test that we can get the available functions from
         the impactcalculator."""
         myList = self.calculator.availableFunctions()
-        print myList
-        assert(myList > 1)
+        assert myList > 1
 
     def test_getMetadata(self):
         """Test that we can get keyword data from a file with
@@ -153,15 +152,14 @@ class ImpactCalculatorTest(unittest.TestCase):
         #print myStyleInfo
 
         # Test we get an exception if style info is not found
-        #try:
-        #    myStyleInfo = self.calculator.getStyleInfo(
-        #                    'boguspath')
-        #except StyleInfoNotFoundException:
-        #    pass  # this is good
-        #except Exception, e:
-        #    msg = ('StyleInfo request for bogus file raised incorrect' +
-        #           ' exception type: \n %s') % str(e)
-        #    assert(), msg
+        try:
+            myStyleInfo = self.calculator.getStyleInfo('boguspath')
+        except StyleInfoNotFoundException:
+            pass  # This is good
+        except Exception, e:
+            msg = ('StyleInfo request for bogus file raised incorrect' +
+                   ' exception type: \n %s') % str(e)
+            raise Exception(msg)
 
 if __name__ == "__main__":
     unittest.main()
