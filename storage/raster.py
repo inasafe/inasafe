@@ -145,6 +145,9 @@ class Raster:
     def get_name(self):
         return self.name
 
+    def get_filename(self):
+        return self.filename
+
     def get_keywords(self, key=None):
         """Return keywords dictionary
         """

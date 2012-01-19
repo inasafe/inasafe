@@ -73,7 +73,8 @@ def calculate_impact(layers, impact_fcn,
     #f.write(style)
     #f.close()
 
-    return output_filename
+    # Return layer object
+    return F
 
 
 def check_data_integrity(layer_files):
