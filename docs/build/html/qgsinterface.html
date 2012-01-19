@@ -3,17 +3,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Module: qgsinterface &mdash; Risk-In-A-Box 0.0.1 documentation</title>
-    
+    <title>Module: qgsinterface &mdash; Risk-In-A-Box v0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -27,24 +24,17 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/theme_extras.js"></script>
-    <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="index.html" />
-    <link rel="up" title="Risk-In-A-Box’s API documentation" href="risk_in_a_box.html" />
-    <link rel="next" title="Module: impactcalculator" href="impactcalculator.html" />
-    <link rel="prev" title="Module: riabdialog" href="riabdialog.html" /> 
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="index.html" /> 
   </head>
   <body>
       <div class="header"><img class="rightlogo" src="_static/icon.png" alt="Logo"/><h1 class="heading"><a href="index.html">
-          <span>Risk-In-A-Box 0.0.1 documentation</span></a></h1>
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
         <h2 class="heading"><span>Module: qgsinterface</span></h2>
       </div>
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="riabdialog.html">Module:  riabdialog</a>
-        &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
-        &#160;&#160;::&#160;&#160;
-        <a href="impactcalculator.html">Module: impactcalculator</a>&#160;&#160;»
         </p>
 
       </div>
@@ -54,108 +44,6 @@
   <div class="section" id="module-qgsinterface">
 <h1>Module: qgsinterface<a class="headerlink" href="#module-qgsinterface" title="Permalink to this headline">¶</a></h1>
 <p>This page contains the documentation for the  Risk-In-A-Box code <strong>qgsinterface</strong> module.</p>
-<span class="target" id="module-qgsinterface"></span><p>Disaster risk assessment tool developed by AusAid - <strong>QGIS plugin implementation.</strong></p>
-<p>Contact : <a class="reference external" href="mailto:ole&#46;moller&#46;nielsen&#37;&#52;&#48;gmail&#46;com">ole<span>&#46;</span>moller<span>&#46;</span>nielsen<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or 
-(at your option) any later version.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This source code was copied from the &#8216;postgis viewer&#8217; application with 
-original authors:
-Copyright (c) 2010 by Ivan Mincik, <a class="reference external" href="mailto:ivan&#46;mincik&#37;&#52;&#48;gista&#46;sk">ivan<span>&#46;</span>mincik<span>&#64;</span>gista<span>&#46;</span>sk</a>
-Copyright (c) 2011 German Carrillo, <a class="reference external" href="mailto:geotux_tuxman&#37;&#52;&#48;linuxmail&#46;org">geotux_tuxman<span>&#64;</span>linuxmail<span>&#46;</span>org</a></p>
-</div>
-<dl class="class">
-<dt id="qgsinterface.Plugins">
-<em class="property">class </em><tt class="descclassname">qgsinterface.</tt><tt class="descname">Plugins</tt><big>(</big><em>myApp</em>, <em>canvas</em>, <em>host</em>, <em>port</em>, <em>dbname</em>, <em>user</em>, <em>passwd</em><big>)</big><a class="headerlink" href="#qgsinterface.Plugins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to manage plugins (Read and load existing plugins)</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="qgsinterface.QgisInterface">
-<em class="property">class </em><tt class="descclassname">qgsinterface.</tt><tt class="descname">QgisInterface</tt><big>(</big><em>myApp</em>, <em>canvas</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to expose qgis objects and functionalities to plugins. This class is 
-here for enabling us to run unit tests only, and so most methods are 
-simply stubs.</p>
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.activeLayer">
-<tt class="descname">activeLayer</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.activeLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get pointer to the active layer (layer selected in the legend)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.addDockWidget">
-<tt class="descname">addDockWidget</tt><big>(</big><em>area</em>, <em>dockwidget</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addDockWidget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a dock widget to the main window</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.addRasterLayer">
-<tt class="descname">addRasterLayer</tt><big>(</big><em>rasterLayerPath</em>, <em>baseName</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addRasterLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a raster layer given a raster layer file name</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.addToolBar">
-<tt class="descname">addToolBar</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addToolBar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add toolbar with specified name</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.addToolBarIcon">
-<tt class="descname">addToolBarIcon</tt><big>(</big><em>qAction</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addToolBarIcon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an icon to the plugins toolbar</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.addVectorLayer">
-<tt class="descname">addVectorLayer</tt><big>(</big><em>vectorLayerPath</em>, <em>baseName</em>, <em>providerKey</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.addVectorLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a vector layer</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.mainWindow">
-<tt class="descname">mainWindow</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.mainWindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a pointer to the main window (instance of QgisApp in case of QGIS)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.mapCanvas">
-<tt class="descname">mapCanvas</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.mapCanvas" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a pointer to the map canvas</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.removeToolBarIcon">
-<tt class="descname">removeToolBarIcon</tt><big>(</big><em>qAction</em><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.removeToolBarIcon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove an action (icon) from the plugin toolbar</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.zoomFull">
-<tt class="descname">zoomFull</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.zoomFull" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zoom to the map full extent</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.zoomToNext">
-<tt class="descname">zoomToNext</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.zoomToNext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zoom to next view extent</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="qgsinterface.QgisInterface.zoomToPrevious">
-<tt class="descname">zoomToPrevious</tt><big>(</big><big>)</big><a class="headerlink" href="#qgsinterface.QgisInterface.zoomToPrevious" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zoom to previous view extent</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -163,18 +51,14 @@ simply stubs.</p>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="riabdialog.html">Module:  riabdialog</a>
-        &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
-        &#160;&#160;::&#160;&#160;
-        <a href="impactcalculator.html">Module: impactcalculator</a>&#160;&#160;»
         </p>
 
       </div>
 
     <div class="footer">
         &copy; Copyright 2012, Ole Moller.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
     </div>
   </body>
 </html>

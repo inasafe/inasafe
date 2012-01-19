@@ -27,13 +27,14 @@ on your machine in order to work effectively with the code base:
 * nosetests (with coverage plugin)
 * python-numpy
 * python-gdal
+* python-sphinx
 * ...
 
 
 On an ubuntu system you can install these requirements using apt::
 
   sudo apt-get install git subversion pep8 python-nose python-coverage \
-  python-gdal python-numpy
+  python-gdal python-numpy python-sphinx
 
 
 In some cases these dependencies may already be on your system via installation
@@ -43,12 +44,24 @@ Quick Installation Guide - Developers
 -------------------------------------
 
 To develop on the plugin, you first need to copy it to your local system. If you are a developer,
-the simplest way to do that is to clone it from our GitHub repository page like this::
+the simplest way to do that is go to `~/.qgis/python/plugins` and clone risk_in_a_box from our GitHub
+repository page like this::
 
   git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
   git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)
 
-Place the local repository under `~/.qgis/python/plugins` and then restart QGIS. If you wish to
+NOTE FOR TREVOR: Temporarily, to download the test data the first time, do::
+  python storage/test_io.py
+(If asked for a username or password use: anonymous and <blank>)
+
+To verify that the installation works you can run the test suite from the command line::
+
+  make test
+
+This will run all the regression tests and also highlight any code issues.
+Note that first time the tests are run they will pull 250MB of test data from our subversion repository.
+
+To run the plugin restart QGIS. If you wish to
 an IDE for development, please refer to `this article <http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/>`_
 for detailed information on how you can do so.
 
@@ -59,7 +72,6 @@ of pydevpath.txt.templ to pydevpath.txt e.g.::
 
 Then replace the path to your pydevd module as described in the above article.
 
-
 .. note::
 
    If you are running with remote debugging enabled, be sure to start the
@@ -67,25 +79,27 @@ Then replace the path to your pydevd module as described in the above article.
    otherwise QGIS will likely crash when it can't find the debug server.
 
 
-If you wish to run the unit tests, please make a local copy of the qgispath.txt.templ template
-and adjust the path contained in that file to match your QGIS installation path e.g.::
-
-  cp qgispath.txt.templ qgispath.txt
-
-In order to run the tests, you should install 'discover' e.g.::
-
-  sudo pip install discover
-
-Then you can run the tests (from within the risk_in_a_box toplevel directory) like this::
-
-  python -m discover
+# If you wish to run the unit tests, please make a local copy of the qgispath.txt.templ template
+# and adjust the path contained in that file to match your QGIS installation path e.g.::
+#
+#  cp qgispath.txt.templ qgispath.txt
+#
+# In order to run the tests, you should install 'discover' e.g.::
+#
+#  sudo pip install discover
+#
+# Then you can run the tests (from within the risk_in_a_box toplevel directory) like this::
+#
+#  python -m discover
 
 Coding Standards
 ================
 
 Please observe the following coding standards when working on the codebase:
 
-* PEP8
+* Python style guide (PEP8): http://www.python.org/dev/peps/pep-0008
+* Python documentation guide (PEP257): http://www.python.org/dev/peps/pep-0257
 * Docstrings quoted with :samp:`"""`
-* Strings in source code should be quoted with :samp:`'`
+* Simple strings in source code should be quoted with :samp:`'`
+
 

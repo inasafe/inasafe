@@ -1,7 +1,7 @@
 #/***************************************************************************
 # Riab
 #
-# Disaster risk assessment tool developed by AusAid
+# Disaster risk assessment tool developed by AusAid and World Bank
 #                             -------------------
 #        begin                : 2012-01-09
 #        copyright            : (C) 2012 by Australia Indonesia Facility for Disaster Reduction

@@ -23,7 +23,7 @@ class Vector:
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
-                 name='Vector layer', keywords=None):
+                 name='Vector layer', keywords=None, style_info=None):
         """Initialise object with either geometry or filename
 
         Input
@@ -63,6 +63,7 @@ class Vector:
             self.data = None
             self.extent = None
             self.keywords = {}
+            self.style_info = {}
             return
 
         if isinstance(data, basestring):
@@ -82,6 +83,14 @@ class Vector:
                        'dictionary. I got %s' % keywords)
                 assert isinstance(keywords, dict), msg
                 self.keywords = keywords
+
+            if style_info is None:
+                self.style_info = {}
+            else:
+                msg = ('Specified style_info must be either None or a '
+                       'dictionary. I got %s' % style_info)
+                assert isinstance(style_info, dict), msg
+                self.style_info = style_info
 
             msg = 'Geometry must be specified'
             assert geometry is not None, msg
@@ -199,6 +208,11 @@ class Vector:
                        '%s' % (key, self.get_name(), self.keywords.keys()))
                 raise Exception(msg)
 
+    def get_style_info(self):
+        """Return style_info dictionary
+        """
+        return self.style_info
+
     def get_caption(self):
         """Return 'caption' keyword if present. Otherwise ''.
         """
@@ -233,6 +247,8 @@ class Vector:
 
         # Look for any keywords
         self.keywords = read_keywords(basename + '.keywords')
+
+        # FIXME (Ole): Should also look for style file to populate style_info
 
         # Determine name
         if 'title' in self.keywords:
@@ -513,6 +529,8 @@ class Vector:
 
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
+
+        # FIXME (Ole): Maybe store style_info
 
     def get_attribute_names(self):
         """ Get available attribute names
