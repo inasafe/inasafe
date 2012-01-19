@@ -64,12 +64,12 @@ class ImpactCalculatorTest(unittest.TestCase):
             # run non threaded
             myRunner.run()
             myMessage = myRunner.result()
-            myImpactFile = myRunner.impactFile()
-            myFilename = myImpactFile.get_filename()
+            myImpactLayer = myRunner.impactLayer()
+            myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
-        except:
-            msg = 'Calculator run failed.'
+        except Exception, e:
+            msg = 'Calculator run failed. %s' % str(e)
             assert(), msg
 
     def test_thread(self):
