@@ -11,7 +11,7 @@ The latest source code is available in https://github.com/AIFDR/risk_in_a_box
 which contains modules for risk calculations, gis functionality and functions for impact modelling.
 
 For more information about Risk In a Box please look at
-our project page at http://aifdr.github.com/risk_in_a_box
+the documentation at http://risk-in-a-box.readthedocs.org
 
 ========================
 Quick Installation Guide
