@@ -250,13 +250,13 @@ class RiabDock(QtGui.QDockWidget):
         """Slot activated when the process is done."""
         #settrace()
         myMessage = self.runner.result()
-        myImpactFile = self.runner.impactFile()
+        impactLayer = self.runner.impactLayer()
         myReport = ''
-        if myImpactFile:
-            myFilename = myImpactFile.get_filename()
+        if impactLayer:
+            myFilename = impactLayer.get_filename()
             try:
                 myReport = self.calculator.getMetadata(
-                                            myImpactFile, 'caption')
+                                            impactLayer, 'caption')
                 self.ui.wvResults.setHtml(myMessage + '\n' +
                         myFilename +
                         '\n' + myReport)
