@@ -84,6 +84,6 @@ test_suite: compile
 	@echo "----------------------"
 
 	# Preceding dash means that make will continue in case of errors
-	-nosetests -v --with-id --with-coverage --cover-package=.,engine,storage
+	-nosetests -v --with-id --with-coverage --cover-package=.,engine,storage,impact_functions
 
 
