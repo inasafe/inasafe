@@ -21,11 +21,11 @@
 
 PLUGINNAME = riab
 
-PY_FILES = riab.py riabdialog.py __init__.py
+PY_FILES = riab.py riabdock.py __init__.py
 
 EXTRAS = icon.png
 
-UI_FILES = ui_riab.py
+UI_FILES = ui_riabdock.py
 
 RESOURCE_FILES = resources.py
 

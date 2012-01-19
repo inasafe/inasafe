@@ -18,11 +18,11 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import QObject, SIGNAL
+from PyQt4.QtCore import QObject, SIGNAL, QCoreApplication, Qt
 from PyQt4.QtGui import QAction, QIcon
 
-# Import the code for the dialog
-from riabdialog import RiabDialog
+# Import the code for the dock
+from riabdock import RiabDock
 """
 ..todo:: Find out how to suppress warnings as this import is needed
   but not used directly.
@@ -73,15 +73,23 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
-        # Create action that will start plugin configuration
-        self.action = QAction(QIcon(':/plugins/riab/icon.png'), \
-            'Risk In A Box', self.iface.mainWindow())
-        # connect the action to the run method
-        QObject.connect(self.action, SIGNAL('triggered()'), self.run)
+        self.dockWidget = None
 
-        # Add toolbar button and menu item
-        self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu('&Risk In A Box', self.action)
+        # create action for plugin dockable window (show/hide)
+        self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
+                                   'Risk In A Box', self.iface.mainWindow())
+        self.actionDock.setStatusTip(QCoreApplication.translate(
+                "Risk In A Box", "Show/hide Risk In A Box dock widget"))
+        self.actionDock.setWhatsThis(QCoreApplication.translate(
+                "Risk In A Box", "Show/hide Risk In A Box dock widget"))
+        self.actionDock.setCheckable(True)
+
+        QObject.connect(self.actionDock, SIGNAL("triggered()"),
+                         self.showHideDockWidget)
+
+        # create dockwidget
+        self.dockWidget = RiabDock(self.iface)
+        self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
 
     def unload(self):
         """Gui breakdown procedure (for QGIS plugin api).
@@ -97,15 +105,16 @@ class Riab:
            no exceptions explicitly raised.
         """
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu('&Risk In A Box', self.action)
-        self.iface.removeToolBarIcon(self.action)
+        self.iface.removePluginMenu('&Risk In A Box', self.actionDock)
+        self.iface.removeToolBarIcon(self.actionDock)
 
     # Run method that performs all the real work
-    def run(self):
+    def showHideDockWidget(self):
         """Gui run procedure.
 
         This slot is called when the user clicks the toolbar icon or
-        menu item associated with this plugin.
+        menu item associated with this plugin. It will hide or show
+        the dock depending on its current state.
 
         .. see also:: :func:`Riab.initGui`.
 
@@ -116,15 +125,7 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
-        # Create and show the dialog
-        dlg = RiabDialog(self.iface)
-
-        # Show the dialog
-        dlg.show()
-        result = dlg.exec_()
-
-        # See if OK was pressed
-        if result == 1:
-            # do something useful (delete the line containing pass and
-            # substitute with your code
-            pass
+        if self.dockWidget.isVisible():
+            self.dockWidget.setVisible(False)
+        else:
+            self.docWidget.setVisible(True)

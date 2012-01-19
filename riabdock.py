@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from PyQt4 import QtGui, QtCore
-from ui_riab import Ui_Riab
+from ui_riabdock import Ui_RiabDock
 import os
 
 # Check if a pydevpath.txt file exists in the plugin folder (you
@@ -50,8 +50,8 @@ from impactcalculator import ImpactCalculator
 import tempfile
 
 
-class RiabDialog(QtGui.QDialog):
-    """Dialog implementation class for the Risk In A Box plugin."""
+class RiabDock(QtGui.QDockWidget):
+    """Dock implementation class for the Risk In A Box plugin."""
 
     def __init__(self, iface, guiContext=True):
         """Constructor for the dialog.
@@ -74,7 +74,7 @@ class RiabDialog(QtGui.QDialog):
         if DEBUG:
             # settrace()
             pass
-        QtGui.QDialog.__init__(self)
+        QtGui.QDockWidget.__init__(self, None)
 
         # Save reference to the QGIS interface
         self.iface = iface
@@ -82,18 +82,18 @@ class RiabDialog(QtGui.QDialog):
         self.calculator = ImpactCalculator()
         self.runner = None
         # Set up the user interface from Designer.
-        self.ui = Ui_Riab()
+        self.ui = Ui_RiabDock()
         self.ui.setupUi(self)
         self.getLayers()
         self.getFunctions()
         self.setOkButtonStatus()
-        myButton = self.ui.buttonBox.button(self.ui.buttonBox.Help)
-        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                                self.showHelp)
-        self.showHelp()
-        myButton = self.ui.buttonBox.button(self.ui.buttonBox.Reset)
-        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                                self.resetForm)
+        #myButton = self.ui.buttonBox.button(self.ui.buttonBox.Help)
+        #QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+        #                        self.showHelp)
+        #self.showHelp()
+        #myButton = self.ui.buttonBox.button(self.ui.buttonBox.Reset)
+        #QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+        #                        self.resetForm)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -139,10 +139,10 @@ class RiabDialog(QtGui.QDialog):
            None.
         Raises:
            no exceptions explicitly raised."""
-        myButton = self.ui.buttonBox.button(self.ui.buttonBox.Ok)
-        myFlag, myMessage = self.validate()
-        myButton.setEnabled(myFlag)
-        self.ui.wvResults.setHtml(myMessage)
+        #myButton = self.ui.buttonBox.button(self.ui.buttonBox.Ok)
+        #myFlag, myMessage = self.validate()
+        #myButton.setEnabled(myFlag)
+        #self.ui.wvResults.setHtml(myMessage)
 
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
@@ -240,7 +240,7 @@ class RiabDialog(QtGui.QDialog):
 
     def completed(self):
         """Slot activated when the process is done."""
-        settrace()
+        #settrace()
         myMessage = self.runner.result()
         myFilename = self.runner.filename()
         myReport = ''
