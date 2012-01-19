@@ -68,11 +68,8 @@ def calculate_impact(layers, impact_fcn,
     F.filename = output_filename
     F.write_to_file(output_filename)
 
-    # Generate style as defined by the impact_function
-    #style = impact_function.generate_style(F)
-    #f = open(output_filename.replace(extension, '.sld'), 'w')
-    #f.write(style)
-    #f.close()
+    # FIXME (Ole): If we need to save style as defined by the impact_function
+    #              this is the place
 
     # Return layer object
     return F

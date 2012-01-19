@@ -47,37 +47,6 @@ class FunctionProvider:
     target_field = 'DAMAGE'
     symbol_field = 'USE_MAJOR'
 
-    def generate_style(self, data):
-        """Make a default style for all plugins
-        """
-
-        # The parameters are substituted into the sld according the the
-        # Django template methodology:
-        # https://docs.djangoproject.com/en/dev/ref/templates/
-        #         builtins/?from=olddocs
-
-        params = {'name': data.get_name()}
-
-        if data.is_raster:
-            colormapentries = [
-                ColorMapEntry(color='#ffffff', opacity='0',
-                              quantity='-9999.0'),
-                ColorMapEntry(color='#38A800', opacity='0',
-                              quantity='0.1'),
-                ColorMapEntry(color='#38A800', quantity='0.2'),
-                ColorMapEntry(color='#79C900', quantity='0.5'),
-                ColorMapEntry(color='#CEED00', quantity='1'),
-                ColorMapEntry(color='#FFCC00', quantity='2'),
-                ColorMapEntry(color='#FF6600', quantity='3'),
-                ColorMapEntry(color='#FF0000', quantity='5'),
-                ColorMapEntry(color='#7A0000', quantity='9')]
-
-            params['colormapentries'] = colormapentries
-            return render_to_string('impact/styles/raster.sld', params)
-        elif data.is_vector:
-            params['damage_field'] = self.target_field
-            return render_to_string('impact/styles/vector.sld', params)
-
 
 def get_plugins(name=None):
     """Retrieve a list of plugins that match the name you pass

@@ -75,7 +75,7 @@ pep8: compile
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	pep8 --repeat --ignore=E203 --exclude loader.py,ui_riab.py,resources.py,resources_rc.py .
+	pep8 --repeat --ignore=E203 --exclude loader.py,ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py .
 
 # Run test suite only
 test_suite: compile

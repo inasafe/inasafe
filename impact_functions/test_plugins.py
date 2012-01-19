@@ -23,6 +23,7 @@ from storage.utilities_test import TESTDATA
 
 DEFAULT_PLUGINS = ('Earthquake Fatality Function',)
 
+
 # FIXME (Ole): Change H, E to layers.
 class BasicFunction(FunctionProvider):
     """Risk plugin for testing

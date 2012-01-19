@@ -107,54 +107,6 @@ class USGSFatalityFunction(FunctionProvider):
                    name='Estimated fatalities')
         return R
 
-    def generate_style(self, data):
-        """Generates and SLD file based on the data values
-        """
-
-        s = """<?xml version="1.0" encoding="UTF-8"?>
-<sld:StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" version="1.0.0">
-  <sld:NamedLayer>
-    <sld:Name>Estimated Fatalities</sld:Name>
-    <sld:UserStyle>
-      <sld:Name>Estimated Fatalities</sld:Name>
-      <sld:Title>Estimated Earthquake Fatalities</sld:Title>
-      <sld:Abstract>Estimated Fatalities from ground shaking</sld:Abstract>
-      <sld:FeatureTypeStyle>
-        <sld:Name>Estimated Fatalities</sld:Name>
-        <sld:Rule>
-          <sld:RasterSymbolizer>
-            <sld:Geometry>
-              <ogc:PropertyName>geom</ogc:PropertyName>
-            </sld:Geometry>
-            <sld:ChannelSelection>
-              <sld:GrayChannel>
-                <sld:SourceChannelName>1</sld:SourceChannelName>
-              </sld:GrayChannel>
-            </sld:ChannelSelection>
-            <sld:ColorMap>
-              <sld:ColorMapEntry color="#ffffff" opacity="0" quantity="-9999.0"/>
-              <sld:ColorMapEntry color="#38A800" opacity="0" quantity="0.01"/>
-              <sld:ColorMapEntry color="#38A800" quantity="0.02"/>
-              <sld:ColorMapEntry color="#79C900" quantity="0.05"/>
-              <sld:ColorMapEntry color="#CEED00" quantity="0.1"/>
-              <sld:ColorMapEntry color="#FFCC00" quantity="0.2"/>
-              <sld:ColorMapEntry color="#FF6600" quantity="0.3"/>
-              <sld:ColorMapEntry color="#FF0000" quantity="0.5"/>
-              <sld:ColorMapEntry color="#7A0000" quantity="0.9"/>
-              <sld:ColorMapEntry color="#DDDDDD" quantity="5.0"/>
-              <sld:ColorMapEntry color="#FFFFFF" quantity="10.0"/>
-            </sld:ColorMap>
-          </sld:RasterSymbolizer>
-        </sld:Rule>
-      </sld:FeatureTypeStyle>
-    </sld:UserStyle>
-  </sld:NamedLayer>
-</sld:StyledLayerDescriptor>
-
-        """
-
-        return s
-
 
 def generate_exposure_table(mmi_range,
                             number_of_people_affected):
