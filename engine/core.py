@@ -65,6 +65,7 @@ def calculate_impact(layers, impact_fcn,
         # use default style for vector
 
     output_filename = unique_filename(suffix=extension)
+    F.filename = output_filename
     F.write_to_file(output_filename)
 
     # Generate style as defined by the impact_function
