@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Risk-in-a-box User Documentation &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <title>RISK IN A BOX - QGIS &mdash; Risk-In-A-Box v0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
@@ -26,17 +26,17 @@
     <script type="text/javascript" src="_static/theme_extras.js"></script>
     <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="index.html" />
     <link rel="next" title="Risk-in-a-box Developer Documentation" href="development.html" />
-    <link rel="prev" title="Welcome to Risk-In-A-Box’s documentation!" href="index.html" /> 
+    <link rel="prev" title="Welcome to Risk in a Box’s documentation!" href="index.html" /> 
   </head>
   <body>
       <div class="header"><img class="rightlogo" src="_static/icon.png" alt="Logo"/><h1 class="heading"><a href="index.html">
           <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
-        <h2 class="heading"><span>Risk-in-a-box User Documentation</span></h2>
+        <h2 class="heading"><span>RISK IN A BOX - QGIS</span></h2>
       </div>
       <div class="topnav">
       
         <p>
-        «&#160;&#160;<a href="index.html">Welcome to Risk-In-A-Box&#8217;s documentation!</a>
+        «&#160;&#160;<a href="index.html">Welcome to Risk in a Box&#8217;s documentation!</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
@@ -47,32 +47,53 @@
       <div class="content">
         
         
-  <div class="section" id="risk-in-a-box-user-documentation">
-<h1>Risk-in-a-box User Documentation<a class="headerlink" href="#risk-in-a-box-user-documentation" title="Permalink to this headline">¶</a></h1>
-<p>This is the project: Risk in a Box - QGIS plugin</p>
+  <div class="section" id="risk-in-a-box-qgis">
+<h1>RISK IN A BOX - QGIS<a class="headerlink" href="#risk-in-a-box-qgis" title="Permalink to this headline">¶</a></h1>
+<p>This is the project: Risk in a Box - QGIS</p>
 <div class="figure align-center">
 <img alt="_images/screenshot.jpg" src="_images/screenshot.jpg" />
 </div>
 <p>The latest source code is available in <a class="reference external" href="https://github.com/AIFDR/risk_in_a_box">https://github.com/AIFDR/risk_in_a_box</a>
-which contains modules for risk calculations, gis functionality and plugin
-management.</p>
+which contains modules for risk calculations, gis functionality and functions for impact modelling.</p>
 <p>For more information about Risk In a Box please look at
-our documentation under docs/build/html.</p>
-<div class="section" id="quick-installation-guide-users">
-<h2>Quick Installation Guide - Users<a class="headerlink" href="#quick-installation-guide-users" title="Permalink to this headline">¶</a></h2>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This is a plugin for <a class="reference external" href="http://qgis.org">Quantum GIS</a> (QGIS). It requires version 1.7 of QGIS
-(or newer).</p>
+our project page at <a class="reference external" href="http://aifdr.github.com/risk_in_a_box">http://aifdr.github.com/risk_in_a_box</a></p>
 </div>
-<p>To install the plugin, use the plugin manager in QGIS:</p>
+<div class="section" id="quick-installation-guide">
+<h1>Quick Installation Guide<a class="headerlink" href="#quick-installation-guide" title="Permalink to this headline">¶</a></h1>
+<p>Risk in a Box is a plugin for <a class="reference external" href="http://qgis.org">Quantum GIS</a> (QGIS), so QGIS must be installed first.</p>
+<p>To install the Risk in a Box, use the plugin manager in QGIS:</p>
 <div class="highlight-python"><pre>Plugins -&gt; Fetch Python Plugins</pre>
 </div>
-<p>Then search for &#8216;Risk In A Box&#8217;, select it and click the install button. The plugin will
-now be added to your plugins menu.</p>
-<p>Contact:
-<a class="reference external" href="mailto:Ole&#46;Moller&#46;Nielsen&#37;&#52;&#48;gmail&#46;com">Ole<span>&#46;</span>Moller<span>&#46;</span>Nielsen<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<p>Then search for &#8216;Risk In A Box&#8217;, select it and click the install button.
+The plugin will now be added to your plugins menu.</p>
+<div class="section" id="system-requirements">
+<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<ul class="simple">
+<li>A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X</li>
+<li>The Open Source Geographic Information System QGIS (<a class="reference external" href="http://www.qgis.org">http://www.qgis.org</a>). Risk in a Box requires QGIS version 1.7 or newer.</li>
+</ul>
+</blockquote>
 </div>
+</div>
+<div class="section" id="limitations">
+<h1>LIMITATIONS<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h1>
+<p>Risk in a Box is a very new project. The current code development started
+in earnest in March 2011 and there is still much to be done.
+However, we work on the philosophy that stakeholders should have access
+to the development and source code from the very beginning and invite
+comments, suggestions and contributions.</p>
+<p>As such, Risk in a Box currently has some major limitations, including</p>
+<blockquote>
+<ul class="simple">
+<li>Hazard layers must be provided as raster data</li>
+<li>Exposure data must be either raster data or vector data but only
+point, line and polygon types are supported.</li>
+<li>All data must be provided in WGS84 geographic coordinates</li>
+<li>Neither AIFDR nor GFDRR take any responsibility for the correctness of</li>
+</ul>
+<p>outputs from Risk in a Box or decisions derived as a consequence</p>
+</blockquote>
 </div>
 
 
@@ -80,7 +101,7 @@ now be added to your plugins menu.</p>
       <div class="bottomnav">
       
         <p>
-        «&#160;&#160;<a href="index.html">Welcome to Risk-In-A-Box&#8217;s documentation!</a>
+        «&#160;&#160;<a href="index.html">Welcome to Risk in a Box&#8217;s documentation!</a>
         &#160;&#160;::&#160;&#160;
         <a class="uplink" href="index.html">Contents</a>
         &#160;&#160;::&#160;&#160;
