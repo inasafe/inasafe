@@ -66,16 +66,24 @@ package: compile
 docs: compile
 	cd docs; make html; cd ..
 
-test: compile
-	@echo "----------------------"
-	@echo "Regresssion Test Suite"
-	@echo "----------------------"
-	nosetests -v --with-id --with-coverage --cover-package=.,engine,storage
+# Run the test suite followed by pep8 style checking
+test: test_suite pep8
 
+# Run pep8 style checking only
+pep8: compile
 	@echo
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
 	pep8 --repeat --ignore=E203 --exclude loader.py,ui_riab.py,resources.py,resources_rc.py .
+
+# Run test suite only
+test_suite: compile
+	@echo "----------------------"
+	@echo "Regresssion Test Suite"
+	@echo "----------------------"
+
+	# Preceding dash means that make will continue in case of errors
+	-nosetests -v --with-id --with-coverage --cover-package=.,engine,storage
 
 
