@@ -1,4 +1,3 @@
-from storage.loader import render_to_string
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector

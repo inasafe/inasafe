@@ -6,7 +6,6 @@ To register the plugin, the module must be imported by the Python process
 using it.
 """
 
-from storage.loader import render_to_string
 from impact_functions.utilities import ColorMapEntry
 import types
 import keyword

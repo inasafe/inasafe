@@ -1,11 +1,7 @@
-from storage.loader import render_to_string
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
-from impact_functions.utilities import PointZoomSize
-from impact_functions.utilities import PointClassColor
-from impact_functions.utilities import PointSymbol
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
@@ -87,50 +83,3 @@ class FloodBuildingImpactFunction(FunctionProvider):
                    name='Estimated buildings affected',
                    keywords={'caption': caption})
         return V
-
-    def generate_style(self, data):
-        """Generates and SLD file based on the data values
-        """
-
-        DEFAULT_SYMBOL = 'circle'
-
-        symbol_field = None
-        symbol_keys = [None, '']
-        symbol_values = [DEFAULT_SYMBOL, DEFAULT_SYMBOL]
-
-        scale_keys = [10000000000, 10000000, 5000000, 1000000,
-                      500000, 250000, 100000]
-        scale_values = [5, 5, 5, 5, 5, 8, 14]
-
-        class_keys = ['Not affected', 'Greater than 10 cm']
-        class_values = [{'min': 0, 'max': 90,
-                         'color': '#cccccc', 'opacity': '0.2'},
-                        {'min': 90, 'max': 100,
-                         'color': '#F31a0c', 'opacity': '1'}]
-
-        if self.symbol_field in data.get_attribute_names():
-            symbol_field = self.symbol_field
-
-            symbol_keys.extend(['Church/Mosque', 'Commercial (office)',
-                                'Hotel',
-                                'Medical facility', 'Other',
-                                'Other industrial',
-                                'Residential', 'Retail', 'School',
-                                'Unknown', 'Warehouse'])
-
-            symbol_values.extend([DEFAULT_SYMBOL, DEFAULT_SYMBOL,
-                                  DEFAULT_SYMBOL,
-                                  DEFAULT_SYMBOL, DEFAULT_SYMBOL,
-                                  DEFAULT_SYMBOL,
-                                  DEFAULT_SYMBOL, DEFAULT_SYMBOL,
-                                  DEFAULT_SYMBOL,
-                                  DEFAULT_SYMBOL, DEFAULT_SYMBOL])
-
-        params = dict(name=data.get_name(),
-                      damage_field=self.target_field,
-                      symbol_field=symbol_field,
-                      symbols=dict(zip(symbol_keys, symbol_values)),
-                      scales=dict(zip(scale_keys, scale_values)),
-                      classifications=dict(zip(class_keys, class_values)))
-
-        return render_to_string('impact/styles/point_classes.sld', params)

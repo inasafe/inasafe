@@ -1,4 +1,3 @@
-from storage.loader import render_to_string
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
@@ -87,47 +86,3 @@ class FloodRoadImpactFunction(FunctionProvider):
                    name='Estimated roads affected',
                    keywords={'caption': caption})
         return V
-
-    def generate_style(self, data):
-        """Generates and SLD file based on the data values
-        """
-
-        DEFAULT_SYMBOL = 'circle'
-
-        symbol_field = None
-        symbol_keys = [None, '']
-        symbol_values = [DEFAULT_SYMBOL, DEFAULT_SYMBOL]
-
-        scale_keys = [10000000000]
-        scale_values = [4]
-
-        class_keys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        class_values = [{'min': 0, 'max': 1,
-                         'color': '#50BBE6', 'opacity': '0.0'},
-                        {'min': 1, 'max': 2,
-                         'color': '#50BBE6', 'opacity': '0.3'},
-                        {'min': 2, 'max': 3,
-                         'color': '#234AE8', 'opacity': '0.9'},
-                        {'min': 3, 'max': 4,
-                         'color': '#234AE8', 'opacity': '0.9'},
-                        {'min': 4, 'max': 5,
-                         'color': '#234AE8', 'opacity': '0.9'},
-                       {'min': 5, 'max': 6,
-                         'color': '#234AE8', 'opacity': '0.9'},
-                       {'min': 6, 'max': 7,
-                         'color': '#234AE8', 'opacity': '0.9'},
-                         {'min': 7, 'max': 8,
-                         'color': '#234AE8', 'opacity': '0.9'},
-                       {'min': 8, 'max': 9,
-                         'color': '#234AE8', 'opacity': '0.9'},
-                        {'min': 9, 'max': 10,
-                         'color': '#234AE8', 'opacity': '1.0'}]
-
-        params = dict(name=data.get_name(),
-                      damage_field=self.target_field,
-                      symbol_field=symbol_field,
-                      symbols=dict(zip(symbol_keys, symbol_values)),
-                      scales=dict(zip(scale_keys, scale_values)),
-                      classifications=dict(zip(class_keys, class_values)))
-
-        return render_to_string('impact/styles/flood_road.sld', params)
