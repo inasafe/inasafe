@@ -250,15 +250,18 @@ class RiabDock(QtGui.QDockWidget):
         """Slot activated when the process is done."""
         #settrace()
         myMessage = self.runner.result()
-        myFilename = self.runner.filename()
+        myImpactFile = self.runner.impactFile()
         myReport = ''
-        if myFilename:
+        if myImpactFile:
+            myFilename = myImpactFile.get_filename()
             try:
                 myReport = self.calculator.getMetadata(
-                                            myFilename, 'caption')
-                self.ui.wvResults.setHtml(myMessage + '\n' + myFilename +
-                                          '\n' + myReport)
-                myVectorPath = os.path.join(tempfile.gettempdir(), myFilename)
+                                            myImpactFile, 'caption')
+                self.ui.wvResults.setHtml(myMessage + '\n' +
+                        myFilename +
+                        '\n' + myReport)
+                myVectorPath = os.path.join(tempfile.gettempdir(),
+                        myFilename)
                 myName = (self.ui.cboExposure.currentText() + 'X' +
                           self.ui.cboHazard.currentText() + 'X' +
                           self.ui.cboFunction.currentText())

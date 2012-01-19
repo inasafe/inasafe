@@ -23,7 +23,8 @@ import unicodedata
 from riabexceptions import (InsufficientParametersException,
                             NoFunctionsFoundException,
                             KeywordNotFoundException,
-                            StyleInfoNotFoundException)
+                            StyleInfoNotFoundException,
+                            InvalidParameterException)
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.dirname(__file__))
@@ -112,12 +113,11 @@ class ImpactCalculator():
 
         return myList
 
-    def getMetadata(self, layerpath, keyword):
+    def getMetadata(self, theImpactLayer, keyword):
         """Get metadata from the keywords file associated with a layer.
         Args:
 
-           * layerpath - a string containing a path to a layer (raster
-            or vector)
+           * theImpactLayer - a RIAB layer (vector or raster)
            * keyword - the metadata keyword to retrieve e.g. 'title'
 
         Returns:
@@ -131,47 +131,51 @@ class ImpactCalculator():
 
         """
         myValue = None
+        if not theImpactLayer:
+            raise InvalidParameterException()
         try:
-            myValue = (read_layer(self.make_ascii(layerpath))
-              .get_keywords(keyword))
+            myValue = theImpactLayer.get_keywords(keyword)
         except Exception, e:
             msg = 'Keyword retrieval failed for %s (%s) \n %s' % (
-                        layerpath, keyword, str(e))
+                    theImpactLayer.get_filename(), keyword, str(e))
             raise KeywordNotFoundException(msg)
         if not myValue or myValue == '':
             msg = 'No value was found for keyword %s in layer %s' % (
-                        layerpath, keyword)
+                        theImpactLayer.get_filename(), keyword)
             raise KeywordNotFoundException(msg)
         return myValue
 
-    def getStyleInfo(self, layerpath):
+    def getStyleInfo(self, theImpactLayer):
         """Get styleinfo associated with a layer.
         Args:
 
-           * layerpath - a string containing a path to a layer (raster
-            or vector)
+           * theImpactLayer - RIAB layer (raster or vector)
 
         Returns:
            A list of dictionaries containing styleinfo info for a layer.
 
         Raises:
-           KeywordNotFoundException if the keyword is not recognised.
 
+           * StyleInfoNotFoundException if the style is not found.
+           * InvalidParameterException if the paramers are not correct.
          .. todo::
             cache the layer if io is too slow
 
         """
+        myValue = theImpactLayer.get_style_info()
+        return myValue
         myValue = None
+        if not theImpactLayer:
+            raise InvalidParameterException()
         try:
-            myValue = (read_layer(self.make_ascii(layerpath))
-              .get_style_info())
+            myValue = theImpactLayer.get_style_info()
         except Exception, e:
             msg = 'Styleinfo retrieval failed for %s\n %s' % (
-                        layerpath, str(e))
+                        theImpactLayer.get_filename(), str(e))
             raise StyleInfoNotFoundException(msg)
         if not myValue or myValue == '':
-            msg = 'No styleInfo was found for keyword %s in layer %s' % (
-                        layerpath)
+            msg = 'No styleInfo was found for layer %s' % (
+                        theImpactLayer.get_filename())
             raise StyleInfoNotFoundException(msg)
         return myValue
 
@@ -276,7 +280,7 @@ class ImpactCalculatorThread(threading.Thread):
         self._exposureLayer = theExposureLayer
         self._function = theFunction
         self._notifier = CalculatorNotifier()
-        self._filename = None
+        self._impactLayer = None
         self._result = None
 
     def notifier(self):
@@ -284,10 +288,10 @@ class ImpactCalculatorThread(threading.Thread):
         thread completes."""
         return self._notifier
 
-    def filename(self):
-        """Return the filename of the output from the
+    def impactLayer(self):
+        """Return the RIAB file which is the output from the
         last run."""
-        return self._filename
+        return self._impactLayer
 
     def result(self):
         """Return the result of the last run."""
@@ -333,9 +337,8 @@ class ImpactCalculatorThread(threading.Thread):
         #settrace()
         try:
             myLayers = [self._hazardLayer, self._exposureLayer]
-            myImpactLayer = calculate_impact(layers=myLayers,
+            self._impactLayer = calculate_impact(layers=myLayers,
                                       impact_fcn=self._function)
-            self._filename = myImpactLayer.get_filename()
         except Exception, e:
             self._result = 'Error encountered:\n' + str(e)
             #  let any listending slots know we are done
