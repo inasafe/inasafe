@@ -43,3 +43,8 @@ class NoFunctionsFoundException(Exception):
 class KeywordNotFoundException(Exception):
     """Custom exception for when a no keyword can be found."""
     pass
+
+
+class StyleInfoNotFoundException(Exception):
+    """Custom exception for when a no styleInfo can be found."""
+    pass

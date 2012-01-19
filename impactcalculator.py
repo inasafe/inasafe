@@ -22,7 +22,8 @@ import os
 import unicodedata
 from riabexceptions import (InsufficientParametersException,
                             NoFunctionsFoundException,
-                            KeywordNotFoundException)
+                            KeywordNotFoundException,
+                            StyleInfoNotFoundException)
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.dirname(__file__))
@@ -141,6 +142,37 @@ class ImpactCalculator():
             msg = 'No value was found for keyword %s in layer %s' % (
                         layerpath, keyword)
             raise KeywordNotFoundException(msg)
+        return myValue
+
+    def getStyleInfo(self, layerpath):
+        """Get styleinfo associated with a layer.
+        Args:
+
+           * layerpath - a string containing a path to a layer (raster
+            or vector)
+
+        Returns:
+           A list of dictionaries containing styleinfo info for a layer.
+
+        Raises:
+           KeywordNotFoundException if the keyword is not recognised.
+
+         .. todo::
+            cache the layer if io is too slow
+
+        """
+        myValue = None
+        try:
+            myValue = (read_layer(self.make_ascii(layerpath))
+              .get_style_info())
+        except Exception, e:
+            msg = 'Styleinfo retrieval failed for %s\n %s' % (
+                        layerpath, str(e))
+            raise StyleInfoNotFoundException(msg)
+        if not myValue or myValue == '':
+            msg = 'No styleInfo was found for keyword %s in layer %s' % (
+                        layerpath)
+            raise StyleInfoNotFoundException(msg)
         return myValue
 
     def make_ascii(self, x):
@@ -298,13 +330,17 @@ class ImpactCalculatorThread(threading.Thread):
            None
            set.
         """
-
+        #settrace()
         try:
             myLayers = [self._hazardLayer, self._exposureLayer]
-            self._filename = calculate_impact(layers=myLayers,
+            myImpactLayer = calculate_impact(layers=myLayers,
                                       impact_fcn=self._function)
+            self._filename = myImpactLayer.get_filename()
         except Exception, e:
             self._result = 'Error encountered:\n' + str(e)
+            #  let any listending slots know we are done
+            self._notifier.done.emit()
+            return
 
         self._result = 'Completed successfully'
         #  let any listending slots know we are done

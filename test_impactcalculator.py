@@ -22,7 +22,8 @@ import unittest
 from impactcalculator import ImpactCalculator
 #from riabexceptions import TestNotImplementedException
 from riabexceptions import (InsufficientParametersException,
-                             KeywordNotFoundException)
+                             KeywordNotFoundException,
+                             StyleInfoNotFoundException)
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -124,6 +125,24 @@ class ImpactCalculatorTest(unittest.TestCase):
         except Exception, e:
             msg = ('Request for bogus keyword raised incorrect exception' +
                     ' type: \n %s') % str(e)
+            assert(), msg
+
+    def test_getStyleInfo(self):
+        """Test that we can get styleInfo data from a vector
+        file with a .keyword metadata file associated with it."""
+        myStyleInfo = self.calculator.getStyleInfo(self.vectorPath)
+        msg = 'Keyword request returned an empty string'
+        assert(myStyleInfo is not ''), msg
+        #print myStyleInfo
+        # Test we get an exception if keyword is not found
+        try:
+            myStyleInfo = self.calculator.getStyleInfo(
+                            'boguspath')
+        except StyleInfoNotFoundException:
+            pass  # this is good
+        except Exception, e:
+            msg = ('StyleInfo request for bogus file raised incorrect' +
+                   ' exception type: \n %s') % str(e)
             assert(), msg
 
 if __name__ == "__main__":
