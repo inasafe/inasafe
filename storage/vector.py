@@ -117,6 +117,8 @@ class Vector:
             # FIXME: Need to establish extent here
 
     def __str__(self):
+        """Render as name, number of features, geometry type
+        """
 
         g_type_str = geometrytype2string(self.geometry_type)
         return ('Vector data set: %s, %i features, geometry type '
@@ -194,6 +196,9 @@ class Vector:
 
     def get_name(self):
         return self.name
+
+    def get_filename(self):
+        return self.filename
 
     def get_keywords(self, key=None):
         """Return keywords dictionary

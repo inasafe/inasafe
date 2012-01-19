@@ -117,8 +117,9 @@ class Test_Engine(unittest.TestCase):
         IF = plugin_list[0][plugin_name]
 
         # Call calculation engine
-        impact_filename = calculate_impact(layers=[H, E],
-                                           impact_fcn=IF)
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
 
         # Do calculation manually and check result
         hazard_raster = read_layer(hazard_filename)
@@ -133,8 +134,7 @@ class Test_Engine(unittest.TestCase):
         F = 10 ** (a * H - b) * E
 
         # Verify correctness of result
-        calculated_raster = read_layer(impact_filename)
-        C = calculated_raster.get_data(nan=0)
+        C = impact_layer.get_data(nan=0)
 
         # Compare shape and extrema
         msg = ('Shape of calculated raster differs from reference raster: '
@@ -155,7 +155,7 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(C, F, rtol=1e-12, atol=1e-12), msg
 
         # Check that extrema are in range
-        xmin, xmax = calculated_raster.get_extrema()
+        xmin, xmax = impact_layer.get_extrema()
         assert numpy.alltrue(C >= xmin)
         assert numpy.alltrue(C <= xmax)
         assert numpy.alltrue(C >= 0)
@@ -181,8 +181,9 @@ class Test_Engine(unittest.TestCase):
         IF = plugin_list[0][plugin_name]
 
         # Call calculation engine
-        impact_filename = calculate_impact(layers=[H, E],
-                                           impact_fcn=IF)
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
 
         # Do calculation manually and check result
         hazard_raster = read_layer(hazard_filename)
@@ -192,8 +193,7 @@ class Test_Engine(unittest.TestCase):
         E = exposure_raster.get_data(nan=0)
 
         # Verify correctness of result
-        calculated_raster = read_layer(impact_filename)
-        C = calculated_raster.get_data(nan=0)
+        C = impact_layer.get_data(nan=0)
 
         # Calculate impact manually
         # FIXME (Ole): Jono will do this
@@ -218,7 +218,7 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(C, F, rtol=1e-12, atol=1e-12), msg
 
         # Check that extrema are in range
-        xmin, xmax = calculated_raster.get_extrema()
+        xmin, xmax = impact_layer.get_extrema()
         assert numpy.alltrue(C >= xmin)
         assert numpy.alltrue(C <= xmax)
         assert numpy.alltrue(C >= 0)
@@ -256,8 +256,9 @@ class Test_Engine(unittest.TestCase):
             IF = plugin_list[0][plugin_name]
 
             # Call impact calculation engine
-            impact_filename = calculate_impact(layers=[H, E],
-                                               impact_fcn=IF)
+            impact_layer = calculate_impact(layers=[H, E],
+                                            impact_fcn=IF)
+            impact_filename = impact_layer.get_filename()
 
             # Do calculation manually and check result
             hazard_raster = read_layer(hazard_filename)
@@ -345,8 +346,9 @@ class Test_Engine(unittest.TestCase):
 
             IF = plugin_list[0][plugin_name]
 
-            impact_filename = calculate_impact(layers=[H, E],
-                                               impact_fcn=IF)
+            impact_vector = calculate_impact(layers=[H, E],
+                                             impact_fcn=IF)
+            impact_filename = impact_vector.get_filename()
 
             # Read input data
             hazard_raster = read_layer(hazard_filename)
@@ -357,8 +359,7 @@ class Test_Engine(unittest.TestCase):
             coordinates = exposure_vector.get_geometry()
             attributes = exposure_vector.get_data()
 
-            # Read calculated result
-            impact_vector = read_layer(impact_filename)
+            # Extract calculated result
             icoordinates = impact_vector.get_geometry()
             iattributes = impact_vector.get_data()
 
@@ -482,8 +483,9 @@ class Test_Engine(unittest.TestCase):
             assert plugin_list[0].keys()[0] == plugin_name
 
             IF = plugin_list[0][plugin_name]
-            impact_filename = calculate_impact(layers=[H, E],
-                                               impact_fcn=IF)
+            impact_vector = calculate_impact(layers=[H, E],
+                                             impact_fcn=IF)
+            impact_filename = impact_vector.get_filename()
 
             # Read input data
             hazard_raster = read_layer(hazard_filename)
@@ -494,8 +496,7 @@ class Test_Engine(unittest.TestCase):
             coordinates = exposure_vector.get_geometry()
             attributes = exposure_vector.get_data()
 
-            # Read calculated result
-            impact_vector = read_layer(impact_filename)
+            # Extract calculated result
             icoordinates = impact_vector.get_geometry()
             iattributes = impact_vector.get_data()
 
@@ -542,11 +543,12 @@ class Test_Engine(unittest.TestCase):
         assert plugin_list[0].keys()[0] == plugin_name
 
         IF = plugin_list[0][plugin_name]
-        impact_filename = calculate_impact(layers=[H, E],
-                                           impact_fcn=IF)
+        impact_vector = calculate_impact(layers=[H, E],
+                                         impact_fcn=IF)
+        impact_filename = impact_vector.get_filename()
 
         # Read calculated result
-        impact_vector = read_layer(impact_filename)
+        impact_vector = read_layer(impact_filename)  # Read to have truncation
         icoordinates = impact_vector.get_geometry()
         iattributes = impact_vector.get_data()
         N = len(icoordinates)
@@ -654,8 +656,9 @@ class Test_Engine(unittest.TestCase):
         assert plugin_list[0].keys()[0] == plugin_name
 
         IF = plugin_list[0][plugin_name]
-        impact_filename = calculate_impact(layers=[H, E],
-                                           impact_fcn=IF)
+        impact_vector = calculate_impact(layers=[H, E],
+                                         impact_fcn=IF)
+        impact_filename = impact_vector.get_filename()
 
         # Read input data
         hazard_raster = read_layer(hazard_filename)
@@ -666,8 +669,7 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
         attributes = exposure_vector.get_data()
 
-        # Read calculated result
-        impact_vector = read_layer(impact_filename)
+        # Extract calculated result
         coordinates = impact_vector.get_geometry()
         attributes = impact_vector.get_data()
 
@@ -1106,15 +1108,15 @@ class Test_Engine(unittest.TestCase):
             IF = plugin_list[0][plugin_name]
 
             # Call impact calculation engine normally
-            impact_filename = calculate_impact(layers=[H, E],
-                                               impact_fcn=IF)
+            impact_layer = calculate_impact(layers=[H, E],
+                                            impact_fcn=IF)
 
             # Make keyword value empty and verify exception is raised
             expected_category = E.keywords['category']
             E.keywords['category'] = ''
             try:
-                impact_filename = calculate_impact(layers=[H, E],
-                                                   impact_fcn=IF)
+                impact_layer = calculate_impact(layers=[H, E],
+                                                impact_fcn=IF)
             except AssertionError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
@@ -1132,8 +1134,8 @@ class Test_Engine(unittest.TestCase):
                 del H.keywords['subcategory']
 
             try:
-                impact_filename = calculate_impact(layers=[H, E],
-                                                   impact_fcn=IF)
+                impact_layer = calculate_impact(layers=[H, E],
+                                                impact_fcn=IF)
             except AssertionError, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)
@@ -1168,16 +1170,16 @@ class Test_Engine(unittest.TestCase):
             IF = plugin_list[0][plugin_name]
 
             # Call impact calculation engine
-            impact_filename = calculate_impact(layers=[H, E],
-                                               impact_fcn=IF)
+            impact_vector = calculate_impact(layers=[H, E],
+                                             impact_fcn=IF)
+            impact_filename = impact_vector.get_filename()
 
             # Read hazard data for reference
             hazard_raster = read_layer(hazard_filename)
             A = hazard_raster.get_data()
             mmi_min, mmi_max = hazard_raster.get_extrema()
 
-            # Read calculated result
-            impact_vector = read_layer(impact_filename)
+            # Extract calculated result
             coordinates = impact_vector.get_geometry()
             attributes = impact_vector.get_data()
 
@@ -1243,8 +1245,8 @@ class Test_Engine(unittest.TestCase):
         plugin_list = get_plugins(plugin_name)
         IF = plugin_list[0][plugin_name]
 
-        impact_filename = calculate_impact(layers=[H, E],
-                                                   impact_fcn=IF)
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
 
     def test_erf(self):
         """Test ERF approximation

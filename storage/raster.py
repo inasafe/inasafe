@@ -94,6 +94,8 @@ class Raster:
             self.number_of_bands = 1
 
     def __str__(self):
+        """Render as name
+        """
         return self.name
 
     def __len__(self):
