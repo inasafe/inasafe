@@ -64,7 +64,8 @@ class ImpactCalculatorTest(unittest.TestCase):
             # run non threaded
             myRunner.run()
             myMessage = myRunner.result()
-            myFilename = myRunner.filename()
+            myImpactFile = myRunner.impactFile()
+            myFilename = myImpactFile.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
         except:
@@ -79,7 +80,8 @@ class ImpactCalculatorTest(unittest.TestCase):
             # wait until the thread is done
             myRunner.join()
             myMessage = myRunner.result()
-            myFilename = myRunner.filename()
+            myImpactFile = myRunner.impactFile()
+            myFilename = myImpactFile.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
         except Exception, e:
@@ -113,13 +115,17 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_getMetadata(self):
         """Test that we can get keyword data from a file with
         a .keyword metadata file associated with it."""
-        myKeyword = self.calculator.getMetadata(self.vectorPath, 'title')
+        myRunner = self.calculator.getRunner()
+        myRunner.start()
+        myRunner.join()
+        myImpactLayer = myRunner.impactLayer()
+        myKeyword = self.calculator.getMetadata(myImpactLayer, 'caption')
         msg = 'Keyword request returned an empty string'
         assert(myKeyword is not ''), msg
         # Test we get an exception if keyword is not found
         try:
             myKeyword = self.calculator.getMetadata(
-                            self.vectorPath, 'boguskeyword')
+                            myImpactLayer, 'boguskeyword')
         except KeywordNotFoundException:
             pass  # this is good
         except Exception, e:
@@ -127,10 +133,18 @@ class ImpactCalculatorTest(unittest.TestCase):
                     ' type: \n %s') % str(e)
             assert(), msg
 
-    def Xtest_getStyleInfo(self):
+    def test_getStyleInfo(self):
         """Test that we can get styleInfo data from a vector
         file with a .keyword metadata file associated with it."""
-        myStyleInfo = self.calculator.getStyleInfo(self.vectorPath)
+        myRunner = self.calculator.getRunner()
+        myRunner.start()
+        myRunner.join()
+        myImpactLayer = myRunner.impactLayer()
+        msg = ('Incorrect type returned from '
+               'myRunner.impactlayer(). Expected an impactlayer'
+               'but received a %s' % type(myImpactLayer))
+        assert hasattr(myImpactLayer, 'get_style_info'), msg
+        myStyleInfo = self.calculator.getStyleInfo(myImpactLayer)
         msg = 'Keyword request returned an empty string'
         assert(myStyleInfo is not ''), msg
         #print myStyleInfo

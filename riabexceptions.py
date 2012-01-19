@@ -48,3 +48,9 @@ class KeywordNotFoundException(Exception):
 class StyleInfoNotFoundException(Exception):
     """Custom exception for when a no styleInfo can be found."""
     pass
+
+
+class InvalidParameterException(Exception):
+    """Custom exception for when an invalid parameter is
+    passed to a functio."""
+    pass
