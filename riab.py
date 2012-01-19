@@ -19,7 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 # Import the PyQt and QGIS libraries
 from PyQt4.QtCore import QObject, SIGNAL, QCoreApplication, Qt
-from PyQt4.QtGui import QAction, QIcon
+from PyQt4.QtGui import QAction, QIcon, QApplication
 
 # Import the code for the dock
 from riabdock import RiabDock
@@ -83,13 +83,23 @@ class Riab:
         self.actionDock.setWhatsThis(QCoreApplication.translate(
                 "Risk In A Box", "Show/hide Risk In A Box dock widget"))
         self.actionDock.setCheckable(True)
-
+        self.actionDock.setChecked(True)
         QObject.connect(self.actionDock, SIGNAL("triggered()"),
                          self.showHideDockWidget)
 
-        # create dockwidget
+        self.iface.addToolBarIcon(self.actionDock)
+        self.iface.addPluginToMenu(
+            QCoreApplication.translate(
+                "Risk In A Box", "Hide / Show Dock"), self.actionDock)
+
+        # create dockwidget and tabify it with the legend
         self.dockWidget = RiabDock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
+        myLegendTab = self.iface.mainWindow().findChild(
+                                    QApplication, 'Legend')
+        self.iface.mainWindow().tabifyDockWidget(
+                        myLegendTab, self.dockWidget)
+        self.dockWidget.raise_()
 
     def unload(self):
         """Gui breakdown procedure (for QGIS plugin api).
@@ -107,6 +117,9 @@ class Riab:
         # Remove the plugin menu item and icon
         self.iface.removePluginMenu('&Risk In A Box', self.actionDock)
         self.iface.removeToolBarIcon(self.actionDock)
+        self.iface.mainWindow().removeDockWidget(self.dockWidget)
+        self.dockWidget.setVisible(False)
+        self.dockWidget.destroy()
 
     # Run method that performs all the real work
     def showHideDockWidget(self):
@@ -128,4 +141,5 @@ class Riab:
         if self.dockWidget.isVisible():
             self.dockWidget.setVisible(False)
         else:
-            self.docWidget.setVisible(True)
+            self.dockWidget.setVisible(True)
+            self.dockWidget.raise_()
