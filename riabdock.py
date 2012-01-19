@@ -212,7 +212,6 @@ class RiabDock(QtGui.QDockWidget):
                   'Function list retireval error', str(e))
 
     def accept(self):
-        #settrace()
         """Execute analysis when ok button is clicked."""
         self.showBusy()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
@@ -284,7 +283,8 @@ class RiabDock(QtGui.QDockWidget):
 
     def showBusy(self):
         """A helper function to indicate the plugin is processing."""
-        self.ui.pbnRunStop.setText('Cancel')
+        #self.ui.pbnRunStop.setText('Cancel')
+        self.ui.pbnRunStop.setEnabled(False)
         myHtml = ('<center><p>Analyzing this question...</p>' +
                    '<img src="qrc:/plugins/riab/ajax-loader.gif" />' +
                    '</center>')
@@ -293,8 +293,13 @@ class RiabDock(QtGui.QDockWidget):
 
     def hideBusy(self):
         """A helper function to indicate processing is done."""
-        self.ui.pbnRunStop.setText('Run')
+        #self.ui.pbnRunStop.setText('Run')
+        if self.runner:
+            del self.runner
+
         self.ui.grpQuestion.setEnabled(True)
+        self.ui.pbnRunStop.setEnabled(True)
+        self.repaint()
 
     def resetForm(self):
         """Reset the form contents to their onload state."""

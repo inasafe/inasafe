@@ -127,7 +127,7 @@ class ImpactCalculatorTest(unittest.TestCase):
                     ' type: \n %s') % str(e)
             assert(), msg
 
-    def test_getStyleInfo(self):
+    def Xtest_getStyleInfo(self):
         """Test that we can get styleInfo data from a vector
         file with a .keyword metadata file associated with it."""
         myStyleInfo = self.calculator.getStyleInfo(self.vectorPath)
