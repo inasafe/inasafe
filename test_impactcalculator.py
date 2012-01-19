@@ -47,15 +47,18 @@ class ImpactCalculatorTest(unittest.TestCase):
 
     def test_properties(self):
         """Test if the properties work as expected."""
+
         msg = 'Vector property incorrect.'
         assert(self.calculator.getExposureLayer() ==
                self.vectorPath), msg
+
         msg = 'Raster property incorrect.'
         assert(self.calculator.getHazardLayer() ==
                self.rasterPath), msg
+
         msg = 'Function property incorrect.'
         assert(self.calculator.getFunction() ==
-               'Flood Building Impact Function'), msg
+               'Earthquake Guidelines Function'), msg
 
     def test_run(self):
         """Test that run works as expected in non threading mode"""
