@@ -167,4 +167,3 @@ def select_template(template_name_list):
     # If we get here, none of the templates could be loaded
     raise TemplateDoesNotExist(', '.join(not_found))
 
-
