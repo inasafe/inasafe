@@ -212,6 +212,7 @@ class RiabDock(QtGui.QDockWidget):
                   'Function list retireval error', str(e))
 
     def accept(self):
+        #settrace()
         """Execute analysis when ok button is clicked."""
         self.showBusy()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")

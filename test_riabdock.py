@@ -48,13 +48,13 @@ from qgisinterface import QgisInterface
 from riabdock import RiabDock
 
 
-class RiabDialogTest(unittest.TestCase):
+class RiabDockTest(unittest.TestCase):
     """Test the risk in a box GUI"""
     app = None
 
     def setUp(self):
         """Create an app that all tests can use"""
-        print 'RiabDialogTest - setUp called'
+        print 'RiabDockTest - setUp called'
         if not self.app:
             myGuiFlag = True  # We need to enable qgis app in gui mode
             self.app = QgsApplication(sys.argv, myGuiFlag)
@@ -67,11 +67,11 @@ class RiabDialogTest(unittest.TestCase):
             self.iface = QgisInterface(self.canvas)
             myGuiContextFlag = False
 
-        self.form = RiabDialog(self.iface, myGuiContextFlag)
+        self.form = RiabDock(self.iface, myGuiContextFlag)
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""
-        print 'RiabDialogTest tearDown called'
+        print 'RiabDockTest tearDown called'
         self.form.destroy()
 
     def __del__(self):
@@ -104,13 +104,13 @@ class RiabDialogTest(unittest.TestCase):
         #QTest.mouseClick(myHazardItem, Qt.LeftButton)
         #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
-    def Xtest_defaults(self):
+    def test_defaults(self):
         """Test the GUI in its default state"""
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
         self.assertNotEqual(self.form.ui.cboFunction.currentIndex(), -1)
 
-    def Xtest_validate(self):
+    def test_validate(self):
         """Test that the validate function works as expected."""
         # First check that we DONT validate a clear form
         self.clearForm()
@@ -125,7 +125,7 @@ class RiabDialogTest(unittest.TestCase):
                      ' a populated for with selections.')
         assert(myFlag), myMessage
 
-    def Xtest_setOkButtonStatus(self):
+    def test_setOkButtonStatus(self):
         """Test that the OK button changes properly according to
         form validity."""
         # First check that we ok ISNT enabled on a clear form
@@ -141,12 +141,12 @@ class RiabDialogTest(unittest.TestCase):
                      'populated form with selections.')
         assert(myFlag), myMessage
 
-    def Xtest_run(self):
+    def test_run(self):
         """Test that the ok button works as expected"""
         # Push OK with the left mouse button
         self.clearForm()
         self.loadLayers()
-        myOkWidget = self.form.ui.buttonBox.button(self.form.ui.buttonBox.Ok)
+        myOkWidget = self.form.ui.pbnRunStop
         QTest.mouseClick(myOkWidget, QtCore.Qt.LeftButton)
         #QTest.keyClicks(
         #  self.form.ui.buttonBox.button(self.form.ui.buttonBox.Cancel), " ")
@@ -177,7 +177,7 @@ class RiabDialogTest(unittest.TestCase):
         self.canvas.setLayerSet([myVectorCanvasLayer, myRasterCanvasLayer])
         self.form.getLayers()
 
-    def Xtest_loadLayers(self):
+    def test_loadLayers(self):
         """Load some layers in the canvas, call load layers
          and verify that the list widget was update appropriately
         """
