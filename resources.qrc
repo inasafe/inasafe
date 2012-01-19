@@ -3,5 +3,6 @@
     <file>icon.png</file>
     <file>bnpb_logo.png</file>
     <file>logo-flower.png</file>
+    <file>ajax-loader.gif</file>
   </qresource>
 </RCC>

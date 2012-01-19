@@ -35,7 +35,7 @@ compile: $(UI_FILES) $(RESOURCE_FILES)
 
 %.py : %.qrc
 	pyrcc4 -o $@  $<
-	#this is ugly but the resource referenced by the rc
+	#this is ugly but the resource referenced by the ui
 	#looks for a file generated with a different name
 	cp resources.py resources_rc.py
 

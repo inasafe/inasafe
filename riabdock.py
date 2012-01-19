@@ -87,13 +87,16 @@ class RiabDock(QtGui.QDockWidget):
         self.getLayers()
         self.getFunctions()
         self.setOkButtonStatus()
-        #myButton = self.ui.buttonBox.button(self.ui.buttonBox.Help)
-        #QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-        #                        self.showHelp)
+        myButton = self.ui.pbnHelp
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                                self.showHelp)
         #self.showHelp()
-        #myButton = self.ui.buttonBox.button(self.ui.buttonBox.Reset)
-        #QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-        #                        self.resetForm)
+        myButton = self.ui.pbnRunStop
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                                self.accept)
+        QtCore.QObject.connect(self.iface.mapCanvas(),
+                               QtCore.SIGNAL('layersChanged()'),
+                               self.getLayers)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -125,7 +128,7 @@ class RiabDock(QtGui.QDockWidget):
         myExposureIndex = self.ui.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
             myMessage = 'Please ensure both Hazard layer and ' + \
-            'Exposure layer are set before clicking OK.'
+            'Exposure layer are set before clicking Run.'
             return (False, myMessage)
         else:
             return (True, '')
@@ -139,10 +142,11 @@ class RiabDock(QtGui.QDockWidget):
            None.
         Raises:
            no exceptions explicitly raised."""
-        #myButton = self.ui.buttonBox.button(self.ui.buttonBox.Ok)
-        #myFlag, myMessage = self.validate()
-        #myButton.setEnabled(myFlag)
-        #self.ui.wvResults.setHtml(myMessage)
+        myButton = self.ui.pbnRunStop
+        myFlag, myMessage = self.validate()
+        myButton.setEnabled(myFlag)
+        if myMessage is not '':
+            self.ui.wvResults.setHtml(myMessage)
 
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
@@ -160,25 +164,29 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
            no
         """
-
+        self.ui.cboHazard.clear()
+        self.ui.cboExposure.clear()
         for i in range(len(self.iface.mapCanvas().layers())):
-            myLayer = self.iface.mapCanvas().layer(i)
-            """
-            .. todo:: check raster is single band
-                      store uuid in user property of list widget for layers
-            """
-            if myLayer.type() == QgsMapLayer.RasterLayer:
-                myName = myLayer.name()
-                mySource = myLayer.source()
-                self.ui.cboHazard.addItem(myName, mySource)
+            try:
+                myLayer = self.iface.mapCanvas().layer(i)
+                """
+                .. todo:: check raster is single band
+                          store uuid in user property of list widget for layers
+                """
+                if myLayer.type() == QgsMapLayer.RasterLayer:
+                    myName = myLayer.name()
+                    mySource = myLayer.source()
+                    self.ui.cboHazard.addItem(myName, mySource)
 
-            elif myLayer.type() == QgsMapLayer.VectorLayer:
-                myName = myLayer.name()
-                mySource = myLayer.source()
-                self.ui.cboExposure.addItem(myName, mySource)
-            else:
-                pass  # skip the layer
-
+                elif myLayer.type() == QgsMapLayer.VectorLayer:
+                    myName = myLayer.name()
+                    mySource = myLayer.source()
+                    self.ui.cboExposure.addItem(myName, mySource)
+                else:
+                    pass  # skip the layer
+            except:
+                pass
+        self.setOkButtonStatus()
         return
 
     def getFunctions(self):
@@ -205,12 +213,12 @@ class RiabDock(QtGui.QDockWidget):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
-        self.enableBusyCursor()
+        self.showBusy()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
         if not myFlag:
             self.ui.wvResults.setHtml(myMessage)
-            self.disableBusyCursor()
+            self.hideBusy()
             return
         try:
             myHazardIndex = self.ui.cboHazard.currentIndex()
@@ -233,7 +241,7 @@ class RiabDock(QtGui.QDockWidget):
             self.runner.start()
 
         except Exception, e:
-            self.disableBusyCursor()
+            self.hideBusy()
             msg = 'An exception occurred when starting the model: %s' % (
                     (str(e)))
             self.ui.wvResults.setHtml(msg)
@@ -258,20 +266,34 @@ class RiabDock(QtGui.QDockWidget):
                 if not myVectorLayer.isValid():
                     msg = 'Vector layer "%s" is not valid' % myFilename
                     self.ui.wvResults.setHtml(msg)
-                    self.disableBusyCursor()
+                    self.hideBusy()
                     return
                 QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
             except Exception, e:
                 self.ui.wvResults.setHtml(myMessage + '\n' + myFilename +
                                  '\nError:\n' + str(e))
 
-        self.disableBusyCursor()
+        self.hideBusy()
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
         myPath = os.path.abspath(os.path.join(ROOT, 'docs', 'build',
                                             'html', 'README.html'))
         self.ui.wvResults.setUrl(QtCore.QUrl('file:///' + myPath))
+
+    def showBusy(self):
+        """A helper function to indicate the plugin is processing."""
+        self.ui.pbnRunStop.setText('Cancel')
+        myHtml = ('<center><p>Analyzing this question...</p>' +
+                   '<img src="qrc:/plugins/riab/ajax-loader.gif" />' +
+                   '</center>')
+        self.ui.wvResults.setHtml(myHtml)
+        self.ui.grpQuestion.setEnabled(False)
+
+    def hideBusy(self):
+        """A helper function to indicate processing is done."""
+        self.ui.pbnRunStop.setText('Run')
+        self.ui.grpQuestion.setEnabled(True)
 
     def resetForm(self):
         """Reset the form contents to their onload state."""

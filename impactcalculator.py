@@ -245,7 +245,7 @@ class ImpactCalculatorThread(threading.Thread):
         self._function = theFunction
         self._notifier = CalculatorNotifier()
         self._filename = None
-        self._message = None
+        self._result = None
 
     def notifier(self):
         """Return a qobject that will emit a 'done' signal when the

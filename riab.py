@@ -97,9 +97,10 @@ class Riab:
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(
                                     QApplication, 'Legend')
-        self.iface.mainWindow().tabifyDockWidget(
+        if myLegendTab:
+            self.iface.mainWindow().tabifyDockWidget(
                         myLegendTab, self.dockWidget)
-        self.dockWidget.raise_()
+            self.dockWidget.raise_()
 
     def unload(self):
         """Gui breakdown procedure (for QGIS plugin api).

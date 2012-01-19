@@ -45,7 +45,7 @@ from qgis.core import QgsRasterLayer
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
-from riabdialog import RiabDialog
+from riabdock import RiabDock
 
 
 class RiabDialogTest(unittest.TestCase):
