@@ -80,8 +80,8 @@ class ImpactCalculatorTest(unittest.TestCase):
             # wait until the thread is done
             myRunner.join()
             myMessage = myRunner.result()
-            myImpactFile = myRunner.impactFile()
-            myFilename = myImpactFile.get_filename()
+            myImpactLayer = myRunner.impactLayer()
+            myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
         except Exception, e:
@@ -136,28 +136,32 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_getStyleInfo(self):
         """Test that we can get styleInfo data from a vector
         file with a .keyword metadata file associated with it."""
+
         myRunner = self.calculator.getRunner()
         myRunner.start()
         myRunner.join()
         myImpactLayer = myRunner.impactLayer()
+
         msg = ('Incorrect type returned from '
                'myRunner.impactlayer(). Expected an impactlayer'
                'but received a %s' % type(myImpactLayer))
         assert hasattr(myImpactLayer, 'get_style_info'), msg
+
         myStyleInfo = self.calculator.getStyleInfo(myImpactLayer)
-        msg = 'Keyword request returned an empty string'
-        assert(myStyleInfo is not ''), msg
+        msg = 'Style inforrequest returned an empty string'
+        assert myStyleInfo is not '', msg
         #print myStyleInfo
-        # Test we get an exception if keyword is not found
-        try:
-            myStyleInfo = self.calculator.getStyleInfo(
-                            'boguspath')
-        except StyleInfoNotFoundException:
-            pass  # this is good
-        except Exception, e:
-            msg = ('StyleInfo request for bogus file raised incorrect' +
-                   ' exception type: \n %s') % str(e)
-            assert(), msg
+
+        # Test we get an exception if style info is not found
+        #try:
+        #    myStyleInfo = self.calculator.getStyleInfo(
+        #                    'boguspath')
+        #except StyleInfoNotFoundException:
+        #    pass  # this is good
+        #except Exception, e:
+        #    msg = ('StyleInfo request for bogus file raised incorrect' +
+        #           ' exception type: \n %s') % str(e)
+        #    assert(), msg
 
 if __name__ == "__main__":
     unittest.main()
