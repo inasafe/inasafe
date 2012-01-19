@@ -22,8 +22,8 @@ import unittest
 from impactcalculator import ImpactCalculator
 #from riabexceptions import TestNotImplementedException
 from riabexceptions import (InsufficientParametersException,
-                             KeywordNotFoundException,
-                             StyleInfoNotFoundException)
+                            KeywordNotFoundException,
+                            StyleInfoNotFoundException)
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -159,7 +159,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         except Exception, e:
             msg = ('StyleInfo request for bogus file raised incorrect' +
                    ' exception type: \n %s') % str(e)
-            raise Exception(msg)
+            raise StyleInfoNotFoundException(msg)
 
 if __name__ == "__main__":
     unittest.main()

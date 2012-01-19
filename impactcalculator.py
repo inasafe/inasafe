@@ -163,6 +163,11 @@ class ImpactCalculator():
         if not theImpactLayer:
             raise InvalidParameterException()
 
+        if not hasattr(theImpactLayer, 'get_style_info'):
+            msg = ('Argument "%s" was not a valid layer instance' %
+                   theImpactLayer)
+            raise StyleInfoNotFoundException(msg)
+
         try:
             myValue = theImpactLayer.get_style_info()
         except Exception, e:
