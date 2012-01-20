@@ -19,6 +19,7 @@ Implementation
    riab
    riabdock
    riabhelp
+   riabclipper
    qgsinterface
    impactcalculator
    riabexceptions
