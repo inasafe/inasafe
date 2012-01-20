@@ -31,17 +31,20 @@ import os
 # for notes on setting up the debugging environment.
 ROOT = os.path.dirname(__file__)
 PATH = os.path.abspath(os.path.join(ROOT, 'pydevpath.txt'))
-DEBUG = False
+
 if os.path.isfile(PATH):
     try:
-        PYDEVD_PATH = file(PATH, 'rt').readline()
+        PYDEVD_PATH = file(PATH, 'rt').readline().strip()
+        #print 'Found path', PYDEVD_PATH
         DEBUG = True
         import sys
         sys.path.append(PYDEVD_PATH)
+        #print 'sys.path', sys.path
         from pydevd import *
         print 'Debugging is enabled.'
         #print sys.path
-    except:
+    except Exception, e:
+        print 'Debugging was requested, but could no be enabled: %s' % str(e)
         #fail silently
         pass
 
@@ -74,7 +77,7 @@ class RiabDock(QtGui.QDockWidget):
            no exceptions explicitly raised
         """
         if DEBUG:
-            # settrace()
+            #settrace()
             pass
         QtGui.QDockWidget.__init__(self, None)
 
@@ -215,6 +218,7 @@ class RiabDock(QtGui.QDockWidget):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
+        #settrace()
         self.showBusy()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
@@ -234,13 +238,15 @@ class RiabDock(QtGui.QDockWidget):
             self.calculator.setExposureLayer(myExposureFileName)
 
             self.calculator.setFunction(self.ui.cboFunction.currentText())
-            # start it in its own thread
+
+            # Start it in its own thread
             self.runner = self.calculator.getRunner()
 
             QtCore.QObject.connect(self.runner.notifier(),
-                               QtCore.SIGNAL('done()'),
-                               self.completed)
-            self.runner.start()
+                                   QtCore.SIGNAL('done()'),
+                                   self.completed)
+            #self.runner.start()  # Run in different thread
+            self.runner.run()  # Run in same thread
 
         except Exception, e:
             self.hideBusy()
