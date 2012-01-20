@@ -39,7 +39,7 @@ if os.path.isfile(PATH):
         print 'Found path', PYDEVD_PATH
         DEBUG = True
         sys.path.append(PYDEVD_PATH)
-        
+
         from pydevd import *
         print 'Debugging is enabled.'
         #print sys.path
@@ -269,23 +269,25 @@ class RiabDock(QtGui.QDockWidget):
         else:
             myFilename = myImpactLayer.get_filename()
             try:
+                # Get tabular information from impact layer
                 myReport = self.calculator.getMetadata(
                                             myImpactLayer, 'caption')
                 self.ui.wvResults.setHtml(myMessage + '\n' +
-                        myFilename +
-                        '\n' + myReport)
-                myVectorPath = os.path.join(tempfile.gettempdir(),
-                        myFilename)
+                                          myFilename +
+                                          '\n' + myReport)
+
+                # Load impact layer into QGIS
                 myName = (self.ui.cboExposure.currentText() + 'X' +
                           self.ui.cboHazard.currentText() + 'X' +
                           self.ui.cboFunction.currentText())
-                myVectorLayer = QgsVectorLayer(myVectorPath, myName, 'ogr')
+                myVectorLayer = QgsVectorLayer(myFilename, myName, 'ogr')
                 if not myVectorLayer.isValid():
                     msg = 'Vector layer "%s" is not valid' % myFilename
                     self.ui.wvResults.setHtml(msg)
                     self.hideBusy()
                     return
 
+                # Get requested style for impact layer
                 myStyle = myImpactLayer.get_style_info()
                 myTargetField = myStyle['target_field']
                 myClasses = myStyle['style_classes']
