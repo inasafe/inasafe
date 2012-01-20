@@ -247,7 +247,7 @@ class CalculatorNotifier(QObject):
     done = pyqtSignal()
 
     def showMessage(self):
-        print "hello"
+        print 'hello'
 
 
 class ImpactCalculatorThread(threading.Thread):
@@ -347,6 +347,7 @@ class ImpactCalculatorThread(threading.Thread):
             #  let any listending slots know we are done
             self._notifier.done.emit()
             return
+
 
         self._result = 'Completed successfully'
         #  let any listending slots know we are done
