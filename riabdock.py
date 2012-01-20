@@ -49,17 +49,17 @@ if os.path.isfile(PATH):
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
                        QgsSymbolV2, QgsRendererRangeV2,
-                       QgsSymbolLayerV2Registry)
+                       QgsSymbolLayerV2Registry, QgsColorRampShader)
 from impactcalculator import ImpactCalculator
 
 
 # Helper functions
-def setVectorStyle(qgisVectorLayer, myStyle):
+def setVectorStyle(qgisVectorLayer, style):
     """Set QGIS vector style based on RIAB style dictionary
 
     Input
         qgisVectorLayer: Qgis layer
-        myStyle: Dictionary of the form as in the example below
+        style: Dictionary of the form as in the example below
 
         {'target_field': 'DMGLEVEL',
         'style_classes':
@@ -75,8 +75,8 @@ def setVectorStyle(qgisVectorLayer, myStyle):
 
     """
 
-    myTargetField = myStyle['target_field']
-    myClasses = myStyle['style_classes']
+    myTargetField = style['target_field']
+    myClasses = style['style_classes']
     myGeometryType = qgisVectorLayer.geometryType()
 
     myRangeList = []
@@ -130,6 +130,40 @@ def setVectorStyle(qgisVectorLayer, myStyle):
     myRenderer.setClassAttribute(myTargetField)
     qgisVectorLayer.setRendererV2(myRenderer)
     qgisVectorLayer.saveDefaultStyle()
+
+
+def setRasterStyle(qgisRasterLayer, style):
+    """Set QGIS raster style based on RIAB style dictionary
+
+    Input
+        qgisRasterLayer: Qgis layer
+        style: Dictionary of the form as in the example below
+
+        {
+            'style_classes':
+            [{'max': 1.5, 'colour': '#fecc5c', label': 'Low damage'},
+             {'max': 3, 'colour': '#fd8d3c', label': 'Medium damage'},
+             {'max': 5, 'colour': '#ffccgg', label': 'High damage'}
+            ]
+        }
+
+    Output
+        Sets and saves style for qgisRasterLayer
+
+    """
+    myClasses = style['style_classes']
+    myRangeList = []
+    for myClass in myClasses:
+        myMax = myClass['max']
+        myColour = myClass['colour']
+        #myLabel = myClass['label']
+        myShader = QgsColorRampShader.ColorRampItem(myMax, myColour)
+        myRangeList.append(myShader)
+    qgisRasterLayer.setColorShadingAlgorithm(
+                    QgsRasterLayer.ColorRampShader)
+    myFunction = qgisRasterLayer.rasterShader().rasterShaderFunction()
+    myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
+    myFunction.setColorRampItemList(myRangeList)
 
 
 class RiabDock(QtGui.QDockWidget):
@@ -432,12 +466,11 @@ class RiabDock(QtGui.QDockWidget):
                 qgisImpactLayer.setColorShadingAlgorithm(
                                 QgsRasterLayer.PseudoColorShader)
             else:
-                # FIXME (Ole): Set styling for rasters
-                #setRasterStyle(qgisImpactLayer, myStyle)
-                pass
+                setRasterStyle(qgisImpactLayer, myStyle)
+
         else:
             msg = ('Impact layer %s was neither a raster or a '
-                   'vector layer' % myName)
+                   'vector layer' % qgisImpactLayer.source())
             raise Exception(msg)
 
         # Finally, add layer to QGIS
