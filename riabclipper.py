@@ -23,6 +23,7 @@ from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
 from PyQt4 import QtCore
 from riabexceptions import InvalidParameterException
 
+
 def clipLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. Before calling
