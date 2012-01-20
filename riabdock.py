@@ -53,7 +53,6 @@ from qgis.core import (QgsMapLayer, QgsVectorLayer,
                 QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
                 QgsSymbolV2, QgsRendererRangeV2)
 from impactcalculator import ImpactCalculator
-import tempfile
 
 
 class RiabDock(QtGui.QDockWidget):
@@ -216,7 +215,7 @@ class RiabDock(QtGui.QDockWidget):
                 raise e
             else:
                 QtGui.QMessageBox.critical(self,
-                  'Function list retireval error', str(e))
+                  'Function list retieval error', str(e))
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
@@ -377,3 +376,5 @@ class RiabDock(QtGui.QDockWidget):
     def disableBusyCursor(self):
         """Disable the hourglass cursor"""
         QtGui.qApp.restoreOverrideCursor()
+
+        
