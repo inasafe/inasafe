@@ -26,7 +26,7 @@ from riabexceptions import InvalidParameterException
 
 def clipLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
-    extents of the current view frame. 
+    extents of the current view frame.
 
     Args:
 
@@ -39,8 +39,7 @@ def clipLayer(layer, extent):
         system temp dir).
 
     Raises:
-       InvalidParameterException if class properties for
-       layer and bounding box have not been properly set.
+       None
 
     """
     myFilename = '/tmp/test.shp'
