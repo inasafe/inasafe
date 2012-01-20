@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4 import QtGui, QtCore
 from ui_riabdock import Ui_RiabDock
+from riabhelp import RiabHelp
 import sys
 import os
 
@@ -83,6 +84,7 @@ class RiabDock(QtGui.QDockWidget):
         self.suppressDialogsFlag = guiContext
         self.calculator = ImpactCalculator()
         self.runner = None
+        self._helpDialog = None
         # Set up the user interface from Designer.
         self.ui = Ui_RiabDock()
         self.ui.setupUi(self)
@@ -337,9 +339,9 @@ class RiabDock(QtGui.QDockWidget):
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
-        myPath = os.path.abspath(os.path.join(ROOT, 'docs', 'build',
-                                            'html', 'README.html'))
-        self.ui.wvResults.setUrl(QtCore.QUrl('file:///' + myPath))
+        if not self._helpDialog:
+            self._helpDialog = RiabHelp(self.iface.mainWindow())
+        self._helpDialog.show()
 
     def showBusy(self):
         """A helper function to indicate the plugin is processing."""
