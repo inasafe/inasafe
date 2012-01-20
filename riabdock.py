@@ -290,11 +290,14 @@ class RiabDock(QtGui.QDockWidget):
 
         # Try to run completion code
         try:
-            self._completed()
+            myReport = self._completed()
         except Exception, e:
             self.ui.wvResults.setHtml('Error: %s' % str(e))
             # FIXME (Ole): We need to capture the traceback
             # and make it available as a link in the error report
+        else:
+            # On succes, display generated report
+            self.ui.wvResults.setHtml(myReport)
 
         # Hide hourglass
         self.hideBusy()
@@ -305,7 +308,7 @@ class RiabDock(QtGui.QDockWidget):
         Args
             None
         Returns
-            None
+            Report to render on canvas
         Raises
             Exceptions on a range of error conditions
 
@@ -326,8 +329,6 @@ class RiabDock(QtGui.QDockWidget):
         # Get tabular information from impact layer
         myReport = self.calculator.getMetadata(engineImpactLayer,
                                                'caption')
-        self.ui.wvResults.setHtml(myMessage + '\n' +
-                                  myFilename + '\n' + myReport)
 
         # Get requested style for impact layer of either kind
         myStyle = engineImpactLayer.get_style_info()
@@ -390,8 +391,9 @@ class RiabDock(QtGui.QDockWidget):
 
         # Finally, add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(qgisImpactLayer)
-        #QtGui.QMessageBox.information(
-        #                self, 'Risk in a box', str(myStyle))
+
+        # Return text to display in report pane
+        return myReport
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
