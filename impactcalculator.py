@@ -348,7 +348,6 @@ class ImpactCalculatorThread(threading.Thread):
             self._notifier.done.emit()
             return
 
-
         self._result = 'Completed successfully'
         #  let any listending slots know we are done
         self._notifier.done.emit()

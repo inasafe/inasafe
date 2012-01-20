@@ -1,8 +1,8 @@
 import numpy
 from numpy import nansum as sum
-from impact.plugins.core import FunctionProvider
-from impact.plugins.core import get_hazard_layer, get_exposure_layers
-from impact.storage.raster import Raster
+from impact_functions.core import FunctionProvider
+from impact_functions.core import get_hazard_layer, get_exposure_layers
+from storage.raster import Raster
 
 
 class FloodEvacuationFunction(FunctionProvider):

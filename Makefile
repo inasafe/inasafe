@@ -83,7 +83,7 @@ test_suite: compile
 	@echo "Regresssion Test Suite"
 	@echo "----------------------"
 
-	# Preceding dash means that make will continue in case of errors
+	@# Preceding dash means that make will continue in case of errors
 	-nosetests -v --with-id --with-coverage --cover-package=.,engine,storage,impact_functions
 
 
