@@ -218,7 +218,7 @@ class RiabDock(QtGui.QDockWidget):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
-        settrace()
+        #settrace()
         self.showBusy()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
@@ -277,17 +277,27 @@ class RiabDock(QtGui.QDockWidget):
                                           '\n' + myReport)
 
                 # Load impact layer into QGIS
-                myName = (self.ui.cboExposure.currentText() + 'X' +
-                          self.ui.cboHazard.currentText() + 'X' +
-                          self.ui.cboFunction.currentText())
-                myVectorLayer = QgsVectorLayer(myFilename, myName, 'ogr')
-                if not myVectorLayer.isValid():
-                    msg = 'Vector layer "%s" is not valid' % myFilename
-                    self.ui.wvResults.setHtml(msg)
-                    self.hideBusy()
-                    return
+                if myImpactLayer.is_vector:
+                    myName = (self.ui.cboExposure.currentText() + 'X' +
+                              self.ui.cboHazard.currentText() + 'X' +
+                              self.ui.cboFunction.currentText())
+                    myVectorLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+                    if not myVectorLayer.isValid():
+                        msg = 'Vector layer "%s" is not valid' % myFilename
+                        self.ui.wvResults.setHtml(msg)
+                        self.hideBusy()
+                        return
+                elif myImpactLayer.is_raster:
+                    msg = 'Raster impact layers not yet implemented'
+                    raise Exception(msg)
+                else:
+                    msg = ('Impact layer %s was neither a raster or a '
+                           'vector layer' % myName)
+                    raise Exception(msg)
+
 
                 # Get requested style for impact layer
+                # FIXME (Ole): Suggest wrapping this in separate function
                 myStyle = myImpactLayer.get_style_info()
                 myTargetField = myStyle['target_field']
                 myClasses = myStyle['style_classes']
@@ -321,7 +331,7 @@ class RiabDock(QtGui.QDockWidget):
                 #                self, 'Risk in a box', str(myStyle))
             except Exception, e:
                 self.ui.wvResults.setHtml(myMessage + '\n' + myFilename +
-                                 '\nError:\n' + str(e))
+                                          '\nError:\n' + str(e))
 
         self.hideBusy()
 
