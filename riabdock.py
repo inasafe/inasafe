@@ -221,7 +221,7 @@ class RiabDock(QtGui.QDockWidget):
             validated qgis layer or None
 
         Raises
-            nothing, but sets an error message and remove hourglass
+            Exception if layer is not valid
         """
 
         if kind == 'vector':
@@ -239,9 +239,7 @@ class RiabDock(QtGui.QDockWidget):
             return qgisLayer
         else:
             msg = 'Impact layer "%s" is not valid' % myFilename
-            self.ui.wvResults.setHtml(msg)
-            self.hideBusy()
-            return None
+            raise Exception(msg)
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
@@ -288,102 +286,110 @@ class RiabDock(QtGui.QDockWidget):
     def completed(self):
         """Slot activated when the process is done."""
 
+        # Try to run completion code
+        try:
+            self._completed()
+        except Exception, e:
+            self.ui.wvResults.setHtml('Error: %s' % str(e))
+
+        # Hide hourglass
+        self.hideBusy()
+
+
+    def _completed(self):
+        """Helper function for slot activated when the process is done.
+
+        Args
+            None
+        Returns
+            None
+        Raises
+            Exceptions on a range of error conditions
+
+        Provides report out from impact_function to canvas
+        """
+
         myMessage = self.runner.result()
         engineImpactLayer = self.runner.impactLayer()
 
         if engineImpactLayer is None:
             msg = ('No impact layer was calculated. '
                    'Error message: %s\n' % str(myMessage))
-            self.ui.wvResults.setHtml(msg)
-            self.hideBusy()
+            raise Exception(msg)
 
         # Get information from calculated impact layer
         myFilename = engineImpactLayer.get_filename()
-        try:
-            # Get tabular information from impact layer
-            myReport = self.calculator.getMetadata(engineImpactLayer,
-                                                   'caption')
-            self.ui.wvResults.setHtml(myMessage + '\n' +
-                                      myFilename + '\n' + myReport)
 
-            # Get requested style for impact layer of either kind
-            myStyle = engineImpactLayer.get_style_info()
+        # Get tabular information from impact layer
+        myReport = self.calculator.getMetadata(engineImpactLayer,
+                                               'caption')
+        self.ui.wvResults.setHtml(myMessage + '\n' +
+                                  myFilename + '\n' + myReport)
 
-            # Load impact layer into QGIS
-            myName = (self.ui.cboExposure.currentText() + 'X' +
-                      self.ui.cboHazard.currentText() + 'X' +
-                      self.ui.cboFunction.currentText())
+        # Get requested style for impact layer of either kind
+        myStyle = engineImpactLayer.get_style_info()
 
-            # Read layer as vector or raster
-            if engineImpactLayer.is_vector:
-                qgisImpactLayer = self.readLayer(myFilename, myName, 'vector')
-                if qgisImpactLayer is None:
-                    return
+        # Load impact layer into QGIS
+        myName = (self.ui.cboExposure.currentText() + 'X' +
+                  self.ui.cboHazard.currentText() + 'X' +
+                  self.ui.cboFunction.currentText())
 
-                if not myStyle:
-                    # Set default style if possible
-                    myTargetField = myClasses = None
-                else:
-                    myTargetField = myStyle['target_field']
-                    myClasses = myStyle['style_classes']
-
-                    # FIXME (Ole): Suggest wrapping this as a function
-                    myRangeList = []
-                    for myClass in myClasses:
-                        myOpacity = myClass['opacity']
-                        myMax = myClass['max']
-                        myMin = myClass['min']
-                        myColour = myClass['colour']
-                        myLabel = myClass['label']
-                        myColour = QtGui.QColor(myColour)
-                        mySymbol = QgsSymbolV2.defaultSymbol(
-                                    qgisImpactLayer.geometryType())
-                        mySymbol.setColor(myColour)
-                        mySymbol.setAlpha(myOpacity)
-                        myRange = QgsRendererRangeV2(
-                                    myMin,
-                                    myMax,
-                                    mySymbol,
-                                    myLabel)
-                        myRangeList.append(myRange)
-
-                    myRenderer = QgsGraduatedSymbolRendererV2(
-                                    '', myRangeList)
-                    myRenderer.setMode(
-                            QgsGraduatedSymbolRendererV2.EqualInterval)
-                    myRenderer.setClassAttribute(myTargetField)
-                    qgisImpactLayer.setRendererV2(myRenderer)
-                    qgisImpactLayer.saveDefaultStyle()
-
-            elif engineImpactLayer.is_raster:
-                qgisImpactLayer = self.readLayer(myFilename,
-                                                 myName, 'raster')
-                if qgisImpactLayer is None:
-                    return
-
-                if not myStyle:
-                    # Set default style if possible
-                    myClasses = None
-                else:
-                    myClasses = myStyle['style_classes']
-                    # FIXME (Ole): Set styling for rasters
-
+        # Read layer as vector or raster
+        if engineImpactLayer.is_vector:
+            qgisImpactLayer = self.readLayer(myFilename, myName, 'vector')
+            if not myStyle:
+                # Set default style if possible
+                myTargetField = myClasses = None
             else:
-                msg = ('Impact layer %s was neither a raster or a '
-                       'vector layer' % myName)
-                self.ui.wvResults.setHtml(msg)
-                self.hideBusy()
-                return
+                myTargetField = myStyle['target_field']
+                myClasses = myStyle['style_classes']
 
-            # Finally, add layer to QGIS
-            QgsMapLayerRegistry.instance().addMapLayer(qgisImpactLayer)
-            #QtGui.QMessageBox.information(
-            #                self, 'Risk in a box', str(myStyle))
-        except Exception, e:
-            self.ui.wvResults.setHtml(myMessage + '\n' + myFilename +
-                                      '\nError:\n' + str(e))
-        # Hide hourglass
-        self.hideBusy()
+                # FIXME (Ole): Suggest wrapping this as a function
+                myRangeList = []
+                for myClass in myClasses:
+                    myOpacity = myClass['opacity']
+                    myMax = myClass['max']
+                    myMin = myClass['min']
+                    myColour = myClass['colour']
+                    myLabel = myClass['label']
+                    myColour = QtGui.QColor(myColour)
+                    mySymbol = QgsSymbolV2.defaultSymbol(
+                        qgisImpactLayer.geometryType())
+                    mySymbol.setColor(myColour)
+                    mySymbol.setAlpha(myOpacity)
+                    myRange = QgsRendererRangeV2(myMin,
+                                                 myMax,
+                                                 mySymbol,
+                                                 myLabel)
+                    myRangeList.append(myRange)
+
+                myRenderer = QgsGraduatedSymbolRendererV2('', myRangeList)
+                myRenderer.setMode(
+                    QgsGraduatedSymbolRendererV2.EqualInterval)
+                myRenderer.setClassAttribute(myTargetField)
+                qgisImpactLayer.setRendererV2(myRenderer)
+                qgisImpactLayer.saveDefaultStyle()
+
+        elif engineImpactLayer.is_raster:
+            qgisImpactLayer = self.readLayer(myFilename, myName, 'raster')
+
+            if not myStyle:
+                # Set default style if possible
+                myClasses = None
+            else:
+                myClasses = myStyle['style_classes']
+                # FIXME (Ole): Set styling for rasters
+
+        else:
+            msg = ('Impact layer %s was neither a raster or a '
+                   'vector layer' % myName)
+            raise Exception(msg)
+
+
+        # Finally, add layer to QGIS
+        QgsMapLayerRegistry.instance().addMapLayer(qgisImpactLayer)
+        #QtGui.QMessageBox.information(
+        #                self, 'Risk in a box', str(myStyle))
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
