@@ -707,6 +707,9 @@ class Vector:
     def is_polygon_data(self):
         return self.is_vector and self.geometry_type == ogr.wkbPolygon
 
+    @property
+    def is_riab_spatial_object(self):
+        return True
 
 #----------------------------------
 # Helper functions for class Vector

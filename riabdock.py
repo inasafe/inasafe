@@ -51,6 +51,44 @@ from qgis.core import (QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsSymbolV2, QgsRendererRangeV2)
 from impactcalculator import ImpactCalculator
 
+# Helper functions
+def setVectorStyle(qgisVectorLayer, myStyle):
+    """Set QGIS vector style based on RIAB style dictionary
+
+    Input
+        qgisVectorLayer: Qgis layer
+        myStyle: Dictionary of the form
+
+    """
+
+    myTargetField = myStyle['target_field']
+    myClasses = myStyle['style_classes']
+
+    myRangeList = []
+    for myClass in myClasses:
+        myOpacity = myClass['opacity']
+        myMax = myClass['max']
+        myMin = myClass['min']
+        myColour = myClass['colour']
+        myLabel = myClass['label']
+        myColour = QtGui.QColor(myColour)
+        mySymbol = QgsSymbolV2.defaultSymbol(
+            qgisVectorLayer.geometryType())
+        mySymbol.setColor(myColour)
+        mySymbol.setAlpha(myOpacity)
+        myRange = QgsRendererRangeV2(myMin,
+                                     myMax,
+                                     mySymbol,
+                                     myLabel)
+        myRangeList.append(myRange)
+
+    myRenderer = QgsGraduatedSymbolRendererV2('', myRangeList)
+    myRenderer.setMode(
+        QgsGraduatedSymbolRendererV2.EqualInterval)
+    myRenderer.setClassAttribute(myTargetField)
+    qgisVectorLayer.setRendererV2(myRenderer)
+    qgisVectorLayer.saveDefaultStyle()
+
 
 class RiabDock(QtGui.QDockWidget):
     """Dock implementation class for the Risk In A Box plugin."""
@@ -211,14 +249,12 @@ class RiabDock(QtGui.QDockWidget):
                 QtGui.QMessageBox.critical(self,
                   'Function list retireval error', str(e))
 
-    def readLayer(self, myFilename, myName, kind=None):
+    def readImpactLayer(self, engineImpactLayer):
         """Helper function to read and validate layer
 
         Args
-            myFilename: absolute path to layer file
-            myName: Symbolic layer name
-            kind: either 'raster', 'vector' or None
-                  (in which case it will try either)
+            engineImpactLayer: Layer object as provided by the riab engine
+
         Returns
             validated qgis layer or None
 
@@ -226,21 +262,28 @@ class RiabDock(QtGui.QDockWidget):
             Exception if layer is not valid
         """
 
-        if kind == 'vector':
-            qgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
-        elif kind == 'raster':
-            qgisLayer = QgsRasterLayer(myFilename, myName)
-        elif kind is None:
-            # Try either
-            try:
-                qgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
-            except:
-                qgisLayer = QgsRasterLayer(myFilename, myName)
+        msg = ('Input argument must be a RIAB spatial object. '
+               'I got %s' % type(engineImpactLayer))
+        if not hasattr(engineImpactLayer, 'is_riab_spatial_object'):
+            raise Exception(msg)
+        if not engineImpactLayer.is_riab_spatial_object:
+            raise Exception(msg)
 
+        # Get associated filename and symbolic name
+        myFilename = engineImpactLayer.get_filename()
+        myName = engineImpactLayer.get_name()
+
+        # Read layer
+        if engineImpactLayer.is_vector:
+            qgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+        elif engineImpactLayer.is_raster:
+            qgisLayer = QgsRasterLayer(myFilename, myName)
+
+        # Verify that new qgis layer is valid
         if qgisLayer.isValid():
             return qgisLayer
         else:
-            msg = 'Impact layer "%s" is not valid' % myFilename
+            msg = 'Loaded impact layer "%s" is not valid' % myFilename
             raise Exception(msg)
 
     def accept(self):
@@ -323,9 +366,6 @@ class RiabDock(QtGui.QDockWidget):
                    'Error message: %s\n' % str(myMessage))
             raise Exception(msg)
 
-        # Get information from calculated impact layer
-        myFilename = engineImpactLayer.get_filename()
-
         # Get tabular information from impact layer
         myReport = self.calculator.getMetadata(engineImpactLayer,
                                                'caption')
@@ -334,56 +374,23 @@ class RiabDock(QtGui.QDockWidget):
         myStyle = engineImpactLayer.get_style_info()
 
         # Load impact layer into QGIS
-        myName = (self.ui.cboExposure.currentText() + 'X' +
-                  self.ui.cboHazard.currentText() + 'X' +
-                  self.ui.cboFunction.currentText())
+        qgisImpactLayer = self.readImpactLayer(engineImpactLayer)
 
-        # Read layer as vector or raster
+        # Determine styling for QGIS layer
         if engineImpactLayer.is_vector:
-            qgisImpactLayer = self.readLayer(myFilename, myName, 'vector')
             if not myStyle:
                 # Set default style if possible
-                myTargetField = myClasses = None
+                pass
             else:
-                myTargetField = myStyle['target_field']
-                myClasses = myStyle['style_classes']
-
-                # FIXME (Ole): Suggest wrapping this as a function
-                myRangeList = []
-                for myClass in myClasses:
-                    myOpacity = myClass['opacity']
-                    myMax = myClass['max']
-                    myMin = myClass['min']
-                    myColour = myClass['colour']
-                    myLabel = myClass['label']
-                    myColour = QtGui.QColor(myColour)
-                    mySymbol = QgsSymbolV2.defaultSymbol(
-                        qgisImpactLayer.geometryType())
-                    mySymbol.setColor(myColour)
-                    mySymbol.setAlpha(myOpacity)
-                    myRange = QgsRendererRangeV2(myMin,
-                                                 myMax,
-                                                 mySymbol,
-                                                 myLabel)
-                    myRangeList.append(myRange)
-
-                myRenderer = QgsGraduatedSymbolRendererV2('', myRangeList)
-                myRenderer.setMode(
-                    QgsGraduatedSymbolRendererV2.EqualInterval)
-                myRenderer.setClassAttribute(myTargetField)
-                qgisImpactLayer.setRendererV2(myRenderer)
-                qgisImpactLayer.saveDefaultStyle()
-
+                setVectorStyle(qgisImpactLayer, myStyle)
         elif engineImpactLayer.is_raster:
-            qgisImpactLayer = self.readLayer(myFilename, myName, 'raster')
-
             if not myStyle:
-                # Set default style if possible
+                # FIXME (Ole): Set default style if possible. I would looooove pseudocolour!!!
                 myClasses = None
             else:
-                myClasses = myStyle['style_classes']
                 # FIXME (Ole): Set styling for rasters
-
+                #setRasterStyle(qgisImpactLayer, myStyle)
+                pass
         else:
             msg = ('Impact layer %s was neither a raster or a '
                    'vector layer' % myName)

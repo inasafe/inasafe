@@ -576,3 +576,7 @@ class Raster:
     @property
     def is_vector(self):
         return False
+
+    @property
+    def is_riab_spatial_object(self):
+        return True
