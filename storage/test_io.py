@@ -61,10 +61,12 @@ class Test_IO(unittest.TestCase):
         """
 
         v = Vector(None)
-        assert v.get_name().startswith('Vector')
+        assert v.get_name().startswith('')
+        assert v.is_riab_spatial_object
 
         r = Raster(None)
-        assert r.get_name().startswith('Raster')
+        assert r.get_name().startswith('')
+        assert r.is_riab_spatial_object
 
     def test_vector_feature_count(self):
         """Number of features read from vector data is as expected

@@ -23,7 +23,7 @@ class Vector:
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
-                 name='Vector layer', keywords=None, style_info=None):
+                 name='', keywords=None, style_info=None):
         """Initialise object with either geometry or filename
 
         Input
@@ -196,6 +196,9 @@ class Vector:
 
     def get_name(self):
         return self.name
+
+    def set_name(self, name):
+        self.name = name
 
     def get_filename(self):
         return self.filename
@@ -703,6 +706,10 @@ class Vector:
     @property
     def is_polygon_data(self):
         return self.is_vector and self.geometry_type == ogr.wkbPolygon
+
+    @property
+    def is_riab_spatial_object(self):
+        return True
 
 
 #----------------------------------

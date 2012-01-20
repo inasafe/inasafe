@@ -14,13 +14,18 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+
 class Ui_RiabHelp(object):
     def setupUi(self, RiabHelp):
-        RiabHelp.setObjectName(_fromUtf8("RiabHelp"))
+        RiabHelp.setObjectName(_fromUtf8('RiabHelp'))
         RiabHelp.resize(727, 403)
-        RiabHelp.setWindowTitle(QtGui.QApplication.translate("RiabHelp", "Risk In A Box Help", None, QtGui.QApplication.UnicodeUTF8))
+        titler = QtGui.QApplication.translate('RiabHelp',
+                                              'Risk In A Box Help', None,
+                                              QtGui.QApplication.UnicodeUTF8)
+        RiabHelp.setWindowTitle(title)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/riab/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(':/plugins/riab/icon.png')),
+                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
         RiabHelp.setWindowIcon(icon)
         self.gridLayout = QtGui.QGridLayout(RiabHelp)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
@@ -35,8 +40,12 @@ class Ui_RiabHelp(object):
         self.gridLayout.addWidget(self.buttonBox, 1, 0, 1, 1)
 
         self.retranslateUi(RiabHelp)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), RiabHelp.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), RiabHelp.reject)
+        QtCore.QObject.connect(self.buttonBox,
+                               QtCore.SIGNAL(_fromUtf8('accepted()')),
+                               RiabHelp.accept)
+        QtCore.QObject.connect(self.buttonBox,
+                               QtCore.SIGNAL(_fromUtf8('rejected()')),
+                               RiabHelp.reject)
         QtCore.QMetaObject.connectSlotsByName(RiabHelp)
 
     def retranslateUi(self, RiabHelp):

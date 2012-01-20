@@ -148,6 +148,6 @@ class FloodImpactFunction(FunctionProvider):
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
-                   name='People affected',
+                   name='Penduduk terdampak oleh banjir',
                    keywords={'caption': caption})
         return R
