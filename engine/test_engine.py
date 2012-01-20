@@ -24,6 +24,7 @@ from impact_functions_for_testing import unspecific_building_impact_model
 from impact_functions_for_testing import NEXIS_building_impact_model
 from impact_functions_for_testing import HKV_flood_study
 
+
 def linear_function(x, y):
     """Auxiliary function for use with interpolation test
     """

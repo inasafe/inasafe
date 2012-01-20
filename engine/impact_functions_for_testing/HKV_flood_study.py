@@ -92,7 +92,6 @@ class FloodImpactFunction(FunctionProvider):
             I_female = I * G
             I_male = I - I_female
 
-
         # Generate text with result for this study
         total = str(int(sum(P.flat) / 1000))
         count = str(int(sum(I.flat) / 1000))
@@ -105,7 +104,6 @@ class FloodImpactFunction(FunctionProvider):
         if gender_ratio is not None:
             total_female = str(int(sum(P_female.flat) / 1000))
             total_male = str(int(sum(P_male.flat) / 1000))
-
 
             caption += ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'
@@ -123,7 +121,6 @@ class FloodImpactFunction(FunctionProvider):
         if gender_ratio is not None:
             affected_female = str(int(sum(I_female.flat) / 1000))
             affected_male = str(int(sum(I_male.flat) / 1000))
-
 
             caption += ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'
