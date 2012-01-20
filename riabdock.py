@@ -218,7 +218,7 @@ class RiabDock(QtGui.QDockWidget):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
-        settrace()
+        #settrace()
         self.showBusy()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
