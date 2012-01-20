@@ -1,5 +1,6 @@
 """
-Disaster risk assessment tool developed by AusAid - **GUI Test Cases.**
+Disaster risk assessment tool developed by AusAid and World Bank
+- **GUI Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
 
