@@ -67,6 +67,5 @@ class RiabTest(unittest.TestCase):
         myIface = QgisInterface(myCanvas)
         Riab(myIface)
 
-
 if __name__ == "__main__":
     unittest.main()

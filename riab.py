@@ -20,14 +20,12 @@ __copyright__ += 'Disaster Reduction'
 # Import the PyQt and QGIS libraries
 from PyQt4.QtCore import QObject, SIGNAL, QCoreApplication, Qt
 from PyQt4.QtGui import QAction, QIcon, QApplication
-
 # Import the code for the dock
 from riabdock import RiabDock
 """
 ..todo:: Find out how to suppress warnings as this import is needed
   but not used directly.
 """
-
 import resources
 
 

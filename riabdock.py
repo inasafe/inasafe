@@ -260,7 +260,7 @@ class RiabDock(QtGui.QDockWidget):
                 raise e
             else:
                 QtGui.QMessageBox.critical(self,
-                  'Function list retireval error', str(e))
+                  'Function list retieval error', str(e))
 
     def readImpactLayer(self, engineImpactLayer):
         """Helper function to read and validate layer
