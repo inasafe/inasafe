@@ -337,7 +337,6 @@ class ImpactCalculatorThread(threading.Thread):
            None
            set.
         """
-        #settrace()
         try:
             myLayers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculate_impact(layers=myLayers,

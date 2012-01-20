@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4 import QtGui, QtCore
 from ui_riabdock import Ui_RiabDock
+import sys
 import os
 
 # Check if a pydevpath.txt file exists in the plugin folder (you
@@ -35,11 +36,10 @@ PATH = os.path.abspath(os.path.join(ROOT, 'pydevpath.txt'))
 if os.path.isfile(PATH):
     try:
         PYDEVD_PATH = file(PATH, 'rt').readline().strip()
-        #print 'Found path', PYDEVD_PATH
+        print 'Found path', PYDEVD_PATH
         DEBUG = True
-        import sys
         sys.path.append(PYDEVD_PATH)
-        #print 'sys.path', sys.path
+        
         from pydevd import *
         print 'Debugging is enabled.'
         #print sys.path
@@ -76,9 +76,6 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
            no exceptions explicitly raised
         """
-        if DEBUG:
-            #settrace()
-            pass
         QtGui.QDockWidget.__init__(self, None)
 
         # Save reference to the QGIS interface
@@ -172,25 +169,28 @@ class RiabDock(QtGui.QDockWidget):
         self.ui.cboHazard.clear()
         self.ui.cboExposure.clear()
         for i in range(len(self.iface.mapCanvas().layers())):
-            try:
-                myLayer = self.iface.mapCanvas().layer(i)
-                """
-                .. todo:: check raster is single band
-                          store uuid in user property of list widget for layers
-                """
-                if myLayer.type() == QgsMapLayer.RasterLayer:
-                    myName = myLayer.name()
-                    mySource = myLayer.source()
-                    self.ui.cboHazard.addItem(myName, mySource)
 
-                elif myLayer.type() == QgsMapLayer.VectorLayer:
-                    myName = myLayer.name()
-                    mySource = myLayer.source()
-                    self.ui.cboExposure.addItem(myName, mySource)
-                else:
-                    pass  # skip the layer
-            except:
-                pass
+            myLayer = self.iface.mapCanvas().layer(i)
+            """
+            .. todo:: check raster is single band
+            store uuid in user property of list widget for layers
+            """
+
+            # Hazard combo
+            #if myLayer.type() == QgsMapLayer.RasterLayer:
+            myName = myLayer.name()
+            mySource = myLayer.source()
+            self.ui.cboHazard.addItem(myName, mySource)
+
+            # Exposure combo
+            #elif myLayer.type() == QgsMapLayer.VectorLayer:
+            myName = myLayer.name()
+            mySource = myLayer.source()
+            self.ui.cboExposure.addItem(myName, mySource)
+
+            #else:
+            #    pass  # skip the layer
+
         self.setOkButtonStatus()
         return
 
@@ -218,7 +218,7 @@ class RiabDock(QtGui.QDockWidget):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
-        #settrace()
+        settrace()
         self.showBusy()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
@@ -243,7 +243,7 @@ class RiabDock(QtGui.QDockWidget):
         QtCore.QObject.connect(self.runner.notifier(),
                                QtCore.SIGNAL('done()'),
                                self.completed)
-            #self.runner.start()  # Run in different thread
+        #self.runner.start()  # Run in different thread
         try:
             QtGui.qApp.setOverrideCursor(
                     QtGui.QCursor(QtCore.Qt.WaitCursor))
@@ -260,11 +260,13 @@ class RiabDock(QtGui.QDockWidget):
 
     def completed(self):
         """Slot activated when the process is done."""
-        #settrace()
         myMessage = self.runner.result()
         myImpactLayer = self.runner.impactLayer()
         myReport = ''
-        if myImpactLayer:
+        if myImpactLayer is None:
+            msg = 'No impact layer was calculated. Error message: %s\n' % str(myMessage)
+            self.ui.wvResults.setHtml(msg)
+        else:
             myFilename = myImpactLayer.get_filename()
             try:
                 myReport = self.calculator.getMetadata(
