@@ -107,7 +107,7 @@ def setVectorStyle(qgisVectorLayer, style):
                             "color_border": myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         elif myGeometryType == QGis.Polygon:
-            myMetadata = myRegistry.symbolLayerMetadata("SimplePolygon")
+            myMetadata = myRegistry.symbolLayerMetadata("SimpleFill")
             mySymbolLayer = myMetadata.createSymbolLayer({
                             "color_border": myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
