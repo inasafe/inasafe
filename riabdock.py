@@ -51,13 +51,26 @@ from qgis.core import (QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsSymbolV2, QgsRendererRangeV2)
 from impactcalculator import ImpactCalculator
 
+
 # Helper functions
 def setVectorStyle(qgisVectorLayer, myStyle):
     """Set QGIS vector style based on RIAB style dictionary
 
     Input
         qgisVectorLayer: Qgis layer
-        myStyle: Dictionary of the form
+        myStyle: Dictionary of the form as in the example below
+
+        {'target_field': 'DMGLEVEL',
+        'style_classes':
+        [{'opacity': 1, 'max': 1.5, 'colour': '#fecc5c',
+          'min': 0.5, 'label': 'Low damage'},
+        {'opacity': 1, 'max': 2.5, 'colour': '#fd8d3c',
+         'min': 1.5, 'label': 'Medium damage'},
+        {'opacity': 1, 'max': 3.5, 'colour': '#f31a1c',
+         'min': 2.5, 'label': 'High damage'}]}
+
+    Output
+        Sets and saves style for qgisVectorLayer
 
     """
 
@@ -385,7 +398,8 @@ class RiabDock(QtGui.QDockWidget):
                 setVectorStyle(qgisImpactLayer, myStyle)
         elif engineImpactLayer.is_raster:
             if not myStyle:
-                # FIXME (Ole): Set default style if possible. I would looooove pseudocolour!!!
+                # FIXME (Ole): Set default style if possible.
+                #              I would looooove pseudocolour!!!
                 myClasses = None
             else:
                 # FIXME (Ole): Set styling for rasters

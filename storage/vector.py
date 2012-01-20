@@ -711,6 +711,7 @@ class Vector:
     def is_riab_spatial_object(self):
         return True
 
+
 #----------------------------------
 # Helper functions for class Vector
 #----------------------------------
