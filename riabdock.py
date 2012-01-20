@@ -293,6 +293,8 @@ class RiabDock(QtGui.QDockWidget):
             self._completed()
         except Exception, e:
             self.ui.wvResults.setHtml('Error: %s' % str(e))
+            # FIXME (Ole): We need to capture the traceback
+            # and make it available as a link in the error report
 
         # Hide hourglass
         self.hideBusy()
