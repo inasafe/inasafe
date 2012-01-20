@@ -264,7 +264,8 @@ class RiabDock(QtGui.QDockWidget):
         myImpactLayer = self.runner.impactLayer()
         myReport = ''
         if myImpactLayer is None:
-            msg = 'No impact layer was calculated. Error message: %s\n' % str(myMessage)
+            msg = ('No impact layer was calculated. '
+                   'Error message: %s\n' % str(myMessage))
             self.ui.wvResults.setHtml(msg)
         else:
             myFilename = myImpactLayer.get_filename()
@@ -294,7 +295,6 @@ class RiabDock(QtGui.QDockWidget):
                     msg = ('Impact layer %s was neither a raster or a '
                            'vector layer' % myName)
                     raise Exception(msg)
-
 
                 # Get requested style for impact layer
                 # FIXME (Ole): Suggest wrapping this in separate function
