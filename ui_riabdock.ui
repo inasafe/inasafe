@@ -16,7 +16,7 @@
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
     <property name="leftMargin">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="topMargin">
      <number>0</number>
@@ -109,6 +109,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="label_9">
+           <property name="minimumSize">
+            <size>
+             <width>64</width>
+             <height>64</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>64</width>
@@ -119,7 +125,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resources.qrc">:/plugins/riab/bnpb_logo.png</pixmap>
+            <pixmap resource="resources.qrc">:/plugins/riab/bnpb_logo_64.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>

@@ -306,8 +306,8 @@ class RiabDock(QtGui.QDockWidget):
                 myRenderer.setMode(
                         QgsGraduatedSymbolRendererV2.EqualInterval)
                 myRenderer.setClassAttribute(myTargetField)
-
                 myVectorLayer.setRendererV2(myRenderer)
+                myVectorLayer.saveDefaultStyle()
                 QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
                 #QtGui.QMessageBox.information(
                 #                self, 'Risk in a box', str(myStyle))
