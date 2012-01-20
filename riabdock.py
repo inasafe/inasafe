@@ -46,9 +46,10 @@ if os.path.isfile(PATH):
     except Exception, e:
         print 'Debugging was requested, but could no be enabled: %s' % str(e)
 
-from qgis.core import (QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
+from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
-                       QgsSymbolV2, QgsRendererRangeV2)
+                       QgsSymbolV2, QgsRendererRangeV2,
+                       QgsSymbolLayerV2Registry)
 from impactcalculator import ImpactCalculator
 
 
@@ -76,6 +77,7 @@ def setVectorStyle(qgisVectorLayer, myStyle):
 
     myTargetField = myStyle['target_field']
     myClasses = myStyle['style_classes']
+    myGeometryType = qgisVectorLayer.geometryType()
 
     myRangeList = []
     for myClass in myClasses:
@@ -85,8 +87,35 @@ def setVectorStyle(qgisVectorLayer, myStyle):
         myColour = myClass['colour']
         myLabel = myClass['label']
         myColour = QtGui.QColor(myColour)
-        mySymbol = QgsSymbolV2.defaultSymbol(
-            qgisVectorLayer.geometryType())
+        mySymbol = QgsSymbolV2.defaultSymbol(myGeometryType)
+        myColourString = "%s, %s, %s" % (
+                         myColour.red(),
+                         myColour.green(),
+                         myColour.blue())
+        # Work around for the fact that QgsSimpleMarkerSymbolLayerV2
+        # python bindings are missing from the QGIS api.
+        # .. see:: http://hub.qgis.org/issues/4848
+        # We need to create a custom symbol layer as
+        # the border colour of a symbol can not be set otherwise
+        myRegistry = QgsSymbolLayerV2Registry.instance()
+        if myGeometryType == QGis.Point:
+            myMetadata = myRegistry.symbolLayerMetadata("SimpleMarker")
+            # note that you can get a list of available layer properties
+            # that you can set by doing e.g.
+            # QgsSimpleMarkerSymbolLayerV2.properties()
+            mySymbolLayer = myMetadata.createSymbolLayer({
+                            "color_border": myColourString})
+            mySymbol.changeSymbolLayer(0, mySymbolLayer)
+        elif myGeometryType == QGis.Polygon:
+            myMetadata = myRegistry.symbolLayerMetadata("SimplePolygon")
+            mySymbolLayer = myMetadata.createSymbolLayer({
+                            "color_border": myColourString})
+            mySymbol.changeSymbolLayer(0, mySymbolLayer)
+        else:
+            # for lines we do nothing special as the property setting
+            # below should give us what we require.
+            pass
+
         mySymbol.setColor(myColour)
         mySymbol.setAlpha(myOpacity)
         myRange = QgsRendererRangeV2(myMin,
@@ -398,9 +427,10 @@ class RiabDock(QtGui.QDockWidget):
                 setVectorStyle(qgisImpactLayer, myStyle)
         elif engineImpactLayer.is_raster:
             if not myStyle:
-                # FIXME (Ole): Set default style if possible.
-                #              I would looooove pseudocolour!!!
-                myClasses = None
+                qgisImpactLayer.setDrawingStyle(
+                                QgsRasterLayer.SingleBandPseudoColor)
+                qgisImpactLayer.setColorShadingAlgorithm(
+                                QgsRasterLayer.PseudoColorShader)
             else:
                 # FIXME (Ole): Set styling for rasters
                 #setRasterStyle(qgisImpactLayer, myStyle)
