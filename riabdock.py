@@ -226,29 +226,33 @@ class RiabDock(QtGui.QDockWidget):
             self.ui.wvResults.setHtml(myMessage)
             self.hideBusy()
             return
-        try:
-            myHazardIndex = self.ui.cboHazard.currentIndex()
-            myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
-                                 QtCore.Qt.UserRole).toString()
-            self.calculator.setHazardLayer(myHazardFileName)
+        myHazardIndex = self.ui.cboHazard.currentIndex()
+        myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
+                             QtCore.Qt.UserRole).toString()
+        self.calculator.setHazardLayer(myHazardFileName)
 
-            myExposureIndex = self.ui.cboExposure.currentIndex()
-            myExposureFileName = self.ui.cboExposure.itemData(myExposureIndex,
-                                 QtCore.Qt.UserRole).toString()
-            self.calculator.setExposureLayer(myExposureFileName)
+        myExposureIndex = self.ui.cboExposure.currentIndex()
+        myExposureFileName = self.ui.cboExposure.itemData(myExposureIndex,
+                             QtCore.Qt.UserRole).toString()
+        self.calculator.setExposureLayer(myExposureFileName)
 
-            self.calculator.setFunction(self.ui.cboFunction.currentText())
+        self.calculator.setFunction(self.ui.cboFunction.currentText())
 
-            # Start it in its own thread
-            self.runner = self.calculator.getRunner()
-
-            QtCore.QObject.connect(self.runner.notifier(),
-                                   QtCore.SIGNAL('done()'),
-                                   self.completed)
+        # Start it in its own thread
+        self.runner = self.calculator.getRunner()
+        QtCore.QObject.connect(self.runner.notifier(),
+                               QtCore.SIGNAL('done()'),
+                               self.completed)
             #self.runner.start()  # Run in different thread
+        try:
+            QtGui.qApp.setOverrideCursor(
+                    QtGui.QCursor(QtCore.Qt.WaitCursor))
+            self.repaint()
             self.runner.run()  # Run in same thread
+            QtGui.qApp.restoreOverrideCursor()
 
         except Exception, e:
+            QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             msg = 'An exception occurred when starting the model: %s' % (
                     (str(e)))
