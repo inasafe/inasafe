@@ -96,10 +96,19 @@ class FloodBuildingImpactFunction(FunctionProvider):
         caption += ('Bangunan perlu ditutup ketika banjir '
                    'lebih dari %.1f m' % threshold)
 
+        # Create style
+        style_classes = [dict(label=_('Dibuka'), min=0, max=90,
+                              colour='#1EFC7C', opacity=1),
+                         dict(label=_('Ditutup'), min=90, max=100,
+                              colour='#F31A1C', opacity=1)]
+        style_info = dict(target_field=self.target_field,
+                          style_classes=style_classes)
+
         # Create vector layer and return
         V = Vector(data=building_impact,
                    projection=E.get_projection(),
                    geometry=coordinates,
                    name='Estimated buildings affected',
-                   keywords={'caption': caption})
+                   keywords={'caption': caption},
+                   style_info=style_info)
         return V
