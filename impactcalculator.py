@@ -340,13 +340,11 @@ class ImpactCalculatorThread(threading.Thread):
         try:
             myLayers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculate_impact(layers=myLayers,
-                                      impact_fcn=self._function)
+                                                 impact_fcn=self._function)
         except Exception, e:
-            self._result = 'Error encountered:\n' + str(e)
-            #  let any listending slots know we are done
-            self._notifier.done.emit()
-            return
+            self._result = 'Calculation error encountered:\n' + str(e)
+        else:
+            self._result = 'Calculation completed successfully.'
 
-        self._result = 'Completed successfully'
-        #  let any listending slots know we are done
+        #  Let any listending slots know we are done
         self._notifier.done.emit()
