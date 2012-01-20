@@ -24,9 +24,6 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 from engine.numerics import cdf
-from impact_functions.utilities import PointZoomSize
-from impact_functions.utilities import PointClassColor
-from impact_functions.utilities import PointSymbol
 from impact_functions.mappings import osm2padang, sigab2padang
 
 
@@ -57,7 +54,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
     """
 
     def run(self, layers):
-        """Risk plugin for earthquake school damage
+        """Risk plugin for Padang building survey
         """
 
         # Extract data
