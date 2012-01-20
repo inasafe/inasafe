@@ -17,7 +17,8 @@ Implementation
    
    init
    riab
-   riabdialog
+   riabdock
+   riabhelp
    qgsinterface
    impactcalculator
    riabexceptions
@@ -29,7 +30,7 @@ Unit Tests
    :maxdepth: 2
       
    test_riab
-   test_riabdialog
+   test_riabdock
    test_impactcalculator
 
 Indices and tables

@@ -19,7 +19,8 @@ Quick Installation Guide
 
 .. note::
 
-Risk in a Box is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS), so QGIS must be installed first.
+  Risk in a Box is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS), so
+  QGIS must be installed first.
 
 
 To install the Risk in a Box, use the plugin manager in QGIS::
@@ -57,10 +58,6 @@ As such, Risk in a Box currently has some major limitations, including
    point, line and polygon types are supported.
  * All data must be provided in WGS84 geographic coordinates
  * Neither AIFDR nor GFDRR take any responsibility for the correctness of
- outputs from Risk in a Box or decisions derived as a consequence
-
-
-
-
+   outputs from Risk in a Box or decisions derived as a consequence
 
 

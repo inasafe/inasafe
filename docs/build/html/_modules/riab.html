@@ -3,14 +3,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>riab &mdash; Risk-In-A-Box v0.0.1 documentation</title>
+    <title>riab &mdash; Risk-In-A-Box 0.0.1 documentation</title>
+    
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -24,12 +27,12 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/theme_extras.js"></script>
-    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="../index.html" />
+    <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
       <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
-          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
+          <span>Risk-In-A-Box 0.0.1 documentation</span></a></h1>
         <h2 class="heading"><span>riab</span></h2>
       </div>
       <div class="topnav">
@@ -63,11 +66,11 @@
 <span class="n">__copyright__</span> <span class="o">+=</span> <span class="s">&#39;Disaster Reduction&#39;</span>
 
 <span class="c"># Import the PyQt and QGIS libraries</span>
-<span class="kn">from</span> <span class="nn">PyQt4.QtCore</span> <span class="kn">import</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">SIGNAL</span>
-<span class="kn">from</span> <span class="nn">PyQt4.QtGui</span> <span class="kn">import</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QIcon</span>
+<span class="kn">from</span> <span class="nn">PyQt4.QtCore</span> <span class="kn">import</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">,</span> <span class="n">QCoreApplication</span><span class="p">,</span> <span class="n">Qt</span>
+<span class="kn">from</span> <span class="nn">PyQt4.QtGui</span> <span class="kn">import</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QApplication</span>
 
-<span class="c"># Import the code for the dialog</span>
-<span class="kn">from</span> <span class="nn">riabdialog</span> <span class="kn">import</span> <span class="n">RiabDialog</span>
+<span class="c"># Import the code for the dock</span>
+<span class="kn">from</span> <span class="nn">riabdock</span> <span class="kn">import</span> <span class="n">RiabDock</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">..todo:: Find out how to suppress warnings as this import is needed</span>
 <span class="sd">  but not used directly.</span>
@@ -118,15 +121,34 @@
 <span class="sd">        Raises:</span>
 <span class="sd">           no exceptions explicitly raised.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># Create action that will start plugin configuration</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s">&#39;:/plugins/riab/icon.png&#39;</span><span class="p">),</span> \
-            <span class="s">&#39;Risk In A Box&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mainWindow</span><span class="p">())</span>
-        <span class="c"># connect the action to the run method</span>
-        <span class="n">QObject</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="s">&#39;triggered()&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span> <span class="o">=</span> <span class="bp">None</span>
 
-        <span class="c"># Add toolbar button and menu item</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">addToolBarIcon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">addPluginToMenu</span><span class="p">(</span><span class="s">&#39;&amp;Risk In A Box&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">)</span>
+        <span class="c"># create action for plugin dockable window (show/hide)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="s">&#39;:/plugins/riab/icon.png&#39;</span><span class="p">),</span>
+                                   <span class="s">&#39;Risk In A Box&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mainWindow</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span><span class="o">.</span><span class="n">setStatusTip</span><span class="p">(</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+                <span class="s">&quot;Risk In A Box&quot;</span><span class="p">,</span> <span class="s">&quot;Show/hide Risk In A Box dock widget&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span><span class="o">.</span><span class="n">setWhatsThis</span><span class="p">(</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+                <span class="s">&quot;Risk In A Box&quot;</span><span class="p">,</span> <span class="s">&quot;Show/hide Risk In A Box dock widget&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">QObject</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">(</span><span class="s">&quot;triggered()&quot;</span><span class="p">),</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">showHideDockWidget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">addToolBarIcon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">addPluginToMenu</span><span class="p">(</span>
+            <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+                <span class="s">&quot;Risk In A Box&quot;</span><span class="p">,</span> <span class="s">&quot;Hide / Show Dock&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span><span class="p">)</span>
+
+        <span class="c"># create dockwidget and tabify it with the legend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span> <span class="o">=</span> <span class="n">RiabDock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">addDockWidget</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">LeftDockWidgetArea</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="p">)</span>
+        <span class="n">myLegendTab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mainWindow</span><span class="p">()</span><span class="o">.</span><span class="n">findChild</span><span class="p">(</span>
+                                    <span class="n">QApplication</span><span class="p">,</span> <span class="s">&#39;Legend&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">myLegendTab</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mainWindow</span><span class="p">()</span><span class="o">.</span><span class="n">tabifyDockWidget</span><span class="p">(</span>
+                        <span class="n">myLegendTab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="o">.</span><span class="n">raise_</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Riab.unload"><a class="viewcode-back" href="../riab.html#riab.Riab.unload">[docs]</a>    <span class="k">def</span> <span class="nf">unload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gui breakdown procedure (for QGIS plugin api).</span>
@@ -142,15 +164,19 @@
 <span class="sd">           no exceptions explicitly raised.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># Remove the plugin menu item and icon</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">removePluginMenu</span><span class="p">(</span><span class="s">&#39;&amp;Risk In A Box&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">removeToolBarIcon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">removePluginMenu</span><span class="p">(</span><span class="s">&#39;&amp;Risk In A Box&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">removeToolBarIcon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actionDock</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="o">.</span><span class="n">mainWindow</span><span class="p">()</span><span class="o">.</span><span class="n">removeDockWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
 
     <span class="c"># Run method that performs all the real work</span></div>
-<div class="viewcode-block" id="Riab.run"><a class="viewcode-back" href="../riab.html#riab.Riab.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Riab.showHideDockWidget"><a class="viewcode-back" href="../riab.html#riab.Riab.showHideDockWidget">[docs]</a>    <span class="k">def</span> <span class="nf">showHideDockWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gui run procedure.</span>
 
 <span class="sd">        This slot is called when the user clicks the toolbar icon or</span>
-<span class="sd">        menu item associated with this plugin.</span>
+<span class="sd">        menu item associated with this plugin. It will hide or show</span>
+<span class="sd">        the dock depending on its current state.</span>
 
 <span class="sd">        .. see also:: :func:`Riab.initGui`.</span>
 
@@ -161,18 +187,11 @@
 <span class="sd">        Raises:</span>
 <span class="sd">           no exceptions explicitly raised.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># Create and show the dialog</span>
-        <span class="n">dlg</span> <span class="o">=</span> <span class="n">RiabDialog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iface</span><span class="p">)</span>
-
-        <span class="c"># Show the dialog</span>
-        <span class="n">dlg</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
-
-        <span class="c"># See if OK was pressed</span>
-        <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="c"># do something useful (delete the line containing pass and</span>
-            <span class="c"># substitute with your code</span>
-            <span class="k">pass</span></div></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="o">.</span><span class="n">isVisible</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dockWidget</span><span class="o">.</span><span class="n">raise_</span><span class="p">()</span></div></div>
 </pre></div>
 
       </div>
@@ -186,7 +205,7 @@
 
     <div class="footer">
         &copy; Copyright 2012, Ole Moller.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

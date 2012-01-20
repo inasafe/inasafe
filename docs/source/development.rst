@@ -43,9 +43,10 @@ process you followed for QGIS.
 Quick Installation Guide - Developers
 -------------------------------------
 
-To develop on the plugin, you first need to copy it to your local system. If you are a developer,
-the simplest way to do that is go to `~/.qgis/python/plugins` and clone risk_in_a_box from our GitHub
-repository page like this::
+To develop on the plugin, you first need to copy it to your local system. If
+you are a developer, the simplest way to do that is go to
+`~/.qgis/python/plugins` and clone risk_in_a_box from our GitHub repository
+page like this::
 
   git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
   git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)
@@ -59,7 +60,8 @@ To verify that the installation works you can run the test suite from the comman
   make test
 
 This will run all the regression tests and also highlight any code issues.
-Note that first time the tests are run they will pull 250MB of test data from our subversion repository.
+Note that first time the tests are run they will pull 250MB of test data from
+our subversion repository.
 
 To run the plugin restart QGIS. If you wish to
 an IDE for development, please refer to `this article <http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/>`_
