@@ -22,7 +22,7 @@ from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
                        QgsVectorFileWriter)
 from PyQt4 import QtCore
 from riabexceptions import InvalidParameterException
-
+import tempfile
 
 def clipLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
@@ -42,11 +42,18 @@ def clipLayer(layer, extent):
        None
 
     """
-
-    myFilename = '/tmp/test.shp'  # Tempory file to write to
     if not layer or not extent:
         msg = 'Layer or Extent passed to clip is None.'
         raise InvalidParameterException(msg)
+
+    myFilename = None
+    if layer.type() == QgsMapLayer.RasterLayer:
+        myFilename = tempfile.mkstemp('.tif', 'clip_',
+                                      tempfile.gettempdir())[1]
+    else:
+        myFilename = tempfile.mkstemp('.shp', 'clip_',
+                                      tempfile.gettempdir())[1]
+
     myDestinationCrs = QgsCoordinateReferenceSystem()
     myDestinationCrs.createFromEpsg(4326)
     myXForm = QgsCoordinateTransform(
