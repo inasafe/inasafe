@@ -23,6 +23,7 @@ from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
 from PyQt4 import QtCore
 from riabexceptions import InvalidParameterException
 
+
 def clipLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. Before calling
@@ -44,25 +45,32 @@ def clipLayer(layer, extent):
        layer and bounding box have not been properly set.
 
     """
-    myFilename = '/tmp/test.shp'
+
+    myFilename = '/tmp/test.shp'  # Tempory file to write to
     if not layer or not extent:
-        msg = "Layer or Extent passed to clip is None."
+        msg = 'Layer or Extent passed to clip is None.'
         raise InvalidParameterException(msg)
     myDestinationCrs = QgsCoordinateReferenceSystem()
     myDestinationCrs.createFromEpsg(4326)
     myXForm = QgsCoordinateTransform(
         layer.crs(), myDestinationCrs)
-    # get the clip area in the layers crs
-    myProjectedExtent = myXForm.transformBoundingBox(
-        extent)
+
+    # Get the clip area in the layers crs
+    myProjectedExtent = myXForm.transformBoundingBox(extent)
     if layer.type() == QgsMapLayer.RasterLayer:
         msg = 'Clipping not implemented for rasters yet'
         raise Exception(msg)
-    else:  # vector layer
+    else:
+        # Vector layer
         myProvider = layer.dataProvider()
+        if myProvider is None:
+            msg = ('Could not obtain data provider from '
+                   'layer "%s"' % layer.source())
+            raise Exception(msg)
+
         myAttributes = myProvider.attributeIndexes()
         myProvider.select(myAttributes,
-                            myProjectedExtent, True, True)
+                          myProjectedExtent, True, True)
         myFieldList = myProvider.fields()
         myWriter = QgsVectorFileWriter(
                 myFilename,
@@ -70,13 +78,14 @@ def clipLayer(layer, extent):
                 myFieldList,
                 layer.wkbType(),
                 myDestinationCrs,
-                "ESRI Shapefile")
+                'ESRI Shapefile')
         if myWriter.hasError() != QgsVectorFileWriter.NoError:
             msg = 'Error when creating shapefile: ', myWriter.hasError()
             raise Exception(msg)
-        # retreive every feature with its geometry and attributes
+
+        # Retreive every feature with its geometry and attributes
         myFeature = QgsFeature()
         while myProvider.nextFeature(myFeature):
             myWriter.addFeature(myFeature)
-        del myWriter  # flush to disk
-    return myFilename  # filename of created file
+        del myWriter  # Flush to disk
+    return myFilename  # Filename of created file

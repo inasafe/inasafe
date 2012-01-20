@@ -56,25 +56,33 @@ class RiabTest(unittest.TestCase):
             myUseDefaultPathFlag = True
             self.app.setPrefixPath(QGIS_PATH, myUseDefaultPathFlag)
             self.app.initQgis()
+
+            print 'QGIS settings', self.app.showSettings()
+
             self.parent = QtGui.QWidget()
             self.canvas = QgsMapCanvas(self.parent)
             self.canvas.resize(QtCore.QSize(400, 400))
             self.iface = QgisInterface(self.canvas)
             myRoot = os.path.dirname(__file__)
             self.vectorPath = os.path.join(myRoot, 'riab_test_data',
-                                       'Padang_WGS84.shp')
+                                           'Padang_WGS84.shp')
             self.rasterPath = os.path.join(myRoot, 'riab_test_data',
-                                        'Shakemap_Padang_2009.asc')
+                                           'Shakemap_Padang_2009.asc')
 
     def test_clipVector(self):
         # create a vector
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(self.vectorPath, myName, 'ogr')
-        # create a bounding box
+
+        msg = 'Did not find layer "%s" in path "%s"' % (myName,
+                                                        self.vectorPath)
+        assert myVectorLayer is not None,  msg
+
+        # Create a bounding box
         myRect = QgsRectangle(100.03, -1.14, 100.81, -0.73)
-        # clip the vector to the bbox
+        # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myRect)
-        # check the output is valid
+        # Check the output is valid
         assert(os.path.exists(myResult))
 
 
