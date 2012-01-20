@@ -299,7 +299,6 @@ class RiabDock(QtGui.QDockWidget):
         # Hide hourglass
         self.hideBusy()
 
-
     def _completed(self):
         """Helper function for slot activated when the process is done.
 
@@ -388,7 +387,6 @@ class RiabDock(QtGui.QDockWidget):
             msg = ('Impact layer %s was neither a raster or a '
                    'vector layer' % myName)
             raise Exception(msg)
-
 
         # Finally, add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(qgisImpactLayer)
