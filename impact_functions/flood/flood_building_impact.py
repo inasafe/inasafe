@@ -17,17 +17,23 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'AFFECTED'
+    plugin_name = 'Ditutup Sementara'
 
     def run(self, layers):
         """Risk plugin for tsunami population
         """
 
+        threshold = 1.0  # Flood threshold [m]
+
         # Extract data
-        H = get_hazard_layer(layers)    # Depth
+        H_org = get_hazard_layer(layers)    # Depth
         E = get_exposure_layer(layers)  # Building locations
 
+        # FIXME (Ole): interpolate does not carry original name through,
+        # so get_name gives "Vector Layer" :-)
+
         # Interpolate hazard level to building locations
-        H = H.interpolate(E)
+        H = H_org.interpolate(E)
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()
@@ -47,7 +53,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
             dep = float(depth[i].values()[0])
 
             # Tag and count
-            if dep > 0.1:
+            if dep > threshold:
                 affected = 99.5
                 count += 1
             else:
@@ -65,16 +71,30 @@ class FloodBuildingImpactFunction(FunctionProvider):
             building_impact.append(result_dict)
 
         # Create report
-        caption = ('<table border="0" width="320px">'
+        Hname = H_org.get_name()
+        Ename = E.get_name()
+        caption = ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
+                   'kemungkinan yang terjadi&#58;</b><br><br><p>' % (Hname,
+                                                                     Ename))
+        caption += ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
                     '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (> 10 cm) &#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (< 10 cm) &#58;</td><td>%i</td></tr>'
-                    '</table>' % (_('Buildings'), _('Total'),
-                                  _('All'), N,
-                                  _('Inundated'), count,
-                                  _('Not inundated'), N - count))
+                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
+                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
+                    #'   <tr><td>%s (> %.2f m) &#58;</td><td>%i</td></tr>'
+                    #'   <tr><td>%s (< %.2f m) &#58;</td><td>%i</td></tr>'
+                    '</table>' % (_('Gedung'), _('Jumlah'),
+                                  _('Semua'), N,
+                                  #_('Terendam'), threshold, count,
+                                  #_('Tidak terendam'), threshold, N - count))
+                                  _('Ditutup'), count,
+                                  _('Dibuka'), N - count))
+
+        caption += '<br>'  # Blank separation row
+        caption += '<b>Anggapan&#58;</b><br>'
+        caption += ('Bangunan perlu ditutup ketika banjir '
+                   'lebih dari %.1f m' % threshold)
 
         # Create vector layer and return
         V = Vector(data=building_impact,
