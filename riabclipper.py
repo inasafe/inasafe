@@ -24,9 +24,38 @@ from PyQt4 import QtCore
 from riabexceptions import InvalidParameterException
 import tempfile
 
+
 def clipLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame.
+
+    .. note:: Will delgate to clipVectorLayer or
+    clipRasterLayer as needed.
+
+    Args:
+
+        * theLayer - a valid QGIS vector or raster layer
+        * theExtent - a valid QgsRectangle defining the
+                      clip extent in EPSG:4326
+
+    Returns:
+        Path to the output clipped layer (placed in the
+        system temp dir).
+
+    Raises:
+       None
+
+    """
+    if layer.type() == QgsMapLayer.VectorLayer:
+        return _clipVectorLayer(layer, extent)
+    else:
+        return _clipRasterLayer(layer, extent)
+
+
+def _clipVectorLayer(layer, extent):
+    """Clip a Hazard or Exposure layer to the
+    extents of the current view frame. The layer must be a
+    vector layer or an exception will be thrown.
 
     Args:
 
@@ -46,13 +75,22 @@ def clipLayer(layer, extent):
         msg = 'Layer or Extent passed to clip is None.'
         raise InvalidParameterException(msg)
 
-    myFilename = None
-    if layer.type() == QgsMapLayer.RasterLayer:
-        myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                      tempfile.gettempdir())[1]
-    else:
-        myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                      tempfile.gettempdir())[1]
+    if layer.type() != QgsMapLayer.VectorLayer:
+        msg = ('Expected a vector layer but received a %s.' %
+                str(layer.type()))
+        raise InvalidParameterException(msg)
+
+    myFilename = tempfile.mkstemp('.shp', 'clip_',
+                                tempfile.gettempdir())[1]
+
+    if not layer or not extent:
+        msg = 'Layer or Extent passed to clip is None.'
+        raise InvalidParameterException(msg)
+
+    if layer.type() != QgsMapLayer.VectorLayer:
+        msg = ('Expected a vector layer but received a %s.' %
+                str(layer.type()))
+        raise InvalidParameterException(msg)
 
     myDestinationCrs = QgsCoordinateReferenceSystem()
     myDestinationCrs.createFromEpsg(4326)
@@ -87,9 +125,43 @@ def clipLayer(layer, extent):
             msg = 'Error when creating shapefile: ', myWriter.hasError()
             raise Exception(msg)
 
-        # Retreive every feature with its geometry and attributes
+        # Retrieve every feature with its geometry and attributes
         myFeature = QgsFeature()
         while myProvider.nextFeature(myFeature):
             myWriter.addFeature(myFeature)
         del myWriter  # Flush to disk
+    return myFilename  # Filename of created file
+
+
+def _clipRasterLayer(layer, extent):
+    """Clip a Hazard or Exposure layer to the
+    extents of the current view frame. The layer must be a
+    raster layer or an exception will be thrown.
+
+    Args:
+
+        * theLayer - a valid QGIS vector or raster layer
+        * theExtent - a valid QgsRectangle defining the
+                      clip extent in EPSG:4326
+
+    Returns:
+        Path to the output clipped layer (placed in the
+        system temp dir).
+
+    Raises:
+       None
+
+    """
+    if not layer or not extent:
+        msg = 'Layer or Extent passed to clip is None.'
+        raise InvalidParameterException(msg)
+
+    if layer.type() == QgsMapLayer.VectorLayer:
+        msg = ('Expected a vector layer but received a %s.' %
+                str(layer.type()))
+        raise InvalidParameterException(msg)
+
+    myFilename = tempfile.mkstemp('.tif', 'clip_',
+                                    tempfile.gettempdir())[1]
+
     return myFilename  # Filename of created file
