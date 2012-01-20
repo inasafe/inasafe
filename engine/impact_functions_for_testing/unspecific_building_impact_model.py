@@ -13,6 +13,8 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
                     subcategory.startswith('building')
     """
 
+    plugin_name = 'Earthquake Building Damage Function'
+
     @staticmethod
     def run(layers):
         """Risk plugin for earthquake school damage
@@ -51,6 +53,5 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
 
         V = Vector(data=building_damage,
                    projection=E.get_projection(),
-                   geometry=coordinates,
-                   name='Estimated pct damage')
+                   geometry=coordinates)
         return V

@@ -68,6 +68,20 @@ def calculate_impact(layers, impact_fcn,
     F.filename = output_filename
     F.write_to_file(output_filename)
 
+    # Establish default name (layer1 X layer1 x impact_function)
+    if not F.get_name():
+        default_name = ''
+        for layer in layers:
+            default_name += layer.name + ' X '
+
+        if hasattr(impact_function, 'plugin_name'):
+            default_name += impact_function.plugin_name
+        else:
+            # Strip trailing 'X'
+            default_name = default_name[:-2]
+
+        F.set_name(default_name)
+
     # FIXME (Ole): If we need to save style as defined by the impact_function
     #              this is the place
 

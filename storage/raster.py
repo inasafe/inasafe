@@ -18,7 +18,7 @@ class Raster:
     """
 
     def __init__(self, data=None, projection=None, geotransform=None,
-                 name='Raster layer', keywords=None, style_info=None):
+                 name='', keywords=None, style_info=None):
         """Initialise object with either data or filename
 
         Input
@@ -146,6 +146,9 @@ class Raster:
 
     def get_name(self):
         return self.name
+
+    def set_name(self, name):
+        self.name = name
 
     def get_filename(self):
         return self.filename
