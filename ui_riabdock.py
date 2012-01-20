@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riabdock.ui'
 #
-# Created: Thu Jan 19 05:24:26 2012
+# Created: Fri Jan 20 03:07:26 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -22,7 +22,7 @@ class Ui_RiabDock(object):
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.dockWidgetContents)
-        self.gridLayout.setContentsMargins(0, 0, 0, 3)
+        self.gridLayout.setContentsMargins(3, 0, 0, 3)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.grpQuestion = QtGui.QGroupBox(self.dockWidgetContents)
         self.grpQuestion.setTitle(QtGui.QApplication.translate("RiabDock", "Question", None, QtGui.QApplication.UnicodeUTF8))
@@ -65,9 +65,10 @@ class Ui_RiabDock(object):
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         self.label_9 = QtGui.QLabel(self.groupBox_2)
+        self.label_9.setMinimumSize(QtCore.QSize(64, 64))
         self.label_9.setMaximumSize(QtCore.QSize(64, 64))
         self.label_9.setText(_fromUtf8(""))
-        self.label_9.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/riab/bnpb_logo.png")))
+        self.label_9.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/riab/bnpb_logo_64.png")))
         self.label_9.setScaledContents(True)
         self.label_9.setAlignment(QtCore.Qt.AlignCenter)
         self.label_9.setObjectName(_fromUtf8("label_9"))
