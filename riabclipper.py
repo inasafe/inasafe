@@ -26,9 +26,7 @@ from riabexceptions import InvalidParameterException
 
 def clipLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
-    extents of the current view frame. Before calling
-    clip, the bounding box and layer properties of
-    this class should be set.
+    extents of the current view frame. 
 
     Args:
 

@@ -40,7 +40,6 @@ class RiabHelp(QtGui.QDialog):
            no exceptions explicitly raised
         """
         QtGui.QDialog.__init__(self, None)
-
         # Save reference to the QGIS interface
         self.iface = iface
         # Set up the user interface from Designer.
