@@ -100,7 +100,7 @@ class FloodImpactFunction(FunctionProvider):
 
         # Create report
         iname = inundation.get_name()
-        pname = poor_households.get_name()
+        pname = population.get_name()
         caption = ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
                    'kemungkinan yang terjadi&#58;</b><br><br><p>' % (iname,
                                                                      pname))
