@@ -32,7 +32,8 @@ class ImpactCalculatorTest(unittest.TestCase):
     def setUp(self):
         """Create shared resources that all tests can use"""
         self.calculator = ImpactCalculator()
-        myRoot = os.path.dirname(__file__)
+        myRoot = os.path.abspath(os.path.join(
+            os.path.dirname(__file__), '..', '..'))
         self.vectorPath = os.path.join(myRoot, 'riab_test_data',
                                    'Padang_WGS84.shp')
         self.rasterPath = os.path.join(myRoot, 'riab_test_data',

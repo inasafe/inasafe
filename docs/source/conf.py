@@ -16,6 +16,7 @@ import sys
 import os
 sys.path.append(os.path.abspath('../../'))
 sys.path.append(os.path.abspath('../../../'))
+sys.path.append(os.path.abspath('../../../gui/tests'))
 #print sys.path
 
 # If extensions (or modules to document with autodoc) are in another directory,

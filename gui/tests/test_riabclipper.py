@@ -28,6 +28,7 @@ from riabexceptions import QgisPathException
 
 ROOT = os.path.dirname(__file__)
 PATH = os.path.abspath(os.path.join(ROOT, 'qgispath.txt'))
+print "Path: ", PATH
 QGIS_PATH = None  # e.g. /usr/local if QGIS is installed under there
 if os.path.isfile(PATH):
     try:
@@ -59,11 +60,8 @@ class RiabTest(unittest.TestCase):
 
             print 'QGIS settings', self.app.showSettings()
 
-            self.parent = QtGui.QWidget()
-            self.canvas = QgsMapCanvas(self.parent)
-            self.canvas.resize(QtCore.QSize(400, 400))
-            self.iface = QgisInterface(self.canvas)
-            myRoot = os.path.dirname(__file__)
+            myRoot = os.path.abspath(os.path.join(
+                os.path.dirname(__file__), '..', '..'))
             self.vectorPath = os.path.join(myRoot, 'riab_test_data',
                                            'Padang_WGS84.shp')
             self.rasterPath = os.path.join(myRoot, 'riab_test_data',
@@ -76,7 +74,7 @@ class RiabTest(unittest.TestCase):
 
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         self.vectorPath)
-        assert myVectorLayer is not None,  msg
+        assert myVectorLayer is not None, msg
 
         # Create a bounding box
         myRect = QgsRectangle(100.03, -1.14, 100.81, -0.73)
@@ -84,6 +82,7 @@ class RiabTest(unittest.TestCase):
         myResult = clipLayer(myVectorLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))
+        del myVectorLayer
 
 
 if __name__ == '__main__':
