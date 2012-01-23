@@ -38,7 +38,7 @@ pep8: compile
 	pep8 --repeat --ignore=E203 --exclude ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py .
 
 # Run test suite only
-test_suite: compile
+test_suite: compile testdata
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
 	@echo "----------------------"
@@ -46,4 +46,7 @@ test_suite: compile
 	@# Preceding dash means that make will continue in case of errors
 	-nosetests -v --with-id --with-coverage --cover-package=.,engine,storage,impact_functions
 
-
+# Get test data
+testdata:
+	@echo "Updating test data - please hit Enter if asked for password"
+	svn co http://www.aifdr.org/svn/riab_test_data --username anonymous
