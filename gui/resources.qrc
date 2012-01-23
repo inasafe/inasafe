@@ -5,5 +5,8 @@
     <file alias="bnpb_logo_64.png">resources/img/bnpb_logo_64.png</file>
     <file alias="logo-flower.png">resources/img/logo-flower.png</file>
     <file alias="ajax-loader.gif">resources/img/ajax-loader.gif</file>
+    <file alias="css/bootstrap.css">resources/css/bootstrap.css</file>
+    <file alias="header.html">resources/header.html</file>
+    <file alias="footer.html">resources/footer.html</file>
   </qresource>
 </RCC>

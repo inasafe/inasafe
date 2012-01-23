@@ -263,7 +263,7 @@ class RiabDock(QtGui.QDockWidget):
         myFlag, myMessage = self.validate()
         myButton.setEnabled(myFlag)
         if myMessage is not '':
-            self.ui.wvResults.setHtml(myMessage)
+            displayHtml(myMessage)
 
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
@@ -382,7 +382,7 @@ class RiabDock(QtGui.QDockWidget):
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
         if not myFlag:
-            self.ui.wvResults.setHtml(myMessage)
+            displayHtml(myMessage)
             self.hideBusy()
             return
 
@@ -395,7 +395,7 @@ class RiabDock(QtGui.QDockWidget):
             self.hideBusy()
             msg = ('An exception occurred when creating the optimal'
                   'clipped layer copies: %s' % ((str(e))))
-            self.ui.wvResults.setHtml(msg)
+            displayHtml(msg)
             return
             
         self.calculator.setHazardLayer(myHazardFilename)
@@ -423,7 +423,7 @@ class RiabDock(QtGui.QDockWidget):
             self.hideBusy()
             msg = 'An exception occurred when starting the model: %s' % (
                     (str(e)))
-            self.ui.wvResults.setHtml(msg)
+            displayHtml(msg)
 
     def completed(self):
         """Slot activated when the process is done."""
@@ -432,12 +432,12 @@ class RiabDock(QtGui.QDockWidget):
         try:
             myReport = self._completed()
         except Exception, e:
-            self.ui.wvResults.setHtml('Error: %s' % str(e))
+            displayHtml('Error: %s' % str(e))
             # FIXME (Ole): We need to capture the traceback
             # and make it available as a link in the error report
         else:
             # On succes, display generated report
-            self.ui.wvResults.setHtml(myReport)
+            displayHtml(myReport)
 
         # Hide hourglass
         self.hideBusy()
@@ -513,7 +513,7 @@ class RiabDock(QtGui.QDockWidget):
         myHtml = ('<center><p>Analyzing this question...</p>' +
                    '<img src="qrc:/plugins/riab/ajax-loader.gif" />' +
                    '</center>')
-        self.ui.wvResults.setHtml(myHtml)
+        displayHtml(myHtml)
         self.ui.grpQuestion.setEnabled(False)
 
     def hideBusy(self):
@@ -586,3 +586,27 @@ class RiabDock(QtGui.QDockWidget):
         myClippedHazardPath = clipLayer(myHazardLayer, myRect)
 
         return myClippedHazardPath, myClippedExposurePath
+
+    def htmlHeader(self):
+      """Get a standard html header for wrapping content in."""
+      myFile = QFile(":/header.html")
+      if (!myFile.open(QIODevice.ReadOnly | QIODevice.Text))
+         return;
+      myHtml = myFile.readAll()
+      myFile.close()
+      return myHtml
+
+
+    def htmlFooter(self):
+      """Get a standard html footer for wrapping content in."""
+      myFile = QFile(":/footer.html")
+      if (!myFile.open(QIODevice.ReadOnly | QIODevice.Text))
+         return;
+      myHtml = myFile.readAll()
+      myFile.close()
+      return myHtml
+
+    def displayHtml(self, theMessage):
+      """Given an html snippet, wrap it in a page header and footer 
+      and display it in the wvResults widget."""
+      self.ui.wvResults.setHtml(htmlHeader() + theMessage + htmlFooter)
