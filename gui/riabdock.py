@@ -264,7 +264,7 @@ class RiabDock(QtGui.QDockWidget):
         myFlag, myMessage = self.validate()
         myButton.setEnabled(myFlag)
         if myMessage is not '':
-            displayHtml(myMessage)
+            self.displayHtml(myMessage)
 
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
@@ -293,7 +293,7 @@ class RiabDock(QtGui.QDockWidget):
             """
 
             myName = myLayer.name()
-            mySource = myLayer.id()
+            mySource = str(myLayer.id())
             self.ui.cboHazard.addItem(myName, mySource)
             self.ui.cboExposure.addItem(myName, mySource)
 
@@ -316,11 +316,7 @@ class RiabDock(QtGui.QDockWidget):
             for myFunction in myList:
                 self.ui.cboFunction.addItem(myFunction)
         except Exception, e:
-            if not self.suppressDialogsFlag:
-                raise e
-            else:
-                QtGui.QMessageBox.critical(self,
-                  'Function list retieval error', str(e))
+            raise e
 
     def readImpactLayer(self, engineImpactLayer):
         """Helper function to read and validate layer
@@ -364,7 +360,7 @@ class RiabDock(QtGui.QDockWidget):
         and return it as a QgsMapLayer"""
         myIndex = self.ui.cboHazard.currentIndex()
         myLayerId = self.ui.cboHazard.itemData(myIndex,
-                             QtCore.Qt.UserRole).toInt()
+                             QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
@@ -373,17 +369,16 @@ class RiabDock(QtGui.QDockWidget):
         userrole of the QtCombo for exposure."""
         myIndex = self.ui.cboExposure.currentIndex()
         myLayerId = self.ui.cboExposure.itemData(myIndex,
-                             QtCore.Qt.UserRole).toInt()
+                             QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
         self.showBusy()
-        #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
         if not myFlag:
-            displayHtml(myMessage)
+            self.displayHtml(myMessage)
             self.hideBusy()
             return
 
@@ -394,16 +389,14 @@ class RiabDock(QtGui.QDockWidget):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            msg = ('An exception occurred when creating the optimal'
+            msg = ('An exception occurred when creating the optimal '
                   'clipped layer copies: %s' % ((str(e))))
-            displayHtml(msg)
+            msg += get_exception_with_stacktrace(e, html=True)
+            self.displayHtml(msg)
             return
 
         self.calculator.setHazardLayer(myHazardFilename)
         self.calculator.setExposureLayer(myExposureFilename)
-        QtGui.QMessageBox.critical(self,
-                  'Optimally clipped layers: \n%s\n%s' % (
-                    myHazardFilename, myExposureFilename))
         self.calculator.setFunction(self.ui.cboFunction.currentText())
 
         # Start it in its own thread
@@ -424,7 +417,7 @@ class RiabDock(QtGui.QDockWidget):
             self.hideBusy()
             msg = 'An exception occurred when starting the model: %s' % (
                     (str(e)))
-            displayHtml(msg)
+            self.displayHtml(msg)
 
     def completed(self):
         """Slot activated when the process is done."""
@@ -435,10 +428,10 @@ class RiabDock(QtGui.QDockWidget):
         except Exception, e:
             # Display message and traceback
             msg = get_exception_with_stacktrace(e, html=True)
-            displayHtml(msg)
+            self.displayHtml(msg)
         else:
             # On succes, display generated report
-            displayHtml(myReport)
+            self.displayHtml(myReport)
 
         # Hide hourglass
         self.hideBusy()
@@ -514,7 +507,7 @@ class RiabDock(QtGui.QDockWidget):
         myHtml = ('<center><p>Analyzing this question...</p>' +
                    '<img src="qrc:/plugins/riab/ajax-loader.gif" />' +
                    '</center>')
-        displayHtml(myHtml)
+        self.displayHtml(myHtml)
         self.ui.grpQuestion.setEnabled(False)
 
     def hideBusy(self):
@@ -575,7 +568,7 @@ class RiabDock(QtGui.QDockWidget):
                                     myExtent)
         except Exception, e:
           msg = ('Failed to obtain the optimal extent given:\n%s\n%s' %
-                  ( myHazardFilename, myExposureFilename ))
+                  ( myHazardLayer.source(), myExposureLayer.source() ))
           raise Exception(msg)
         myRect = QgsRectangle(myExtent[0],
                               myExtent[1],
@@ -586,13 +579,13 @@ class RiabDock(QtGui.QDockWidget):
         # Clip the vector to the bbox
         myClippedHazardPath = clipLayer(myHazardLayer, myRect)
 
-        return myClippedHazardPath, myClippedExposurePath
+        return (myClippedHazardPath, myClippedExposurePath)
 
     def htmlHeader(self):
       """Get a standard html header for wrapping content in."""
-      myFile = QFile(":/header.html")
-      if (!myFile.open(QIODevice.ReadOnly | QIODevice.Text))
-         return;
+      myFile = QtCore.QFile(":/header.html")
+      if not myFile.open(QtCore.QIODevice.Text):
+         return '----'
       myHtml = myFile.readAll()
       myFile.close()
       return myHtml
@@ -600,9 +593,9 @@ class RiabDock(QtGui.QDockWidget):
 
     def htmlFooter(self):
       """Get a standard html footer for wrapping content in."""
-      myFile = QFile(":/footer.html")
-      if (!myFile.open(QIODevice.ReadOnly | QIODevice.Text))
-         return;
+      myFile = QtCore.QFile(":/footer.html")
+      if not myFile.open(QtCore.QIODevice.Text):
+         return '----'
       myHtml = myFile.readAll()
       myFile.close()
       return myHtml
@@ -610,4 +603,4 @@ class RiabDock(QtGui.QDockWidget):
     def displayHtml(self, theMessage):
       """Given an html snippet, wrap it in a page header and footer 
       and display it in the wvResults widget."""
-      self.ui.wvResults.setHtml(htmlHeader() + theMessage + htmlFooter)
+      self.ui.wvResults.setHtml(self.htmlHeader() + theMessage + self.htmlFooter())

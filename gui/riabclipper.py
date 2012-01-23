@@ -130,6 +130,8 @@ def _clipVectorLayer(layer, extent):
         myWriter.addFeature(myFeature)
     del myWriter  # Flush to disk
 
+    copyKeywords( layer.source(), myFilename)
+
     return myFilename  # Filename of created file
 
 
@@ -194,3 +196,14 @@ def _clipRasterLayer(layer, extent):
     # .. todo:: Check the result of the shell call is ok
 
     return myFilename  # Filename of created file
+
+def copyKeywords(sourceFile, destinationFile):
+  """Helper to copy the keywords file from a source dataset 
+  to a destination dataset.
+
+  e.g.::
+    
+    copyKeywords('foo.shp','bar.shp')
+
+  Will result in the foo.keywords file being copied to bar.keyword.""""
+
