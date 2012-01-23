@@ -38,7 +38,8 @@ if os.path.isfile(PATH):
     except Exception, e:
         raise QgisPathException
 
-from qgis.core import QgsApplication, QgsRectangle, QgsVectorLayer
+from qgis.core import (QgsApplication, QgsRectangle, QgsVectorLayer,
+    QgsRasterLayer)
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 import unittest
@@ -67,7 +68,7 @@ class RiabTest(unittest.TestCase):
             self.rasterPath = os.path.join(myRoot, 'riab_test_data',
                                            'Shakemap_Padang_2009.asc')
 
-    def Xtest_clipVector(self):
+    def test_clipVector(self):
         # create a vector
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(self.vectorPath, myName, 'ogr')
@@ -83,6 +84,23 @@ class RiabTest(unittest.TestCase):
         # Check the output is valid
         assert(os.path.exists(myResult))
         del myVectorLayer
+
+    def test_clipRaster(self):
+        # create a vector
+        myName = 'shake'
+        myRasterLayer = QgsRasterLayer(self.rasterPath, myName)
+
+        msg = 'Did not find layer "%s" in path "%s"' % (myName,
+                                                        self.rasterPath)
+        assert myRasterLayer is not None, msg
+
+        # Create a bounding box
+        myRect = QgsRectangle(97, -3, 104, 1)
+        # Clip the vector to the bbox
+        myResult = clipLayer(myRasterLayer, myRect)
+        # Check the output is valid
+        assert(os.path.exists(myResult))
+        del myRasterLayer
 
 
 if __name__ == '__main__':
