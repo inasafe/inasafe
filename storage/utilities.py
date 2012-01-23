@@ -156,20 +156,21 @@ def write_keywords(keywords, filename):
         keywords: Dictionary of keyword, value pairs
         filename: Name of keywords file. Extension expected to be .keywords
 
-    Keys must be strings
-    Values must be strings or None.
+    Keys must be strings not containing the ":" character
+    Values can be anything that can be converted to a string (using
+    Python's str function)
 
-    If value is None, only the key will be written. Otherwise key, value pairs
-    will be written as key: value
-
-    Trailing or preceding whitespace will be ignored.
+    Surrounding whitespace is removed from values, but keys are unmodified
+    The reason being that keys must always be valid for the dictionary they
+    came from. For values we have decided to be flexible and treat entries like
+    'unit:m' the same as 'unit: m', or indeed 'unit: m '.
+    Otherwise, unintentional whitespace in values would lead to surprising
+    errors in the application.
     """
 
     # Input checks
     basename, ext = os.path.splitext(filename)
 
-    # FIXME (Ole): Why don't we just pass in the filename and let
-    # this function decide the extension?
     msg = ('Unknown extension for file %s. '
            'Expected %s.keywords' % (filename, basename))
     assert ext == '.keywords', msg
@@ -178,38 +179,27 @@ def write_keywords(keywords, filename):
     fid = open(filename, 'w')
     for k, v in keywords.items():
 
+        # Create key
         msg = ('Key in keywords dictionary must be a string. '
                'I got %s with type %s' % (k, str(type(k))[1:-1]))
         assert isinstance(k, basestring), msg
 
-        key = k.strip()
-
+        key = k
         msg = ('Key in keywords dictionary must not contain the ":" '
                'character. I got "%s"' % key)
         assert ':' not in key, msg
 
-        if v is None:
-            fid.write('%s\n' % key)
-        else:
-            msg = ('Keyword value must be a string. '
-                   'For key %s, I got %s with type %s'
-                   % (k, v, str(type(v))[1:-1]))
-            assert isinstance(v, basestring), msg
+        # Create value
+        msg = ('Value in keywords dictionary must be convertible to a string. '
+               'For key %s, I got %s with type %s'
+               % (k, v, str(type(v))[1:-1]))
+        try:
+            val = str(v)
+        except:
+            raise Exception(msg)
 
-            val = v.strip()
-
-            msg = ('Value in keywords dictionary must be a string or None. '
-                   'I got %s with type %s' % (val, type(val)))
-            assert isinstance(val, basestring), msg
-
-            msg = ('Value must not contain the ":" character. '
-                   'I got "%s"' % val)
-            assert ':' not in val, msg
-
-            # FIXME (Ole): Have to remove commas (issue #148)
-            val = val.replace(',', '')
-
-            fid.write('%s: %s\n' % (key, val))
+        # Store
+        fid.write('%s: %s\n' % (key, val))
     fid.close()
 
 
@@ -220,11 +210,13 @@ def read_keywords(filename):
         filename: Name of keywords file. Extension expected to be .keywords
                   The format of one line is expected to be either
                   string: string
-                  or
-                  string
+
     Output
         keywords: Dictionary of keyword, value pairs
 
+    If filename does not exist, an empty dictionary is returned
+    Blank lines are ignored
+    Surrounding whitespace is removed from values, but keys are unmodified
     """
 
     # Input checks
@@ -237,28 +229,32 @@ def read_keywords(filename):
     if not os.path.isfile(filename):
         return {}
 
-    # Read
+    # Read all entries
     keywords = {}
     fid = open(filename, 'r')
     for line in fid.readlines():
-        text = line.strip()
+        # Remove trailing (but not preceeding!) whitespace
+        text = line.rstrip()
+
+        # Ignore blank lines
         if text == '':
             continue
 
-        fields = text.split(':')
-
-        msg = ('Keyword must be either "string" or "string: string". '
+        msg = ('Keyword entry must have the form "string: string". '
                'I got %s ' % text)
-        assert len(fields) in [1, 2], msg
+        assert ':' in text, msg
 
-        key = fields[0].strip()
+        # Get splitting point
+        idx = text.find(':')
 
-        if len(fields) == 2:
-            val = fields[1].strip()
-        else:
-            val = None
+        # Take key as everything up to the first ':'
+        key = text[:idx]
 
-        keywords[key] = val  # .replace(' ', '_')
+        # Take value as everything after the first ':'
+        val = text[idx + 1:].strip()
+
+        # Add entry to dictionary
+        keywords[key] = val
     fid.close()
 
     return keywords

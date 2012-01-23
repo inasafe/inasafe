@@ -507,7 +507,7 @@ class Test_IO(unittest.TestCase):
                       'AUTHORITY["EPSG","4326"]]')
         geotransform = (lon_ul, dlon, 0, lat_ul, 0, dlat)
         R1 = Raster(A1, projection, geotransform,
-                    keywords={'testdata': None, 'size': 'small'})
+                    keywords={'testkwd': 'testval', 'size': 'small'})
 
         msg = ('Dimensions of raster array do not match those of '
                'raster object')
@@ -934,11 +934,29 @@ class Test_IO(unittest.TestCase):
                     'category': 'impact',
                     'subcategory': 'flood',
                     'layer': None,
-                    'with spaces': 'trailing_ws '}
+                    'kw': 'with:colon',
+                    'number': 31,
+                    'with spaces': 'trailing_ws ',
+                    'trailing_ws ': 13.42,
+                    ' preceding_ws': ' mixed spaces '}
 
         write_keywords(keywords, kwd_filename)
         msg = 'Keywords file %s was not created' % kwd_filename
         assert os.path.isfile(kwd_filename), msg
+
+        fid = open(kwd_filename)
+        for line in fid.readlines():
+            fields = line.split(':')
+
+            k = fields[0]
+            v = ':'.join(fields[1:])
+
+            msg = 'Did not find keyword "%s" in %s' % (k, keywords.keys())
+            assert k in keywords, msg
+
+            msg = 'Got value "%s", expected "%s"' % (v.strip(),
+                                                     str(keywords[k]).strip())
+            assert v.strip() == str(keywords[k]).strip(), msg
 
         x = read_keywords(kwd_filename)
         os.remove(kwd_filename)
@@ -957,15 +975,12 @@ class Test_IO(unittest.TestCase):
 
         # Check keyword values
         for key in keywords:
-            refval = keywords[key]
+            refval = str(keywords[key]).strip()
             newval = x[key]
 
-            if refval is None:
-                assert newval is None
-            else:
-                msg = ('Expected value %s was not read from %s. '
-                       'I got %s' % (refval, kwd_filename, newval))
-                assert refval.strip() == newval, msg
+            msg = ('Expected value "%s" was not read from "%s". '
+                   'I got "%s"' % (refval, kwd_filename, newval))
+            assert refval == newval, msg
 
         # Check catching of wrong extension
         kwd_filename = unique_filename(suffix='.xxxx')
@@ -1011,15 +1026,13 @@ class Test_IO(unittest.TestCase):
 
         # Colon in value
         kwd_filename = unique_filename(suffix='.keywords')
-        keywords = {'with_a_colon': 'take: that!'}  # This one is illegal
+        keywords = {'with_a_colon': 'take: that!'}  # This one is ok
+        k = 'with_a_colon'
 
-        try:
-            write_keywords(keywords, kwd_filename)
-        except AssertionError:
-            pass
-        else:
-            msg = 'Colon in keywords value %s was not caught' % keywords
-            raise Exception(msg)
+        write_keywords(keywords, kwd_filename)
+        x = read_keywords(kwd_filename)
+        assert k in x.keys()
+        assert x[k] == keywords[k]
 
     def test_bounding_box_conversions(self):
         """Bounding boxes can be converted between list and string
