@@ -7,6 +7,7 @@ Code documentation
 * :doc:`api-docs`
 * :doc:`todo`
 
+Issue tracker: https://github.com/AIFDR/risk_in_a_box/issues
 
 
 Requirements to develop Risk-in-a-Box
