@@ -260,8 +260,7 @@ def get_bounding_boxes(haz_data, exp_data, req_bbox):
         haz_layer = read_layer(haz_data)
     else:
         haz_layer = haz_data
-
-    msg = 'Input data %s was not a valid spatial object' % str(haz_data)
+    msg = 'Input data "%s" was not a valid spatial object' % str(haz_layer)
     assert (hasattr(haz_layer, 'is_riab_spatial_object') and
             haz_layer.is_riab_spatial_object), msg
 
@@ -269,8 +268,7 @@ def get_bounding_boxes(haz_data, exp_data, req_bbox):
         exp_layer = read_layer(exp_data)
     else:
         exp_layer = exp_data
-    msg = 'Input data %s was not a valid spatial object' % str(exp_data)
-
+    msg = 'Input data "%s" was not a valid spatial object' % str(exp_layer)
     assert (hasattr(exp_layer, 'is_riab_spatial_object') and
             exp_layer.is_riab_spatial_object), msg
 

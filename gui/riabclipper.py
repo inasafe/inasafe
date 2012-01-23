@@ -84,7 +84,7 @@ def _clipVectorLayer(layer, extent):
         raise InvalidParameterException(msg)
 
     myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                tempfile.gettempdir())[1]
+                                  tempfile.gettempdir())[1]
 
     if not layer or not extent:
         msg = 'Layer or Extent passed to clip is None.'
@@ -92,47 +92,44 @@ def _clipVectorLayer(layer, extent):
 
     if layer.type() != QgsMapLayer.VectorLayer:
         msg = ('Expected a vector layer but received a %s.' %
-                str(layer.type()))
+               str(layer.type()))
         raise InvalidParameterException(msg)
 
     myDestinationCrs = QgsCoordinateReferenceSystem()
     myDestinationCrs.createFromEpsg(4326)
-    myXForm = QgsCoordinateTransform(
-        layer.crs(), myDestinationCrs)
+    myXForm = QgsCoordinateTransform(layer.crs(),
+                                     myDestinationCrs)
 
     # Get the clip area in the layers crs
     myProjectedExtent = myXForm.transformBoundingBox(extent)
-    if layer.type() == QgsMapLayer.RasterLayer:
-        msg = 'Clipping not implemented for rasters yet'
+
+    # Get vector layer
+    myProvider = layer.dataProvider()
+    if myProvider is None:
+        msg = ('Could not obtain data provider from '
+               'layer "%s"' % layer.source())
         raise Exception(msg)
-    else:
-        # Vector layer
-        myProvider = layer.dataProvider()
-        if myProvider is None:
-            msg = ('Could not obtain data provider from '
-                   'layer "%s"' % layer.source())
-            raise Exception(msg)
 
-        myAttributes = myProvider.attributeIndexes()
-        myProvider.select(myAttributes,
-                          myProjectedExtent, True, True)
-        myFieldList = myProvider.fields()
-        myWriter = QgsVectorFileWriter(
-                myFilename,
-                'UTF-8',
-                myFieldList,
-                layer.wkbType(),
-                myDestinationCrs,
-                'ESRI Shapefile')
-        if myWriter.hasError() != QgsVectorFileWriter.NoError:
-            msg = 'Error when creating shapefile: ', myWriter.hasError()
-            raise Exception(msg)
+    myAttributes = myProvider.attributeIndexes()
+    myProvider.select(myAttributes,
+                      myProjectedExtent, True, True)
+    myFieldList = myProvider.fields()
+    myWriter = QgsVectorFileWriter(myFilename,
+                                   'UTF-8',
+                                   myFieldList,
+                                   layer.wkbType(),
+                                   myDestinationCrs,
+                                   'ESRI Shapefile')
+    if myWriter.hasError() != QgsVectorFileWriter.NoError:
+        msg = 'Error when creating shapefile: ', myWriter.hasError()
+        raise Exception(msg)
 
-        # Retrieve every feature with its geometry and attributes
-        myFeature = QgsFeature()
-        while myProvider.nextFeature(myFeature):
-            myWriter.addFeature(myFeature)
-        del myWriter  # Flush to disk
+    # Retrieve every feature with its geometry and attributes
+    myFeature = QgsFeature()
+    while myProvider.nextFeature(myFeature):
+        myWriter.addFeature(myFeature)
+    del myWriter  # Flush to disk
+
     return myFilename  # Filename of created file
 
 
@@ -161,18 +158,18 @@ def _clipRasterLayer(layer, extent):
         msg = 'Layer or Extent passed to clip is None.'
         raise InvalidParameterException(msg)
 
-    if layer.type() == QgsMapLayer.VectorLayer:
-        msg = ('Expected a vector layer but received a %s.' %
-                str(layer.type()))
+    if layer.type() == QgsMapLayer.RasterLayer:
+        msg = ('Expected a raster layer but received a %s.' %
+               str(layer.type()))
         raise InvalidParameterException(msg)
 
     mySource = layer.source()
 
-    # get the crs of the layer so we can check if it is not yet in EPSG:4326
+    # Get the crs of the layer so we can check if it is not yet in EPSG:4326
     myCrs = layer.crs()
 
     if myCrs.epsg() is not 4326:
-            # reproject the layer to wgs84
+            # Reproject the layer to wgs84
         myFilename = tempfile.mkstemp('.tif', 'prj_',
                                 tempfile.gettempdir())[1]
         myCommand = 'gdalwarp -t_srs EPSG:4326 -r near -of GTiff %s %s' % (
@@ -185,16 +182,15 @@ def _clipRasterLayer(layer, extent):
 
     myFilename = tempfile.mkstemp('.tif', 'clip_',
                                     tempfile.gettempdir())[1]
-    myCommand = 'gdal_translate -projwin %f %f %f %f -of GTiff %s %s' % (
-        extent.xMinimum(),
-        extent.yMaximum(),
-        extent.xMaximum(),
-        extent.yMinimum(),
-        mySource,
-        myFilename)
+    myCommand = ('gdal_translate -projwin %f %f %f %f -of GTiff '
+                 '%s %s' % (extent.xMinimum(),
+                            extent.yMaximum(),
+                            extent.xMaximum(),
+                            extent.yMinimum(),
+                            mySource,
+                            myFilename))
     print 'Command: ', myCommand
     myResult = call(myCommand, shell=True)
     # .. todo:: Check the result of the shell call is ok
 
     return myFilename  # Filename of created file
-

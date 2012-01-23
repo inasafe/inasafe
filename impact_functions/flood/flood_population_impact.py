@@ -144,10 +144,24 @@ class FloodImpactFunction(FunctionProvider):
         caption += ('- Penduduk dianggap terdampak ketika '
                     'banjir lebih dari %.1f m.' % threshold)
 
+        # Create style
+        style_classes = [dict(colour='#ffffff', quantity=-9999, opacity=0),
+                         dict(colour='#38A800', quantity=2, opacity=0),
+                         dict(colour='#38A800', quantity=5, opacity=1),
+                         dict(colour='#79C900', quantity=10, opacity=1),
+                         dict(colour='#CEED00', quantity=20, opacity=1),
+                         dict(colour='#FFCC00', quantity=50, opacity=1),
+                         dict(colour='#FF6600', quantity=100, opacity=1),
+                         dict(colour='#FF0000', quantity=200, opacity=1),
+                         dict(colour='#7A0000', quantity=300, opacity=1)]
+        style_info = dict(target_field=None,
+                          style_classes=style_classes)
+
         # Create raster object and return
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name='Penduduk terdampak oleh banjir',
-                   keywords={'caption': caption})
+                   keywords={'caption': caption},
+                   style_info=style_info)
         return R

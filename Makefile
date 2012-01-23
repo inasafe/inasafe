@@ -44,7 +44,7 @@ test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	-nosetests -v --with-id --with-coverage --cover-package=.,engine,storage,impact_functions
+	-nosetests -v --with-id --with-coverage --cover-package=gui,engine,storage,impact_functions
 
 # Get test data
 testdata:
