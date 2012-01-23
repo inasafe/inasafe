@@ -22,6 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
+from utilities import get_exception_with_stacktrace
 import sys
 import os
 
@@ -366,7 +367,7 @@ class RiabDock(QtGui.QDockWidget):
             raise Exception(msg)
 
     def getHazardFilename(self):
-        """Obtain the name of the path to the hazard file from the 
+        """Obtain the name of the path to the hazard file from the
         userrole of the QtCombo for exposure."""
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myHazardFilename = self.ui.cboHazard.itemData(myHazardIndex,
@@ -375,7 +376,7 @@ class RiabDock(QtGui.QDockWidget):
 
 
     def getExposureFilename(self):
-        """Obtain the name of the path to the exposure file from the 
+        """Obtain the name of the path to the exposure file from the
         userrole of the QtCombo for exposure."""
         myExposureIndex = self.ui.cboExposure.currentIndex()
         myExposureFilename = self.ui.cboExposure.itemData(myExposureIndex,
@@ -403,7 +404,7 @@ class RiabDock(QtGui.QDockWidget):
                   'clipped layer copies: %s' % ((str(e))))
             self.ui.wvResults.setHtml(msg)
             return
-            
+
         self.calculator.setHazardLayer(myHazardFilename)
         self.calculator.setExposureLayer(myExposureFilename)
         QtGui.QMessageBox.critical(self,
@@ -438,9 +439,9 @@ class RiabDock(QtGui.QDockWidget):
         try:
             myReport = self._completed()
         except Exception, e:
-            self.ui.wvResults.setHtml('Error: %s' % str(e))
-            # FIXME (Ole): We need to capture the traceback
-            # and make it available as a link in the error report
+            # Display message and traceback
+            msg = get_exception_with_stacktrace(e, html=True)
+            self.ui.wvResults.setHtml(msg)
         else:
             # On succes, display generated report
             self.ui.wvResults.setHtml(myReport)
@@ -554,13 +555,13 @@ class RiabDock(QtGui.QDockWidget):
         to ensure that the extent is tenable, includes data from both
         etc.
 
-        The result of this function will be two layers which are 
+        The result of this function will be two layers which are
         clipped if needed.
 
         Args:
             None
         Returns:
-            A two-tuple containing the paths to the clipped hazard and 
+            A two-tuple containing the paths to the clipped hazard and
             exposure layers.
 
         Raises:

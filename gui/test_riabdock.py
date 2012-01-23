@@ -23,6 +23,7 @@ import unittest
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
 from gui.riabexceptions import QgisPathException
+from utilities import get_exception_with_stacktrace
 
 # Check if a qgispath.txt file exists in the plugin folder (you
 # need to rename it from qgispath.txt.templ in the standard plugin
@@ -192,6 +193,24 @@ class RiabDockTest(unittest.TestCase):
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
               self.form.ui.cboExposure.count()
         self.assertEqual(self.form.ui.cboExposure.count(), 1), msg
+
+    def Xtest_stacktrace(self):
+        """Test HTML wrapping of stacktrace
+        """
+
+        myCalculator = ImpactCalculator()
+        try:
+            myCalculator.getOptimalExtent('aoeu', 'oaeu', [])
+        except Exception, e:
+            # Display message and traceback
+            msg = get_exception_with_stacktrace(e, html=True)
+
+            #print msg
+            self.form.ui.wvResults.setHtml(msg)
+
+            # Look at state of
+            myContent = self.form.ui.wvResults.html()
+            #print myContent
 
 
 if __name__ == '__main__':
