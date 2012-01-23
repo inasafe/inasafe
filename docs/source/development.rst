@@ -28,13 +28,13 @@ on your machine in order to work effectively with the code base:
 * python-numpy
 * python-gdal
 * python-sphinx
-* ...
+* pyqt4-dev-tools
 
 
 On an ubuntu system you can install these requirements using apt::
 
   sudo apt-get install git subversion pep8 python-nose python-coverage \
-  python-gdal python-numpy python-sphinx
+  python-gdal python-numpy python-sphinx pyqt4-dev-tools
 
 
 In some cases these dependencies may already be on your system via installation
