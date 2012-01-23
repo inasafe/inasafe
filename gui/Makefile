@@ -60,7 +60,7 @@ test_suite: compile
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	-nosetests -v --with-id --with-coverage --cover-package=test
+	-nosetests -v --with-id --with-coverage --cover-package=.
 
 indent:
 	@# sudo apt-get install python2.7-examples for reindent script

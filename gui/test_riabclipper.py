@@ -39,7 +39,7 @@ if os.path.isfile(PATH):
         raise QgisPathException
 
 from qgis.core import (QgsApplication, QgsRectangle, QgsVectorLayer,
-    QgsRasterLayer)
+    QgsRasterLayer, QgsMapLayerRegistry)
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 import unittest
@@ -63,7 +63,7 @@ class RiabTest(unittest.TestCase):
             print 'QGIS settings', self.app.showSettings()
 
             myRoot = os.path.abspath(os.path.join(
-                os.path.dirname(__file__), '..', '..'))
+                os.path.dirname(__file__), '..'))
             self.vectorPath = os.path.join(myRoot, 'riab_test_data',
                                            'Padang_WGS84.shp')
             self.rasterPath = os.path.join(myRoot, 'riab_test_data',
@@ -84,7 +84,7 @@ class RiabTest(unittest.TestCase):
         myResult = clipLayer(myVectorLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))
-        del myVectorLayer
+        QgsMapLayerRegistry.instance().removeMapLayer(myVectorLayer.id())
 
     def test_clipRaster(self):
         # create a vector
@@ -101,7 +101,7 @@ class RiabTest(unittest.TestCase):
         myResult = clipLayer(myRasterLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))
-        del myRasterLayer
+        QgsMapLayerRegistry.instance().removeMapLayer(myRasterLayer.id())
 
     def test_clipBoth(self):
         # create a vector
@@ -124,7 +124,9 @@ class RiabTest(unittest.TestCase):
                     myRect.yMinimum(),
                     myRect.xMaximum(),
                     myRect.yMaximum()]
-        myExtent = getOptimalExtent(myExtent)
+        myExtent = getOptimalExtent(self.rasterPath,
+                                    self.vectorPath,
+                                    myExtent)
         myRect = QgsRectangle(myExtent[0],
                               myExtent[1],
                               myExtent[2],
@@ -137,8 +139,8 @@ class RiabTest(unittest.TestCase):
         myResult = clipLayer(myRasterLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))
-        del myVectorLayer
-        del myRasterLayer
+        QgsMapLayerRegistry.instance().removeMapLayer(myRasterLayer.id())
+        QgsMapLayerRegistry.instance().removeMapLayer(myVectorLayer.id())
 
 
 if __name__ == '__main__':

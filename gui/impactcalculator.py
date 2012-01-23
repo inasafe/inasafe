@@ -30,13 +30,13 @@ from riabexceptions import (InsufficientParametersException,
 pardir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(pardir)
 from impact_functions import get_plugins
-from engine.core import calculate_impact
+from engine.core import calculate_impact, get_bounding_boxes
 from storage.core import read_layer
 import threading
 from PyQt4.QtCore import QObject, pyqtSignal
 
 
-def getOptimalExtent(self, hazardPath, exposurePath, desiredViewport):
+def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
     """ A helper function to determine what the optimal extent is.
     Optimal extent should be considered as the intersection between
     the three inputs. The riab library will perform various checks
@@ -68,7 +68,7 @@ def getOptimalExtent(self, hazardPath, exposurePath, desiredViewport):
         Any exceptions raised by the RIAB library will be propogated.
     """
     try:
-        return engine.core.get_bounding_boxes(
+        return get_bounding_boxes(
             hazardPath,
             exposurePath,
             desiredViewport)
