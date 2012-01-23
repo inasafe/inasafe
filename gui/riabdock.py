@@ -48,9 +48,12 @@ if os.path.isfile(PATH):
 
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
-                       QgsSymbolV2, QgsRendererRangeV2,
+                       QgsSymbolV2, QgsRendererRangeV2, 
                        QgsSymbolLayerV2Registry, QgsColorRampShader)
+from qgis.gui import QgsMapCanvas
 from impactcalculator import ImpactCalculator
+from riabclipper import clipLayer
+from impactcalculator import getOptimalExtent
 
 
 # Helper functions
@@ -362,9 +365,25 @@ class RiabDock(QtGui.QDockWidget):
             msg = 'Loaded impact layer "%s" is not valid' % myFilename
             raise Exception(msg)
 
+    def getHazardFilename(self):
+        """Obtain the name of the path to the hazard file from the 
+        userrole of the QtCombo for exposure."""
+        myHazardIndex = self.ui.cboHazard.currentIndex()
+        myHazardFilename = self.ui.cboHazard.itemData(myHazardIndex,
+                             QtCore.Qt.UserRole).toString()
+        return myHazardFilename
+
+
+    def getExposureFilename(self):
+        """Obtain the name of the path to the exposure file from the 
+        userrole of the QtCombo for exposure."""
+        myExposureIndex = self.ui.cboExposure.currentIndex()
+        myExposureFilename = self.ui.cboExposure.itemData(myExposureIndex,
+                             QtCore.Qt.UserRole).toString()
+        return myExposureFilename
+
     def accept(self):
         """Execute analysis when ok button is clicked."""
-        #settrace()
         self.showBusy()
         #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
@@ -372,16 +391,24 @@ class RiabDock(QtGui.QDockWidget):
             self.ui.wvResults.setHtml(myMessage)
             self.hideBusy()
             return
-        myHazardIndex = self.ui.cboHazard.currentIndex()
-        myHazardFileName = self.ui.cboHazard.itemData(myHazardIndex,
-                             QtCore.Qt.UserRole).toString()
-        self.calculator.setHazardLayer(myHazardFileName)
 
-        myExposureIndex = self.ui.cboExposure.currentIndex()
-        myExposureFileName = self.ui.cboExposure.itemData(myExposureIndex,
-                             QtCore.Qt.UserRole).toString()
-        self.calculator.setExposureLayer(myExposureFileName)
-
+        myHazardFilename = None
+        myExposureFilename = None
+        try:
+            myHazardFilename, myExposureFilename = self.optimalClip()
+        except Exception, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            msg = ('An exception occurred when creating the optimal'
+                  'clipped layer copies: %s' % ((str(e))))
+            self.ui.wvResults.setHtml(msg)
+            return
+            
+        self.calculator.setHazardLayer(myHazardFilename)
+        self.calculator.setExposureLayer(myExposureFilename)
+        QtGui.QMessageBox.critical(self,
+                  'Optimally clipped layers: \n%s\n%s' % (
+                    myHazardFilename, myExposureFilename))
         self.calculator.setFunction(self.ui.cboFunction.currentText())
 
         # Start it in its own thread
@@ -396,7 +423,7 @@ class RiabDock(QtGui.QDockWidget):
             self.repaint()
             self.runner.run()  # Run in same thread
             QtGui.qApp.restoreOverrideCursor()
-
+            # .. todo :: Disconnect done slot/signal
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -519,3 +546,47 @@ class RiabDock(QtGui.QDockWidget):
     def disableBusyCursor(self):
         """Disable the hourglass cursor"""
         QtGui.qApp.restoreOverrideCursor()
+
+    def optimalClip(self):
+        """ A helper function to perform an optimal clip of the input data.
+        Optimal extent should be considered as the intersection between
+        the three inputs. The riab library will perform various checks
+        to ensure that the extent is tenable, includes data from both
+        etc.
+
+        The result of this function will be two layers which are 
+        clipped if needed.
+
+        Args:
+            None
+        Returns:
+            A two-tuple containing the paths to the clipped hazard and 
+            exposure layers.
+
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myHazardFilename = self.getHazardFilename()
+        myExposureFilename = self.getExposureFilename()
+        myRect = self.iface.mapCanvas().extent()
+
+        myExtent = [myRect.xMinimum(),
+                    myRect.yMinimum(),
+                    myRect.xMaximum(),
+                    myRect.yMaximum()]
+        try:
+            myExtent = getOptimalExtent(myHazardFilename,
+                                    myExposureFilename,
+                                    myExtent)
+        except Exception, e:
+          raise e
+        myRect = QgsRectangle(myExtent[0],
+                              myExtent[1],
+                              myExtent[2],
+                              myExtent[3])
+        # Clip the vector to the bbox
+        myClippedExposurePath = clipLayer(myExposureFilename, myRect)
+        # Clip the vector to the bbox
+        myClippedHazardPath = clipLayer(myHazardFilename, myRect)
+
+        return myClippedHazardPath, myClippedExposurePath

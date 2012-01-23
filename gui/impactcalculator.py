@@ -76,6 +76,7 @@ def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
         raise e
 
 
+
 class ImpactCalculator():
     """A class to compute an impact scenario."""
 
@@ -388,3 +389,5 @@ class ImpactCalculatorThread(threading.Thread):
 
         #  Let any listending slots know we are done
         self._notifier.done.emit()
+
+

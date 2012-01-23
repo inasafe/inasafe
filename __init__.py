@@ -18,12 +18,6 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
-import sys
-sys.path.append(os.path.dirname(__file__))
-from gui import riab
-
-
 def name():
     """A user friendly name for the plugin."""
     return 'Risk in a box'
@@ -53,5 +47,5 @@ def qgisMinimumVersion():
 def classFactory(iface):
     """Load Riab class from file Riab"""
 
-    from riab import Riab
+    from gui.riab import Riab
     return Riab(iface)
