@@ -158,7 +158,7 @@ def _clipRasterLayer(layer, extent):
         msg = 'Layer or Extent passed to clip is None.'
         raise InvalidParameterException(msg)
 
-    if layer.type() == QgsMapLayer.RasterLayer:
+    if layer.type() != QgsMapLayer.RasterLayer:
         msg = ('Expected a raster layer but received a %s.' %
                str(layer.type()))
         raise InvalidParameterException(msg)

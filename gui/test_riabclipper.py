@@ -137,7 +137,7 @@ class RiabTest(unittest.TestCase):
         myResult = clipLayer(myVectorLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))
-        # Clip the vector to the bbox
+        # Clip the raster to the bbox
         myResult = clipLayer(myRasterLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))

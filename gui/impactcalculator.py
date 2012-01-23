@@ -35,6 +35,11 @@ from storage.core import read_layer
 import threading
 from PyQt4.QtCore import QObject, pyqtSignal
 
+def makeAscii(x):
+    """Convert QgsString to ASCII"""
+    x = unicode(x)
+    x = unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
+    return x
 
 def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
     """ A helper function to determine what the optimal extent is.
@@ -69,8 +74,8 @@ def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
     """
     try:
         return get_bounding_boxes(
-            hazardPath,
-            exposurePath,
+            makeAscii(hazardPath),
+            makeAscii(exposurePath),
             desiredViewport)
     except Exception, e:
         raise e
@@ -223,12 +228,6 @@ class ImpactCalculator():
 
         return myValue
 
-    def _makeAscii(self, x):
-        """Convert QgsString to ASCII"""
-        x = unicode(x)
-        x = unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
-        return x
-
     def getRunner(self):
         """ Factory to create a new runner thread.
         Requires three parameters to be set before execution
@@ -262,10 +261,10 @@ class ImpactCalculator():
             raise InsufficientParametersException(msg)
 
         # Call impact calculation engine
-        myHazardLayer = read_layer(self._makeAscii(self.__hazard_layer))
-        myExposureLayer = read_layer(self._makeAscii(self.__exposure_layer))
-        myFunctions = get_plugins(self._makeAscii(self.__function))
-        myFunction = myFunctions[0][self._makeAscii(self.__function)]
+        myHazardLayer = read_layer(makeAscii(self.__hazard_layer))
+        myExposureLayer = read_layer(makeAscii(self.__exposure_layer))
+        myFunctions = get_plugins(makeAscii(self.__function))
+        myFunction = myFunctions[0][makeAscii(self.__function)]
         return ImpactCalculatorThread(myHazardLayer,
                                       myExposureLayer,
                                       myFunction)

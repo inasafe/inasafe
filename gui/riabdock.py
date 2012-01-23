@@ -48,7 +48,7 @@ if os.path.isfile(PATH):
 
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
-                       QgsSymbolV2, QgsRendererRangeV2, 
+                       QgsSymbolV2, QgsRendererRangeV2, QgsRectangle,
                        QgsSymbolLayerV2Registry, QgsColorRampShader)
 from qgis.gui import QgsMapCanvas
 from impactcalculator import ImpactCalculator
