@@ -8,5 +8,6 @@
     <file alias="css/bootstrap.css">resources/css/bootstrap.css</file>
     <file alias="header.html">resources/header.html</file>
     <file alias="footer.html">resources/footer.html</file>
+    <file alias="js/bootstrap-alerts.js">resources/js/bootstrap-alerts.js</file>
   </qresource>
 </RCC>

@@ -19,7 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, QtWebKit
+from PyQt4.QtWebKit import QWebSettings
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
 from utilities import get_exception_with_stacktrace
@@ -215,6 +216,8 @@ class RiabDock(QtGui.QDockWidget):
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
+        #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
+        #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -504,8 +507,8 @@ class RiabDock(QtGui.QDockWidget):
         """A helper function to indicate the plugin is processing."""
         #self.ui.pbnRunStop.setText('Cancel')
         self.ui.pbnRunStop.setEnabled(False)
-        myHtml = ('<center><p>Analyzing this question...</p>' +
-                   '<img src="qrc:/plugins/riab/ajax-loader.gif" />' +
+        myHtml = ('<center><p>Analyzing this question...</p>' + 
+                   '<img src="qrc:/plugins/riab/ajax-loader.gif" />' + 
                    '</center>')
         self.displayHtml(myHtml)
         self.ui.grpQuestion.setEnabled(False)
@@ -567,9 +570,9 @@ class RiabDock(QtGui.QDockWidget):
                                     myExposureLayer.source(),
                                     myExtent)
         except Exception, e:
-          msg = ('Failed to obtain the optimal extent given:\n%s\n%s' %
-                  ( myHazardLayer.source(), myExposureLayer.source() ))
-          raise Exception(msg)
+            msg = ('Failed to obtain the optimal extent given:\n%s\n%s' %
+                  (myHazardLayer.source(), myExposureLayer.source()))
+            raise Exception(msg)
         myRect = QgsRectangle(myExtent[0],
                               myExtent[1],
                               myExtent[2],
@@ -582,27 +585,27 @@ class RiabDock(QtGui.QDockWidget):
         return (myClippedHazardPath, myClippedExposurePath)
 
     def htmlHeader(self):
-      """Get a standard html header for wrapping content in."""
-      myFile = QtCore.QFile(":/plugins/riab/header.html")
-      if not myFile.open(QtCore.QIODevice.ReadOnly):
-         return '----'
-      myStream = QtCore.QTextStream(myFile)
-      myHtml = myStream.readAll()
-      myFile.close()
-      return myHtml
-
+        """Get a standard html header for wrapping content in."""
+        myFile = QtCore.QFile(':/plugins/riab/header.html')
+        if not myFile.open(QtCore.QIODevice.ReadOnly):
+            return '----'
+        myStream = QtCore.QTextStream(myFile)
+        myHtml = myStream.readAll()
+        myFile.close()
+        return myHtml
 
     def htmlFooter(self):
-      """Get a standard html footer for wrapping content in."""
-      myFile = QtCore.QFile(":/plugins/riab/footer.html")
-      if not myFile.open(QtCore.QIODevice.ReadOnly):
-         return '----'
-      myStream = QtCore.QTextStream(myFile)
-      myHtml = myStream.readAll()
-      myFile.close()
-      return myHtml
+        """Get a standard html footer for wrapping content in."""
+        myFile = QtCore.QFile(':/plugins/riab/footer.html')
+        if not myFile.open(QtCore.QIODevice.ReadOnly):
+            return '----'
+        myStream = QtCore.QTextStream(myFile)
+        myHtml = myStream.readAll()
+        myFile.close()
+        return myHtml
 
     def displayHtml(self, theMessage):
-      """Given an html snippet, wrap it in a page header and footer 
-      and display it in the wvResults widget."""
-      self.ui.wvResults.setHtml(self.htmlHeader() + theMessage + self.htmlFooter())
+        """Given an html snippet, wrap it in a page header and footer
+        and display it in the wvResults widget."""
+        self.ui.wvResults.setHtml(self.htmlHeader() + theMessage +
+                                self.htmlFooter())
