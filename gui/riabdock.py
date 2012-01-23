@@ -107,13 +107,13 @@ def setVectorStyle(qgisVectorLayer, style):
             # note that you can get a list of available layer properties
             # that you can set by doing e.g.
             # QgsSimpleMarkerSymbolLayerV2.properties()
-            mySymbolLayer = myMetadata.createSymbolLayer({
-                            "color_border": myColourString})
+            mySymbolLayer = myMetadata.createSymbolLayer({"color_border":
+                                                          myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         elif myGeometryType == QGis.Polygon:
             myMetadata = myRegistry.symbolLayerMetadata("SimpleFill")
-            mySymbolLayer = myMetadata.createSymbolLayer({
-                            "color_border": myColourString})
+            mySymbolLayer = myMetadata.createSymbolLayer({"color_border":
+                                                          myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         else:
             # for lines we do nothing special as the property setting
@@ -129,8 +129,7 @@ def setVectorStyle(qgisVectorLayer, style):
         myRangeList.append(myRange)
 
     myRenderer = QgsGraduatedSymbolRendererV2('', myRangeList)
-    myRenderer.setMode(
-        QgsGraduatedSymbolRendererV2.EqualInterval)
+    myRenderer.setMode(QgsGraduatedSymbolRendererV2.EqualInterval)
     myRenderer.setClassAttribute(myTargetField)
     qgisVectorLayer.setRendererV2(myRenderer)
     qgisVectorLayer.saveDefaultStyle()
@@ -163,8 +162,9 @@ def setRasterStyle(qgisRasterLayer, style):
         #myLabel = myClass['label']
         myShader = QgsColorRampShader.ColorRampItem(myMax, myColour)
         myRangeList.append(myShader)
-    qgisRasterLayer.setColorShadingAlgorithm(
-                    QgsRasterLayer.ColorRampShader)
+
+    # Apply the shading algorithm and design their ramp
+    qgisRasterLayer.setColorShadingAlgorithm(QgsRasterLayer.ColorRampShader)
     myFunction = qgisRasterLayer.rasterShader().rasterShaderFunction()
     myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
     myFunction.setColorRampItemList(myRangeList)
@@ -207,11 +207,11 @@ class RiabDock(QtGui.QDockWidget):
         self.setOkButtonStatus()
         myButton = self.ui.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                                self.showHelp)
+                               self.showHelp)
         #self.showHelp()
         myButton = self.ui.pbnRunStop
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                                self.accept)
+                               self.accept)
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)

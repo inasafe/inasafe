@@ -69,7 +69,7 @@ class RiabTest(unittest.TestCase):
             self.rasterPath = os.path.join(myRoot, 'riab_test_data',
                                            'Shakemap_Padang_2009.asc')
 
-    def test_clipVector(self):
+    def Xtest_clipVector(self):
         # create a vector
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(self.vectorPath, myName, 'ogr')
@@ -86,7 +86,7 @@ class RiabTest(unittest.TestCase):
         assert(os.path.exists(myResult))
         QgsMapLayerRegistry.instance().removeMapLayer(myVectorLayer.id())
 
-    def test_clipRaster(self):
+    def Xtest_clipRaster(self):
         # create a vector
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(self.rasterPath, myName)
@@ -103,7 +103,7 @@ class RiabTest(unittest.TestCase):
         assert(os.path.exists(myResult))
         QgsMapLayerRegistry.instance().removeMapLayer(myRasterLayer.id())
 
-    def test_clipBoth(self):
+    def Xtest_clipBoth(self):
         # create a vector
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(self.vectorPath, myName, 'ogr')

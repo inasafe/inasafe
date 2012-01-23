@@ -1,6 +1,7 @@
 import sys
 import traceback
 
+
 def get_exception_with_stacktrace(e, html=False):
     """Convert exception into a string and and stack trace
 
@@ -24,6 +25,3 @@ def get_exception_with_stacktrace(e, html=False):
         s += '</pre></div>'
 
         return s
-
-
-

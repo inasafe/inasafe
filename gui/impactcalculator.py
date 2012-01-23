@@ -35,11 +35,13 @@ from storage.core import read_layer
 import threading
 from PyQt4.QtCore import QObject, pyqtSignal
 
+
 def makeAscii(x):
     """Convert QgsString to ASCII"""
     x = unicode(x)
     x = unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
     return x
+
 
 def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
     """ A helper function to determine what the optimal extent is.
@@ -79,7 +81,6 @@ def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
             desiredViewport)
     except Exception, e:
         raise e
-
 
 
 class ImpactCalculator():
@@ -388,5 +389,3 @@ class ImpactCalculatorThread(threading.Thread):
 
         #  Let any listending slots know we are done
         self._notifier.done.emit()
-
-
