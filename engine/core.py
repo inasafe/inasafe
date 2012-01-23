@@ -277,9 +277,9 @@ def get_bounding_boxes(haz_data, exp_data, req_bbox):
     try:
         vpt_bbox = list(req_bbox)
     except:
-        msg = ('Invalid bounding box %s (%s). '
-               'It must be a list (west, south, east, north' % (str(req_bbox),
-                                                                type(req_bbox)))
+        msg = ('Invalid bounding box %s (%s). It must be a sequence of the '
+               'form [west, south, east, north]' % (str(req_bbox),
+                                                    type(req_bbox)))
         raise Exception(msg)
 
     # Get bounding boxes for layers

@@ -1037,11 +1037,10 @@ class Test_Engine(unittest.TestCase):
         """Merging of bounding boxes works
         """
 
-
         # Name file names for hazard level and exposure
         exposure_filename = '%s/%s' % (TESTDATA, 'Population_2010.asc')
-        hazard_filename = '%s/%s' % (TESTDATA, 'Lembang_Earthquake_Scenario.asc')
-
+        hazard_filename = '%s/%s' % (TESTDATA,
+                                     'Lembang_Earthquake_Scenario.asc')
 
         # Reduced versions of metadata dictionaries for verification only
         haz_metadata = {'layer_type': 'raster',
@@ -1088,14 +1087,14 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(exposure_res, exp_metadata['resolution'],
                               rtol=1.0e-12, atol=1.0e-12)
 
-
         # First, do some examples that produce valid results
         ref_res = [105.3000035, -8.3749995, 110.2914705, -5.5667785]
         view_port = [94.972335, -11.009721, 141.014002, 6.073612]
         bbox = get_bounding_boxes(H, E, view_port)
         assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
 
-        bbox = get_bounding_boxes(hazard_filename, exposure_filename, view_port)
+        bbox = get_bounding_boxes(hazard_filename, exposure_filename,
+                                  view_port)
         assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
 
         view_port = [105.3000035,
@@ -1127,7 +1126,6 @@ class Test_Engine(unittest.TestCase):
         else:
             msg = ('Wrong input data should have raised an exception')
             raise Exception(msg)
-
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
