@@ -173,15 +173,15 @@ def _clipRasterLayer(layer, extent):
 
     if myCrs.epsg() is not 4326:
             # reproject the layer to wgs84
-            myFilename = tempfile.mkstemp('.tif', 'prj_',
-                                    tempfile.gettempdir())[1]
-            myCommand = 'gdalwarp -t_srs EPSG:4326 -r near -of GTiff %s %s' % (
-                mySource, myFilename)
-            myResult = call(myCommand, shell=True)
-            # .. todo:: Check the result of the shell call is ok
-            # Set the source to the filename so code after this if
-            # block continues to work as expected
-            mySource = myFilename
+        myFilename = tempfile.mkstemp('.tif', 'prj_',
+                                tempfile.gettempdir())[1]
+        myCommand = 'gdalwarp -t_srs EPSG:4326 -r near -of GTiff %s %s' % (
+            mySource, myFilename)
+        myResult = call(myCommand, shell=True)
+        # .. todo:: Check the result of the shell call is ok
+        # Set the source to the filename so code after this if
+        # block continues to work as expected
+        mySource = myFilename
 
     myFilename = tempfile.mkstemp('.tif', 'clip_',
                                     tempfile.gettempdir())[1]
