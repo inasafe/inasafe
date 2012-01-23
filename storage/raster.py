@@ -566,6 +566,14 @@ class Raster:
                 res = float(keywords['resolution'])
                 if not isotropic:
                     res = (res, res)
+        else:
+            if isotropic:
+                msg = ('Resolution of layer "%s" was not isotropic: '
+                       '[dx, dy] == %s' % (self.get_name(), res))
+                assert numpy.allclose(res[0], res[0],
+                                      rtol=1.0e-12, atol=1.0e-12), msg
+            else:
+                res = res[0]
 
         return res
 
