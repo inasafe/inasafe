@@ -44,6 +44,7 @@ from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 import unittest
 from riabclipper import clipLayer
+from impactcalculator import getOptimalExtent
 
 
 class RiabTest(unittest.TestCase):
@@ -100,6 +101,43 @@ class RiabTest(unittest.TestCase):
         myResult = clipLayer(myRasterLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))
+        del myRasterLayer
+
+    def test_clipBoth(self):
+        # create a vector
+        myName = 'padang'
+        myVectorLayer = QgsVectorLayer(self.vectorPath, myName, 'ogr')
+        msg = 'Did not find layer "%s" in path "%s"' % (myName,
+                                                        self.vectorPath)
+        assert myVectorLayer is not None, msg
+        #create a raster
+        myName = 'shake'
+        myRasterLayer = QgsRasterLayer(self.rasterPath, myName)
+
+        msg = 'Did not find layer "%s" in path "%s"' % (myName,
+                                                        self.rasterPath)
+        assert myRasterLayer is not None, msg
+
+        # Create a bounding box
+        myRect = QgsRectangle(97, -3, 104, 1)
+        myExtent = [myRect.xMinimum(),
+                    myRect.yMinimum(),
+                    myRect.xMaximum(),
+                    myRect.yMaximum()]
+        myExtent = getOptimalExtent(myExtent)
+        myRect = QgsRectangle(myExtent[0],
+                              myExtent[1],
+                              myExtent[2],
+                              myExtent[3])
+        # Clip the vector to the bbox
+        myResult = clipLayer(myVectorLayer, myRect)
+        # Check the output is valid
+        assert(os.path.exists(myResult))
+        # Clip the vector to the bbox
+        myResult = clipLayer(myRasterLayer, myRect)
+        # Check the output is valid
+        assert(os.path.exists(myResult))
+        del myVectorLayer
         del myRasterLayer
 
 

@@ -36,6 +36,46 @@ import threading
 from PyQt4.QtCore import QObject, pyqtSignal
 
 
+def getOptimalExtent(self, hazardPath, exposurePath, desiredViewport):
+    """ A helper function to determine what the optimal extent is.
+    Optimal extent should be considered as the intersection between
+    the three inputs. The riab library will perform various checks
+    to ensure that the extent is tenable, includes data from both
+    etc.
+
+    This is just a thin wrapper around engine.core.get_bounding_boxes.
+
+    Typically the result of this function will be used to clip
+    input layers to a commone extent before processing.
+
+    Args:
+
+       * hazardPath - a string representing a path to a hazard file
+         in the file system.
+       * exposurePath - a string representing a path to an
+         exposure file on the file system.
+
+       ..note:: We do minimal checking as the riab library takes
+         care of it for us.
+
+    Returns:
+       An array containing an extent in the form [xmin,ymin,xmax,ymax]
+       e.g.::
+
+        [100.03, -1.14, 100.81, -0.73]
+
+    Raises:
+        Any exceptions raised by the RIAB library will be propogated.
+    """
+    try:
+        return engine.core.get_bounding_boxes(
+            hazardPath,
+            exposurePath,
+            desiredViewport)
+    except Exception, e:
+        raise e
+
+
 class ImpactCalculator():
     """A class to compute an impact scenario."""
 
@@ -182,7 +222,7 @@ class ImpactCalculator():
 
         return myValue
 
-    def make_ascii(self, x):
+    def _makeAscii(self, x):
         """Convert QgsString to ASCII"""
         x = unicode(x)
         x = unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
@@ -221,10 +261,10 @@ class ImpactCalculator():
             raise InsufficientParametersException(msg)
 
         # Call impact calculation engine
-        myHazardLayer = read_layer(self.make_ascii(self.__hazard_layer))
-        myExposureLayer = read_layer(self.make_ascii(self.__exposure_layer))
-        myFunctions = get_plugins(self.make_ascii(self.__function))
-        myFunction = myFunctions[0][self.make_ascii(self.__function)]
+        myHazardLayer = read_layer(self._makeAscii(self.__hazard_layer))
+        myExposureLayer = read_layer(self._makeAscii(self.__exposure_layer))
+        myFunctions = get_plugins(self._makeAscii(self.__function))
+        myFunction = myFunctions[0][self._makeAscii(self.__function)]
         return ImpactCalculatorThread(myHazardLayer,
                                       myExposureLayer,
                                       myFunction)
