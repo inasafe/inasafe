@@ -25,6 +25,7 @@ from riabexceptions import InvalidParameterException
 import tempfile
 from subprocess import call
 
+
 def clipLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame.
@@ -139,9 +140,9 @@ def _clipRasterLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. The layer must be a
     raster layer or an exception will be thrown.
-    
+
     The output layer will always be in WGS84/Geographic.
- 
+
     Args:
 
         * theLayer - a valid QGIS vector or raster layer
@@ -174,8 +175,8 @@ def _clipRasterLayer(layer, extent):
             # reproject the layer to wgs84
             myFilename = tempfile.mkstemp('.tif', 'prj_',
                                     tempfile.gettempdir())[1]
-            myCommand = 'gdalwarp -t_srs EPSG:4326 -r near -of GTiff %s %s' % ( 
-                mySource, myFilename )
+            myCommand = 'gdalwarp -t_srs EPSG:4326 -r near -of GTiff %s %s' % (
+                mySource, myFilename)
             myResult = call(myCommand, shell=True)
             # .. todo:: Check the result of the shell call is ok
             # Set the source to the filename so code after this if
@@ -184,13 +185,13 @@ def _clipRasterLayer(layer, extent):
 
     myFilename = tempfile.mkstemp('.tif', 'clip_',
                                     tempfile.gettempdir())[1]
-    myCommand = 'gdal_translate -projwin %f %f %f %f -of GTiff %s %s' % ( 
-        extent.xMinimum(), 
-        extent.yMaximum(), 
+    myCommand = 'gdal_translate -projwin %f %f %f %f -of GTiff %s %s' % (
+        extent.xMinimum(),
+        extent.yMaximum(),
         extent.xMaximum(),
         extent.yMinimum(),
-        mySource, 
-        myFilename )
+        mySource,
+        myFilename)
     print 'Command: ', myCommand
     myResult = call(myCommand, shell=True)
     # .. todo:: Check the result of the shell call is ok
