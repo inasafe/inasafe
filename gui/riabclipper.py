@@ -197,3 +197,4 @@ def _clipRasterLayer(layer, extent):
     # .. todo:: Check the result of the shell call is ok
 
     return myFilename  # Filename of created file
+

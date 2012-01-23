@@ -119,7 +119,9 @@ class RiabTest(unittest.TestCase):
         assert myRasterLayer is not None, msg
 
         # Create a bounding box
-        myRect = QgsRectangle(97, -3, 104, 1)
+        myRect = QgsRectangle(99.53, -1.22, 101.20, -0.36)
+        #myRect = QgsRectangle(89, -6, 102, 1)
+        # myRect = QgsRectangle(97, -3, 104, 1)
         myExtent = [myRect.xMinimum(),
                     myRect.yMinimum(),
                     myRect.xMaximum(),
