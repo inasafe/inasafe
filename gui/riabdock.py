@@ -291,16 +291,9 @@ class RiabDock(QtGui.QDockWidget):
             store uuid in user property of list widget for layers
             """
 
-            # Hazard combo
-            #if myLayer.type() == QgsMapLayer.RasterLayer:
             myName = myLayer.name()
-            mySource = myLayer.source()
+            mySource = myLayer.id()
             self.ui.cboHazard.addItem(myName, mySource)
-
-            # Exposure combo
-            #elif myLayer.type() == QgsMapLayer.VectorLayer:
-            myName = myLayer.name()
-            mySource = myLayer.source()
             self.ui.cboExposure.addItem(myName, mySource)
 
         self.setOkButtonStatus()
@@ -365,22 +358,23 @@ class RiabDock(QtGui.QDockWidget):
             msg = 'Loaded impact layer "%s" is not valid' % myFilename
             raise Exception(msg)
 
-    def getHazardFilename(self):
-        """Obtain the name of the path to the hazard file from the 
-        userrole of the QtCombo for exposure."""
-        myHazardIndex = self.ui.cboHazard.currentIndex()
-        myHazardFilename = self.ui.cboHazard.itemData(myHazardIndex,
-                             QtCore.Qt.UserRole).toString()
-        return myHazardFilename
+    def getHazardLayer(self):
+        """Obtain qgsmaplayer id from the userrole of the QtCombo for exposure
+        and return it as a QgsMapLayer"""
+        myIndex = self.ui.cboHazard.currentIndex()
+        myLayerId = self.ui.cboHazard.itemData(myIndex,
+                             QtCore.Qt.UserRole).toInt()
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        return myLayer
 
-
-    def getExposureFilename(self):
+    def getExposureLayer(self):
         """Obtain the name of the path to the exposure file from the 
         userrole of the QtCombo for exposure."""
-        myExposureIndex = self.ui.cboExposure.currentIndex()
-        myExposureFilename = self.ui.cboExposure.itemData(myExposureIndex,
-                             QtCore.Qt.UserRole).toString()
-        return myExposureFilename
+        myIndex = self.ui.cboExposure.currentIndex()
+        myLayerId = self.ui.cboExposure.itemData(myIndex,
+                             QtCore.Qt.UserRole).toInt()
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        return myLayer
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
@@ -566,8 +560,8 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        myHazardFilename = self.getHazardFilename()
-        myExposureFilename = self.getExposureFilename()
+        myHazardLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
         myRect = self.iface.mapCanvas().extent()
 
         myExtent = [myRect.xMinimum(),
@@ -575,18 +569,20 @@ class RiabDock(QtGui.QDockWidget):
                     myRect.xMaximum(),
                     myRect.yMaximum()]
         try:
-            myExtent = getOptimalExtent(myHazardFilename,
-                                    myExposureFilename,
+            myExtent = getOptimalExtent(myHazardLayer.source(),
+                                    myExposureLayer.source(),
                                     myExtent)
         except Exception, e:
-          raise e
+          msg = ('Failed to obtain the optimal extent given:\n%s\n%s' %
+                  ( myHazardFilename, myExposureFilename ))
+          raise Exception(msg)
         myRect = QgsRectangle(myExtent[0],
                               myExtent[1],
                               myExtent[2],
                               myExtent[3])
         # Clip the vector to the bbox
-        myClippedExposurePath = clipLayer(myExposureFilename, myRect)
+        myClippedExposurePath = clipLayer(myExposureLayer, myRect)
         # Clip the vector to the bbox
-        myClippedHazardPath = clipLayer(myHazardFilename, myRect)
+        myClippedHazardPath = clipLayer(myHazardLayer, myRect)
 
         return myClippedHazardPath, myClippedExposurePath
