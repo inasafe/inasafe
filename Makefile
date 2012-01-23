@@ -27,7 +27,12 @@ docs: compile
 	cd docs; make html; cd ..
 
 # Run the test suite followed by pep8 style checking
-test: test_suite pep8
+test: test_suite pep8 disabled_tests
+	@echo
+	@echo "--------------"
+	@echo "DISABLED TESTS"
+	@echo "--------------"
+	grep -R Xtest_ *
 
 # Run pep8 style checking only
 pep8: compile
@@ -50,3 +55,10 @@ test_suite: compile testdata
 testdata:
 	@echo "Updating test data - please hit Enter if asked for password"
 	svn co http://www.aifdr.org/svn/riab_test_data --username anonymous
+
+disabled_tests:
+	@echo
+	@echo "--------------"
+	@echo "DISABLED TESTS"
+	@echo "--------------"
+	@grep -R Xtest * | grep ".py:" | grep -v "docs/build/html"
