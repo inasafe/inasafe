@@ -56,7 +56,7 @@ from impactcalculator import ImpactCalculator
 from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent
 
-
+import resources
 # Helper functions
 def setVectorStyle(qgisVectorLayer, style):
     """Set QGIS vector style based on RIAB style dictionary
@@ -583,20 +583,22 @@ class RiabDock(QtGui.QDockWidget):
 
     def htmlHeader(self):
       """Get a standard html header for wrapping content in."""
-      myFile = QtCore.QFile(":/header.html")
-      if not myFile.open(QtCore.QIODevice.Text):
+      myFile = QtCore.QFile(":/plugins/riab/header.html")
+      if not myFile.open(QtCore.QIODevice.ReadOnly):
          return '----'
-      myHtml = myFile.readAll()
+      myStream = QtCore.QTextStream(myFile)
+      myHtml = myStream.readAll()
       myFile.close()
       return myHtml
 
 
     def htmlFooter(self):
       """Get a standard html footer for wrapping content in."""
-      myFile = QtCore.QFile(":/footer.html")
-      if not myFile.open(QtCore.QIODevice.Text):
+      myFile = QtCore.QFile(":/plugins/riab/footer.html")
+      if not myFile.open(QtCore.QIODevice.ReadOnly):
          return '----'
-      myHtml = myFile.readAll()
+      myStream = QtCore.QTextStream(myFile)
+      myHtml = myStream.readAll()
       myFile.close()
       return myHtml
 

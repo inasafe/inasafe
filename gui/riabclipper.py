@@ -198,12 +198,13 @@ def _clipRasterLayer(layer, extent):
     return myFilename  # Filename of created file
 
 def copyKeywords(sourceFile, destinationFile):
-  """Helper to copy the keywords file from a source dataset 
-  to a destination dataset.
+    """Helper to copy the keywords file from a source dataset 
+    to a destination dataset.
 
-  e.g.::
+    e.g.::
     
     copyKeywords('foo.shp','bar.shp')
 
-  Will result in the foo.keywords file being copied to bar.keyword.""""
-
+    Will result in the foo.keywords file being copied to bar.keyword."""
+    
+    pass
