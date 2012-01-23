@@ -15,6 +15,7 @@ from storage.utilities import buffered_bounding_box
 from storage.utilities import is_sequence
 from storage.core import bboxlist2string, bboxstring2list
 from storage.core import check_bbox_string
+from storage.core import read_layer
 from utilities import REQUIRED_KEYWORDS
 
 import logging
@@ -241,44 +242,49 @@ def get_common_resolution(haz_metadata, exp_metadata):
     return raster_resolution
 
 
-def get_bounding_boxes(haz_metadata, exp_metadata, req_bbox):
+def get_bounding_boxes(haz_data, exp_data, req_bbox):
     """Check and get appropriate bounding boxes for input layers
 
     Input
-        haz_metadata: Metadata for hazard layer
-        exp_metadata: Metadata for exposure layer
+        haz_data: Filename or layer object for hazard layer
+        exp_data: Filename or layer object for exposure layer
         req_bbox: Bounding box (string as requested by HTML POST, or list)
 
     Output
-        intersection_bbox: Common bounding box
-        buffered_bbox: Bounding box grown slightly larger
-
-    Note intersection_bbox is simply the intersection
-         among hazard, exposure and viewport bounds.
-         buffered_bbox may be grown by one pixel size of the hazard layer
-         in case exposure data
-         is vector data to make sure points always can be interpolated
+        intersection_bbox: Common bounding box which is simply the intersection
+                           among hazard, exposure and viewport bounds.
     """
 
-    # FIXME (Ole): Get rid of string version of bbox
-
-    # Check requested bounding box and establish viewport bounding box
-    if isinstance(req_bbox, basestring):
-        check_bbox_string(req_bbox)
-        vpt_bbox = bboxstring2list(req_bbox)
-    elif is_sequence(req_bbox):
-        x = bboxlist2string(req_bbox)
-        check_bbox_string(x)
-        vpt_bbox = bboxstring2list(x)
+    # Input checks
+    if isinstance(haz_data, basestring):
+        haz_layer = read_layer(haz_data)
     else:
+        haz_layer = haz_data
+
+    msg = 'Input data %s was not a valid spatial object' % str(haz_data)
+    assert (hasattr(haz_layer, 'is_riab_spatial_object') and
+            haz_layer.is_riab_spatial_object), msg
+
+    if isinstance(exp_data, basestring):
+        exp_layer = read_layer(exp_data)
+    else:
+        exp_layer = exp_data
+    msg = 'Input data %s was not a valid spatial object' % str(exp_data)
+
+    assert (hasattr(exp_layer, 'is_riab_spatial_object') and
+            exp_layer.is_riab_spatial_object), msg
+
+    try:
+        vpt_bbox = list(req_bbox)
+    except:
         msg = ('Invalid bounding box %s (%s). '
-               'It must be a string or a list' % (str(req_bbox),
-                                                  type(req_bbox)))
+               'It must be a list (west, south, east, north' % (str(req_bbox),
+                                                                type(req_bbox)))
         raise Exception(msg)
 
     # Get bounding boxes for layers
-    haz_bbox = haz_metadata['bounding_box']
-    exp_bbox = exp_metadata['bounding_box']
+    haz_bbox = haz_layer.get_bounding_box()
+    exp_bbox = exp_layer.get_bounding_box()
 
     # New bounding box for data common to hazard, exposure and viewport
     # Download only data within this intersection
@@ -297,6 +303,7 @@ def get_bounding_boxes(haz_metadata, exp_metadata, req_bbox):
 
     # Grow hazard bbox to buffer this common bbox in case where
     # hazard is raster and exposure is vector
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # FIXME (Ole): Move this into the caller
     #if (haz_metadata['layer_type'] == 'raster' and
     #    exp_metadata['layer_type'] == 'vector'):#

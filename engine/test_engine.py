@@ -1090,24 +1090,26 @@ class Test_Engine(unittest.TestCase):
 
 
         # First, do some examples that produce valid results
-        view_port = '94.972335,-11.009721,141.014002,6.073612'
-        bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
-
+        ref_res = [105.3000035, -8.3749995, 110.2914705, -5.5667785]
         view_port = [94.972335, -11.009721, 141.014002, 6.073612]
-        bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
+        bbox = get_bounding_boxes(H, E, view_port)
+        assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
 
-        print bbox
+        bbox = get_bounding_boxes(hazard_filename, exposure_filename, view_port)
+        assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
 
         view_port = [105.3000035,
                      -8.3749994999999995,
                      110.2914705,
                      -5.5667784999999999]
-        bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
+        bbox = get_bounding_boxes(H, E, view_port)
+        assert numpy.allclose(bbox, ref_res,
+                              rtol=1.0e-12, atol=1.0e-12)
 
         # Then one where boxes don't overlap
         view_port = [105.3, -4.3, 110.29, -2.5]
         try:
-            bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
+            bbox = get_bounding_boxes(H, E, view_port)
         except Exception, e:
             msg = 'Did not find expected error message in %s' % str(e)
             assert 'did not overlap' in str(e), msg
@@ -1115,6 +1117,17 @@ class Test_Engine(unittest.TestCase):
             msg = ('Non ovelapping bounding boxes should have raised '
                    'an exception')
             raise Exception(msg)
+
+        # Try with wrong input data
+        try:
+            bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
+        except Exception, e:
+            msg = 'Did not find expected error message in %s' % str(e)
+            assert 'was not a valid spatial' in str(e), msg
+        else:
+            msg = ('Wrong input data should have raised an exception')
+            raise Exception(msg)
+
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
