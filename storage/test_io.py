@@ -1575,11 +1575,6 @@ class Test_IO(unittest.TestCase):
 
 
 if __name__ == '__main__':
-
-    # Update test data
-    cmd = 'svn co %s %s' % (TESTREPO, TESTDATA)
-    os.system(cmd)
-
     suite = unittest.makeSuite(Test_IO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
