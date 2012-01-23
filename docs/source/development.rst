@@ -26,10 +26,11 @@ on your machine in order to work effectively with the code base:
 * subversion
 * pep8
 * nosetests (with coverage plugin)
-* python-numpy
-* python-gdal
-* python-sphinx
-* pyqt4-dev-tools
+* python-numpy (for numerical computations)
+* python-gdal (python bindings to underlying gis functionality)
+* python-sphinx (compilation of documents)
+* pyqt4-dev-tools (compiling ui and resources)
+* qt4-doc (qt4 API documentation)
 
 
 On an ubuntu system you can install these requirements using apt::

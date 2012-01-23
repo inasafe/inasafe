@@ -22,6 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
+from utilities import get_exception_with_stacktrace
 import sys
 import os
 
@@ -397,7 +398,7 @@ class RiabDock(QtGui.QDockWidget):
                   'clipped layer copies: %s' % ((str(e))))
             displayHtml(msg)
             return
-            
+
         self.calculator.setHazardLayer(myHazardFilename)
         self.calculator.setExposureLayer(myExposureFilename)
         QtGui.QMessageBox.critical(self,
@@ -432,9 +433,9 @@ class RiabDock(QtGui.QDockWidget):
         try:
             myReport = self._completed()
         except Exception, e:
-            displayHtml('Error: %s' % str(e))
-            # FIXME (Ole): We need to capture the traceback
-            # and make it available as a link in the error report
+            # Display message and traceback
+            msg = get_exception_with_stacktrace(e, html=True)
+            displayHtml(msg)
         else:
             # On succes, display generated report
             displayHtml(myReport)
@@ -548,13 +549,13 @@ class RiabDock(QtGui.QDockWidget):
         to ensure that the extent is tenable, includes data from both
         etc.
 
-        The result of this function will be two layers which are 
+        The result of this function will be two layers which are
         clipped if needed.
 
         Args:
             None
         Returns:
-            A two-tuple containing the paths to the clipped hazard and 
+            A two-tuple containing the paths to the clipped hazard and
             exposure layers.
 
         Raises:
