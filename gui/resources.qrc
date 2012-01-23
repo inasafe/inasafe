@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/plugins/riab">
+    <file alias="icon.png">resources/img/icon.png</file>
+    <file alias="bnpb_logo.png">resources/img/bnpb_logo.png</file>
+    <file alias="bnpb_logo_64.png">resources/img/bnpb_logo_64.png</file>
+    <file alias="logo-flower.png">resources/img/logo-flower.png</file>
+    <file alias="ajax-loader.gif">resources/img/ajax-loader.gif</file>
+  </qresource>
+</RCC>

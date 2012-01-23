@@ -22,7 +22,7 @@ import os
 import unittest
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
-from riabexceptions import QgisPathException
+from gui.riabexceptions import QgisPathException
 
 # Check if a qgispath.txt file exists in the plugin folder (you
 # need to rename it from qgispath.txt.templ in the standard plugin
@@ -46,7 +46,7 @@ from qgis.core import QgsRasterLayer
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
-from riabdock import RiabDock
+from gui.riabdock import RiabDock
 
 
 class RiabDockTest(unittest.TestCase):

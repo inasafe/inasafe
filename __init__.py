@@ -18,6 +18,9 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import sys, os
+sys.path.append(os.path.dirname(__file__))
+from gui import riab
 
 def name():
     """A user friendly name for the plugin."""

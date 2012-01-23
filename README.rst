@@ -4,7 +4,7 @@ RISK IN A BOX - QGIS
 
 This is the project: Risk in a Box - QGIS
 
-.. figure::  ../../img/screenshot.jpg
+.. figure::  ../../gui/resources/img/screenshot.jpg
    :align:   center
 
 The latest source code is available in https://github.com/AIFDR/risk_in_a_box
@@ -36,7 +36,8 @@ System Requirements
 -------------------
 
  - A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X
- - The Open Source Geographic Information System QGIS (http://www.qgis.org). Risk in a Box requires QGIS version 1.7 or newer.
+ - The Open Source Geographic Information System QGIS (http://www.qgis.org).
+   Risk in a Box requires QGIS version 1.7 or newer.
 
 
 

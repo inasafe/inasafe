@@ -18,13 +18,29 @@
 # ***************************************************************************/
 
 # Makefile for a PyQGIS plugin
+
+PLUGINNAME = riab
+
+PY_FILES = riab.py riabdock.py riabhelp.py __init__.py
+
+EXTRAS = icon.png
+
+UI_FILES = ui_riabdock.py ui_riabhelp.py
+
+RESOURCE_FILES = resources.py
+
 default: compile
 
-compile:
-	make -C gui
+compile: $(UI_FILES) $(RESOURCE_FILES)
 
-docs: compile
-	cd docs; make html; cd ..
+%.py : %.qrc
+	pyrcc4 -o $@  $<
+	@#this is ugly but the resource referenced by the ui
+	@#looks for a file generated with a different name
+	cp resources.py resources_rc.py
+
+%.py : %.ui
+	pyuic4 -o $@ $<
 
 # Run the test suite followed by pep8 style checking
 test: test_suite pep8
@@ -35,7 +51,7 @@ pep8: compile
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	pep8 --repeat --ignore=E203 --exclude ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py .
+	pep8 --repeat --ignore=E203 --exclude ui_riabhelp.py,ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py .
 
 # Run test suite only
 test_suite: compile
@@ -44,6 +60,8 @@ test_suite: compile
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	-nosetests -v --with-id --with-coverage --cover-package=.,engine,storage,impact_functions
+	-nosetests -v --with-id --with-coverage --cover-package=test
 
-
+indent:
+	@# sudo apt-get install python2.7-examples for reindent script
+	python /usr/share/doc/python2.7/examples/Tools/scripts/reindent.py *.py

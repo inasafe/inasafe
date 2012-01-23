@@ -12,9 +12,10 @@ etc.
 
 It is developed jointly by AusAID (AIFDR) and World Bank (GFDRR) as an Open Source project
 
-You can find out more about the Risk in a Box project by visiting `riskinabox.org <http://riskinabox.org/>`_.
+You can find out more about the Risk in a Box project by visiting
+`riskinabox.org <http://riskinabox.org/>`_.
 
-.. figure::  ../../img/screenshot.jpg
+.. figure::  ../../gui/resources/img/screenshot.jpg
    :align:   center
 
 
