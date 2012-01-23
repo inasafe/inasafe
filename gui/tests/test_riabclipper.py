@@ -67,7 +67,7 @@ class RiabTest(unittest.TestCase):
             self.rasterPath = os.path.join(myRoot, 'riab_test_data',
                                            'Shakemap_Padang_2009.asc')
 
-    def test_clipVector(self):
+    def Xtest_clipVector(self):
         # create a vector
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(self.vectorPath, myName, 'ogr')
