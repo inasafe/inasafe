@@ -1033,11 +1033,17 @@ class Test_Engine(unittest.TestCase):
             if not numpy.isnan(interpolated_depth):
                 assert depth_min <= interpolated_depth <= depth_max, msg
 
-    def test_non_overlapping_bboxes(self):
-        """Non overlapping bounding boxes causes exception to be raised
+    def test_merging_of_bboxes(self):
+        """Merging of bounding boxes works
         """
 
-        # Reduced versions of metadata dictionaries
+
+        # Name file names for hazard level and exposure
+        exposure_filename = '%s/%s' % (TESTDATA, 'Population_2010.asc')
+        hazard_filename = '%s/%s' % (TESTDATA, 'Lembang_Earthquake_Scenario.asc')
+
+
+        # Reduced versions of metadata dictionaries for verification only
         haz_metadata = {'layer_type': 'raster',
                         'title': 'lembang_earthquake_scenario',
                         'bounding_box': (105.3000035,
@@ -1062,12 +1068,35 @@ class Test_Engine(unittest.TestCase):
                         'resolution': (0.0083333333333333003,
                                        0.0083333333333333003)}
 
-        # First, do some that work
+        # Verify relevant metada is ok
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        hazard_bbox = H.get_bounding_box()
+        assert numpy.allclose(hazard_bbox, haz_metadata['bounding_box'],
+                              rtol=1.0e-12, atol=1.0e-12)
+
+        exposure_bbox = E.get_bounding_box()
+        assert numpy.allclose(exposure_bbox, exp_metadata['bounding_box'],
+                              rtol=1.0e-12, atol=1.0e-12)
+
+        hazard_res = H.get_resolution()
+        assert numpy.allclose(hazard_res, haz_metadata['resolution'],
+                              rtol=1.0e-12, atol=1.0e-12)
+
+        exposure_res = E.get_resolution()
+        assert numpy.allclose(exposure_res, exp_metadata['resolution'],
+                              rtol=1.0e-12, atol=1.0e-12)
+
+
+        # First, do some examples that produce valid results
         view_port = '94.972335,-11.009721,141.014002,6.073612'
         bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
 
         view_port = [94.972335, -11.009721, 141.014002, 6.073612]
         bbox = get_bounding_boxes(haz_metadata, exp_metadata, view_port)
+
+        print bbox
 
         view_port = [105.3000035,
                      -8.3749994999999995,

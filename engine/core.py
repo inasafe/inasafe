@@ -250,15 +250,17 @@ def get_bounding_boxes(haz_metadata, exp_metadata, req_bbox):
         req_bbox: Bounding box (string as requested by HTML POST, or list)
 
     Output
-        haz_bbox: Bounding box to be used for hazard layer.
-        exp_bbox: Bounding box to be used for exposure layer
-        imp_bbox: Bounding box to be used for resulting impact layer
+        intersection_bbox: Common bounding box
+        buffered_bbox: Bounding box grown slightly larger
 
-    Note exp_bbox and imp_bbox are the same and calculated as the
-         intersection among hazard, exposure and viewport bounds.
-         haz_bbox may be grown by one pixel size in case exposure data
+    Note intersection_bbox is simply the intersection
+         among hazard, exposure and viewport bounds.
+         buffered_bbox may be grown by one pixel size of the hazard layer
+         in case exposure data
          is vector data to make sure points always can be interpolated
     """
+
+    # FIXME (Ole): Get rid of string version of bbox
 
     # Check requested bounding box and establish viewport bounding box
     if isinstance(req_bbox, basestring):
@@ -295,18 +297,19 @@ def get_bounding_boxes(haz_metadata, exp_metadata, req_bbox):
 
     # Grow hazard bbox to buffer this common bbox in case where
     # hazard is raster and exposure is vector
-    if (haz_metadata['layer_type'] == 'raster' and
-        exp_metadata['layer_type'] == 'vector'):
-
-        haz_res = haz_metadata['resolution']
-        haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)
-    else:
-        haz_bbox = intersection_bbox
+    # FIXME (Ole): Move this into the caller
+    #if (haz_metadata['layer_type'] == 'raster' and
+    #    exp_metadata['layer_type'] == 'vector'):#
+    #
+    #    haz_res = haz_metadata['resolution']
+    #    haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)
+    #else:
+    #    haz_bbox = intersection_bbox
 
     # Usually the intersection bbox is used for both exposure layer and result
-    exp_bbox = imp_bbox = intersection_bbox
+    #exp_bbox = imp_bbox = intersection_bbox
 
-    return haz_bbox, exp_bbox, imp_bbox
+    return intersection_bbox
 
 
 def get_linked_layers(main_layers):
