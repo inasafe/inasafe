@@ -19,9 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import unittest
-from impactcalculator import ImpactCalculator
+from gui.impactcalculator import ImpactCalculator
 #from riabexceptions import TestNotImplementedException
-from riabexceptions import (InsufficientParametersException,
+from gui.riabexceptions import (InsufficientParametersException,
                             KeywordNotFoundException,
                             StyleInfoNotFoundException)
 

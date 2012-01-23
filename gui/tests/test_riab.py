@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import os
-from riabexceptions import QgisPathException
+from gui.riabexceptions import QgisPathException
 
 # Check if a qgispath.txt file exists in the plugin folder (you
 # need to rename it from qgispath.txt.templ in the standard plugin
@@ -40,7 +40,7 @@ from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from PyQt4.QtGui import QWidget
 import unittest
-from riab import Riab
+from gui.riab import Riab
 
 
 class RiabTest(unittest.TestCase):

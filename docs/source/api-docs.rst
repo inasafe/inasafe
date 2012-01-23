@@ -20,7 +20,6 @@ Implementation
    riabdock
    riabhelp
    riabclipper
-   qgsinterface
    impactcalculator
    riabexceptions
    
@@ -30,6 +29,7 @@ Unit Tests
 .. toctree::
    :maxdepth: 2
       
+   qgisinterface
    test_riab
    test_riabdock
    test_impactcalculator
