@@ -18,6 +18,7 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+
 def name():
     """A user friendly name for the plugin."""
     return 'Risk in a box'

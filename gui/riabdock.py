@@ -374,7 +374,6 @@ class RiabDock(QtGui.QDockWidget):
                              QtCore.Qt.UserRole).toString()
         return myHazardFilename
 
-
     def getExposureFilename(self):
         """Obtain the name of the path to the exposure file from the
         userrole of the QtCombo for exposure."""
@@ -580,7 +579,8 @@ class RiabDock(QtGui.QDockWidget):
                                     myExposureFilename,
                                     myExtent)
         except Exception, e:
-          raise e
+            raise e
+
         myRect = QgsRectangle(myExtent[0],
                               myExtent[1],
                               myExtent[2],
