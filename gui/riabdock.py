@@ -302,8 +302,28 @@ class RiabDock(QtGui.QDockWidget):
 
             myName = myLayer.name()
             mySource = str(myLayer.id())
-            self.ui.cboHazard.addItem(myName, mySource)
-            self.ui.cboExposure.addItem(myName, mySource)
+            # find out if the layer is a hazard or an exposure
+            # layer by quering its keywords. If the query fails,
+            # the layer will be ignored.
+            try:
+                myCategory = self.calculator.getKeywordFromFile(
+                                str(myLayer.source()), 'category')
+            except:
+                # continue ignoring this layer
+                continue
+            # See if there is a title for this layer, if not,
+            # fallback to the layer's filename
+            myTitle = None
+            try:
+                myTitle = self.calculator.getKeywordFromFile(
+                            str(myLayer.source()), 'title')
+            except:
+                myTitle = myName
+
+            if myCategory == 'hazard':
+                self.ui.cboHazard.addItem(myTitle, mySource)
+            elif myCategory == 'exposure':
+                self.ui.cboExposure.addItem(myTitle, mySource)
 
         self.setOkButtonStatus()
         return
