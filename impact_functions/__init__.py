@@ -18,5 +18,6 @@ for f in os.listdir(dirname):
 
 
 from impact_functions.core import FunctionProvider
-from impact_functions.core import get_plugins
+from impact_functions.core import get_plugins  # FIXME: Deprecate
+from impact_functions.core import get_admissible_plugins
 from impact_functions.core import compatible_layers
