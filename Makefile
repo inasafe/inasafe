@@ -31,7 +31,7 @@ test: test_suite pep8 disabled_tests
 
 
 # Run pep8 style checking only
-pep8: compile
+pep8:
 	@echo
 	@echo "-----------"
 	@echo "PEP8 issues"
