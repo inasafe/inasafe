@@ -14,6 +14,7 @@ from core import FunctionProvider
 from core import requirements_collect
 from core import requirement_check
 from core import requirements_met
+from core import get_admissible_plugins
 
 
 class BasicFunction(FunctionProvider):
@@ -29,6 +30,55 @@ class BasicFunction(FunctionProvider):
     def run(H, E,
             a=0.97429, b=11.037):
 
+        return None
+
+
+class F1(FunctionProvider):
+    """Risk plugin for testing
+
+    :param requires category=='hazard' and \
+                    subcategory.startswith('flood') and \
+                    layer_type=='raster' and \
+                    unit=='m'
+
+    :param requires category=='exposure' and \
+                    subcategory.startswith('population') and \
+                    layer_type=='raster' and \
+                    datatype=='population'
+
+    """
+
+    @staticmethod
+    def run():
+        return None
+
+
+class F2(FunctionProvider):
+    """Risk plugin for testing
+
+    :param requires category=='hazard' and \
+                    subcategory.startswith('flood') and \
+                    layer_type=='raster' and \
+                    unit=='m'
+
+    :param requires category=='exposure' and \
+                    subcategory.startswith('building')
+    """
+
+    @staticmethod
+    def run():
+        return None
+
+
+class F3(FunctionProvider):
+    """Risk plugin for testing
+
+    :param requires category=='hazard'
+    :param requires category=='exposure'
+    """
+
+    @staticmethod
+    def run():
         return None
 
 
@@ -85,11 +135,42 @@ class Test_plugin_core(unittest.TestCase):
         #self.assertRaises(SyntaxError, requirement_check, params, line)
 
     def test_keywords_error(self):
-        """ Handling of reserved python keywords """
+        """Handling of reserved python keywords """
         line = "unit=='mmi'"
         params = {'class': 'myclass'}
         msg = 'Reserved keyword in statement (logged)'
         assert requirement_check(params, line) == False, msg
+
+    def test_filtering_of_impact_functions(self):
+        """Impact functions are filtered correctly
+        """
+
+        # Keywords matching F1 and F3
+        haz_keywords1 = dict(category='hazard', subcategory='flood',
+                                layer_type='raster', unit='m')
+        exp_keywords1 = dict(category='exposure', subcategory='population',
+                             layer_type='raster', datatype='population')
+
+        # Keywords matching F2 and F3
+        haz_keywords2 = dict(category='hazard', subcategory='flood',
+                             layer_type='raster', unit='m')
+        exp_keywords2 = dict(category='exposure', subcategory='building')
+
+        # Check correct matching
+        P = get_admissible_plugins([haz_keywords1, exp_keywords1])
+        msg = 'Expected impact functions F1 and F3 in %s' % str(P.keys())
+        assert 'F1' in P and 'F3' in P, msg
+
+        P = get_admissible_plugins([haz_keywords2, exp_keywords2])
+        msg = 'Expected impact functions F2 and F3 in %s' % str(P.keys())
+        assert 'F2' in P and 'F3' in P, msg
+
+        # Check empty call returns all
+        P = get_admissible_plugins([])
+        msg = ('Expected at least impact functions F1, F2 and F3 in %s'
+               % str(P.keys()))
+        assert 'F1' in P and 'F2' in P and 'F3' in P, msg
+
 
 if __name__ == '__main__':
     os.environ['DJANGO_SETTINGS_MODULE'] = 'risiko.settings'

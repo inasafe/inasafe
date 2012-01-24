@@ -10,6 +10,7 @@ from impact_functions.utilities import ColorMapEntry
 import types
 import keyword
 
+# FIXME (Ole): Bring logging back - and do it well!
 import logging
 logger = logging.getLogger('risiko')
 
@@ -111,7 +112,7 @@ def requirements_collect(func):
     """Collect the requirements from the plugin function doc
 
     The requirements need to be specified using
-      :param requires <valid pythhon expression>
+      :param requires <valid python expression>
     The layer keywords are put into the local name space
     each requires should be on a new line
     a '/' at the end of a line will be a continuation
@@ -308,3 +309,40 @@ def extract_layers(layers, keyword, value):
             extracted_layers.append(layer)
 
     return extracted_layers
+
+
+def get_admissible_plugins(keywords_list=None):
+    """Get plugins that match specified keywords
+
+    Input
+        keywords_list: List of dictionaries containing layer keywords
+                       If None or empty all plugins are returned
+
+    Output
+        Dictionary of impact functions ({name: class})
+    """
+
+    # Input checks
+    if keywords_list is None:
+        keywords_list = []
+
+    # Get all impact functions
+    plugin_dict = get_plugins()
+
+    # Build dictionary of those that match given keywords
+    admissible_plugins = {}
+    for name, func in plugin_dict.items():
+
+        # Required keywords for func
+        requirelines = requirements_collect(func)
+
+        # Keep impact function if requirements are met for all given keywords
+        match = True
+        for kw_dict in keywords_list:
+            if not requirements_met(requirelines, kw_dict):
+                match = False
+        if match:
+            admissible_plugins[name] = func
+
+    # Return (possibly empty) dictionary
+    return admissible_plugins
