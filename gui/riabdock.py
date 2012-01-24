@@ -59,6 +59,8 @@ from impactcalculator import getOptimalExtent
 
 import resources
 # Helper functions
+
+
 def setVectorStyle(qgisVectorLayer, style):
     """Set QGIS vector style based on RIAB style dictionary
 
@@ -371,7 +373,7 @@ class RiabDock(QtGui.QDockWidget):
         return myLayer
 
     def getExposureLayer(self):
-        """Obtain the name of the path to the exposure file from the 
+        """Obtain the name of the path to the exposure file from the
         userrole of the QtCombo for exposure."""
         myIndex = self.ui.cboExposure.currentIndex()
         myLayerId = self.ui.cboExposure.itemData(myIndex,
