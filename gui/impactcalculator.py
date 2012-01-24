@@ -29,7 +29,7 @@ from riabexceptions import (InsufficientParametersException,
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(pardir)
-from impact_functions import get_plugins
+from impact_functions import get_admissible_plugins, get_plugins
 from engine.core import calculate_impact, get_bounding_boxes
 from storage.core import read_layer
 from storage.utilities import read_keywords
@@ -144,22 +144,33 @@ class ImpactCalculator():
         riab function to use to process the hazard and exposure
         layers with.""")
 
-    def availableFunctions(self, kw_list=None):
+    def availableFunctions(self, theKeywordList=None):
         """ Query the riab engine to see what plugins are available.
         Args:
-           None.
+
+           theKeywordList - an optional parameter which should contain
+           a list of 2 dictionaries (the number of items in the list
+           is not enforced). The dictionaries should be obtained by using
+           getKeywordFromFile e.g.::
+
+               myFile1 = foo.shp
+               myFile2 = bar.asc
+               myKeywords1 = getKeywordFromFile(myFile1)
+               myKeywords2 = getKeywordFromFile(myFile2)
+               myList = [myKeywords1, myKeywords2]
+               myFunctions = availableFunctions(myList)
 
         Returns:
            A dictionary of strings where each is a plugin name.
-
+           .. note:: If theKeywordList is not provided, all available
+            plugins will be returned in the list.
         Raises:
-           NoFunctionsFoundException if not all parameters are
-           set.
+           NoFunctionsFoundException if no functions are found.
         """
-        myDict = get_admissible_plugins(kw_list)
-        if len(myDict) < 1:
-            myMessage = 'No RIAB impact functions could be found'
-            raise NoFunctionsFoundException(myMessage)
+        myDict = get_admissible_plugins(theKeywordList)
+        #if len(myDict) < 1:
+        #    myMessage = 'No RIAB impact functions could be found'
+        #    raise NoFunctionsFoundException(myMessage)
 
         return myDict
 
@@ -181,7 +192,7 @@ class ImpactCalculator():
            KeywordNotFoundException if the keyword is not recognised.
         """
         myValue = None
-        if not theLayer:
+        if theLayer is None:
             raise InvalidParameterException()
         try:
             myValue = theLayer.get_keywords(keyword)
@@ -195,7 +206,7 @@ class ImpactCalculator():
             raise KeywordNotFoundException(msg)
         return myValue
 
-    def getKeywordFromFile(self, theLayerPath, keyword):
+    def getKeywordFromFile(self, theLayerPath, keyword=None):
         """Get metadata from the keywords file associated with a layer.
 
         .. note:: Requires a str representing a file path instance
@@ -206,21 +217,25 @@ class ImpactCalculator():
 
         Args:
 
-           * theImpactLayer - a string representing a path to a layer
+           * theLayerPath - a string representing a path to a layer
                (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
            * keyword - the metadata keyword to retrieve e.g. 'title'
 
         Returns:
-           A string containing the retrieved value for the keyword.
+           A string containing the retrieved value for the keyword if
+           the keyword argument is specified, otherwise the
+           complete keywords dictionary is returned.
 
         Raises:
            KeywordNotFoundException if the keyword is not recognised.
         """
-        myValue = None
+        # check the source layer path is valid
         if not os.path.isfile(theLayerPath):
             msg = ('Cannot get keywords from a non-existant file.'
                    '%s does not exist.' % theLayerPath)
             raise InvalidParameterException(msg)
+
+        # check there really is a keywords file for this layer
         myKeywordFilePath = os.path.splitext(theLayerPath)[0]
         myKeywordFilePath += '.keywords'
         if not os.path.isfile(myKeywordFilePath):
@@ -228,17 +243,24 @@ class ImpactCalculator():
             raise InvalidParameterException(msg)
 
         #now get the requested keyword using the riab library
+        myDictionary = None
         try:
             myDictionary = read_keywords(myKeywordFilePath)
-            myValue = myDictionary[keyword]
         except Exception, e:
             msg = 'Keyword retrieval failed for %s (%s) \n %s' % (
                     myKeywordFilePath, keyword, str(e))
             raise KeywordNotFoundException(msg)
-        if not myValue or myValue == '':
-            msg = 'No value was found for keyword %s in file %s' % (
+
+        # if no keyword was supplied, just return the dict
+        if keyword is None:
+            return myDictionary
+        if not keyword in myDictionary:
+            msg = 'No value was found for in file %s in keyword %s' % (
                         myKeywordFilePath, keyword)
             raise KeywordNotFoundException(msg)
+
+        myValue = myDictionary[keyword]
+
         return myValue
 
     def getStyleInfo(self, theLayer):

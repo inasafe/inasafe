@@ -110,9 +110,17 @@ class ImpactCalculatorTest(unittest.TestCase):
         assert(), msg
 
     def test_availableFunctions(self):
-        """Test that we can get the available functions from
-        the impactcalculator."""
+        """Check we can get the available functions from the impactcalculator.
+        """
         myList = self.calculator.availableFunctions()
+        assert myList > 1
+        # also test if it works when we give it two layers
+        # to see if we can determine which functions will
+        # work for them.
+        myKeywords1 = self.calculator.getKeywordFromFile(self.rasterPath)
+        myKeywords2 = self.calculator.getKeywordFromFile(self.vectorPath)
+        myList = [myKeywords1, myKeywords2]
+        myList = self.calculator.availableFunctions(myList)
         assert myList > 1
 
     def test_getKeywordFromLayer(self):

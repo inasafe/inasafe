@@ -217,6 +217,7 @@ def _reprojectVectorLayer(theLayer):
 
     return mySource
 
+
 def _clipRasterLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the extents provided. The
     layer must be a raster layer or an exception will be thrown.
