@@ -32,8 +32,7 @@ def clipLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame.
 
-    .. note:: Will delgate to clipVectorLayer or
-    clipRasterLayer as needed.
+    .. note:: Will delegate to clipVectorLayer or clipRasterLayer as needed.
 
     Args:
 
@@ -55,6 +54,36 @@ def clipLayer(layer, extent):
         return _clipRasterLayer(layer, extent)
 
 
+def reprojectLayer(theLayer):
+    """Reproject a Hazard or Exposure layer to EPSG:4326 and
+       return the resulting dataset's filename. If the input
+       is already in EPSG:4326, its original filename will
+       simply be returned.
+
+    .. note:: Will delegate to _reprojectVectorLayer or
+              _reprojectRasterLayer as needed.
+
+    Args:
+
+        theLayer - a valid QGIS vector or raster layer
+
+    Returns:
+        Path to the output reprojected layer. If it is a
+        generated dataset it will be placed in the
+        system temp dir. If the original file is already in
+        EPSG:4326, it will simply return the original
+        file name.
+
+    Raises:
+       None
+
+    """
+    if theLayer.type() == QgsMapLayer.VectorLayer:
+        return _reprojectVectorLayer(theLayer)
+    else:
+        return _reprojectRasterLayer(theLayer)
+
+
 def _clipVectorLayer(layer, extent):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. The layer must be a
@@ -64,7 +93,7 @@ def _clipVectorLayer(layer, extent):
 
     Args:
 
-        * theLayer - a valid QGIS vector or raster layer
+        * theLayer - a valid QGIS vector layer in EPSG:4326
         * theExtent - a valid QgsRectangle defining the
                       clip extent in EPSG:4326
 
@@ -102,7 +131,7 @@ def _clipVectorLayer(layer, extent):
     myXForm = QgsCoordinateTransform(layer.crs(),
                                      myDestinationCrs)
 
-    # Get the clip area in the layers crs
+    # Get the clip area in the layer's crs
     myProjectedExtent = myXForm.transformBoundingBox(extent)
 
     # Get vector layer
@@ -112,10 +141,12 @@ def _clipVectorLayer(layer, extent):
                'layer "%s"' % layer.source())
         raise Exception(msg)
 
+    # get the layer field list, select by our extent then write to disk
     myAttributes = myProvider.attributeIndexes()
     myProvider.select(myAttributes,
                       myProjectedExtent, True, True)
     myFieldList = myProvider.fields()
+
     myWriter = QgsVectorFileWriter(myFilename,
                                    'UTF-8',
                                    myFieldList,
@@ -137,18 +168,68 @@ def _clipVectorLayer(layer, extent):
     return myFilename  # Filename of created file
 
 
-def _clipRasterLayer(layer, extent):
-    """Clip a Hazard or Exposure layer to the
-    extents of the current view frame. The layer must be a
-    raster layer or an exception will be thrown.
+def _reprojectVectorLayer(theLayer):
+    """Reproject a Hazard or Exposure layer to EPSG:4326
+    The layer must be a *vector* layer or an exception will be thrown.
 
     The output layer will always be in WGS84/Geographic.
 
     Args:
 
-        * theLayer - a valid QGIS vector or raster layer
-        * theExtent - a valid QgsRectangle defining the
-                      clip extent in EPSG:4326
+        * theLayer - a valid QGIS vector layer
+
+    Returns:
+        Path to the output reprojected layer. The output
+        will be placed in the system temp dir. If the
+        original layer is already in WGS84, the original
+        layer's file name is simply returned without doing
+        anything.
+
+    Raises:
+       InvalidParameterException if an invalid input is
+       received.
+
+    """
+    if not theLayer:
+        msg = 'Layer passed for reprojection is None.'
+        raise InvalidParameterException(msg)
+
+    if theLayer.type() != QgsMapLayer.VectorLayer:
+        msg = ('Expected a vector layer but received a %s.' %
+               str(theLayer.type()))
+        raise InvalidParameterException(msg)
+
+    mySource = theLayer.source()
+    # Get the crs of the layer so we can check if it is not yet in EPSG:4326
+    # .. note:: Later we could support postgres by always writing to disk at
+    #           this point.
+    myCrs = theLayer.crs()
+    if myCrs.epsg() is not 4326:
+            # Reproject the layer to wgs84
+        myFilename = tempfile.mkstemp('.shp', 'prj_',
+                                tempfile.gettempdir())[1]
+        myError = QgsVectorFileWriter.writeAsVectorFormat(
+                                theLayer,
+                                myFilename,
+                                "UTF-8",
+                                None,
+                                "ESRI Shapefile")
+
+    return mySource
+
+def _clipRasterLayer(layer, extent):
+    """Clip a Hazard or Exposure layer to the extents provided. The
+    layer must be a raster layer or an exception will be thrown.
+
+    .. note:: The extent *must* be in EPSG:4326.
+
+    The output layer will always be in WGS84/Geographic.
+
+    Args:
+
+        * theLayer - a valid QGIS raster layer in EPSG:4326
+        * theExtent - a valid QgsRectangle defining the clip extent
+            in EPSG:4326
 
     Returns:
         Path to the output clipped layer (placed in the
@@ -167,11 +248,63 @@ def _clipRasterLayer(layer, extent):
                str(layer.type()))
         raise InvalidParameterException(msg)
 
-    mySource = layer.source()
-
-    # Get the crs of the layer so we can check if it is not yet in EPSG:4326
+    # Get the crs of the layer so we can check that it is in EPSG:4326
     myCrs = layer.crs()
+    if myCrs.epsg() is not 4326:
+        msg = ('Expected a raster layer in EPSG:4326 but received one'
+               'in EPSG:%s.' % myCrs.epsg())
+        raise InvalidParameterException(msg)
 
+    myFilename = tempfile.mkstemp('.tif', 'clip_',
+                                    tempfile.gettempdir())[1]
+    myCommand = ('gdal_translate -projwin %f %f %f %f -of GTiff '
+                 '%s %s' % (extent.xMinimum(),
+                            extent.yMaximum(),
+                            extent.xMaximum(),
+                            extent.yMinimum(),
+                            layer.source(),
+                            myFilename))
+    print 'Command: ', myCommand
+    myResult = call(myCommand, shell=True)
+    # .. todo:: Check the result of the shell call is ok
+    copyKeywords(str(layer.source()), myFilename)
+    return myFilename  # Filename of created file
+
+
+def _reprojectRasterLayer(theLayer):
+    """Reproject a Hazard or Exposure layer to EPSG:4326
+    The layer must be a raster layer or an exception will be thrown.
+
+    The output layer will always be in WGS84/Geographic.
+
+    Args:
+
+        * theLayer - a valid QGIS raster layer
+
+    Returns:
+        Path to the output reprojected layer. The output
+        will be placed in the system temp dir. If the
+        original layer is already in WGS84, the original
+        layer's file name is simply returned without doing
+        anything.
+
+    Raises:
+       InvalidParameterException if an invalid input is
+       received.
+
+    """
+    if not theLayer:
+        msg = 'Layer passed for reprojection is None.'
+        raise InvalidParameterException(msg)
+
+    if theLayer.type() != QgsMapLayer.RasterLayer:
+        msg = ('Expected a raster layer but received a %s.' %
+               str(theLayer.type()))
+        raise InvalidParameterException(msg)
+
+    mySource = theLayer.source()
+    # Get the crs of the layer so we can check if it is not yet in EPSG:4326
+    myCrs = theLayer.crs()
     if myCrs.epsg() is not 4326:
             # Reproject the layer to wgs84
         myFilename = tempfile.mkstemp('.tif', 'prj_',
@@ -184,20 +317,7 @@ def _clipRasterLayer(layer, extent):
         # block continues to work as expected
         mySource = myFilename
 
-    myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                    tempfile.gettempdir())[1]
-    myCommand = ('gdal_translate -projwin %f %f %f %f -of GTiff '
-                 '%s %s' % (extent.xMinimum(),
-                            extent.yMaximum(),
-                            extent.xMaximum(),
-                            extent.yMinimum(),
-                            mySource,
-                            myFilename))
-    print 'Command: ', myCommand
-    myResult = call(myCommand, shell=True)
-    # .. todo:: Check the result of the shell call is ok
-    copyKeywords(str(layer.source()), myFilename)
-    return myFilename  # Filename of created file
+    return mySource
 
 
 def copyKeywords(sourceFile, destinationFile):

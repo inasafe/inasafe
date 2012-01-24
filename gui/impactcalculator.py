@@ -76,6 +76,8 @@ def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
         Any exceptions raised by the RIAB library will be propogated.
     """
     try:
+        # .. note:: The get_bounding_boxes function below assumes that
+        #            all inputs are in EPSG:4326
         return get_bounding_boxes(
             makeAscii(hazardPath),
             makeAscii(exposurePath),
@@ -142,24 +144,24 @@ class ImpactCalculator():
         riab function to use to process the hazard and exposure
         layers with.""")
 
-    def availableFunctions(self):
+    def availableFunctions(self, kw_list=None):
         """ Query the riab engine to see what plugins are available.
         Args:
            None.
 
         Returns:
-           A list of strings where each is a plugin name.
+           A dictionary of strings where each is a plugin name.
 
         Raises:
            NoFunctionsFoundException if not all parameters are
            set.
         """
-        myList = get_plugins()
-        if len(myList) < 1:
+        myDict = get_admissible_plugins(kw_list)
+        if len(myDict) < 1:
             myMessage = 'No RIAB impact functions could be found'
             raise NoFunctionsFoundException(myMessage)
 
-        return myList
+        return myDict
 
     def getKeywordFromLayer(self, theLayer, keyword):
         """Get metadata from the keywords file associated with a layer.

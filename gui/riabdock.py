@@ -51,7 +51,9 @@ if os.path.isfile(PATH):
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
                        QgsSymbolV2, QgsRendererRangeV2, QgsRectangle,
-                       QgsSymbolLayerV2Registry, QgsColorRampShader)
+                       QgsSymbolLayerV2Registry, QgsColorRampShader,
+                       QgsCoordinateReferenceSystem,
+                       QgsCoordinateTransform)
 from qgis.gui import QgsMapCanvas
 from impactcalculator import ImpactCalculator
 from riabclipper import clipLayer
@@ -303,7 +305,7 @@ class RiabDock(QtGui.QDockWidget):
             myName = myLayer.name()
             mySource = str(myLayer.id())
             # find out if the layer is a hazard or an exposure
-            # layer by quering its keywords. If the query fails,
+            # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
             try:
                 myCategory = self.calculator.getKeywordFromFile(
@@ -340,8 +342,8 @@ class RiabDock(QtGui.QDockWidget):
            no
         """
         try:
-            myList = self.calculator.availableFunctions()
-            for myFunction in myList:
+            myDict = self.calculator.availableFunctions()
+            for myFunction in myDict:  # use only key
                 self.ui.cboFunction.addItem(myFunction)
         except Exception, e:
             raise e
@@ -587,18 +589,27 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
+        myCanvas = self.iface.mapCanvas().extent()
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
-        myRect = self.iface.mapCanvas().extent()
+        myRect = myCanvas.extent()
+        # reproject the mapcanvas extent to EPSG:4326 if needed
+        myDestinationCrs = QgsCoordinateReferenceSystem()
+        myDestinationCrs.createFromEpsg(4326)
+        myXForm = QgsCoordinateTransform(myCanvas.crs(),
+                                         myDestinationCrs)
 
-        myExtent = [myRect.xMinimum(),
-                    myRect.yMinimum(),
-                    myRect.xMaximum(),
-                    myRect.yMaximum()]
+        # Get the clip area in the layer's crs
+        myProjectedExtent = myXForm.transformBoundingBox(myRect)
+
+        myExtent = [myProjectedExtent.xMinimum(),
+                    myProjectedExtent.yMinimum(),
+                    myProjectedExtent.xMaximum(),
+                    myProjectedExtent.yMaximum()]
         try:
             myExtent = getOptimalExtent(myHazardLayer.source(),
                                     myExposureLayer.source(),
-                                    myExtent)
+                                    myProjectedExtent)
         except Exception, e:
             msg = ('<p>There '
                    'was insufficient overlap between the input layers '
