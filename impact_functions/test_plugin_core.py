@@ -173,7 +173,6 @@ class Test_plugin_core(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'risiko.settings'
     suite = unittest.makeSuite(Test_plugin_core, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
