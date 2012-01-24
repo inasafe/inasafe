@@ -353,14 +353,14 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
            no
         """
-        #settrace()
+        settrace()
         self.ui.cboFunction.clear()
         # get the keyword dicts for hazard and exposure
         myHazardLayer = self.getHazardLayer()
         if myHazardLayer is None:
             return
         myHazardFile = myHazardLayer.source()
-        myExposureLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
         if myExposureLayer is None:
             return
         myExposureFile = myExposureLayer.source()
@@ -641,6 +641,9 @@ class RiabDock(QtGui.QDockWidget):
                     myProjectedExtent.yMinimum(),
                     myProjectedExtent.xMaximum(),
                     myProjectedExtent.yMaximum()]
+
+        #myGeoHazardLayer = reproject()
+
         try:
             myExtent = getOptimalExtent(myHazardLayer.source(),
                                     myExposureLayer.source(),
