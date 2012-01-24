@@ -222,6 +222,14 @@ class RiabDock(QtGui.QDockWidget):
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
+        # update the functions list whenever we change the hazard
+        QtCore.QObject.connect(self.ui.cboHazard,
+                               QtCore.SIGNAL('currentIndexChanged(int)'),
+                               self.getFunctions)
+        # update the functions list whenever we change the exposure
+        QtCore.QObject.connect(self.ui.cboExposure,
+                               QtCore.SIGNAL('currentIndexChanged(int)'),
+                               self.getFunctions)
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
@@ -345,6 +353,7 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
            no
         """
+        #settrace()
         self.ui.cboFunction.clear()
         # get the keyword dicts for hazard and exposure
         myHazardLayer = self.getHazardLayer()
