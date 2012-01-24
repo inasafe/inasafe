@@ -17,11 +17,13 @@ __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import os
+import shutil
 from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
                        QgsRectangle, QgsMapLayer, QgsFeature,
                        QgsVectorFileWriter)
 from PyQt4 import QtCore
-from riabexceptions import InvalidParameterException
+from riabexceptions import InvalidParameterException, KeywordNotFoundException
 import tempfile
 from subprocess import call
 
@@ -130,7 +132,7 @@ def _clipVectorLayer(layer, extent):
         myWriter.addFeature(myFeature)
     del myWriter  # Flush to disk
 
-    copyKeywords( layer.source(), myFilename)
+    copyKeywords(str(layer.source()), myFilename)
 
     return myFilename  # Filename of created file
 
@@ -194,17 +196,31 @@ def _clipRasterLayer(layer, extent):
     print 'Command: ', myCommand
     myResult = call(myCommand, shell=True)
     # .. todo:: Check the result of the shell call is ok
-
+    copyKeywords(str(layer.source()), myFilename)
     return myFilename  # Filename of created file
 
+
 def copyKeywords(sourceFile, destinationFile):
-    """Helper to copy the keywords file from a source dataset 
+    """Helper to copy the keywords file from a source dataset
     to a destination dataset.
 
     e.g.::
-    
+
     copyKeywords('foo.shp','bar.shp')
 
     Will result in the foo.keywords file being copied to bar.keyword."""
-    
-    pass
+
+    mySourceBase = os.path.splitext(sourceFile)[0]
+    myDestinationBase = os.path.splitext(destinationFile)[0]
+    myNewSource = mySourceBase + '.keywords'
+    myNewDestination = myDestinationBase + '.keywords'
+    if not os.path.exists(myNewSource):
+        msg = ('Keywords file associated with dataset could not be found: \n%s'
+               % myNewSource)
+        raise KeywordNotFoundException(msg)
+    try:
+        shutil.copyfile(myNewSource, myNewDestination)
+    except:
+        msg = ('Failed to copy keywords file from :\n%s\nto\%s' %
+               (myNewSource, myNewDestination))
+    return
