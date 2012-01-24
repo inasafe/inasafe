@@ -251,9 +251,9 @@ def _clipRasterLayer(layer, extent):
 
     # Get the crs of the layer so we can check that it is in EPSG:4326
     myCrs = layer.crs()
-    if myCrs.epsg() is not 4326:
+    if myCrs.epsg() != 4326:
         msg = ('Expected a raster layer in EPSG:4326 but received one'
-               'in EPSG:%s.' % myCrs.epsg())
+               ' in EPSG:%s.' % myCrs.epsg())
         raise InvalidParameterException(msg)
 
     myFilename = tempfile.mkstemp('.tif', 'clip_',
@@ -306,7 +306,7 @@ def _reprojectRasterLayer(theLayer):
     mySource = theLayer.source()
     # Get the crs of the layer so we can check if it is not yet in EPSG:4326
     myCrs = theLayer.crs()
-    if myCrs.epsg() is not 4326:
+    if myCrs.epsg() != 4326:
             # Reproject the layer to wgs84
         myFilename = tempfile.mkstemp('.tif', 'prj_',
                                 tempfile.gettempdir())[1]

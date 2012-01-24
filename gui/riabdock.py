@@ -635,6 +635,7 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
+        settrace()
         myCanvas = self.iface.mapCanvas()
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
@@ -648,12 +649,12 @@ class RiabDock(QtGui.QDockWidget):
                                          myGeoCrs)
 
             # Get the clip area in the layer's crs
-            myProjectedExtent = myXForm.transformBoundingBox(myRect)
+            myTransformedExtent = myXForm.transformBoundingBox(myRect)
 
-            myGeoExtent = [myProjectedExtent.xMinimum(),
-                        myProjectedExtent.yMinimum(),
-                        myProjectedExtent.xMaximum(),
-                        myProjectedExtent.yMaximum()]
+            myGeoExtent = [myTransformedExtent.xMinimum(),
+                           myTransformedExtent.yMinimum(),
+                           myTransformedExtent.xMaximum(),
+                           myTransformedExtent.yMaximum()]
         else:
             myGeoExtent = [myRect.xMinimum(),
                         myRect.yMinimum(),
@@ -672,7 +673,7 @@ class RiabDock(QtGui.QDockWidget):
             # We will convert it to a QgsRectangle afterwards.
             myGeoExtent = getOptimalExtent(myGeoHazardPath,
                                     myGeoExposurePath,
-                                    myProjectedExtent)
+                                    myGeoExtent)
         except Exception, e:
             msg = ('<p>There '
                    'was insufficient overlap between the input layers '
@@ -681,8 +682,7 @@ class RiabDock(QtGui.QDockWidget):
                    'details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
                    '<p>%s</p><p>%s</p>' %
-                   # perhaps it would be better to show the Geo layers? TS
-                  (myHazardLayer.source(), myExposureLayer.source()))
+                  (myGeoHazardPath, myGeoExposurePath))
             raise Exception(msg)
 
         myRect = QgsRectangle(myGeoExtent[0],
