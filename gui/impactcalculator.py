@@ -32,6 +32,7 @@ sys.path.append(pardir)
 from impact_functions import get_plugins
 from engine.core import calculate_impact, get_bounding_boxes
 from storage.core import read_layer
+from storage.utilities import read_keywords
 import threading
 from PyQt4.QtCore import QObject, pyqtSignal
 
@@ -160,43 +161,89 @@ class ImpactCalculator():
 
         return myList
 
-    def getMetadata(self, theImpactLayer, keyword):
+    def getKeywordFromLayer(self, theLayer, keyword):
         """Get metadata from the keywords file associated with a layer.
+
+        .. note:: Requires a riab layer instance as parameter.
+        .. see:: getKeywordFromPath
+
         Args:
 
-           * theImpactLayer - a RIAB layer (vector or raster)
+           * theLayer - a RIAB layer (vector or raster)
            * keyword - the metadata keyword to retrieve e.g. 'title'
 
         Returns:
-           A list of strings where each is a plugin name.
+           A string containing the retrieved value for the keyword.
 
         Raises:
            KeywordNotFoundException if the keyword is not recognised.
-
-         .. todo::
-            cache the layer if io is too slow
-
         """
         myValue = None
-        if not theImpactLayer:
+        if not theLayer:
             raise InvalidParameterException()
         try:
-            myValue = theImpactLayer.get_keywords(keyword)
+            myValue = theLayer.get_keywords(keyword)
         except Exception, e:
             msg = 'Keyword retrieval failed for %s (%s) \n %s' % (
-                    theImpactLayer.get_filename(), keyword, str(e))
+                    theLayer.get_filename(), keyword, str(e))
             raise KeywordNotFoundException(msg)
         if not myValue or myValue == '':
             msg = 'No value was found for keyword %s in layer %s' % (
-                        theImpactLayer.get_filename(), keyword)
+                        theLayer.get_filename(), keyword)
             raise KeywordNotFoundException(msg)
         return myValue
 
-    def getStyleInfo(self, theImpactLayer):
+    def getKeywordFromFile(self, theLayerPath, keyword):
+        """Get metadata from the keywords file associated with a layer.
+
+        .. note:: Requires a str representing a file path instance
+                  as parameter As opposed to getKeywordFromLayer which
+                  takes a riab file object as parameter.
+
+        .. see:: getKeywordFromLayer
+
+        Args:
+
+           * theImpactLayer - a string representing a path to a layer
+               (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
+           * keyword - the metadata keyword to retrieve e.g. 'title'
+
+        Returns:
+           A string containing the retrieved value for the keyword.
+
+        Raises:
+           KeywordNotFoundException if the keyword is not recognised.
+        """
+        myValue = None
+        if not os.path.isfile(theLayerPath):
+            msg = ('Cannot get keywords from a non-existant file.'
+                   '%s does not exist.' % theLayerPath)
+            raise InvalidParameterException(msg)
+        myKeywordFilePath = os.path.splitext(theLayerPath)[0]
+        myKeywordFilePath += '.keywords'
+        if not os.path.isfile(myKeywordFilePath):
+            msg = ('No keywords file found for %s' % theLayerPath)
+            raise InvalidParameterException(msg)
+
+        #now get the requested keyword using the riab library
+        try:
+            myDictionary = read_keywords(myKeywordFilePath)
+            myValue = myDictionary[keyword]
+        except Exception, e:
+            msg = 'Keyword retrieval failed for %s (%s) \n %s' % (
+                    myKeywordFilePath, keyword, str(e))
+            raise KeywordNotFoundException(msg)
+        if not myValue or myValue == '':
+            msg = 'No value was found for keyword %s in file %s' % (
+                        myKeywordFilePath, keyword)
+            raise KeywordNotFoundException(msg)
+        return myValue
+
+    def getStyleInfo(self, theLayer):
         """Get styleinfo associated with a layer.
         Args:
 
-           * theImpactLayer - RIAB layer (raster or vector)
+           * theLayer - RIAB layer (raster or vector)
 
         Returns:
            A list of dictionaries containing styleinfo info for a layer.
@@ -207,24 +254,24 @@ class ImpactCalculator():
            * InvalidParameterException if the paramers are not correct.
         """
 
-        if not theImpactLayer:
+        if not theLayer:
             raise InvalidParameterException()
 
-        if not hasattr(theImpactLayer, 'get_style_info'):
+        if not hasattr(theLayer, 'get_style_info'):
             msg = ('Argument "%s" was not a valid layer instance' %
-                   theImpactLayer)
+                   theLayer)
             raise StyleInfoNotFoundException(msg)
 
         try:
-            myValue = theImpactLayer.get_style_info()
+            myValue = theLayer.get_style_info()
         except Exception, e:
             msg = 'Styleinfo retrieval failed for %s\n %s' % (
-                        theImpactLayer.get_filename(), str(e))
+                        theLayer.get_filename(), str(e))
             raise StyleInfoNotFoundException(msg)
 
         if not myValue or myValue == '':
             msg = ('No styleInfo was found for layer %s' % (
-                    theImpactLayer.get_filename()))
+                    theLayer.get_filename()))
             raise StyleInfoNotFoundException(msg)
 
         return myValue

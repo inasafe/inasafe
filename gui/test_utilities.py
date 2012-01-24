@@ -30,14 +30,16 @@ class Test_U(unittest.TestCase):
             get_bounding_boxes('aoeu', 'oaeu', [])
         except Exception, e:
             # Display message and traceback
+
             msg = get_exception_with_stacktrace(e, html=False)
+            print msg
             assert str(e) in msg
             assert 'line' in msg
             assert 'File' in msg
 
             msg = get_exception_with_stacktrace(e, html=True)
             assert str(e) in msg
-            assert '<div id="traceback">' in msg
+            assert '<pre id="traceback"' in msg
             assert 'line' in msg
             assert 'File' in msg
 

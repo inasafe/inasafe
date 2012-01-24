@@ -19,7 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, QtWebKit
+from PyQt4.QtWebKit import QWebSettings
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
 from utilities import get_exception_with_stacktrace
@@ -56,8 +57,10 @@ from impactcalculator import ImpactCalculator
 from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent
 
-
+import resources
 # Helper functions
+
+
 def setVectorStyle(qgisVectorLayer, style):
     """Set QGIS vector style based on RIAB style dictionary
 
@@ -215,6 +218,8 @@ class RiabDock(QtGui.QDockWidget):
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
+        #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
+        #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -245,8 +250,11 @@ class RiabDock(QtGui.QDockWidget):
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myExposureIndex = self.ui.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
-            myMessage = 'Please ensure both Hazard layer and ' + \
-            'Exposure layer are set before clicking Run.'
+            myMessage = ('<span class="label notice">Getting started:</span> '
+            'To use this tool you need to add some layers to your QGIS '
+            'project. At least one <em>hazard</em> layer (e.g. earthquake MMI)'
+            'and one <em>exposure</em> layer (e.g. dwellings) are available. '
+            'When you are ready, click the <em>run</em> button below.')
             return (False, myMessage)
         else:
             return (True, '')
@@ -264,7 +272,7 @@ class RiabDock(QtGui.QDockWidget):
         myFlag, myMessage = self.validate()
         myButton.setEnabled(myFlag)
         if myMessage is not '':
-            self.ui.wvResults.setHtml(myMessage)
+            self.displayHtml(myMessage)
 
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
@@ -292,17 +300,30 @@ class RiabDock(QtGui.QDockWidget):
             store uuid in user property of list widget for layers
             """
 
-            # Hazard combo
-            #if myLayer.type() == QgsMapLayer.RasterLayer:
             myName = myLayer.name()
-            mySource = myLayer.source()
-            self.ui.cboHazard.addItem(myName, mySource)
+            mySource = str(myLayer.id())
+            # find out if the layer is a hazard or an exposure
+            # layer by quering its keywords. If the query fails,
+            # the layer will be ignored.
+            try:
+                myCategory = self.calculator.getKeywordFromFile(
+                                str(myLayer.source()), 'category')
+            except:
+                # continue ignoring this layer
+                continue
+            # See if there is a title for this layer, if not,
+            # fallback to the layer's filename
+            myTitle = None
+            try:
+                myTitle = self.calculator.getKeywordFromFile(
+                            str(myLayer.source()), 'title')
+            except:
+                myTitle = myName
 
-            # Exposure combo
-            #elif myLayer.type() == QgsMapLayer.VectorLayer:
-            myName = myLayer.name()
-            mySource = myLayer.source()
-            self.ui.cboExposure.addItem(myName, mySource)
+            if myCategory == 'hazard':
+                self.ui.cboHazard.addItem(myTitle, mySource)
+            elif myCategory == 'exposure':
+                self.ui.cboExposure.addItem(myTitle, mySource)
 
         self.setOkButtonStatus()
         return
@@ -323,11 +344,7 @@ class RiabDock(QtGui.QDockWidget):
             for myFunction in myList:
                 self.ui.cboFunction.addItem(myFunction)
         except Exception, e:
-            if not self.suppressDialogsFlag:
-                raise e
-            else:
-                QtGui.QMessageBox.critical(self,
-                  'Function list retieval error', str(e))
+            raise e
 
     def readImpactLayer(self, engineImpactLayer):
         """Helper function to read and validate layer
@@ -366,29 +383,30 @@ class RiabDock(QtGui.QDockWidget):
             msg = 'Loaded impact layer "%s" is not valid' % myFilename
             raise Exception(msg)
 
-    def getHazardFilename(self):
-        """Obtain the name of the path to the hazard file from the
-        userrole of the QtCombo for exposure."""
-        myHazardIndex = self.ui.cboHazard.currentIndex()
-        myHazardFilename = self.ui.cboHazard.itemData(myHazardIndex,
+    def getHazardLayer(self):
+        """Obtain qgsmaplayer id from the userrole of the QtCombo for exposure
+        and return it as a QgsMapLayer"""
+        myIndex = self.ui.cboHazard.currentIndex()
+        myLayerId = self.ui.cboHazard.itemData(myIndex,
                              QtCore.Qt.UserRole).toString()
-        return myHazardFilename
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        return myLayer
 
-    def getExposureFilename(self):
+    def getExposureLayer(self):
         """Obtain the name of the path to the exposure file from the
         userrole of the QtCombo for exposure."""
-        myExposureIndex = self.ui.cboExposure.currentIndex()
-        myExposureFilename = self.ui.cboExposure.itemData(myExposureIndex,
+        myIndex = self.ui.cboExposure.currentIndex()
+        myLayerId = self.ui.cboExposure.itemData(myIndex,
                              QtCore.Qt.UserRole).toString()
-        return myExposureFilename
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        return myLayer
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
         self.showBusy()
-        #QtGui.QMessageBox.information(self, "Risk In A Box", "testing...")
         myFlag, myMessage = self.validate()
         if not myFlag:
-            self.ui.wvResults.setHtml(myMessage)
+            self.displayHtml(myMessage)
             self.hideBusy()
             return
 
@@ -399,16 +417,16 @@ class RiabDock(QtGui.QDockWidget):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            msg = ('An exception occurred when creating the optimal'
-                  'clipped layer copies: %s' % ((str(e))))
-            self.ui.wvResults.setHtml(msg)
+            msg = ('<p><span class="label important">Error:</span> '
+                   'An exception occurred when creating layer '
+                   'subsets clipped to the optimal extent: %s</p>' %
+                   ((str(e))))
+            msg += get_exception_with_stacktrace(e, html=True)
+            self.displayHtml(msg)
             return
 
         self.calculator.setHazardLayer(myHazardFilename)
         self.calculator.setExposureLayer(myExposureFilename)
-        QtGui.QMessageBox.critical(self,
-                  'Optimally clipped layers: \n%s\n%s' % (
-                    myHazardFilename, myExposureFilename))
         self.calculator.setFunction(self.ui.cboFunction.currentText())
 
         # Start it in its own thread
@@ -429,7 +447,7 @@ class RiabDock(QtGui.QDockWidget):
             self.hideBusy()
             msg = 'An exception occurred when starting the model: %s' % (
                     (str(e)))
-            self.ui.wvResults.setHtml(msg)
+            self.displayHtml(msg)
 
     def completed(self):
         """Slot activated when the process is done."""
@@ -440,10 +458,10 @@ class RiabDock(QtGui.QDockWidget):
         except Exception, e:
             # Display message and traceback
             msg = get_exception_with_stacktrace(e, html=True)
-            self.ui.wvResults.setHtml(msg)
+            self.displayHtml(msg)
         else:
             # On succes, display generated report
-            self.ui.wvResults.setHtml(myReport)
+            self.displayHtml(myReport)
 
         # Hide hourglass
         self.hideBusy()
@@ -470,7 +488,7 @@ class RiabDock(QtGui.QDockWidget):
             raise Exception(msg)
 
         # Get tabular information from impact layer
-        myReport = self.calculator.getMetadata(engineImpactLayer,
+        myReport = self.calculator.getKeywordFromLayer(engineImpactLayer,
                                                'caption')
 
         # Get requested style for impact layer of either kind
@@ -516,10 +534,12 @@ class RiabDock(QtGui.QDockWidget):
         """A helper function to indicate the plugin is processing."""
         #self.ui.pbnRunStop.setText('Cancel')
         self.ui.pbnRunStop.setEnabled(False)
-        myHtml = ('<center><p>Analyzing this question...</p>' +
-                   '<img src="qrc:/plugins/riab/ajax-loader.gif" />' +
-                   '</center>')
-        self.ui.wvResults.setHtml(myHtml)
+        myHtml = ('<div><span class="label success">'
+                   'Analyzing this question...</span></div>'
+                   '<div><img src="qrc:/plugins/riab/ajax-loader.gif" />'
+                   '</div>')
+        self.displayHtml(myHtml)
+        self.repaint()
         self.ui.grpQuestion.setEnabled(False)
 
     def hideBusy(self):
@@ -527,6 +547,7 @@ class RiabDock(QtGui.QDockWidget):
         #self.ui.pbnRunStop.setText('Run')
         if self.runner:
             del self.runner
+            self.runner = None
 
         self.ui.grpQuestion.setEnabled(True)
         self.ui.pbnRunStop.setEnabled(True)
@@ -566,8 +587,8 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        myHazardFilename = self.getHazardFilename()
-        myExposureFilename = self.getExposureFilename()
+        myHazardLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
         myRect = self.iface.mapCanvas().extent()
 
         myExtent = [myRect.xMinimum(),
@@ -575,19 +596,52 @@ class RiabDock(QtGui.QDockWidget):
                     myRect.xMaximum(),
                     myRect.yMaximum()]
         try:
-            myExtent = getOptimalExtent(myHazardFilename,
-                                    myExposureFilename,
+            myExtent = getOptimalExtent(myHazardLayer.source(),
+                                    myExposureLayer.source(),
                                     myExtent)
         except Exception, e:
-            raise e
-
+            msg = ('<p>There '
+                   'was insufficient overlap between the input layers '
+                   'and / or the layers and the viewport. Please select '
+                   'two overlapping layers and zoom or pan to them. Full '
+                   'details follow:</p>'
+                   '<p>Failed to obtain the optimal extent given:</p>'
+                   '<p>%s</p><p>%s</p>' %
+                  (myHazardLayer.source(), myExposureLayer.source()))
+            raise Exception(msg)
         myRect = QgsRectangle(myExtent[0],
                               myExtent[1],
                               myExtent[2],
                               myExtent[3])
         # Clip the vector to the bbox
-        myClippedExposurePath = clipLayer(myExposureFilename, myRect)
+        myClippedExposurePath = clipLayer(myExposureLayer, myRect)
         # Clip the vector to the bbox
-        myClippedHazardPath = clipLayer(myHazardFilename, myRect)
+        myClippedHazardPath = clipLayer(myHazardLayer, myRect)
 
-        return myClippedHazardPath, myClippedExposurePath
+        return (myClippedHazardPath, myClippedExposurePath)
+
+    def htmlHeader(self):
+        """Get a standard html header for wrapping content in."""
+        myFile = QtCore.QFile(':/plugins/riab/header.html')
+        if not myFile.open(QtCore.QIODevice.ReadOnly):
+            return '----'
+        myStream = QtCore.QTextStream(myFile)
+        myHtml = myStream.readAll()
+        myFile.close()
+        return myHtml
+
+    def htmlFooter(self):
+        """Get a standard html footer for wrapping content in."""
+        myFile = QtCore.QFile(':/plugins/riab/footer.html')
+        if not myFile.open(QtCore.QIODevice.ReadOnly):
+            return '----'
+        myStream = QtCore.QTextStream(myFile)
+        myHtml = myStream.readAll()
+        myFile.close()
+        return myHtml
+
+    def displayHtml(self, theMessage):
+        """Given an html snippet, wrap it in a page header and footer
+        and display it in the wvResults widget."""
+        self.ui.wvResults.setHtml(self.htmlHeader() + theMessage +
+                                self.htmlFooter())

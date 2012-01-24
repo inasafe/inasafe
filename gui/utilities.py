@@ -14,14 +14,19 @@ def get_exception_with_stacktrace(e, html=False):
     """
 
     info = ''.join(traceback.format_tb(sys.exc_info()[2]))
-    errmsg = str(e) + '\n\n' + info
+    errmsg = str(e)
 
     if not html:
-        return errmsg
+        return errmsg + "\n" + info
     else:
         # Wrap string in html
-        s = '<div id="traceback"><pre>\n'
-        s += errmsg
+        s = '<div>'
+        s += '<span class="label important">Problem:</span> ' + errmsg
+        s += '</div>'
+        s += '<div>'
+        s += '<span class="label warning">Traceback:</span> '
+        s += '<pre id="traceback" class="prettyprint">\n'
+        s += info
         s += '</pre></div>'
 
         return s
