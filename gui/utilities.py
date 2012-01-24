@@ -17,7 +17,7 @@ def get_exception_with_stacktrace(e, html=False):
     errmsg = str(e)
 
     if not html:
-        return errmsg
+        return errmsg + "\n" + info
     else:
         # Wrap string in html
         s = '<div>'
