@@ -395,8 +395,10 @@ class RiabDock(QtGui.QDockWidget):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            msg = ('An exception occurred when creating the optimal '
-                  'clipped layer copies: %s' % ((str(e))))
+            msg = ('<p><span class="label important">Error:</span> '
+                   'An exception occurred when creating layer '
+                   'subsets clipped to the optimal extent: %s</p>' %
+                   ((str(e))))
             msg += get_exception_with_stacktrace(e, html=True)
             self.displayHtml(msg)
             return
@@ -510,10 +512,12 @@ class RiabDock(QtGui.QDockWidget):
         """A helper function to indicate the plugin is processing."""
         #self.ui.pbnRunStop.setText('Cancel')
         self.ui.pbnRunStop.setEnabled(False)
-        myHtml = ('<center><p>Analyzing this question...</p>' + 
-                   '<img src="qrc:/plugins/riab/ajax-loader.gif" />' + 
-                   '</center>')
+        myHtml = ('<div><span class="label success">'
+                   'Analyzing this question...</span></div>'
+                   '<div><img src="qrc:/plugins/riab/ajax-loader.gif" />'
+                   '</div>')
         self.displayHtml(myHtml)
+        self.repaint()
         self.ui.grpQuestion.setEnabled(False)
 
     def hideBusy(self):
@@ -521,6 +525,7 @@ class RiabDock(QtGui.QDockWidget):
         #self.ui.pbnRunStop.setText('Run')
         if self.runner:
             del self.runner
+            self.runner = None
 
         self.ui.grpQuestion.setEnabled(True)
         self.ui.pbnRunStop.setEnabled(True)
@@ -573,7 +578,13 @@ class RiabDock(QtGui.QDockWidget):
                                     myExposureLayer.source(),
                                     myExtent)
         except Exception, e:
-            msg = ('Failed to obtain the optimal extent given:\n%s\n%s' %
+            msg = ('<p>There '
+                   'was insufficient overlap between the input layers '
+                   'and / or the layers and the viewport. Please select '
+                   'two overlapping layers and zoom or pan to them. Full '
+                   'details follow:</p>'
+                   '<p>Failed to obtain the optimal extent given:</p>'
+                   '<p>%s</p><p>%s</p>' %
                   (myHazardLayer.source(), myExposureLayer.source()))
             raise Exception(msg)
         myRect = QgsRectangle(myExtent[0],
