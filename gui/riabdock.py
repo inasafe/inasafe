@@ -248,8 +248,11 @@ class RiabDock(QtGui.QDockWidget):
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myExposureIndex = self.ui.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
-            myMessage = 'Please ensure both Hazard layer and ' + \
-            'Exposure layer are set before clicking Run.'
+            myMessage = ('<span class="label notice">Getting started:</span> '
+            'To use this tool you need to add some layers to your QGIS '
+            'project. At least one <em>hazard</em> layer (e.g. earthquake MMI)'
+            'and one <em>exposure</em> layer (e.g. dwellings) are available. '
+            'When you are ready, click the <em>run</em> button below.')
             return (False, myMessage)
         else:
             return (True, '')

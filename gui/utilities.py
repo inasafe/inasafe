@@ -25,7 +25,7 @@ def get_exception_with_stacktrace(e, html=False):
         s += '</div>'
         s += '<div>'
         s += '<span class="label warning">Traceback:</span> '
-        s += '<pre id="traceback">\n'
+        s += '<pre id="traceback" class="prettyprint">\n'
         s += info
         s += '</pre></div>'
 
