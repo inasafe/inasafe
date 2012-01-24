@@ -468,7 +468,7 @@ class RiabDock(QtGui.QDockWidget):
             raise Exception(msg)
 
         # Get tabular information from impact layer
-        myReport = self.calculator.getMetadata(engineImpactLayer,
+        myReport = self.calculator.getKeywordFromLayer(engineImpactLayer,
                                                'caption')
 
         # Get requested style for impact layer of either kind

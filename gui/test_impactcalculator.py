@@ -115,20 +115,39 @@ class ImpactCalculatorTest(unittest.TestCase):
         myList = self.calculator.availableFunctions()
         assert myList > 1
 
-    def test_getMetadata(self):
-        """Test that we can get keyword data from a file with
+    def test_getKeywordFromLayer(self):
+        """Test that we can get keyword data from a riab layer with
         a .keyword metadata file associated with it."""
         myRunner = self.calculator.getRunner()
         myRunner.start()
         myRunner.join()
         myImpactLayer = myRunner.impactLayer()
-        myKeyword = self.calculator.getMetadata(myImpactLayer, 'caption')
+        myKeyword = self.calculator.getKeywordFromLayer(
+                                        myImpactLayer, 'caption')
         msg = 'Keyword request returned an empty string'
         assert(myKeyword is not ''), msg
         # Test we get an exception if keyword is not found
         try:
-            myKeyword = self.calculator.getMetadata(
+            myKeyword = self.calculator.getKeywordFromLayer(
                             myImpactLayer, 'boguskeyword')
+        except KeywordNotFoundException:
+            pass  # this is good
+        except Exception, e:
+            msg = ('Request for bogus keyword raised incorrect exception' +
+                    ' type: \n %s') % str(e)
+            assert(), msg
+
+    def test_getKeywordFromFile(self):
+        """Test that we can get keyword data from a file with
+        a .keyword metadata file associated with it."""
+        myKeyword = self.calculator.getKeywordFromFile(
+                                    self.rasterPath, 'category')
+        msg = 'Keyword request returned an empty string'
+        assert(myKeyword is not ''), msg
+        # Test we get an exception if keyword is not found
+        try:
+            myKeyword = self.calculator.getKeywordFromFile(
+                            self.rasterPath, 'boguskeyword')
         except KeywordNotFoundException:
             pass  # this is good
         except Exception, e:
