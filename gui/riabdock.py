@@ -56,7 +56,7 @@ from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsCoordinateTransform)
 from qgis.gui import QgsMapCanvas
 from impactcalculator import ImpactCalculator
-from riabclipper import clipLayer
+from riabclipper import clipLayer, reprojectLayer
 from impactcalculator import getOptimalExtent
 
 import resources
@@ -353,7 +353,7 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
            no
         """
-        settrace()
+        #settrace()
         self.ui.cboFunction.clear()
         # get the keyword dicts for hazard and exposure
         myHazardLayer = self.getHazardLayer()
@@ -366,8 +366,19 @@ class RiabDock(QtGui.QDockWidget):
         myExposureFile = myExposureLayer.source()
         myHazardKeywords = self.calculator.getKeywordFromFile(
                                             str(myHazardFile))
+        # We need to add the layer type to the returned dict
+        if myHazardLayer.type() == QgsMapLayer.VectorLayer:
+            myHazardKeywords['layer_type'] = 'vector'
+        elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
+            myHazardKeywords['layer_type'] = 'raster'
+
         myExposureKeywords = self.calculator.getKeywordFromFile(
                                             str(myExposureFile))
+        # We need to add the layer type to the returned dict
+        if myExposureLayer.type() == QgsMapLayer.VectorLayer:
+            myExposureKeywords['layer_type'] = 'vector'
+        elif myExposureLayer.type() == QgsMapLayer.RasterLayer:
+            myExposureKeywords['layer_type'] = 'raster'
 
         # now find out which functions can be used with these layers
         myList = [myHazardKeywords, myExposureKeywords]
@@ -624,29 +635,43 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        myCanvas = self.iface.mapCanvas().extent()
+        myCanvas = self.iface.mapCanvas()
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
         myRect = myCanvas.extent()
         # reproject the mapcanvas extent to EPSG:4326 if needed
-        myDestinationCrs = QgsCoordinateReferenceSystem()
-        myDestinationCrs.createFromEpsg(4326)
-        myXForm = QgsCoordinateTransform(myCanvas.crs(),
-                                         myDestinationCrs)
+        myGeoCrs = QgsCoordinateReferenceSystem()
+        myGeoCrs.createFromEpsg(4326)
+        myGeoExtent = None
+        if myCanvas.hasCrsTransformEnabled():
+            myXForm = QgsCoordinateTransform(myCanvas.destinationCrs(),
+                                         myGeoCrs)
 
-        # Get the clip area in the layer's crs
-        myProjectedExtent = myXForm.transformBoundingBox(myRect)
+            # Get the clip area in the layer's crs
+            myProjectedExtent = myXForm.transformBoundingBox(myRect)
 
-        myExtent = [myProjectedExtent.xMinimum(),
-                    myProjectedExtent.yMinimum(),
-                    myProjectedExtent.xMaximum(),
-                    myProjectedExtent.yMaximum()]
+            myGeoExtent = [myProjectedExtent.xMinimum(),
+                        myProjectedExtent.yMinimum(),
+                        myProjectedExtent.xMaximum(),
+                        myProjectedExtent.yMaximum()]
+        else:
+            myGeoExtent = [myRect.xMinimum(),
+                        myRect.yMinimum(),
+                        myRect.xMaximum(),
+                        myRect.yMaximum()]
 
-        #myGeoHazardLayer = reproject()
+        # First make sure that we have EPSG:4326 versions of the input layers
+        myGeoHazardPath = reprojectLayer(myHazardLayer)
+        myGeoExposurePath = reprojectLayer(myExposureLayer)
 
+        # Now work out the optimal extent between the two layers and
+        # the current view extent. The optimal extent is the intersection
+        # between the two layers and the viewport.
         try:
-            myExtent = getOptimalExtent(myHazardLayer.source(),
-                                    myExposureLayer.source(),
+            # Extent is returned as an array [xmin,ymin,xmax,ymax]
+            # We will convert it to a QgsRectangle afterwards.
+            myGeoExtent = getOptimalExtent(myGeoHazardPath,
+                                    myGeoExposurePath,
                                     myProjectedExtent)
         except Exception, e:
             msg = ('<p>There '
@@ -656,16 +681,34 @@ class RiabDock(QtGui.QDockWidget):
                    'details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
                    '<p>%s</p><p>%s</p>' %
+                   # perhaps it would be better to show the Geo layers? TS
                   (myHazardLayer.source(), myExposureLayer.source()))
             raise Exception(msg)
-        myRect = QgsRectangle(myExtent[0],
-                              myExtent[1],
-                              myExtent[2],
-                              myExtent[3])
+
+        myRect = QgsRectangle(myGeoExtent[0],
+                              myGeoExtent[1],
+                              myGeoExtent[2],
+                              myGeoExtent[3])
+
+        # get the geographic layers as QgisMapLayer objects
+        myGeoHazardLayer = None
+        myGeoExposureLayer = None
+
+        if myHazardLayer.type() == QgsMapLayer.VectorLayer:
+            myGeoHazardLayer = QgsVectorLayer(myGeoHazardPath, "hzrd", 'ogr')
+        elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
+            myGeoHazardLayer = QgsRasterLayer(myGeoHazardPath, "hzrd")
+
+        if myExposureLayer.type() == QgsMapLayer.VectorLayer:
+            myGeoExposureLayer = QgsVectorLayer(
+                                        myGeoExposurePath, "exps", 'ogr')
+        elif myExposureLayer.type() == QgsMapLayer.RasterLayer:
+            myGeoExposureLayer = QgsRasterLayer(myGeoExposurePath, "exps")
+
+        # Clip the exposure to the bbox
+        myClippedExposurePath = clipLayer(myGeoExposureLayer, myRect)
         # Clip the vector to the bbox
-        myClippedExposurePath = clipLayer(myExposureLayer, myRect)
-        # Clip the vector to the bbox
-        myClippedHazardPath = clipLayer(myHazardLayer, myRect)
+        myClippedHazardPath = clipLayer(myGeoHazardLayer, myRect)
 
         return (myClippedHazardPath, myClippedExposurePath)
 
