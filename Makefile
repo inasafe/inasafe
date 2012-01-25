@@ -51,7 +51,7 @@ test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions
+	@-export PYTHONPATH=`pwd`; export QGISPATH=/usr; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions
 
 # Get test data
 testdata:
