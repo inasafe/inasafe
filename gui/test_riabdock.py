@@ -20,19 +20,22 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import sys
 import os
 import unittest
+
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
-from utilities import get_exception_with_stacktrace
-from utilities import get_qgis_test_app
 from qgis.core import (QgsApplication,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry)
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
-from gui.riabdock import RiabDock
-from impactcalculator import ImpactCalculator
 
+from utilities import get_exception_with_stacktrace
+from utilities_test import get_qgis_test_app
+from impactcalculator import ImpactCalculator
+from gui.riabdock import RiabDock
+
+# Get QGis app handle
 qgis_app = get_qgis_test_app()
 
 # Set form to test against
@@ -68,6 +71,7 @@ def loadLayers():
         QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
 
     # Now go ahead and load our layers
+    # FIXME (Ole): Use environment variable
     myRoot = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..'))
     myVectorPath = os.path.join(myRoot, 'riab_test_data',
@@ -102,7 +106,7 @@ class RiabDockTest(unittest.TestCase):
         self.assertEqual(form.ui.cboFunction.currentIndex(), -1)
 
     def test_validate(self):
-        """Test that the validate function works as expected."""
+        """Validate function work as expected"""
 
         # First check that we DONT validate a clear form
         clearForm()
@@ -120,8 +124,7 @@ class RiabDockTest(unittest.TestCase):
         assert(myFlag), myMessage
 
     def test_setOkButtonStatus(self):
-        """Test that the OK button changes properly according to
-        form validity."""
+        """OK button changes properly according to form validity"""
 
         # First check that we ok ISNT enabled on a clear form
         clearForm()
@@ -139,7 +142,7 @@ class RiabDockTest(unittest.TestCase):
         assert(myFlag), myMessage
 
     def test_run(self):
-        """Test that the ok button works as expected"""
+        """OK button works as expected"""
 
         # Push OK with the left mouse button
         clearForm()
@@ -150,8 +153,7 @@ class RiabDockTest(unittest.TestCase):
         #  form.ui.buttonBox.button(form.ui.buttonBox.Cancel), " ")
 
     def test_loadLayers(self):
-        """Load some layers in the canvas, call load layers
-         and verify that the list widget was update appropriately
+        """Layers can be loaded and list widget was updated appropriately
         """
 
         clearForm()
