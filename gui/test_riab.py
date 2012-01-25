@@ -18,7 +18,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import os
+import unittest
+
 from gui.riabexceptions import QgisPathException
+
+from utilities import get_qgis_test_app
 
 # Check if a qgispath.txt file exists in the plugin folder (you
 # need to rename it from qgispath.txt.templ in the standard plugin
@@ -39,33 +43,21 @@ from qgis.core import QgsApplication
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from PyQt4.QtGui import QWidget
-import unittest
+
 from gui.riab import Riab
 
+qgis_app = get_qgis_test_app()
 
 class RiabTest(unittest.TestCase):
     """Test the risk in a box plugin stub"""
 
-    def setUp(self):
-        """Create an app that all tests can use"""
-        myGuiFlag = True  # We need to enable qgis app in gui mode
-        self.app = QgsApplication(sys.argv, myGuiFlag)
-        #todo - softcode these paths
-        myUseDefaultPathFlag = True
-        self.app.setPrefixPath('/usr/local', myUseDefaultPathFlag)
-        self.app.initQgis()
-
-    def tearDown(self):
-        """Tear down - destroy the QGIS app"""
-        self.app.exitQgis()
-
     def test_load(self):
-        """Test if we are able to load our plugin"""
-        print 'Testing load'
+        """Risk in a Box QGis plugin can be loaded"""
+
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
         Riab(myIface)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

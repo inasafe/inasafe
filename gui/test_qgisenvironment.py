@@ -18,27 +18,26 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import os
-from qgis.core import (
-    QgsApplication,
-    QgsProviderRegistry
-    )
 import unittest
 
+from qgis.core import (QgsApplication,
+                       QgsProviderRegistry)
+
+from utilities import get_qgis_test_app
+
+qgis_app = get_qgis_test_app()
 
 class RiabTest(unittest.TestCase):
     """Test the QGIS Environment"""
+
     def test_QGISEnvironment(self):
-        """Testing that QGIS is hunky dory"""
-        a = QgsApplication(sys.argv, False)  # False = nongui mode
-        if 'QGISPATH' in os.environ:
-            myPath = os.environ['QGISPATH']
-            myUseDefaultPathFlag = True
-            a.setPrefixPath(myPath, myUseDefaultPathFlag)
-        a.initQgis()
+        """QGIS environment is OK"""
+
         r = QgsProviderRegistry.instance()
-        for item in r.providerList():
-            print str(item)
-        print 'Provider count: %s' % len(r.providerList())
+        #for item in r.providerList():
+        #    print str(item)
+
+        #print 'Provider count: %s' % len(r.providerList())
         assert 'gdal' in r.providerList()
         assert 'ogr' in r.providerList()
 

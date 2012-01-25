@@ -16,19 +16,20 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+
 import sys
 import os
-from qgis.core import (
-    QgsApplication,
-    QgsRectangle,
-    QgsVectorLayer,
-    QgsRasterLayer,
-    QgsMapLayerRegistry
-    )
 import unittest
+
+from qgis.core import (QgsApplication,
+                       QgsRectangle,
+                       QgsVectorLayer,
+                       QgsRasterLayer,
+                       QgsMapLayerRegistry)
+
 from riabclipper import clipLayer, getBestResolution, reprojectLayer
 from impactcalculator import getOptimalExtent
-
+from utilities import get_qgis_test_app
 
 myRoot = os.path.abspath(os.path.join(
         os.path.dirname(__file__), '..'))
@@ -40,21 +41,10 @@ rasterPath = os.path.join(myRoot, 'riab_test_data',
 rasterPath2 = os.path.join(myRoot, 'riab_test_data',
                            'population_padang_1.asc')
 
-# Start one QGis application to test agaist
-myGuiFlag = False  # We don't need to enable qgis app in gui mode
-qgis_app = QgsApplication(sys.argv, myGuiFlag)
-if os.environ.has_key('QGISPATH'):
-    myPath = os.environ['QGISPATH']
-    myUseDefaultPathFlag = True
-    qgis_app.setPrefixPath(myPath, myUseDefaultPathFlag)
-
-qgis_app.initQgis()
-print 'QGIS settings', qgis_app.showSettings()
-
+qgis_app = get_qgis_test_app()
 
 class RiabTest(unittest.TestCase):
     """Test the risk in a box clipper"""
-    app = None
 
     def setUp(self):
         pass
@@ -66,7 +56,7 @@ class RiabTest(unittest.TestCase):
         """Vector layers can be clipped
         """
 
-        # Create a vector
+        # Create a vector layer
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(vectorPath, myName, 'ogr')
 
@@ -87,7 +77,7 @@ class RiabTest(unittest.TestCase):
         """Raster layers can be clipped
         """
 
-        # Create a raster
+        # Create a raster layer
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(rasterPath, myName)
 
@@ -117,6 +107,7 @@ class RiabTest(unittest.TestCase):
     def test_clipBoth(self):
         """Raster and Vector layers can be clipped
         """
+
         # Create a vector layer
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(vectorPath, myName, 'ogr')
@@ -165,8 +156,8 @@ class RiabTest(unittest.TestCase):
         myRasterLayer = QgsRasterLayer(rasterPath, myName)
         myName = 'population'  # 0.0307411 (courser than shake)
         myRasterLayer2 = QgsRasterLayer(rasterPath2, myName)
-        assert(getBestResolution(myRasterLayer, myRasterLayer2)
-               == myRasterLayer)
+        assert (getBestResolution(myRasterLayer, myRasterLayer2)
+                == myRasterLayer)
 
 if __name__ == '__main__':
     unittest.main()
