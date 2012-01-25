@@ -28,7 +28,48 @@ import tempfile
 from subprocess import call
 
 
-def clipLayer(layer, extent):
+def getBestResolution(theHazardLayer, theExposureLayer):
+    """Given two raster layers, assess them to
+    see which has the better spatial resolution and
+    return the better one.
+
+    Args:
+
+        * theHazardLayer - a valid QGIS raster layer
+        * theExposureLayer - a valid QGIS raster layer
+
+    Returns:
+        QGIS raster layer which is one of the two input layers.
+
+    Raises:
+       InvalidParameterException if both of the inputs are not
+       valid QGIS raster layers.
+
+    .. note:: This function is not yet sensitive to rasters
+        where the x and y dimensions of a pixel differ.
+
+    """
+    if (theHazardLayer.type() != QgsMapLayer.RasterLayer or
+        not theHazardLayer.isValid()):
+        msg = ('getBestResolution: Hazard layer is not a valid raster layer.')
+        raise InvalidParameterException(msg)
+    if (theExposureLayer.type() != QgsMapLayer.RasterLayer or
+        not theExposureLayer.isValid()):
+        msg = ('getBestResolution: Exposure layer is not a valid '
+               'raster layer.')
+        raise InvalidParameterException(msg)
+
+    myHazardUPP = theHazardLayer.rasterUnitsPerPixel()
+    myExposureUPP = theExposureLayer.rasterUnitsPerPixel()
+    print "Exposure Units Per Pixel: %s" % myExposureUPP
+    print "Hazard Units Per Pixel: %s" % myHazardUPP
+    if myHazardUPP < myExposureUPP:
+        return theHazardLayer
+    else:
+        return theExposureLayer
+
+
+def clipLayer(theLayer, theExtent, theDimensions=None):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame.
 
@@ -37,8 +78,10 @@ def clipLayer(layer, extent):
     Args:
 
         * theLayer - a valid QGIS vector or raster layer
-        * theExtent - a valid QgsRectangle defining the
-                      clip extent in EPSG:4326
+        * theExtent - valid QgsRectangle defining the clip extent in EPSG:4326
+        * theDimensions - dimensions to which the layer should be resampled to.
+            This argument will be ignored for vector layers and if not provided
+            for a raster layer, the native raster resolution will be used.
 
     Returns:
         Path to the output clipped layer (placed in the
@@ -48,10 +91,10 @@ def clipLayer(layer, extent):
        None
 
     """
-    if layer.type() == QgsMapLayer.VectorLayer:
-        return _clipVectorLayer(layer, extent)
+    if theLayer.type() == QgsMapLayer.VectorLayer:
+        return _clipVectorLayer(theLayer, theExtent)
     else:
-        return _clipRasterLayer(layer, extent)
+        return _clipRasterLayer(theLayer, theExtent)
 
 
 def reprojectLayer(theLayer):
@@ -251,9 +294,9 @@ def _clipRasterLayer(layer, extent):
 
     # Get the crs of the layer so we can check that it is in EPSG:4326
     myCrs = layer.crs()
-    if myCrs.epsg() is not 4326:
+    if myCrs.epsg() != 4326:
         msg = ('Expected a raster layer in EPSG:4326 but received one'
-               'in EPSG:%s.' % myCrs.epsg())
+               ' in EPSG:%s.' % myCrs.epsg())
         raise InvalidParameterException(msg)
 
     myFilename = tempfile.mkstemp('.tif', 'clip_',
@@ -306,7 +349,7 @@ def _reprojectRasterLayer(theLayer):
     mySource = theLayer.source()
     # Get the crs of the layer so we can check if it is not yet in EPSG:4326
     myCrs = theLayer.crs()
-    if myCrs.epsg() is not 4326:
+    if myCrs.epsg() != 4326:
             # Reproject the layer to wgs84
         myFilename = tempfile.mkstemp('.tif', 'prj_',
                                 tempfile.gettempdir())[1]

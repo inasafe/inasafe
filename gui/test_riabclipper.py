@@ -18,32 +18,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import os
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtTest import QTest
-from riabexceptions import QgisPathException
-
-# Check if a qgispath.txt file exists in the plugin folder (you
-# need to rename it from qgispath.txt.templ in the standard plugin
-# distribution) and if it does, read the qgis path
-
-ROOT = os.path.dirname(__file__)
-PATH = os.path.abspath(os.path.join(ROOT, 'qgispath.txt'))
-print "Path: ", PATH
-QGIS_PATH = None  # e.g. /usr/local if QGIS is installed under there
-if os.path.isfile(PATH):
-    try:
-        QGIS_PATH = file(PATH, 'rt').readline().rstrip()
-        sys.path.append(os.path.join(QGIS_PATH, 'share', 'qgis', 'python'))
-        #print sys.path
-    except Exception, e:
-        raise QgisPathException
-
-from qgis.core import (QgsApplication, QgsRectangle, QgsVectorLayer,
-    QgsRasterLayer, QgsMapLayerRegistry)
-from qgis.gui import QgsMapCanvas
-from qgisinterface import QgisInterface
+from qgis.core import (
+    QgsApplication,
+    QgsRectangle,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsMapLayerRegistry
+    )
 import unittest
-from riabclipper import clipLayer
+from riabclipper import clipLayer, getBestResolution, reprojectLayer
 from impactcalculator import getOptimalExtent
 
 
@@ -54,11 +37,13 @@ class RiabTest(unittest.TestCase):
     def setUp(self):
         """Test if we can clip a layer nicely."""
         if not self.app:
-            myGuiFlag = True  # We need to enable qgis app in gui mode
+            myGuiFlag = False  # We don't need to enable qgis app in gui mode
             self.app = QgsApplication(sys.argv, myGuiFlag)
-            myUseDefaultPathFlag = True
-            self.app.setPrefixPath(QGIS_PATH, myUseDefaultPathFlag)
-            self.app.initQgis()
+            if os.environ.has_key('QGISPATH'):
+                myPath = os.environ['QGISPATH']
+                myUseDefaultPathFlag = True
+                self.app.setPrefixPath(myPath, myUseDefaultPathFlag)
+                self.app.initQgis()
 
             print 'QGIS settings', self.app.showSettings()
 
@@ -68,8 +53,10 @@ class RiabTest(unittest.TestCase):
                                            'Padang_WGS84.shp')
             self.rasterPath = os.path.join(myRoot, 'riab_test_data',
                                            'Shakemap_Padang_2009.asc')
+            self.rasterPath2 = os.path.join(myRoot, 'riab_test_data',
+                                           'population_padang_1.asc')
 
-    def Xtest_clipVector(self):
+    def test_clipVector(self):
         # create a vector
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(self.vectorPath, myName, 'ogr')
@@ -84,9 +71,9 @@ class RiabTest(unittest.TestCase):
         myResult = clipLayer(myVectorLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))
-        QgsMapLayerRegistry.instance().removeMapLayer(myVectorLayer.id())
+        del myVectorLayer
 
-    def Xtest_clipRaster(self):
+    def test_clipRaster(self):
         # create a vector
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(self.rasterPath, myName)
@@ -101,9 +88,9 @@ class RiabTest(unittest.TestCase):
         myResult = clipLayer(myRasterLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))
-        QgsMapLayerRegistry.instance().removeMapLayer(myRasterLayer.id())
+        del myRasterLayer
 
-    def Xtest_clipBoth(self):
+    def test_clipBoth(self):
         # create a vector
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(self.vectorPath, myName, 'ogr')
@@ -141,9 +128,17 @@ class RiabTest(unittest.TestCase):
         myResult = clipLayer(myRasterLayer, myRect)
         # Check the output is valid
         assert(os.path.exists(myResult))
-        QgsMapLayerRegistry.instance().removeMapLayer(myRasterLayer.id())
-        QgsMapLayerRegistry.instance().removeMapLayer(myVectorLayer.id())
+        del myRasterLayer
+        del myVectorLayer
 
+    def test_getBestResolution(self):
+        """Test if getBestResolution is working."""
+        myName = 'shake'  # pixel size 0.00833333
+        myRasterLayer = QgsRasterLayer(self.rasterPath, myName)
+        myName = 'population'  # 0.0307411 (courser than shake)
+        myRasterLayer2 = QgsRasterLayer(self.rasterPath2, myName)
+        assert(getBestResolution(myRasterLayer, myRasterLayer2)
+               == myRasterLayer)
 
 if __name__ == '__main__':
     unittest.main()

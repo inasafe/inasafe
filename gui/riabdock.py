@@ -19,35 +19,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from PyQt4 import QtGui, QtCore, QtWebKit
+from PyQt4 import QtGui, QtCore
 from PyQt4.QtWebKit import QWebSettings
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
 from utilities import get_exception_with_stacktrace
 import sys
 import os
-
-# Check if a pydevpath.txt file exists in the plugin folder (you
-# need to rename it from settings.txt.templ in the standard plugin
-# distribution) and if it does, read the pydevd path from it and
-# enable the debug flag to true. Please see:
-# http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/
-# for notes on setting up the debugging environment.
-ROOT = os.path.dirname(__file__)
-PATH = os.path.abspath(os.path.join(ROOT, 'pydevpath.txt'))
-
-if os.path.isfile(PATH):
-    try:
-        PYDEVD_PATH = file(PATH, 'rt').readline().strip()
-        sys.path.append(PYDEVD_PATH)
-
-        from pydevd import *
-        print 'Debugging is enabled.'
-
-        DEBUG = True
-    except Exception, e:
-        print 'Debugging was requested, but could no be enabled: %s' % str(e)
-
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
                        QgsSymbolV2, QgsRendererRangeV2, QgsRectangle,
@@ -58,9 +36,17 @@ from qgis.gui import QgsMapCanvas
 from impactcalculator import ImpactCalculator
 from riabclipper import clipLayer, reprojectLayer
 from impactcalculator import getOptimalExtent
-
+# don't remove this even if it is flagged as unused by your ide
+# it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
-# Helper functions
+
+#see if we can import pydev - see development docs for details
+try:
+    from pydevd import *
+    print 'Remote debugging is enabled.'
+    DEBUG = True
+except Exception, e:
+    print 'Debugging was disabled'
 
 
 def setVectorStyle(qgisVectorLayer, style):
@@ -264,12 +250,24 @@ class RiabDock(QtGui.QDockWidget):
         if myHazardIndex == -1 or myExposureIndex == -1:
             myMessage = ('<span class="label notice">Getting started:</span> '
             'To use this tool you need to add some layers to your QGIS '
-            'project. At least one <em>hazard</em> layer (e.g. earthquake MMI)'
-            'and one <em>exposure</em> layer (e.g. dwellings) are available. '
-            'When you are ready, click the <em>run</em> button below.')
+            'project. Ensure that at least one <em>hazard</em> layer (e.g. '
+            'earthquake MMI) and one <em>exposure</em> layer (e.g. dwellings) '
+            're available. When you are ready, click the <em>run</em> '
+            'button below.')
+            return (False, myMessage)
+        if self.ui.cboFunction.currentIndex() == -1:
+            myMessage = ('<span class="label important">No valid functions:'
+            '</span> No functions are available for the inputs you have '
+            'specified. '
+            'Try selecting a different combination of inputs. Please consult '
+            'the user manual for details on what constitute valid inputs for '
+            'a given risk function.')
             return (False, myMessage)
         else:
-            return (True, '')
+            myMessage = ('<span class="label success">Ready:</span> '
+            'You can now proceed to run your model by clicking the <em> '
+            'Run</em> button.')
+            return (True, myMessage)
 
     def setOkButtonStatus(self):
         """Helper function to set the ok button status if the
@@ -451,6 +449,7 @@ class RiabDock(QtGui.QDockWidget):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
+        settrace()
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
@@ -487,6 +486,7 @@ class RiabDock(QtGui.QDockWidget):
             QtGui.qApp.setOverrideCursor(
                     QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.repaint()
+            QtGui.qApp.processEvents()
             self.runner.run()  # Run in same thread
             QtGui.qApp.restoreOverrideCursor()
             # .. todo :: Disconnect done slot/signal
@@ -588,6 +588,7 @@ class RiabDock(QtGui.QDockWidget):
                    '</div>')
         self.displayHtml(myHtml)
         self.repaint()
+        QtGui.qApp.processEvents()
         self.ui.grpQuestion.setEnabled(False)
 
     def hideBusy(self):
@@ -635,6 +636,7 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
+        #settrace()
         myCanvas = self.iface.mapCanvas()
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
@@ -648,12 +650,12 @@ class RiabDock(QtGui.QDockWidget):
                                          myGeoCrs)
 
             # Get the clip area in the layer's crs
-            myProjectedExtent = myXForm.transformBoundingBox(myRect)
+            myTransformedExtent = myXForm.transformBoundingBox(myRect)
 
-            myGeoExtent = [myProjectedExtent.xMinimum(),
-                        myProjectedExtent.yMinimum(),
-                        myProjectedExtent.xMaximum(),
-                        myProjectedExtent.yMaximum()]
+            myGeoExtent = [myTransformedExtent.xMinimum(),
+                           myTransformedExtent.yMinimum(),
+                           myTransformedExtent.xMaximum(),
+                           myTransformedExtent.yMaximum()]
         else:
             myGeoExtent = [myRect.xMinimum(),
                         myRect.yMinimum(),
@@ -672,7 +674,7 @@ class RiabDock(QtGui.QDockWidget):
             # We will convert it to a QgsRectangle afterwards.
             myGeoExtent = getOptimalExtent(myGeoHazardPath,
                                     myGeoExposurePath,
-                                    myProjectedExtent)
+                                    myGeoExtent)
         except Exception, e:
             msg = ('<p>There '
                    'was insufficient overlap between the input layers '
@@ -681,8 +683,7 @@ class RiabDock(QtGui.QDockWidget):
                    'details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
                    '<p>%s</p><p>%s</p>' %
-                   # perhaps it would be better to show the Geo layers? TS
-                  (myHazardLayer.source(), myExposureLayer.source()))
+                  (myGeoHazardPath, myGeoExposurePath))
             raise Exception(msg)
 
         myRect = QgsRectangle(myGeoExtent[0],
@@ -709,7 +710,8 @@ class RiabDock(QtGui.QDockWidget):
         myClippedExposurePath = clipLayer(myGeoExposureLayer, myRect)
         # Clip the vector to the bbox
         myClippedHazardPath = clipLayer(myGeoHazardLayer, myRect)
-
+        # .. todo:: Cleanup temporary working files, careful not to delete
+        #            User's own data'
         return (myClippedHazardPath, myClippedExposurePath)
 
     def htmlHeader(self):
