@@ -90,9 +90,19 @@ class RiabTest(unittest.TestCase):
 
         # Clip the vector to the bbox
         myResult = clipLayer(myRasterLayer, myRect)
-
         # Check the output is valid
         assert(os.path.exists(myResult))
+
+        # Clip and give a desired resolution for the output
+        mySize = 0.05
+        myResult = clipLayer(myRasterLayer, myRect, mySize)
+        myNewRasterLayer = QgsRasterLayer(myResult, myName)
+        assert myNewRasterLayer.isValid(), 'Resampled raster is not valid'
+        assert (myNewRasterLayer.rasterUnitsPerPixel() == mySize), (
+                    'Resampled raster has incorrect pixel size.'
+                    'Expected: %f, Actual: %f' %
+                    (mySize, myNewRasterLayer.rasterUnitsPerPixel())
+                 )
 
     def test_clipBoth(self):
         """Raster and Vector layers can be clipped

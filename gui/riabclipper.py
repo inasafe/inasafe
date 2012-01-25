@@ -69,7 +69,7 @@ def getBestResolution(theHazardLayer, theExposureLayer):
         return theExposureLayer
 
 
-def clipLayer(theLayer, theExtent, theDimensions=None):
+def clipLayer(theLayer, theExtent, theCellSize=None):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame.
 
@@ -79,9 +79,9 @@ def clipLayer(theLayer, theExtent, theDimensions=None):
 
         * theLayer - a valid QGIS vector or raster layer
         * theExtent - valid QgsRectangle defining the clip extent in EPSG:4326
-        * theDimensions - dimensions to which the layer should be resampled to.
+        * theCellSize - cell size which the layer should be resampled to.
             This argument will be ignored for vector layers and if not provided
-            for a raster layer, the native raster resolution will be used.
+            for a raster layer, the native raster cell size will be used.
 
     Returns:
         Path to the output clipped layer (placed in the
@@ -94,7 +94,7 @@ def clipLayer(theLayer, theExtent, theDimensions=None):
     if theLayer.type() == QgsMapLayer.VectorLayer:
         return _clipVectorLayer(theLayer, theExtent)
     else:
-        return _clipRasterLayer(theLayer, theExtent)
+        return _clipRasterLayer(theLayer, theExtent, theCellSize)
 
 
 def reprojectLayer(theLayer):
@@ -261,7 +261,7 @@ def _reprojectVectorLayer(theLayer):
     return mySource
 
 
-def _clipRasterLayer(layer, extent):
+def _clipRasterLayer(layer, extent, theCellSize=None):
     """Clip a Hazard or Exposure layer to the extents provided. The
     layer must be a raster layer or an exception will be thrown.
 
@@ -274,6 +274,9 @@ def _clipRasterLayer(layer, extent):
         * theLayer - a valid QGIS raster layer in EPSG:4326
         * theExtent - a valid QgsRectangle defining the clip extent
             in EPSG:4326
+        * theCellSize - cell size which the layer should be resampled to.
+            If not provided for a raster layer, the native raster cell
+            size will be used.
 
     Returns:
         Path to the output clipped layer (placed in the
@@ -299,6 +302,23 @@ def _clipRasterLayer(layer, extent):
                ' in EPSG:%s.' % myCrs.epsg())
         raise InvalidParameterException(msg)
 
+    myWorkingLayer = layer.source()
+    # resample the file first if needed to the required pixel size
+    myCellSize = layer.rasterUnitsPerPixel()
+    if myCellSize != theCellSize and theCellSize is not None:
+        # ok we have to resample
+        myFilename = tempfile.mkstemp('.tif', 'rsmpl_',
+                                    tempfile.gettempdir())[1]
+        myCommand = ('gdalwarp -tr %f %f -of GTiff '
+                 '%s %s' % (theCellSize,
+                            theCellSize,
+                            myWorkingLayer,
+                            myFilename))
+        print 'Command: ', myCommand
+        myResult = call(myCommand, shell=True)
+        myWorkingLayer = myFilename
+    # ok myWorking layer now has the original or resampled file
+    # which we can go on to clip....
     myFilename = tempfile.mkstemp('.tif', 'clip_',
                                     tempfile.gettempdir())[1]
     myCommand = ('gdal_translate -projwin %f %f %f %f -of GTiff '
@@ -306,7 +326,7 @@ def _clipRasterLayer(layer, extent):
                             extent.yMaximum(),
                             extent.xMaximum(),
                             extent.yMinimum(),
-                            layer.source(),
+                            myWorkingLayer,
                             myFilename))
     print 'Command: ', myCommand
     myResult = call(myCommand, shell=True)
