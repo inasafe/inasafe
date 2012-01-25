@@ -1,0 +1,66 @@
+#! /bin/bash
+
+# Name of root dir and repository
+RIABDIR = "risk_in_a_box"
+RIABREPO = "AIFDR/$RIABDIR.git"
+
+echo "---------------------------------------------------------"
+echo "Installing Risk in a Box and all its dependencies."
+echo "This will take a little while depending on"
+echo "the internet speed."
+echo
+echo "In any case, now is great time to go get a cup of coffee!"
+echo "---------------------------------------------------------"
+
+
+sudo apt-get -y update
+
+echo "Installing Ubuntu packages for running Risk in a Box"
+sudo apt-get install -y qgis python-qgis
+
+echo "Installing Ubuntu packages for development"
+sudo apt-get install -y git subversion pep8 python-nose python-coverage python-gdal python-numpy python-sphinx pyqt4-dev-tools
+
+if grep -q RIABQGIS ~/.bash_aliases
+then
+    echo "You already have RIABQGIS in your ~/.bash_aliases"
+else
+    echo "export RIABQGIS=`pwd`/$RIAB" >> ~/.bash_aliases
+    #echo 'alias risiko-activate="source $RIAB_HOME/riab_env/bin/activate;echo Risk In a Box virtual environment activated. Available commands are:; echo;echo risiko-test risiko-start risiko-stop risiko-clean risiko-upload risiko-populate risiko-uninstall;echo"' >> ~/.bash_aliases
+    echo "Adding RIABQGIS path to your ~/.bash_aliases"
+fi
+
+# Function to clone the git repositories
+function checkup() {
+  REPO="$1"
+  WORKING_DIR="$2"
+  BRANCH="$3"
+  if [ -d "${WORKING_DIR}" ];
+  then
+      echo "Updating ${WORKING_DIR} from upstream"
+      (cd "${WORKING_DIR}" && git pull)
+  else
+      git clone "git@github.com:${REPO}" "${WORKING_DIR}" || git clone "https://github.com/${REPO}" "${WORKING_DIR}" || git clone "http://github.com/${REPO}" "${WORKING_DIR}"
+  fi
+
+  pushd .
+  cd $WORKING_DIR
+  git fetch origin $BRANCH
+  git checkout $BRANCH
+  popd
+}
+
+echo "Downloading Risk in a Box"
+checkup $RIABREPO $RIABDIR master
+
+echo "Downloading test and demo data"
+cd $RIABQGIS; make test_data
+
+export RIABQGIS
+
+echo
+echo "Congratulations, you have installed Risk in a Box - QGIS"
+echo
+echo "To verify that the installation works, you can run the test suite"
+echo "cd $RIABQGIS
+echo "make test"

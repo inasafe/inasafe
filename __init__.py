@@ -1,5 +1,6 @@
 """
-Disaster risk assessment tool developed by AusAid - **Module risk_in_a_box.**
+Disaster risk assessment tool developed by AusAid and World Bank
+ - **Module risk_in_a_box.**
 
 This script initializes the plugin, making it known to QGIS.
 
@@ -26,7 +27,7 @@ def name():
 
 def description():
     """A one line description for the plugin."""
-    return 'Disaster risk assessment tool developed by AusAid'
+    return 'Disaster risk assessment tool developed by AusAid and World Bank'
 
 
 def version():
