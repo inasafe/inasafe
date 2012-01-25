@@ -32,6 +32,7 @@ from utilities import geotransform2resolution
 from utilities import nanallclose
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
+from core import check_bbox_string
 from utilities_test import same_API
 from utilities_test import TESTREPO, TESTDATA
 from utilities_test import FEATURE_COUNTS
@@ -899,6 +900,12 @@ class Test_IO(unittest.TestCase):
             msg = ('Got bbox %s from filename %s, but expected %s '
                    % (str(bbox), filename, str(ref_bbox[filename])))
             assert numpy.allclose(bbox, ref_bbox[filename]), msg
+
+            # Check the conversions
+            bbox_string = bboxlist2string(bbox)
+
+            # Check the check :-)
+            check_bbox_string(bbox_string)
 
     def test_layer_API(self):
         """Vector and Raster instances have a similar API

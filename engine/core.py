@@ -209,37 +209,39 @@ def check_data_integrity(layer_files):
             assert layer.columns == N, msg
 
 
-def get_common_resolution(haz_metadata, exp_metadata):
-    """Determine common resolution for raster layers
+# FIXME (Ole): This may be obsolete now
+# def get_common_resolution(haz_metadata, exp_metadata):
+#     """Determine common resolution for raster layers
 
-    Input
-        haz_metadata: Metadata for hazard layer
-        exp_metadata: Metadata for exposure layer
+#     Input
+#         haz_metadata: Metadata for hazard layer
+#         exp_metadata: Metadata for exposure layer
 
-    Output
-        raster_resolution: Common resolution or None (in case of vector layers)
-    """
+#     Output
+#         raster_resolution: Common resolution or None
+# (in case of vector layers)
+#     """
 
-    # Determine resolution in case of raster layers
-    haz_res = exp_res = None
-    if haz_metadata['layer_type'] == 'raster':
-        haz_res = haz_metadata['resolution']
+#     # Determine resolution in case of raster layers
+#     haz_res = exp_res = None
+#     if haz_metadata['layer_type'] == 'raster':
+#         haz_res = haz_metadata['resolution']
 
-    if exp_metadata['layer_type'] == 'raster':
-        exp_res = exp_metadata['resolution']
+#     if exp_metadata['layer_type'] == 'raster':
+#         exp_res = exp_metadata['resolution']
 
-    # Determine common resolution in case of two raster layers
-    if haz_res is None or exp_res is None:
-        # This means native resolution will be used
-        raster_resolution = None
-    else:
-        # Take the minimum
-        resx = min(haz_res[0], exp_res[0])
-        resy = min(haz_res[1], exp_res[1])
+#     # Determine common resolution in case of two raster layers
+#     if haz_res is None or exp_res is None:
+#         # This means native resolution will be used
+#         raster_resolution = None
+#     else:
+#         # Take the minimum
+#         resx = min(haz_res[0], exp_res[0])
+#         resy = min(haz_res[1], exp_res[1])
 
-        raster_resolution = (resx, resy)
+#         raster_resolution = (resx, resy)
 
-    return raster_resolution
+#     return raster_resolution
 
 
 def get_bounding_boxes(haz_data, exp_data, req_bbox):
@@ -317,55 +319,57 @@ def get_bounding_boxes(haz_data, exp_data, req_bbox):
     return intersection_bbox
 
 
-def get_linked_layers(main_layers):
-    """Get list of layers that are required by main layers
+# FIXME (Ole): This needs to be rewritten as it
+# directly depends on ows metadata
+# def get_linked_layers(main_layers):
+#     """Get list of layers that are required by main layers
 
-    Input
-       main_layers: List of layers of the form (server, layer_name,
-                                                bbox, metadata)
-    Output
-       new_layers: New layers flagged by the linked keywords in main layers
+#     Input
+#        main_layers: List of layers of the form (server, layer_name,
+#                                                 bbox, metadata)
+#     Output
+#        new_layers: New layers flagged by the linked keywords in main layers
 
 
-    Algorithm will recursively pull layers from new layers if their
-    keyword linked exists and points to available layers.
-    """
+#     Algorithm will recursively pull layers from new layers if their
+#     keyword linked exists and points to available layers.
+#     """
 
-    # FIXME: I don't think the naming is very robust.
-    # Main layer names and workspaces come from the app, while
-    # we just use the basename from the keywords for the linked layers.
-    # Not sure if the basename will always work as layer name.
+#     # FIXME: I don't think the naming is very robust.
+#     # Main layer names and workspaces come from the app, while
+#     # we just use the basename from the keywords for the linked layers.
+#     # Not sure if the basename will always work as layer name.
 
-    new_layers = []
-    for server, name, bbox, metadata in main_layers:
+#     new_layers = []
+#     for server, name, bbox, metadata in main_layers:
 
-        workspace, layername = name.split(':')
+#         workspace, layername = name.split(':')
 
-        keywords = metadata['keywords']
-        if 'linked' in keywords:
-            basename, _ = os.path.splitext(keywords['linked'])
+#         keywords = metadata['keywords']
+#         if 'linked' in keywords:
+#             basename, _ = os.path.splitext(keywords['linked'])
 
-            # FIXME (Ole): Geoserver converts names to lowercase @#!!
-            basename = basename.lower()
+#             # FIXME (Ole): Geoserver converts names to lowercase @#!!
+#             basename = basename.lower()
 
-            new_layer = '%s:%s' % (workspace, basename)
-            if new_layer == name:
-                msg = 'Layer %s linked to itself' % name
-                raise Exception(msg)
+#             new_layer = '%s:%s' % (workspace, basename)
+#             if new_layer == name:
+#                 msg = 'Layer %s linked to itself' % name
+#                 raise Exception(msg)
 
-            try:
-                new_metadata = get_metadata(server, new_layer)
-            except Exception, e:
-                msg = ('Linked layer %s could not be found: %s'
-                       % (basename, str(e)))
-                logger.info(msg)
-                #raise Exception(msg)
-            else:
-                new_layers.append((server, new_layer, bbox, new_metadata))
+#             try:
+#                 new_metadata = get_metadata(server, new_layer)
+#             except Exception, e:
+#                 msg = ('Linked layer %s could not be found: %s'
+#                        % (basename, str(e)))
+#                 logger.info(msg)
+#                 #raise Exception(msg)
+#             else:
+#                 new_layers.append((server, new_layer, bbox, new_metadata))
 
-    # Recursively search for linked layers required by the newly added layers
-    if len(new_layers) > 0:
-        new_layers += get_linked_layers(new_layers)
+#     # Recursively search for linked layers required by the newly added layers
+#     if len(new_layers) > 0:
+#         new_layers += get_linked_layers(new_layers)
 
-    # Return list of new layers
-    return new_layers
+#     # Return list of new layers
+#     return new_layers

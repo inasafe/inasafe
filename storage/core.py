@@ -7,26 +7,13 @@
 import os
 import time
 import numpy
-import urllib2
-import tempfile
-import contextlib
-from zipfile import ZipFile
 
 from vector import Vector
 from raster import Raster
-from utilities import is_sequence
-from utilities import LAYER_TYPES
-from utilities import WCS_TEMPLATE
-from utilities import WFS_TEMPLATE
-from utilities import unique_filename
-from utilities import write_keywords
-from utilities import extract_WGS84_geotransform
-from utilities import geotransform2resolution
 
+# FIXME (Ole): make logging work again
 import logging
 logger = logging.getLogger('risiko')
-
-#INTERNAL_SERVER_URL = os.path.join(settings.GEOSERVER_BASE_URL, 'ows')
 
 
 def read_layer(filename):
@@ -188,90 +175,6 @@ def get_bounding_box_string(filename):
     return bboxlist2string(get_bounding_box(filename))
 
 
-def get_geotransform(server_url, layer_name):
-    """Constructs the geotransform based on the WCS service.
-
-    Should only be called be rasters / WCS layers.
-
-    Returns:
-        geotransform is a vector of six numbers:
-
-         (top left x, w-e pixel resolution, rotation,
-          top left y, rotation, n-s pixel resolution).
-
-        We should (at least) use elements 0, 1, 3, 5
-        to uniquely determine if rasters are aligned
-
-    """
-
-    metadata = get_metadata(server_url, layer_name)
-    return metadata['geotransform']
-
-
-def get_layer_descriptors(url):
-    """Get layer information for use with the plugin system
-
-    The keywords are parsed and added to the metadata dictionary
-    if they conform to the format "identifier:value".
-
-    NOTE: Keywords will overwrite metadata with same keys. A notable
-          example is title which is currently in use.
-
-    Input
-        url: The wfs url
-        version: The version of the wfs xml expected
-
-    Output
-        A list of (lists of) dictionaries containing the metadata for
-        each layer of the following form:
-
-        [['geonode:lembang_schools',
-          {'layer_type': 'vector',
-           'category': 'exposure',
-           'subcategory': 'building',
-           'title': 'lembang_schools'}],
-         ['geonode:shakemap_padang_20090930',
-          {'layer_type': 'raster',
-           'category': 'hazard',
-           'subcategory': 'earthquake',
-           'title': 'shakemap_padang_20090930'}]]
-
-    """
-
-    # FIXME (Ole): I don't like the format, but it permeates right
-    #              through to the HTTPResponses in views.py, so
-    #              I am not sure if it can be changed. My problem is
-    #
-    #              1: A dictionary of metadata entries would be simpler
-    #              2: The keywords should have their own dictionary to avoid
-    #                 danger of keywords overwriting other metadata
-    #
-    #              I have raised this in ticket #126
-
-    # Get all metadata from owslib
-    metadata = get_metadata(url)
-
-    # Create exactly the same structure that was produced by the now obsolete
-    # get_layers_metadata. FIXME: However, this is subject to issue #126
-    x = []
-    for key in metadata:
-        # Get all metadata
-        md = metadata[key]
-
-        # Create new special purpose entry
-        block = {}
-        block['layer_type'] = md['layer_type']
-        block['title'] = md['title']
-
-        # Copy keyword data into this block possibly overwriting data
-        for kw in md['keywords']:
-            block[kw] = md['keywords'][kw]
-
-        x.append([key, block])
-
-    return x
-
-
 def check_bbox_string(bbox_string):
     """Check that bbox string is valid
     """
@@ -308,79 +211,3 @@ def check_bbox_string(bbox_string):
     msg = ('Southern border %.5f was greater than or equal to northern border '
            '%.5f of bounding box %s' % (miny, maxy, bbox_string))
     assert miny < maxy, msg
-
-
-#--------------------------------------------------------------------
-# Functionality to upload layers to GeoNode and check their integrity
-#--------------------------------------------------------------------
-
-def run(cmd, stdout=None, stderr=None):
-    """Run command with stdout and stderr optionally redirected
-
-    The logfiles are only kept in case the command fails.
-    """
-
-    # Build command
-    msg = 'Argument cmd must be a string. I got %s' % cmd
-    assert isinstance(cmd, basestring), msg
-
-    s = cmd
-    if stdout is not None:
-        msg = 'Argument stdout must be a string or None. I got %s' % stdout
-        assert isinstance(stdout, basestring), msg
-        s += ' > %s' % stdout
-
-    if stderr is not None:
-        msg = 'Argument stderr must be a string or None. I got %s' % stdout
-        assert isinstance(stderr, basestring), msg
-        s += ' 2> %s' % stderr
-
-    # Run command
-    err = os.system(s)
-
-    if err != 0:
-        msg = 'Command "%s" failed with errorcode %i. ' % (cmd, err)
-        if stdout:
-            msg += 'See logfile %s for stdout details' % stdout
-        if stderr is not None:
-            msg += 'See logfile %s for stderr details' % stderr
-        raise Exception(msg)
-    else:
-        # Clean up
-        if stdout is not None:
-            os.remove(stdout)
-        if stderr is not None:
-            os.remove(stderr)
-
-
-def assert_bounding_box_matches(layer, filename):
-    """Verify that GeoNode layer has the same bounding box as filename
-    """
-
-    # Check integrity
-    assert hasattr(layer, 'geographic_bounding_box')
-    assert isinstance(layer.geographic_bounding_box, basestring)
-
-    # Exctract bounding bounding box from layer handle
-    s = 'POLYGON(('
-    i = layer.geographic_bounding_box.find(s) + len(s)
-    assert i > len(s)
-
-    j = layer.geographic_bounding_box.find('))')
-    assert j > i
-
-    bbox_string = str(layer.geographic_bounding_box[i:j])
-    A = numpy.array([[float(x[0]), float(x[1])] for x in
-                     (p.split() for p in bbox_string.split(','))])
-    south = min(A[:, 1])
-    north = max(A[:, 1])
-    west = min(A[:, 0])
-    east = max(A[:, 0])
-    bbox = [west, south, east, north]
-
-    # Check correctness of bounding box against reference
-    ref_bbox = get_bounding_box(filename)
-
-    msg = ('Bounding box from layer handle "%s" was not as expected.\n'
-           'Got %s, expected %s' % (layer.name, bbox, ref_bbox))
-    assert numpy.allclose(bbox, ref_bbox, rtol=1.0e-6, atol=1.0e-8), msg
