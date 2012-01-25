@@ -31,6 +31,7 @@ from riabclipper import clipLayer, getBestResolution, reprojectLayer
 from impactcalculator import getOptimalExtent
 from utilities_test import get_qgis_test_app
 
+# Setup pathnames for test data sets
 myRoot = os.path.abspath(os.path.join(
         os.path.dirname(__file__), '..'))
 
@@ -41,7 +42,9 @@ rasterPath = os.path.join(myRoot, 'riab_test_data',
 rasterPath2 = os.path.join(myRoot, 'riab_test_data',
                            'population_padang_1.asc')
 
+# Handle to common QGis test app
 qgis_app = get_qgis_test_app()
+
 
 class RiabTest(unittest.TestCase):
     """Test the risk in a box clipper"""
@@ -90,19 +93,20 @@ class RiabTest(unittest.TestCase):
 
         # Clip the vector to the bbox
         myResult = clipLayer(myRasterLayer, myRect)
+
         # Check the output is valid
-        assert(os.path.exists(myResult))
+        assert os.path.exists(myResult)
 
         # Clip and give a desired resolution for the output
         mySize = 0.05
         myResult = clipLayer(myRasterLayer, myRect, mySize)
         myNewRasterLayer = QgsRasterLayer(myResult, myName)
         assert myNewRasterLayer.isValid(), 'Resampled raster is not valid'
-        assert (myNewRasterLayer.rasterUnitsPerPixel() == mySize), (
-                    'Resampled raster has incorrect pixel size.'
-                    'Expected: %f, Actual: %f' %
-                    (mySize, myNewRasterLayer.rasterUnitsPerPixel())
-                 )
+
+        msg = ('Resampled raster has incorrect pixel size.'
+               'Expected: %f, Actual: %f' %
+               (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
+        assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, msg
 
     def test_clipBoth(self):
         """Raster and Vector layers can be clipped

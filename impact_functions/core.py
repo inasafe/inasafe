@@ -313,7 +313,7 @@ def extract_layers(layers, keyword, value):
 
 # FIXME (Ole): Maybe filter by name too, rename to get_impact_functions
 #  and remove some of the other functions.
-def get_admissible_plugins(keywords=None):  #, name=None):
+def get_admissible_plugins(keywords=None):  # , name=None):
     """Get plugins that match specified keywords
 
     Input
