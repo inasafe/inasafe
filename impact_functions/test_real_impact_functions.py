@@ -72,6 +72,17 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Perlu Evakuasi' in P
         assert 'Meninggal' in P
 
+        # Try form where only one dictionary is passed
+        # This one gets all the flood related impact functions
+        P = get_admissible_plugins(D1)
+        assert len(P) >= 6
+        assert 'Terdampak' in P
+        assert 'Perlu Evakuasi' in P
+        assert 'Meninggal' in P
+        assert 'Ditutup Sementara' in P
+        assert 'Flood Road Impact Function' in P
+        assert 'Dalam bahaya' in P
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_real_plugins, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
