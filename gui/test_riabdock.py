@@ -24,27 +24,12 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
 from gui.riabexceptions import QgisPathException
 from utilities import get_exception_with_stacktrace
-
-# Check if a qgispath.txt file exists in the plugin folder (you
-# need to rename it from qgispath.txt.templ in the standard plugin
-# distribution) and if it does, read the qgis path
-
-ROOT = os.path.dirname(__file__)
-PATH = os.path.abspath(os.path.join(ROOT, 'qgispath.txt'))
-QGIS_PATH = None  # e.g. /usr/local if QGIS is installed under there
-if os.path.isfile(PATH):
-    try:
-        QGIS_PATH = file(PATH, 'rt').readline().rstrip()
-        sys.path.append(os.path.join(QGIS_PATH, 'share', 'qgis', 'python'))
-        #print sys.path
-    except Exception, e:
-        raise QgisPathException
-
-
-from qgis.core import QgsApplication
-from qgis.core import QgsVectorLayer
-from qgis.core import QgsRasterLayer
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import (
+                       QgsApplication
+                       QgsVectorLayer
+                       QgsRasterLayer
+                       QgsMapLayerRegistry
+                       )
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
 from gui.riabdock import RiabDock
@@ -58,18 +43,21 @@ class RiabDockTest(unittest.TestCase):
         """Create an app that all tests can use"""
         print 'RiabDockTest - setUp called'
         if not self.app:
-            myGuiFlag = True  # We need to enable qgis app in gui mode
+            myGuiFlag = True  # We do need to enable qgis app in gui mode
             self.app = QgsApplication(sys.argv, myGuiFlag)
-            myUseDefaultPathFlag = True
-            self.app.setPrefixPath(QGIS_PATH, myUseDefaultPathFlag)
-            self.app.initQgis()
+            if os.environ.has_key('QGISPATH'):
+                myPath = os.environ['QGISPATH']
+                myUseDefaultPathFlag = True
+                self.app.setPrefixPath(myPath, myUseDefaultPathFlag)
+                self.app.initQgis()
+
+            print 'QGIS settings', self.app.showSettings()
             self.parent = QtGui.QWidget()
             self.canvas = QgsMapCanvas(self.parent)
             self.canvas.resize(QtCore.QSize(400, 400))
             self.iface = QgisInterface(self.canvas)
             myGuiContextFlag = False
-
-        self.form = RiabDock(self.iface, myGuiContextFlag)
+            self.form = RiabDock(self.iface, myGuiContextFlag)
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""
@@ -106,13 +94,13 @@ class RiabDockTest(unittest.TestCase):
         #QTest.mouseClick(myHazardItem, Qt.LeftButton)
         #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
-    def Xtest_defaults(self):
+    def test_defaults(self):
         """Test the GUI in its default state"""
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
         self.assertNotEqual(self.form.ui.cboFunction.currentIndex(), -1)
 
-    def Xtest_validate(self):
+    def test_validate(self):
         """Test that the validate function works as expected."""
         # First check that we DONT validate a clear form
         self.clearForm()
@@ -127,7 +115,7 @@ class RiabDockTest(unittest.TestCase):
                      ' a populated for with selections.')
         assert(myFlag), myMessage
 
-    def Xtest_setOkButtonStatus(self):
+    def test_setOkButtonStatus(self):
         """Test that the OK button changes properly according to
         form validity."""
         # First check that we ok ISNT enabled on a clear form
@@ -143,7 +131,7 @@ class RiabDockTest(unittest.TestCase):
                      'populated form with selections.')
         assert(myFlag), myMessage
 
-    def Xtest_run(self):
+    def test_run(self):
         """Test that the ok button works as expected"""
         # Push OK with the left mouse button
         self.clearForm()
@@ -179,7 +167,7 @@ class RiabDockTest(unittest.TestCase):
         self.canvas.setLayerSet([myVectorCanvasLayer, myRasterCanvasLayer])
         self.form.getLayers()
 
-    def Xtest_loadLayers(self):
+    def test_loadLayers(self):
         """Load some layers in the canvas, call load layers
          and verify that the list widget was update appropriately
         """
@@ -194,7 +182,7 @@ class RiabDockTest(unittest.TestCase):
               self.form.ui.cboExposure.count()
         self.assertEqual(self.form.ui.cboExposure.count(), 1), msg
 
-    def Xtest_stacktrace(self):
+    def test_stacktrace(self):
         """Test HTML wrapping of stacktrace
         """
 
