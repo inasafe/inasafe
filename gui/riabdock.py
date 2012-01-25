@@ -449,7 +449,7 @@ class RiabDock(QtGui.QDockWidget):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
-        settrace()
+        #settrace()
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
