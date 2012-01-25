@@ -26,35 +26,64 @@ compile:
 docs: compile
 	cd docs; make html; cd ..
 
+clean:
+	# FIXME (Ole): Use normal Makefile rules instead
+	@find . -name '*~' -exec rm {} \;
+	@find . -name '*.pyc' -exec rm {} \;
+
 # Run the test suite followed by pep8 style checking
-test: test_suite pep8 disabled_tests
+test: test_suite pep8 disabled_tests dependency_test
 
 
-# Run pep8 style checking only
+# Run pep8 style checking
 pep8:
 	@echo
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	pep8 --repeat --ignore=E203 --exclude ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py .
+	@pep8 --repeat --ignore=E203 --exclude ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py .
 
 # Run test suite only
 test_suite: compile testdata
+	@echo
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=gui,engine,storage,impact_functions
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions
 
 # Get test data
 testdata:
+	@echo
+	@echo "-----------------------------------------------------------"
 	@echo "Updating test data - please hit Enter if asked for password"
-	svn co http://www.aifdr.org/svn/riab_test_data --username anonymous
+	@echo "-----------------------------------------------------------"
+	@svn co http://www.aifdr.org/svn/riab_test_data --username anonymous
 
 disabled_tests:
 	@echo
 	@echo "--------------"
-	@echo "DISABLED TESTS"
+	@echo "Disabled tests"
 	@echo "--------------"
-	@grep -R Xtest * | grep ".py:" | grep -v "docs/build/html"
+	@grep -R Xtest * | grep ".py:" | grep -v "docs/build/html" || true
+
+dependency_test:
+	@echo
+	@echo "---------------------------------------------"
+	@echo "List of unwanted dependencies in RIAB library"
+	@echo "---------------------------------------------"
+
+	@# Need disjunction with "true" because grep returns non-zero error code if no matches were found
+	@# nielso@shakti:~/sandpit/risk_in_a_box$ grep PyQt4 engine
+	@# nielso@shakti:~/sandpit/risk_in_a_box$ echo $?
+	@# 1
+	@# See http://stackoverflow.com/questions/4761728/gives-an-error-in-makefile-not-in-bash-when-grep-output-is-empty why we need "|| true"
+
+	@# FIXME (Ole): Have variable containing modules to check
+	@grep -R PyQt4 storage engine impact_functions || true
+	@grep -R qgis.core storage engine impact_functions || true
+	@grep -R "import scipy" storage engine impact_functions || true
+	@grep -R "from scipy import" storage engine impact_functions || true
+
+

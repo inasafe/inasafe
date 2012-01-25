@@ -311,38 +311,49 @@ def extract_layers(layers, keyword, value):
     return extracted_layers
 
 
-def get_admissible_plugins(keywords_list=None):
+# FIXME (Ole): Maybe filter by name too, rename to get_impact_functions
+#  and remove some of the other functions.
+def get_admissible_plugins(keywords=None):  #, name=None):
     """Get plugins that match specified keywords
 
     Input
-        keywords_list: List of dictionaries containing layer keywords
-                       If None or empty all plugins are returned
+        keywords: Either dictionary or list of dictionaries containing
+                  layer keywords of the form
+                  {'category': 'hazard', 'subcategory': 'flood', ...}
+
+                  If None or empty all plugins are returned
+#        name: Optional impact function name (or part of function name)
+#              used to further filter the result.
+#              If None all names are considered to match
 
     Output
         Dictionary of impact functions ({name: class})
     """
 
     # Input checks
-    if keywords_list is None:
-        keywords_list = []
+    if keywords is None:
+        keywords = []
+
+    if isinstance(keywords, dict):
+        keywords = [keywords]
 
     # Get all impact functions
     plugin_dict = get_plugins()
 
     # Build dictionary of those that match given keywords
     admissible_plugins = {}
-    for name, func in plugin_dict.items():
+    for f_name, func in plugin_dict.items():
 
         # Required keywords for func
         requirelines = requirements_collect(func)
 
         # Keep impact function if requirements are met for all given keywords
         match = True
-        for kw_dict in keywords_list:
+        for kw_dict in keywords:
             if not requirements_met(requirelines, kw_dict):
                 match = False
         if match:
-            admissible_plugins[name] = func
+            admissible_plugins[f_name] = func
 
     # Return (possibly empty) dictionary
     return admissible_plugins
