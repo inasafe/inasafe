@@ -36,9 +36,11 @@ class ImpactCalculatorTest(unittest.TestCase):
             os.path.dirname(__file__), '..'))
         self.vectorPath = os.path.join(myRoot, 'riab_test_data',
                                        'Padang_WGS84.shp')
-        self.rasterPath = os.path.join(myRoot, 'riab_test_data',
+        self.rasterShakePath = os.path.join(myRoot, 'riab_test_data',
                                        'Shakemap_Padang_2009.asc')
-        self.calculator.setHazardLayer(self.rasterPath)
+        self.rasterPopulationPath = os.path.join(myRoot, 'riab_test_data',
+                                                 'glp10ag.asc')
+        self.calculator.setHazardLayer(self.rasterShakePath)
         self.calculator.setExposureLayer(self.vectorPath)
         self.calculator.setFunction('Earthquake Guidelines Function')
 
@@ -55,7 +57,7 @@ class ImpactCalculatorTest(unittest.TestCase):
 
         msg = 'Raster property incorrect.'
         assert (self.calculator.getHazardLayer() ==
-                self.rasterPath), msg
+                self.rasterShakePath), msg
 
         msg = 'Function property incorrect.'
         assert (self.calculator.getFunction() ==
@@ -117,7 +119,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         # also test if it works when we give it two layers
         # to see if we can determine which functions will
         # work for them.
-        myKeywords1 = self.calculator.getKeywordFromFile(self.rasterPath)
+        myKeywords1 = self.calculator.getKeywordFromFile(self.rasterShakePath)
         myKeywords2 = self.calculator.getKeywordFromFile(self.vectorPath)
         myList = [myKeywords1, myKeywords2]
         myList = self.calculator.availableFunctions(myList)
@@ -149,13 +151,13 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test that we can get keyword data from a file with
         a .keyword metadata file associated with it."""
         myKeyword = self.calculator.getKeywordFromFile(
-                                    self.rasterPath, 'category')
+                                    self.rasterShakePath, 'category')
         msg = 'Keyword request returned an empty string'
         assert(myKeyword is not ''), msg
         # Test we get an exception if keyword is not found
         try:
             myKeyword = self.calculator.getKeywordFromFile(
-                            self.rasterPath, 'boguskeyword')
+                            self.rasterShakePath, 'boguskeyword')
         except KeywordNotFoundException:
             pass  # this is good
         except Exception, e:

@@ -31,7 +31,7 @@ from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
 
 from utilities import get_exception_with_stacktrace
-from utilities_test import get_qgis_test_app
+from utilities_test import get_qgis_test_app, getUiState
 from impactcalculator import ImpactCalculator
 from gui.riabdock import RiabDock
 
@@ -76,23 +76,44 @@ def loadLayers():
             os.path.dirname(__file__), '..'))
     myVectorPath = os.path.join(myRoot, 'riab_test_data',
                                 'Padang_WGS84.shp')
-    myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
+
+    myPopulationRasterPath = os.path.join(myRoot, 'riab_test_data',
+                                          'glp10ag.asc')
+    myShakeRasterPath = os.path.join(myRoot, 'riab_test_data',
+                                'Shakemap_Padang_2009.asc')
+    myShakeFileInfo = QtCore.QFileInfo(myShakeRasterPath)
+    myShakeBaseName = myShakeFileInfo.baseName()
+
+    myPopulationFileInfo = QtCore.QFileInfo(myPopulationRasterPath)
+    myPopulationBaseName = myPopulationFileInfo.baseName()
+
+    # Create QGis Layer Instances
+    myVectorLayer = QgsVectorLayer(myVectorPath, 'Padang Buildings', 'ogr')
     msg = 'Vector layer "%s" is not valid' % str(myVectorLayer.source())
     assert myVectorLayer.isValid(), msg
 
-    myRasterPath = os.path.join(myRoot, 'riab_test_data',
-                                'Shakemap_Padang_2009.asc')
-    myFileInfo = QtCore.QFileInfo(myRasterPath)
-    myBaseName = myFileInfo.baseName()
-    myRasterLayer = QgsRasterLayer(myRasterPath, myBaseName)
-    msg = 'Raster layer "%s" is not valid' % str(myRasterLayer.source())
-    assert myRasterLayer.isValid(), msg
+    myShakeRasterLayer = QgsRasterLayer(myShakeRasterPath, myShakeBaseName)
+    msg = 'Raster layer "%s" is not valid' % str(myShakeRasterLayer.source())
+    assert myShakeRasterLayer.isValid(), msg
 
+    myPopulationRasterLayer = QgsRasterLayer(myPopulationRasterPath, myPopulationBaseName)
+    msg = 'Raster layer "%s" is not valid' % str(myPopulationRasterLayer.source())
+    assert myPopulationRasterLayer.isValid(), msg
+
+    # Add layers to the registry (that QGis knows about)
     QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
+    QgsMapLayerRegistry.instance().addMapLayer(myShakeRasterLayer)
+    QgsMapLayerRegistry.instance().addMapLayer(myPopulationRasterLayer)
+
+    # Create Map Canvas Layer Instances
     myVectorCanvasLayer = QgsMapCanvasLayer(myVectorLayer)
-    QgsMapLayerRegistry.instance().addMapLayer(myRasterLayer)
-    myRasterCanvasLayer = QgsMapCanvasLayer(myRasterLayer)
-    canvas.setLayerSet([myVectorCanvasLayer, myRasterCanvasLayer])
+    myShakeRasterCanvasLayer = QgsMapCanvasLayer(myShakeRasterLayer)
+    myPopulationRasterCanvasLayer = QgsMapCanvasLayer(myPopulationRasterLayer)
+
+    # Add MCL's to the canvas
+    canvas.setLayerSet([myVectorCanvasLayer,
+                        myShakeRasterCanvasLayer,
+                        myPopulationRasterCanvasLayer])
     form.getLayers()
 
 
@@ -148,7 +169,20 @@ class RiabDockTest(unittest.TestCase):
         clearForm()
         loadLayers()
         myOkWidget = form.ui.pbnRunStop
+
+        msg = 'Run button was not enabled'
+        assert form.ui.pbnRunStop.isEnabled(), msg
+
+        D = getUiState(form.ui)
+
+        #print D
+        assert D == {'Hazard': 'Shakemap_Padang_2009',
+                     'Exposure': 'Padang Buildings',
+                     'Impact Function': 'Earthquake Guidelines Function',
+                     'Run Button Enabled': True}
+
         QTest.mouseClick(myOkWidget, QtCore.Qt.LeftButton)
+
         #QTest.keyClicks(
         #  form.ui.buttonBox.button(form.ui.buttonBox.Cancel), " ")
 
@@ -160,11 +194,11 @@ class RiabDockTest(unittest.TestCase):
         loadLayers()
         msg = 'Expect 1 layer in hazard list widget but got %s' % \
               form.ui.cboHazard.count()
-        self.assertEqual(form.ui.cboExposure.count(), 1), msg
+        self.assertEqual(form.ui.cboHazard.count(), 1), msg
 
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
               form.ui.cboExposure.count()
-        self.assertEqual(form.ui.cboExposure.count(), 1), msg
+        self.assertEqual(form.ui.cboExposure.count(), 2), msg
 
 
 if __name__ == '__main__':
