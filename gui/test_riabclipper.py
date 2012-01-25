@@ -43,7 +43,8 @@ class RiabTest(unittest.TestCase):
                 myPath = os.environ['QGISPATH']
                 myUseDefaultPathFlag = True
                 self.app.setPrefixPath(myPath, myUseDefaultPathFlag)
-                self.app.initQgis()
+            self.app.initQgis()
+            
 
             print 'QGIS settings', self.app.showSettings()
 
