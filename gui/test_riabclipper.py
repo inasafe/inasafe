@@ -40,30 +40,33 @@ rasterPath = os.path.join(myRoot, 'riab_test_data',
 rasterPath2 = os.path.join(myRoot, 'riab_test_data',
                            'population_padang_1.asc')
 
+# Start one QGis application to test agaist
+myGuiFlag = False  # We don't need to enable qgis app in gui mode
+qgis_app = QgsApplication(sys.argv, myGuiFlag)
+if os.environ.has_key('QGISPATH'):
+    myPath = os.environ['QGISPATH']
+    myUseDefaultPathFlag = True
+    qgis_app.setPrefixPath(myPath, myUseDefaultPathFlag)
+
+qgis_app.initQgis()
+print 'QGIS settings', qgis_app.showSettings()
+
 
 class RiabTest(unittest.TestCase):
     """Test the risk in a box clipper"""
     app = None
 
     def setUp(self):
-        """Test if we can clip a layer nicely."""
-
-        myGuiFlag = False  # We don't need to enable qgis app in gui mode
-        self.app = QgsApplication(sys.argv, myGuiFlag)
-        if os.environ.has_key('QGISPATH'):
-            myPath = os.environ['QGISPATH']
-            myUseDefaultPathFlag = True
-            self.app.setPrefixPath(myPath, myUseDefaultPathFlag)
-
-        self.app.initQgis()
-        print 'QGIS settings', self.app.showSettings()
+        pass
 
     def tearDown(self):
-        # self.app.exitQgis()  # This one causes segfault
-        del self.app
+        pass
 
     def test_clipVector(self):
-        # create a vector
+        """Vector layers can be clipped
+        """
+
+        # Create a vector
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(vectorPath, myName, 'ogr')
 
@@ -73,14 +76,18 @@ class RiabTest(unittest.TestCase):
 
         # Create a bounding box
         myRect = QgsRectangle(100.03, -1.14, 100.81, -0.73)
+
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myRect)
+
         # Check the output is valid
         assert(os.path.exists(myResult))
-        del myVectorLayer
 
     def test_clipRaster(self):
-        # create a vector
+        """Raster layers can be clipped
+        """
+
+        # Create a raster
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(rasterPath, myName)
 
@@ -90,20 +97,24 @@ class RiabTest(unittest.TestCase):
 
         # Create a bounding box
         myRect = QgsRectangle(97, -3, 104, 1)
+
         # Clip the vector to the bbox
         myResult = clipLayer(myRasterLayer, myRect)
+
         # Check the output is valid
         assert(os.path.exists(myResult))
-        del myRasterLayer
 
     def test_clipBoth(self):
-        # create a vector
+        """Raster and Vector layers can be clipped
+        """
+        # Create a vector layer
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(vectorPath, myName, 'ogr')
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         vectorPath)
         assert myVectorLayer is not None, msg
-        #create a raster
+
+        # Create a raster layer
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(rasterPath, myName)
 
@@ -113,8 +124,7 @@ class RiabTest(unittest.TestCase):
 
         # Create a bounding box
         myRect = QgsRectangle(99.53, -1.22, 101.20, -0.36)
-        #myRect = QgsRectangle(89, -6, 102, 1)
-        # myRect = QgsRectangle(97, -3, 104, 1)
+
         myExtent = [myRect.xMinimum(),
                     myRect.yMinimum(),
                     myRect.xMaximum(),
@@ -128,16 +138,20 @@ class RiabTest(unittest.TestCase):
                               myExtent[3])
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myRect)
+
         # Check the output is valid
         assert(os.path.exists(myResult))
+
         # Clip the raster to the bbox
         myResult = clipLayer(myRasterLayer, myRect)
+
         # Check the output is valid
         assert(os.path.exists(myResult))
 
     def test_getBestResolution(self):
         """Test if getBestResolution is working."""
-        myName = 'shake'  # pixel size 0.00833333
+
+        myName = 'shake'  # Pixel size 0.00833333
         myRasterLayer = QgsRasterLayer(rasterPath, myName)
         myName = 'population'  # 0.0307411 (courser than shake)
         myRasterLayer2 = QgsRasterLayer(rasterPath2, myName)
