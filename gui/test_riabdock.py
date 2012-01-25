@@ -25,9 +25,9 @@ from PyQt4.QtTest import QTest
 from gui.riabexceptions import QgisPathException
 from utilities import get_exception_with_stacktrace
 from qgis.core import (
-                       QgsApplication
-                       QgsVectorLayer
-                       QgsRasterLayer
+                       QgsApplication,
+                       QgsVectorLayer,
+                       QgsRasterLayer,
                        QgsMapLayerRegistry
                        )
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
