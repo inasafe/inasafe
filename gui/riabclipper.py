@@ -314,7 +314,7 @@ def _clipRasterLayer(layer, extent, theCellSize=None):
                             theCellSize,
                             myWorkingLayer,
                             myFilename))
-        print 'Command: ', myCommand
+        #print 'Command: ', myCommand
         myResult = call(myCommand, shell=True)
         myWorkingLayer = myFilename
     # ok myWorking layer now has the original or resampled file
@@ -328,7 +328,7 @@ def _clipRasterLayer(layer, extent, theCellSize=None):
                             extent.yMinimum(),
                             myWorkingLayer,
                             myFilename))
-    print 'Command: ', myCommand
+    #print 'Command: ', myCommand
     myResult = call(myCommand, shell=True)
     # .. todo:: Check the result of the shell call is ok
     copyKeywords(str(layer.source()), myFilename)

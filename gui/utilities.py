@@ -35,6 +35,8 @@ def get_exception_with_stacktrace(e, html=False):
         return s
 
 qgis_app = None  # Static variable used to hold hand to running QGis app
+
+
 def get_qgis_test_app():
     """ Start one QGis application to test agaist
 
@@ -53,7 +55,7 @@ def get_qgis_test_app():
     if qgis_app is None:
         myGuiFlag = True  # All test will run qgis in gui mode
         qgis_app = QgsApplication(sys.argv, myGuiFlag)
-        if os.environ.has_key('QGISPATH'):
+        if 'QGISPATH' in os.environ:
             myPath = os.environ['QGISPATH']
             myUseDefaultPathFlag = True
             qgis_app.setPrefixPath(myPath, myUseDefaultPathFlag)
@@ -61,4 +63,3 @@ def get_qgis_test_app():
         qgis_app.initQgis()
 
     return qgis_app
-

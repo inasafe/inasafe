@@ -34,7 +34,7 @@ from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsCoordinateTransform)
 from qgis.gui import QgsMapCanvas
 from impactcalculator import ImpactCalculator
-from riabclipper import clipLayer, reprojectLayer
+from riabclipper import clipLayer, reprojectLayer, getBestResolution
 from impactcalculator import getOptimalExtent
 # don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -706,10 +706,20 @@ class RiabDock(QtGui.QDockWidget):
         elif myExposureLayer.type() == QgsMapLayer.RasterLayer:
             myGeoExposureLayer = QgsRasterLayer(myGeoExposurePath, "exps")
 
+        # if both inputs are rasters, the clipped versions need to be
+        # resampled to a common resolution too.
+        myCellSize = None
+        if (myGeoHazardLayer.type() == QgsMapLayer.RasterLayer and
+            myGeoExposureLayer.type() == QgsMapLayer.RasterLayer):
+            myBestRaster = getBestResolution(myGeoHazardLayer,
+                                           myGeoExposureLayer)
+            myCellSize = myBestRaster.rasterUnitsPerPixel()
+
         # Clip the exposure to the bbox
-        myClippedExposurePath = clipLayer(myGeoExposureLayer, myRect)
+        myClippedExposurePath = clipLayer(myGeoExposureLayer,
+                                          myRect, myCellSize)
         # Clip the vector to the bbox
-        myClippedHazardPath = clipLayer(myGeoHazardLayer, myRect)
+        myClippedHazardPath = clipLayer(myGeoHazardLayer, myRect, myCellSize)
         # .. todo:: Cleanup temporary working files, careful not to delete
         #            User's own data'
         return (myClippedHazardPath, myClippedExposurePath)

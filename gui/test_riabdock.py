@@ -50,6 +50,7 @@ def clearForm():
     form.ui.cboExposure.clear()
     form.ui.cboFunction.setCurrentIndex(0)
 
+
 def populateForm():
     """A helper function to populate the form and set it to a valid state."""
     loadLayers()
@@ -57,6 +58,7 @@ def populateForm():
     form.ui.cboExposure.setCurrentIndex(0)
     #QTest.mouseClick(myHazardItem, Qt.LeftButton)
     #QTest.mouseClick(myExposureItem, Qt.LeftButton)
+
 
 def loadLayers():
     """Helper function to load layers into the dialog."""
@@ -146,7 +148,6 @@ class RiabDockTest(unittest.TestCase):
         QTest.mouseClick(myOkWidget, QtCore.Qt.LeftButton)
         #QTest.keyClicks(
         #  form.ui.buttonBox.button(form.ui.buttonBox.Cancel), " ")
-
 
     def test_loadLayers(self):
         """Load some layers in the canvas, call load layers

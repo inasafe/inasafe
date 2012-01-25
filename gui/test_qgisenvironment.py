@@ -27,6 +27,7 @@ from utilities import get_qgis_test_app
 
 qgis_app = get_qgis_test_app()
 
+
 class RiabTest(unittest.TestCase):
     """Test the QGIS Environment"""
 

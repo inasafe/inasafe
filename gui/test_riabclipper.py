@@ -43,6 +43,7 @@ rasterPath2 = os.path.join(myRoot, 'riab_test_data',
 
 qgis_app = get_qgis_test_app()
 
+
 class RiabTest(unittest.TestCase):
     """Test the risk in a box clipper"""
 

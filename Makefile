@@ -34,6 +34,9 @@ clean:
 # Run the test suite followed by pep8 style checking
 test: test_suite pep8 disabled_tests dependency_test
 
+# Run the test suite for gui only
+guitest: gui_test_suite pep8 disabled_tests dependency_test
+
 
 # Run pep8 style checking
 pep8:
@@ -52,6 +55,16 @@ test_suite: compile testdata
 
 	@# Preceding dash means that make will continue in case of errors
 	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions
+
+# Run test suite only
+gui_test_suite: compile testdata
+	@echo
+	@echo "----------------------"
+	@echo "Regresssion Test Suite"
+	@echo "----------------------"
+
+	@# Preceding dash means that make will continue in case of errors
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=gui gui
 
 # Get test data
 testdata:

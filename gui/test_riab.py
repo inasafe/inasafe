@@ -48,6 +48,7 @@ from gui.riab import Riab
 
 qgis_app = get_qgis_test_app()
 
+
 class RiabTest(unittest.TestCase):
     """Test the risk in a box plugin stub"""
 
