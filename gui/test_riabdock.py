@@ -25,15 +25,15 @@ from PyQt4.QtTest import QTest
 from gui.riabexceptions import QgisPathException
 from utilities import get_exception_with_stacktrace
 from qgis.core import (
-                       QgsApplication
-                       QgsVectorLayer
-                       QgsRasterLayer
+                       QgsApplication,
+                       QgsVectorLayer,
+                       QgsRasterLayer,
                        QgsMapLayerRegistry
                        )
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
 from gui.riabdock import RiabDock
-
+from impactcalculator import ImpactCalculator
 
 class RiabDockTest(unittest.TestCase):
     """Test the risk in a box GUI"""
@@ -49,7 +49,7 @@ class RiabDockTest(unittest.TestCase):
                 myPath = os.environ['QGISPATH']
                 myUseDefaultPathFlag = True
                 self.app.setPrefixPath(myPath, myUseDefaultPathFlag)
-                self.app.initQgis()
+            self.app.initQgis()
 
             print 'QGIS settings', self.app.showSettings()
             self.parent = QtGui.QWidget()
@@ -98,7 +98,7 @@ class RiabDockTest(unittest.TestCase):
         """Test the GUI in its default state"""
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
-        self.assertNotEqual(self.form.ui.cboFunction.currentIndex(), -1)
+        self.assertNotEqual(self.form.ui.cboFunction.currentIndex(), -1)    
 
     def test_validate(self):
         """Test that the validate function works as expected."""
