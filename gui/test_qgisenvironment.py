@@ -19,11 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import sys
 import os
 import unittest
-
-from qgis.core import (QgsApplication,
-                       QgsProviderRegistry)
-
-from utilities import get_qgis_test_app
+from qgis.core import QgsApplication, QgsProviderRegistry
+from utilities_test import get_qgis_test_app
 
 qgis_app = get_qgis_test_app()
 
@@ -31,7 +28,7 @@ class RiabTest(unittest.TestCase):
     """Test the QGIS Environment"""
 
     def test_QGISEnvironment(self):
-        """QGIS environment is OK"""
+        """QGIS environment has the expected providers"""
 
         r = QgsProviderRegistry.instance()
         #for item in r.providerList():
@@ -40,6 +37,9 @@ class RiabTest(unittest.TestCase):
         #print 'Provider count: %s' % len(r.providerList())
         assert 'gdal' in r.providerList()
         assert 'ogr' in r.providerList()
+
+        # FIXME (Ole): When we start using PostGIS and WFS we
+        #              can add more tests
 
 if __name__ == '__main__':
     unittest.main()

@@ -22,7 +22,7 @@ import unittest
 
 from gui.riabexceptions import QgisPathException
 
-from utilities import get_qgis_test_app
+from utilities_test import get_qgis_test_app
 
 # Check if a qgispath.txt file exists in the plugin folder (you
 # need to rename it from qgispath.txt.templ in the standard plugin

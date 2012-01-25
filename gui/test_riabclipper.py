@@ -29,7 +29,7 @@ from qgis.core import (QgsApplication,
 
 from riabclipper import clipLayer, getBestResolution, reprojectLayer
 from impactcalculator import getOptimalExtent
-from utilities import get_qgis_test_app
+from utilities_test import get_qgis_test_app
 
 myRoot = os.path.abspath(os.path.join(
         os.path.dirname(__file__), '..'))
