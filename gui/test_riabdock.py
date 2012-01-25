@@ -98,7 +98,7 @@ class RiabDockTest(unittest.TestCase):
         """Test the GUI in its default state"""
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
-        self.assertNotEqual(self.form.ui.cboFunction.currentIndex(), -1)
+        self.assertEqual(self.form.ui.cboFunction.currentIndex(), -1)
 
     def test_validate(self):
         """Test that the validate function works as expected."""
@@ -147,13 +147,16 @@ class RiabDockTest(unittest.TestCase):
         for myLayer in QgsMapLayerRegistry.instance().mapLayers():
             QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
         # Now go ahead and load our layers
-        myVectorPath = os.path.join(ROOT, 'testdata', 'Jakarta_sekolah.shp')
+        myRoot = os.path.abspath(os.path.join(
+                os.path.dirname(__file__), '..'))
+        myVectorPath = os.path.join(myRoot, 'riab_test_data',
+                                     'Padang_WGS84.shp')
         myVectorLayer = QgsVectorLayer(myVectorPath, 'points', 'ogr')
         msg = 'Vector layer "%s" is not valid' % str(myVectorLayer.source())
         assert myVectorLayer.isValid(), msg
 
-        myRasterPath = os.path.join(ROOT, 'testdata',
-                                    'current_flood_depth_jakarta.asc')
+        myRasterPath = os.path.join(myRoot, 'riab_test_data',
+                                    'Shakemap_Padang_2009.asc')
         myFileInfo = QtCore.QFileInfo(myRasterPath)
         myBaseName = myFileInfo.baseName()
         myRasterLayer = QgsRasterLayer(myRasterPath, myBaseName)
@@ -181,24 +184,6 @@ class RiabDockTest(unittest.TestCase):
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
               self.form.ui.cboExposure.count()
         self.assertEqual(self.form.ui.cboExposure.count(), 1), msg
-
-    def test_stacktrace(self):
-        """Test HTML wrapping of stacktrace
-        """
-
-        myCalculator = ImpactCalculator()
-        try:
-            myCalculator.getOptimalExtent('aoeu', 'oaeu', [])
-        except Exception, e:
-            # Display message and traceback
-            msg = get_exception_with_stacktrace(e, html=True)
-
-            #print msg
-            self.form.ui.wvResults.setHtml(msg)
-
-            # Look at state of
-            myContent = self.form.ui.wvResults.html()
-            #print myContent
 
 
 if __name__ == '__main__':
