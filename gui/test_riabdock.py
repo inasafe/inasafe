@@ -22,7 +22,6 @@ import os
 import unittest
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
-from gui.riabexceptions import QgisPathException
 from utilities import get_exception_with_stacktrace
 from qgis.core import (
                        QgsApplication,
@@ -35,6 +34,7 @@ from qgisinterface import QgisInterface
 from gui.riabdock import RiabDock
 from impactcalculator import ImpactCalculator
 
+
 class RiabDockTest(unittest.TestCase):
     """Test the risk in a box GUI"""
     app = None
@@ -45,7 +45,7 @@ class RiabDockTest(unittest.TestCase):
         if not self.app:
             myGuiFlag = True  # We do need to enable qgis app in gui mode
             self.app = QgsApplication(sys.argv, myGuiFlag)
-            if os.environ.has_key('QGISPATH'):
+            if 'QGISPATH' in os.environ:
                 myPath = os.environ['QGISPATH']
                 myUseDefaultPathFlag = True
                 self.app.setPrefixPath(myPath, myUseDefaultPathFlag)
@@ -98,7 +98,7 @@ class RiabDockTest(unittest.TestCase):
         """Test the GUI in its default state"""
         self.assertEqual(self.form.ui.cboHazard.currentIndex(), -1)
         self.assertEqual(self.form.ui.cboExposure.currentIndex(), -1)
-        self.assertNotEqual(self.form.ui.cboFunction.currentIndex(), -1)    
+        self.assertNotEqual(self.form.ui.cboFunction.currentIndex(), -1)
 
     def test_validate(self):
         """Test that the validate function works as expected."""
