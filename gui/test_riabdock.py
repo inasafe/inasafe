@@ -23,41 +23,30 @@ import unittest
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
 from utilities import get_exception_with_stacktrace
-from qgis.core import (
-                       QgsApplication,
+from utilities import get_qgis_test_app
+from qgis.core import (QgsApplication,
                        QgsVectorLayer,
                        QgsRasterLayer,
-                       QgsMapLayerRegistry
-                       )
+                       QgsMapLayerRegistry)
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
 from gui.riabdock import RiabDock
 from impactcalculator import ImpactCalculator
 
+qgis_app = get_qgis_test_app()
 
 class RiabDockTest(unittest.TestCase):
     """Test the risk in a box GUI"""
-    app = None
 
     def setUp(self):
-        """Create an app that all tests can use"""
-        print 'RiabDockTest - setUp called'
-        if not self.app:
-            myGuiFlag = True  # We do need to enable qgis app in gui mode
-            self.app = QgsApplication(sys.argv, myGuiFlag)
-            if 'QGISPATH' in os.environ:
-                myPath = os.environ['QGISPATH']
-                myUseDefaultPathFlag = True
-                self.app.setPrefixPath(myPath, myUseDefaultPathFlag)
-            self.app.initQgis()
+        """Create a form that all tests can use"""
 
-            print 'QGIS settings', self.app.showSettings()
-            self.parent = QtGui.QWidget()
-            self.canvas = QgsMapCanvas(self.parent)
-            self.canvas.resize(QtCore.QSize(400, 400))
-            self.iface = QgisInterface(self.canvas)
-            myGuiContextFlag = False
-            self.form = RiabDock(self.iface, myGuiContextFlag)
+        self.parent = QtGui.QWidget()
+        self.canvas = QgsMapCanvas(self.parent)
+        self.canvas.resize(QtCore.QSize(400, 400))
+        self.iface = QgisInterface(self.canvas)
+        myGuiContextFlag = False
+        self.form = RiabDock(self.iface, myGuiContextFlag)
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""

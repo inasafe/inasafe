@@ -20,6 +20,8 @@ import sys
 import os
 from gui.riabexceptions import QgisPathException
 
+from utilities import get_qgis_test_app
+
 # Check if a qgispath.txt file exists in the plugin folder (you
 # need to rename it from qgispath.txt.templ in the standard plugin
 # distribution) and if it does, read the qgis path
@@ -42,22 +44,25 @@ from PyQt4.QtGui import QWidget
 import unittest
 from gui.riab import Riab
 
+qgis_app = get_qgis_test_app()
 
 class RiabTest(unittest.TestCase):
     """Test the risk in a box plugin stub"""
 
     def setUp(self):
-        """Create an app that all tests can use"""
-        myGuiFlag = True  # We need to enable qgis app in gui mode
-        self.app = QgsApplication(sys.argv, myGuiFlag)
-        #todo - softcode these paths
-        myUseDefaultPathFlag = True
-        self.app.setPrefixPath('/usr/local', myUseDefaultPathFlag)
-        self.app.initQgis()
+        pass
+        #"""Create an app that all tests can use"""
+        #myGuiFlag = True  # We need to enable qgis app in gui mode
+        #self.app = QgsApplication(sys.argv, myGuiFlag)
+        ##todo - softcode these paths
+        #myUseDefaultPathFlag = True
+        #self.app.setPrefixPath('/usr/local', myUseDefaultPathFlag)
+        #self.app.initQgis()
 
     def tearDown(self):
-        """Tear down - destroy the QGIS app"""
-        self.app.exitQgis()
+        pass
+        #"""Tear down - destroy the QGIS app"""
+        #self.app.exitQgis()
 
     def test_load(self):
         """Test if we are able to load our plugin"""
