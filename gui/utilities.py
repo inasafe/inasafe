@@ -59,7 +59,6 @@ def get_qgis_test_app():
             qgis_app.setPrefixPath(myPath, myUseDefaultPathFlag)
 
         qgis_app.initQgis()
-        #rint 'QGIS settings', qgis_app.showSettings()
 
     return qgis_app
 

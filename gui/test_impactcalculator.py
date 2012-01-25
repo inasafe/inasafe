@@ -22,8 +22,8 @@ import unittest
 from gui.impactcalculator import ImpactCalculator
 #from riabexceptions import TestNotImplementedException
 from gui.riabexceptions import (InsufficientParametersException,
-                            KeywordNotFoundException,
-                            StyleInfoNotFoundException)
+                                KeywordNotFoundException,
+                                StyleInfoNotFoundException)
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -35,9 +35,9 @@ class ImpactCalculatorTest(unittest.TestCase):
         myRoot = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..'))
         self.vectorPath = os.path.join(myRoot, 'riab_test_data',
-                                   'Padang_WGS84.shp')
+                                       'Padang_WGS84.shp')
         self.rasterPath = os.path.join(myRoot, 'riab_test_data',
-                                    'Shakemap_Padang_2009.asc')
+                                       'Shakemap_Padang_2009.asc')
         self.calculator.setHazardLayer(self.rasterPath)
         self.calculator.setExposureLayer(self.vectorPath)
         self.calculator.setFunction('Earthquake Guidelines Function')
@@ -50,16 +50,16 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test if the properties work as expected."""
 
         msg = 'Vector property incorrect.'
-        assert(self.calculator.getExposureLayer() ==
-               self.vectorPath), msg
+        assert (self.calculator.getExposureLayer() ==
+                self.vectorPath), msg
 
         msg = 'Raster property incorrect.'
-        assert(self.calculator.getHazardLayer() ==
-               self.rasterPath), msg
+        assert (self.calculator.getHazardLayer() ==
+                self.rasterPath), msg
 
         msg = 'Function property incorrect.'
-        assert(self.calculator.getFunction() ==
-               'Earthquake Guidelines Function'), msg
+        assert (self.calculator.getFunction() ==
+                'Earthquake Guidelines Function'), msg
 
     def test_run(self):
         """Test that run works as expected in non threading mode"""
