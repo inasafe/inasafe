@@ -345,56 +345,56 @@ def sigab2bnpb(E, target_attribute='VCLASS'):
     return V
 
 
-def XX_printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
-    """Map SIGAB point data to BNPB vulnerability classes
+# def XX_printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
+#     """Map SIGAB point data to BNPB vulnerability classes
 
-    Input
-        E: Vector object representing the OSM data
-        target_attribute: Optional name of the attribute containing
-                          the mapped vulnerability class. Default
-                          value is 'VCLASS'
+#     Input
+#         E: Vector object representing the OSM data
+#         target_attribute: Optional name of the attribute containing
+#                           the mapped vulnerability class. Default
+#                           value is 'VCLASS'
 
-    Output:
-        Vector object like E, but with one new attribute (e.g. 'VCLASS')
-        representing the vulnerability class used in the guidelines
-    """
+#     Output:
+#         Vector object like E, but with one new attribute (e.g. 'VCLASS')
+#         representing the vulnerability class used in the guidelines
+#     """
 
-    # Input check
-    #required = ['Bangunan', 'Halaman', 'Struktur_B', 'Level',
-    #            'Lantai', 'Atap', 'Dinding', 'Tingkat']
-    actual = E.get_attribute_names()
-    #print actual
+#     # Input check
+#     #required = ['Bangunan', 'Halaman', 'Struktur_B', 'Level',
+#     #            'Lantai', 'Atap', 'Dinding', 'Tingkat']
+#     actual = E.get_attribute_names()
+#     #print actual
 
-    #msg = ('Input data to osm2bnpb must have attributes %s. '
-    #       'It has %s' % (str(required), str(actual)))
-    #for attribute in required:
-    #    assert attribute in actual, msg
+#     #msg = ('Input data to osm2bnpb must have attributes %s. '
+#     #       'It has %s' % (str(required), str(actual)))
+#     #for attribute in required:
+#     #    assert attribute in actual, msg
 
-    # Start mapping
-    fields = {}
-    N = len(E)
-    print 'Total number of attributes', N
-    attributes = E.get_data()
-    count = 0
-    for i in range(N):
-        for key in actual:  # Required:
-            if key not in fields:
-                fields[key] = {}
+#     # Start mapping
+#     fields = {}
+#     N = len(E)
+#     print 'Total number of attributes', N
+#     attributes = E.get_data()
+#     count = 0
+#     for i in range(N):
+#         for key in actual:  # Required:
+#             if key not in fields:
+#                 fields[key] = {}
 
-            val = E.get_data(key, i).lower()
-            if val not in fields[key]:
-                fields[key][val] = 0
+#             val = E.get_data(key, i).lower()
+#             if val not in fields[key]:
+#                 fields[key][val] = 0
 
-            # Count incidences of each value
-            fields[key][val] += 1
+#             # Count incidences of each value
+#             fields[key][val] += 1
 
-    fid = open('/home/nielso/sigab_stats.txt', 'w')
-    for key in actual:  # Required:
-        print
-        print key
-        fid.write('\n%s\n' % key)
-        for val in fields[key]:
-            print '    %s: %i' % (str(val), fields[key][val])
-            fid.write('    %s: %i\n' % (str(val), fields[key][val]))
+#     fid = open('/home/nielso/sigab_stats.txt', 'w')
+#     for key in actual:  # Required:
+#         print
+#         print key
+#         fid.write('\n%s\n' % key)
+#         for val in fields[key]:
+#             print '    %s: %i' % (str(val), fields[key][val])
+#             fid.write('    %s: %i\n' % (str(val), fields[key][val]))
 
-    fid.close()
+#     fid.close()
