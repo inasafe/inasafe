@@ -55,6 +55,12 @@ class RiabTest(unittest.TestCase):
                                            'Shakemap_Padang_2009.asc')
             self.rasterPath2 = os.path.join(myRoot, 'riab_test_data',
                                            'population_padang_1.asc')
+    #def tearDown(self):
+    def __del__(self):        
+        if self.app:
+            self.app.exitQgis()
+            del self.app
+            self.app = None
 
     def test_clipVector(self):
         # create a vector
