@@ -1,8 +1,8 @@
 #! /bin/bash
 
 # Name of root dir and repository
-RIABDIR = "risk_in_a_box"
-RIABREPO = "AIFDR/$RIABDIR.git"
+RIABDIR="risk_in_a_box"
+RIABREPO="AIFDR/$RIABDIR.git"
 
 echo "---------------------------------------------------------"
 echo "Installing Risk in a Box and all its dependencies."
@@ -17,8 +17,8 @@ gpg --keyserver keyserver.ubuntu.com --recv 1F9ADD375CA44993
 gpg --export --armor 1F9ADD375CA44993 | sudo apt-key add -
 sudo apt-get install python-software-properties
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get -y update
-sudo apt-get install -y qgis python-qgis
+sudo apt-get -qq update
+sudo apt-get install -q -y qgis python-qgis
 
 echo "Installing Ubuntu packages for development"
 sudo apt-get install -y git subversion pep8 python-nose python-coverage python-gdal python-numpy python-sphinx pyqt4-dev-tools
@@ -26,11 +26,17 @@ sudo apt-get install -y git subversion pep8 python-nose python-coverage python-g
 if grep -q RIABQGIS ~/.bash_aliases
 then
     echo "You already have RIABQGIS in your ~/.bash_aliases"
+    source ~/.bash_aliases
 else
-    echo "export RIABQGIS=`pwd`/$RIAB" >> ~/.bash_aliases
+    export RIABQGIS=`pwd`/$RIABDIR  # Make path available for this session
+
+    echo Path to RIABQGIS is $RIABQGIS
+
+    # Store it for future sessions
+    echo "export RIABQGIS=$RIABQGIS" >> ~/.bash_aliases
     #echo 'alias risiko-activate="source $RIAB_HOME/riab_env/bin/activate;echo Risk In a Box virtual environment activated. Available commands are:; echo;echo risiko-test risiko-start risiko-stop risiko-clean risiko-upload risiko-populate risiko-uninstall;echo"' >> ~/.bash_aliases
     echo "Adding RIABQGIS path to your ~/.bash_aliases"
-fi
+ fi
 
 # Function to clone the git repositories
 function checkup() {
@@ -42,6 +48,9 @@ function checkup() {
       echo "Updating ${WORKING_DIR} from upstream"
       (cd "${WORKING_DIR}" && git pull)
   else
+      echo "git@github.com:${REPO} ${WORKING_DIR}"
+      echo "https://github.com/${REPO} ${WORKING_DIR}"
+      echo "http://github.com/${REPO} ${WORKING_DIR}"
       git clone "git@github.com:${REPO}" "${WORKING_DIR}" || git clone "https://github.com/${REPO}" "${WORKING_DIR}" || git clone "http://github.com/${REPO}" "${WORKING_DIR}"
   fi
 
@@ -53,16 +62,18 @@ function checkup() {
 }
 
 echo "Downloading Risk in a Box"
-checkup $RIABREPO $RIABDIR master
+checkup ${RIABREPO} ${RIABDIR} master
 
 echo "Downloading test and demo data"
-cd $RIABQGIS; make test_data
+echo dir $RIABQGIS
+pushd $RIABQGIS
+make testdata
+popd
 
-export RIABQGIS
 
 echo
 echo "Congratulations, you have installed Risk in a Box - QGIS"
 echo
 echo "To verify that the installation works, you can run the test suite"
-echo "cd $RIABQGIS
+echo "cd $RIABQGIS"
 echo "make test"
