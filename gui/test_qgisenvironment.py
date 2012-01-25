@@ -30,7 +30,7 @@ class RiabTest(unittest.TestCase):
     def test_QGISEnvironment(self):
         """Testing that QGIS is hunky dory"""
         a = QgsApplication(sys.argv, False)  # False = nongui mode
-        if os.environ.has_key('QGISPATH'):
+        if 'QGISPATH' in os.environ:
             myPath = os.environ['QGISPATH']
             myUseDefaultPathFlag = True
             a.setPrefixPath(myPath, myUseDefaultPathFlag)

@@ -39,12 +39,11 @@ class RiabTest(unittest.TestCase):
         if not self.app:
             myGuiFlag = False  # We don't need to enable qgis app in gui mode
             self.app = QgsApplication(sys.argv, myGuiFlag)
-            if os.environ.has_key('QGISPATH'):
+            if 'QGISPATH' in os.environ:
                 myPath = os.environ['QGISPATH']
                 myUseDefaultPathFlag = True
                 self.app.setPrefixPath(myPath, myUseDefaultPathFlag)
             self.app.initQgis()
-            
 
             print 'QGIS settings', self.app.showSettings()
 
@@ -56,8 +55,9 @@ class RiabTest(unittest.TestCase):
                                            'Shakemap_Padang_2009.asc')
             self.rasterPath2 = os.path.join(myRoot, 'riab_test_data',
                                            'population_padang_1.asc')
+
     #def tearDown(self):
-    def __del__(self):        
+    def __del__(self):
         if self.app:
             self.app.exitQgis()
             del self.app
