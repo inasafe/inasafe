@@ -59,19 +59,24 @@ To verify that the installation works you can run the test suite from the comman
 
 This will run all the regression tests and also highlight any code issues.
 Note that first time the tests are run they will pull 250MB of test data from
-our subversion repository (If asked for a password just hit Enter).
+our subversion repository (If asked for a password just hit Enter). See further 
+notes on running tests below.
 
 
-To run the plugin restart QGIS. If you wish to
-an IDE for development, please refer to `this article <http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/>`_
+To run the plugin start QGIS and enable it from the :menuselection:`Plugins --> Manage Plugins`
+menu. 
+
+Remote Debugging with and IDE
+.............................
+
+If you wish to use an IDE for development, please refer to 
+`this article <http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/>`_
 for detailed information on how you can do so.
 
-If you wish to debug the plugin, (referring once again to the above article), make a copy
-of pydevpath.txt.templ to pydevpath.txt e.g.::
+For remote debugging, you should add pydevd to your PYTHONPATH before starting QGIS
+for example (you will need to adjust these paths to match your system)::
 
-  cp pydevpath.txt.templ pydevpath.txt
-
-Then replace the path to your pydevd module as described in the above article.
+	export PYTHONPATH=$PYTHONPATH:/home/timlinux/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev.debug_2.3.0.2011121518/pysrc/
 
 .. note::
 
@@ -79,19 +84,48 @@ Then replace the path to your pydevd module as described in the above article.
    PyDev debug server first before launching the Risk-in-a-box QGIS plugin
    otherwise QGIS will likely crash when it can't find the debug server.
 
+You will need to ensure that the PYTHONPATH containing your pydev package folder 
+is set before you launch QGIS - for example by adding the above line to your ~/.bashrc. 
 
-# If you wish to run the unit tests, please make a local copy of the qgispath.txt.templ template
-# and adjust the path contained in that file to match your QGIS installation path e.g.::
-#
-#  cp qgispath.txt.templ qgispath.txt
-#
-# In order to run the tests, you should install 'discover' e.g.::
-#
-#  sudo pip install discover
-#
-# Then you can run the tests (from within the risk_in_a_box toplevel directory) like this::
-#
-#  python -m discover
+QGIS installed in a non-standard location
+.........................................
+
+For running unit tests that need QGIS, you may need to adjust PYTHONPATH and QGISPATH 
+if QGIS is running in a non standard location. For example with QGIS built from source 
+into /usr/local (and python bindings global install option disabled), you could run 
+these commands (or add them to your ~/.bashrc)::
+
+	export QGISPATH=/usr/local
+	export PYTHONPATH=$PYTHONPATH:/usr/local/share/qgis/python/
+
+.. note:: The above can be set within Eclipse's project properties if you are running 
+your tests using the PyDev IDE environment.
+
+
+Adding risk_in_a_box to your python path:
+.........................................
+
+Lastly, you should add the riab plugin folder to your PYTHONPATH so that 
+package and module paths can be resolved correctly. E.g::
+
+	export PYTHONPATH=$PYTHONPATH:${HOME}/.qgis/python/plugins/risk_in_a_box
+
+Once again you could add this to your .bashrc or set it in Eclipse for convenience 
+if needed.
+
+Running tests
+.............
+
+You can run all tests (which includes code coverage reports and other 
+diagnostics) by doing this within the risk_in_a_box plugin folder::
+
+	make test
+
+You can also run individual tests using nose. For example to run the riabclipper 
+test you would do::
+
+	nosetests -v gui.test_riabclipper
+
 
 Coding Standards
 ================
