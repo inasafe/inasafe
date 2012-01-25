@@ -96,8 +96,10 @@ def loadLayers():
     msg = 'Raster layer "%s" is not valid' % str(myShakeRasterLayer.source())
     assert myShakeRasterLayer.isValid(), msg
 
-    myPopulationRasterLayer = QgsRasterLayer(myPopulationRasterPath, myPopulationBaseName)
-    msg = 'Raster layer "%s" is not valid' % str(myPopulationRasterLayer.source())
+    myPopulationRasterLayer = QgsRasterLayer(myPopulationRasterPath,
+                                             myPopulationBaseName)
+    msg = ('Raster layer "%s" is not valid' %
+           str(myPopulationRasterLayer.source()))
     assert myPopulationRasterLayer.isValid(), msg
 
     # Add layers to the registry (that QGis knows about)
