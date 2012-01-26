@@ -88,6 +88,7 @@ def loadLayers():
 
     # Now go ahead and load our layers
     # FIXME (Ole): Use environment variable
+    # FIXME (Ole): Write as a for loop as in the tests in engine
     myRoot = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..'))
     myVectorPath = os.path.join(myRoot, 'riab_test_data',
@@ -97,11 +98,23 @@ def loadLayers():
                                           'glp10ag.asc')
     myShakeRasterPath = os.path.join(myRoot, 'riab_test_data',
                                 'Shakemap_Padang_2009.asc')
+
+    myBBTsunamiPath = os.path.join(myRoot, 'riab_test_data',
+                                   'tsunami_max_inundation_depth_BB_utm.asc')
+    myBBExposurePath = os.path.join(myRoot, 'riab_test_data',
+                                    'tsunami_exposure_BB.shp')
+
     myShakeFileInfo = QtCore.QFileInfo(myShakeRasterPath)
     myShakeBaseName = myShakeFileInfo.baseName()
 
     myPopulationFileInfo = QtCore.QFileInfo(myPopulationRasterPath)
     myPopulationBaseName = myPopulationFileInfo.baseName()
+
+    myBBTsunamiFileInfo = QtCore.QFileInfo(myBBTsunamiPath)
+    myBBTsunamiBaseName = myBBTsunamiFileInfo.baseName()
+
+    myBBExposureFileInfo = QtCore.QFileInfo(myBBExposurePath)
+    myBBTsunamiBaseName = myBBExposureFileInfo.baseName()
 
     # Create QGis Layer Instances
     myVectorLayer = QgsVectorLayer(myVectorPath, 'Padang Buildings', 'ogr')
@@ -118,20 +131,32 @@ def loadLayers():
            str(myPopulationRasterLayer.source()))
     assert myPopulationRasterLayer.isValid(), msg
 
+    myBBTsunamiLayer = QgsRasterLayer(myBBTsunamiPath, myBBTsunamiBaseName)
+    assert myBBTsunamiLayer.isValid()
+
+    myBBExposureLayer = QgsRasterLayer(myBBExposurePath, myBBExposureBaseName)
+    assert myBBExposureLayer.isValid()
+
     # Add layers to the registry (that QGis knows about)
     QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
     QgsMapLayerRegistry.instance().addMapLayer(myShakeRasterLayer)
     QgsMapLayerRegistry.instance().addMapLayer(myPopulationRasterLayer)
+    QgsMapLayerRegistry.instance().addMapLayer(myBBTsunamiLayer)
+    QgsMapLayerRegistry.instance().addMapLayer(myBBExposureLayer)
 
     # Create Map Canvas Layer Instances
     myVectorCanvasLayer = QgsMapCanvasLayer(myVectorLayer)
     myShakeRasterCanvasLayer = QgsMapCanvasLayer(myShakeRasterLayer)
     myPopulationRasterCanvasLayer = QgsMapCanvasLayer(myPopulationRasterLayer)
+    myBBTsunamiCanvasLayer = QgsMapCanvasLayer(myBBTsunamiLayer)
+    myBBExposureCanvasLayer = QgsMapCanvasLayer(myBBExposureLayer)
 
     # Add MCL's to the canvas
     canvas.setLayerSet([myVectorCanvasLayer,
                         myShakeRasterCanvasLayer,
-                        myPopulationRasterCanvasLayer])
+                        myPopulationRasterCanvasLayer,
+                        myBBTsunamiCanvasLayer,
+                        myBBExposureCanvasLayer])
     form.getLayers()
 
 

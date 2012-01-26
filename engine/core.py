@@ -57,6 +57,9 @@ def calculate_impact(layers, impact_fcn,
     # Pass input layers to plugin
     F = impact_function.run(layers)
 
+    msg = 'Impact function %s returned None' % str(impact_function)
+    assert F is not None, msg
+
     # Write result and return filename
     if F.is_raster:
         extension = '.tif'

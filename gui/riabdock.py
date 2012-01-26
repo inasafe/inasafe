@@ -254,12 +254,23 @@ class RiabDock(QtGui.QDockWidget):
             'button below.')
             return (False, myMessage)
         if self.ui.cboFunction.currentIndex() == -1:
+
+            haz_fn = str(self.getHazardLayer().source())
+            haz_kwds = self.calculator.getKeywordFromFile(haz_fn)
+
+            exp_fn = str(self.getExposureLayer().source())
+            exp_kwds = self.calculator.getKeywordFromFile(exp_fn)
+
             myMessage = ('<span class="label important">No valid functions:'
-            '</span> No functions are available for the inputs you have '
-            'specified. '
-            'Try selecting a different combination of inputs. Please consult '
-            'the user manual for details on what constitute valid inputs for '
-            'a given risk function.')
+                         '</span> No functions are available for the inputs '
+                         'you have specified. '
+                         'Try selecting a different combination of inputs. '
+                         'Please consult the user manual <FIXME: add link> for '
+                         'details on what constitute valid inputs for '
+                         'a given risk function. <br>'
+                         'Hazard keywords [%s]: %s <br>'
+                         'Exposure keywords [%s]: %s' % (haz_fn, haz_kwds,
+                                                         exp_fn, exp_kwds))
             return (False, myMessage)
         else:
             myMessage = ('<span class="label success">Ready:</span> '
@@ -725,7 +736,18 @@ class RiabDock(QtGui.QDockWidget):
         myClippedHazardPath = clipLayer(myGeoHazardLayer, myRect, myCellSize)
         # .. todo:: Cleanup temporary working files, careful not to delete
         #            User's own data'
-        return (myClippedHazardPath, myClippedExposurePath)
+
+        # FIXME: Turn paths back into layers temporarily and print res
+        myExposureLayer = QgsRasterLayer(myClippedExposurePath, 'exp')
+        myHazardLayer = QgsRasterLayer(myClippedHazardPath, 'haz')
+
+        myHazardUPP = myHazardLayer.rasterUnitsPerPixel()
+        myExposureUPP = myExposureLayer.rasterUnitsPerPixel()
+
+        print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
+        print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
+
+        return myClippedHazardPath, myClippedExposurePath
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
