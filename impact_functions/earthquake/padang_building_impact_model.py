@@ -52,8 +52,13 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     layer_type=='vector' and \
                     datatype in ['osm', 'itb', 'sigab']
     """
-    
+
     # FIXME (TD): make the plugin_name work
+    # U just need to restart QGIS :-)
+    # Anyway, we are onto something better where
+    # more than one plugin can have the same title - e.g.
+    # perlu evacuasi for both population and poor households.
+    # Watch this space. (OLe)
     #plugin_name = "My Padang Test Function 4"
 
     def run(self, layers):

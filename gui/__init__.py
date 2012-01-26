@@ -1,5 +1,3 @@
-## NOTE (TD): path modified in parent to ensure that plugins can be seen from the gui
-
 import os
 import sys
 

@@ -876,7 +876,7 @@ class Test_IO(unittest.TestCase):
         y = x[1].split('.')[:2]
         z = ''.join(y)  # Turn into number and
         if z.endswith(', '):
-           z = z[:-1]  # Remove trailing comma
+            z = z[:-1]  # Remove trailing comma
 
         # Reference bbox for vector data
         ref_bbox = {'tsunami_exposure_BB.shp': [150.124,
