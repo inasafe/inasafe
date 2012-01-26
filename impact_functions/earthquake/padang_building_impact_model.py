@@ -52,6 +52,9 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     layer_type=='vector' and \
                     datatype in ['osm', 'itb', 'sigab']
     """
+    
+    # FIXME (TD): make the plugin_name work
+    #plugin_name = "My Padang Test Function 4"
 
     def run(self, layers):
         """Risk plugin for Padang building survey
