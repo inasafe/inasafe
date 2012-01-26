@@ -136,7 +136,7 @@ def loadLayers():
            str(myBBTsunamiLayer.source()))
     assert myBBTsunamiLayer.isValid(), msg
 
-    myBBExposureLayer = QgsRasterLayer(myBBExposurePath, myBBExposureBaseName)
+    myBBExposureLayer = QgsVectorLayer(myBBExposurePath, myBBExposureBaseName, 'ogr')
     msg = ('BBExposure layer "%s" is not valid' %
            str(myBBExposureLayer.source()))
     assert myBBExposureLayer.isValid(), msg
@@ -281,11 +281,12 @@ class RiabDockTest(unittest.TestCase):
         loadLayers()
         msg = 'Expect 1 layer in hazard list widget but got %s' % \
               form.ui.cboHazard.count()
-        self.assertEqual(form.ui.cboHazard.count(), 1), msg
+        print form.ui.cboHazard.count()
+        self.assertEqual(form.ui.cboHazard.count(), 2), msg
 
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
               form.ui.cboExposure.count()
-        self.assertEqual(form.ui.cboExposure.count(), 2), msg
+        self.assertEqual(form.ui.cboExposure.count(), 3), msg
 
 
 if __name__ == '__main__':
