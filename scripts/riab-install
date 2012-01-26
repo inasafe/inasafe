@@ -21,7 +21,7 @@ sudo apt-get -qq update
 sudo apt-get install -q -y qgis python-qgis
 
 echo "Installing Ubuntu packages for development"
-sudo apt-get install -y git subversion pep8 python-nose python-coverage python-gdal python-numpy python-sphinx pyqt4-dev-tools
+sudo apt-get install -y git subversion pep8 python-nose python-coverage python-numpy python-sphinx pyqt4-dev-tools
 
 if grep -q RIABQGIS ~/.bash_aliases
 then
