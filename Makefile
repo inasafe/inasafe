@@ -64,7 +64,7 @@ gui_test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=gui gui
+	@-export PYTHONPATH=`pwd`:/usr/local/share/qgis/python/; export QGISPATH=/usr/local; nosetests -v --with-id --with-coverage --cover-package=gui gui
 
 # Get test data
 testdata:

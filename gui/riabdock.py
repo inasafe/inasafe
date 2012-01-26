@@ -20,12 +20,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtWebKit import QWebSettings
+#from PyQt4a.QtCore.QCoreApplication import translate as tr
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
 from utilities import get_exception_with_stacktrace
-import sys
-import os
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
                        QgsSymbolV2, QgsRendererRangeV2, QgsRectangle,
@@ -661,8 +659,9 @@ class RiabDock(QtGui.QDockWidget):
         myGeoCrs.createFromEpsg(4326)
         myGeoExtent = None
         if myCanvas.hasCrsTransformEnabled():
-            myXForm = QgsCoordinateTransform(myCanvas.destinationCrs(),
-                                         myGeoCrs)
+            myXForm = QgsCoordinateTransform(
+                                myCanvas.mapRenderer().destinationCrs(),
+                                myGeoCrs)
 
             # Get the clip area in the layer's crs
             myTransformedExtent = myXForm.transformBoundingBox(myRect)

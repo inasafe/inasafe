@@ -16,17 +16,11 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import sys
-import os
 import unittest
-
-from gui.riabexceptions import QgisPathException
-
 from qgis.core import QgsApplication
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from PyQt4.QtGui import QWidget
-
 from utilities_test import get_qgis_test_app
 
 from gui.riab import Riab
