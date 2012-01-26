@@ -88,83 +88,47 @@ def loadLayers():
         QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
 
     # Now go ahead and load our layers
+
     # FIXME (Ole): Use environment variable
     # FIXME (Ole): Write as a for loop as in the tests in engine
-    myRoot = os.path.abspath(os.path.join(
-            os.path.dirname(__file__), '..'))
-    myVectorPath = os.path.join(myRoot, 'riab_test_data',
-                                'Padang_WGS84.shp')
+    myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    myData = os.path.join(myRoot, 'riab_test_data')
 
-    myPopulationRasterPath = os.path.join(myRoot, 'riab_test_data',
-                                          'glp10ag.asc')
-    myShakeRasterPath = os.path.join(myRoot, 'riab_test_data',
-                                'Shakemap_Padang_2009.asc')
+    # List all layers in the correct order.
+    myFileList = ['Padang_WGS84.shp',
+                  'glp10ag.asc',
+                  'Shakemap_Padang_2009.asc',
+                  'tsunami_max_inundation_depth_BB_utm.asc',
+                  'tsunami_exposure_BB.shp']
 
-    myBBTsunamiPath = os.path.join(myRoot, 'riab_test_data',
-                                   'tsunami_max_inundation_depth_BB_utm.asc')
-    myBBExposurePath = os.path.join(myRoot, 'riab_test_data',
-                                    'tsunami_exposure_BB.shp')
+    myCanvasLayers = []
+    for myFile in myFileList:
+        # Extract basename and absolute path
+        myBaseName, myExt = os.path.splitext(myFile)
+        myPath = os.path.join(myData, myFile)
 
-    myShakeFileInfo = QtCore.QFileInfo(myShakeRasterPath)
-    myShakeBaseName = myShakeFileInfo.baseName()
+        # Create QGis Layer Instance
+        if myExt in ['.asc', '.tif']:
+            myLayer = QgsRasterLayer(myPath, myBaseName)
+        elif myExt in ['.shp']:
+            myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+        else:
+            msg = 'File %s had illegal extension' % myPath
+            raise Exception(msg)
 
-    myPopulationFileInfo = QtCore.QFileInfo(myPopulationRasterPath)
-    myPopulationBaseName = myPopulationFileInfo.baseName()
+        msg = 'Layer "%s" is not valid' % str(myLayer.source())
+        assert myLayer.isValid(), msg
 
-    myBBTsunamiFileInfo = QtCore.QFileInfo(myBBTsunamiPath)
-    myBBTsunamiBaseName = myBBTsunamiFileInfo.baseName()
+        # Add layer to the registry (that QGis knows about)
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
-    myBBExposureFileInfo = QtCore.QFileInfo(myBBExposurePath)
-    myBBExposureBaseName = myBBExposureFileInfo.baseName()
-
-    # Create QGis Layer Instances
-    myVectorLayer = QgsVectorLayer(myVectorPath, 'Padang Buildings', 'ogr')
-    msg = 'Vector layer "%s" is not valid' % str(myVectorLayer.source())
-    assert myVectorLayer.isValid(), msg
-
-    myShakeRasterLayer = QgsRasterLayer(myShakeRasterPath, myShakeBaseName)
-    msg = 'Raster layer "%s" is not valid' % str(myShakeRasterLayer.source())
-    assert myShakeRasterLayer.isValid(), msg
-
-    myPopulationRasterLayer = QgsRasterLayer(myPopulationRasterPath,
-                                             myPopulationBaseName)
-    msg = ('Raster layer "%s" is not valid' %
-           str(myPopulationRasterLayer.source()))
-    assert myPopulationRasterLayer.isValid(), msg
-
-    myBBTsunamiLayer = QgsRasterLayer(myBBTsunamiPath, myBBTsunamiBaseName)
-    msg = ('BBTsunami layer "%s" is not valid' %
-           str(myBBTsunamiLayer.source()))
-    assert myBBTsunamiLayer.isValid(), msg
-
-    myBBExposureLayer = QgsVectorLayer(myBBExposurePath,
-                                       myBBExposureBaseName, 'ogr')
-    msg = ('BBExposure layer "%s" is not valid' %
-           str(myBBExposureLayer.source()))
-    assert myBBExposureLayer.isValid(), msg
-
-    # Add layers to the registry (that QGis knows about)
-    QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
-    QgsMapLayerRegistry.instance().addMapLayer(myShakeRasterLayer)
-    QgsMapLayerRegistry.instance().addMapLayer(myPopulationRasterLayer)
-    QgsMapLayerRegistry.instance().addMapLayer(myBBTsunamiLayer)
-    QgsMapLayerRegistry.instance().addMapLayer(myBBExposureLayer)
-
-    # Create Map Canvas Layer Instances
-    myVectorCanvasLayer = QgsMapCanvasLayer(myVectorLayer)
-    myShakeRasterCanvasLayer = QgsMapCanvasLayer(myShakeRasterLayer)
-    myPopulationRasterCanvasLayer = QgsMapCanvasLayer(myPopulationRasterLayer)
-    myBBTsunamiCanvasLayer = QgsMapCanvasLayer(myBBTsunamiLayer)
-    myBBExposureCanvasLayer = QgsMapCanvasLayer(myBBExposureLayer)
+        # Create Map Canvas Layer Instance and add to list
+        myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
 
     # Add MCL's to the canvas
     # NOTE: New layers *must* be added to the end of this list, otherwise
     #       tests will break.
-    canvas.setLayerSet([myVectorCanvasLayer,
-                        myShakeRasterCanvasLayer,
-                        myPopulationRasterCanvasLayer,
-                        myBBTsunamiCanvasLayer,
-                        myBBExposureCanvasLayer])
+    canvas.setLayerSet(myCanvasLayers)
     form.getLayers()
 
 
@@ -228,7 +192,7 @@ class RiabDockTest(unittest.TestCase):
 
         #print D
         assert D == {'Hazard': 'Shakemap_Padang_2009',
-                     'Exposure': 'Padang Buildings',
+                     'Exposure': 'Padang_WGS84',
                      'Impact Function': 'Earthquake Guidelines Function',
                      'Run Button Enabled': True}
 
