@@ -17,7 +17,6 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import sys
 import os
 import unittest
 
@@ -26,13 +25,11 @@ from PyQt4.QtTest import QTest
 from qgis.core import (QgsApplication,
                        QgsVectorLayer,
                        QgsRasterLayer,
-                       QgsMapLayerRegistry)
+                       QgsMapLayerRegistry,
+                       QgsRectangle)
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
-
-from utilities import get_exception_with_stacktrace
-from utilities_test import get_qgis_test_app, getUiState
-from impactcalculator import ImpactCalculator
+from utilities_test import get_qgis_test_app
 from gui.riabdock import RiabDock
 
 # Get QGis app handle
@@ -42,9 +39,28 @@ qgis_app = get_qgis_test_app()
 parent = QtGui.QWidget()
 canvas = QgsMapCanvas(parent)
 canvas.resize(QtCore.QSize(400, 400))
+myRect = QgsRectangle(100.03, -1.14, 100.81, -0.73)
+canvas.setExtent(myRect)
+# QgisInterface is a stub implementation of the QGIS plugin interface
 iface = QgisInterface(canvas)
 myGuiContextFlag = False
 form = RiabDock(iface, myGuiContextFlag)
+
+
+def getUiState(ui):
+    """Get state of the 3 combos on the form ui
+    """
+
+    myHazard = str(ui.cboHazard.currentText())
+    myExposure = str(ui.cboExposure.currentText())
+    myImpactFunction = str(ui.cboFunction.currentText())
+
+    myRunButton = ui.pbnRunStop.isEnabled()
+
+    return {'Hazard': myHazard,
+            'Exposure': myExposure,
+            'Impact Function': myImpactFunction,
+            'Run Button Enabled': myRunButton}
 
 
 def clearForm():
@@ -184,7 +200,16 @@ class RiabDockTest(unittest.TestCase):
                      'Run Button Enabled': True}
 
         QTest.mouseClick(myOkWidget, QtCore.Qt.LeftButton)
-
+        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+        # Expected output:
+        #Buildings    Total
+        #All:    3160
+        #Low damage (10-25%):    0
+        #Medium damage (25-50%):    0
+        #High damage (50-100%):    3160
+        msg = ('Unexpected result returned for Earthquake guidelines function '
+               'Expected:\n "All" coount of 3160, received: \n %s' % myResult)
+        assert '3160' in myResult, msg
         #QTest.keyClicks(
         #  form.ui.buttonBox.button(form.ui.buttonBox.Cancel), " ")
 

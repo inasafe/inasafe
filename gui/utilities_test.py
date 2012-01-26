@@ -34,19 +34,3 @@ def get_qgis_test_app():
         qgis_app.initQgis()
 
     return qgis_app
-
-
-def getUiState(ui):
-    """Get state of the 3 combos on the form ui
-    """
-
-    myHazard = str(ui.cboHazard.currentText())
-    myExposure = str(ui.cboExposure.currentText())
-    myImpactFunction = str(ui.cboFunction.currentText())
-
-    myRunButton = ui.pbnRunStop.isEnabled()
-
-    return {'Hazard': myHazard,
-            'Exposure': myExposure,
-            'Impact Function': myImpactFunction,
-            'Run Button Enabled': myRunButton}
