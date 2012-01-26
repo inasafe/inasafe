@@ -46,7 +46,7 @@ rasterPath2 = os.path.join(myRoot, 'riab_test_data',
 qgis_app = get_qgis_test_app()
 
 
-class RiabTest(unittest.TestCase):
+class RiabClipper(unittest.TestCase):
     """Test the risk in a box clipper"""
 
     def setUp(self):
@@ -164,4 +164,6 @@ class RiabTest(unittest.TestCase):
                 == myRasterLayer)
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.makeSuite(RiabClipper, 'test')
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)

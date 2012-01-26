@@ -18,14 +18,12 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
+import numpy
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtWebKit import QWebSettings
+#from PyQt4a.QtCore.QCoreApplication import translate as tr
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
 from utilities import get_exception_with_stacktrace
-import sys
-import os
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
                        QgsSymbolV2, QgsRendererRangeV2, QgsRectangle,
@@ -267,8 +265,8 @@ class RiabDock(QtGui.QDockWidget):
                          '</span> No functions are available for the inputs '
                          'you have specified. '
                          'Try selecting a different combination of inputs. '
-                         'Please consult the user manual <FIXME: add link> for '
-                         'details on what constitute valid inputs for '
+                         'Please consult the user manual <FIXME: add link> '
+                         'for details on what constitute valid inputs for '
                          'a given risk function. <br>'
                          'Hazard keywords [%s]: %s <br>'
                          'Exposure keywords [%s]: %s' % (haz_fn, haz_kwds,
@@ -661,8 +659,9 @@ class RiabDock(QtGui.QDockWidget):
         myGeoCrs.createFromEpsg(4326)
         myGeoExtent = None
         if myCanvas.hasCrsTransformEnabled():
-            myXForm = QgsCoordinateTransform(myCanvas.destinationCrs(),
-                                         myGeoCrs)
+            myXForm = QgsCoordinateTransform(
+                                myCanvas.mapRenderer().destinationCrs(),
+                                myGeoCrs)
 
             # Get the clip area in the layer's crs
             myTransformedExtent = myXForm.transformBoundingBox(myRect)
@@ -737,7 +736,27 @@ class RiabDock(QtGui.QDockWidget):
         myClippedHazardPath = clipLayer(myGeoHazardLayer, myRect, myCellSize)
         # .. todo:: Cleanup temporary working files, careful not to delete
         #            User's own data'
-        return (myClippedHazardPath, myClippedExposurePath)
+
+        # FIXME: Turn paths back into layers temporarily and print res
+        myExposureLayer = QgsRasterLayer(myClippedExposurePath, 'exp')
+        myHazardLayer = QgsRasterLayer(myClippedHazardPath, 'haz')
+
+        myHazardUPP = myHazardLayer.rasterUnitsPerPixel()
+        myExposureUPP = myExposureLayer.rasterUnitsPerPixel()
+
+        # FIXME (Ole): This causes some strange failures. Revisit!
+        # Check that resolutions are equal up to some precision
+        msg = ('Resampled pixels sizes did not match: Exposure pixel '
+               ' size = %.12f, '
+               'Hazard pixel size = %.12f' % (myExposureUPP, myHazardUPP))
+        #assert numpy.allclose(myExposureUPP, myHazardUPP,
+        #                      # FIXME (Ole): I would like to make this tighter
+        #                      rtol=1.0e-6, atol=1.0e-3), msg
+
+        #print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
+        #print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
+
+        return myClippedHazardPath, myClippedExposurePath
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""

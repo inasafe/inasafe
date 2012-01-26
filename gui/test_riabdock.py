@@ -26,7 +26,8 @@ from qgis.core import (QgsApplication,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
-                       QgsRectangle)
+                       QgsRectangle,
+                       QgsCoordinateReferenceSystem)
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
 from utilities_test import get_qgis_test_app
@@ -88,6 +89,7 @@ def loadLayers():
 
     # Now go ahead and load our layers
     # FIXME (Ole): Use environment variable
+    # FIXME (Ole): Write as a for loop as in the tests in engine
     myRoot = os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..'))
     myVectorPath = os.path.join(myRoot, 'riab_test_data',
@@ -97,11 +99,23 @@ def loadLayers():
                                           'glp10ag.asc')
     myShakeRasterPath = os.path.join(myRoot, 'riab_test_data',
                                 'Shakemap_Padang_2009.asc')
+
+    myBBTsunamiPath = os.path.join(myRoot, 'riab_test_data',
+                                   'tsunami_max_inundation_depth_BB_utm.asc')
+    myBBExposurePath = os.path.join(myRoot, 'riab_test_data',
+                                    'tsunami_exposure_BB.shp')
+
     myShakeFileInfo = QtCore.QFileInfo(myShakeRasterPath)
     myShakeBaseName = myShakeFileInfo.baseName()
 
     myPopulationFileInfo = QtCore.QFileInfo(myPopulationRasterPath)
     myPopulationBaseName = myPopulationFileInfo.baseName()
+
+    myBBTsunamiFileInfo = QtCore.QFileInfo(myBBTsunamiPath)
+    myBBTsunamiBaseName = myBBTsunamiFileInfo.baseName()
+
+    myBBExposureFileInfo = QtCore.QFileInfo(myBBExposurePath)
+    myBBExposureBaseName = myBBExposureFileInfo.baseName()
 
     # Create QGis Layer Instances
     myVectorLayer = QgsVectorLayer(myVectorPath, 'Padang Buildings', 'ogr')
@@ -118,20 +132,39 @@ def loadLayers():
            str(myPopulationRasterLayer.source()))
     assert myPopulationRasterLayer.isValid(), msg
 
+    myBBTsunamiLayer = QgsRasterLayer(myBBTsunamiPath, myBBTsunamiBaseName)
+    msg = ('BBTsunami layer "%s" is not valid' %
+           str(myBBTsunamiLayer.source()))
+    assert myBBTsunamiLayer.isValid(), msg
+
+    myBBExposureLayer = QgsVectorLayer(myBBExposurePath,
+                                       myBBExposureBaseName, 'ogr')
+    msg = ('BBExposure layer "%s" is not valid' %
+           str(myBBExposureLayer.source()))
+    assert myBBExposureLayer.isValid(), msg
+
     # Add layers to the registry (that QGis knows about)
     QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
     QgsMapLayerRegistry.instance().addMapLayer(myShakeRasterLayer)
     QgsMapLayerRegistry.instance().addMapLayer(myPopulationRasterLayer)
+    QgsMapLayerRegistry.instance().addMapLayer(myBBTsunamiLayer)
+    QgsMapLayerRegistry.instance().addMapLayer(myBBExposureLayer)
 
     # Create Map Canvas Layer Instances
     myVectorCanvasLayer = QgsMapCanvasLayer(myVectorLayer)
     myShakeRasterCanvasLayer = QgsMapCanvasLayer(myShakeRasterLayer)
     myPopulationRasterCanvasLayer = QgsMapCanvasLayer(myPopulationRasterLayer)
+    myBBTsunamiCanvasLayer = QgsMapCanvasLayer(myBBTsunamiLayer)
+    myBBExposureCanvasLayer = QgsMapCanvasLayer(myBBExposureLayer)
 
     # Add MCL's to the canvas
+    # NOTE: New layers *must* be added to the end of this list, otherwise
+    #       tests will break.
     canvas.setLayerSet([myVectorCanvasLayer,
                         myShakeRasterCanvasLayer,
-                        myPopulationRasterCanvasLayer])
+                        myPopulationRasterCanvasLayer,
+                        myBBTsunamiCanvasLayer,
+                        myBBExposureCanvasLayer])
     form.getLayers()
 
 
@@ -181,7 +214,8 @@ class RiabDockTest(unittest.TestCase):
         assert(myFlag), myMessage
 
     def test_runEarthQuakeGuidelinesFunction(self):
-        """Raster and vector based function runs as expected."""
+        """Earthquake function runs in GUI with Shakemap 2009 and
+           Padang Buildings"""
 
         # Push OK with the left mouse button
         clearForm()
@@ -211,7 +245,8 @@ class RiabDockTest(unittest.TestCase):
                'Expected:\n "All" count of 3160, received: \n %s' % myResult)
         assert '3160' in myResult, msg
 
-    def test_runEarthquakeFatalityFunction(self):
+    def Xtest_runEarthquakeFatalityFunction(self):
+        """Earthquake fatality function runs in GUI with Shakemap 2009"""
         """Raster on analysis runs as expected"""
 
         # Push OK with the left mouse button
@@ -244,6 +279,59 @@ class RiabDockTest(unittest.TestCase):
                'received: \n %s' % myResult)
         assert '20771496' in myResult, msg
 
+    def test_runTsunamiBuildingImpactFunction(self):
+        """Tsunami function runs in GUI with Batemans Bay model"""
+        """Raster and vector based function runs as expected."""
+
+        # Push OK with the left mouse button
+        clearForm()
+        loadLayers()
+        myButton = form.ui.pbnRunStop
+
+        msg = 'Run button was not enabled'
+        assert myButton.isEnabled(), msg
+
+        # Hazard layers
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Enter)
+
+        # Exposure layers
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+
+        # Check that layers and impact function are correct
+        D = getUiState(form.ui)
+
+        assert D == {'Run Button Enabled': True,
+                     'Impact Function': 'Tsunami Building Impact Function',
+                     'Hazard': 'tsunami_max_inundation_depth_BB_utm',
+                     'Exposure': 'tsunami_exposure_BB'}
+
+        # Enable on-the-fly reprojection
+        canvas.mapRenderer().setProjectionsEnabled(True)
+
+        # Create WGS84 CRS Instance
+        myGeoCrs = QgsCoordinateReferenceSystem()
+        myGeoCrs.createFromEpsg(4326)
+
+        # Reproject all layers to WGS84 geographic CRS
+        canvas.mapRenderer().setDestinationCrs(myGeoCrs)
+
+        # Zoom to an area known to be occupied by both layer in the new CRS
+        myRect = QgsRectangle(150.168, -35.748, 150.211, -35.703)
+        canvas.setExtent(myRect)
+
+        # Press RUN
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+
+        #print myResult
+        msg = 'Result not as expected: %s' % myResult
+        assert '3204' in myResult, msg
+        assert '311' in myResult, msg
+        assert '6' in myResult, msg
+
     def test_loadLayers(self):
         """Layers can be loaded and list widget was updated appropriately
         """
@@ -252,12 +340,15 @@ class RiabDockTest(unittest.TestCase):
         loadLayers()
         msg = 'Expect 1 layer in hazard list widget but got %s' % \
               form.ui.cboHazard.count()
-        self.assertEqual(form.ui.cboHazard.count(), 1), msg
+        self.assertEqual(form.ui.cboHazard.count(), 2), msg
 
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
               form.ui.cboExposure.count()
-        self.assertEqual(form.ui.cboExposure.count(), 2), msg
+        self.assertEqual(form.ui.cboExposure.count(), 3), msg
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.makeSuite(RiabDockTest, 'test')
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)
+

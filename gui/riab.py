@@ -18,10 +18,21 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import QObject, SIGNAL, QCoreApplication, Qt
+from PyQt4.QtCore import (
+                          QObject,
+                          QLocale,
+                          QTranslator,
+                          SIGNAL,
+                          QCoreApplication,
+                          Qt,
+                          QSettings,
+                          QVariant
+                          )
 from PyQt4.QtGui import QAction, QIcon, QApplication
-# Import the code for the dock
+from qgis.core import QGis
 from riabdock import RiabDock
+import os
+
 """
 ..todo:: Find out how to suppress warnings as this import is needed
   but not used directly.
@@ -55,6 +66,25 @@ class Riab:
         """
         # Save reference to the QGIS interface
         self.iface = iface
+
+        # See if QGIS wants to override the system locale
+        # and then see if we can get a valid translation file
+        # for whatever locale is effectively being used.
+        myOverrideFlag = QSettings().value('locale/overrideFlag',
+                                            QVariant(False)).toBool()
+        myLocalName = None
+        if not myOverrideFlag:
+            myLocalName = QLocale.system().name()
+        else:
+            myLocalName = QSettings().value('locale/userLocale',
+                                            QVariant('')).toString()
+        myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        myTranslationPath = os.path.join(myRoot, 'i18n',
+                        'rastertransparency_' + str(myLocalName) + '.qm')
+        if os.path.exists(myTranslationPath):
+            myTranslator = QTranslator()
+            myTranslator.load(myTranslationPath)
+            QCoreApplication.installTranslator(self.translator)
 
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).

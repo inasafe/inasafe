@@ -21,11 +21,11 @@ import sys
 import os
 import unicodedata
 from riabexceptions import (InsufficientParametersException,
-                            NoFunctionsFoundException,
                             KeywordNotFoundException,
                             StyleInfoNotFoundException,
                             InvalidParameterException)
 
+from utilities import get_exception_with_stacktrace
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(pardir)
@@ -454,7 +454,10 @@ class ImpactCalculatorThread(threading.Thread):
             self._impactLayer = calculate_impact(layers=myLayers,
                                                  impact_fcn=self._function)
         except Exception, e:
-            self._result = 'Calculation error encountered:\n' + str(e)
+            msg = 'Calculation error encountered:\n'
+            msg += get_exception_with_stacktrace(e, html=True)
+            print msg
+            self._result = msg
         else:
             self._result = 'Calculation completed successfully.'
 
