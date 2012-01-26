@@ -114,7 +114,7 @@ def loadLayers():
     myBBTsunamiBaseName = myBBTsunamiFileInfo.baseName()
 
     myBBExposureFileInfo = QtCore.QFileInfo(myBBExposurePath)
-    myBBTsunamiBaseName = myBBExposureFileInfo.baseName()
+    myBBExposureBaseName = myBBExposureFileInfo.baseName()
 
     # Create QGis Layer Instances
     myVectorLayer = QgsVectorLayer(myVectorPath, 'Padang Buildings', 'ogr')
@@ -132,10 +132,14 @@ def loadLayers():
     assert myPopulationRasterLayer.isValid(), msg
 
     myBBTsunamiLayer = QgsRasterLayer(myBBTsunamiPath, myBBTsunamiBaseName)
-    assert myBBTsunamiLayer.isValid()
+    msg = ('BBTsunami layer "%s" is not valid' %
+           str(myBBTsunamiLayer.source()))
+    assert myBBTsunamiLayer.isValid(), msg
 
-    myBBExposureLayer = QgsRasterLayer(myBBExposurePath, myBBExposureBaseName)
-    assert myBBExposureLayer.isValid()
+    myBBExposureLayer = QgsVectorLayer(myBBExposurePath, myBBExposureBaseName, 'ogr')
+    msg = ('BBExposure layer "%s" is not valid' %
+           str(myBBExposureLayer.source()))
+    assert myBBExposureLayer.isValid(), msg
 
     # Add layers to the registry (that QGis knows about)
     QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
@@ -277,11 +281,12 @@ class RiabDockTest(unittest.TestCase):
         loadLayers()
         msg = 'Expect 1 layer in hazard list widget but got %s' % \
               form.ui.cboHazard.count()
-        self.assertEqual(form.ui.cboHazard.count(), 1), msg
+        print form.ui.cboHazard.count()
+        self.assertEqual(form.ui.cboHazard.count(), 2), msg
 
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
               form.ui.cboExposure.count()
-        self.assertEqual(form.ui.cboExposure.count(), 2), msg
+        self.assertEqual(form.ui.cboExposure.count(), 3), msg
 
 
 if __name__ == '__main__':
