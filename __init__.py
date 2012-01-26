@@ -21,13 +21,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 # Add parent directory to path to make test aware of other modules
-import sys
-import os
-
-curdir = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(curdir)
-
-
+#import sys
+#import os
+#
+#curdir = os.path.abspath(os.path.dirname(__file__))
+#sys.path.append(curdir)
 
 def name():
     """A user friendly name for the plugin."""
@@ -61,7 +59,7 @@ def classFactory(iface):
     # setup the logging
     import logging
     logger = logging.getLogger('risiko')
-    
+
     # TODO (TD): Change to read from a log file see http://docs.python.org/howto/logging-cookbook.html#logging-cookbook
     # FIXME (TD): Logger is working at this level but not in the impact functions!!
     logger.setLevel(logging.DEBUG)
@@ -69,11 +67,11 @@ def classFactory(iface):
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
     logger.addHandler(ch)
-    
+
     # Try loading the FunctionProvider
     from impact_functions.core import FunctionProvider
     # FIXME (TD): reload doesn't seem to reload the plugins anything
-    
+
     logger.debug("reload core 3")
     from gui.riab import Riab
     return Riab(iface)
