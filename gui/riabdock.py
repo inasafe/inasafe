@@ -737,7 +737,18 @@ class RiabDock(QtGui.QDockWidget):
         myClippedHazardPath = clipLayer(myGeoHazardLayer, myRect, myCellSize)
         # .. todo:: Cleanup temporary working files, careful not to delete
         #            User's own data'
-        return (myClippedHazardPath, myClippedExposurePath)
+
+        # FIXME: Turn paths back into layers temporarily and print res
+        myExposureLayer = QgsRasterLayer(myClippedExposurePath, 'exp')
+        myHazardLayer = QgsRasterLayer(myClippedHazardPath, 'haz')
+
+        myHazardUPP = myHazardLayer.rasterUnitsPerPixel()
+        myExposureUPP = myExposureLayer.rasterUnitsPerPixel()
+
+        print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
+        print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
+
+        return myClippedHazardPath, myClippedExposurePath
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
