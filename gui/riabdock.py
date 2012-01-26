@@ -450,6 +450,7 @@ class RiabDock(QtGui.QDockWidget):
     def getExposureLayer(self):
         """Obtain the name of the path to the exposure file from the
         userrole of the QtCombo for exposure."""
+
         myIndex = self.ui.cboExposure.currentIndex()
         if myIndex < 0:
             return None
@@ -460,6 +461,9 @@ class RiabDock(QtGui.QDockWidget):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
+        #.. todo:: FIXME (Tim) We may have to implement some polling logic
+        # because the putton click accept() function and the updating
+        # of the web view after model completion are asynchronous.
         #settrace()
         self.showBusy()
         myFlag, myMessage = self.validate()
