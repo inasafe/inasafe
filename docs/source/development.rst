@@ -149,7 +149,11 @@ Please observe the following coding standards when working on the codebase:
 Branching guide
 ---------------
 
-Risiko follows the following simple branching model:
+Risk In A Box follows the following simple branching model:
+
+.. figure::  ../../release-workflow.png
+   :align:   center
+
 
 *New development* takes place in *master*. Master should always be maintained in a 
 usable state with tests passing and the code functional as far as possible such 
@@ -184,7 +188,7 @@ Process for developers adding a new feature
 -------------------------------------------
 
 Create a feature branch
-    * git checkout -b <featurebranch> develop
+    * git checkout -b <featurebranch> master
 
 Write new code and tests
     ...
@@ -194,7 +198,7 @@ Publish (if unfinished)
 
 To keep branch up to date
     * git checkout <featurebranch>
-    * git merge origin develop
+    * git merge origin master
 
 When all tests pass, either merge into develop
     * git checkout master
