@@ -197,7 +197,7 @@ def _clipVectorLayer(layer, extent):
                                    myDestinationCrs,
                                    'ESRI Shapefile')
     if myWriter.hasError() != QgsVectorFileWriter.NoError:
-        msg = ('Error when creating shapefile: <br>%s<br>%s' % 
+      msg = ('Error when creating shapefile: <br>Filename: %s<br>Error: %s' % 
             (myFilename, myWriter.hasError()))
         raise Exception(msg)
 
