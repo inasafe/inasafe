@@ -21,7 +21,6 @@ import sys
 import os
 import unicodedata
 from riabexceptions import (InsufficientParametersException,
-                            NoFunctionsFoundException,
                             KeywordNotFoundException,
                             StyleInfoNotFoundException,
                             InvalidParameterException)
