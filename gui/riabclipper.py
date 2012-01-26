@@ -197,7 +197,8 @@ def _clipVectorLayer(layer, extent):
                                    myDestinationCrs,
                                    'ESRI Shapefile')
     if myWriter.hasError() != QgsVectorFileWriter.NoError:
-        msg = 'Error when creating shapefile: ', myWriter.hasError()
+        msg = ('Error when creating shapefile: <br>%s<br>%s' % 
+            (myFilename, myWriter.hasError()))
         raise Exception(msg)
 
     # Retrieve every feature with its geometry and attributes
