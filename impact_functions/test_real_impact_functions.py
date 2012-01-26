@@ -9,7 +9,8 @@ import unittest
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from impact_functions.core import get_admissible_plugins
+from impact_functions.core import get_admissible_plugins, get_plugins
+from impact_functions.core import requirements_collect
 from impact_functions.core import FunctionProvider  # Load all real plugins
 
 
@@ -44,6 +45,10 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Earthquake Fatality Function Podes' in P
         assert 'Terdampak' in P
         assert 'Meninggal' in P
+
+        #print
+        #for p in P:
+        #    print p, P[p]
 
         # This one should get 2 earthquake building impact functions
         D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'MMI'}
@@ -82,6 +87,32 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Ditutup Sementara' in P
         assert 'Flood Road Impact Function' in P
         assert 'Dalam bahaya' in P
+
+        # Try to get general tsunami building impact function (e.g. BB data)
+        f_name = 'Tsunami Building Impact Function'
+
+        D1 = {'category': 'hazard', 'subcategory': 'tsunami', 'unit': 'm'}
+        D2 = {'category': 'exposure', 'subcategory': 'building'}
+
+        # Add layer_type
+        D1['layer_type'] = 'raster'
+        D2['layer_type'] = 'vector'
+        P = get_admissible_plugins([D1, D2])
+
+        assert f_name in P
+
+        # Get requirements from expected function
+        P_all = get_admissible_plugins()
+        assert P[f_name] == P_all[f_name]
+
+        requirelines = requirements_collect(P[f_name])
+        for i, D in enumerate([D1, D2]):
+            for key in D:
+                msg = 'Key %s was not found in %s' % (key, requirelines[i])
+                assert key in requirelines[i], msg
+
+                msg = 'Val %s was not found in %s' % (D[key], requirelines[i])
+                assert D[key] in requirelines[i], msg
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_real_plugins, 'test')

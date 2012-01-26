@@ -256,12 +256,23 @@ class RiabDock(QtGui.QDockWidget):
             'button below.')
             return (False, myMessage)
         if self.ui.cboFunction.currentIndex() == -1:
+
+            haz_fn = str(self.getHazardLayer().source())
+            haz_kwds = self.calculator.getKeywordFromFile(haz_fn)
+
+            exp_fn = str(self.getExposureLayer().source())
+            exp_kwds = self.calculator.getKeywordFromFile(exp_fn)
+
             myMessage = ('<span class="label important">No valid functions:'
-            '</span> No functions are available for the inputs you have '
-            'specified. '
-            'Try selecting a different combination of inputs. Please consult '
-            'the user manual for details on what constitute valid inputs for '
-            'a given risk function.')
+                         '</span> No functions are available for the inputs '
+                         'you have specified. '
+                         'Try selecting a different combination of inputs. '
+                         'Please consult the user manual <FIXME: add link> for '
+                         'details on what constitute valid inputs for '
+                         'a given risk function. <br>'
+                         'Hazard keywords [%s]: %s <br>'
+                         'Exposure keywords [%s]: %s' % (haz_fn, haz_kwds,
+                                                         exp_fn, exp_kwds))
             return (False, myMessage)
         else:
             myMessage = ('<span class="label success">Ready:</span> '
@@ -439,6 +450,7 @@ class RiabDock(QtGui.QDockWidget):
     def getExposureLayer(self):
         """Obtain the name of the path to the exposure file from the
         userrole of the QtCombo for exposure."""
+
         myIndex = self.ui.cboExposure.currentIndex()
         if myIndex < 0:
             return None
@@ -449,6 +461,9 @@ class RiabDock(QtGui.QDockWidget):
 
     def accept(self):
         """Execute analysis when ok button is clicked."""
+        #.. todo:: FIXME (Tim) We may have to implement some polling logic
+        # because the putton click accept() function and the updating
+        # of the web view after model completion are asynchronous.
         #settrace()
         self.showBusy()
         myFlag, myMessage = self.validate()

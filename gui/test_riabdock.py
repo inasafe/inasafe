@@ -180,16 +180,16 @@ class RiabDockTest(unittest.TestCase):
                      'populated form with selections.')
         assert(myFlag), myMessage
 
-    def test_run(self):
-        """OK button works as expected"""
+    def test_runEarthQuakeGuidelinesFunction(self):
+        """Raster and vector based function runs as expected."""
 
         # Push OK with the left mouse button
         clearForm()
         loadLayers()
-        myOkWidget = form.ui.pbnRunStop
+        myButton = form.ui.pbnRunStop
 
         msg = 'Run button was not enabled'
-        assert form.ui.pbnRunStop.isEnabled(), msg
+        assert myButton.isEnabled(), msg
 
         D = getUiState(form.ui)
 
@@ -199,7 +199,7 @@ class RiabDockTest(unittest.TestCase):
                      'Impact Function': 'Earthquake Guidelines Function',
                      'Run Button Enabled': True}
 
-        QTest.mouseClick(myOkWidget, QtCore.Qt.LeftButton)
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
         # Expected output:
         #Buildings    Total
@@ -208,10 +208,41 @@ class RiabDockTest(unittest.TestCase):
         #Medium damage (25-50%):    0
         #High damage (50-100%):    3160
         msg = ('Unexpected result returned for Earthquake guidelines function '
-               'Expected:\n "All" coount of 3160, received: \n %s' % myResult)
+               'Expected:\n "All" count of 3160, received: \n %s' % myResult)
         assert '3160' in myResult, msg
-        #QTest.keyClicks(
-        #  form.ui.buttonBox.button(form.ui.buttonBox.Cancel), " ")
+
+    def test_runEarthquakeFatalityFunction(self):
+        """Raster on analysis runs as expected"""
+
+        # Push OK with the left mouse button
+        clearForm()
+        loadLayers()
+        myButton = form.ui.pbnRunStop
+
+        msg = 'Run button was not enabled'
+        assert myButton.isEnabled(), msg
+
+        # now let's simulate a choosing another combo item and running
+        # the model again...
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+        D = getUiState(form.ui)
+        #print D
+        assert D == {'Hazard': 'Shakemap_Padang_2009',
+                     'Exposure': 'Population Density Estimate (5kmx5km)',
+                     'Impact Function': 'Earthquake Fatality Function',
+                     'Run Button Enabled': True}
+
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+
+        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+        # Expected output:
+        # Jumlah Penduduk:    20771496
+        # Perkiraan Orang Meninggal:    2687
+        msg = ('Unexpected result returned for Earthquake Fatality Function '
+               'Expected:\n "Jumlah Penduduk" count of 20771496, '
+               'received: \n %s' % myResult)
+        assert '20771496' in myResult, msg
 
     def test_loadLayers(self):
         """Layers can be loaded and list widget was updated appropriately
