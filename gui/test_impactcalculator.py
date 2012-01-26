@@ -38,6 +38,12 @@ class ImpactCalculatorTest(unittest.TestCase):
                                        'Padang_WGS84.shp')
         self.rasterShakePath = os.path.join(myRoot, 'riab_test_data',
                                        'Shakemap_Padang_2009.asc')
+        # UTM projected layer
+        self.rasterTsunamiBBPath = os.path.join(myRoot, 'riab_test_data',
+                                                'tsunami_max_inundation_depth_BB_utm.asc')
+        self.rasterExposureBBPath = os.path.join(myRoot, 'riab_test_data',
+                                                'tsunami_exposure_BB.shp')
+
         self.rasterPopulationPath = os.path.join(myRoot, 'riab_test_data',
                                                  'glp10ag.asc')
         self.calculator.setHazardLayer(self.rasterShakePath)
@@ -150,10 +156,12 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_getKeywordFromFile(self):
         """Test that we can get keyword data from a file with
         a .keyword metadata file associated with it."""
+
         myKeyword = self.calculator.getKeywordFromFile(
                                     self.rasterShakePath, 'category')
-        msg = 'Keyword request returned an empty string'
-        assert(myKeyword is not ''), msg
+        msg = 'Keyword request did not return expected value'
+        assert myKeyword == 'hazard', msg
+
         # Test we get an exception if keyword is not found
         try:
             myKeyword = self.calculator.getKeywordFromFile(
@@ -164,6 +172,32 @@ class ImpactCalculatorTest(unittest.TestCase):
             msg = ('Request for bogus keyword raised incorrect exception' +
                     ' type: \n %s') % str(e)
             assert(), msg
+
+        myKeywords = self.calculator.getKeywordFromFile(self.rasterShakePath)
+        assert myKeywords == {'category': 'hazard',
+                              'subcategory': 'earthquake',
+                              'unit': 'MMI'}
+
+        myKeywords = self.calculator.getKeywordFromFile(
+            self.rasterPopulationPath)
+        assert myKeywords == {'category': 'exposure', 'density': 'yes',
+                              'subcategory': 'population',
+                              'title': 'Population Density Estimate (5kmx5km)'}
+
+        myKeywords = self.calculator.getKeywordFromFile(self.vectorPath)
+        assert myKeywords == {'category': 'exposure', 'datatype': 'itb',
+                              'subcategory': 'building'}
+
+        # BB tsunami example (one layer is UTM)
+        myKeywords = self.calculator.getKeywordFromFile(
+            self.rasterTsunamiBBPath)
+        assert myKeywords == {'category': 'hazard',
+                              'subcategory': 'tsunami', 'unit': 'm'}
+        myKeywords = self.calculator.getKeywordFromFile(
+            self.rasterExposureBBPath)
+        print myKeywords == {'category': 'exposure',
+                             'subcategory': 'building'}
+
 
     def test_getStyleInfo(self):
         """Test that we can get styleInfo data from a vector
@@ -194,5 +228,7 @@ class ImpactCalculatorTest(unittest.TestCase):
                    ' exception type: \n %s') % str(e)
             raise StyleInfoNotFoundException(msg)
 
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == '__main__':
+    suite = unittest.makeSuite(ImpactCalculatorTest, 'test')
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)

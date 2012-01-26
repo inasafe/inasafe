@@ -256,12 +256,23 @@ class RiabDock(QtGui.QDockWidget):
             'button below.')
             return (False, myMessage)
         if self.ui.cboFunction.currentIndex() == -1:
+
+            haz_fn = str(self.getHazardLayer().source())
+            haz_kwds = self.calculator.getKeywordFromFile(haz_fn)
+
+            exp_fn = str(self.getExposureLayer().source())
+            exp_kwds = self.calculator.getKeywordFromFile(exp_fn)
+
             myMessage = ('<span class="label important">No valid functions:'
-            '</span> No functions are available for the inputs you have '
-            'specified. '
-            'Try selecting a different combination of inputs. Please consult '
-            'the user manual for details on what constitute valid inputs for '
-            'a given risk function.')
+                         '</span> No functions are available for the inputs '
+                         'you have specified. '
+                         'Try selecting a different combination of inputs. '
+                         'Please consult the user manual <FIXME: add link> for '
+                         'details on what constitute valid inputs for '
+                         'a given risk function. <br>'
+                         'Hazard keywords [%s]: %s <br>'
+                         'Exposure keywords [%s]: %s' % (haz_fn, haz_kwds,
+                                                         exp_fn, exp_kwds))
             return (False, myMessage)
         else:
             myMessage = ('<span class="label success">Ready:</span> '
