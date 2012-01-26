@@ -14,8 +14,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory.startswith('building') and \
-                    layer_type=='vector' and \
-                    datatype=='osm'
+                    layer_type=='vector'
     """
 
     target_field = 'ICLASS'
