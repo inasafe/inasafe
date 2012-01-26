@@ -18,7 +18,7 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
+import numpy
 from PyQt4 import QtGui, QtCore
 #from PyQt4a.QtCore.QCoreApplication import translate as tr
 from ui_riabdock import Ui_RiabDock
@@ -744,8 +744,16 @@ class RiabDock(QtGui.QDockWidget):
         myHazardUPP = myHazardLayer.rasterUnitsPerPixel()
         myExposureUPP = myExposureLayer.rasterUnitsPerPixel()
 
-        print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
-        print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
+        # FIXME (Ole): This causes some strange failures. Revisit!
+        # Check that resolutions are equal up to some precision
+        msg = ('Resampled pixels sizes did not match: Exposure pixel size = %.12f, '
+               'Hazard pixel size = %.12f' % (myExposureUPP, myHazardUPP))
+        #assert numpy.allclose(myExposureUPP, myHazardUPP,
+        #                      # FIXME (Ole): I would like to make this tighter
+        #                      rtol=1.0e-6, atol=1.0e-3), msg
+
+        #print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
+        #print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
 
         return myClippedHazardPath, myClippedExposurePath
 

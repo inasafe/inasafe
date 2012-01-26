@@ -28,6 +28,9 @@ import tempfile
 from subprocess import call
 
 
+# FIXME (Ole): Still potentially missing keyword copying!!!!
+
+
 def getBestResolution(theHazardLayer, theExposureLayer):
     """Given two raster layers, assess them to
     see which has the better spatial resolution and
@@ -208,7 +211,7 @@ def _clipVectorLayer(layer, extent):
         myWriter.addFeature(myFeature)
     del myWriter  # Flush to disk
 
-    copyKeywords(str(layer.source()), myFilename)
+    copyKeywords(layer.source(), myFilename)
 
     return myFilename  # Filename of created file
 
@@ -250,15 +253,14 @@ def _reprojectVectorLayer(theLayer):
     #           this point.
     myCrs = theLayer.crs()
     if myCrs.epsg() is not 4326:
-            # Reproject the layer to wgs84
+        # Reproject the layer to wgs84
         myFilename = tempfile.mkstemp('.shp', 'prj_',
-                                tempfile.gettempdir())[1]
-        myError = QgsVectorFileWriter.writeAsVectorFormat(
-                                theLayer,
-                                myFilename,
-                                "UTF-8",
-                                None,
-                                "ESRI Shapefile")
+                                      tempfile.gettempdir())[1]
+        myError = QgsVectorFileWriter.writeAsVectorFormat(theLayer,
+                                                          myFilename,
+                                                          "UTF-8",
+                                                          None,
+                                                          "ESRI Shapefile")
 
     return mySource
 
@@ -305,7 +307,15 @@ def _clipRasterLayer(layer, extent, theCellSize=None):
         raise InvalidParameterException(msg)
 
     myWorkingLayer = layer.source()
-    # resample the file first if needed to the required pixel size
+
+    # Check for existence of keywords file
+    kwd_filename = str(myWorkingLayer)[:-4] + '.keywords'
+    msg = ('Input file to be clipped "%s" does not have the '
+           'expected keywords file %s' % (myWorkingLayer,
+                                          kwd_filename))
+    assert os.path.isfile(kwd_filename), msg
+
+    # Resample the file first if needed to the required pixel size
     myCellSize = layer.rasterUnitsPerPixel()
     if myCellSize != theCellSize and theCellSize is not None:
         # ok we have to resample
@@ -330,10 +340,11 @@ def _clipRasterLayer(layer, extent, theCellSize=None):
                             extent.yMinimum(),
                             myWorkingLayer,
                             myFilename))
-    #print 'Command: ', myCommand
+
     myResult = call(myCommand, shell=True)
     # .. todo:: Check the result of the shell call is ok
-    copyKeywords(str(layer.source()), myFilename)
+
+    copyKeywords(myWorkingLayer, myFilename)
     return myFilename  # Filename of created file
 
 
@@ -369,19 +380,25 @@ def _reprojectRasterLayer(theLayer):
         raise InvalidParameterException(msg)
 
     mySource = theLayer.source()
+
     # Get the crs of the layer so we can check if it is not yet in EPSG:4326
     myCrs = theLayer.crs()
     if myCrs.epsg() != 4326:
             # Reproject the layer to wgs84
         myFilename = tempfile.mkstemp('.tif', 'prj_',
-                                tempfile.gettempdir())[1]
+                                      tempfile.gettempdir())[1]
         myCommand = 'gdalwarp -t_srs EPSG:4326 -r near -of GTiff %s %s' % (
             mySource, myFilename)
         myResult = call(myCommand, shell=True)
+
+        copyKeywords(mySource, myFilename)
+
         # .. todo:: Check the result of the shell call is ok
         # Set the source to the filename so code after this if
         # block continues to work as expected
         mySource = myFilename
+
+
 
     return mySource
 
@@ -396,17 +413,23 @@ def copyKeywords(sourceFile, destinationFile):
 
     Will result in the foo.keywords file being copied to bar.keyword."""
 
-    mySourceBase = os.path.splitext(sourceFile)[0]
+    # FIXME (Ole): Need to turn qgis strings into normal strings earlier
+    mySourceBase = os.path.splitext(str(sourceFile))[0]
     myDestinationBase = os.path.splitext(destinationFile)[0]
     myNewSource = mySourceBase + '.keywords'
     myNewDestination = myDestinationBase + '.keywords'
-    if not os.path.exists(myNewSource):
+
+    if not os.path.isfile(myNewSource):
         msg = ('Keywords file associated with dataset could not be found: \n%s'
                % myNewSource)
         raise KeywordNotFoundException(msg)
+
     try:
         shutil.copyfile(myNewSource, myNewDestination)
-    except:
-        msg = ('Failed to copy keywords file from :\n%s\nto\%s' %
-               (myNewSource, myNewDestination))
+    except Exception, e:
+        msg = ('Failed to copy keywords file from :\n%s\nto\%s: %s' %
+               (myNewSource, myNewDestination, str(e)))
+        raise Exception(msg)
+
+
     return
