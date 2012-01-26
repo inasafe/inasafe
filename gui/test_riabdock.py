@@ -114,7 +114,7 @@ def loadLayers():
     myBBTsunamiBaseName = myBBTsunamiFileInfo.baseName()
 
     myBBExposureFileInfo = QtCore.QFileInfo(myBBExposurePath)
-    myBBTsunamiBaseName = myBBExposureFileInfo.baseName()
+    myBBExposureBaseName = myBBExposureFileInfo.baseName()
 
     # Create QGis Layer Instances
     myVectorLayer = QgsVectorLayer(myVectorPath, 'Padang Buildings', 'ogr')
@@ -132,10 +132,14 @@ def loadLayers():
     assert myPopulationRasterLayer.isValid(), msg
 
     myBBTsunamiLayer = QgsRasterLayer(myBBTsunamiPath, myBBTsunamiBaseName)
-    assert myBBTsunamiLayer.isValid()
+    msg = ('BBTsunami layer "%s" is not valid' %
+           str(myBBTsunamiLayer.source()))
+    assert myBBTsunamiLayer.isValid(), msg
 
     myBBExposureLayer = QgsRasterLayer(myBBExposurePath, myBBExposureBaseName)
-    assert myBBExposureLayer.isValid()
+    msg = ('BBExposure layer "%s" is not valid' %
+           str(myBBExposureLayer.source()))
+    assert myBBExposureLayer.isValid(), msg
 
     # Add layers to the registry (that QGis knows about)
     QgsMapLayerRegistry.instance().addMapLayer(myVectorLayer)
