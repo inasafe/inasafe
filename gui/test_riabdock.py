@@ -211,7 +211,7 @@ class RiabDockTest(unittest.TestCase):
                'Expected:\n "All" count of 3160, received: \n %s' % myResult)
         assert '3160' in myResult, msg
 
-    def test_runEarthquakeFatalityFunction(self):
+    def Xtest_runEarthquakeFatalityFunction(self):
         """Raster on analysis runs as expected"""
 
         # Push OK with the left mouse button
