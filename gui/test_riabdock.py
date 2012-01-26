@@ -91,6 +91,7 @@ def loadLayers():
 
     # FIXME (Ole): Use environment variable
     # FIXME (Ole): Write as a for loop as in the tests in engine
+
     myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     myData = os.path.join(myRoot, 'riab_test_data')
 

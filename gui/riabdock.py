@@ -746,6 +746,7 @@ class RiabDock(QtGui.QDockWidget):
 
         # FIXME (Ole): This causes some strange failures. Revisit!
         # Check that resolutions are equal up to some precision
+
         msg = ('Resampled pixels sizes did not match: '
                'Exposure pixel size = %.12f, '
                'Hazard pixel size = %.12f' % (myExposureUPP, myHazardUPP))

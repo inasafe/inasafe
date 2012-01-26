@@ -39,10 +39,10 @@ class ImpactCalculatorTest(unittest.TestCase):
         self.rasterShakePath = os.path.join(myRoot, 'riab_test_data',
                                        'Shakemap_Padang_2009.asc')
         # UTM projected layer
+
         fn = 'tsunami_max_inundation_depth_BB_utm.asc'
         self.rasterTsunamiBBPath = os.path.join(myRoot,
                                                 'riab_test_data', fn)
-
         self.rasterExposureBBPath = os.path.join(myRoot, 'riab_test_data',
                                                 'tsunami_exposure_BB.shp')
 

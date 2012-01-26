@@ -161,7 +161,7 @@ def _clipVectorLayer(layer, extent):
         raise InvalidParameterException(msg)
 
     myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                  tempfile.gettempdir())[1]
+                                  tempfile.tempdir)[1]
 
     if not layer or not extent:
         msg = 'Layer or Extent passed to clip is None.'
@@ -255,7 +255,7 @@ def _reprojectVectorLayer(theLayer):
     if myCrs.epsg() is not 4326:
         # Reproject the layer to wgs84
         myFilename = tempfile.mkstemp('.shp', 'prj_',
-                                      tempfile.gettempdir())[1]
+                                      tempfile.tempdir)[1]
         myError = QgsVectorFileWriter.writeAsVectorFormat(theLayer,
                                                           myFilename,
                                                           "UTF-8",
@@ -320,7 +320,7 @@ def _clipRasterLayer(layer, extent, theCellSize=None):
     if myCellSize != theCellSize and theCellSize is not None:
         # ok we have to resample
         myFilename = tempfile.mkstemp('.tif', 'rsmpl_',
-                                    tempfile.gettempdir())[1]
+                                    tempfile.tempdir)[1]
         myCommand = ('gdalwarp -tr %f %f -of GTiff '
                  '%s %s' % (theCellSize,
                             theCellSize,
@@ -332,7 +332,7 @@ def _clipRasterLayer(layer, extent, theCellSize=None):
     # ok myWorking layer now has the original or resampled file
     # which we can go on to clip....
     myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                    tempfile.gettempdir())[1]
+                                    tempfile.tempdir)[1]
     myCommand = ('gdal_translate -projwin %f %f %f %f -of GTiff '
                  '%s %s' % (extent.xMinimum(),
                             extent.yMaximum(),
@@ -386,7 +386,7 @@ def _reprojectRasterLayer(theLayer):
     if myCrs.epsg() != 4326:
             # Reproject the layer to wgs84
         myFilename = tempfile.mkstemp('.tif', 'prj_',
-                                      tempfile.gettempdir())[1]
+                                      tempfile.tempdir)[1]
         myCommand = 'gdalwarp -t_srs EPSG:4326 -r near -of GTiff %s %s' % (
             mySource, myFilename)
         myResult = call(myCommand, shell=True)
