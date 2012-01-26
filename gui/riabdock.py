@@ -265,8 +265,8 @@ class RiabDock(QtGui.QDockWidget):
                          '</span> No functions are available for the inputs '
                          'you have specified. '
                          'Try selecting a different combination of inputs. '
-                         'Please consult the user manual <FIXME: add link> for '
-                         'details on what constitute valid inputs for '
+                         'Please consult the user manual <FIXME: add link> '
+                         'for details on what constitute valid inputs for '
                          'a given risk function. <br>'
                          'Hazard keywords [%s]: %s <br>'
                          'Exposure keywords [%s]: %s' % (haz_fn, haz_kwds,
@@ -746,7 +746,8 @@ class RiabDock(QtGui.QDockWidget):
 
         # FIXME (Ole): This causes some strange failures. Revisit!
         # Check that resolutions are equal up to some precision
-        msg = ('Resampled pixels sizes did not match: Exposure pixel size = %.12f, '
+        msg = ('Resampled pixels sizes did not match: Exposure pixel '
+               ' size = %.12f, '
                'Hazard pixel size = %.12f' % (myExposureUPP, myHazardUPP))
         #assert numpy.allclose(myExposureUPP, myHazardUPP,
         #                      # FIXME (Ole): I would like to make this tighter
