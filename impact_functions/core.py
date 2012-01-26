@@ -134,6 +134,7 @@ def requirements_collect(func):
         join_line = False
 
         for cnt, line in enumerate(lines):
+            #print cnt, line
             doc_line = line.strip()
             if len(doc_line) == 0:
                 continue
@@ -146,6 +147,7 @@ def requirements_collect(func):
 
             join_line = doc_line[-1] == '/'
 
+    # Return list with one item per requirement
     return requires_lines
 
 
