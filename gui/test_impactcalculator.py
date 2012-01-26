@@ -39,8 +39,10 @@ class ImpactCalculatorTest(unittest.TestCase):
         self.rasterShakePath = os.path.join(myRoot, 'riab_test_data',
                                        'Shakemap_Padang_2009.asc')
         # UTM projected layer
-        self.rasterTsunamiBBPath = os.path.join(myRoot, 'riab_test_data',
-                                                'tsunami_max_inundation_depth_BB_utm.asc')
+        fn = 'tsunami_max_inundation_depth_BB_utm.asc'
+        self.rasterTsunamiBBPath = os.path.join(myRoot,
+                                                'riab_test_data', fn)
+
         self.rasterExposureBBPath = os.path.join(myRoot, 'riab_test_data',
                                                 'tsunami_exposure_BB.shp')
 
@@ -197,7 +199,6 @@ class ImpactCalculatorTest(unittest.TestCase):
             self.rasterExposureBBPath)
         print myKeywords == {'category': 'exposure',
                              'subcategory': 'building'}
-
 
     def test_getStyleInfo(self):
         """Test that we can get styleInfo data from a vector

@@ -201,7 +201,7 @@ def _clipVectorLayer(layer, extent):
                                    'ESRI Shapefile')
     if myWriter.hasError() != QgsVectorFileWriter.NoError:
         msg = ('Error when creating shapefile: <br>Filename:'
-               '%s<br>Error: %s' % 
+               '%s<br>Error: %s' %
             (myFilename, myWriter.hasError()))
         raise Exception(msg)
 
@@ -398,8 +398,6 @@ def _reprojectRasterLayer(theLayer):
         # block continues to work as expected
         mySource = myFilename
 
-
-
     return mySource
 
 
@@ -430,6 +428,5 @@ def copyKeywords(sourceFile, destinationFile):
         msg = ('Failed to copy keywords file from :\n%s\nto\%s: %s' %
                (myNewSource, myNewDestination, str(e)))
         raise Exception(msg)
-
 
     return

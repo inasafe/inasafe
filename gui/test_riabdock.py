@@ -137,7 +137,8 @@ def loadLayers():
            str(myBBTsunamiLayer.source()))
     assert myBBTsunamiLayer.isValid(), msg
 
-    myBBExposureLayer = QgsVectorLayer(myBBExposurePath, myBBExposureBaseName, 'ogr')
+    myBBExposureLayer = QgsVectorLayer(myBBExposurePath,
+                                       myBBExposureBaseName, 'ogr')
     msg = ('BBExposure layer "%s" is not valid' %
            str(myBBExposureLayer.source()))
     assert myBBExposureLayer.isValid(), msg
@@ -213,7 +214,7 @@ class RiabDockTest(unittest.TestCase):
         assert(myFlag), myMessage
 
     def test_runEarthQuakeGuidelinesFunction(self):
-        """Earthquake function runs in GUI with Shakemap 2009 and Padang Buildings"""
+        """GUI runs with Shakemap 2009 and Padang Buildings"""
 
         # Push OK with the left mouse button
         clearForm()
@@ -349,4 +350,3 @@ if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
-
