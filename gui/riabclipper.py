@@ -161,7 +161,7 @@ def _clipVectorLayer(layer, extent):
         raise InvalidParameterException(msg)
 
     myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                  tempfile.gettempdir())[1]
+                                  tempfile.tempdir)[1]
 
     if not layer or not extent:
         msg = 'Layer or Extent passed to clip is None.'
