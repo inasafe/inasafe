@@ -128,14 +128,15 @@ def setRasterStyle(qgisRasterLayer, style):
     Input
         qgisRasterLayer: Qgis layer
         style: Dictionary of the form as in the example below
-
-        {
-            'style_classes':
-            [{'max': 1.5, 'colour': '#fecc5c', label': 'Low damage'},
-             {'max': 3, 'colour': '#fd8d3c', label': 'Medium damage'},
-             {'max': 5, 'colour': '#ffccgg', label': 'High damage'}
-            ]
-        }
+        style_classes = [dict(colour='#ffffff', quantity=-9999, opacity=0),
+                         dict(colour='#38A800', quantity=2, opacity=0),
+                         dict(colour='#38A800', quantity=5, opacity=1),
+                         dict(colour='#79C900', quantity=10, opacity=1),
+                         dict(colour='#CEED00', quantity=20, opacity=1),
+                         dict(colour='#FFCC00', quantity=50, opacity=1),
+                         dict(colour='#FF6600', quantity=100, opacity=1),
+                         dict(colour='#FF0000', quantity=200, opacity=1),
+                         dict(colour='#7A0000', quantity=300, opacity=1)]
 
     Output
         Sets and saves style for qgisRasterLayer
@@ -144,8 +145,9 @@ def setRasterStyle(qgisRasterLayer, style):
     myClasses = style['style_classes']
     myRangeList = []
     for myClass in myClasses:
-        myMax = myClass['max']
-        myColour = myClass['colour']
+        myMax = myClass['quantity']
+        myColour = QtGui.QColor(myClass['colour'])
+        #myColour = myClass['opacity']  # ?
         #myLabel = myClass['label']
         myShader = QgsColorRampShader.ColorRampItem(myMax, myColour)
         myRangeList.append(myShader)
