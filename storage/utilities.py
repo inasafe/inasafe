@@ -29,14 +29,14 @@ TYPE_MAP = {type(None): ogr.OFTString,  # What else should this be?
             type(numpy.array([[0.0]])[0]): ogr.OFTReal}  # numpy.ndarray
 
 # Templates for downloading layers through rest
-WCS_TEMPLATE = '%s?version=1.0.0' + \
-    '&service=wcs&request=getcoverage&format=GeoTIFF&' + \
-    'store=false&coverage=%s&crs=EPSG:4326&bbox=%s' + \
-    '&resx=%s&resy=%s'
+#WCS_TEMPLATE = '%s?version=1.0.0' + \
+#    '&service=wcs&request=getcoverage&format=GeoTIFF&' + \
+#    'store=false&coverage=%s&crs=EPSG:4326&bbox=%s' + \
+#    '&resx=%s&resy=%s'
 
-WFS_TEMPLATE = '%s?service=WFS&version=1.0.0' + \
-    '&request=GetFeature&typeName=%s' + \
-    '&outputFormat=SHAPE-ZIP&bbox=%s'
+#WFS_TEMPLATE = '%s?service=WFS&version=1.0.0' + \
+#    '&request=GetFeature&typeName=%s' + \
+#    '&outputFormat=SHAPE-ZIP&bbox=%s'
 
 
 # Miscellaneous auxiliary functions
