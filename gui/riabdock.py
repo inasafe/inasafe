@@ -358,7 +358,6 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
            no
         """
-        #settrace()
         self.ui.cboFunction.clear()
         # get the keyword dicts for hazard and exposure
         myHazardLayer = self.getHazardLayer()
@@ -460,7 +459,6 @@ class RiabDock(QtGui.QDockWidget):
         #.. todo:: FIXME (Tim) We may have to implement some polling logic
         # because the putton click accept() function and the updating
         # of the web view after model completion are asynchronous.
-        #settrace()
         self.showBusy()
         myFlag, myMessage = self.validate()
         if not myFlag:
@@ -647,7 +645,6 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        #settrace()
         myCanvas = self.iface.mapCanvas()
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
@@ -656,7 +653,7 @@ class RiabDock(QtGui.QDockWidget):
         myGeoCrs = QgsCoordinateReferenceSystem()
         myGeoCrs.createFromEpsg(4326)
         myGeoExtent = None
-        settrace()
+
         if myCanvas.hasCrsTransformEnabled():
             myXForm = QgsCoordinateTransform(
                                 myCanvas.mapRenderer().destinationCrs(),

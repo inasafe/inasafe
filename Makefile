@@ -85,7 +85,7 @@ unwanted_strings:
 	@echo "------------------------------"
 	@echo "Strings that should be deleted"
 	@echo "------------------------------"
-	@grep -R "settrace()" * | grep ".py:" || true
+	@grep -R "settrace()" * | grep ".py:" | grep -v Makefile || true
 
 dependency_test:
 	@echo
