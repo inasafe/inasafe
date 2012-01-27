@@ -81,7 +81,7 @@ def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
         return get_bounding_boxes(
             makeAscii(hazardPath),
             makeAscii(exposurePath),
-            desiredViewport)
+            desiredViewport)[0]
     except Exception, e:
         raise e
 
