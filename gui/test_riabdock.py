@@ -100,7 +100,10 @@ def loadLayers():
                   'glp10ag.asc',
                   'Shakemap_Padang_2009.asc',
                   'tsunami_max_inundation_depth_BB_utm.asc',
-                  'tsunami_exposure_BB.shp']
+                  'tsunami_exposure_BB.shp',
+                  'Flood_Current_Depth_Jakarta_geographic.asc',
+                  'Population_Jakarta_geographic.asc'
+                  ]
 
     myCanvasLayers = []
     for myFile in myFileList:
@@ -312,6 +315,72 @@ class RiabDockTest(unittest.TestCase):
         assert '312' in myResult, msg
         assert '4' in myResult, msg
 
+    def test_runFloodPopulationImpactFunction(self):
+        """Flood function runs in GUI with Jakarta data
+           Raster on raster based function runs as expected."""
+
+        # Push OK with the left mouse button
+        clearForm()
+        loadLayers()
+        myButton = form.ui.pbnRunStop
+
+        msg = 'Run button was not enabled'
+        assert myButton.isEnabled(), msg
+
+        # Hazard layers
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Enter)
+
+        # Exposure layers
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+
+        # Choose impact function (second item in the list)
+        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Enter)
+
+        # Check that layers and impact function are correct
+        D = getUiState(form.ui)
+        assert D == {'Run Button Enabled': True,
+                     'Impact Function': 'Terdampak',
+                     'Hazard': 'Flood Depth (current) Jakarta',
+                     'Exposure': 'Population_Jakarta_geographic'}
+        # Enable on-the-fly reprojection
+        canvas.mapRenderer().setProjectionsEnabled(False)
+
+        # Create WGS84 CRS Instance
+        myGeoCrs = QgsCoordinateReferenceSystem()
+        myGeoCrs.createFromEpsg(4326)
+
+        # Reproject all layers to WGS84 geographic CRS
+        canvas.mapRenderer().setDestinationCrs(myGeoCrs)
+
+        # Zoom to an area known to be occupied by both layer in the new CRS
+        myRect = QgsRectangle(106.52, -6.38, 107.14, -6.07)
+        canvas.setExtent(myRect)
+
+        # Press RUN
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+
+        #Apabila terjadi "Flood Depth (current) Jakarta" 
+        # perkiraan dampak terhadap "clip_CCaFFQ" kemungkinan yang terjadi:
+        #Terdampak (x 1000):    1
+        #Catatan:
+        #- Jumlah penduduk Jakarta 2 <-- should be about 8000
+        #- Jumlah dalam ribuan
+        #- Penduduk dianggap terdampak ketika banjir lebih dari 0.1 m.  <-- expecting around 2400
+
+        #print myResult
+
+        msg = 'Result not as expected: %s' % myResult
+        assert '3205' in myResult, msg
+        assert '312' in myResult, msg
+        assert '4' in myResult, msg
+
     def test_loadLayers(self):
         """Layers can be loaded and list widget was updated appropriately
         """
@@ -320,11 +389,11 @@ class RiabDockTest(unittest.TestCase):
         loadLayers()
         msg = 'Expect 1 layer in hazard list widget but got %s' % \
               form.ui.cboHazard.count()
-        self.assertEqual(form.ui.cboHazard.count(), 2), msg
+        self.assertEqual(form.ui.cboHazard.count(), 3), msg
 
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
               form.ui.cboExposure.count()
-        self.assertEqual(form.ui.cboExposure.count(), 3), msg
+        self.assertEqual(form.ui.cboExposure.count(), 4), msg
 
 
 if __name__ == '__main__':
