@@ -649,6 +649,7 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
+        #settrace()
         # get the hazard and exposure layers selected in the combos
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
@@ -711,8 +712,8 @@ class RiabDock(QtGui.QDockWidget):
             myExposureLayer.type() == QgsMapLayer.RasterLayer):
             myHazardColumns = myHazardLayer.width()
             myExposureColumns = myExposureLayer.width()
-            myHazardGeoWidth = myHazardGeoExtent[3] - myHazardGeoExtent[0]
-            myExposureGeoWidth = (myExposureGeoExtent[3] -
+            myHazardGeoWidth = abs(myHazardGeoExtent[3] - myHazardGeoExtent[0])
+            myExposureGeoWidth = abs(myExposureGeoExtent[3] -
                                    myExposureGeoExtent[0])
             myHazardGeoCellSize = myHazardGeoWidth / myHazardColumns
             myExposureGeoCellSize = myExposureGeoWidth / myExposureColumns
@@ -797,7 +798,6 @@ class RiabDock(QtGui.QDockWidget):
                        myTransformedExtent.xMaximum(),
                        myTransformedExtent.yMaximum()]
         return myGeoExtent
-
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""

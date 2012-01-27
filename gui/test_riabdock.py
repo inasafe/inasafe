@@ -236,12 +236,19 @@ class RiabDockTest(unittest.TestCase):
 
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
         # Expected output:
+        # Pre clip refactor:
         # Jumlah Penduduk:    20771496
         # Perkiraan Orang Meninggal:    2687
+        # Post Clip Refactor:
+        # Jumlah Penduduk:    2040918
+        # Perkiraan Orang Meninggal:    287
+
         msg = ('Unexpected result returned for Earthquake Fatality Function '
                'Expected:\n "Jumlah Penduduk" count of 20771496, '
                'received: \n %s' % myResult)
-        assert '20771496' in myResult, msg
+        # Pre clip refactor
+        #assert '20771496' in myResult, msg
+        assert '2040918' in myResult, msg
 
     def test_runTsunamiBuildingImpactFunction(self):
         """Tsunami function runs in GUI with Batemans Bay model"""
@@ -304,7 +311,6 @@ class RiabDockTest(unittest.TestCase):
         assert '3205' in myResult, msg
         assert '312' in myResult, msg
         assert '4' in myResult, msg
-
 
     def test_loadLayers(self):
         """Layers can be loaded and list widget was updated appropriately

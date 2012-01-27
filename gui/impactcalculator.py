@@ -44,8 +44,8 @@ def makeAscii(x):
     return x
 
 
-def getOptimalExtent(theHazardGeoExtent, 
-                     theExposureGeoExtent, 
+def getOptimalExtent(theHazardGeoExtent,
+                     theExposureGeoExtent,
                      theViewportGeoExtent):
     """ A helper function to determine what the optimal extent is.
     Optimal extent should be considered as the intersection between
