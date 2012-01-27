@@ -18,9 +18,7 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import numpy
 from PyQt4 import QtGui, QtCore
-#from PyQt4a.QtCore.QCoreApplication import translate as tr
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
 from utilities import get_exception_with_stacktrace
@@ -246,12 +244,13 @@ class RiabDock(QtGui.QDockWidget):
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myExposureIndex = self.ui.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
-            myMessage = ('<span class="label notice">Getting started:</span> '
-            'To use this tool you need to add some layers to your QGIS '
-            'project. Ensure that at least one <em>hazard</em> layer (e.g. '
-            'earthquake MMI) and one <em>exposure</em> layer (e.g. dwellings) '
-            're available. When you are ready, click the <em>run</em> '
-            'button below.')
+            myMessage = QCoreApplication.translate(
+            '<span class="label notice">Getting started:'
+            '</span> To use this tool you need to add some layers to your '
+            'QGIS project. Ensure that at least one <em>hazard</em> layer '
+            '(e.g. earthquake MMI) and one <em>exposure</em> layer (e.g. '
+            'dwellings) re available. When you are ready, click the <em>'
+            'run</em> button below.')
             return (False, myMessage)
         if self.ui.cboFunction.currentIndex() == -1:
 

@@ -319,7 +319,7 @@ def get_bounding_boxes(haz_data, exp_data, req_bbox):
     # Usually the intersection bbox is used for both exposure layer and result
     #exp_bbox = imp_bbox = intersection_bbox
 
-    return intersection_bbox
+    return intersection_bbox, None
 
 
 # FIXME (Ole): This needs to be rewritten as it
