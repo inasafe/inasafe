@@ -614,13 +614,6 @@ class RiabDock(QtGui.QDockWidget):
         self.ui.pbnRunStop.setEnabled(True)
         self.repaint()
 
-    def resetForm(self):
-        """Reset the form contents to their onload state."""
-        self.ui.cboFunction.setCurrentIndex(0)
-        self.ui.cboHazard.setCurrentIndex(0)
-        self.ui.cboExposure.setCurrentIndex(0)
-        self.showHelp()
-
     def enableBusyCursor(self):
         """Set the hourglass enabled."""
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
