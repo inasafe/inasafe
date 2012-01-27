@@ -30,7 +30,7 @@ from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsCoordinateTransform)
 from qgis.gui import QgsMapCanvas
 from impactcalculator import ImpactCalculator
-from riabclipper import clipLayer, reprojectLayer
+from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent
 # don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -244,7 +244,7 @@ class RiabDock(QtGui.QDockWidget):
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myExposureIndex = self.ui.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
-            myMessage = QCoreApplication.translate(
+            myMessage = (
             '<span class="label notice">Getting started:'
             '</span> To use this tool you need to add some layers to your '
             'QGIS project. Ensure that at least one <em>hazard</em> layer '
@@ -649,8 +649,6 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        settrace()
-
         # get the hazard and exposure layers selected in the combos
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
@@ -737,7 +735,7 @@ class RiabDock(QtGui.QDockWidget):
         # logic checked to here..............
         ############################################################
 
-        
+
         # .. todo:: Cleanup temporary working files, careful not to delete
         #            User's own data'
 
