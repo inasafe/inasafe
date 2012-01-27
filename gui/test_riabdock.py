@@ -368,12 +368,22 @@ class RiabDockTest(unittest.TestCase):
         #Apabila terjadi "Flood Depth (current) Jakarta"
         # perkiraan dampak terhadap "clip_CCaFFQ" kemungkinan yang terjadi:
         #Terdampak (x 1000):    1
+
+        # Pre clipping fix scores:
+
         #Catatan:
         #- Jumlah penduduk Jakarta 2 <-- should be about 8000
         #- Jumlah dalam ribuan
         #- Penduduk dianggap terdampak ketika banjir
         #lebih dari 0.1 m.  <-- expecting around 2400
+        #Terdampak (x 1000): 2479
 
+        # Post clipping fix scores
+
+        #Catatan:
+        #- Jumlah penduduk Jakarta 356018
+        #- Jumlah dalam ribuan
+        #- Penduduk dianggap terdampak ketika banjir lebih dari 0.1 m.
         #print myResult
 
         msg = 'Result not as expected: %s' % myResult

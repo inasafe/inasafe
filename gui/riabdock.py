@@ -24,11 +24,10 @@ from riabhelp import RiabHelp
 from utilities import get_exception_with_stacktrace
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
-                       QgsSymbolV2, QgsRendererRangeV2, QgsRectangle,
+                       QgsSymbolV2, QgsRendererRangeV2,
                        QgsSymbolLayerV2Registry, QgsColorRampShader,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
-from qgis.gui import QgsMapCanvas
 from impactcalculator import ImpactCalculator
 from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent
@@ -65,7 +64,6 @@ def setVectorStyle(qgisVectorLayer, style):
         Sets and saves style for qgisVectorLayer
 
     """
-
     myTargetField = style['target_field']
     myClasses = style['style_classes']
     myGeometryType = qgisVectorLayer.geometryType()
@@ -704,17 +702,32 @@ class RiabDock(QtGui.QDockWidget):
         myCellSize = None
         if (myHazardLayer.type() == QgsMapLayer.RasterLayer and
             myExposureLayer.type() == QgsMapLayer.RasterLayer):
-            myHazardColumns = myHazardLayer.width()
-            myExposureColumns = myExposureLayer.width()
-            myHazardGeoWidth = abs(myHazardGeoExtent[3] - myHazardGeoExtent[0])
-            myExposureGeoWidth = abs(myExposureGeoExtent[3] -
-                                   myExposureGeoExtent[0])
-            myHazardGeoCellSize = myHazardGeoWidth / myHazardColumns
-            myExposureGeoCellSize = myExposureGeoWidth / myExposureColumns
-            if myHazardGeoCellSize < myExposureGeoCellSize:
-                myCellSize = myHazardGeoCellSize
+            # if they are both in EPSG:4326, simply take the best res
+            if (myExposureLayer.crs().authid() == 'EPSG:4326' and
+                myHazardLayer.crs().authid() == 'EPSG:4326'):
+                if (myExposureLayer.rasterUnitsPerPixel() >
+                   myHazardLayer.rasterUnitsPerPixel()):
+                    myCellSize = myHazardLayer.rasterUnitsPerPixel()
+                else:
+                    myCellSize = myExposureLayer.rasterUnitsPerPixel()
+            # .. todo:: FIXME Consider another clause for single raster
+            #    in inputs that is EPSG:4326 and can have its pixel size used
+            #    directly
             else:
-                myCellSize = myExposureGeoCellSize
+                # Otherwise, work it out based on EPSG:4326 representations
+                # of their extents
+                myHazardColumns = myHazardLayer.width()
+                myExposureColumns = myExposureLayer.width()
+                myHazardGeoWidth = abs(myHazardGeoExtent[3] -
+                                       myHazardGeoExtent[0])
+                myExposureGeoWidth = abs(myExposureGeoExtent[3] -
+                                       myExposureGeoExtent[0])
+                myHazardGeoCellSize = myHazardGeoWidth / myHazardColumns
+                myExposureGeoCellSize = myExposureGeoWidth / myExposureColumns
+                if myHazardGeoCellSize < myExposureGeoCellSize:
+                    myCellSize = myHazardGeoCellSize
+                else:
+                    myCellSize = myExposureGeoCellSize
 
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to

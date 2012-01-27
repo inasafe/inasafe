@@ -29,7 +29,6 @@ from PyQt4.QtCore import (
                           QVariant)
 
 from PyQt4.QtGui import QAction, QIcon, QApplication
-from qgis.core import QGis
 from riabdock import RiabDock
 import os
 
