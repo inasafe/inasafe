@@ -27,16 +27,15 @@ docs: compile
 	cd docs; make html; cd ..
 
 clean:
-	# FIXME (Ole): Use normal Makefile rules instead
+	@# FIXME (Ole): Use normal Makefile rules instead
 	@find . -name '*~' -exec rm {} \;
 	@find . -name '*.pyc' -exec rm {} \;
 
 # Run the test suite followed by pep8 style checking
-test: test_suite pep8 disabled_tests dependency_test
+test: test_suite pep8 disabled_tests dependency_test unwanted_strings
 
 # Run the test suite for gui only
-guitest: gui_test_suite pep8 disabled_tests dependency_test
-
+guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 
 # Run pep8 style checking
 pep8:
@@ -80,6 +79,13 @@ disabled_tests:
 	@echo "Disabled tests"
 	@echo "--------------"
 	@grep -R Xtest * | grep ".py:" | grep -v "docs/build/html" || true
+
+unwanted_strings:
+	@echo
+	@echo "------------------------------"
+	@echo "Strings that should be deleted"
+	@echo "------------------------------"
+	@grep -R "settrace()" * | grep ".py:" || true
 
 dependency_test:
 	@echo
