@@ -637,7 +637,7 @@ class RiabDock(QtGui.QDockWidget):
         etc.
 
         The result of this function will be two layers which are
-        clipped if needed.
+        clipped and resampled if needed.
 
         Args:
             None
