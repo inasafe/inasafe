@@ -17,7 +17,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-import sys
 import os
 import unittest
 
@@ -27,7 +26,7 @@ from qgis.core import (QgsApplication,
                        QgsRasterLayer,
                        QgsMapLayerRegistry)
 
-from riabclipper import clipLayer, getBestResolution, reprojectLayer
+from riabclipper import clipLayer, extentToKml
 from impactcalculator import getOptimalExtent
 from utilities_test import get_qgis_test_app
 
@@ -68,7 +67,7 @@ class RiabClipper(unittest.TestCase):
         assert myVectorLayer is not None, msg
 
         # Create a bounding box
-        myRect = QgsRectangle(100.03, -1.14, 100.81, -0.73)
+        myRect = [100.03, -1.14, 100.81, -0.73]
 
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myRect)
@@ -89,7 +88,7 @@ class RiabClipper(unittest.TestCase):
         assert myRasterLayer is not None, msg
 
         # Create a bounding box
-        myRect = QgsRectangle(97, -3, 104, 1)
+        myRect = [97, -3, 104, 1]
 
         # Clip the vector to the bbox
         myResult = clipLayer(myRasterLayer, myRect)
@@ -108,7 +107,7 @@ class RiabClipper(unittest.TestCase):
                (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
         assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, msg
 
-    def test_clipBoth(self):
+    def Xtest_clipBoth(self):
         """Raster and Vector layers can be clipped
         """
 
@@ -153,15 +152,10 @@ class RiabClipper(unittest.TestCase):
         # Check the output is valid
         assert(os.path.exists(myResult))
 
-    def test_getBestResolution(self):
-        """Test if getBestResolution is working."""
-
-        myName = 'shake'  # Pixel size 0.00833333
-        myRasterLayer = QgsRasterLayer(rasterPath, myName)
-        myName = 'population'  # 0.0307411 (courser than shake)
-        myRasterLayer2 = QgsRasterLayer(rasterPath2, myName)
-        assert (getBestResolution(myRasterLayer, myRasterLayer2)
-                == myRasterLayer)
+    def test_extentToKml(self):
+        """Test if extent too KML is working."""
+        myExtent = [100.03, -1.14, 100.81, -0.73]
+        assert extentToKml(myExtent)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabClipper, 'test')
