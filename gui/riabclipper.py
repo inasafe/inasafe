@@ -189,21 +189,30 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
     # because unline gdal_translate, it does not take projwin.
     myClipKml = extentToKml(theExtent)
 
-    # Resample the file first if needed to the required pixel size
-    if theCellSize is None:
-        theCellSize = theLayer.rasterUnitsPerPixel()
-
     #create a filename for the clipped, resampled and reprojected layer
     myFilename = tempfile.mkstemp('.tif', 'clip_',
                                 tempfile.tempdir)[1]
-    myCommand = ('gdalwarp  -t_srs EPSG:4326 -r near -tr %f %f '
-                 '-cutline %s -crop_to_cutline -of GTiff '
-                 '%s %s' % (theCellSize,
-                            theCellSize,
-                            myClipKml,
-                            myWorkingLayer,
-                            myFilename))
+    # If no cell size is specified, we need to run gdalwarp without
+    # specifying the output pixel size to ensure the raster dims
+    # remain consistent.
+    if theCellSize is None:
+        myFilename = tempfile.mkstemp('.tif', 'clip_',
+                                    tempfile.tempdir)[1]
+        myCommand = ('gdalwarp  -t_srs EPSG:4326 -r near '
+                     '-cutline %s -crop_to_cutline -of GTiff '
+                     '%s %s' % (myClipKml,
+                                myWorkingLayer,
+                                myFilename))
+    else:
+        myCommand = ('gdalwarp  -t_srs EPSG:4326 -r near -tr %f %f '
+                     '-cutline %s -crop_to_cutline -of GTiff '
+                     '%s %s' % (theCellSize,
+                                theCellSize,
+                                myClipKml,
+                                myWorkingLayer,
+                                myFilename))
     #print 'Command: ', myCommand
+    # Now run GDAL warp scottie...
     myResult = call(myCommand, shell=True)
 
     # .. todo:: Check the result of the shell call is ok

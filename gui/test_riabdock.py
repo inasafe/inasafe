@@ -209,7 +209,7 @@ class RiabDockTest(unittest.TestCase):
                'Expected:\n "All" count of 3160, received: \n %s' % myResult)
         assert '3160' in myResult, msg
 
-    def Xtest_runEarthquakeFatalityFunction(self):
+    def test_runEarthquakeFatalityFunction(self):
         """Earthquake fatality function runs in GUI with Shakemap 2009"""
         """Raster on analysis runs as expected"""
 
@@ -291,10 +291,20 @@ class RiabDockTest(unittest.TestCase):
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
 
         #print myResult
+        # ketinggian tsunami    Jumlah gedung
+        # < 1 m:    3205
+        # 1 - 3 m:    312
+        # > 3 m:    4
+
         msg = 'Result not as expected: %s' % myResult
-        assert '3204' in myResult, msg
-        assert '311' in myResult, msg
-        assert '6' in myResult, msg
+        # Exected before clip on steroids refactor
+        #assert '3204' in myResult, msg
+        #assert '311' in myResult, msg
+        #assert '6' in myResult, msg
+        assert '3205' in myResult, msg
+        assert '312' in myResult, msg
+        assert '4' in myResult, msg
+
 
     def test_loadLayers(self):
         """Layers can be loaded and list widget was updated appropriately
