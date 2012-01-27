@@ -13,6 +13,8 @@ which contains modules for risk calculations, gis functionality and functions fo
 For more information about Risk In a Box please look at
 the documentation at http://risk-in-a-box.readthedocs.org
 
+Risk in a Box - QGis web site: http://aifdr.github.com/risk_in_a_box
+
 ========================
 Quick Installation Guide
 ========================
