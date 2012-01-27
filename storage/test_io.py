@@ -874,7 +874,9 @@ class Test_IO(unittest.TestCase):
         # Get gdal version number
         x = gdal.VersionInfo('').replace('dev', '').split()
         y = x[1].split('.')[:2]
-        z = ''.join(y)[:-1]  # Turn into number and remove trailing comma
+        z = ''.join(y)  # Turn into number and
+        if z.endswith(', '):
+            z = z[:-1]  # Remove trailing comma
 
         # Reference bbox for vector data
         ref_bbox = {'tsunami_exposure_BB.shp': [150.124,

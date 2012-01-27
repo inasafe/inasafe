@@ -386,7 +386,7 @@ class RiabDock(QtGui.QDockWidget):
         elif myExposureLayer.type() == QgsMapLayer.RasterLayer:
             myExposureKeywords['layer_type'] = 'raster'
 
-        # now find out which functions can be used with these layers
+        # Find out which functions can be used with these layers
         myList = [myHazardKeywords, myExposureKeywords]
         try:
             myDict = self.calculator.availableFunctions(myList)
