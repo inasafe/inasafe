@@ -107,7 +107,7 @@ class RiabClipper(unittest.TestCase):
                (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
         assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, msg
 
-    def Xtest_clipBoth(self):
+    def test_clipBoth(self):
         """Raster and Vector layers can be clipped
         """
 
@@ -127,27 +127,37 @@ class RiabClipper(unittest.TestCase):
         assert myRasterLayer is not None, msg
 
         # Create a bounding box
-        myRect = QgsRectangle(99.53, -1.22, 101.20, -0.36)
+        myViewportGeoExtent = [99.53, -1.22, 101.20, -0.36]
 
-        myExtent = [myRect.xMinimum(),
-                    myRect.yMinimum(),
-                    myRect.xMaximum(),
-                    myRect.yMaximum()]
-        myExtent = getOptimalExtent(rasterPath,
-                                    vectorPath,
-                                    myExtent)
-        myRect = QgsRectangle(myExtent[0],
-                              myExtent[1],
-                              myExtent[2],
-                              myExtent[3])
+        # get the Hazard extents as an array in EPSG:4326
+        myHazardGeoExtent = [
+                       myRasterLayer.extent().xMinimum(),
+                       myRasterLayer.extent().yMinimum(),
+                       myRasterLayer.extent().xMaximum(),
+                       myRasterLayer.extent().yMaximum()]
+        # get the Exposure extents as an array in EPSG:4326
+        myExposureGeoExtent = [myVectorLayer.extent().xMinimum(),
+                            myVectorLayer.extent().yMinimum(),
+                            myVectorLayer.extent().xMaximum(),
+                            myVectorLayer.extent().yMaximum()]
+
+        # Now work out the optimal extent between the two layers and
+        # the current view extent. The optimal extent is the intersection
+        # between the two layers and the viewport.
+        # Extent is returned as an array [xmin,ymin,xmax,ymax]
+
+        myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                                    myExposureGeoExtent,
+                                    myViewportGeoExtent)
+
         # Clip the vector to the bbox
-        myResult = clipLayer(myVectorLayer, myRect)
+        myResult = clipLayer(myVectorLayer, myGeoExtent)
 
         # Check the output is valid
         assert(os.path.exists(myResult))
 
         # Clip the raster to the bbox
-        myResult = clipLayer(myRasterLayer, myRect)
+        myResult = clipLayer(myRasterLayer, myGeoExtent)
 
         # Check the output is valid
         assert(os.path.exists(myResult))

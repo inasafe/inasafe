@@ -735,8 +735,6 @@ class RiabDock(QtGui.QDockWidget):
         ############################################################
         # logic checked to here..............
         ############################################################
-
-
         # .. todo:: Cleanup temporary working files, careful not to delete
         #            User's own data'
 
@@ -759,8 +757,6 @@ class RiabDock(QtGui.QDockWidget):
 
         #print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
         #print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
-
-
 
     def viewportGeoArray(self):
         """Obtain the map canvas current extent in EPSG:4326"""
