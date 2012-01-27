@@ -17,7 +17,8 @@ class FloodImpactFunction(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory.startswith('population') and \
-                    layer_type=='raster'
+                    layer_type=='raster' and \
+                    datatype=='population'
     """
 
     @staticmethod
@@ -41,13 +42,14 @@ class FloodImpactFunction(FunctionProvider):
         population = gender_ratio = None
         for layer in get_exposure_layers(layers):
             keywords = layer.get_keywords()
+            print layer, keywords
 
             if 'datatype' not in keywords:
                 population = layer
             else:
                 datatype = keywords['datatype']
 
-                if 'population' in datatype and 'density' in datatype:
+                if 'population' in datatype:
                     population = layer
 
                 if 'female' in datatype and 'ratio' in datatype:

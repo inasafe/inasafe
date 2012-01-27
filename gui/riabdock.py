@@ -693,8 +693,7 @@ class RiabDock(QtGui.QDockWidget):
                    myViewportGeoExtent,
                    myHazardGeoExtent,
                    myExposureGeoExtent,
-                   str(e)
-                   ))
+                   str(e)))
             raise Exception(msg)
 
         # Next work out the ideal spatial resolution for rasters

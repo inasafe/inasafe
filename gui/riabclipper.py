@@ -281,8 +281,7 @@ def extentToKml(theExtent):
      myTopLeftCorner,
      myTopRightCorner,
      myBottomRightCorner,
-     myBottomLeftCorner
-     ))
+     myBottomLeftCorner))
 
     myFilename = tempfile.mkstemp('.kml', 'extent_',
                                       tempfile.tempdir)[1]

@@ -102,8 +102,7 @@ def loadLayers():
                   'tsunami_max_inundation_depth_BB_utm.asc',
                   'tsunami_exposure_BB.shp',
                   'Flood_Current_Depth_Jakarta_geographic.asc',
-                  'Population_Jakarta_geographic.asc'
-                  ]
+                  'Population_Jakarta_geographic.asc']
 
     myCanvasLayers = []
     for myFile in myFileList:
@@ -366,13 +365,14 @@ class RiabDockTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
 
-        #Apabila terjadi "Flood Depth (current) Jakarta" 
+        #Apabila terjadi "Flood Depth (current) Jakarta"
         # perkiraan dampak terhadap "clip_CCaFFQ" kemungkinan yang terjadi:
         #Terdampak (x 1000):    1
         #Catatan:
         #- Jumlah penduduk Jakarta 2 <-- should be about 8000
         #- Jumlah dalam ribuan
-        #- Penduduk dianggap terdampak ketika banjir lebih dari 0.1 m.  <-- expecting around 2400
+        #- Penduduk dianggap terdampak ketika banjir
+        #lebih dari 0.1 m.  <-- expecting around 2400
 
         #print myResult
 
