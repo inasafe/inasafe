@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riabdock.ui'
 #
-# Created: Sat Jan 28 13:09:31 2012
+# Created: Sat Jan 28 13:13:00 2012
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -100,12 +100,12 @@ class Ui_RiabDock(object):
 
     def retranslateUi(self, RiabDock):
         RiabDock.setWindowTitle(QtGui.QApplication.translate("RiabDock", "Risk-In-A-Box", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpQuestion.setTitle(QtGui.QApplication.translate("RiabDock", "Question", None, QtGui.QApplication.UnicodeUTF8))
+        self.grpQuestion.setTitle(QtGui.QApplication.translate("RiabDock", "Pertanyaan", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setText(QtGui.QApplication.translate("RiabDock", "Apabile terjadi", None, QtGui.QApplication.UnicodeUTF8))
         self.label_7.setText(QtGui.QApplication.translate("RiabDock", "Berapa banyak", None, QtGui.QApplication.UnicodeUTF8))
         self.label_8.setText(QtGui.QApplication.translate("RiabDock", "&Yang mungkin", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_2.setTitle(QtGui.QApplication.translate("RiabDock", "Results", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("RiabDock", "Supported by AusAID and the World Bank", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_2.setTitle(QtGui.QApplication.translate("RiabDock", "Hasil", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_4.setText(QtGui.QApplication.translate("RiabDock", "Didukung oleh AusAID dan World Bank", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnHelp.setText(QtGui.QApplication.translate("RiabDock", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnRunStop.setText(QtGui.QApplication.translate("RiabDock", "Run", None, QtGui.QApplication.UnicodeUTF8))
 
