@@ -255,7 +255,6 @@ class Test_Engine(unittest.TestCase):
             assert plugin_list[0].keys()[0] == plugin_name
 
             IF = plugin_list[0][plugin_name]
-
             # Call impact calculation engine
             impact_layer = calculate_impact(layers=[H, E],
                                             impact_fcn=IF)
@@ -285,7 +284,6 @@ class Test_Engine(unittest.TestCase):
             calculated_raster = read_layer(impact_filename)
             C = calculated_raster.get_data(nan=0)
 
-            print '1'
             # Check caption
             caption = calculated_raster.get_caption()
             expct = expected_strings[i]  # Number of people affected (HTML)
@@ -1417,6 +1415,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_jakarta')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
