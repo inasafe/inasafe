@@ -30,9 +30,9 @@ from utilities import get_exception_with_stacktrace
 pardir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(pardir)
 from impact_functions import get_admissible_plugins, get_plugins
-from engine.core import calculate_impact, get_bounding_boxes
+from engine.core import calculate_impact
 from storage.core import read_layer
-from storage.utilities import read_keywords
+from storage.utilities import read_keywords, bbox_intersection
 import threading
 from PyQt4.QtCore import QObject, pyqtSignal
 
@@ -44,30 +44,40 @@ def makeAscii(x):
     return x
 
 
-def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
+def getOptimalExtent(theHazardGeoExtent,
+                     theExposureGeoExtent,
+                     theViewportGeoExtent):
     """ A helper function to determine what the optimal extent is.
     Optimal extent should be considered as the intersection between
     the three inputs. The riab library will perform various checks
     to ensure that the extent is tenable, includes data from both
     etc.
 
-    This is just a thin wrapper around engine.core.get_bounding_boxes.
+    This is just a thin wrapper around storage.utilities.bbox_intersection.
 
     Typically the result of this function will be used to clip
     input layers to a commone extent before processing.
 
     Args:
 
-       * hazardPath - a string representing a path to a hazard file
-         in the file system.
-       * exposurePath - a string representing a path to an
-         exposure file on the file system.
+        * theHazardGeoExtent - an array representing the hazard layer
+           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
+           that the coordinates are in EPSG:4326 although currently
+           no checks are made to enforce this.
+        * theExposureGeoExtent - an array representing the exposure layer
+           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
+           that the coordinates are in EPSG:4326 although currently
+           no checks are made to enforce this.
+        * theViewPortGeoExtent - an array representing the viewport
+           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
+           that the coordinates are in EPSG:4326 although currently
+           no checks are made to enforce this.
 
        ..note:: We do minimal checking as the riab library takes
          care of it for us.
 
     Returns:
-       An array containing an extent in the form [xmin,ymin,xmax,ymax]
+       An array containing an extent in the form [xmin, ymin, xmax, ymax]
        e.g.::
 
         [100.03, -1.14, 100.81, -0.73]
@@ -75,15 +85,19 @@ def getOptimalExtent(hazardPath, exposurePath, desiredViewport):
     Raises:
         Any exceptions raised by the RIAB library will be propogated.
     """
-    try:
         # .. note:: The get_bounding_boxes function below assumes that
         #            all inputs are in EPSG:4326
-        return get_bounding_boxes(
-            makeAscii(hazardPath),
-            makeAscii(exposurePath),
-            desiredViewport)[0]
-    except Exception, e:
-        raise e
+    myOptimalExtent = bbox_intersection(theHazardGeoExtent,
+                                        theExposureGeoExtent,
+                                        theViewportGeoExtent)
+    if myOptimalExtent is None:
+        # Bounding boxes did not overlap
+        msg = ('Bounding boxes of hazard data, exposure data '
+               'and viewport did not overlap, so no computation was '
+               'done. Please make sure you pan to where the data is and '
+               'that hazard and exposure data overlaps.')
+        raise Exception(msg)
+    return myOptimalExtent
 
 
 class ImpactCalculator():

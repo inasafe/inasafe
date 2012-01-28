@@ -24,13 +24,12 @@ from riabhelp import RiabHelp
 from utilities import get_exception_with_stacktrace
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
-                       QgsSymbolV2, QgsRendererRangeV2, QgsRectangle,
+                       QgsSymbolV2, QgsRendererRangeV2,
                        QgsSymbolLayerV2Registry, QgsColorRampShader,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
-from qgis.gui import QgsMapCanvas
 from impactcalculator import ImpactCalculator
-from riabclipper import clipLayer, reprojectLayer, getBestResolution
+from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent
 # don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -65,7 +64,6 @@ def setVectorStyle(qgisVectorLayer, style):
         Sets and saves style for qgisVectorLayer
 
     """
-
     myTargetField = style['target_field']
     myClasses = style['style_classes']
     myGeometryType = qgisVectorLayer.geometryType()
@@ -122,37 +120,40 @@ def setVectorStyle(qgisVectorLayer, style):
     qgisVectorLayer.saveDefaultStyle()
 
 
-def setRasterStyle(qgisRasterLayer, style):
+def setRasterStyle(theQgsRasterLayer, theStyle):
     """Set QGIS raster style based on RIAB style dictionary
 
     Input
-        qgisRasterLayer: Qgis layer
+        theQgsRasterLayer: Qgis layer
         style: Dictionary of the form as in the example below
-
-        {
-            'style_classes':
-            [{'max': 1.5, 'colour': '#fecc5c', label': 'Low damage'},
-             {'max': 3, 'colour': '#fd8d3c', label': 'Medium damage'},
-             {'max': 5, 'colour': '#ffccgg', label': 'High damage'}
-            ]
-        }
+        style_classes = [dict(colour='#ffffff', quantity=-9999, opacity=0),
+                         dict(colour='#38A800', quantity=2, opacity=0),
+                         dict(colour='#38A800', quantity=5, opacity=1),
+                         dict(colour='#79C900', quantity=10, opacity=1),
+                         dict(colour='#CEED00', quantity=20, opacity=1),
+                         dict(colour='#FFCC00', quantity=50, opacity=1),
+                         dict(colour='#FF6600', quantity=100, opacity=1),
+                         dict(colour='#FF0000', quantity=200, opacity=1),
+                         dict(colour='#7A0000', quantity=300, opacity=1)]
 
     Output
-        Sets and saves style for qgisRasterLayer
+        Sets and saves style for theQgsRasterLayer
 
     """
-    myClasses = style['style_classes']
+    theQgsRasterLayer.setDrawingStyle(QgsRasterLayer.PalettedColor)
+    myClasses = theStyle['style_classes']
     myRangeList = []
     for myClass in myClasses:
-        myMax = myClass['max']
-        myColour = myClass['colour']
+        myMax = myClass['quantity']
+        myColour = QtGui.QColor(myClass['colour'])
+        #myColour = myClass['opacity']  # ?
         #myLabel = myClass['label']
         myShader = QgsColorRampShader.ColorRampItem(myMax, myColour)
         myRangeList.append(myShader)
 
     # Apply the shading algorithm and design their ramp
-    qgisRasterLayer.setColorShadingAlgorithm(QgsRasterLayer.ColorRampShader)
-    myFunction = qgisRasterLayer.rasterShader().rasterShaderFunction()
+    theQgsRasterLayer.setColorShadingAlgorithm(QgsRasterLayer.ColorRampShader)
+    myFunction = theQgsRasterLayer.rasterShader().rasterShaderFunction()
     myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
     myFunction.setColorRampItemList(myRangeList)
 
@@ -244,7 +245,8 @@ class RiabDock(QtGui.QDockWidget):
         myHazardIndex = self.ui.cboHazard.currentIndex()
         myExposureIndex = self.ui.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
-            myMessage = ('<span class="label notice">Getting started:'
+            myMessage = (
+            '<span class="label notice">Getting started:'
             '</span> To use this tool you need to add some layers to your '
             'QGIS project. Ensure that at least one <em>hazard</em> layer '
             '(e.g. earthquake MMI) and one <em>exposure</em> layer (e.g. '
@@ -611,13 +613,6 @@ class RiabDock(QtGui.QDockWidget):
         self.ui.pbnRunStop.setEnabled(True)
         self.repaint()
 
-    def resetForm(self):
-        """Reset the form contents to their onload state."""
-        self.ui.cboFunction.setCurrentIndex(0)
-        self.ui.cboHazard.setCurrentIndex(0)
-        self.ui.cboExposure.setCurrentIndex(0)
-        self.showHelp()
-
     def enableBusyCursor(self):
         """Set the hourglass enabled."""
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
@@ -634,7 +629,8 @@ class RiabDock(QtGui.QDockWidget):
         etc.
 
         The result of this function will be two layers which are
-        clipped if needed.
+        clipped and resampled if needed, and in the EPSG:4326 geographic
+        coordinate reference system..
 
         Args:
             None
@@ -645,46 +641,36 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        myCanvas = self.iface.mapCanvas()
+        # get the hazard and exposure layers selected in the combos
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
-        myRect = myCanvas.extent()
-        # reproject the mapcanvas extent to EPSG:4326 if needed
+
+        # reproject all extents to EPSG:4326 if needed
         myGeoCrs = QgsCoordinateReferenceSystem()
         myGeoCrs.createFromEpsg(4326)
-        myGeoExtent = None
 
-        if myCanvas.hasCrsTransformEnabled():
-            myXForm = QgsCoordinateTransform(
-                                myCanvas.mapRenderer().destinationCrs(),
-                                myGeoCrs)
 
-            # Get the clip area in the layer's crs
-            myTransformedExtent = myXForm.transformBoundingBox(myRect)
-
-            myGeoExtent = [myTransformedExtent.xMinimum(),
-                           myTransformedExtent.yMinimum(),
-                           myTransformedExtent.xMaximum(),
-                           myTransformedExtent.yMaximum()]
-        else:
-            myGeoExtent = [myRect.xMinimum(),
-                        myRect.yMinimum(),
-                        myRect.xMaximum(),
-                        myRect.yMaximum()]
-
-        # First make sure that we have EPSG:4326 versions of the input layers
-        myGeoHazardPath = reprojectLayer(myHazardLayer)
-        myGeoExposurePath = reprojectLayer(myExposureLayer)
+        # get the current viewport extent as an array in EPSG:4326
+        myViewportGeoExtent = self.viewportGeoArray()
+        # get the Hazard extents as an array in EPSG:4326
+        myHazardGeoExtent = self.extentToGeoArray(
+                            myHazardLayer.extent(),
+                            myHazardLayer.crs())
+        # get the Exposure extents as an array in EPSG:4326
+        myExposureGeoExtent = self.extentToGeoArray(
+                            myExposureLayer.extent(),
+                            myExposureLayer.crs())
 
         # Now work out the optimal extent between the two layers and
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
+        myGeoExtent = None
         try:
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
-            myGeoExtent = getOptimalExtent(myGeoHazardPath,
-                                    myGeoExposurePath,
-                                    myGeoExtent)
+            myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                                    myExposureGeoExtent,
+                                    myViewportGeoExtent)
         except Exception, e:
             msg = ('<p>There '
                    'was insufficient overlap between the input layers '
@@ -692,44 +678,69 @@ class RiabDock(QtGui.QDockWidget):
                    'two overlapping layers and zoom or pan to them. Full '
                    'details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
-                   '<p>%s</p><p>%s</p>' %
-                  (myGeoHazardPath, myGeoExposurePath))
+                   '<p>Hazard: %s</p>'
+                   '<p>Exposure: %s</p>'
+                   '<p>Viewport Geo Extent: %s</p>'
+                   '<p>Hazard Geo Extent: %s</p>'
+                   '<p>Exposure Geo Extent: %s</p>'
+                   '<p>Details: %s</p>'
+                    %
+                  (myHazardLayer.source(),
+                   myExposureLayer.source(),
+                   myViewportGeoExtent,
+                   myHazardGeoExtent,
+                   myExposureGeoExtent,
+                   str(e)))
             raise Exception(msg)
 
-        myRect = QgsRectangle(myGeoExtent[0],
-                              myGeoExtent[1],
-                              myGeoExtent[2],
-                              myGeoExtent[3])
-
-        # get the geographic layers as QgisMapLayer objects
-        myGeoHazardLayer = None
-        myGeoExposureLayer = None
-
-        if myHazardLayer.type() == QgsMapLayer.VectorLayer:
-            myGeoHazardLayer = QgsVectorLayer(myGeoHazardPath, "hzrd", 'ogr')
-        elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
-            myGeoHazardLayer = QgsRasterLayer(myGeoHazardPath, "hzrd")
-
-        if myExposureLayer.type() == QgsMapLayer.VectorLayer:
-            myGeoExposureLayer = QgsVectorLayer(
-                                        myGeoExposurePath, "exps", 'ogr')
-        elif myExposureLayer.type() == QgsMapLayer.RasterLayer:
-            myGeoExposureLayer = QgsRasterLayer(myGeoExposurePath, "exps")
-
-        # if both inputs are rasters, the clipped versions need to be
-        # resampled to a common resolution too.
+        # Next work out the ideal spatial resolution for rasters
+        # in the analysis. We do this based on the geographic extents
+        # rather than the layers native extents so that we can pass
+        # the ideal cell size and extents to the layer prep routines
+        # and do all preprocessing in a single operation.
         myCellSize = None
-        if (myGeoHazardLayer.type() == QgsMapLayer.RasterLayer and
-            myGeoExposureLayer.type() == QgsMapLayer.RasterLayer):
-            myBestRaster = getBestResolution(myGeoHazardLayer,
-                                           myGeoExposureLayer)
-            myCellSize = myBestRaster.rasterUnitsPerPixel()
+        if (myHazardLayer.type() == QgsMapLayer.RasterLayer and
+            myExposureLayer.type() == QgsMapLayer.RasterLayer):
+            # if they are both in EPSG:4326, simply take the best res
+            if (myExposureLayer.crs().authid() == 'EPSG:4326' and
+                myHazardLayer.crs().authid() == 'EPSG:4326'):
+                if (myExposureLayer.rasterUnitsPerPixel() >
+                   myHazardLayer.rasterUnitsPerPixel()):
+                    myCellSize = myHazardLayer.rasterUnitsPerPixel()
+                else:
+                    myCellSize = myExposureLayer.rasterUnitsPerPixel()
+            # .. todo:: FIXME Consider another clause for single raster
+            #    in inputs that is EPSG:4326 and can have its pixel size used
+            #    directly
+            else:
+                # Otherwise, work it out based on EPSG:4326 representations
+                # of their extents
+                myHazardColumns = myHazardLayer.width()
+                myExposureColumns = myExposureLayer.width()
+                myHazardGeoWidth = abs(myHazardGeoExtent[3] -
+                                       myHazardGeoExtent[0])
+                myExposureGeoWidth = abs(myExposureGeoExtent[3] -
+                                       myExposureGeoExtent[0])
+                myHazardGeoCellSize = myHazardGeoWidth / myHazardColumns
+                myExposureGeoCellSize = myExposureGeoWidth / myExposureColumns
+                if myHazardGeoCellSize < myExposureGeoCellSize:
+                    myCellSize = myHazardGeoCellSize
+                else:
+                    myCellSize = myExposureGeoCellSize
 
-        # Clip the exposure to the bbox
-        myClippedExposurePath = clipLayer(myGeoExposureLayer,
-                                          myRect, myCellSize)
-        # Clip the vector to the bbox
-        myClippedHazardPath = clipLayer(myGeoHazardLayer, myRect, myCellSize)
+        # Make sure that we have EPSG:4326 versions of the input layers
+        # that are clipped and (in the case of two raster inputs) resampled to
+        # the best resolution.
+        myClippedExposurePath = clipLayer(myExposureLayer,
+                                          myGeoExtent, myCellSize)
+        myClippedHazardPath = clipLayer(myHazardLayer,
+                                          myGeoExtent, myCellSize)
+
+        return myClippedHazardPath, myClippedExposurePath
+
+        ############################################################
+        # logic checked to here..............
+        ############################################################
         # .. todo:: Cleanup temporary working files, careful not to delete
         #            User's own data'
 
@@ -753,7 +764,42 @@ class RiabDock(QtGui.QDockWidget):
         #print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
         #print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
 
-        return myClippedHazardPath, myClippedExposurePath
+    def viewportGeoArray(self):
+        """Obtain the map canvas current extent in EPSG:4326"""
+
+        # get the current viewport extent
+        myCanvas = self.iface.mapCanvas()
+        myRect = myCanvas.extent()
+
+        myCrs = None
+
+        if myCanvas.hasCrsTransformEnabled():
+            myCrs = myCanvas.mapRenderer().destinationCrs()
+        else:
+            # some code duplication from extentToGeoArray here
+            # in favour of clarity of logic...
+            myCrs = QgsCoordinateReferenceSystem()
+            myCrs.createFromEpsg(4326)
+
+        return self.extentToGeoArray(myRect, myCrs)
+
+    def extentToGeoArray(self, theExtent, theSourceCrs):
+        """Convert the supplied extent to geographic and return as as array"""
+
+        myGeoCrs = QgsCoordinateReferenceSystem()
+        myGeoCrs.createFromEpsg(4326)
+        myXForm = QgsCoordinateTransform(
+                            theSourceCrs,
+                            myGeoCrs)
+
+        # Get the clip area in the layer's crs
+        myTransformedExtent = myXForm.transformBoundingBox(theExtent)
+
+        myGeoExtent = [myTransformedExtent.xMinimum(),
+                       myTransformedExtent.yMinimum(),
+                       myTransformedExtent.xMaximum(),
+                       myTransformedExtent.yMaximum()]
+        return myGeoExtent
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
