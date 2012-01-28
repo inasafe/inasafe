@@ -237,7 +237,7 @@ class Test_Engine(unittest.TestCase):
 
         # Expected values from HKV
         expected_values = [2485442, 1537920]
-        expected_strings = ['<b>2479</b>', '<b>1533</b>']
+        expected_strings = ['<b>2480</b>', '<b>1533</b>']
 
         i = 0
         for filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
@@ -285,6 +285,7 @@ class Test_Engine(unittest.TestCase):
             calculated_raster = read_layer(impact_filename)
             C = calculated_raster.get_data(nan=0)
 
+            print '1'
             # Check caption
             caption = calculated_raster.get_caption()
             expct = expected_strings[i]  # Number of people affected (HTML)
@@ -1416,6 +1417,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_jakarta')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
