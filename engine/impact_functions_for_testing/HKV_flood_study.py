@@ -42,7 +42,6 @@ class FloodImpactFunction(FunctionProvider):
         population = gender_ratio = None
         for layer in get_exposure_layers(layers):
             keywords = layer.get_keywords()
-            print layer, keywords
 
             if 'datatype' not in keywords:
                 population = layer
