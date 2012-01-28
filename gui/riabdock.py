@@ -120,11 +120,11 @@ def setVectorStyle(qgisVectorLayer, style):
     qgisVectorLayer.saveDefaultStyle()
 
 
-def setRasterStyle(qgisRasterLayer, style):
+def setRasterStyle(theQgsRasterLayer, theStyle):
     """Set QGIS raster style based on RIAB style dictionary
 
     Input
-        qgisRasterLayer: Qgis layer
+        theQgsRasterLayer: Qgis layer
         style: Dictionary of the form as in the example below
         style_classes = [dict(colour='#ffffff', quantity=-9999, opacity=0),
                          dict(colour='#38A800', quantity=2, opacity=0),
@@ -137,10 +137,11 @@ def setRasterStyle(qgisRasterLayer, style):
                          dict(colour='#7A0000', quantity=300, opacity=1)]
 
     Output
-        Sets and saves style for qgisRasterLayer
+        Sets and saves style for theQgsRasterLayer
 
     """
-    myClasses = style['style_classes']
+    theQgsRasterLayer.setDrawingStyle(QgsRasterLayer.PalettedColor)
+    myClasses = theStyle['style_classes']
     myRangeList = []
     for myClass in myClasses:
         myMax = myClass['quantity']
@@ -151,8 +152,8 @@ def setRasterStyle(qgisRasterLayer, style):
         myRangeList.append(myShader)
 
     # Apply the shading algorithm and design their ramp
-    qgisRasterLayer.setColorShadingAlgorithm(QgsRasterLayer.ColorRampShader)
-    myFunction = qgisRasterLayer.rasterShader().rasterShaderFunction()
+    theQgsRasterLayer.setColorShadingAlgorithm(QgsRasterLayer.ColorRampShader)
+    myFunction = theQgsRasterLayer.rasterShader().rasterShaderFunction()
     myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
     myFunction.setColorRampItemList(myRangeList)
 
