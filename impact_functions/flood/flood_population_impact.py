@@ -23,8 +23,7 @@ class FloodImpactFunction(FunctionProvider):
 
     plugin_name = 'Terdampak'
 
-    @staticmethod
-    def run(layers):
+    def run(self, layers):
         """Risk plugin for earthquake fatalities
 
         Input
@@ -161,7 +160,7 @@ class FloodImpactFunction(FunctionProvider):
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
-                   name='Penduduk terdampak oleh banjir',
+                   name='Penduduk yang %s' % (self.plugin_name.lower()),
                    keywords={'caption': caption},
                    style_info=style_info)
         return R
