@@ -105,4 +105,11 @@ dependency_test:
 	@grep -R "import scipy" storage engine impact_functions || true
 	@grep -R "from scipy import" storage engine impact_functions || true
 
-
+list_gis_packages:
+	@echo
+	@echo "---------------------------------------"
+	@echo "List of QGis related packages installed"
+	@echo "---------------------------------------"
+	@dpkg -l | grep qgis || true
+	@dpkg -l | grep gdal || true
+	@dpkg -l | grep geos || true
