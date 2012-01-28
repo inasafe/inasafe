@@ -23,8 +23,7 @@ class FloodFatalityFunction(FunctionProvider):
 
     plugin_name = 'Meninggal'
 
-    @staticmethod
-    def run(layers):
+    def run(self, layers):
         """Risk plugin for earthquake fatalities
 
         Input
@@ -100,7 +99,7 @@ class FloodFatalityFunction(FunctionProvider):
 
         # Create report
         iname = inundation.get_name()
-        pname = poor_households.get_name()
+        pname = population.get_name()
         caption = ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
                    'kemungkinan yang terjadi&#58;</b><br><br><p>' % (iname,
                                                                      pname))
@@ -148,6 +147,6 @@ class FloodFatalityFunction(FunctionProvider):
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
-                   name='People affected',
+                   name='Penduduk yang %s' % (self.plugin_name.lower()),
                    keywords={'caption': caption})
         return R
