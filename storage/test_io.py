@@ -875,7 +875,7 @@ class Test_IO(unittest.TestCase):
         x = gdal.VersionInfo('').replace('dev', '').split()
         y = x[1].split('.')[:2]
         z = ''.join(y)  # Turn into number and
-        if z.endswith(', '):
+        if z.endswith(','):
             z = z[:-1]  # Remove trailing comma
 
         # Reference bbox for vector data
