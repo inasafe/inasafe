@@ -30,7 +30,7 @@
     <item row="0" column="0">
      <widget class="QGroupBox" name="grpQuestion">
       <property name="title">
-       <string>Question</string>
+       <string>Pertanyaan</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <property name="margin">
@@ -81,7 +81,7 @@
     <item row="1" column="0">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
-       <string>Results</string>
+       <string>Hasil</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="leftMargin">
@@ -138,7 +138,7 @@
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Supported by AusAID and the World Bank</string>
+            <string>Didukung oleh AusAID dan World Bank</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
