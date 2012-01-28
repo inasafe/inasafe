@@ -499,6 +499,7 @@ class RiabDock(QtGui.QDockWidget):
             self.repaint()
             QtGui.qApp.processEvents()
             self.runner.run()  # Run in same thread
+            #self.runner.start() # Run in separate thread
             QtGui.qApp.restoreOverrideCursor()
             # .. todo :: Disconnect done slot/signal
         except Exception, e:
