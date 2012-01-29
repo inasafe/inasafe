@@ -25,7 +25,7 @@ from utilities_test import get_qgis_test_app
 
 from gui.riab import Riab
 
-qgis_app = get_qgis_test_app()
+QGISAPP = get_qgis_test_app()
 
 
 class RiabTest(unittest.TestCase):

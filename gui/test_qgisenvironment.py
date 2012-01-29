@@ -16,13 +16,11 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import sys
-import os
 import unittest
-from qgis.core import QgsApplication, QgsProviderRegistry
+from qgis.core import QgsProviderRegistry
 from utilities_test import get_qgis_test_app
 
-qgis_app = get_qgis_test_app()
+QGISAPP = get_qgis_test_app()
 
 
 class RiabTest(unittest.TestCase):

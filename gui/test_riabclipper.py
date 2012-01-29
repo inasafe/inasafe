@@ -42,7 +42,7 @@ rasterPath2 = os.path.join(myRoot, 'riab_test_data',
                            'population_padang_1.asc')
 
 # Handle to common QGis test app
-qgis_app = get_qgis_test_app()
+QGISAPP = get_qgis_test_app()
 
 
 class RiabClipper(unittest.TestCase):

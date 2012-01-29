@@ -34,7 +34,7 @@ from utilities_test import get_qgis_test_app
 from gui.riabdock import RiabDock
 
 # Get QGis app handle
-qgis_app = get_qgis_test_app()
+QGISAPP = get_qgis_test_app()
 
 # Set form to test against
 parent = QtGui.QWidget()

@@ -5,7 +5,7 @@ import os
 import sys
 from qgis.core import QgsApplication
 
-qgis_app = None  # Static variable used to hold hand to running QGis app
+QGISAPP = None  # Static variable used to hold hand to running QGis app
 
 
 def get_qgis_test_app():
@@ -21,16 +21,17 @@ def get_qgis_test_app():
     If QGis is already running the handle to that app will be returned
     """
 
-    global qgis_app
+    global QGISAPP
 
-    if qgis_app is None:
+    if QGISAPP is None:
         myGuiFlag = True  # All test will run qgis in gui mode
-        qgis_app = QgsApplication(sys.argv, myGuiFlag)
+        QGISAPP = QgsApplication(sys.argv, myGuiFlag)
         if 'QGISPATH' in os.environ:
             myPath = os.environ['QGISPATH']
             myUseDefaultPathFlag = True
-            qgis_app.setPrefixPath(myPath, myUseDefaultPathFlag)
+            QGISAPP.setPrefixPath(myPath, myUseDefaultPathFlag)
 
-        qgis_app.initQgis()
-
-    return qgis_app
+        QGISAPP.initQgis()
+        s = QGISAPP.showSettings()
+        print s
+    return QGISAPP
