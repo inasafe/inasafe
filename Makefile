@@ -45,7 +45,7 @@ pep8:
 	@echo "-----------"
 	@pep8 --repeat --ignore=E203 --exclude ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py .
 
-# Run test suite only
+# Run entire test suite
 test_suite: compile testdata
 	@echo
 	@echo "----------------------"
@@ -53,9 +53,9 @@ test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions || true
 
-# Run test suite only
+# Run gui test suite only
 gui_test_suite: compile testdata
 	@echo
 	@echo "----------------------"
