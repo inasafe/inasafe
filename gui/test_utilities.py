@@ -8,7 +8,7 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from utilities import get_exception_with_stacktrace
+from utilities import getExceptionWithStacktrace
 from engine.core import get_bounding_boxes
 
 
@@ -31,13 +31,13 @@ class Test_U(unittest.TestCase):
         except Exception, e:
             # Display message and traceback
 
-            msg = get_exception_with_stacktrace(e, html=False)
+            msg = getExceptionWithStacktrace(e, html=False)
             print msg
             assert str(e) in msg
             assert 'line' in msg
             assert 'File' in msg
 
-            msg = get_exception_with_stacktrace(e, html=True)
+            msg = getExceptionWithStacktrace(e, html=True)
             assert str(e) in msg
             assert '<pre id="traceback"' in msg
             assert 'line' in msg

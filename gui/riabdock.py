@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
-from utilities import get_exception_with_stacktrace
+from utilities import getExceptionWithStacktrace
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
                        QgsSymbolV2, QgsRendererRangeV2,
@@ -479,7 +479,7 @@ class RiabDock(QtGui.QDockWidget):
                    'An exception occurred when creating layer '
                    'subsets clipped to the optimal extent: %s</p>' %
                    ((str(e))))
-            msg += get_exception_with_stacktrace(e, html=True)
+            msg += getExceptionWithStacktrace(e, html=True)
             self.displayHtml(msg)
             return
 
@@ -517,7 +517,7 @@ class RiabDock(QtGui.QDockWidget):
             myReport = self._completed()
         except Exception, e:
             # Display message and traceback
-            msg = get_exception_with_stacktrace(e, html=True)
+            msg = getExceptionWithStacktrace(e, html=True)
             self.displayHtml(msg)
         else:
             # On succes, display generated report

@@ -24,6 +24,7 @@ from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
                        QgsVectorFileWriter)
 from riabexceptions import InvalidParameterException, KeywordNotFoundException
 import tempfile
+from utilities import getTempDir
 from subprocess import call
 
 
@@ -91,7 +92,7 @@ def _clipVectorLayer(theLayer, theExtent):
         raise InvalidParameterException(msg)
 
     myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                  tempfile.tempdir)[1]
+                                  getTempDir())[1]
 
     # get the clip extents in the layer's native CRS
     myGeoCrs = QgsCoordinateReferenceSystem()
@@ -191,13 +192,13 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
 
     #create a filename for the clipped, resampled and reprojected layer
     myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                tempfile.tempdir)[1]
+                                getTempDir())[1]
     # If no cell size is specified, we need to run gdalwarp without
     # specifying the output pixel size to ensure the raster dims
     # remain consistent.
     if theCellSize is None:
         myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                    tempfile.tempdir)[1]
+                                    getTempDir())[1]
         myCommand = ('gdalwarp  -t_srs EPSG:4326 -r near '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '%s %s' % (myClipKml,
@@ -284,7 +285,7 @@ def extentToKml(theExtent):
      myBottomLeftCorner))
 
     myFilename = tempfile.mkstemp('.kml', 'extent_',
-                                      tempfile.tempdir)[1]
+                                      getTempDir())[1]
     myFile = file(myFilename, 'wt')
     myFile.write(myKml)
     myFile.close()

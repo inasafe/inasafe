@@ -25,7 +25,7 @@ from riabexceptions import (InsufficientParametersException,
                             StyleInfoNotFoundException,
                             InvalidParameterException)
 
-from utilities import get_exception_with_stacktrace
+from utilities import getExceptionWithStacktrace
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(pardir)
@@ -469,7 +469,7 @@ class ImpactCalculatorThread(threading.Thread):
                                                  impact_fcn=self._function)
         except Exception, e:
             msg = 'Calculation error encountered:\n'
-            msg += get_exception_with_stacktrace(e, html=True)
+            msg += getExceptionWithStacktrace(e, html=True)
             print msg
             self._result = msg
         else:
