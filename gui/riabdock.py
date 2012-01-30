@@ -642,22 +642,22 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        # get the hazard and exposure layers selected in the combos
+        # Get the hazard and exposure layers selected in the combos
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
 
-        # reproject all extents to EPSG:4326 if needed
+        # Reproject all extents to EPSG:4326 if needed
         myGeoCrs = QgsCoordinateReferenceSystem()
         myGeoCrs.createFromEpsg(4326)
 
-
-        # get the current viewport extent as an array in EPSG:4326
+        # Get the current viewport extent as an array in EPSG:4326
         myViewportGeoExtent = self.viewportGeoArray()
-        # get the Hazard extents as an array in EPSG:4326
+
+        # Get the Hazard extents as an array in EPSG:4326
         myHazardGeoExtent = self.extentToGeoArray(
                             myHazardLayer.extent(),
                             myHazardLayer.crs())
-        # get the Exposure extents as an array in EPSG:4326
+        # Get the Exposure extents as an array in EPSG:4326
         myExposureGeoExtent = self.extentToGeoArray(
                             myExposureLayer.extent(),
                             myExposureLayer.crs())

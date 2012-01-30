@@ -10,6 +10,8 @@ Unreinforced masonry (URM) and reinforced masonry (RM) according to
 the guidelines.
 """
 
+import numpy
+
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
@@ -78,6 +80,7 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
         count3 = 0
         count2 = 0
         count1 = 0
+        count_unknown = 0
         building_damage = []
         for i in range(N):
             mmi = float(shaking[i].values()[0])
@@ -85,15 +88,22 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
             building_class = E.get_data(self.vclass_tag, i)
             lo, hi = damage_parameters[building_class]
 
-            if mmi < lo:
+            if numpy.isnan(mmi):
+                # If we don't know the shake level assign Not-a-Number
+                damage = numpy.nan
+                count_unknown += 1
+            elif mmi < lo:
                 damage = 1  # Low
                 count1 += 1
             elif lo <= mmi < hi:
                 damage = 2  # Medium
                 count2 += 1
-            else:
+            elif mmi >= hi:
                 damage = 3  # High
                 count3 += 1
+            else:
+                msg = 'Undefined shakelevel %s' % str(mmi)
+                raise Exception(msg)
 
             # Collect shake level and calculated damage
             result_dict = {self.target_field: damage,
@@ -114,11 +124,14 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
                     '   <tr><td>%s (10-25%%)&#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s (25-50%%)&#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s (50-100%%)&#58;</td><td>%i</td></tr>'
-                    '</table>' % (_('Buildings'), _('Total'),
-                                  _('All'), N,
-                                  _('Low damage'), count1,
-                                  _('Medium damage'), count2,
-                                  _('High damage'), count3))
+                    % (_('Buildings'), _('Total'),
+                       _('All'), N,
+                       _('Low damage'), count1,
+                       _('Medium damage'), count2,
+                       _('High damage'), count3))
+        caption += ('   <tr><td>%s (NaN)&#58;</td><td>%i</td></tr>'
+                    % ('Unknown', count_unknown))
+        caption += '</table>'
 
         # Create style
         style_classes = [dict(label=_('Low damage'), min=0.5, max=1.5,
