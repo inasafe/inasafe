@@ -241,11 +241,11 @@ class RiabDockTest(unittest.TestCase):
 
         D = getUiState(form.ui)
 
-        #print D
+        msg = 'Got unexpected state: %s' % str(D)
         assert D == {'Hazard': 'Shakemap_Padang_2009',
                      'Exposure': 'Padang_WGS84',
                      'Impact Function': 'Earthquake Guidelines Function',
-                     'Run Button Enabled': True}
+                     'Run Button Enabled': True}, msg
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
@@ -281,11 +281,12 @@ class RiabDockTest(unittest.TestCase):
         QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
         D = getUiState(form.ui)
-        #print D
+
+        msg = 'Got unexpected state: %s' % str(D)
         assert D == {'Hazard': 'Shakemap_Padang_2009',
                      'Exposure': 'Population Density Estimate (5kmx5km)',
                      'Impact Function': 'Earthquake Fatality Function',
-                     'Run Button Enabled': True}
+                     'Run Button Enabled': True}, msg
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
@@ -329,10 +330,11 @@ class RiabDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         D = getUiState(form.ui)
 
+        msg = 'Got unexpected state: %s' % str(D)
         assert D == {'Run Button Enabled': True,
                      'Impact Function': 'Tsunami Building Impact Function',
                      'Hazard': 'tsunami_max_inundation_depth_BB_utm',
-                     'Exposure': 'tsunami_exposure_BB'}
+                     'Exposure': 'tsunami_exposure_BB'}, msg
 
         setCanvasCrs(GEOCRS, True)
         setBatemansBayGeoExtent()
@@ -385,10 +387,13 @@ class RiabDockTest(unittest.TestCase):
 
         # Check that layers and impact function are correct
         D = getUiState(form.ui)
+
+        msg = 'Got unexpected state: %s' % str(D)
         assert D == {'Run Button Enabled': True,
                      'Impact Function': 'Terdampak',
-                     'Hazard': 'Flood Depth (current) Jakarta',
-                     'Exposure': 'Population_Jakarta_geographic'}
+                     'Hazard': 'Banjir Jakarta seperti 2007',
+                     'Exposure': 'Penduduk Jakarta'}, msg
+
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
         setJakartaGeoExtent()
@@ -450,10 +455,13 @@ class RiabDockTest(unittest.TestCase):
 
         # Check that layers and impact function are correct
         D = getUiState(form.ui)
+
+        msg = 'Got unexpected state: %s' % str(D)
         assert D == {'Run Button Enabled': True,
                      'Impact Function': 'Terdampak',
-                     'Hazard': 'Flood Depth (current) Jakarta',
-                     'Exposure': 'Population_Jakarta_geographic'}
+                     'Hazard': 'Banjir Jakarta seperti 2007',
+                     'Exposure': 'Penduduk Jakarta'}, msg
+
         # Enable on-the-fly reprojection
         setCanvasCrs(GOOGLECRS, True)
         setJakartaGoogleExtent()
