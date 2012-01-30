@@ -65,7 +65,7 @@ class RiabClipper(unittest.TestCase):
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         vectorPath)
         assert myVectorLayer is not None, msg
-
+        assert myVectorLayer.isValid()
         # Create a bounding box
         myRect = [100.03, -1.14, 100.81, -0.73]
 

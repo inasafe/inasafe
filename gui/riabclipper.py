@@ -117,6 +117,13 @@ def _clipVectorLayer(theLayer, theExtent):
     myProvider.select(myAttributes,
                       myProjectedExtent, True, True)
     myFieldList = myProvider.fields()
+    # ensure the file is deleted before we try to write to it
+    # fixes windows specific issue where you get a message like thisL
+    # ERROR 1: c:\temp\riab\clip_jpxjnt.shp is not a directory.
+    QgsVectorFileWriter.deleteShapeFile(myFilename)
+    # Make windows path
+    if os.name is 'nt':
+        myFilename = myFilename.replace('\\', '//')
 
     myWriter = QgsVectorFileWriter(myFilename,
                                    'UTF-8',
