@@ -16,7 +16,7 @@ __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os
+import os, sys
 import shutil
 from PyQt4.QtCore import QString
 from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
@@ -218,10 +218,21 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
                                 myClipKml,
                                 myWorkingLayer,
                                 myFilename))
-    #print 'Command: ', myCommand
+    myExecutablePrefix = ''
+    if sys.platform == 'darwin':  # Mac OS X
+        # .. todo:: FIXME - softcode gdal version in this path
+        myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
+                          'Versions/1.8/Programs/')
+    myCommand = myExecutablePrefix + myCommand
+    # print 'Command: ', myCommand
     # Now run GDAL warp scottie...
-    myResult = call(myCommand, shell=True)
-
+    try:
+        myResult = call(myCommand, shell=True)
+    except Exception, e:
+        myMessage = ('<p>Error while executing the following shell command:'
+                     '</p><pre>%s</pre><p>Error message: %s'
+                     ) % (myCommand, str(e))
+        raise Exception(myMessage)
     # .. todo:: Check the result of the shell call is ok
     copyKeywords(myWorkingLayer, myFilename)
     return myFilename  # Filename of created file
