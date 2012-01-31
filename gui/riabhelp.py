@@ -50,6 +50,6 @@ class RiabHelp(QtGui.QDialog):
     def showHelp(self):
         """Load the help text into the wvResults widget"""
         ROOT = os.path.dirname(__file__)
-        myPath = os.path.abspath(os.path.join(ROOT, 'docs', 'build',
+        myPath = os.path.abspath(os.path.join(ROOT, '..', 'docs', 'build',
                                             'html', 'README.html'))
         self.ui.webView.setUrl(QtCore.QUrl('file:///' + myPath))
