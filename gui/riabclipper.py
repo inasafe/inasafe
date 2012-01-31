@@ -197,14 +197,14 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
     myClipKml = extentToKml(theExtent)
 
     #create a filename for the clipped, resampled and reprojected layer
-    myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                getTempDir())[1]
+    myHandle, myFilename = tempfile.mkstemp('.tif', 'clip_',
+                                getTempDir())
+    os.close(myHandle)
+    os.remove(myFilename)
     # If no cell size is specified, we need to run gdalwarp without
     # specifying the output pixel size to ensure the raster dims
     # remain consistent.
     if theCellSize is None:
-        myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                    getTempDir())[1]
         myCommand = ('gdalwarp  -t_srs EPSG:4326 -r near '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '"%s" "%s"' % (myClipKml,
