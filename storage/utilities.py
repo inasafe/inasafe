@@ -62,6 +62,11 @@ def truncate_field_names(data, n=10):
     FIXME(Ole): THIS IS OBSOLETE AFTER OGR'S OWN FIELD NAME LAUNDERER IS USED
     """
 
+    # FIXME: Put in deprecation exception on 31 January 2012
+    msg = ('Simple field name truncation has been deprecated. Please '
+           'upgrade gdal')
+    raise DeprecationWarning(msg)
+
     if data is None:
         return None
 
