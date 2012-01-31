@@ -166,32 +166,12 @@ def check_data_integrity(layer_files):
             assert len(layer) > 0, msg
 
     # Check that arrays are aligned.
-    #
-    # We have observerd Geoserver resolution changes - see ticket:102
-    # https://github.com/AIFDR/riab/issues/102
-    #
-    # However, both rasters are now downloaded with exactly the same
-    # parameters since we have made bbox and resolution variable in ticket:103
-    # https://github.com/AIFDR/riab/issues/103
-    #
-    # So if they are still not aligned, we raise an Exception
+    M = layer_files[0].rows
+    N = layer_files[0].columns
+    refname = layer_files[0].get_name()
 
-    # First find the minimum dimensions
-    M = N = sys.maxint
-    refname = ''
     for layer in layer_files:
         if layer.is_raster:
-            if layer.rows < M:
-                refname = layer.get_name()
-                M = layer.rows
-            if layer.columns < N:
-                refname = layer.get_name()
-                N = layer.columns
-
-    # Then check for alignment
-    for layer in layer_files:
-        if layer.is_raster:
-            data = layer.get_data()
 
             msg = ('Rasters are not aligned!\n'
                    'Raster %s has %i rows but raster %s has %i rows\n'
