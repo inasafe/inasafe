@@ -273,8 +273,7 @@ def geotransform2bbox(geotransform, columns, rows):
 
 
 def geotransform2resolution(geotransform, isotropic=False,
-                            # FIXME (Ole): Check these tolerances (issue #173)
-                            rtol=5.0e-2, atol=1.0e-2):
+                            rtol=1.0e-6, atol=1.0e-8):
     """Convert geotransform to resolution
 
     Input
