@@ -115,12 +115,12 @@ class Test_plugins(unittest.TestCase):
         # Characterisation test to preserve the behaviour of
         # get_layer_descriptors. FIXME: I think we should change this to be
         # a dictionary of metadata entries (ticket #126).
-        reference = [['geonode:lembang_schools',
+        reference = [['lembang_schools',
                       {'layer_type': 'vector',
                        'category': 'exposure',
                        'subcategory': 'building',
                        'title': 'lembang_schools'}],
-                     ['geonode:shakemap_padang_20090930',
+                     ['shakemap_padang_20090930',
                       {'layer_type': 'raster',
                        'category': 'hazard',
                        'subcategory': 'earthquake',
@@ -138,7 +138,6 @@ class Test_plugins(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'risiko.settings'
     suite = unittest.makeSuite(Test_plugins, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

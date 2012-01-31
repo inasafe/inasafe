@@ -5,8 +5,6 @@
 """
 
 import os
-import time
-import numpy
 
 from vector import Vector
 from raster import Raster

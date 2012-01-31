@@ -28,16 +28,6 @@ TYPE_MAP = {type(None): ogr.OFTString, # What else should this be?
             type(numpy.array([0.0])[0]): ogr.OFTReal, # numpy.float64
             type(numpy.array([[0.0]])[0]): ogr.OFTReal}  # numpy.ndarray
 
-# Templates for downloading layers through rest
-#WCS_TEMPLATE = '%s?version=1.0.0' + \
-#    '&service=wcs&request=getcoverage&format=GeoTIFF&' + \
-#    'store=false&coverage=%s&crs=EPSG:4326&bbox=%s' + \
-#    '&resx=%s&resy=%s'
-
-#WFS_TEMPLATE = '%s?service=WFS&version=1.0.0' + \
-#    '&request=GetFeature&typeName=%s' + \
-#    '&outputFormat=SHAPE-ZIP&bbox=%s'
-
 
 # Miscellaneous auxiliary functions
 def unique_filename(**kwargs):
@@ -73,6 +63,11 @@ def truncate_field_names(data, n=10):
 
     FIXME(Ole): THIS IS OBSOLETE AFTER OGR'S OWN FIELD NAME LAUNDERER IS USED
     """
+
+    # FIXME: Put in deprecation exception on 31 January 2012
+    msg = ('Simple field name truncation has been deprecated. Please '
+           'upgrade gdal')
+    raise DeprecationWarning(msg)
 
     if data is None:
         return None
@@ -136,20 +131,6 @@ gdal.PopErrorHandler()
 
 
 """
-
-
-# GeoServer utility functions
-def is_server_reachable(url):
-    """Make an http connection to url to see if it is accesible.
-
-       Returns boolean
-    """
-    try:
-        urlopen(url)
-    except Exception:
-        return False
-    else:
-        return True
 
 
 def write_keywords(keywords, filename):
@@ -299,8 +280,7 @@ def geotransform2bbox(geotransform, columns, rows):
 
 
 def geotransform2resolution(geotransform, isotropic=False,
-                            # FIXME (Ole): Check these tolerances (issue #173)
-                            rtol=5.0e-2, atol=1.0e-2):
+                            rtol=1.0e-6, atol=1.0e-8):
     """Convert geotransform to resolution
 
     Input

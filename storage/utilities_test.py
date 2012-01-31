@@ -2,7 +2,6 @@
 """
 
 import os
-import time
 import types
 import numpy
 
@@ -70,39 +69,6 @@ def same_API(X, Y, exclude=None):
     _same_API(Y, X, exclude=exclude)
 
     return True
-
-
-def get_web_page(url, username=None, password=None):
-    """Get url page possible with username and password.
-    """
-    import urllib2
-
-    if username is not None:
-
-        # Create password manager
-        passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        passman.add_password(None, url, username, password)
-
-        # create the handler
-        authhandler = urllib2.HTTPBasicAuthHandler(passman)
-        opener = urllib2.build_opener(authhandler)
-        urllib2.install_opener(opener)
-
-    try:
-        pagehandle = urllib2.urlopen(url)
-    except HTTPError, e:
-        msg = ('The server couldn\'t fulfill the request. '
-                'Error code: ' % e.code)
-        e.args = (msg,)
-        raise
-    except urllib2.URLError, e:
-        msg = 'Could not open URL "%s": %s' % (url, e)
-        e.args = (msg,)
-        raise
-    else:
-        page = pagehandle.readlines()
-
-    return page
 
 
 def combine_coordinates(x, y):
