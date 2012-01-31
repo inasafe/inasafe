@@ -304,6 +304,10 @@ class Raster:
                 return self
         else:
             # Interpolate this raster layer to geometry of X
+            msg = ('Name must be either a string or None. I got %s'
+                   % (str(type(X)))[1:-1])
+            assert name is None or isinstance(name, basestring), msg
+
             return interpolate_raster_vector(self, X, name)
 
     def get_data(self, nan=True, scaling=None):

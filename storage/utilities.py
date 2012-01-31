@@ -126,20 +126,6 @@ gdal.PopErrorHandler()
 """
 
 
-# GeoServer utility functions
-def is_server_reachable(url):
-    """Make an http connection to url to see if it is accesible.
-
-       Returns boolean
-    """
-    try:
-        urlopen(url)
-    except Exception:
-        return False
-    else:
-        return True
-
-
 def write_keywords(keywords, filename):
     """Write keywords dictonary to file
 

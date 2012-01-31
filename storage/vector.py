@@ -687,6 +687,13 @@ class Vector:
         msg = 'Interpolation from vector layers not yet implemented'
         raise Exception(msg)
 
+        msg = 'Input to Vector.interpolate must be a vector layer instance'
+        assert X.is_vector, msg
+
+        msg = ('Name must be either a string or None. I got %s'
+               % (str(type(X)))[1:-1])
+        assert name is None or isinstance(name, basestring), msg
+
     @property
     def is_raster(self):
         return False

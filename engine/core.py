@@ -102,9 +102,7 @@ def check_data_integrity(layer_files):
     manpage = ('http://risiko_dev.readthedocs.org/en/latest/usage/'
                'plugins/development.html')
     instructions = ('Please add keywords as <keyword>:<value> pairs '
-                    'either in '
-                    'the .keywords file or directly into the '
-                    'embedded GeoServer. For more information '
+                    ' in the .keywords file. For more information '
                     'please read the sections on impact functions '
                     'and keywords in the manual: %s' % manpage)
 
