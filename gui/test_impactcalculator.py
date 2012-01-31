@@ -137,8 +137,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test that we can get keyword data from a riab layer with
         a .keyword metadata file associated with it."""
         myRunner = self.calculator.getRunner()
-        myRunner.start()
-        myRunner.join()
+        myRunner.run()
         myImpactLayer = myRunner.impactLayer()
         myKeyword = self.calculator.getKeywordFromLayer(
                                         myImpactLayer, 'caption')

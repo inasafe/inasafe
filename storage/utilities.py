@@ -21,11 +21,11 @@ DRIVER_MAP = {'.shp': 'ESRI Shapefile',
 
 # Map between Python types and OGR field types
 # FIXME (Ole): I can't find a double precision type for OGR
-TYPE_MAP = {type(None): ogr.OFTString,  # What else should this be?
+TYPE_MAP = {type(None): ogr.OFTString, # What else should this be?
             type(''): ogr.OFTString,
             type(0): ogr.OFTInteger,
             type(0.0): ogr.OFTReal,
-            type(numpy.array([0.0])[0]): ogr.OFTReal,  # numpy.float64
+            type(numpy.array([0.0])[0]): ogr.OFTReal, # numpy.float64
             type(numpy.array([[0.0]])[0]): ogr.OFTReal}  # numpy.ndarray
 
 # Templates for downloading layers through rest
@@ -48,9 +48,11 @@ def unique_filename(**kwargs):
     See http://docs.python.org/library/tempfile.html for details.
     """
 
-    _, filename = mkstemp(**kwargs)
+    handle, filename = mkstemp(**kwargs)
 
     try:
+        # Need to close it using the filehandle first for windows!
+        os.close(handle)
         os.remove(filename)
     except:
         pass
@@ -320,7 +322,7 @@ def geotransform2resolution(geotransform, isotropic=False,
     """
 
     resx = geotransform[1]     # w-e pixel resolution
-    resy = - geotransform[5]   # n-s pixel resolution (always negative)
+    resy = -geotransform[5]   # n-s pixel resolution (always negative)
 
     if isotropic:
         msg = ('Resolution requested with '

@@ -21,11 +21,11 @@ from qgis.core import QgsApplication
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from PyQt4.QtGui import QWidget
-from utilities_test import get_qgis_test_app
+from utilities_test import getQgisTestApp
 
 from gui.riab import Riab
 
-QGISAPP = get_qgis_test_app()
+QGISAPP = getQgisTestApp()
 
 
 class RiabTest(unittest.TestCase):

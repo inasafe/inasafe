@@ -8,7 +8,7 @@ from qgis.core import QgsApplication
 QGISAPP = None  # Static variable used to hold hand to running QGis app
 
 
-def get_qgis_test_app():
+def getQgisTestApp():
     """ Start one QGis application to test agaist
 
     Input

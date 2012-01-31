@@ -19,6 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 import os
 import shutil
+from PyQt4.QtCore import QString
 from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
                        QgsRectangle, QgsMapLayer, QgsFeature,
                        QgsVectorFileWriter)
@@ -91,12 +92,18 @@ def _clipVectorLayer(theLayer, theExtent):
                 str(theLayer.type()))
         raise InvalidParameterException(msg)
 
-    myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                  getTempDir())[1]
-
+    myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
+                                  getTempDir())
+    # ensure the file is deleted before we try to write to it
+    # fixes windows specific issue where you get a message like this
+    # ERROR 1: c:\temp\riab\clip_jpxjnt.shp is not a directory.
+    # This is because mkstemp creates the file handle and leaves
+    # the file open.
+    os.close(myHandle)
+    os.remove(myFilename)
     # get the clip extents in the layer's native CRS
     myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromEpsg(4326)
+    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     myXForm = QgsCoordinateTransform(myGeoCrs, theLayer.crs())
     myRect = QgsRectangle(theExtent[0], theExtent[1],
                           theExtent[2], theExtent[3])
@@ -117,13 +124,6 @@ def _clipVectorLayer(theLayer, theExtent):
     myProvider.select(myAttributes,
                       myProjectedExtent, True, True)
     myFieldList = myProvider.fields()
-    # ensure the file is deleted before we try to write to it
-    # fixes windows specific issue where you get a message like thisL
-    # ERROR 1: c:\temp\riab\clip_jpxjnt.shp is not a directory.
-    QgsVectorFileWriter.deleteShapeFile(myFilename)
-    # Make windows path
-    if os.name is 'nt':
-        myFilename = myFilename.replace('\\', '//')
 
     myWriter = QgsVectorFileWriter(myFilename,
                                    'UTF-8',
@@ -208,13 +208,13 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
                                     getTempDir())[1]
         myCommand = ('gdalwarp  -t_srs EPSG:4326 -r near '
                      '-cutline %s -crop_to_cutline -of GTiff '
-                     '%s %s' % (myClipKml,
+                     '"%s" "%s"' % (myClipKml,
                                 myWorkingLayer,
                                 myFilename))
     else:
         myCommand = ('gdalwarp  -t_srs EPSG:4326 -r near -tr %f %f '
                      '-cutline %s -crop_to_cutline -of GTiff '
-                     '%s %s' % (theCellSize,
+                     '"%s" "%s"' % (theCellSize,
                                 theCellSize,
                                 myClipKml,
                                 myWorkingLayer,

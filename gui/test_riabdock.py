@@ -30,11 +30,11 @@ from qgis.core import (QgsApplication,
                        QgsCoordinateReferenceSystem)
 from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
-from utilities_test import get_qgis_test_app
+from utilities_test import getQgisTestApp
 from gui.riabdock import RiabDock
 
 # Get QGis app handle
-QGISAPP = get_qgis_test_app()
+QGISAPP = getQgisTestApp()
 
 # Set form to test against
 parent = QtGui.QWidget()
@@ -149,7 +149,7 @@ def setCanvasCrs(theEpsgId, theOtfpFlag=False):
 
     # Create CRS Instance
     myCrs = QgsCoordinateReferenceSystem()
-    myCrs.createFromEpsg(theEpsgId)  # google mercator
+    myCrs.createFromId(theEpsgId, QgsCoordinateReferenceSystem.EpsgCrsId)
 
     # Reproject all layers to WGS84 geographic CRS
     canvas.mapRenderer().setDestinationCrs(myCrs)

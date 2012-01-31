@@ -18,9 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 from qgis.core import QgsProviderRegistry
-from utilities_test import get_qgis_test_app
+from utilities_test import getQgisTestApp
 
-QGISAPP = get_qgis_test_app()
+QGISAPP = getQgisTestApp()
 
 
 class RiabTest(unittest.TestCase):

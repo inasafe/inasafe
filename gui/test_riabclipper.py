@@ -28,13 +28,13 @@ from qgis.core import (QgsApplication,
 
 from riabclipper import clipLayer, extentToKml
 from impactcalculator import getOptimalExtent
-from utilities_test import get_qgis_test_app
+from utilities_test import getQgisTestApp
 
 # Setup pathnames for test data sets
 myRoot = os.path.abspath(os.path.join(
         os.path.dirname(__file__), '..'))
 
-vectorPath = os.path.join(myRoot, 'riab_test_data',
+VECTOR_PATH = os.path.join(myRoot, 'riab_test_data',
                           'Padang_WGS84.shp')
 rasterPath = os.path.join(myRoot, 'riab_test_data',
                           'Shakemap_Padang_2009.asc')
@@ -42,7 +42,7 @@ rasterPath2 = os.path.join(myRoot, 'riab_test_data',
                            'population_padang_1.asc')
 
 # Handle to common QGis test app
-QGISAPP = get_qgis_test_app()
+QGISAPP = getQgisTestApp()
 
 
 class RiabClipper(unittest.TestCase):
@@ -60,10 +60,10 @@ class RiabClipper(unittest.TestCase):
 
         # Create a vector layer
         myName = 'padang'
-        myVectorLayer = QgsVectorLayer(vectorPath, myName, 'ogr')
+        myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
 
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        vectorPath)
+                                                        VECTOR_PATH)
         assert myVectorLayer is not None, msg
         assert myVectorLayer.isValid()
         # Create a bounding box
@@ -113,9 +113,9 @@ class RiabClipper(unittest.TestCase):
 
         # Create a vector layer
         myName = 'padang'
-        myVectorLayer = QgsVectorLayer(vectorPath, myName, 'ogr')
+        myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        vectorPath)
+                                                        VECTOR_PATH)
         assert myVectorLayer is not None, msg
 
         # Create a raster layer
