@@ -145,11 +145,9 @@ def check_data_integrity(layer_files):
             else:
                 msg = ('Geotransforms in input raster layers are different: '
                        '%s %s' % (geotransform, layer.get_geotransform()))
-                # FIXME (Ole): Use high tolerance until we find out
-                # why geoserver changes resolution (issue #102)
                 assert numpy.allclose(geotransform,
                                       layer.get_geotransform(),
-                                      rtol=1.0e-1), msg
+                                      rtol=1.0e-12), msg
 
         # In either case of vector layers, we check that the coordinates
         # are the same
