@@ -27,9 +27,6 @@ def calculate_impact(layers, impact_fcn,
     """Calculate impact levels as a function of list of input layers
 
     Input
-        FIXME (Ole): For the moment we take only a list with two
-        elements containing one hazard level one exposure level
-
         layers: List of Raster and Vector layer objects to be used for analysis
 
         impact_fcn: Function of the form f(layers)
@@ -102,9 +99,7 @@ def check_data_integrity(layer_files):
     manpage = ('http://risiko_dev.readthedocs.org/en/latest/usage/'
                'plugins/development.html')
     instructions = ('Please add keywords as <keyword>:<value> pairs '
-                    'either in '
-                    'the .keywords file or directly into the '
-                    'embedded GeoServer. For more information '
+                    ' in the .keywords file. For more information '
                     'please read the sections on impact functions '
                     'and keywords in the manual: %s' % manpage)
 
@@ -147,11 +142,9 @@ def check_data_integrity(layer_files):
             else:
                 msg = ('Geotransforms in input raster layers are different: '
                        '%s %s' % (geotransform, layer.get_geotransform()))
-                # FIXME (Ole): Use high tolerance until we find out
-                # why geoserver changes resolution (issue #102)
                 assert numpy.allclose(geotransform,
                                       layer.get_geotransform(),
-                                      rtol=1.0e-1), msg
+                                      rtol=1.0e-12), msg
 
         # In either case of vector layers, we check that the coordinates
         # are the same
@@ -170,32 +163,12 @@ def check_data_integrity(layer_files):
             assert len(layer) > 0, msg
 
     # Check that arrays are aligned.
-    #
-    # We have observerd Geoserver resolution changes - see ticket:102
-    # https://github.com/AIFDR/riab/issues/102
-    #
-    # However, both rasters are now downloaded with exactly the same
-    # parameters since we have made bbox and resolution variable in ticket:103
-    # https://github.com/AIFDR/riab/issues/103
-    #
-    # So if they are still not aligned, we raise an Exception
+    M = layer_files[0].rows
+    N = layer_files[0].columns
+    refname = layer_files[0].get_name()
 
-    # First find the minimum dimensions
-    M = N = sys.maxint
-    refname = ''
     for layer in layer_files:
         if layer.is_raster:
-            if layer.rows < M:
-                refname = layer.get_name()
-                M = layer.rows
-            if layer.columns < N:
-                refname = layer.get_name()
-                N = layer.columns
-
-    # Then check for alignment
-    for layer in layer_files:
-        if layer.is_raster:
-            data = layer.get_data()
 
             msg = ('Rasters are not aligned!\n'
                    'Raster %s has %i rows but raster %s has %i rows\n'
@@ -210,41 +183,6 @@ def check_data_integrity(layer_files):
                                             layer.columns,
                                             refname, N))
             assert layer.columns == N, msg
-
-
-# FIXME (Ole): This may be obsolete now
-# def get_common_resolution(haz_metadata, exp_metadata):
-#     """Determine common resolution for raster layers
-
-#     Input
-#         haz_metadata: Metadata for hazard layer
-#         exp_metadata: Metadata for exposure layer
-
-#     Output
-#         raster_resolution: Common resolution or None
-# (in case of vector layers)
-#     """
-
-#     # Determine resolution in case of raster layers
-#     haz_res = exp_res = None
-#     if haz_metadata['layer_type'] == 'raster':
-#         haz_res = haz_metadata['resolution']
-
-#     if exp_metadata['layer_type'] == 'raster':
-#         exp_res = exp_metadata['resolution']
-
-#     # Determine common resolution in case of two raster layers
-#     if haz_res is None or exp_res is None:
-#         # This means native resolution will be used
-#         raster_resolution = None
-#     else:
-#         # Take the minimum
-#         resx = min(haz_res[0], exp_res[0])
-#         resy = min(haz_res[1], exp_res[1])
-
-#         raster_resolution = (resx, resy)
-
-#     return raster_resolution
 
 
 def get_bounding_boxes(haz_data, exp_data, req_bbox):

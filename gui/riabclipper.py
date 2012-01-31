@@ -1,5 +1,4 @@
-"""
-Disaster risk assessment tool developed by AusAid -
+"""Disaster risk assessment tool developed by AusAid -
   **RiabClipper implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
