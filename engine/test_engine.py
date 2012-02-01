@@ -1093,7 +1093,7 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
 
         bbox, _ = get_bounding_boxes(hazard_filename, exposure_filename,
-                                  view_port)
+                                     view_port)
         assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
 
         view_port = [105.3000035,

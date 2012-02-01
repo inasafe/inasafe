@@ -20,19 +20,24 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import sys
 import os
 import unicodedata
+
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(pardir)
+
+
 from riabexceptions import (InsufficientParametersException,
                             KeywordNotFoundException,
                             StyleInfoNotFoundException,
                             InvalidParameterException)
 
 from utilities import getExceptionWithStacktrace
-# Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.dirname(__file__))
-sys.path.append(pardir)
+
 from impact_functions import get_admissible_plugins, get_plugins
 from engine.core import calculate_impact
 from storage.core import read_layer
 from storage.utilities import read_keywords, bbox_intersection
+from storage.utilities import buffered_bounding_box
 import threading
 from PyQt4.QtCore import QObject, pyqtSignal
 
@@ -85,8 +90,9 @@ def getOptimalExtent(theHazardGeoExtent,
     Raises:
         Any exceptions raised by the RIAB library will be propogated.
     """
-        # .. note:: The get_bounding_boxes function below assumes that
-        #            all inputs are in EPSG:4326
+
+    # .. note:: The get_bounding_boxes function below assumes that
+    #           all inputs are in EPSG:4326
     myOptimalExtent = bbox_intersection(theHazardGeoExtent,
                                         theExposureGeoExtent,
                                         theViewportGeoExtent)
@@ -97,6 +103,7 @@ def getOptimalExtent(theHazardGeoExtent,
                'done. Please make sure you pan to where the data is and '
                'that hazard and exposure data overlaps.')
         raise Exception(msg)
+
     return myOptimalExtent
 
 

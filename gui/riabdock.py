@@ -654,13 +654,12 @@ class RiabDock(QtGui.QDockWidget):
         myViewportGeoExtent = self.viewportGeoArray()
 
         # Get the Hazard extents as an array in EPSG:4326
-        myHazardGeoExtent = self.extentToGeoArray(
-                            myHazardLayer.extent(),
-                            myHazardLayer.crs())
+        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
+                                                  myHazardLayer.crs())
+
         # Get the Exposure extents as an array in EPSG:4326
-        myExposureGeoExtent = self.extentToGeoArray(
-                            myExposureLayer.extent(),
-                            myExposureLayer.crs())
+        myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
+                                                    myExposureLayer.crs())
 
         # Now work out the optimal extent between the two layers and
         # the current view extent. The optimal extent is the intersection
@@ -670,8 +669,8 @@ class RiabDock(QtGui.QDockWidget):
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
             myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                                    myExposureGeoExtent,
-                                    myViewportGeoExtent)
+                                           myExposureGeoExtent,
+                                           myViewportGeoExtent)
         except Exception, e:
             msg = ('<p>There '
                    'was insufficient overlap between the input layers '
@@ -685,13 +684,13 @@ class RiabDock(QtGui.QDockWidget):
                    '<p>Hazard Geo Extent: %s</p>'
                    '<p>Exposure Geo Extent: %s</p>'
                    '<p>Details: %s</p>'
-                    %
-                  (myHazardLayer.source(),
-                   myExposureLayer.source(),
-                   myViewportGeoExtent,
-                   myHazardGeoExtent,
-                   myExposureGeoExtent,
-                   str(e)))
+                   %
+                   (myHazardLayer.source(),
+                    myExposureLayer.source(),
+                    myViewportGeoExtent,
+                    myHazardGeoExtent,
+                    myExposureGeoExtent,
+                    str(e)))
             raise Exception(msg)
 
         # Next work out the ideal spatial resolution for rasters
@@ -699,10 +698,12 @@ class RiabDock(QtGui.QDockWidget):
         # rather than the layers native extents so that we can pass
         # the ideal cell size and extents to the layer prep routines
         # and do all preprocessing in a single operation.
+        # FIXME (Ole): Consider pushing this operation into a function
         myCellSize = None
         if (myHazardLayer.type() == QgsMapLayer.RasterLayer and
             myExposureLayer.type() == QgsMapLayer.RasterLayer):
-            # if they are both in EPSG:4326, simply take the best res
+
+            # If they are both in EPSG:4326, simply take the best res
             if (myExposureLayer.crs().authid() == 'EPSG:4326' and
                 myHazardLayer.crs().authid() == 'EPSG:4326'):
                 if (myExposureLayer.rasterUnitsPerPixel() >
@@ -710,9 +711,9 @@ class RiabDock(QtGui.QDockWidget):
                     myCellSize = myHazardLayer.rasterUnitsPerPixel()
                 else:
                     myCellSize = myExposureLayer.rasterUnitsPerPixel()
-            # .. todo:: FIXME Consider another clause for single raster
-            #    in inputs that is EPSG:4326 and can have its pixel size used
-            #    directly
+                    # .. todo:: FIXME Consider another clause for single
+                    #           raster in inputs that is EPSG:4326 and can
+                    #           have its pixel size used directly
             else:
                 # Otherwise, work it out based on EPSG:4326 representations
                 # of their extents
@@ -729,12 +730,23 @@ class RiabDock(QtGui.QDockWidget):
                 else:
                     myCellSize = myExposureGeoCellSize
 
+        # If exposure is vector data grow hazard raster layer to ensure
+        # there are enough pixels for points at the edge of the view port
+        # to be interpolated correctly. This requires resolution to be ready
+        if (myHazardLayer.type() == QgsMapLayer.RasterLayer and
+            myExposureLayer.type() == QgsMapLayer.VectorLayer):
+            # haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)
+            myBufferedGeoExtent = myGeoExtent
+        else:
+            # No change
+            myBufferedGeoExtent = myGeoExtent
+
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
-        myClippedExposurePath = clipLayer(myExposureLayer,
-                                          myGeoExtent, myCellSize)
         myClippedHazardPath = clipLayer(myHazardLayer,
+                                          myBufferedGeoExtent, myCellSize)
+        myClippedExposurePath = clipLayer(myExposureLayer,
                                           myGeoExtent, myCellSize)
 
         return myClippedHazardPath, myClippedExposurePath
