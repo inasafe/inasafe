@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
-from utilities import getExceptionWithStacktrace
+from utilities import getExceptionWithStacktrace, getWGS84resolution
 from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
                        QgsSymbolV2, QgsRendererRangeV2,
@@ -704,7 +704,7 @@ class RiabDock(QtGui.QDockWidget):
             myExposureLayer.type() == QgsMapLayer.RasterLayer):
 
             # If they are both in EPSG:4326, simply take the best res
-            if (myExposureLayer.crs().authid() == 'EPSG:4326' and
+            if False and (myExposureLayer.crs().authid() == 'EPSG:4326' and
                 myHazardLayer.crs().authid() == 'EPSG:4326'):
                 if (myExposureLayer.rasterUnitsPerPixel() >
                    myHazardLayer.rasterUnitsPerPixel()):
@@ -715,16 +715,13 @@ class RiabDock(QtGui.QDockWidget):
                     #           raster in inputs that is EPSG:4326 and can
                     #           have its pixel size used directly
             else:
-                # Otherwise, work it out based on EPSG:4326 representations
-                # of their extents
-                myHazardColumns = myHazardLayer.width()
-                myExposureColumns = myExposureLayer.width()
-                myHazardGeoWidth = abs(myHazardGeoExtent[3] -
-                                       myHazardGeoExtent[0])
-                myExposureGeoWidth = abs(myExposureGeoExtent[3] -
-                                       myExposureGeoExtent[0])
-                myHazardGeoCellSize = myHazardGeoWidth / myHazardColumns
-                myExposureGeoCellSize = myExposureGeoWidth / myExposureColumns
+                # Otherwise,
+                myHazardGeoCellSize = getWGS84resolution(myHazardLayer,
+                                                         myHazardGeoExtent)
+
+                myExposureGeoCellSize = getWGS84resolution(myExposureLayer,
+                                                           myExposureGeoExtent)
+
                 if myHazardGeoCellSize < myExposureGeoCellSize:
                     myCellSize = myHazardGeoCellSize
                 else:
@@ -799,6 +796,8 @@ class RiabDock(QtGui.QDockWidget):
     def extentToGeoArray(self, theExtent, theSourceCrs):
         """Convert the supplied extent to geographic and return as as array"""
 
+        # FIXME (Ole): As there is no reference to self, this function
+        #              should be a general helper outside the class
         myGeoCrs = QgsCoordinateReferenceSystem()
         myGeoCrs.createFromEpsg(4326)
         myXForm = QgsCoordinateTransform(

@@ -22,6 +22,7 @@ import sys
 import traceback
 import tempfile
 
+from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem
 
 def getExceptionWithStacktrace(e, html=False):
     """Convert exception into a string and and stack trace
@@ -80,3 +81,43 @@ def getTempDir(theSubDirectory=None):
         os.makedirs(myPath)
 
     return myPath
+
+
+def getWGS84resolution(theLayer, theGeoExtent=None):
+    """Return resolution of raster layer in EPSG:4326
+
+    Input
+        theLayer: Raster layer
+        theGeoExtent: Bounding box in EPSG:4326
+        # FIXME (Ole), the second argumunt should be obtained within
+                       this function to make it independent
+    Output
+        resolution.
+
+    If input layer is already in EPSG:4326, simply return the resolution
+    If not, work it out based on EPSG:4326 representations of its extent
+    """
+
+    msg = ('Input layer to getWGS84resolution must be a raster layer. '
+           'I got: %s' % str(theLayer.type())[1:-1])
+    assert theLayer.type() == QgsMapLayer.RasterLayer, msg
+
+    if theLayer.crs().authid() == 'EPSG:4326':
+        # If it is already in EPSG:4326, simply use the native resolution
+        myCellSize = theLayer.rasterUnitsPerPixel()
+    else:
+        # Otherwise, work it out based on EPSG:4326 representations of
+        # its extent
+
+        # Reproject extent to EPSG:4326
+        myGeoCrs = QgsCoordinateReferenceSystem()
+        myGeoCrs.createFromEpsg(4326)
+
+        # Estimate cellsize
+        # FIXME (Ole): Get geoextent from layer
+        myColumns = theLayer.width()
+        myGeoWidth = abs(myGeoExtent[3] - myGeoExtent[0])
+        myCellSize = myGeoWidth / myColumns
+
+
+    return myCellSize
