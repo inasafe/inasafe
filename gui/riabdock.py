@@ -753,18 +753,18 @@ class RiabDock(QtGui.QDockWidget):
         #            User's own data'
 
         # FIXME: Turn paths back into layers temporarily and print res
-        myExposureLayer = QgsRasterLayer(myClippedExposurePath, 'exp')
-        myHazardLayer = QgsRasterLayer(myClippedHazardPath, 'haz')
+        #myExposureLayer = QgsRasterLayer(myClippedExposurePath, 'exp')
+        #myHazardLayer = QgsRasterLayer(myClippedHazardPath, 'haz')
 
-        myHazardUPP = myHazardLayer.rasterUnitsPerPixel()
-        myExposureUPP = myExposureLayer.rasterUnitsPerPixel()
+        #myHazardUPP = myHazardLayer.rasterUnitsPerPixel()
+        #myExposureUPP = myExposureLayer.rasterUnitsPerPixel()
 
         # FIXME (Ole): This causes some strange failures. Revisit!
         # Check that resolutions are equal up to some precision
 
-        msg = ('Resampled pixels sizes did not match: '
-               'Exposure pixel size = %.12f, '
-               'Hazard pixel size = %.12f' % (myExposureUPP, myHazardUPP))
+        #msg = ('Resampled pixels sizes did not match: '
+        #       'Exposure pixel size = %.12f, '
+        #       'Hazard pixel size = %.12f' % (myExposureUPP, myHazardUPP))
         #assert numpy.allclose(myExposureUPP, myHazardUPP,
         #                      # FIXME (Ole): I would like to make this tighter
         #                      rtol=1.0e-6, atol=1.0e-3), msg
