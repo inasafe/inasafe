@@ -106,6 +106,24 @@ def getOptimalExtent(theHazardGeoExtent,
 
     return myOptimalExtent
 
+def getBufferedExtent(theGeoExtent, theCellSize):
+    """Grow bounding box with one unit of resolution in each direction
+
+    Input
+        bbox: Bounding box with format [W, S, E, N]
+        resolution: (resx, resy) - Raster resolution in each direction.
+                    res - Raster resolution in either direction
+                    If resolution is None bbox is returned unchanged.
+
+    Ouput
+        Adjusted bounding box
+
+    Note: See docstring for underlying function buffered_bounding_box
+          for more details.
+    """
+
+    return buffered_bounding_box(theGeoExtent, theCellSize)
+
 
 class ImpactCalculator():
     """A class to compute an impact scenario."""

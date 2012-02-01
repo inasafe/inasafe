@@ -30,8 +30,9 @@ from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
                        QgsCoordinateTransform)
 from impactcalculator import ImpactCalculator
 from riabclipper import clipLayer
-from impactcalculator import getOptimalExtent
-# don't remove this even if it is flagged as unused by your ide
+from impactcalculator import getOptimalExtent, getBufferedExtent
+
+# Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
 
@@ -723,9 +724,9 @@ class RiabDock(QtGui.QDockWidget):
                 # the view port to be interpolated correctly. This requires
                 # resolution to be available
                 assert myExposureLayer.type() == QgsMapLayer.VectorLayer
+                myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
+                                                        myHazardGeoCellSize)
 
-                # haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)
-                myBufferedGeoExtent = myGeoExtent
         else:
             # Hazard layer is vector
             if myExposureLayer.type() == QgsMapLayer.RasterLayer:

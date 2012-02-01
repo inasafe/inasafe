@@ -369,17 +369,12 @@ class RiabDockTest(unittest.TestCase):
 
         #print myResult
         # Post clip on steroids refactor
-        # < 1 m:    1929
-        # 1 - 3 m:    83
+        # < 1 m:    1923
+        # 1 - 3 m:    89
         # > 3 m:    0
-
         msg = 'Result not as expected: %s' % myResult
-        # Exected before clip on steroids refactor
-        #assert '3204' in myResult, msg
-        #assert '311' in myResult, msg
-        #assert '6' in myResult, msg
-        assert '1929' in myResult, msg
-        assert '83' in myResult, msg
+        assert '1923' in myResult, msg
+        assert '89' in myResult, msg
         assert '0' in myResult, msg
 
     def test_runFloodPopulationImpactFunction(self):

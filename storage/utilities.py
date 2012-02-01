@@ -403,7 +403,6 @@ def minimal_bounding_box(bbox, min_res, eps=1.0e-6):
 def buffered_bounding_box(bbox, resolution):
     """Grow bounding box with one unit of resolution in each direction
 
-
     This will ensure there is enough pixels to robustly provide
     interpolated values without having to painstakingly deal with
     all corner cases such as 1 x 1, 1 x 2 and 2 x 1 arrays.
