@@ -106,6 +106,7 @@ def getOptimalExtent(theHazardGeoExtent,
 
     return myOptimalExtent
 
+
 def getBufferedExtent(theGeoExtent, theCellSize):
     """Grow bounding box with one unit of resolution in each direction
 

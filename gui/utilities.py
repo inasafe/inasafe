@@ -24,6 +24,7 @@ import tempfile
 
 from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem
 
+
 def getExceptionWithStacktrace(e, html=False):
     """Convert exception into a string and and stack trace
 
@@ -118,6 +119,5 @@ def getWGS84resolution(theLayer, theGeoExtent=None):
         myColumns = theLayer.width()
         myGeoWidth = abs(theGeoExtent[3] - theGeoExtent[0])
         myCellSize = myGeoWidth / myColumns
-
 
     return myCellSize

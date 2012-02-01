@@ -726,7 +726,6 @@ class RiabDock(QtGui.QDockWidget):
                 assert myExposureLayer.type() == QgsMapLayer.VectorLayer
                 myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
                                                         myHazardGeoCellSize)
-
         else:
             # Hazard layer is vector
             if myExposureLayer.type() == QgsMapLayer.RasterLayer:
@@ -745,7 +744,6 @@ class RiabDock(QtGui.QDockWidget):
                                           myGeoExtent, myCellSize)
 
         return myClippedHazardPath, myClippedExposurePath
-
 
         ############################################################
         # logic checked to here..............

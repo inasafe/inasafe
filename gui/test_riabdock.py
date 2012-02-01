@@ -533,7 +533,6 @@ class RiabDockTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
 
-
         # Check that none of these  get a NaN value:
         assert 'Unknown' in myResult
 
@@ -545,7 +544,6 @@ class RiabDockTest(unittest.TestCase):
         #              result layer and check that all buildings
         #              have values.
         #              Tim, how do we get the output filename?
-
 
     def test_loadLayers(self):
         """Layers can be loaded and list widget was updated appropriately
