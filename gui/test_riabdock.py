@@ -17,8 +17,14 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
+import sys
+import os
+
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
@@ -32,6 +38,7 @@ from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from qgisinterface import QgisInterface
 from utilities_test import getQgisTestApp
 from gui.riabdock import RiabDock
+from storage.utilities import read_keywords
 
 # Get QGis app handle
 QGISAPP = getQgisTestApp()
@@ -87,11 +94,7 @@ def loadLayers():
     for myLayer in QgsMapLayerRegistry.instance().mapLayers():
         QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
 
-    # Now go ahead and load our layers
-
     # FIXME (Ole): Use environment variable
-    # FIXME (Ole): Write as a for loop as in the tests in engine
-
     myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     myData = os.path.join(myRoot, 'riab_test_data')
 
@@ -102,13 +105,26 @@ def loadLayers():
                   'tsunami_max_inundation_depth_BB_utm.asc',
                   'tsunami_exposure_BB.shp',
                   'Flood_Current_Depth_Jakarta_geographic.asc',
-                  'Population_Jakarta_geographic.asc']
+                  'Population_Jakarta_geographic.asc',
+                  'eq_yogya_2006.asc',
+                  'OSM_building_polygons_20110905.shp']
 
+    # Now go ahead and load our layers
+    number_exp_layers = 0
+    number_haz_layers = 0
     myCanvasLayers = []
     for myFile in myFileList:
         # Extract basename and absolute path
         myBaseName, myExt = os.path.splitext(myFile)
         myPath = os.path.join(myData, myFile)
+        myKeywordPath = myPath[:-4] + '.keywords'
+
+        # Determine if layer is hazard or exposure
+        kwds = read_keywords(myKeywordPath)
+        if kwds['category'] == 'hazard':
+            number_haz_layers += 1
+        elif kwds['category'] == 'exposure':
+            number_exp_layers += 1
 
         # Create QGis Layer Instance
         if myExt in ['.asc', '.tif']:
@@ -133,6 +149,8 @@ def loadLayers():
     #       tests will break.
     canvas.setLayerSet(myCanvasLayers)
     form.getLayers()
+
+    return number_haz_layers, number_exp_layers
 
 
 def setCanvasCrs(theEpsgId, theOtfpFlag=False):
@@ -479,14 +497,16 @@ class RiabDockTest(unittest.TestCase):
         """
 
         clearForm()
-        loadLayers()
+        number_haz_layers, number_exp_layers = loadLayers()
         msg = 'Expect 1 layer in hazard list widget but got %s' % \
               form.ui.cboHazard.count()
-        self.assertEqual(form.ui.cboHazard.count(), 3), msg
+        self.assertEqual(form.ui.cboHazard.count(),
+                         number_haz_layers), msg
 
         msg = 'Expect 1 layer in exposure list widget but got %s' % \
               form.ui.cboExposure.count()
-        self.assertEqual(form.ui.cboExposure.count(), 4), msg
+        self.assertEqual(form.ui.cboExposure.count(),
+                         number_exp_layers), msg
 
 
 if __name__ == '__main__':
