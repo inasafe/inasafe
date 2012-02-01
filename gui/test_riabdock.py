@@ -571,6 +571,6 @@ class RiabDockTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(RiabDockTest, 'test_issue45')
+    suite = unittest.makeSuite(RiabDockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

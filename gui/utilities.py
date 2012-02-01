@@ -116,7 +116,7 @@ def getWGS84resolution(theLayer, theGeoExtent=None):
         # Estimate cellsize
         # FIXME (Ole): Get geoextent from layer
         myColumns = theLayer.width()
-        myGeoWidth = abs(myGeoExtent[3] - myGeoExtent[0])
+        myGeoWidth = abs(theGeoExtent[3] - theGeoExtent[0])
         myCellSize = myGeoWidth / myColumns
 
 
