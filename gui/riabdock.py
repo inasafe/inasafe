@@ -642,6 +642,7 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
+
         # Get the hazard and exposure layers selected in the combos
         myHazardLayer = self.getHazardLayer()
         myExposureLayer = self.getExposureLayer()
@@ -698,37 +699,36 @@ class RiabDock(QtGui.QDockWidget):
         # rather than the layers native extents so that we can pass
         # the ideal cell size and extents to the layer prep routines
         # and do all preprocessing in a single operation.
+        myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
         myCellSize = None
-        if (myHazardLayer.type() == QgsMapLayer.RasterLayer and
-            myExposureLayer.type() == QgsMapLayer.RasterLayer):
-
+        if myHazardLayer.type() == QgsMapLayer.RasterLayer:
             myHazardGeoCellSize = getWGS84resolution(myHazardLayer,
                                                      myHazardGeoExtent)
 
-            myExposureGeoCellSize = getWGS84resolution(myExposureLayer,
-                                                       myExposureGeoExtent)
+            if myExposureLayer.type() == QgsMapLayer.RasterLayer:
+                myExposureGeoCellSize = getWGS84resolution(myExposureLayer,
+                                                           myExposureGeoExtent)
 
-            if myHazardGeoCellSize < myExposureGeoCellSize:
-                myCellSize = myHazardGeoCellSize
+                if myHazardGeoCellSize < myExposureGeoCellSize:
+                    myCellSize = myHazardGeoCellSize
+                else:
+                    myCellSize = myExposureGeoCellSize
             else:
-                myCellSize = myExposureGeoCellSize
+                # If exposure is vector data grow hazard raster layer to
+                # ensure there are enough pixels for points at the edge of
+                # the view port to be interpolated correctly. This requires
+                # resolution to be available
+                assert myExposureLayer.type() == QgsMapLayer.VectorLayer
 
-        # If exposure is vector data grow hazard raster layer to ensure
-        # there are enough pixels for points at the edge of the view port
-        # to be interpolated correctly. This requires resolution to be ready
-        if (myHazardLayer.type() == QgsMapLayer.RasterLayer and
-            myExposureLayer.type() == QgsMapLayer.VectorLayer):
-            # haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)
-            myBufferedGeoExtent = myGeoExtent
-        else:
-            # No change
-            myBufferedGeoExtent = myGeoExtent
+                # haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)
+                myBufferedGeoExtent = myGeoExtent
+
 
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
         myClippedHazardPath = clipLayer(myHazardLayer,
-                                          myBufferedGeoExtent, myCellSize)
+                                        myBufferedGeoExtent, myCellSize)
         myClippedExposurePath = clipLayer(myExposureLayer,
                                           myGeoExtent, myCellSize)
 
