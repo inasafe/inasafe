@@ -519,8 +519,7 @@ class RiabDockTest(unittest.TestCase):
         QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
 
-        # Choose impact function (second item in the list)
-        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Down)
+        # Choose impact function
         QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
