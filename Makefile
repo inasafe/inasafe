@@ -113,3 +113,10 @@ list_gis_packages:
 	@dpkg -l | grep qgis || true
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
+
+pylint:
+	@echo
+	@echo "---------------------------------------"
+	@echo "Pylint report                          "
+	@echo "---------------------------------------"
+	pylint --disable=C,R storage engine gui
