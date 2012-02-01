@@ -199,6 +199,12 @@ def setBatemansBayGeoExtent():
     canvas.setExtent(myRect)
 
 
+def setYogyaGeoExtent():
+    """Zoom to an area know to be occupied by both Jakarta layers in Geo"""
+    myRect = QgsRectangle(110.348, -7.732, 110.368, -7.716)
+    canvas.setExtent(myRect)
+
+
 class RiabDockTest(unittest.TestCase):
     """Test the risk in a box GUI"""
 
@@ -492,6 +498,61 @@ class RiabDockTest(unittest.TestCase):
         #Terdampak (x 1000):    2366
         assert '2366' in myResult, msg
 
+    def test_issue45(self):
+        """Points near the edge of a raster hazard layer are interpolated OK"""
+
+        # Push OK with the left mouse button
+        clearForm()
+        loadLayers()
+        myButton = form.ui.pbnRunStop
+        setCanvasCrs(GEOCRS, True)
+        setYogyaGeoExtent()
+
+        msg = 'Run button was not enabled'
+        assert myButton.isEnabled(), msg
+
+        # Hazard layers
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Enter)
+
+        # Exposure layers
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+
+        # Choose impact function (second item in the list)
+        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Enter)
+
+        # Check that layers and impact function are correct
+        D = getUiState(form.ui)
+        msg = 'Got unexpected state: %s' % str(D)
+        assert D == {'Hazard': 'Yogya2006',
+                     'Exposure': 'OSM_building_polygons_20110905',
+                     'Impact Function': 'Earthquake Guidelines Function',
+                     'Run Button Enabled': True}, msg
+
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+
+
+        # Check that none of these  get a NaN value:
+        assert 'Unknown' in myResult
+
+        msg = ('Some buildings returned by Earthquake guidelines function '
+               'had NaN values. Result: \n %s' % myResult)
+        assert 'Unknown (NaN):	196' not in myResult, msg
+
+        # FIXME (Ole): A more robust test would be to load the
+        #              result layer and check that all buildings
+        #              have values.
+        #              Tim, how do we get the output filename?
+
+
     def test_loadLayers(self):
         """Layers can be loaded and list widget was updated appropriately
         """
@@ -510,6 +571,6 @@ class RiabDockTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(RiabDockTest, 'test')
+    suite = unittest.makeSuite(RiabDockTest, 'test_issue45')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

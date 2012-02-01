@@ -71,13 +71,12 @@ def getTempDir(theSubDirectory=None):
        Any errors from the underlying system calls.
     """
     myDir = tempfile.gettempdir()
-    if os.name is 'nt':  # windows
+    if os.name is 'nt':  # Windows
         myDir = 'c://temp'
     myPath = os.path.join(myDir, 'riab')
     if theSubDirectory is not None:
         myPath = os.path.join(myPath, 'theSubDirectory')
     if not os.path.exists(myPath):
         os.makedirs(myPath)
-
 
     return myPath
