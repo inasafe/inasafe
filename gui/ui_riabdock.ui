@@ -39,7 +39,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Apabile terjadi</string>
+          <string>Apabila terjadi</string>
          </property>
          <property name="buddy">
           <cstring>cboHazard</cstring>
