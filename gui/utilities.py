@@ -75,6 +75,8 @@ def getTempDir(theSubDirectory=None):
     myDir = tempfile.gettempdir()
     if os.name is 'nt':  # Windows
         myDir = 'c://temp'
+    elif os.name is 'posix':  # linux, osx
+        myDir = '/tmp'
     myPath = os.path.join(myDir, 'riab')
     if theSubDirectory is not None:
         myPath = os.path.join(myPath, 'theSubDirectory')
