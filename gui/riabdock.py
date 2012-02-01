@@ -702,10 +702,14 @@ class RiabDock(QtGui.QDockWidget):
         myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
         myCellSize = None
         if myHazardLayer.type() == QgsMapLayer.RasterLayer:
+
+            # Hazard layer is raster
             myHazardGeoCellSize = getWGS84resolution(myHazardLayer,
                                                      myHazardGeoExtent)
 
             if myExposureLayer.type() == QgsMapLayer.RasterLayer:
+
+                # In case of two raster layers establish common resolution
                 myExposureGeoCellSize = getWGS84resolution(myExposureLayer,
                                                            myExposureGeoExtent)
 
@@ -722,7 +726,14 @@ class RiabDock(QtGui.QDockWidget):
 
                 # haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)
                 myBufferedGeoExtent = myGeoExtent
-
+        else:
+            # Hazard layer is vector
+            if myExposureLayer.type() == QgsMapLayer.RasterLayer:
+                msg = 'Raster exposure with vector hazard not implemented'
+                raise Exception(msg)
+            else:
+                # Both layers are vector
+                pass
 
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
@@ -733,6 +744,7 @@ class RiabDock(QtGui.QDockWidget):
                                           myGeoExtent, myCellSize)
 
         return myClippedHazardPath, myClippedExposurePath
+
 
         ############################################################
         # logic checked to here..............
@@ -825,4 +837,4 @@ class RiabDock(QtGui.QDockWidget):
         """Given an html snippet, wrap it in a page header and footer
         and display it in the wvResults widget."""
         self.ui.wvResults.setHtml(self.htmlHeader() + theMessage +
-                                self.htmlFooter())
+                                  self.htmlFooter())
