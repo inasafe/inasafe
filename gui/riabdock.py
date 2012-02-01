@@ -698,34 +698,20 @@ class RiabDock(QtGui.QDockWidget):
         # rather than the layers native extents so that we can pass
         # the ideal cell size and extents to the layer prep routines
         # and do all preprocessing in a single operation.
-        # FIXME (Ole): Consider pushing this operation into a function
         myCellSize = None
         if (myHazardLayer.type() == QgsMapLayer.RasterLayer and
             myExposureLayer.type() == QgsMapLayer.RasterLayer):
 
-            # If they are both in EPSG:4326, simply take the best res
-            if False and (myExposureLayer.crs().authid() == 'EPSG:4326' and
-                myHazardLayer.crs().authid() == 'EPSG:4326'):
-                if (myExposureLayer.rasterUnitsPerPixel() >
-                   myHazardLayer.rasterUnitsPerPixel()):
-                    myCellSize = myHazardLayer.rasterUnitsPerPixel()
-                else:
-                    myCellSize = myExposureLayer.rasterUnitsPerPixel()
-                    # .. todo:: FIXME Consider another clause for single
-                    #           raster in inputs that is EPSG:4326 and can
-                    #           have its pixel size used directly
+            myHazardGeoCellSize = getWGS84resolution(myHazardLayer,
+                                                     myHazardGeoExtent)
+
+            myExposureGeoCellSize = getWGS84resolution(myExposureLayer,
+                                                       myExposureGeoExtent)
+
+            if myHazardGeoCellSize < myExposureGeoCellSize:
+                myCellSize = myHazardGeoCellSize
             else:
-                # Otherwise,
-                myHazardGeoCellSize = getWGS84resolution(myHazardLayer,
-                                                         myHazardGeoExtent)
-
-                myExposureGeoCellSize = getWGS84resolution(myExposureLayer,
-                                                           myExposureGeoExtent)
-
-                if myHazardGeoCellSize < myExposureGeoCellSize:
-                    myCellSize = myHazardGeoCellSize
-                else:
-                    myCellSize = myExposureGeoCellSize
+                myCellSize = myExposureGeoCellSize
 
         # If exposure is vector data grow hazard raster layer to ensure
         # there are enough pixels for points at the edge of the view port
