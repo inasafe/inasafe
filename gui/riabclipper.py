@@ -16,7 +16,8 @@ __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os, sys
+import os
+import sys
 import shutil
 from PyQt4.QtCore import QString
 from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
