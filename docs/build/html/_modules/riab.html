@@ -3,17 +3,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>riab &mdash; Risk-In-A-Box 0.0.1 documentation</title>
-    
+    <title>riab &mdash; Risk-In-A-Box v0.0.1 documentation</title>
     <link rel="stylesheet" href="../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/print.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -27,12 +24,12 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/theme_extras.js"></script>
-    <link rel="top" title="Risk-In-A-Box 0.0.1 documentation" href="../index.html" />
+    <link rel="top" title="Risk-In-A-Box v0.0.1 documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
       <div class="header"><img class="rightlogo" src="../_static/icon.png" alt="Logo"/><h1 class="heading"><a href="../index.html">
-          <span>Risk-In-A-Box 0.0.1 documentation</span></a></h1>
+          <span>Risk-In-A-Box v0.0.1 documentation</span></a></h1>
         <h2 class="heading"><span>riab</span></h2>
       </div>
       <div class="topnav">
@@ -66,10 +63,20 @@
 <span class="n">__copyright__</span> <span class="o">+=</span> <span class="s">&#39;Disaster Reduction&#39;</span>
 
 <span class="c"># Import the PyQt and QGIS libraries</span>
-<span class="kn">from</span> <span class="nn">PyQt4.QtCore</span> <span class="kn">import</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">SIGNAL</span><span class="p">,</span> <span class="n">QCoreApplication</span><span class="p">,</span> <span class="n">Qt</span>
+<span class="kn">from</span> <span class="nn">PyQt4.QtCore</span> <span class="kn">import</span> <span class="p">(</span>
+                          <span class="n">QObject</span><span class="p">,</span>
+                          <span class="n">QLocale</span><span class="p">,</span>
+                          <span class="n">QTranslator</span><span class="p">,</span>
+                          <span class="n">SIGNAL</span><span class="p">,</span>
+                          <span class="n">QCoreApplication</span><span class="p">,</span>
+                          <span class="n">Qt</span><span class="p">,</span>
+                          <span class="n">QSettings</span><span class="p">,</span>
+                          <span class="n">QVariant</span><span class="p">)</span>
+
 <span class="kn">from</span> <span class="nn">PyQt4.QtGui</span> <span class="kn">import</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QIcon</span><span class="p">,</span> <span class="n">QApplication</span>
-<span class="c"># Import the code for the dock</span>
 <span class="kn">from</span> <span class="nn">riabdock</span> <span class="kn">import</span> <span class="n">RiabDock</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">..todo:: Find out how to suppress warnings as this import is needed</span>
 <span class="sd">  but not used directly.</span>
@@ -103,6 +110,25 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c"># Save reference to the QGIS interface</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">iface</span> <span class="o">=</span> <span class="n">iface</span>
+
+        <span class="c"># See if QGIS wants to override the system locale</span>
+        <span class="c"># and then see if we can get a valid translation file</span>
+        <span class="c"># for whatever locale is effectively being used.</span>
+        <span class="n">myOverrideFlag</span> <span class="o">=</span> <span class="n">QSettings</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#39;locale/overrideFlag&#39;</span><span class="p">,</span>
+                                            <span class="n">QVariant</span><span class="p">(</span><span class="bp">False</span><span class="p">))</span><span class="o">.</span><span class="n">toBool</span><span class="p">()</span>
+        <span class="n">myLocalName</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">myOverrideFlag</span><span class="p">:</span>
+            <span class="n">myLocalName</span> <span class="o">=</span> <span class="n">QLocale</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">myLocalName</span> <span class="o">=</span> <span class="n">QSettings</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s">&#39;locale/userLocale&#39;</span><span class="p">,</span>
+                                            <span class="n">QVariant</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span>
+        <span class="n">myRoot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&#39;..&#39;</span><span class="p">))</span>
+        <span class="n">myTranslationPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">myRoot</span><span class="p">,</span> <span class="s">&#39;i18n&#39;</span><span class="p">,</span>
+                        <span class="s">&#39;rastertransparency_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">myLocalName</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.qm&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">myTranslationPath</span><span class="p">):</span>
+            <span class="n">myTranslator</span> <span class="o">=</span> <span class="n">QTranslator</span><span class="p">()</span>
+            <span class="n">myTranslator</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">myTranslationPath</span><span class="p">)</span>
+            <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">installTranslator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translator</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Riab.initGui"><a class="viewcode-back" href="../riab.html#riab.Riab.initGui">[docs]</a>    <span class="k">def</span> <span class="nf">initGui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Gui initialisation procedure (for QGIS plugin api).</span>
@@ -203,7 +229,7 @@
 
     <div class="footer">
         &copy; Copyright 2012, Ole Moller.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

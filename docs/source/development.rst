@@ -66,14 +66,77 @@ notes on running tests below.
 To run the plugin start QGIS and enable it from the :menuselection:`Plugins --> Manage Plugins`
 menu. 
 
-Remote Debugging with and IDE
-.............................
+Development using Eclipse IDE with PyDev
+----------------------------------------
 
 If you wish to use an IDE for development, please refer to 
 `this article <http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/>`_
-for detailed information on how you can do so.
+for detailed information on how to get the basic Eclipse with PyDev setup.
 
-For remote debugging, you should add pydevd to your PYTHONPATH before starting QGIS
+Configuring your Eclipse project
+................................
+
+The procedure for doing this is to do: :menuselection:`File --> New --> Project...` and
+then from the resulting dialog do :menuselection:`PyDev --> PyDev Project`.
+
+In the resulting project dialog, set the following details:
+
+* :guilabel:`Project name:` : :kbd:`risk_in_a_box`
+* :guilabel:`Use default` : :kbd:`uncheck`
+* :guilabel:`Directory` : :kbd:`/home/<your user name/.qgis/python/plugins/risk_in_a_box/`
+* :guilabel:`Choose project type` : :kbd:`Python`
+* :guilabel:`Grammar Version` : :kbd:`2.7`
+* :guilabel:`Add project directory to PYTHONPATH?` : :kbd:`check`
+
+At this point you should should click the link entitled 'Please configure an interpreter 
+in related preferences before continuing.' And on the resulting dialog do:
+
+
+* :guilabel:`Python Interpreters: New...` : :kbd:`click this button`
+
+In the dialog that appears do:
+
+* :guilabel:`Interpreter Name` : :kbd:`System Python 2.7`
+* :guilabel:`Interpreter Executable` : :kbd:`/usr/bin/python`
+* :guilabel:`OK Button` : :kbd:`click this button`
+
+Another dialog will appear. Tick the first entry in the list that points to your::
+
+~/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev_2.3.0.2011121518/
+
+(or simply click the 'Select All' button)
+
+* :guilabel:`OK Button` : :kbd:`click this button`
+
+You will be returned to the Python Interpreters list and should see an entry for 
+System Python 2.7 listed there. Now do in the *Libraries* tab:
+
+* :guilabel:`Finish` : :kbd:`click this button`
+
+Running Unit tests from the IDE
+...............................
+
+Python has very good integrated support for unit testing. The first thing 
+you should do after setting up the IDE project is to run the tests. You can run tests 
+in the following ways:
+
+* For the entire risk_in_a_box package
+* For individual sub packages (e.g. engine, gui, storage, impact_functions)
+* for an individual test module within a package
+* for an class within a test module
+* for an individual method within a test class
+
+You can view these individual entities by browsing and expanding nodes in the project 
+panel in the left of the IDE.
+
+.. note:: If you run the test suite for the entire risk_in_a_box package, it will 
+    mistakenly treat the sphinx documentation conf.py (docs.source.conf) as a test 
+    and fail for that test. This is 'normal' and can be ignored.
+
+Remote Debugging with Eclipse
+................................
+
+For remote debugging, you should add pydevd to your PYTHONPATH before starting *QGIS*
 for example (you will need to adjust these paths to match your system)::
 
 	export PYTHONPATH=$PYTHONPATH:/home/timlinux/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev.debug_2.3.0.2011121518/pysrc/
@@ -85,7 +148,16 @@ for example (you will need to adjust these paths to match your system)::
    otherwise QGIS will likely crash when it can't find the debug server.
 
 You will need to ensure that the PYTHONPATH containing your pydev package folder 
-is set before you launch QGIS - for example by adding the above line to your ~/.bashrc. 
+is set before you launch QGIS - for example by adding the above line to your ~/.bashrc 
+or by making a small batch file containing the above export and then sourcing the file 
+before launching QGIS e.g.::
+
+    source riab_paths.sh
+    /usr/local/bin/qgis
+
+
+Additional development environment notes
+----------------------------------------
 
 QGIS installed in a non-standard location
 .........................................
