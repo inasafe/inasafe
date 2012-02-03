@@ -55,7 +55,12 @@ test_suite: compile testdata
 	@# Preceding dash means that make will continue in case of errors
 	@# Swapping stdout & stderr and filter out low level QGIS garbage
 	@# See http://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter
-	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions 3>&1 1>&2 2>&3 3>&- | grep -v "Object::" || true
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+
+	@# FIXME (Ole) - to get of the remaining junk I tried to use
+	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
+	@# This does clip the line, but does not flush and puts an extra
+	@# newline in.
 
 # Run gui test suite only
 gui_test_suite: compile testdata
@@ -65,7 +70,7 @@ gui_test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "Object::" || true
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Get test data
 testdata:
