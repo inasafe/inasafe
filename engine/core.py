@@ -184,84 +184,8 @@ def check_data_integrity(layer_files):
                                             refname, N))
             assert layer.columns == N, msg
 
-
-def get_bounding_boxes(haz_data, exp_data, req_bbox):
-    """Check and get appropriate bounding boxes for input layers
-
-    Input
-        haz_data: Filename or layer object for hazard layer
-        exp_data: Filename or layer object for exposure layer
-        req_bbox: Bounding box (string as requested by HTML POST, or list)
-
-    Output
-        intersection_bbox: Common bounding box which is simply the intersection
-                           among hazard, exposure and viewport bounds.
-    """
-
-    # Input checks
-    if isinstance(haz_data, basestring):
-        haz_layer = read_layer(haz_data)
-    else:
-        haz_layer = haz_data
-    msg = 'Input data "%s" was not a valid spatial object' % str(haz_layer)
-    assert (hasattr(haz_layer, 'is_riab_spatial_object') and
-            haz_layer.is_riab_spatial_object), msg
-
-    if isinstance(exp_data, basestring):
-        exp_layer = read_layer(exp_data)
-    else:
-        exp_layer = exp_data
-    msg = 'Input data "%s" was not a valid spatial object' % str(exp_layer)
-    assert (hasattr(exp_layer, 'is_riab_spatial_object') and
-            exp_layer.is_riab_spatial_object), msg
-
-    try:
-        vpt_bbox = list(req_bbox)
-    except:
-        msg = ('Invalid bounding box %s (%s). It must be a sequence of the '
-               'form [west, south, east, north]' % (str(req_bbox),
-                                                    type(req_bbox)))
-        raise Exception(msg)
-
-    # Get bounding boxes for layers
-    haz_bbox = haz_layer.get_bounding_box()
-    exp_bbox = exp_layer.get_bounding_box()
-
-    # New bounding box for data common to hazard, exposure and viewport
-    # Download only data within this intersection
-    intersection_bbox = bbox_intersection(vpt_bbox, haz_bbox, exp_bbox)
-    if intersection_bbox is None:
-        # Bounding boxes did not overlap
-        msg = ('Bounding boxes of hazard data [%s], exposure data [%s] '
-               'and viewport [%s] did not overlap, so no computation was '
-               'done. Please make sure you pan to where the data is and '
-               'that hazard and exposure data overlaps.'
-               % (bboxlist2string(haz_bbox, decimals=3),
-                  bboxlist2string(exp_bbox, decimals=3),
-                  bboxlist2string(vpt_bbox, decimals=3)))
-        logger.info(msg)
-        raise Exception(msg)
-
-    # Grow hazard bbox to buffer this common bbox in case where
-    # hazard is raster and exposure is vector
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # FIXME (Ole): Move this into the caller
-    #if (haz_metadata['layer_type'] == 'raster' and
-    #    exp_metadata['layer_type'] == 'vector'):#
-    #
-    #    haz_res = haz_metadata['resolution']
-    #    haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)
-    #else:
-    #    haz_bbox = intersection_bbox
-
-    # Usually the intersection bbox is used for both exposure layer and result
-    #exp_bbox = imp_bbox = intersection_bbox
-
-    return intersection_bbox, None
-
-
 # FIXME (Ole): This needs to be rewritten as it
-# directly depends on ows metadata
+# directly depends on ows metadata. See issue #54
 # def get_linked_layers(main_layers):
 #     """Get list of layers that are required by main layers
 

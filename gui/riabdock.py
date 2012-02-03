@@ -178,7 +178,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Args:
 
            * iface - a Quantum GIS QGisAppInterface instance.
-           * guidContext - an optional paramter, defaults to True. Set to
+           * guiContext - an optional paramter, defaults to True. Set to
              False if you do not wish to see popup messages etc. Used
              mainly by init tests.
 
@@ -210,14 +210,6 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
-        # update the functions list whenever we change the hazard
-        QtCore.QObject.connect(self.cboHazard,
-                               QtCore.SIGNAL('currentIndexChanged(int)'),
-                               self.getFunctions)
-        # update the functions list whenever we change the exposure
-        QtCore.QObject.connect(self.cboExposure,
-                               QtCore.SIGNAL('currentIndexChanged(int)'),
-                               self.getFunctions)
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
@@ -258,14 +250,14 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             'dwellings) re available. When you are ready, click the <em>'
             'run</em> button below.')
             return (False, myMessage)
+
         if self.cboFunction.currentIndex() == -1:
-
-            haz_fn = str(self.getHazardLayer().source())
-            haz_kwds = self.calculator.getKeywordFromFile(haz_fn)
-
-            exp_fn = str(self.getExposureLayer().source())
-            exp_kwds = self.calculator.getKeywordFromFile(exp_fn)
-
+            myHazardFunction = str(self.getHazardLayer().source())
+            myHazardKeywords = self.calculator.getKeywordFromFile(
+                                                            myHazardFunction)
+            myExposureFunction = str(self.getExposureLayer().source())
+            myExposureKeywords = self.calculator.getKeywordFromFile(
+                                                            myExposureFunction)
             myMessage = ('<span class="label important">No valid functions:'
                          '</span> No functions are available for the inputs '
                          'you have specified. '
@@ -274,8 +266,9 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                          'for details on what constitute valid inputs for '
                          'a given risk function. <br>'
                          'Hazard keywords [%s]: %s <br>'
-                         'Exposure keywords [%s]: %s' % (haz_fn, haz_kwds,
-                                                         exp_fn, exp_kwds))
+                         'Exposure keywords [%s]: %s' % (
+                                myHazardFunction, myHazardKeywords,
+                                myExposureFunction, myExposureKeywords))
             return (False, myMessage)
         else:
             myMessage = ('<span class="label success">Ready:</span> '
@@ -294,6 +287,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Raises:
            no exceptions explicitly raised."""
         # Add any other logic you mught like here...
+        self.getFunctions()
         self.setOkButtonStatus()
 
     @pyqtSignature('int')  # prevents actions being handled twice
@@ -307,6 +301,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Raises:
            no exceptions explicitly raised."""
         # Add any other logic you mught like here...
+        self.getFunctions()
         self.setOkButtonStatus()
 
     @pyqtSignature('int')  # prevents actions being handled twice
@@ -418,17 +413,17 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                                             str(myHazardFile))
         # We need to add the layer type to the returned dict
         if myHazardLayer.type() == QgsMapLayer.VectorLayer:
-            myHazardKeywords['layer_type'] = 'vector'
+            myHazardKeywords['layertype'] = 'vector'
         elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
-            myHazardKeywords['layer_type'] = 'raster'
+            myHazardKeywords['layertype'] = 'raster'
 
         myExposureKeywords = self.calculator.getKeywordFromFile(
                                             str(myExposureFile))
         # We need to add the layer type to the returned dict
         if myExposureLayer.type() == QgsMapLayer.VectorLayer:
-            myExposureKeywords['layer_type'] = 'vector'
+            myExposureKeywords['layertype'] = 'vector'
         elif myExposureLayer.type() == QgsMapLayer.RasterLayer:
-            myExposureKeywords['layer_type'] = 'raster'
+            myExposureKeywords['layertype'] = 'raster'
 
         # Find out which functions can be used with these layers
         myList = [myHazardKeywords, myExposureKeywords]

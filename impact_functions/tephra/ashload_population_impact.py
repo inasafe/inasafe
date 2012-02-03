@@ -12,12 +12,12 @@ class TephraPopulationImpactFunction(FunctionProvider):
     :rating 1
     :param requires category=='hazard' and \
                     subcategory.startswith('tephra') and \
-                    layer_type=='raster' and \
+                    layertype=='raster' and \
                     unit=='kg/m^2'
 
     :param requires category=='exposure' and \
                     subcategory.startswith('population') and \
-                    layer_type=='raster'
+                    layertype=='raster'
     """
 
     @staticmethod

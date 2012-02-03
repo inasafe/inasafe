@@ -55,9 +55,9 @@ class Test_real_plugins(unittest.TestCase):
         D2 = {'category': 'exposure', 'datatype': 'itb',
               'subcategory': 'building'}
 
-        # Add layer_type
-        D1['layer_type'] = 'raster'
-        D2['layer_type'] = 'vector'
+        # Add layertype
+        D1['layertype'] = 'raster'
+        D2['layertype'] = 'vector'
         P = get_admissible_plugins([D1, D2])
         assert len(P) >= 2  # Depending on other tests there could be more
         assert 'Earthquake Guidelines Function' in P
@@ -68,9 +68,9 @@ class Test_real_plugins(unittest.TestCase):
         D2 = {'category': 'exposure', 'datatype': 'population',
               'subcategory': 'population'}
 
-        # Add layer_type
-        D1['layer_type'] = 'raster'
-        D2['layer_type'] = 'raster'
+        # Add layertype
+        D1['layertype'] = 'raster'
+        D2['layertype'] = 'raster'
         P = get_admissible_plugins([D1, D2])
         assert len(P) >= 3  # Depending on other tests there could be more
         assert 'Terdampak' in P
@@ -94,9 +94,9 @@ class Test_real_plugins(unittest.TestCase):
         D1 = {'category': 'hazard', 'subcategory': 'tsunami', 'unit': 'm'}
         D2 = {'category': 'exposure', 'subcategory': 'building'}
 
-        # Add layer_type
-        D1['layer_type'] = 'raster'
-        D2['layer_type'] = 'vector'
+        # Add layertype
+        D1['layertype'] = 'raster'
+        D2['layertype'] = 'vector'
         P = get_admissible_plugins([D1, D2])
 
         assert f_name in P

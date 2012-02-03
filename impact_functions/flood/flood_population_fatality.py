@@ -12,12 +12,12 @@ class FloodFatalityFunction(FunctionProvider):
     :rating 1
     :param requires category=='hazard' and \
                     subcategory.startswith('flood') and \
-                    layer_type=='raster' and \
+                    layertype=='raster' and \
                     unit=='m'
 
     :param requires category=='exposure' and \
                     subcategory.startswith('population') and \
-                    layer_type=='raster' and \
+                    layertype=='raster' and \
                     datatype=='population'
     """
 

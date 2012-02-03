@@ -209,19 +209,19 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
     # specifying the output pixel size to ensure the raster dims
     # remain consistent.
     if theCellSize is None:
-        myCommand = ('gdalwarp  -t_srs EPSG:4326 -r near '
+        myCommand = ('gdalwarp -q -t_srs EPSG:4326 -r near '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '"%s" "%s"' % (myClipKml,
-                                myWorkingLayer,
-                                myFilename))
+                                    myWorkingLayer,
+                                    myFilename))
     else:
-        myCommand = ('gdalwarp  -t_srs EPSG:4326 -r near -tr %f %f '
+        myCommand = ('gdalwarp -q -t_srs EPSG:4326 -r near -tr %f %f '
                      '-cutline %s -crop_to_cutline -of GTiff '
                      '"%s" "%s"' % (theCellSize,
-                                theCellSize,
-                                myClipKml,
-                                myWorkingLayer,
-                                myFilename))
+                                    theCellSize,
+                                    myClipKml,
+                                    myWorkingLayer,
+                                    myFilename))
     myExecutablePrefix = ''
     if sys.platform == 'darwin':  # Mac OS X
         # .. todo:: FIXME - softcode gdal version in this path

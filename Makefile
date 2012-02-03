@@ -17,7 +17,12 @@
 # *                                                                         *
 # ***************************************************************************/
 
-# Makefile for a PyQGIS plugin
+# Makefile for Risk in a Box - QGIS
+
+NONGUI := storage engine impact_functions
+GUI := gui
+ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
+
 default: compile
 
 compile:
@@ -53,7 +58,16 @@ test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions || true
+	@# Swapping stdout & stderr and filter out low level QGIS garbage
+	@# See http://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+
+	@# FIXME (Ole) - to get of the remaining junk I tried to use
+	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
+	@# This does clip the line, but does not flush and puts an extra
+	@# newline in.
+
+	@echo Expecting 1 test to fail in support of issue 52
 
 # Run gui test suite only
 gui_test_suite: compile testdata
@@ -63,7 +77,7 @@ gui_test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:/usr/local/share/qgis/python/; export QGISPATH=/usr/local; nosetests -v --with-id --with-coverage --cover-package=gui gui
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Get test data
 testdata:
@@ -99,11 +113,10 @@ dependency_test:
 	@# 1
 	@# See http://stackoverflow.com/questions/4761728/gives-an-error-in-makefile-not-in-bash-when-grep-output-is-empty why we need "|| true"
 
-	@# FIXME (Ole): Have variable containing modules to check
-	@grep -R PyQt4 storage engine impact_functions || true
-	@grep -R qgis.core storage engine impact_functions || true
-	@grep -R "import scipy" storage engine impact_functions || true
-	@grep -R "from scipy import" storage engine impact_functions || true
+	@grep -R PyQt4 $(NONGUI) || true
+	@grep -R qgis.core $(NONGUI) || true
+	@grep -R "import scipy" $(NONGUI) || true
+	@grep -R "from scipy import" $(NONGUI) || true
 
 list_gis_packages:
 	@echo
