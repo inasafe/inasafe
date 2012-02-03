@@ -53,7 +53,9 @@ test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions || true
+	@# Swapping stdout & stderr and filter out low level QGIS garbage
+	@# See http://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=engine,storage,gui,impact_functions 3>&1 1>&2 2>&3 3>&- | grep -v "Object::" || true
 
 # Run gui test suite only
 gui_test_suite: compile testdata
@@ -63,7 +65,7 @@ gui_test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:/usr/local/share/qgis/python/; export QGISPATH=/usr/local; nosetests -v --with-id --with-coverage --cover-package=gui gui
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "Object::" || true
 
 # Get test data
 testdata:

@@ -444,6 +444,56 @@ class RiabDockTest(unittest.TestCase):
 
         msg = 'Result not as expected: %s' % myResult
         assert '356018' in myResult, msg
+        assert '2479' in myResult, msg  # These are expected impact number
+
+    def test_runFloodPopulationImpactFunction_scaling(self):
+        """Flood function runs in GUI with 5x5km population data
+           Raster on raster based function runs as expected with scaling."""
+
+        # Push OK with the left mouse button
+        clearForm()
+        loadLayers()
+        myButton = form.ui.pbnRunStop
+
+        msg = 'Run button was not enabled'
+        assert myButton.isEnabled(), msg
+
+        # Hazard layers
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Enter)
+
+        # Exposure layers
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        #QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        #QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+
+        # Choose impact function (second item in the list)
+        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Enter)
+
+        # Check that layers and impact function are correct
+        D = getUiState(form.ui)
+
+        msg = 'Got unexpected state: %s' % str(D)
+        assert D == {'Run Button Enabled': True,
+                     'Impact Function': 'Terdampak',
+                     'Hazard': 'Banjir Jakarta seperti 2007',
+                     'Exposure': 'Population Density Estimate (5kmx5km)'}, msg
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # Press RUN
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+
+        msg = 'Result not as expected: %s' % myResult
+        print myResult
+        #assert '356018' in myResult, msg
+        #assert '2479' in myResult, msg  # These are expected impact number
 
     def test_Issue47(self):
         """Issue47: Problem when hazard & exposure data are in different
