@@ -90,7 +90,7 @@ def loadStandardLayers():
     """Helper function to load standard layers into the dialog."""
     # List all layers in the correct order.
     # NOTE: New layers *must* be added to the end of this list, otherwise
-    #       tests will break.    
+    #       tests will break.
     myFileList = ['Padang_WGS84.shp',
                   'glp10ag.asc',
                   'Shakemap_Padang_2009.asc',
@@ -113,8 +113,6 @@ def loadLayers(theLayerList, theClearFlag=True):
     # FIXME (Ole): Use environment variable
     myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     myData = os.path.join(myRoot, 'riab_test_data')
-
-
 
     # Now go ahead and load our layers
     myExposureLayerCount = 0
@@ -152,7 +150,6 @@ def loadLayers(theLayerList, theClearFlag=True):
         # Create Map Canvas Layer Instance and add to list
         myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
 
-
     # Quickly add any existing canvas layers to our list first
     for myLayer in canvas.layers():
         myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
@@ -160,7 +157,7 @@ def loadLayers(theLayerList, theClearFlag=True):
     canvas.setLayerSet(myCanvasLayers)
     form.getLayers()
 
-    # Add MCL's to the canvas    
+    # Add MCL's to the canvas
     return myHazardLayerCount, myExposureLayerCount
 
 
@@ -568,10 +565,9 @@ class RiabDockTest(unittest.TestCase):
                          myHazardLayerCount), myMessage
 
         myMessage = 'Expect %s layer(s) in exposure list widget but got %s' \
-              % ( myExposureLayerCount, form.cboExposure.count())
+              % (myExposureLayerCount, form.cboExposure.count())
         self.assertEqual(form.cboExposure.count(),
                          myExposureLayerCount), myMessage
-
 
     def test_Issue71(self):
         """Test issue #71 in githib - cbo changes should update ok button."""
@@ -583,11 +579,11 @@ class RiabDockTest(unittest.TestCase):
         myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
                       'Population_Jakarta_geographic.asc']
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
-        
+
         myMessage = ("Incorrect number of Hazard layers: expected 1 got %s"
                      % myHazardLayerCount)
         assert myHazardLayerCount == 1, myMessage
-        
+
         myMessage = ("Incorrect number of Exposure layers: expected 1 got %s"
                      % myExposureLayerCount)
         assert myExposureLayerCount == 1, myMessage
@@ -595,13 +591,13 @@ class RiabDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
         # Second part of scenario - run disables when adding invalid layer
         # and select it - run should be disabled
-        myFileList = ['glp10ag.asc'] #this layer has incorrect keywords
+        myFileList = ['glp10ag.asc']  # this layer has incorrect keywords
         myClearFlag = False
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
         myMessage = 'Run button was not disabled when exposure set to \n%s' % \
             form.cboExposure.currentText()
-        assert myButton.isEnabled()==False, myMessage
+        assert myButton.isEnabled() == False, myMessage
         # Now select again a valid layer and the run button
         # should be enabled
         QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
