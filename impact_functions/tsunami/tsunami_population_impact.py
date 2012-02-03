@@ -11,12 +11,12 @@ class TsunamiPopulationImpactFunction(FunctionProvider):
 
     :param requires category=='hazard' and \
                     subcategory.startswith('tsunami') and \
-                    layer_type=='raster' and \
+                    layertype=='raster' and \
                     unit=='m'
 
     :param requires category=='exposure' and \
                     subcategory.startswith('population') and \
-                    layer_type=='raster'
+                    layertype=='raster'
 
     """
 

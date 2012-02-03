@@ -59,6 +59,14 @@ How does the documentation work?::
      https://github.com/AIFDR/risk_in_a_box/admin/hooks
 
 
+How do I replace a string across multiple files
+::
 
+To replace string layer_type, say, with layertype across all python files
+in project, do
 
+find . -name "*.py" -print | xargs sed -i 's/layer_type/layertype/g'
+
+For details see
+http://rushi.wordpress.com/2008/08/05/find-replace-across-multiple-files-in-linux/
 

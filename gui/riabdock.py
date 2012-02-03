@@ -375,17 +375,17 @@ class RiabDock(QtGui.QDockWidget):
                                             str(myHazardFile))
         # We need to add the layer type to the returned dict
         if myHazardLayer.type() == QgsMapLayer.VectorLayer:
-            myHazardKeywords['layer_type'] = 'vector'
+            myHazardKeywords['layertype'] = 'vector'
         elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
-            myHazardKeywords['layer_type'] = 'raster'
+            myHazardKeywords['layertype'] = 'raster'
 
         myExposureKeywords = self.calculator.getKeywordFromFile(
                                             str(myExposureFile))
         # We need to add the layer type to the returned dict
         if myExposureLayer.type() == QgsMapLayer.VectorLayer:
-            myExposureKeywords['layer_type'] = 'vector'
+            myExposureKeywords['layertype'] = 'vector'
         elif myExposureLayer.type() == QgsMapLayer.RasterLayer:
-            myExposureKeywords['layer_type'] = 'raster'
+            myExposureKeywords['layertype'] = 'raster'
 
         # Find out which functions can be used with these layers
         myList = [myHazardKeywords, myExposureKeywords]

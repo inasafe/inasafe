@@ -116,12 +116,12 @@ class Test_plugins(unittest.TestCase):
         # get_layer_descriptors. FIXME: I think we should change this to be
         # a dictionary of metadata entries (ticket #126).
         reference = [['lembang_schools',
-                      {'layer_type': 'vector',
+                      {'layertype': 'vector',
                        'category': 'exposure',
                        'subcategory': 'building',
                        'title': 'lembang_schools'}],
                      ['shakemap_padang_20090930',
-                      {'layer_type': 'raster',
+                      {'layertype': 'raster',
                        'category': 'hazard',
                        'subcategory': 'earthquake',
                        'title': 'shakemap_padang_20090930'}]]

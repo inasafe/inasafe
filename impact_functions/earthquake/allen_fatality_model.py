@@ -11,12 +11,12 @@ class EarthquakeFatalityFunction(FunctionProvider):
     :rating 1
     :param requires category=='hazard' and \
                 subcategory.startswith('earthquake') and \
-                layer_type=='raster' and \
+                layertype=='raster' and \
                 unit=='MMI'
 
     :param requires category=='exposure' and \
                 subcategory.startswith('population') and \
-                layer_type=='raster'
+                layertype=='raster'
     """
 
     @staticmethod

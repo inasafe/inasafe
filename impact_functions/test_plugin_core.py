@@ -38,12 +38,12 @@ class F1(FunctionProvider):
 
     :param requires category=='hazard' and \
                     subcategory.startswith('flood') and \
-                    layer_type=='raster' and \
+                    layertype=='raster' and \
                     unit=='m'
 
     :param requires category=='exposure' and \
                     subcategory.startswith('population') and \
-                    layer_type=='raster' and \
+                    layertype=='raster' and \
                     datatype=='population'
 
     """
@@ -58,7 +58,7 @@ class F2(FunctionProvider):
 
     :param requires category=='hazard' and \
                     subcategory.startswith('flood') and \
-                    layer_type=='raster' and \
+                    layertype=='raster' and \
                     unit=='m'
 
     :param requires category=='exposure' and \
@@ -147,13 +147,13 @@ class Test_plugin_core(unittest.TestCase):
 
         # Keywords matching F1 and F3
         haz_keywords1 = dict(category='hazard', subcategory='flood',
-                                layer_type='raster', unit='m')
+                                layertype='raster', unit='m')
         exp_keywords1 = dict(category='exposure', subcategory='population',
-                             layer_type='raster', datatype='population')
+                             layertype='raster', datatype='population')
 
         # Keywords matching F2 and F3
         haz_keywords2 = dict(category='hazard', subcategory='flood',
-                             layer_type='raster', unit='m')
+                             layertype='raster', unit='m')
         exp_keywords2 = dict(category='exposure', subcategory='building')
 
         # Check correct matching
