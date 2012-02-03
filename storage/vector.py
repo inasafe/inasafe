@@ -366,7 +366,7 @@ class Vector:
 
                 # FIXME (Ole): Ascertain the type of each field?
                 #              We need to cast each appropriately?
-                #              This is issue #66
+                #              This is issue #66 (https://github.com/AIFDR/riab/issues/66)
                 #feature_type = feature.GetFieldDefnRef(j).GetType()
                 fields[name] = feature.GetField(j)
                 #print 'Field', name, feature_type, j, fields[name]
