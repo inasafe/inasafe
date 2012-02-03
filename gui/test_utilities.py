@@ -9,7 +9,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from utilities import getExceptionWithStacktrace
-from engine.core import get_bounding_boxes
+from storage.utilities import bbox_intersection
 
 
 class Test_U(unittest.TestCase):
@@ -27,7 +27,7 @@ class Test_U(unittest.TestCase):
         """
 
         try:
-            get_bounding_boxes('aoeu', 'oaeu', [])
+            bbox_intersection('aoeu', 'oaeu', [])
         except Exception, e:
             # Display message and traceback
 
