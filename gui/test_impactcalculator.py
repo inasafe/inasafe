@@ -183,6 +183,7 @@ class ImpactCalculatorTest(unittest.TestCase):
             self.rasterPopulationPath)
         assert myKeywords == {'category': 'exposure', 'density': 'yes',
                               'subcategory': 'population',
+                              'datatype': 'population',
                               'title': 'Population Density Estimate (5kmx5km)'}
 
         myKeywords = self.calculator.getKeywordFromFile(self.vectorPath)
