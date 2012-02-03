@@ -28,8 +28,7 @@ sys.path.append(pardir)
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
-from qgis.core import (QgsApplication,
-                       QgsVectorLayer,
+from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle,
@@ -80,25 +79,18 @@ def clearForm():
 def populateForm():
     """A helper function to populate the form and set it to a valid state.
     """
-    loadLayers()
+    loadStandardLayers()
     form.ui.cboHazard.setCurrentIndex(0)
     form.ui.cboExposure.setCurrentIndex(0)
     #QTest.mouseClick(myHazardItem, Qt.LeftButton)
     #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
 
-def loadLayers():
-    """Helper function to load layers into the dialog."""
-
-    # First unload any layers that may already be loaded
-    for myLayer in QgsMapLayerRegistry.instance().mapLayers():
-        QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
-
-    # FIXME (Ole): Use environment variable
-    myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    myData = os.path.join(myRoot, 'riab_test_data')
-
+def loadStandardLayers():
+    """Helper function to load standard layers into the dialog."""
     # List all layers in the correct order.
+    # NOTE: New layers *must* be added to the end of this list, otherwise
+    #       tests will break.    
     myFileList = ['Padang_WGS84.shp',
                   'glp10ag.asc',
                   'Shakemap_Padang_2009.asc',
@@ -108,23 +100,39 @@ def loadLayers():
                   'Population_Jakarta_geographic.asc',
                   'eq_yogya_2006.asc',
                   'OSM_building_polygons_20110905.shp']
+    myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+    return myHazardLayerCount, myExposureLayerCount
+
+def loadLayers(theLayerList, theClearFlag=True):
+    """Helper function to load layers as defined in a python list."""
+    # First unload any layers that may already be loaded
+    if theClearFlag:
+        for myLayer in QgsMapLayerRegistry.instance().mapLayers():
+            QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
+
+    # FIXME (Ole): Use environment variable
+    myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    myData = os.path.join(myRoot, 'riab_test_data')
+
+
 
     # Now go ahead and load our layers
-    number_exp_layers = 0
-    number_haz_layers = 0
+    myExposureLayerCount = 0
+    myHazardLayerCount = 0
     myCanvasLayers = []
-    for myFile in myFileList:
+    # Now create our new layers
+    for myFile in theLayerList:
         # Extract basename and absolute path
         myBaseName, myExt = os.path.splitext(myFile)
         myPath = os.path.join(myData, myFile)
         myKeywordPath = myPath[:-4] + '.keywords'
 
         # Determine if layer is hazard or exposure
-        kwds = read_keywords(myKeywordPath)
-        if kwds['category'] == 'hazard':
-            number_haz_layers += 1
-        elif kwds['category'] == 'exposure':
-            number_exp_layers += 1
+        myKeywords = read_keywords(myKeywordPath)
+        if myKeywords['category'] == 'hazard':
+            myHazardLayerCount += 1
+        elif myKeywords['category'] == 'exposure':
+            myExposureLayerCount += 1
 
         # Create QGis Layer Instance
         if myExt in ['.asc', '.tif']:
@@ -132,11 +140,11 @@ def loadLayers():
         elif myExt in ['.shp']:
             myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
         else:
-            msg = 'File %s had illegal extension' % myPath
-            raise Exception(msg)
+            myMessage = 'File %s had illegal extension' % myPath
+            raise Exception(myMessage)
 
-        msg = 'Layer "%s" is not valid' % str(myLayer.source())
-        assert myLayer.isValid(), msg
+        myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
+        assert myLayer.isValid(), myMessage
 
         # Add layer to the registry (that QGis knows about)
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
@@ -144,13 +152,16 @@ def loadLayers():
         # Create Map Canvas Layer Instance and add to list
         myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
 
-    # Add MCL's to the canvas
-    # NOTE: New layers *must* be added to the end of this list, otherwise
-    #       tests will break.
+
+    # Quickly add any existing canvas layers to our list first
+    for myLayer in canvas.layers():
+        myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
+    # now load all these layers in the canvas
     canvas.setLayerSet(myCanvasLayers)
     form.getLayers()
 
-    return number_haz_layers, number_exp_layers
+    # Add MCL's to the canvas    
+    return myHazardLayerCount, myExposureLayerCount
 
 
 def setCanvasCrs(theEpsgId, theOtfpFlag=False):
@@ -256,20 +267,20 @@ class RiabDockTest(unittest.TestCase):
 
         # Push OK with the left mouse button
         clearForm()
-        loadLayers()
+        loadStandardLayers()
         myButton = form.ui.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
-        msg = 'Run button was not enabled'
-        assert myButton.isEnabled(), msg
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
 
         D = getUiState(form.ui)
 
-        msg = 'Got unexpected state: %s' % str(D)
+        myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Hazard': 'Shakemap_Padang_2009',
                      'Exposure': 'Padang_WGS84',
                      'Impact Function': 'Earthquake Guidelines Function',
-                     'Run Button Enabled': True}, msg
+                     'Run Button Enabled': True}, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
@@ -282,9 +293,9 @@ class RiabDockTest(unittest.TestCase):
         #High damage (50-100%):    3160
         # Post merge of clip on steoids branch:
         #High damage (50-100%):    2993
-        msg = ('Unexpected result returned for Earthquake guidelines function '
+        myMessage = ('Unexpected result returned for Earthquake guidelines function '
                'Expected:\n "All" count of 2993, received: \n %s' % myResult)
-        assert '2993' in myResult, msg
+        assert '2993' in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction(self):
         """Earthquake fatality function runs in GUI with Shakemap 2009"""
@@ -292,13 +303,13 @@ class RiabDockTest(unittest.TestCase):
 
         # Push OK with the left mouse button
         clearForm()
-        loadLayers()
+        loadStandardLayers()
         myButton = form.ui.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
 
-        msg = 'Run button was not enabled'
-        assert myButton.isEnabled(), msg
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
 
         # now let's simulate a choosing another combo item and running
         # the model again...
@@ -306,11 +317,11 @@ class RiabDockTest(unittest.TestCase):
         QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
         D = getUiState(form.ui)
 
-        msg = 'Got unexpected state: %s' % str(D)
+        myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Hazard': 'Shakemap_Padang_2009',
                      'Exposure': 'Population Density Estimate (5kmx5km)',
                      'Impact Function': 'Earthquake Fatality Function',
-                     'Run Button Enabled': True}, msg
+                     'Run Button Enabled': True}, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
@@ -323,12 +334,12 @@ class RiabDockTest(unittest.TestCase):
         # Jumlah Penduduk:    21189932
         # Perkiraan Orang Meninggal:    2903
 
-        msg = ('Unexpected result returned for Earthquake Fatality Function '
+        myMessage = ('Unexpected result returned for Earthquake Fatality Function '
                'Expected:\n "Jumlah Penduduk" count of 21189932, '
                'received: \n %s' % myResult)
         # Pre clip refactor
-        #assert '20771496' in myResult, msg
-        assert '21189932' in myResult, msg
+        #assert '20771496' in myResult, myMessage
+        assert '21189932' in myResult, myMessage
 
     def test_runTsunamiBuildingImpactFunction(self):
         """Tsunami function runs in GUI with Batemans Bay model"""
@@ -336,11 +347,11 @@ class RiabDockTest(unittest.TestCase):
 
         # Push OK with the left mouse button
         clearForm()
-        loadLayers()
+        loadStandardLayers()
         myButton = form.ui.pbnRunStop
 
-        msg = 'Run button was not enabled'
-        assert myButton.isEnabled(), msg
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
 
         # Hazard layers
         QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
@@ -354,11 +365,11 @@ class RiabDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         D = getUiState(form.ui)
 
-        msg = 'Got unexpected state: %s' % str(D)
+        myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Run Button Enabled': True,
                      'Impact Function': 'Tsunami Building Impact Function',
                      'Hazard': 'tsunami_max_inundation_depth_BB_utm',
-                     'Exposure': 'tsunami_exposure_BB'}, msg
+                     'Exposure': 'tsunami_exposure_BB'}, myMessage
 
         setCanvasCrs(GEOCRS, True)
         setBatemansBayGeoExtent()
@@ -372,10 +383,10 @@ class RiabDockTest(unittest.TestCase):
         # < 1 m:    1923
         # 1 - 3 m:    89
         # > 3 m:    0
-        msg = 'Result not as expected: %s' % myResult
-        assert '1923' in myResult, msg
-        assert '89' in myResult, msg
-        assert '0' in myResult, msg
+        myMessage = 'Result not as expected: %s' % myResult
+        assert '1923' in myResult, myMessage
+        assert '89' in myResult, myMessage
+        assert '0' in myResult, myMessage
 
     def test_runFloodPopulationImpactFunction(self):
         """Flood function runs in GUI with Jakarta data
@@ -383,11 +394,11 @@ class RiabDockTest(unittest.TestCase):
 
         # Push OK with the left mouse button
         clearForm()
-        loadLayers()
+        loadStandardLayers()
         myButton = form.ui.pbnRunStop
 
-        msg = 'Run button was not enabled'
-        assert myButton.isEnabled(), msg
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
 
         # Hazard layers
         QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
@@ -407,11 +418,11 @@ class RiabDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         D = getUiState(form.ui)
 
-        msg = 'Got unexpected state: %s' % str(D)
+        myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Run Button Enabled': True,
                      'Impact Function': 'Terdampak',
                      'Hazard': 'Banjir Jakarta seperti 2007',
-                     'Exposure': 'Penduduk Jakarta'}, msg
+                     'Exposure': 'Penduduk Jakarta'}, myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
@@ -442,8 +453,8 @@ class RiabDockTest(unittest.TestCase):
         #- Penduduk dianggap terdampak ketika banjir lebih dari 0.1 m.
         #print myResult
 
-        msg = 'Result not as expected: %s' % myResult
-        assert '356018' in myResult, msg
+        myMessage = 'Result not as expected: %s' % myResult
+        assert '356018' in myResult, myMessage
 
     def test_Issue47(self):
         """Issue47: Problem when hazard & exposure data are in different
@@ -451,11 +462,11 @@ class RiabDockTest(unittest.TestCase):
         See https://github.com/AIFDR/risk_in_a_box/issues/47"""
 
         clearForm()
-        loadLayers()
+        loadStandardLayers()
         myButton = form.ui.pbnRunStop
 
-        msg = 'Run button was not enabled'
-        assert myButton.isEnabled(), msg
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
 
         # Hazard layers
         QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
@@ -475,11 +486,11 @@ class RiabDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         D = getUiState(form.ui)
 
-        msg = 'Got unexpected state: %s' % str(D)
+        myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Run Button Enabled': True,
                      'Impact Function': 'Terdampak',
                      'Hazard': 'Banjir Jakarta seperti 2007',
-                     'Exposure': 'Penduduk Jakarta'}, msg
+                     'Exposure': 'Penduduk Jakarta'}, myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GOOGLECRS, True)
@@ -489,22 +500,22 @@ class RiabDockTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
 
-        msg = 'Result not as expected: %s' % myResult
+        myMessage = 'Result not as expected: %s' % myResult
         #Terdampak (x 1000):    2366
-        assert '2366' in myResult, msg
+        assert '2366' in myResult, myMessage
 
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
         # Push OK with the left mouse button
         clearForm()
-        loadLayers()
+        loadStandardLayers()
         myButton = form.ui.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setYogyaGeoExtent()
 
-        msg = 'Run button was not enabled'
-        assert myButton.isEnabled(), msg
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
 
         # Hazard layers
         QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
@@ -524,11 +535,11 @@ class RiabDockTest(unittest.TestCase):
 
         # Check that layers and impact function are correct
         D = getUiState(form.ui)
-        msg = 'Got unexpected state: %s' % str(D)
+        myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Hazard': 'Yogya2006',
                      'Exposure': 'OSM_building_polygons_20110905',
                      'Impact Function': 'Earthquake Guidelines Function',
-                     'Run Button Enabled': True}, msg
+                     'Run Button Enabled': True}, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
@@ -536,9 +547,9 @@ class RiabDockTest(unittest.TestCase):
         # Check that none of these  get a NaN value:
         assert 'Unknown' in myResult
 
-        msg = ('Some buildings returned by Earthquake guidelines function '
+        myMessage = ('Some buildings returned by Earthquake guidelines function '
                'had NaN values. Result: \n %s' % myResult)
-        assert 'Unknown (NaN):	196' not in myResult, msg
+        assert 'Unknown (NaN):	196' not in myResult, myMessage
 
         # FIXME (Ole): A more robust test would be to load the
         #              result layer and check that all buildings
@@ -550,16 +561,54 @@ class RiabDockTest(unittest.TestCase):
         """
 
         clearForm()
-        number_haz_layers, number_exp_layers = loadLayers()
-        msg = 'Expect 1 layer in hazard list widget but got %s' % \
-              form.ui.cboHazard.count()
+        myHazardLayerCount, myExposureLayerCount = loadStandardLayers()
+        myMessage = 'Expect %s layer(s) in hazard list widget but got %s' \
+                     % (myHazardLayerCount, form.ui.cboHazard.count())
         self.assertEqual(form.ui.cboHazard.count(),
-                         number_haz_layers), msg
+                         myHazardLayerCount), myMessage
 
-        msg = 'Expect 1 layer in exposure list widget but got %s' % \
-              form.ui.cboExposure.count()
+        myMessage = 'Expect %s layer(s) in exposure list widget but got %s' \
+              % ( myExposureLayerCount, form.ui.cboExposure.count())
         self.assertEqual(form.ui.cboExposure.count(),
-                         number_exp_layers), msg
+                         myExposureLayerCount), myMessage
+
+
+    def test_Issue71(self):
+        """Test issue #71 in githib - cbo changes should update ok button."""
+        # See https://github.com/AIFDR/risk_in_a_box/issues/71
+        # Push OK with the left mouse button
+        clearForm()
+        myButton = form.ui.pbnRunStop
+        # First part of scenario should have enabled run
+        myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
+                      'Population_Jakarta_geographic.asc']
+        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+        
+        myMessage = ("Incorrect number of Hazard layers: expected 1 got %s"
+                     % myHazardLayerCount)
+        assert myHazardLayerCount == 1, myMessage
+        
+        myMessage = ("Incorrect number of Exposure layers: expected 1 got %s"
+                     % myExposureLayerCount)
+        assert myExposureLayerCount == 1, myMessage
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
+        # Second part of scenario - run disables when adding invalid layer
+        # and select it - run should be disabled
+        myFileList = ['glp10ag.asc'] #this layer has incorrect keywords
+        myClearFlag = False
+        myHazardLayerCount, myExposureLayerCount = (
+            loadLayers(myFileList, myClearFlag))
+        myMessage = 'Run button was not disabled when exposure set to \n%s' % \
+            form.ui.cboExposure.currentText()
+        assert myButton.isEnabled()==False, myMessage
+        # Now select again a valid layer and the run button
+        # should be enabled
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+        myMessage = 'Run button was not ensabled when exposure set to \n%s' % \
+            form.ui.cboExposure.currentText()
+        assert myButton.isEnabled(), myMessage
 
 
 if __name__ == '__main__':

@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import pyqtSignature 
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
 from utilities import getExceptionWithStacktrace, getWGS84resolution
@@ -278,6 +279,46 @@ class RiabDock(QtGui.QDockWidget):
             'You can now proceed to run your model by clicking the <em> '
             'Run</em> button.')
             return (True, myMessage)
+
+    @pyqtSignature('') #prevents actions being handled twice
+    def on_cboHazard_currentIndexChanged(self):
+        """Automatic slot executed when the Hazard combo is changed 
+        so that we can see if the ok button should be enabled.
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        # Add any other logic you mught like here...
+        self.setOkButtonStatus()
+        
+    @pyqtSignature('') #prevents actions being handled twice
+    def on_cboExposure_currentIndexChanged(self):
+        """Automatic slot executed when the Exposure combo is changed 
+        so that we can see if the ok button should be enabled.
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        # Add any other logic you mught like here...
+        self.setOkButtonStatus()
+
+    @pyqtSignature('') #prevents actions being handled twice
+    def on_cboFunction_currentIndexChanged(self):
+        """Automatic slot executed when the Function combo is changed 
+        so that we can see if the ok button should be enabled.
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        # Add any other logic you mught like here...
+        self.setOkButtonStatus()
+
 
     def setOkButtonStatus(self):
         """Helper function to set the ok button status if the
