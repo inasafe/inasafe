@@ -72,16 +72,16 @@ def getUiState(ui):
 
 def clearForm():
     """Helper function to  set all form elements to default state"""
-    form.ui.cboHazard.clear()
-    form.ui.cboExposure.clear()
+    form.cboHazard.clear()
+    form.cboExposure.clear()
 
 
 def populateForm():
     """A helper function to populate the form and set it to a valid state.
     """
     loadStandardLayers()
-    form.ui.cboHazard.setCurrentIndex(0)
-    form.ui.cboExposure.setCurrentIndex(0)
+    form.cboHazard.setCurrentIndex(0)
+    form.cboExposure.setCurrentIndex(0)
     #QTest.mouseClick(myHazardItem, Qt.LeftButton)
     #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
@@ -222,9 +222,9 @@ class RiabDockTest(unittest.TestCase):
     def test_defaults(self):
         """Test the GUI in its default state"""
         clearForm()
-        self.assertEqual(form.ui.cboHazard.currentIndex(), -1)
-        self.assertEqual(form.ui.cboExposure.currentIndex(), -1)
-        self.assertEqual(form.ui.cboFunction.currentIndex(), -1)
+        self.assertEqual(form.cboHazard.currentIndex(), -1)
+        self.assertEqual(form.cboExposure.currentIndex(), -1)
+        self.assertEqual(form.cboFunction.currentIndex(), -1)
 
     def test_validate(self):
         """Validate function work as expected"""
@@ -268,13 +268,13 @@ class RiabDockTest(unittest.TestCase):
         # Push OK with the left mouse button
         clearForm()
         loadStandardLayers()
-        myButton = form.ui.pbnRunStop
+        myButton = form.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        D = getUiState(form.ui)
+        D = getUiState(form)
 
         myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Hazard': 'Shakemap_Padang_2009',
@@ -283,7 +283,7 @@ class RiabDockTest(unittest.TestCase):
                      'Run Button Enabled': True}, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+        myResult = form.wvResults.page().currentFrame().toPlainText()
         # Expected output:
         #Buildings    Total
         #All:    3160
@@ -304,7 +304,7 @@ class RiabDockTest(unittest.TestCase):
         # Push OK with the left mouse button
         clearForm()
         loadStandardLayers()
-        myButton = form.ui.pbnRunStop
+        myButton = form.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
 
@@ -313,9 +313,9 @@ class RiabDockTest(unittest.TestCase):
 
         # now let's simulate a choosing another combo item and running
         # the model again...
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
-        D = getUiState(form.ui)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+        D = getUiState(form)
 
         myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Hazard': 'Shakemap_Padang_2009',
@@ -325,7 +325,7 @@ class RiabDockTest(unittest.TestCase):
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
-        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+        myResult = form.wvResults.page().currentFrame().toPlainText()
         # Expected output:
         # Pre clip refactor:
         # Jumlah Penduduk:    20771496
@@ -348,22 +348,22 @@ class RiabDockTest(unittest.TestCase):
         # Push OK with the left mouse button
         clearForm()
         loadStandardLayers()
-        myButton = form.ui.pbnRunStop
+        myButton = form.pbnRunStop
 
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        D = getUiState(form.ui)
+        D = getUiState(form)
 
         myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Run Button Enabled': True,
@@ -376,7 +376,7 @@ class RiabDockTest(unittest.TestCase):
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+        myResult = form.wvResults.page().currentFrame().toPlainText()
 
         #print myResult
         # Post clip on steroids refactor
@@ -395,28 +395,28 @@ class RiabDockTest(unittest.TestCase):
         # Push OK with the left mouse button
         clearForm()
         loadStandardLayers()
-        myButton = form.ui.pbnRunStop
+        myButton = form.pbnRunStop
 
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function (second item in the list)
-        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        D = getUiState(form.ui)
+        D = getUiState(form)
 
         myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Run Button Enabled': True,
@@ -430,7 +430,7 @@ class RiabDockTest(unittest.TestCase):
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+        myResult = form.wvResults.page().currentFrame().toPlainText()
 
         #Apabila terjadi "Flood Depth (current) Jakarta"
         # perkiraan dampak terhadap "clip_CCaFFQ" kemungkinan yang terjadi:
@@ -463,28 +463,28 @@ class RiabDockTest(unittest.TestCase):
 
         clearForm()
         loadStandardLayers()
-        myButton = form.ui.pbnRunStop
+        myButton = form.pbnRunStop
 
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function (second item in the list)
-        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        D = getUiState(form.ui)
+        D = getUiState(form)
 
         myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Run Button Enabled': True,
@@ -498,7 +498,7 @@ class RiabDockTest(unittest.TestCase):
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+        myResult = form.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
         #Terdampak (x 1000):    2366
@@ -510,7 +510,7 @@ class RiabDockTest(unittest.TestCase):
         # Push OK with the left mouse button
         clearForm()
         loadStandardLayers()
-        myButton = form.ui.pbnRunStop
+        myButton = form.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setYogyaGeoExtent()
 
@@ -518,23 +518,23 @@ class RiabDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboHazard, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function
-        QTest.keyClick(form.ui.cboFunction, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        D = getUiState(form.ui)
+        D = getUiState(form)
         myMessage = 'Got unexpected state: %s' % str(D)
         assert D == {'Hazard': 'Yogya2006',
                      'Exposure': 'OSM_building_polygons_20110905',
@@ -542,7 +542,7 @@ class RiabDockTest(unittest.TestCase):
                      'Run Button Enabled': True}, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+        myResult = form.wvResults.page().currentFrame().toPlainText()
 
         # Check that none of these  get a NaN value:
         assert 'Unknown' in myResult
@@ -563,13 +563,13 @@ class RiabDockTest(unittest.TestCase):
         clearForm()
         myHazardLayerCount, myExposureLayerCount = loadStandardLayers()
         myMessage = 'Expect %s layer(s) in hazard list widget but got %s' \
-                     % (myHazardLayerCount, form.ui.cboHazard.count())
-        self.assertEqual(form.ui.cboHazard.count(),
+                     % (myHazardLayerCount, form.cboHazard.count())
+        self.assertEqual(form.cboHazard.count(),
                          myHazardLayerCount), myMessage
 
         myMessage = 'Expect %s layer(s) in exposure list widget but got %s' \
-              % ( myExposureLayerCount, form.ui.cboExposure.count())
-        self.assertEqual(form.ui.cboExposure.count(),
+              % ( myExposureLayerCount, form.cboExposure.count())
+        self.assertEqual(form.cboExposure.count(),
                          myExposureLayerCount), myMessage
 
 
@@ -578,7 +578,7 @@ class RiabDockTest(unittest.TestCase):
         # See https://github.com/AIFDR/risk_in_a_box/issues/71
         # Push OK with the left mouse button
         clearForm()
-        myButton = form.ui.pbnRunStop
+        myButton = form.pbnRunStop
         # First part of scenario should have enabled run
         myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
                       'Population_Jakarta_geographic.asc']
@@ -600,14 +600,14 @@ class RiabDockTest(unittest.TestCase):
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
         myMessage = 'Run button was not disabled when exposure set to \n%s' % \
-            form.ui.cboExposure.currentText()
+            form.cboExposure.currentText()
         assert myButton.isEnabled()==False, myMessage
         # Now select again a valid layer and the run button
         # should be enabled
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.ui.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
         myMessage = 'Run button was not ensabled when exposure set to \n%s' % \
-            form.ui.cboExposure.currentText()
+            form.cboExposure.currentText()
         assert myButton.isEnabled(), myMessage
 
 

@@ -160,7 +160,7 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     myFunction.setColorRampItemList(myRangeList)
 
 
-class RiabDock(QtGui.QDockWidget):
+class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
     """Dock implementation class for the Risk In A Box plugin."""
 
     def __init__(self, iface, guiContext=True):
@@ -192,27 +192,27 @@ class RiabDock(QtGui.QDockWidget):
         self.runner = None
         self.helpDialog = None
         # Set up the user interface from Designer.
-        self.ui = Ui_RiabDock()
-        self.ui.setupUi(self)
+        #self.ui = Ui_RiabDock()
+        self.setupUi(self)
         self.getLayers()
         self.setOkButtonStatus()
 
-        myButton = self.ui.pbnHelp
+        myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
         #self.showHelp()
-        myButton = self.ui.pbnRunStop
+        myButton = self.pbnRunStop
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.accept)
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
         # update the functions list whenever we change the hazard
-        QtCore.QObject.connect(self.ui.cboHazard,
+        QtCore.QObject.connect(self.cboHazard,
                                QtCore.SIGNAL('currentIndexChanged(int)'),
                                self.getFunctions)
         # update the functions list whenever we change the exposure
-        QtCore.QObject.connect(self.ui.cboExposure,
+        QtCore.QObject.connect(self.cboExposure,
                                QtCore.SIGNAL('currentIndexChanged(int)'),
                                self.getFunctions)
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
@@ -239,13 +239,13 @@ class RiabDock(QtGui.QDockWidget):
 
            Example::
 
-               flag,msg = self.ui.validate()
+               flag,msg = self.validate()
 
         Raises:
            no exceptions explicitly raised
         """
-        myHazardIndex = self.ui.cboHazard.currentIndex()
-        myExposureIndex = self.ui.cboExposure.currentIndex()
+        myHazardIndex = self.cboHazard.currentIndex()
+        myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
             myMessage = (
             '<span class="label notice">Getting started:'
@@ -255,7 +255,7 @@ class RiabDock(QtGui.QDockWidget):
             'dwellings) re available. When you are ready, click the <em>'
             'run</em> button below.')
             return (False, myMessage)
-        if self.ui.cboFunction.currentIndex() == -1:
+        if self.cboFunction.currentIndex() == -1:
 
             haz_fn = str(self.getHazardLayer().source())
             haz_kwds = self.calculator.getKeywordFromFile(haz_fn)
@@ -329,7 +329,7 @@ class RiabDock(QtGui.QDockWidget):
            None.
         Raises:
            no exceptions explicitly raised."""
-        myButton = self.ui.pbnRunStop
+        myButton = self.pbnRunStop
         myFlag, myMessage = self.validate()
         myButton.setEnabled(myFlag)
         if myMessage is not '':
@@ -351,8 +351,8 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
            no
         """
-        self.ui.cboHazard.clear()
-        self.ui.cboExposure.clear()
+        self.cboHazard.clear()
+        self.cboExposure.clear()
         for i in range(len(self.iface.mapCanvas().layers())):
 
             myLayer = self.iface.mapCanvas().layer(i)
@@ -382,9 +382,9 @@ class RiabDock(QtGui.QDockWidget):
                 myTitle = myName
 
             if myCategory == 'hazard':
-                self.ui.cboHazard.addItem(myTitle, mySource)
+                self.cboHazard.addItem(myTitle, mySource)
             elif myCategory == 'exposure':
-                self.ui.cboExposure.addItem(myTitle, mySource)
+                self.cboExposure.addItem(myTitle, mySource)
 
         # now populate the functions list based on the layers loaded
         self.getFunctions()
@@ -402,7 +402,7 @@ class RiabDock(QtGui.QDockWidget):
         Raises:
            no
         """
-        self.ui.cboFunction.clear()
+        self.cboFunction.clear()
         # get the keyword dicts for hazard and exposure
         myHazardLayer = self.getHazardLayer()
         if myHazardLayer is None:
@@ -434,7 +434,7 @@ class RiabDock(QtGui.QDockWidget):
             myDict = self.calculator.availableFunctions(myList)
             #populate the hazard combo with the available functions
             for myFunction in myDict:  # use only key
-                self.ui.cboFunction.addItem(myFunction)
+                self.cboFunction.addItem(myFunction)
         except Exception, e:
             raise e
 
@@ -478,10 +478,10 @@ class RiabDock(QtGui.QDockWidget):
     def getHazardLayer(self):
         """Obtain qgsmaplayer id from the userrole of the QtCombo for exposure
         and return it as a QgsMapLayer"""
-        myIndex = self.ui.cboHazard.currentIndex()
+        myIndex = self.cboHazard.currentIndex()
         if myIndex < 0:
             return None
-        myLayerId = self.ui.cboHazard.itemData(myIndex,
+        myLayerId = self.cboHazard.itemData(myIndex,
                              QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
@@ -490,10 +490,10 @@ class RiabDock(QtGui.QDockWidget):
         """Obtain the name of the path to the exposure file from the
         userrole of the QtCombo for exposure."""
 
-        myIndex = self.ui.cboExposure.currentIndex()
+        myIndex = self.cboExposure.currentIndex()
         if myIndex < 0:
             return None
-        myLayerId = self.ui.cboExposure.itemData(myIndex,
+        myLayerId = self.cboExposure.itemData(myIndex,
                              QtCore.Qt.UserRole).toString()
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
@@ -527,7 +527,7 @@ class RiabDock(QtGui.QDockWidget):
 
         self.calculator.setHazardLayer(myHazardFilename)
         self.calculator.setExposureLayer(myExposureFilename)
-        self.calculator.setFunction(self.ui.cboFunction.currentText())
+        self.calculator.setFunction(self.cboFunction.currentText())
 
         # Start it in its own thread
         self.runner = self.calculator.getRunner()
@@ -634,8 +634,8 @@ class RiabDock(QtGui.QDockWidget):
 
     def showBusy(self):
         """A helper function to indicate the plugin is processing."""
-        #self.ui.pbnRunStop.setText('Cancel')
-        self.ui.pbnRunStop.setEnabled(False)
+        #self.pbnRunStop.setText('Cancel')
+        self.pbnRunStop.setEnabled(False)
         myHtml = ('<div><span class="label success">'
                    'Analyzing this question...</span></div>'
                    '<div><img src="qrc:/plugins/riab/ajax-loader.gif" />'
@@ -643,17 +643,17 @@ class RiabDock(QtGui.QDockWidget):
         self.displayHtml(myHtml)
         self.repaint()
         QtGui.qApp.processEvents()
-        self.ui.grpQuestion.setEnabled(False)
+        self.grpQuestion.setEnabled(False)
 
     def hideBusy(self):
         """A helper function to indicate processing is done."""
-        #self.ui.pbnRunStop.setText('Run')
+        #self.pbnRunStop.setText('Run')
         if self.runner:
             del self.runner
             self.runner = None
 
-        self.ui.grpQuestion.setEnabled(True)
-        self.ui.pbnRunStop.setEnabled(True)
+        self.grpQuestion.setEnabled(True)
+        self.pbnRunStop.setEnabled(True)
         self.repaint()
 
     def enableBusyCursor(self):
@@ -876,5 +876,5 @@ class RiabDock(QtGui.QDockWidget):
     def displayHtml(self, theMessage):
         """Given an html snippet, wrap it in a page header and footer
         and display it in the wvResults widget."""
-        self.ui.wvResults.setHtml(self.htmlHeader() + theMessage +
+        self.wvResults.setHtml(self.htmlHeader() + theMessage +
                                   self.htmlFooter())
