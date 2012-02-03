@@ -168,6 +168,12 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
         This dialog will allow the user to select layers and scenario details
         and subsequently run their model.
+        
+        .. note:: We use the multiple inheritance approach from Qt4 so that
+            for elements are directly accessible in the form context and we can
+            use autoconnect to set up slots. See article below:
+            http://doc.qt.nokia.com/4.7-snapshot/designer-using-a-ui-file.html
+
 
         Args:
 
@@ -182,7 +188,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
            no exceptions explicitly raised
         """
         QtGui.QDockWidget.__init__(self, None)
-
+        self.setupUi(self)
         # Save reference to the QGIS interface
         self.iface = iface
         self.header = None  # for storing html header template
@@ -191,9 +197,6 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         self.calculator = ImpactCalculator()
         self.runner = None
         self.helpDialog = None
-        # Set up the user interface from Designer.
-        #self.ui = Ui_RiabDock()
-        self.setupUi(self)
         self.getLayers()
         self.setOkButtonStatus()
 
@@ -280,8 +283,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             'Run</em> button.')
             return (True, myMessage)
 
-    @pyqtSignature('') #prevents actions being handled twice
-    def on_cboHazard_currentIndexChanged(self):
+    @pyqtSignature('int') #prevents actions being handled twice
+    def on_cboHazard_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Hazard combo is changed 
         so that we can see if the ok button should be enabled.
         Args:
@@ -293,8 +296,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         # Add any other logic you mught like here...
         self.setOkButtonStatus()
         
-    @pyqtSignature('') #prevents actions being handled twice
-    def on_cboExposure_currentIndexChanged(self):
+    @pyqtSignature('int') #prevents actions being handled twice
+    def on_cboExposure_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Exposure combo is changed 
         so that we can see if the ok button should be enabled.
         Args:
@@ -306,8 +309,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         # Add any other logic you mught like here...
         self.setOkButtonStatus()
 
-    @pyqtSignature('') #prevents actions being handled twice
-    def on_cboFunction_currentIndexChanged(self):
+    @pyqtSignature('int') #prevents actions being handled twice
+    def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed 
         so that we can see if the ok button should be enabled.
         Args:
