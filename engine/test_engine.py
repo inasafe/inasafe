@@ -1036,6 +1036,8 @@ class Test_Engine(unittest.TestCase):
         """Merging of bounding boxes works
         """
 
+        # FIXME (Ole): Deprecate this test
+
         # Name file names for hazard level and exposure
         exposure_filename = '%s/%s' % (TESTDATA, 'Population_2010.asc')
         hazard_filename = '%s/%s' % (TESTDATA,

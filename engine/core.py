@@ -198,6 +198,10 @@ def get_bounding_boxes(haz_data, exp_data, req_bbox):
                            among hazard, exposure and viewport bounds.
     """
 
+    # FIXME (Ole): As the gui now has its own wrapper about bbox_intersection
+    #              I think this one should retire, but I want to keep the
+    #              tests.
+
     # Input checks
     if isinstance(haz_data, basestring):
         haz_layer = read_layer(haz_data)
@@ -242,26 +246,11 @@ def get_bounding_boxes(haz_data, exp_data, req_bbox):
         logger.info(msg)
         raise Exception(msg)
 
-    # Grow hazard bbox to buffer this common bbox in case where
-    # hazard is raster and exposure is vector
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # FIXME (Ole): Move this into the caller
-    #if (haz_metadata['layertype'] == 'raster' and
-    #    exp_metadata['layertype'] == 'vector'):#
-    #
-    #    haz_res = haz_metadata['resolution']
-    #    haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)
-    #else:
-    #    haz_bbox = intersection_bbox
-
-    # Usually the intersection bbox is used for both exposure layer and result
-    #exp_bbox = imp_bbox = intersection_bbox
-
     return intersection_bbox, None
 
 
 # FIXME (Ole): This needs to be rewritten as it
-# directly depends on ows metadata
+# directly depends on ows metadata. See issue #54
 # def get_linked_layers(main_layers):
 #     """Get list of layers that are required by main layers
 

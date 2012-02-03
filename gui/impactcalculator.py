@@ -91,7 +91,23 @@ def getOptimalExtent(theHazardGeoExtent,
         Any exceptions raised by the RIAB library will be propogated.
     """
 
-    # .. note:: The get_bounding_boxes function below assumes that
+    # Check that inputs are valid
+    for x in [theHazardGeoExtent,
+              theExposureGeoExtent,
+              theViewportGeoExtent]:
+
+        # Err message
+        msg = ('Invalid bounding box %s (%s). It must be a sequence of the '
+               'form [west, south, east, north]' % (str(x),
+                                                    str(type(x))[1:-1]))
+        try:
+            list(x)
+        except:
+            raise Exception(msg)
+
+        assert len(x) == 4, msg
+
+    # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
     myOptimalExtent = bbox_intersection(theHazardGeoExtent,
                                         theExposureGeoExtent,
