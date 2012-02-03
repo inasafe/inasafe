@@ -94,14 +94,16 @@ def _clipVectorLayer(theLayer, theExtent):
 
     myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
                                   getTempDir())
-    # ensure the file is deleted before we try to write to it
+
+    # Ensure the file is deleted before we try to write to it
     # fixes windows specific issue where you get a message like this
     # ERROR 1: c:\temp\riab\clip_jpxjnt.shp is not a directory.
     # This is because mkstemp creates the file handle and leaves
     # the file open.
     os.close(myHandle)
     os.remove(myFilename)
-    # get the clip extents in the layer's native CRS
+
+    # Get the clip extents in the layer's native CRS
     myGeoCrs = QgsCoordinateReferenceSystem()
     myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     myXForm = QgsCoordinateTransform(myGeoCrs, theLayer.crs())
@@ -197,11 +199,12 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
     # because unline gdal_translate, it does not take projwin.
     myClipKml = extentToKml(theExtent)
 
-    #create a filename for the clipped, resampled and reprojected layer
+    # Create a filename for the clipped, resampled and reprojected layer
     myHandle, myFilename = tempfile.mkstemp('.tif', 'clip_',
                                 getTempDir())
     os.close(myHandle)
     os.remove(myFilename)
+
     # If no cell size is specified, we need to run gdalwarp without
     # specifying the output pixel size to ensure the raster dims
     # remain consistent.
@@ -225,15 +228,16 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
         myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
                           'Versions/1.8/Programs/')
     myCommand = myExecutablePrefix + myCommand
-    # print 'Command: ', myCommand
+
     # Now run GDAL warp scottie...
     try:
         myResult = call(myCommand, shell=True)
     except Exception, e:
         myMessage = ('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'
-                     ) % (myCommand, str(e))
+                     % (myCommand, str(e)))
         raise Exception(myMessage)
+
     # .. todo:: Check the result of the shell call is ok
     copyKeywords(myWorkingLayer, myFilename)
     return myFilename  # Filename of created file

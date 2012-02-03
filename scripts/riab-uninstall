@@ -1,0 +1,40 @@
+#! /bin/bash
+
+echo "---------------------------------------------------------"
+echo "Uninstalling Risk in a Box                               "
+echo
+echo "This will completely remove Risk in a Box, its datasets, "
+echo "and .bash_aliases - although a copy will be left in      "
+echo ".bash_aliases_risiko_copy                                "
+echo
+echo "System wide Risiko dependencies will be left intact      "
+echo
+
+read -p "Do you wish to remove Risk in a Box [Y/N](N) ?" answer
+case $answer in
+    y | Y | yes | YES | Yes) answer="y";;
+    * ) echo "OK - nothing done"; exit 0;
+esac
+
+read -p "ARE YOU SURE [Y/N](N) ?" answer
+case $answer in
+    y | Y | yes | YES | Yes) answer="y";;
+    * ) echo "OK - nothing done"; exit 0;
+esac
+
+echo "Moving .bash_alias to .bash_aliases_risiko_copy"
+sudo mv -f ~/.bash_aliases ~/.bash_aliases_risiko_copy
+
+echo "Removing Risk in a Box"
+/bin/rm -rf $RIABQGIS
+cd
+
+echo
+echo "Success, You have removed Risk in a Box!"
+echo
+echo "If you want to reinstall "
+echo "1) Make an area (say ~/work) and cd to it"
+#echo "2) wget http://bit.ly/riab-install"
+echo "2) wget https://raw.github.com/AIFDR/risk_in_a_box/master/scripts/riab-install"
+echo "3) ./riab-install"
+echo
