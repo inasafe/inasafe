@@ -246,8 +246,8 @@ def get_bounding_boxes(haz_data, exp_data, req_bbox):
     # hazard is raster and exposure is vector
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # FIXME (Ole): Move this into the caller
-    #if (haz_metadata['layer_type'] == 'raster' and
-    #    exp_metadata['layer_type'] == 'vector'):#
+    #if (haz_metadata['layertype'] == 'raster' and
+    #    exp_metadata['layertype'] == 'vector'):#
     #
     #    haz_res = haz_metadata['resolution']
     #    haz_bbox = buffered_bounding_box(intersection_bbox, haz_res)

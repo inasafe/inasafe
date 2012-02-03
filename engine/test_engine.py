@@ -1042,7 +1042,7 @@ class Test_Engine(unittest.TestCase):
                                      'Lembang_Earthquake_Scenario.asc')
 
         # Reduced versions of metadata dictionaries for verification only
-        haz_metadata = {'layer_type': 'raster',
+        haz_metadata = {'layertype': 'raster',
                         'title': 'lembang_earthquake_scenario',
                         'bounding_box': (105.3000035,
                                          -8.3749994999999995,
@@ -1054,7 +1054,7 @@ class Test_Engine(unittest.TestCase):
                         'resolution': (0.0083330000000000001,
                                        0.0083330000000000001)}
 
-        exp_metadata = {'layer_type': 'raster',
+        exp_metadata = {'layertype': 'raster',
                         'title': 'population_2010',
                         'bounding_box': (94.972335000000001,
                                          -11.009721000000001,

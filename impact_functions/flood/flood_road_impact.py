@@ -13,7 +13,7 @@ class FloodRoadImpactFunction(FunctionProvider):
 
     :param requires category=='hazard' and \
                     subcategory.startswith('flood') and \
-                    layer_type=='raster' and \
+                    layertype=='raster' and \
                     unit=='m'
 
     :param requires category=='exposure' and \
