@@ -124,7 +124,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         """
         myList = self.calculator.availableFunctions()
         assert myList > 1
-        # also test if it works when we give it two layers
+
+        # Also test if it works when we give it two layers
         # to see if we can determine which functions will
         # work for them.
         myKeywords1 = self.calculator.getKeywordFromFile(self.rasterShakePath)

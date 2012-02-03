@@ -491,9 +491,10 @@ class RiabDockTest(unittest.TestCase):
         myResult = form.ui.wvResults.page().currentFrame().toPlainText()
 
         msg = 'Result not as expected: %s' % myResult
-        print myResult
-        #assert '356018' in myResult, msg
-        #assert '2479' in myResult, msg  # These are expected impact number
+
+        # FIXME (Adjust these numbers - they don't need to be exact)
+        assert '356018' in myResult, msg
+        assert '2479' in myResult, msg  # These are expected impact number
 
     def test_Issue47(self):
         """Issue47: Problem when hazard & exposure data are in different
