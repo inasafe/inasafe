@@ -103,6 +103,7 @@ def loadStandardLayers():
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
     return myHazardLayerCount, myExposureLayerCount
 
+
 def loadLayers(theLayerList, theClearFlag=True):
     """Helper function to load layers as defined in a python list."""
     # First unload any layers that may already be loaded
@@ -290,8 +291,9 @@ class RiabDockTest(unittest.TestCase):
         #High damage (50-100%):    3160
         # Post merge of clip on steoids branch:
         #High damage (50-100%):    2993
-        myMessage = ('Unexpected result returned for Earthquake guidelines function '
-               'Expected:\n "All" count of 2993, received: \n %s' % myResult)
+        myMessage = ('Unexpected result returned for Earthquake guidelines'
+               'function. Expected:\n "All" count of 2993, '
+               'received: \n %s' % myResult)
         assert '2993' in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction(self):
@@ -331,9 +333,9 @@ class RiabDockTest(unittest.TestCase):
         # Jumlah Penduduk:    21189932
         # Perkiraan Orang Meninggal:    2903
 
-        myMessage = ('Unexpected result returned for Earthquake Fatality Function '
-               'Expected:\n "Jumlah Penduduk" count of 21189932, '
-               'received: \n %s' % myResult)
+        myMessage = ('Unexpected result returned for Earthquake Fatality '
+               'Function Expected:\n "Jumlah Penduduk" count of 21189932 '
+               ', received: \n %s' % myResult)
         # Pre clip refactor
         #assert '20771496' in myResult, myMessage
         assert '21189932' in myResult, myMessage
@@ -460,7 +462,7 @@ class RiabDockTest(unittest.TestCase):
 
         # Push OK with the left mouse button
         clearForm()
-        loadLayers()
+        loadStandardLayers()
         myButton = form.pbnRunStop
 
         msg = 'Run button was not enabled'
@@ -482,7 +484,7 @@ class RiabDockTest(unittest.TestCase):
         QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        myDict = getUiState(form.ui)
+        myDict = getUiState(form)
 
         msg = 'Got unexpected state: %s' % str(myDict)
         assert myDict == {'Run Button Enabled': True,
@@ -496,7 +498,7 @@ class RiabDockTest(unittest.TestCase):
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.ui.wvResults.page().currentFrame().toPlainText()
+        myResult = form.wvResults.page().currentFrame().toPlainText()
 
         msg = 'Result not as expected: %s' % myResult
 
