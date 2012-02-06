@@ -555,7 +555,6 @@ class RiabDockTest(unittest.TestCase):
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
-        # Push OK with the left mouse button
         clearForm()
         loadStandardLayers()
         myButton = form.pbnRunStop
@@ -642,13 +641,12 @@ class RiabDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
         # Second part of scenario - run disables when adding invalid layer
         # and select it - run should be disabled
-        myFileList = ['glp10ag.asc']  # this layer has incorrect keywords
+        myFileList = ['issue71.tif']  # this layer has incorrect keywords
         myClearFlag = False
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
-
         myDict = getUiState(form)
-        myMessage = ('Run button was not disabled when exposure set to \n%s' 
+        myMessage = ('Run button was not disabled when exposure set to \n%s'
                     '\nUI State: \n%s') % (form.cboExposure.currentText(),
                     myDict)
         assert myButton.isEnabled() == False, myMessage
