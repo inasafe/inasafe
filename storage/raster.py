@@ -566,18 +566,31 @@ class Raster:
         if native:
             keywords = self.get_keywords()
             if 'resolution' in keywords:
-                # Clunky but works - see issue #171
-                res = float(keywords['resolution'])
-                if not isotropic:
-                    res = (res, res)
-        #else:
-        #    if isotropic:
-        #        msg = ('Resolution of layer "%s" was not isotropic: '
-        #               '[dx, dy] == %s' % (self.get_name(), res))
-        #        assert numpy.allclose(res[0], res[1],
-        #                              rtol=1.0e-12, atol=1.0e-12), msg
-        #    else:
-        #        res = res[0]
+
+                resolution = keywords['resolution']
+                try:
+                    res = float(resolution)
+                except:
+                    # Assume resolution is a string of the form:
+                    # (0.00045228819716044, 0.00045228819716044)
+
+                    msg = ('Unknown format for resolution keyword: %s'
+                           % resolution)
+                    assert (resolution.startswith('(') and
+                            resolution.endswith(')')), msg
+
+                    dx, dy = [float(s) for s in resolution[1:-1].split(',')]
+                    if not isotropic:
+                        res = (dx, dy)
+                    else:
+                        msg = ('Resolution of layer "%s" was not isotropic: '
+                               '[dx, dy] == %s' % (self.get_name(), res))
+                        assert numpy.allclose(dx, dy,
+                                              rtol=1.0e-12, atol=1.0e-12), msg
+                        res = dx
+                else:
+                    if not isotropic:
+                        res = (res, res)
 
         # Return either 2-tuple or scale depending on isotropic
         return res

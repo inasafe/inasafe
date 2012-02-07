@@ -119,6 +119,7 @@ def loadLayers(theLayerList, theClearFlag=True):
     myExposureLayerCount = 0
     myHazardLayerCount = 0
     myCanvasLayers = []
+
     # Now create our new layers
     for myFile in theLayerList:
         # Extract basename and absolute path

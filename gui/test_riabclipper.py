@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 import os
+import numpy
 import unittest
 
 from qgis.core import (QgsApplication,
@@ -30,8 +31,10 @@ from storage.core import read_layer
 from riabclipper import clipLayer, extentToKml
 from impactcalculator import getOptimalExtent
 from utilities_test import getQgisTestApp
+from storage.utilities_test import TESTDATA
+from storage.utilities import nanallclose
 
-# Setup pathnames for test data sets
+# Setup pathnames for test data sets FIXME!!
 myRoot = os.path.abspath(os.path.join(
         os.path.dirname(__file__), '..'))
 
@@ -189,6 +192,144 @@ class RiabClipper(unittest.TestCase):
 
         msg = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
         assert kwds['zoot'] == 'animal', msg
+
+
+    def testRasterScaling(self):
+        """Raster layers can be scaled when resampled
+
+        This is a test for ticket #52
+
+        Native test .asc data has
+
+        Population_Jakarta_geographic.asc
+        ncols         638
+        nrows         649
+        cellsize      0.00045228819716044
+
+        Population_2010.asc
+        ncols         5525
+        nrows         2050
+        cellsize      0.0083333333333333
+
+        Scaling is necessary for raster data that represents density
+        such as population per km^2
+        """
+
+        for test_filename in ['Population_Jakarta_geographic.asc',
+                              'Population_2010.asc']:
+
+            myRasterPath = ('%s/%s' % (TESTDATA, test_filename))
+
+            # Get reference values
+            R = read_layer(myRasterPath)
+            R_min_ref, R_max_ref = R.get_extrema()
+            native_resolution = R.get_resolution()
+
+            # Get the Hazard extents as an array in EPSG:4326
+            bounding_box = R.get_bounding_box()
+
+            # Test for a range of resolutions
+            for res in [0.02, 0.01, 0.005, 0.002, 0.001, 0.0005,  # Coarser
+                        0.0002]:                                  # Finer
+
+                # To save time don't do finest resolution for the
+                # large population set
+                if test_filename.startswith('Population_2010') and res < 0.005:
+                    break
+
+                # Clip the raster to the bbox
+                myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
+                myResult = clipLayer(myRasterLayer, bounding_box, res,
+                                     extraKeywords={'resolution': native_resolution})
+
+                R = read_layer(myResult)
+                A_native = R.get_data(scaling=False)
+                A_scaled = R.get_data(scaling=True)
+
+                sigma = (R.get_resolution()[0] / native_resolution[0]) ** 2
+
+                # Compare extrema
+                expected_scaled_max = sigma * numpy.nanmax(A_native)
+                msg = ('Resampled raster was not rescaled correctly: '
+                       'max(A_scaled) was %f but expected %f'
+                       % (numpy.nanmax(A_scaled), expected_scaled_max))
+
+                # FIXME (Ole): The rtol used to be 1.0e-8 -
+                #              now it has to be 1.0e-6, otherwise we get
+                #              max(A_scaled) was 12083021.000000 but
+                #              expected 12083020.414316
+                #              Is something being rounded to the nearest integer?
+                assert numpy.allclose(expected_scaled_max,
+                                      numpy.nanmax(A_scaled),
+                                      rtol=1.0e-6, atol=1.0e-8), msg
+
+                expected_scaled_min = sigma * numpy.nanmin(A_native)
+                msg = ('Resampled raster was not rescaled correctly: '
+                       'min(A_scaled) was %f but expected %f'
+                       % (numpy.nanmin(A_scaled), expected_scaled_min))
+                assert numpy.allclose(expected_scaled_min,
+                                      numpy.nanmin(A_scaled),
+                                      rtol=1.0e-8, atol=1.0e-12), msg
+
+                # Compare elementwise
+                msg = 'Resampled raster was not rescaled correctly'
+                assert nanallclose(A_native * sigma, A_scaled,
+                                   rtol=1.0e-8, atol=1.0e-8), msg
+
+                # Check that it also works with manual scaling
+                A_manual = R.get_data(scaling=sigma)
+                msg = 'Resampled raster was not rescaled correctly'
+                assert nanallclose(A_manual, A_scaled,
+                                   rtol=1.0e-8, atol=1.0e-8), msg
+
+                # Check that an exception is raised for bad arguments
+                try:
+                    R.get_data(scaling='bad')
+                except:
+                    pass
+                else:
+                    msg = 'String argument should have raised exception'
+                    raise Exception(msg)
+
+                try:
+                    R.get_data(scaling='(1, 3)')
+                except:
+                    pass
+                else:
+                    msg = 'Tuple argument should have raised exception'
+                    raise Exception(msg)
+
+                # Check None option without existence of density keyword
+                A_none = R.get_data(scaling=None)
+                msg = 'Data should not have changed'
+                assert nanallclose(A_native, A_none,
+                                   rtol=1.0e-12, atol=1.0e-12), msg
+
+                # Try with None and density keyword
+                R.keywords['density'] = 'true'
+                A_none = R.get_data(scaling=None)
+                msg = 'Resampled raster was not rescaled correctly'
+                assert nanallclose(A_scaled, A_none,
+                                   rtol=1.0e-12, atol=1.0e-12), msg
+
+                R.keywords['density'] = 'Yes'
+                A_none = R.get_data(scaling=None)
+                msg = 'Resampled raster was not rescaled correctly'
+                assert nanallclose(A_scaled, A_none,
+                                   rtol=1.0e-12, atol=1.0e-12), msg
+
+                R.keywords['density'] = 'False'
+                A_none = R.get_data(scaling=None)
+                msg = 'Data should not have changed'
+                assert nanallclose(A_native, A_none,
+                                   rtol=1.0e-12, atol=1.0e-12), msg
+
+                R.keywords['density'] = 'no'
+                A_none = R.get_data(scaling=None)
+                msg = 'Data should not have changed'
+                assert nanallclose(A_native, A_none,
+                                   rtol=1.0e-12, atol=1.0e-12), msg
+
 
     def test_extentToKml(self):
         """Test if extent too KML is working."""
