@@ -67,7 +67,7 @@ test_suite: compile testdata
 	@# This does clip the line, but does not flush and puts an extra
 	@# newline in.
 
-	@echo Expecting 1 test to fail in support of issue 52
+	@#echo Expecting 1 test to fail in support of issue 52
 
 # Run gui test suite only
 gui_test_suite: compile testdata

@@ -216,6 +216,12 @@ def setYogyaGeoExtent():
     canvas.setExtent(myRect)
 
 
+def setGeoExtent(theBoundingBox):
+    """Zoom to an area specified given bounding box (list)"""
+    myRect = QgsRectangle(*theBoundingBox)
+    canvas.setExtent(myRect)
+
+
 class RiabDockTest(unittest.TestCase):
     """Test the risk in a box GUI"""
 
@@ -298,9 +304,8 @@ class RiabDockTest(unittest.TestCase):
                'received: \n %s' % myResult)
         assert '2993' in myResult, myMessage
 
-    def test_runEarthquakeFatalityFunction(self):
-        """Earthquake fatality function runs in GUI with Shakemap 2009"""
-        """Raster on analysis runs as expected"""
+    def test_runEarthquakeFatalityFunction_small(self):
+        """Padang 2009 fatalities estimated correctly - small extent"""
 
         # Push OK with the left mouse button
         clearForm()
@@ -312,8 +317,8 @@ class RiabDockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        # now let's simulate a choosing another combo item and running
-        # the model again...
+        # Simulate choosing another combo item and running
+        # the model again
         QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
 
@@ -328,21 +333,57 @@ class RiabDockTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
         myResult = form.wvResults.page().currentFrame().toPlainText()
-        # Expected output:
-        # Pre clip refactor:
-        # Jumlah Penduduk:    20771496
-        # Perkiraan Orang Meninggal:    2687
-        # Post Clip Refactor:
-        # Jumlah Penduduk:    21189932
-        # Perkiraan Orang Meninggal:    2903
+
+        # Check against expected output
+        myMessage = ('Unexpected result returned for Earthquake Fatality '
+                     'Function Expected: fatality count of '
+                     '116 , received: \n %s' % myResult)
+        assert '116' in myResult, myMessage
 
         myMessage = ('Unexpected result returned for Earthquake Fatality '
-                     'Function Expected:\n "Jumlah Penduduk" count of '
-                     '21189932 , received: \n %s' % myResult)
+                     'Function Expected: total population count of '
+                     '847528 , received: \n %s' % myResult)
+        assert '847528' in myResult, myMessage
 
-        # Pre clip refactor
-        #assert '20771496' in myResult, myMessage
-        assert '21189932' in myResult, myMessage
+    def test_runEarthquakeFatalityFunction_Padang_full(self):
+        """Padang 2009 fatalities estimated correctly"""
+
+        # Push OK with the left mouse button
+        clearForm()
+        loadStandardLayers()
+        myButton = form.pbnRunStop
+        setCanvasCrs(GEOCRS, True)
+        setGeoExtent([96, -5, 105, 2])  # This covers all of the 2009 shaking
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
+
+        # Simulate choosing another combo item and running
+        # the model again
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+
+        myDict = getUiState(form)
+        expectDict = {'Hazard': 'Shakemap_Padang_2009',
+                      'Exposure': 'Population Density Estimate (5kmx5km)',
+                      'Impact Function': 'Earthquake Fatality Function',
+                      'Run Button Enabled': True}
+        myMessage = 'Got unexpected state: %s' % str(myDict)
+        assert myDict == expectDict, myMessage
+
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+
+        myResult = form.wvResults.page().currentFrame().toPlainText()
+
+        # Check against expected output
+        myMessage = ('Unexpected result returned for Earthquake Fatality '
+                     'Function Expected: fatality count of '
+                     '500 , received: \n %s' % myResult)
+        assert '500' in myResult, myMessage
+
+        myMessage = ('Unexpected result returned for Earthquake Fatality '
+                     'Function Expected: total population count of '
+                     '31374072 , received: \n %s' % myResult)
+        assert '31374072' in myResult, myMessage
 
     def test_runTsunamiBuildingImpactFunction(self):
         """Tsunami function runs in GUI with Batemans Bay model"""

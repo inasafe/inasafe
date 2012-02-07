@@ -18,6 +18,7 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from ui_riabdock import Ui_RiabDock
@@ -743,7 +744,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         # All this is done in the function getWGS84resolution
         myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
         myCellSize = None
-        extraKeywords = {}
+        extraExposureKeywords = {}
         if myHazardLayer.type() == QgsMapLayer.RasterLayer:
 
             # Hazard layer is raster
@@ -761,8 +762,9 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                 else:
                     myCellSize = myExposureGeoCellSize
 
-                # Record native resolution for optional rescaling
-                #extraKeywords['resolution'] = myExposureGeoCellSize
+                # Record native resolution to allow rescaling of exposure data
+                if not numpy.allclose(myCellSize, myExposureGeoCellSize):
+                    extraExposureKeywords['resolution'] = myExposureGeoCellSize
             else:
                 # If exposure is vector data grow hazard raster layer to
                 # ensure there are enough pixels for points at the edge of
@@ -784,11 +786,10 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
         myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
-                                        myCellSize,
-                                        extraKeywords=extraKeywords)
+                                        myCellSize)
         myClippedExposurePath = clipLayer(myExposureLayer,
                                           myGeoExtent, myCellSize,
-                                          extraKeywords=extraKeywords)
+                                          extraKeywords=extraExposureKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 
