@@ -33,9 +33,12 @@ docs: compile
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
-	@find . -name '*~' -exec rm {} \;
-	@find . -name '*.pyc' -exec rm {} \;
-	@rm .noseids
+	@# Preceding dash means that make will continue in case of errors
+	@# Swapping stdout & stderr and filter out low level QGIS garbage
+	@# See http://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter
+	@-find . -name '*~' -exec rm {} \;
+	@-find . -name '*.pyc' -exec rm {} \;
+	@-/bin/rm .noseids 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
 test: test_suite pep8 disabled_tests dependency_test unwanted_strings
@@ -57,10 +60,6 @@ test_suite: compile testdata
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
 	@echo "----------------------"
-
-	@# Preceding dash means that make will continue in case of errors
-	@# Swapping stdout & stderr and filter out low level QGIS garbage
-	@# See http://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter
 	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
@@ -68,6 +67,7 @@ test_suite: compile testdata
 	@# This does clip the line, but does not flush and puts an extra
 	@# newline in.
 
+	@# Report expected failures if any!
 	@#echo Expecting 1 test to fail in support of issue 52
 
 # Run gui test suite only
