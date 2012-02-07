@@ -400,7 +400,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
            no
         """
         self.cboFunction.clear()
-        # get the keyword dicts for hazard and exposure
+
+        # Get the keyword dictionaries for hazard and exposure
         myHazardLayer = self.getHazardLayer()
         if myHazardLayer is None:
             return
@@ -411,7 +412,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         myExposureFile = myExposureLayer.source()
         myHazardKeywords = self.calculator.getKeywordFromFile(
                                             str(myHazardFile))
-        # We need to add the layer type to the returned dict
+        # We need to add the layer type to the returned keywords
         if myHazardLayer.type() == QgsMapLayer.VectorLayer:
             myHazardKeywords['layertype'] = 'vector'
         elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
@@ -419,7 +420,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
         myExposureKeywords = self.calculator.getKeywordFromFile(
                                             str(myExposureFile))
-        # We need to add the layer type to the returned dict
+        # We need to add the layer type to the returned keywords
         if myExposureLayer.type() == QgsMapLayer.VectorLayer:
             myExposureKeywords['layertype'] = 'vector'
         elif myExposureLayer.type() == QgsMapLayer.RasterLayer:
@@ -429,7 +430,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         myList = [myHazardKeywords, myExposureKeywords]
         try:
             myDict = self.calculator.availableFunctions(myList)
-            #populate the hazard combo with the available functions
+            # Populate the hazard combo with the available functions
             for myFunction in myDict:  # use only key
                 self.cboFunction.addItem(myFunction)
         except Exception, e:
@@ -734,10 +735,12 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             raise Exception(msg)
 
         # Next work out the ideal spatial resolution for rasters
-        # in the analysis. We do this based on the geographic extents
+        # in the analysis. If layers are not native WGS84, we estimate
+        # this based on the geographic extents
         # rather than the layers native extents so that we can pass
-        # the ideal cell size and extents to the layer prep routines
+        # the ideal WGS84 cell size and extents to the layer prep routines
         # and do all preprocessing in a single operation.
+        # All this is done in the function getWGS84resolution
         myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
         myCellSize = None
         if myHazardLayer.type() == QgsMapLayer.RasterLayer:

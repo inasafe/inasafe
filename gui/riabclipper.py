@@ -18,13 +18,16 @@ __copyright__ += 'Disaster Reduction'
 
 import os
 import sys
-import shutil
+import tempfile
+
 from PyQt4.QtCore import QString
 from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
                        QgsRectangle, QgsMapLayer, QgsFeature,
                        QgsVectorFileWriter)
+
+from storage.utilities import read_keywords, write_keywords
+
 from riabexceptions import InvalidParameterException, KeywordNotFoundException
-import tempfile
 from utilities import getTempDir
 from subprocess import call
 
@@ -93,7 +96,7 @@ def _clipVectorLayer(theLayer, theExtent):
         raise InvalidParameterException(msg)
 
     myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                  getTempDir())
+                                            getTempDir())
 
     # Ensure the file is deleted before we try to write to it
     # fixes windows specific issue where you get a message like this
@@ -243,15 +246,22 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
     return myFilename  # Filename of created file
 
 
-def copyKeywords(sourceFile, destinationFile):
+def copyKeywords(sourceFile, destinationFile, extraKeywords={}):
     """Helper to copy the keywords file from a source dataset
     to a destination dataset.
 
     e.g.::
 
-    copyKeywords('foo.shp','bar.shp')
+    copyKeywords('foo.shp', 'bar.shp')
 
-    Will result in the foo.keywords file being copied to bar.keyword."""
+    Will result in the foo.keywords file being copied to bar.keyword.
+
+    Optional argument extraKeywords is a dictionary with additional
+    keywords that will be added to the destination file
+    e.g::
+
+    copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
+    """
 
     # FIXME (Ole): Need to turn qgis strings into normal strings earlier
     mySourceBase = os.path.splitext(str(sourceFile))[0]
@@ -265,11 +275,22 @@ def copyKeywords(sourceFile, destinationFile):
         raise KeywordNotFoundException(msg)
 
     try:
-        shutil.copyfile(myNewSource, myNewDestination)
+        srcKeywords = read_keywords(myNewSource)
+        dstKeywords = srcKeywords
+        for key in extraKeywords:
+            dstKeywords[key] = extraKeywords[key]
+        write_keywords(dstKeywords, myNewDestination)
     except Exception, e:
         msg = ('Failed to copy keywords file from :\n%s\nto\%s: %s' %
                (myNewSource, myNewDestination, str(e)))
         raise Exception(msg)
+
+    #try:
+    #    shutil.copyfile(myNewSource, myNewDestination)
+    #except Exception, e:
+    #    msg = ('Failed to copy keywords file from :\n%s\nto\%s: %s' %
+    #           (myNewSource, myNewDestination, str(e)))
+    #    raise Exception(msg)
 
     return
 
