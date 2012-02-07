@@ -193,7 +193,6 @@ class RiabClipper(unittest.TestCase):
         msg = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
         assert kwds['zoot'] == 'animal', msg
 
-
     def testRasterScaling(self):
         """Raster layers can be scaled when resampled
 
@@ -238,9 +237,10 @@ class RiabClipper(unittest.TestCase):
                     break
 
                 # Clip the raster to the bbox
+                extraKeywords = {'resolution': native_resolution}
                 myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
                 myResult = clipLayer(myRasterLayer, bounding_box, res,
-                                     extraKeywords={'resolution': native_resolution})
+                                     extraKeywords=extraKeywords)
 
                 R = read_layer(myResult)
                 A_native = R.get_data(scaling=False)
@@ -258,7 +258,8 @@ class RiabClipper(unittest.TestCase):
                 #              now it has to be 1.0e-6, otherwise we get
                 #              max(A_scaled) was 12083021.000000 but
                 #              expected 12083020.414316
-                #              Is something being rounded to the nearest integer?
+                #              Is something being rounded to the nearest
+                #              integer?
                 assert numpy.allclose(expected_scaled_max,
                                       numpy.nanmax(A_scaled),
                                       rtol=1.0e-6, atol=1.0e-8), msg
@@ -329,7 +330,6 @@ class RiabClipper(unittest.TestCase):
                 msg = 'Data should not have changed'
                 assert nanallclose(A_native, A_none,
                                    rtol=1.0e-12, atol=1.0e-12), msg
-
 
     def test_extentToKml(self):
         """Test if extent too KML is working."""

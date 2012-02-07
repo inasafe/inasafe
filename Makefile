@@ -35,6 +35,7 @@ clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@find . -name '*~' -exec rm {} \;
 	@find . -name '*.pyc' -exec rm {} \;
+	@rm .noseids
 
 # Run the test suite followed by pep8 style checking
 test: test_suite pep8 disabled_tests dependency_test unwanted_strings
