@@ -32,7 +32,7 @@ from utilities import getTempDir
 from subprocess import call
 
 
-def clipLayer(theLayer, theExtent, theCellSize=None):
+def clipLayer(theLayer, theExtent, theCellSize=None, extraKeywords=None):
     """Clip a Hazard or Exposure layer to the extents provided.
 
     .. note:: Will delegate to clipVectorLayer or clipRasterLayer as needed.
@@ -47,6 +47,8 @@ def clipLayer(theLayer, theExtent, theCellSize=None):
         * theCellSize - cell size which the layer should be resampled to.
             This argument will be ignored for vector layers and if not provided
             for a raster layer, the native raster cell size will be used.
+        * extraKeywords - Optional keywords dictionary to be added to
+                          output layer
 
     Returns:
         Path to the output clipped layer (placed in the
@@ -58,12 +60,15 @@ def clipLayer(theLayer, theExtent, theCellSize=None):
 
     """
     if theLayer.type() == QgsMapLayer.VectorLayer:
-        return _clipVectorLayer(theLayer, theExtent)
+        return _clipVectorLayer(theLayer, theExtent,
+                                extraKeywords=extraKeywords)
     else:
-        return _clipRasterLayer(theLayer, theExtent, theCellSize)
+        return _clipRasterLayer(theLayer, theExtent, theCellSize,
+                                extraKeywords=extraKeywords)
 
 
-def _clipVectorLayer(theLayer, theExtent):
+def _clipVectorLayer(theLayer, theExtent,
+                     extraKeywords=None):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. The layer must be a
     vector layer or an exception will be thrown.
@@ -148,12 +153,13 @@ def _clipVectorLayer(theLayer, theExtent):
         myWriter.addFeature(myFeature)
     del myWriter  # Flush to disk
 
-    copyKeywords(theLayer.source(), myFilename)
+    copyKeywords(theLayer.source(), myFilename, extraKeywords=extraKeywords)
 
     return myFilename  # Filename of created file
 
 
-def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
+def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
+                     extraKeywords=None):
     """Clip a Hazard or Exposure raster layer to the extents provided. The
     layer must be a raster layer or an exception will be thrown.
 
@@ -204,7 +210,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
 
     # Create a filename for the clipped, resampled and reprojected layer
     myHandle, myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                getTempDir())
+                                            getTempDir())
     os.close(myHandle)
     os.remove(myFilename)
 
@@ -229,7 +235,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
     if sys.platform == 'darwin':  # Mac OS X
         # .. todo:: FIXME - softcode gdal version in this path
         myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
-                          'Versions/1.8/Programs/')
+                              'Versions/1.8/Programs/')
     myCommand = myExecutablePrefix + myCommand
 
     # Now run GDAL warp scottie...
@@ -242,11 +248,11 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None):
         raise Exception(myMessage)
 
     # .. todo:: Check the result of the shell call is ok
-    copyKeywords(myWorkingLayer, myFilename)
+    copyKeywords(myWorkingLayer, myFilename, extraKeywords=extraKeywords)
     return myFilename  # Filename of created file
 
 
-def copyKeywords(sourceFile, destinationFile, extraKeywords={}):
+def copyKeywords(sourceFile, destinationFile, extraKeywords=None):
     """Helper to copy the keywords file from a source dataset
     to a destination dataset.
 
@@ -273,6 +279,12 @@ def copyKeywords(sourceFile, destinationFile, extraKeywords={}):
         msg = ('Keywords file associated with dataset could not be found: \n%s'
                % myNewSource)
         raise KeywordNotFoundException(msg)
+
+    if extraKeywords is None:
+        extraKeywords = {}
+    msg = ('Expected extraKeywords to be a dictionary. Got %s'
+           % str(type(extraKeywords))[1:-1])
+    assert isinstance(extraKeywords, dict), msg
 
     try:
         srcKeywords = read_keywords(myNewSource)
