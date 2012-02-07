@@ -232,10 +232,11 @@ class RiabClipper(unittest.TestCase):
             for res in [0.02, 0.01, 0.005, 0.002, 0.001, 0.0005,  # Coarser
                         0.0002]:                                  # Finer
 
-                # To save time don't do finest resolution for the
+                # To save time only do two resolutions for the
                 # large population set
-                if test_filename.startswith('Population_2010') and res < 0.005:
-                    break
+                if test_filename.startswith('Population_2010'):
+                    if res > 0.01 or res < 0.005:
+                        break
 
                 # Clip the raster to the bbox
                 myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
