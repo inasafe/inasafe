@@ -383,7 +383,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             elif myCategory == 'exposure':
                 self.cboExposure.addItem(myTitle, mySource)
 
-        # now populate the functions list based on the layers loaded
+        # Now populate the functions list based on the layers loaded
         self.getFunctions()
         self.setOkButtonStatus()
         return
@@ -431,7 +431,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         try:
             myDict = self.calculator.availableFunctions(myList)
             # Populate the hazard combo with the available functions
-            for myFunction in myDict:  # use only key
+            for myFunction in myDict:  # Use only key
                 self.cboFunction.addItem(myFunction)
         except Exception, e:
             raise e

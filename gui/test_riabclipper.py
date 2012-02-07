@@ -26,6 +26,7 @@ from qgis.core import (QgsApplication,
                        QgsRasterLayer,
                        QgsMapLayerRegistry)
 
+from storage.core import read_layer
 from riabclipper import clipLayer, extentToKml
 from impactcalculator import getOptimalExtent
 from utilities_test import getQgisTestApp
@@ -129,43 +130,80 @@ class RiabClipper(unittest.TestCase):
         # Create a bounding box
         myViewportGeoExtent = [99.53, -1.22, 101.20, -0.36]
 
-        # get the Hazard extents as an array in EPSG:4326
-        myHazardGeoExtent = [
-                       myRasterLayer.extent().xMinimum(),
-                       myRasterLayer.extent().yMinimum(),
-                       myRasterLayer.extent().xMaximum(),
-                       myRasterLayer.extent().yMaximum()]
-        # get the Exposure extents as an array in EPSG:4326
+        # Get the Hazard extents as an array in EPSG:4326
+        myHazardGeoExtent = [myRasterLayer.extent().xMinimum(),
+                             myRasterLayer.extent().yMinimum(),
+                             myRasterLayer.extent().xMaximum(),
+                             myRasterLayer.extent().yMaximum()]
+
+        # Get the Exposure extents as an array in EPSG:4326
         myExposureGeoExtent = [myVectorLayer.extent().xMinimum(),
-                            myVectorLayer.extent().yMinimum(),
-                            myVectorLayer.extent().xMaximum(),
-                            myVectorLayer.extent().yMaximum()]
+                               myVectorLayer.extent().yMinimum(),
+                               myVectorLayer.extent().xMaximum(),
+                               myVectorLayer.extent().yMaximum()]
 
         # Now work out the optimal extent between the two layers and
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
         # Extent is returned as an array [xmin,ymin,xmax,ymax]
-
         myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                                    myExposureGeoExtent,
-                                    myViewportGeoExtent)
+                                       myExposureGeoExtent,
+                                       myViewportGeoExtent)
 
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myGeoExtent)
 
         # Check the output is valid
-        assert(os.path.exists(myResult))
+        assert os.path.exists(myResult)
+        read_layer(myResult)
 
         # Clip the raster to the bbox
         myResult = clipLayer(myRasterLayer, myGeoExtent)
 
         # Check the output is valid
-        assert(os.path.exists(myResult))
+        assert os.path.exists(myResult)
+        read_layer(myResult)
+
+        # -------------------------------
+        # Check the extra keywords option
+        # -------------------------------
+        # Clip the vector to the bbox
+        myResult = clipLayer(myVectorLayer, myGeoExtent,
+                             extraKeywords={'kermit': 'piggy'})
+
+        # Check the output is valid
+        assert os.path.exists(myResult)
+        L = read_layer(myResult)
+        kwds = L.get_keywords()
+        msg = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
+        assert kwds['kermit'] == 'piggy'
+
+        # Clip the raster to the bbox
+        myResult = clipLayer(myRasterLayer, myGeoExtent,
+                             extraKeywords={'zoot': 'animal'})
+
+        # Check the output is valid
+        assert os.path.exists(myResult)
+        L = read_layer(myResult)
+        kwds = L.get_keywords()
+
+        msg = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
+        assert kwds()['zoot'] == 'animal', msg
 
     def test_extentToKml(self):
         """Test if extent too KML is working."""
         myExtent = [100.03, -1.14, 100.81, -0.73]
-        assert extentToKml(myExtent)
+        kmlFilename = extentToKml(myExtent)
+        assert os.path.exists(kmlFilename)
+        f = open(kmlFilename)
+        kml = f.read()
+        f.close()
+
+        msg = 'Generated KML was not as expected: %s' % kml
+        assert '<?xml version' in kml, msg
+        for x in myExtent:
+            assert str(x) in kml, msg
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabClipper, 'test')
