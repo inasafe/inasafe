@@ -128,6 +128,8 @@ def loadLayers(theLayerList, theClearFlag=True):
 
         # Determine if layer is hazard or exposure
         myKeywords = read_keywords(myKeywordPath)
+        msg = 'Could not read %s' % myKeywordPath
+        assert myKeywords is not None, msg
         if myKeywords['category'] == 'hazard':
             myHazardLayerCount += 1
         elif myKeywords['category'] == 'exposure':
@@ -586,9 +588,9 @@ class RiabDockTest(unittest.TestCase):
         myDict = getUiState(form)
         myMessage = 'Got unexpected state: %s' % str(myDict)
         assert myDict == {'Hazard': 'Yogya2006',
-                     'Exposure': 'OSM_building_polygons_20110905',
-                     'Impact Function': 'Earthquake Guidelines Function',
-                     'Run Button Enabled': True}, myMessage
+                          'Exposure': 'OSM_building_polygons_20110905',
+                          'Impact Function': 'Earthquake Guidelines Function',
+                          'Run Button Enabled': True}, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.wvResults.page().currentFrame().toPlainText()
@@ -596,8 +598,9 @@ class RiabDockTest(unittest.TestCase):
         # Check that none of these  get a NaN value:
         assert 'Unknown' in myResult
 
-        myMessage = ('Some buildings returned by Earthquake guidelines function '
-               'had NaN values. Result: \n %s' % myResult)
+        myMessage = ('Some buildings returned by Earthquake guidelines '
+                     'function '
+                     'had NaN values. Result: \n %s' % myResult)
         assert 'Unknown (NaN):	196' not in myResult, myMessage
 
         # FIXME (Ole): A more robust test would be to load the
