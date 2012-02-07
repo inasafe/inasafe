@@ -25,7 +25,6 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsVectorLayer,
@@ -38,6 +37,7 @@ from qgisinterface import QgisInterface
 from utilities_test import getQgisTestApp
 from gui.riabdock import RiabDock
 from storage.utilities import read_keywords
+from storage.utilities_test import TESTDATA
 
 # Get QGis app handle
 QGISAPP = getQgisTestApp()
@@ -46,6 +46,7 @@ QGISAPP = getQgisTestApp()
 parent = QtGui.QWidget()
 canvas = QgsMapCanvas(parent)
 canvas.resize(QtCore.QSize(400, 400))
+
 # QgisInterface is a stub implementation of the QGIS plugin interface
 iface = QgisInterface(canvas)
 myGuiContextFlag = False
@@ -111,10 +112,6 @@ def loadLayers(theLayerList, theClearFlag=True):
         for myLayer in QgsMapLayerRegistry.instance().mapLayers():
             QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
 
-    # FIXME (Ole): Use environment variable
-    myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    myData = os.path.join(myRoot, 'riab_test_data')
-
     # Now go ahead and load our layers
     myExposureLayerCount = 0
     myHazardLayerCount = 0
@@ -124,7 +121,7 @@ def loadLayers(theLayerList, theClearFlag=True):
     for myFile in theLayerList:
         # Extract basename and absolute path
         myBaseName, myExt = os.path.splitext(myFile)
-        myPath = os.path.join(myData, myFile)
+        myPath = os.path.join(TESTDATA, myFile)
         myKeywordPath = myPath[:-4] + '.keywords'
 
         # Determine if layer is hazard or exposure

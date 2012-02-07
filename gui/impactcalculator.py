@@ -482,11 +482,8 @@ class ImpactCalculatorThread(threading.Thread):
         result accessors to determine what the result of the analysis was::
 
           calculator = ImpactCalculator()
-          myRoot = os.path.dirname(__file__)
-          vectorPath = os.path.join(myRoot, 'testdata',
-                                     'Jakarta_sekolah.shp')
-          rasterPath = os.path.join(myRoot, 'testdata',
-                                    'current_flood_depth_jakarta.asc')
+          rasterPath = os.path.join(TESTDATA, 'xxx.asc')
+          vectorPath = os.path.join(TESTDATA, 'xxx.shp')
           calculator.setHazardLayer(self.rasterPath)
           calculator.setExposureLayer(self.vectorPath)
           calculator.setFunction('Flood Building Impact Function')

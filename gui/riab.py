@@ -17,9 +17,10 @@ __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import os
+
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import (
-                          QObject,
+from PyQt4.QtCore import (QObject,
                           QLocale,
                           QTranslator,
                           SIGNAL,
@@ -29,14 +30,12 @@ from PyQt4.QtCore import (
                           QVariant)
 
 from PyQt4.QtGui import QAction, QIcon, QApplication
-from riabdock import RiabDock
-import os
 
-"""
-..todo:: Find out how to suppress warnings as this import is needed
-  but not used directly.
-"""
-import resources
+# Import RIAB modules
+from riabdock import RiabDock
+
+# ..todo:: Find out how to suppress warnings as this import is needed
+#          but not used directly.
 
 
 class Riab:
@@ -63,6 +62,7 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
+
         # Save reference to the QGIS interface
         self.iface = iface
 
@@ -102,31 +102,31 @@ class Riab:
         """
         self.dockWidget = None
 
-        # create action for plugin dockable window (show/hide)
+        # Create action for plugin dockable window (show/hide)
         self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
-                                   'Risk In A Box', self.iface.mainWindow())
+                                  'Risk In A Box', self.iface.mainWindow())
         self.actionDock.setStatusTip(QCoreApplication.translate(
-                "Risk In A Box", "Show/hide Risk In A Box dock widget"))
+                'Risk In A Box', 'Show/hide Risk In A Box dock widget'))
         self.actionDock.setWhatsThis(QCoreApplication.translate(
-                "Risk In A Box", "Show/hide Risk In A Box dock widget"))
+                'Risk In A Box', 'Show/hide Risk In A Box dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
-        QObject.connect(self.actionDock, SIGNAL("triggered()"),
-                         self.showHideDockWidget)
+        QObject.connect(self.actionDock, SIGNAL('triggered()'),
+                        self.showHideDockWidget)
 
         self.iface.addToolBarIcon(self.actionDock)
         self.iface.addPluginToMenu(
             QCoreApplication.translate(
-                "Risk In A Box", "Hide / Show Dock"), self.actionDock)
+                'Risk In A Box', 'Hide / Show Dock'), self.actionDock)
 
         # create dockwidget and tabify it with the legend
         self.dockWidget = RiabDock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
-        myLegendTab = self.iface.mainWindow().findChild(
-                                    QApplication, 'Legend')
+        myLegendTab = self.iface.mainWindow().findChild(QApplication,
+                                                        'Legend')
         if myLegendTab:
-            self.iface.mainWindow().tabifyDockWidget(
-                        myLegendTab, self.dockWidget)
+            self.iface.mainWindow().tabifyDockWidget(myLegendTab,
+                                                     self.dockWidget)
             self.dockWidget.raise_()
 
     def unload(self):

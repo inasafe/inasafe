@@ -26,9 +26,7 @@ from gui.riabexceptions import (InsufficientParametersException,
                                 KeywordNotFoundException,
                                 StyleInfoNotFoundException)
 from storage.core import read_layer
-
-myRoot = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), '..'))
+from storage.utilities_test import TESTDATA
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -37,20 +35,17 @@ class ImpactCalculatorTest(unittest.TestCase):
     def setUp(self):
         """Create shared resources that all tests can use"""
         self.calculator = ImpactCalculator()
-        self.vectorPath = os.path.join(myRoot, 'riab_test_data',
-                                       'Padang_WGS84.shp')
-        self.rasterShakePath = os.path.join(myRoot, 'riab_test_data',
-                                       'Shakemap_Padang_2009.asc')
+        self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+        self.rasterShakePath = os.path.join(TESTDATA,
+                                            'Shakemap_Padang_2009.asc')
         # UTM projected layer
 
         fn = 'tsunami_max_inundation_depth_BB_utm.asc'
-        self.rasterTsunamiBBPath = os.path.join(myRoot,
-                                                'riab_test_data', fn)
-        self.rasterExposureBBPath = os.path.join(myRoot, 'riab_test_data',
+        self.rasterTsunamiBBPath = os.path.join(TESTDATA, fn)
+        self.rasterExposureBBPath = os.path.join(TESTDATA,
                                                 'tsunami_exposure_BB.shp')
 
-        self.rasterPopulationPath = os.path.join(myRoot, 'riab_test_data',
-                                                 'glp10ag.asc')
+        self.rasterPopulationPath = os.path.join(TESTDATA, 'glp10ag.asc')
         self.calculator.setHazardLayer(self.rasterShakePath)
         self.calculator.setExposureLayer(self.vectorPath)
         self.calculator.setFunction('Earthquake Guidelines Function')
@@ -237,9 +232,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Optimal extent is calculated correctly
         """
 
-        exposure_path = os.path.join(myRoot, 'riab_test_data',
-                                     'Population_2010.asc')
-        hazard_path = os.path.join(myRoot, 'riab_test_data',
+        exposure_path = os.path.join(TESTDATA, 'Population_2010.asc')
+        hazard_path = os.path.join(TESTDATA,
                                    'Lembang_Earthquake_Scenario.asc')
 
         # Expected data

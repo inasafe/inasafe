@@ -34,16 +34,10 @@ from utilities_test import getQgisTestApp
 from storage.utilities_test import TESTDATA
 from storage.utilities import nanallclose
 
-# Setup pathnames for test data sets FIXME!!
-myRoot = os.path.abspath(os.path.join(
-        os.path.dirname(__file__), '..'))
-
-VECTOR_PATH = os.path.join(myRoot, 'riab_test_data',
-                          'Padang_WGS84.shp')
-rasterPath = os.path.join(myRoot, 'riab_test_data',
-                          'Shakemap_Padang_2009.asc')
-rasterPath2 = os.path.join(myRoot, 'riab_test_data',
-                           'population_padang_1.asc')
+# Setup pathnames for test data sets
+VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+rasterPath = os.path.join(TESTDATA, 'Shakemap_Padang_2009.asc')
+rasterPath2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 
 # Handle to common QGis test app
 QGISAPP = getQgisTestApp()
