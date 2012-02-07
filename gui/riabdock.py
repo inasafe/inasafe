@@ -743,6 +743,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         # All this is done in the function getWGS84resolution
         myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
         myCellSize = None
+        extraKeywords = {}
         if myHazardLayer.type() == QgsMapLayer.RasterLayer:
 
             # Hazard layer is raster
@@ -759,6 +760,9 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                     myCellSize = myHazardGeoCellSize
                 else:
                     myCellSize = myExposureGeoCellSize
+
+                # Record native resolution for optional rescaling
+                #extraKeywords['resolution'] = myExposureGeoCellSize
             else:
                 # If exposure is vector data grow hazard raster layer to
                 # ensure there are enough pixels for points at the edge of
@@ -779,10 +783,12 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
-        myClippedHazardPath = clipLayer(myHazardLayer,
-                                        myBufferedGeoExtent, myCellSize)
+        myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
+                                        myCellSize,
+                                        extraKeywords=extraKeywords)
         myClippedExposurePath = clipLayer(myExposureLayer,
-                                          myGeoExtent, myCellSize)
+                                          myGeoExtent, myCellSize,
+                                          extraKeywords=extraKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 

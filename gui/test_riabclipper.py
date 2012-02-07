@@ -188,7 +188,7 @@ class RiabClipper(unittest.TestCase):
         kwds = L.get_keywords()
 
         msg = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
-        assert kwds()['zoot'] == 'animal', msg
+        assert kwds['zoot'] == 'animal', msg
 
     def test_extentToKml(self):
         """Test if extent too KML is working."""

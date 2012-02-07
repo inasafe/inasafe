@@ -240,9 +240,9 @@ class RiabDockTest(unittest.TestCase):
         # Now check we DO validate a populated form
         populateForm()
         myFlag = form.validate()
-        myMessage = ('Validation expected to pass on' +
-                     ' a populated for with selections.')
-        assert(myFlag), myMessage
+        myMessage = ('Validation expected to pass on '
+                     'a populated for with selections.')
+        assert myFlag, myMessage
 
     def test_setOkButtonStatus(self):
         """OK button changes properly according to form validity"""
@@ -260,7 +260,7 @@ class RiabDockTest(unittest.TestCase):
         myFlag = form.validate()
         myMessage = ('Validation expected to pass on a ' +
                      'populated form with selections.')
-        assert(myFlag), myMessage
+        assert myFlag, myMessage
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
@@ -275,12 +275,12 @@ class RiabDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         myDict = getUiState(form)
-
+        expectDict = {'Hazard': 'Shakemap_Padang_2009',
+                        'Exposure': 'Padang_WGS84',
+                        'Impact Function': 'Earthquake Guidelines Function',
+                        'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == {'Hazard': 'Shakemap_Padang_2009',
-                     'Exposure': 'Padang_WGS84',
-                     'Impact Function': 'Earthquake Guidelines Function',
-                     'Run Button Enabled': True}, myMessage
+        assert myDict == expectDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.wvResults.page().currentFrame().toPlainText()
@@ -316,13 +316,14 @@ class RiabDockTest(unittest.TestCase):
         # the model again...
         QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
-        myDict = getUiState(form)
 
+        myDict = getUiState(form)
+        expectDict = {'Hazard': 'Shakemap_Padang_2009',
+                        'Exposure': 'Population Density Estimate (5kmx5km)',
+                        'Impact Function': 'Earthquake Fatality Function',
+                        'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == {'Hazard': 'Shakemap_Padang_2009',
-                     'Exposure': 'Population Density Estimate (5kmx5km)',
-                     'Impact Function': 'Earthquake Fatality Function',
-                     'Run Button Enabled': True}, myMessage
+        assert myDict == expectDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
@@ -336,8 +337,9 @@ class RiabDockTest(unittest.TestCase):
         # Perkiraan Orang Meninggal:    2903
 
         myMessage = ('Unexpected result returned for Earthquake Fatality '
-               'Function Expected:\n "Jumlah Penduduk" count of 21189932 '
-               ', received: \n %s' % myResult)
+                     'Function Expected:\n "Jumlah Penduduk" count of '
+                     '21189932 , received: \n %s' % myResult)
+
         # Pre clip refactor
         #assert '20771496' in myResult, myMessage
         assert '21189932' in myResult, myMessage
@@ -366,11 +368,12 @@ class RiabDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(form)
 
+        expectDict = {'Run Button Enabled': True,
+                        'Impact Function': 'Tsunami Building Impact Function',
+                        'Hazard': 'tsunami_max_inundation_depth_BB_utm',
+                        'Exposure': 'tsunami_exposure_BB'}
         myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == {'Run Button Enabled': True,
-                     'Impact Function': 'Tsunami Building Impact Function',
-                     'Hazard': 'tsunami_max_inundation_depth_BB_utm',
-                     'Exposure': 'tsunami_exposure_BB'}, myMessage
+        assert myDict == expectDict, myMessage
 
         setCanvasCrs(GEOCRS, True)
         setBatemansBayGeoExtent()
@@ -419,11 +422,12 @@ class RiabDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(form)
 
+        expectDict = {'Run Button Enabled': True,
+                        'Impact Function': 'Terdampak',
+                        'Hazard': 'Banjir Jakarta seperti 2007',
+                        'Exposure': 'Penduduk Jakarta'}
         myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == {'Run Button Enabled': True,
-                     'Impact Function': 'Terdampak',
-                     'Hazard': 'Banjir Jakarta seperti 2007',
-                     'Exposure': 'Penduduk Jakarta'}, myMessage
+        assert myDict == expectDict, myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
@@ -455,8 +459,7 @@ class RiabDockTest(unittest.TestCase):
         #print myResult
 
         msg = 'Result not as expected: %s' % myResult
-        assert '356018' in myResult, msg
-        assert '2479' in myResult, msg  # These are expected impact number
+        assert '2479' in myResult, msg  # This is the expected impact number
 
     def test_runFloodPopulationImpactFunction_scaling(self):
         """Flood function runs in GUI with 5x5km population data
@@ -477,8 +480,6 @@ class RiabDockTest(unittest.TestCase):
 
         # Exposure layers
         QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        #QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        #QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function (second item in the list)
@@ -489,10 +490,11 @@ class RiabDockTest(unittest.TestCase):
         myDict = getUiState(form)
 
         msg = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == {'Run Button Enabled': True,
-                     'Impact Function': 'Terdampak',
-                     'Hazard': 'Banjir Jakarta seperti 2007',
-                     'Exposure': 'Population Density Estimate (5kmx5km)'}, msg
+        expectDict = {'Run Button Enabled': True,
+                        'Impact Function': 'Terdampak',
+                        'Hazard': 'Banjir Jakarta seperti 2007',
+                        'Exposure': 'Population Density Estimate (5kmx5km)'}
+        assert myDict == expectDict, msg
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
@@ -504,9 +506,9 @@ class RiabDockTest(unittest.TestCase):
 
         msg = 'Result not as expected: %s' % myResult
 
-        # FIXME (Adjust these numbers - they don't need to be exact)
-        assert '356018' in myResult, msg
-        assert '2479' in myResult, msg  # These are expected impact number
+        # Check numbers are OK (within expected errors from resampling)
+        assert '10481' in myResult, msg
+        assert '2312' in myResult, msg  # These are expected impact number
 
     def test_Issue47(self):
         """Issue47: Problem when hazard & exposure data are in different
@@ -537,12 +539,12 @@ class RiabDockTest(unittest.TestCase):
 
         # Check that layers and impact function are correct
         myDict = getUiState(form)
-
+        expectDict = {'Run Button Enabled': True,
+                        'Impact Function': 'Terdampak',
+                        'Hazard': 'Banjir Jakarta seperti 2007',
+                        'Exposure': 'Penduduk Jakarta'}
         myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == {'Run Button Enabled': True,
-                     'Impact Function': 'Terdampak',
-                     'Hazard': 'Banjir Jakarta seperti 2007',
-                     'Exposure': 'Penduduk Jakarta'}, myMessage
+        assert myDict == expectDict, myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GOOGLECRS, True)
@@ -586,11 +588,12 @@ class RiabDockTest(unittest.TestCase):
 
         # Check that layers and impact function are correct
         myDict = getUiState(form)
+        expectDict = {'Hazard': 'Yogya2006',
+                        'Exposure': 'OSM_building_polygons_20110905',
+                        'Impact Function': 'Earthquake Guidelines Function',
+                        'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == {'Hazard': 'Yogya2006',
-                          'Exposure': 'OSM_building_polygons_20110905',
-                          'Impact Function': 'Earthquake Guidelines Function',
-                          'Run Button Enabled': True}, myMessage
+        assert myDict == expectDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = form.wvResults.page().currentFrame().toPlainText()
@@ -644,22 +647,24 @@ class RiabDockTest(unittest.TestCase):
         assert myExposureLayerCount == 1, myMessage
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
+
         # Second part of scenario - run disables when adding invalid layer
         # and select it - run should be disabled
-        myFileList = ['issue71.tif']  # this layer has incorrect keywords
+        myFileList = ['issue71.tif']  # This layer has incorrect keywords
         myClearFlag = False
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
         myDict = getUiState(form)
         myMessage = ('Run button was not disabled when exposure set to \n%s'
-                    '\nUI State: \n%s') % (form.cboExposure.currentText(),
-                    myDict)
+                     '\nUI State: \n%s') % (form.cboExposure.currentText(),
+                                            myDict)
         assert myButton.isEnabled() == False, myMessage
+
         # Now select again a valid layer and the run button
         # should be enabled
         QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
-        myMessage = 'Run button was not ensabled when exposure set to \n%s' % \
+        myMessage = 'Run button was not enabled when exposure set to \n%s' % \
             form.cboExposure.currentText()
         assert myButton.isEnabled(), myMessage
 
