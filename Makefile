@@ -120,6 +120,8 @@ dependency_test:
 	@grep -R "from scipy import" $(NONGUI) || true
 	@grep -R "django" $(NONGUI) || true
 	@grep -R "geonode" $(NONGUI) || true
+	@grep -R "geoserver" $(NONGUI) || true
+	@grep -R "owslib" $(NONGUI) || true
 
 list_gis_packages:
 	@echo
