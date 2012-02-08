@@ -118,6 +118,8 @@ dependency_test:
 	@grep -R qgis.core $(NONGUI) || true
 	@grep -R "import scipy" $(NONGUI) || true
 	@grep -R "from scipy import" $(NONGUI) || true
+	@grep -R "django" $(NONGUI) || true
+	@grep -R "geonode" $(NONGUI) || true
 
 list_gis_packages:
 	@echo
