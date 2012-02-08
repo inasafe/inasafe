@@ -131,8 +131,12 @@ def _clipVectorLayer(theLayer, theExtent,
     #           different clipping behaviour e.g. reject polygons that
     #           intersect the edge of the bbox. Tim
     myAttributes = myProvider.attributeIndexes()
+    myFetchGeometryFlag = True
+    myUseIntersectFlag = True
     myProvider.select(myAttributes,
-                      myProjectedExtent, True, True)
+                      myProjectedExtent,
+                      myFetchGeometryFlag,
+                      myUseIntersectFlag)
     myFieldList = myProvider.fields()
 
     myWriter = QgsVectorFileWriter(myFilename,
