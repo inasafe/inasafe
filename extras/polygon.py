@@ -6,6 +6,89 @@ import numpy as num
 from math import sqrt
 from numerical_tools import ensure_numeric
 
+
+def _separate_points_by_polygon(points, polygon, indices,
+                                closed, verbose):
+    """Old C-code to refactor into numpy code
+    """
+
+  minpx = polygon[0]; maxpx = minpx;
+  minpy = polygon[1]; maxpy = minpy;
+
+  for (i=0; i<N; i++) {
+    px_i = polygon[2*i];
+    py_i = polygon[2*i + 1];
+
+    if (px_i < minpx) minpx = px_i;
+    if (px_i > maxpx) maxpx = px_i;
+    if (py_i < minpy) minpy = py_i;
+    if (py_i > maxpy) maxpy = py_i;
+  }
+
+  // Begin main loop (for each point)
+  inside_index = 0;    // Keep track of points inside
+  outside_index = M-1; // Keep track of points outside (starting from end)
+  if (verbose){
+     printf("Separating %d points\n", M);
+  }
+  for (k=0; k<M; k++) {
+    if (verbose){
+      if (k %((M+10)/10)==0) printf("Doing %d of %d\n", k, M);
+    }
+
+    x = points[2*k];
+    y = points[2*k + 1];
+
+    inside = 0;
+
+    // Optimisation
+    if ((x > maxpx) || (x < minpx) || (y > maxpy) || (y < minpy)) {
+      // Nothing
+    } else {
+      // Check polygon
+      for (i=0; i<N; i++) {
+        j = (i+1)%N;
+
+        px_i = polygon[2*i];
+        py_i = polygon[2*i+1];
+        px_j = polygon[2*j];
+        py_j = polygon[2*j+1];
+
+        // Check for case where point is contained in line segment
+        if (__point_on_line(x, y, px_i, py_i, px_j, py_j, rtol, atol)) {
+	  if (closed == 1) {
+	    inside = 1;
+	  } else {
+	    inside = 0;
+	  }
+	  break;
+        } else {
+          //Check if truly inside polygon
+	  if ( ((py_i < y) && (py_j >= y)) ||
+	       ((py_j < y) && (py_i >= y)) ) {
+	    if (px_i + (y-py_i)/(py_j-py_i)*(px_j-px_i) < x)
+	      inside = 1-inside;
+	  }
+        }
+      }
+    }
+    if (inside == 1) {
+      indices[inside_index] = k;
+      inside_index += 1;
+    } else {
+      indices[outside_index] = k;
+      outside_index -= 1;
+    }
+  } // End k
+
+  return inside_index;
+}
+
+
+
+
+
+
 ##
 # @brief Determine whether a point is on a line segment.
 # @param point (x, y) of point in question (tuple, list or array).
