@@ -3,13 +3,8 @@
 """Polygon manipulations"""
 
 import numpy as num
-
 from math import sqrt
-from anuga.utilities.numerical_tools import ensure_numeric
-from anuga.geospatial_data.geospatial_data import ensure_absolute, Geospatial_data
-from anuga.config import netcdf_float
-import anuga.utilities.log as log
-
+from numerical_tools import ensure_numeric
 
 ##
 # @brief Determine whether a point is on a line segment.
@@ -211,122 +206,122 @@ def NEW_C_intersection(line0, line1):
 
     return status, value
 
-def is_inside_triangle(point, triangle, 
-                       closed=True, 
+def is_inside_triangle(point, triangle,
+                       closed=True,
                        rtol=1.0e-12,
-                       atol=1.0e-12,                      
-                       check_inputs=True, 
+                       atol=1.0e-12,
+                       check_inputs=True,
                        verbose=False):
     """Determine if one point is inside a triangle
-    
+
     This uses the barycentric method:
-    
+
     Triangle is A, B, C
     Point P can then be written as
-    
+
     P = A + alpha * (C-A) + beta * (B-A)
-    or if we let 
-    v=P-A, v0=C-A, v1=B-A    
-    
-    v = alpha*v0 + beta*v1 
+    or if we let
+    v=P-A, v0=C-A, v1=B-A
+
+    v = alpha*v0 + beta*v1
 
     Dot this equation by v0 and v1 to get two:
-    
+
     dot(v0, v) = alpha*dot(v0, v0) + beta*dot(v0, v1)
-    dot(v1, v) = alpha*dot(v1, v0) + beta*dot(v1, v1)    
-    
+    dot(v1, v) = alpha*dot(v1, v0) + beta*dot(v1, v1)
+
     or if a_ij = dot(v_i, v_j) and b_i = dot(v_i, v)
     the matrix equation:
-    
+
     a_00 a_01   alpha     b_0
-                       = 
+                       =
     a_10 a_11   beta      b_1
-    
+
     Solving for alpha and beta yields:
-    
+
     alpha = (b_0*a_11 - b_1*a_01)/denom
     beta =  (b_1*a_00 - b_0*a_10)/denom
-    
+
     with denom = a_11*a_00 - a_10*a_01
-    
+
     The point is in the triangle whenever
     alpha and beta and their sums are in the unit interval.
-    
+
     rtol and atol will determine how close the point has to be to the edge
     before it is deemed to be on the edge.
-    
+
     """
 
-    triangle = ensure_numeric(triangle)        
-    point = ensure_numeric(point, num.float)    
-    
+    triangle = ensure_numeric(triangle)
+    point = ensure_numeric(point, num.float)
+
     if check_inputs is True:
         msg = 'is_inside_triangle must be invoked with one point only'
         assert num.allclose(point.shape, [2]), msg
-    
-    
+
+
     # Use C-implementation
     return bool(_is_inside_triangle(point, triangle, int(closed), rtol, atol))
-    
-    
 
-    # FIXME (Ole): The rest of this function has been made 
+
+
+    # FIXME (Ole): The rest of this function has been made
     # obsolete by the C extension.
-    
+
     # Quickly reject points that are clearly outside
-    if point[0] < min(triangle[:,0]): return False 
-    if point[0] > max(triangle[:,0]): return False    
+    if point[0] < min(triangle[:,0]): return False
+    if point[0] > max(triangle[:,0]): return False
     if point[1] < min(triangle[:,1]): return False
-    if point[1] > max(triangle[:,1]): return False        
+    if point[1] > max(triangle[:,1]): return False
 
 
-    # Start search    
+    # Start search
     A = triangle[0, :]
     B = triangle[1, :]
     C = triangle[2, :]
-    
+
     # Now check if point lies wholly inside triangle
-    v0 = C-A 
-    v1 = B-A        
-        
+    v0 = C-A
+    v1 = B-A
+
     a00 = num.inner(v0, v0)
     a10 = a01 = num.inner(v0, v1)
     a11 = num.inner(v1, v1)
-    
+
     denom = a11*a00 - a01*a10
-    
+
     if abs(denom) > 0.0:
         v = point-A
-        b0 = num.inner(v0, v)        
-        b1 = num.inner(v1, v)            
-    
+        b0 = num.inner(v0, v)
+        b1 = num.inner(v1, v)
+
         alpha = (b0*a11 - b1*a01)/denom
-        beta = (b1*a00 - b0*a10)/denom        
+        beta = (b1*a00 - b0*a10)/denom
 
         if (alpha > 0.0) and (beta > 0.0) and (alpha+beta < 1.0):
-            return True 
+            return True
 
 
     if closed is True:
         # Check if point lies on one of the edges
-        
+
         for X, Y in [[A,B], [B,C], [C,A]]:
             res = _point_on_line(point[0], point[1],
                                  X[0], X[1],
                                  Y[0], Y[1],
                                  rtol, atol)
-            
+
             if res:
                 return True
-                
+
     return False
 
 def is_inside_polygon_quick(point, polygon, closed=True, verbose=False):
     """Determine if one point is inside a polygon
     Both point and polygon are assumed to be numeric arrays or lists and
     no georeferencing etc or other checks will take place.
-    
-    As such it is faster than is_inside_polygon 
+
+    As such it is faster than is_inside_polygon
     """
 
     # FIXME(Ole): This function isn't being used
@@ -336,7 +331,7 @@ def is_inside_polygon_quick(point, polygon, closed=True, verbose=False):
     msg = ('is_inside_polygon() must be invoked with one point only.\n'
            'I got %s and converted to %s' % (str(point), str(points.shape)))
     assert points.shape[0] == 1 and points.shape[1] == 2, msg
-    
+
     indices = num.zeros(1, num.int)
 
     count = _separate_points_by_polygon(points, polygon, indices,
@@ -380,28 +375,6 @@ def inside_polygon(points, polygon, closed=True, verbose=False):
        points and polygon can be a geospatial instance,
        a list or a numeric array
     """
-
-    try:
-        points = ensure_absolute(points)
-    except NameError, e:
-        raise NameError, e
-    except:
-        # If this fails it is going to be because the points can't be
-        # converted to a numeric array.
-        msg = 'Points could not be converted to numeric array' 
-        raise Exception, msg
-
-    polygon = ensure_absolute(polygon)        
-    try:
-        polygon = ensure_absolute(polygon)
-    except NameError, e:
-        raise NameError, e
-    except:
-        # If this fails it is going to be because the points can't be
-        # converted to a numeric array.
-        msg = ('Polygon %s could not be converted to numeric array'
-               % (str(polygon)))
-        raise Exception, msg
 
     if len(points.shape) == 1:
         # Only one point was passed in. Convert to array of points
@@ -540,10 +513,10 @@ def in_and_outside_polygon(points, polygon, closed=True, verbose=False):
 # @param polygon A set of points defining a polygon (tuple, list or array).
 # @param closed True if points on boundary are considered 'inside' polygon.
 # @param verbose True if this function is to be verbose.
-# @return (indices, count) where indices are point indices and count is the 
+# @return (indices, count) where indices are point indices and count is the
 #          delimiter index between point inside (on left) and others.
 def separate_points_by_polygon(points, polygon,
-                               closed=True, 
+                               closed=True,
                                check_input=True,
                                verbose=False):
     """Determine whether points are inside or outside a polygon
@@ -567,7 +540,7 @@ def separate_points_by_polygon(points, polygon,
        The indices of points outside are obtained as indices[count:]
 
     Examples:
-       U = [[0,0], [1,0], [1,1], [0,1]] #Unit square
+       U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square
 
        separate_points_by_polygon( [[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
        will return the indices [0, 2, 1] and count == 2 as only the first
@@ -610,7 +583,7 @@ def separate_points_by_polygon(points, polygon,
         msg = 'Polygon array must be a 2d array of vertices'
         assert len(polygon.shape) == 2, msg
 
-        msg = 'Polygon array must have two columns' 
+        msg = 'Polygon array must have two columns'
         assert polygon.shape[1]==2, msg
 
         msg = ('Points array must be 1 or 2 dimensional. '
@@ -620,12 +593,12 @@ def separate_points_by_polygon(points, polygon,
         if len(points.shape) == 1:
             # Only one point was passed in.  Convert to array of points.
             points = num.reshape(points, (1,2))
-    
+
             msg = ('Point array must have two columns (x,y), '
                    'I got points.shape[1]=%d' % points.shape[0])
             assert points.shape[1]==2, msg
 
-       
+
             msg = ('Points array must be a 2d array. I got %s.'
                    % str(points[:30]))
             assert len(points.shape)==2, msg
@@ -801,7 +774,7 @@ def plot_polygons(polygons_points,
     return vec
 
 ##
-# @brief 
+# @brief
 # @param polygon A set of points defining a polygon.
 # @param verbose True if this function is to be verbose.
 # @return A tuple (x, y) of X and Y coordinates of the polygon.
@@ -1092,7 +1065,7 @@ def point_in_polygon(polygon, delta=1e-8):
     class Found(exceptions.Exception): pass
 
     polygon = ensure_numeric(polygon)
-    
+
     point_in = False
     while not point_in:
         try:
@@ -1125,9 +1098,9 @@ def point_in_polygon(polygon, delta=1e-8):
 
 ##
 # @brief Calculate approximate number of triangles inside a bounding polygon.
-# @param interior_regions 
-# @param bounding_poly 
-# @param remainder_res 
+# @param interior_regions
+# @param bounding_poly
+# @param remainder_res
 # @return The number of triangles.
 def number_mesh_triangles(interior_regions, bounding_poly, remainder_res):
     """Calculate the approximate number of triangles inside the
@@ -1146,7 +1119,7 @@ def number_mesh_triangles(interior_regions, bounding_poly, remainder_res):
     log.critical('Polygon   Max triangle area (m^2)   Total area (km^2) '
                  'Estimated #triangles')
     log.critical('-' * 80)
-        
+
     no_triangles = 0.0
     area = polygon_area(bounding_poly)
 
@@ -1158,7 +1131,7 @@ def number_mesh_triangles(interior_regions, bounding_poly, remainder_res):
 
         log.critical('Interior %s%s%d'
                      % (('%.0f' % resolution).ljust(25),
-                        ('%.2f' % (this_area/1000000)).ljust(19), 
+                        ('%.2f' % (this_area/1000000)).ljust(19),
                         this_triangles))
         #print 'Interior ',
         #print ('%.0f' % resolution).ljust(25),
@@ -1295,15 +1268,15 @@ def interpolate_polyline(data,
     return interpolated_values
 
 ##
-# @brief 
-# @param data 
-# @param polyline_nodes 
-# @param gauge_neighbour_id 
-# @param interpolation_points 
-# @param interpolated_values 
-# @param rtol 
-# @param atol 
-# @return 
+# @brief
+# @param data
+# @param polyline_nodes
+# @param gauge_neighbour_id
+# @param interpolation_points
+# @param interpolated_values
+# @param rtol
+# @param atol
+# @return
 # @note OBSOLETED BY C-EXTENSION
 def _interpolate_polyline(data,
                           polyline_nodes,
@@ -1349,21 +1322,6 @@ def _interpolate_polyline(data,
 ################################################################################
 # Initialise module
 ################################################################################
-
-from anuga.utilities import compile
-if compile.can_use_C_extension('polygon_ext.c'):
-    # Underlying C implementations can be accessed
-    from polygon_ext import _point_on_line
-    from polygon_ext import _separate_points_by_polygon
-    from polygon_ext import _interpolate_polyline    
-    from polygon_ext import _is_inside_triangle        
-    #from polygon_ext import _intersection
-
-else:
-    msg = 'C implementations could not be accessed by %s.\n ' %__file__
-    msg += 'Make sure compile_all.py has been run as described in '
-    msg += 'the ANUGA installation guide.'
-    raise Exception, msg
 
 
 if __name__ == "__main__":

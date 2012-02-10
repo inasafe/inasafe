@@ -6,7 +6,6 @@
 from math import acos, pi, sqrt
 from warnings import warn
 
-import anuga.utilities.log as log
 import numpy as num
 
 #After having migrated to numpy we should use the native NAN.
@@ -29,7 +28,7 @@ def safe_acos(x):
                 'I got %.12f' %x
     warning_msg = 'Changing argument to acos from %.18f to %.1f' %(x, sign(x))
 
-    eps = get_machine_precision() # Machine precision 
+    eps = get_machine_precision() # Machine precision
     if x < -1.0:
         if x < -1.0 - eps:
             raise ValueError, errmsg
@@ -41,7 +40,7 @@ def safe_acos(x):
         if x > 1.0 + eps:
             raise ValueError, errmsg
         else:
-            log.critical('NOTE: changing argument to acos from %.18f to 1.0' %x)
+            print 'NOTE: changing argument to acos from %.18f to 1.0' % x
             x = 1.0
 
     return acos(x)
@@ -50,7 +49,7 @@ def safe_acos(x):
 def sign(x):
     if x > 0: return 1
     if x < 0: return -1
-    if x == 0: return 0    
+    if x == 0: return 0
 
 
 def is_scalar(x):
@@ -65,20 +64,20 @@ def is_scalar(x):
 
 def angle(v1, v2=None):
     """Compute angle between 2D vectors v1 and v2.
-    
-    If v2 is not specified it will default 
+
+    If v2 is not specified it will default
     to e1 (the unit vector in the x-direction)
 
     The angle is measured as a number in [0, 2pi] from v2 to v1.
     """
-  
+
     # Prepare two numeric vectors
     if v2 is None:
         v2 = [1.0, 0.0] # Unit vector along the x-axis
-	
+
     v1 = ensure_numeric(v1, num.float)
-    v2 = ensure_numeric(v2, num.float)    
-    
+    v2 = ensure_numeric(v2, num.float)
+
     # Normalise
     v1 = v1/num.sqrt(num.sum(v1**2))
     v2 = v2/num.sqrt(num.sum(v2**2))
@@ -87,21 +86,21 @@ def angle(v1, v2=None):
     p = num.inner(v1, v2)
     c = num.inner(v1, normal_vector(v2))    # Projection onto normal
                                             # (negative cross product)
-        
+
     theta = safe_acos(p)
-            
-    
-    # Correct if v1 is in quadrant 3 or 4 with respect to v2 (as the x-axis) 
+
+
+    # Correct if v1 is in quadrant 3 or 4 with respect to v2 (as the x-axis)
     # If v2 was the unit vector [1,0] this would correspond to the test
-    # if v1[1] < 0: theta = 2*pi-theta    
+    # if v1[1] < 0: theta = 2*pi-theta
     # In general we use the sign of the projection onto the normal.
-    if c < 0: 
+    if c < 0:
        #Quadrant 3 or 4
-       theta = 2*pi-theta        
-       
+       theta = 2*pi-theta
+
     return theta
 
-    
+
 def anglediff(v0, v1):
     """Compute difference between angle of vector v0 (x0, y0) and v1 (x1, y1).
     This is used for determining the ordering of vertices,
@@ -126,14 +125,14 @@ def normal_vector(v):
 
     Returns vector 90 degrees counter clockwise to and of same length as v
     """
-    
+
     return num.array([-v[1], v[0]], num.float)
 
-    
+
 #def crossproduct_length(v1, v2):
 #    return v1[0]*v2[1]-v2[0]*v1[1]
-   
-       
+
+
 def mean(x):
     """Mean value of a vector
     """
@@ -143,20 +142,20 @@ def mean(x):
 def cov(x, y=None):
     """Covariance of vectors x and y.
 
-    If y is None: return cov(x, x) 
+    If y is None: return cov(x, x)
     """
-    
+
     if y is None:
-        y = x 
+        y = x
 
     x = ensure_numeric(x)
     y = ensure_numeric(y)
     msg = 'Lengths must be equal: len(x) == %d, len(y) == %d' %(len(x), len(y))
     assert(len(x)==len(y)), msg
 
-    N = len(x) 
-    cx = x - mean(x)  
-    cy = y - mean(y)  
+    N = len(x)
+    cx = x - mean(x)
+    cy = y - mean(y)
 
     p = num.inner(cx,cy)/N
     return(p)
@@ -182,7 +181,7 @@ def err(x, y=0, n=2, relative=True):
 
     x = ensure_numeric(x)
     if y:
-        y = ensure_numeric(y)        
+        y = ensure_numeric(y)
 
     if n == 2:
         err = norm(x-y)
@@ -196,22 +195,22 @@ def err(x, y=0, n=2, relative=True):
         err = max(abs(x-y))
         if relative is True:
             try:
-                err = err/max(abs(y))    
+                err = err/max(abs(y))
             except:
                 pass
-          
+
     return err
-  
+
 
 def norm(x):
     """2-norm of x
     """
-  
+
     y = num.ravel(x)
     p = num.sqrt(num.inner(y,y))
     return p
-    
-  
+
+
 def corr(x, y=None):
     """Correlation of x and y
     If y is None return autocorrelation of x
@@ -219,15 +218,15 @@ def corr(x, y=None):
 
     from math import sqrt
     if y is None:
-        y = x 
+        y = x
 
     varx = cov(x)
     vary = cov(y)
 
     if varx == 0 or vary == 0:
         C = 0
-    else:  
-        C = cov(x,y)/sqrt(varx * vary)   
+    else:
+        C = cov(x,y)/sqrt(varx * vary)
 
     return(C)
 
@@ -287,8 +286,8 @@ def histogram(a, bins, relative=False):
 
     if relative is True:
         hist = hist/float(num.sum(hist))
-        
-    return hist 
+
+    return hist
 
 def create_bins(data, number_of_bins = None):
     """Safely create bins for use with histogram
@@ -304,11 +303,11 @@ def create_bins(data, number_of_bins = None):
     else:
         if number_of_bins is None:
             number_of_bins = 10
-            
+
         bins = num.arange(mn, mx, (mx-mn)/number_of_bins)
 
     return bins
-    
+
 
 
 def get_machine_precision():
@@ -319,7 +318,7 @@ def get_machine_precision():
     """
 
     global machine_precision
-    
+
     if machine_precision is None:
         epsilon = 1.
         while epsilon/2 + 1. > 1.:
@@ -327,7 +326,7 @@ def get_machine_precision():
 
         machine_precision = epsilon
 
-    return machine_precision    
+    return machine_precision
 
 ####################################################################
 #Python versions of function that are also implemented in numerical_tools_ext.c
@@ -350,7 +349,7 @@ def gradient_python(x0, y0, x1, y1, x2, y2, q0, q1, q2):
 
 def gradient2_python(x0, y0, x1, y1, q0, q1):
     """Compute radient based on two points and enforce zero gradient
-    in the direction orthogonal to (x1-x0), (y1-y0) 
+    in the direction orthogonal to (x1-x0), (y1-y0)
     """
 
     #Old code
@@ -364,8 +363,8 @@ def gradient2_python(x0, y0, x1, y1, q0, q1):
     if det != 0.0:
         a = (x1-x0)*(q1-q0)/det
         b = (y1-y0)*(q1-q0)/det
-        
-    return a, b        
+
+    return a, b
 
 ################################################################################
 # Decision functions for numeric package objects.
@@ -399,17 +398,13 @@ def is_num_int(obj):
 
 
 #-----------------
-#Initialise module
+# Initialise module
 
-from anuga.utilities import compile
-if compile.can_use_C_extension('util_ext.c'):
-    from util_ext import gradient, gradient2
-else:
-    gradient = gradient_python
-    gradient2 = gradient2_python    
+gradient = gradient_python
+gradient2 = gradient2_python
 
 
 if __name__ == '__main__':
     pass
 
-    
+

@@ -3,13 +3,9 @@
 import unittest
 import numpy as num
 from math import sqrt, pi
-from anuga.utilities.numerical_tools import ensure_numeric
-from anuga.utilities.system_tools import get_pathname_from_package
+from numerical_tools import ensure_numeric
 
 from polygon import *
-from anuga.coordinate_transforms.geo_reference import Geo_reference
-from anuga.geospatial_data.geospatial_data import Geospatial_data
-
 
 def test_function(x, y):
     return x+y
@@ -21,20 +17,6 @@ class Test_Polygon(unittest.TestCase):
 
     def tearDown(self):
         pass
-
-    def test_that_C_extension_compiles(self):
-        FN = 'polygon_ext.c'
-        try:
-            import polygon_ext
-        except:
-            from compile import compile
-
-            try:
-                compile(FN)
-            except:
-                raise Exception, 'Could not compile %s' %FN
-            else:
-                import polygon_ext
 
     # Polygon stuff
     def test_polygon_function_constants(self):
@@ -54,11 +36,11 @@ class Test_Polygon(unittest.TestCase):
         z = f([5, 5, 27, 35], [5, 9, 8, -5])
         assert num.allclose(z, [2, 1, 0, 2])
 
-    def test_polygon_function_csvfile(self):
+    def Xtest_polygon_function_csvfile(self):
         from os import sep, getenv
 
         # Get path where this test is run
-        path = get_pathname_from_package('anuga.utilities')
+        #path = get_pathname_from_package('anuga.utilities')
 
         # Form absolute filename and read
         filename = path + sep + 'mainland_only.csv'
@@ -68,37 +50,6 @@ class Test_Polygon(unittest.TestCase):
         z = f([430000, 480000], [490000, 7720000]) # 1st outside, 2nd inside
 
         assert num.allclose(z, [0, 10])
-
-    def test_polygon_function_georef(self):
-        """Check that georeferencing works"""
-
-        from anuga.coordinate_transforms.geo_reference import Geo_reference
-
-        geo = Geo_reference(56, 200, 1000)
-
-        # Make points 'absolute'
-        p1 = [[200,1000], [210,1000], [210,1010], [200,1010]]
-        p2 = [[200,1000], [210,1010], [215,1005], [220, 1010], [225,1000],
-              [230,1010], [240,990]]
-
-        f = Polygon_function([(p1, 1.0)], geo_reference=geo)
-        z = f([5, 5, 27, 35], [5, 9, 8, -5]) # Two first inside p1
-
-        assert num.allclose(z, [1, 1, 0, 0])
-
-        f = Polygon_function([(p2, 2.0)], geo_reference=geo)
-        z = f([5, 5, 27, 35], [5, 9, 8, -5]) # First and last inside p2
-        assert num.allclose(z, [2, 0, 0, 2])
-
-        # Combined
-        f = Polygon_function([(p1, 1.0), (p2, 2.0)], geo_reference=geo)
-        z = f([5, 5, 27, 35], [5, 9, 8, -5])
-        assert num.allclose(z, [2, 1, 0, 2])
-
-        # Check that it would fail without geo
-        f = Polygon_function([(p1, 1.0), (p2, 2.0)])
-        z = f([5, 5, 27, 35], [5, 9, 8, -5])
-        assert not num.allclose(z, [2, 1, 0, 2])
 
     def test_polygon_function_callable(self):
         """Check that values passed into Polygon_function can be callable."""
@@ -178,7 +129,7 @@ class Test_Polygon(unittest.TestCase):
 
     def test_inside_polygon_main(self):
         """test_is_inside_polygon_quick
-        
+
         Test fast version of of is_inside_polygon
         """
 
@@ -1623,27 +1574,6 @@ class Test_Polygon(unittest.TestCase):
         os.remove('test1.png')
         os.remove('test2.png')
 
-    def test_inside_polygon_geospatial(self):
-        #Simplest case: Polygon is the unit square
-        polygon_absolute = [[0,0], [1,0], [1,1], [0,1]]
-        poly_geo_ref = Geo_reference(57, 100, 100)
-        polygon = poly_geo_ref.change_points_geo_ref(polygon_absolute)
-        poly_spatial = Geospatial_data(polygon, geo_reference=poly_geo_ref)
-
-        points_absolute = (0.5, 0.5)
-        points_geo_ref = Geo_reference(57, 78, -56)
-        points = points_geo_ref.change_points_geo_ref(points_absolute)
-        points_spatial = Geospatial_data(points, geo_reference=points_geo_ref)
-
-        assert is_inside_polygon(points_absolute, polygon_absolute)
-        assert is_inside_polygon(ensure_numeric(points_absolute),
-                                 ensure_numeric(polygon_absolute))
-        assert is_inside_polygon(points_absolute, poly_spatial)
-        assert is_inside_polygon(points_spatial, poly_spatial)
-        assert is_inside_polygon(points_spatial, polygon_absolute)
-
-        assert is_inside_polygon(points_absolute, polygon_absolute)
-
     def NOtest_decimate_polygon(self):
         polygon = [[0,0], [10,10], [15,5], [20, 10],
                    [25,0], [30,10], [40,-10], [35, -5]]
@@ -1809,5 +1739,5 @@ class Test_Polygon(unittest.TestCase):
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(Test_Polygon,'test')
-    runner = unittest.TextTestRunner()
+    runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
