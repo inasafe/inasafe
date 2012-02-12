@@ -12,6 +12,75 @@ def _separate_points_by_polygon(points, polygon, indices,
     """Old C-code to refactor into numpy code
     """
 
+    rtol=0.0
+    atol=0.0
+
+    # Get polygon extents to quickly rule out points that
+    # are outside its bounding box
+    minpx = min(polygon[:, 0])
+    maxpx = max(polygon[:, 0])
+    minpy = min(polygon[:, 1])
+    maxpy = max(polygon[:, 1])
+
+    M = points.shape[0]
+    N = polygon.shape[0]
+
+    for i in range(M):
+        # Begin main loop (for each point) - FIXME (write as vector ops)
+        inside_index = 0     # Keep track of points inside
+        outside_index = M-1  # Keep track of points outside (starting from end)
+
+    for k in range(M):
+        #if k % ((M + 10) / 10) == 0:
+        #    print 'Doing %d of %d' % (k, M)
+
+        x = points[k, 0]
+        y = points[k, 1]
+        inside = 0
+
+        #  Optimisation
+        if x > maxpx or x < minpx or y > maxpy or y < minpy:
+            pass
+        else:
+            # Check polygon
+            for i in range(N):
+                j = (i + 1) % N
+
+                px_i = polygon[i, 0]
+                py_i = polygon[i, 1]
+                px_j = polygon[j, 0]
+                py_j = polygon[j, 1]
+
+                #  Check for case where point is contained in line segment
+                #if point_on_line(x, y, px_i, py_i, px_j, py_j, rtol, atol):
+                if point_on_line(points[k, :], [[px_i, py_i], [px_j, py_j]],
+                                 rtol, atol):
+                    if closed == 1:
+                        inside = 1
+                    else:
+                        inside = 0
+                    break
+                else:
+                    # Check if truly inside polygon
+                    if (((py_i < y) and (py_j >= y)) or
+                        ((py_j < y) and (py_i >= y))):
+                        if (px_i + (y-py_i)/(py_j-py_i)*(px_j-px_i) < x):
+                            inside = 1-inside
+
+
+        # Record point as either inside or outside
+        if inside == 1:
+            indices[inside_index] = k
+            inside_index += 1
+        else:
+            indices[outside_index] = k
+            outside_index -= 1
+
+    return inside_index;
+
+
+
+"""
   minpx = polygon[0]; maxpx = minpx;
   minpy = polygon[1]; maxpy = minpy;
 
@@ -83,7 +152,7 @@ def _separate_points_by_polygon(points, polygon, indices,
 
   return inside_index;
 }
-
+"""
 
 
 
@@ -113,12 +182,71 @@ def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
     point = ensure_numeric(point)
     line = ensure_numeric(line)
 
-    res = _point_on_line(point[0], point[1],
-                         line[0,0], line[0,1],
-                         line[1,0], line[1,1],
-                         rtol, atol)
+    x = point[0]; y = point[1]
+    x0, y0 = line[0]
+    x1, y1 = line[1]
 
-    return bool(res)
+    #int __point_on_line(double x, double y,
+    #                    double x0, double y0,
+    #                    double x1, double y1,
+    #                    double rtol,
+    #                    double atol) {
+    #    /*Determine whether a point is on a line segment
+    #
+    #      Input: x, y, x0, x0, x1, y1: where
+    #      point is given by x, y
+    #      line is given by (x0, y0) and (x1, y1)
+    #
+    #      */
+
+    #double a0, a1, a_normal0, a_normal1, b0, b1, len_a, len_b;
+    #double nominator, denominator;
+    #int is_parallel;
+
+    a0 = x - x0
+    a1 = y - y0
+
+    a_normal0 = a1
+    a_normal1 = -a0
+
+    b0 = x1 - x0
+    b1 = y1 - y0
+
+    nominator = abs(a_normal0 * b0 + a_normal1 * b1)
+    denominator = b0 * b0 + b1 * b1;
+
+    # Determine if line is parallel to point vector up to a tolerance
+    is_parallel = 0;
+    if denominator == 0.0:
+        # Denominator is negative - use absolute tolerance
+        if nominator <= atol:
+            is_parallel = 1
+    else:
+        # Denominator is positive - use relative tolerance
+        if nominator / denominator <= rtol:
+            is_parallel = 1
+
+    if is_parallel:
+        # Point is somewhere on the infinite extension of the line
+        # subject to specified absolute tolerance
+
+        len_a = sqrt(a0 * a0 + a1 * a1)
+        len_b = sqrt(b0 * b0 + b1 * b1)
+
+        if a0 * b0 + a1 * b1 >= 0 and len_a <= len_b:
+            return 1
+        else:
+            return 0
+    else:
+        return 0
+
+
+    #res = _point_on_line(point[0], point[1],
+    #                     line[0,0], line[0,1],
+    #                     line[1,0], line[1,1],
+    #                     rtol, atol)
+
+    #return bool(res)
 
 
 ######
@@ -289,116 +417,6 @@ def NEW_C_intersection(line0, line1):
 
     return status, value
 
-def is_inside_triangle(point, triangle,
-                       closed=True,
-                       rtol=1.0e-12,
-                       atol=1.0e-12,
-                       check_inputs=True,
-                       verbose=False):
-    """Determine if one point is inside a triangle
-
-    This uses the barycentric method:
-
-    Triangle is A, B, C
-    Point P can then be written as
-
-    P = A + alpha * (C-A) + beta * (B-A)
-    or if we let
-    v=P-A, v0=C-A, v1=B-A
-
-    v = alpha*v0 + beta*v1
-
-    Dot this equation by v0 and v1 to get two:
-
-    dot(v0, v) = alpha*dot(v0, v0) + beta*dot(v0, v1)
-    dot(v1, v) = alpha*dot(v1, v0) + beta*dot(v1, v1)
-
-    or if a_ij = dot(v_i, v_j) and b_i = dot(v_i, v)
-    the matrix equation:
-
-    a_00 a_01   alpha     b_0
-                       =
-    a_10 a_11   beta      b_1
-
-    Solving for alpha and beta yields:
-
-    alpha = (b_0*a_11 - b_1*a_01)/denom
-    beta =  (b_1*a_00 - b_0*a_10)/denom
-
-    with denom = a_11*a_00 - a_10*a_01
-
-    The point is in the triangle whenever
-    alpha and beta and their sums are in the unit interval.
-
-    rtol and atol will determine how close the point has to be to the edge
-    before it is deemed to be on the edge.
-
-    """
-
-    triangle = ensure_numeric(triangle)
-    point = ensure_numeric(point, num.float)
-
-    if check_inputs is True:
-        msg = 'is_inside_triangle must be invoked with one point only'
-        assert num.allclose(point.shape, [2]), msg
-
-
-    # Use C-implementation
-    return bool(_is_inside_triangle(point, triangle, int(closed), rtol, atol))
-
-
-
-    # FIXME (Ole): The rest of this function has been made
-    # obsolete by the C extension.
-
-    # Quickly reject points that are clearly outside
-    if point[0] < min(triangle[:,0]): return False
-    if point[0] > max(triangle[:,0]): return False
-    if point[1] < min(triangle[:,1]): return False
-    if point[1] > max(triangle[:,1]): return False
-
-
-    # Start search
-    A = triangle[0, :]
-    B = triangle[1, :]
-    C = triangle[2, :]
-
-    # Now check if point lies wholly inside triangle
-    v0 = C-A
-    v1 = B-A
-
-    a00 = num.inner(v0, v0)
-    a10 = a01 = num.inner(v0, v1)
-    a11 = num.inner(v1, v1)
-
-    denom = a11*a00 - a01*a10
-
-    if abs(denom) > 0.0:
-        v = point-A
-        b0 = num.inner(v0, v)
-        b1 = num.inner(v1, v)
-
-        alpha = (b0*a11 - b1*a01)/denom
-        beta = (b1*a00 - b0*a10)/denom
-
-        if (alpha > 0.0) and (beta > 0.0) and (alpha+beta < 1.0):
-            return True
-
-
-    if closed is True:
-        # Check if point lies on one of the edges
-
-        for X, Y in [[A,B], [B,C], [C,A]]:
-            res = _point_on_line(point[0], point[1],
-                                 X[0], X[1],
-                                 Y[0], Y[1],
-                                 rtol, atol)
-
-            if res:
-                return True
-
-    return False
-
 def is_inside_polygon_quick(point, polygon, closed=True, verbose=False):
     """Determine if one point is inside a polygon
     Both point and polygon are assumed to be numeric arrays or lists and
@@ -459,6 +477,7 @@ def inside_polygon(points, polygon, closed=True, verbose=False):
        a list or a numeric array
     """
 
+    points = ensure_numeric(points)
     if len(points.shape) == 1:
         # Only one point was passed in. Convert to array of points
         points = num.reshape(points, (1,2))
@@ -1178,69 +1197,6 @@ def point_in_polygon(polygon, delta=1e-8):
             delta = delta * 0.1
 
     return point
-
-##
-# @brief Calculate approximate number of triangles inside a bounding polygon.
-# @param interior_regions
-# @param bounding_poly
-# @param remainder_res
-# @return The number of triangles.
-def number_mesh_triangles(interior_regions, bounding_poly, remainder_res):
-    """Calculate the approximate number of triangles inside the
-    bounding polygon and the other interior regions
-
-    Polygon areas are converted to square Kms
-
-    FIXME: Add tests for this function
-    """
-
-    from anuga.utilities.polygon import polygon_area
-
-    # TO DO check if any of the regions fall inside one another
-
-    log.critical('-' * 80)
-    log.critical('Polygon   Max triangle area (m^2)   Total area (km^2) '
-                 'Estimated #triangles')
-    log.critical('-' * 80)
-
-    no_triangles = 0.0
-    area = polygon_area(bounding_poly)
-
-    for poly, resolution in interior_regions:
-        this_area = polygon_area(poly)
-        this_triangles = this_area/resolution
-        no_triangles += this_triangles
-        area -= this_area
-
-        log.critical('Interior %s%s%d'
-                     % (('%.0f' % resolution).ljust(25),
-                        ('%.2f' % (this_area/1000000)).ljust(19),
-                        this_triangles))
-        #print 'Interior ',
-        #print ('%.0f' % resolution).ljust(25),
-        #print ('%.2f' % (this_area/1000000)).ljust(19),
-        #print '%d' % (this_triangles)
-
-    bound_triangles = area/remainder_res
-    no_triangles += bound_triangles
-
-    log.critical('Bounding %s%s%d'
-                 % (('%.0f' % remainder_res).ljust(25),
-                    ('%.2f' % (area/1000000)).ljust(19),
-                    bound_triangles))
-    #print 'Bounding ',
-    #print ('%.0f' % remainder_res).ljust(25),
-    #print ('%.2f' % (area/1000000)).ljust(19),
-    #print '%d' % (bound_triangles)
-
-    total_number_of_triangles = no_triangles/0.7
-
-    log.critical('Estimated total number of triangles: %d'
-                 % total_number_of_triangles)
-    log.critical('Note: This is generally about 20%% '
-                 'less than the final amount')
-
-    return int(total_number_of_triangles)
 
 ##
 # @brief Reduce number of points in polygon by the specified factor.
