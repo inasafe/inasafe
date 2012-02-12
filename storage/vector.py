@@ -844,6 +844,7 @@ def convert_polygons_to_centroids(V):
 
     geometry = V.get_geometry()
     N = len(V)
+
     # Calculate points for each polygon
     centroids = []
     for i in range(N):

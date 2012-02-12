@@ -1040,7 +1040,7 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = ('%s/tsunami_polygon.shp' % TESTDATA)
+        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
         exposure_filename = ('%s/building_Maumere.shp' % TESTDATA)
 
         # Read input data
@@ -1077,6 +1077,37 @@ class Test_Engine(unittest.TestCase):
         # Verify interpolated values with test result
         for i in range(N):
             category = I_attributes[i]['Catergory']  # The typo is as the data
+
+    def test_interpolation_from_polygons_error_handling(self):
+        """Interpolation using polygons handles input errors as expected
+
+        This catches situation where input data have different projections
+        This is a test for interpolation (issue #48)
+        """
+
+        # Input data
+        hazard_filename = ('%s/tsunami_polygon.shp' % TESTDATA)  # UTM
+        exposure_filename = ('%s/building_Maumere.shp' % TESTDATA)  # GEO
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+
+        # Check projection mismatch is caught
+        try:
+            H.interpolate(E)
+        except AssertionError, e:
+            msg = ('Projection mismatch shoud have been caught: %s'
+                   % str(e))
+            assert 'Projections' in str(e), msg
+        else:
+            msg = 'Should have raised assertError about projection mismatch'
+            raise Exception(msg)
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
