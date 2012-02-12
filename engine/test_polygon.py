@@ -67,7 +67,8 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(z, [2, 14, 0, 2])
 
         # Combined w default
-        f = Polygon_function([(p1, linear_function), (p2, 2.0)], default = 3.14)
+        f = Polygon_function([(p1, linear_function), (p2, 2.0)],
+                             default = 3.14)
         z = f([5, 5, 27, 35], [5, 9, 8, -5])
         assert num.allclose(z, [2, 14, 3.14, 2])
 
@@ -333,7 +334,8 @@ class Test_Polygon(unittest.TestCase):
             assert is_inside_polygon(point, polygon)
 
         # Very convoluted polygon
-        polygon = [[0,0], [10,10], [15,5], [20, 10], [25,0], [30,10], [40,-10]]
+        polygon = [[0,0], [10,10], [15,5], [20, 10], [25,0],
+                   [30,10], [40,-10]]
         points = populate_polygon(polygon, 5)
         assert len(points) == 5
         for point in points:
@@ -411,7 +413,8 @@ class Test_Polygon(unittest.TestCase):
             assert not is_inside_polygon(point, inner2_polygon)
 
         # Very convoluted polygon
-        polygon = [[0,0], [10,10], [15,5], [20, 10], [25,0], [30,10], [40,-10]]
+        polygon = [[0,0], [10,10], [15,5], [20, 10], [25,0],
+                   [30,10], [40,-10]]
         ex_poly = [[-1,-1], [5,0], [5, 5], [-1,5]]
         points = populate_polygon(polygon, M, exclude=[ex_poly])
 
@@ -717,7 +720,7 @@ class Test_Polygon(unittest.TestCase):
         self.failUnless(value is None, 'Expected value of None, got %s' %
                                        str(value))
 
-        # ----------------------------------------------------------------------
+        # ---------------------------------------------------------------
 
         # line0 fully within line1, same direction
         # 0:         ---->----
@@ -767,8 +770,7 @@ class Test_Polygon(unittest.TestCase):
                                (str(status), str(value)))
         self.failUnless(num.allclose(value, line0))
 
-        # ----------------------------------------------------------------------
-
+        # --------------------------------------------------------------
         # line1 fully within line0, same direction
         # 0:    --------->-----------
         # 1:         ---->----
@@ -817,8 +819,7 @@ class Test_Polygon(unittest.TestCase):
                                (str(status), str(value)))
         self.failUnless(num.allclose(value, line1))
 
-        # ----------------------------------------------------------------------
-
+        # ----------------------------------------------------------------
         # line in same direction, partial overlap
         # 0:    ----->-----
         # 1:       ------->--------
@@ -867,8 +868,7 @@ class Test_Polygon(unittest.TestCase):
                                (str(status), str(value)))
         self.failUnless(num.allclose(value, [line1[1],line0[1]]))
 
-        # ----------------------------------------------------------------------
-
+        # -------------------------------------------------------------------
         # line in same direction, partial overlap
         # 0:       ------>------
         # 1:    ------>------
@@ -917,8 +917,7 @@ class Test_Polygon(unittest.TestCase):
                                (str(status), str(value)))
         self.failUnless(num.allclose(value, [line0[0],line1[0]]))
 
-        # ----------------------------------------------------------------------
-
+        # --------------------------------------------------------------------
         # line in same direction, same left point, line1 longer
         # 0:    ----->------
         # 1:    ------->--------
@@ -967,8 +966,7 @@ class Test_Polygon(unittest.TestCase):
                                (str(status), str(value)))
         self.failUnless(num.allclose(value, line0))
 
-        # ----------------------------------------------------------------------
-
+        # -------------------------------------------------------------------
         # line in same direction, same left point, same right point
         # 0:    ------->--------
         # 1:    ------->--------
@@ -1017,8 +1015,7 @@ class Test_Polygon(unittest.TestCase):
                                (str(status), str(value)))
         self.failUnless(num.allclose(value, line0))
 
-        # ----------------------------------------------------------------------
-
+        # -------------------------------------------------------------------
         # line in same direction, same right point, line1 longer
         # 0:        ----->------
         # 1:    ------->--------
@@ -1067,8 +1064,7 @@ class Test_Polygon(unittest.TestCase):
                                (str(status), str(value)))
         self.failUnless(num.allclose(value, line0))
 
-        # ----------------------------------------------------------------------
-
+        # -------------------------------------------------------------------
         # line in same direction, same left point, line0 longer
         # 0:    ------->--------
         # 1:    ----->------
@@ -1117,8 +1113,7 @@ class Test_Polygon(unittest.TestCase):
                                (str(status), str(value)))
         self.failUnless(num.allclose(value, line1))
 
-        # ----------------------------------------------------------------------
-
+        # -------------------------------------------------------------------
         # line in same direction, same right point, line0 longer
         # 0:    ------->--------
         # 1:        ----->------
