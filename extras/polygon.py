@@ -1055,7 +1055,6 @@ def read_polygon(filename, delimiter=','):
 
     return polygon
 
-##
 # @brief Write polygon data to a file.
 # @param polygon Polygon points to write to file.
 # @param filename Path to file to write.
@@ -1074,23 +1073,17 @@ def write_polygon(polygon, filename=None):
         fid.write('%f, %f\n' % point)
     fid.close()
 
-##
-# @brief Unimplemented.
+
 def read_tagged_polygons(filename):
     """
     """
     pass
 
-##
-# @brief Populate given polygon with uniformly distributed points.
-# @param polygon Polygon to uniformly fill.
-# @param number_of_points Number of points required in polygon.
-# @param seed Seed for random number generator.
-# @param exclude List of polygons inside main where points should be excluded.
-# @return List of random points inside input polygon.
-# @note Delimiter is assumed to be a comma.
+
 def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
     """Populate given polygon with uniformly distributed points.
+
+
 
     Input:
        polygon - list of vertices of polygon
@@ -1143,7 +1136,7 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 
     return points
 
-##
+
 # @brief Get a point inside a polygon that is close to an edge.
 # @param polygon List  of vertices of polygon.
 # @param delta Maximum distance from an edge is delta * sqrt(2).
@@ -1198,7 +1191,7 @@ def point_in_polygon(polygon, delta=1e-8):
 
     return point
 
-##
+
 # @brief Reduce number of points in polygon by the specified factor.
 # @param polygon The polygon to reduce.
 # @param factor The factor to reduce polygon points by (default 10).

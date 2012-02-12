@@ -253,7 +253,7 @@ class Test_Polygon(unittest.TestCase):
         # Now try the vector formulation returning indices
         polygon = [[0,0], [1,0], [0.5,-1], [2, -1], [2,1], [0,1]]
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
-        res = inside_polygon( points, polygon, verbose=False )
+        res = inside_polygon(points, polygon, verbose=False)
         assert num.allclose(res, [0,1,2])
 
     def test_outside_polygon(self):
@@ -330,7 +330,7 @@ class Test_Polygon(unittest.TestCase):
 
 
     def test_separate_points_by_polygon(self):
-        # unit square
+        # Unit square
         U = [[0,0], [1,0], [1,1], [0,1]]
 
         indices, count = separate_points_by_polygon([[0.5, 0.5],
@@ -350,9 +350,9 @@ class Test_Polygon(unittest.TestCase):
 
         polygon = [[0,0], [1,0], [0.5,-1], [2, -1], [2,1], [0,1]]
         points = [ [0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
-        res, count = separate_points_by_polygon( points, polygon )
+        res, count = separate_points_by_polygon(points, polygon)
 
-        assert num.allclose( res, [1,2,3,5,4,0] )
+        assert num.allclose(res, [1,2,3,5,4,0])
         assert count == 3
 
     def test_populate_polygon(self):
@@ -385,7 +385,7 @@ class Test_Polygon(unittest.TestCase):
             assert is_inside_polygon(point, polygon)
             assert not is_inside_polygon(point, ex_poly)
 
-        # overlap
+        # Overlap
         polygon = [[0,0], [1,0], [1,1], [0,1]]
         ex_poly = [[-1,-1], [0.5,0], [0.5, 0.5], [-1,0.5]]
         points = populate_polygon(polygon, 5, exclude=[ex_poly])
@@ -397,8 +397,8 @@ class Test_Polygon(unittest.TestCase):
 
         # Multiple
         polygon = [[0,0], [1,0], [1,1], [0,1]]
-        ex_poly1 = [[0,0], [0.5,0], [0.5, 0.5], [0,0.5]]    # SW quarter
-        ex_poly2 = [[0.5,0.5], [0.5,1], [1, 1], [1,0.5]]    # NE quarter
+        ex_poly1 = [[0,0], [0.5,0], [0.5, 0.5], [0,0.5]]  # SW quarter
+        ex_poly2 = [[0.5,0.5], [0.5,1], [1, 1], [1,0.5]]  # NE quarter
 
         points = populate_polygon(polygon, 20, exclude=[ex_poly1, ex_poly2])
 
@@ -419,27 +419,28 @@ class Test_Polygon(unittest.TestCase):
             assert not is_inside_polygon(point, ex_poly), '%s' % str(point)
 
     def test_populate_polygon_with_exclude2(self):
+
+        M = 200  # Number of points
         min_outer = 0
         max_outer = 1000
-        polygon_outer = [[min_outer,min_outer], [max_outer,min_outer],
-                         [max_outer,max_outer], [min_outer,max_outer]]
+        polygon_outer = [[min_outer, min_outer], [max_outer, min_outer],
+                         [max_outer, max_outer], [min_outer, max_outer]]
 
         delta = 10
         min_inner1 = min_outer + delta
         max_inner1 = max_outer - delta
-        inner1_polygon = [[min_inner1,min_inner1], [max_inner1,min_inner1],
-                          [max_inner1,max_inner1], [min_inner1,max_inner1]]
+        inner1_polygon = [[min_inner1, min_inner1], [max_inner1, min_inner1],
+                          [max_inner1, max_inner1], [min_inner1, max_inner1]]
 
-        density_inner2 = 1000
         min_inner2 = min_outer + 2*delta
         max_inner2 = max_outer - 2*delta
-        inner2_polygon = [[min_inner2,min_inner2], [max_inner2,min_inner2],
-                          [max_inner2,max_inner2], [min_inner2,max_inner2]]
+        inner2_polygon = [[min_inner2, min_inner2], [max_inner2, min_inner2],
+                          [max_inner2, max_inner2], [min_inner2, max_inner2]]
 
-        points = populate_polygon(polygon_outer, 20,
+        points = populate_polygon(polygon_outer, M,
                                   exclude=[inner1_polygon, inner2_polygon])
 
-        assert len(points) == 20
+        assert len(points) == M
         for point in points:
             assert is_inside_polygon(point, polygon_outer)
             assert not is_inside_polygon(point, inner1_polygon)
@@ -448,20 +449,161 @@ class Test_Polygon(unittest.TestCase):
         # Very convoluted polygon
         polygon = [[0,0], [10,10], [15,5], [20, 10], [25,0], [30,10], [40,-10]]
         ex_poly = [[-1,-1], [5,0], [5, 5], [-1,5]]
-        points = populate_polygon(polygon, 20, exclude=[ex_poly])
+        points = populate_polygon(polygon, M, exclude=[ex_poly])
 
-        assert len(points) == 20
+        assert len(points) == M
         for point in points:
             assert is_inside_polygon(point, polygon)
             assert not is_inside_polygon(point, ex_poly), '%s' % str(point)
+
+    def test_large_example(self):
+        """Large polygon clipping example works
+        """
+
+        M = 500  # Number of points inside
+        N = 300  # Number of points outside
+
+        # Main box
+        min_main = 0
+        max_main = 100
+        main_polygon = [[min_main, min_main], [max_main, min_main],
+                        [max_main, max_main], [min_main, max_main]]
+
+        # Outer box
+        delta = 10
+        min_outer = min_main - delta
+        max_outer = max_main + delta
+        outer_polygon = [[min_outer, min_outer], [max_outer, min_outer],
+                         [max_outer, max_outer], [min_outer, max_outer]]
+
+        # Create points inside and outside main polygon
+        points_inside = populate_polygon(main_polygon, M)
+        points_outside = populate_polygon(outer_polygon, N, exclude=[main_polygon])
+
+        assert len(points_inside) == M
+        for point in points_inside:
+            assert is_inside_polygon(point, main_polygon)
+
+        assert len(points_outside) == N
+        for point in points_outside:
+            assert not is_inside_polygon(point, main_polygon)
+
+        # Test separation algorithm
+        all_points = num.concatenate((points_inside, points_outside))
+        assert all_points.shape[0] == M + N
+
+        indices, count = separate_points_by_polygon(all_points, main_polygon)
+        msg = 'Expected %i points inside, got %i' % (M, count)
+        assert count == M, msg
+
+        msg = 'Expected %i indices, got %i' % (M + N, len(indices))
+        assert len(indices) == M + N, msg
+
+        for point in all_points[indices[:count]]:
+            assert is_inside_polygon(point, main_polygon)
+
+        for point in all_points[indices[count:]]:
+            assert not is_inside_polygon(point, main_polygon)
+
+    def test_large_convoluted_example(self):
+        """Large convoluted polygon clipping example works
+        """
+
+        M = 500  # Number of points inside
+        N = 300  # Number of points outside
+
+        # Main box
+        main_polygon = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0], [30, 10], [40, -10]]
+        main_polygon = ensure_numeric(main_polygon)
+
+        # Outer box
+        delta = 5
+        x_min = min(main_polygon[:, 0]) - delta
+        x_max = max(main_polygon[:, 0]) + delta
+        y_min = min(main_polygon[:, 1]) - delta
+        y_max = max(main_polygon[:, 1]) + delta
+
+        outer_polygon = [[x_min, y_min], [x_max, y_min],
+                         [x_max, y_max], [x_min, y_max]]
+
+        # Create points inside and outside main polygon
+        points_inside = populate_polygon(main_polygon, M)
+        points_outside = populate_polygon(outer_polygon, N, exclude=[main_polygon])
+
+        assert len(points_inside) == M
+        for point in points_inside:
+            assert is_inside_polygon(point, main_polygon)
+
+        assert len(points_outside) == N
+        for point in points_outside:
+            assert not is_inside_polygon(point, main_polygon)
+
+        # Test separation algorithm
+        all_points = num.concatenate((points_inside, points_outside))
+        assert all_points.shape[0] == M + N
+
+        indices, count = separate_points_by_polygon(all_points, main_polygon)
+        msg = 'Expected %i points inside, got %i' % (M, count)
+        assert count == M, msg
+
+        msg = 'Expected %i indices, got %i' % (M + N, len(indices))
+        assert len(indices) == M + N, msg
+
+        for point in all_points[indices[:count]]:
+            assert is_inside_polygon(point, main_polygon)
+
+        for point in all_points[indices[count:]]:
+            assert not is_inside_polygon(point, main_polygon)
+
+    def test_large_convoluted_example_random(self):
+        """Large convoluted polygon clipping example works (random points)
+        """
+
+        M = 1000  # Number of points
+
+        # Main box
+        main_polygon = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0], [30, 10], [40, -10]]
+        main_polygon = ensure_numeric(main_polygon)
+
+        # Outer box
+        delta = 5
+        x_min = min(main_polygon[:, 0]) - delta
+        x_max = max(main_polygon[:, 0]) + delta
+        y_min = min(main_polygon[:, 1]) - delta
+        y_max = max(main_polygon[:, 1]) + delta
+
+        outer_polygon = [[x_min, y_min], [x_max, y_min],
+                         [x_max, y_max], [x_min, y_max]]
+
+        # Create points inside and outside main polygon
+        all_points = populate_polygon(outer_polygon, M, seed=17)
+        assert len(all_points) == M
+        all_points = ensure_numeric(all_points)
+
+        # Test separation algorithm
+        indices, count = separate_points_by_polygon(all_points, main_polygon)
+
+        msg = 'Expected %i points inside, got %i' % (271, count)
+        assert count == 271, msg
+
+        msg = 'Expected %i indices, got %i' % (M, len(indices))
+        assert len(indices) == M, msg
+
+        for point in all_points[indices[:count]]:
+            assert is_inside_polygon(point, main_polygon)
+
+        for point in all_points[indices[count:]]:
+            assert not is_inside_polygon(point, main_polygon)
 
     def test_point_in_polygon(self):
         polygon = [[0,0], [1,0], [1,1], [0,1]]
         point = point_in_polygon(polygon)
         assert is_inside_polygon(point, polygon)
 
-        # this may get into a vicious loop
-        # polygon = [[1e32,1e54], [1,0], [1,1], [0,1]]
+        # This once got into a vicious loop so is a good and hard test
+        polygon = [[1e32,1e54], [1,0], [1,1], [0,1]]
+        point = point_in_polygon(polygon)
+        assert is_inside_polygon(point, polygon)
 
         polygon = [[1e15,1e7], [1,0], [1,1], [0,1]]
         point = point_in_polygon(polygon)
@@ -471,11 +613,11 @@ class Test_Polygon(unittest.TestCase):
         point = point_in_polygon(polygon)
         assert is_inside_polygon(point, polygon)
 
-        polygon = [[1e32,1e54], [-1e32,1e54], [1e32,-1e54]]
+        polygon = [[1e32, 1e54], [-1e32, 1e54], [1e32, -1e54]]
         point = point_in_polygon(polygon)
         assert is_inside_polygon(point, polygon)
 
-        polygon = [[1e18,1e15], [1,0], [0,1]]
+        polygon = [[1e18, 1e15], [1,0], [0,1]]
         point = point_in_polygon(polygon)
         assert is_inside_polygon(point, polygon)
 
