@@ -253,7 +253,7 @@ class Test_Polygon(unittest.TestCase):
         # Now try the vector formulation returning indices
         polygon = [[0,0], [1,0], [0.5,-1], [2, -1], [2,1], [0,1]]
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
-        res = inside_polygon(points, polygon, verbose=False)
+        res = inside_polygon(points, polygon)
         assert num.allclose(res, [0,1,2])
 
     def test_outside_polygon(self):
@@ -594,32 +594,6 @@ class Test_Polygon(unittest.TestCase):
 
         for point in all_points[indices[count:]]:
             assert not is_inside_polygon(point, main_polygon)
-
-    def test_point_in_polygon(self):
-        polygon = [[0,0], [1,0], [1,1], [0,1]]
-        point = point_in_polygon(polygon)
-        assert is_inside_polygon(point, polygon)
-
-        # This once got into a vicious loop so is a good and hard test
-        polygon = [[1e32,1e54], [1,0], [1,1], [0,1]]
-        point = point_in_polygon(polygon)
-        assert is_inside_polygon(point, polygon)
-
-        polygon = [[1e15,1e7], [1,0], [1,1], [0,1]]
-        point = point_in_polygon(polygon)
-        assert is_inside_polygon(point, polygon)
-
-        polygon = [[0,0], [1,0], [1,1], [1e8,1e8]]
-        point = point_in_polygon(polygon)
-        assert is_inside_polygon(point, polygon)
-
-        polygon = [[1e32, 1e54], [-1e32, 1e54], [1e32, -1e54]]
-        point = point_in_polygon(polygon)
-        assert is_inside_polygon(point, polygon)
-
-        polygon = [[1e18, 1e15], [1,0], [0,1]]
-        point = point_in_polygon(polygon)
-        assert is_inside_polygon(point, polygon)
 
     def test_in_and_outside_polygon_main(self):
         # Simplest case: Polygon is the unit square
@@ -1623,93 +1597,7 @@ class Test_Polygon(unittest.TestCase):
                    [314037.58727982, 6224953.2960092]]
         assert polygon_area(polygon) == 1.0
 
-    def test_poly_xy(self):
-        # Simplest case: Polygon is the unit square
-        polygon = [[0,0], [1,0], [1,1], [0,1]]
-        x, y = poly_xy(polygon)
-        assert len(x) == len(polygon)+1
-        assert len(y) == len(polygon)+1
-        assert x[0] == 0
-        assert x[1] == 1
-        assert x[2] == 1
-        assert x[3] == 0
-        assert y[0] == 0
-        assert y[1] == 0
-        assert y[2] == 1
-        assert y[3] == 1
-
-    # Arbitrary polygon
-        polygon = [[1,5], [1,1], [100,10], [1,10], [3,6]]
-        x, y = poly_xy(polygon)
-        assert len(x) == len(polygon)+1
-        assert len(y) == len(polygon)+1
-        assert x[0] == 1
-        assert x[1] == 1
-        assert x[2] == 100
-        assert x[3] == 1
-        assert x[4] == 3
-        assert y[0] == 5
-        assert y[1] == 1
-        assert y[2] == 10
-        assert y[3] == 10
-        assert y[4] == 6
-
-    # Disabled
-    def xtest_plot_polygons(self):
-        import os
-
-        # Simplest case: Polygon is the unit square
-        polygon1 = [[0,0], [1,0], [1,1], [0,1]]
-        polygon2 = [[1,1], [2,1], [3,2], [2,2]]
-        v = plot_polygons([polygon1, polygon2], 'test1')
-        assert len(v) == 4
-        assert v[0] == 0
-        assert v[1] == 3
-        assert v[2] == 0
-        assert v[3] == 2
-
-        # Another case
-        polygon3 = [[1,5], [10,1], [100,10], [50,10], [3,6]]
-        v = plot_polygons([polygon2,polygon3], 'test2')
-        assert len(v) == 4
-        assert v[0] == 1
-        assert v[1] == 100
-        assert v[2] == 1
-        assert v[3] == 10
-
-        os.remove('test1.png')
-        os.remove('test2.png')
-
-    def NOtest_decimate_polygon(self):
-        polygon = [[0,0], [10,10], [15,5], [20, 10],
-                   [25,0], [30,10], [40,-10], [35, -5]]
-
-        dpoly = decimate_polygon(polygon, factor=2)
-
-        print dpoly
-
-        assert len(dpoly)*2==len(polygon)
-
-        minx = maxx = polygon[0][0]
-        miny = maxy = polygon[0][1]
-        for point in polygon[1:]:
-            x, y = point
-
-            if x < minx: minx = x
-            if x > maxx: maxx = x
-            if y < miny: miny = y
-            if y > maxy: maxy = y
-
-        assert [minx, miny] in polygon
-        print minx, maxy
-        assert [minx, maxy] in polygon
-        assert [maxx, miny] in polygon
-        assert [maxx, maxy] in polygon
-
-
-################################################################################
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Polygon, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
