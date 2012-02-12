@@ -748,7 +748,7 @@ class Vector:
         N = len(X)
         assert len(atts) == N
 
-        print 'Interpolating'
+        print 'Interpolating %i points and %i polygons' %(N, len(regions))
         z = P(points[:, 0], points[:, 1])
         print 'Done z'
 
@@ -759,7 +759,9 @@ class Vector:
         data = X.get_data()
         if attribute is None:
             for i in range(N):
-                for attribute in z:
+                print i, z[i]
+                print z[i].keys()
+                for attribute in z[i]:
                     # FIXME(Ole): What if there is a name clash?
                     data[i][attribute] = {attribute: z[i][attribute]}
         else:

@@ -459,7 +459,11 @@ class Polygon_function:
         else:
             z = [self.default] * N  # FIXME (Ole): Use NAN
 
+        k = 0
         for polygon, value in self.regions:
+            print ('Doing polygon %i of %i: L = %i'
+                   % (k, len(self.regions), len(polygon)))
+            k += 1
             indices = inside_polygon(points, polygon)
 
             if callable(value):
