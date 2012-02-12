@@ -17,8 +17,7 @@ from utilities import geometrytype2string
 from engine.polygon import Polygon_function
 from engine.numerics import ensure_numeric
 
-# FIXME (Ole): Consider using pyshp to read and write shapefiles
-#              See http://code.google.com/p/pyshp
+
 class Vector:
     """Class for abstraction of vector data
     """
@@ -749,7 +748,6 @@ class Vector:
 
         z = P(points[:, 0], points[:, 1])
         print z[0:10]
-        import sys; sys.exit()
         assert len(z) == N
 
         # Build union of existing and interpolated attributes
@@ -767,8 +765,6 @@ class Vector:
         return Vector(data=atts,
                       projection=X.get_projection(),
                       geometry=X.get_geometry())
-
-
 
     @property
     def is_raster(self):
