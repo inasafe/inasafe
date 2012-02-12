@@ -14,7 +14,7 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
-
+from engine.polygon import Polygon_function
 
 # FIXME (Ole): Consider using pyshp to read and write shapefiles
 #              See http://code.google.com/p/pyshp
@@ -673,27 +673,42 @@ class Vector:
                       projection=self.get_projection(),
                       geometry=geometry)
 
-    def interpolate(self, X, name=None):
+    def interpolate(self, X, name=None, attribute=None):
         """Interpolate values of this vector layer to other layer
 
         Input
             X: Layer object defining target
             name: Optional name of interpolated layer
+            attribute: Optional attribute name to use.
+                       If None, all attributes are used.
 
         Output
             Y: Layer object with values of this vector layer interpolated to
                geometry of input layer X
         """
 
-        msg = 'Interpolation from vector layers not yet implemented'
-        raise Exception(msg)
-
         msg = 'Input to Vector.interpolate must be a vector layer instance'
         assert X.is_vector, msg
+
+        msg = ('Vector layer must be polygon geometry type for interpolation '
+               'to take place. I got OGR geometry type %s'
+               % self.geometry_type)
+        assert X.is_polygon_data, msg
 
         msg = ('Name must be either a string or None. I got %s'
                % (str(type(X)))[1:-1])
         assert name is None or isinstance(name, basestring), msg
+
+        msg = ('Attribute must be either a string or None. I got %s'
+               % (str(type(X)))[1:-1])
+        assert attribute is None or isinstance(attribute, basestring), msg
+
+        # Create callable polygon function for this data
+        #for p in
+
+
+        Polygon_function
+
 
     @property
     def is_raster(self):

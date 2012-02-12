@@ -10,6 +10,7 @@ sys.path.append(pardir)
 # Import Risk in a Box modules
 from engine.core import calculate_impact
 from engine.interpolation2d import interpolate_raster
+from engine.polygon import Polygon_function
 from engine.numerics import cdf, erf
 from storage.core import read_layer
 
@@ -1032,6 +1033,41 @@ class Test_Engine(unittest.TestCase):
             if not numpy.isnan(interpolated_depth):
                 assert depth_min <= interpolated_depth <= depth_max, msg
 
+    def test_interpolation_from_polygons(self):
+        """Interpolation using tsunami polygon data set from Maumere
+
+        This is a test for interpolation (issue #48)
+        """
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = ('%s/tsunami_polygon.shp' % TESTDATA)
+        exposure_filename = ('%s/building_Maumere.shp' % TESTDATA)
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+
+        # Test riab's interpolation function
+        I = H.interpolate(E, name='depth')
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+        assert numpy.allclose(I_geometry, E_geometry)
+
+        N = len(Icoordinates)
+        assert N == 891
+
+        # Verify interpolated values with test result
+        #for i in range(N):
+        #    interpolated_depth = Iattributes[i]['depth']
+        #    pointid = attributes[i]['POINTID']
+
+
+
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
         """
@@ -1321,6 +1357,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_interpolation_from_polygons')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
