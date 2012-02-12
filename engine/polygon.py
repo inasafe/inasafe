@@ -457,7 +457,7 @@ class Polygon_function:
         if callable(self.default):
             z = self.default(x, y)
         else:
-            z = [self.default] * N
+            z = [self.default] * N  # FIXME (Ole): Use NAN
 
         for polygon, value in self.regions:
             indices = inside_polygon(points, polygon)

@@ -138,3 +138,10 @@ pylint:
 	@echo "Pylint report                          "
 	@echo "---------------------------------------"
 	pylint --disable=C,R storage engine gui
+
+profile:
+	@echo
+	@echo "---------------------------------------"
+	@echo "Profiling engine                       "
+	@echo "---------------------------------------"
+	python -m cProfile engine/test_engine.py -s cumulative

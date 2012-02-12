@@ -736,7 +736,9 @@ class Vector:
                 assert attribute in attr, msg
                 regions.append((polygon, attr[attribute]))
 
+        print 'create P'
         P = Polygon_function(regions)
+        print 'Done P'
 
         #### FIXME(Ole): A bit messy from here
 
@@ -746,7 +748,10 @@ class Vector:
         N = len(X)
         assert len(atts) == N
 
+        print 'Interpolating'
         z = P(points[:, 0], points[:, 1])
+        print 'Done z'
+
         print z[0:10]
         assert len(z) == N
 
@@ -754,12 +759,12 @@ class Vector:
         data = X.get_data()
         if attribute is None:
             for i in range(N):
-                for key in z:
+                for attribute in z:
                     # FIXME(Ole): What if there is a name clash?
-                    data[i][key] = {key: z[i]}
+                    data[i][attribute] = {attribute: z[i][attribute]}
         else:
             for i in range(N):
-                data[i][attribute] = z[i]
+                data[i][attribute] = z[i][attribute]
 
         # Create new Vector instance and return
         return Vector(data=atts,
