@@ -327,6 +327,40 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(res, [1, 2, 3, 5, 4, 0])
         assert count == 3
 
+    def test_polygon_clipping_error_handling(self):
+        """Polygon clipping checks input as expected"""
+
+        U = [[0, 0], [1, 0], [1, 1], [0, 1]]
+        points = [[2, 2], [1, 3], [-1, 1], [0, 2]]
+
+        # Correct call
+        separate_points_by_polygon(points, U)
+
+        # Input errors
+        try:
+            outside_polygon(points, ['what'])
+        except:
+            pass
+        else:
+            msg = 'Should have raised exception'
+            raise Exception(msg)
+
+        try:
+            outside_polygon('Hmmm', U)
+        except:
+            pass
+        else:
+            msg = 'Should have raised exception'
+            raise Exception(msg)
+
+        try:
+            inside_polygon(points, U, closed=7)
+        except:
+            pass
+        else:
+            msg = 'Should have raised exception'
+            raise Exception(msg)
+
     def test_populate_polygon(self):
         polygon = [[0, 0], [1, 0], [1, 1], [0, 1]]
         points = populate_polygon(polygon, 5)

@@ -1078,8 +1078,6 @@ class Test_Engine(unittest.TestCase):
         for i in range(N):
             category = I_attributes[i]['Catergory']  # The typo is as the data
 
-
-
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
         """

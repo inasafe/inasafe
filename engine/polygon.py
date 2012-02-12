@@ -70,18 +70,16 @@ def separate_points_by_polygon(points, polygon,
 
         try:
             points = ensure_numeric(points, num.float)
-        except NameError, e:
-            raise NameError(e)
-        except:
-            msg = 'Points could not be converted to numeric array'
+        except Exception, e:
+            msg = ('Points could not be converted to numeric array: %s'
+                   % str(e))
             raise Exception(msg)
 
         try:
             polygon = ensure_numeric(polygon, num.float)
-        except NameError, e:
-            raise NameError(e)
-        except:
-            msg = 'Polygon could not be converted to numeric array'
+        except Exception, e:
+            msg = ('Polygon could not be converted to numeric array: %s'
+                   % str(e))
             raise Exception(msg)
 
         msg = 'Polygon array must be a 2d array of vertices'
@@ -102,7 +100,7 @@ def separate_points_by_polygon(points, polygon,
                    'I got points.shape[1]=%d' % points.shape[0])
             assert points.shape[1] == 2, msg
 
-            msg = ('Points array must be a 2d array. I got %s.'
+            msg = ('Points array must be a 2d array. I got %s...'
                    % str(points[:30]))
             assert len(points.shape) == 2, msg
 
@@ -115,7 +113,7 @@ def separate_points_by_polygon(points, polygon,
     indices = num.zeros(M, num.int)
 
     count = _separate_points_by_polygon(points, polygon, indices,
-                                        int(closed))
+                                        closed=closed)
 
     # log.critical('Found %d points (out of %d) inside polygon' % (count, M))
 
@@ -171,7 +169,7 @@ def _separate_points_by_polygon(points, polygon, indices,
                                  [[px_i, py_i], [px_j, py_j]],
                                  rtol, atol):
                     #  Point coincides with line segment
-                    if closed == 1:
+                    if closed:
                         inside = 1
                     else:
                         inside = 0
@@ -217,6 +215,7 @@ def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
     Tolerances rtol and atol are used with numpy.allclose()
     """
 
+    # Prepare input data
     point = ensure_numeric(point)
     line = ensure_numeric(line)
 
@@ -224,27 +223,31 @@ def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
     x0, y0 = line[0]
     x1, y1 = line[1]
 
+    # Vector from beginning of line to point
     a0 = x - x0
     a1 = y - y0
 
+    # It's normal vector
     a_normal0 = a1
     a_normal1 = -a0
 
+    # Vector parallel to line
     b0 = x1 - x0
     b1 = y1 - y0
 
+    # Dot product
     nominator = abs(a_normal0 * b0 + a_normal1 * b1)
     denominator = b0 * b0 + b1 * b1
 
     # Determine if line is parallel to point vector up to a tolerance
-    is_parallel = 0
-    if denominator == 0.0:
-        # Denominator is negative - use absolute tolerance
-        if nominator <= atol:
+    is_parallel = False
+    if denominator != 0.0:
+        # Denominator is not zero (positive) - use relative tolerance
+        if nominator <= rtol * denominator:
             is_parallel = True
     else:
-        # Denominator is positive - use relative tolerance
-        if nominator / denominator <= rtol:
+        # Denominator is zero - use absolute tolerance
+        if nominator <= atol:
             is_parallel = True
 
     if is_parallel:
@@ -255,9 +258,9 @@ def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
         len_b = sqrt(b0 * b0 + b1 * b1)
 
         if a0 * b0 + a1 * b1 >= 0 and len_a <= len_b:
-            return True
+            return True  # Point is within line boundaries
         else:
-            return False
+            return False  # Point is outside line boundaries
     else:
         return False
 
@@ -272,11 +275,8 @@ def is_inside_polygon(point, polygon, closed=True):
 
     if indices.shape[0] == 1:
         return True
-    elif indices.shape[0] == 0:
-        return False
     else:
-        msg = 'is_inside_polygon must be invoked with one point only'
-        raise Exception(msg)
+        return False
 
 
 def inside_polygon(points, polygon, closed=True):
@@ -292,13 +292,9 @@ def inside_polygon(points, polygon, closed=True):
        a list or a numeric array
     """
 
-    points = ensure_numeric(points)
-    if len(points.shape) == 1:
-        # Only one point was passed in. Convert to array of points
-        points = num.reshape(points, (1, 2))
-
     indices, count = separate_points_by_polygon(points, polygon,
-                                                closed=closed)
+                                                closed=closed,
+                                                check_input=True)
 
     # Return indices of points inside polygon
     return indices[:count]
@@ -310,15 +306,12 @@ def is_outside_polygon(point, polygon, closed=True):
     See outside_polygon for more details
     """
 
-    indices = outside_polygon(point, polygon, closed)
+    indices = outside_polygon(point, polygon, closed=closed)
 
     if indices.shape[0] == 1:
         return True
-    elif indices.shape[0] == 0:
-        return False
     else:
-        msg = 'is_outside_polygon must be invoked with one point only'
-        raise Exception(msg)
+        return False
 
 
 def outside_polygon(points, polygon, closed=True):
@@ -331,28 +324,9 @@ def outside_polygon(points, polygon, closed=True):
        See separate_points_by_polygon for documentation
     """
 
-    try:
-        points = ensure_numeric(points, num.float)
-    except NameError, e:
-        raise NameError(e)
-    except:
-        msg = 'Points could not be converted to numeric array'
-        raise Exception(msg)
-
-    try:
-        polygon = ensure_numeric(polygon, num.float)
-    except NameError, e:
-        raise NameError(e)
-    except:
-        msg = 'Polygon could not be converted to numeric array'
-        raise Exception(msg)
-
-    if len(points.shape) == 1:
-        # Only one point was passed in. Convert to array of points
-        points = num.reshape(points, (1, 2))
-
     indices, count = separate_points_by_polygon(points, polygon,
-                                                closed=closed)
+                                                closed=closed,
+                                                check_input=True)
 
     # Return indices of points outside polygon
     if count == len(indices):
@@ -379,31 +353,10 @@ def in_and_outside_polygon(points, polygon, closed=True):
     See separate_points_by_polygon for more documentation
     """
 
-    try:
-        points = ensure_numeric(points, num.float)
-    except NameError, e:
-        raise NameError(e)
-    except:
-        msg = 'Points could not be converted to numeric array'
-        raise Exception(msg)
-
-    try:
-        polygon = ensure_numeric(polygon, num.float)
-    except NameError, e:
-        raise NameError(e)
-    except:
-        msg = 'Polygon could not be converted to numeric array'
-        raise Exception(msg)
-
-    if len(points.shape) == 1:
-        # Only one point was passed in. Convert to array of points
-        points = num.reshape(points, (1, 2))
-
     indices, count = separate_points_by_polygon(points, polygon,
-                                                closed=closed)
+                                                closed=closed,
+                                                check_input=True)
 
-    # Returns indices of points inside and indices of points outside
-    # the polygon
     if count == len(indices):
         # No points are outside
         return indices[:count], []
