@@ -7,7 +7,7 @@ from numerical_tools import ensure_numeric
 
 from polygon import *
 
-def test_function(x, y):
+def linear_function(x, y):
     return x+y
 
 
@@ -57,23 +57,23 @@ class Test_Polygon(unittest.TestCase):
         p1 = [[0,0], [10,0], [10,10], [0,10]]
         p2 = [[0,0], [10,10], [15,5], [20, 10], [25,0], [30,10], [40,-10]]
 
-        f = Polygon_function([(p1, test_function)])
+        f = Polygon_function([(p1, linear_function)])
         z = f([5, 5, 27, 35], [5, 9, 8, -5]) # Two first inside p1
         assert num.allclose(z, [10, 14, 0, 0])
 
         # Combined
-        f = Polygon_function([(p1, test_function), (p2, 2.0)])
+        f = Polygon_function([(p1, linear_function), (p2, 2.0)])
         z = f([5, 5, 27, 35], [5, 9, 8, -5])
         assert num.allclose(z, [2, 14, 0, 2])
 
         # Combined w default
-        f = Polygon_function([(p1, test_function), (p2, 2.0)], default = 3.14)
+        f = Polygon_function([(p1, linear_function), (p2, 2.0)], default = 3.14)
         z = f([5, 5, 27, 35], [5, 9, 8, -5])
         assert num.allclose(z, [2, 14, 3.14, 2])
 
         # Combined w default func
-        f = Polygon_function([(p1, test_function), (p2, 2.0)],
-                             default=test_function)
+        f = Polygon_function([(p1, linear_function), (p2, 2.0)],
+                             default=linear_function)
         z = f([5, 5, 27, 35], [5, 9, 8, -5])
         assert num.allclose(z, [2, 14, 35, 2])
 
@@ -730,7 +730,7 @@ class Test_Polygon(unittest.TestCase):
     # the test_intersection_bug_20081110_?() set of tests.
     # This function tests all parallel line cases for 4 collinear points.
     # This function should never be run directly by the unittest code.
-    def helper_test_parallel_intersection_code(self, P1, P2, P3, P4):
+    def helper_parallel_intersection_code(self, P1, P2, P3, P4):
         # lines in same direction, no overlap
         # 0:         ---->----
         # 1:                     --------->-----------
@@ -1239,18 +1239,18 @@ class Test_Polygon(unittest.TestCase):
         P3 = [3.0, 3.0]
         P4 = [4.0, 4.0]
 
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P1 = [1.0, 1.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P1 = [1.0, 1.0]
         P2 = [2.0, 2.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P2 = [2.0, 2.0]
         P3 = [3.0, 3.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P3 = [3.0, 3.0]
         P4 = [4.0, 4.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_TL(self):
         """test_intersection_bug_20081110(self)
@@ -1265,18 +1265,18 @@ class Test_Polygon(unittest.TestCase):
         P3 = [-3.0, 3.0]
         P4 = [-4.0, 4.0]
 
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P1 = [-1.0, 1.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P1 = [-1.0, 1.0]
         P2 = [-2.0, 2.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P2 = [-2.0, 2.0]
         P3 = [-3.0, 3.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P3 = [-3.0, 3.0]
         P4 = [-4.0, 4.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_BL(self):
         """test_intersection_bug_20081110(self)
@@ -1291,18 +1291,18 @@ class Test_Polygon(unittest.TestCase):
         P3 = [-3.0, -3.0]
         P4 = [-4.0, -4.0]
 
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P1 = [-1.0, -1.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P1 = [-1.0, -1.0]
         P2 = [-2.0, -2.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P2 = [-2.0, -2.0]
         P3 = [-3.0, -3.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P3 = [-3.0, -3.0]
         P4 = [-4.0, -4.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_BR(self):
         """test_intersection_bug_20081110(self)
@@ -1317,18 +1317,18 @@ class Test_Polygon(unittest.TestCase):
         P3 = [3.0, -3.0]
         P4 = [4.0, -4.0]
 
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P1 = [1.0, -1.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P1 = [1.0, -1.0]
         P2 = [2.0, -2.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P2 = [2.0, -2.0]
         P3 = [3.0, -3.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
         P3 = [3.0, -3.0]
         P4 = [4.0, -4.0+1.0e-9]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_TR_TL(self):
         """test_intersection_bug_20081110(self)
@@ -1342,7 +1342,7 @@ class Test_Polygon(unittest.TestCase):
         P2 = [ 1.0, 5.0]
         P3 = [ 2.0, 6.0]
         P4 = [ 3.0, 7.0]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
         # define 4 collinear points, 2 in TL, 2 in TR
         #    P1---P2-+-P3---P4
@@ -1350,7 +1350,7 @@ class Test_Polygon(unittest.TestCase):
         P2 = [-2.0, 2.0]
         P3 = [ 2.0, 6.0]
         P4 = [ 3.0, 7.0]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
         # define 4 collinear points, 3 in TL, 1 in TR
         #    P1---P2---P3-+-P4
@@ -1358,7 +1358,7 @@ class Test_Polygon(unittest.TestCase):
         P2 = [-2.0, 2.0]
         P3 = [-1.0, 3.0]
         P4 = [ 3.0, 7.0]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_TR_BL(self):
         """test_intersection_bug_20081110(self)
@@ -1372,7 +1372,7 @@ class Test_Polygon(unittest.TestCase):
         P2 = [ 1.0,  2.0]
         P3 = [ 2.0,  3.0]
         P4 = [ 3.0,  4.0]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
         # define 4 collinear points, 2 in TL, 2 in TR
         #    P1---P2-+-P3---P4
@@ -1380,7 +1380,7 @@ class Test_Polygon(unittest.TestCase):
         P2 = [-3.0, -2.0]
         P3 = [ 2.0,  3.0]
         P4 = [ 3.0,  4.0]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
         # define 4 collinear points, 3 in TL, 1 in TR
         #    P1---P2---P3-+-P4
@@ -1388,7 +1388,7 @@ class Test_Polygon(unittest.TestCase):
         P2 = [-3.0, -2.0]
         P3 = [-2.0, -1.0]
         P4 = [ 3.0,  4.0]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_TR_BR(self):
         """test_intersection_bug_20081110(self)
@@ -1402,7 +1402,7 @@ class Test_Polygon(unittest.TestCase):
         P2 = [ 5.0,  1.0]
         P3 = [ 6.0,  2.0]
         P4 = [ 7.0,  3.0]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
         # define 4 collinear points, 2 in BR, 2 in TR
         #    P1---P2-+-P3---P4
@@ -1410,7 +1410,7 @@ class Test_Polygon(unittest.TestCase):
         P2 = [ 2.0, -2.0]
         P3 = [ 6.0,  2.0]
         P4 = [ 7.0,  3.0]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
         # define 4 collinear points, 3 in BR, 1 in TR
         #    P1---P2---P3-+-P4
@@ -1418,7 +1418,7 @@ class Test_Polygon(unittest.TestCase):
         P2 = [ 2.0, -2.0]
         P3 = [ 3.0, -1.0]
         P4 = [ 7.0,  3.0]
-        self.helper_test_parallel_intersection_code(P1, P2, P3, P4)
+        self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
 
     def test_intersection_direction_invariance(self):

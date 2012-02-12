@@ -776,17 +776,15 @@ class Polygon_function:
                'I got %s' % str(T))
         assert a == 2, msg
 
-        if geo_reference is None:
-            from anuga.coordinate_transforms.geo_reference import Geo_reference
-            geo_reference = Geo_reference()
 
         self.default = default
 
         # Make points in polygons relative to geo_reference
+        # FIXME: DELETE
         self.regions = []
         for polygon, value in regions:
-            P = geo_reference.change_points_geo_ref(polygon)
-            self.regions.append((P, value))
+            #P = geo_reference.change_points_geo_ref(polygon)
+            self.regions.append((polygon, value))
 
     def __call__(self, x, y):
         """Callable property of Polygon_function.
