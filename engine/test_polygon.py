@@ -127,34 +127,7 @@ class Test_Polygon(unittest.TestCase):
         assert not is_inside_polygon((0.5, 0.), polygon, closed=False)
         assert not is_inside_polygon((1., 0.5), polygon, closed=False)
 
-    def test_inside_polygon_main(self):
-        """test_is_inside_polygon_quick
-
-        Test fast version of of is_inside_polygon
-        """
-
-        # Simplest case: Polygon is the unit square
-        polygon = [[0,0], [1,0], [1,1], [0,1]]
-
-        assert is_inside_polygon_quick( (0.5, 0.5), polygon )
-        assert not is_inside_polygon_quick( (0.5, 1.5), polygon )
-        assert not is_inside_polygon_quick( (0.5, -0.5), polygon )
-        assert not is_inside_polygon_quick( (-0.5, 0.5), polygon )
-        assert not is_inside_polygon_quick( (1.5, 0.5), polygon )
-
-        # Try point on borders
-        assert is_inside_polygon_quick( (1., 0.5), polygon, closed=True)
-        assert is_inside_polygon_quick( (0.5, 1), polygon, closed=True)
-        assert is_inside_polygon_quick( (0., 0.5), polygon, closed=True)
-        assert is_inside_polygon_quick( (0.5, 0.), polygon, closed=True)
-
-        assert not is_inside_polygon_quick( (0.5, 1), polygon, closed=False)
-        assert not is_inside_polygon_quick( (0., 0.5), polygon, closed=False)
-        assert not is_inside_polygon_quick( (0.5, 0.), polygon, closed=False)
-        assert not is_inside_polygon_quick( (1., 0.5), polygon, closed=False)
-
-
-    def test_inside_polygon_main(self):
+    def test_inside_polygon_main2(self):
         # Simplest case: Polygon is the unit square
         polygon = [[0,0], [1,0], [1,1], [0,1]]
 
@@ -178,13 +151,6 @@ class Test_Polygon(unittest.TestCase):
 
         assert not is_inside_polygon( (0.5, 1.5), polygon )
         assert not is_inside_polygon( (0.5, -0.5), polygon )
-
-        assert is_inside_polygon_quick( (0.5, 0.5), polygon )
-        assert is_inside_polygon_quick( (1, -0.5), polygon )
-        assert is_inside_polygon_quick( (1.5, 0), polygon )
-
-        assert not is_inside_polygon_quick( (0.5, 1.5), polygon )
-        assert not is_inside_polygon_quick( (0.5, -0.5), polygon )
 
         # Very convoluted polygon
         polygon = [[0,0], [10,10], [15,5], [20, 10], [25,0], [30,10], [40,-10]]
@@ -211,9 +177,11 @@ class Test_Polygon(unittest.TestCase):
                    [11,10], [11,11], [10,11], [10,10]]
         assert is_inside_polygon((0.5, 0.5), polygon)
         assert is_inside_polygon((10.5, 10.5), polygon)
-
-        # FIXME: Fails if point is 5.5, 5.5
         assert not is_inside_polygon((0, 5.5), polygon)
+
+        # FIXME: Fails if point is 5.5, 5.5 - maybe ok, but
+        # need to understand it
+        #assert is_inside_polygon((5.5, 5.5), polygon)
 
         # Polygon with a hole
         polygon = [[-1,-1], [2,-1], [2,2], [-1,2], [-1,-1],
@@ -349,7 +317,8 @@ class Test_Polygon(unittest.TestCase):
         assert count == 3
 
         polygon = [[0,0], [1,0], [0.5,-1], [2, -1], [2,1], [0,1]]
-        points = [ [0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
+        points = [ [0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0],
+                   [0.5, 1.5], [0.5, -0.5]]
         res, count = separate_points_by_polygon(points, polygon)
 
         assert num.allclose(res, [1,2,3,5,4,0])
@@ -363,17 +332,12 @@ class Test_Polygon(unittest.TestCase):
         for point in points:
             assert is_inside_polygon(point, polygon)
 
-            assert is_inside_polygon_quick(point, polygon)
-
-
         # Very convoluted polygon
         polygon = [[0,0], [10,10], [15,5], [20, 10], [25,0], [30,10], [40,-10]]
         points = populate_polygon(polygon, 5)
         assert len(points) == 5
         for point in points:
             assert is_inside_polygon(point, polygon)
-            assert is_inside_polygon_quick(point, polygon)
-
 
     def test_populate_polygon_with_exclude(self):
         polygon = [[0,0], [1,0], [1,1], [0,1]]
@@ -478,7 +442,8 @@ class Test_Polygon(unittest.TestCase):
 
         # Create points inside and outside main polygon
         points_inside = populate_polygon(main_polygon, M)
-        points_outside = populate_polygon(outer_polygon, N, exclude=[main_polygon])
+        points_outside = populate_polygon(outer_polygon, N,
+                                          exclude=[main_polygon])
 
         assert len(points_inside) == M
         for point in points_inside:
@@ -513,7 +478,8 @@ class Test_Polygon(unittest.TestCase):
         N = 300  # Number of points outside
 
         # Main box
-        main_polygon = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0], [30, 10], [40, -10]]
+        main_polygon = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0],
+                        [30, 10], [40, -10]]
         main_polygon = ensure_numeric(main_polygon)
 
         # Outer box
@@ -528,7 +494,8 @@ class Test_Polygon(unittest.TestCase):
 
         # Create points inside and outside main polygon
         points_inside = populate_polygon(main_polygon, M)
-        points_outside = populate_polygon(outer_polygon, N, exclude=[main_polygon])
+        points_outside = populate_polygon(outer_polygon, N,
+                                          exclude=[main_polygon])
 
         assert len(points_inside) == M
         for point in points_inside:
@@ -562,7 +529,8 @@ class Test_Polygon(unittest.TestCase):
         M = 1000  # Number of points
 
         # Main box
-        main_polygon = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0], [30, 10], [40, -10]]
+        main_polygon = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0],
+                        [30, 10], [40, -10]]
         main_polygon = ensure_numeric(main_polygon)
 
         # Outer box
@@ -1538,64 +1506,6 @@ class Test_Polygon(unittest.TestCase):
         status, value = intersection(line0, line1)
         assert status == 2
         assert num.allclose(value, [[7, 19], [1, 7]])
-
-
-    def NOtest_inside_polygon_main(self):
-        # FIXME (Ole): Why is this disabled?
-        #print "inside",inside
-        #print "outside",outside
-
-        assert not inside_polygon((0.5, 1.5), polygon)
-        assert not inside_polygon((0.5, -0.5), polygon)
-        assert not inside_polygon((-0.5, 0.5), polygon)
-        assert not inside_polygon((1.5, 0.5), polygon)
-
-        # Try point on borders
-        assert inside_polygon((1., 0.5), polygon, closed=True)
-        assert inside_polygon((0.5, 1), polygon, closed=True)
-        assert inside_polygon((0., 0.5), polygon, closed=True)
-        assert inside_polygon((0.5, 0.), polygon, closed=True)
-
-        assert not inside_polygon((0.5, 1), polygon, closed=False)
-        assert not inside_polygon((0., 0.5), polygon, closed=False)
-        assert not inside_polygon((0.5, 0.), polygon, closed=False)
-        assert not inside_polygon((1., 0.5), polygon, closed=False)
-
-        # From real example (that failed)
-        polygon = [[20,20], [40,20], [40,40], [20,40]]
-        points = [[40, 50]]
-        res = inside_polygon(points, polygon)
-        assert len(res) == 0
-
-        polygon = [[20,20], [40,20], [40,40], [20,40]]
-        points = [[25, 25], [30, 20], [40, 50], [90, 20], [40, 90]]
-        res = inside_polygon(points, polygon)
-        assert len(res) == 2
-        assert num.allclose(res, [0,1])
-
-    def test_polygon_area(self):
-        # Simplest case: Polygon is the unit square
-        polygon = [[0,0], [1,0], [1,1], [0,1]]
-        assert polygon_area(polygon) == 1
-
-        # Simple case: Polygon is a rectangle
-        polygon = [[0,0], [1,0], [1,4], [0,4]]
-        assert polygon_area(polygon) == 4
-
-        # Simple case: Polygon is a unit triangle
-        polygon = [[0,0], [1,0], [0,1]]
-        assert polygon_area(polygon) == 0.5
-
-        # Simple case: Polygon is a diamond
-        polygon = [[0,0], [1,1], [2,0], [1, -1]]
-        assert polygon_area(polygon) == 2.0
-
-        # Complex case where numerical errors might occur
-        polygon = [[314037.58727982, 6224952.2960092],
-                   [314038.58727982, 6224952.2960092],
-                   [314038.58727982, 6224953.2960092],
-                   [314037.58727982, 6224953.2960092]]
-        assert polygon_area(polygon) == 1.0
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Polygon, 'test')

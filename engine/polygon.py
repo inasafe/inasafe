@@ -250,36 +250,36 @@ def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
         return False
 
 
-######
-# Result functions used in intersection() below for collinear lines.
+#------------------------------------------------------------------
+# Result functions used in intersection() below for collinear lines
 # (p0,p1) defines line 0, (p2,p3) defines line 1.
-######
+#------------------------------------------------------------------
 
 # Result functions for possible states
 def lines_dont_coincide(p0,p1,p2,p3):
-    return (3, None)
+    return 3, None
 
 def lines_0_fully_included_in_1(p0, p1, p2, p3):
-    return (2, num.array([p0, p1]))
+    return 2, num.array([p0, p1])
 
 def lines_1_fully_included_in_0(p0, p1, p2, p3):
-    return (2, num.array([p2, p3]))
+    return 2, num.array([p2, p3])
 
 def lines_overlap_same_direction(p0, p1, p2, p3):
-    return (2, num.array([p0, p3]))
+    return 2, num.array([p0, p3])
 
 def lines_overlap_same_direction2(p0, p1, p2, p3):
-    return (2, num.array([p2, p1]))
+    return 2, num.array([p2, p1])
 
 def lines_overlap_opposite_direction(p0, p1, p2, p3):
-    return (2, num.array([p0, p2]))
+    return 2, num.array([p0, p2])
 
 def lines_overlap_opposite_direction2(p0, p1, p2, p3):
-    return (2, num.array([p3, p1]))
+    return 2, num.array([p3, p1])
 
 # This function called when an impossible state is found
 def lines_error(p1, p2, p3, p4):
-    msg = ('INTERNAL ERROR: p1=%s, p2=%s, p3=%s, p4=%s'
+    msg = ('Impossible state: p1=%s, p2=%s, p3=%s, p4=%s'
            % (str(p1), str(p2), str(p3), str(p4)))
     raise RuntimeError, msg
 
@@ -287,22 +287,22 @@ def lines_error(p1, p2, p3, p4):
 #
 #                 0s1    0e1    1s0    1e0   # line 0 starts on 1, 0 ends 1,
 #                                                   1 starts 0, 1 ends 0
-collinear_result = { (False, False, False, False): lines_dont_coincide,
-                     (False, False, False, True ): lines_error,
-                     (False, False, True,  False): lines_error,
-                     (False, False, True,  True ): lines_1_fully_included_in_0,
-                     (False, True,  False, False): lines_error,
-                     (False, True,  False, True ): lines_overlap_opposite_direction2,
-                     (False, True,  True,  False): lines_overlap_same_direction2,
-                     (False, True,  True,  True ): lines_1_fully_included_in_0,
-                     (True,  False, False, False): lines_error,
-                     (True,  False, False, True ): lines_overlap_same_direction,
-                     (True,  False, True,  False): lines_overlap_opposite_direction,
-                     (True,  False, True,  True ): lines_1_fully_included_in_0,
-                     (True,  True,  False, False): lines_0_fully_included_in_1,
-                     (True,  True,  False, True ): lines_0_fully_included_in_1,
-                     (True,  True,  True,  False): lines_0_fully_included_in_1,
-                     (True,  True,  True,  True ): lines_0_fully_included_in_1}
+collinearmap = {(False, False, False, False): lines_dont_coincide,
+                (False, False, False, True ): lines_error,
+                (False, False, True,  False): lines_error,
+                (False, False, True,  True ): lines_1_fully_included_in_0,
+                (False, True,  False, False): lines_error,
+                (False, True,  False, True ): lines_overlap_opposite_direction2,
+                (False, True,  True,  False): lines_overlap_same_direction2,
+                (False, True,  True,  True ): lines_1_fully_included_in_0,
+                (True,  False, False, False): lines_error,
+                (True,  False, False, True ): lines_overlap_same_direction,
+                (True,  False, True,  False): lines_overlap_opposite_direction,
+                (True,  False, True,  True ): lines_1_fully_included_in_0,
+                (True,  True,  False, False): lines_0_fully_included_in_1,
+                (True,  True,  False, True ): lines_0_fully_included_in_1,
+                (True,  True,  True,  False): lines_0_fully_included_in_1,
+                (True,  True,  True,  True ): lines_0_fully_included_in_1}
 
 def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
     """Returns intersecting point between two line segments.
@@ -344,16 +344,16 @@ def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
         # Lines are parallel - check if they are collinear
         if num.allclose([u0, u1], 0.0, rtol=rtol, atol=atol):
             # We now know that the lines are collinear
-            state_tuple = (point_on_line([x0, y0], line1, rtol=rtol, atol=atol),
-                           point_on_line([x1, y1], line1, rtol=rtol, atol=atol),
-                           point_on_line([x2, y2], line0, rtol=rtol, atol=atol),
-                           point_on_line([x3, y3], line0, rtol=rtol, atol=atol))
+            state = (point_on_line([x0, y0], line1, rtol=rtol, atol=atol),
+                     point_on_line([x1, y1], line1, rtol=rtol, atol=atol),
+                     point_on_line([x2, y2], line0, rtol=rtol, atol=atol),
+                     point_on_line([x3, y3], line0, rtol=rtol, atol=atol))
 
-            return collinear_result[state_tuple]([x0,y0], [x1,y1],
-                                                 [x2,y2], [x3,y3])
+            return collinearmap[state]([x0,y0], [x1,y1],
+                                       [x2,y2], [x3,y3])
         else:
             # Lines are parallel but aren't collinear
-            return 4, None #FIXME (Ole): Add distance here instead of None
+            return 4, None  # FIXME (Ole): Add distance here instead of None
     else:
         # Lines are not parallel, check if they intersect
         u0 = u0/denom
@@ -373,30 +373,6 @@ def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
         else:
             # No intersection
             return 0, None
-
-def is_inside_polygon_quick(point, polygon, closed=True):
-    """Determine if one point is inside a polygon
-    Both point and polygon are assumed to be numeric arrays or lists and
-    no georeferencing etc or other checks will take place.
-
-    As such it is faster than is_inside_polygon
-    """
-
-    # FIXME(Ole): This function isn't being used
-    polygon = ensure_numeric(polygon, num.float)
-    points = ensure_numeric(point, num.float) # Convert point to array of points
-    points = num.ascontiguousarray(points[num.newaxis, :])
-    msg = (' Function is_inside_polygon() must be invoked with one point only.\n'
-           'I got %s and converted to %s' % (str(point), str(points.shape)))
-    assert points.shape[0] == 1 and points.shape[1] == 2, msg
-
-    indices = num.zeros(1, num.int)
-
-    count = _separate_points_by_polygon(points, polygon, indices,
-                                        int(closed))
-
-    return count > 0
-
 
 def is_inside_polygon(point, polygon, closed=True):
     """Determine if one point is inside a polygon
@@ -541,43 +517,6 @@ def in_and_outside_polygon(points, polygon, closed=True):
     else:
         return  indices[:count], indices[count:][::-1]  #return reversed
 
-
-def polygon_area(input_polygon):
-    """ Determine area of arbitrary polygon.
-
-    Input
-        input_polygon: list or Nx2 array of points defining the polygon
-
-    Output
-        scalar value for the polygon area
-
-    Reference:     http://mathworld.wolfram.com/PolygonArea.html
-    """
-
-    # Move polygon to origin (0,0) to avoid rounding errors
-    # This makes a copy of the polygon to avoid destroying it
-    input_polygon = ensure_numeric(input_polygon)
-    min_x = min(input_polygon[:,0])
-    min_y = min(input_polygon[:,1])
-    polygon = input_polygon - [min_x, min_y]
-
-    # Compute area
-    n = len(polygon)
-    poly_area = 0.0
-
-    for i in range(n):
-        pti = polygon[i]
-        if i == n-1:
-            pt1 = polygon[0]
-        else:
-            pt1 = polygon[i+1]
-        xi = pti[0]
-        yi1 = pt1[1]
-        xi1 = pt1[0]
-        yi = pti[1]
-        poly_area += xi*yi1 - xi1*yi
-
-    return abs(poly_area/2)
 
 class Polygon_function:
     """Create callable object f: x,y -> z, where a,y,z are vectors and
