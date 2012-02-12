@@ -15,6 +15,7 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
 from engine.polygon import Polygon_function
+from engine.numerics import ensure_numeric
 
 # FIXME (Ole): Consider using pyshp to read and write shapefiles
 #              See http://code.google.com/p/pyshp
@@ -690,10 +691,27 @@ class Vector:
         msg = 'Input to Vector.interpolate must be a vector layer instance'
         assert X.is_vector, msg
 
-        msg = ('Vector layer must be polygon geometry type for interpolation '
-               'to take place. I got OGR geometry type %s'
-               % self.geometry_type)
-        assert X.is_polygon_data, msg
+        X_projection = X.get_projection()
+        S_projection = self.get_projection()
+
+        msg = ('Projections must be the same: I got %s and %s'
+               % (S_projection, X_projection))
+        assert S_projection == X_projection, msg
+
+        msg = ('Vector layer to interpolate from must be polygon geometry. '
+               'I got OGR geometry type %s'
+               % geometrytype2string(self.geometry_type))
+        assert self.is_polygon_data, msg
+
+        # FIXME (Ole): Maybe organise this the same way it is done with rasters
+        if X.is_polygon_data:
+            # Use centroids, in case of polygons
+            X = convert_polygons_to_centroids(X)
+
+        msg = ('Vector layer to interpolate to must be point geometry. '
+               'I got OGR geometry type %s'
+               % geometrytype2string(X.geometry_type))
+        assert X.is_point_data, msg
 
         msg = ('Name must be either a string or None. I got %s'
                % (str(type(X)))[1:-1])
@@ -704,10 +722,52 @@ class Vector:
         assert attribute is None or isinstance(attribute, basestring), msg
 
         # Create callable polygon function for this data
-        #for p in
+        geom = self.get_geometry()
+        data = self.get_data()
+        assert len(geom) == len(data)
 
+        regions = []
+        for i, polygon in enumerate(geom):
+            attr = data[i]
+            if attribute is None:
+                regions.append((polygon, attr))
+            else:
+                msg = ('Requested attribute %s did not exist in %s'
+                       % (attribute, attr.keys()))
+                assert attribute in attr, msg
+                regions.append((polygon, attr[attribute]))
 
-        Polygon_function
+        P = Polygon_function(regions)
+
+        #### FIXME(Ole): A bit messy from here
+
+        # Apply function to data
+        points = ensure_numeric(X.get_geometry())
+        atts = X.get_data()
+        N = len(X)
+        assert len(atts) == N
+
+        z = P(points[:, 0], points[:, 1])
+        print z[0:10]
+        import sys; sys.exit()
+        assert len(z) == N
+
+        # Build union of existing and interpolated attributes
+        data = X.get_data()
+        if attribute is None:
+            for i in range(N):
+                for key in z:
+                    # FIXME(Ole): What if there is a name clash?
+                    data[i][key] = {key: z[i]}
+        else:
+            for i in range(N):
+                data[i][attribute] = z[i]
+
+        # Create new Vector instance and return
+        return Vector(data=atts,
+                      projection=X.get_projection(),
+                      geometry=X.get_geometry())
+
 
 
     @property

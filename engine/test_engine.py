@@ -1053,18 +1053,30 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test riab's interpolation function
-        I = H.interpolate(E, name='depth')
+        I = H.interpolate(E, name='depth',
+                          attribute=None)  # Take all attributes across
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
-        assert numpy.allclose(I_geometry, E_geometry)
 
-        N = len(Icoordinates)
-        assert N == 891
+        N = len(I_attributes)
+        assert N == len(E_attributes)
+        assert N == 3528
+
+        # Assert that expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+        for name in H_names:
+            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
 
         # Verify interpolated values with test result
-        #for i in range(N):
-        #    interpolated_depth = Iattributes[i]['depth']
-        #    pointid = attributes[i]['POINTID']
+        for i in range(N):
+            category = I_attributes[i]['Catergory']  # The typo is as the data
 
 
 

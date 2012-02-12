@@ -504,12 +504,11 @@ class Polygon_function:
         if callable(self.default):
             z = self.default(x, y)
         else:
-            z = num.ones(N, num.float) * self.default
+            z = [self.default] * N
 
         for polygon, value in self.regions:
             indices = inside_polygon(points, polygon)
 
-            # FIXME: This needs to be vectorised
             if callable(value):
                 for i in indices:
                     xx = num.array([x[i]])
@@ -523,7 +522,8 @@ class Polygon_function:
             msg = ('Warning: points provided to Polygon function did not fall '
                    'within its regions in [%.2f, %.2f], y in [%.2f, %.2f]'
                    % (min(x), max(x), min(y), max(y)))
-            log.critical(msg)
+            #log.critical(msg)
+            raise Exception(msg)  # FIXME(Ole): Probably too severe
 
         return z
 
