@@ -9,7 +9,8 @@ from numerical_tools import ensure_numeric
 
 def _separate_points_by_polygon(points, polygon, indices,
                                 closed, verbose):
-    """Old C-code to refactor into numpy code
+    """Old C-code
+    FIXME(Ole): Refactor into numpy code
     """
 
     rtol=0.0
@@ -25,11 +26,10 @@ def _separate_points_by_polygon(points, polygon, indices,
     M = points.shape[0]
     N = polygon.shape[0]
 
-    for i in range(M):
-        # Begin main loop (for each point) - FIXME (write as vector ops)
-        inside_index = 0     # Keep track of points inside
-        outside_index = M-1  # Keep track of points outside (starting from end)
+    inside_index = 0     # Keep track of points inside
+    outside_index = M-1  # Keep track of points outside (starting from end)
 
+    # Begin main loop (for each point) - FIXME (write as vector ops)
     for k in range(M):
         #if k % ((M + 10) / 10) == 0:
         #    print 'Doing %d of %d' % (k, M)
@@ -78,86 +78,6 @@ def _separate_points_by_polygon(points, polygon, indices,
 
     return inside_index;
 
-
-
-"""
-  minpx = polygon[0]; maxpx = minpx;
-  minpy = polygon[1]; maxpy = minpy;
-
-  for (i=0; i<N; i++) {
-    px_i = polygon[2*i];
-    py_i = polygon[2*i + 1];
-
-    if (px_i < minpx) minpx = px_i;
-    if (px_i > maxpx) maxpx = px_i;
-    if (py_i < minpy) minpy = py_i;
-    if (py_i > maxpy) maxpy = py_i;
-  }
-
-  // Begin main loop (for each point)
-  inside_index = 0;    // Keep track of points inside
-  outside_index = M-1; // Keep track of points outside (starting from end)
-  if (verbose){
-     printf("Separating %d points\n", M);
-  }
-  for (k=0; k<M; k++) {
-    if (verbose){
-      if (k %((M+10)/10)==0) printf("Doing %d of %d\n", k, M);
-    }
-
-    x = points[2*k];
-    y = points[2*k + 1];
-
-    inside = 0;
-
-    // Optimisation
-    if ((x > maxpx) || (x < minpx) || (y > maxpy) || (y < minpy)) {
-      // Nothing
-    } else {
-      // Check polygon
-      for (i=0; i<N; i++) {
-        j = (i+1)%N;
-
-        px_i = polygon[2*i];
-        py_i = polygon[2*i+1];
-        px_j = polygon[2*j];
-        py_j = polygon[2*j+1];
-
-        // Check for case where point is contained in line segment
-        if (__point_on_line(x, y, px_i, py_i, px_j, py_j, rtol, atol)) {
-	  if (closed == 1) {
-	    inside = 1;
-	  } else {
-	    inside = 0;
-	  }
-	  break;
-        } else {
-          //Check if truly inside polygon
-	  if ( ((py_i < y) && (py_j >= y)) ||
-	       ((py_j < y) && (py_i >= y)) ) {
-	    if (px_i + (y-py_i)/(py_j-py_i)*(px_j-px_i) < x)
-	      inside = 1-inside;
-	  }
-        }
-      }
-    }
-    if (inside == 1) {
-      indices[inside_index] = k;
-      inside_index += 1;
-    } else {
-      indices[outside_index] = k;
-      outside_index -= 1;
-    }
-  } // End k
-
-  return inside_index;
-}
-"""
-
-
-
-
-
 ##
 # @brief Determine whether a point is on a line segment.
 # @param point (x, y) of point in question (tuple, list or array).
@@ -186,23 +106,6 @@ def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
     x0, y0 = line[0]
     x1, y1 = line[1]
 
-    #int __point_on_line(double x, double y,
-    #                    double x0, double y0,
-    #                    double x1, double y1,
-    #                    double rtol,
-    #                    double atol) {
-    #    /*Determine whether a point is on a line segment
-    #
-    #      Input: x, y, x0, x0, x1, y1: where
-    #      point is given by x, y
-    #      line is given by (x0, y0) and (x1, y1)
-    #
-    #      */
-
-    #double a0, a1, a_normal0, a_normal1, b0, b1, len_a, len_b;
-    #double nominator, denominator;
-    #int is_parallel;
-
     a0 = x - x0
     a1 = y - y0
 
@@ -220,11 +123,11 @@ def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
     if denominator == 0.0:
         # Denominator is negative - use absolute tolerance
         if nominator <= atol:
-            is_parallel = 1
+            is_parallel = True
     else:
         # Denominator is positive - use relative tolerance
         if nominator / denominator <= rtol:
-            is_parallel = 1
+            is_parallel = True
 
     if is_parallel:
         # Point is somewhere on the infinite extension of the line
@@ -234,19 +137,11 @@ def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
         len_b = sqrt(b0 * b0 + b1 * b1)
 
         if a0 * b0 + a1 * b1 >= 0 and len_a <= len_b:
-            return 1
+            return True
         else:
-            return 0
+            return False
     else:
-        return 0
-
-
-    #res = _point_on_line(point[0], point[1],
-    #                     line[0,0], line[0,1],
-    #                     line[1,0], line[1,1],
-    #                     rtol, atol)
-
-    #return bool(res)
+        return False
 
 
 ######
@@ -269,12 +164,15 @@ def lines_overlap_opposite_direction(p0,p1,p2,p3):  return (2,
 def lines_overlap_opposite_direction2(p0,p1,p2,p3): return (2,
                                                             num.array([p3,p1]))
 
-# this function called when an impossible state is found
+# This function called when an impossible state is found
 def lines_error(p1, p2, p3, p4):
     raise RuntimeError, ('INTERNAL ERROR: p1=%s, p2=%s, p3=%s, p4=%s'
                          % (str(p1), str(p2), str(p3), str(p4)))
 
-#                     0s1    0e1    1s0    1e0   # line 0 starts on 1, 0 ends 1, 1 starts 0, 1 ends 0
+# Mapping to possible states for line intersection
+#
+#                 0s1    0e1    1s0    1e0   # line 0 starts on 1, 0 ends 1,
+#                                                   1 starts 0, 1 ends 0
 collinear_result = { (False, False, False, False): lines_dont_coincide,
                      (False, False, False, True ): lines_error,
                      (False, False, True,  False): lines_error,
@@ -290,21 +188,8 @@ collinear_result = { (False, False, False, False): lines_dont_coincide,
                      (True,  True,  False, False): lines_0_fully_included_in_1,
                      (True,  True,  False, True ): lines_0_fully_included_in_1,
                      (True,  True,  True,  False): lines_0_fully_included_in_1,
-                     (True,  True,  True,  True ): lines_0_fully_included_in_1
-                   }
+                     (True,  True,  True,  True ): lines_0_fully_included_in_1}
 
-##
-# @brief Finds intersection point of two line segments.
-# @param line0 First line ((x1,y1), (x2,y2)).
-# @param line1 Second line ((x1,y1), (x2,y2)).
-# @param rtol Relative error for 'close'.
-# @param atol Absolute error for 'close'.
-# @return (status, value) where:
-#             status = 0 - no intersection, value set to None
-#                      1 - intersection found, value=(x,y)
-#                      2 - lines collienar, overlap, value=overlap segment
-#                      3 - lines collinear, no overlap, value is None
-#                      4 - lines parallel, value is None
 def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
     """Returns intersecting point between two line segments.
 
@@ -375,48 +260,6 @@ def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
             # No intersection
             return 0, None
 
-##
-# @brief Finds intersection point of two line segments.
-# @param line0 First line ((x1,y1), (x2,y2)).
-# @param line1 Second line ((x1,y1), (x2,y2)).
-# @return (status, value) where:
-#             status = 0 - no intersection, value set to None
-#                      1 - intersection found, value=(x,y)
-#                      2 - lines collienar, overlap, value=overlap segment
-#                      3 - lines collinear, no overlap, value is None
-#                      4 - lines parallel, value is None
-# @note Wrapper for C function.
-def NEW_C_intersection(line0, line1):
-    """Returns intersecting point between two line segments.
-
-    However, if parallel lines coincide partly (i.e. share a common segment),
-    the line segment where lines coincide is returned
-
-    Inputs:
-        line0, line1: Each defined by two end points as in: [[x0, y0], [x1, y1]]
-                      A line can also be a 2x2 numpy array with each row
-                      corresponding to a point.
-
-    Output:
-        status, value - where status and value is interpreted as follows:
-        status == 0: no intersection, value set to None.
-        status == 1: intersection point found and returned in value as [x,y].
-        status == 2: Collinear overlapping lines found.
-                     Value takes the form [[x0,y0], [x1,y1]].
-        status == 3: Collinear non-overlapping lines. Value set to None.
-        status == 4: Lines are parallel. Value set to None.
-    """
-
-    line0 = ensure_numeric(line0, num.float)
-    line1 = ensure_numeric(line1, num.float)
-
-    status, value = _intersection(line0[0,0], line0[0,1],
-                                  line0[1,0], line0[1,1],
-                                  line1[0,0], line1[0,1],
-                                  line1[1,0], line1[1,1])
-
-    return status, value
-
 def is_inside_polygon_quick(point, polygon, closed=True, verbose=False):
     """Determine if one point is inside a polygon
     Both point and polygon are assumed to be numeric arrays or lists and
@@ -429,7 +272,7 @@ def is_inside_polygon_quick(point, polygon, closed=True, verbose=False):
     polygon = ensure_numeric(polygon, num.float)
     points = ensure_numeric(point, num.float) # Convert point to array of points
     points = num.ascontiguousarray(points[num.newaxis, :])
-    msg = ('is_inside_polygon() must be invoked with one point only.\n'
+    msg = (' Function is_inside_polygon() must be invoked with one point only.\n'
            'I got %s and converted to %s' % (str(point), str(points.shape)))
     assert points.shape[0] == 1 and points.shape[1] == 2, msg
 
@@ -457,13 +300,6 @@ def is_inside_polygon(point, polygon, closed=True, verbose=False):
         msg = 'is_inside_polygon must be invoked with one point only'
         raise msg
 
-##
-# @brief Determine which of a set of points are inside a polygon.
-# @param points A set of points (tuple, list or array).
-# @param polygon A set of points defining a polygon (tuple, list or array).
-# @param closed True if points on boundary are considered 'inside' polygon.
-# @param verbose True if this function is to be verbose.
-# @return A list of indices of points inside the polygon.
 def inside_polygon(points, polygon, closed=True, verbose=False):
     """Determine points inside a polygon
 
@@ -489,14 +325,6 @@ def inside_polygon(points, polygon, closed=True, verbose=False):
     # Return indices of points inside polygon
     return indices[:count]
 
-##
-# @brief Determine if one point is outside a polygon.
-# @param point The point of interest.
-# @param polygon The polygon to test inclusion in.
-# @param closed True if points on boundary are considered 'inside' polygon.
-# @param verbose True if this function is to be verbose.
-# @return True if point is outside the polygon.
-# @note Uses inside_polygon() to do the work.
 def is_outside_polygon(point, polygon, closed=True, verbose=False,
                        points_geo_ref=None, polygon_geo_ref=None):
     """Determine if one point is outside a polygon
@@ -514,13 +342,6 @@ def is_outside_polygon(point, polygon, closed=True, verbose=False,
         msg = 'is_outside_polygon must be invoked with one point only'
         raise Exception, msg
 
-##
-# @brief Determine which of a set of points are outside a polygon.
-# @param points A set of points (tuple, list or array).
-# @param polygon A set of points defining a polygon (tuple, list or array).
-# @param closed True if points on boundary are considered 'inside' polygon.
-# @param verbose True if this function is to be verbose.
-# @return A list of indices of points outside the polygon.
 def outside_polygon(points, polygon, closed = True, verbose = False):
     """Determine points outside a polygon
 
@@ -562,19 +383,19 @@ def outside_polygon(points, polygon, closed = True, verbose = False):
     else:
         return indices[count:][::-1]  #return reversed
 
-##
-# @brief Separate a list of points into two sets inside+outside a polygon.
-# @param points A set of points (tuple, list or array).
-# @param polygon A set of points defining a polygon (tuple, list or array).
-# @param closed True if points on boundary are considered 'inside' polygon.
-# @param verbose True if this function is to be verbose.
-# @return A tuple (in, out) of point indices for poinst inside amd outside.
 def in_and_outside_polygon(points, polygon, closed=True, verbose=False):
-    """Determine points inside and outside a polygon
+    """Separate a list of points into two sets inside and outside a polygon
 
-       See separate_points_by_polygon for documentation
+    Input
+        points: (tuple, list or array) of coordinates
+        polygon: Set of points defining the polygon
+        closed: Set to True if points on boundary are considered 'inside' polygon
 
-       Returns an array of points inside and array of points outside the polygon
+    Output
+        inside: Array of points inside the polygon
+        outside: Array of points outside the polygon
+
+    See separate_points_by_polygon for more documentation
     """
 
     try:
@@ -609,14 +430,6 @@ def in_and_outside_polygon(points, polygon, closed=True, verbose=False):
     else:
         return  indices[:count], indices[count:][::-1]  #return reversed
 
-##
-# @brief Sort a list of points into contiguous points inside+outside a polygon.
-# @param points A set of points (tuple, list or array).
-# @param polygon A set of points defining a polygon (tuple, list or array).
-# @param closed True if points on boundary are considered 'inside' polygon.
-# @param verbose True if this function is to be verbose.
-# @return (indices, count) where indices are point indices and count is the
-#          delimiter index between point inside (on left) and others.
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
@@ -658,11 +471,10 @@ def separate_points_by_polygon(points, polygon,
     Algorithm is based on work by Darel Finley,
     http://www.alienryderflex.com/polygon/
 
-    Uses underlying C-implementation in polygon_ext.c
     """
 
     if check_input:
-        #Input checks
+        # Input checks
         assert isinstance(closed, bool), 'Keyword argument "closed" must be boolean'
         assert isinstance(verbose, bool), 'Keyword argument "verbose" must be boolean'
 
@@ -721,12 +533,14 @@ def separate_points_by_polygon(points, polygon,
 
     return indices, count
 
-##
-# @brief Determine area of a polygon.
-# @param input_polygon The polygon to get area of.
-# @return A scalar value for the polygon area.
 def polygon_area(input_polygon):
     """ Determine area of arbitrary polygon.
+
+    Input
+        input_polygon: list or Nx2 array of points defining the polygon
+
+    Output
+        scalar value for the polygon area
 
     Reference:     http://mathworld.wolfram.com/PolygonArea.html
     """
@@ -756,15 +570,7 @@ def polygon_area(input_polygon):
 
     return abs(poly_area/2)
 
-##
-# @brief Plot a set of polygons.
-# @param polygons_points List of polygons to plot.
-# @param style List of styles for each polygon.
-# @param figname Name to save figure to.
-# @param label Title for the plot.
-# @param verbose True if this function is to be verbose.
-# @return A list of min/max x and y values [minx, maxx, miny, maxy].
-# @note A style value is 'line' for polygons, 'outside' for points outside.
+
 def plot_polygons(polygons_points,
                   style=None,
                   figname=None,
@@ -882,7 +688,7 @@ def plot_polygons(polygons_points,
 # @return A tuple (x, y) of X and Y coordinates of the polygon.
 # @note We duplicate the first point so can have closed polygon in plot.
 def poly_xy(polygon, verbose=False):
-    """ this is used within plot_polygons so need to duplicate
+    """ This is used within plot_polygons so need to duplicate
         the first point so can have closed polygon in plot
     """
 
@@ -903,11 +709,6 @@ def poly_xy(polygon, verbose=False):
     return x, y
 
 
-##
-# @brief Define a class that defines a callable object for a polygon.
-# @note Object created is function: f: x,y -> z
-#       where x, y and z are vectors and z depends on whether x,y belongs
-#       to specified polygons.
 class Polygon_function:
     """Create callable object f: x,y -> z, where a,y,z are vectors and
     where f will return different values depending on whether x,y belongs
@@ -942,12 +743,13 @@ class Polygon_function:
     FIXME: This should really work with geo_spatial point sets.
     """
 
-    ##
-    # @brief Create instance of a polygon function.
-    # @param regions A list of (x,y) tuples defining a polygon.
-    # @param default Value or function returning value for points outside poly.
-    # @param geo_reference ??
+
     def __init__(self, regions, default=0.0, geo_reference=None):
+        """Create instance of a polygon function.
+
+        See class documentation for details
+        """
+
         try:
             len(regions)
         except:
@@ -986,11 +788,17 @@ class Polygon_function:
             P = geo_reference.change_points_geo_ref(polygon)
             self.regions.append((P, value))
 
-    ##
-    # @brief Implement the 'callable' property of Polygon_function.
-    # @param x List of x coordinates of points ot interest.
-    # @param y List of y coordinates of points ot interest.
     def __call__(self, x, y):
+        """Callable property of Polygon_function.
+
+        Input
+            x: List of x coordinates of points ot interest
+            y: List of y coordinates of points ot interest
+
+        Output
+            z: Computed value at (x, y)
+        """
+
         x = num.array(x, num.float)
         y = num.array(y, num.float)
 
