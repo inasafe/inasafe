@@ -17,6 +17,7 @@ from storage.core import read_layer
 from storage.utilities import unique_filename
 from storage.core import write_vector_data
 from storage.core import write_raster_data
+from storage.vector import Vector
 from impact_functions import get_plugins
 
 from storage.utilities_test import TESTDATA
@@ -1047,6 +1048,11 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(hazard_filename)
         H_attributes = H.get_data()
         H_geometry = H.get_geometry()
+
+        # Cut down to make test quick
+        H = Vector(data=H_attributes[:117],
+                   geometry=H_geometry[:117],
+                   projection=H.get_projection())
 
         E = read_layer(exposure_filename)
         E_geometry = E.get_geometry()
