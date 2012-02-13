@@ -30,11 +30,11 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
         #print 'Number of polygons', len(E)
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E)
+        Hi = H.interpolate(E)
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()
-        depth = H.get_data()
+        depth = Hi.get_data()
         N = len(depth)
 
         # List attributes to carry forward to result layer
@@ -47,19 +47,32 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
         population_impact = []
         for i in range(N):
 
-            # Get depth
-            dep = float(depth[i].values()[0])
+            if H.is_raster:
+                # Get depth
+                dep = float(depth[i].values()[0])
 
-            # Classify buildings according to depth
-            if dep >= 3:
-                affected = 3  # FIXME: Colour upper bound is 100 but
-                count3 += 1          # does not catch affected == 100
-            elif 1 <= dep < 3:
-                affected = 2
-                count1 += 1
-            else:
-                affected = 1
-                count0 += 1
+                # Classify buildings according to depth
+                if dep >= 3:
+                    affected = 3  # FIXME: Colour upper bound is 100 but
+                    count3 += 1          # does not catch affected == 100
+                elif 1 <= dep < 3:
+                    affected = 2
+                    count1 += 1
+                else:
+                    affected = 1
+                    count0 += 1
+            elif H.is_vector:
+                dep = 0  # Just put something here
+                cat = depth[i]['Catergory']
+                if cat == 'Very High':
+                    affected = 3
+                    count3 += 1
+                elif cat == 'High':
+                    affected = 2
+                    count1 += 1
+                else:
+                    affected = 1
+                    count0 += 1
 
             # Collect depth and calculated damage
             result_dict = {self.target_field: affected,
