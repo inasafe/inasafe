@@ -14,7 +14,7 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
-from engine.polygon import Polygon_function
+from engine.polygon import inside_polygon
 from engine.numerics import ensure_numeric
 
 
@@ -101,8 +101,8 @@ class Vector:
 
             self.geometry_type = get_geometry_type(geometry)
 
-            msg = 'Projection must be specified'
-            assert projection is not None, msg
+            #msg = 'Projection must be specified'
+            #assert projection is not None, msg
             self.projection = Projection(projection)
 
             self.data = data
@@ -720,58 +720,56 @@ class Vector:
                % (str(type(X)))[1:-1])
         assert attribute is None or isinstance(attribute, basestring), msg
 
-        # Create callable polygon function for this data
+        attribute_names = self.get_attribute_names()
+        if attribute is not None:
+            msg = ('Requested attribute "%s" did not exist in %s'
+                   % (attribute, attribute_names))
+            assert attribute in attribute_names, msg
+
+        #----------------
+        # Start algorithm
+        #----------------
+
+        # Extract point features
+        points = ensure_numeric(X.get_geometry())
+        attributes = X.get_data()
+        N = len(X)
+
+        # Extract polygon features
         geom = self.get_geometry()
         data = self.get_data()
         assert len(geom) == len(data)
 
-        regions = []
-        for i, polygon in enumerate(geom):
-            attr = data[i]
+        # Augment point features with empty attributes from polygon
+        for a in attributes:
             if attribute is None:
-                regions.append((polygon, attr))
+                # Use all attributes
+                for key in attribute_names:
+                    a[key] = None
             else:
-                msg = ('Requested attribute %s did not exist in %s'
-                       % (attribute, attr.keys()))
-                assert attribute in attr, msg
-                regions.append((polygon, attr[attribute]))
+                # Use only requested attribute
+                a[attribute] = None
 
-        print 'create P'
-        P = Polygon_function(regions)
-        print 'Done P'
+        # Traverse polygons and assign attributes to points that fall inside
+        for i, polygon in enumerate(geom):
+            if attribute is None:
+                # Use all attributes
+                poly_attr = data[i]
+            else:
+                # Use only requested attribute
+                poly_attr = {attribute: data[i][attribute]}
 
-        #### FIXME(Ole): A bit messy from here
-
-        # Apply function to data
-        points = ensure_numeric(X.get_geometry())
-        atts = X.get_data()
-        N = len(X)
-        assert len(atts) == N
-
-        print 'Interpolating %i points and %i polygons' %(N, len(regions))
-        z = P(points[:, 0], points[:, 1])
-        print 'Done z'
-
-        print z[0:10]
-        assert len(z) == N
-
-        # Build union of existing and interpolated attributes
-        data = X.get_data()
-        if attribute is None:
-            for i in range(N):
-                print i, z[i]
-                print z[i].keys()
-                for attribute in z[i]:
-                    # FIXME(Ole): What if there is a name clash?
-                    data[i][attribute] = {attribute: z[i][attribute]}
-        else:
-            for i in range(N):
-                data[i][attribute] = z[i][attribute]
+            # Clip data points by polygons and add polygon attributes
+            indices = inside_polygon(points, polygon)
+            for k in indices:
+                for key in poly_attr:
+                    attributes[k][key] = poly_attr[key]
 
         # Create new Vector instance and return
-        return Vector(data=atts,
-                      projection=X.get_projection(),
-                      geometry=X.get_geometry())
+        V = Vector(data=attributes,
+                   projection=X.get_projection(),
+                   geometry=X.get_geometry())
+        return V
 
     @property
     def is_raster(self):
