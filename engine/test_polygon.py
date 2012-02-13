@@ -21,6 +21,9 @@ class Test_Polygon(unittest.TestCase):
 
     # Polygon stuff
     def test_polygon_function_constants(self):
+        """Polygon function works
+        """
+
         p1 = [[0, 0], [10, 0], [10, 10], [0, 10]]
         p2 = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0],
               [30, 10], [40, -10]]
@@ -39,6 +42,8 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(z, [2, 1, 0, 2])
 
     def Xtest_polygon_function_csvfile(self):
+        """Polygons can be written and read
+        """
         from os import sep, getenv
 
         # Get path where this test is run
@@ -54,7 +59,8 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(z, [0, 10])
 
     def test_polygon_function_callable(self):
-        """Check that values passed into Polygon_function can be callable."""
+        """Values passed into Polygon_function can be callable.
+        """
 
         p1 = [[0, 0], [10, 0], [10, 10], [0, 10]]
         p2 = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0],
@@ -82,6 +88,9 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(z, [2, 14, 35, 2])
 
     def test_point_on_line(self):
+        """Points coinciding with lines are correctly detected
+        """
+
         # Endpoints first
         assert point_on_line([0, 0], [[0, 0], [1, 0]])
         assert point_on_line([1, 0], [[0, 0], [1, 0]])
@@ -111,6 +120,9 @@ class Test_Polygon(unittest.TestCase):
         assert not point_on_line([40, 19], [[40, 40], [40, 40]])
 
     def test_is_inside_polygon_main(self):
+        """Points are classified as either inside polygon or not
+        """
+
         # Simplest case: Polygon is the unit square
         polygon = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
@@ -132,6 +144,9 @@ class Test_Polygon(unittest.TestCase):
         assert not is_inside_polygon((1., 0.5), polygon, closed=False)
 
     def test_inside_polygon_main2(self):
+        """Points can be classified as either inside or outside polygon (2)
+        """
+
         # Simplest case: Polygon is the unit square
         polygon = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
@@ -196,6 +211,8 @@ class Test_Polygon(unittest.TestCase):
         assert not is_inside_polygon((0.5, 0.5), polygon)
 
     def test_duplicate_points_being_ok(self):
+        """Polygons can have duplicate points without problems
+        """
 
         polygon = [[0, 0], [1, 0], [1, 0], [1, 0], [1, 1], [0, 1], [0, 0]]
 
@@ -223,6 +240,9 @@ class Test_Polygon(unittest.TestCase):
         assert len(res) == 0
 
     def test_inside_polygon_vector_version(self):
+        """Indices of points inside polygon are correct
+        """
+
         # Now try the vector formulation returning indices
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
@@ -230,6 +250,9 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(res, [0, 1, 2])
 
     def test_outside_polygon(self):
+        """Points are classified as either outside polygon or not
+        """
+
         # unit square
         U = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
@@ -256,6 +279,9 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(res, [0, 4, 5])
 
     def test_outside_polygon2(self):
+        """Points are classified as either outside polygon or not (2)
+        """
+
         # unit square
         U = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
@@ -266,7 +292,7 @@ class Test_Polygon(unittest.TestCase):
         assert is_outside_polygon([0.5, 1.0], U, closed=False)
 
     def test_all_outside_polygon(self):
-        """Test case where all points are outside poly"""
+        """Corner case where all points are outside polygon works"""
 
         # unit square
         U = [[0, 0], [1, 0], [1, 1], [0, 1]]
@@ -284,7 +310,7 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(indices, [])
 
     def test_all_inside_polygon(self):
-        """Test case where all points are inside poly"""
+        """Corner case where all points are inside polygon works"""
 
         # unit square
         U = [[0, 0], [1, 0], [1, 1], [0, 1]]
@@ -302,6 +328,9 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(indices, [0, 1, 2])
 
     def test_separate_points_by_polygon(self):
+        """Set of points is correctly separated according to polygon
+        """
+
         # Unit square
         U = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
@@ -362,6 +391,9 @@ class Test_Polygon(unittest.TestCase):
             raise Exception(msg)
 
     def test_populate_polygon(self):
+        """Polygon can be populated by random points
+        """
+
         polygon = [[0, 0], [1, 0], [1, 1], [0, 1]]
         points = populate_polygon(polygon, 5)
 
@@ -378,6 +410,9 @@ class Test_Polygon(unittest.TestCase):
             assert is_inside_polygon(point, polygon)
 
     def test_populate_polygon_with_exclude(self):
+        """Polygon with hole can be populated by random points
+        """
+
         polygon = [[0, 0], [1, 0], [1, 1], [0, 1]]
         ex_poly = [[0, 0], [0.5, 0], [0.5, 0.5], [0, 0.5]]     # SW quarter
         points = populate_polygon(polygon, 5, exclude=[ex_poly])
@@ -422,6 +457,8 @@ class Test_Polygon(unittest.TestCase):
             assert not is_inside_polygon(point, ex_poly), '%s' % str(point)
 
     def test_populate_polygon_with_exclude2(self):
+        """Polygon with hole can be populated by random points (2)
+        """
 
         M = 200  # Number of points
         min_outer = 0
@@ -604,6 +641,9 @@ class Test_Polygon(unittest.TestCase):
             assert not is_inside_polygon(point, main_polygon)
 
     def test_in_and_outside_polygon_main(self):
+        """Set of points is correctly separated according to polygon (2)
+        """
+
         # Simplest case: Polygon is the unit square
         polygon = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
@@ -642,6 +682,9 @@ class Test_Polygon(unittest.TestCase):
         assert num.alltrue(outside == [0, 2, 4, 5])
 
     def test_intersection1(self):
+        """Intersection of two simple lines works
+        """
+
         line0 = [[-1, 0], [1, 0]]
         line1 = [[0, -1], [0, 1]]
 
@@ -650,6 +693,9 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(value, [0.0, 0.0])
 
     def test_intersection2(self):
+        """Intersection point is independent of direction
+        """
+
         line0 = [[0, 0], [24, 12]]
         line1 = [[0, 12], [24, 0]]
 
@@ -670,6 +716,9 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(value, [12.0, 6.0])
 
     def test_intersection3(self):
+        """Intersection point is independent of direction (2)
+        """
+
         line0 = [[0, 0], [24, 12]]
         line1 = [[0, 17], [24, 0]]
 
@@ -690,7 +739,7 @@ class Test_Polygon(unittest.TestCase):
         assert num.allclose(value, [14.068965517, 7.0344827586])
 
     def test_intersection_endpoints(self):
-        """test_intersection_endpoints(self):
+        """Intersection of lines with coinciding endpoints works
 
         Test that coinciding endpoints are picked up
         """
@@ -1241,7 +1290,7 @@ class Test_Polygon(unittest.TestCase):
         self.failUnless(num.allclose(value, line1))
 
     def test_intersection_bug_20081110_TR(self):
-        """test_intersection_bug_20081110(self)
+        """Intersection corner case top-right
 
         Test all cases in top-right quadrant
         """
@@ -1267,7 +1316,7 @@ class Test_Polygon(unittest.TestCase):
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_TL(self):
-        """test_intersection_bug_20081110(self)
+        """Intersection corner case top-left
 
         Test all cases in top-left quadrant
         """
@@ -1293,7 +1342,7 @@ class Test_Polygon(unittest.TestCase):
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_BL(self):
-        """test_intersection_bug_20081110(self)
+        """Intersection corner case bottom-left
 
         Test all cases in bottom-left quadrant
         """
@@ -1319,7 +1368,7 @@ class Test_Polygon(unittest.TestCase):
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_BR(self):
-        """test_intersection_bug_20081110(self)
+        """Intersection corner case bottom-right
 
         Test all cases in bottom-right quadrant
         """
@@ -1345,7 +1394,7 @@ class Test_Polygon(unittest.TestCase):
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_TR_TL(self):
-        """test_intersection_bug_20081110(self)
+        """Intersection corner case top-right and top-left
 
         Test all cases in top-right & top-left quadrant
         """
@@ -1375,7 +1424,7 @@ class Test_Polygon(unittest.TestCase):
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_TR_BL(self):
-        """test_intersection_bug_20081110(self)
+        """Intersection corner case top-right and bottom-left
 
         Test all cases in top-right & bottom-left quadrant
         """
@@ -1405,7 +1454,7 @@ class Test_Polygon(unittest.TestCase):
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_bug_20081110_TR_BR(self):
-        """test_intersection_bug_20081110(self)
+        """Intersection corner case top-right and bottom-right
 
         Test all cases in top-right & bottom-right quadrant
         """
@@ -1435,7 +1484,9 @@ class Test_Polygon(unittest.TestCase):
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
     def test_intersection_direction_invariance(self):
-        """This runs through a number of examples and checks that
+        """Intersection is direction invariant
+
+        This runs through a number of examples and checks that
         direction of lines don't matter.
         """
 
@@ -1468,6 +1519,9 @@ class Test_Polygon(unittest.TestCase):
             assert num.allclose(p1, p3), msg
 
     def test_no_intersection(self):
+        """Lines that don't intersect return None as expected
+        """
+
         line0 = [[-1, 1], [1, 1]]
         line1 = [[0, -1], [0, 0]]
 
@@ -1476,6 +1530,9 @@ class Test_Polygon(unittest.TestCase):
         assert value is None
 
     def test_intersection_parallel(self):
+        """Parallel lines are correctly detected in intersection code
+        """
+
         line0 = [[-1, 1], [1, 1]]
         line1 = [[-1, 0], [5, 0]]
 
@@ -1491,7 +1548,8 @@ class Test_Polygon(unittest.TestCase):
         assert value is None
 
     def test_intersection_coincide(self):
-        """Test what happens when two lines partly coincide"""
+        """Two lines that partly coincide are handled correctly
+        """
 
         # Overlap 1
         line0 = [[0, 0], [5, 0]]
