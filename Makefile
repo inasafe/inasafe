@@ -39,6 +39,7 @@ clean:
 	@-find . -name '*~' -exec rm {} \;
 	@-find . -name '*.pyc' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
+	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
 test: test_suite pep8 disabled_tests dependency_test unwanted_strings
