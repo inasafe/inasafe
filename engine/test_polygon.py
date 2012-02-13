@@ -3,7 +3,7 @@
 import unittest
 import numpy as num
 from math import sqrt, pi
-from numerical_tools import ensure_numeric
+from numerics import ensure_numeric
 
 from polygon import *
 
