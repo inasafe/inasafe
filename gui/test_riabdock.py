@@ -340,8 +340,8 @@ class RiabDockTest(unittest.TestCase):
 
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: total population count of '
-                     '847528 , received: \n %s' % myResult)
-        assert '847528' in myResult, myMessage
+                     '847529 , received: \n %s' % myResult)
+        assert '847529' in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_Padang_full(self):
         """Padang 2009 fatalities estimated correctly"""
@@ -380,8 +380,8 @@ class RiabDockTest(unittest.TestCase):
 
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: total population count of '
-                     '31374072 , received: \n %s' % myResult)
-        assert '31374072' in myResult, myMessage
+                     '31372262 , received: \n %s' % myResult)
+        assert '31372262' in myResult, myMessage
 
     def test_runTsunamiBuildingImpactFunction(self):
         """Tsunami function runs in GUI with Batemans Bay model"""
@@ -498,7 +498,7 @@ class RiabDockTest(unittest.TestCase):
         #print myResult
 
         msg = 'Result not as expected: %s' % myResult
-        assert '2479' in myResult, msg  # This is the expected impact number
+        assert '2480' in myResult, msg  # This is the expected impact number
 
     def test_runFloodPopulationImpactFunction_scaling(self):
         """Flood function runs in GUI with 5x5km population data
@@ -546,7 +546,7 @@ class RiabDockTest(unittest.TestCase):
         msg = 'Result not as expected: %s' % myResult
 
         # Check numbers are OK (within expected errors from resampling)
-        assert '10481' in myResult, msg
+        assert '10484' in myResult, msg
         assert '2312' in myResult, msg  # These are expected impact number
 
     def test_Issue47(self):

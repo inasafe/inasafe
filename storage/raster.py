@@ -343,12 +343,17 @@ class Raster:
             # Read from raster file
             A = self.band.ReadAsArray()
 
+            # Convert to double precision (issue #75)
+            A = numpy.array(A, dtype=numpy.float64)
+
+            # Self check
             M, N = A.shape
             msg = ('Dimensions of raster array do not match those of '
                    'raster file %s' % self.filename)
             assert M == self.rows, msg
             assert N == self.columns, msg
 
+        # Handle no data value
         if nan is False:
             pass
         else:
