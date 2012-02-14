@@ -94,43 +94,6 @@ class FloodEvacuationFunction(FunctionProvider):
             I_male = I - I_female
 
         # Generate text with result for this study
-        print 'Sums'
-        print 'Total:', numpy.sum(P)
-        print 'Impac:', numpy.sum(I)
-
-        #import cPickle
-        #fid = open('test_arrays_zoom.pck', 'wb')
-        #cPickle.dump((D, P), fid)
-        #fid.close()
-
-
-        #print 'P isnan: %i' % numpy.isnan(P).sum()
-        #print 'D isnan: %i' % numpy.isnan(D).sum()
-
-        print 'Number of deep cells: %i' % numpy.sum(D > threshold)
-        print 'Number of shallow cells: %i' % numpy.sum(D <= threshold)
-        print 'Sum: %i' % (numpy.sum(D > threshold) + numpy.sum(D <= threshold))
-        print 'Total: %i' % numpy.sum(D >= 0)
-        print
-
-        imp = numpy.sum(P[D > threshold])
-        safe = numpy.sum(P[D <= threshold])
-        tot1 =  numpy.sum(P[D >= 0])
-        tot2 =  numpy.sum(P)
-        #print 'Count imp cells: %i' % numpy.sum(P[D > threshold] >= 0)
-        #print 'Count safe cells: %i' % numpy.sum(P[D <= threshold] >= 0)
-        #print 'Sum: %i' % (numpy.sum(P[D > threshold] >= 0) + numpy.sum(P[D <= threshold] >= 0))
-        #print 'Total1: %i' % numpy.sum(P >= 0)
-        #print 'Total2: %i' % numpy.sum(P[D >= 0] >= 0)
-        #print
-
-        print 'Impacted %i' % imp
-        print 'Not imp %i' % safe
-        print 'Sum: %i' % (safe + imp)
-        print 'Tot1: %i' % tot1
-        #print 'Tot2: %i' % tot2
-        print 'Sum-Tot1 %i' % (safe + imp - tot1)
-
         total = str(int(numpy.sum(P) / 1000))
         count = str(int(numpy.sum(I) / 1000))
 
