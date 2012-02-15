@@ -109,7 +109,6 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.alltrue(res[:N])
         assert not numpy.sometrue(res[N:])
 
-
     def test_is_inside_polygon_main(self):
         """Points are classified as either inside polygon or not
         """

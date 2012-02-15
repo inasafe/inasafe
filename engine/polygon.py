@@ -191,8 +191,81 @@ def _separate_points_by_polygon(points, polygon, indices,
     return inside_index
 
 
+def _separate_points_by_polygon_python(points, polygon, indices,
+                                       closed):
+    """Underlying algorithm to partition point according to polygon
+
+    Old C-code converted to Python
+    This is not using numpy code - available for testing only
+    """
+
+    # FIXME: Pass these in
+    rtol = 0.0
+    atol = 0.0
+
+    # Get polygon extents to quickly rule out points that
+    # are outside its bounding box
+    minpx = min(polygon[:, 0])
+    maxpx = max(polygon[:, 0])
+    minpy = min(polygon[:, 1])
+    maxpy = max(polygon[:, 1])
+
+    M = points.shape[0]
+    N = polygon.shape[0]
+
+    inside_index = 0  # Keep track of points inside
+    outside_index = M - 1  # Keep track of points outside (starting from end)
+
+    # Begin main loop (for each point) - FIXME (write as vector ops)
+    for k in range(M):
+        x = points[k, 0]
+        y = points[k, 1]
+        inside = 0
+
+        if x > maxpx or x < minpx or y > maxpy or y < minpy:
+            #  Skip if point is outside polygon bounding box
+            pass
+        else:
+            # Check if it is inside polygon
+            for i in range(N):
+                # Loop through polygon vertices
+                j = (i + 1) % N
+
+                px_i = polygon[i, 0]
+                py_i = polygon[i, 1]
+                px_j = polygon[j, 0]
+                py_j = polygon[j, 1]
+
+                if point_on_line(points[k, :],
+                                 [[px_i, py_i], [px_j, py_j]],
+                                 rtol, atol):
+                    #  Point coincides with line segment
+                    if closed:
+                        inside = 1
+                    else:
+                        inside = 0
+                    break
+                else:
+                    # Check if truly inside polygon
+                    if (((py_i < y) and (py_j >= y)) or
+                        ((py_j < y) and (py_i >= y))):
+                        sigma = (y - py_i) / (py_j - py_i) * (px_j - px_i)
+                        if (px_i + sigma < x):
+                            inside = 1 - inside
+
+        # Record point as either inside or outside
+        if inside == 1:
+            indices[inside_index] = k
+            inside_index += 1
+        else:
+            indices[outside_index] = k
+            outside_index -= 1
+
+    return inside_index
+
+
 def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
-    """Determine whether a point is on a line segment
+    """Determine if a point is on a line segment
 
     Input
         points: Coordinates of either
