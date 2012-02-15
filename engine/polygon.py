@@ -126,6 +126,9 @@ def _separate_points_by_polygon(points, polygon, indices,
     FIXME(Ole): Refactor into numpy code
     """
 
+    # Suppress numpy warnings (as we'll be dividing by zero)
+    original_numpy_settings = numpy.seterr(invalid='ignore', divide='ignore')
+
     # FIXME: Pass these in
     rtol = 0.0
     atol = 0.0
@@ -140,48 +143,85 @@ def _separate_points_by_polygon(points, polygon, indices,
     M = points.shape[0]
     N = polygon.shape[0]
 
+    x = points[:, 0]
+    y = points[:, 1]
+
+    # Vector keeping track of which points are inside
+    inside = numpy.zeros(M, dtype=numpy.int)  # All assumed outside initially
+
+    # Mask for points can be considered for inclusion
+    candidates = numpy.ones(M, dtype=numpy.bool)  # All True initially
+
+    # Only work on those that are inside polygon bounding box
+    # FIXME (Ole): TODO this optimisation later
+    #outside_box = (x > maxpx) + (x < minpx) + (y > maxpy) + (y < minpy)
+    #inside_box = -outside_box
+    #ipoints = points[inside_box]
+
+    # Find points on polygon boundary
+    for i in range(N):
+
+        #if not numpy.sometrue(candidates):
+        #    break
+
+        # Loop through polygon vertices
+        j = (i + 1) % N
+
+        px_i = polygon[i, 0]
+        py_i = polygon[i, 1]
+        px_j = polygon[j, 0]
+        py_j = polygon[j, 1]
+
+        # Select those that are on the boundary FIXME: restrict to inside box
+        boundary_points = point_on_line(points,
+                                        [[px_i, py_i], [px_j, py_j]],
+                                        rtol, atol)
+
+        if closed:
+            inside[boundary_points] = 1
+        else:
+            inside[boundary_points] = 0
+
+        # Remove boundary point from further analysis
+        candidates[boundary_points] = False
+
+    #print 'masih ada', candidates, inside
+
+    # Algorithm for finding points inside polygon
+    for i in range(N):
+        #print i, j
+
+        #print 'inside', inside
+
+        #if not numpy.sometrue(candidates):
+        #    break
+
+        # Loop through polygon vertices
+        j = (i + 1) % N
+
+        px_i = polygon[i, 0]
+        py_i = polygon[i, 1]
+        px_j = polygon[j, 0]
+        py_j = polygon[j, 1]
+
+        # Intersection formula
+        sigma = (y - py_i) / (py_j - py_i) * (px_j - px_i)
+        seg_i = (py_i < y) * (py_j >= y)
+        seg_j = (py_j < y) * (py_i >= y)
+        mask = (px_i + sigma < x) * (seg_i + seg_j) * candidates
+
+        inside[mask] = 1 - inside[mask]
+
+    # Restore numpy warnings
+    numpy.seterr(**original_numpy_settings)
+
+    # Record point as either inside or outside
+    # FIXME (Ole): this is just for backwards compatibility
     inside_index = 0  # Keep track of points inside
     outside_index = M - 1  # Keep track of points outside (starting from end)
 
-    # Begin main loop (for each point) - FIXME (write as vector ops)
     for k in range(M):
-        x = points[k, 0]
-        y = points[k, 1]
-        inside = 0
-
-        if x > maxpx or x < minpx or y > maxpy or y < minpy:
-            #  Skip if point is outside polygon bounding box
-            pass
-        else:
-            # Check if it is inside polygon
-            for i in range(N):
-                # Loop through polygon vertices
-                j = (i + 1) % N
-
-                px_i = polygon[i, 0]
-                py_i = polygon[i, 1]
-                px_j = polygon[j, 0]
-                py_j = polygon[j, 1]
-
-                if point_on_line(points[k, :],
-                                 [[px_i, py_i], [px_j, py_j]],
-                                 rtol, atol):
-                    #  Point coincides with line segment
-                    if closed:
-                        inside = 1
-                    else:
-                        inside = 0
-                    break
-                else:
-                    # Check if truly inside polygon
-                    if (((py_i < y) and (py_j >= y)) or
-                        ((py_j < y) and (py_i >= y))):
-                        sigma = (y - py_i) / (py_j - py_i) * (px_j - px_i)
-                        if (px_i + sigma < x):
-                            inside = 1 - inside
-
-        # Record point as either inside or outside
-        if inside == 1:
+        if inside[k] == 1:
             indices[inside_index] = k
             inside_index += 1
         else:

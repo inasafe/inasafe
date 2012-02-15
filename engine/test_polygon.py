@@ -109,7 +109,7 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.alltrue(res[:N])
         assert not numpy.sometrue(res[N:])
 
-    def test_is_inside_polygon_main(self):
+    def test_is_inside_polygon_main1(self):
         """Points are classified as either inside polygon or not
         """
 
@@ -317,26 +317,111 @@ class Test_Polygon(unittest.TestCase):
         indices = inside_polygon(points, U, closed=True)
         assert numpy.allclose(indices, [0, 1, 2])
 
-    def test_separate_points_by_polygon(self):
+    def test_separate_points_by_polygon_edge(self):
+        """Points on polygon edge correctly detected
+        """
+
+        # Unit square
+        U = [[0, 0], [1, 0], [1, 1], [0, 1]]
+
+        # Try with boundary (vertical edge) point
+        indices, count = separate_points_by_polygon([[0, 0.5],
+                                                     [0.3, 0.3],
+                                                     [0.1, 0.6]], U)
+        assert count == 3
+        assert numpy.allclose(indices, [0, 1, 2])
+
+        # Try with boundary (horizontal edge) point
+        indices, count = separate_points_by_polygon([[0.5, 0.0],
+                                                     [0.3, 0.3],
+                                                     [0.1, 0.6]], U)
+        assert count == 3
+        assert numpy.allclose(indices, [0, 1, 2])
+
+        # Try with boundary (corner) point
+        indices, count = separate_points_by_polygon([[0.0, 0.0],
+                                                     [0.3, 0.3],
+                                                     [0.1, 0.6]], U)
+        assert count == 3
+        assert numpy.allclose(indices, [0, 1, 2])
+
+        # One outside
+        indices, count = separate_points_by_polygon([[0, 0.5],
+                                                     [1.3, 0.3],
+                                                     [0.1, 0.6]], U)
+        assert count == 2
+        assert numpy.allclose(indices, [0, 2, 1])
+
+
+    def test_separate_points_by_polygon1(self):
         """Set of points is correctly separated according to polygon
         """
 
         # Unit square
         U = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
+        indices, count = separate_points_by_polygon([[0.5, 0.5]], U)
+        assert count == 1
+        assert numpy.allclose(indices, [0])
+
+        indices, count = separate_points_by_polygon([[0.5, 0.5],
+                                                     [0.3, 0.2]], U)
+        assert count == 2
+        assert numpy.allclose(indices, [0, 1])
+
+        indices, count = separate_points_by_polygon([[0.5, 0.5],
+                                                     [0.3, 0.2],
+                                                     [0.6, 0.7]], U)
+        assert count == 3
+        assert numpy.allclose(indices, [0, 1, 2])
+
+        indices, count = separate_points_by_polygon([[0.3, 0.2]], U)
+        assert count == 1
+        assert numpy.allclose(indices, [0])
+
+        indices, count = separate_points_by_polygon([[0.3, 0.2],
+                                                     [1, -0.5]], U)
+        assert count == 1
+        assert numpy.allclose(indices, [0, 1])
+
         indices, count = separate_points_by_polygon([[0.5, 0.5],
                                                      [1, -0.5],
                                                      [0.3, 0.2]], U)
-        assert numpy.allclose(indices, [0, 2, 1])
         assert count == 2
+        assert numpy.allclose(indices, [0, 2, 1])
+
+        indices, count = separate_points_by_polygon([[0.1, 0.1],
+                                                     [0.5, 0.5],
+                                                     [1, -0.5],
+                                                     [0.3, 0.2]], U)
+        assert count == 3
+        assert numpy.allclose(indices, [0, 1, 3, 2])
+
+        # Try with boundary (edge) point
+        indices, count = separate_points_by_polygon([[0, 0.5],
+                                                     [0.1, 0.2]], U)
+        assert count == 2
+        assert numpy.allclose(indices, [0, 1])
+
+        # Try with boundary (corner) point
+        indices, count = separate_points_by_polygon([[0, 0],
+                                                     [0.1, 0.2]], U)
+        assert count == 2
+        assert numpy.allclose(indices, [0, 1])
+
+        # Try with a range of cases point
+        indices, count = separate_points_by_polygon([[0, 0],  # corner
+                                                     [0, 0.5],  # edge
+                                                     [0.1, 0.2]], U)
+        assert count == 3
+        assert numpy.allclose(indices, [0, 1, 2])
 
         # One more test of vector formulation returning indices
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
         res, count = separate_points_by_polygon(points, polygon)
-
-        assert numpy.allclose(res, [0, 1, 2, 4, 3])
         assert count == 3
+        assert numpy.allclose(res, [0, 1, 2, 4, 3])
 
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0],
