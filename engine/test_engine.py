@@ -1163,13 +1163,12 @@ class Test_Engine(unittest.TestCase):
                    geometry=H_geometry,
                    projection=H.get_projection())
         #H.write_to_file('MM_cut.shp')  # E.g. to view with QGis
-
-        print 'Size H', len(H)
+        #print 'Size H', len(H)
 
         E = read_layer(exposure_filename)
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
-        print 'Size E', len(E)
+        #print 'Size E', len(E)
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
@@ -1633,6 +1632,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_interpolation_from_polygons1')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
