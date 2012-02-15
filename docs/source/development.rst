@@ -59,17 +59,17 @@ To verify that the installation works you can run the test suite from the comman
 
 This will run all the regression tests and also highlight any code issues.
 Note that first time the tests are run they will pull 250MB of test data from
-our subversion repository (If asked for a password just hit Enter). See further 
+our subversion repository (If asked for a password just hit Enter). See further
 notes on running tests below.
 
 
 To run the plugin start QGIS and enable it from the :menuselection:`Plugins --> Manage Plugins`
-menu. 
+menu.
 
 Development using Eclipse IDE with PyDev
 ----------------------------------------
 
-If you wish to use an IDE for development, please refer to 
+If you wish to use an IDE for development, please refer to
 `this article <http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/>`_
 for detailed information on how to get the basic Eclipse with PyDev setup.
 
@@ -88,7 +88,7 @@ In the resulting project dialog, set the following details:
 * :guilabel:`Grammar Version` : :kbd:`2.7`
 * :guilabel:`Add project directory to PYTHONPATH?` : :kbd:`check`
 
-At this point you should should click the link entitled 'Please configure an interpreter 
+At this point you should should click the link entitled 'Please configure an interpreter
 in related preferences before continuing.' And on the resulting dialog do:
 
 
@@ -108,7 +108,7 @@ Another dialog will appear. Tick the first entry in the list that points to your
 
 * :guilabel:`OK Button` : :kbd:`click this button`
 
-You will be returned to the Python Interpreters list and should see an entry for 
+You will be returned to the Python Interpreters list and should see an entry for
 System Python 2.7 listed there. Now do in the *Libraries* tab:
 
 * :guilabel:`Finish` : :kbd:`click this button`
@@ -116,8 +116,8 @@ System Python 2.7 listed there. Now do in the *Libraries* tab:
 Running Unit tests from the IDE
 ...............................
 
-Python has very good integrated support for unit testing. The first thing 
-you should do after setting up the IDE project is to run the tests. You can run tests 
+Python has very good integrated support for unit testing. The first thing
+you should do after setting up the IDE project is to run the tests. You can run tests
 in the following ways:
 
 * For the entire risk_in_a_box package
@@ -126,11 +126,11 @@ in the following ways:
 * for an class within a test module
 * for an individual method within a test class
 
-You can view these individual entities by browsing and expanding nodes in the project 
+You can view these individual entities by browsing and expanding nodes in the project
 panel in the left of the IDE.
 
-.. note:: If you run the test suite for the entire risk_in_a_box package, it will 
-    mistakenly treat the sphinx documentation conf.py (docs.source.conf) as a test 
+.. note:: If you run the test suite for the entire risk_in_a_box package, it will
+    mistakenly treat the sphinx documentation conf.py (docs.source.conf) as a test
     and fail for that test. This is 'normal' and can be ignored.
 
 Remote Debugging with Eclipse
@@ -147,9 +147,9 @@ for example (you will need to adjust these paths to match your system)::
    PyDev debug server first before launching the Risk-in-a-box QGIS plugin
    otherwise QGIS will likely crash when it can't find the debug server.
 
-You will need to ensure that the PYTHONPATH containing your pydev package folder 
-is set before you launch QGIS - for example by adding the above line to your ~/.bashrc 
-or by making a small batch file containing the above export and then sourcing the file 
+You will need to ensure that the PYTHONPATH containing your pydev package folder
+is set before you launch QGIS - for example by adding the above line to your ~/.bashrc
+or by making a small batch file containing the above export and then sourcing the file
 before launching QGIS e.g.::
 
     source riab_paths.sh
@@ -162,38 +162,38 @@ Additional development environment notes
 QGIS installed in a non-standard location
 .........................................
 
-For running unit tests that need QGIS, you may need to adjust PYTHONPATH and QGISPATH 
-if QGIS is running in a non standard location. For example with QGIS built from source 
-into /usr/local (and python bindings global install option disabled), you could run 
+For running unit tests that need QGIS, you may need to adjust PYTHONPATH and QGISPATH
+if QGIS is running in a non standard location. For example with QGIS built from source
+into /usr/local (and python bindings global install option disabled), you could run
 these commands (or add them to your ~/.bashrc)::
 
 	export QGISPATH=/usr/local
 	export PYTHONPATH=$PYTHONPATH:/usr/local/share/qgis/python/
 
-.. note:: The above can be set within Eclipse's project properties if you are running 
+.. note:: The above can be set within Eclipse's project properties if you are running
 your tests using the PyDev IDE environment.
 
 
 Adding risk_in_a_box to your python path:
 .........................................
 
-Lastly, you should add the riab plugin folder to your PYTHONPATH so that 
+Lastly, you should add the riab plugin folder to your PYTHONPATH so that
 package and module paths can be resolved correctly. E.g::
 
 	export PYTHONPATH=$PYTHONPATH:${HOME}/.qgis/python/plugins/risk_in_a_box
 
-Once again you could add this to your .bashrc or set it in Eclipse for convenience 
+Once again you could add this to your .bashrc or set it in Eclipse for convenience
 if needed.
 
 Running tests
 .............
 
-You can run all tests (which includes code coverage reports and other 
+You can run all tests (which includes code coverage reports and other
 diagnostics) by doing this within the risk_in_a_box plugin folder::
 
 	make test
 
-You can also run individual tests using nose. For example to run the riabclipper 
+You can also run individual tests using nose. For example to run the riabclipper
 test you would do::
 
 	nosetests -v gui.test_riabclipper
@@ -206,15 +206,15 @@ Please observe the following coding standards when working on the codebase:
 
 * Docstrings quoted with :samp:`"""`
 * Simple strings in source code should be quoted with :samp:`'`
-* Coding must follow a style guide. In case of Python it is `pep8 <http://www.python.org/dev/peps/pep-0008>`_ and 
+* Coding must follow a style guide. In case of Python it is `pep8 <http://www.python.org/dev/peps/pep-0008>`_ and
   using the command line tool pep8 (or :samp:`make pep8`) to enforce this
 * `Python documentation guide <http://www.python.org/dev/peps/pep-0257>`_
 * Adherence to regression/unit testing wherever possible (:samp:`make test`)
 * Use of github for revision control, issue tracking and management
-* Simple deployment procedure - all dependencies must be delivered with 
+* Simple deployment procedure - all dependencies must be delivered with
   the plugin installer for QGIS or exist in standard QGIS installs.
-* Develop in the spirit of XP/Agile, i.e. frequent releases, continuous 
-  integration and iterative development. The master branch should always 
+* Develop in the spirit of XP/Agile, i.e. frequent releases, continuous
+  integration and iterative development. The master branch should always
   be assumed to represent a working demo with all tests passing.
 
 
@@ -227,15 +227,15 @@ Risk In A Box follows the following simple branching model:
    :align:   center
 
 
-*New development* takes place in *master*. Master should always be maintained in a 
-usable state with tests passing and the code functional as far as possible such 
+*New development* takes place in *master*. Master should always be maintained in a
+usable state with tests passing and the code functional as far as possible such
 that we can create a new release from master at short notice.
 
-*Releases* should take place in long lived branches named after the minor version number 
+*Releases* should take place in long lived branches named after the minor version number
 (we follow the `semantic versioning scheme <http://semver.org/>`_) so for example the first
 release would be version 0.1 and would be in a branch from master called *release_0-1*.
 
-After the minor release branch is made, the *point releases (patch)* are created as tags 
+After the minor release branch is made, the *point releases (patch)* are created as tags
 off that branch. For example the release flow for version 0.1.0  would be:
 
 * branch release_0.1 from master
@@ -243,17 +243,17 @@ off that branch. For example the release flow for version 0.1.0  would be:
 * when we are ready to release, tag the branch as release_0-1-0
 * create packages from a checkout of the tag
 
-After the release, development should take place in master. Additional short lived 
-branches can be made off master while new features are worked on, and then merged into 
+After the release, development should take place in master. Additional short lived
+branches can be made off master while new features are worked on, and then merged into
 master when they are ready.
 
-Optionally, development can also be carried out in independent forks of the risk_in_a_box 
+Optionally, development can also be carried out in independent forks of the risk_in_a_box
 repository and then merged into master when they are ready via a pull request or patch.
 
-Commits to master that constitute bug fixes to existing features should be backported to 
-the current release branch using the :samp:`git cherry-pick` command. Alternatively, if 
-a fix is made in the release branch, the changeset should be applied to master where 
-appropriate in order to ensure that master includes all bug fixes from the release branches. 
+Commits to master that constitute bug fixes to existing features should be backported to
+the current release branch using the :samp:`git cherry-pick` command. Alternatively, if
+a fix is made in the release branch, the changeset should be applied to master where
+appropriate in order to ensure that master includes all bug fixes from the release branches.
 
 
 Process for developers adding a new feature
@@ -272,7 +272,7 @@ To keep branch up to date
     * git checkout <featurebranch>
     * git merge origin master
 
-When all tests pass, either merge into develop
+When all tests pass, either merge into master
     * git checkout master
     * git merge --no-ff <featurebranch>
       (possibly resolve conflict and verify test suite runs)
@@ -281,7 +281,7 @@ When all tests pass, either merge into develop
 Or issue a pull request through github
     ..
 
-To delete when branch is no longer needed (though it is preferable to do 
+To delete when branch is no longer needed (though it is preferable to do
 such work in a fork of the official repo).
 
     * git push origin :<featurebranch>
@@ -295,13 +295,13 @@ Create a local `tracking branch <http://book.git-scm.com/4_tracking_branches.htm
 	git fetch
 	git branch --track release-0_1 origin/release-0_1
 	git checkout release-0_1
-	
+
 Now apply your fix, test and commit::
 
 	git commit -m "Fix issue #22 - results do not display"
 	git push
 
-To backport the fix to master do (you should test after cherry picking and 
+To backport the fix to master do (you should test after cherry picking and
 before pushing though)::
 
 	git checkout master
