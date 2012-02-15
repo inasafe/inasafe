@@ -271,6 +271,8 @@ Publish (if unfinished)
 To keep branch up to date
     * git checkout <featurebranch>
     * git merge origin master
+    * (possibly resolve conflict and verify test suite runs)
+    * git push origin <featurebranch>
 
 When all tests pass, either merge into master
     * git checkout master
