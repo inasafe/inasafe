@@ -239,7 +239,7 @@ class Test_Engine(unittest.TestCase):
 
         # Expected values from HKV
         expected_values = [2485442, 1537920]
-        expected_strings = ['<b>2479</b>', '<b>1533</b>']
+        expected_strings = ['<b>2480</b>', '<b>1533</b>']
 
         i = 0
         for filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
@@ -1023,7 +1023,7 @@ class Test_Engine(unittest.TestCase):
                 assert interpolated_depth > 2.675
 
                 # This is a characterisation test for bilinear interpolation
-                assert numpy.allclose(interpolated_depth, 3.62477215491,
+                assert numpy.allclose(interpolated_depth, 3.62477204455,
                                       rtol=1.0e-12, atol=1.0e-12)
 
             # Check that interpolated points are within range

@@ -343,12 +343,17 @@ class Raster:
             # Read from raster file
             A = self.band.ReadAsArray()
 
+            # Convert to double precision (issue #75)
+            A = numpy.array(A, dtype=numpy.float64)
+
+            # Self check
             M, N = A.shape
             msg = ('Dimensions of raster array do not match those of '
                    'raster file %s' % self.filename)
             assert M == self.rows, msg
             assert N == self.columns, msg
 
+        # Handle no data value
         if nan is False:
             pass
         else:
@@ -380,7 +385,11 @@ class Raster:
 
             actual_res = self.get_resolution(isotropic=True)
             native_res = self.get_resolution(isotropic=True, native=True)
+            #print
+            #print 'Actual res', actual_res
+            #print 'Native res', native_res
             sigma = (actual_res / native_res) ** 2
+            #print 'Scaling', sigma
         else:
             # See if scaling can work as a scalar value
             try:

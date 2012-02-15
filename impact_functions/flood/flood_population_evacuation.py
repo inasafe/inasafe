@@ -94,8 +94,8 @@ class FloodEvacuationFunction(FunctionProvider):
             I_male = I - I_female
 
         # Generate text with result for this study
-        total = str(int(sum(P.flat) / 1000))
-        count = str(int(sum(I.flat) / 1000))
+        total = str(int(numpy.sum(P) / 1000))
+        count = str(int(numpy.sum(I) / 1000))
 
         # Create report
         iname = inundation.get_name()
