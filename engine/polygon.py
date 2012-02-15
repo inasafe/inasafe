@@ -362,6 +362,7 @@ def in_and_outside_polygon(points, polygon, closed=True):
         # Return indices for points inside and outside (reversed)
         return  indices[:count], indices[count:][::-1]
 
+
 #--------------------------------------------------
 # Helper function to generate points inside polygon
 #--------------------------------------------------
