@@ -462,7 +462,6 @@ class Test_Polygon(unittest.TestCase):
         assert count_r == count_p
         assert numpy.allclose(indices_r, indices_p)
 
-
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0],
                   [0.5, 1.5], [0.5, -0.5]]
@@ -474,7 +473,6 @@ class Test_Polygon(unittest.TestCase):
         assert count_p == 3
         assert numpy.allclose(res_p, [1, 2, 3, 5, 4, 0])
         assert numpy.allclose(res_r, [1, 2, 3, 5, 4, 0])
-
 
     def test_polygon_clipping_error_handling(self):
         """Polygon clipping checks input as expected"""
