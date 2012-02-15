@@ -21,7 +21,8 @@ from numerics import ensure_numeric
 
 def separate_points_by_polygon(points, polygon,
                                closed=True,
-                               check_input=True):
+                               check_input=True,
+                               numpy_version=True):
     """Determine whether points are inside or outside a polygon
 
     Input:
@@ -108,17 +109,20 @@ def separate_points_by_polygon(points, polygon,
     N = polygon.shape[0]  # Number of vertices in polygon
     M = points.shape[0]  # Number of points
 
-    indices = numpy.zeros(M, numpy.int)
-
-    count = _separate_points_by_polygon(points, polygon, indices,
-                                        closed=closed)
+    #indices = numpy.zeros(M, numpy.int)
+    if numpy_version:
+        indices, count = _separate_points_by_polygon(points, polygon,
+                                                     closed=closed)
+    else:
+        indices, count = _separate_points_by_polygon_python(points, polygon,
+                                                            closed=closed)
 
     # log.critical('Found %d points (out of %d) inside polygon' % (count, M))
 
     return indices, count
 
 
-def _separate_points_by_polygon(points, polygon, indices,
+def _separate_points_by_polygon(points, polygon,
                                 closed):
     """Underlying algorithm to partition point according to polygon
     """
@@ -142,6 +146,9 @@ def _separate_points_by_polygon(points, polygon, indices,
 
     x = points[:, 0]
     y = points[:, 1]
+
+    # Vector to return sorted indices (inside first, then outside)
+    indices = numpy.zeros(M, numpy.int)
 
     # Vector keeping track of which points are inside
     inside = numpy.zeros(M, dtype=numpy.int)  # All assumed outside initially
@@ -213,10 +220,10 @@ def _separate_points_by_polygon(points, polygon, indices,
             indices[outside_index] = k
             outside_index -= 1
 
-    return inside_index
+    return indices, inside_index
 
 
-def _separate_points_by_polygon_python(points, polygon, indices,
+def _separate_points_by_polygon_python(points, polygon,
                                        closed):
     """Underlying algorithm to partition point according to polygon
 
@@ -237,6 +244,9 @@ def _separate_points_by_polygon_python(points, polygon, indices,
 
     M = points.shape[0]
     N = polygon.shape[0]
+
+    # Vector to return sorted indices (inside first, then outside)
+    indices = numpy.zeros(M, numpy.int)
 
     inside_index = 0  # Keep track of points inside
     outside_index = M - 1  # Keep track of points outside (starting from end)
@@ -286,7 +296,7 @@ def _separate_points_by_polygon_python(points, polygon, indices,
             indices[outside_index] = k
             outside_index -= 1
 
-    return inside_index
+    return indices, inside_index
 
 
 def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):

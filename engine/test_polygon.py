@@ -430,6 +430,52 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(res, [1, 2, 3, 5, 4, 0])
         assert count == 3
 
+    def test_separate_points_by_polygon_characterisation(self):
+        """Numpy version of polygon clipping agrees with python version
+        """
+
+        # Unit square
+        U = [[0, 0], [1, 0], [1, 1], [0, 1]]
+
+        indices_r, count_r = separate_points_by_polygon([[0.5, 0.5],
+                                                         [0.3, 0.2]],
+                                                        U,
+                                                        numpy_version=True)
+        indices_p, count_p = separate_points_by_polygon([[0.5, 0.5],
+                                                         [0.3, 0.2]],
+                                                        U,
+                                                        numpy_version=False)
+
+        assert count_r == count_p
+        assert numpy.allclose(indices_r, indices_p)
+
+        indices_r, count_r = separate_points_by_polygon([[0.5, 0.5],
+                                                         [0.3, 0.2],
+                                                         [0.6, 0.7]],
+                                                        U,
+                                                        numpy_version=True)
+        indices_p, count_p = separate_points_by_polygon([[0.5, 0.5],
+                                                         [0.3, 0.2],
+                                                         [0.6, 0.7]],
+                                                        U,
+                                                        numpy_version=False)
+        assert count_r == count_p
+        assert numpy.allclose(indices_r, indices_p)
+
+
+        polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
+        points = [[0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0],
+                  [0.5, 1.5], [0.5, -0.5]]
+        res_r, count_r = separate_points_by_polygon(points, polygon,
+                                                    numpy_version=True)
+        res_p, count_p = separate_points_by_polygon(points, polygon,
+                                                    numpy_version=False)
+        assert count_r == 3
+        assert count_p == 3
+        assert numpy.allclose(res_p, [1, 2, 3, 5, 4, 0])
+        assert numpy.allclose(res_r, [1, 2, 3, 5, 4, 0])
+
+
     def test_polygon_clipping_error_handling(self):
         """Polygon clipping checks input as expected"""
 
