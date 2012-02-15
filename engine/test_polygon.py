@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-import numpy as num
+import numpy
 from math import sqrt, pi
 from numerics import ensure_numeric
 
@@ -52,6 +52,26 @@ class Test_Polygon(unittest.TestCase):
         assert point_on_line([40, 19], [[40, 19], [40, 19]])
         assert not point_on_line([40, 19], [[40, 40], [40, 40]])
 
+    def Xtest_point_on_line_vector(self):
+        """Points coinciding with lines are correctly detected
+
+        Vectorised version
+        """
+
+        N = 100
+        x0 = 0
+        x1 = 50
+        horiz_line = [[x0, 0], [x1, 0]]
+        space = numpy.linspace(x0, x1, num=N, endpoint=True)
+        print space, len(space)
+
+        points = numpy.zeros((N, 2), numpy.float64)
+
+        res = point_on_line(points, horiz_line)
+        assert numpy.alltrue(res)
+
+
+
     def test_is_inside_polygon_main(self):
         """Points are classified as either inside polygon or not
         """
@@ -93,7 +113,7 @@ class Test_Polygon(unittest.TestCase):
         points = [[25, 25], [30, 20], [40, 50], [90, 20], [40, 90]]
         res = inside_polygon(points, polygon)
         assert len(res) == 2
-        assert num.allclose(res, [0, 1])
+        assert numpy.allclose(res, [0, 1])
 
         # More convoluted and non convex polygon
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
@@ -180,7 +200,7 @@ class Test_Polygon(unittest.TestCase):
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
         res = inside_polygon(points, polygon)
-        assert num.allclose(res, [0, 1, 2])
+        assert numpy.allclose(res, [0, 1, 2])
 
     def test_outside_polygon(self):
         """Points are classified as either outside polygon or not
@@ -196,20 +216,20 @@ class Test_Polygon(unittest.TestCase):
         assert is_outside_polygon([1.5, 0.5], U)
 
         indices = outside_polygon([[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
-        assert num.allclose(indices, [1])
+        assert numpy.allclose(indices, [1])
 
         # One more test of vector formulation returning indices
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
         res = outside_polygon(points, polygon)
-        assert num.allclose(res, [3, 4])
+        assert numpy.allclose(res, [3, 4])
 
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0],
                   [0.5, 1.5], [0.5, -0.5]]
         res = outside_polygon(points, polygon)
 
-        assert num.allclose(res, [0, 4, 5])
+        assert numpy.allclose(res, [0, 4, 5])
 
     def test_outside_polygon2(self):
         """Points are classified as either outside polygon or not (2)
@@ -234,13 +254,13 @@ class Test_Polygon(unittest.TestCase):
 
         indices, count = separate_points_by_polygon(points, U)
         assert count == 0                           # None inside
-        assert num.allclose(indices, [3, 2, 1, 0])
+        assert numpy.allclose(indices, [3, 2, 1, 0])
 
         indices = outside_polygon(points, U, closed=True)
-        assert num.allclose(indices, [0, 1, 2, 3])
+        assert numpy.allclose(indices, [0, 1, 2, 3])
 
         indices = inside_polygon(points, U, closed=True)
-        assert num.allclose(indices, [])
+        assert numpy.allclose(indices, [])
 
     def test_all_inside_polygon(self):
         """Corner case where all points are inside polygon works"""
@@ -252,13 +272,13 @@ class Test_Polygon(unittest.TestCase):
 
         indices, count = separate_points_by_polygon(points, U)
         assert count == 3       # All inside
-        assert num.allclose(indices, [0, 1, 2])
+        assert numpy.allclose(indices, [0, 1, 2])
 
         indices = outside_polygon(points, U, closed=True)
-        assert num.allclose(indices, [])
+        assert numpy.allclose(indices, [])
 
         indices = inside_polygon(points, U, closed=True)
-        assert num.allclose(indices, [0, 1, 2])
+        assert numpy.allclose(indices, [0, 1, 2])
 
     def test_separate_points_by_polygon(self):
         """Set of points is correctly separated according to polygon
@@ -270,7 +290,7 @@ class Test_Polygon(unittest.TestCase):
         indices, count = separate_points_by_polygon([[0.5, 0.5],
                                                      [1, -0.5],
                                                      [0.3, 0.2]], U)
-        assert num.allclose(indices, [0, 2, 1])
+        assert numpy.allclose(indices, [0, 2, 1])
         assert count == 2
 
         # One more test of vector formulation returning indices
@@ -278,7 +298,7 @@ class Test_Polygon(unittest.TestCase):
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
         res, count = separate_points_by_polygon(points, polygon)
 
-        assert num.allclose(res, [0, 1, 2, 4, 3])
+        assert numpy.allclose(res, [0, 1, 2, 4, 3])
         assert count == 3
 
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
@@ -286,7 +306,7 @@ class Test_Polygon(unittest.TestCase):
                   [0.5, 1.5], [0.5, -0.5]]
         res, count = separate_points_by_polygon(points, polygon)
 
-        assert num.allclose(res, [1, 2, 3, 5, 4, 0])
+        assert numpy.allclose(res, [1, 2, 3, 5, 4, 0])
         assert count == 3
 
     def test_polygon_clipping_error_handling(self):
@@ -464,7 +484,7 @@ class Test_Polygon(unittest.TestCase):
             assert not is_inside_polygon(point, main_polygon)
 
         # Test separation algorithm
-        all_points = num.concatenate((points_inside, points_outside))
+        all_points = numpy.concatenate((points_inside, points_outside))
         assert all_points.shape[0] == M + N
 
         indices, count = separate_points_by_polygon(all_points, main_polygon)
@@ -516,7 +536,7 @@ class Test_Polygon(unittest.TestCase):
             assert not is_inside_polygon(point, main_polygon)
 
         # Test separation algorithm
-        all_points = num.concatenate((points_inside, points_outside))
+        all_points = numpy.concatenate((points_inside, points_outside))
         assert all_points.shape[0] == M + N
 
         indices, count = separate_points_by_polygon(all_points, main_polygon)
@@ -596,23 +616,23 @@ class Test_Polygon(unittest.TestCase):
 
         points = [(1., 0.25), (1., 0.75)]
         inside, outside = in_and_outside_polygon(points, polygon, closed=True)
-        assert num.alltrue(inside == [0, 1])
+        assert numpy.alltrue(inside == [0, 1])
         assert len(outside) == 0
 
         inside, outside = in_and_outside_polygon(points, polygon, closed=False)
         assert len(inside) == 0
-        assert num.alltrue(outside == [0, 1])
+        assert numpy.alltrue(outside == [0, 1])
 
         points = [(100., 0.25), (0.5, 0.5)]
         inside, outside = in_and_outside_polygon(points, polygon)
-        assert num.alltrue(inside == [1])
+        assert numpy.alltrue(inside == [1])
         assert outside[0] == 0
 
         points = [(100., 0.25), (0.5, 0.5), (39, 20),
                   (0.6, 0.7), (56, 43), (67, 90)]
         inside, outside = in_and_outside_polygon(points, polygon)
-        assert num.alltrue(inside == [1, 3])
-        assert num.alltrue(outside == [0, 2, 4, 5])
+        assert numpy.alltrue(inside == [1, 3])
+        assert numpy.alltrue(outside == [0, 2, 4, 5])
 
     def test_intersection1(self):
         """Intersection of two simple lines works
@@ -623,7 +643,7 @@ class Test_Polygon(unittest.TestCase):
 
         status, value = intersection(line0, line1)
         assert status == 1
-        assert num.allclose(value, [0.0, 0.0])
+        assert numpy.allclose(value, [0.0, 0.0])
 
     def test_intersection2(self):
         """Intersection point is independent of direction
@@ -634,19 +654,19 @@ class Test_Polygon(unittest.TestCase):
 
         status, value = intersection(line0, line1)
         assert status == 1
-        assert num.allclose(value, [12.0, 6.0])
+        assert numpy.allclose(value, [12.0, 6.0])
 
         # Swap direction of one line
         line1 = [[24, 0], [0, 12]]
 
         status, value = intersection(line0, line1)
         assert status == 1
-        assert num.allclose(value, [12.0, 6.0])
+        assert numpy.allclose(value, [12.0, 6.0])
 
         # Swap order of lines
         status, value = intersection(line1, line0)
         assert status == 1
-        assert num.allclose(value, [12.0, 6.0])
+        assert numpy.allclose(value, [12.0, 6.0])
 
     def test_intersection3(self):
         """Intersection point is independent of direction (2)
@@ -657,19 +677,19 @@ class Test_Polygon(unittest.TestCase):
 
         status, value = intersection(line0, line1)
         assert status == 1
-        assert num.allclose(value, [14.068965517, 7.0344827586])
+        assert numpy.allclose(value, [14.068965517, 7.0344827586])
 
         # Swap direction of one line
         line1 = [[24, 0], [0, 17]]
 
         status, value = intersection(line0, line1)
         assert status == 1
-        assert num.allclose(value, [14.068965517, 7.0344827586])
+        assert numpy.allclose(value, [14.068965517, 7.0344827586])
 
         # Swap order of lines
         status, value = intersection(line1, line0)
         assert status == 1
-        assert num.allclose(value, [14.068965517, 7.0344827586])
+        assert numpy.allclose(value, [14.068965517, 7.0344827586])
 
     def test_intersection_endpoints(self):
         """Intersection of lines with coinciding endpoints works
@@ -682,14 +702,14 @@ class Test_Polygon(unittest.TestCase):
 
         status, value = intersection(line0, line1)
         assert status == 1
-        assert num.allclose(value, [1.0, 1.0])
+        assert numpy.allclose(value, [1.0, 1.0])
 
         line0 = [[1, 1], [2, 0]]
         line1 = [[1, 1], [2, 1]]
 
         status, value = intersection(line0, line1)
         assert status == 1
-        assert num.allclose(value, [1.0, 1.0])
+        assert numpy.allclose(value, [1.0, 1.0])
 
     # This function is a helper function for
     # the test_intersection_bug_20081110_?() set of tests.
@@ -757,7 +777,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line0 fully within line1, same direction
         # 0:         ----<----
@@ -770,7 +790,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line0 fully within line1, opposite direction
         # 0:         ----<----
@@ -783,7 +803,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line0 fully within line1, opposite direction
         # 0:         ---->----
@@ -796,7 +816,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # --------------------------------------------------------------
         # line1 fully within line0, same direction
@@ -810,7 +830,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # line1 fully within line0, same direction
         # 0:    ---------<-----------
@@ -823,7 +843,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # line1 fully within line0, opposite direction
         # 0:    ---------<-----------
@@ -836,7 +856,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # line1 fully within line0, opposite direction
         # 0:    --------->-----------
@@ -849,7 +869,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # ----------------------------------------------------------------
         # line in same direction, partial overlap
@@ -863,7 +883,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, [line1[0], line0[1]]))
+        self.failUnless(numpy.allclose(value, [line1[0], line0[1]]))
 
         # line in same direction, partial overlap
         # 0:    -----<-----
@@ -876,7 +896,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, [line0[0], line1[1]]))
+        self.failUnless(numpy.allclose(value, [line0[0], line1[1]]))
 
         # line in opposite direction, partial overlap
         # 0:    -----<-----
@@ -889,7 +909,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, [line0[0], line1[0]]))
+        self.failUnless(numpy.allclose(value, [line0[0], line1[0]]))
 
         # line in opposite direction, partial overlap
         # 0:    ----->-----
@@ -902,7 +922,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, [line1[1], line0[1]]))
+        self.failUnless(numpy.allclose(value, [line1[1], line0[1]]))
 
         # -------------------------------------------------------------------
         # line in same direction, partial overlap
@@ -916,7 +936,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, [line0[0], line1[1]]))
+        self.failUnless(numpy.allclose(value, [line0[0], line1[1]]))
 
         # line in same direction, partial overlap
         # 0:       ------<------
@@ -929,7 +949,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, [line1[0], line0[1]]))
+        self.failUnless(numpy.allclose(value, [line1[0], line0[1]]))
 
         # line in opposite direction, partial overlap
         # 0:       ------<------
@@ -942,7 +962,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, [line1[1], line0[1]]))
+        self.failUnless(numpy.allclose(value, [line1[1], line0[1]]))
 
         # line in opposite direction, partial overlap
         # 0:       ------>------
@@ -955,7 +975,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, [line0[0], line1[0]]))
+        self.failUnless(numpy.allclose(value, [line0[0], line1[0]]))
 
         # --------------------------------------------------------------------
         # line in same direction, same left point, line1 longer
@@ -969,7 +989,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line in same direction, same left point, line1 longer
         # 0:    -----<------
@@ -982,7 +1002,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line in opposite direction, same left point, line1 longer
         # 0:    ----->------
@@ -995,7 +1015,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line in opposite direction, same start point, line1 longer
         # 0:    -----<------
@@ -1008,7 +1028,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # -------------------------------------------------------------------
         # line in same direction, same left point, same right point
@@ -1022,7 +1042,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line in same direction, same left point, same right point
         # 0:    -------<--------
@@ -1035,7 +1055,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line in opposite direction, same left point, same right point
         # 0:    ------->--------
@@ -1048,7 +1068,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line in opposite direction, same left point, same right point
         # 0:    -------<--------
@@ -1061,7 +1081,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # -------------------------------------------------------------------
         # line in same direction, same right point, line1 longer
@@ -1075,7 +1095,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line in same direction, same right point, line1 longer
         # 0:        -----<------
@@ -1088,7 +1108,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line in opposite direction, same right point, line1 longer
         # 0:        ----->------
@@ -1101,7 +1121,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # line in opposite direction, same right point, line1 longer
         # 0:        -----<------
@@ -1114,7 +1134,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line0))
+        self.failUnless(numpy.allclose(value, line0))
 
         # -------------------------------------------------------------------
         # line in same direction, same left point, line0 longer
@@ -1128,7 +1148,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # line in same direction, same left point, line0 longer
         # 0:    -------<--------
@@ -1141,7 +1161,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # line in opposite direction, same left point, line0 longer
         # 0:    ------->--------
@@ -1154,7 +1174,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # line in opposite direction, same left point, line0 longer
         # 0:    -------<--------
@@ -1167,7 +1187,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # -------------------------------------------------------------------
         # line in same direction, same right point, line0 longer
@@ -1181,7 +1201,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # line in same direction, same right point, line0 longer
         # 0:    -------<--------
@@ -1194,7 +1214,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # line in opposite direction, same right point, line0 longer
         # 0:    ------->--------
@@ -1207,7 +1227,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
         # line in opposite direction, same right point, line0 longer
         # 0:    -------<--------
@@ -1220,7 +1240,7 @@ class Test_Polygon(unittest.TestCase):
         self.failIf(status != 2,
                     'Expected status 2, got status=%s, value=%s' %
                     (str(status), str(value)))
-        self.failUnless(num.allclose(value, line1))
+        self.failUnless(numpy.allclose(value, line1))
 
     def test_intersection_bug_20081110_TR(self):
         """Intersection corner case top-right
@@ -1443,13 +1463,13 @@ class Test_Polygon(unittest.TestCase):
                    'However, segment [%f,%f], [%f, %f]' %
                    (x, 0, common_end_point[0], common_end_point[1]))
             msg += ' gave %s, \nbut when reversed we got %s' % (p1, p2)
-            assert num.allclose(p1, p2), msg
+            assert numpy.allclose(p1, p2), msg
 
             # Swap order of lines
             status, p3 = intersection(line1, line0)
             assert status == 1
             msg = 'Order of lines gave different results'
-            assert num.allclose(p1, p3), msg
+            assert numpy.allclose(p1, p3), msg
 
     def test_no_intersection(self):
         """Lines that don't intersect return None as expected
@@ -1490,7 +1510,7 @@ class Test_Polygon(unittest.TestCase):
 
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, [[0, 0], [3, 0]])
+        assert numpy.allclose(value, [[0, 0], [3, 0]])
 
         # Overlap 2
         line0 = [[-10, 0], [5, 0]]
@@ -1498,7 +1518,7 @@ class Test_Polygon(unittest.TestCase):
 
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, [[-3, 0], [5, 0]])
+        assert numpy.allclose(value, [[-3, 0], [5, 0]])
 
         # Inclusion 1
         line0 = [[0, 0], [5, 0]]
@@ -1506,7 +1526,7 @@ class Test_Polygon(unittest.TestCase):
 
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, line1)
+        assert numpy.allclose(value, line1)
 
         # Inclusion 2
         line0 = [[1, 0], [5, 0]]
@@ -1514,7 +1534,7 @@ class Test_Polygon(unittest.TestCase):
 
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, line0)
+        assert numpy.allclose(value, line0)
 
         # Exclusion (no intersection)
         line0 = [[-10, 0], [1, 0]]
@@ -1531,45 +1551,46 @@ class Test_Polygon(unittest.TestCase):
         line1 = [[1, 7], [10, 25]]
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, [[1, 7], [7, 19]])
+        assert numpy.allclose(value, [[1, 7], [7, 19]])
 
         status, value = intersection(line1, line0)
         assert status == 2
-        assert num.allclose(value, [[1, 7], [7, 19]])
+        assert numpy.allclose(value, [[1, 7], [7, 19]])
 
         # Swap direction
         line0 = [[7, 19], [0, 5]]
         line1 = [[1, 7], [10, 25]]
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, [[7, 19], [1, 7]])
+        assert numpy.allclose(value, [[7, 19], [1, 7]])
 
         line0 = [[0, 5], [7, 19]]
         line1 = [[10, 25], [1, 7]]
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, [[1, 7], [7, 19]])
+        assert numpy.allclose(value, [[1, 7], [7, 19]])
 
         # Inclusion
         line0 = [[1, 7], [7, 19]]
         line1 = [[0, 5], [10, 25]]
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, [[1, 7], [7, 19]])
+        assert numpy.allclose(value, [[1, 7], [7, 19]])
 
         line0 = [[0, 5], [10, 25]]
         line1 = [[1, 7], [7, 19]]
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, [[1, 7], [7, 19]])
+        assert numpy.allclose(value, [[1, 7], [7, 19]])
 
         line0 = [[0, 5], [10, 25]]
         line1 = [[7, 19], [1, 7]]
         status, value = intersection(line0, line1)
         assert status == 2
-        assert num.allclose(value, [[7, 19], [1, 7]])
+        assert numpy.allclose(value, [[7, 19], [1, 7]])
 
 if __name__ == '__main__':
+    #suite = unittest.makeSuite(Test_Polygon, 'test_point_on_line')
     suite = unittest.makeSuite(Test_Polygon, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
