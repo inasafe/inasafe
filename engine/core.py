@@ -90,9 +90,21 @@ def calculate_impact(layers, impact_fcn,
     return F
 
 
-def check_data_integrity(layer_files):
-    """Read list of layer files and verify that that they have correct keywords
-    as well as the same projection and georeferencing.
+def check_data_integrity(layer_objects):
+    """Check list of layer objects
+
+    Input
+        layer_objects: List of RIAB layer instances
+
+    Output
+        Nothing
+
+    Raises
+        Exceptions for a range of errors
+
+    This function checks that
+    * Layers have correct keywords
+    * That they have the same georeferences
     """
 
     # Link to documentation
@@ -110,7 +122,7 @@ def check_data_integrity(layer_files):
     geotransform = None
     coordinates = None
 
-    for layer in layer_files:
+    for layer in layer_objects:
 
         # Check that critical keywords exist and are non empty
         keywords = layer.get_keywords()
@@ -146,29 +158,23 @@ def check_data_integrity(layer_files):
                                       layer.get_geotransform(),
                                       rtol=1.0e-12), msg
 
-        # In either case of vector layers, we check that the coordinates
-        # are the same
+        # In case of vector layers, we just check that they are non-empty
         if layer.is_vector:
-            if coordinates is None:
-                coordinates = layer.get_geometry()
-            else:
-                msg = ('Coordinates in input vector layers are different: '
-                       '%s %s' % (coordinates, layer.get_geometry()))
-                assert numpy.allclose(coordinates,
-                                      layer.get_geometry()), msg
-
-            msg = ('There are no data points to interpolate to. '
+            msg = ('There are no vector data features. '
                    'Perhaps zoom out or pan to the study area '
                    'and try again')
             assert len(layer) > 0, msg
 
     # Check that arrays are aligned.
-    M = layer_files[0].rows
-    N = layer_files[0].columns
-    refname = layer_files[0].get_name()
 
-    for layer in layer_files:
+    refname = None
+    for layer in layer_objects:
         if layer.is_raster:
+
+            if refname is None:
+                refname = layer.get_name()
+                M = layer.rows
+                N = layer.columns
 
             msg = ('Rasters are not aligned!\n'
                    'Raster %s has %i rows but raster %s has %i rows\n'

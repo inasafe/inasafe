@@ -2,8 +2,41 @@
 """
 
 import numpy
-import math
-from interpolation1d import interpolate1d
+
+
+def ensure_numeric(A, typecode=None):
+    """Ensure that sequence is a numeric array.
+
+    Inputs:
+        A: Sequence. If A is already a numeric array it will be returned
+                     unaltered
+                     If not, an attempt is made to convert it to a numeric
+                     array
+        A: Scalar.   Return 0-dimensional array containing that value. Note
+                     that a 0-dim array DOES NOT HAVE A LENGTH UNDER numpy.
+        A: String.   Array of ASCII values (numpy can't handle this)
+
+        typecode:    numeric type. If specified, use this in the conversion.
+                     If not, let numeric package decide.
+                     typecode will always be one of num.float, num.int, etc.
+
+    Note that numpy.array(A, dtype) will sometimes copy.  Use 'copy=False' to
+    copy only when required.
+
+    This function is necessary as array(A) can cause memory overflow.
+    """
+
+    if isinstance(A, basestring):
+        msg = 'Sorry, cannot handle strings in ensure_numeric()'
+        raise Exception(msg)
+
+    if typecode is None:
+        if isinstance(A, numpy.ndarray):
+            return A
+        else:
+            return numpy.array(A)
+    else:
+        return numpy.array(A, dtype=typecode, copy=False)
 
 
 def cdf(x, mu=0, sigma=1, kind='normal'):

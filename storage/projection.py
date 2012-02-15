@@ -21,8 +21,9 @@ class Projection:
         """
 
         if p is None:
-            msg = 'Requested projection is None'
-            raise TypeError(msg)
+            #msg = 'Requested projection is None'
+            #raise TypeError(msg)
+            p = DEFAULT_PROJECTION
 
         # Clean input string. This will also work when p is of class
         # Projection by virtue of its __repr__()

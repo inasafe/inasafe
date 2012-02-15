@@ -5,7 +5,7 @@ import os
 import numpy
 from osgeo import ogr, gdal
 from projection import Projection
-from utilities import DRIVER_MAP, TYPE_MAP
+from utilities import DRIVER_MAP, TYPE_MAP, DEFAULT_ATTRIBUTE
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import get_geometry_type
@@ -14,10 +14,10 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
+from engine.polygon import inside_polygon
+from engine.numerics import ensure_numeric
 
 
-# FIXME (Ole): Consider using pyshp to read and write shapefiles
-#              See http://code.google.com/p/pyshp
 class Vector:
     """Class for abstraction of vector data
     """
@@ -101,8 +101,8 @@ class Vector:
 
             self.geometry_type = get_geometry_type(geometry)
 
-            msg = 'Projection must be specified'
-            assert projection is not None, msg
+            #msg = 'Projection must be specified'
+            #assert projection is not None, msg
             self.projection = Projection(projection)
 
             self.data = data
@@ -175,11 +175,34 @@ class Vector:
         # Check data
         for i, a in enumerate(x):
             for key in a:
-                if a[key] != y[i][key]:
-                    # Not equal, try numerical comparison with tolerances
+                X = a[key]
+                Y = y[i][key]
+                if X != Y:
+                    # Not obviously equal, try some special cases
 
-                    if not numpy.allclose(a[key], y[i][key],
-                                          rtol=rtol, atol=atol):
+                    res = None
+                    try:
+                        # try numerical comparison with tolerances
+                        res = numpy.allclose(X, Y,
+                                             rtol=rtol, atol=atol)
+                    except:
+                        pass
+                    else:
+                        if not res:
+                            return False
+
+                    try:
+                        # Try to cast as booleans. This will take care of
+                        # None, '', True, False, ...
+                        res = (bool(X) is bool(Y))
+                    except:
+                        pass
+                    else:
+                        if not res:
+                            return False
+
+                    if res is None:
+                        # None of the comparisons could be done
                         return False
 
         # Check keywords
@@ -520,12 +543,15 @@ class Vector:
                     actual_field_name = layer_def.GetFieldDefn(j).GetNameRef()
 
                     val = data[i][name]
+
                     if type(val) == numpy.ndarray:
                         # A singleton of type <type 'numpy.ndarray'> works
                         # for gdal version 1.6 but fails for version 1.8
                         # in SetField with error: NotImplementedError:
                         # Wrong number of arguments for overloaded function
                         val = float(val)
+                    elif val is None:
+                        val = ''
 
                     feature.SetField(actual_field_name, val)
 
@@ -673,27 +699,111 @@ class Vector:
                       projection=self.get_projection(),
                       geometry=geometry)
 
-    def interpolate(self, X, name=None):
+    def interpolate(self, X, name=None, attribute=None):
         """Interpolate values of this vector layer to other layer
 
         Input
             X: Layer object defining target
             name: Optional name of interpolated layer
+            attribute: Optional attribute name to use.
+                       If None, all attributes are used.
 
         Output
             Y: Layer object with values of this vector layer interpolated to
                geometry of input layer X
         """
 
-        msg = 'Interpolation from vector layers not yet implemented'
-        raise Exception(msg)
-
         msg = 'Input to Vector.interpolate must be a vector layer instance'
         assert X.is_vector, msg
+
+        X_projection = X.get_projection()
+        S_projection = self.get_projection()
+
+        msg = ('Projections must be the same: I got %s and %s'
+               % (S_projection, X_projection))
+        assert S_projection == X_projection, msg
+
+        msg = ('Vector layer to interpolate from must be polygon geometry. '
+               'I got OGR geometry type %s'
+               % geometrytype2string(self.geometry_type))
+        assert self.is_polygon_data, msg
+
+        # FIXME (Ole): Maybe organise this the same way it is done with rasters
+        if X.is_polygon_data:
+            # Use centroids, in case of polygons
+            X = convert_polygons_to_centroids(X)
+
+        msg = ('Vector layer to interpolate to must be point geometry. '
+               'I got OGR geometry type %s'
+               % geometrytype2string(X.geometry_type))
+        assert X.is_point_data, msg
 
         msg = ('Name must be either a string or None. I got %s'
                % (str(type(X)))[1:-1])
         assert name is None or isinstance(name, basestring), msg
+
+        msg = ('Attribute must be either a string or None. I got %s'
+               % (str(type(X)))[1:-1])
+        assert attribute is None or isinstance(attribute, basestring), msg
+
+        attribute_names = self.get_attribute_names()
+        if attribute is not None:
+            msg = ('Requested attribute "%s" did not exist in %s'
+                   % (attribute, attribute_names))
+            assert attribute in attribute_names, msg
+
+        #----------------
+        # Start algorithm
+        #----------------
+
+        # Extract point features
+        points = ensure_numeric(X.get_geometry())
+        attributes = X.get_data()
+        N = len(X)
+
+        # Extract polygon features
+        geom = self.get_geometry()
+        data = self.get_data()
+        assert len(geom) == len(data)
+
+        # Augment point features with empty attributes from polygon
+        for a in attributes:
+            if attribute is None:
+                # Use all attributes
+                for key in attribute_names:
+                    a[key] = None
+            else:
+                # Use only requested attribute
+                a[attribute] = None
+
+            # Always create attribute to indicate if point was
+            # inside any of the polygons
+            a[DEFAULT_ATTRIBUTE] = None
+
+        # Traverse polygons and assign attributes to points that fall inside
+        for i, polygon in enumerate(geom):
+            if attribute is None:
+                # Use all attributes
+                poly_attr = data[i]
+            else:
+                # Use only requested attribute
+                poly_attr = {attribute: data[i][attribute]}
+
+            # Assign default attribute to indicate points inside
+            poly_attr[DEFAULT_ATTRIBUTE] = True
+
+            # Clip data points by polygons and add polygon attributes
+            indices = inside_polygon(points, polygon)
+            for k in indices:
+                for key in poly_attr:
+                    # Assign attributes from polygon to points
+                    attributes[k][key] = poly_attr[key]
+
+        # Create new Vector instance and return
+        V = Vector(data=attributes,
+                   projection=X.get_projection(),
+                   geometry=X.get_geometry())
+        return V
 
     @property
     def is_raster(self):
@@ -773,6 +883,7 @@ def convert_polygons_to_centroids(V):
 
     geometry = V.get_geometry()
     N = len(V)
+
     # Calculate points for each polygon
     centroids = []
     for i in range(N):

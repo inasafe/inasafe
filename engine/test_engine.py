@@ -10,12 +10,14 @@ sys.path.append(pardir)
 # Import Risk in a Box modules
 from engine.core import calculate_impact
 from engine.interpolation2d import interpolate_raster
-from engine.numerics import cdf, erf
+from engine.polygon import separate_points_by_polygon
+from engine.numerics import cdf, erf, ensure_numeric
 from storage.core import read_layer
 
-from storage.utilities import unique_filename
+from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
 from storage.core import write_vector_data
 from storage.core import write_raster_data
+from storage.vector import Vector
 from impact_functions import get_plugins
 
 from storage.utilities_test import TESTDATA
@@ -1031,6 +1033,315 @@ class Test_Engine(unittest.TestCase):
 
             if not numpy.isnan(interpolated_depth):
                 assert depth_min <= interpolated_depth <= depth_max, msg
+
+    def test_polygon_clipping(self):
+        """Clipping using real polygon and point data from Maumere
+        """
+
+        # Test data
+        polygon_filename = ('%s/test_poly.txt' % TESTDATA)  # Polygon 799
+        points_filename = ('%s/test_points.txt' % TESTDATA)
+
+        # Read
+        polygon = []
+        fid = open(polygon_filename)
+        for line in fid.readlines():
+            fields = line.strip().split(',')
+            polygon.append([float(fields[0]), float(fields[1])])
+        polygon = ensure_numeric(polygon)
+
+        points = []
+        fid = open(points_filename)
+        for line in fid.readlines():
+            fields = line.strip().split(',')
+            points.append([float(fields[0]), float(fields[1])])
+        points = ensure_numeric(points)
+
+        # Clip
+        indices, count = separate_points_by_polygon(points, polygon)
+
+        # Expected number of points inside
+        assert count == 458
+
+        # First 10 inside
+        assert numpy.alltrue(indices[:10] == [2279, 2290, 2297, 2306, 2307,
+                                              2313, 2316, 2319, 2321, 2322])
+
+        # Last 10 outside
+        assert numpy.alltrue(indices[-10:] == [9, 8, 7, 6, 5, 4, 3, 2, 1, 0])
+
+        # Store for viewing in e.g. QGis
+        if False:  # True:
+            Vector(geometry=[polygon]).write_to_file('test_poly.shp')
+            pts_inside = points[indices[:count]]
+            Vector(geometry=pts_inside).write_to_file('test_points_in.shp')
+            pts_outside = points[indices[count:]]
+            Vector(geometry=pts_outside).write_to_file('test_points_out.shp')
+
+    def test_interpolation_from_polygons_one_poly(self):
+        """Interpolation using one polygon from Maumere works
+
+        This is a test for interpolation (issue #48)
+        """
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
+        exposure_filename = ('%s/building_Maumere.shp' % TESTDATA)
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        # Cut down to make test quick
+        # Polygon #799 is the one used in separate test
+        H = Vector(data=H_attributes[799:800],
+                   geometry=H_geometry[799:800],
+                   projection=H.get_projection())
+        #H.write_to_file('MM_799.shp')  # E.g. to view with QGis
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+
+        # Test riab's interpolation function
+        I = H.interpolate(E, name='depth',
+                          attribute=None)  # Take all attributes across
+
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+
+        N = len(I_attributes)
+        assert N == len(E_attributes)
+
+        # Assert that expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+        for name in H_names:
+            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # Verify interpolated values with test result
+        count = 0
+        for i in range(N):
+            category = I_attributes[i]['Catergory']  # The typo is as the data
+            if category is not None:
+                count += 1
+
+        msg = ('Expected 458 points tagged with category, '
+               'but got only %i' % count)
+        assert count == 458, msg
+
+    def test_interpolation_from_polygons1(self):
+        """Interpolation using multiple polygons from Maumere works
+
+        This is a test for interpolation (issue #48)
+        """
+
+        # FIXME (Ole): Really should move this and subsequent tests to
+        #              test_io.py
+
+        # Name file names for hazard and exposure
+        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
+        exposure_filename = ('%s/building_Maumere.shp' % TESTDATA)
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        # Cut down to make test quick
+        #H = Vector(data=H_attributes[658:850],
+        #           geometry=H_geometry[658:850],
+        #           projection=H.get_projection())
+        H = Vector(data=H_attributes,
+                   geometry=H_geometry,
+                   projection=H.get_projection())
+        #H.write_to_file('MM_cut.shp')  # E.g. to view with QGis
+        #print 'Size H', len(H)
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+        #print 'Size E', len(E)
+
+        # Test riab's interpolation function
+        I = H.interpolate(E, name='depth',
+                          attribute=None)  # Take all attributes across
+        #I.write_to_file('MM_res.shp')
+
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+
+        N = len(I_attributes)
+        assert N == len(E_attributes)
+
+        # Assert that expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+        for name in H_names:
+            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # Verify interpolated values with test result
+        counts = {}
+        for i in range(N):
+            attrs = I_attributes[i]
+            msg = ('Did not find default attribute %s in %s'
+                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+            assert DEFAULT_ATTRIBUTE in attrs, msg
+
+            # Count items using default attribute
+            if DEFAULT_ATTRIBUTE not in counts:
+                counts[DEFAULT_ATTRIBUTE] = 0
+            if attrs[DEFAULT_ATTRIBUTE] is True:
+                counts[DEFAULT_ATTRIBUTE] += 1
+
+            # Count items in each specific category
+            category = attrs['Catergory']  # The typo is as the data
+            if category not in counts:
+                counts[category] = 0
+            counts[category] += 1
+
+        if len(H) == 192:
+            msg = ('Expected 100 points tagged with category "High", '
+                   'but got only %i' % counts['High'])
+            assert counts['High'] == 100, msg
+
+            msg = ('Expected 739 points tagged with category "Very High", '
+                   'but got only %i' % counts['Very High'])
+            assert counts['Very High'] == 739, msg
+
+            # Check default attribute too
+            msg = ('Expected 839 points tagged with default attribute "%s", '
+                   'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                        counts[DEFAULT_ATTRIBUTE]))
+            assert counts[DEFAULT_ATTRIBUTE] == 839, msg
+
+        if len(H) == 1032:
+            msg = ('Expected 2258 points tagged with category "High", '
+                   'but got only %i' % counts['High'])
+            assert counts['High'] == 2258, msg
+
+            msg = ('Expected 1190 points tagged with category "Very High", '
+                   'but got only %i' % counts['Very High'])
+            assert counts['Very High'] == 1190, msg
+
+            # Check default attribute too
+            msg = ('Expected 3452 points tagged with default attribute "%s", '
+                   'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                        counts[DEFAULT_ATTRIBUTE]))
+            assert counts[DEFAULT_ATTRIBUTE] == 3452, msg
+
+        #for key in counts:
+        #    print key, counts[key]
+
+    def test_interpolation_from_polygons_one_attribute(self):
+        """Interpolation using multiple polygons works with specified attribute
+
+        This is a test for interpolation (issue #48)
+        """
+
+        # Name file names for hazard and exposure
+        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
+        exposure_filename = ('%s/building_Maumere.shp' % TESTDATA)
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        # Cut down to make test quick
+        H = Vector(data=H_attributes[658:850],
+                   geometry=H_geometry[658:850],
+                   projection=H.get_projection())
+        #H.write_to_file('MM_cut.shp')  # E.g. to view with QGis
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+
+        # Test riab's interpolation function
+        I = H.interpolate(E, name='depth',
+                          attribute='Catergory')  # Spelling is as in test data
+        #I.write_to_file('MM_res.shp')
+
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+
+        N = len(I_attributes)
+        assert N == len(E_attributes)
+
+        # Assert that expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+
+        name = 'Catergory'
+        msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+        assert name in I_names, msg
+
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # Verify interpolated values with test result
+        counts = {}
+        for i in range(N):
+            category = I_attributes[i]['Catergory']  # The typo is as the data
+            if category not in counts:
+                counts[category] = 0
+
+            counts[category] += 1
+
+        msg = ('Expected 100 points tagged with category "High", '
+               'but got only %i' % counts['High'])
+        assert counts['High'] == 100, msg
+
+        msg = ('Expected 739 points tagged with category "Very High", '
+               'but got only %i' % counts['Very High'])
+        assert counts['Very High'] == 739, msg
+
+    def test_interpolation_from_polygons_error_handling(self):
+        """Interpolation using polygons handles input errors as expected
+
+        This catches situation where input data have different projections
+        This is a test for interpolation (issue #48)
+        """
+
+        # Input data
+        hazard_filename = ('%s/tsunami_polygon.shp' % TESTDATA)  # UTM
+        exposure_filename = ('%s/building_Maumere.shp' % TESTDATA)  # GEO
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+
+        # Check projection mismatch is caught
+        try:
+            H.interpolate(E)
+        except AssertionError, e:
+            msg = ('Projection mismatch shoud have been caught: %s'
+                   % str(e))
+            assert 'Projections' in str(e), msg
+        else:
+            msg = 'Should have raised assertError about projection mismatch'
+            raise Exception(msg)
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
