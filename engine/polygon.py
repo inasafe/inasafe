@@ -222,13 +222,18 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
     if len(points.shape) == 1:
         # One point only - make into 1 x 2 array
         points = points[numpy.newaxis, :]
+        one_point = True
+    else:
+        one_point = False
 
     msg = 'Argument points must be either [x, y] or an Nx2 array of points'
     assert len(points.shape) == 2, msg
     assert points.shape[0] > 0, msg
     assert points.shape[1] == 2, msg
+    N = points.shape[0]  # Number of points
 
-    x, y = points[0, :]
+    x = points[:, 0]
+    y = points[:, 1]
     x0, y0 = line[0]
     x1, y1 = line[1]
 
@@ -248,30 +253,30 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
     nominator = abs(a_normal0 * b0 + a_normal1 * b1)
     denominator = b0 * b0 + b1 * b1
 
-    # Determine if line is parallel to point vector up to a tolerance
-    is_parallel = False
-    if denominator != 0.0:
-        # Denominator is not zero (positive) - use relative tolerance
-        if nominator <= rtol * denominator:
-            is_parallel = True
+    # Determine if point vector is parallel to line up to a tolerance
+    is_parallel = numpy.zeros(N, dtype=numpy.bool)  # All False
+    is_parallel[nominator <= atol + rtol * denominator] = True
+
+    # Determine for points parallel to line if they are within end points
+    a0p = a0[is_parallel]
+    a1p = a1[is_parallel]
+
+    len_a = numpy.sqrt(a0p * a0p + a1p * a1p)
+    len_b = numpy.sqrt(b0 * b0 + b1 * b1)
+    cross = a0p * b0 + a1p * b1
+
+    # Initialise result to all False
+    result = numpy.zeros(N, dtype=numpy.bool)
+
+    # Result is True only if a0 * b0 + a1 * b1 >= 0 and len_a <= len_b
+    result[is_parallel] = (cross >= 0) * (len_a <= len_b)
+
+    # Return either boolean scalar or boolean vector
+    if one_point:
+        assert len(result) == 1
+        return result[0]
     else:
-        # Denominator is zero - use absolute tolerance
-        if nominator <= atol:
-            is_parallel = True
-
-    if is_parallel:
-        # Point is somewhere on the infinite extension of the line
-        # subject to specified absolute tolerance
-
-        len_a = sqrt(a0 * a0 + a1 * a1)
-        len_b = sqrt(b0 * b0 + b1 * b1)
-
-        if a0 * b0 + a1 * b1 >= 0 and len_a <= len_b:
-            return True  # Point is within line boundaries
-        else:
-            return False  # Point is outside line boundaries
-    else:
-        return False
+        return result
 
 
 def is_inside_polygon(point, polygon, closed=True):

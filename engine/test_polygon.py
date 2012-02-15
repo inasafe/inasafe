@@ -62,43 +62,53 @@ class Test_Polygon(unittest.TestCase):
         N = 100
         x0 = 0
         x1 = 50
+        x0in = x0 + 5
+        x1in = x1 - 5
         space = numpy.linspace(x0, x1, num=N, endpoint=True)
 
         # First a couple where all points are included
-        horiz_points = numpy.zeros((N, 2), numpy.float64)
-        horiz_points[:, 0] = space
+        h_points = numpy.zeros((N, 2), numpy.float64)
+        h_points[:, 0] = space
         horiz_line = [[x0, 0], [x1, 0]]
-        res = point_on_line(horiz_points, horiz_line)
+        res = point_on_line(h_points, horiz_line)
         assert numpy.alltrue(res)
 
-        vertical_points = numpy.zeros((N, 2), numpy.float64)
-        vertical_points[:, 1] = space
+        v_points = numpy.zeros((N, 2), numpy.float64)
+        v_points[:, 1] = space
         vertical_line = [[0, x0], [0, x1]]
-        res = point_on_line(vertical_points, vertical_line)
+        res = point_on_line(v_points, vertical_line)
         assert numpy.alltrue(res)
 
         # Then some where points are outside
-        horiz_line = [[x0 + 5, 0], [x1 - 5, 0]]
-        #print points
-        #print horiz_line
-        res = point_on_line(horiz_points, horiz_line)
+        horiz_line = [[x0in, 0], [x1in, 0]]
+        res = point_on_line(h_points, horiz_line)
         assert numpy.sometrue(res)
-        # BE MORE SPECIFIC
+        ref = (x0in < h_points[:, 0]) * (h_points[:, 0] < x1in)
+        assert numpy.alltrue(res == ref)
 
-        vertical_line = [[0, x0 + 5], [0, x1 - 5]]
-        res = point_on_line(vertical_points, vertical_line)
-        assert numpy.alltrue(res)
+        vertical_line = [[0, x0in], [0, x1in]]
+        res = point_on_line(v_points, vertical_line)
+        ref = (x0in < v_points[:, 1]) * (v_points[:, 1] < x1in)
+        assert numpy.alltrue(res == ref)
 
         # Diagonal example - all in
         diagonal_line = [[x0, x0], [x1, x1]]
-        diagonal_points = numpy.zeros((N, 2), numpy.float64)
-        diagonal_points[:, 0] = space
-        diagonal_points[:, 1] = space
-        res = point_on_line(diagonal_points, vertical_line)
+        d_points = numpy.zeros((N, 2), numpy.float64)
+        d_points[:, 0] = space
+        d_points[:, 1] = space
+        res = point_on_line(d_points, diagonal_line)
         assert numpy.alltrue(res)
 
+        # Example with all out - all False
+        res = point_on_line(d_points, vertical_line)
+        assert not numpy.sometrue(res)
+
         # Then a more realistic example, diagonal with points outside
-        points = numpy.concatenate((diagonal_points, [[31, 12], [0, 3]]))
+        points = numpy.concatenate((d_points, [[31, 12], [0, 3]]))
+        res = point_on_line(points, diagonal_line)
+        assert numpy.alltrue(res[:N])
+        assert not numpy.sometrue(res[N:])
+
 
     def test_is_inside_polygon_main(self):
         """Points are classified as either inside polygon or not
@@ -1618,6 +1628,6 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(value, [[7, 19], [1, 7]])
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Polygon, 'test') #_point_on_line')
+    suite = unittest.makeSuite(Test_Polygon, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
