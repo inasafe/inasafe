@@ -52,25 +52,53 @@ class Test_Polygon(unittest.TestCase):
         assert point_on_line([40, 19], [[40, 19], [40, 19]])
         assert not point_on_line([40, 19], [[40, 40], [40, 40]])
 
-    def Xtest_point_on_line_vector(self):
+    def test_point_on_line_vector(self):
         """Points coinciding with lines are correctly detected
 
         Vectorised version
         """
 
+        # Common variables
         N = 100
         x0 = 0
         x1 = 50
-        horiz_line = [[x0, 0], [x1, 0]]
         space = numpy.linspace(x0, x1, num=N, endpoint=True)
-        print space, len(space)
 
-        points = numpy.zeros((N, 2), numpy.float64)
-
-        res = point_on_line(points, horiz_line)
+        # First a couple where all points are included
+        horiz_points = numpy.zeros((N, 2), numpy.float64)
+        horiz_points[:, 0] = space
+        horiz_line = [[x0, 0], [x1, 0]]
+        res = point_on_line(horiz_points, horiz_line)
         assert numpy.alltrue(res)
 
+        vertical_points = numpy.zeros((N, 2), numpy.float64)
+        vertical_points[:, 1] = space
+        vertical_line = [[0, x0], [0, x1]]
+        res = point_on_line(vertical_points, vertical_line)
+        assert numpy.alltrue(res)
 
+        # Then some where points are outside
+        horiz_line = [[x0 + 5, 0], [x1 - 5, 0]]
+        #print points
+        #print horiz_line
+        res = point_on_line(horiz_points, horiz_line)
+        assert numpy.sometrue(res)
+        # BE MORE SPECIFIC
+
+        vertical_line = [[0, x0 + 5], [0, x1 - 5]]
+        res = point_on_line(vertical_points, vertical_line)
+        assert numpy.alltrue(res)
+
+        # Diagonal example - all in
+        diagonal_line = [[x0, x0], [x1, x1]]
+        diagonal_points = numpy.zeros((N, 2), numpy.float64)
+        diagonal_points[:, 0] = space
+        diagonal_points[:, 1] = space
+        res = point_on_line(diagonal_points, vertical_line)
+        assert numpy.alltrue(res)
+
+        # Then a more realistic example, diagonal with points outside
+        points = numpy.concatenate((diagonal_points, [[31, 12], [0, 3]]))
 
     def test_is_inside_polygon_main(self):
         """Points are classified as either inside polygon or not
@@ -1590,7 +1618,6 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(value, [[7, 19], [1, 7]])
 
 if __name__ == '__main__':
-    #suite = unittest.makeSuite(Test_Polygon, 'test_point_on_line')
-    suite = unittest.makeSuite(Test_Polygon, 'test')
+    suite = unittest.makeSuite(Test_Polygon, 'test') #_point_on_line')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

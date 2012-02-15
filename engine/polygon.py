@@ -12,7 +12,7 @@ Some more specific or helper functions include:
     point_on_line
 """
 
-import numpy as num
+import numpy
 from math import sqrt
 from random import uniform, seed as seed_function
 
@@ -67,14 +67,14 @@ def separate_points_by_polygon(points, polygon,
         assert isinstance(closed, bool), msg
 
         try:
-            points = ensure_numeric(points, num.float)
+            points = ensure_numeric(points, numpy.float)
         except Exception, e:
             msg = ('Points could not be converted to numeric array: %s'
                    % str(e))
             raise Exception(msg)
 
         try:
-            polygon = ensure_numeric(polygon, num.float)
+            polygon = ensure_numeric(polygon, numpy.float)
         except Exception, e:
             msg = ('Polygon could not be converted to numeric array: %s'
                    % str(e))
@@ -92,7 +92,7 @@ def separate_points_by_polygon(points, polygon,
 
         if len(points.shape) == 1:
             # Only one point was passed in. Convert to array of points.
-            points = num.reshape(points, (1, 2))
+            points = numpy.reshape(points, (1, 2))
 
             msg = ('Point array must have two columns (x,y), '
                    'I got points.shape[1]=%d' % points.shape[0])
@@ -108,7 +108,7 @@ def separate_points_by_polygon(points, polygon,
     N = polygon.shape[0]  # Number of vertices in polygon
     M = points.shape[0]  # Number of points
 
-    indices = num.zeros(M, num.int)
+    indices = numpy.zeros(M, numpy.int)
 
     count = _separate_points_by_polygon(points, polygon, indices,
                                         closed=closed)
@@ -191,11 +191,13 @@ def _separate_points_by_polygon(points, polygon, indices,
     return inside_index
 
 
-def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
+def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
     """Determine whether a point is on a line segment
 
     Input
-        point:  Coordinates given by sequence [x, y]
+        points: Coordinates of either
+                * one point given by sequence [x, y]
+                * multiple points given by list of points or Nx2 array
         line: Endpoint coordinates [[x0, y0], [x1, y1]] or
               the equivalent 2x2 numeric array with each row corresponding
               to a point.
@@ -214,10 +216,19 @@ def point_on_line(point, line, rtol=1.0e-5, atol=1.0e-8):
     """
 
     # Prepare input data
-    point = ensure_numeric(point)
+    points = ensure_numeric(points)
     line = ensure_numeric(line)
 
-    x, y = point
+    if len(points.shape) == 1:
+        # One point only - make into 1 x 2 array
+        points = points[numpy.newaxis, :]
+
+    msg = 'Argument points must be either [x, y] or an Nx2 array of points'
+    assert len(points.shape) == 2, msg
+    assert points.shape[0] > 0, msg
+    assert points.shape[1] == 2, msg
+
+    x, y = points[0, :]
     x0, y0 = line[0]
     x1, y1 = line[1]
 
@@ -329,7 +340,7 @@ def outside_polygon(points, polygon, closed=True):
     # Return indices of points outside polygon
     if count == len(indices):
         # No points are outside
-        return num.array([])
+        return numpy.array([])
     else:
         # Return indices for points outside (reversed)
         return indices[count:][::-1]
@@ -450,8 +461,8 @@ def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
         status == 4: Lines are parallel. Value set to None.
     """
 
-    line0 = ensure_numeric(line0, num.float)
-    line1 = ensure_numeric(line1, num.float)
+    line0 = ensure_numeric(line0, numpy.float)
+    line1 = ensure_numeric(line1, numpy.float)
 
     x0, y0 = line0[0, :]
     x1, y1 = line0[1, :]
@@ -463,9 +474,9 @@ def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
     u0 = (x3 - x2) * (y0 - y2) - (y3 - y2) * (x0 - x2)
     u1 = (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0)
 
-    if num.allclose(denom, 0.0, rtol=rtol, atol=atol):
+    if numpy.allclose(denom, 0.0, rtol=rtol, atol=atol):
         # Lines are parallel - check if they are collinear
-        if num.allclose([u0, u1], 0.0, rtol=rtol, atol=atol):
+        if numpy.allclose([u0, u1], 0.0, rtol=rtol, atol=atol):
             # We now know that the lines are collinear
             state = (point_on_line([x0, y0], line1, rtol=rtol, atol=atol),
                      point_on_line([x1, y1], line1, rtol=rtol, atol=atol),
@@ -486,13 +497,13 @@ def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
         y = y0 + u0 * (y1 - y0)
 
         # Sanity check - can be removed to speed up if needed
-        assert num.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol)
-        assert num.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol)
+        assert numpy.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol)
+        assert numpy.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol)
 
         # Check if point found lies within given line segments
         if 0.0 <= u0 <= 1.0 and 0.0 <= u1 <= 1.0:
             # We have intersection
-            return 1, num.array([x, y])
+            return 1, numpy.array([x, y])
         else:
             # No intersection
             return 0, None
@@ -507,27 +518,27 @@ def lines_dont_coincide(p0, p1, p2, p3):
 
 
 def lines_0_fully_included_in_1(p0, p1, p2, p3):
-    return 2, num.array([p0, p1])
+    return 2, numpy.array([p0, p1])
 
 
 def lines_1_fully_included_in_0(p0, p1, p2, p3):
-    return 2, num.array([p2, p3])
+    return 2, numpy.array([p2, p3])
 
 
 def lines_overlap_same_direction(p0, p1, p2, p3):
-    return 2, num.array([p0, p3])
+    return 2, numpy.array([p0, p3])
 
 
 def lines_overlap_same_direction2(p0, p1, p2, p3):
-    return 2, num.array([p2, p1])
+    return 2, numpy.array([p2, p1])
 
 
 def lines_overlap_opposite_direction(p0, p1, p2, p3):
-    return 2, num.array([p0, p2])
+    return 2, numpy.array([p0, p2])
 
 
 def lines_overlap_opposite_direction2(p0, p1, p2, p3):
-    return 2, num.array([p3, p1])
+    return 2, numpy.array([p3, p1])
 
 
 # This function called when an impossible state is found
