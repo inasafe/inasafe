@@ -53,7 +53,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203 --exclude ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py .
+	@pep8 --repeat --ignore=E203 --exclude ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py . || true
 
 # Run entire test suite
 test_suite: compile testdata
@@ -87,7 +87,7 @@ testdata:
 	@echo "-----------------------------------------------------------"
 	@echo "Updating test data - please hit Enter if asked for password"
 	@echo "-----------------------------------------------------------"
-	@svn co http://www.aifdr.org/svn/riab_test_data
+	@svn co http://www.aifdr.org/svn/riab_test_data ../riab_test_data
 
 disabled_tests:
 	@echo

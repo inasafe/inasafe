@@ -5,8 +5,12 @@ import os
 import types
 import numpy
 
-# Find parent directory to path
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Find parent parent directory to path
+# NOTE: This must match Makefile target testdata
+# FIXME (Ole): Use environment variable for this.
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                      '..',
+                                      '..'))  # Assuming test data two lvls up
 
 # Location of test data
 TESTDATANAME = 'riab_test_data'
