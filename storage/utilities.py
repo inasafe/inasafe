@@ -9,6 +9,9 @@ from tempfile import mkstemp
 from urllib2 import urlopen
 import math
 
+# Default attribute to assign to vector layers
+DEFAULT_ATTRIBUTE = 'Affected'
+
 # Spatial layer file extensions that are recognised in Risiko
 # FIXME: Perhaps add '.gml', '.zip', ...
 LAYER_TYPES = ['.shp', '.asc', '.tif', '.tiff', '.geotif', '.geotiff']
@@ -23,6 +26,7 @@ DRIVER_MAP = {'.shp': 'ESRI Shapefile',
 # FIXME (Ole): I can't find a double precision type for OGR
 TYPE_MAP = {type(None): ogr.OFTString,  # What else should this be?
             type(''): ogr.OFTString,
+            type(True): ogr.OFTInteger,
             type(0): ogr.OFTInteger,
             type(0.0): ogr.OFTReal,
             type(numpy.array([0.0])[0]): ogr.OFTReal,  # numpy.float64
@@ -31,7 +35,7 @@ TYPE_MAP = {type(None): ogr.OFTString,  # What else should this be?
 
 # Miscellaneous auxiliary functions
 def unique_filename(**kwargs):
-    """Create new filename guaranteed not to exist previoously
+    """Create new filename guaranteed not to exist previously
 
     Use mkstemp to create the file, then remove it and return the name
 

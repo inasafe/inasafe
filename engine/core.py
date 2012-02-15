@@ -91,8 +91,20 @@ def calculate_impact(layers, impact_fcn,
 
 
 def check_data_integrity(layer_objects):
-    """Read list of layer objects and verify that that they have correct keywords
-    as well as the same projection and georeferencing.
+    """Check list of layer objects
+
+    Input
+        layer_objects: List of RIAB layer instances
+
+    Output
+        Nothing
+
+    Raises
+        Exceptions for a range of errors
+
+    This function checks that
+    * Layers have correct keywords
+    * That they have the same georeferences
     """
 
     # Link to documentation

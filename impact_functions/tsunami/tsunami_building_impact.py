@@ -63,13 +63,10 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                     count0 += 1
             elif H.is_vector:
                 dep = 0  # Just put something here
-                cat = depth[i]['Catergory']
-                if cat == 'Very High':
+                cat = depth[i]['Affected']
+                if cat is True:
                     affected = 3
                     count3 += 1
-                elif cat == 'High':
-                    affected = 2
-                    count1 += 1
                 else:
                     affected = 1
                     count0 += 1
@@ -86,16 +83,26 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
             population_impact.append(result_dict)
 
         # Create report
-        caption = ('<table border="0" width="320px">'
-                   '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
-                    '   <tr></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '</table>' % ('ketinggian tsunami', 'Jumlah gedung',
-                                  '< 1 m', count0,
-                                  '1 - 3 m', count1,
-                                  '> 3 m', count3))
+        if H.is_raster:
+            caption = ('<table border="0" width="320px">'
+                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+                       '   <tr></tr>'
+                       '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+                       '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+                       '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+                       '</table>' % ('ketinggian tsunami', 'Jumlah gedung',
+                                     '< 1 m', count0,
+                                     '1 - 3 m', count1,
+                                     '> 3 m', count3))
+        else:
+            caption = ('<table border="0" width="320px">'
+                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+                       '   <tr></tr>'
+                       '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+                       '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+                       '</table>' % ('Terdampak oleh tsunami', 'Jumlah gedung',
+                                     'Terdampak', count3,
+                                     'Tidak terdampak', count0))
 
         # Create vector layer and return
         V = Vector(data=population_impact,

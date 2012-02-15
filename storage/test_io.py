@@ -292,6 +292,58 @@ class Test_IO(unittest.TestCase):
             msg = 'Should have raised TypeError'
             raise Exception(msg)
 
+    def test_attribute_types(self):
+        """Different attribute types are handled correctly in vector data
+        """
+
+        # Read a data file
+        layername = 'lembang_schools.shp'
+        filename = '%s/%s' % (TESTDATA, layername)
+        V = read_layer(filename)
+
+        # Make a smaller dataset
+        V_ref = V.get_topN('FLOOR_AREA', 5)
+
+        geometry = V_ref.get_geometry()
+        data = V_ref.get_data()
+        projection = V_ref.get_projection()
+
+        # Create new attributes with a range of types
+        keys = ['None', 'String', 'Boolean', 'Integer', 'Real',
+                'Array 1D', 'Array 2D']
+        values = [None, 'Test', True, 3, 3.14,
+                  numpy.array([2.56]), numpy.array([[6.21]])]
+
+        data = []
+        for i in range(len(geometry)):
+            D = {}
+            for j, key in enumerate(keys):
+                if key == 'Boolean':
+                    # Add a little variation
+                    if i % 2 == 0:
+                        D[key] = not values[j]
+                    else:
+                        D[key] = values[j]
+                else:
+                    D[key] = values[j]
+
+            data.append(D)
+
+        # Create new object from test data
+        V_new = Vector(data=data, projection=projection, geometry=geometry)
+
+        # Write this new object, read it again and check
+        tmp_filename = unique_filename(suffix='.shp')
+        V_new.write_to_file(tmp_filename)
+
+        V_tmp = read_layer(tmp_filename)
+
+        #print V_new.get_data()
+        #print V_tmp.get_data()
+
+        assert V_tmp == V_new
+        assert not V_tmp != V_new
+
     def test_reading_and_writing_of_vector_polygon_data(self):
         """Vector polygon data can be read and written correctly
         """

@@ -5,7 +5,7 @@ import os
 import numpy
 from osgeo import ogr, gdal
 from projection import Projection
-from utilities import DRIVER_MAP, TYPE_MAP
+from utilities import DRIVER_MAP, TYPE_MAP, DEFAULT_ATTRIBUTE
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import get_geometry_type
@@ -175,11 +175,34 @@ class Vector:
         # Check data
         for i, a in enumerate(x):
             for key in a:
-                if a[key] != y[i][key]:
-                    # Not equal, try numerical comparison with tolerances
+                X = a[key]
+                Y = y[i][key]
+                if X != Y:
+                    # Not obviously equal, try some special cases
 
-                    if not numpy.allclose(a[key], y[i][key],
-                                          rtol=rtol, atol=atol):
+                    res = None
+                    try:
+                        # try numerical comparison with tolerances
+                        res = numpy.allclose(X, Y,
+                                             rtol=rtol, atol=atol)
+                    except:
+                        pass
+                    else:
+                        if not res:
+                            return False
+
+                    try:
+                        # Try to cast as booleans. This will take care of
+                        # None, '', True, False, ...
+                        res = (bool(X) is bool(Y))
+                    except:
+                        pass
+                    else:
+                        if not res:
+                            return False
+
+                    if res is None:
+                        # None of the comparisons could be done
                         return False
 
         # Check keywords
@@ -520,12 +543,15 @@ class Vector:
                     actual_field_name = layer_def.GetFieldDefn(j).GetNameRef()
 
                     val = data[i][name]
+
                     if type(val) == numpy.ndarray:
                         # A singleton of type <type 'numpy.ndarray'> works
                         # for gdal version 1.6 but fails for version 1.8
                         # in SetField with error: NotImplementedError:
                         # Wrong number of arguments for overloaded function
                         val = float(val)
+                    elif val is None:
+                        val = ''
 
                     feature.SetField(actual_field_name, val)
 
@@ -750,6 +776,10 @@ class Vector:
                 # Use only requested attribute
                 a[attribute] = None
 
+            # Always create attribute to indicate if point was
+            # inside any of the polygons
+            a[DEFAULT_ATTRIBUTE] = None
+
         # Traverse polygons and assign attributes to points that fall inside
         for i, polygon in enumerate(geom):
             if attribute is None:
@@ -759,10 +789,14 @@ class Vector:
                 # Use only requested attribute
                 poly_attr = {attribute: data[i][attribute]}
 
+            # Assign default attribute to indicate points inside
+            poly_attr[DEFAULT_ATTRIBUTE] = True
+
             # Clip data points by polygons and add polygon attributes
             indices = inside_polygon(points, polygon)
             for k in indices:
                 for key in poly_attr:
+                    # Assign attributes from polygon to points
                     attributes[k][key] = poly_attr[key]
 
         # Create new Vector instance and return

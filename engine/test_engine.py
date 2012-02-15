@@ -10,11 +10,11 @@ sys.path.append(pardir)
 # Import Risk in a Box modules
 from engine.core import calculate_impact
 from engine.interpolation2d import interpolate_raster
-from engine.polygon import Polygon_function, separate_points_by_polygon
+from engine.polygon import separate_points_by_polygon
 from engine.numerics import cdf, erf, ensure_numeric
 from storage.core import read_layer
 
-from storage.utilities import unique_filename
+from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
 from storage.core import write_vector_data
 from storage.core import write_raster_data
 from storage.vector import Vector
@@ -1071,11 +1071,12 @@ class Test_Engine(unittest.TestCase):
         assert numpy.alltrue(indices[-10:] == [9, 8, 7, 6, 5, 4, 3, 2, 1, 0])
 
         # Store for viewing in e.g. QGis
-        if False: #True:
+        if False:  # True:
             Vector(geometry=[polygon]).write_to_file('test_poly.shp')
-            Vector(geometry=points[indices[:count]]).write_to_file('test_points_inside.shp')
-            Vector(geometry=points[indices[count:]]).write_to_file('test_points_outside.shp')
-
+            pts_inside = points[indices[:count]]
+            Vector(geometry=pts_inside).write_to_file('test_points_in.shp')
+            pts_outside = points[indices[count:]]
+            Vector(geometry=pts_outside).write_to_file('test_points_out.shp')
 
     def test_interpolation_from_polygons_one_poly(self):
         """Interpolation using one polygon from Maumere works
@@ -1093,7 +1094,8 @@ class Test_Engine(unittest.TestCase):
         H_geometry = H.get_geometry()
 
         # Cut down to make test quick
-        H = Vector(data=H_attributes[799:800],  # Polygon #799 is the one used in separate test
+        # Polygon #799 is the one used in separate test
+        H = Vector(data=H_attributes[799:800],
                    geometry=H_geometry[799:800],
                    projection=H.get_projection())
         #H.write_to_file('MM_799.shp')  # E.g. to view with QGis
@@ -1131,14 +1133,18 @@ class Test_Engine(unittest.TestCase):
             if category is not None:
                 count += 1
 
-        msg = 'Expected 458 points tagged with category, but got only %i' % count
+        msg = ('Expected 458 points tagged with category, '
+               'but got only %i' % count)
         assert count == 458, msg
 
-    def test_interpolation_from_polygons(self):
+    def test_interpolation_from_polygons1(self):
         """Interpolation using multiple polygons from Maumere works
 
         This is a test for interpolation (issue #48)
         """
+
+        # FIXME (Ole): Really should move this and subsequent tests to
+        #              test_io.py
 
         # Name file names for hazard and exposure
         hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
@@ -1185,25 +1191,42 @@ class Test_Engine(unittest.TestCase):
         # Verify interpolated values with test result
         counts = {}
         for i in range(N):
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            attrs = I_attributes[i]
+            msg = ('Did not find default attribute %s in %s'
+                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+            assert DEFAULT_ATTRIBUTE in attrs, msg
+
+            # Count items using default attribute
+            if DEFAULT_ATTRIBUTE not in counts:
+                counts[DEFAULT_ATTRIBUTE] = 0
+            if attrs[DEFAULT_ATTRIBUTE] is True:
+                counts[DEFAULT_ATTRIBUTE] += 1
+
+            # Count items in each specific category
+            category = attrs['Catergory']  # The typo is as the data
             if category not in counts:
                 counts[category] = 0
-
             counts[category] += 1
 
-        msg = ('Expected 100 points tagged with category "High", but got only %i'
-               % counts['High'])
+        msg = ('Expected 100 points tagged with category "High", '
+               'but got only %i' % counts['High'])
         assert counts['High'] == 100, msg
 
-        msg = ('Expected 739 points tagged with category "Very High", but got only %i'
-               % counts['Very High'])
+        msg = ('Expected 739 points tagged with category "Very High", '
+               'but got only %i' % counts['Very High'])
         assert counts['Very High'] == 739, msg
+
+        # Check default attribute too
+        msg = ('Expected 839 points tagged with default attribute "%s", '
+               'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                    counts[DEFAULT_ATTRIBUTE]))
+        assert counts[DEFAULT_ATTRIBUTE] == 839, msg
 
         #for key in counts:
         #    print key, counts[key]
 
     def test_interpolation_from_polygons_one_attribute(self):
-        """Interpolation using multiple polygons from works with specified attribute
+        """Interpolation using multiple polygons works with specified attribute
 
         This is a test for interpolation (issue #48)
         """
@@ -1260,14 +1283,13 @@ class Test_Engine(unittest.TestCase):
 
             counts[category] += 1
 
-        msg = ('Expected 100 points tagged with category "High", but got only %i'
-               % counts['High'])
+        msg = ('Expected 100 points tagged with category "High", '
+               'but got only %i' % counts['High'])
         assert counts['High'] == 100, msg
 
-        msg = ('Expected 739 points tagged with category "Very High", but got only %i'
-               % counts['Very High'])
+        msg = ('Expected 739 points tagged with category "Very High", '
+               'but got only %i' % counts['Very High'])
         assert counts['Very High'] == 739, msg
-
 
     def test_interpolation_from_polygons_error_handling(self):
         """Interpolation using polygons handles input errors as expected
