@@ -352,7 +352,6 @@ class Test_Polygon(unittest.TestCase):
         assert count == 2
         assert numpy.allclose(indices, [0, 2, 1])
 
-
     def test_separate_points_by_polygon1(self):
         """Set of points is correctly separated according to polygon
         """

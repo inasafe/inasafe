@@ -1156,14 +1156,20 @@ class Test_Engine(unittest.TestCase):
         H_geometry = H.get_geometry()
 
         # Cut down to make test quick
-        H = Vector(data=H_attributes[658:850],
-                   geometry=H_geometry[658:850],
+        #H = Vector(data=H_attributes[658:850],
+        #           geometry=H_geometry[658:850],
+        #           projection=H.get_projection())
+        H = Vector(data=H_attributes,
+                   geometry=H_geometry,
                    projection=H.get_projection())
         #H.write_to_file('MM_cut.shp')  # E.g. to view with QGis
+
+        print 'Size H', len(H)
 
         E = read_layer(exposure_filename)
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
+        print 'Size E', len(E)
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
@@ -1208,19 +1214,35 @@ class Test_Engine(unittest.TestCase):
                 counts[category] = 0
             counts[category] += 1
 
-        msg = ('Expected 100 points tagged with category "High", '
-               'but got only %i' % counts['High'])
-        assert counts['High'] == 100, msg
+        if len(H) == 192:
+            msg = ('Expected 100 points tagged with category "High", '
+                   'but got only %i' % counts['High'])
+            assert counts['High'] == 100, msg
 
-        msg = ('Expected 739 points tagged with category "Very High", '
-               'but got only %i' % counts['Very High'])
-        assert counts['Very High'] == 739, msg
+            msg = ('Expected 739 points tagged with category "Very High", '
+                   'but got only %i' % counts['Very High'])
+            assert counts['Very High'] == 739, msg
 
-        # Check default attribute too
-        msg = ('Expected 839 points tagged with default attribute "%s", '
-               'but got only %i' % (DEFAULT_ATTRIBUTE,
-                                    counts[DEFAULT_ATTRIBUTE]))
-        assert counts[DEFAULT_ATTRIBUTE] == 839, msg
+            # Check default attribute too
+            msg = ('Expected 839 points tagged with default attribute "%s", '
+                   'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                        counts[DEFAULT_ATTRIBUTE]))
+            assert counts[DEFAULT_ATTRIBUTE] == 839, msg
+
+        if len(H) == 1032:
+            msg = ('Expected 2258 points tagged with category "High", '
+                   'but got only %i' % counts['High'])
+            assert counts['High'] == 2258, msg
+
+            msg = ('Expected 1190 points tagged with category "Very High", '
+                   'but got only %i' % counts['Very High'])
+            assert counts['Very High'] == 1190, msg
+
+            # Check default attribute too
+            msg = ('Expected 3452 points tagged with default attribute "%s", '
+                   'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                        counts[DEFAULT_ATTRIBUTE]))
+            assert counts[DEFAULT_ATTRIBUTE] == 3452, msg
 
         #for key in counts:
         #    print key, counts[key]
@@ -1611,6 +1633,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_interpolation_from_polygons1')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

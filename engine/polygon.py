@@ -121,9 +121,6 @@ def separate_points_by_polygon(points, polygon,
 def _separate_points_by_polygon(points, polygon, indices,
                                 closed):
     """Underlying algorithm to partition point according to polygon
-
-    Old C-code converted to Python
-    FIXME(Ole): Refactor into numpy code
     """
 
     # Suppress numpy warnings (as we'll be dividing by zero)
@@ -153,16 +150,13 @@ def _separate_points_by_polygon(points, polygon, indices,
     candidates = numpy.ones(M, dtype=numpy.bool)  # All True initially
 
     # Only work on those that are inside polygon bounding box
-    # FIXME (Ole): TODO this optimisation later
-    #outside_box = (x > maxpx) + (x < minpx) + (y > maxpy) + (y < minpy)
-    #inside_box = -outside_box
-    #ipoints = points[inside_box]
+    outside_box = (x > maxpx) + (x < minpx) + (y > maxpy) + (y < minpy)
+    inside_box = -outside_box
+    candidates *= inside_box
 
+    # FIXME (Ole): Restrict computations to candidates only
     # Find points on polygon boundary
     for i in range(N):
-
-        #if not numpy.sometrue(candidates):
-        #    break
 
         # Loop through polygon vertices
         j = (i + 1) % N
@@ -172,7 +166,7 @@ def _separate_points_by_polygon(points, polygon, indices,
         px_j = polygon[j, 0]
         py_j = polygon[j, 1]
 
-        # Select those that are on the boundary FIXME: restrict to inside box
+        # Select those that are on the boundary
         boundary_points = point_on_line(points,
                                         [[px_i, py_i], [px_j, py_j]],
                                         rtol, atol)
@@ -185,17 +179,8 @@ def _separate_points_by_polygon(points, polygon, indices,
         # Remove boundary point from further analysis
         candidates[boundary_points] = False
 
-    #print 'masih ada', candidates, inside
-
     # Algorithm for finding points inside polygon
     for i in range(N):
-        #print i, j
-
-        #print 'inside', inside
-
-        #if not numpy.sometrue(candidates):
-        #    break
-
         # Loop through polygon vertices
         j = (i + 1) % N
 
