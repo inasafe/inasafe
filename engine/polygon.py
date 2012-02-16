@@ -219,17 +219,9 @@ def _separate_points_by_polygon(points, polygon,
         # and code that depends on this order.
         return numpy.arange(M)[::-1], 0
 
-    # FIXME (Ole): this is just for backwards compatibility
-    inside_index = 0  # Keep track of points inside
-    outside_index = M - 1  # Keep track of points outside (starting from end)
-
-    for k in range(M):
-        if inside[k] == 1:
-            indices[inside_index] = k
-            inside_index += 1
-        else:
-            indices[outside_index] = k
-            outside_index -= 1
+    indices[:inside_index] = numpy.where(inside)[0]  # Indices of inside points
+    # Indices of outside points (reversed...)
+    indices[inside_index:] = numpy.where(1-inside)[0][::-1]
 
     return indices, inside_index
 
