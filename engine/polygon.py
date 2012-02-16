@@ -161,6 +161,10 @@ def _separate_points_by_polygon(points, polygon,
     inside_box = -outside_box
     candidates *= inside_box
 
+    # Don't continue if all points are outside bounding box
+    if not numpy.sometrue(candidates):
+        return numpy.arange(M)[::-1], 0
+
     # FIXME (Ole): Restrict computations to candidates only
     # Find points on polygon boundary
     for i in range(N):
