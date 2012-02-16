@@ -493,6 +493,97 @@ def in_and_outside_polygon(points, polygon, closed=True):
 def clip_lines_by_polygon(lines, polygon,
                           closed=True,
                           check_input=True):
+    """Clip line segments by polygon
+
+    Input:
+       lines - Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
+               where pi and qi are poitn coordinates (x, y).
+               It is also possible to pass in the natural
+               numpy representations.
+       polygon - list of vertices of polygon or the corresponding numpy array
+       closed - (optional) determine whether points on boundary should be
+       regarded as belonging to the polygon (closed = True)
+       or not (closed = False)
+       check_input: Allows faster execution if set to False
+
+    Outputs:
+
+       XXXXXXXXXXXXXXXXXXXX TODO XXXXXXXXXXXXXXXXXXXXXXXXXXX
+       indices: array of same length as points with indices of points falling
+       inside the polygon listed from the beginning and indices of points
+       falling outside listed from the end.
+
+       count: count of points falling inside the polygon
+
+       The indices of points inside are obtained as indices[:count]
+       The indices of points outside are obtained as indices[count:]
+
+    Examples:
+       U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square
+
+       separate_points_by_polygon( [[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
+       will return the indices [0, 2, 1] and count == 2 as only the first
+       and the last point are inside the unit square
+
+    Remarks:
+       The vertices may be listed clockwise or counterclockwise and
+       the first point may optionally be repeated.
+       Polygons do not need to be convex.
+       Polygons can have holes in them and points inside a hole is
+       regarded as being outside the polygon.
+
+    Algorithm is based on work by Darel Finley,
+    http://www.alienryderflex.com/polygon/
+
+    """
+
+    if check_input:
+        # Input checks
+        msg = 'Keyword argument "closed" must be boolean'
+        assert isinstance(closed, bool), msg
+
+        try:
+            points = ensure_numeric(points, numpy.float)
+        except Exception, e:
+            msg = ('Points could not be converted to numeric array: %s'
+                   % str(e))
+            raise Exception(msg)
+
+        try:
+            polygon = ensure_numeric(polygon, numpy.float)
+        except Exception, e:
+            msg = ('Polygon could not be converted to numeric array: %s'
+                   % str(e))
+            raise Exception(msg)
+
+        msg = 'Polygon array must be a 2d array of vertices'
+        assert len(polygon.shape) == 2, msg
+
+        msg = 'Polygon array must have two columns'
+        assert polygon.shape[1] == 2, msg
+
+        msg = ('Points array must be 1 or 2 dimensional. '
+               'I got %d dimensions' % len(points.shape))
+        assert 0 < len(points.shape) < 3, msg
+
+        if len(points.shape) == 1:
+            # Only one point was passed in. Convert to array of points.
+            points = numpy.reshape(points, (1, 2))
+
+            msg = ('Point array must have two columns (x,y), '
+                   'I got points.shape[1]=%d' % points.shape[0])
+            assert points.shape[1] == 2, msg
+
+            msg = ('Points array must be a 2d array. I got %s...'
+                   % str(points[:30]))
+            assert len(points.shape) == 2, msg
+
+            msg = 'Points array must have two columns'
+            assert points.shape[1] == 2, msg
+
+    N = polygon.shape[0]  # Number of vertices in polygon
+    M = points.shape[0]  # Number of points
+
     """
     """
 
