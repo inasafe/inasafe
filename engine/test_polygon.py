@@ -1754,7 +1754,30 @@ class Test_Polygon(unittest.TestCase):
         assert status == 2
         assert numpy.allclose(value, [[7, 19], [1, 7]])
 
+    def test_clip_lines_by_polygon1(self):
+        """Points are classified as either inside polygon or not
+        """
+
+        # Simplest case: Polygon is the unit square
+        polygon = [[0, 0], [1, 0], [1, 1], [0, 1]]
+
+        # Simple horizontal fully intersecting line
+        lines = [[[-1, 0.5], [2, 0.5]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        print inside_line_segments
+        print outside_line_segments
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 0.5], [1, 0.5]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, 0.5], [0, 0.5]],
+                               [[1, 0.5], [2, 0.5]]])
+
+
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Polygon, 'test')
+    suite = unittest.makeSuite(Test_Polygon, 'test_clip')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

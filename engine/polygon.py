@@ -490,6 +490,15 @@ def in_and_outside_polygon(points, polygon, closed=True):
         return  indices[:count], indices[count:][::-1]
 
 
+def clip_lines_by_polygon(lines, polygon,
+                          closed=True,
+                          check_input=True):
+    """
+    """
+
+    msg = 'Not implemented'
+    raise Exception(msg)
+
 #--------------------------------------------------
 # Helper function to generate points inside polygon
 #--------------------------------------------------
