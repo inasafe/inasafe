@@ -1159,6 +1159,8 @@ class Test_Engine(unittest.TestCase):
         #H = Vector(data=H_attributes[658:850],
         #           geometry=H_geometry[658:850],
         #           projection=H.get_projection())
+
+        # Full version
         H = Vector(data=H_attributes,
                    geometry=H_geometry,
                    projection=H.get_projection())
@@ -1204,8 +1206,12 @@ class Test_Engine(unittest.TestCase):
             # Count items using default attribute
             if DEFAULT_ATTRIBUTE not in counts:
                 counts[DEFAULT_ATTRIBUTE] = 0
+                counts['Not ' + DEFAULT_ATTRIBUTE] = 0
+
             if attrs[DEFAULT_ATTRIBUTE] is True:
                 counts[DEFAULT_ATTRIBUTE] += 1
+            else:
+                counts['Not ' + DEFAULT_ATTRIBUTE] += 1
 
             # Count items in each specific category
             category = attrs['Catergory']  # The typo is as the data
@@ -1214,6 +1220,7 @@ class Test_Engine(unittest.TestCase):
             counts[category] += 1
 
         if len(H) == 192:
+            # In case we used cut down version
             msg = ('Expected 100 points tagged with category "High", '
                    'but got only %i' % counts['High'])
             assert counts['High'] == 100, msg
@@ -1228,7 +1235,12 @@ class Test_Engine(unittest.TestCase):
                                         counts[DEFAULT_ATTRIBUTE]))
             assert counts[DEFAULT_ATTRIBUTE] == 839, msg
 
+            msg = 'Affected and not affected does not add up'
+            assert (counts[DEFAULT_ATTRIBUTE] +
+                    counts['Not ' + DEFAULT_ATTRIBUTE]) == len(E), msg
+
         if len(H) == 1032:
+            # The full version
             msg = ('Expected 2258 points tagged with category "High", '
                    'but got only %i' % counts['High'])
             assert counts['High'] == 2258, msg
@@ -1238,10 +1250,20 @@ class Test_Engine(unittest.TestCase):
             assert counts['Very High'] == 1190, msg
 
             # Check default attribute too
-            msg = ('Expected 3452 points tagged with default attribute "%s", '
+            msg = ('Expected 3452 points tagged with default attribute '
+                   '"%s = True", '
                    'but got only %i' % (DEFAULT_ATTRIBUTE,
                                         counts[DEFAULT_ATTRIBUTE]))
             assert counts[DEFAULT_ATTRIBUTE] == 3452, msg
+            msg = ('Expected 76 points tagged with default attribute '
+                   '"%s = True", '
+                   'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                        counts['Not ' + DEFAULT_ATTRIBUTE]))
+            assert counts['Not ' + DEFAULT_ATTRIBUTE] == 76, msg
+
+            msg = 'Affected and not affected does not add up'
+            assert (counts[DEFAULT_ATTRIBUTE] +
+                    counts['Not ' + DEFAULT_ATTRIBUTE]) == len(E), msg
 
         #for key in counts:
         #    print key, counts[key]

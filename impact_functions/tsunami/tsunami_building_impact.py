@@ -27,8 +27,6 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
         H = get_hazard_layer(layers)    # Depth
         E = get_exposure_layer(layers)  # Building locations
 
-        #print 'Number of polygons', len(E)
-
         # Interpolate hazard level to building locations
         Hi = H.interpolate(E)
 
@@ -100,9 +98,11 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+                       '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '</table>' % ('Terdampak oleh tsunami', 'Jumlah gedung',
                                      'Terdampak', count3,
-                                     'Tidak terdampak', count0))
+                                     'Tidak terdampak', count0,
+                                     'Semua', N))
 
         # Create vector layer and return
         V = Vector(data=population_impact,
