@@ -1137,7 +1137,7 @@ class Test_Engine(unittest.TestCase):
                'but got only %i' % count)
         assert count == 458, msg
 
-    def test_interpolation_from_polygons1(self):
+    def test_interpolation_from_polygons_multiple(self):
         """Interpolation using multiple polygons from Maumere works
 
         This is a test for interpolation (issue #48)
