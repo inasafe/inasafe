@@ -221,7 +221,7 @@ def _separate_points_by_polygon(points, polygon,
 
     indices[:inside_index] = numpy.where(inside)[0]  # Indices of inside points
     # Indices of outside points (reversed...)
-    indices[inside_index:] = numpy.where(1-inside)[0][::-1]
+    indices[inside_index:] = numpy.where(1 - inside)[0][::-1]
 
     return indices, inside_index
 
