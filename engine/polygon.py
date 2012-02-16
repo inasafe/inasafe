@@ -212,6 +212,13 @@ def _separate_points_by_polygon(points, polygon,
     numpy.seterr(**original_numpy_settings)
 
     # Record point as either inside or outside
+    inside_index = numpy.sum(inside)  # How many points are inside
+    if inside_index == 0:
+        # Return all indices as points outside
+        # FIXME (Ole): Don't need the reversal anymore, but must update tests
+        # and code that depends on this order.
+        return numpy.arange(M)[::-1], 0
+
     # FIXME (Ole): this is just for backwards compatibility
     inside_index = 0  # Keep track of points inside
     outside_index = M - 1  # Keep track of points outside (starting from end)
