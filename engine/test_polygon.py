@@ -1754,8 +1754,8 @@ class Test_Polygon(unittest.TestCase):
         assert status == 2
         assert numpy.allclose(value, [[7, 19], [1, 7]])
 
-    def test_clip_lines_by_polygon1(self):
-        """Points are classified as either inside polygon or not
+    def test_clip_lines_by_polygon_simple(self):
+        """Simple lines are clipped and classified by polygon
         """
 
         # Simplest case: Polygon is the unit square
@@ -1799,6 +1799,20 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(outside_line_segments,
                               [[[0.5, -1], [0.5, 0]],
                                [[0.5, 1], [0.5, 2]]])
+
+        # Simple vertical line coinciding with polygon edge
+        lines = [[[1, -1], [1, 2]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[1, 0], [1, 1]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[1, -1], [1, 0]],
+                               [[1, 1], [1, 2]]])
+
 
         # Simple sloping fully intersecting line
         lines = [[[-1, 0.0], [2, 1.0]]]
