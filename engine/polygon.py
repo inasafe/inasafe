@@ -597,8 +597,6 @@ def clip_lines_by_polygon(lines, polygon,
             elif status == 2:
                 # Collinear overlapping lines found
                 # Use both ends of common segment
-                # FIXME: Think about this and remember to add test
-                print 'Collinear overlapping lines found'
                 intersections.append(value[0])
                 intersections.append(value[1])
 

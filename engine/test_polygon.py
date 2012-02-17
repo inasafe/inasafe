@@ -1774,6 +1774,19 @@ class Test_Polygon(unittest.TestCase):
                               [[[-1, 0.5], [0, 0.5]],
                                [[1, 0.5], [2, 0.5]]])
 
+        # Simple horizontal line coinciding with polygon edge
+        lines = [[[-1, 1], [2, 1]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 1], [1, 1]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, 1], [0, 1]],
+                               [[1, 1], [2, 1]]])
+
         # Simple vertical fully intersecting line
         lines = [[[0.5, -1], [0.5, 2]]]
 
@@ -1800,6 +1813,18 @@ class Test_Polygon(unittest.TestCase):
                               [[[-1, 0], [0, 1.0/3]],
                                [[1, 2.0/3], [2, 1]]])
 
+        # Simple sloping line coinciding with one edge, intersecting another
+        lines = [[[-1, 0.0], [1, 2.0/3]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 1.0/3], [1, 2.0/3]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, 0], [0, 1.0/3]]])
+
         # Diagonal line intersecting corners
         lines = [[[-1, -1], [2, 2]]]
 
@@ -1812,6 +1837,32 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(outside_line_segments,
                               [[[-1, -1], [0, 0]],
                                [[1, 1], [2, 2]]])
+
+        # Diagonal line intersecting corners - other way
+        lines = [[[-1, 2], [2, -1]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 1], [1, 0]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, 2], [0, 1]],
+                               [[1, 0], [2, -1]]])
+
+        # Diagonal line coinciding with one corner
+        lines = [[[-1, -1], [1, 1]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 0], [1, 1]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, -1], [0, 0]]])
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Polygon, 'test_clip')
