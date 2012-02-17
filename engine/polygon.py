@@ -493,7 +493,7 @@ def clip_lines_by_polygon(lines, polygon,
        polygon - list of vertices of polygon or the corresponding numpy array
        closed - (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
-       or not (closed = False)
+       or not (closed = False) - False is not recommended here
        check_input: Allows faster execution if set to False
 
     Outputs:
@@ -577,18 +577,19 @@ def clip_lines_by_polygon(lines, polygon,
     #    * Determine if it is inside or outside clipping polygon
 
     # FIXME (Ole): Vectorise
+    #print
+    inside_line_segments = []
+    outside_line_segments = []
     for k in range(M):
         # Loop through lines
-        print 'line', lines[k]
+        #print 'line', lines[k]
 
-        intersections = []
+        intersections = list(lines[k])  # Initialise with end points
         for i in range(N):
             # Loop through polygon edges
             j = (i + 1) % N
             edge = [polygon[i, :], polygon[j, :]]
 
-            print 'edge', edge
-            print 'intersection',
             status, value = intersection(lines[k], edge)
             if status == 1:
                 # Genuine intersection found
@@ -597,11 +598,39 @@ def clip_lines_by_polygon(lines, polygon,
                 # Collinear overlapping lines found
                 # Use both ends of common segment
                 # FIXME: Think about this and remember to add test
+                print 'Collinear overlapping lines found'
                 intersections.append(value[0])
                 intersections.append(value[1])
 
+        # Loop through intersections for this line segment
+        #print
+        distances = {}
+        P = len(intersections)
+        for i in range(P):
+            v = lines[k][0] - intersections[i]
+            d = numpy.dot(v, v)
+            #print 'Intersection', i, intersections[i], d
+            distances[d] = intersections[i]  # Don't record duplicates
 
+        # Sort by Schwarzian transform
+        A = zip(distances.keys(), distances.values())
+        A.sort()
+        _, intersections = zip(*A)
 
+        P = len(intersections)
+
+        # Separate segments according to polygon
+        for i in range(P - 1):
+            segment = [intersections[i], intersections[i + 1]]
+            midpoint = (segment[0] + segment[1]) / 2
+            if is_inside_polygon(midpoint, polygon, closed=closed):
+                #print 'Inside', midpoint, segment
+                inside_line_segments.append(segment)
+            else:
+                #print 'Outside', midpoint, segment
+                outside_line_segments.append(segment)
+
+    return inside_line_segments, outside_line_segments
 
 
 #--------------------------------------------------

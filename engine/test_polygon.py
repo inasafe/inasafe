@@ -1767,8 +1767,6 @@ class Test_Polygon(unittest.TestCase):
         inside_line_segments, outside_line_segments = \
             clip_lines_by_polygon(lines, polygon)
 
-        print inside_line_segments
-        print outside_line_segments
         assert numpy.allclose(inside_line_segments,
                               [[[0, 0.5], [1, 0.5]]])
 
@@ -1776,6 +1774,44 @@ class Test_Polygon(unittest.TestCase):
                               [[[-1, 0.5], [0, 0.5]],
                                [[1, 0.5], [2, 0.5]]])
 
+        # Simple vertical fully intersecting line
+        lines = [[[0.5, -1], [0.5, 2]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0.5, 0], [0.5, 1]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[0.5, -1], [0.5, 0]],
+                               [[0.5, 1], [0.5, 2]]])
+
+        # Simple sloping fully intersecting line
+        lines = [[[-1, 0.0], [2, 1.0]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 1.0/3], [1, 2.0/3]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, 0], [0, 1.0/3]],
+                               [[1, 2.0/3], [2, 1]]])
+
+        # Diagonal line intersecting corners
+        lines = [[[-1, -1], [2, 2]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 0], [1, 1]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, -1], [0, 0]],
+                               [[1, 1], [2, 2]]])
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Polygon, 'test_clip')
