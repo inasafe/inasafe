@@ -168,19 +168,12 @@ def _separate_points_by_polygon(points, polygon,
     # FIXME (Ole): Restrict computations to candidates only
     # Find points on polygon boundary
     for i in range(N):
-
-        # Loop through polygon vertices
+        # Loop through polygon edges
         j = (i + 1) % N
-
-        px_i = polygon[i, 0]
-        py_i = polygon[i, 1]
-        px_j = polygon[j, 0]
-        py_j = polygon[j, 1]
+        edge = [polygon[i, :], polygon[j, :]]
 
         # Select those that are on the boundary
-        boundary_points = point_on_line(points,
-                                        [[px_i, py_i], [px_j, py_j]],
-                                        rtol, atol)
+        boundary_points = point_on_line(points, edge, rtol, atol)
 
         if closed:
             inside[boundary_points] = 1
@@ -192,13 +185,10 @@ def _separate_points_by_polygon(points, polygon,
 
     # Algorithm for finding points inside polygon
     for i in range(N):
-        # Loop through polygon vertices
+        # Loop through polygon edges
         j = (i + 1) % N
-
-        px_i = polygon[i, 0]
-        py_i = polygon[i, 1]
-        px_j = polygon[j, 0]
-        py_j = polygon[j, 1]
+        px_i, py_i = polygon[i, :]
+        px_j, py_j = polygon[j, :]
 
         # Intersection formula
         sigma = (y - py_i) / (py_j - py_i) * (px_j - px_i)
@@ -573,7 +563,7 @@ def clip_lines_by_polygon(lines, polygon,
         #assert points.shape[1] == 2, msg
 
     N = polygon.shape[0]  # Number of vertices in polygon
-
+    M = lines.shape[0]  # Number of lines
 
     # Algorithm
     #
@@ -586,12 +576,33 @@ def clip_lines_by_polygon(lines, polygon,
     #    * Calculate its midpoint
     #    * Determine if it is inside or outside clipping polygon
 
+    # FIXME (Ole): Vectorise
+    for k in range(M):
+        # Loop through lines
+        print 'line', lines[k]
 
-    """
-    """
+        intersections = []
+        for i in range(N):
+            # Loop through polygon edges
+            j = (i + 1) % N
+            edge = [polygon[i, :], polygon[j, :]]
 
-    msg = 'Not implemented'
-    raise Exception(msg)
+            print 'edge', edge
+            print 'intersection',
+            status, value = intersection(lines[k], edge)
+            if status == 1:
+                # Genuine intersection found
+                intersections.append(value)
+            elif status == 2:
+                # Collinear overlapping lines found
+                # Use both ends of common segment
+                # FIXME: Think about this and remember to add test
+                intersections.append(value[0])
+                intersections.append(value[1])
+
+
+
+
 
 #--------------------------------------------------
 # Helper function to generate points inside polygon
