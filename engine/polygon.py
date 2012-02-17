@@ -95,16 +95,16 @@ def separate_points_by_polygon(points, polygon,
             # Only one point was passed in. Convert to array of points.
             points = numpy.reshape(points, (1, 2))
 
-            msg = ('Point array must have two columns (x,y), '
-                   'I got points.shape[1]=%d' % points.shape[0])
-            assert points.shape[1] == 2, msg
+        msg = ('Point array must have two columns (x,y), '
+               'I got points.shape[1]=%d' % points.shape[0])
+        assert points.shape[1] == 2, msg
 
-            msg = ('Points array must be a 2d array. I got %s...'
-                   % str(points[:30]))
-            assert len(points.shape) == 2, msg
+        msg = ('Points array must be a 2d array. I got %s...'
+               % str(points[:30]))
+        assert len(points.shape) == 2, msg
 
-            msg = 'Points array must have two columns'
-            assert points.shape[1] == 2, msg
+        msg = 'Points array must have two columns'
+        assert points.shape[1] == 2, msg
 
     N = polygon.shape[0]  # Number of vertices in polygon
     M = points.shape[0]  # Number of points
@@ -508,33 +508,28 @@ def clip_lines_by_polygon(lines, polygon,
 
     Outputs:
 
-       XXXXXXXXXXXXXXXXXXXX TODO XXXXXXXXXXXXXXXXXXXXXXXXXXX
-       indices: array of same length as points with indices of points falling
-       inside the polygon listed from the beginning and indices of points
-       falling outside listed from the end.
+       inside_line_segments: Clipped line segments that are inside polygon
+       outside_line_segments: Clipped line segments that are outside polygon
 
-       count: count of points falling inside the polygon
+    Example:
 
-       The indices of points inside are obtained as indices[:count]
-       The indices of points outside are obtained as indices[count:]
+        U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square
 
-    Examples:
-       U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square
+        # Simple horizontal fully intersecting line
+        lines = [[[-1, 0.5], [2, 0.5]]]
 
-       separate_points_by_polygon( [[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
-       will return the indices [0, 2, 1] and count == 2 as only the first
-       and the last point are inside the unit square
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 0.5], [1, 0.5]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, 0.5], [0, 0.5]],
+                               [[1, 0.5], [2, 0.5]]])
 
     Remarks:
-       The vertices may be listed clockwise or counterclockwise and
-       the first point may optionally be repeated.
-       Polygons do not need to be convex.
-       Polygons can have holes in them and points inside a hole is
-       regarded as being outside the polygon.
-
-    Algorithm is based on work by Darel Finley,
-    http://www.alienryderflex.com/polygon/
-
+       The assumptions listed in separate_points_by_polygon apply
     """
 
     if check_input:
@@ -543,9 +538,9 @@ def clip_lines_by_polygon(lines, polygon,
         assert isinstance(closed, bool), msg
 
         try:
-            points = ensure_numeric(points, numpy.float)
+            lines = ensure_numeric(lines, numpy.float)
         except Exception, e:
-            msg = ('Points could not be converted to numeric array: %s'
+            msg = ('Lines could not be converted to numeric array: %s'
                    % str(e))
             raise Exception(msg)
 
@@ -562,27 +557,35 @@ def clip_lines_by_polygon(lines, polygon,
         msg = 'Polygon array must have two columns'
         assert polygon.shape[1] == 2, msg
 
-        msg = ('Points array must be 1 or 2 dimensional. '
-               'I got %d dimensions' % len(points.shape))
-        assert 0 < len(points.shape) < 3, msg
+        msg = ('Lines array must be 3 dimensional. '
+               'I got %d dimensions' % len(lines.shape))
+        assert len(lines.shape) == 3, msg
 
-        if len(points.shape) == 1:
-            # Only one point was passed in. Convert to array of points.
-            points = numpy.reshape(points, (1, 2))
-
-            msg = ('Point array must have two columns (x,y), '
-                   'I got points.shape[1]=%d' % points.shape[0])
-            assert points.shape[1] == 2, msg
-
-            msg = ('Points array must be a 2d array. I got %s...'
-                   % str(points[:30]))
-            assert len(points.shape) == 2, msg
-
-            msg = 'Points array must have two columns'
-            assert points.shape[1] == 2, msg
+        #msg = ('Point array must have two columns (x,y), '
+        #       'I got points.shape[1]=%d' % points.shape[0])
+        #assert points.shape[1] == 2, msg
+        #
+        #msg = ('Points array must be a 2d array. I got %s...'
+        #       % str(points[:30]))
+        #assert len(points.shape) == 2, msg
+        #
+        #msg = 'Points array must have two columns'
+        #assert points.shape[1] == 2, msg
 
     N = polygon.shape[0]  # Number of vertices in polygon
-    M = points.shape[0]  # Number of points
+
+
+    # Algorithm
+    #
+    # 1: Find all intersection points between line segments and polygon edges
+    # 2: For each line segment
+    #    * Calculate distance from first end point to each intersection point
+    #    * Sort intersection points by distance
+    #    * Cut segment into multiple segments
+    # 3: For each new line segment
+    #    * Calculate its midpoint
+    #    * Determine if it is inside or outside clipping polygon
+
 
     """
     """
