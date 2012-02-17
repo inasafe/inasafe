@@ -1877,6 +1877,22 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(outside_line_segments,
                               [[[-1, -1], [0, 0]]])
 
+        # Very convoluted polygon
+        polygon = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0],
+                   [30, 10], [40, -10]]
+
+        lines = [[[-10, 5, [60, 5]]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 0], [1, 1]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, -1], [0, 0]]])
+
+
     def test_clip_lines_by_polygon_multi(self):
         """Composite lines are clipped and classified by polygon
         """
