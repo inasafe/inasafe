@@ -1881,16 +1881,17 @@ class Test_Polygon(unittest.TestCase):
         polygon = [[0, 0], [10, 10], [15, 5], [20, 10], [25, 0],
                    [30, 10], [40, -10]]
 
-        lines = [[[-10, 5, [60, 5]]]]
+        lines = [[[-10, 6], [60, 6]]]
 
         inside_line_segments, outside_line_segments = \
             clip_lines_by_polygon(lines, polygon)
 
         assert numpy.allclose(inside_line_segments,
-                              [[[0, 0], [1, 1]]])
-
+                              [[[6, 6], [14, 6]], [[16, 6.], [22, 6]],
+                              [[28, 6], [32, 6]]])
         assert numpy.allclose(outside_line_segments,
-                              [[[-1, -1], [0, 0]]])
+                              [[[-10, 6], [6, 6]], [[14, 6], [16, 6]],
+                              [[22, 6], [28, 6]], [[32, 6], [60, 6]]])
 
 
     def test_clip_lines_by_polygon_multi(self):
@@ -1916,6 +1917,6 @@ class Test_Polygon(unittest.TestCase):
                                [[0.5, 1], [0.5, 2]]])
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Polygon, 'test_clip')
+    suite = unittest.makeSuite(Test_Polygon, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
