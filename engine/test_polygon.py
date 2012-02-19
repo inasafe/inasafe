@@ -6,6 +6,7 @@ from math import sqrt, pi
 from numerics import ensure_numeric
 
 from polygon import *
+from utilities import test_polygon, test_lines
 
 
 def linear_function(x, y):
@@ -1938,7 +1939,21 @@ class Test_Polygon(unittest.TestCase):
         """Real roads are clipped by complex polygon
         """
 
-        raise Exception('Belum')
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(test_lines, test_polygon)
+
+        # These lines have compontes both inside and outside
+        assert len(inside_line_segments) > 0
+        assert len(outside_line_segments) > 0
+
+        # Check that midpoints of each segment are correctly placed
+        for seg in inside_line_segments:
+            midpoint = (seg[0] + seg[1]) / 2
+            assert is_inside_polygon(midpoint, test_polygon)
+
+        for seg in outside_line_segments:
+            midpoint = (seg[0] + seg[1]) / 2
+            assert not is_inside_polygon(midpoint, test_polygon)
 
 
 if __name__ == '__main__':
