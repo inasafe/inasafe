@@ -138,7 +138,7 @@
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Didukung oleh AusAID dan World Bank</string>
+            <string>Sponsored by AusAID and World Bank</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="en_GB" sourcelanguage="en_US">
+<!DOCTYPE TS><TS version="2.0" language="en_ZA" sourcelanguage="en_US">
 <context>
     <name>@default</name>
     <message>
-        <location filename="riab.py" line="120"/>
-        <source>Risk In A Box</source>
-        <translation type="obsolete">Risk In A Box</translation>
+        <location filename="riab.py" line="139"/>
+        <source>Show/hide Risk In A Box dock widget</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riab.py" line="119"/>
-        <source>Show/hide Risk In A Box dock widget</source>
+        <location filename="riab.py" line="146"/>
+        <source>Risk in a box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -63,21 +63,6 @@
         <source>Failed to copy keywords file from :
 %s
 to%s: %s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="utilities.py" line="61"/>
-        <source>&lt;span class=&quot;label important&quot;&gt;Problem:&lt;/span&gt; </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="utilities.py" line="64"/>
-        <source>&lt;span class=&quot;label warning&quot;&gt;Traceback:&lt;/span&gt; </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="utilities.py" line="118"/>
-        <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -177,6 +162,21 @@ to%s: %s</source>
         <source>Calculation completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="utilities.py" line="61"/>
+        <source>&lt;span class=&quot;label important&quot;&gt;Problem:&lt;/span&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="64"/>
+        <source>&lt;span class=&quot;label warning&quot;&gt;Traceback:&lt;/span&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="118"/>
+        <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RiabDock</name>
@@ -217,8 +217,8 @@ to%s: %s</source>
     </message>
     <message>
         <location filename="ui_riabdock.ui" line="141"/>
-        <source>Didukung oleh AusAID dan World Bank</source>
-        <translation type="unfinished"></translation>
+        <source>Sponsored by AusAID and World Bank</source>
+        <translation>Funded by AusAID and World Bank</translation>
     </message>
     <message>
         <location filename="ui_riabdock.ui" line="161"/>
@@ -292,14 +292,6 @@ to%s: %s</source>
     <message>
         <location filename="ui_riabhelp.ui" line="25"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Risk In A Box</name>
-    <message>
-        <location filename="riab.py" line="126"/>
-        <source>Hide / Show Dock</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

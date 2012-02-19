@@ -3,8 +3,6 @@
 *~
 docs/build/doctrees
 pydevpath.txt
-.project
-.pydevproject
 .coverage
 .noseids
 .svn

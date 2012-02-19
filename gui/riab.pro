@@ -9,4 +9,4 @@ FORMS = ui_riabdock.ui \
         ui_riabhelp.ui
 
 TRANSLATIONS = i18n/riab_id.ts \
-               i18n/riab_en_us.ts
+               i18n/riab_en_ZA.ts

@@ -32,6 +32,13 @@ from PyQt4.QtGui import QAction, QIcon, QApplication
 
 # Import RIAB modules
 from riabdock import RiabDock
+#see if we can import pydev - see development docs for details
+try:
+    from pydevd import *
+    print 'Remote debugging is enabled.'
+    DEBUG = True
+except Exception, e:
+    print 'Debugging was disabled'
 
 
 def tr(theText):
@@ -75,10 +82,23 @@ class Riab:
 
         # Save reference to the QGIS interface
         self.iface = iface
+        self.setupI18n()
 
-        # See if QGIS wants to override the system locale
-        # and then see if we can get a valid translation file
-        # for whatever locale is effectively being used.
+    def setupI18n(self):
+        """Setup internationalisation for the plugin.
+
+        See if QGIS wants to override the system locale
+        and then see if we can get a valid translation file
+        for whatever locale is effectively being used.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
         myLocalName = None
@@ -88,12 +108,12 @@ class Riab:
             myLocalName = QSettings().value('locale/userLocale',
                                             QVariant('')).toString()
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        myTranslationPath = os.path.join(myRoot, 'i18n',
-                        'riab' + str(myLocalName) + '.qm')
+        myTranslationPath = os.path.join(myRoot, 'gui', 'i18n',
+                        'riab_' + str(myLocalName) + '.qm')
         if os.path.exists(myTranslationPath):
             myTranslator = QTranslator()
             myTranslator.load(myTranslationPath)
-            QCoreApplication.installTranslator(self.translator)
+            QCoreApplication.installTranslator(myTranslator)
 
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
@@ -123,9 +143,7 @@ class Riab:
                         self.showHideDockWidget)
 
         self.iface.addToolBarIcon(self.actionDock)
-        self.iface.addPluginToMenu(
-            QCoreApplication.translate(
-                'Risk In A Box', 'Hide / Show Dock'), self.actionDock)
+        self.iface.addPluginToMenu(tr('Risk in a box'), self.actionDock)
 
         # create dockwidget and tabify it with the legend
         self.dockWidget = RiabDock(self.iface)

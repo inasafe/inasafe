@@ -17,9 +17,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-from qgis.core import QgsApplication
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
+from PyQt4.QtCore import QCoreApplication
 from PyQt4.QtGui import QWidget
 from utilities_test import getQgisTestApp
 
@@ -38,6 +38,21 @@ class RiabTest(unittest.TestCase):
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
         Riab(myIface)
+
+    def test_setupI18n(self):
+        """Gui translations are working."""
+        myUntranslatedString = 'Sponsored by AusAID and World Bank'
+        myExpectedString = 'Funded by AusAID and World Bank'
+        myParent = QWidget()
+        myCanvas = QgsMapCanvas(myParent)
+        myIface = QgisInterface(myCanvas)
+        Riab(myIface)
+        myContext = 'RiabDock'
+        myTranslation = QCoreApplication.translate(
+                                    myContext, myUntranslatedString)
+        myMessage = 'Expected: %s\nGot: %s' % (
+                            myExpectedString, myTranslation)
+        assert myTranslation == myExpectedString, myMessage
 
 if __name__ == '__main__':
     unittest.main()

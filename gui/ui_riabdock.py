@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'ui_riabdock.ui'
 #
-# Created: Tue Jan 31 11:25:36 2012
-#      by: PyQt4 UI code generator 4.8.3
+# Created: Sun Feb 19 23:03:11 2012
+#      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -18,23 +18,28 @@ class Ui_RiabDock(object):
     def setupUi(self, RiabDock):
         RiabDock.setObjectName(_fromUtf8("RiabDock"))
         RiabDock.resize(394, 547)
+        RiabDock.setWindowTitle(QtGui.QApplication.translate("RiabDock", "Risk-In-A-Box", None, QtGui.QApplication.UnicodeUTF8))
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.dockWidgetContents)
         self.gridLayout.setContentsMargins(3, 0, 0, 3)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.grpQuestion = QtGui.QGroupBox(self.dockWidgetContents)
+        self.grpQuestion.setTitle(QtGui.QApplication.translate("RiabDock", "Pertanyaan", None, QtGui.QApplication.UnicodeUTF8))
         self.grpQuestion.setObjectName(_fromUtf8("grpQuestion"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpQuestion)
         self.gridLayout_3.setMargin(0)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
         self.label_6 = QtGui.QLabel(self.grpQuestion)
+        self.label_6.setText(QtGui.QApplication.translate("RiabDock", "Apabila terjadi", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.gridLayout_3.addWidget(self.label_6, 0, 0, 1, 1)
         self.label_7 = QtGui.QLabel(self.grpQuestion)
+        self.label_7.setText(QtGui.QApplication.translate("RiabDock", "Berapa banyak", None, QtGui.QApplication.UnicodeUTF8))
         self.label_7.setObjectName(_fromUtf8("label_7"))
         self.gridLayout_3.addWidget(self.label_7, 2, 0, 1, 1)
         self.label_8 = QtGui.QLabel(self.grpQuestion)
+        self.label_8.setText(QtGui.QApplication.translate("RiabDock", "&Yang mungkin", None, QtGui.QApplication.UnicodeUTF8))
         self.label_8.setObjectName(_fromUtf8("label_8"))
         self.gridLayout_3.addWidget(self.label_8, 5, 0, 1, 1)
         self.cboFunction = QtGui.QComboBox(self.grpQuestion)
@@ -48,6 +53,7 @@ class Ui_RiabDock(object):
         self.gridLayout_3.addWidget(self.cboHazard, 1, 0, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 0, 0, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(self.dockWidgetContents)
+        self.groupBox_2.setTitle(QtGui.QApplication.translate("RiabDock", "Hasil", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
         self.verticalLayout = QtGui.QVBoxLayout(self.groupBox_2)
         self.verticalLayout.setContentsMargins(0, 3, 3, 3)
@@ -68,6 +74,7 @@ class Ui_RiabDock(object):
         self.label_9.setObjectName(_fromUtf8("label_9"))
         self.horizontalLayout_2.addWidget(self.label_9)
         self.label_4 = QtGui.QLabel(self.groupBox_2)
+        self.label_4.setText(QtGui.QApplication.translate("RiabDock", "Sponsored by AusAID and World Bank", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setAlignment(QtCore.Qt.AlignCenter)
         self.label_4.setWordWrap(True)
         self.label_4.setObjectName(_fromUtf8("label_4"))
@@ -77,11 +84,13 @@ class Ui_RiabDock(object):
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.pbnHelp = QtGui.QPushButton(self.dockWidgetContents)
+        self.pbnHelp.setText(QtGui.QApplication.translate("RiabDock", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnHelp.setObjectName(_fromUtf8("pbnHelp"))
         self.horizontalLayout.addWidget(self.pbnHelp)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.pbnRunStop = QtGui.QPushButton(self.dockWidgetContents)
+        self.pbnRunStop.setText(QtGui.QApplication.translate("RiabDock", "Run", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnRunStop.setObjectName(_fromUtf8("pbnRunStop"))
         self.horizontalLayout.addWidget(self.pbnRunStop)
         self.gridLayout.addLayout(self.horizontalLayout, 4, 0, 1, 1)
@@ -99,15 +108,7 @@ class Ui_RiabDock(object):
         RiabDock.setTabOrder(self.pbnRunStop, self.pbnHelp)
 
     def retranslateUi(self, RiabDock):
-        RiabDock.setWindowTitle(QtGui.QApplication.translate("RiabDock", "Risk-In-A-Box", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpQuestion.setTitle(QtGui.QApplication.translate("RiabDock", "Pertanyaan", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("RiabDock", "Apabila terjadi", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("RiabDock", "Berapa banyak", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_8.setText(QtGui.QApplication.translate("RiabDock", "&Yang mungkin", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_2.setTitle(QtGui.QApplication.translate("RiabDock", "Hasil", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("RiabDock", "Didukung oleh AusAID dan World Bank", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnHelp.setText(QtGui.QApplication.translate("RiabDock", "Help", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnRunStop.setText(QtGui.QApplication.translate("RiabDock", "Run", None, QtGui.QApplication.UnicodeUTF8))
+        pass
 
 from PyQt4 import QtWebKit
 import resources_rc
