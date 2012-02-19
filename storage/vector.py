@@ -775,6 +775,7 @@ class Vector:
             # Use centroids, in case of polygons
             X = convert_polygons_to_centroids(X)
         elif X.is_line_data:
+
             # Clip lines to polygon and return centroids
 
             # FIXME (Ole): Need to separate this out, but identify what is
@@ -801,7 +802,9 @@ class Vector:
             #cPickle.dump(lines, fid)
             #fid.close()
             clip_lines_by_polygon(lines, polygon)
-            pass
+
+            msg = 'Line data not yet implemented in interpolation'
+            raise Exception(msg)
 
         msg = ('Vector layer to interpolate to must be point geometry. '
                'I got OGR geometry type %s'

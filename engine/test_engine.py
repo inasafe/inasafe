@@ -1801,6 +1801,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_line_clipping_by_polygon')
+    suite = unittest.makeSuite(Test_Engine, 'test') #_line_clipping_by_polygon')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
