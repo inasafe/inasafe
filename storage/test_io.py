@@ -292,6 +292,72 @@ class Test_IO(unittest.TestCase):
             msg = 'Should have raised TypeError'
             raise Exception(msg)
 
+    def test_vector_class_geometry_types(self):
+        """Admissible geometry types work in vector class
+        """
+
+        # So far the admissible classes are Point, Line and Polygon
+
+
+        test_data = [numpy.array([[122.226889, -8.625599],
+                                  [122.227299, -8.624500],
+                                  [122.227409, -8.624221],
+                                  [122.227536, -8.624059]]),
+                     numpy.array([[122.237129, -8.628637],
+                                  [122.233170, -8.627332],
+                                  [122.231621, -8.626837],
+                                  [122.231021, -8.626557]]),
+                     numpy.array([[122.247938, -8.632926],
+                                  [122.247940, -8.633560],
+                                  [122.247390, -8.636220]])]
+        # Point data
+        v_ref = Vector(geometry=test_data[0])
+        assert v_ref.is_point_data
+        assert v_ref.geometry_type == 1
+
+        tmp_filename = unique_filename(suffix='.shp')
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        assert v_file == v_ref
+        assert v_ref == v_file
+
+        v = Vector(geometry=test_data[0], geometry_type='point')
+        assert v.is_point_data
+        assert v_ref == v
+
+        v = Vector(geometry=test_data[0], geometry_type=1)
+        assert v.is_point_data
+        assert v_ref == v
+
+        # Polygon data
+        v_ref = Vector(geometry=test_data)
+        assert v_ref.is_polygon_data
+        assert v_ref.geometry_type == 3
+
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        assert v_file == v_ref
+        assert v_ref == v_file
+
+        v = Vector(geometry=test_data, geometry_type='polygon')
+        assert v == v_ref
+
+        v = Vector(geometry=test_data, geometry_type=3)
+        assert v == v_ref
+
+        # Line data
+        v_ref = Vector(geometry=test_data, geometry_type='line')
+        assert v_ref.is_line_data
+        assert v_ref.geometry_type == 2
+
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        assert v_file == v_ref
+        assert v_ref == v_file
+
+        v = Vector(geometry=test_data, geometry_type=2)
+        assert v == v_ref
+
     def test_attribute_types(self):
         """Different attribute types are handled correctly in vector data
         """

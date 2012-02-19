@@ -32,6 +32,10 @@ TYPE_MAP = {type(None): ogr.OFTString,  # What else should this be?
             type(numpy.array([0.0])[0]): ogr.OFTReal,  # numpy.float64
             type(numpy.array([[0.0]])[0]): ogr.OFTReal}  # numpy.ndarray
 
+# Map between verbose types and OGR geometry types
+INVERSE_GEOMETRY_TYPE_MAP = {'point': ogr.wkbPoint,
+                             'line': ogr.wkbLineString,
+                             'polygon': ogr.wkbPolygon}
 
 # Miscellaneous auxiliary functions
 def unique_filename(**kwargs):
@@ -455,21 +459,37 @@ def buffered_bounding_box(bbox, resolution):
     return bbox
 
 
-def get_geometry_type(geometry):
+def get_geometry_type(geometry, geometry_type):
     """Determine geometry type based on data
 
     Input
         geometry: A list of either point coordinates [lon, lat] or polygons
                   which are assumed to be numpy arrays of coordinates
+        geometry_type: Optional type - 'point', 'line', 'polygon' or None
 
     Output
-        geometry_type: Either ogr.wkbPoint or ogr.wkbPolygon
+        geometry_type: Either ogr.wkbPoint, ogr.wkbLineString or ogr.wkbPolygon
 
     If geometry type cannot be determined an Exception is raised.
 
     Note, there is no consistency check across all entries of the
     geometry list, only the first element is used in this determination.
     """
+
+    # FIXME (Ole): Perhaps use OGR's own symbols
+    msg = ('Argument geometry_type must be either "point", "line", '
+           '"polygon" or None')
+    assert (geometry_type is None or
+            geometry_type in [1, 2, 3] or
+            geometry_type.lower() in ['point', 'line', 'polygon']), msg
+
+    if geometry_type is not None:
+        if isinstance(geometry_type, basestring):
+            return INVERSE_GEOMETRY_TYPE_MAP[geometry_type.lower()]
+        else:
+            return geometry_type
+        # FIXME (Ole): Should add some additional checks to see if choice
+        #              makes sense
 
     msg = 'Argument geometry must be a sequence. I got %s ' % type(geometry)
     assert is_sequence(geometry), msg

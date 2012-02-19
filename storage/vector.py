@@ -23,6 +23,7 @@ class Vector:
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
+                 geometry_type=None,
                  name='', keywords=None, style_info=None):
         """Initialise object with either geometry or filename
 
@@ -35,6 +36,10 @@ class Vector:
             projection: Geospatial reference in WKT format.
                         Only used if geometry is provide as a numeric array,
             geometry: A list of either point coordinates or polygons
+            geometry_type: Desired interpretation of geometry.
+                           Valid options are 'point', 'line', 'polygon' or
+                           the ogr types: 1, 2, 3
+                           If None, a geometry_type will be inferred
             name: Optional name for layer.
                   Only used if geometry is provide as a numeric array
             keywords: Optional dictionary with keywords that describe the
@@ -99,20 +104,27 @@ class Vector:
             assert is_sequence(geometry), msg
             self.geometry = geometry
 
-            self.geometry_type = get_geometry_type(geometry)
+            self.geometry_type = get_geometry_type(geometry, geometry_type)
 
             #msg = 'Projection must be specified'
             #assert projection is not None, msg
             self.projection = Projection(projection)
 
-            self.data = data
-            if data is not None:
-                msg = 'Data must be a sequence'
-                assert is_sequence(data), msg
+            if data is None:
+                # Generate default attribute as OGR will do that anyway
+                # when writing
+                data = []
+                for i in range(len(geometry)):
+                    data.append({'ID': i})
 
-                msg = ('The number of entries in geometry and data '
-                       'must be the same')
-                assert len(geometry) == len(data), msg
+            # Check data
+            self.data = data
+            msg = 'Data must be a sequence'
+            assert is_sequence(data), msg
+
+            msg = ('The number of entries in geometry and data '
+                   'must be the same')
+            assert len(geometry) == len(data), msg
 
             # FIXME: Need to establish extent here
 
@@ -148,62 +160,86 @@ class Vector:
                    ' as its type is %s ' % (str(other), type(other)))
             raise TypeError(msg)
 
+        # Check number of features match
+        if len(self) != len(other):
+            return False
+
         # Check projection
         if self.projection != other.projection:
             return False
 
-        # Check geometry
-        if not numpy.allclose(self.get_geometry(),
-                              other.get_geometry(),
-                              rtol=rtol, atol=atol):
+        # Check geometry type
+        if self.geometry_type != other.geometry_type:
             return False
+
+        # Check geometry
+        geom0 = self.get_geometry()
+        geom1 = other.get_geometry()
+        if len(geom0) != len(geom1):
+            return False
+
+        if self.is_point_data:
+            if not numpy.allclose(geom0, geom1,
+                                  rtol=rtol, atol=atol):
+                return False
+        else:
+            # Line or Polygon data
+            for i in range(len(geom0)):
+                if not numpy.allclose(geom0[i], geom1[i],
+                                      rtol=rtol, atol=atol):
+                    return False
 
         # Check keys
         x = self.get_data()
         y = other.get_data()
 
-        for key in x[0]:
-            for i in range(len(y)):
-                if key not in y[i]:
-                    return False
-
-        for key in y[0]:
-            for i in range(len(x)):
-                if key not in x[i]:
-                    return False
-
-        # Check data
-        for i, a in enumerate(x):
-            for key in a:
-                X = a[key]
-                Y = y[i][key]
-                if X != Y:
-                    # Not obviously equal, try some special cases
-
-                    res = None
-                    try:
-                        # try numerical comparison with tolerances
-                        res = numpy.allclose(X, Y,
-                                             rtol=rtol, atol=atol)
-                    except:
-                        pass
-                    else:
-                        if not res:
-                            return False
-
-                    try:
-                        # Try to cast as booleans. This will take care of
-                        # None, '', True, False, ...
-                        res = (bool(X) is bool(Y))
-                    except:
-                        pass
-                    else:
-                        if not res:
-                            return False
-
-                    if res is None:
-                        # None of the comparisons could be done
+        if x is None:
+            if y is not None:
+                return False
+        else:
+            for key in x[0]:
+                for i in range(len(y)):
+                    if key not in y[i]:
                         return False
+
+            for key in y[0]:
+                for i in range(len(x)):
+                    if key not in x[i]:
+                        return False
+
+            # Check data
+            for i, a in enumerate(x):
+                for key in a:
+                    X = a[key]
+                    Y = y[i][key]
+
+                    if X != Y:
+                        # Not obviously equal, try some special cases
+
+                        res = None
+                        try:
+                            # try numerical comparison with tolerances
+                            res = numpy.allclose(X, Y,
+                                                 rtol=rtol, atol=atol)
+                        except:
+                            pass
+                        else:
+                            if not res:
+                                return False
+
+                        try:
+                            # Try to cast as booleans. This will take care of
+                            # None, '', True, False, ...
+                            res = (bool(X) is bool(Y))
+                        except:
+                            pass
+                        else:
+                            if not res:
+                                return False
+
+                        if res is None:
+                            # None of the comparisons could be done
+                            return False
 
         # Check keywords
         if self.keywords != other.keywords:
@@ -526,6 +562,9 @@ class Vector:
             elif self.geometry_type == ogr.wkbPolygon:
                 wkt = array2wkt(geometry[i], geom_type='POLYGON')
                 geom = ogr.CreateGeometryFromWkt(wkt)
+            elif self.geometry_type == ogr.wkbLineString:
+                wkt = array2wkt(geometry[i], geom_type='LINESTRING')
+                geom = ogr.CreateGeometryFromWkt(wkt)
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
                 raise Exception(msg)
@@ -624,11 +663,13 @@ class Vector:
 
         geometry type     output type
         -----------------------------
-        point             coordinates (Nx2 array of longitudes and latitudes)
-        line              TODO
+        point             list of 2x1 array of longitudes and latitudes)
+        line              list of arrays of coordinates
         polygon           list of arrays of coordinates
 
         """
+
+        # FIXME (Ole): Do some checking
         return self.geometry
 
     def get_projection(self, proj4=False):
