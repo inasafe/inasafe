@@ -527,12 +527,13 @@ def clip_lines_by_polygon(lines, polygon,
         msg = 'Keyword argument "closed" must be boolean'
         assert isinstance(closed, bool), msg
 
-        try:
-            lines = ensure_numeric(lines, numpy.float)
-        except Exception, e:
-            msg = ('Lines could not be converted to numeric array: %s'
-                   % str(e))
-            raise Exception(msg)
+        for i in range(len(lines)):
+            try:
+                lines[i] = ensure_numeric(lines[i], numpy.float)
+            except Exception, e:
+                msg = ('Line could not be converted to numeric array: %s'
+                       % str(e))
+                raise Exception(msg)
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
@@ -547,23 +548,13 @@ def clip_lines_by_polygon(lines, polygon,
         msg = 'Polygon array must have two columns'
         assert polygon.shape[1] == 2, msg
 
-        msg = ('Lines array must be 3 dimensional. '
-               'I got %d dimensions' % len(lines.shape))
-        assert len(lines.shape) == 3, msg
-
-        #msg = ('Point array must have two columns (x,y), '
-        #       'I got points.shape[1]=%d' % points.shape[0])
-        #assert points.shape[1] == 2, msg
-        #
-        #msg = ('Points array must be a 2d array. I got %s...'
-        #       % str(points[:30]))
-        #assert len(points.shape) == 2, msg
-        #
-        #msg = 'Points array must have two columns'
-        #assert points.shape[1] == 2, msg
+        for line in lines:
+            msg = ('Each line segment must be 2 dimensional. '
+                   'I got %d dimensions' % len(line.shape))
+            assert len(line.shape) == 2, msg
 
     N = polygon.shape[0]  # Number of vertices in polygon
-    M = lines.shape[0]  # Number of lines
+    M = len(lines)  # Number of lines
 
     # Algorithm
     #
