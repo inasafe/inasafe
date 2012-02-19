@@ -28,14 +28,24 @@ from PyQt4.QtCore import (QObject,
                           Qt,
                           QSettings,
                           QVariant)
-
 from PyQt4.QtGui import QAction, QIcon, QApplication
 
 # Import RIAB modules
 from riabdock import RiabDock
 
-# ..todo:: Find out how to suppress warnings as this import is needed
-#          but not used directly.
+
+def tr(theText):
+    """We define a tr() alias here since the Riab class below
+    does not inherit from QObject.
+    .. note:: see http://tinyurl.com/pyqt-differences
+    Args:
+       theText - string to be translated
+    Returns:
+       Translated version of the given string if available, otherwise
+       the original string.
+    """
+    myContext = "Riab"
+    return QCoreApplication.translate(myContext, theText)
 
 
 class Riab:
@@ -79,7 +89,7 @@ class Riab:
                                             QVariant('')).toString()
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'i18n',
-                        'rastertransparency_' + str(myLocalName) + '.qm')
+                        'riab' + str(myLocalName) + '.qm')
         if os.path.exists(myTranslationPath):
             myTranslator = QTranslator()
             myTranslator.load(myTranslationPath)
@@ -105,10 +115,8 @@ class Riab:
         # Create action for plugin dockable window (show/hide)
         self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
                                   'Risk In A Box', self.iface.mainWindow())
-        self.actionDock.setStatusTip(QCoreApplication.translate(
-                'Risk In A Box', 'Show/hide Risk In A Box dock widget'))
-        self.actionDock.setWhatsThis(QCoreApplication.translate(
-                'Risk In A Box', 'Show/hide Risk In A Box dock widget'))
+        self.actionDock.setStatusTip(tr('Show/hide Risk In A Box dock widget'))
+        self.actionDock.setWhatsThis(tr('Show/hide Risk In A Box dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
         QObject.connect(self.actionDock, SIGNAL('triggered()'),

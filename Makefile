@@ -31,6 +31,13 @@ compile:
 docs: compile
 	cd docs; make html; cd ..
 
+#Qt .ts file updates - run to register new strings for translation in gui
+ts: compile
+	cd gui; pylupdate4 riab.pro; cd ..
+
+qm: compile
+	cd gui; lrelease riab.pro; cd ..
+
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors

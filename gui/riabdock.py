@@ -259,7 +259,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             myExposureFunction = str(self.getExposureLayer().source())
             myExposureKeywords = self.calculator.getKeywordFromFile(
                                                             myExposureFunction)
-            myMessage = ('<span class="label important">No valid functions:'
+            myMessage = self.tr('<span class="label important">No valid '
+                         'functions:'
                          '</span> No functions are available for the inputs '
                          'you have specified. '
                          'Try selecting a different combination of inputs. '
@@ -272,7 +273,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                                 myExposureFunction, myExposureKeywords))
             return (False, myMessage)
         else:
-            myMessage = ('<span class="label success">Ready:</span> '
+            myMessage = self.tr('<span class="label success">Ready:</span> '
             'You can now proceed to run your model by clicking the <em> '
             'Run</em> button.')
             return (True, myMessage)
@@ -463,15 +464,15 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
         # Read layer
         if engineImpactLayer.is_vector:
-            qgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+            myQgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
         elif engineImpactLayer.is_raster:
-            qgisLayer = QgsRasterLayer(myFilename, myName)
+            myQgisLayer = QgsRasterLayer(myFilename, myName)
 
         # Verify that new qgis layer is valid
-        if qgisLayer.isValid():
-            return qgisLayer
+        if myQgisLayer.isValid():
+            return myQgisLayer
         else:
-            msg = 'Loaded impact layer "%s" is not valid' % myFilename
+            msg = self.tr('Loaded impact layer "%s" is not valid' % myFilename)
             raise Exception(msg)
 
     def getHazardLayer(self):
@@ -516,7 +517,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            msg = ('<p><span class="label important">Error:</span> '
+            msg = self.tr('<p><span class="label important">Error:</span> '
                    'An exception occurred when creating layer '
                    'subsets clipped to the optimal extent: %s</p>' %
                    ((str(e))))
@@ -546,8 +547,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            msg = 'An exception occurred when starting the model: %s' % (
-                    (str(e)))
+            msg = self.tr('An exception occurred when starting the model:'
+                          ' %s' % ((str(e))))
             self.displayHtml(msg)
 
     def completed(self):
@@ -584,7 +585,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         engineImpactLayer = self.runner.impactLayer()
 
         if engineImpactLayer is None:
-            msg = ('No impact layer was calculated. '
+            msg = self.tr('No impact layer was calculated. '
                    'Error message: %s\n' % str(myMessage))
             raise Exception(msg)
 
@@ -615,7 +616,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                 setRasterStyle(qgisImpactLayer, myStyle)
 
         else:
-            msg = ('Impact layer %s was neither a raster or a '
+            msg = self.tr('Impact layer %s was neither a raster or a '
                    'vector layer' % qgisImpactLayer.source())
             raise Exception(msg)
 
@@ -635,7 +636,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         """A helper function to indicate the plugin is processing."""
         #self.pbnRunStop.setText('Cancel')
         self.pbnRunStop.setEnabled(False)
-        myHtml = ('<div><span class="label success">'
+        myHtml = self.tr('<div><span class="label success">'
                    'Analyzing this question...</span></div>'
                    '<div><img src="qrc:/plugins/riab/ajax-loader.gif" />'
                    '</div>')
@@ -714,7 +715,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                                            myExposureGeoExtent,
                                            myViewportGeoExtent)
         except Exception, e:
-            msg = ('<p>There '
+            msg = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
                    'and / or the layers and the viewport. Please select '
                    'two overlapping layers and zoom or pan to them. Full '
@@ -776,7 +777,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         else:
             # Hazard layer is vector
             if myExposureLayer.type() == QgsMapLayer.RasterLayer:
-                msg = 'Raster exposure with vector hazard not implemented'
+                msg = self.tr('Raster exposure with vector hazard not '
+                              'implemented')
                 raise Exception(msg)
             else:
                 # Both layers are vector

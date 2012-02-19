@@ -21,11 +21,8 @@ import os
 import numpy
 import unittest
 
-from qgis.core import (QgsApplication,
-                       QgsRectangle,
-                       QgsVectorLayer,
-                       QgsRasterLayer,
-                       QgsMapLayerRegistry)
+from qgis.core import (QgsVectorLayer,
+                       QgsRasterLayer)
 
 from storage.core import read_layer
 from riabclipper import clipLayer, extentToKml

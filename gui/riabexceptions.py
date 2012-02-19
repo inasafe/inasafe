@@ -52,5 +52,5 @@ class StyleInfoNotFoundException(Exception):
 
 class InvalidParameterException(Exception):
     """Custom exception for when an invalid parameter is
-    passed to a functio."""
+    passed to a function."""
     pass
