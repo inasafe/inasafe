@@ -15,7 +15,6 @@ from vector import convert_polygons_to_centroids
 from projection import Projection
 from projection import DEFAULT_PROJECTION
 from core import read_layer
-from core import write_vector_data
 from core import write_raster_data
 from utilities import unique_filename
 from utilities import write_keywords
@@ -167,10 +166,12 @@ class Test_IO(unittest.TestCase):
             # FIXME (Ole): I would like to use gml here, but OGR does not
             #              store the spatial reference! Ticket #18
             out_filename = unique_filename(suffix='.shp')
-            write_vector_data(attributes, wkt, coords, out_filename)
+            Vector(geometry=coords, data=attributes, projection=wkt,
+                   geometry_type='point').write_to_file(out_filename)
 
             # Read again and check
             layer = read_layer(out_filename)
+            assert layer.is_point_data
             coords = numpy.array(layer.get_geometry())
             attributes = layer.get_data()
 
@@ -495,10 +496,12 @@ class Test_IO(unittest.TestCase):
         # FIXME (Ole): I would like to use gml here, but OGR does not
         #              store the spatial reference! Ticket #18
         out_filename = unique_filename(suffix='.shp')
-        write_vector_data(attributes, wkt, geometry, out_filename)
+        Vector(geometry=geometry, data=attributes, projection=wkt,
+               geometry_type='polygon').write_to_file(out_filename)
 
         # Read again and check
         layer = read_layer(out_filename)
+        assert layer.is_polygon_data
         geometry_new = layer.get_geometry()
         attributes_new = layer.get_data()
 
@@ -1680,10 +1683,12 @@ class Test_IO(unittest.TestCase):
         # FIXME (Ole): I would like to use gml here, but OGR does not
         #              store the spatial reference! Ticket #18
         out_filename = unique_filename(suffix='.shp')
-        write_vector_data(attributes, wkt, geometry, out_filename)
+        Vector(geometry=geometry, data=attributes, projection=wkt,
+               geometry_type='line').write_to_file(out_filename)
 
         # Read again and check
         layer = read_layer(out_filename)
+        assert layer.is_line_data
         geometry_new = layer.get_geometry()
         attributes_new = layer.get_data()
 
