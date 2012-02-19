@@ -1,4 +1,5 @@
 import unittest
+import cPickle
 import numpy
 import sys
 import os
@@ -10,7 +11,8 @@ sys.path.append(pardir)
 # Import Risk in a Box modules
 from engine.core import calculate_impact
 from engine.interpolation2d import interpolate_raster
-from engine.polygon import separate_points_by_polygon
+from engine.polygon import separate_points_by_polygon, clip_lines_by_polygon
+from engine.polygon import is_inside_polygon
 from engine.numerics import cdf, erf, ensure_numeric
 from storage.core import read_layer
 
@@ -1079,7 +1081,7 @@ class Test_Engine(unittest.TestCase):
             Vector(geometry=pts_outside).write_to_file('test_points_out.shp')
 
     def test_interpolation_from_polygons_one_poly(self):
-        """Interpolation using one polygon from Maumere works
+        """Point interpolation using one polygon from Maumere works
 
         This is a test for interpolation (issue #48)
         """
@@ -1138,7 +1140,7 @@ class Test_Engine(unittest.TestCase):
         assert count == 458, msg
 
     def test_interpolation_from_polygons_multiple(self):
-        """Interpolation using multiple polygons from Maumere works
+        """Point interpolation using multiple polygons from Maumere works
 
         This is a test for interpolation (issue #48)
         """
@@ -1269,7 +1271,7 @@ class Test_Engine(unittest.TestCase):
         #    print key, counts[key]
 
     def test_interpolation_from_polygons_one_attribute(self):
-        """Interpolation using multiple polygons works with specified attribute
+        """Point interpolation from multiple polygons works with attribute
 
         This is a test for interpolation (issue #48)
         """
@@ -1364,6 +1366,151 @@ class Test_Engine(unittest.TestCase):
         else:
             msg = 'Should have raised assertError about projection mismatch'
             raise Exception(msg)
+
+    def test_line_clipping_by_polygon(self):
+        """Multiple lines are clipped correctly by complex polygon
+        """
+
+        # Test data
+        polygon_filename = ('%s/test_poly.txt' % TESTDATA)  # Polygon 799  (520 x 2)
+        lines_filename = ('%s/test_lines.pck' % TESTDATA)  # 156 composite lines
+
+        # Read
+        test_polygon = []
+        fid = open(polygon_filename)
+        for line in fid.readlines():
+            fields = line.strip().split(',')
+            test_polygon.append([float(fields[0]), float(fields[1])])
+        test_polygon = ensure_numeric(test_polygon)
+
+        fid = open(lines_filename)
+        test_lines = cPickle.load(fid)
+        fid.close()
+
+        # Clip
+        #for i in range(len(lines)):
+        #    inside_line_segments, outside_line_segments = \
+        #        clip_lines_by_polygon([lines[i]], polygon)
+        #
+        #    if len(inside_line_segments) > 0:
+        #        print
+        #        print 'Found', i, len(lines[i]), len(outside_line_segments)
+        #
+        #        print
+        #        print 'Line'
+        #        for j in range(lines[i].shape[0]):
+        #            print '[%f, %f], ' % (lines[i][j, 0], lines[i][j, 1])
+        #        print
+
+        # Clip
+
+        # FIXME (Ole): This is to debug intersection algorithm
+        #inside_line_segments, outside_line_segments, intersections = \
+        #    clip_lines_by_polygon(test_lines, test_polygon)
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(test_lines, test_polygon)
+
+        # These lines have compontes both inside and outside
+        assert len(inside_line_segments) > 0
+        assert len(outside_line_segments) > 0
+
+        # Check that midpoints of each segment are correctly placed
+        inside_centroids = []
+        for seg in inside_line_segments:
+            midpoint = (seg[0] + seg[1]) / 2
+            inside_centroids.append(midpoint)
+            assert is_inside_polygon(midpoint, test_polygon)
+
+        outside_centroids = []
+        for seg in outside_line_segments:
+            midpoint = (seg[0] + seg[1]) / 2
+            outside_centroids.append(midpoint)
+            assert not is_inside_polygon(midpoint, test_polygon)
+
+        # Store as shape files for visual inspection e.g. by QGis
+        P = Vector(geometry=[test_polygon])
+        P.write_to_file('test_polygon.shp')  # E.g. to view with QGis
+
+        L = Vector(geometry=test_lines, geometry_type='line')
+        L.write_to_file('test_lines.shp')  # E.g. to view with QGis
+
+        L = Vector(geometry=inside_line_segments, geometry_type='line')
+        L.write_to_file('inside_lines.shp')  # E.g. to view with QGis
+
+        L = Vector(geometry=outside_line_segments, geometry_type='line')
+        L.write_to_file('outside_lines.shp')  # E.g. to view with QGis
+
+        L = Vector(geometry=inside_centroids, geometry_type='point')
+        L.write_to_file('inside_centroids.shp')  # E.g. to view with QGis
+
+        L = Vector(geometry=outside_centroids, geometry_type='point')
+        L.write_to_file('outside_centroids.shp')  # E.g. to view with QGis
+
+        # FIXME: Debug
+        #L = Vector(geometry=intersections, geometry_type='point')
+        #L.write_to_file('intersections.shp')  # E.g. to view with QGis
+
+
+        # Check a few against visual inspection
+
+    def test_line_interpolation_from_polygons_one_poly(self):
+        """Line clipping and interpolation using one polygon works
+
+        This is a test for road interpolation (issue #55)
+        """
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
+        exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        # Cut down to polygon #799 to make test quick
+        H = Vector(data=H_attributes[799:800],
+                   geometry=H_geometry[799:800],
+                   projection=H.get_projection())
+        #H.write_to_file('MM_799.shp')  # E.g. to view with QGis
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+
+        # Test riab's interpolation function
+        I = H.interpolate(E, name='depth',
+                          attribute=None)  # Take all attributes across
+
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+
+        N = len(I_attributes)
+        assert N == len(E_attributes)
+
+        # Assert that expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+        for name in H_names:
+            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # Verify interpolated values with test result
+        count = 0
+        for i in range(N):
+            category = I_attributes[i]['Catergory']  # The typo is as the data
+            if category is not None:
+                count += 1
+
+        #msg = ('Expected 458 points tagged with category, '
+        #       'but got only %i' % count)
+        #assert count == 458, msg
+
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
@@ -1654,6 +1801,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_line_clipping_by_polygon')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

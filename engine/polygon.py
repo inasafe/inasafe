@@ -571,6 +571,7 @@ def clip_lines_by_polygon(lines, polygon,
     #print
     inside_line_segments = []
     outside_line_segments = []
+    final_intersections = []   # TEMP
     for k in range(M):
         # Loop through lines
         #print 'line', lines[k]
@@ -590,6 +591,10 @@ def clip_lines_by_polygon(lines, polygon,
                 # Use both ends of common segment
                 intersections.append(value[0])
                 intersections.append(value[1])
+            else:
+                pass
+                #print status, value
+        final_intersections += intersections
 
         # Loop through intersections for this line segment
         #print
@@ -619,6 +624,7 @@ def clip_lines_by_polygon(lines, polygon,
                 #print 'Outside', midpoint, segment
                 outside_line_segments.append(segment)
 
+    #return inside_line_segments, outside_line_segments, final_intersections
     return inside_line_segments, outside_line_segments
 
 
