@@ -14,7 +14,7 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
-from engine.polygon import inside_polygon
+from engine.polygon import inside_polygon, clip_lines_by_polygon
 from engine.numerics import ensure_numeric
 
 
@@ -770,9 +770,38 @@ class Vector:
         assert self.is_polygon_data, msg
 
         # FIXME (Ole): Maybe organise this the same way it is done with rasters
+        # FIXME (Ole): Retain original geometry to use with returned data here
         if X.is_polygon_data:
             # Use centroids, in case of polygons
             X = convert_polygons_to_centroids(X)
+        elif X.is_line_data:
+            # Clip lines to polygon and return centroids
+
+            # FIXME (Ole): Need to separate this out, but identify what is
+            #              common with points and lines
+            #
+            # The following in this elif branch is temporary only
+
+            # Lines
+            lines = X.get_geometry()
+            attributes = X.get_data()
+            N = len(X)
+
+            # Extract polygon features
+            geom = self.get_geometry()
+            data = self.get_data()
+            assert len(geom) == len(data)
+
+            # Try clipper
+            polygon = geom[0]
+            #print 'Lines', len(lines)
+            #print polygon, len(polygon)
+            #fid = open('test_lines.txt', 'wb')
+            #import cPickle
+            #cPickle.dump(lines, fid)
+            #fid.close()
+            clip_lines_by_polygon(lines, polygon)
+            pass
 
         msg = ('Vector layer to interpolate to must be point geometry. '
                'I got OGR geometry type %s'
