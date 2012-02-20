@@ -82,6 +82,23 @@ plugin).</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="riab.Riab.setupI18n">
+<tt class="descname">setupI18n</tt><big>(</big><big>)</big><a class="headerlink" href="#riab.Riab.setupI18n" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup internationalisation for the plugin.</p>
+<p>See if QGIS wants to override the system locale
+and then see if we can get a valid translation file
+for whatever locale is effectively being used.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>None.</dd>
+<dt>Returns:</dt>
+<dd>None.</dd>
+<dt>Raises:</dt>
+<dd>no exceptions explicitly raised.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="riab.Riab.showHideDockWidget">
 <tt class="descname">showHideDockWidget</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/riab.html#Riab.showHideDockWidget"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#riab.Riab.showHideDockWidget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gui run procedure.</p>
@@ -114,6 +131,22 @@ any graphical user interface elements that should appear in QGIS.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="riab.tr">
+<tt class="descclassname">riab.</tt><tt class="descname">tr</tt><big>(</big><em>theText</em><big>)</big><a class="headerlink" href="#riab.tr" title="Permalink to this definition">¶</a></dt>
+<dd><p>We define a tr() alias here since the Riab class below
+does not inherit from QObject.
+.. note:: see <a class="reference external" href="http://tinyurl.com/pyqt-differences">http://tinyurl.com/pyqt-differences</a>
+Args:</p>
+<blockquote>
+<div>theText - string to be translated</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>Translated version of the given string if available, otherwise
+the original string.</dd>
+</dl>
 </dd></dl>
 
 </div>

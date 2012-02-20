@@ -134,7 +134,7 @@ panel in the left of the IDE.
     and fail for that test. This is 'normal' and can be ignored.
 
 Remote Debugging with Eclipse
-................................
+.............................
 
 For remote debugging, you should add pydevd to your PYTHONPATH before starting *QGIS*
 for example (you will need to adjust these paths to match your system)::
@@ -217,6 +217,8 @@ Please observe the following coding standards when working on the codebase:
   integration and iterative development. The master branch should always
   be assumed to represent a working demo with all tests passing.
 
+All strings should be internationalisation enabled. Please see :doc:`i18n` 
+for details.
 
 Branching guide
 ---------------
