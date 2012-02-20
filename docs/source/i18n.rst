@@ -1,9 +1,63 @@
 Internationalisation Support
 ============================
 
-Rules of the road:
+QGIS Plugin
+-----------
+
+The QGIS Plugin uses QtLinguist. this free, open source application can 
+be downloaded and used to translate the Qt translation files.
+
+Preparing for a release
+.......................
+
+As developer, before a release you should do:
+
+* run :samp:`make update-translation-strings` to update the translation files
+* distribute the .ts files under :samp:`gui/i18n` to the translators
+* instruct them to open the .ts file for their locale with QtLinguist
+* commit the returned file from the translator when all strings have been
+  translated
+* run :samp:`make compile-translation-strings` to create binary loadable 
+  translations
+* ensure the .qm files are distributed with the release (the .ts files do not 
+  need to be released)
+
+
+.. note:: Translators should take heed - when refreshing the .ts file in
+   QtLinguist, the file *must be closed* (:menuselection:`File --> Close`) and
+   then reopened. Simply loading doing (:menuselection:`File --< Open`) and
+   choosing the same file you already have in the workspace will not refresh the
+   workspace with any new changes that appeared on disk.
+
+.. note:: :samp:`make update-translation-strings` is no destructive. That is,
+   you can safely run it as many times as you like, new strings will be added
+   to it, deprecated strings will be left in place and already translated
+   strings will remain translated.
+
+Rules of the road for developers
+................................
+
+These notes relate *only* to the modules under gui.
 
 * Classes and anonymous functions that do not inherit QObject should use 
   the format :samp:`QCoreApplication.translate('Riab', 'Translations loaded')`
 * Classes that inherit QObject should use the form :samp:`self.tr('foo')`
 
+
+Adding a new language
+.....................
+
+To add a new language, edit the :samp:`gui/riab.pro` file and append the new 
+locale to the bottom of the file. For example, to add South African english 
+as a new locale, change this::
+
+   TRANSLATIONS = i18n/riab_id.ts
+
+to this::
+
+    TRANSLATIONS = i18n/riab_id.ts\
+                   i18n/riab_en_ZA.ts
+
+Save and close the .pro file. Next run :samp:`make update-translation-strings` 
+to generate the new .ts file under gui/i18n. Don't forget to :samp:`git add` 
+the new file and place it under version control. 

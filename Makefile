@@ -32,10 +32,11 @@ docs: compile
 	cd docs; make html; cd ..
 
 #Qt .ts file updates - run to register new strings for translation in gui
-ts: compile
+update-translation-strings: compile
 	cd gui; pylupdate4 riab.pro; cd ..
 
-qm: compile
+#Qt .qm file updates - run to create binary representation of translated strings for translation in gui
+compile-translation-strings: compile
 	cd gui; lrelease riab.pro; cd ..
 
 clean:
