@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID" sourcelanguage="en_US">
 <context>
     <name>@default</name>
     <message>
@@ -199,8 +200,38 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="ui_riabdock.ui" line="33"/>
+        <source>Questions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="42"/>
+        <source>In the event of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="52"/>
+        <source>How many</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="62"/>
+        <source>&amp;Might</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="84"/>
+        <source>Results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="ui_riabdock.ui" line="103"/>
         <source>about:blank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="141"/>
+        <source>Supported by AusAID and World Bank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -211,7 +242,7 @@ to%s: %s</source>
     <message>
         <location filename="ui_riabdock.ui" line="181"/>
         <source>Run</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="riabdock.py" line="262"/>
@@ -262,36 +293,6 @@ to%s: %s</source>
     <message>
         <location filename="riabdock.py" line="780"/>
         <source>Raster exposure with vector hazard not implemented</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="33"/>
-        <source>Questions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="42"/>
-        <source>In the event of</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="52"/>
-        <source>How many</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="62"/>
-        <source>&amp;Might</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="84"/>
-        <source>Results</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="141"/>
-        <source>Supported by AusAID and World Bank</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

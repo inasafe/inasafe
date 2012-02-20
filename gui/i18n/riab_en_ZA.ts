@@ -217,12 +217,12 @@ to%s: %s</source>
     <message>
         <location filename="ui_riabdock.ui" line="161"/>
         <source>Help</source>
-        <translation>Hulp</translation>
+        <translation type="unfinished">Help</translation>
     </message>
     <message>
         <location filename="ui_riabdock.ui" line="181"/>
         <source>Run</source>
-        <translation>Ruun!</translation>
+        <translation type="unfinished">Run</translation>
     </message>
     <message>
         <location filename="riabdock.py" line="262"/>
