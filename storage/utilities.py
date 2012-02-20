@@ -794,6 +794,10 @@ def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
 def ugettext(s):
     """Translation support
     """
+    path = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                        '..', 'i18n'))
     lang = os.environ['LANG']
-    t = gettext.translation('riab', 'i18n', languages=[lang], fallback=True)
+    filename_prefix = 'riab'
+    t = gettext.translation(filename_prefix,
+                            path, languages=[lang], fallback=True)
     return t.ugettext(s)

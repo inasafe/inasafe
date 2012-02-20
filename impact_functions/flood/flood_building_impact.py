@@ -92,7 +92,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         caption += '<br>'  # Blank separation row
         caption += '<b>' + _('Assumption') + '&#58;</b><br>'
-        caption += _('Building need to closed when flooding'
+        caption += _('Buildings that will need to closed when flooding'
                    'more than %.1f m' % threshold)
 
         # Create style

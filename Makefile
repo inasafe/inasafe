@@ -34,6 +34,7 @@ docs: compile
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
 	cd gui; pylupdate4 riab.pro; cd ..
+	xgettext -d id -o i18n/id/LC_MESSAGES/riab.po storage/test_io.py impact_functions/flood/flood_building_impact.py
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in gui
 compile-translation-strings: compile
