@@ -34,6 +34,8 @@ docs: compile
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
 	cd gui; pylupdate4 riab.pro; cd ..
+	# todo script this so we can loop through the locale list
+	# and apply same xgettext for each supported locale. TS
 	xgettext -j -d id -o i18n/id/LC_MESSAGES/riab.po \
 		storage/test_io.py \
 		impact_functions/flood/flood_building_impact.py
