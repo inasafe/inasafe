@@ -3,6 +3,7 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 
+
 class FloodBuildingImpactFunction(FunctionProvider):
     """Risk plugin for flood impact on building data
 
