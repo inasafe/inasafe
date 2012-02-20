@@ -30,7 +30,7 @@
     <item row="0" column="0">
      <widget class="QGroupBox" name="grpQuestion">
       <property name="title">
-       <string>Pertanyaan</string>
+       <string>Questions</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <property name="margin">
@@ -39,7 +39,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Apabila terjadi</string>
+          <string>In the event of</string>
          </property>
          <property name="buddy">
           <cstring>cboHazard</cstring>
@@ -49,7 +49,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>Berapa banyak</string>
+          <string>How many</string>
          </property>
          <property name="buddy">
           <cstring>cboExposure</cstring>
@@ -59,7 +59,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="label_8">
          <property name="text">
-          <string>&amp;Yang mungkin</string>
+          <string>&amp;Might</string>
          </property>
          <property name="buddy">
           <cstring>cboFunction</cstring>
@@ -81,7 +81,7 @@
     <item row="1" column="0">
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
-       <string>Hasil</string>
+       <string>Results</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="leftMargin">
@@ -138,7 +138,7 @@
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Sponsored by AusAID and World Bank</string>
+            <string>Supported by AusAID and World Bank</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
