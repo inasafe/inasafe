@@ -35,8 +35,8 @@ on your machine in order to work effectively with the code base:
 
 On an ubuntu system you can install these requirements using apt::
 
-  sudo apt-get install git subversion pep8 python-nose python-coverage \
-  python-gdal python-numpy python-sphinx pyqt4-dev-tools
+   sudo apt-get install git subversion pep8 python-nose python-coverage \
+   python-gdal python-numpy python-sphinx pyqt4-dev-tools
 
 
 In some cases these dependencies may already be on your system via installation
@@ -50,21 +50,21 @@ you are a developer, the simplest way to do that is go to
 `~/.qgis/python/plugins` and clone risk_in_a_box from our GitHub repository
 page like this::
 
-  git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
-  git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)
+   git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
+   git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)
 
-To verify that the installation works you can run the test suite from the command line::
+To verify that the installation works you can run the test suite from the
+command line::
 
-  make test
+   make test
 
 This will run all the regression tests and also highlight any code issues.
 Note that first time the tests are run they will pull 250MB of test data from
 our subversion repository (If asked for a password just hit Enter). See further
 notes on running tests below.
 
-
-To run the plugin start QGIS and enable it from the :menuselection:`Plugins --> Manage Plugins`
-menu.
+To run the plugin start QGIS and enable it from the 
+:menuselection:`Plugins --> Manage Plugins` menu.
 
 Development using Eclipse IDE with PyDev
 ----------------------------------------
@@ -76,7 +76,8 @@ for detailed information on how to get the basic Eclipse with PyDev setup.
 Configuring your Eclipse project
 ................................
 
-The procedure for doing this is to do: :menuselection:`File --> New --> Project...` and
+The procedure for doing this is to do: 
+:menuselection:`File --> New --> Project...` and
 then from the resulting dialog do :menuselection:`PyDev --> PyDev Project`.
 
 In the resulting project dialog, set the following details:
@@ -91,7 +92,6 @@ In the resulting project dialog, set the following details:
 At this point you should should click the link entitled 'Please configure an interpreter
 in related preferences before continuing.' And on the resulting dialog do:
 
-
 * :guilabel:`Python Interpreters: New...` : :kbd:`click this button`
 
 In the dialog that appears do:
@@ -100,9 +100,10 @@ In the dialog that appears do:
 * :guilabel:`Interpreter Executable` : :kbd:`/usr/bin/python`
 * :guilabel:`OK Button` : :kbd:`click this button`
 
-Another dialog will appear. Tick the first entry in the list that points to your::
+Another dialog will appear. Tick the first entry in the list that points to 
+your::
 
-~/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev_2.3.0.2011121518/
+   ~/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev_2.3.0.2011121518/
 
 (or simply click the 'Select All' button)
 
@@ -162,16 +163,16 @@ Additional development environment notes
 QGIS installed in a non-standard location
 .........................................
 
-For running unit tests that need QGIS, you may need to adjust PYTHONPATH and QGISPATH
-if QGIS is running in a non standard location. For example with QGIS built from source
-into /usr/local (and python bindings global install option disabled), you could run
-these commands (or add them to your ~/.bashrc)::
+For running unit tests that need QGIS, you may need to adjust *PYTHONPATH* and
+*QGISPATH* if QGIS is running in a non standard location. For example with
+QGIS built from source into /usr/local (and python bindings global install
+option disabled), you could run these commands (or add them to your ~/.bashrc)::
 
 	export QGISPATH=/usr/local
 	export PYTHONPATH=$PYTHONPATH:/usr/local/share/qgis/python/
 
-.. note:: The above can be set within Eclipse's project properties if you are running
-your tests using the PyDev IDE environment.
+.. note:: The above can be set within Eclipse's project properties if you are
+    running your tests using the PyDev IDE environment.
 
 
 Adding risk_in_a_box to your python path:
@@ -182,8 +183,8 @@ package and module paths can be resolved correctly. E.g::
 
 	export PYTHONPATH=$PYTHONPATH:${HOME}/.qgis/python/plugins/risk_in_a_box
 
-Once again you could add this to your .bashrc or set it in Eclipse for convenience
-if needed.
+Once again you could add this to your .bashrc or set it in Eclipse for 
+convenience if needed.
 
 Running tests
 .............
@@ -193,8 +194,8 @@ diagnostics) by doing this within the risk_in_a_box plugin folder::
 
 	make test
 
-You can also run individual tests using nose. For example to run the riabclipper
-test you would do::
+You can also run individual tests using nose. For example to run the
+riabclipper test you would do::
 
 	nosetests -v gui.test_riabclipper
 
@@ -217,6 +218,7 @@ Please observe the following coding standards when working on the codebase:
   integration and iterative development. The master branch should always
   be assumed to represent a working demo with all tests passing.
 
+
 All strings should be internationalisation enabled. Please see :doc:`i18n` 
 for details.
 
@@ -229,12 +231,12 @@ Risk In A Box follows the following simple branching model:
    :align:   center
 
 
-*New development* takes place in *master*. Master should always be maintained in a
-usable state with tests passing and the code functional as far as possible such
-that we can create a new release from master at short notice.
+*New development* takes place in *master*. Master should always be maintained 
+in a usable state with tests passing and the code functional as far as possible
+such that we can create a new release from master at short notice.
 
-*Releases* should take place in long lived branches named after the minor version number
-(we follow the `semantic versioning scheme <http://semver.org/>`_) so for example the first
+*Releases* should take place in long lived branches named after the minor
+version number (we follow the `semantic versioning scheme <http://semver.org/>`_) so for example the first
 release would be version 0.1 and would be in a branch from master called *release_0-1*.
 
 After the minor release branch is made, the *point releases (patch)* are created as tags
@@ -244,6 +246,7 @@ off that branch. For example the release flow for version 0.1.0  would be:
 * apply any final polishing the the relase_0-1 branch
 * when we are ready to release, tag the branch as release_0-1-0
 * create packages from a checkout of the tag
+
 
 After the release, development should take place in master. Additional short lived
 branches can be made off master while new features are worked on, and then merged into
@@ -264,23 +267,28 @@ Process for developers adding a new feature
 Create a feature branch
     * git checkout -b <featurebranch> master
 
+
 Write new code and tests
     ...
 
 Publish (if unfinished)
     * git push origin <featurebranch>
 
-To keep branch up to date
+To keep branch up to date:
+
     * git checkout <featurebranch>
     * git merge origin master
     * (possibly resolve conflict and verify test suite runs)
     * git push origin <featurebranch>
 
+
 When all tests pass, either merge into master
+
     * git checkout master
     * git merge --no-ff <featurebranch>
       (possibly resolve conflict and verify test suite runs)
     * git push origin master
+
 
 Or issue a pull request through github
     ..

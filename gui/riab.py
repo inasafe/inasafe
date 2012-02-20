@@ -71,7 +71,7 @@ class Riab:
         self.iface = iface
         self.translator = None
         self.setupI18n()
-        #print QCoreApplication.translate('Riab', 'Translations loaded')
+        #print self.tr('Risk in a Box')
 
     def setupI18n(self):
         """Setup internationalisation for the plugin.
@@ -98,6 +98,7 @@ class Riab:
                                             QVariant('')).toString()
         # Also set the system locale to the user overridden local
         # so that the riab library functions gettext will work
+        # .. see:: :py:func:`storage.utilities`
         os.environ['LANG'] = str(myLocaleName)
 
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -110,7 +111,18 @@ class Riab:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 raise TranslationLoadException(myMessage)
             QCoreApplication.installTranslator(self.translator)
-        #print QCoreApplication.translate('Riab', 'Translations loaded')
+
+    def tr(self, theString):
+        """We implement this ourself since we do not inherit QObject.
+        
+        Args:
+           theString - string for translation.
+        Returns:
+           Translated version of theString.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        return QCoreApplication.translate('Riab', theString)
 
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
@@ -131,29 +143,26 @@ class Riab:
 
         # Create action for plugin dockable window (show/hide)
         self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
-                                QCoreApplication.translate('Riab',
-                                'Risk in a Box'), self.iface.mainWindow())
-        self.actionDock.setStatusTip(QCoreApplication.translate(
-                                'Riab', 'Show/hide Risk in a Box dock widget'))
-        self.actionDock.setWhatsThis(QCoreApplication.translate(
-                                'Riab', 'Show/hide Risk in a Box dock widget'))
+                                self.tr('Risk in a Box'), self.iface.mainWindow())
+        self.actionDock.setStatusTip(self.tr(
+                                    'Show/hide Risk in a Box dock widget'))
+        self.actionDock.setWhatsThis(self.tr(
+                                    'Show/hide Risk in a Box dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
         QObject.connect(self.actionDock, SIGNAL('triggered()'),
                         self.showHideDockWidget)
 
         self.iface.addToolBarIcon(self.actionDock)
-        self.iface.addPluginToMenu(QCoreApplication.translate(
-                                    'Riab', 'Risk in a Box'), self.actionDock)
+        self.iface.addPluginToMenu(self.tr('Risk in a Box'), self.actionDock)
 
         # create dockwidget and tabify it with the legend
         self.dockWidget = RiabDock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
-        myLegendTab = self.iface.mainWindow().findChild(QApplication,
-                                                        'Legend')
+        myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
         if myLegendTab:
-            self.iface.mainWindow().tabifyDockWidget(myLegendTab,
-                                                     self.dockWidget)
+            self.iface.mainWindow().tabifyDockWidget(
+                                            myLegendTab, self.dockWidget)
             self.dockWidget.raise_()
 
     def unload(self):
@@ -170,8 +179,7 @@ class Riab:
            no exceptions explicitly raised.
         """
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(QCoreApplication.translate(
-                                    'Riab', '&Risk in a Box'), self.actionDock)
+        self.iface.removePluginMenu(self.tr('&Risk in a Box'), self.actionDock)
         self.iface.removeToolBarIcon(self.actionDock)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)

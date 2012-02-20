@@ -2,7 +2,6 @@ Frequently Asked Questions
 ==========================
 
 
-
 How do I rename a shape file and all the helper files?
 ::
 
@@ -42,12 +41,19 @@ How do I take screen capture e.g. for use in a presentation?
 
 How does the documentation work?::
 
-  The Risk in a Box documentation files are written using the RST
-  format (http://docutils.sourceforge.net/docs/user/rst/quickref.html) and stored with the source code in github: https://github.com/AIFDR/risk_in_a_box/tree/master/docs/source
+  The Risk in a Box documentation files are written using the RST format
+  (http://docutils.sourceforge.net/docs/user/rst/quickref.html) and stored with
+  the source code in github:
+  https://github.com/AIFDR/risk_in_a_box/tree/master/docs/source
 
   The RST files are used for two products:
-  * HTML files generated using Sphinx (http://sphinx.pocoo.org) by running https://github.com/AIFDR/risk_in_a_box/blob/master/docs/Makefile. These files are accessible through both the file browser and the help button available in Risk in a Box
-  * The web site http://readthedocs.org/docs/risk-in-a-box which automatically reads the RST files from github to update its content. The steps to achieve this are
+  * HTML files generated using Sphinx (http://sphinx.pocoo.org) by running
+    https://github.com/AIFDR/risk_in_a_box/blob/master/docs/Makefile. These
+    files are accessible through both the file browser and the help button
+    available in Risk in a Box
+  * The web site http://readthedocs.org/docs/risk-in-a-box which automatically
+    reads the RST files from github to update its content. The steps to achieve
+    this are
 
   1. Register the project on the dashboard at ReadTheDocs
      (http://readthedocs.org/dashboard/risk-in-a-box/edit).
@@ -63,9 +69,10 @@ How do I replace a string across multiple files
 ::
 
 To replace string layer_type, say, with layertype across all python files
-in project, do
+in project, do::
 
-find . -name "*.py" -print | xargs sed -i 's/layer_type/layertype/g'
+   find . -name "*.py" -print | xargs sed -i 's/layer_type/layertype/g'
+
 
 For details see
 http://rushi.wordpress.com/2008/08/05/find-replace-across-multiple-files-in-linux/

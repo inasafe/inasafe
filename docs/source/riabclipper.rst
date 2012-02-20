@@ -1,7 +1,8 @@
 Module:  riabclipper
 ====================
 
-This page contains the documentation for the Risk-In-A-Box **riabclipper** module.
+This page contains the documentation for the Risk-In-A-Box **riabclipper** 
+module.
 
-.. automodule:: riabclipper
+.. automodule:: gui.riabclipper
       :members:
