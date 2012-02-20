@@ -1,11 +1,14 @@
+
 Internationalisation Support
 ============================
+
 
 QGIS Plugin
 -----------
 
 The QGIS Plugin uses QtLinguist. this free, open source application can 
 be downloaded and used to translate the Qt translation files.
+
 
 Preparing for a release
 .......................
@@ -61,3 +64,45 @@ to this::
 Save and close the .pro file. Next run :samp:`make update-translation-strings` 
 to generate the new .ts file under gui/i18n. Don't forget to :samp:`git add` 
 the new file and place it under version control. 
+
+RIAB Library Translations
+-------------------------
+
+Low level gettext usage
+.......................
+
+Translation is done using gettext.
+
+Create the initial .po file::
+
+   xgettext -d id -o i18n/id/LC_MESSAGES/riab.po i18ntest.py
+
+After you create the initial .pot, you need to specify the characterset and 
+encoding for that file (by editing it with a text editor). For example::
+
+   "Content-Type: text/plain; charset=UTF-8\n"
+   "Content-Transfer-Encoding: 8bit\n"
+
+
+If you add strings to the file, update the .pot file by adding -j option::
+
+   xgettext -j -d id -o i18n/id/LC_MESSAGES/riab.po i18ntest.py
+
+Next, you can make the .po files available to translators. Recent versions of
+QtLinguist support translations of .po files, so you can use a similar process
+to that described in the gui section above.
+
+When the .po file has been updated, it should be committed to the git
+repository (e.g. via a pull request from the user's repository clone, or by
+emailing the .po file to a developer). After receiving an updated .po file, 
+it should be compiled to a :samp:`.mo` file (which is a binary representation
+of the strings)::
+
+   msgfmt -o i18n/id/LC_MESSAGES/riab.mo i18n/id/LC_MESSAGES/riab.po
+
+The :samp:`msgfmt` command accepts one or more input files which can be 
+merged into a single :samp:`.mo`.
+
+.. note:: These functions are wrapped as make scripts so you should not need to 
+   use them on a day to day basis.
+
