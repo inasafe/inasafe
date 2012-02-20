@@ -1372,8 +1372,11 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Test data
-        polygon_filename = ('%s/test_poly.txt' % TESTDATA)  # Polygon 799  (520 x 2)
-        lines_filename = ('%s/test_lines.pck' % TESTDATA)  # 156 composite lines
+
+        # Polygon 799  (520 x 2)
+        polygon_filename = ('%s/test_poly.txt' % TESTDATA)
+        # 156 composite lines
+        lines_filename = ('%s/test_lines.pck' % TESTDATA)
 
         # Read
         test_polygon = []
@@ -1450,7 +1453,6 @@ class Test_Engine(unittest.TestCase):
         #L = Vector(geometry=intersections, geometry_type='point')
         #L.write_to_file('intersections.shp')  # E.g. to view with QGis
 
-
         # Check a few against visual inspection
 
     def test_line_interpolation_from_polygons_one_poly(self):
@@ -1510,7 +1512,6 @@ class Test_Engine(unittest.TestCase):
         #msg = ('Expected 458 points tagged with category, '
         #       'but got only %i' % count)
         #assert count == 458, msg
-
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception

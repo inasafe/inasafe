@@ -37,6 +37,7 @@ INVERSE_GEOMETRY_TYPE_MAP = {'point': ogr.wkbPoint,
                              'line': ogr.wkbLineString,
                              'polygon': ogr.wkbPolygon}
 
+
 # Miscellaneous auxiliary functions
 def unique_filename(**kwargs):
     """Create new filename guaranteed not to exist previously

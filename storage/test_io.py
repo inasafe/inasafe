@@ -299,7 +299,6 @@ class Test_IO(unittest.TestCase):
 
         # So far the admissible classes are Point, Line and Polygon
 
-
         test_data = [numpy.array([[122.226889, -8.625599],
                                   [122.227299, -8.624500],
                                   [122.227409, -8.624221],

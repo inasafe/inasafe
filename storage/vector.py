@@ -35,7 +35,7 @@ class Vector:
                 * None
             projection: Geospatial reference in WKT format.
                         Only used if geometry is provide as a numeric array,
-            geometry: A list of either point coordinates or polygons
+            geometry: A list of either point coordinates or polygons/lines
             geometry_type: Desired interpretation of geometry.
                            Valid options are 'point', 'line', 'polygon' or
                            the ogr types: 1, 2, 3

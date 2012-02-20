@@ -1,12 +1,18 @@
-#!/usr/bin/env python
-
 import unittest
 import numpy
+import sys
+import os
+
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
 from math import sqrt, pi
 from numerics import ensure_numeric
 
 from polygon import *
 from utilities import test_polygon, test_lines
+from storage.vector import Vector
 
 
 def linear_function(x, y):
@@ -1814,7 +1820,6 @@ class Test_Polygon(unittest.TestCase):
                               [[[1, -1], [1, 0]],
                                [[1, 1], [1, 2]]])
 
-
         # Simple sloping fully intersecting line
         lines = [[[-1, 0.0], [2, 1.0]]]
 
@@ -1822,23 +1827,23 @@ class Test_Polygon(unittest.TestCase):
             clip_lines_by_polygon(lines, polygon)
 
         assert numpy.allclose(inside_line_segments,
-                              [[[0, 1.0/3], [1, 2.0/3]]])
+                              [[[0, 1.0 / 3], [1, 2.0 / 3]]])
 
         assert numpy.allclose(outside_line_segments,
-                              [[[-1, 0], [0, 1.0/3]],
-                               [[1, 2.0/3], [2, 1]]])
+                              [[[-1, 0], [0, 1.0 / 3]],
+                               [[1, 2.0 / 3], [2, 1]]])
 
         # Simple sloping line coinciding with one edge, intersecting another
-        lines = [[[-1, 0.0], [1, 2.0/3]]]
+        lines = [[[-1, 0.0], [1, 2.0 / 3]]]
 
         inside_line_segments, outside_line_segments = \
             clip_lines_by_polygon(lines, polygon)
 
         assert numpy.allclose(inside_line_segments,
-                              [[[0, 1.0/3], [1, 2.0/3]]])
+                              [[[0, 1.0 / 3], [1, 2.0 / 3]]])
 
         assert numpy.allclose(outside_line_segments,
-                              [[[-1, 0], [0, 1.0/3]]])
+                              [[[-1, 0], [0, 1.0 / 3]]])
 
         # Diagonal line intersecting corners
         lines = [[[-1, -1], [2, 2]]]
@@ -1894,7 +1899,6 @@ class Test_Polygon(unittest.TestCase):
                               [[[-10, 6], [6, 6]], [[14, 6], [16, 6]],
                               [[22, 6], [28, 6]], [[32, 6], [60, 6]]])
 
-
     def test_clip_lines_by_polygon_multi(self):
         """Composite lines are clipped and classified by polygon
         """
@@ -1933,7 +1937,7 @@ class Test_Polygon(unittest.TestCase):
 
         # Multiple lines with different number of segments
         lines = [[[-1, 0.5], [0.5, 0.5], [0.5, 2]],
-                 [[-1, 0.0], [1, 2.0/3]]]
+                 [[-1, 0.0], [1, 2.0 / 3]]]
 
         inside_line_segments, outside_line_segments = \
             clip_lines_by_polygon(lines, polygon)
@@ -1941,12 +1945,12 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(inside_line_segments,
                               [[[0, 0.5], [0.5, 0.5]],
                                [[0.5, 0.5], [0.5, 1]],
-                               [[0, 1.0/3], [1, 2.0/3]]])
+                               [[0, 1.0 / 3], [1, 2.0 / 3]]])
 
         assert numpy.allclose(outside_line_segments,
                               [[[-1, 0.5], [0, 0.5]],
                                [[0.5, 1], [0.5, 2]],
-                               [[-1, 0], [0, 1.0/3]]])
+                               [[-1, 0], [0, 1.0 / 3]]])
 
     def test_clip_lines_by_polygon_real_data(self):
         """Real roads are clipped by complex polygon
@@ -1956,8 +1960,8 @@ class Test_Polygon(unittest.TestCase):
             clip_lines_by_polygon(test_lines, test_polygon)
 
         # These lines have compontes both inside and outside
-        assert len(inside_line_segments) > 0
-        assert len(outside_line_segments) > 0
+        assert len(inside_line_segments) == 33
+        assert len(outside_line_segments) == 49
 
         # Check that midpoints of each segment are correctly placed
         for seg in inside_line_segments:
@@ -1968,6 +1972,23 @@ class Test_Polygon(unittest.TestCase):
             midpoint = (seg[0] + seg[1]) / 2
             assert not is_inside_polygon(midpoint, test_polygon)
 
+        # Store for visual inspection by e.g. QGis
+        #Vector(geometry=[test_polygon],
+        #       geometry_type='polygon').write_to_file('test_polygon.shp')
+        #Vector(geometry=test_lines,
+        #       geometry_type='line').write_to_file('test_lines.shp')
+        #Vector(geometry=inside_line_segments,
+        #       geometry_type='line').write_to_file('inside_segments.shp')
+        #Vector(geometry=outside_line_segments,
+        #       geometry_type='line').write_to_file('outside_segments.shp')
+
+        # Characterisation test based on visually verified result
+        assert numpy.allclose(inside_line_segments[0],
+                              [[122.23028405, -8.62598333],
+                               [122.22879, -8.624855]])
+        assert numpy.allclose(outside_line_segments[0],
+                              [[122.231021, -8.626557],
+                               [122.230563, -8.626194]])
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Polygon, 'test')
