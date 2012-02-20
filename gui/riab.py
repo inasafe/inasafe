@@ -98,7 +98,7 @@ class Riab:
                                             QVariant('')).toString()
         # Also set the system locale to the user overridden local
         # so that the riab library functions gettext will work
-        #os.environ['LANG'] = myLocaleName
+        os.environ['LANG'] = str(myLocaleName)
 
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'gui', 'i18n',
