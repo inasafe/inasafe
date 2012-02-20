@@ -32,7 +32,7 @@ As developer, before a release you should do:
    choosing the same file you already have in the workspace will not refresh the
    workspace with any new changes that appeared on disk.
 
-.. note:: :samp:`make update-translation-strings` is no destructive. That is,
+.. note:: :samp:`make update-translation-strings` is non destructive. That is,
    you can safely run it as many times as you like, new strings will be added
    to it, deprecated strings will be left in place and already translated
    strings will remain translated.
@@ -106,3 +106,91 @@ merged into a single :samp:`.mo`.
 .. note:: These functions are wrapped as make scripts so you should not need to 
    use them on a day to day basis.
 
+.. _library-release-label:
+
+Preparing for a release
+.......................
+
+As developer, before a release you should do:
+
+* run :samp:`make update-translation-strings` to update the translation files
+* distribute the .po files under :samp:`i18n/<locale>/LC_MESSAGES/riab.po` to 
+  the translators
+* instruct them to open the .po file for their locale with QtLinguist
+* commit the returned file from the translator when all strings have been
+  translated
+* run :samp:`make compile-translation-strings` to create binary loadable 
+  translations (.mo files)
+* ensure the .mo files are distributed with the release (the .po files do not 
+  need to be released)
+
+
+.. note:: Translators should take heed - when refreshing the .po file in
+   QtLinguist, the file *must be closed* (:menuselection:`File --> Close`) and
+   then reopened. Simply loading doing (:menuselection:`File --< Open`) and
+   choosing the same file you already have in the workspace will not refresh the
+   workspace with any new changes that appeared on disk.
+
+.. note:: :samp:`make update-translation-strings` is non destructive. That is,
+   you can safely run it as many times as you like, new strings will be added
+   to it, deprecated strings will be left in place and already translated
+   strings will remain translated.
+
+Rules of the road for developers
+................................
+
+These notes relate *only* to the modules under *not* under gui. See the gui
+section at the start of this document for notes on what to do in the gui module. 
+
+* Import the gettext helper e.g::
+
+   `from storage.utilities import ugettext as _`
+
+* All strings should be wrapped using the _ helper e.g. :samp:`foo = _('bar')`
+* The library will use at run-time the :samp:`LANG` environment variable which 
+  should be set to the iso code e.g. 'id' for 'Indonesia' of the Locale
+  you wish to use. This is done automatically for you by the QGIS Plugin, but
+  if you are using the riab library in another context, be sure to set it before 
+  using any libary functions if you want them to return translated strings e.g.::
+  
+      os.environ['LANG'] = 'id'
+      # do stuff with riab lib
+
+
+Adding a new language
+.....................
+
+To add a new language, edit the :samp:`Makefile` file and append the new 
+locale to the bottom of the file. For example, to add South African english 
+as a new locale, change this section::
+
+   update-translation-strings: compile
+
+copy one of the existing stanzas e.g.::
+
+   xgettext -j -d id -o i18n/id/LC_MESSAGES/riab.po \
+      storage/test_io.py \
+      impact_functions/flood/flood_building_impact.py
+
+Save and close the Makefil file. Next you need to create the initial translation
+stringlist for that locale by creating a locale directory and running the 
+command above without the :samp:`-j` (j is for 'join' which merges old content 
+with new, avoiding destroying previous translated strings). So for example you 
+would run from the command line::
+
+   mkdir -p i18n/en_ZA/LC_MESSAGES/
+   xgettext -d id -o i18n/en_ZA/LC_MESSAGES/riab.po \
+      storage/test_io.py \
+      impact_functions/flood/flood_building_impact.py
+
+The above adding a hypothetical new translation for South African English. After
+the inital creation of your .po files using the above commands, you can update
+them anytime the strings in the library have been changed by doing::
+
+   make update-translation-strings`
+
+to generate the updated .po file under i18n/en_ZA/LC_MESSAGES. Don't forget to 
+:samp:`git add` the new directory and file and place them under version control. 
+
+To convert the .po file to a binary .mo file (which is used at runtime for the
+actual translation), follow the :ref:`_library-release-label` section above.
