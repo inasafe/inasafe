@@ -39,6 +39,7 @@ update-translation-strings: compile
 #Qt .qm file updates - run to create binary representation of translated strings for translation in gui
 compile-translation-strings: compile
 	cd gui; lrelease riab.pro; cd ..
+	msgfmt -o i18n/id/LC_MESSAGES/riab.mo i18n/id/LC_MESSAGES/riab.po
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
