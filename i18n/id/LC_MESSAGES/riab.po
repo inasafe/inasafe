@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-20 12:12+0200\n"
+"POT-Creation-Date: 2012-02-20 18:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Language: id_ID\n"
 
 #: storage/test_io.py:1648
 msgid "Hello!"
@@ -27,45 +26,56 @@ msgid "Hello2!"
 msgstr "Hi2"
 
 #: impact_functions/flood/flood_building_impact.py:75
+#: impact_functions/flood/flood_building_impact.py:76
 #, python-format
 msgid ""
-"<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of "
-"&#58;</b><br><br><p>"
+"<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of &#58;"
+"</b><br><br><p>"
 msgstr ""
-"<b>Apabila terjadi\"%s\" Perkiraan dampak\"%s\" Kemungkinan terjadi "
-"&#58;</b><br><br><p>"
+"<b>Apabila terjadi\"%s\" Perkiraan dampak\"%s\" Kemungkinan terjadi &#58;</"
+"b><br><br><p>"
 
 #: impact_functions/flood/flood_building_impact.py:86
+#: impact_functions/flood/flood_building_impact.py:87
 msgid "Building"
 msgstr "Bangunan"
 
 #: impact_functions/flood/flood_building_impact.py:86
+#: impact_functions/flood/flood_building_impact.py:87
 msgid "Number of"
 msgstr "Jumlah"
 
 #: impact_functions/flood/flood_building_impact.py:87
+#: impact_functions/flood/flood_building_impact.py:88
 msgid "All"
 msgstr "Semua"
 
 #: impact_functions/flood/flood_building_impact.py:90
 #: impact_functions/flood/flood_building_impact.py:101
+#: impact_functions/flood/flood_building_impact.py:91
+#: impact_functions/flood/flood_building_impact.py:102
 msgid "Closed"
 msgstr "Ditutup"
 
 #: impact_functions/flood/flood_building_impact.py:91
 #: impact_functions/flood/flood_building_impact.py:99
+#: impact_functions/flood/flood_building_impact.py:92
+#: impact_functions/flood/flood_building_impact.py:100
 msgid "Opened"
 msgstr "Dibuka"
 
 #: impact_functions/flood/flood_building_impact.py:94
+#: impact_functions/flood/flood_building_impact.py:95
 msgid "Assumption"
 msgstr "Anggapan"
 
 #: impact_functions/flood/flood_building_impact.py:95
+#: impact_functions/flood/flood_building_impact.py:96
 #, python-format
 msgid "Buildings that will need to closed when floodingmore than %.1f m"
 msgstr "Bangunan yang perlu ditutup ketika banjir lebih dari % 1 f m"
 
 #: impact_functions/flood/flood_building_impact.py:110
+#: impact_functions/flood/flood_building_impact.py:111
 msgid "Estimated buildings affected"
 msgstr "Bangunan yang diperkirakan terdampak"

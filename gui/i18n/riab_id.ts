@@ -186,17 +186,17 @@ ke %s: %s</translation>
         <translation type="obsolete">Terjemahan dimuat</translation>
     </message>
     <message>
-        <location filename="riab.py" line="146"/>
+        <location filename="riab.py" line="157"/>
         <source>Risk in a Box</source>
         <translation>Risk in a Box</translation>
     </message>
     <message>
-        <location filename="riab.py" line="138"/>
+        <location filename="riab.py" line="149"/>
         <source>Show/hide Risk in a Box dock widget</source>
         <translation>Tampilkan/hilangkan widget Risk in a Box</translation>
     </message>
     <message>
-        <location filename="riab.py" line="173"/>
+        <location filename="riab.py" line="182"/>
         <source>&amp;Risk in a Box</source>
         <translation>&amp;Risk in a Box</translation>
     </message>

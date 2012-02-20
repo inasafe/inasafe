@@ -186,17 +186,17 @@ to%s: %s</source>
         <translation type="obsolete">Box in a risk</translation>
     </message>
     <message>
-        <location filename="riab.py" line="146"/>
+        <location filename="riab.py" line="157"/>
         <source>Risk in a Box</source>
         <translation>Box in a Risk</translation>
     </message>
     <message>
-        <location filename="riab.py" line="138"/>
+        <location filename="riab.py" line="149"/>
         <source>Show/hide Risk in a Box dock widget</source>
         <translation>Show or hide Risk in a Box dock widget</translation>
     </message>
     <message>
-        <location filename="riab.py" line="173"/>
+        <location filename="riab.py" line="182"/>
         <source>&amp;Risk in a Box</source>
         <translation>&amp;Box in a risk</translation>
     </message>
