@@ -243,7 +243,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         myHazardIndex = self.cboHazard.currentIndex()
         myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
-            myMessage = (
+            myMessage = self.tr(
             '<span class="label notice">Getting started:'
             '</span> To use this tool you need to add some layers to your '
             'QGIS project. Ensure that at least one <em>hazard</em> layer '

@@ -29,9 +29,10 @@ from PyQt4.QtCore import (QObject,
                           QSettings,
                           QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication
-from riabexceptions import TranslationLoadException
+
 # Import RIAB modules
 from riabdock import RiabDock
+from riabexceptions import TranslationLoadException
 #see if we can import pydev - see development docs for details
 try:
     from pydevd import *
@@ -86,6 +87,7 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
+        #settrace()
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
         myLocaleName = None
@@ -94,6 +96,10 @@ class Riab:
         else:
             myLocaleName = QSettings().value('locale/userLocale',
                                             QVariant('')).toString()
+        # Also set the system locale to the user overridden local
+        # so that the riab library functions gettext will work
+        #os.environ['LANG'] = myLocaleName
+
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'gui', 'i18n',
                         'riab_' + str(myLocaleName) + '.qm')
@@ -104,7 +110,7 @@ class Riab:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 raise TranslationLoadException(myMessage)
             QCoreApplication.installTranslator(self.translator)
-        print QCoreApplication.translate('Riab', 'Translations loaded')
+        #print QCoreApplication.translate('Riab', 'Translations loaded')
 
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).

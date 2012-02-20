@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="id_ID" sourcelanguage="en_US">
+<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="en_US">
 <context>
     <name>@default</name>
     <message>
@@ -184,20 +183,20 @@ ke %s: %s</translation>
     <message>
         <location filename="riab.py" line="107"/>
         <source>Translations loaded</source>
-        <translation>Terjemahan dimuat</translation>
+        <translation type="obsolete">Terjemahan dimuat</translation>
     </message>
     <message>
-        <location filename="riab.py" line="140"/>
+        <location filename="riab.py" line="146"/>
         <source>Risk in a Box</source>
         <translation>Risk in a Box</translation>
     </message>
     <message>
-        <location filename="riab.py" line="132"/>
+        <location filename="riab.py" line="138"/>
         <source>Show/hide Risk in a Box dock widget</source>
         <translation>Tampilkan/hilangkan widget Risk in a Box</translation>
     </message>
     <message>
-        <location filename="riab.py" line="167"/>
+        <location filename="riab.py" line="173"/>
         <source>&amp;Risk in a Box</source>
         <translation>&amp;Risk in a Box</translation>
     </message>
@@ -305,6 +304,11 @@ ke %s: %s</translation>
         <location filename="riabdock.py" line="780"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation>Raster terpapar dengan vektor ancaman tidak diimplementasikan</translation>
+    </message>
+    <message>
+        <location filename="riabdock.py" line="246"/>
+        <source>&lt;span class=&quot;label notice&quot;&gt;Getting started:&lt;/span&gt; To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
