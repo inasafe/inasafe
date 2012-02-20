@@ -571,60 +571,61 @@ def clip_lines_by_polygon(lines, polygon,
     #print
     inside_line_segments = []
     outside_line_segments = []
-    final_intersections = []   # TEMP
+
+    # Loop through lines
     for k in range(M):
-        # Loop through lines
-        #print 'line', lines[k]
 
-        intersections = list(lines[k])  # Initialise with end points
-        for i in range(N):
-            # Loop through polygon edges
-            j = (i + 1) % N
-            edge = [polygon[i, :], polygon[j, :]]
+        # Loop through segments
+        for l in range(len(lines[k]) - 1):
+            segment = [lines[k][l], lines[k][l + 1]]
 
-            status, value = intersection(lines[k], edge)
-            if status == 1:
-                # Genuine intersection found
-                intersections.append(value)
-            elif status == 2:
-                # Collinear overlapping lines found
-                # Use both ends of common segment
-                intersections.append(value[0])
-                intersections.append(value[1])
-            else:
-                pass
-                #print status, value
-        final_intersections += intersections
+            intersections = list(segment)  # Initialise with end points
+            for i in range(N):
+                # Loop through polygon edges
+                j = (i + 1) % N
+                edge = [polygon[i, :], polygon[j, :]]
 
-        # Loop through intersections for this line segment
-        #print
-        distances = {}
-        P = len(intersections)
-        for i in range(P):
-            v = lines[k][0] - intersections[i]
-            d = numpy.dot(v, v)
-            #print 'Intersection', i, intersections[i], d
-            distances[d] = intersections[i]  # Don't record duplicates
+                status, value = intersection(segment, edge)
+                if status == 1:
+                    # Genuine intersection found
+                    intersections.append(value)
+                elif status == 2:
+                    # Collinear overlapping lines found
+                    # Use both ends of common segment
+                    intersections.append(value[0])
+                    intersections.append(value[1])
+                else:
+                    pass
+                    #print status, value
 
-        # Sort by Schwarzian transform
-        A = zip(distances.keys(), distances.values())
-        A.sort()
-        _, intersections = zip(*A)
+            # Loop through intersections for this line segment
+            #print
+            distances = {}
+            P = len(intersections)
+            for i in range(P):
+                v = segment[0] - intersections[i]
+                d = numpy.dot(v, v)
+                #print 'Intersection', i, intersections[i], d
+                distances[d] = intersections[i]  # Don't record duplicates
 
-        P = len(intersections)
+            # Sort by Schwarzian transform
+            A = zip(distances.keys(), distances.values())
+            A.sort()
+            _, intersections = zip(*A)
 
-        # Separate segments according to polygon
-        for i in range(P - 1):
-            segment = [intersections[i], intersections[i + 1]]
-            midpoint = (segment[0] + segment[1]) / 2
-            if is_inside_polygon(midpoint, polygon, closed=closed):
-                #print 'Inside', midpoint, segment
-                inside_line_segments.append(segment)
-            else:
-                #print 'Outside', midpoint, segment
-                outside_line_segments.append(segment)
+            P = len(intersections)
 
-    #return inside_line_segments, outside_line_segments, final_intersections
+            # Separate segments according to polygon
+            for i in range(P - 1):
+                segment = [intersections[i], intersections[i + 1]]
+                midpoint = (segment[0] + segment[1]) / 2
+                if is_inside_polygon(midpoint, polygon, closed=closed):
+                    #print 'Inside', midpoint, segment
+                    inside_line_segments.append(segment)
+                else:
+                    #print 'Outside', midpoint, segment
+                    outside_line_segments.append(segment)
+
     return inside_line_segments, outside_line_segments
 
 

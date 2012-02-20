@@ -1429,22 +1429,22 @@ class Test_Engine(unittest.TestCase):
 
         # Store as shape files for visual inspection e.g. by QGis
         P = Vector(geometry=[test_polygon])
-        P.write_to_file('test_polygon.shp')  # E.g. to view with QGis
+        P.write_to_file('test_polygon.shp')
 
         L = Vector(geometry=test_lines, geometry_type='line')
-        L.write_to_file('test_lines.shp')  # E.g. to view with QGis
+        L.write_to_file('test_lines.shp')
 
         L = Vector(geometry=inside_line_segments, geometry_type='line')
-        L.write_to_file('inside_lines.shp')  # E.g. to view with QGis
+        L.write_to_file('inside_lines.shp')
 
         L = Vector(geometry=outside_line_segments, geometry_type='line')
-        L.write_to_file('outside_lines.shp')  # E.g. to view with QGis
+        L.write_to_file('outside_lines.shp')
 
         L = Vector(geometry=inside_centroids, geometry_type='point')
-        L.write_to_file('inside_centroids.shp')  # E.g. to view with QGis
+        L.write_to_file('inside_centroids.shp')
 
         L = Vector(geometry=outside_centroids, geometry_type='point')
-        L.write_to_file('outside_centroids.shp')  # E.g. to view with QGis
+        L.write_to_file('outside_centroids.shp')
 
         # FIXME: Debug
         #L = Vector(geometry=intersections, geometry_type='point')
@@ -1801,6 +1801,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test') #_line_clipping_by_polygon')
+    suite = unittest.makeSuite(Test_Engine, 'test_line_clipping_by_polygon')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

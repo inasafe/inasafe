@@ -1902,7 +1902,7 @@ class Test_Polygon(unittest.TestCase):
         # Simplest case: Polygon is the unit square
         polygon = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
-        # Line with two segments changing direction inside polygon
+        # Two lines changing direction inside polygon
         lines = [[[-1, 0.5], [0.5, 0.5]],
                  [[0.5, 0.5], [0.5, 2]]]
 
@@ -1917,8 +1917,22 @@ class Test_Polygon(unittest.TestCase):
                               [[[-1, 0.5], [0, 0.5]],
                                [[0.5, 1], [0.5, 2]]])
 
+        # One line with same two segments changing direction inside polygon
+        lines = [[[-1, 0.5], [0.5, 0.5], [0.5, 2]]]
+
+        inside_line_segments, outside_line_segments = \
+            clip_lines_by_polygon(lines, polygon)
+
+        assert numpy.allclose(inside_line_segments,
+                              [[[0, 0.5], [0.5, 0.5]],
+                               [[0.5, 0.5], [0.5, 1]]])
+
+        assert numpy.allclose(outside_line_segments,
+                              [[[-1, 0.5], [0, 0.5]],
+                               [[0.5, 1], [0.5, 2]]])
+
         # Multiple lines with different number of segments
-        lines = [[[-1, 0.5], [0.5, 0.5]], [[0.5, 0.5], [0.5, 2]],
+        lines = [[[-1, 0.5], [0.5, 0.5], [0.5, 2]],
                  [[-1, 0.0], [1, 2.0/3]]]
 
         inside_line_segments, outside_line_segments = \
@@ -1933,7 +1947,6 @@ class Test_Polygon(unittest.TestCase):
                               [[[-1, 0.5], [0, 0.5]],
                                [[0.5, 1], [0.5, 2]],
                                [[-1, 0], [0, 1.0/3]]])
-
 
     def test_clip_lines_by_polygon_real_data(self):
         """Real roads are clipped by complex polygon
