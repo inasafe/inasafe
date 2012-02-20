@@ -77,7 +77,7 @@ test_suite: compile testdata
 	@# newline in.
 
 	@# Report expected failures if any!
-	@#echo Expecting 1 test to fail in support of issue 52
+	@echo Expecting 1 test to fail in support of issue #3
 
 # Run gui test suite only
 gui_test_suite: compile testdata
