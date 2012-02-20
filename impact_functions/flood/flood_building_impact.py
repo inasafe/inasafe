@@ -16,7 +16,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'AFFECTED'
-    plugin_name = 'Ditutup Sementara'
+    plugin_name = 'Temporary Closed'
 
     def run(self, layers):
         """Risk plugin for tsunami population
@@ -72,8 +72,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Create report
         Hname = H_org.get_name()
         Ename = E.get_name()
-        caption = _('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
-                   'kemungkinan yang terjadi&#58;</b><br><br><p>' % (Hname,
+        caption = _('<b>In case of "%s" the estimated impact to "%s" '
+                   'the possibility of &#58;</b><br><br><p>' % (Hname,
                                                                      Ename))
         caption += ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
@@ -83,22 +83,22 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
                     #'   <tr><td>%s (> %.2f m) &#58;</td><td>%i</td></tr>'
                     #'   <tr><td>%s (< %.2f m) &#58;</td><td>%i</td></tr>'
-                    '</table>' % (_('Gedung'), _('Jumlah'),
-                                  _('Semua'), N,
-                                  #_('Terendam'), threshold, count,
-                                  #_('Tidak terendam'), threshold, N - count))
-                                  _('Ditutup'), count,
-                                  _('Dibuka'), N - count))
+                    '</table>' % (_('Building'), _('Number of'),
+                                  _('All'), N,
+                                  #_('Submerged'), threshold, count,
+                                  #_('Not submerged'), threshold, N - count))
+                                  _('Closed'), count,
+                                  _('Opened'), N - count))
 
         caption += '<br>'  # Blank separation row
-        caption += '<b>' + _('Anggapan') + '&#58;</b><br>'
-        caption += _('Bangunan perlu ditutup ketika banjir '
-                   'lebih dari %.1f m' % threshold)
+        caption += '<b>' + _('Assumption') + '&#58;</b><br>'
+        caption += _('Building need to closed when flooding'
+                   'more than %.1f m' % threshold)
 
         # Create style
-        style_classes = [dict(label=_('Dibuka'), min=0, max=90,
+        style_classes = [dict(label=_('Opened'), min=0, max=90,
                               colour='#1EFC7C', opacity=1),
-                         dict(label=_('Ditutup'), min=90, max=100,
+                         dict(label=_('Closed'), min=90, max=100,
                               colour='#F31A1C', opacity=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
