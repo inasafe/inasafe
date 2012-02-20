@@ -3,7 +3,6 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 
-
 class FloodBuildingImpactFunction(FunctionProvider):
     """Risk plugin for flood impact on building data
 
@@ -73,7 +72,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Create report
         Hname = H_org.get_name()
         Ename = E.get_name()
-        caption = ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
+        caption = _('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
                    'kemungkinan yang terjadi&#58;</b><br><br><p>' % (Hname,
                                                                      Ename))
         caption += ('<table border="0" width="320px">'
@@ -92,8 +91,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                   _('Dibuka'), N - count))
 
         caption += '<br>'  # Blank separation row
-        caption += '<b>Anggapan&#58;</b><br>'
-        caption += ('Bangunan perlu ditutup ketika banjir '
+        caption += '<b>' + _('Anggapan') + '&#58;</b><br>'
+        caption += _('Bangunan perlu ditutup ketika banjir '
                    'lebih dari %.1f m' % threshold)
 
         # Create style
@@ -108,7 +107,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         V = Vector(data=building_impact,
                    projection=E.get_projection(),
                    geometry=coordinates,
-                   name='Estimated buildings affected',
+                   name=_('Estimated buildings affected'),
                    keywords={'caption': caption},
                    style_info=style_info)
         return V

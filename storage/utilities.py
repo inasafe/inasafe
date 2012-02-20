@@ -8,6 +8,7 @@ from osgeo import ogr
 from tempfile import mkstemp
 from urllib2 import urlopen
 import math
+import gettext
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'Affected'
@@ -791,7 +792,8 @@ def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
 
 
 def ugettext(s):
-    """Dummy placeholder for translation
+    """Translation support
     """
-
-    return s
+    lang = os.environ['LANG']
+    t = gettext.translation('riab', 'i18n', languages=[lang], fallback=True)
+    return t.ugettext(s)
