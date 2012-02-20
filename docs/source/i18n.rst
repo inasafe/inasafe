@@ -6,3 +6,4 @@ Rules of the road:
 * Classes and anonymous functions that do not inherit QObject should use 
   the format :samp:`QCoreApplication.translate('Riab', 'Translations loaded')`
 * Classes that inherit QObject should use the form :samp:`self.tr('foo')`
+

@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="en_US">
+<!DOCTYPE TS><TS version="2.0">
 <context>
     <name>@default</name>
-    <message>
-        <location filename="riab.py" line="139"/>
-        <source>Show/hide Risk In A Box dock widget</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="riabclipper.py" line="211"/>
         <source>Layer or Extent passed to clip is None.</source>
@@ -58,21 +53,6 @@
         <source>Failed to copy keywords file from :
 %s
 to%s: %s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="utilities.py" line="61"/>
-        <source>&lt;span class=&quot;label important&quot;&gt;Problem:&lt;/span&gt; </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="utilities.py" line="64"/>
-        <source>&lt;span class=&quot;label warning&quot;&gt;Traceback:&lt;/span&gt; </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="utilities.py" line="118"/>
-        <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -173,8 +153,41 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riab.py" line="146"/>
-        <source>Risk in a box</source>
+        <location filename="utilities.py" line="61"/>
+        <source>&lt;span class=&quot;label important&quot;&gt;Problem:&lt;/span&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="64"/>
+        <source>&lt;span class=&quot;label warning&quot;&gt;Traceback:&lt;/span&gt; </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="118"/>
+        <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Riab</name>
+    <message>
+        <location filename="riab.py" line="106"/>
+        <source>Translations loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="139"/>
+        <source>Risk in a Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="131"/>
+        <source>Show/hide Risk in a Box dock widget</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="166"/>
+        <source>&amp;Risk in a Box</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -213,6 +226,11 @@ to%s: %s</source>
     <message>
         <location filename="ui_riabdock.ui" line="103"/>
         <source>about:blank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="141"/>
+        <source>Sponsored by AusAID and World Bank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -275,11 +293,6 @@ to%s: %s</source>
         <location filename="riabdock.py" line="780"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="141"/>
-        <source>Sponsored by AusAID and World Bank</source>
-        <translation>Didukung oleh AusAID dan World Bank</translation>
     </message>
 </context>
 <context>

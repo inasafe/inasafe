@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="en_ZA" sourcelanguage="en_US">
+<!DOCTYPE TS>
+<TS version="2.0" language="en_ZA">
 <context>
     <name>@default</name>
-    <message>
-        <location filename="riab.py" line="139"/>
-        <source>Show/hide Risk In A Box dock widget</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="riab.py" line="146"/>
-        <source>Risk in a box</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="riabclipper.py" line="211"/>
         <source>Layer or Extent passed to clip is None.</source>
@@ -179,6 +170,39 @@ to%s: %s</source>
     </message>
 </context>
 <context>
+    <name>Riab</name>
+    <message>
+        <location filename="riab.py" line="165"/>
+        <source>Risk In A Box</source>
+        <translation type="obsolete">Test</translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="106"/>
+        <source>Translations loaded</source>
+        <translation>Loaded translations ZA</translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="138"/>
+        <source>Risk in a box</source>
+        <translation type="obsolete">Box in a risk</translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="139"/>
+        <source>Risk in a Box</source>
+        <translation>Box in a Risk</translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="131"/>
+        <source>Show/hide Risk in a Box dock widget</source>
+        <translation>Show or hide Risk in a Box dock widget</translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="166"/>
+        <source>&amp;Risk in a Box</source>
+        <translation>&amp;Box in a risk</translation>
+    </message>
+</context>
+<context>
     <name>RiabDock</name>
     <message>
         <location filename="ui_riabdock.ui" line="14"/>
@@ -218,7 +242,7 @@ to%s: %s</source>
     <message>
         <location filename="ui_riabdock.ui" line="141"/>
         <source>Sponsored by AusAID and World Bank</source>
-        <translation>Funded by AusAID and World Bank</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="ui_riabdock.ui" line="161"/>

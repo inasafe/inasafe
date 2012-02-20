@@ -29,7 +29,7 @@ from PyQt4.QtCore import (QObject,
                           QSettings,
                           QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication
-
+from riabexceptions import TranslationLoadException
 # Import RIAB modules
 from riabdock import RiabDock
 #see if we can import pydev - see development docs for details
@@ -39,20 +39,6 @@ try:
     DEBUG = True
 except Exception, e:
     print 'Debugging was disabled'
-
-
-def tr(theText):
-    """We define a tr() alias here since the Riab class below
-    does not inherit from QObject.
-    .. note:: see http://tinyurl.com/pyqt-differences
-    Args:
-       theText - string to be translated
-    Returns:
-       Translated version of the given string if available, otherwise
-       the original string.
-    """
-    myContext = "Riab"
-    return QCoreApplication.translate(myContext, theText)
 
 
 class Riab:
@@ -82,7 +68,9 @@ class Riab:
 
         # Save reference to the QGIS interface
         self.iface = iface
+        self.translator = None
         self.setupI18n()
+        print QCoreApplication.translate('Riab', 'Translations loaded')
 
     def setupI18n(self):
         """Setup internationalisation for the plugin.
@@ -98,22 +86,25 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
-
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
-        myLocalName = None
+        myLocaleName = None
         if not myOverrideFlag:
-            myLocalName = QLocale.system().name()
+            myLocaleName = QLocale.system().name()
         else:
-            myLocalName = QSettings().value('locale/userLocale',
+            myLocaleName = QSettings().value('locale/userLocale',
                                             QVariant('')).toString()
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'gui', 'i18n',
-                        'riab_' + str(myLocalName) + '.qm')
+                        'riab_' + str(myLocaleName) + '.qm')
         if os.path.exists(myTranslationPath):
-            myTranslator = QTranslator()
-            myTranslator.load(myTranslationPath)
-            QCoreApplication.installTranslator(myTranslator)
+            self.translator = QTranslator()
+            myResult = self.translator.load(myTranslationPath)
+            if not myResult:
+                myMessage = 'Failed to load translation for %s' % myLocaleName
+                raise TranslationLoadException(myMessage)
+            QCoreApplication.installTranslator(self.translator)
+        print QCoreApplication.translate('Riab', 'Translations loaded')
 
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
@@ -134,16 +125,20 @@ class Riab:
 
         # Create action for plugin dockable window (show/hide)
         self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
-                                  'Risk In A Box', self.iface.mainWindow())
-        self.actionDock.setStatusTip(tr('Show/hide Risk In A Box dock widget'))
-        self.actionDock.setWhatsThis(tr('Show/hide Risk In A Box dock widget'))
+                                QCoreApplication.translate('Riab',
+                                'Risk in a Box'), self.iface.mainWindow())
+        self.actionDock.setStatusTip(QCoreApplication.translate(
+                                'Riab', 'Show/hide Risk in a Box dock widget'))
+        self.actionDock.setWhatsThis(QCoreApplication.translate(
+                                'Riab', 'Show/hide Risk in a Box dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
         QObject.connect(self.actionDock, SIGNAL('triggered()'),
                         self.showHideDockWidget)
 
         self.iface.addToolBarIcon(self.actionDock)
-        self.iface.addPluginToMenu(tr('Risk in a box'), self.actionDock)
+        self.iface.addPluginToMenu(QCoreApplication.translate(
+                                    'Riab', 'Risk in a Box'), self.actionDock)
 
         # create dockwidget and tabify it with the legend
         self.dockWidget = RiabDock(self.iface)
@@ -169,7 +164,8 @@ class Riab:
            no exceptions explicitly raised.
         """
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu('&Risk In A Box', self.actionDock)
+        self.iface.removePluginMenu(QCoreApplication.translate(
+                                    'Riab', '&Risk in a Box'), self.actionDock)
         self.iface.removeToolBarIcon(self.actionDock)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)

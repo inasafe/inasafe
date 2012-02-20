@@ -54,3 +54,9 @@ class InvalidParameterException(Exception):
     """Custom exception for when an invalid parameter is
     passed to a function."""
     pass
+
+
+class TranslationLoadException(Exception):
+    """Custom exception handler for whe translation file fails
+    to load."""
+    pass
