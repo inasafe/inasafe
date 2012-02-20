@@ -171,22 +171,22 @@ to%s: %s</source>
 <context>
     <name>Riab</name>
     <message>
-        <location filename="riab.py" line="106"/>
+        <location filename="riab.py" line="107"/>
         <source>Translations loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riab.py" line="139"/>
+        <location filename="riab.py" line="140"/>
         <source>Risk in a Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riab.py" line="131"/>
+        <location filename="riab.py" line="132"/>
         <source>Show/hide Risk in a Box dock widget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riab.py" line="166"/>
+        <location filename="riab.py" line="167"/>
         <source>&amp;Risk in a Box</source>
         <translation type="unfinished"></translation>
     </message>
@@ -199,38 +199,8 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="33"/>
-        <source>Pertanyaan</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="42"/>
-        <source>Apabila terjadi</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="52"/>
-        <source>Berapa banyak</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="62"/>
-        <source>&amp;Yang mungkin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="84"/>
-        <source>Hasil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="ui_riabdock.ui" line="103"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ui_riabdock.ui" line="141"/>
-        <source>Sponsored by AusAID and World Bank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -292,6 +262,36 @@ to%s: %s</source>
     <message>
         <location filename="riabdock.py" line="780"/>
         <source>Raster exposure with vector hazard not implemented</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="33"/>
+        <source>Questions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="42"/>
+        <source>In the event of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="52"/>
+        <source>How many</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="62"/>
+        <source>&amp;Might</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="84"/>
+        <source>Results</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ui_riabdock.ui" line="141"/>
+        <source>Supported by AusAID and World Bank</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
