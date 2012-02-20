@@ -70,7 +70,7 @@ class Riab:
         self.iface = iface
         self.translator = None
         self.setupI18n()
-        print QCoreApplication.translate('Riab', 'Translations loaded')
+        #print QCoreApplication.translate('Riab', 'Translations loaded')
 
     def setupI18n(self):
         """Setup internationalisation for the plugin.
