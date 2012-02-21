@@ -74,7 +74,7 @@ class Riab:
         self.setupI18n()
         #print self.tr('Risk in a Box')
 
-    def setupI18n(self):
+    def setupI18n(self, thePreferredLocale=None):
         """Setup internationalisation for the plugin.
 
         See if QGIS wants to override the system locale
@@ -82,7 +82,8 @@ class Riab:
         for whatever locale is effectively being used.
 
         Args:
-           None.
+           thePreferredLocale - optional parameter which if set
+           will override any other way of determining locale..
         Returns:
            None.
         Raises:
@@ -92,11 +93,13 @@ class Riab:
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
         myLocaleName = None
-        if not myOverrideFlag:
+        if thePreferredLocale is not None:
+            myLocaleName = thePreferredLocale
+        elif myOverrideFlag:
             myLocaleName = QLocale.system().name()
         else:
             myLocaleName = QSettings().value('locale/userLocale',
-                                            QVariant('')).toString()
+                                             QVariant('')).toString()
         # Also set the system locale to the user overridden local
         # so that the riab library functions gettext will work
         # .. see:: :py:func:`storage.utilities`

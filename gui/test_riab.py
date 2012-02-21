@@ -17,9 +17,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import sys
+import os
+
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
-from PyQt4.QtCore import QCoreApplication
 from PyQt4.QtGui import QWidget
 from utilities_test import getQgisTestApp
 
@@ -41,11 +47,13 @@ class RiabTest(unittest.TestCase):
 
     def test_setupI18n(self):
         """Gui translations are working."""
+
         myUntranslatedString = 'Risk in a Box'
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
         myRiab = Riab(myIface)
+        myRiab.setupI18n('en_ZA')
         myTranslation = myRiab.tr(myUntranslatedString)
         myMessage = 'Expected: %s\nTo be different to: %s' % (
                             myUntranslatedString, myTranslation)
