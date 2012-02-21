@@ -26,7 +26,6 @@ sys.path.append(pardir)
 
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
-from PyQt4.QtCore import QCoreApplication
 from PyQt4.QtGui import QWidget
 from utilities_test import getQgisTestApp
 
@@ -49,12 +48,12 @@ class RiabTest(unittest.TestCase):
     def test_setupI18n(self):
         """Gui translations are working."""
 
-        os.environ['LANG'] = 'en_ZA'
         myUntranslatedString = 'Risk in a Box'
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
         myRiab = Riab(myIface)
+        myRiab.setupI18n('en_ZA')
         myTranslation = myRiab.tr(myUntranslatedString)
         myMessage = 'Expected: %s\nTo be different to: %s' % (
                             myUntranslatedString, myTranslation)
