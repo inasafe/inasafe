@@ -18,7 +18,7 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4 import QtGui  # QtCore
+from PyQt4 import QtGui, QtCore
 #from PyQt4.QtCore import pyqtSignature
 #from ui_riabdock import Ui_RiabDock
 #from utilities import getExceptionWithStacktrace
@@ -60,7 +60,13 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         # set some inital ui state:
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
+        self.radPredefined.setChecked(True)
+        self.radExposure.setChecked(True)
         self.adjustSize()
+        myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
+        myButton.setEnabled(False)
+
+        # Put in some dummy data while we are testing
 
     @pyqtSignature('bool')  # prevents actions being handled twice
     def on_pbnAdvanced_toggled(self, theFlag):
@@ -77,3 +83,67 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         self.adjustSize()
+
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def on_radHazard_toggled(self, theFlag):
+        """Automatic slot executed when the hazard radio is toggled.
+
+        Args:
+           theFlag - boolean indicating the new checked state of the button
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        if theFlag:
+            myHazardList = ['earthquake', 'flood', 'tsunami', 'volcano']
+            self.setSubcategoryList(myHazardList)
+
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def on_radExposure_toggled(self, theFlag):
+        """Automatic slot executed when the hazard radio is toggled.
+
+        Args:
+           theFlag - boolean indicating the new checked state of the button
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        if theFlag:
+            myExposureList = ['population', 'building', 'roads']
+            self.setSubcategoryList(myExposureList)
+
+    def setSubcategoryList(self, theList):
+        """Helper to populate the subcategory list based on category context.
+
+        Args:
+           theList - a list of subcategories e.g. ['earthquake','volcano']
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        self.cboSubcategory.clear()
+        for myItem in theList:
+            self.cboSubcategory.addItem(myItem)
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_pbnAddToList1_clicked(self):
+        """Automatic slot executed when the pbnAddToList1 button is pressed.
+
+        It will add the current key/value pair to the list if it is not
+        already present. The kvp will also be stored in the data of the
+        listwidgetitem as a simple dict.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+
+        myCurrentKey = self.cboKeyword.currentText()
+        myCurrentValue = self.cboKeyword.currentText()
+        myItem = QtGui.QListWidgetItem(myCurrentKey + ':' + myCurrentValue)
+        myData = {myCurrentKey: myCurrentValue}
+        myItem.setData(myData)
+        self.lstKeywords.insertItem(0, myItem)

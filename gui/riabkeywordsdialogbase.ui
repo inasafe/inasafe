@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>514</width>
-    <height>474</height>
+    <width>520</width>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,6 +25,9 @@
      </item>
      <item>
       <widget class="QRadioButton" name="radHazard">
+       <property name="toolTip">
+        <string>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</string>
+       </property>
        <property name="text">
         <string>Hazard</string>
        </property>
@@ -32,6 +35,9 @@
      </item>
      <item>
       <widget class="QRadioButton" name="radExposure">
+       <property name="toolTip">
+        <string>Where people and property are situated.</string>
+       </property>
        <property name="text">
         <string>Exposure</string>
        </property>
@@ -49,7 +55,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cboSubcategory"/>
+      <widget class="QComboBox" name="cboSubcategory">
+       <property name="toolTip">
+        <string>A subcategory represents the type of hazard.</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -63,29 +73,12 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Advanced editor</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QRadioButton" name="radPredefined">
-        <property name="text">
-         <string>Predefined</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QFrame" name="frame">
         <property name="frameShape">
@@ -111,12 +104,17 @@
            </item>
            <item>
             <property name="text">
-             <string>Foo</string>
+             <string>Units</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Bar</string>
+             <string>Density</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Datatype</string>
             </property>
            </item>
           </widget>
@@ -129,7 +127,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cboValue"/>
+          <widget class="QComboBox" name="cboValue">
+           <property name="editable">
+            <bool>true</bool>
+           </property>
+           <property name="insertPolicy">
+            <enum>QComboBox::InsertAtTop</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="pbnAddToList1">
@@ -141,10 +146,39 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QRadioButton" name="radUserDefined">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>User Defined</string>
+         <string>Current keywords</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QListWidget" name="lstKeywords">
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+        <item>
+         <property name="text">
+          <string>New Item</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QPushButton" name="pbnRemove">
+        <property name="text">
+         <string>Remove selected</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radPredefined">
+        <property name="text">
+         <string>Predefined</string>
         </property>
        </widget>
       </item>
@@ -165,7 +199,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit"/>
+          <widget class="QLineEdit" name="leKey"/>
          </item>
          <item>
           <widget class="QLabel" name="label_7">
@@ -175,7 +209,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_2"/>
+          <widget class="QLineEdit" name="leValue"/>
          </item>
          <item>
           <widget class="QPushButton" name="pbnAddToList2">
@@ -187,24 +221,36 @@
         </layout>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_8">
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="radUserDefined">
         <property name="text">
-         <string>Current keywords</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QListWidget" name="lstKeywords"/>
-      </item>
-      <item row="6" column="0">
-       <widget class="QPushButton" name="pbnRemove">
-        <property name="text">
-         <string>Remove selected</string>
+         <string>User Defined</string>
         </property>
        </widget>
       </item>
      </layout>
+     <zorder>radPredefined</zorder>
+     <zorder>frame</zorder>
+     <zorder>radUserDefined</zorder>
+     <zorder>frame_2</zorder>
+     <zorder>label_8</zorder>
+     <zorder>lstKeywords</zorder>
+     <zorder>pbnRemove</zorder>
+     <zorder>pbnAddToList1</zorder>
+     <zorder>label_4</zorder>
+     <zorder>cboKeyword</zorder>
+     <zorder>cboValue</zorder>
+     <zorder>label_5</zorder>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
     </widget>
    </item>
   </layout>
@@ -294,22 +340,6 @@
   <connection>
    <sender>radUserDefined</sender>
    <signal>toggled(bool)</signal>
-   <receiver>frame</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>38</x>
-     <y>224</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>30</x>
-     <y>174</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radUserDefined</sender>
-   <signal>toggled(bool)</signal>
    <receiver>frame_2</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -320,6 +350,22 @@
     <hint type="destinationlabel">
      <x>114</x>
      <y>243</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radUserDefined</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>30</x>
+     <y>174</y>
     </hint>
    </hints>
   </connection>
