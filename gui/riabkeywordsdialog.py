@@ -22,6 +22,7 @@ from PyQt4 import QtGui, QtCore
 #from PyQt4.QtCore import pyqtSignature
 #from ui_riabdock import Ui_RiabDock
 #from utilities import getExceptionWithStacktrace
+from impactcalculator import ImpactCalculator
 from riabkeywordsdialogbase import Ui_RiabKeywordsDialogBase
 from PyQt4.QtCore import pyqtSignature
 # Don't remove this even if it is flagged as unused by your ide
@@ -65,6 +66,11 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.adjustSize()
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         myButton.setEnabled(False)
+        self.layer = self.iface.activeLayer()
+        mySource = str(self.layer.source())
+        self.calculator = ImpactCalculator()
+        myHazardKeywords = self.calculator.getKeywordFromFile(mySource)
+        self.loadStateFromKeywords(myHazardKeywords)
         #settrace()
         # Put in some dummy data while we are testing
 
@@ -182,3 +188,20 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
         for myItem in self.lstKeywords.selectedItems():
             self.lstKeywords.takeItem(self.lstKeywords.row(myItem))
+
+    def loadStateFromKeywords(self, theKeywords):
+        """Given a keywords dict, set the ui state to match it.
+
+        Args:
+           theKeywords - a dict of keywords as returned from the riab
+           library.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        if 'category' in theKeywords:
+            myCategory = theKeywords['category']
+            if myCategory in 'hazard':
+                self.radHazard.setChecked(True)
+            else:
+                self.radExposure.setChecked(True)
