@@ -65,7 +65,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.adjustSize()
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         myButton.setEnabled(False)
-
+        settrace()
         # Put in some dummy data while we are testing
 
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -181,4 +181,4 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         for myItem in self.lstKeywords.selectedItems():
-            self.lstKeywords.removeItemWidget(myItem)
+            self.lstKeywords.takeItem(self.lstKeywords.row(myItem))
