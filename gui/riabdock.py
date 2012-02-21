@@ -79,7 +79,7 @@ def setVectorStyle(qgisVectorLayer, style):
 
     myRangeList = []
     for myClass in myClasses:
-        myTransparencyPercent = myClass['tranparency']
+        myTransparencyPercent = myClass['transparency']
         myMax = myClass['max']
         myMin = myClass['min']
         myColour = myClass['colour']

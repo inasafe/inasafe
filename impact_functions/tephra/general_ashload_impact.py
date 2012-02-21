@@ -119,13 +119,13 @@ class TephraImpactFunction(FunctionProvider):
         class_keys = ['< 90 kg/m2', '90 - 150 kg/m2',
                       '150 - 300 kg/m2', '> 300 kg/m2']
         class_values = [{'min': -0.5, 'max': 0.5,
-                         'color': '#cccccc', 'opacity': '1'},
+                         'color': '#cccccc', 'transparency': '1'},
                         {'min': 0.5, 'max': 1.5,
-                         'color': '#0EEC6C', 'opacity': '1'},
+                         'color': '#0EEC6C', 'transparency': '1'},
                         {'min': 1.5, 'max': 2.5,
-                         'color': '#FD8D3C', 'opacity': '1'},
+                         'color': '#FD8D3C', 'transparency': '1'},
                         {'min': 2.5, 'max': 3.5,
-                         'color': '#F31A1C', 'opacity': '1'}]
+                         'color': '#F31A1C', 'transparency': '1'}]
 
         params = dict(name=data.get_name(),
                       damage_field=self.target_field,
