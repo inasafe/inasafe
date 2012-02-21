@@ -172,7 +172,7 @@ copy one of the existing stanzas e.g.::
       storage/test_io.py \
       impact_functions/flood/flood_building_impact.py
 
-Save and close the Makefil file. Next you need to create the initial translation
+Save and close the Makefile file. Next you need to create the initial translation
 stringlist for that locale by creating a locale directory and running the 
 command above without the :samp:`-j` (j is for 'join' which merges old content 
 with new, avoiding destroying previous translated strings). So for example you 
@@ -194,3 +194,31 @@ to generate the updated .po file under i18n/en_ZA/LC_MESSAGES. Don't forget to
 
 To convert the .po file to a binary .mo file (which is used at runtime for the
 actual translation), follow the :ref:`_library-release-label` section above.
+
+Adding a new source file for translation
+........................................
+
+To add a new source file, edit the :samp:`Makefile` file and append the new 
+sourcefile to the bottom of the file list in the 
+:samp:`update-translation-strings` section. For example::
+
+   xgettext -j -d id -o i18n/id/LC_MESSAGES/riab.po \
+      storage/test_io.py \
+      impact_functions/flood/flood_building_impact.py
+      
+Would become::
+
+   xgettext -j -d id -o i18n/id/LC_MESSAGES/riab.po \
+      storage/test_io.py \
+      impact_functions/flood/flood_building_impact.py \
+      impact_functions/flood/flood_population_fatality
+
+The above adding the impact_function *flood_population_fatality* to the list of 
+translatable source files. Now run::
+
+   make update-translation-strings`
+
+to generate the updated .po file and make it available to translators. When the
+translated file is returned, convert the .po file to a binary .mo file (which is
+used at runtime for the actual translation), then follow the 
+:ref:`_library-release-label` section above.
