@@ -25,7 +25,9 @@ PY_FILES = riab.py riabdock.py riabhelp.py __init__.py
 
 EXTRAS = icon.png
 
-UI_FILES = ui_riabdock.py ui_riabhelp.py
+UI_FILES = ui_riabdock.py \
+					 ui_riabhelp.py \
+					 riabkeywordsdialogbase.py
 
 RESOURCE_FILES = resources.py
 
@@ -40,6 +42,7 @@ compile: $(UI_FILES) $(RESOURCE_FILES)
 	cp resources.py resources_rc.py
 
 %.py : %.ui
+	set -x
 	pyuic4 -o $@ $<
 
 # Run the test suite followed by pep8 style checking

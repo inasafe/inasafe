@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RiabKeywords</class>
- <widget class="QDialog" name="RiabKeywords">
+ <class>RiabKeywordsDialogBase</class>
+ <widget class="QDialog" name="RiabKeywordsDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>511</height>
+    <height>491</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -214,12 +214,12 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>RiabKeywords</receiver>
+   <receiver>RiabKeywordsDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>501</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -230,16 +230,96 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>RiabKeywords</receiver>
+   <receiver>RiabKeywordsDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>501</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>groupBox</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>151</x>
+     <y>89</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>120</x>
+     <y>114</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>42</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>50</x>
+     <y>161</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_2</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>146</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>75</x>
+     <y>242</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_3</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>30</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_3</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_2</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>69</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>114</x>
+     <y>243</y>
     </hint>
    </hints>
   </connection>

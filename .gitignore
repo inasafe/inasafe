@@ -13,4 +13,5 @@ qgispath.txt
 riab_test_data
 riab_demo_data
 .project
-.pydeproject
+.pydevproject
+.settings

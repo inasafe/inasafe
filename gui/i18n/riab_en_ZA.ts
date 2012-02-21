@@ -224,53 +224,53 @@ to%s: %s</source>
         <translation type="unfinished">Run</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="262"/>
+        <location filename="riabdock.py" line="296"/>
         <source>&lt;span class=&quot;label important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%s]: %s &lt;br&gt;Exposure keywords [%s]: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="276"/>
+        <location filename="riabdock.py" line="310"/>
         <source>&lt;span class=&quot;label success&quot;&gt;Ready:&lt;/span&gt; You can now proceed to run your model by clicking the &lt;em&gt; Run&lt;/em&gt; button.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="475"/>
+        <location filename="riabdock.py" line="509"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="520"/>
+        <location filename="riabdock.py" line="546"/>
         <source>&lt;p&gt;&lt;span class=&quot;label important&quot;&gt;Error:&lt;/span&gt; An exception occurred when creating layer subsets clipped to the optimal extent: %s&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="550"/>
+        <location filename="riabdock.py" line="591"/>
         <source>An exception occurred when starting the model: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="588"/>
+        <location filename="riabdock.py" line="629"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="619"/>
+        <location filename="riabdock.py" line="660"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="639"/>
+        <location filename="riabdock.py" line="680"/>
         <source>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Analyzing this question...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/riab/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="718"/>
+        <location filename="riabdock.py" line="759"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %s&lt;/p&gt;&lt;p&gt;Exposure: %s&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %s&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %s&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="780"/>
+        <location filename="riabdock.py" line="821"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation type="unfinished"></translation>
     </message>
@@ -305,7 +305,7 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="246"/>
+        <location filename="riabdock.py" line="280"/>
         <source>&lt;span class=&quot;label notice&quot;&gt;Getting started:&lt;/span&gt; To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
         <translation type="unfinished"></translation>
     </message>
