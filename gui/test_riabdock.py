@@ -49,8 +49,7 @@ CANVAS.resize(QtCore.QSize(400, 400))
 
 # QgisInterface is a stub implementation of the QGIS plugin interface
 IFACE = QgisInterface(CANVAS)
-GUI_CONTEXT_FLAG = False
-DOCK = RiabDock(IFACE, GUI_CONTEXT_FLAG)
+DOCK = RiabDock(IFACE)
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 

@@ -41,13 +41,14 @@ CANVAS.resize(QtCore.QSize(400, 400))
 
 # QgisInterface is a stub implementation of the QGIS plugin interface
 IFACE = QgisInterface(CANVAS)
-GUI_CONTEXT_FLAG = False
-DIALOG = RiabKeywordsDialog(IFACE, GUI_CONTEXT_FLAG)
+DIALOG = RiabKeywordsDialog(PARENT, IFACE)
 
 
 class RiabKeywordsDialogTest(unittest.TestCase):
     """Test the risk in a box keywords GUI"""
-    pass
+    def testDialogLoads(self):
+        """Basic test to ensure the keyword dialog has loaded"""
+        assert DIALOG is not None
 
 
 if __name__ == '__main__':

@@ -198,7 +198,7 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
 class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
     """Dock implementation class for the Risk In A Box plugin."""
 
-    def __init__(self, iface, guiContext=True):
+    def __init__(self, iface):
         """Constructor for the dialog.
 
         This dialog will allow the user to select layers and scenario details
@@ -213,9 +213,6 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Args:
 
            * iface - a Quantum GIS QGisAppInterface instance.
-           * guiContext - an optional paramter, defaults to True. Set to
-             False if you do not wish to see popup messages etc. Used
-             mainly by init tests.
 
         Returns:
            not applicable
@@ -228,7 +225,6 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         self.iface = iface
         self.header = None  # for storing html header template
         self.footer = None  # for storing html footer template
-        self.suppressDialogsFlag = guiContext
         self.calculator = ImpactCalculator()
         self.runner = None
         self.helpDialog = None

@@ -40,7 +40,7 @@ except Exception, e:
 class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
 
-    def __init__(self, parent, iface, guiContext=True):
+    def __init__(self, parent, iface):
         """Constructor for the dialog.
 
         Args:
@@ -65,7 +65,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.adjustSize()
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         myButton.setEnabled(False)
-        settrace()
+        #settrace()
         # Put in some dummy data while we are testing
 
     @pyqtSignature('bool')  # prevents actions being handled twice
