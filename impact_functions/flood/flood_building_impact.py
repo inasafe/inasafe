@@ -17,7 +17,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'AFFECTED'
-    plugin_name = 'Temporary Closed'
+    plugin_name = 'Temporarily Closed'
 
     def run(self, layers):
         """Risk plugin for tsunami population
