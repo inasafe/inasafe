@@ -109,7 +109,12 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if theFlag:
-            myExposureList = ['population', 'building', 'roads']
+            myExposureList = ['population [density]',
+                              'population [count]',
+                              'building [osm]',
+                              'building [sigab]',
+                              'building [other]',
+                              'roads']
             self.setSubcategoryList(myExposureList)
 
     def setSubcategoryList(self, theList):
@@ -155,3 +160,18 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myData = myCurrentKey + '|' + myCurrentValue
         myItem.setData(QtCore.Qt.UserRole, myData)
         self.lstKeywords.insertItem(0, myItem)
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_pbnRemove_clicked(self):
+        """Automatic slot executed when the pbnRemove button is pressed.
+
+        It will remove any selected items in the keywords list.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        for myItem in self.lstKeywords.selectedItems():
+            self.lstKeywords.removeItemWidget(myItem)
