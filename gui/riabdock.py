@@ -131,7 +131,18 @@ def setVectorStyle(qgisVectorLayer, style):
 
 
 def setRasterStyle(theQgsRasterLayer, theStyle):
-    """Set QGIS raster style based on RIAB style dictionary
+    """Set QGIS raster style based on RIAB style dictionary.
+
+    This function will set both the colour map and the transparency
+    for the passed in layer.
+
+    .. note:: There is currently a limitation in QGIS in that
+       pixel transparency values can not be specified in ranges and
+       consequently the opacity is of limited value and seems to
+       only work effectively with integer values.
+
+    .. todo:: Get Tim to implement range based transparency in
+       the core QGIS library.
 
     Input
         theQgsRasterLayer: Qgis layer
