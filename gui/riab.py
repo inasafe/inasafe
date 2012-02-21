@@ -114,7 +114,7 @@ class Riab:
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
-        
+
         Args:
            theString - string for translation.
         Returns:
@@ -143,7 +143,7 @@ class Riab:
 
         # Create action for plugin dockable window (show/hide)
         self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
-                                self.tr('Risk in a Box'), self.iface.mainWindow())
+                            self.tr('Risk in a Box'), self.iface.mainWindow())
         self.actionDock.setStatusTip(self.tr(
                                     'Show/hide Risk in a Box dock widget'))
         self.actionDock.setWhatsThis(self.tr(
