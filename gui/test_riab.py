@@ -17,6 +17,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import sys
+import os
+
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from PyQt4.QtCore import QCoreApplication
@@ -41,6 +48,8 @@ class RiabTest(unittest.TestCase):
 
     def test_setupI18n(self):
         """Gui translations are working."""
+
+        os.environ['LANG'] = 'en_ZA'
         myUntranslatedString = 'Risk in a Box'
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)

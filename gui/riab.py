@@ -95,7 +95,7 @@ class Riab:
             myLocaleName = QLocale.system().name()
         else:
             myLocaleName = QSettings().value('locale/userLocale',
-                                            QVariant('')).toString()
+                                             QVariant('')).toString()
         # Also set the system locale to the user overridden local
         # so that the riab library functions gettext will work
         # .. see:: :py:func:`storage.utilities`
