@@ -41,8 +41,10 @@ compile: $(UI_FILES) $(RESOURCE_FILES)
 	@#looks for a file generated with a different name
 	cp resources.py resources_rc.py
 
+clean: compile
+	rm $(UI_FILES)
+
 %.py : %.ui
-	set -x
 	pyuic4 -o $@ $<
 
 # Run the test suite followed by pep8 style checking

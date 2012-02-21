@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>514</width>
-    <height>491</height>
+    <height>474</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,21 +17,21 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="lblCategory">
        <property name="text">
         <string>Category</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radioButton">
+      <widget class="QRadioButton" name="radHazard">
        <property name="text">
         <string>Hazard</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radioButton_2">
+      <widget class="QRadioButton" name="radExposure">
        <property name="text">
         <string>Exposure</string>
        </property>
@@ -49,12 +49,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="cboSubcategory"/>
      </item>
     </layout>
    </item>
    <item row="2" column="0">
-    <widget class="QPushButton" name="pushButton_4">
+    <widget class="QPushButton" name="pbnAdvanced">
      <property name="text">
       <string>Show advanced</string>
      </property>
@@ -80,7 +80,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="radioButton_4">
+       <widget class="QRadioButton" name="radPredefined">
         <property name="text">
          <string>Predefined</string>
         </property>
@@ -103,7 +103,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_2">
+          <widget class="QComboBox" name="cboKeyword">
            <item>
             <property name="text">
              <string>Subcategory</string>
@@ -129,10 +129,10 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_3"/>
+          <widget class="QComboBox" name="cboValue"/>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="pbnAddToList1">
            <property name="text">
             <string>Add to list</string>
            </property>
@@ -142,7 +142,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QRadioButton" name="radioButton_3">
+       <widget class="QRadioButton" name="radUserDefined">
         <property name="text">
          <string>User Defined</string>
         </property>
@@ -178,7 +178,7 @@
           <widget class="QLineEdit" name="lineEdit_2"/>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="pbnAddToList2">
            <property name="text">
             <string>Add to list</string>
            </property>
@@ -195,10 +195,10 @@
        </widget>
       </item>
       <item row="5" column="0">
-       <widget class="QListWidget" name="listWidget"/>
+       <widget class="QListWidget" name="lstKeywords"/>
       </item>
       <item row="6" column="0">
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="pbnRemove">
         <property name="text">
          <string>Remove selected</string>
         </property>
@@ -244,7 +244,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_4</sender>
+   <sender>pbnAdvanced</sender>
    <signal>toggled(bool)</signal>
    <receiver>groupBox</receiver>
    <slot>setVisible(bool)</slot>
@@ -260,7 +260,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>radioButton_4</sender>
+   <sender>radPredefined</sender>
    <signal>toggled(bool)</signal>
    <receiver>frame</receiver>
    <slot>setEnabled(bool)</slot>
@@ -276,7 +276,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>radioButton_4</sender>
+   <sender>radPredefined</sender>
    <signal>toggled(bool)</signal>
    <receiver>frame_2</receiver>
    <slot>setDisabled(bool)</slot>
@@ -292,7 +292,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>radioButton_3</sender>
+   <sender>radUserDefined</sender>
    <signal>toggled(bool)</signal>
    <receiver>frame</receiver>
    <slot>setDisabled(bool)</slot>
@@ -308,7 +308,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>radioButton_3</sender>
+   <sender>radUserDefined</sender>
    <signal>toggled(bool)</signal>
    <receiver>frame_2</receiver>
    <slot>setEnabled(bool)</slot>

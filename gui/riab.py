@@ -32,6 +32,7 @@ from PyQt4.QtGui import QAction, QIcon, QApplication
 
 # Import RIAB modules
 from riabdock import RiabDock
+from riabkeywordsdialog import RiabKeywordsDialog
 from riabexceptions import TranslationLoadException
 #see if we can import pydev - see development docs for details
 try:
@@ -140,10 +141,11 @@ class Riab:
            no exceptions explicitly raised.
         """
         self.dockWidget = None
-
+        #--------------------------------------
         # Create action for plugin dockable window (show/hide)
+        #--------------------------------------
         self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
-                            self.tr('Risk in a Box'), self.iface.mainWindow())
+                         self.tr('Toggle RIAB Dock'), self.iface.mainWindow())
         self.actionDock.setStatusTip(self.tr(
                                     'Show/hide Risk in a Box dock widget'))
         self.actionDock.setWhatsThis(self.tr(
@@ -152,11 +154,31 @@ class Riab:
         self.actionDock.setChecked(True)
         QObject.connect(self.actionDock, SIGNAL('triggered()'),
                         self.showHideDockWidget)
-
+        # add to plugin toolbar
         self.iface.addToolBarIcon(self.actionDock)
-        self.iface.addPluginToMenu(self.tr('Risk in a Box'), self.actionDock)
+        # add to plugin menu
+        self.iface.addPluginToMenu(self.tr('Risk in a Box'),
+                                   self.actionDock)
 
+        #--------------------------------------
+        # Create action for keywords editor
+        #--------------------------------------
+        self.actionKeywordsDialog = QAction(QIcon(':/plugins/riab/icon.png'),
+                            self.tr('Keyword Editor'), self.iface.mainWindow())
+        self.actionKeywordsDialog.setStatusTip(self.tr(
+                                    'Open the keywords editor'))
+        self.actionKeywordsDialog.setWhatsThis(self.tr(
+                                    'Open the keywords editor'))
+        QObject.connect(self.actionKeywordsDialog, SIGNAL('triggered()'),
+                        self.showKeywordsEditor)
+
+        self.iface.addToolBarIcon(self.actionKeywordsDialog)
+        self.iface.addPluginToMenu(self.tr('Risk in a Box'),
+                                   self.actionKeywordsDialog)
+
+        #--------------------------------------
         # create dockwidget and tabify it with the legend
+        #--------------------------------------
         self.dockWidget = RiabDock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
@@ -179,15 +201,19 @@ class Riab:
            no exceptions explicitly raised.
         """
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(self.tr('&Risk in a Box'), self.actionDock)
+        self.iface.removePluginMenu(self.tr('Risk in a Box'),
+                                    self.actionDock)
         self.iface.removeToolBarIcon(self.actionDock)
+        self.iface.removePluginMenu(self.tr('Risk in a Box'),
+                                    self.actionKeywordsDialog)
+        self.iface.removeToolBarIcon(self.actionKeywordsDialog)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
 
     # Run method that performs all the real work
     def showHideDockWidget(self):
-        """Gui run procedure.
+        """Show or hide the dock widget.
 
         This slot is called when the user clicks the toolbar icon or
         menu item associated with this plugin. It will hide or show
@@ -207,3 +233,21 @@ class Riab:
         else:
             self.dockWidget.setVisible(True)
             self.dockWidget.raise_()
+
+    def showKeywordsEditor(self):
+        """Show the keywords editor.
+
+        This slot is called when the user clicks the keyword editor toolbar
+        icon or menu item associated with this plugin
+
+        .. see also:: :func:`Riab.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        myDialog = RiabKeywordsDialog(self.iface.mainWindow(), self.iface)
+        myDialog.show()

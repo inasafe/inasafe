@@ -23,7 +23,7 @@ from PyQt4 import QtGui  # QtCore
 #from ui_riabdock import Ui_RiabDock
 #from utilities import getExceptionWithStacktrace
 from riabkeywordsdialogbase import Ui_RiabKeywordsDialogBase
-
+from PyQt4.QtCore import pyqtSignature
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -40,11 +40,11 @@ except Exception, e:
 class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
 
-    def __init__(self, iface, guiContext=True):
+    def __init__(self, parent, iface, guiContext=True):
         """Constructor for the dialog.
 
         Args:
-
+           * parent - parent widget of this dialog
            * iface - a Quantum GIS QGisAppInterface instance.
 
         Returns:
@@ -52,7 +52,28 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised
         """
-        QtGui.QDialog.__init__(self, None)
+        QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
-        # Save reference to the QGIS interface
+        # Save reference to the QGIS interface and parent
         self.iface = iface
+        self.parent = parent
+        # set some inital ui state:
+        self.pbnAdvanced.setChecked(True)
+        self.pbnAdvanced.toggle()
+        self.adjustSize()
+
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def on_pbnAdvanced_toggled(self, theFlag):
+        """Automatic slot executed when the advanced button is toggled.
+
+        .. note:: some of the behaviour for hiding widgets is done using
+           the signal/slot editor in designer, so if you are trying to figure
+           out how the interactions work, look there too!
+
+        Args:
+           theFlag - boolean indicating the new checked state of the button
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        self.adjustSize()
