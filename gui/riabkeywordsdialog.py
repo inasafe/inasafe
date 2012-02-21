@@ -95,7 +95,14 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if theFlag:
-            myHazardList = ['earthquake', 'flood', 'tsunami', 'volcano']
+            myHazardList = [self.tr('earthquake [mmi]'),
+                            self.tr('tsunami [m]'),
+                            self.tr('tsunami [wet/dry]'),
+                            self.tr('tsunami [feet]'),
+                            self.tr('flood [m]'),
+                            self.tr('flood [wet/dry]'),
+                            self.tr('flood [feet]'),
+                            self.tr('volcano [kg2/m2]')]
             self.setSubcategoryList(myHazardList)
 
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -109,12 +116,12 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if theFlag:
-            myExposureList = ['population [density]',
-                              'population [count]',
-                              'building [osm]',
-                              'building [sigab]',
-                              'building [other]',
-                              'roads']
+            myExposureList = [self.tr('population [density]'),
+                              self.tr('population [count]'),
+                              self.tr('building [osm]'),
+                              self.tr('building [sigab]'),
+                              self.tr('building [other]'),
+                              self.tr('roads')]
             self.setSubcategoryList(myExposureList)
 
     def setSubcategoryList(self, theList):

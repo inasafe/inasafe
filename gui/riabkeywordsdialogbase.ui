@@ -11,18 +11,18 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Risk in a Box - Keyword Editor</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLabel" name="lblCategory">
-       <property name="text">
-        <string>Category</string>
-       </property>
-      </widget>
-     </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lblCategory">
+     <property name="text">
+      <string>Category</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QRadioButton" name="radHazard">
        <property name="toolTip">
@@ -45,28 +45,24 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Subcategory</string>
-       </property>
-       <property name="buddy">
-        <cstring>cboSubcategory</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cboSubcategory">
-       <property name="toolTip">
-        <string>A subcategory represents the type of hazard.</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Subcategory</string>
+     </property>
+     <property name="buddy">
+      <cstring>cboSubcategory</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="QComboBox" name="cboSubcategory">
+     <property name="toolTip">
+      <string>A subcategory represents the type of hazard.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3">
     <widget class="QPushButton" name="pbnAdvanced">
      <property name="text">
       <string>Show advanced</string>
@@ -76,7 +72,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0" colspan="3">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Advanced editor</string>
@@ -256,13 +252,20 @@
      <zorder>label_5</zorder>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0" colspan="3">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="3">
+    <widget class="QLabel" name="lblLayerName">
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>
