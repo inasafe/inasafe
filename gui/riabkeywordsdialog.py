@@ -132,7 +132,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
 
         It will add the current key/value pair to the list if it is not
         already present. The kvp will also be stored in the data of the
-        listwidgetitem as a simple dict.
+        listwidgetitem as a simple string delimited with a bar ('|').
 
         Args:
            None
@@ -142,8 +142,16 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
 
         myCurrentKey = self.cboKeyword.currentText()
-        myCurrentValue = self.cboKeyword.currentText()
+        myCurrentValue = self.cboValue.currentText()
         myItem = QtGui.QListWidgetItem(myCurrentKey + ':' + myCurrentValue)
-        myData = {myCurrentKey: myCurrentValue}
-        myItem.setData(myData)
+
+        # check the key does not already exist
+        for myCounter in range(self.lstKeywords.count()):
+            myExistingItem = self.lstKeywords.item(myCounter)
+            if myExistingItem.text() == myItem.text():
+                # .. todo:: tell the user something? TS
+                return
+
+        myData = myCurrentKey + '|' + myCurrentValue
+        myItem.setData(QtCore.Qt.UserRole, myData)
         self.lstKeywords.insertItem(0, myItem)

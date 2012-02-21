@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'riabkeywordsdialogbase.ui'
 #
-# Created: Tue Feb 21 11:00:43 2012
+# Created: Tue Feb 21 11:11:36 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -47,14 +47,6 @@ class Ui_RiabKeywordsDialogBase(object):
         self.cboSubcategory = QtGui.QComboBox(RiabKeywordsDialogBase)
         self.cboSubcategory.setToolTip(QtGui.QApplication.translate("RiabKeywordsDialogBase", "A subcategory represents the type of hazard.", None, QtGui.QApplication.UnicodeUTF8))
         self.cboSubcategory.setObjectName(_fromUtf8("cboSubcategory"))
-        self.cboSubcategory.addItem(_fromUtf8(""))
-        self.cboSubcategory.setItemText(0, QtGui.QApplication.translate("RiabKeywordsDialogBase", "Earthquake", None, QtGui.QApplication.UnicodeUTF8))
-        self.cboSubcategory.addItem(_fromUtf8(""))
-        self.cboSubcategory.setItemText(1, QtGui.QApplication.translate("RiabKeywordsDialogBase", "Flood", None, QtGui.QApplication.UnicodeUTF8))
-        self.cboSubcategory.addItem(_fromUtf8(""))
-        self.cboSubcategory.setItemText(2, QtGui.QApplication.translate("RiabKeywordsDialogBase", "Tsunami", None, QtGui.QApplication.UnicodeUTF8))
-        self.cboSubcategory.addItem(_fromUtf8(""))
-        self.cboSubcategory.setItemText(3, QtGui.QApplication.translate("RiabKeywordsDialogBase", "Volcano", None, QtGui.QApplication.UnicodeUTF8))
         self.horizontalLayout_3.addWidget(self.cboSubcategory)
         self.gridLayout_2.addLayout(self.horizontalLayout_3, 1, 0, 1, 1)
         self.pbnAdvanced = QtGui.QPushButton(RiabKeywordsDialogBase)
@@ -89,7 +81,7 @@ class Ui_RiabKeywordsDialogBase(object):
         self.cboKeyword.setItemText(3, QtGui.QApplication.translate("RiabKeywordsDialogBase", "Datatype", None, QtGui.QApplication.UnicodeUTF8))
         self.horizontalLayout.addWidget(self.cboKeyword)
         self.label_5 = QtGui.QLabel(self.frame)
-        self.label_5.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "value", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_5.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Value", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.horizontalLayout.addWidget(self.label_5)
         self.cboValue = QtGui.QComboBox(self.frame)
@@ -110,9 +102,6 @@ class Ui_RiabKeywordsDialogBase(object):
         self.lstKeywords.setAlternatingRowColors(True)
         self.lstKeywords.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
         self.lstKeywords.setObjectName(_fromUtf8("lstKeywords"))
-        item = QtGui.QListWidgetItem()
-        item.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "New Item", None, QtGui.QApplication.UnicodeUTF8))
-        self.lstKeywords.addItem(item)
         self.gridLayout.addWidget(self.lstKeywords, 5, 0, 1, 1)
         self.pbnRemove = QtGui.QPushButton(self.groupBox)
         self.pbnRemove.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Remove selected", None, QtGui.QApplication.UnicodeUTF8))
@@ -157,6 +146,12 @@ class Ui_RiabKeywordsDialogBase(object):
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
         self.gridLayout_2.addWidget(self.buttonBox, 4, 0, 1, 1)
+        self.label_2.setBuddy(self.cboSubcategory)
+        self.label_4.setBuddy(self.cboKeyword)
+        self.label_5.setBuddy(self.cboValue)
+        self.label_8.setBuddy(self.lstKeywords)
+        self.label_6.setBuddy(self.leKey)
+        self.label_7.setBuddy(self.leValue)
 
         self.retranslateUi(RiabKeywordsDialogBase)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), RiabKeywordsDialogBase.accept)
@@ -167,10 +162,21 @@ class Ui_RiabKeywordsDialogBase(object):
         QtCore.QObject.connect(self.radUserDefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.frame_2.setEnabled)
         QtCore.QObject.connect(self.radUserDefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.frame.setDisabled)
         QtCore.QMetaObject.connectSlotsByName(RiabKeywordsDialogBase)
+        RiabKeywordsDialogBase.setTabOrder(self.radHazard, self.radExposure)
+        RiabKeywordsDialogBase.setTabOrder(self.radExposure, self.cboSubcategory)
+        RiabKeywordsDialogBase.setTabOrder(self.cboSubcategory, self.pbnAdvanced)
+        RiabKeywordsDialogBase.setTabOrder(self.pbnAdvanced, self.radPredefined)
+        RiabKeywordsDialogBase.setTabOrder(self.radPredefined, self.cboKeyword)
+        RiabKeywordsDialogBase.setTabOrder(self.cboKeyword, self.cboValue)
+        RiabKeywordsDialogBase.setTabOrder(self.cboValue, self.pbnAddToList1)
+        RiabKeywordsDialogBase.setTabOrder(self.pbnAddToList1, self.radUserDefined)
+        RiabKeywordsDialogBase.setTabOrder(self.radUserDefined, self.leKey)
+        RiabKeywordsDialogBase.setTabOrder(self.leKey, self.leValue)
+        RiabKeywordsDialogBase.setTabOrder(self.leValue, self.pbnAddToList2)
+        RiabKeywordsDialogBase.setTabOrder(self.pbnAddToList2, self.lstKeywords)
+        RiabKeywordsDialogBase.setTabOrder(self.lstKeywords, self.pbnRemove)
+        RiabKeywordsDialogBase.setTabOrder(self.pbnRemove, self.buttonBox)
 
     def retranslateUi(self, RiabKeywordsDialogBase):
-        __sortingEnabled = self.lstKeywords.isSortingEnabled()
-        self.lstKeywords.setSortingEnabled(False)
-        item = self.lstKeywords.item(0)
-        self.lstKeywords.setSortingEnabled(__sortingEnabled)
+        pass
 
