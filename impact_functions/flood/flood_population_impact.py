@@ -144,15 +144,14 @@ class FloodImpactFunction(FunctionProvider):
                     'banjir lebih dari %.1f m.' % threshold)
 
         # Create style
-        style_classes = [dict(colour='#ffffff', quantity=-9999, opacity=0),
-                         dict(colour='#38A800', quantity=2, opacity=0),
-                         dict(colour='#38A800', quantity=5, opacity=1),
-                         dict(colour='#79C900', quantity=10, opacity=1),
-                         dict(colour='#CEED00', quantity=20, opacity=1),
-                         dict(colour='#FFCC00', quantity=50, opacity=1),
-                         dict(colour='#FF6600', quantity=100, opacity=1),
-                         dict(colour='#FF0000', quantity=200, opacity=1),
-                         dict(colour='#7A0000', quantity=300, opacity=1)]
+        style_classes = [dict(colour='#38A800', quantity=2, transparency=100),
+                         dict(colour='#38A800', quantity=5, transparency=0),
+                         dict(colour='#79C900', quantity=10, transparency=0),
+                         dict(colour='#CEED00', quantity=20, transparency=0),
+                         dict(colour='#FFCC00', quantity=50, transparency=0),
+                         dict(colour='#FF6600', quantity=100, transparency=0),
+                         dict(colour='#FF0000', quantity=200, transparency=0),
+                         dict(colour='#7A0000', quantity=300, transparency=0)]
         style_info = dict(target_field=None,
                           style_classes=style_classes)
 
