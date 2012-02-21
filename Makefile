@@ -23,6 +23,13 @@ NONGUI := storage engine impact_functions
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
 
+# POFILES = list of files to be harvested for translation strings
+POFILES = storage/test_io.py \
+					impact_functions/flood/flood_building_impact.py
+
+# LOCALES = space delimited list of iso codes to generate po files for
+LOCALES = id
+
 default: compile
 
 compile:
@@ -33,12 +40,12 @@ docs: compile
 
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
-	cd gui; pylupdate4 riab.pro; cd ..
+	# Qt translation stuff first.
+	cd gui; pylupdate4 riab.pro; cd .
+	# Gettext translation stuff next.
 	# todo script this so we can loop through the locale list
 	# and apply same xgettext for each supported locale. TS
-	xgettext -j -d id -o i18n/id/LC_MESSAGES/riab.po \
-		storage/test_io.py \
-		impact_functions/flood/flood_building_impact.py
+	$(foreach LOCALE,$(LOCALES),xgettext -j -d id -o i18n/$(LOCALE)/LC_MESSAGES/riab.po $(POFILES);)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in gui
 compile-translation-strings: compile
