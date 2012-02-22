@@ -1513,7 +1513,6 @@ class Test_Engine(unittest.TestCase):
                'but got only %i' % count)
         assert count == 34, msg
 
-
         #print I_geometry[1123]
         #print I_attributes[1123]
         assert I_attributes[1123]['Catergory'] == 'Very High'

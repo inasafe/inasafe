@@ -1942,7 +1942,6 @@ class Test_Polygon(unittest.TestCase):
                               [[[-1, 0.5], [0, 0.5]],
                                [[0.5, 1], [0.5, 2]]])
 
-
         # Multiple lines with different number of segments
         lines = [[[-1, 0.5], [0.5, 0.5], [0.5, 2]],
                  [[-1, 0.0], [1, 2.0 / 3]]]

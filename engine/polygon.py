@@ -623,7 +623,6 @@ def clip_line_by_polygon(line, polygon,
         msg = 'Polygon array must have two columns'
         assert polygon.shape[1] == 2, msg
 
-
     N = polygon.shape[0]  # Number of vertices in polygon
     M = line.shape[0]  # Number of segments
 
@@ -644,7 +643,7 @@ def clip_line_by_polygon(line, polygon,
 
     # Loop through line segments
     for k in range(M - 1):
-        segment = [line[k, :], line[k+1, :]]
+        segment = [line[k, :], line[k + 1, :]]
 
         intersections = list(segment)  # Initialise with end points
         for i in range(N):

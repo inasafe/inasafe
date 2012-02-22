@@ -839,7 +839,6 @@ class Vector:
             #V.write_to_file('clipped_and_tagged.shp')
             return V
 
-
         # The following applies only to Polygon-Point interpolation
         msg = ('Vector layer to interpolate to must be point geometry. '
                'I got OGR geometry type %s'
