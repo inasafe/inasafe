@@ -180,13 +180,14 @@ class ImpactCalculatorTest(unittest.TestCase):
 
         myKeywords = self.calculator.getKeywordFromFile(
             self.rasterPopulationPath)
-        assert myKeywords == {'category': 'exposure', 'density': 'yes',
+        assert myKeywords == {'category': 'exposure',
                               'subcategory': 'population',
-                              'datatype': 'population',
+                              'datatype': 'density',
                               'title': 'Population Density Estimate (5kmx5km)'}
 
         myKeywords = self.calculator.getKeywordFromFile(self.vectorPath)
-        assert myKeywords == {'category': 'exposure', 'datatype': 'itb',
+        assert myKeywords == {'category': 'exposure',
+                              'datatype': 'itb',
                               'subcategory': 'building'}
 
         # BB tsunami example (one layer is UTM)
