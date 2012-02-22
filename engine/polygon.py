@@ -685,10 +685,28 @@ def clip_line_by_polygon(line, polygon,
         for i in range(P - 1):
             segment = [intersections[i], intersections[i + 1]]
             midpoint = (segment[0] + segment[1]) / 2
+
+            #if (numpy.allclose(segment[0], [122.23618882, -8.62832731]) or
+            #    numpy.allclose(segment[0], [122.23608672, -8.62829367]) or
+            #    numpy.allclose(segment[1], [122.23618882, -8.62832731]) or
+            #    numpy.allclose(segment[1], [122.23608672, -8.62829367])):
+            #    print
+            #    print 'Found ', i, segment, midpoint
+
+                #Found  1 [array([ 122.23655677,   -8.62844855]), array([ 122.23618882,   -8.62832731])] [ 122.2363728    -8.62838793]  # Right
+                #Inside [ 122.2363728    -8.62838793]
+                #Found  2 [array([ 122.23618882,   -8.62832731]), array([ 122.23608672,   -8.62829367])] [ 122.23613777   -8.62831049]  # !
+                # Outside
+                #Found  3 [array([ 122.23608672,   -8.62829367]), array([ 122.23525728,   -8.62802037])] [ 122.235672     -8.62815702]  # Left
+                #Inside [ 122.235672     -8.62815702]
+
+
             if is_inside_polygon(midpoint, polygon, closed=closed):
                 inside_line_segments.append(segment)
+                #print 'Inside', midpoint
             else:
                 outside_line_segments.append(segment)
+                #print 'Outside', midpoint
 
     # Rejoin adjacent segments and add to result lines
     inside_lines = join_line_segments(inside_line_segments)
@@ -696,7 +714,8 @@ def clip_line_by_polygon(line, polygon,
 
     return inside_lines, outside_lines
 
-def join_line_segments(segments, rtol=1.0e-5, atol=1.0e-8):
+# FIXME (Ole): What should the accuracy be? rtol=1.0e-5 is too big - 1.0e-8 seems OK, but maybe go with single precision
+def join_line_segments(segments, rtol=1.0e-12, atol=1.0e-8):
     """Join adjacent line segments
 
     Input
@@ -715,6 +734,19 @@ def join_line_segments(segments, rtol=1.0e-5, atol=1.0e-8):
 
     line = segments[0]
     for i in range(len(segments)-1):
+
+        #flag = False
+        #segment = segments[i]
+        #if (numpy.allclose(segment[0], [122.23618882, -8.62832731]) or
+        #    numpy.allclose(segment[0], [122.23608672, -8.62829367]) or
+        #    numpy.allclose(segment[1], [122.23618882, -8.62832731]) or
+        #    numpy.allclose(segment[1], [122.23608672, -8.62829367])):
+        #    print
+        #    print 'Found ', i, segment, segments[i + 1]
+        #    flag = True
+        #else:
+        #    flag = False
+
         if numpy.allclose(segments[i][1], segments[i + 1][0],
                           rtol=rtol, atol=atol):
             # Segments are adjacent

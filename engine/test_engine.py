@@ -1406,10 +1406,6 @@ class Test_Engine(unittest.TestCase):
         #        print
 
         # Clip
-
-        # FIXME (Ole): This is to debug intersection algorithm
-        #inside_line_segments, outside_line_segments, intersections = \
-        #    clip_lines_by_polygon(test_lines, test_polygon)
         inside_line_segments, outside_line_segments = \
             clip_lines_by_polygon(test_lines, test_polygon)
 
@@ -1430,12 +1426,12 @@ class Test_Engine(unittest.TestCase):
             outside_centroids.append(midpoint)
             assert not is_inside_polygon(midpoint, test_polygon)
 
-        # Store as shape files for visual inspection e.g. by QGis
-        P = Vector(geometry=[test_polygon])
-        P.write_to_file('test_polygon.shp')
-
         # Possibly generate files for visual inspection with e.g. QGis
-        if False: # True:  #False:
+        if True:  #False:
+            # Store as shape files for visual inspection e.g. by QGis
+            P = Vector(geometry=[test_polygon])
+            P.write_to_file('test_polygon.shp')
+
             L = Vector(geometry=test_lines, geometry_type='line')
             L.write_to_file('test_lines.shp')
 
@@ -1472,6 +1468,8 @@ class Test_Engine(unittest.TestCase):
         H = Vector(data=H_attributes[799:800],
                    geometry=H_geometry[799:800],
                    projection=H.get_projection())
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
         #H.write_to_file('MM_799.shp')  # E.g. to view with QGis
 
         E = read_layer(exposure_filename)
@@ -1481,11 +1479,20 @@ class Test_Engine(unittest.TestCase):
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
                           attribute=None)  # Take all attributes across
-
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
         N = len(I_attributes)
+
+        # Possibly generate files for visual inspection with e.g. QGis
+        if True:  #False:
+            L = Vector(geometry=H_geometry, geometry_type='polygon',
+                       data=H_attributes)
+            L.write_to_file('test_polygon.shp')
+
+            L = Vector(geometry=I_geometry, geometry_type='line',
+                       data=I_attributes)
+            L.write_to_file('interpolated_lines.shp')
 
         # Assert that expected attribute names exist
         I_names = I.get_attribute_names()
@@ -1804,6 +1811,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_line')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
