@@ -403,8 +403,8 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myExistingItem = self.lstKeywords.item(myCounter)
             myText = myExistingItem.text()
             myTokens = myText.split(':')
-            myKey = myTokens[0].strip()
-            myValue = myTokens[1].strip()
+            myKey = str(myTokens[0]).strip()
+            myValue = str(myTokens[1]).strip()
             myKeywords[myKey] = myValue
 
         write_keywords(myKeywords, myFileName)
