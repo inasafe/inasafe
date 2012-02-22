@@ -25,9 +25,9 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   user-docs/index.rst
-   developer-docs/index.rst
-   api-docs/index.rst
+   user-docs/index
+   developer-docs/index
+   api-docs/index
    authors
 
 
