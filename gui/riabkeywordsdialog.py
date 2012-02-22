@@ -67,10 +67,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         myButton.setEnabled(False)
         self.layer = self.iface.activeLayer()
-        mySource = str(self.layer.source())
-        self.calculator = ImpactCalculator()
-        myHazardKeywords = self.calculator.getKeywordFromFile(mySource)
-        self.loadStateFromKeywords(myHazardKeywords)
+        self.loadStateFromKeywords()
         #settrace()
         # Put in some dummy data while we are testing
 
@@ -189,19 +186,57 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         for myItem in self.lstKeywords.selectedItems():
             self.lstKeywords.takeItem(self.lstKeywords.row(myItem))
 
-    def loadStateFromKeywords(self, theKeywords):
-        """Given a keywords dict, set the ui state to match it.
+    def addListEntry(self, theKey, theValue):
+        """Add an item to the keywords list given its key/value.
+        
+        The key and value must both be valid, non empty strings 
+        or an InvalidKVPException will be raised.
 
         Args:
-           theKeywords - a dict of keywords as returned from the riab
-           library.
+        
+           * theKey - string representing the key part of the key 
+             value pair (kvp)
+           * theValue - string representing the value part of the key
+             value pair (kvp)
+        
         Returns:
            None.
         Raises:
            no exceptions explicitly raised."""
-        if 'category' in theKeywords:
-            myCategory = theKeywords['category']
+
+    def loadStateFromKeywords(self):
+        """Set the ui state to match the keywords of the
+           currently active layer.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        mySource = str(self.layer.source())
+        self.calculator = ImpactCalculator()
+        myKeywords = self.calculator.getKeywordFromFile(mySource)
+
+        myCategory = None
+        if 'category' in myKeywords:
+            myCategory = myKeywords['category']
+            addListEntry('category', myCategory)
             if myCategory in 'hazard':
                 self.radHazard.setChecked(True)
             else:
                 self.radExposure.setChecked(True)
+
+        # get the subcategory an type if it is an exposure layer
+        # or the subcategory and units if it is a hazard layer
+        mySubcategory = None
+        myUnits = None
+        myType = None
+        if 'subcategory' in myKeywords:
+            mySubcategory = myKeywords['subcategory']
+        if 'type' in myKeywords:
+            myType = myKeywords['type']
+        if 'units' in myKeywords:
+            myUnits = myKeywords['units']
+
+        

@@ -60,3 +60,7 @@ class TranslationLoadException(Exception):
     """Custom exception handler for whe translation file fails
     to load."""
     pass
+
+class InvalidKVPException(Exception):
+    """An exception raised when a key value pair is invalid -
+    for example if the key of value is None or an empty string."""
