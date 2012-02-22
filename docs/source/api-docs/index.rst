@@ -34,10 +34,4 @@ Unit Tests
    test_riabdock
    test_impactcalculator
 
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
