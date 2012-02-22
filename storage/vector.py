@@ -36,6 +36,7 @@ class Vector:
             projection: Geospatial reference in WKT format.
                         Only used if geometry is provide as a numeric array,
             geometry: A list of either point coordinates or polygons/lines
+                      (see note below)
             geometry_type: Desired interpretation of geometry.
                            Valid options are 'point', 'line', 'polygon' or
                            the ogr types: 1, 2, 3
@@ -50,12 +51,17 @@ class Vector:
                       Keywords can for example be used to display text
                       about the layer in a web application.
 
-        Note that if data is a filename, all other arguments are ignored
+        Notes
+
+        If data is a filename, all other arguments are ignored
         as they will be inferred from the file.
 
         The geometry type will be inferred from the dimensions of geometry.
         If each entry is one set of coordinates the type will be ogr.wkbPoint,
         if it is an array of coordinates the type will be ogr.wkbPolygon.
+
+        Each polygon or line feature take the form of an Nx2 array representing
+        vertices where line segments are joined
         """
 
         if data is None and projection is None and geometry is None:

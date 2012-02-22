@@ -8,6 +8,7 @@ from osgeo import ogr
 from tempfile import mkstemp
 from urllib2 import urlopen
 import math
+from engine.numerics import ensure_numeric
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'Affected'
@@ -559,6 +560,19 @@ def array2wkt(A, geom_type='POLYGON'):
         LINESTRING(1000 1000, 1100 1050)
 
     """
+
+    try:
+        A = ensure_numeric(A, numpy.float)
+    except Exception, e:
+        msg = ('Array (%s) could not be converted to numeric array: %s'
+               % (geom_type, str(type(A))))
+        raise Exception(msg)
+
+    msg = 'Array must be a 2d array of vertices. I got %s' % (str(A.shape))
+    assert len(A.shape) == 2, msg
+
+    msg = 'A array must have two columns. I got %s' % (str(A.shape[0]))
+    assert A.shape[1] == 2, msg
 
     if geom_type == 'LINESTRING':
         # One bracket

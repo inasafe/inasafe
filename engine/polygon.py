@@ -557,7 +557,7 @@ def clip_line_by_polygon(line, polygon,
     """Clip line segments by polygon
 
     Input
-       line: Sequence of line segments: [[x0, y0], [x1, y1], ...] or
+       line: Sequence of line nodes: [[x0, y0], [x1, y1], ...] or
              the equivalent Nx2 numpy array
        polygon: list of vertices of polygon or the corresponding numpy array
        closed: (optional) determine whether points on boundary should be
@@ -566,8 +566,10 @@ def clip_line_by_polygon(line, polygon,
        check_input: Allows faster execution if set to False
 
     Outputs
-       inside_line_segments: Clipped line segments that are inside polygon
-       outside_line_segments: Clipped line segments that are outside polygon
+       inside_lines: Clipped lines that are inside polygon
+       outside_lines: Clipped lines that are outside polygon
+
+       Both outputs take the form of lists of Nx2 line arrays
 
     Example:
 
@@ -577,7 +579,7 @@ def clip_line_by_polygon(line, polygon,
         line = [[-1, 0.5], [2, 0.5]]
 
         inside_line_segments, outside_line_segments = \
-            clip_lines_by_polygon(lines, polygon)
+            clip_line_by_polygon(line, polygon)
 
         assert numpy.allclose(inside_line_segments,
                               [[[0, 0.5], [1, 0.5]]])
@@ -638,10 +640,11 @@ def clip_line_by_polygon(line, polygon,
     #    * Determine if it is inside or outside clipping polygon
 
     # FIXME (Ole): Vectorise
+
+    # Loop through line segments
     inside_line_segments = []
     outside_line_segments = []
 
-    # Loop through line segments
     for k in range(M - 1):
         segment = [line[k, :], line[k + 1, :]]
 
@@ -652,14 +655,14 @@ def clip_line_by_polygon(line, polygon,
             edge = [polygon[i, :], polygon[j, :]]
 
             status, value = intersection(segment, edge)
-            if status == 1:
-                # Genuine intersection found
-                intersections.append(value)
-            elif status == 2:
+            if status == 2:
                 # Collinear overlapping lines found
-                # Use both ends of common segment
-                intersections.append(value[0])
-                intersections.append(value[1])
+                # Use midpoint of common segment
+                value = (value[0] + value[1]) / 2
+
+            if value is not None:
+                # Record intersection point found
+                intersections.append(value)
             else:
                 pass
 
@@ -687,7 +690,45 @@ def clip_line_by_polygon(line, polygon,
             else:
                 outside_line_segments.append(segment)
 
-    return inside_line_segments, outside_line_segments
+    # Rejoin adjacent segments and add to result lines
+    inside_lines = join_line_segments(inside_line_segments)
+    outside_lines = join_line_segments(outside_line_segments)
+
+    return inside_lines, outside_lines
+
+def join_line_segments(segments, rtol=1.0e-5, atol=1.0e-8):
+    """Join adjacent line segments
+
+    Input
+        segments: List of distinct line segments [[p0, p1], [p2, p3], ...]
+        rtol, atol: Optional tolerances passed on to numpy.allclose
+
+    Output
+        list of Nx2 numpy arrays each corresponding to a continuous line
+        formed from consecutive segments
+    """
+
+    lines = []
+
+    if len(segments) == 0:
+        return lines
+
+    line = segments[0]
+    for i in range(len(segments)-1):
+        if numpy.allclose(segments[i][1], segments[i + 1][0],
+                          rtol=rtol, atol=atol):
+            # Segments are adjacent
+            line.append(segments[i + 1][1])
+        else:
+            # Segments are disjoint - current line finishes here
+            lines.append(line)
+            line = segments[i + 1]
+
+    # Finish
+    lines.append(line)
+
+    # Return
+    return lines
 
 
 #--------------------------------------------------
