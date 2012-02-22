@@ -191,6 +191,13 @@ class Riab:
                                             myLegendTab, self.dockWidget)
             self.dockWidget.raise_()
 
+        #
+        # Hook up a slot for when the current layer is changed
+        #
+        QObject.connect(self.iface,
+            SIGNAL("currentLayerChanged(QgsMapLayer*)"),
+            self.layerChanged)
+
     def unload(self):
         """Gui breakdown procedure (for QGIS plugin api).
 
@@ -214,6 +221,9 @@ class Riab:
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
+        QObject.disconnect(self.iface,
+            SIGNAL("currentLayerChanged(QgsMapLayer*)"),
+            self.layerChanged)
 
     # Run method that performs all the real work
     def showHideDockWidget(self):
@@ -253,5 +263,27 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
+        if self.iface.activeLayer() is None:
+            return
         myDialog = RiabKeywordsDialog(self.iface.mainWindow(), self.iface)
         myDialog.show()
+
+    def layerChanged(self, theLayer):
+        """Show the keywords editor.
+
+        This slot is called when the user clicks the keyword editor toolbar
+        icon or menu item associated with this plugin
+
+        .. see also:: :func:`Riab.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        if theLayer is None:
+            self.actionKeywordsDialog.setEnabled(False)
+        else:
+            self.actionKeywordsDialog.setEnabled(True)

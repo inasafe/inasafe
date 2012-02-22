@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from wx.tools.XRCed.globals import MyDataObject
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.0.1'
@@ -19,6 +18,7 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
 from PyQt4 import QtGui, QtCore
 #from PyQt4.QtCore import pyqtSignature
 #from ui_riabdock import Ui_RiabDock
@@ -26,6 +26,8 @@ from PyQt4 import QtGui, QtCore
 from impactcalculator import ImpactCalculator
 from riabkeywordsdialogbase import Ui_RiabKeywordsDialogBase
 from PyQt4.QtCore import pyqtSignature
+from storage.utilities import write_keywords
+from riabexceptions import InvalidParameterException
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -79,13 +81,13 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.radPredefined.setChecked(True)
         self.radExposure.setChecked(True)
         self.adjustSize()
-        myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
-        myButton.setEnabled(False)
+        #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
+        #myButton.setEnabled(False)
         self.layer = self.iface.activeLayer()
         self.lblLayerName.setText(self.layer.name())
         self.loadStateFromKeywords()
-        #settrace()
-        # Put in some dummy data while we are testing
+        settrace()
+        #self.connect(self.buttonBox, QtCore.SIGNAL('accepted()'), self.accept)
 
     @pyqtSignature('bool')  # prevents actions being handled twice
     def on_pbnAdvanced_toggled(self, theFlag):
@@ -317,8 +319,8 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myExistingItem = self.lstKeywords.item(myCounter)
             myText = myExistingItem.text()
             myTokens = myText.split(':')
-            myKey = myTokens[1]
-            if myKey == theValue:
+            myValue = myTokens[1]
+            if myValue == theValue:
                 # remove it since the key is already present
                 self.lstKeywords.takeItem(myCounter)
                 break
@@ -335,7 +337,11 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
         mySource = str(self.layer.source())
         self.calculator = ImpactCalculator()
-        myKeywords = self.calculator.getKeywordFromFile(mySource)
+        try:
+            myKeywords = self.calculator.getKeywordFromFile(mySource)
+        except InvalidParameterException:
+            # layer has no keywords file so just start with a blank slate
+            return
 
         myCategory = None
         if 'category' in myKeywords:
@@ -378,3 +384,28 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             else:
                 self.setSubcategoryList(self.standardExposureList,
                                          mySubCategory + ' [' + myUnits + ']')
+
+    def accept(self):
+        """Automatic slot executed when the ok button is pressed.
+
+        It will write out the keywords for the layer that is active.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        myFileName = self.layer.source()
+        myFileName = os.path.splitext(str(myFileName))[0] + '.keywords'
+        myKeywords = {}
+        for myCounter in range(self.lstKeywords.count()):
+            myExistingItem = self.lstKeywords.item(myCounter)
+            myText = myExistingItem.text()
+            myTokens = myText.split(':')
+            myKey = myTokens[0].strip()
+            myValue = myTokens[1].strip()
+            myKeywords[myKey] = myValue
+
+        write_keywords(myKeywords, myFileName)
+        return
