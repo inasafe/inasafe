@@ -7,77 +7,36 @@
     <x>0</x>
     <y>0</y>
     <width>520</width>
-    <height>475</height>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Risk in a Box - Keyword Editor</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="1" column="0">
-    <widget class="QLabel" name="lblCategory">
-     <property name="text">
-      <string>Category</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QRadioButton" name="radHazard">
-       <property name="toolTip">
-        <string>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</string>
-       </property>
-       <property name="text">
-        <string>Hazard</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radExposure">
-       <property name="toolTip">
-        <string>Where people and property are situated.</string>
-       </property>
-       <property name="text">
-        <string>Exposure</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Subcategory</string>
-     </property>
-     <property name="buddy">
-      <cstring>cboSubcategory</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QComboBox" name="cboSubcategory">
-     <property name="toolTip">
-      <string>A subcategory represents the type of hazard.</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="3">
+   <item row="2" column="0" colspan="2">
     <widget class="QPushButton" name="pbnAdvanced">
      <property name="text">
-      <string>Show advanced</string>
+      <string>Show advanced editor</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="3">
-    <widget class="QGroupBox" name="groupBox">
+   <item row="3" column="0" colspan="2">
+    <widget class="QGroupBox" name="grpAdvanced">
      <property name="title">
       <string>Advanced editor</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radPredefined">
+        <property name="text">
+         <string>Predefined</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QFrame" name="frame">
         <property name="frameShape">
@@ -101,22 +60,22 @@
           <widget class="QComboBox" name="cboKeyword">
            <item>
             <property name="text">
-             <string>Subcategory</string>
+             <string>subcategory</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Units</string>
+             <string>units</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Density</string>
+             <string>density</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Datatype</string>
+             <string>datatype</string>
             </property>
            </item>
           </widget>
@@ -126,20 +85,10 @@
            <property name="text">
             <string>Value</string>
            </property>
-           <property name="buddy">
-            <cstring>cboValue</cstring>
-           </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="cboValue">
-           <property name="editable">
-            <bool>true</bool>
-           </property>
-           <property name="insertPolicy">
-            <enum>QComboBox::InsertAtTop</enum>
-           </property>
-          </widget>
+          <widget class="QLineEdit" name="lePredefinedValue"/>
          </item>
          <item>
           <widget class="QPushButton" name="pbnAddToList1">
@@ -151,37 +100,10 @@
         </layout>
        </widget>
       </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_8">
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="radUserDefined">
         <property name="text">
-         <string>Current keywords</string>
-        </property>
-        <property name="buddy">
-         <cstring>lstKeywords</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QListWidget" name="lstKeywords">
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionMode">
-         <enum>QAbstractItemView::ExtendedSelection</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QPushButton" name="pbnRemove">
-        <property name="text">
-         <string>Remove selected</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QRadioButton" name="radPredefined">
-        <property name="text">
-         <string>Predefined</string>
+         <string>User Defined</string>
         </property>
        </widget>
       </item>
@@ -230,10 +152,30 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QRadioButton" name="radUserDefined">
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>User Defined</string>
+         <string>Current keywords</string>
+        </property>
+        <property name="buddy">
+         <cstring>lstKeywords</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QListWidget" name="lstKeywords">
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QPushButton" name="pbnRemove">
+        <property name="text">
+         <string>Remove selected</string>
         </property>
        </widget>
       </item>
@@ -245,14 +187,9 @@
      <zorder>label_8</zorder>
      <zorder>lstKeywords</zorder>
      <zorder>pbnRemove</zorder>
-     <zorder>pbnAddToList1</zorder>
-     <zorder>label_4</zorder>
-     <zorder>cboKeyword</zorder>
-     <zorder>cboValue</zorder>
-     <zorder>label_5</zorder>
     </widget>
    </item>
-   <item row="5" column="0" colspan="3">
+   <item row="4" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -262,10 +199,70 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="3">
+   <item row="1" column="0" colspan="2">
+    <widget class="QGroupBox" name="grpSimple">
+     <property name="title">
+      <string>Quick edit</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblCategory">
+        <property name="text">
+         <string>Category</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QRadioButton" name="radHazard">
+          <property name="toolTip">
+           <string>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</string>
+          </property>
+          <property name="text">
+           <string>Hazard</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radExposure">
+          <property name="toolTip">
+           <string>Where people and property are situated.</string>
+          </property>
+          <property name="text">
+           <string>Exposure</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Subcategory</string>
+        </property>
+        <property name="buddy">
+         <cstring>cboSubcategory</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="cboSubcategory">
+        <property name="toolTip">
+         <string>A subcategory represents the type of hazard.</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="lblLayerName">
      <property name="text">
       <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -274,11 +271,9 @@
  <tabstops>
   <tabstop>radHazard</tabstop>
   <tabstop>radExposure</tabstop>
-  <tabstop>cboSubcategory</tabstop>
   <tabstop>pbnAdvanced</tabstop>
   <tabstop>radPredefined</tabstop>
   <tabstop>cboKeyword</tabstop>
-  <tabstop>cboValue</tabstop>
   <tabstop>pbnAddToList1</tabstop>
   <tabstop>radUserDefined</tabstop>
   <tabstop>leKey</tabstop>
@@ -297,8 +292,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>501</y>
+     <x>266</x>
+     <y>570</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -313,8 +308,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>325</x>
-     <y>501</y>
+     <x>334</x>
+     <y>570</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -325,16 +320,16 @@
   <connection>
    <sender>pbnAdvanced</sender>
    <signal>toggled(bool)</signal>
-   <receiver>groupBox</receiver>
+   <receiver>grpAdvanced</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>151</x>
-     <y>89</y>
+     <x>160</x>
+     <y>156</y>
     </hint>
     <hint type="destinationlabel">
-     <x>120</x>
-     <y>114</y>
+     <x>129</x>
+     <y>277</y>
     </hint>
    </hints>
   </connection>
@@ -345,12 +340,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>42</x>
-     <y>142</y>
+     <x>68</x>
+     <y>209</y>
     </hint>
     <hint type="destinationlabel">
-     <x>50</x>
-     <y>161</y>
+     <x>76</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -361,12 +356,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>73</x>
-     <y>146</y>
+     <x>99</x>
+     <y>209</y>
     </hint>
     <hint type="destinationlabel">
-     <x>75</x>
-     <y>242</y>
+     <x>101</x>
+     <y>343</y>
     </hint>
    </hints>
   </connection>
@@ -377,12 +372,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>69</x>
-     <y>224</y>
+     <x>95</x>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
-     <x>114</x>
-     <y>243</y>
+     <x>140</x>
+     <y>343</y>
     </hint>
    </hints>
   </connection>
@@ -393,12 +388,28 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>38</x>
-     <y>224</y>
+     <x>64</x>
+     <y>290</y>
     </hint>
     <hint type="destinationlabel">
-     <x>30</x>
-     <y>174</y>
+     <x>56</x>
+     <y>262</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbnAdvanced</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>grpSimple</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>173</x>
+     <y>143</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>29</x>
+     <y>40</y>
     </hint>
    </hints>
   </connection>

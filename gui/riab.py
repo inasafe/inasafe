@@ -166,7 +166,8 @@ class Riab:
         #--------------------------------------
         # Create action for keywords editor
         #--------------------------------------
-        self.actionKeywordsDialog = QAction(QIcon(':/plugins/riab/icon.png'),
+        self.actionKeywordsDialog = QAction(
+                            QIcon(':/plugins/riab/keywords.png'),
                             self.tr('Keyword Editor'), self.iface.mainWindow())
         self.actionKeywordsDialog.setStatusTip(self.tr(
                                     'Open the keywords editor'))

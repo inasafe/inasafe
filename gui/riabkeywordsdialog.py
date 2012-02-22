@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from wx.tools.XRCed.globals import MyDataObject
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.0.1'
@@ -55,6 +56,20 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         """
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
+        self.standardExposureList = [self.tr('population [density]'),
+                                     self.tr('population [count]'),
+                                     self.tr('building [osm]'),
+                                     self.tr('building [sigab]'),
+                                     self.tr('building [other]'),
+                                     self.tr('roads')]
+        self.standardHazardList = [self.tr('earthquake [mmi]'),
+                                     self.tr('tsunami [m]'),
+                                     self.tr('tsunami [wet/dry]'),
+                                     self.tr('tsunami [feet]'),
+                                     self.tr('flood [m]'),
+                                     self.tr('flood [wet/dry]'),
+                                     self.tr('flood [feet]'),
+                                     self.tr('volcano [kg2/m2]')]
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -67,6 +82,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         myButton.setEnabled(False)
         self.layer = self.iface.activeLayer()
+        self.lblLayerName.setText(self.layer.name())
         self.loadStateFromKeywords()
         #settrace()
         # Put in some dummy data while we are testing
@@ -85,6 +101,10 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
+        if theFlag:
+            self.pbnAdvanced.setText(self.tr('Show simple editor'))
+        else:
+            self.pbnAdvanced.setText(self.tr('Show advanced editor'))
         self.adjustSize()
 
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -98,19 +118,11 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if theFlag:
-            myHazardList = [self.tr('earthquake [mmi]'),
-                            self.tr('tsunami [m]'),
-                            self.tr('tsunami [wet/dry]'),
-                            self.tr('tsunami [feet]'),
-                            self.tr('flood [m]'),
-                            self.tr('flood [wet/dry]'),
-                            self.tr('flood [feet]'),
-                            self.tr('volcano [kg2/m2]')]
-            self.setSubcategoryList(myHazardList)
+            self.setSubcategoryList(self.standardHazardList)
 
     @pyqtSignature('bool')  # prevents actions being handled twice
     def on_radExposure_toggled(self, theFlag):
-        """Automatic slot executed when the hazard radio is toggled.
+        """Automatic slot executed when the hazard radio is toggled on.
 
         Args:
            theFlag - boolean indicating the new checked state of the button
@@ -119,35 +131,37 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if theFlag:
-            myExposureList = [self.tr('population [density]'),
-                              self.tr('population [count]'),
-                              self.tr('building [osm]'),
-                              self.tr('building [sigab]'),
-                              self.tr('building [other]'),
-                              self.tr('roads')]
-            self.setSubcategoryList(myExposureList)
+            self.setSubcategoryList(self.standardExposureList)
 
-    def setSubcategoryList(self, theList):
+    def setSubcategoryList(self, theList, theSelectedItem=None):
         """Helper to populate the subcategory list based on category context.
 
         Args:
-           theList - a list of subcategories e.g. ['earthquake','volcano']
+
+           * theList - a list of subcategories e.g. ['earthquake','volcano']
+           * theSelectedItem - optional parameter indicating which item
+             should be selected in the combo. If the selected item is not
+             in theList, it will be appended to it.
         Returns:
            None.
         Raises:
            no exceptions explicitly raised.
         """
         self.cboSubcategory.clear()
+        if theSelectedItem is not None and theSelectedItem not in theList:
+            theList.append(theSelectedItem)
+        myIndex = 0
+        mySelectedIndex = 0
         for myItem in theList:
+            if myItem == theSelectedItem:
+                mySelectedIndex = myIndex
+            myIndex += 1
             self.cboSubcategory.addItem(myItem)
+        self.cboSubcategory.setCurrentIndex(mySelectedIndex)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pbnAddToList1_clicked(self):
         """Automatic slot executed when the pbnAddToList1 button is pressed.
-
-        It will add the current key/value pair to the list if it is not
-        already present. The kvp will also be stored in the data of the
-        listwidgetitem as a simple string delimited with a bar ('|').
 
         Args:
            None
@@ -157,19 +171,23 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
 
         myCurrentKey = self.cboKeyword.currentText()
-        myCurrentValue = self.cboValue.currentText()
-        myItem = QtGui.QListWidgetItem(myCurrentKey + ':' + myCurrentValue)
+        myCurrentValue = self.lePredefinedValue.text()
+        self.addListEntry(myCurrentKey, myCurrentValue)
 
-        # check the key does not already exist
-        for myCounter in range(self.lstKeywords.count()):
-            myExistingItem = self.lstKeywords.item(myCounter)
-            if myExistingItem.text() == myItem.text():
-                # .. todo:: tell the user something? TS
-                return
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_pbnAddToList2_clicked(self):
+        """Automatic slot executed when the pbnAddToList2 button is pressed.
 
-        myData = myCurrentKey + '|' + myCurrentValue
-        myItem.setData(QtCore.Qt.UserRole, myData)
-        self.lstKeywords.insertItem(0, myItem)
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+
+        myCurrentKey = self.leKey.text()
+        myCurrentValue = self.leValue.text()
+        self.addListEntry(myCurrentKey, myCurrentValue)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pbnRemove_clicked(self):
@@ -188,21 +206,49 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
 
     def addListEntry(self, theKey, theValue):
         """Add an item to the keywords list given its key/value.
-        
-        The key and value must both be valid, non empty strings 
+
+        The key and value must both be valid, non empty strings
         or an InvalidKVPException will be raised.
 
+        If an entry with the same key exists, it's value will be
+        replaced with theValue.
+
+        It will add the current key/value pair to the list if it is not
+        already present. The kvp will also be stored in the data of the
+        listwidgetitem as a simple string delimited with a bar ('|').
+
         Args:
-        
-           * theKey - string representing the key part of the key 
+
+           * theKey - string representing the key part of the key
              value pair (kvp)
            * theValue - string representing the value part of the key
              value pair (kvp)
-        
+
         Returns:
            None.
         Raises:
            no exceptions explicitly raised."""
+        if theKey is None or theKey == '':
+            return
+        if theValue is None or theValue == '':
+            return
+
+        myItem = QtGui.QListWidgetItem(theKey + ':' + theValue)
+
+        # check the key does not already exist
+        for myCounter in range(self.lstKeywords.count()):
+            myExistingItem = self.lstKeywords.item(myCounter)
+            myText = myExistingItem.text()
+            myTokens = myText.split(':')
+            myKey = myTokens[0]
+            if myKey == theKey:
+                # remove it since the key is already present
+                self.lstKeywords.takeItem(myCounter)
+                break
+
+        myData = theKey + '|' + theValue
+        myItem.setData(QtCore.Qt.UserRole, myData)
+        self.lstKeywords.insertItem(0, myItem)
 
     def loadStateFromKeywords(self):
         """Set the ui state to match the keywords of the
@@ -221,22 +267,45 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myCategory = None
         if 'category' in myKeywords:
             myCategory = myKeywords['category']
-            addListEntry('category', myCategory)
+            self.addListEntry('category', myCategory)
             if myCategory in 'hazard':
                 self.radHazard.setChecked(True)
             else:
                 self.radExposure.setChecked(True)
-
+        self.addListEntry('category', myCategory)
         # get the subcategory an type if it is an exposure layer
         # or the subcategory and units if it is a hazard layer
-        mySubcategory = None
+        mySubCategory = None
         myUnits = None
         myType = None
         if 'subcategory' in myKeywords:
-            mySubcategory = myKeywords['subcategory']
-        if 'type' in myKeywords:
-            myType = myKeywords['type']
+            mySubCategory = myKeywords['subcategory']
+            self.addListEntry('subcategory', mySubCategory)
+        if 'datatype' in myKeywords:
+            myType = myKeywords['datatype']
+            self.addListEntry('datatype', myType)
         if 'units' in myKeywords:
             myUnits = myKeywords['units']
+            self.addListEntry('units', myUnits)
 
-        
+        # .. note:: The logic here could theoritically be simpler
+        #    but type and units arent guaranteed to be mutually exclusive
+        #    in the future.
+        if mySubCategory and myUnits:
+            # also set up the combo in the 'simple' editor section
+            if self.radExposure.isChecked():
+                self.setSubcategoryList(self.standardExposureList,
+                                         mySubCategory + ' [' + myType + ']')
+            else:
+                self.setSubcategoryList(self.standardExposureList,
+                                         mySubCategory + ' [' + myUnits + ']')
+
+        elif mySubCategory and myType:
+            # also set up the combo in the 'simple' editor section
+            # also set up the combo in the 'simple' editor section
+            if self.radExposure.isChecked():
+                self.setSubcategoryList(self.standardExposureList,
+                                         mySubCategory + ' [' + myType + ']')
+            else:
+                self.setSubcategoryList(self.standardExposureList,
+                                         mySubCategory + ' [' + myUnits + ']')

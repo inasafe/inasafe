@@ -47,3 +47,6 @@ Here are some common useful tags::
    units         feet
    ============  ================
 
+   :menuselection:`Plugins --> Manage Plugins`
+
+   
