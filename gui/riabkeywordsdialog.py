@@ -86,8 +86,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.layer = self.iface.activeLayer()
         self.lblLayerName.setText(self.layer.name())
         self.loadStateFromKeywords()
-        settrace()
-        #self.connect(self.buttonBox, QtCore.SIGNAL('accepted()'), self.accept)
+        #settrace()
 
     @pyqtSignature('bool')  # prevents actions being handled twice
     def on_pbnAdvanced_toggled(self, theFlag):
@@ -120,6 +119,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if theFlag:
+            self.addListEntry('category', 'hazard')
             self.setSubcategoryList(self.standardHazardList)
 
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -133,7 +133,36 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if theFlag:
+            self.addListEntry('category', 'exposure')
             self.setSubcategoryList(self.standardExposureList)
+
+    @pyqtSignature('int')  # prevents actions being handled twice
+    def on_cboSubcategory_currentIndexChanged(self, theIndex):
+        """Automatic slot executed when the subcategory is changed.
+
+        When the user changes the subcategory, we will extract the
+        subcategory and dataype or unit (depending on if it is a hazard
+        or exposure subcategory) from the [] after the name.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        #settrace()
+        myText = str(self.cboSubcategory.currentText())
+        myTokens = myText.split(' ')
+        if len(myTokens) < 1:
+            return
+        mySubcategory = myTokens[0]
+        self.addListEntry('subcategory', mySubcategory)
+        if myText in self.standardHazardList:
+            myUnits = myTokens[1].replace('[', '').replace(']', '')
+            self.addListEntry('units', myUnits)
+        if myText in self.standardExposureList:
+            myDataType = myTokens[1].replace('[', '').replace(']', '')
+            self.addListEntry('datatype', myDataType)
 
     def setSubcategoryList(self, theList, theSelectedItem=None):
         """Helper to populate the subcategory list based on category context.
@@ -350,12 +379,12 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.addListEntry('category', myCategory)
         # get the subcategory an type if it is an exposure layer
         # or the subcategory and units if it is a hazard layer
-        mySubCategory = None
+        mySubcategory = None
         myUnits = None
         myType = None
         if 'subcategory' in myKeywords:
-            mySubCategory = myKeywords['subcategory']
-            self.addListEntry('subcategory', mySubCategory)
+            mySubcategory = myKeywords['subcategory']
+            self.addListEntry('subcategory', mySubcategory)
         if 'datatype' in myKeywords:
             myType = myKeywords['datatype']
             self.addListEntry('datatype', myType)
@@ -366,24 +395,24 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         # .. note:: The logic here could theoritically be simpler
         #    but type and units arent guaranteed to be mutually exclusive
         #    in the future.
-        if mySubCategory and myUnits:
+        if mySubcategory and myUnits:
             # also set up the combo in the 'simple' editor section
             if self.radExposure.isChecked():
                 self.setSubcategoryList(self.standardExposureList,
-                                         mySubCategory + ' [' + myType + ']')
+                                         mySubcategory + ' [' + myType + ']')
             else:
                 self.setSubcategoryList(self.standardExposureList,
-                                         mySubCategory + ' [' + myUnits + ']')
+                                         mySubcategory + ' [' + myUnits + ']')
 
-        elif mySubCategory and myType:
+        elif mySubcategory and myType:
             # also set up the combo in the 'simple' editor section
             # also set up the combo in the 'simple' editor section
             if self.radExposure.isChecked():
                 self.setSubcategoryList(self.standardExposureList,
-                                         mySubCategory + ' [' + myType + ']')
+                                         mySubcategory + ' [' + myType + ']')
             else:
                 self.setSubcategoryList(self.standardExposureList,
-                                         mySubCategory + ' [' + myUnits + ']')
+                                         mySubcategory + ' [' + myUnits + ']')
 
     def accept(self):
         """Automatic slot executed when the ok button is pressed.
@@ -408,4 +437,4 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myKeywords[myKey] = myValue
 
         write_keywords(myKeywords, myFileName)
-        return
+        self.close()
