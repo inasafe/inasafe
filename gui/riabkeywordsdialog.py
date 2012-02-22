@@ -232,10 +232,68 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             return
         if theValue is None or theValue == '':
             return
+        # special rule: if the key is 'category', enforce that the
+        # value is either 'exposure' or 'hazard' and toggle the
+        # correct radio button in the simple editor
+        if theKey == 'category':
+            if not self.setCategory(theValue):
+                # .. todo:: report an error to the user
+                return False
 
         myItem = QtGui.QListWidgetItem(theKey + ':' + theValue)
+        # we are going to replace, so remove it if it exists already
+        self.removeItemByKey(theKey)
+        myData = theKey + '|' + theValue
+        myItem.setData(QtCore.Qt.UserRole, myData)
+        self.lstKeywords.insertItem(0, myItem)
 
-        # check the key does not already exist
+    def setCategory(self, theCategory):
+        """Set the category radio button based on theCategory.
+
+        Args:
+           theCategory - a string which must be either 'hazard' or 'exposure'.
+        Returns:
+           False if the radio button could not be updated
+        Raises:
+           no exceptions explicitly raised."""
+        # convert from QString if needed
+        myCategory = str(theCategory)
+        if myCategory not in ['hazard', 'exposure']:
+            # .. todo:: report an error to the user
+            return False
+        # Special case when category changes, we start on a new slate!
+        self.reset()
+
+        if myCategory in 'hazard':
+            self.radHazard.setChecked(True)
+        else:
+            self.radExposure.setChecked(True)
+        return True
+
+    def reset(self):
+        """Reset all controls to a blank state.
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+           no exceptions explicitly raised."""
+        self.cboSubcategory.clear()
+        self.lstKeywords.clear()
+        self.leKey.clear()
+        self.leValue.clear()
+        self.lePredefinedValue.clear()
+
+    def removeItemByKey(self, theKey):
+        """Remove an item from the kvp list given its key.
+
+        Args:
+            theKey - key of item to be removed.
+        Returns:
+            None
+        Raises:
+           no exceptions explicitly raised."""
         for myCounter in range(self.lstKeywords.count()):
             myExistingItem = self.lstKeywords.item(myCounter)
             myText = myExistingItem.text()
@@ -246,9 +304,24 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
                 self.lstKeywords.takeItem(myCounter)
                 break
 
-        myData = theKey + '|' + theValue
-        myItem.setData(QtCore.Qt.UserRole, myData)
-        self.lstKeywords.insertItem(0, myItem)
+    def removeItemByValue(self, theValue):
+        """Remove an item from the kvp list given its key.
+
+        Args:
+            theValue - value of item to be removed.
+        Returns:
+            None
+        Raises:
+           no exceptions explicitly raised."""
+        for myCounter in range(self.lstKeywords.count()):
+            myExistingItem = self.lstKeywords.item(myCounter)
+            myText = myExistingItem.text()
+            myTokens = myText.split(':')
+            myKey = myTokens[1]
+            if myKey == theValue:
+                # remove it since the key is already present
+                self.lstKeywords.takeItem(myCounter)
+                break
 
     def loadStateFromKeywords(self):
         """Set the ui state to match the keywords of the
@@ -267,11 +340,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myCategory = None
         if 'category' in myKeywords:
             myCategory = myKeywords['category']
-            self.addListEntry('category', myCategory)
-            if myCategory in 'hazard':
-                self.radHazard.setChecked(True)
-            else:
-                self.radExposure.setChecked(True)
+            self.setCategory(myCategory)
         self.addListEntry('category', myCategory)
         # get the subcategory an type if it is an exposure layer
         # or the subcategory and units if it is a hazard layer

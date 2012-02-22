@@ -175,7 +175,7 @@ Valid densities for different subcategories
 .. table::
 
    ============ ============== ====================
-    Subcategory  Key            Allowed Values
+   Subcategory  Key            Allowed Values
    ============ ============== ====================
    population    datatype        count
    population    datatype        density
@@ -184,3 +184,22 @@ Valid densities for different subcategories
    building      datatype        other
    roads         datatype        not used for roads
    ============ ============== =====================
+
+Assumptions
+...........
+
+The following assumptions are made about keywords, which may or may not be
+programmatically enforced by the RIAB library and GUI:
+
+* There should only be one keyword for a given key in the keywords file
+* Switching from hazard to exposure will clear the GUI since in general
+  most keywords are category dependent.
+* Keywords for Category **are** enforced to be one of 'hazard' or 'exposure' by
+  the GUI.
+* All other Keywords and values that do not fit the above domain lists may be
+  used but they may produce undesired results.
+
+
+
+
+ 

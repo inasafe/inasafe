@@ -103,7 +103,7 @@
       <item row="2" column="0">
        <widget class="QRadioButton" name="radUserDefined">
         <property name="text">
-         <string>User Defined</string>
+         <string>User defined</string>
         </property>
        </widget>
       </item>
