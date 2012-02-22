@@ -4,7 +4,7 @@ RISK IN A BOX - QGIS
 
 This is the project: Risk in a Box - QGIS
 
-.. figure::  ../../gui/resources/img/screenshot.jpg
+.. figure::  ../../../gui/resources/img/screenshot.jpg
    :align:   center
 
 The latest source code is available in https://github.com/AIFDR/risk_in_a_box
