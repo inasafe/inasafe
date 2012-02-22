@@ -85,8 +85,8 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         #myButton.setEnabled(False)
         self.layer = self.iface.activeLayer()
         self.lblLayerName.setText(self.layer.name())
-        self.loadStateFromKeywords()
         #settrace()
+        self.loadStateFromKeywords()
 
     @pyqtSignature('bool')  # prevents actions being handled twice
     def on_pbnAdvanced_toggled(self, theFlag):
@@ -354,6 +354,26 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
                 self.lstKeywords.takeItem(myCounter)
                 break
 
+    def getValueForKey(self, theKey):
+        """Check if our key list contains a specific key,
+        and return its value if present.
+
+        Args:
+           theKey- String representing the key to search for
+        Returns:
+           Value of key if matched otherwise none
+        Raises:
+           no exceptions explicitly raised."""
+        for myCounter in range(self.lstKeywords.count()):
+            myExistingItem = self.lstKeywords.item(myCounter)
+            myText = myExistingItem.text()
+            myTokens = myText.split(':')
+            myKey = str(myTokens[0]).strip()
+            myValue = str(myTokens[1]).strip()
+            if myKey == theKey:
+                return myValue
+        return None
+
     def loadStateFromKeywords(self):
         """Set the ui state to match the keywords of the
            currently active layer.
@@ -372,26 +392,17 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             # layer has no keywords file so just start with a blank slate
             return
 
-        myCategory = None
+        #if we have a category key, unpack it first so radio button etc get set
         if 'category' in myKeywords:
-            myCategory = myKeywords['category']
-            self.setCategory(myCategory)
-        self.addListEntry('category', myCategory)
-        # get the subcategory an type if it is an exposure layer
-        # or the subcategory and units if it is a hazard layer
-        mySubcategory = None
-        myUnits = None
-        myType = None
-        if 'subcategory' in myKeywords:
-            mySubcategory = myKeywords['subcategory']
-            self.addListEntry('subcategory', mySubcategory)
-        if 'datatype' in myKeywords:
-            myType = myKeywords['datatype']
-            self.addListEntry('datatype', myType)
-        if 'units' in myKeywords:
-            myUnits = myKeywords['units']
-            self.addListEntry('units', myUnits)
+            self.addListEntry('category', myKeywords['category'])
+            myKeywords.pop('category')
 
+        for myKey in myKeywords.iterkeys():
+            self.addListEntry(myKey, myKeywords[myKey])
+
+        mySubcategory = self.getValueForKey('subcategory')
+        myUnits = self.getValueForKey('units')
+        myType = self.getValueForKey('datatype')
         # .. note:: The logic here could theoritically be simpler
         #    but type and units arent guaranteed to be mutually exclusive
         #    in the future.
