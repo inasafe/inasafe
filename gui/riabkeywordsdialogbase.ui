@@ -60,17 +60,17 @@
           <widget class="QComboBox" name="cboKeyword">
            <item>
             <property name="text">
+             <string>category</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>subcategory</string>
             </property>
            </item>
            <item>
             <property name="text">
              <string>units</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>density</string>
             </property>
            </item>
            <item>

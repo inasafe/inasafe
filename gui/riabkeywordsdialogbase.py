@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'riabkeywordsdialogbase.ui'
 #
-# Created: Wed Feb 22 09:26:47 2012
+# Created: Wed Feb 22 12:46:56 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -48,11 +48,11 @@ class Ui_RiabKeywordsDialogBase(object):
         self.cboKeyword = QtGui.QComboBox(self.frame)
         self.cboKeyword.setObjectName(_fromUtf8("cboKeyword"))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(0, QtGui.QApplication.translate("RiabKeywordsDialogBase", "subcategory", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(0, QtGui.QApplication.translate("RiabKeywordsDialogBase", "category", None, QtGui.QApplication.UnicodeUTF8))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(1, QtGui.QApplication.translate("RiabKeywordsDialogBase", "units", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(1, QtGui.QApplication.translate("RiabKeywordsDialogBase", "subcategory", None, QtGui.QApplication.UnicodeUTF8))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(2, QtGui.QApplication.translate("RiabKeywordsDialogBase", "density", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(2, QtGui.QApplication.translate("RiabKeywordsDialogBase", "units", None, QtGui.QApplication.UnicodeUTF8))
         self.cboKeyword.addItem(_fromUtf8(""))
         self.cboKeyword.setItemText(3, QtGui.QApplication.translate("RiabKeywordsDialogBase", "datatype", None, QtGui.QApplication.UnicodeUTF8))
         self.horizontalLayout.addWidget(self.cboKeyword)
@@ -69,7 +69,7 @@ class Ui_RiabKeywordsDialogBase(object):
         self.horizontalLayout.addWidget(self.pbnAddToList1)
         self.gridLayout.addWidget(self.frame, 1, 0, 1, 1)
         self.radUserDefined = QtGui.QRadioButton(self.grpAdvanced)
-        self.radUserDefined.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "User Defined", None, QtGui.QApplication.UnicodeUTF8))
+        self.radUserDefined.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "User defined", None, QtGui.QApplication.UnicodeUTF8))
         self.radUserDefined.setObjectName(_fromUtf8("radUserDefined"))
         self.gridLayout.addWidget(self.radUserDefined, 2, 0, 1, 1)
         self.frame_2 = QtGui.QFrame(self.grpAdvanced)
