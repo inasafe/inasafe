@@ -75,17 +75,16 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
+        #settrace()
         # set some inital ui state:
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
         self.radPredefined.setChecked(True)
-        self.radExposure.setChecked(True)
         self.adjustSize()
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
         self.layer = self.iface.activeLayer()
         self.lblLayerName.setText(self.layer.name())
-        #settrace()
         self.loadStateFromKeywords()
 
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -103,7 +102,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if theFlag:
-            self.pbnAdvanced.setText(self.tr('Show simple editor'))
+            self.pbnAdvanced.setText(self.tr('Hide advanced editor'))
         else:
             self.pbnAdvanced.setText(self.tr('Show advanced editor'))
         self.adjustSize()
@@ -118,11 +117,10 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        if theFlag:
-            self.addListEntry('category', 'hazard')
-            self.setSubcategoryList(self.standardHazardList)
+        if not theFlag:
+            return
+        self.setCategory('hazard')
 
-    @pyqtSignature('bool')  # prevents actions being handled twice
     def on_radExposure_toggled(self, theFlag):
         """Automatic slot executed when the hazard radio is toggled on.
 
@@ -132,12 +130,31 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        if theFlag:
+        if not theFlag:
+            return
+        self.setCategory('exposure')
+
+    def setCategoryInList(self):
+        """Add an entry to the list based on the current state of the
+        category radio buttons. Any existing entry in the list will be
+        overwritten.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+
+        if self.radExposure.isChecked():
             self.addListEntry('category', 'exposure')
-            self.setSubcategoryList(self.standardExposureList)
+            #self.setSubcategoryList(self.standardExposureList)
+        else:
+            self.addListEntry('category', 'hazard')
+            #self.setSubcategoryList(self.standardHazardList)
 
     @pyqtSignature('int')  # prevents actions being handled twice
-    def on_cboSubcategory_currentIndexChanged(self, theIndex):
+    def on_cboSubcategory_currentIndexChanged(self, theIndex=None):
         """Automatic slot executed when the subcategory is changed.
 
         When the user changes the subcategory, we will extract the
@@ -150,7 +167,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        #settrace()
+
         myText = str(self.cboSubcategory.currentText())
         myTokens = myText.split(' ')
         if len(myTokens) < 1:
@@ -178,6 +195,9 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised.
         """
+        # To aoid triggering on_cboSubcategory_currentIndexChanged
+        # we block signals from the combo while updating it
+        self.cboSubcategory.blockSignals(True)
         self.cboSubcategory.clear()
         if theSelectedItem is not None and theSelectedItem not in theList:
             theList.append(theSelectedItem)
@@ -189,6 +209,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myIndex += 1
             self.cboSubcategory.addItem(myItem)
         self.cboSubcategory.setCurrentIndex(mySelectedIndex)
+        self.cboSubcategory.blockSignals(False)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pbnAddToList1_clicked(self):
@@ -263,13 +284,6 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             return
         if theValue is None or theValue == '':
             return
-        # special rule: if the key is 'category', enforce that the
-        # value is either 'exposure' or 'hazard' and toggle the
-        # correct radio button in the simple editor
-        if theKey == 'category':
-            if not self.setCategory(theValue):
-                # .. todo:: report an error to the user
-                return False
 
         myItem = QtGui.QListWidgetItem(theKey + ':' + theValue)
         # we are going to replace, so remove it if it exists already
@@ -289,32 +303,62 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
         # convert from QString if needed
         myCategory = str(theCategory)
+        if self.getValueForKey('category') == myCategory:
+            #nothing to do, go home
+            return True
         if myCategory not in ['hazard', 'exposure']:
             # .. todo:: report an error to the user
             return False
         # Special case when category changes, we start on a new slate!
-        self.reset()
 
-        if myCategory in 'hazard':
+        if myCategory == 'hazard':
+            # only cause a toggle if we actually changed the category
+            # This will only really be apparent if user manually enters
+            # category as a keyword
+            self.reset()
+            self.radHazard.blockSignals(True)
             self.radHazard.setChecked(True)
+            self.radHazard.blockSignals(False)
+            self.removeItemByKey('subcategory')
+            self.removeItemByKey('datatype')
+            self.addListEntry('category', 'hazard')
+            myList = self.standardHazardList
+            self.setSubcategoryList(myList)
+
         else:
+            self.reset()
+            self.radExposure.blockSignals(True)
             self.radExposure.setChecked(True)
+            self.radExposure.blockSignals(False)
+            self.removeItemByKey('subcategory')
+            self.removeItemByKey('units')
+            self.addListEntry('category', 'exposure')
+            myList = self.standardExposureList
+            self.setSubcategoryList(myList)
+
         return True
 
-    def reset(self):
+    def reset(self, thePrimaryKeywordsOnlyFlag=True):
         """Reset all controls to a blank state.
 
         Args:
-            None
+            thePrimaryKeywordsOnlyFlag - if True (the default), only
+            reset Subcategory, datatype and units.
         Returns:
             None
         Raises:
            no exceptions explicitly raised."""
+
         self.cboSubcategory.clear()
-        self.lstKeywords.clear()
-        self.leKey.clear()
-        self.leValue.clear()
-        self.lePredefinedValue.clear()
+        self.removeItemByKey('subcategory')
+        self.removeItemByKey('datatype')
+        self.removeItemByKey('units')
+        if not thePrimaryKeywordsOnlyFlag:
+            # Clear everything else too
+            self.lstKeywords.clear()
+            self.leKey.clear()
+            self.leValue.clear()
+            self.lePredefinedValue.clear()
 
     def removeItemByKey(self, theKey):
         """Remove an item from the kvp list given its key.
@@ -391,7 +435,6 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         except InvalidParameterException:
             # layer has no keywords file so just start with a blank slate
             return
-
         #if we have a category key, unpack it first so radio button etc get set
         if 'category' in myKeywords:
             self.addListEntry('category', myKeywords['category'])

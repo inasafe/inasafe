@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'riabkeywordsdialogbase.ui'
 #
-# Created: Wed Feb 22 12:46:56 2012
+# Created: Wed Feb 22 19:25:31 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -48,13 +48,11 @@ class Ui_RiabKeywordsDialogBase(object):
         self.cboKeyword = QtGui.QComboBox(self.frame)
         self.cboKeyword.setObjectName(_fromUtf8("cboKeyword"))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(0, QtGui.QApplication.translate("RiabKeywordsDialogBase", "category", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(0, QtGui.QApplication.translate("RiabKeywordsDialogBase", "subcategory", None, QtGui.QApplication.UnicodeUTF8))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(1, QtGui.QApplication.translate("RiabKeywordsDialogBase", "subcategory", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(1, QtGui.QApplication.translate("RiabKeywordsDialogBase", "units", None, QtGui.QApplication.UnicodeUTF8))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(2, QtGui.QApplication.translate("RiabKeywordsDialogBase", "units", None, QtGui.QApplication.UnicodeUTF8))
-        self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(3, QtGui.QApplication.translate("RiabKeywordsDialogBase", "datatype", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(2, QtGui.QApplication.translate("RiabKeywordsDialogBase", "datatype", None, QtGui.QApplication.UnicodeUTF8))
         self.horizontalLayout.addWidget(self.cboKeyword)
         self.label_5 = QtGui.QLabel(self.frame)
         self.label_5.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Value", None, QtGui.QApplication.UnicodeUTF8))
@@ -135,6 +133,7 @@ class Ui_RiabKeywordsDialogBase(object):
         self.radExposure = QtGui.QRadioButton(self.grpSimple)
         self.radExposure.setToolTip(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Where people and property are situated.", None, QtGui.QApplication.UnicodeUTF8))
         self.radExposure.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Exposure", None, QtGui.QApplication.UnicodeUTF8))
+        self.radExposure.setChecked(True)
         self.radExposure.setObjectName(_fromUtf8("radExposure"))
         self.horizontalLayout_3.addWidget(self.radExposure)
         self.gridLayout_3.addLayout(self.horizontalLayout_3, 1, 1, 1, 1)
@@ -166,7 +165,6 @@ class Ui_RiabKeywordsDialogBase(object):
         QtCore.QObject.connect(self.radPredefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.frame_2.setDisabled)
         QtCore.QObject.connect(self.radUserDefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.frame_2.setEnabled)
         QtCore.QObject.connect(self.radUserDefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.frame.setDisabled)
-        QtCore.QObject.connect(self.pbnAdvanced, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.grpSimple.setHidden)
         QtCore.QMetaObject.connectSlotsByName(RiabKeywordsDialogBase)
         RiabKeywordsDialogBase.setTabOrder(self.radHazard, self.radExposure)
         RiabKeywordsDialogBase.setTabOrder(self.radExposure, self.pbnAdvanced)

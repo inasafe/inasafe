@@ -60,11 +60,6 @@
           <widget class="QComboBox" name="cboKeyword">
            <item>
             <property name="text">
-             <string>category</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
              <string>subcategory</string>
             </property>
            </item>
@@ -180,13 +175,6 @@
        </widget>
       </item>
      </layout>
-     <zorder>radPredefined</zorder>
-     <zorder>frame</zorder>
-     <zorder>radUserDefined</zorder>
-     <zorder>frame_2</zorder>
-     <zorder>label_8</zorder>
-     <zorder>lstKeywords</zorder>
-     <zorder>pbnRemove</zorder>
     </widget>
    </item>
    <item row="4" column="0" colspan="2">
@@ -231,6 +219,9 @@
           </property>
           <property name="text">
            <string>Exposure</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -394,22 +385,6 @@
     <hint type="destinationlabel">
      <x>56</x>
      <y>262</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pbnAdvanced</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>grpSimple</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>173</x>
-     <y>143</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>29</x>
-     <y>40</y>
     </hint>
    </hints>
   </connection>
