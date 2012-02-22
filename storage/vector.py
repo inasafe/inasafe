@@ -14,7 +14,7 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
-from engine.polygon import inside_polygon, clip_lines_by_polygon
+from engine.polygon import inside_polygon, clip_line_by_polygon
 from engine.numerics import ensure_numeric
 
 
@@ -781,31 +781,66 @@ class Vector:
             # FIXME (Ole): Need to separate this out, but identify what is
             #              common with points and lines
             #
-            # The following in this elif branch is temporary only
 
-            # Lines
+            #X.write_to_file('line_data.shp')
+            #self.write_to_file('poly_data.shp')
+
+            # Extract line features
             lines = X.get_geometry()
-            attributes = X.get_data()
+            line_attributes = X.get_data()
             N = len(X)
+            assert len(lines) == N
+            assert len(line_attributes) == N
 
             # Extract polygon features
-            geom = self.get_geometry()
-            data = self.get_data()
-            assert len(geom) == len(data)
+            polygons = self.get_geometry()
+            poly_attributes = self.get_data()
+            assert len(polygons) == len(poly_attributes)
 
-            # Try clipper
-            polygon = geom[0]
-            #print 'Lines', len(lines)
-            #print polygon, len(polygon)
-            #fid = open('test_lines.txt', 'wb')
-            #import cPickle
-            #cPickle.dump(lines, fid)
-            #fid.close()
-            clip_lines_by_polygon(lines, polygon)
+            # Data structure for resulting line segments
+            clipped_geometry = []
+            clipped_attributes = []
 
-            msg = 'Line data not yet implemented in interpolation'
-            raise Exception(msg)
+            # Clip line lines to polygons
+            for i, polygon in enumerate(polygons):
+                for j, line in enumerate(lines):
+                    inside, outside = clip_line_by_polygon(line, polygon)
 
+                    # FIXME (Ole): Join adjacent segments again
+                    # (maybe do in clipping function)
+
+                    # Create new attributes
+                    # FIXME (Ole): Todo DEFAULT_ATTRIBUTE and single
+                    # specified polygon attribute
+                    inside_attributes = {}
+                    outside_attributes = {}
+                    for key in line_attributes[j]:
+                        inside_attributes[key] = line_attributes[j][key]
+                        outside_attributes[key] = line_attributes[j][key]
+
+                    for key in poly_attributes[i]:
+                        inside_attributes[key] = poly_attributes[i][key]
+                        outside_attributes[key] = None
+
+                    # Assign new attribute set to clipped lines
+                    for segment in inside:
+                        clipped_geometry.append(segment)
+                        clipped_attributes.append(inside_attributes)
+
+                    for segment in outside:
+                        clipped_geometry.append(segment)
+                        clipped_attributes.append(outside_attributes)
+
+            # Create new Vector instance and return
+            V = Vector(data=clipped_attributes,
+                       projection=X.get_projection(),
+                       geometry=clipped_geometry,
+                       geometry_type='line')
+            #V.write_to_file('clipped_and_tagged.shp')
+            return V
+
+
+        # The following applies only to Polygon-Point interpolation
         msg = ('Vector layer to interpolate to must be point geometry. '
                'I got OGR geometry type %s'
                % geometrytype2string(X.geometry_type))

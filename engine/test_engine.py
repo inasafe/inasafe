@@ -1488,7 +1488,6 @@ class Test_Engine(unittest.TestCase):
         I_attributes = I.get_data()
 
         N = len(I_attributes)
-        assert N == len(E_attributes)
 
         # Assert that expected attribute names exist
         I_names = I.get_attribute_names()
@@ -1507,11 +1506,17 @@ class Test_Engine(unittest.TestCase):
         for i in range(N):
             category = I_attributes[i]['Catergory']  # The typo is as the data
             if category is not None:
+                assert category.lower() in ['high', 'very high']
                 count += 1
 
-        #msg = ('Expected 458 points tagged with category, '
-        #       'but got only %i' % count)
-        #assert count == 458, msg
+        msg = ('Expected 34 points tagged with category, '
+               'but got only %i' % count)
+        assert count == 34, msg
+
+
+        #print I_geometry[1123]
+        #print I_attributes[1123]
+        assert I_attributes[1123]['Catergory'] == 'Very High'
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
@@ -1802,6 +1807,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_line_clipping_by_polygon')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
