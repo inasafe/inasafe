@@ -1,6 +1,6 @@
-====================
-RISK IN A BOX - QGIS
-====================
+===========================
+Risk in a Box - QGIS Plugin
+===========================
 
 This is the project: Risk in a Box - QGIS
 
@@ -44,7 +44,7 @@ System Requirements
 
 
 ===========
-LIMITATIONS
+Limitations
 ===========
 
 Risk in a Box is a very new project. The current code development started

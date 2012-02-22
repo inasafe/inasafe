@@ -1,7 +1,7 @@
 
-=================================
-The Risk in a Box Keywords System
-=================================
+===================
+The Keywords System
+===================
 
 This document describes the purpose and usage of the Risk in a Box *keywords*
 system.
