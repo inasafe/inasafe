@@ -1434,26 +1434,24 @@ class Test_Engine(unittest.TestCase):
         P = Vector(geometry=[test_polygon])
         P.write_to_file('test_polygon.shp')
 
-        L = Vector(geometry=test_lines, geometry_type='line')
-        L.write_to_file('test_lines.shp')
+        # Possibly generate files for visual inspection with e.g. QGis
+        if False: # True:  #False:
+            L = Vector(geometry=test_lines, geometry_type='line')
+            L.write_to_file('test_lines.shp')
 
-        L = Vector(geometry=inside_line_segments, geometry_type='line')
-        L.write_to_file('inside_lines.shp')
+            L = Vector(geometry=inside_line_segments, geometry_type='line')
+            L.write_to_file('inside_lines.shp')
 
-        L = Vector(geometry=outside_line_segments, geometry_type='line')
-        L.write_to_file('outside_lines.shp')
+            L = Vector(geometry=outside_line_segments, geometry_type='line')
+            L.write_to_file('outside_lines.shp')
 
-        L = Vector(geometry=inside_centroids, geometry_type='point')
-        L.write_to_file('inside_centroids.shp')
+            L = Vector(geometry=inside_centroids, geometry_type='point')
+            L.write_to_file('inside_centroids.shp')
 
-        L = Vector(geometry=outside_centroids, geometry_type='point')
-        L.write_to_file('outside_centroids.shp')
+            L = Vector(geometry=outside_centroids, geometry_type='point')
+            L.write_to_file('outside_centroids.shp')
 
-        # FIXME: Debug
-        #L = Vector(geometry=intersections, geometry_type='point')
-        #L.write_to_file('intersections.shp')  # E.g. to view with QGis
-
-        # Check a few against visual inspection
+        # FIXME (Ole): TODO Check a few against visual inspection and write test
 
     def test_line_interpolation_from_polygons_one_poly(self):
         """Line clipping and interpolation using one polygon works
