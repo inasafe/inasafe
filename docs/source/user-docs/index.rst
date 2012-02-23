@@ -16,6 +16,7 @@ This document describes how to use the Risk in a box system.
    :maxdepth: 2
 
    README
+   dock
    keywords
    impact_functions
    faq

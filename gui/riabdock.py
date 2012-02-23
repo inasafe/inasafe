@@ -666,7 +666,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
     def showHelp(self):
         """Load the help text into the wvResults widget"""
         if not self.helpDialog:
-            self.helpDialog = RiabHelp(self.iface.mainWindow())
+            self.helpDialog = RiabHelp(self.iface.mainWindow(), 'dock')
         self.helpDialog.show()
 
     def showBusy(self):

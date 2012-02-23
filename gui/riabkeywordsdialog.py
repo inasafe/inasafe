@@ -25,6 +25,7 @@ from PyQt4 import QtGui, QtCore
 #from utilities import getExceptionWithStacktrace
 from impactcalculator import ImpactCalculator
 from riabkeywordsdialogbase import Ui_RiabKeywordsDialogBase
+from riabhelp import RiabHelp
 from PyQt4.QtCore import pyqtSignature
 from storage.utilities import write_keywords
 from riabexceptions import InvalidParameterException
@@ -75,6 +76,11 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
+        # Set up things for context help
+        myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                               self.showHelp)
+        self.helpDialog = None
         #settrace()
         # set some inital ui state:
         self.pbnAdvanced.setChecked(True)
@@ -86,6 +92,12 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.layer = self.iface.activeLayer()
         self.lblLayerName.setText(self.layer.name())
         self.loadStateFromKeywords()
+
+    def showHelp(self):
+        """Load the help text for the keywords gui"""
+        if not self.helpDialog:
+            self.helpDialog = RiabHelp(self.iface.mainWindow(), 'keywords')
+        self.helpDialog.show()
 
     @pyqtSignature('bool')  # prevents actions being handled twice
     def on_pbnAdvanced_toggled(self, theFlag):

@@ -1,7 +1,8 @@
 
-===================
-The Keywords System
-===================
+===============
+Keywords System
+===============
+
 
 This document describes the purpose and usage of the Risk in a Box *keywords*
 system.
@@ -255,6 +256,24 @@ QGIS layers list, and then using the plugin menu to start the editor
 Alternatively, you may use the keywords editor icon on the 
 plugins toolbar as illustrated below.
 
-
-
  XXXX Add screenshot here xxxxxxx
+
+Saving your edits
+-----------------
+
+To save your keyword edits, simply press the :guilabel:`OK` button and the
+.keywords file will be written to disk.
+
+Cancelling your edits
+---------------------
+
+You can cancel your changes at any time by pressing the :guilabel:`Cancel`
+button. No changes will be written to disk and your .keywords file will
+remain in its original state.
+
+Getting help
+------------
+
+If you need help using the keywords editor, you can click on the
+:guilabel:`Help` button at the bottom of the dialog and this page will be 
+displayed.

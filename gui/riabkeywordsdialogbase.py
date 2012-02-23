@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'riabkeywordsdialogbase.ui'
 #
-# Created: Thu Feb 23 04:43:42 2012
+# Created: Thu Feb 23 06:17:00 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -31,13 +31,13 @@ class Ui_RiabKeywordsDialogBase(object):
         self.grpSimple.setObjectName(_fromUtf8("grpSimple"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpSimple)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
-        self.label = QtGui.QLabel(self.grpSimple)
-        self.label.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setObjectName(_fromUtf8("label"))
-        self.gridLayout_3.addWidget(self.label, 0, 0, 1, 1)
-        self.lineEdit = QtGui.QLineEdit(self.grpSimple)
-        self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
-        self.gridLayout_3.addWidget(self.lineEdit, 0, 1, 1, 1)
+        self.lblTitle = QtGui.QLabel(self.grpSimple)
+        self.lblTitle.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblTitle.setObjectName(_fromUtf8("lblTitle"))
+        self.gridLayout_3.addWidget(self.lblTitle, 0, 0, 1, 1)
+        self.leTitle = QtGui.QLineEdit(self.grpSimple)
+        self.leTitle.setObjectName(_fromUtf8("leTitle"))
+        self.gridLayout_3.addWidget(self.leTitle, 0, 1, 1, 1)
         self.lblCategory = QtGui.QLabel(self.grpSimple)
         self.lblCategory.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Category", None, QtGui.QApplication.UnicodeUTF8))
         self.lblCategory.setObjectName(_fromUtf8("lblCategory"))
@@ -155,7 +155,7 @@ class Ui_RiabKeywordsDialogBase(object):
         self.gridLayout_2.addWidget(self.grpAdvanced, 4, 0, 1, 1)
         self.buttonBox = QtGui.QDialogButtonBox(RiabKeywordsDialogBase)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
         self.gridLayout_2.addWidget(self.buttonBox, 5, 0, 1, 1)
         self.label_2.setBuddy(self.cboSubcategory)

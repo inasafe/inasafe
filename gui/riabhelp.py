@@ -25,31 +25,40 @@ import os
 class RiabHelp(QtGui.QDialog):
     """Help dialog class for the Risk In A Box plugin."""
 
-    def __init__(self, iface):
+    def __init__(self, theParent=None, theContext=None):
         """Constructor for the dialog.
 
         This dialog will show the user help documentation.
 
         Args:
-
-           * iface - a Quantum GIS QGisAppInterface instance.
-
+           * theParent - Optional widget to use as parent
+           * theContext - Optional - page name (without path)
+             of a document in the user-docs subdirectory.
+             e.g. 'keywords'
         Returns:
            not applicable
         Raises:
            no exceptions explicitly raised
         """
-        QtGui.QDialog.__init__(self, None)
-        # Save reference to the QGIS interface
-        self.iface = iface
+        QtGui.QDialog.__init__(self, theParent)
         # Set up the user interface from Designer.
         self.ui = Ui_RiabHelp()
         self.ui.setupUi(self)
-        self.showHelp()
+        self.context = theContext
+        self.showContexthelp()
 
-    def showHelp(self):
+    def showContexthelp(self):
         """Load the help text into the wvResults widget"""
         ROOT = os.path.dirname(__file__)
         myPath = os.path.abspath(os.path.join(ROOT, '..', 'docs', 'build',
-                                            'html', 'README.html'))
+                                            'html', 'user-docs',
+                                            'README.html'))
+
+        if self.context is not None:
+            myContextPath = os.path.abspath(os.path.join(ROOT, '..',
+                                            'docs', 'build',
+                                            'html', 'user-docs',
+                                            self.context + '.html'))
+            if os.path.isfile(myContextPath):
+                myPath = myContextPath
         self.ui.webView.setUrl(QtCore.QUrl('file:///' + myPath))
