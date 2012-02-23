@@ -134,25 +134,6 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             return
         self.setCategory('exposure')
 
-    def setCategoryInList(self):
-        """Add an entry to the list based on the current state of the
-        category radio buttons. Any existing entry in the list will be
-        overwritten.
-
-        Args:
-           None
-        Returns:
-           None.
-        Raises:
-           no exceptions explicitly raised."""
-
-        if self.radExposure.isChecked():
-            self.addListEntry('category', 'exposure')
-            #self.setSubcategoryList(self.standardExposureList)
-        else:
-            self.addListEntry('category', 'hazard')
-            #self.setSubcategoryList(self.standardHazardList)
-
     @pyqtSignature('int')  # prevents actions being handled twice
     def on_cboSubcategory_currentIndexChanged(self, theIndex=None):
         """Automatic slot executed when the subcategory is changed.
@@ -239,6 +220,19 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
 
         myCurrentKey = self.leKey.text()
         myCurrentValue = self.leValue.text()
+        if myCurrentKey == 'category' and myCurrentValue == 'hazard':
+            self.radHazard.blockSignals(True)
+            self.radHazard.setChecked(True)
+            self.setSubcategoryList(self.standardHazardList)
+            self.radHazard.blockSignals(False)
+        elif myCurrentKey == 'category' and myCurrentValue == 'exposure':
+            self.radExposure.blockSignals(True)
+            self.radExposure.setChecked(True)
+            self.setSubcategoryList(self.standardExposureList)
+            self.radExposure.blockSignals(False)
+        elif myCurrentKey == 'category':
+            #.. todo:: notify the user their category is invalid
+            pass
         self.addListEntry(myCurrentKey, myCurrentValue)
 
     @pyqtSignature('')  # prevents actions being handled twice
@@ -437,7 +431,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             return
         #if we have a category key, unpack it first so radio button etc get set
         if 'category' in myKeywords:
-            self.addListEntry('category', myKeywords['category'])
+            self.setCategory(myKeywords['category'])
             myKeywords.pop('category')
 
         for myKey in myKeywords.iterkeys():
