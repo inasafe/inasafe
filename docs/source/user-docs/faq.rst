@@ -3,14 +3,14 @@ Frequently Asked Questions
 
 
 How do I rename a shape file and all the helper files?
-::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
   Use the rename command. rename [ -v ] [ -n ] [ -f ] perlexpr [ files ].
   For example
     rename -v 's/^building/OSM_building_polygons_20110905/' building.*
 
 How do I reproject a spatial data file to WGS84 geographic coordinates
-::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
   For raster data, use gdalwarp, for example
   gdalwarp -t_srs EPSG:4326 <source>.tif <target>.tif
@@ -19,7 +19,7 @@ How do I reproject a spatial data file to WGS84 geographic coordinates
   ogr2ogr -s_srs EPSG:23834 -t_srs EPSG:4326 <target>.shp <source>.shp
 
 How do I get Open Street Map building data into Risk in a Box?
-::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
   For Indonesia, you can download latest collections at http://data.kompetisiosm.org
 
@@ -30,7 +30,7 @@ How do I get Open Street Map building data into Risk in a Box?
  * Build query: upper(geometrytype("way")) IN ('POLYGON','MULTIPOLYGON') AND BUILDING != ''
 
 How do I take screen capture e.g. for use in a presentation?
-::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
   On Ubuntu, get the packages gtk-recordmydesktop and mencoder
   Record using recordmydesktop (start and stop icon in the top bar)
@@ -66,12 +66,20 @@ How does the documentation work?::
 
 
 How do I replace a string across multiple files
-::
+:::::::::::::::::::::::::::::::::::::::::::::::
 
 To replace string layer_type, say, with layertype across all python files
 in project, do::
 
    find . -name "*.py" -print | xargs sed -i 's/layer_type/layertype/g'
+
+Alternative you can install the 'rpl' command line tool::
+
+   sudo apt-get install rpl
+
+Using rpl is much simpler, just do::
+
+   rpl "oldstring" "newstring" *.py
 
 
 For details see
