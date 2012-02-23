@@ -90,8 +90,9 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
         self.layer = self.iface.activeLayer()
-        self.lblLayerName.setText(self.layer.name())
-        self.loadStateFromKeywords()
+        if self.layer:
+            self.lblLayerName.setText(self.layer.name())
+            self.loadStateFromKeywords()
 
     def showHelp(self):
         """Load the help text for the keywords gui"""
@@ -452,7 +453,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         mySubcategory = self.getValueForKey('subcategory')
         myUnits = self.getValueForKey('units')
         myType = self.getValueForKey('datatype')
-        myTitle = self.getValeyForKey('title')
+        myTitle = self.getValueForKey('title')
         if myTitle is not None:
             self.leTitle.setText(myTitle)
         # .. note:: The logic here could theoritically be simpler
@@ -477,6 +478,29 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
                 self.setSubcategoryList(self.standardExposureList,
                                          mySubcategory + ' [' + myUnits + ']')
 
+    def getKeywords(self):
+        """Obtain the state of the dialog as a keywords dict
+
+        Args:
+           None
+        Returns:
+           dict - a dictionary of keyword reflecting the state of the dialog.
+        Raises:
+           no exceptions explicitly raised."""
+                #make sure title is listed
+        if str(self.leTitle.text()) != '':
+            self.addListEntry('title', str(self.leTitle.text()))
+
+        myKeywords = {}
+        for myCounter in range(self.lstKeywords.count()):
+            myExistingItem = self.lstKeywords.item(myCounter)
+            myText = myExistingItem.text()
+            myTokens = myText.split(':')
+            myKey = str(myTokens[0]).strip()
+            myValue = str(myTokens[1]).strip()
+            myKeywords[myKey] = myValue
+        return myKeywords
+
     def accept(self):
         """Automatic slot executed when the ok button is pressed.
 
@@ -490,18 +514,6 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
         myFileName = self.layer.source()
         myFileName = os.path.splitext(str(myFileName))[0] + '.keywords'
-        #make sure title is listed
-        if str(self.leTitle.text()) != '':
-            self.addListEntry('title', str(self.leTitle.text()))
-
-        myKeywords = {}
-        for myCounter in range(self.lstKeywords.count()):
-            myExistingItem = self.lstKeywords.item(myCounter)
-            myText = myExistingItem.text()
-            myTokens = myText.split(':')
-            myKey = str(myTokens[0]).strip()
-            myValue = str(myTokens[1]).strip()
-            myKeywords[myKey] = myValue
-
+        myKeywords = self.getKeywords()
         write_keywords(myKeywords, myFileName)
         self.close()

@@ -25,6 +25,7 @@ __copyright__ = ('Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
 
 
 from PyQt4.QtCore import QObject
+from qgis.core import QgsMapLayerRegistry
 
 
 class QgisInterface(QObject):
@@ -61,7 +62,9 @@ class QgisInterface(QObject):
 
     def activeLayer(self):
         """Get pointer to the active layer (layer selected in the legend)"""
-        pass
+        myLayers = QgsMapLayerRegistry.instance().mapLayers()
+        for myItem in myLayers:
+            return myLayers[myItem]
 
     def addToolBarIcon(self, qAction):
         """Add an icon to the plugins toolbar"""
