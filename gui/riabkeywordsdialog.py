@@ -133,6 +133,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             return
         self.setCategory('hazard')
 
+    @pyqtSignature('bool')  # prevents actions being handled twice
     def on_radExposure_toggled(self, theFlag):
         """Automatic slot executed when the hazard radio is toggled on.
 

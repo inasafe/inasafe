@@ -161,19 +161,30 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         loadStandardLayers()
         myDialog = RiabKeywordsDialog(PARENT, IFACE)
         myButton = myDialog.pbnAdvanced
+        myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myState = myDialog.grpAdvanced.isHidden()
+        myExpectedState = False
         myMessage = ('Advanced options did not become visible when'
-                     ' the advanced button was clicked')
-        assert myDialog.grpAdvanced.isVisible(), myMessage
+                     ' the advanced button was clicked\nGot'
+                     '%s\nExpected\%s\n' % (myState, myExpectedState))
+
+        assert myState == myExpectedState, myMessage
+
+        # Now hide advanced again and test...
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myState = myDialog.grpAdvanced.isHidden()
+        myExpectedState = True
         myMessage = ('Advanced options did not become hidden when'
-                     ' the advanced button was clicked again')
+                     ' the advanced button was clicked again\nGot'
+                     '%s\nExpected\%s\n' % (myState, myExpectedState))
         assert not myDialog.grpAdvanced.isVisible(), myMessage
 
     def test_on_radHazard_toggled(self):
         """Test hazard radio button toggle behaviour works"""
         myDialog = RiabKeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radHazard
+        myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = ('Toggling the hazard radio did not add a category '
                      'to the keywords list.')
@@ -183,6 +194,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         """Test exposure radio button toggle behaviour works"""
         myDialog = RiabKeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radExposure
+        myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = ('Toggling the exposure radio did not add a category '
                      'to the keywords list.')
@@ -191,6 +203,8 @@ class RiabKeywordsDialogTest(unittest.TestCase):
     def test_on_cboSubcategory_currentIndexChanged(self):
         """Test subcategory combo change event works"""
         myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myButton = myDialog.radHazard
+        myButton.setChecked(True)
         myButton = myDialog.radExposure
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myCombo = myDialog.cboSubcategory
@@ -220,6 +234,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         """Test adding an item to the list using predefined form works"""
         myDialog = RiabKeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
+        myDialog.radPredefined.setChecked(True)
         myDialog.cboKeyword.setCurrentIndex(2)
         myExpectedResult = 'foo'
         myDialog.lePredefinedValue.setText(myExpectedResult)
@@ -234,11 +249,13 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         """Test adding an item to the list using user defened form works"""
         myDialog = RiabKeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
-        myDialog.leKey = 'bar'
-        myExpectedResult = 'foo'
+        myDialog.radUserDefined.setChecked(True)
+        myDialog.leKey.setText('foo')
+        myDialog.leValue.setText('bar')
+        myExpectedResult = 'bar'
         myDialog.lePredefinedValue.setText(myExpectedResult)
         QTest.mouseClick(myDialog.pbnAddToList2, QtCore.Qt.LeftButton)
-        myResult = myDialog.getValueForKey('bar')
+        myResult = myDialog.getValueForKey('foo')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
         print 'Dict', myDialog.getKeywords()
