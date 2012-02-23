@@ -452,6 +452,9 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         mySubcategory = self.getValueForKey('subcategory')
         myUnits = self.getValueForKey('units')
         myType = self.getValueForKey('datatype')
+        myTitle = self.getValeyForKey('title')
+        if myTitle is not None:
+            self.leTitle.setText(myTitle)
         # .. note:: The logic here could theoritically be simpler
         #    but type and units arent guaranteed to be mutually exclusive
         #    in the future.
@@ -487,6 +490,10 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
         myFileName = self.layer.source()
         myFileName = os.path.splitext(str(myFileName))[0] + '.keywords'
+        #make sure title is listed
+        if str(self.leTitle.text()) != '':
+            self.addListEntry('title', str(self.leTitle.text()))
+
         myKeywords = {}
         for myCounter in range(self.lstKeywords.count()):
             myExistingItem = self.lstKeywords.item(myCounter)
