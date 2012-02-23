@@ -292,32 +292,20 @@ class RiabClipper(unittest.TestCase):
                     msg = 'Tuple argument should have raised exception'
                     raise Exception(msg)
 
-                # Check None option without existence of density keyword
+                # Check None option without keyword datatype == 'density'
                 A_none = R.get_data(scaling=None)
                 msg = 'Data should not have changed'
                 assert nanallclose(A_native, A_none,
                                    rtol=1.0e-12, atol=1.0e-12), msg
 
                 # Try with None and density keyword
-                R.keywords['density'] = 'true'
+                R.keywords['datatype'] = 'density'
                 A_none = R.get_data(scaling=None)
                 msg = 'Resampled raster was not rescaled correctly'
                 assert nanallclose(A_scaled, A_none,
                                    rtol=1.0e-12, atol=1.0e-12), msg
 
-                R.keywords['density'] = 'Yes'
-                A_none = R.get_data(scaling=None)
-                msg = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(A_scaled, A_none,
-                                   rtol=1.0e-12, atol=1.0e-12), msg
-
-                R.keywords['density'] = 'False'
-                A_none = R.get_data(scaling=None)
-                msg = 'Data should not have changed'
-                assert nanallclose(A_native, A_none,
-                                   rtol=1.0e-12, atol=1.0e-12), msg
-
-                R.keywords['density'] = 'no'
+                R.keywords['datatype'] = 'counts'
                 A_none = R.get_data(scaling=None)
                 msg = 'Data should not have changed'
                 assert nanallclose(A_native, A_none,

@@ -327,9 +327,9 @@ class Raster:
                            its current and native resolution. This is typically
                            required if raster data represents a density
                            such as population per km^2
-                     None: The behaviour will depend on the keyword "density"
-                           associated with the layer. If density is "true" or
-                           "yes" (ignoring case), scaling will be applied
+                     None: The behaviour will depend on the keyword
+                           "population" associated with the layer. If
+                           it is "density", scaling will be applied
                            otherwise not. This is the default.
                      scalar value: If scaling takes a numerical scalar value,
                                    that will be use to scale the data
@@ -372,7 +372,7 @@ class Raster:
         if scaling is None:
             # Redefine scaling from density keyword if possible
             kw = self.get_keywords()
-            if 'density' in kw and kw['density'].lower() in ['true', 'yes']:
+            if 'datatype' in kw and kw['datatype'].lower() == 'density':
                 scaling = True
             else:
                 scaling = False

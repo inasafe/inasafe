@@ -18,7 +18,7 @@ class FloodFatalityFunction(FunctionProvider):
     :param requires category=='exposure' and \
                     subcategory.startswith('population') and \
                     layertype=='raster' and \
-                    datatype=='population'
+                    datatype=='density'
     """
 
     plugin_name = 'Meninggal'
@@ -48,10 +48,10 @@ class FloodFatalityFunction(FunctionProvider):
             else:
                 datatype = keywords['datatype']
 
-                if 'population' in datatype:
+                if 'ratio' not in datatype:
                     population = layer
-
-                if 'female' in datatype and 'ratio' in datatype:
+                else:
+                    #if 'female' in datatype and 'ratio' in datatype:
                     gender_ratio_unit = keywords['unit']
 
                     msg = ('Unit for gender ratio must be either '
