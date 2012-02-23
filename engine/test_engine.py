@@ -1427,7 +1427,7 @@ class Test_Engine(unittest.TestCase):
             assert not is_inside_polygon(midpoint, test_polygon)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if True:  #False:
+        if False:
             # Store as shape files for visual inspection e.g. by QGis
             P = Vector(geometry=[test_polygon])
             P.write_to_file('test_polygon.shp')
@@ -1447,7 +1447,35 @@ class Test_Engine(unittest.TestCase):
             L = Vector(geometry=outside_centroids, geometry_type='point')
             L.write_to_file('outside_centroids.shp')
 
-        # FIXME (Ole): TODO Check a few against visual inspection and write test
+        # Characterisation test based on against visual inspection with QGIS
+        #print inside_line_segments[10]
+        #print outside_line_segments[5]
+        assert numpy.allclose(inside_line_segments[10],
+                              [[122.24672045, -8.63255444],
+                               [122.24699685, -8.63265486],
+                               [122.24793801, -8.63292556],
+                               [122.24829356, -8.63304013],
+                               [122.25118524, -8.63364424],
+                               [122.25520475, -8.63433717],
+                               [122.25695448, -8.63469273]])
+
+        assert numpy.allclose(outside_line_segments[5],
+                              [[122.18321143, -8.58901526],
+                               [122.18353015, -8.58890024],
+                               [122.18370883, -8.58884135],
+                               [122.18376524, -8.58881115],
+                               [122.18381025, -8.58878405],
+                               [122.1838646, -8.58875119],
+                               [122.18389685, -8.58873165],
+                               [122.18394329, -8.58869283],
+                               [122.18401084, -8.58862284],
+                               [122.18408657, -8.58853526],
+                               [122.18414936, -8.58845887],
+                               [122.18425204, -8.58832279],
+                               [122.18449009, -8.58804974],
+                               [122.18457453, -8.58798668],
+                               [122.18466284, -8.5878697]])
+
 
     def test_line_interpolation_from_polygons_one_poly(self):
         """Line clipping and interpolation using one polygon works
@@ -1508,22 +1536,60 @@ class Test_Engine(unittest.TestCase):
 
         # Verify interpolated values with test result
         count = 0
+        #counts = {}
         for i in range(N):
+
+            #attrs = I_attributes[i]
+            #msg = ('Did not find default attribute %s in %s'
+            #       % (DEFAULT_ATTRIBUTE, attrs.keys()))
+            #assert DEFAULT_ATTRIBUTE in attrs, msg
+            #
+            ## Count items using default attribute
+            #if DEFAULT_ATTRIBUTE not in counts:
+            #    counts[DEFAULT_ATTRIBUTE] = 0
+            #    counts['Not ' + DEFAULT_ATTRIBUTE] = 0
+            #
+            #if attrs[DEFAULT_ATTRIBUTE] is True:
+            #    counts[DEFAULT_ATTRIBUTE] += 1
+            #else:
+            #    counts['Not ' + DEFAULT_ATTRIBUTE] += 1
+
             category = I_attributes[i]['Catergory']  # The typo is as the data
             if category is not None:
                 assert category.lower() in ['high', 'very high']
                 count += 1
 
-        # FIXME: TODO
         msg = ('Expected 34 points tagged with category, '
                'but got only %i' % count)
-        assert count == 14, msg   ##### y, but got only 14
+        assert count == 14, msg
 
+        assert len(I_geometry) == 181
 
-        print I_geometry[1123]
-        print I_attributes[1123]
-        # TODO
-        ##assert I_attributes[1123]['Catergory'] == 'Very High'
+        #print I_geometry[100]
+        #print I_attributes[100]
+        #print I_geometry[135]
+        #print I_attributes[135]
+
+        assert I_attributes[129]['Catergory'] == 'Very High'
+        assert I_attributes[135]['Catergory'] is None
+
+        # TODOOOOOOOOOOOOOOOO
+        # Check default attribute too
+        #msg = ('Expected 3452 points tagged with default attribute '
+        #       '"%s = True", '
+        #       'but got only %i' % (DEFAULT_ATTRIBUTE,
+        #                            counts[DEFAULT_ATTRIBUTE]))
+        #assert counts[DEFAULT_ATTRIBUTE] == 3452, msg
+        #msg = ('Expected 76 points tagged with default attribute '
+        #       '"%s = True", '
+        #       'but got only %i' % (DEFAULT_ATTRIBUTE,
+        #                            counts['Not ' + DEFAULT_ATTRIBUTE]))
+        #assert counts['Not ' + DEFAULT_ATTRIBUTE] == 76, msg
+        #
+        #msg = 'Affected and not affected does not add up'
+        #assert (counts[DEFAULT_ATTRIBUTE] +
+        #        counts['Not ' + DEFAULT_ATTRIBUTE]) == len(E), msg
+
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
@@ -1814,6 +1880,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_line')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

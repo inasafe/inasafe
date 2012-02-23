@@ -1980,14 +1980,12 @@ class Test_Polygon(unittest.TestCase):
         inside_line_segments, outside_line_segments = \
             clip_lines_by_polygon(test_lines, test_polygon)
 
-        #print
-        #print inside_line_segments
         # These lines have compontes both inside and outside
         assert len(inside_line_segments) <= 33
         assert len(outside_line_segments) <= 49
 
         # Store for visual inspection by e.g. QGis
-        if True:
+        if False:
             Vector(geometry=[test_polygon],
                    geometry_type='polygon').write_to_file('test_polygon.shp')
             Vector(geometry=test_lines,
@@ -1999,41 +1997,47 @@ class Test_Polygon(unittest.TestCase):
 
 
         # Check that midpoints of each segment are correctly placed
-        long_segs = []  # Record segments longer than 2
         for seg in inside_line_segments:
             N = len(seg)
             for i in range(N - 1):
                 midpoint = (seg[i] + seg[i + 1]) / 2
                 assert is_inside_polygon(midpoint, test_polygon)
 
-            if N > 2:
-                #print
-                #print 'LONGC', seg
-                long_segs.append(seg)
-
-        Vector(geometry=long_segs,
-               geometry_type='line').write_to_file('long_segs.shp')
-
         for seg in outside_line_segments:
             N = len(seg)
-            #print N, seg
             for i in range(N - 1):
                 midpoint = (seg[i] + seg[i + 1]) / 2
-
                 assert not is_inside_polygon(midpoint, test_polygon)
 
         # Characterisation test based on visually verified result
+        #print inside_line_segments, len(inside_line_segments)
+        #print outside_line_segments, len(outside_line_segments)
+        assert len(inside_line_segments) == 13
+        assert len(outside_line_segments) == 17
+        assert numpy.allclose(inside_line_segments[0],
+                              [[122.23028405, -8.62598333],
+                               [122.22879, -8.624855],
+                               [122.22776827, -8.62420644]])
 
-        print 'TODO'
-        print inside_line_segments[0]
-        print outside_line_segments[0]
+        assert numpy.allclose(inside_line_segments[-1],
+                              [[122.247938, -8.632926],
+                               [122.24793987, -8.63351817]])
 
-        #assert numpy.allclose(inside_line_segments[0],
-        #                      [[122.23028405, -8.62598333],
-        #                       [122.22879, -8.624855]])
-        #assert numpy.allclose(outside_line_segments[0],
-        #                      [[122.231021, -8.626557],
-        #                       [122.230563, -8.626194]])
+        assert numpy.allclose(outside_line_segments[0],
+                              [[122.231021, -8.626557],
+                               [122.230563, -8.626194],
+                               [122.23028405, -8.62598333]])
+
+        assert numpy.allclose(outside_line_segments[-1],
+                              [[122.24793987, -8.63351817],
+                               [122.24794, -8.63356],
+                               [122.24739, -8.63622]])
+
+        # Not joined are (but that's OK)
+        #[[122.231108, -8.626598], [122.231021, -8.626557]]
+        #[[122.231021, -8.626557], [122.230284, -8.625983]]
+
+
 
     def test_join_segments(self):
         """Consecutive line segments can be joined into continuous line
