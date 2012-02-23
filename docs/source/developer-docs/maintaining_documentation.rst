@@ -49,4 +49,6 @@ Here are some common useful tags::
 
    :menuselection:`Plugins --> Manage Plugins`
 
-   
+   :kbd:`Control-x Control-f`
+
+   :guilabel:`Ok Button`
