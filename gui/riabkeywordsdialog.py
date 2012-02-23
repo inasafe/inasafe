@@ -170,7 +170,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.addListEntry('subcategory', mySubcategory)
         if myText in self.standardHazardList:
             myUnits = myTokens[1].replace('[', '').replace(']', '')
-            self.addListEntry('units', myUnits)
+            self.addListEntry('unit', myUnits)
         if myText in self.standardExposureList:
             myDataType = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('datatype', myDataType)
@@ -338,7 +338,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             self.radExposure.setChecked(True)
             self.radExposure.blockSignals(False)
             self.removeItemByKey('subcategory')
-            self.removeItemByKey('units')
+            self.removeItemByKey('unit')
             self.addListEntry('category', 'exposure')
             myList = self.standardExposureList
             self.setSubcategoryList(myList)
@@ -359,7 +359,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.cboSubcategory.clear()
         self.removeItemByKey('subcategory')
         self.removeItemByKey('datatype')
-        self.removeItemByKey('units')
+        self.removeItemByKey('unit')
         if not thePrimaryKeywordsOnlyFlag:
             # Clear everything else too
             self.lstKeywords.clear()
@@ -454,32 +454,18 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             self.addListEntry(myKey, myKeywords[myKey])
 
         mySubcategory = self.getValueForKey('subcategory')
-        myUnits = self.getValueForKey('units')
+        myUnits = self.getValueForKey('unit')
         myType = self.getValueForKey('datatype')
         myTitle = self.getValueForKey('title')
         if myTitle is not None:
             self.leTitle.setText(myTitle)
-        # .. note:: The logic here could theoritically be simpler
-        #    but type and units arent guaranteed to be mutually exclusive
-        #    in the future.
-        if mySubcategory and myUnits:
-            # also set up the combo in the 'simple' editor section
-            if self.radExposure.isChecked():
-                self.setSubcategoryList(self.standardExposureList,
-                                         mySubcategory + ' [' + myType + ']')
-            else:
-                self.setSubcategoryList(self.standardExposureList,
-                                         mySubcategory + ' [' + myUnits + ']')
 
-        elif mySubcategory and myType:
-            # also set up the combo in the 'simple' editor section
-            # also set up the combo in the 'simple' editor section
-            if self.radExposure.isChecked():
-                self.setSubcategoryList(self.standardExposureList,
-                                         mySubcategory + ' [' + myType + ']')
-            else:
-                self.setSubcategoryList(self.standardExposureList,
-                                         mySubcategory + ' [' + myUnits + ']')
+        if self.radExposure.isChecked():
+            self.setSubcategoryList(self.standardExposureList,
+                                     mySubcategory + ' [' + myType + ']')
+        else:
+            self.setSubcategoryList(self.standardHazardList,
+                                     mySubcategory + ' [' + myUnits + ']')
 
     def getKeywords(self):
         """Obtain the state of the dialog as a keywords dict
