@@ -91,7 +91,6 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         #myButton.setEnabled(False)
         self.layer = self.iface.activeLayer()
         if self.layer:
-            self.lblLayerName.setText(self.layer.name())
             self.loadStateFromKeywords()
 
     def showHelp(self):
@@ -366,6 +365,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             self.leKey.clear()
             self.leValue.clear()
             self.lePredefinedValue.clear()
+            self.leTitle.clear()
 
     def removeItemByKey(self, theKey):
         """Remove an item from the kvp list given its key.
@@ -442,6 +442,8 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         except InvalidParameterException:
             # layer has no keywords file so just start with a blank slate
             return
+
+        self.lblLayerName.setText(self.layer.name())
         #if we have a category key, unpack it first so radio button etc get set
         if 'category' in myKeywords:
             self.setCategory(myKeywords['category'])

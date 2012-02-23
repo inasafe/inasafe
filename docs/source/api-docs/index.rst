@@ -18,6 +18,7 @@ Implementation
    init
    riab
    riabdock
+   riabkeywordsdialog
    riabhelp
    riabclipper
    impactcalculator
@@ -33,5 +34,6 @@ Unit Tests
    test_riab
    test_riabdock
    test_impactcalculator
+   test_riabkeywordsdialog
 
 
