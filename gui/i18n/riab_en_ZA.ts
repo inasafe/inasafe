@@ -186,12 +186,12 @@ to%s: %s</source>
         <translation type="obsolete">Box in a risk</translation>
     </message>
     <message>
-        <location filename="riab.py" line="207"/>
+        <location filename="riab.py" line="218"/>
         <source>Risk in a Box</source>
-        <translation>Box in a Risk</translation>
+        <translation>Risk in a Box</translation>
     </message>
     <message>
-        <location filename="riab.py" line="151"/>
+        <location filename="riab.py" line="154"/>
         <source>Show/hide Risk in a Box dock widget</source>
         <translation>Show or hide Risk in a Box dock widget</translation>
     </message>
@@ -201,17 +201,17 @@ to%s: %s</source>
         <translation type="obsolete">&amp;Box in a risk</translation>
     </message>
     <message>
-        <location filename="riab.py" line="147"/>
+        <location filename="riab.py" line="150"/>
         <source>Toggle RIAB Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riab.py" line="166"/>
+        <location filename="riab.py" line="169"/>
         <source>Keyword Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riab.py" line="170"/>
+        <location filename="riab.py" line="174"/>
         <source>Open the keywords editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -239,53 +239,53 @@ to%s: %s</source>
         <translation type="unfinished">Run</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="296"/>
+        <location filename="riabdock.py" line="292"/>
         <source>&lt;span class=&quot;label important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%s]: %s &lt;br&gt;Exposure keywords [%s]: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="310"/>
+        <location filename="riabdock.py" line="306"/>
         <source>&lt;span class=&quot;label success&quot;&gt;Ready:&lt;/span&gt; You can now proceed to run your model by clicking the &lt;em&gt; Run&lt;/em&gt; button.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="509"/>
+        <location filename="riabdock.py" line="505"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="546"/>
+        <location filename="riabdock.py" line="542"/>
         <source>&lt;p&gt;&lt;span class=&quot;label important&quot;&gt;Error:&lt;/span&gt; An exception occurred when creating layer subsets clipped to the optimal extent: %s&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="591"/>
+        <location filename="riabdock.py" line="587"/>
         <source>An exception occurred when starting the model: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="629"/>
+        <location filename="riabdock.py" line="625"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="660"/>
+        <location filename="riabdock.py" line="656"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="680"/>
+        <location filename="riabdock.py" line="676"/>
         <source>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Analyzing this question...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/riab/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="759"/>
+        <location filename="riabdock.py" line="755"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %s&lt;/p&gt;&lt;p&gt;Exposure: %s&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %s&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %s&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="821"/>
+        <location filename="riabdock.py" line="817"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation type="unfinished"></translation>
     </message>
@@ -320,7 +320,7 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="280"/>
+        <location filename="riabdock.py" line="276"/>
         <source>&lt;span class=&quot;label notice&quot;&gt;Getting started:&lt;/span&gt; To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -341,73 +341,83 @@ to%s: %s</source>
 <context>
     <name>RiabKeywordsDialog</name>
     <message>
-        <location filename="riabkeywordsdialog.py" line="98"/>
+        <location filename="riabkeywordsdialog.py" line="67"/>
         <source>earthquake [mmi]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="99"/>
+        <location filename="riabkeywordsdialog.py" line="68"/>
         <source>tsunami [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="100"/>
+        <location filename="riabkeywordsdialog.py" line="69"/>
         <source>tsunami [wet/dry]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="101"/>
+        <location filename="riabkeywordsdialog.py" line="70"/>
         <source>tsunami [feet]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="102"/>
+        <location filename="riabkeywordsdialog.py" line="71"/>
         <source>flood [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="103"/>
+        <location filename="riabkeywordsdialog.py" line="72"/>
         <source>flood [wet/dry]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="104"/>
+        <location filename="riabkeywordsdialog.py" line="73"/>
         <source>flood [feet]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="105"/>
+        <location filename="riabkeywordsdialog.py" line="74"/>
         <source>volcano [kg2/m2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="119"/>
+        <location filename="riabkeywordsdialog.py" line="61"/>
         <source>population [density]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="120"/>
+        <location filename="riabkeywordsdialog.py" line="62"/>
         <source>population [count]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="121"/>
+        <location filename="riabkeywordsdialog.py" line="63"/>
         <source>building [osm]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="122"/>
+        <location filename="riabkeywordsdialog.py" line="64"/>
         <source>building [sigab]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="123"/>
+        <location filename="riabkeywordsdialog.py" line="65"/>
         <source>building [other]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialog.py" line="124"/>
+        <location filename="riabkeywordsdialog.py" line="66"/>
         <source>roads</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riabkeywordsdialog.py" line="105"/>
+        <source>Hide advanced editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riabkeywordsdialog.py" line="107"/>
+        <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -419,103 +429,113 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="20"/>
+        <location filename="riabkeywordsdialogbase.ui" line="46"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="29"/>
+        <location filename="riabkeywordsdialogbase.ui" line="55"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="32"/>
+        <location filename="riabkeywordsdialogbase.ui" line="58"/>
         <source>Hazard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="39"/>
+        <location filename="riabkeywordsdialogbase.ui" line="65"/>
         <source>Where people and property are situated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="42"/>
+        <location filename="riabkeywordsdialogbase.ui" line="68"/>
         <source>Exposure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="104"/>
+        <location filename="riabkeywordsdialogbase.ui" line="80"/>
         <source>Subcategory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="61"/>
+        <location filename="riabkeywordsdialogbase.ui" line="90"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="68"/>
-        <source>Show advanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="riabkeywordsdialogbase.ui" line="78"/>
+        <location filename="riabkeywordsdialogbase.ui" line="110"/>
         <source>Advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="93"/>
+        <location filename="riabkeywordsdialogbase.ui" line="132"/>
         <source>Keyword</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="109"/>
-        <source>Units</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="riabkeywordsdialogbase.ui" line="114"/>
-        <source>Density</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="riabkeywordsdialogbase.ui" line="119"/>
-        <source>Datatype</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="riabkeywordsdialogbase.ui" line="213"/>
+        <location filename="riabkeywordsdialogbase.ui" line="210"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="226"/>
+        <location filename="riabkeywordsdialogbase.ui" line="223"/>
         <source>Add to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="157"/>
+        <location filename="riabkeywordsdialogbase.ui" line="233"/>
         <source>Current keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="177"/>
+        <location filename="riabkeywordsdialogbase.ui" line="253"/>
         <source>Remove selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="184"/>
+        <location filename="riabkeywordsdialogbase.ui" line="116"/>
         <source>Predefined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="200"/>
+        <location filename="riabkeywordsdialogbase.ui" line="197"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="236"/>
-        <source>User Defined</source>
+        <location filename="riabkeywordsdialogbase.ui" line="30"/>
+        <source>Quick edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riabkeywordsdialogbase.ui" line="36"/>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riabkeywordsdialogbase.ui" line="100"/>
+        <source>Show advanced editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riabkeywordsdialogbase.ui" line="143"/>
+        <source>subcategory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riabkeywordsdialogbase.ui" line="148"/>
+        <source>units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riabkeywordsdialogbase.ui" line="153"/>
+        <source>datatype</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="riabkeywordsdialogbase.ui" line="181"/>
+        <source>User defined</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

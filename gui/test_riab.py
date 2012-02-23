@@ -48,16 +48,19 @@ class RiabTest(unittest.TestCase):
     def test_setupI18n(self):
         """Gui translations are working."""
 
-        myUntranslatedString = 'Risk in a Box'
+        myUntranslatedString = 'Run'
+        myExpectedString = 'Jalankan'
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
         myRiab = Riab(myIface)
-        myRiab.setupI18n('en_ZA')
+        myRiab.setupI18n('id')
         myTranslation = myRiab.tr(myUntranslatedString)
-        myMessage = 'Expected: %s\nTo be different to: %s' % (
-                            myUntranslatedString, myTranslation)
-        assert myTranslation != myUntranslatedString, myMessage
+        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
+                            myUntranslatedString,
+                            myTranslation,
+                            myExpectedString)
+        assert myTranslation == myExpectedString, myMessage
 
 if __name__ == '__main__':
     unittest.main()
