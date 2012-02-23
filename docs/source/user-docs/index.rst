@@ -19,6 +19,7 @@ This document describes how to use the Risk in a box system.
    dock
    keywords
    impact_functions
+   using-qgis
    faq
 
 
