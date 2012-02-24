@@ -33,10 +33,18 @@ LOCALES = id
 default: compile
 
 compile:
-	make -C gui
+	@echo
+	@echo "-----------------"
+	@echo "Compile GUI forms"
+	@echo "-----------------"
+	make -C gui >/dev/null
 
 docs: compile
-	cd docs; make html; cd ..
+	@echo
+	@echo "-------------------------------"
+	@echo "Compile documentation into html"
+	@echo "-------------------------------"
+	cd docs; make html >/dev/null; cd ..
 
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
@@ -63,7 +71,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
-test: test_suite pep8 disabled_tests dependency_test unwanted_strings
+test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings

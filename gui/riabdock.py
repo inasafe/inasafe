@@ -80,6 +80,8 @@ def setVectorStyle(qgisVectorLayer, style):
 
     myRangeList = []
     for myClass in myClasses:
+        # Transparency 100: transparent
+        # Transparency 0: opaque
         myTransparencyPercent = myClass['transparency']
         myMax = myClass['max']
         myMin = myClass['min']
@@ -98,16 +100,16 @@ def setVectorStyle(qgisVectorLayer, style):
         # the border colour of a symbol can not be set otherwise
         myRegistry = QgsSymbolLayerV2Registry.instance()
         if myGeometryType == QGis.Point:
-            myMetadata = myRegistry.symbolLayerMetadata("SimpleMarker")
+            myMetadata = myRegistry.symbolLayerMetadata('SimpleMarker')
             # note that you can get a list of available layer properties
             # that you can set by doing e.g.
             # QgsSimpleMarkerSymbolLayerV2.properties()
-            mySymbolLayer = myMetadata.createSymbolLayer({"color_border":
+            mySymbolLayer = myMetadata.createSymbolLayer({'color_border':
                                                           myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         elif myGeometryType == QGis.Polygon:
-            myMetadata = myRegistry.symbolLayerMetadata("SimpleFill")
-            mySymbolLayer = myMetadata.createSymbolLayer({"color_border":
+            myMetadata = myRegistry.symbolLayerMetadata('SimpleFill')
+            mySymbolLayer = myMetadata.createSymbolLayer({'color_border':
                                                           myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         else:
@@ -117,7 +119,11 @@ def setVectorStyle(qgisVectorLayer, style):
 
         mySymbol.setColor(myColour)
         # .. todo:: Check that vectors use alpha as % otherwise scale TS
-        mySymbol.setAlpha(myTransparencyPercent)
+        # Convert transparency % to opacity
+        # alpha = 0: transparent
+        # alpha = 1: opaque
+        alpha = 1 - myTransparencyPercent/100
+        mySymbol.setAlpha(alpha)
         myRange = QgsRendererRangeV2(myMin,
                                      myMax,
                                      mySymbol,

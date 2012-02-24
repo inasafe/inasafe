@@ -25,15 +25,9 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-<<<<<<< HEAD
    user-docs/index
    developer-docs/index
    api-docs/index
-=======
-   user-docs/index.rst
-   developer-docs/index.rst
-   api-docs/index.rst
->>>>>>> master
    authors
 
 

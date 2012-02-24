@@ -10,17 +10,16 @@ Purpose
 -------
 
 The keywords system is used by the :doc:`impact_functions` to determine the
-<<<<<<< HEAD
 nature of the input layers that have been passed to them.
 
 Each input GIS dataset used by Risk in a Box needs to have an accompanying
 keywords file. The purpose of the keywords file is to provide additional
 metadata needed by the impact functions. For example, the keywords file
-will indicate whether a given dataset should be treated as a *hazard* or an 
+will indicate whether a given dataset should be treated as a *hazard* or an
 *impact* layer. It is also used to indicate the context of the layer (e.g. "it's
 a *flood* layer, it's an *earthquake* layer).
 
-By convention and expectation, the keywords file should be named with the 
+By convention and expectation, the keywords file should be named with the
 same base name of the GIS datasource it accompanies. For example a flood
 dataset saved as::
 
@@ -30,13 +29,13 @@ Would need to have an accompanying keywords file saved as::
 
    c:\gisdata\flood.keywords
 
-.. note:: We recommend to **avoid using spaces** in your file 
+.. note:: We recommend to **avoid using spaces** in your file
    names and file paths!
 
-The Risk in a Box QGIS plugin provides an editor for these keywords. 
-The purpose of this document is to describe the keywords editor and to 
-provide guidelines as to the use of keywords. 
- 
+The Risk in a Box QGIS plugin provides an editor for these keywords.
+The purpose of this document is to describe the keywords editor and to
+provide guidelines as to the use of keywords.
+
 .. note:: Currently keywords are not validated by the library. This means
    if you for example misspell a keyword, use the wrong letter case (e.g. upper
    case instead of lower case) or provide the wrong keyword for the context
@@ -156,7 +155,7 @@ Valid subcategories for subcategory 'volcano'
 In this case the dataset should be a raster layer where each cell represents
 the kilograms per meters squared of ash fall on that cell.
 
-.. note:: 'units' and 'datatype' (described below) should be considered to 
+.. note:: 'units' and 'datatype' (described below) should be considered to
    be mutually exclusive - i.e. they should not both be present in any given
    keywords file.
 
@@ -170,9 +169,9 @@ Valid densities for different subcategories
 
 .. table::
 
-   ============ ============== ====================
+   ============ ============== =====================
    Subcategory  Key            Allowed Values
-   ============ ============== ====================
+   ============ ============== =====================
    population    datatype        count
    population    datatype        density
    building      datatype        osm
@@ -188,11 +187,11 @@ The following assumptions are made about keywords, which may or may not be
 programmatically enforced by the RIAB library and GUI:
 
 * There should only be **one keyword for a given key** in the keywords file
-* Switching from hazard to exposure will clear parts of the GUI since in 
+* Switching from hazard to exposure will clear parts of the GUI since in
   general most keywords are category dependent. In particular, selecting
   **'hazard'** will remove the **'datatype'** key/value pair, and selecting
   **'exposure'** will remove the **'units'** key value pair.
-* Keywords for **category** are **enforced** to be one of 'hazard' or 
+* Keywords for **category** are **enforced** to be one of 'hazard' or
   'exposure' by the GUI.
 * All keywords and values should be in **lower case**, **without spaces**
   with the exception of 'Title' whose value may contain both spaces and
@@ -209,10 +208,10 @@ The graphical user interface for keyword editing is divided into two parts:
 
 1.) **Minimal mode**: In this mode, only following options are provided:
 
-   * **Title** - a 'friendly' name for the dataset which will be displayed in 
+   * **Title** - a 'friendly' name for the dataset which will be displayed in
      reports, the user interface and so on.
-   * **Category** - A mandatory choice between 'hazard' and 'exposure'. 
-   * **Subcategory** - An amalgamated subcategory/units picklist 
+   * **Category** - A mandatory choice between 'hazard' and 'exposure'.
+   * **Subcategory** - An amalgamated subcategory/units picklist
      (in the case of hazard) or amalgamated subcategory/datatype (
      in the case of exposure). In this case, the secondary characteristic (
      units or datatype) are shown in square brackets after the subcategory
@@ -224,38 +223,38 @@ An example of the keywords editor in minimal mode is shown below.
    :align:   center
 
 
-2) **Advanced mode**: In this mode several extra options are provided in 
+2) **Advanced mode**: In this mode several extra options are provided in
   addition to the minimal mode options. Unlike minimal mode, in advanced mode
   only basic validation is performed and the user is given more flexibility to
   manually define and remove key/value pairs. Three sections are provided for
   this:
-  
+
   * **Predefined** - In this section, the user selects from a constrained list
     of keywords, enters a free-form value and then adds the key/value pair to
     the keywords list (see below).
   * **User defined** - In this section, there is no constraint on the keywords
-    entered - any single lower case word will be accepted for both the key and 
+    entered - any single lower case word will be accepted for both the key and
     the value components.
-  * **Current keywords** - In this area a complete list of all the keywords 
-    for the dataset are displayed. The keywords list here is updated when any 
+  * **Current keywords** - In this area a complete list of all the keywords
+    for the dataset are displayed. The keywords list here is updated when any
     changes are made in both the simple and advanced mode editors. It is also
     possible in this area to manually remove unwanted keywords using the 'remove
-    selected' button. Multiple keywords can be removed in a single operation 
-    by :kbd:`Control-clicking` on multiple keyword entries in the current 
+    selected' button. Multiple keywords can be removed in a single operation
+    by :kbd:`Control-clicking` on multiple keyword entries in the current
     keyword list and then clicking :guilabel:`Remove selected`
 
 An example of the keywords editor in advanced mode is shown below.
-  
+
 .. figure::  ../../keyword-editor-advanced.jpeg
    :align:   center
 
 Invoking the keywords editor
 ----------------------------
 
-The keyword editor can easily be invoked by selecting any layer in the 
-QGIS layers list, and then using the plugin menu to start the editor 
-(:menuselection:`Plugins --> Risk in a Box --> Keyword Editor`). 
-Alternatively, you may use the keywords editor icon on the 
+The keyword editor can easily be invoked by selecting any layer in the
+QGIS layers list, and then using the plugin menu to start the editor
+(:menuselection:`Plugins --> Risk in a Box --> Keyword Editor`).
+Alternatively, you may use the keywords editor icon on the
 plugins toolbar as illustrated below.
 
  XXXX Add screenshot here xxxxxxx
@@ -277,8 +276,6 @@ Getting help
 ------------
 
 If you need help using the keywords editor, you can click on the
-:guilabel:`Help` button at the bottom of the dialog and this page will be 
+:guilabel:`Help` button at the bottom of the dialog and this page will be
 displayed.
-==========
-nature of the input layers that have been passed to them.
->>>>>>> master
+
