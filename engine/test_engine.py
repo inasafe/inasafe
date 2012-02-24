@@ -235,7 +235,7 @@ class Test_Engine(unittest.TestCase):
         # Name file names for hazard level, exposure and expected fatalities
 
         population = 'Population_Jakarta_geographic.asc'
-        plugin_name = 'Flood Impact Function'
+        plugin_name = 'HKVtest'
 
         # Expected values from HKV
         expected_values = [2485442, 1537920]
@@ -1405,7 +1405,7 @@ class Test_Engine(unittest.TestCase):
         """
 
         population = 'Population_Jakarta_geographic.asc'
-        plugin_name = 'Flood Impact Function'
+        plugin_name = 'HKVtest'
 
         hazard_layers = ['Flood_Current_Depth_Jakarta_geographic.asc',
                          'Flood_Design_Depth_Jakarta_geographic.asc']
