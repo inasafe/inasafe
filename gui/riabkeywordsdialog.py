@@ -74,7 +74,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
                                      self.tr('flood [m]'),
                                      self.tr('flood [wet/dry]'),
                                      self.tr('flood [feet]'),
-                                     self.tr('volcano [kg2/m2]')]
+                                     self.tr('tephra [kg2/m2]')]
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -194,7 +194,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
 
         Args:
 
-           * theList - a list of subcategories e.g. ['earthquake','volcano']
+           * theList - a list of subcategories e.g. ['earthquake','tephra']
            * theSelectedItem - optional parameter indicating which item
              should be selected in the combo. If the selected item is not
              in theList, it will be appended to it.
@@ -461,8 +461,9 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myKeywords = self.calculator.getKeywordFromFile(mySource)
         except InvalidParameterException:
             # layer has no keywords file so just start with a blank slate
-            # so that subcategory gets populated nicely
-            myKeywords = {}
+            # so that subcategory gets populated nicely & we will assume
+            # exposure to start with
+            myKeywords = {'category': 'exposure'}
 
         self.lblLayerName.setText(self.layer.name())
         #if we have a category key, unpack it first so radio button etc get set
