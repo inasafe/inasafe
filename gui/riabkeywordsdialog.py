@@ -45,12 +45,14 @@ except Exception, e:
 class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
 
-    def __init__(self, parent, iface):
+    def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
 
         Args:
            * parent - parent widget of this dialog
            * iface - a Quantum GIS QGisAppInterface instance.
+           * theDock - Optional dock widget instance that we can notify of
+             changes to the keywords.
 
         Returns:
            not applicable
@@ -76,6 +78,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
+        self.dock = theDock
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -132,6 +135,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         if not theFlag:
             return
         self.setCategory('hazard')
+        self.updateControlsFromList()
 
     @pyqtSignature('bool')  # prevents actions being handled twice
     def on_radExposure_toggled(self, theFlag):
@@ -146,6 +150,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         if not theFlag:
             return
         self.setCategory('exposure')
+        self.updateControlsFromList()
 
     @pyqtSignature('int')  # prevents actions being handled twice
     def on_cboSubcategory_currentIndexChanged(self, theIndex=None):
@@ -163,15 +168,24 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
 
         myText = str(self.cboSubcategory.currentText())
+        if myText == self.tr('Not Set'):
+            self.removeItemByKey('subcategory')
+            return
         myTokens = myText.split(' ')
         if len(myTokens) < 1:
+            self.removeItemByKey('subcategory')
             return
         mySubcategory = myTokens[0]
         self.addListEntry('subcategory', mySubcategory)
-        if myText in self.standardHazardList:
+
+        # Some subcategories e.g. roads have no units or datatype
+        if len(myTokens) == 1:
+            return
+        myCategory = self.getValueForKey('category')
+        if 'hazard' == myCategory:
             myUnits = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('unit', myUnits)
-        if myText in self.standardExposureList:
+        if 'exposure' == myCategory:
             myDataType = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('datatype', myDataType)
 
@@ -219,6 +233,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myCurrentKey = self.cboKeyword.currentText()
         myCurrentValue = self.lePredefinedValue.text()
         self.addListEntry(myCurrentKey, myCurrentValue)
+        self.updateControlsFromList()
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pbnAddToList2_clicked(self):
@@ -247,6 +262,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             #.. todo:: notify the user their category is invalid
             pass
         self.addListEntry(myCurrentKey, myCurrentValue)
+        self.updateControlsFromList()
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pbnRemove_clicked(self):
@@ -262,6 +278,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
         for myItem in self.lstKeywords.selectedItems():
             self.lstKeywords.takeItem(self.lstKeywords.row(myItem))
+        self.updateControlsFromList()
 
     def addListEntry(self, theKey, theValue):
         """Add an item to the keywords list given its key/value.
@@ -381,6 +398,8 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myExistingItem = self.lstKeywords.item(myCounter)
             myText = myExistingItem.text()
             myTokens = myText.split(':')
+            if len(myTokens) < 2:
+                break
             myKey = myTokens[0]
             if myKey == theKey:
                 # remove it since the key is already present
@@ -442,7 +461,8 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myKeywords = self.calculator.getKeywordFromFile(mySource)
         except InvalidParameterException:
             # layer has no keywords file so just start with a blank slate
-            return
+            # so that subcategory gets populated nicely
+            myKeywords = {}
 
         self.lblLayerName.setText(self.layer.name())
         #if we have a category key, unpack it first so radio button etc get set
@@ -452,20 +472,55 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
 
         for myKey in myKeywords.iterkeys():
             self.addListEntry(myKey, myKeywords[myKey])
+        # now make the rest of the gui reflect the list entries
+        self.updateControlsFromList()
 
+    def updateControlsFromList(self):
+        """Set the ui state to match the keywords of the
+           currently active layer.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
         mySubcategory = self.getValueForKey('subcategory')
         myUnits = self.getValueForKey('unit')
         myType = self.getValueForKey('datatype')
         myTitle = self.getValueForKey('title')
         if myTitle is not None:
             self.leTitle.setText(myTitle)
+        else:
+            self.leTitle.setText('')
 
         if self.radExposure.isChecked():
-            self.setSubcategoryList(self.standardExposureList,
+            if mySubcategory is not None and myType is not None:
+                self.setSubcategoryList(self.standardExposureList,
                                      mySubcategory + ' [' + myType + ']')
+            else:
+                self.setSubcategoryList(self.standardExposureList,
+                                        self.tr('Not Set'))
         else:
-            self.setSubcategoryList(self.standardHazardList,
+            if mySubcategory is not None and myUnits is not None:
+                self.setSubcategoryList(self.standardHazardList,
                                      mySubcategory + ' [' + myUnits + ']')
+            else:
+                self.setSubcategoryList(self.standardHazardList,
+                                        self.tr('Not Set'))
+
+    @pyqtSignature('QString')  # prevents actions being handled twice
+    def on_leTitle_textEdited(self, theText):
+        """Update the keywords list whenver the user changes the title.
+        This slot is not called is the title is changed programmatically.
+
+        Args:
+           None
+        Returns:
+           dict - a dictionary of keyword reflecting the state of the dialog.
+        Raises:
+           no exceptions explicitly raised."""
+        self.addListEntry('title', str(theText))
 
     def getKeywords(self):
         """Obtain the state of the dialog as a keywords dict
@@ -505,4 +560,6 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myFileName = os.path.splitext(str(myFileName))[0] + '.keywords'
         myKeywords = self.getKeywords()
         write_keywords(myKeywords, myFileName)
+        if self.dock is not None:
+            self.dock.getLayers()
         self.close()

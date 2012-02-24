@@ -89,17 +89,16 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
-        #settrace()
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
         myLocaleName = None
         if thePreferredLocale is not None:
             myLocaleName = thePreferredLocale
         elif myOverrideFlag:
-            myLocaleName = QLocale.system().name()
-        else:
             myLocaleName = QSettings().value('locale/userLocale',
                                              QVariant('')).toString()
+        else:
+            myLocaleName = QLocale.system().name()
         # Also set the system locale to the user overridden local
         # so that the riab library functions gettext will work
         # .. see:: :py:func:`storage.utilities`
@@ -265,11 +264,13 @@ class Riab:
         """
         if self.iface.activeLayer() is None:
             return
-        myDialog = RiabKeywordsDialog(self.iface.mainWindow(), self.iface)
+        myDialog = RiabKeywordsDialog(self.iface.mainWindow(),
+                                      self.iface,
+                                      self.dockWidget)
         myDialog.show()
 
     def layerChanged(self, theLayer):
-        """Show the keywords editor.
+        """Enable or disable the keywords editor icon.
 
         This slot is called when the user clicks the keyword editor toolbar
         icon or menu item associated with this plugin

@@ -48,8 +48,8 @@ class RiabTest(unittest.TestCase):
     def test_setupI18n(self):
         """Gui translations are working."""
 
-        myUntranslatedString = 'Run'
-        myExpectedString = 'Jalankan'
+        myUntranslatedString = 'Show/hide Risk in a Box dock widget'
+        myExpectedString = 'Tampilkan/hilangkan widget Risk in a Box'
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
