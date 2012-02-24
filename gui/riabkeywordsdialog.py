@@ -512,6 +512,9 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             if mySubcategory is not None and myType is not None:
                 self.setSubcategoryList(self.standardExposureList,
                                      mySubcategory + ' [' + myType + ']')
+            elif mySubcategory is not None:
+                self.setSubcategoryList(self.standardExposureList,
+                                        mySubcategory)
             else:
                 self.setSubcategoryList(self.standardExposureList,
                                         self.tr('Not Set'))
@@ -519,6 +522,9 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             if mySubcategory is not None and myUnits is not None:
                 self.setSubcategoryList(self.standardHazardList,
                                      mySubcategory + ' [' + myUnits + ']')
+            elif mySubcategory is not None:
+                self.setSubcategoryList(self.standardHazardList,
+                                        mySubcategory)
             else:
                 self.setSubcategoryList(self.standardHazardList,
                                         self.tr('Not Set'))
