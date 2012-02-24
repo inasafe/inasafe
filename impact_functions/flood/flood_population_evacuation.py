@@ -16,7 +16,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     unit=='m'
 
     :param requires category=='exposure' and \
-                    subcategory.startswith('population') and \
+                    subcategory=='population' and \
                     layertype=='raster' and \
                     datatype=='density'
     """
