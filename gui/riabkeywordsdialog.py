@@ -509,6 +509,19 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
                 self.setSubcategoryList(self.standardHazardList,
                                         self.tr('Not Set'))
 
+    @pyqtSignature('QString')  # prevents actions being handled twice
+    def on_leTitle_textEdited(self, theText):
+        """Update the keywords list whenver the user changes the title.
+        This slot is not called is the title is changed programmatically.
+
+        Args:
+           None
+        Returns:
+           dict - a dictionary of keyword reflecting the state of the dialog.
+        Raises:
+           no exceptions explicitly raised."""
+        self.addListEntry('title', str(theText))
+
     def getKeywords(self):
         """Obtain the state of the dialog as a keywords dict
 
