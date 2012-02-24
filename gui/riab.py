@@ -268,7 +268,7 @@ class Riab:
         myDialog.show()
 
     def layerChanged(self, theLayer):
-        """Show the keywords editor.
+        """Enable or disable the keywords editor icon.
 
         This slot is called when the user clicks the keyword editor toolbar
         icon or menu item associated with this plugin

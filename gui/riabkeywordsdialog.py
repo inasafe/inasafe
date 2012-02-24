@@ -45,12 +45,14 @@ except Exception, e:
 class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
 
-    def __init__(self, parent, iface):
+    def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
 
         Args:
            * parent - parent widget of this dialog
            * iface - a Quantum GIS QGisAppInterface instance.
+           * theDock - Optional dock widget instance that we can notify of
+             changes to the keywords.
 
         Returns:
            not applicable
@@ -76,6 +78,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
+        self.dock = theDock
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -442,7 +445,8 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myKeywords = self.calculator.getKeywordFromFile(mySource)
         except InvalidParameterException:
             # layer has no keywords file so just start with a blank slate
-            return
+            # so that subcategory gets populated nicely
+            myKeywords = {}
 
         self.lblLayerName.setText(self.layer.name())
         #if we have a category key, unpack it first so radio button etc get set
@@ -461,11 +465,17 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             self.leTitle.setText(myTitle)
 
         if self.radExposure.isChecked():
-            self.setSubcategoryList(self.standardExposureList,
+            if mySubcategory is not None and myType is not None:
+                self.setSubcategoryList(self.standardExposureList,
                                      mySubcategory + ' [' + myType + ']')
+            else:
+                self.setSubcategoryList(self.standardExposureList)
         else:
-            self.setSubcategoryList(self.standardHazardList,
+            if mySubcategory is not None and myUnits is not None:
+                self.setSubcategoryList(self.standardHazardList,
                                      mySubcategory + ' [' + myUnits + ']')
+            else:
+                self.setSubcategoryList(self.standardHazardList)
 
     def getKeywords(self):
         """Obtain the state of the dialog as a keywords dict
@@ -505,4 +515,6 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myFileName = os.path.splitext(str(myFileName))[0] + '.keywords'
         myKeywords = self.getKeywords()
         write_keywords(myKeywords, myFileName)
+        if self.dock is not None:
+            self.dock.getLayers
         self.close()
