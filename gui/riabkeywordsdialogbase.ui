@@ -111,14 +111,25 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QRadioButton" name="radPredefined">
-        <property name="text">
-         <string>Predefined</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QRadioButton" name="radPredefined">
+          <property name="text">
+           <string>Predefined</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="radUserDefined">
+          <property name="text">
+           <string>User defined</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="1" column="0">
-       <widget class="QFrame" name="frame">
+       <widget class="QFrame" name="framePredefined">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -176,14 +187,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QRadioButton" name="radUserDefined">
-        <property name="text">
-         <string>User defined</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QFrame" name="frame_2">
+       <widget class="QFrame" name="frameUserDefined">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -227,7 +231,7 @@
         </layout>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>Current keywords</string>
@@ -237,13 +241,29 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="0">
+      <item row="4" column="0">
        <widget class="QListWidget" name="lstKeywords">
         <property name="alternatingRowColors">
          <bool>true</bool>
         </property>
         <property name="selectionMode">
          <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="lblMessage">
+        <property name="styleSheet">
+         <string notr="true">color: red;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::RichText</enum>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -276,7 +296,6 @@
   <tabstop>radPredefined</tabstop>
   <tabstop>cboKeyword</tabstop>
   <tabstop>pbnAddToList1</tabstop>
-  <tabstop>radUserDefined</tabstop>
   <tabstop>leKey</tabstop>
   <tabstop>leValue</tabstop>
   <tabstop>pbnAddToList2</tabstop>
@@ -325,8 +344,8 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>160</x>
-     <y>156</y>
+     <x>169</x>
+     <y>189</y>
     </hint>
     <hint type="destinationlabel">
      <x>129</x>
@@ -337,12 +356,12 @@
   <connection>
    <sender>radPredefined</sender>
    <signal>toggled(bool)</signal>
-   <receiver>frame</receiver>
-   <slot>setEnabled(bool)</slot>
+   <receiver>framePredefined</receiver>
+   <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>68</x>
-     <y>209</y>
+     <x>95</x>
+     <y>243</y>
     </hint>
     <hint type="destinationlabel">
      <x>76</x>
@@ -353,12 +372,12 @@
   <connection>
    <sender>radPredefined</sender>
    <signal>toggled(bool)</signal>
-   <receiver>frame_2</receiver>
-   <slot>setDisabled(bool)</slot>
+   <receiver>frameUserDefined</receiver>
+   <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>99</x>
-     <y>209</y>
+     <x>126</x>
+     <y>243</y>
     </hint>
     <hint type="destinationlabel">
      <x>101</x>
@@ -369,12 +388,12 @@
   <connection>
    <sender>radUserDefined</sender>
    <signal>toggled(bool)</signal>
-   <receiver>frame_2</receiver>
-   <slot>setEnabled(bool)</slot>
+   <receiver>frameUserDefined</receiver>
+   <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>95</x>
-     <y>290</y>
+     <x>362</x>
+     <y>243</y>
     </hint>
     <hint type="destinationlabel">
      <x>140</x>
@@ -385,12 +404,12 @@
   <connection>
    <sender>radUserDefined</sender>
    <signal>toggled(bool)</signal>
-   <receiver>frame</receiver>
-   <slot>setDisabled(bool)</slot>
+   <receiver>framePredefined</receiver>
+   <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
-     <y>290</y>
+     <x>331</x>
+     <y>243</y>
     </hint>
     <hint type="destinationlabel">
      <x>56</x>

@@ -63,9 +63,9 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         self.setupUi(self)
         self.standardExposureList = [self.tr('population [density]'),
                                      self.tr('population [count]'),
+                                     self.tr('building'),
                                      self.tr('building [osm]'),
                                      self.tr('building [sigab]'),
-                                     self.tr('building [other]'),
                                      self.tr('roads')]
         self.standardHazardList = [self.tr('earthquake [mmi]'),
                                      self.tr('tsunami [m]'),
@@ -309,6 +309,19 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         if theValue is None or theValue == '':
             return
 
+        myMessage = ''
+        if ':' in theKey:
+            theKey = theKey.replace(':', '.')
+            myMessage = self.tr('Colons are not allowed, replaced with "."')
+        if ':' in theValue:
+            theValue = theValue.replace(':', '.')
+            myMessage = self.tr('Colons are not allowed, replaced with "."')
+        if myMessage == '':
+            self.lblMessage.setText('')
+            self.lblMessage.hide()
+        else:
+            self.lblMessage.setText(myMessage)
+            self.lblMessage.show()
         myItem = QtGui.QListWidgetItem(theKey + ':' + theValue)
         # we are going to replace, so remove it if it exists already
         self.removeItemByKey(theKey)
@@ -560,7 +573,12 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myFileName = self.layer.source()
         myFileName = os.path.splitext(str(myFileName))[0] + '.keywords'
         myKeywords = self.getKeywords()
-        write_keywords(myKeywords, myFileName)
+        try:
+            write_keywords(myKeywords, myFileName)
+        except Exception, e:
+            QtGui.QMessageBox.warning(self, self.tr('Risk in a box'),
+            ((self.tr('An error was encountered when saving the keywords:\n')
+                + str(e))))
         if self.dock is not None:
             self.dock.getLayers()
         self.close()

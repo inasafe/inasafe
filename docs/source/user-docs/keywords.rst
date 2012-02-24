@@ -169,9 +169,9 @@ Valid densities for different subcategories
 
 .. table::
 
-   ============ ============== ====================
+   ============ ============== =====================
    Subcategory  Key            Allowed Values
-   ============ ============== ====================
+   ============ ============== =====================
    population    datatype        count
    population    datatype        density
    building      datatype        osm
