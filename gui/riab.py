@@ -264,7 +264,9 @@ class Riab:
         """
         if self.iface.activeLayer() is None:
             return
-        myDialog = RiabKeywordsDialog(self.iface.mainWindow(), self.iface)
+        myDialog = RiabKeywordsDialog(self.iface.mainWindow(),
+                                      self.iface,
+                                      self.dockWidget)
         myDialog.show()
 
     def layerChanged(self, theLayer):

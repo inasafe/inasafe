@@ -516,5 +516,5 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myKeywords = self.getKeywords()
         write_keywords(myKeywords, myFileName)
         if self.dock is not None:
-            self.dock.getLayers
+            self.dock.getLayers()
         self.close()
