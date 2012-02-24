@@ -293,12 +293,9 @@ class RiabDockTest(unittest.TestCase):
         # Post merge of clip on steoids branch:
         #High damage (50-100%):    2993
         myMessage = ('Unexpected result returned for Earthquake guidelines'
-               'function. Expected:\n "All" count of 3110, '
+               'function. Expected:\n "All" count of 2993, '
                'received: \n %s' % myResult)
-        # expected pre de52106a31
-        #assert '2993' in myResult, myMessage
-        # expected post de52106a31
-        assert '3110' in myResult, myMessage
+        assert '2993' in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_small(self):
         """Padang 2009 fatalities estimated correctly - small extent"""
@@ -333,19 +330,13 @@ class RiabDockTest(unittest.TestCase):
         # Check against expected output
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: fatality count of '
-                     '121 , received: \n %s' % myResult)
-        # expected pre de52106a31
-        #assert '116' in myResult, myMessage
-        # expected post de52106a31
-        assert '121' in myResult, myMessage
+                     '116 , received: \n %s' % myResult)
+        assert '116' in myResult, myMessage
 
         myMessage = ('Unexpected result returned for Earthquake Fatality '
                      'Function Expected: total population count of '
-                     '792315 , received: \n %s' % myResult)
-        # expected pre de52106a31
-        #assert '847529' in myResult, myMessage
-        # expected post de52106a31
-        assert '792315' in myResult, myMessage
+                     '847529 , received: \n %s' % myResult)
+        assert '847529' in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_Padang_full(self):
         """Padang 2009 fatalities estimated correctly"""
@@ -431,14 +422,8 @@ class RiabDockTest(unittest.TestCase):
         # 1 - 3 m:    89
         # > 3 m:    0
         myMessage = 'Result not as expected: %s' % myResult
-        # expected pre de52106a31
-        #assert '1923' in myResult, myMessage
-        # expected post de52106a31
-        assert '2301' in myResult, myMessage
-        # expected pre de52106a31
-        #assert '89' in myResult, myMessage
-        # expected post de52106a31
-        assert '228' in myResult, myMessage
+        assert '1923' in myResult, myMessage
+        assert '89' in myResult, myMessage
         assert '0' in myResult, myMessage
 
     def test_runFloodPopulationImpactFunction(self):
@@ -661,10 +646,7 @@ class RiabDockTest(unittest.TestCase):
 
         myMessage = 'Result not as expected: %s' % myResult
         #Terdampak (x 1000):    2366
-        # expected pre de52106a31
-        #assert '2366' in myResult, myMessage
-        # expected post de52106a31
-        assert '2435' in myResult, myMessage
+        assert '2366' in myResult, myMessage
 
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
