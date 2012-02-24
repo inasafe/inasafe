@@ -210,6 +210,37 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         #print 'Dict', myDialog.getKeywords()
         assert myResult == myExpectedResult, myMessage
 
+    def test_addWarningsForColons(self):
+        """Test add entry to list works"""
+        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog.reset(False)
+        myDialog.addListEntry('bar', 'fo:o')
+        myResult = myDialog.getValueForKey('bar')
+        myExpectedResult = 'fo.o'
+        myMessage = ('\nGot: %s\nExpected: %s\n' %
+                     (myResult, myExpectedResult))
+        #print 'Dict', myDialog.getKeywords()
+        assert myResult == myExpectedResult, myMessage
+        #
+        # Check the user gets a message if they put colons in the value
+        #
+        myExpectedResult = 'Colons are not allowed, replaced with "."'
+        myResult = str(myDialog.lblMessage.text())
+        myMessage = ('lblMessage error \nGot: %s\nExpected: %s\n' %
+                     (myResult, myExpectedResult))
+        #print 'Dict', myDialog.getKeywords()
+        assert myResult == myExpectedResult, myMessage
+        #
+        # Check the user gets a message if they put colons in the key
+        #
+        myDialog.addListEntry('ba:r', 'foo')
+        myExpectedResult = 'Colons are not allowed, replaced with "."'
+        myResult = str(myDialog.lblMessage.text())
+        myMessage = ('lblMessage error \nGot: %s\nExpected: %s\n' %
+                     (myResult, myExpectedResult))
+        #print 'Dict', myDialog.getKeywords()
+        assert myResult == myExpectedResult, myMessage
+
     def test_setCategory(self):
         """Test set category works"""
         myDialog = RiabKeywordsDialog(PARENT, IFACE)
