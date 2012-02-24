@@ -33,45 +33,33 @@ class RiabHelpTest(unittest.TestCase):
     APP.exec_() lines because the web view does not load content without
     the main application event loop running.
     """
-    def testDialogLoads(self):
+    def XtestDialogLoads(self):
         """Basic test to ensure the keyword dialog has loaded"""
+
         myHelp = RiabHelp(PARENT)
         #myHelp.show()
-        #APP.exec_()
-        # uncomment the next line if you actually want to see the help
-        # ui popping up when running the tests (not useful in a batch
-        # environment
-        #APP.exec_()
+        #QGISAPP.exec_()
+
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myHelp.close()
         myExpectedText = 'This is the project: Risk in a Box - QGIS'
-        myMessage = 'Expected to find %s in \n\n%s' % (myExpectedText, myText)
+        myMessage = 'Expected to find "%s" in \n\n"%s"' % (myExpectedText, myText)
         assert myText.contains(myExpectedText), myMessage
 
-    def testDockHelp(self):
+    def XtestDockHelp(self):
         """Test help dialog works with context set to 'dock'"""
         myHelp = RiabHelp(PARENT, theContext='dock')
-        #myHelp.show()
-        # uncomment the next line if you actually want to see the help
-        # ui popping up when running the tests (not useful in a batch
-        # environment
-        #APP.exec_()
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'Using the Risk in a Box Plugin'
-        myMessage = 'Expected to find %s in \n\n%s' % (myExpectedText, myText)
+        myMessage = 'Expected to find "%s" in \n\n"%s"' % (myExpectedText, myText)
         assert myText.contains(myExpectedText), myMessage
 
-    def testKeywordsHelp(self):
+    def XtestKeywordsHelp(self):
         """Test help dialog works with context set to 'keywords'"""
         myHelp = RiabHelp(PARENT, theContext='keywords')
-        #myHelp.show()
-        # uncomment the next line if you actually want to see the help
-        # ui popping up when running the tests (not useful in a batch
-        # environment
-        #APP.exec_()
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'avoid using spaces'
-        myMessage = 'Expected to find %s in \n\n%s' % (myExpectedText, myText)
+        myMessage = 'Expected to find "%s" in \n\n"%s"' % (myExpectedText, myText)
         assert myText.contains(myExpectedText), myMessage
 
 if __name__ == '__main__':
