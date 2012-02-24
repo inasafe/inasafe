@@ -155,7 +155,9 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         myDialog.cboKeyword.setCurrentIndex(2)
         myExpectedResult = 'foo'
         myDialog.lePredefinedValue.setText(myExpectedResult)
-        QTest.mouseClick(myDialog.pbnAddToList1, QtCore.Qt.LeftButton)
+        # Work around for commented out line below
+        myDialog.on_pbnAddToList1_clicked()
+        #QTest.mouseClick(myDialog.pbnAddToList1, QtCore.Qt.LeftButton)
         myResult = myDialog.getValueForKey('datatype')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
@@ -171,7 +173,9 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         myDialog.leValue.setText('bar')
         myExpectedResult = 'bar'
         myDialog.lePredefinedValue.setText(myExpectedResult)
-        QTest.mouseClick(myDialog.pbnAddToList2, QtCore.Qt.LeftButton)
+        # Work around for commented out line below
+        myDialog.on_pbnAddToList2_clicked()
+        #QTest.mouseClick(myDialog.pbnAddToList2, QtCore.Qt.LeftButton)
         myResult = myDialog.getValueForKey('foo')
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myResult, myExpectedResult))
