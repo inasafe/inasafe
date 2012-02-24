@@ -122,7 +122,7 @@ def setVectorStyle(qgisVectorLayer, style):
         # Convert transparency % to opacity
         # alpha = 0: transparent
         # alpha = 1: opaque
-        alpha = 1 - myTransparencyPercent / 100
+        alpha = 1 - myTransparencyPercent/100
         mySymbol.setAlpha(alpha)
         myRange = QgsRendererRangeV2(myMin,
                                      myMax,
