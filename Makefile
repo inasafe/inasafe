@@ -63,7 +63,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
-test: test_suite pep8 disabled_tests dependency_test unwanted_strings
+test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
