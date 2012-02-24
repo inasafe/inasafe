@@ -222,6 +222,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         myCurrentKey = self.cboKeyword.currentText()
         myCurrentValue = self.lePredefinedValue.text()
         self.addListEntry(myCurrentKey, myCurrentValue)
+        self.updateControlsFromList()
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pbnAddToList2_clicked(self):
@@ -250,6 +251,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             #.. todo:: notify the user their category is invalid
             pass
         self.addListEntry(myCurrentKey, myCurrentValue)
+        self.updateControlsFromList()
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_pbnRemove_clicked(self):
@@ -265,6 +267,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
         for myItem in self.lstKeywords.selectedItems():
             self.lstKeywords.takeItem(self.lstKeywords.row(myItem))
+        self.updateControlsFromList()
 
     def addListEntry(self, theKey, theValue):
         """Add an item to the keywords list given its key/value.
@@ -456,13 +459,27 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
 
         for myKey in myKeywords.iterkeys():
             self.addListEntry(myKey, myKeywords[myKey])
+        # now make the rest of the gui reflect the list entries
+        self.updateControlsFromList()
 
+    def updateControlsFromList(self):
+        """Set the ui state to match the keywords of the
+           currently active layer.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
         mySubcategory = self.getValueForKey('subcategory')
         myUnits = self.getValueForKey('unit')
         myType = self.getValueForKey('datatype')
         myTitle = self.getValueForKey('title')
         if myTitle is not None:
             self.leTitle.setText(myTitle)
+        else:
+            self.leTitle.setText('')
 
         if self.radExposure.isChecked():
             if mySubcategory is not None and myType is not None:
