@@ -33,10 +33,18 @@ LOCALES = id
 default: compile
 
 compile:
-	make -C gui
+	@echo
+	@echo "-----------------"
+	@echo "Compile GUI forms"
+	@echo "-----------------"
+	make -C gui >/dev/null
 
 docs: compile
-	cd docs; make html; cd ..
+	@echo
+	@echo "-------------------------------"
+	@echo "Compile documentation into html"
+	@echo "-------------------------------"
+	cd docs; make html >/dev/null; cd ..
 
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
