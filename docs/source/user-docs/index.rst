@@ -16,10 +16,15 @@ This document describes how to use the Risk in a box system.
    :maxdepth: 2
 
    README
+<<<<<<< HEAD
    dock
    keywords
    impact_functions
    using-qgis
+=======
+   keywords
+   impact_functions
+>>>>>>> master
    faq
 
 

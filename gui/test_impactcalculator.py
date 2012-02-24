@@ -330,6 +330,31 @@ class ImpactCalculatorTest(unittest.TestCase):
             msg = ('Wrong input data should have raised an exception')
             raise Exception(msg)
 
+    def test_issue100(self):
+        """Test for issue 100: unhashable type dict"""
+        exposure_path = os.path.join(TESTDATA,
+                            'OSM_building_polygons_20110905.shp')
+        hazard_path = os.path.join(TESTDATA,
+                            'Flood_Current_Depth_Jakarta_geographic.asc')
+        # Verify relevant metada is ok
+        #H = read_layer(hazard_path)
+        #E = read_layer(exposure_path)
+        self.calculator.setHazardLayer(hazard_path)
+        self.calculator.setExposureLayer(exposure_path)
+        self.calculator.setFunction('Temporarily Closed')
+        try:
+            myRunner = self.calculator.getRunner()
+            # run non threaded
+            myRunner.run()
+            myMessage = myRunner.result()
+            myImpactLayer = myRunner.impactLayer()
+            myFilename = myImpactLayer.get_filename()
+            assert(myFilename and not myFilename == '')
+            assert(myMessage and not myMessage == '')
+        except Exception, e:
+            msg = 'Calculator run failed. %s' % str(e)
+            assert(), msg
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactCalculatorTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

@@ -1,8 +1,14 @@
 
+<<<<<<< HEAD
 ===============
 Keywords System
 ===============
 
+=======
+=================================
+The Risk in a Box Keywords System
+=================================
+>>>>>>> master
 
 This document describes the purpose and usage of the Risk in a Box *keywords*
 system.
@@ -11,6 +17,7 @@ Purpose
 -------
 
 The keywords system is used by the :doc:`impact_functions` to determine the
+<<<<<<< HEAD
 nature of the input layers that have been passed to them.
 
 Each input GIS dataset used by Risk in a Box needs to have an accompanying
@@ -277,3 +284,6 @@ Getting help
 If you need help using the keywords editor, you can click on the
 :guilabel:`Help` button at the bottom of the dialog and this page will be 
 displayed.
+=======
+nature of the input layers that have been passed to them.
+>>>>>>> master

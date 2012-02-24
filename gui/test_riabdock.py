@@ -43,7 +43,7 @@ try:
     DEBUG = True
 except Exception, e:
     print 'Debugging was disabled'
-settrace()
+
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = RiabDock(IFACE)
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
