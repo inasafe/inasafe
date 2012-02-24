@@ -40,14 +40,14 @@ def getQgisTestApp():
         s = QGISAPP.showSettings()
         print s
 
+    global PARENT
+    if PARENT is None:
+        PARENT = QtGui.QWidget()
+
     global CANVAS
     if CANVAS is None:
         CANVAS = QgsMapCanvas(PARENT)
         CANVAS.resize(QtCore.QSize(400, 400))
-
-    global PARENT
-    if PARENT is None:
-        PARENT = QtGui.QWidget()
 
     global IFACE
     if IFACE is None:
