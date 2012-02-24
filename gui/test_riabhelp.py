@@ -21,8 +21,8 @@ import sys
 import unittest
 # Needed though not used below
 from PyQt4.QtGui import QApplication
-GUIFLAG = True  # All test will run qgis in gui mode
-APP = QApplication(sys.argv, GUIFLAG)
+from utilities_test import getQgisTestApp
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 from riabhelp import RiabHelp
 
@@ -33,42 +33,42 @@ class RiabHelpTest(unittest.TestCase):
     APP.exec_() lines because the web view does not load content without
     the main application event loop running.
     """
-    def XtestDialogLoads(self):
+    def testDialogLoads(self):
         """Basic test to ensure the keyword dialog has loaded"""
-        myHelp = RiabHelp()
-        myHelp.show()
+        myHelp = RiabHelp(PARENT)
+        #myHelp.show()
         #APP.exec_()
         # uncomment the next line if you actually want to see the help
         # ui popping up when running the tests (not useful in a batch
         # environment
-        APP.exec_()
+        #APP.exec_()
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myHelp.close()
         myExpectedText = 'This is the project: Risk in a Box - QGIS'
         myMessage = 'Expected to find %s in \n\n%s' % (myExpectedText, myText)
         assert myText.contains(myExpectedText), myMessage
 
-    def XtestDockHelp(self):
+    def testDockHelp(self):
         """Test help dialog works with context set to 'dock'"""
-        myHelp = RiabHelp(theContext='dock')
-        myHelp.show()
+        myHelp = RiabHelp(PARENT, theContext='dock')
+        #myHelp.show()
         # uncomment the next line if you actually want to see the help
         # ui popping up when running the tests (not useful in a batch
         # environment
-        APP.exec_()
+        #APP.exec_()
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'Using the Risk in a Box Plugin'
         myMessage = 'Expected to find %s in \n\n%s' % (myExpectedText, myText)
         assert myText.contains(myExpectedText), myMessage
 
-    def XtestKeywordsHelp(self):
+    def testKeywordsHelp(self):
         """Test help dialog works with context set to 'keywords'"""
-        myHelp = RiabHelp(theContext='keywords')
-        myHelp.show()
+        myHelp = RiabHelp(PARENT, theContext='keywords')
+        #myHelp.show()
         # uncomment the next line if you actually want to see the help
         # ui popping up when running the tests (not useful in a batch
         # environment
-        APP.exec_()
+        #APP.exec_()
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'avoid using spaces'
         myMessage = 'Expected to find %s in \n\n%s' % (myExpectedText, myText)
