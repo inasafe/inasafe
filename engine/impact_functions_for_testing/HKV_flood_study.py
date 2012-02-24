@@ -5,21 +5,23 @@ from impact_functions.core import get_hazard_layer, get_exposure_layers
 from storage.raster import Raster
 
 
-class FloodImpactFunction(FunctionProvider):
+class HKVFloodImpactFunctionTEST(FunctionProvider):
     """Risk plugin for flood impact
 
     :author HKV
     :rating 1
     :param requires category=='hazard' and \
-                    subcategory.startswith('flood') and \
+                    subcategory=='flood' and \
                     layertype=='raster' and \
                     unit=='m'
 
     :param requires category=='exposure' and \
-                    subcategory.startswith('population') and \
+                    subcategory=='population' and \
                     layertype=='raster' and \
                     datatype=='population'
     """
+
+    plugin_name = 'HKVtest'
 
     @staticmethod
     def run(layers):
@@ -48,10 +50,10 @@ class FloodImpactFunction(FunctionProvider):
             else:
                 datatype = keywords['datatype']
 
-                if 'population' in datatype:
+                if 'ratio' not in datatype:
                     population = layer
-
-                if 'female' in datatype and 'ratio' in datatype:
+                else:
+                    # if 'female' in datatype and 'ratio' in datatype:
                     gender_ratio_unit = keywords['unit']
 
                     msg = ('Unit for gender ratio must be either '
