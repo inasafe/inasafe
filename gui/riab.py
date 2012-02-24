@@ -88,17 +88,16 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
-        #settrace()
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
         myLocaleName = None
         if thePreferredLocale is not None:
             myLocaleName = thePreferredLocale
         elif myOverrideFlag:
-            myLocaleName = QLocale.system().name()
-        else:
             myLocaleName = QSettings().value('locale/userLocale',
                                              QVariant('')).toString()
+        else:
+            myLocaleName = QLocale.system().name()
         # Also set the system locale to the user overridden local
         # so that the riab library functions gettext will work
         # .. see:: :py:func:`storage.utilities`
