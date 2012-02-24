@@ -65,8 +65,8 @@ class Test_real_plugins(unittest.TestCase):
 
         # This one should get 3 flood population impact functions
         D1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}
-        D2 = {'category': 'exposure', 'datatype': 'population',
-              'subcategory': 'population'}
+        D2 = {'category': 'exposure', 'subcategory': 'population',
+              'datatype': 'density'}
 
         # Add layertype
         D1['layertype'] = 'raster'
