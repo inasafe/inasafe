@@ -1931,9 +1931,6 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(inside_line_segments,
                               [[0, 0.5], [0.5, 0.5], [1.0, 0.5]])
 
-
-
-
     def test_clip_lines_by_polygon_multi(self):
         """Multiple composite lines are clipped and classified by polygon
         """
@@ -1995,7 +1992,6 @@ class Test_Polygon(unittest.TestCase):
             Vector(geometry=outside_line_segments,
                    geometry_type='line').write_to_file('outside_segments.shp')
 
-
         # Check that midpoints of each segment are correctly placed
         for seg in inside_line_segments:
             N = len(seg)
@@ -2037,8 +2033,6 @@ class Test_Polygon(unittest.TestCase):
         #[[122.231108, -8.626598], [122.231021, -8.626557]]
         #[[122.231021, -8.626557], [122.230284, -8.625983]]
 
-
-
     def test_join_segments(self):
         """Consecutive line segments can be joined into continuous line
         """
@@ -2073,7 +2067,6 @@ class Test_Polygon(unittest.TestCase):
                                          [0.5, 2.0]])
         assert numpy.allclose(lines[1], [[0.7, 2.0], [1.0, 2.0],
                                          [2.0, 2.0]])
-
 
         # Another example
         segments = [[[0, 0.5], [0.5, 0.5]],

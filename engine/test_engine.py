@@ -1476,7 +1476,6 @@ class Test_Engine(unittest.TestCase):
                                [122.18457453, -8.58798668],
                                [122.18466284, -8.5878697]])
 
-
     def test_line_interpolation_from_polygons_one_poly(self):
         """Line clipping and interpolation using one polygon works
 
@@ -1513,7 +1512,7 @@ class Test_Engine(unittest.TestCase):
         N = len(I_attributes)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if True:  #False:
+        if False:
             L = Vector(geometry=H_geometry, geometry_type='polygon',
                        data=H_attributes)
             L.write_to_file('test_polygon.shp')
@@ -1589,7 +1588,6 @@ class Test_Engine(unittest.TestCase):
         #msg = 'Affected and not affected does not add up'
         #assert (counts[DEFAULT_ATTRIBUTE] +
         #        counts['Not ' + DEFAULT_ATTRIBUTE]) == len(E), msg
-
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception

@@ -716,7 +716,7 @@ def join_line_segments(segments, rtol=1.0e-12, atol=1.0e-12):
         return lines
 
     line = segments[0]
-    for i in range(len(segments)-1):
+    for i in range(len(segments) - 1):
 
         #flag = False
         #segment = segments[i]
