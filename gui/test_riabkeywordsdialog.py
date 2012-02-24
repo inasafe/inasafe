@@ -124,7 +124,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myCombo = myDialog.cboSubcategory
         QTest.mouseClick(myCombo, QtCore.Qt.LeftButton)
-        QTest.keyClick(myCombo, QtCore.Qt.Key_Down)
+        QTest.keyClick(myCombo, QtCore.Qt.Key_Up)
         QTest.keyClick(myCombo, QtCore.Qt.Key_Enter)
         myMessage = ('Changing the subcategory did not add '
                      'to the keywords list for %s' %

@@ -135,6 +135,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         if not theFlag:
             return
         self.setCategory('hazard')
+        self.updateControlsFromList()
 
     @pyqtSignature('bool')  # prevents actions being handled twice
     def on_radExposure_toggled(self, theFlag):
@@ -149,6 +150,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         if not theFlag:
             return
         self.setCategory('exposure')
+        self.updateControlsFromList()
 
     @pyqtSignature('int')  # prevents actions being handled twice
     def on_cboSubcategory_currentIndexChanged(self, theIndex=None):
@@ -166,15 +168,24 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            no exceptions explicitly raised."""
 
         myText = str(self.cboSubcategory.currentText())
+        if myText == self.tr('Not Set'):
+            self.removeItemByKey('subcategory')
+            return
         myTokens = myText.split(' ')
         if len(myTokens) < 1:
+            self.removeItemByKey('subcategory')
             return
         mySubcategory = myTokens[0]
         self.addListEntry('subcategory', mySubcategory)
-        if myText in self.standardHazardList:
+
+        # Some subcategories e.g. roads have no units or datatype
+        if len(myTokens) == 1:
+            return
+        myCategory = self.getValueForKey('category')
+        if 'hazard' == myCategory:
             myUnits = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('unit', myUnits)
-        if myText in self.standardExposureList:
+        if 'exposure' == myCategory:
             myDataType = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('datatype', myDataType)
 
@@ -387,6 +398,8 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myExistingItem = self.lstKeywords.item(myCounter)
             myText = myExistingItem.text()
             myTokens = myText.split(':')
+            if len(myTokens) < 2:
+                break
             myKey = myTokens[0]
             if myKey == theKey:
                 # remove it since the key is already present
@@ -486,13 +499,15 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
                 self.setSubcategoryList(self.standardExposureList,
                                      mySubcategory + ' [' + myType + ']')
             else:
-                self.setSubcategoryList(self.standardExposureList)
+                self.setSubcategoryList(self.standardExposureList,
+                                        self.tr('Not Set'))
         else:
             if mySubcategory is not None and myUnits is not None:
                 self.setSubcategoryList(self.standardHazardList,
                                      mySubcategory + ' [' + myUnits + ']')
             else:
-                self.setSubcategoryList(self.standardHazardList)
+                self.setSubcategoryList(self.standardHazardList,
+                                        self.tr('Not Set'))
 
     def getKeywords(self):
         """Obtain the state of the dialog as a keywords dict
