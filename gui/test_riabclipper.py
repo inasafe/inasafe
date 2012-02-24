@@ -16,10 +16,15 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
-import os
-import numpy
 import unittest
+import sys
+import os
+
+# Add PARENT directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
+import numpy
 
 from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer)
@@ -293,6 +298,7 @@ class RiabClipper(unittest.TestCase):
                     raise Exception(msg)
 
                 # Check None option without keyword datatype == 'density'
+                R.keywords['datatype'] = 'undefined'
                 A_none = R.get_data(scaling=None)
                 msg = 'Data should not have changed'
                 assert nanallclose(A_native, A_none,
