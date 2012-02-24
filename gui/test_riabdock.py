@@ -697,12 +697,15 @@ class RiabDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
         expectDict = {'Hazard': 'Yogya2006',
-                        'Exposure': 'OSM_building_polygons_20110905',
-                        'Impact Function': 'Earthquake Guidelines Function',
-                        'Run Button Enabled': True}
+                      'Exposure': 'OSM_building_polygons_20110905',
+                      'Impact Function': 'Earthquake Guidelines Function',
+                      'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s' % str(myDict)
         assert myDict == expectDict, myMessage
 
+        # This is the where nosetest hangs when running the
+        # guitest suite (Issue #103)
+        # The QTest.mouseClick call never returns.
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
