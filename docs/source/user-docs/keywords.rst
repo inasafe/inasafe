@@ -1,14 +1,7 @@
 
-<<<<<<< HEAD
 ===============
 Keywords System
 ===============
-
-=======
-=================================
-The Risk in a Box Keywords System
-=================================
->>>>>>> master
 
 This document describes the purpose and usage of the Risk in a Box *keywords*
 system.
@@ -204,6 +197,8 @@ programmatically enforced by the RIAB library and GUI:
 * All keywords and values should be in **lower case**, **without spaces**
   with the exception of 'Title' whose value may contain both spaces and
   mixed case letters.
+* Keys and values should **not contain colons**. In the keyword editor, any
+  colons will be replaced with a full stop character.
 * All other Keywords and values that do not fit the above domain lists may be
   used but they may produce undesired results.
 
@@ -284,6 +279,6 @@ Getting help
 If you need help using the keywords editor, you can click on the
 :guilabel:`Help` button at the bottom of the dialog and this page will be 
 displayed.
-=======
+==========
 nature of the input layers that have been passed to them.
 >>>>>>> master
