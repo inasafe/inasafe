@@ -65,7 +65,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
             result_dict = {self.target_field: x}
 
             # Carry all original attributes forward
-            for key in attributes:
+            # FIXME (Ole): Make this part of the interpolation (see issue #101)
+            for key in attribute_names:
                 result_dict[key] = E.get_data(key, i)
 
             # Record result for this feature
