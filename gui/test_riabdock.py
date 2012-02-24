@@ -648,7 +648,7 @@ class RiabDockTest(unittest.TestCase):
         #Terdampak (x 1000):    2366
         assert '2366' in myResult, myMessage
 
-    def Xtest_issue45(self):
+    def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
         clearmyDock()
@@ -685,9 +685,9 @@ class RiabDockTest(unittest.TestCase):
         myMessage = 'Got unexpected state: %s' % str(myDict)
         assert myDict == expectDict, myMessage
 
-        # This is the where nosetest hangs when running the
+        # This is the where nosetest sometims hangs when running the
         # guitest suite (Issue #103)
-        # The QTest.mouseClick call never returns.
+        # The QTest.mouseClick call never returns when run with nosetest, but OK when run normally.
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
