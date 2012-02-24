@@ -687,7 +687,8 @@ class RiabDockTest(unittest.TestCase):
 
         # This is the where nosetest sometims hangs when running the
         # guitest suite (Issue #103)
-        # The QTest.mouseClick call never returns when run with nosetest, but OK when run normally.
+        # The QTest.mouseClick call some times never returns when run
+        # with nosetest, but OK when run normally.
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 

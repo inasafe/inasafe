@@ -43,7 +43,8 @@ class RiabHelpTest(unittest.TestCase):
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myHelp.close()
         myExpectedText = 'This is the project: Risk in a Box - QGIS'
-        myMessage = 'Expected to find "%s" in \n\n"%s"' % (myExpectedText, myText)
+        myMessage = ('Expected to find "%s" in \n\n"%s"'
+                     % (myExpectedText, myText))
         assert myText.contains(myExpectedText), myMessage
 
     def XtestDockHelp(self):
@@ -51,7 +52,8 @@ class RiabHelpTest(unittest.TestCase):
         myHelp = RiabHelp(PARENT, theContext='dock')
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'Using the Risk in a Box Plugin'
-        myMessage = 'Expected to find "%s" in \n\n"%s"' % (myExpectedText, myText)
+        myMessage = ('Expected to find "%s" in \n\n"%s"'
+                     % (myExpectedText, myText))
         assert myText.contains(myExpectedText), myMessage
 
     def XtestKeywordsHelp(self):
@@ -59,7 +61,8 @@ class RiabHelpTest(unittest.TestCase):
         myHelp = RiabHelp(PARENT, theContext='keywords')
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'avoid using spaces'
-        myMessage = 'Expected to find "%s" in \n\n"%s"' % (myExpectedText, myText)
+        myMessage = ('Expected to find "%s" in \n\n"%s"'
+                     % (myExpectedText, myText))
         assert myText.contains(myExpectedText), myMessage
 
 if __name__ == '__main__':
