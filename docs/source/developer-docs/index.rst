@@ -18,10 +18,7 @@ You can find out more about the Risk in a Box project by visiting
    coding_standards
    i18n
    version_control
-<<<<<<< HEAD
    maintaining_documentation
-=======
->>>>>>> master
    bug_reporting
    ../api-docs/index
    todo
