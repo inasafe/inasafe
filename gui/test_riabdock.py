@@ -25,30 +25,26 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle,
                        QgsCoordinateReferenceSystem)
-from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
-from qgisinterface import QgisInterface
+from qgis.gui import QgsMapCanvasLayer
 from utilities_test import getQgisTestApp
 from gui.riabdock import (RiabDock, setRasterStyle)
 from storage.utilities import read_keywords
 from storage.utilities_test import TESTDATA
-
-# Get QGis app handle
-QGISAPP = getQgisTestApp()
-
-# Set DOCK to test against
-PARENT = QtGui.QWidget()
-CANVAS = QgsMapCanvas(PARENT)
-CANVAS.resize(QtCore.QSize(400, 400))
-
-# QgisInterface is a stub implementation of the QGIS plugin interface
-IFACE = QgisInterface(CANVAS)
+try:
+    from pydevd import *
+    print 'Remote debugging is enabled.'
+    DEBUG = True
+except Exception, e:
+    print 'Debugging was disabled'
+settrace()
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = RiabDock(IFACE)
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id

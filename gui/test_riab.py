@@ -31,7 +31,7 @@ from utilities_test import getQgisTestApp
 
 from gui.riab import Riab
 
-QGISAPP = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 class RiabTest(unittest.TestCase):

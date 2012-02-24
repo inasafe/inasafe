@@ -27,25 +27,14 @@ sys.path.append(pardir)
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
-from qgisinterface import QgisInterface
 from utilities_test import getQgisTestApp
 from riabkeywordsdialog import RiabKeywordsDialog
 
-from qgis.core import (QgsVectorLayer,
-                       QgsRasterLayer,
+from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
-from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
 from storage.utilities_test import TESTDATA
-from storage.utilities import read_keywords
 # Get QGis app handle
-QGISAPP = getQgisTestApp()
-# Set DOCK to test against
-PARENT = QtGui.QWidget()
-CANVAS = QgsMapCanvas(PARENT)
-CANVAS.resize(QtCore.QSize(400, 400))
-
-# QgisInterface is a stub implementation of the QGIS plugin interface
-IFACE = QgisInterface(CANVAS)
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 def makePadangLayer():
@@ -58,79 +47,6 @@ def makePadangLayer():
     return myLayer
 
 
-def loadStandardLayers():
-    """Helper function to load standard layers into the dialog."""
-    # List all layers in the correct order.
-    # NOTE: New layers *must* be added to the end of this list, otherwise
-    #       tests will break.
-    myFileList = ['Padang_WGS84.shp',
-                  'glp10ag.asc',
-                  'Shakemap_Padang_2009.asc',
-                  'tsunami_max_inundation_depth_BB_utm.asc',
-                  'tsunami_exposure_BB.shp',
-                  'Flood_Current_Depth_Jakarta_geographic.asc',
-                  'Population_Jakarta_geographic.asc',
-                  'eq_yogya_2006.asc',
-                  'OSM_building_polygons_20110905.shp']
-    myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
-    return myHazardLayerCount, myExposureLayerCount
-
-
-def loadLayers(theLayerList, theClearFlag=True):
-    """Helper function to load layers as defined in a python list."""
-    # First unload any layers that may already be loaded
-    if theClearFlag:
-        clearLayers()
-
-    # Now go ahead and load our layers
-    myExposureLayerCount = 0
-    myHazardLayerCount = 0
-    myCanvasLayers = []
-
-    # Now create our new layers
-    for myFile in theLayerList:
-        # Extract basename and absolute path
-        myBaseName, myExt = os.path.splitext(myFile)
-        myPath = os.path.join(TESTDATA, myFile)
-        myKeywordPath = myPath[:-4] + '.keywords'
-
-        # Determine if layer is hazard or exposure
-        myKeywords = read_keywords(myKeywordPath)
-        msg = 'Could not read %s' % myKeywordPath
-        assert myKeywords is not None, msg
-        if myKeywords['category'] == 'hazard':
-            myHazardLayerCount += 1
-        elif myKeywords['category'] == 'exposure':
-            myExposureLayerCount += 1
-
-        # Create QGis Layer Instance
-        if myExt in ['.asc', '.tif']:
-            myLayer = QgsRasterLayer(myPath, myBaseName)
-        elif myExt in ['.shp']:
-            myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
-        else:
-            myMessage = 'File %s had illegal extension' % myPath
-            raise Exception(myMessage)
-
-        myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
-        assert myLayer.isValid(), myMessage
-
-        # Add layer to the registry (that QGis knows about)
-        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
-
-        # Create Map Canvas Layer Instance and add to list
-        myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-
-    # Quickly add any existing CANVAS layers to our list first
-    for myLayer in CANVAS.layers():
-        myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-    # now load all these layers in the CANVAS
-    CANVAS.setLayerSet(myCanvasLayers)
-
-    # Add MCL's to the CANVAS
-    return myHazardLayerCount, myExposureLayerCount
-
-
 def clearLayers():
     """Clear all the loaded layers"""
     for myLayer in QgsMapLayerRegistry.instance().mapLayers():
@@ -139,7 +55,6 @@ def clearLayers():
 
 class RiabKeywordsDialogTest(unittest.TestCase):
     """Test the risk in a box keywords GUI"""
-    dialog = None
 
     def setUp(self):
         """Create fresh dialog for each test"""
@@ -157,8 +72,8 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         assert myDialog.helpDialog is not None, myMessage
 
     def test_on_pbnAdvanced_toggled(self):
-        """Test advanced button toggel behaviour works"""
-        loadStandardLayers()
+        """Test advanced button toggle behaviour works"""
+        makePadangLayer()
         myDialog = RiabKeywordsDialog(PARENT, IFACE)
         myButton = myDialog.pbnAdvanced
         myButton.setChecked(False)

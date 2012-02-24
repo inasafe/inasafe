@@ -33,11 +33,11 @@ from storage.utilities import nanallclose
 
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-rasterPath = os.path.join(TESTDATA, 'Shakemap_Padang_2009.asc')
-rasterPath2 = os.path.join(TESTDATA, 'population_padang_1.asc')
+RASTERPATH = os.path.join(TESTDATA, 'Shakemap_Padang_2009.asc')
+RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 
 # Handle to common QGis test app
-QGISAPP = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 class RiabClipper(unittest.TestCase):
@@ -76,10 +76,10 @@ class RiabClipper(unittest.TestCase):
 
         # Create a raster layer
         myName = 'shake'
-        myRasterLayer = QgsRasterLayer(rasterPath, myName)
+        myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
 
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        rasterPath)
+                                                        RASTERPATH)
         assert myRasterLayer is not None, msg
 
         # Create a bounding box
@@ -115,10 +115,10 @@ class RiabClipper(unittest.TestCase):
 
         # Create a raster layer
         myName = 'shake'
-        myRasterLayer = QgsRasterLayer(rasterPath, myName)
+        myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
 
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        rasterPath)
+                                                        RASTERPATH)
         assert myRasterLayer is not None, msg
 
         # Create a bounding box
@@ -312,7 +312,7 @@ class RiabClipper(unittest.TestCase):
                                    rtol=1.0e-12, atol=1.0e-12), msg
 
     def test_extentToKml(self):
-        """Test if extent too KML is working."""
+        """Test if extent to KML is working."""
         myExtent = [100.03, -1.14, 100.81, -0.73]
         kmlFilename = extentToKml(myExtent)
         assert os.path.exists(kmlFilename)
