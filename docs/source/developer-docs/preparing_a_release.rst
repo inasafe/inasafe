@@ -175,13 +175,38 @@ The compilation of these resources if the default make target in the root and
    make
 
 
+**Outcome:** Qt resources and user interface files have been compiled
 
-Ensure that Qt resources and user interface files have been compiled
+HIG Compliance
+..............
 
-Ensure that user interface files meet HIG compliance
+The RIAB human interface guidelnes (HIG) are described in the :ref:`hig-label`
+document. User interface should strive to comply with these guidelines. As
+an over-arching principle, before any release, the user interface elements that
+comprise that release should be tested both for usability and to ensure that 
+they are functional.
 
-Enure all unit tests complete successfully and that tests that are expected
-to fail are documented.
+There is no automated test system for HIG. Before making a release of HIG
+compliance, each dialog should be manually tested and inspected.
+
+**Outcome:** A consistent, user friendly and functional graphical user interface
+environment for the software that comprises the releases.
+
+Unit Testing
+............
+
+During the development process, unit tests should be written (following the
+principles of test driven development). A good test suite allows the code to 
+be shipped with confidence knowing it will behave as expected. At the time of
+release, all the tests in the test suite should either pass or have documented
+reasons as to why they fail, and that they are expected to fail.
+
+In addition, tests should provide a code coverage of 80% or better of the
+shipped code base.
+
+**Outcome:** All unit tests complete successfully, or when expected
+to fail are documented accordingly.
+
 
 Ensure that all translation string lists have been updated and that the
 translation process has been carried out.
