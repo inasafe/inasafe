@@ -21,5 +21,5 @@ This document describes how to use the Risk in a box system.
    impact_functions
    using-qgis
    faq
-
+   changelog
 

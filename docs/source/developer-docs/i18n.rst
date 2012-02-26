@@ -222,3 +222,18 @@ to generate the updated .po file and make it available to translators. When the
 translated file is returned, convert the .po file to a binary .mo file (which is
 used at runtime for the actual translation), then follow the 
 :ref:`_library-release-label` section above.
+
+Sphinx Translation
+------------------
+
+Generic documentation on how to translate sphinx documentation is available
+`here <http://sphinx.pocoo.org/latest/intl.html>`-.
+
+Initial notes on the process::
+
+   cd docs
+   make gettext
+
+Which will create pot files which can be found under build/locale. Note that
+this make target needs to be tweaked so that it builds a unique directory
+for each supported locale.

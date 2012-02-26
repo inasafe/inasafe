@@ -175,6 +175,8 @@ package and module paths can be resolved correctly. E.g::
 Once again you could add this to your .bashrc or set it in Eclipse for 
 convenience if needed.
 
+.. _running-tests-label:
+
 Running tests
 .............
 

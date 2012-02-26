@@ -19,6 +19,7 @@ as follows and are described in detail below:
 + Ensure that all translation string lists have been updated and that the
   translation process has been carried out.
 + Ensure that all new and existing features are adequately documented.
++ Update the changelog.
 + Ensure that the sphinx documentation is compiled.
 + Generate python optimsed (.pyo) files for all sources.
 + Update the plugin metadata to reflect current version.
@@ -202,18 +203,94 @@ release, all the tests in the test suite should either pass or have documented
 reasons as to why they fail, and that they are expected to fail.
 
 In addition, tests should provide a code coverage of 80% or better of the
-shipped code base.
+shipped code base. More informationn on running unit tests is included in 
+:ref:`running-tests-label`.
 
 **Outcome:** All unit tests complete successfully, or when expected
 to fail are documented accordingly.
 
+Document new features
+---------------------
 
-Ensure that all translation string lists have been updated and that the
-translation process has been carried out.
+New features in the release should be well documented and that documentation
+should be made available uder the :file:`user-docs` subfolder of the sphinx
+sources tree.
 
-Ensure that all new and existing features are adequately documented.
+For example, when the keywords editor dialog feature was introduced, we created
+a new sphinx document :file:`docs/sources/user-docs/keywords.rst` which
+documents this new feature. Additionally, the help button is set to launch
+the help dialog in the context of the new help document e.g.::
+
+   def showHelp(self):
+      """Load the help text for the keywords gui"""
+      if not self.helpDialog:
+         self.helpDialog = RiabHelp(self.iface.mainWindow(), 'keywords')
+      self.helpDialog.show()
+
+Where the 'keywords' parameter indicates the user-docs/*.rst document that
+should be opened when the help button is clicked. The general style and
+approach used in existing documentation should inform your documentation 
+process so that all the documentation is constent.
+
+**Outcome:** All new and existing features are adequately documented.
+
+Update the changelog
+--------------------
+
+A changelog should be maintained (:file:`docs/sources/user-docs/changelog.rst`)
+that lists the key new features and improvement made with each release. Use
+the :doc:`../user-docs/changelog` file to guide the style of any edits and additions you
+make.
+
+The changelog should not exhaustively list every commit that took place. Rather
+it should list the key features and bug fixes that were made during the 
+release cycle.
+
+.. note:: New release changesets should be introduced to this file **at the top**
+   so that the newest release is alwas listed first. 
+
+**Outcome:** A succinct list of changes and improvements that were made during
+the release cycle.
+
+Finalise translations
+.....................
+
+The Risk in a Box plugin is built from the ground up for internationalization.
+In particular the following two languages are supported as part of this
+project:
+
+* English
+* Bahasa Indonesian
+
+There are three components of the project that require translation:
+
++ The Graphical User Interface - primarily the :file:`gui` python package.
+  Qt4 .ts files are used for these translations.
++ The Risk in a Box libraries - these components provide the underlying
+  functionality of the scenario assessment. Python gettext is used for these
+  translations.
++ The sphinx documentation - this is translated using gettext.
+
+The translation process for the first two items above is documented in 
+detail in :doc:`i18n`. The sphinx translation process is not yet well
+documented, although it will be similar to the gettext process.
+
+The final strings should be made available to translators before the release,
+during which time a string freeze should be in effect on the release code tree.
+
+Once the translation files have been updated, they should be converted to
+compiled string lists (.qm and .mo files for Qt4 and gettext respectively) and 
+made available as part of the distribution.
+
+**Outcome:** The released plugin will be multilingual supporting both
+indonesian and english.
+
+Compile the sphinx documentation
+--------------------------------
 
 Ensure that the sphinx documentation is compiled.
+
+
 
 Generate python optimsed (.pyo) files for all sources.
 
