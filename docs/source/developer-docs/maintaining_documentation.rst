@@ -11,6 +11,8 @@ your documentation clear and visually interesting, the more commonly used in
 this document are listed below. For a more detailed list, please visit 
 the `Spinx Inline Markup page <http://sphinx.pocoo.org/markup/inline.html>`_
 
+A complete list of supported .rst markup is also available `here <http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quotes>`_.
+
 Common tags
 ...........
 

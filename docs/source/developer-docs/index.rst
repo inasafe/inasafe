@@ -20,6 +20,7 @@ You can find out more about the Risk in a Box project by visiting
    version_control
    maintaining_documentation
    bug_reporting
+   preparing_a_release
    ../api-docs/index
    todo
 
