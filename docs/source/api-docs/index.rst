@@ -6,34 +6,54 @@
 Risk-In-A-Box's API documentation
 =================================
 
-This is the API documentation for the Risk-In-A-Box project.
+This is the API documentation for the Risk-In-A-Box project. You can find out
+more about the Risk-In-A-Box project by visiting `riskinabox.org
+<http://riskinabox.org/>`_.
 
-You can find out more about the Risk-In-A-Box project by visiting `riskinabox.org <http://riskinabox.org/>`_.
+Packages
+--------
 
-Implementation
---------------
+Package::gui
+..............
 .. toctree::
    :maxdepth: 2
    
-   init
-   riab
-   riabdock
-   riabkeywordsdialog
-   riabhelp
-   riabclipper
-   impactcalculator
-   riabexceptions
+   gui/init
+   gui/riab
+   gui/riabdock
+   gui/riabkeywordsdialog
+   gui/riabhelp
+   gui/riabclipper
+   gui/impactcalculator
+   gui/riabexceptions
    
+Package::impact_functions
+.........................
+.. toctree::
+   :maxdepth: 2
+   
+   impact_functions/core
+
 Unit Tests
-----------
+..........
+
+Gui Unit Tests
+..............
 
 .. toctree::
    :maxdepth: 2
       
-   qgisinterface
-   test_riab
-   test_riabdock
-   test_impactcalculator
-   test_riabkeywordsdialog
+   gui/qgisinterface
+   gui/test_riab
+   gui/test_riabdock
+   gui/test_impactcalculator
+   gui/test_riabkeywordsdialog
 
 
+Impact Function Unit Tests
+..........................
+
+.. toctree::
+   :maxdepth: 2
+      
+   impact_functions/test_plugin_core

@@ -16,9 +16,11 @@ as follows and are described in detail below:
 + Ensure that user interface files meet HIG compliance
 + Enure all unit tests complete successfully and that tests that are expected
   to fail are documented.
++ Ensure that user acceptance testing has been carried out.
 + Ensure that all translation string lists have been updated and that the
   translation process has been carried out.
 + Ensure that all new and existing features are adequately documented.
++ Ensure that the API documentation is up to date.
 + Update the changelog.
 + Ensure that the sphinx documentation is compiled.
 + Generate python optimsed (.pyo) files for all sources.
@@ -209,38 +211,43 @@ shipped code base. More informationn on running unit tests is included in
 **Outcome:** All unit tests complete successfully, or when expected
 to fail are documented accordingly.
 
+User Acceptance Testing
+-----------------------
+
+While unit testing provides a quantitative measure of the code's robustness,
+user acceptance testing provides a qualitative measure. The plugin should
+be made available to 'invested' users to test with real world data and in 
+real world usage scenarios. Any issues with workflow, ease of use, quality of
+model outputs and reports etc. should be identified at this point and remedied.
+
+**Outcome:** Software that works in real world usage.
+
 Document new features
 ---------------------
 
-New features in the release should be well documented and that documentation
-should be made available uder the :file:`user-docs` subfolder of the sphinx
-sources tree.
-
-For example, when the keywords editor dialog feature was introduced, we created
-a new sphinx document :file:`docs/sources/user-docs/keywords.rst` which
-documents this new feature. Additionally, the help button is set to launch
-the help dialog in the context of the new help document e.g.::
-
-   def showHelp(self):
-      """Load the help text for the keywords gui"""
-      if not self.helpDialog:
-         self.helpDialog = RiabHelp(self.iface.mainWindow(), 'keywords')
-      self.helpDialog.show()
-
-Where the 'keywords' parameter indicates the user-docs/*.rst document that
-should be opened when the help button is clicked. The general style and
-approach used in existing documentation should inform your documentation 
-process so that all the documentation is constent.
+New features in the release should be well documented using the procedure
+described in :ref:`documenting-new-features-howto-label`.
 
 **Outcome:** All new and existing features are adequately documented.
+
+API Documentation
+-----------------
+
+In addition to documenting new features, any new python modules introduced
+during the development work leading up to the release need to be included
+in the API documentation. This process is described in detail in the
+:ref:`api-documentation-howto-label` document.
+
+**Outcome:** The API is completely documented with rich, relevant documentation.
+
 
 Update the changelog
 --------------------
 
 A changelog should be maintained (:file:`docs/sources/user-docs/changelog.rst`)
 that lists the key new features and improvement made with each release. Use
-the :doc:`../user-docs/changelog` file to guide the style of any edits and additions you
-make.
+the :doc:`../user-docs/changelog` file to guide the style of any edits and 
+additions made.
 
 The changelog should not exhaustively list every commit that took place. Rather
 it should list the key features and bug fixes that were made during the 
@@ -288,20 +295,147 @@ indonesian and english.
 Compile the sphinx documentation
 --------------------------------
 
-Ensure that the sphinx documentation is compiled.
+Once documentation is completed, it should be compiled using 
+:command:`make docs` and the :command:`git status` command should be used to
+ensure that all generated documentation is also under version control.
+
+**Outcome:** Sphinx documentation is compiled providing complete documentation
+to be shipped with the plugin.
+
+Update plugin metadata
+----------------------
+
+QGIS uses specific metadata to register the plugin. At the time of writing
+the mechanism for registering this metadata is in transition from an in-source
+based system to an .ini file based system. In the interim, both should be 
+maintained.
+
+The in-source metadata is updated by editing the :file:`__init__.py` file
+in the top level directory of the source tree::
+
+   def name():
+      """A user friendly name for the plugin."""
+      return 'Risk in a box'
+   
+   
+   def description():
+       """A one line description for the plugin."""
+       return 'Disaster risk assessment tool developed by AusAid and World Bank'
+   
+   
+   def version():
+       """Version of the plugin."""
+       return 'Version 0.1'
+   
+   
+   def icon():
+       """Icon path for the plugin."""
+       return 'icon.png'
+   
+   
+   def qgisMinimumVersion():
+       """Minimum version of QGIS needed to run this plugin -
+       currently set to 1.7."""
+       return '1.7'
+
+In general only the version function needs to be updated to reflect the new 
+version of the Risk-In-A-Box plugin.
+
+.. note:: The above will be deprecated with the release of QGIS 2.0, see
+   below for the alternative method of describing the plugin.
+
+For newer versions of QGIS (1.8+), the :file:`metadata.txt` will be used to
+store descriptive information about the plugin. Simply edit this file with
+a text editor and update it as needed.
+
+**Outcome:** The plugin metadata to reflects the current version of Risk in a 
+Box.
+
+Generate a test package
+-----------------------
+
+At this point a test package should be generated that can be used to test
+the plugin in a clean room environment. A clean room environment comprises a
+system that has a fresh operating system installation with the desired version
+of QGIS installed, and **no other software**. It is probably a good practice
+to use machine virtualisation for this purpose, for example with images
+of a windows and a linux system installed. Some virtualisation tools such as
+vmware provide the ability to create a system snapshot and roll back to it.
+
+To generate a test package, use the :file:`scripts/release.sh` bash script.
+
+For exampled to create a test package for version 0.1.0 of the software,
+issue the following command::
+
+   scripts/release.sh 0.1.0
+
+The generated package will be placed in the /tmp directory of your linux system.
+
+Once the clean system is started, extract the package contents into the user's
+personal plugin directory. For example under Linux::
+
+   mkdir -p ~/.qgis/python/plugins
+   cd ~/.qgis/python/plugins
+   unzip risk_in_a_box.0.1.0.zip
+
+Now start QGIS and enable the plugin in the QGIS plugin manager (
+:menuselection:`Plugins --> Manage Plugins`).
+
+Tag the release
+---------------
+
+Tagging the release provides a 'known good' state for the software which 
+represents a point in time where all of the above items in this list have
+been checked. To tag the release simply do::
+
+   git tag release-0_1_0
+   git push --tags
+
+.. note:: Replace 'dot' separators with underscores for the version number.
+
+**Outcome:** The release is tagged in GIT and can be checked out at any point
+in the future.
+
+Upload the package
+------------------
+
+QGIS provides an online plugin repository that centralizes the distribution
+and retrieval of plugins. It is the most efficient way to make your plugin
+available to the world at large.
+
+* Upload the updated package zip file to old QGIS python plugin repository.
+* Upload the updated package zip file to the new QGIS python plugin repository.
+
+Press announcements
+-------------------
+
+Once the release has been made, an announcement should be made to inform
+interested parties about the availability of the new software. A pro-forma
+announcement is provided below **(Trevor or Ole todo)**::
+
+   Dear Risk in a Box Users
+   
+   We are pleased to announce the immediate availability of the newest
+   version of Risk in a Box (version X.X.X). This version includes numerous
+   bug fixes and improvements over the previous release::
+   
+   ----- changelog goes here -------------
+
+   We welcome any feedback you may have on this release. You can use our 
+   issue tracker (requires free account) to notify us of any issues you may
+   have encountered whilst using the system. The tracker is available here:
+   
+   https://github.com/AIFDR/risk_in_a_box/issues
+   
+   This project is supported by the Australian Aid Agency and the World Bank.
+   
+   Best regards
+   
+   (Name of person)
+
+A standard list of contacts should be compiled and the notification sent to
+all those listed.
 
 
-
-Generate python optimsed (.pyo) files for all sources.
-
-Update the plugin metadata to reflect current version.
-
-Generate a test package and validate in a clean room environment.
-
-Tag the release in the revision control system.
-
-Upload the updated package zip file to old QGIS python plugin repository.
-
-Upload the updated package zip file to the new QGIS python plugin repository.
-
-Make announcements and press releases as needed.
+**Outcome:** Interested parties are informed about the availability of the
+new release.
