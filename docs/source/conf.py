@@ -51,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Risk-In-A-Box'
-copyright = u'2012, Ole Moller'
+copyright = u'2012, BNPB/AIFDR/GFDRR'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -238,7 +238,7 @@ man_pages = [('index', 'risk-in-a-box', u'Risk-In-A-Box Documentation',
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'Risk-In-A-Box', u'Risk-In-A-Box Documentation',
-   u'Ole Moller', 'Risk-In-A-Box', 'One line description of project.',
+   u'Ole Nielsen', 'Risk-In-A-Box', 'One line description of project.',
    'Miscellaneous'),
 ]
 

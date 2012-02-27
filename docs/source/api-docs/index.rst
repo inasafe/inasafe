@@ -17,7 +17,7 @@ Package::gui
 ..............
 .. toctree::
    :maxdepth: 2
-   
+
    gui/init
    gui/riab
    gui/riabdock
@@ -26,13 +26,20 @@ Package::gui
    gui/riabclipper
    gui/impactcalculator
    gui/riabexceptions
-   
+
 Package::impact_functions
 .........................
 .. toctree::
    :maxdepth: 2
-   
+
    impact_functions/core
+
+Package::engine
+.........................
+.. toctree::
+   :maxdepth: 2
+
+   engine/interpolation2d
 
 Unit Tests
 ..........
@@ -42,7 +49,7 @@ Gui Unit Tests
 
 .. toctree::
    :maxdepth: 2
-      
+
    gui/qgisinterface
    gui/test_riab
    gui/test_riabdock
@@ -55,5 +62,5 @@ Impact Function Unit Tests
 
 .. toctree::
    :maxdepth: 2
-      
+
    impact_functions/test_plugin_core
