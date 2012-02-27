@@ -42,6 +42,7 @@ from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent, getBufferedExtent
 from riabexceptions import (KeywordNotFoundException,
                             InvalidParameterException)
+from riabmap import RiabMap
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -242,6 +243,10 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
+
+        myButton = self.pbnPrint
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                               self.printMap)
         #self.showHelp()
         myButton = self.pbnRunStop
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -1009,3 +1014,15 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                 self.cboFunction.setCurrentIndex(myCount)
                 break
         self.wvResults.setHtml(self.state['report'])
+
+    def printMap(self):
+        """Slot to print map when print map button pressed.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myMap = RiabMap(self.iface)
+        myMap.makePdf()

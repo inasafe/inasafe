@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riabdock.ui'
 #
-# Created: Sun Feb 26 08:48:39 2012
+# Created: Mon Feb 27 11:54:10 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -89,6 +89,12 @@ class Ui_RiabDock(object):
         self.horizontalLayout.addWidget(self.pbnHelp)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
+        self.pbnPrint = QtGui.QPushButton(self.dockWidgetContents)
+        self.pbnPrint.setText(QtGui.QApplication.translate("RiabDock", "Print...", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnPrint.setObjectName(_fromUtf8("pbnPrint"))
+        self.horizontalLayout.addWidget(self.pbnPrint)
+        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
         self.pbnRunStop = QtGui.QPushButton(self.dockWidgetContents)
         self.pbnRunStop.setText(QtGui.QApplication.translate("RiabDock", "Run", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnRunStop.setObjectName(_fromUtf8("pbnRunStop"))
