@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="en_US">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID" sourcelanguage="en_US">
 <context>
     <name>@default</name>
     <message>
@@ -203,17 +204,17 @@ ke %s: %s</translation>
     <message>
         <location filename="riab.py" line="149"/>
         <source>Toggle RIAB Dock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tombol untuk beralih ke RIAB</translation>
     </message>
     <message>
         <location filename="riab.py" line="168"/>
         <source>Keyword Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor Kata Kunci</translation>
     </message>
     <message>
         <location filename="riab.py" line="173"/>
         <source>Open the keywords editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka editor kata kunci</translation>
     </message>
 </context>
 <context>
@@ -231,7 +232,7 @@ ke %s: %s</translation>
     <message>
         <location filename="ui_riabdock.ui" line="51"/>
         <source>In the event of</source>
-        <translation>Dalam kejadian</translation>
+        <translation>Jika terjadi</translation>
     </message>
     <message>
         <location filename="ui_riabdock.ui" line="61"/>
@@ -344,103 +345,104 @@ ke %s: %s</translation>
     <message>
         <location filename="riabkeywordsdialog.py" line="70"/>
         <source>earthquake [mmi]</source>
-        <translation type="unfinished"></translation>
+        <translation>Gempa bumi [mmi]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="71"/>
         <source>tsunami [m]</source>
-        <translation type="unfinished"></translation>
+        <translation>tsunami [m]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="72"/>
         <source>tsunami [wet/dry]</source>
-        <translation type="unfinished"></translation>
+        <translation>tsunami [basah/kering]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="73"/>
         <source>tsunami [feet]</source>
-        <translation type="unfinished"></translation>
+        <translation>tsunami [kaki]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="74"/>
         <source>flood [m]</source>
-        <translation type="unfinished"></translation>
+        <translation>banjir [m]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="75"/>
         <source>flood [wet/dry]</source>
-        <translation type="unfinished"></translation>
+        <translation>banjir [basah/kering]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="76"/>
         <source>flood [feet]</source>
-        <translation type="unfinished"></translation>
+        <translation>banjir [kaki]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="64"/>
         <source>population [density]</source>
-        <translation type="unfinished"></translation>
+        <translation>populasi [kepadatan]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="65"/>
         <source>population [count]</source>
-        <translation type="unfinished"></translation>
+        <translation>populasi [jumlah]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="67"/>
         <source>building [osm]</source>
-        <translation type="unfinished"></translation>
+        <translation>bangunan [osm]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="68"/>
         <source>building [sigab]</source>
-        <translation type="unfinished"></translation>
+        <translation>bangunan [sigab]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="69"/>
         <source>roads</source>
-        <translation type="unfinished"></translation>
+        <translation>jalan</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="66"/>
         <source>building</source>
-        <translation type="unfinished"></translation>
+        <translation>bangunan</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="77"/>
         <source>tephra [kg2/m2]</source>
-        <translation type="unfinished"></translation>
+        <translation>tephra [kg2/m2]</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="120"/>
         <source>Hide advanced editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Sembunyikan editor lanjut</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="122"/>
         <source>Show advanced editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan editor lanjut</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="529"/>
         <source>Not Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ditentukan</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="318"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>tanda titik dua (:) tidak diijinkan, ganti dengan &quot;.&quot;</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="585"/>
         <source>Risk in a box</source>
-        <translation type="unfinished"></translation>
+        <translation>Risk in a box</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialog.py" line="585"/>
         <source>An error was encountered when saving the keywords:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>terjadi kesalahan ketika menyimpan kata kunci:
+</translation>
     </message>
 </context>
 <context>
@@ -448,117 +450,117 @@ ke %s: %s</translation>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="14"/>
         <source>Risk in a Box - Keyword Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Risk in a Box - Editor kata kunci</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="46"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Kategori</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="55"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bahaya merupakan suatu keadaan yang dapat mengakibatkan tingkat ancaman tertentu pada kehidupan, harta benda, atau lingkungan (Wikipedia)</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="58"/>
         <source>Hazard</source>
-        <translation type="unfinished"></translation>
+        <translation>Bahaya</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="65"/>
         <source>Where people and property are situated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimana lokasi manusia dan harta benda.</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="68"/>
         <source>Exposure</source>
-        <translation type="unfinished"></translation>
+        <translation>Terpapar</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="80"/>
         <source>Subcategory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sub-kategori</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="90"/>
         <source>A subcategory represents the type of hazard.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sub-kategori menunjukan jenis bahaya.</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="110"/>
         <source>Advanced editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor lanjutan</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="143"/>
         <source>Keyword</source>
-        <translation type="unfinished"></translation>
+        <translation>Kata kunci</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="214"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="227"/>
         <source>Add to list</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambahkan ke dalam daftar</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="237"/>
         <source>Current keywords</source>
-        <translation type="unfinished"></translation>
+        <translation>Kata kunci saat ini</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="273"/>
         <source>Remove selected</source>
-        <translation type="unfinished"></translation>
+        <translation>hilangkan yang dipilih</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="118"/>
         <source>Predefined</source>
-        <translation type="unfinished"></translation>
+        <translation>Yang telah ditentukan</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="201"/>
         <source>Key</source>
-        <translation type="unfinished"></translation>
+        <translation>kunci</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="30"/>
         <source>Quick edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Edit cepat</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="36"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Judul</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="100"/>
         <source>Show advanced editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan editor lanjutan</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="125"/>
         <source>User defined</source>
-        <translation type="unfinished"></translation>
+        <translation>Yang ditentukan oleh pengguna</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="154"/>
         <source>subcategory</source>
-        <translation type="unfinished"></translation>
+        <translation>sub-kategori</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="159"/>
         <source>units</source>
-        <translation type="unfinished"></translation>
+        <translation>satuan</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="164"/>
         <source>datatype</source>
-        <translation type="unfinished"></translation>
+        <translation>jenis data</translation>
     </message>
 </context>
 </TS>
