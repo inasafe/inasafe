@@ -1024,5 +1024,19 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
+        myFilename = QtGui.QFileDialog.getSaveFileName(self,
+                            self.tr('Write to pdf'),
+                            '/tmp',
+                            self.tr('Pdf File (*.pdf)'))
         myMap = RiabMap(self.iface)
-        myMap.makePdf()
+        self.showBusy()
+        try:
+            myMap.makePdf(myFilename)
+            self.displayHtml(self.tr('<div><span class="label success">'
+                             'PDF Created</div>'
+                             'Your map was saved as %s' % myFilename))
+        except Exception, e:
+            myReport = getExceptionWithStacktrace(e, html=True)
+            if myReport is not None:
+                self.displayHtml(myReport)
+        self.hideBusy()

@@ -41,11 +41,12 @@ class RiabMap():
         """
         self.iface = theIface
 
-    def makePdf(self):
+    def makePdf(self, theFilename):
         """Method to createa  nice little pdf map.
 
         Args:
-            None
+            theFilename - a string containing a filename path with .pdf
+            extension
         Returns:
             None
         Raises:
@@ -102,7 +103,7 @@ class RiabMap():
         #
         myPrinter = QtGui.QPrinter()
         myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
-        myPrinter.setOutputFileName("/tmp/out.pdf")
+        myPrinter.setOutputFileName(theFilename)
         myPrinter.setPaperSize(QtCore.QSizeF(myComposition.paperWidth(),
                                              myComposition.paperHeight()),
                                              QtGui.QPrinter.Millimeter)

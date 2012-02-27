@@ -840,7 +840,7 @@ class RiabDockTest(unittest.TestCase):
         clearDock()
         loadLayer('issue58.tif')
         myMap = RiabMap(DOCK.iface)
-        myMap.makePdf()
+        myMap.makePdf('/tmp/out.pdf')
         assert os.path.exists('/tmp/out.pdf')
 
 if __name__ == '__main__':
