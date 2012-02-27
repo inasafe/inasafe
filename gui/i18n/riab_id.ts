@@ -187,7 +187,7 @@ ke %s: %s</translation>
         <translation type="obsolete">Terjemahan dimuat</translation>
     </message>
     <message>
-        <location filename="riab.py" line="217"/>
+        <location filename="riab.py" line="236"/>
         <source>Risk in a Box</source>
         <translation>Risk in a Box</translation>
     </message>
@@ -204,7 +204,7 @@ ke %s: %s</translation>
     <message>
         <location filename="riab.py" line="149"/>
         <source>Toggle RIAB Dock</source>
-        <translation type="unfinished">Tombol untuk beralih ke RIAB</translation>
+        <translation>Tombol untuk beralih ke RIAB</translation>
     </message>
     <message>
         <location filename="riab.py" line="168"/>
@@ -215,6 +215,16 @@ ke %s: %s</translation>
         <location filename="riab.py" line="173"/>
         <source>Open the keywords editor</source>
         <translation>Buka editor kata kunci</translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="184"/>
+        <source>Reset Dock</source>
+        <translation>Reset panel</translation>
+    </message>
+    <message>
+        <location filename="riab.py" line="189"/>
+        <source>Reset the Risk in a Box Dock</source>
+        <translation>Reset panel Risk in a Box</translation>
     </message>
 </context>
 <context>
@@ -270,59 +280,59 @@ ke %s: %s</translation>
         <translation>Jalankan</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="298"/>
+        <location filename="riabdock.py" line="300"/>
         <source>&lt;span class=&quot;label important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%s]: %s &lt;br&gt;Exposure keywords [%s]: %s</source>
         <translation>&lt;span class=&quot;label important&quot;&gt;Tidak ada fungsi yang valid&lt;/span&gt; Tidak ada fungsi yang tersedia untuk input yang anda masukan. Coba untuk memilih kombinasi input yang berbeda. Silahkan mengacu pada panduan pengguna &lt;FIXME: add link&gt; untuk lebih jelasnya mengenai input yang benar untuk fungsi risiko yang diberikan. &lt;br&gt;Kata kunci ancaman [%s]: %s &lt;br&gt;Kata kunci terpapar [%s]: %s</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="312"/>
+        <location filename="riabdock.py" line="314"/>
         <source>&lt;span class=&quot;label success&quot;&gt;Ready:&lt;/span&gt; You can now proceed to run your model by clicking the &lt;em&gt; Run&lt;/em&gt; button.</source>
         <translation>&lt;span class=&quot;label success&quot;&gt;Siap:&lt;/span&gt; Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Jalankan.</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="511"/>
+        <location filename="riabdock.py" line="515"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation>Lapisan dampak &quot;%s&quot; yang dimuat tidak benar</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="548"/>
+        <location filename="riabdock.py" line="552"/>
         <source>&lt;p&gt;&lt;span class=&quot;label important&quot;&gt;Error:&lt;/span&gt; An exception occurred when creating layer subsets clipped to the optimal extent: %s&lt;/p&gt;</source>
         <translation>&lt;p&gt;&lt;span class=&quot;label important&quot;&gt;Error:&lt;/span&gt; Terjadi pengecualian ketika membuat lapisan subset pemotong ke cakupan wilayah optimal: %s&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="593"/>
+        <location filename="riabdock.py" line="597"/>
         <source>An exception occurred when starting the model: %s</source>
         <translation>Terjadi pengecualian ketika memulai model: %s</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="631"/>
+        <location filename="riabdock.py" line="635"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation>Tidak ada lapisan dampak yang dihitung. Pesan kesalahan: %s
 </translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="662"/>
+        <location filename="riabdock.py" line="666"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation>Lapisan dampak %s bukan lapisan vektor atau raster</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="682"/>
+        <location filename="riabdock.py" line="686"/>
         <source>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Analyzing this question...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/riab/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</source>
         <translation>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Menganalisa pertanyaan...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/riab/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="761"/>
+        <location filename="riabdock.py" line="765"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %s&lt;/p&gt;&lt;p&gt;Exposure: %s&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %s&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %s&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</source>
         <translation>&lt;p&gt;Tidak cukup tumpang-tindih antara lapisan input dan atau lapisan dan tampilan peta yang aktif. Silahkan memilih dua lapisan yang saling tumpang-tindih dan perbesar atau geser ke detil penuh:&lt;/p&gt;&lt;p&gt;Gagal memberikan cakupan optimal:&lt;/p&gt;&lt;p&gt;Ancaman: %s&lt;/p&gt;&lt;p&gt;Terpapar: %s&lt;/p&gt;&lt;p&gt;Cakupan tampilan peta geografis yang aktif: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis ancaman: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis terpapar: %s&lt;/p&gt;&lt;p&gt;Detil: %s&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="823"/>
+        <location filename="riabdock.py" line="827"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation>Raster terpapar dengan vektor ancaman tidak diimplementasikan</translation>
     </message>
     <message>
-        <location filename="riabdock.py" line="282"/>
+        <location filename="riabdock.py" line="284"/>
         <source>&lt;span class=&quot;label notice&quot;&gt;Getting started:&lt;/span&gt; To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
         <translation>&lt;span class=&quot;label notice&quot;&gt;Memulai:&lt;/span&gt; Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik &lt;em&gt; tombol&lt;/em&gt; jalankan di bawah ini.</translation>
     </message>
@@ -555,12 +565,17 @@ ke %s: %s</translation>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="159"/>
         <source>units</source>
-        <translation>satuan</translation>
+        <translation type="obsolete">satuan</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="164"/>
         <source>datatype</source>
         <translation>jenis data</translation>
+    </message>
+    <message>
+        <location filename="riabkeywordsdialogbase.ui" line="159"/>
+        <source>unit</source>
+        <translation>satuan</translation>
     </message>
 </context>
 </TS>
