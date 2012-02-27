@@ -37,7 +37,7 @@ compile:
 	@echo "-----------------"
 	@echo "Compile GUI forms"
 	@echo "-----------------"
-	make -C gui >/dev/null
+	make -C gui
 
 docs: compile
 	@echo

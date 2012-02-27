@@ -230,7 +230,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
 
-        myCurrentKey = self.cboKeyword.currentText()
+        myCurrentKey = self.tr(self.cboKeyword.currentText())
         myCurrentValue = self.lePredefinedValue.text()
         self.addListEntry(myCurrentKey, myCurrentValue)
         self.updateControlsFromList()

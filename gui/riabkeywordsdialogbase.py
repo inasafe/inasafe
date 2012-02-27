@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'riabkeywordsdialogbase.ui'
 #
-# Created: Fri Feb 24 11:11:12 2012
+# Created: Mon Feb 27 04:08:17 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -101,7 +101,7 @@ class Ui_RiabKeywordsDialogBase(object):
         self.cboKeyword.addItem(_fromUtf8(""))
         self.cboKeyword.setItemText(0, QtGui.QApplication.translate("RiabKeywordsDialogBase", "subcategory", None, QtGui.QApplication.UnicodeUTF8))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(1, QtGui.QApplication.translate("RiabKeywordsDialogBase", "units", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(1, QtGui.QApplication.translate("RiabKeywordsDialogBase", "unit", None, QtGui.QApplication.UnicodeUTF8))
         self.cboKeyword.addItem(_fromUtf8(""))
         self.cboKeyword.setItemText(2, QtGui.QApplication.translate("RiabKeywordsDialogBase", "datatype", None, QtGui.QApplication.UnicodeUTF8))
         self.horizontalLayout.addWidget(self.cboKeyword)
