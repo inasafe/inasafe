@@ -17,9 +17,15 @@ __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from qgis.core import (QgsComposition, QgsComposerMap, QgsComposerLabel)
+from qgis.core import (QgsComposition,
+                       QgsComposerMap,
+                       QgsComposerLabel,
+                       QgsComposerPicture)
 
 from PyQt4 import QtCore, QtGui
+# Don't remove this even if it is flagged as unused by your ide
+# it is needed for qrc:/ url resolution. See Qt Resources docs.
+import resources
 
 
 class RiabMap():
@@ -58,10 +64,39 @@ class RiabMap():
         #
         # Add a label
         #
+        myFontSize = 24
+        myFontWeight = 1
+        myItalicsFlag = False
+        myFont = QtGui.QFont('verdana',
+                             myFontSize,
+                             myFontWeight,
+                             myItalicsFlag)
         myLabel = QgsComposerLabel(myComposition)
-        myLabel.setText("Risk in a Box")
+        myLabel.setFont(myFont)
+        myHeading = 'Risk in a Box'
+        myLabel.setText(myHeading)
         myLabel.adjustSizeToText()
+        myFontMetrics = QtGui.QFontMetrics(myFont)
+        myWidth = myFontMetrics.width(myHeading)
+        myLabel.setItemPosition(int((w / 2) - int(myWidth / 2)), 1, 30, 30)
+        myLabel.setFrame(False)
         myComposition.addItem(myLabel)
+        #
+        # Add a picture - riab logo on right
+        #
+        myPicture = QgsComposerPicture(myComposition)
+        myPicture.setPictureFile(':/plugins/riab/icon.png')
+        myPicture.setItemPosition(w - 30, 1, 30, 30)
+        myPicture.setFrame(False)
+        myComposition.addItem(myPicture)\
+        #
+        # Add a picture - bnpb logo on left
+        #
+        myPicture = QgsComposerPicture(myComposition)
+        myPicture.setPictureFile(':/plugins/riab/bnpb_logo.png')
+        myPicture.setItemPosition(1, 1, 30, 30)
+        myPicture.setFrame(False)
+        myComposition.addItem(myPicture)
         #
         # Print composition to pdf
         #
