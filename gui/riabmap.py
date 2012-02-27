@@ -56,6 +56,19 @@ class RiabMap():
         myComposition = QgsComposition(myRenderer)
         myComposition.setPlotStyle(QgsComposition.Print)
         #
+        # Create a printer device (we are 'printing' to a pdf
+        #
+        myPrinter = QtGui.QPrinter()
+        myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
+        myPrinter.setOutputFileName(theFilename)
+        myPrinter.setPaperSize(QtCore.QSizeF(myComposition.paperWidth(),
+                                             myComposition.paperHeight()),
+                                             QtGui.QPrinter.Millimeter)
+        myPrinter.setFullPage(True)
+        myPrinter.setColorMode(QtGui.QPrinter.Color)
+        myResolution = myComposition.printResolution()
+        myPrinter.setResolution(myResolution)
+        #
         # Add a map to the composition
         #
         x, y = 0, 0
@@ -79,7 +92,11 @@ class RiabMap():
         myLabel.adjustSizeToText()
         myFontMetrics = QtGui.QFontMetrics(myFont)
         myWidth = myFontMetrics.width(myHeading)
-        myLabel.setItemPosition(int((w / 2) - int(myWidth / 2)), 1, 30, 30)
+        myHeight = myFontMetrics.height()
+        myLabel.setItemPosition(int((w / 2) - int(myWidth / 2)),
+                                1,
+                                myWidth,
+                                myHeight)
         myLabel.setFrame(False)
         myComposition.addItem(myLabel)
         #
@@ -99,18 +116,8 @@ class RiabMap():
         myPicture.setFrame(False)
         myComposition.addItem(myPicture)
         #
-        # Print composition to pdf
+        # Render the composition to our pdf printer
         #
-        myPrinter = QtGui.QPrinter()
-        myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
-        myPrinter.setOutputFileName(theFilename)
-        myPrinter.setPaperSize(QtCore.QSizeF(myComposition.paperWidth(),
-                                             myComposition.paperHeight()),
-                                             QtGui.QPrinter.Millimeter)
-        myPrinter.setFullPage(True)
-        myPrinter.setColorMode(QtGui.QPrinter.Color)
-        myPrinter.setResolution(myComposition.printResolution())
-
         myPainter = QtGui.QPainter(myPrinter)
         myPaperRectMM = myPrinter.pageRect(QtGui.QPrinter.Millimeter)
         myPaperRectPx = myPrinter.pageRect(QtGui.QPrinter.DevicePixel)
