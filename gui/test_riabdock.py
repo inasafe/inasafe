@@ -51,7 +51,9 @@ GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 
 
 def getUiState(ui):
-    """Get state of the 3 combos on the DOCK ui
+    """Get state of the 3 combos on the DOCK ui. This method is purely for
+    testing and not to be confused with the saveState and restoreState methods
+    of riabdock.
     """
 
     myHazard = str(ui.cboHazard.currentText())
@@ -762,6 +764,23 @@ class RiabDockTest(unittest.TestCase):
             DOCK.cboExposure.currentText()
         assert myButton.isEnabled(), myMessage
 
+    def test_state(self):
+        """Check if the save/restart state methods work."""
+        clearmyDock()
+        loadStandardLayers()
+        myButton = DOCK.pbnRunStop
+        setCanvasCrs(GEOCRS, True)
+        setPadangGeoExtent()
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.saveState()
+        myState = DOCK.state
+        clearmyDock()
+        loadStandardLayers()
+        setCanvasCrs(GEOCRS, True)
+        setPadangGeoExtent()
+        DOCK.restoreState()
+        myMessage = "Got:\n%s\nExpected:\n%s" % (myState, DOCK.state)
+        assert myState == DOCK.state, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')

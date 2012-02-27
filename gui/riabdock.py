@@ -234,6 +234,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         self.calculator = ImpactCalculator()
         self.runner = None
         self.helpDialog = None
+        self.state = None
         self.getLayers()
         self.setOkButtonStatus()
 
@@ -930,3 +931,50 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         and display it in the wvResults widget."""
         self.wvResults.setHtml(self.htmlHeader() + theMessage +
                                   self.htmlFooter())
+
+    def saveState(self):
+        """Save the current state of the ui to an internal class member
+        so that it can be restored again easily.
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myStateDict = {'hazard': self.cboHazard.currentText(),
+                       'exposure': self.cboExposure.currentText(),
+                       'function': self.cboFunction.currentText(),
+                       'report':
+                         self.wvResults.page().currentFrame().toHtml()
+                    }
+        self.state = myStateDict
+
+    def restoreState(self):
+        """
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        if self.state is None:
+            return
+        for myCount in range(0, self.cboExposure.count()):
+            myItemText = self.cboExposure.itemText(myCount)
+            if myItemText == self.state['exposure']:
+                self.cboExposure.setCurrentIndex(myCount)
+                break
+        for myCount in range(0, self.cboHazard.count()):
+            myItemText = self.cboHazard.itemText(myCount)
+            if myItemText == self.state['hazard']:
+                self.cboHazard.setCurrentIndex(myCount)
+                break
+        for myCount in range(0, self.cboFunction.count()):
+            myItemText = self.cboFunction.itemText(myCount)
+            if myItemText == self.state['function']:
+                self.cboFunction.setCurrentIndex(myCount)
+                break
+        self.wvResults.setHtml(self.state['report'])
