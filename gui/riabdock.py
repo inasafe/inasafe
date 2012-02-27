@@ -979,8 +979,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                        'exposure': self.cboExposure.currentText(),
                        'function': self.cboFunction.currentText(),
                        'report':
-                         self.wvResults.page().currentFrame().toHtml()
-                    }
+                           self.wvResults.page().currentFrame().toHtml()}
         self.state = myStateDict
 
     def restoreState(self):
