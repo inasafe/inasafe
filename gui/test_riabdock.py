@@ -714,6 +714,8 @@ class RiabDockTest(unittest.TestCase):
         #              result layer and check that all buildings
         #              have values.
         #              Tim, how do we get the output filename?
+        # ANSWER
+        #DOCK.calculator.impactLayer()
 
     def test_loadLayers(self):
         """Layers can be loaded and list widget was updated appropriately
