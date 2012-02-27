@@ -51,7 +51,9 @@ GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 
 
 def getUiState(ui):
-    """Get state of the 3 combos on the DOCK ui
+    """Get state of the 3 combos on the DOCK ui. This method is purely for
+    testing and not to be confused with the saveState and restoreState methods
+    of riabdock.
     """
 
     myHazard = str(ui.cboHazard.currentText())
@@ -66,7 +68,7 @@ def getUiState(ui):
             'Run Button Enabled': myRunButton}
 
 
-def clearmyDock():
+def clearDock():
     """Helper function to  set all DOCK elements to default state"""
     DOCK.cboHazard.clear()
     DOCK.cboExposure.clear()
@@ -114,32 +116,12 @@ def loadLayers(theLayerList, theClearFlag=True):
 
     # Now create our new layers
     for myFile in theLayerList:
-        # Extract basename and absolute path
-        myBaseName, myExt = os.path.splitext(myFile)
-        myPath = os.path.join(TESTDATA, myFile)
-        myKeywordPath = myPath[:-4] + '.keywords'
 
-        # Determine if layer is hazard or exposure
-        myKeywords = read_keywords(myKeywordPath)
-        msg = 'Could not read %s' % myKeywordPath
-        assert myKeywords is not None, msg
-        if myKeywords['category'] == 'hazard':
+        myLayer, myType = loadLayer(myFile)
+        if myType == 'hazard':
             myHazardLayerCount += 1
-        elif myKeywords['category'] == 'exposure':
+        elif myType == 'exposure':
             myExposureLayerCount += 1
-
-        # Create QGis Layer Instance
-        if myExt in ['.asc', '.tif']:
-            myLayer = QgsRasterLayer(myPath, myBaseName)
-        elif myExt in ['.shp']:
-            myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
-        else:
-            myMessage = 'File %s had illegal extension' % myPath
-            raise Exception(myMessage)
-
-        myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
-        assert myLayer.isValid(), myMessage
-
         # Add layer to the registry (that QGis knows about)
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
@@ -155,6 +137,34 @@ def loadLayers(theLayerList, theClearFlag=True):
 
     # Add MCL's to the CANVAS
     return myHazardLayerCount, myExposureLayerCount
+
+
+def loadLayer(theLayerFile):
+    """Helper to load and return a single QGIS layer"""
+    # Extract basename and absolute path
+    myBaseName, myExt = os.path.splitext(theLayerFile)
+    myPath = os.path.join(TESTDATA, theLayerFile)
+    myKeywordPath = myPath[:-4] + '.keywords'
+    # Determine if layer is hazard or exposure
+    myKeywords = read_keywords(myKeywordPath)
+    myType = 'undefined'
+    if 'category' in myKeywords:
+        myType = myKeywords['category']
+    msg = 'Could not read %s' % myKeywordPath
+    assert myKeywords is not None, msg
+
+    # Create QGis Layer Instance
+    if myExt in ['.asc', '.tif']:
+        myLayer = QgsRasterLayer(myPath, myBaseName)
+    elif myExt in ['.shp']:
+        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+    else:
+        myMessage = 'File %s had illegal extension' % myPath
+        raise Exception(myMessage)
+
+    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
+    assert myLayer.isValid(), myMessage
+    return myLayer, myType
 
 
 def setCanvasCrs(theEpsgId, theOtfpFlag=False):
@@ -220,7 +230,7 @@ class RiabDockTest(unittest.TestCase):
 
     def test_defaults(self):
         """Test the GUI in its default state"""
-        clearmyDock()
+        clearDock()
         self.assertEqual(DOCK.cboHazard.currentIndex(), -1)
         self.assertEqual(DOCK.cboExposure.currentIndex(), -1)
         self.assertEqual(DOCK.cboFunction.currentIndex(), -1)
@@ -229,7 +239,7 @@ class RiabDockTest(unittest.TestCase):
         """Validate function work as expected"""
 
         # First check that we DONT validate a clear DOCK
-        clearmyDock()
+        clearDock()
         myFlag, myMessage = DOCK.validate()
         assert myMessage is not None, 'No reason for failure given'
 
@@ -247,7 +257,7 @@ class RiabDockTest(unittest.TestCase):
         """OK button changes properly according to DOCK validity"""
 
         # First check that we ok ISNT enabled on a clear DOCK
-        clearmyDock()
+        clearDock()
         myFlag, myMessage = DOCK.validate()
 
         assert myMessage is not None, 'No reason for failure given'
@@ -265,7 +275,7 @@ class RiabDockTest(unittest.TestCase):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
 
         # Push OK with the left mouse button
-        clearmyDock()
+        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
@@ -301,7 +311,7 @@ class RiabDockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly - small extent"""
 
         # Push OK with the left mouse button
-        clearmyDock()
+        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
@@ -342,7 +352,7 @@ class RiabDockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly"""
 
         # Push OK with the left mouse button
-        clearmyDock()
+        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
@@ -383,7 +393,7 @@ class RiabDockTest(unittest.TestCase):
         """Raster and vector based function runs as expected."""
 
         # Push OK with the left mouse button
-        clearmyDock()
+        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -431,7 +441,7 @@ class RiabDockTest(unittest.TestCase):
            Raster on raster based function runs as expected."""
 
         # Push OK with the left mouse button
-        clearmyDock()
+        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -500,7 +510,7 @@ class RiabDockTest(unittest.TestCase):
            Raster on raster based function runs as expected with scaling."""
 
         # Push OK with the left mouse button
-        clearmyDock()
+        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -549,7 +559,7 @@ class RiabDockTest(unittest.TestCase):
         opacity. """
 
         # Push OK with the left mouse button
-        clearmyDock()
+        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -605,7 +615,7 @@ class RiabDockTest(unittest.TestCase):
         proj to viewport.
         See https://github.com/AIFDR/risk_in_a_box/issues/47"""
 
-        clearmyDock()
+        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -651,7 +661,7 @@ class RiabDockTest(unittest.TestCase):
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
-        clearmyDock()
+        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
@@ -711,7 +721,7 @@ class RiabDockTest(unittest.TestCase):
         """Layers can be loaded and list widget was updated appropriately
         """
 
-        clearmyDock()
+        clearDock()
         myHazardLayerCount, myExposureLayerCount = loadStandardLayers()
         myMessage = 'Expect %s layer(s) in hazard list widget but got %s' \
                      % (myHazardLayerCount, DOCK.cboHazard.count())
@@ -727,7 +737,7 @@ class RiabDockTest(unittest.TestCase):
         """Test issue #71 in githib - cbo changes should update ok button."""
         # See https://github.com/AIFDR/risk_in_a_box/issues/71
         # Push OK with the left mouse button
-        clearmyDock()
+        clearDock()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
         myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
@@ -750,6 +760,8 @@ class RiabDockTest(unittest.TestCase):
         myClearFlag = False
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         myDict = getUiState(DOCK)
         myMessage = ('Run button was not disabled when exposure set to \n%s'
                      '\nUI State: \n%s') % (DOCK.cboExposure.currentText(),
@@ -764,6 +776,53 @@ class RiabDockTest(unittest.TestCase):
             DOCK.cboExposure.currentText()
         assert myButton.isEnabled(), myMessage
 
+    def test_state(self):
+        """Check if the save/restart state methods work. See also
+        https://github.com/AIFDR/risk_in_a_box/issues/58
+        """
+        clearDock()
+        loadStandardLayers()
+        myButton = DOCK.pbnRunStop
+        setCanvasCrs(GEOCRS, True)
+        setPadangGeoExtent()
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        DOCK.saveState()
+        myExpectedDict = getUiState(DOCK)
+        #myState = DOCK.state
+        # Now reset and restore and check that it gets the old state
+        # Html is not considered in restore test since the ready
+        # message overwrites it in dock implementation
+        clearDock()
+        loadStandardLayers()
+        setCanvasCrs(GEOCRS, True)
+        setPadangGeoExtent()
+        DOCK.restoreState()
+        myResultDict = getUiState(DOCK)
+        myMessage = "Got:\n%s\nExpected:\n%s" % (
+                                myExpectedDict,
+                                myResultDict)
+        assert myExpectedDict == myResultDict, myMessage
+
+    def test_layerChanged(self):
+        """Test the metadata is updated as the user highlights different
+        QGIS layers. For riab outputs, the table of results should be shown
+        See also
+        https://github.com/AIFDR/risk_in_a_box/issues/58
+        """
+        clearDock()
+        myLayer, myType = loadLayer('issue58.tif')
+        myMessage = ('Unexpected category for issue58.tif.\nGot:'
+                     ' %s\nExpected: undefined' % myType)
+
+        assert myType == 'undefined', myMessage
+        DOCK.layerChanged(myLayer)
+        DOCK.saveState()
+        myHtml = DOCK.state['report']
+        myExpectedString = '4229'
+        myMessage = "%s\nDoes not contain:\n%s" % (
+                                myHtml,
+                                myExpectedString)
+        assert myExpectedString in myHtml, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')

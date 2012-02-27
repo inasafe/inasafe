@@ -233,6 +233,9 @@ class Riab:
         self.iface.removePluginMenu(self.tr('Risk in a Box'),
                                     self.actionKeywordsDialog)
         self.iface.removeToolBarIcon(self.actionKeywordsDialog)
+        self.iface.removePluginMenu(self.tr('Risk in a Box'),
+                                    self.actionResetDock)
+        self.iface.removeToolBarIcon(self.actionResetDock)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
@@ -321,3 +324,4 @@ class Riab:
             self.actionKeywordsDialog.setEnabled(False)
         else:
             self.actionKeywordsDialog.setEnabled(True)
+        self.dockWidget.layerChanged(theLayer)

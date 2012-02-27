@@ -40,7 +40,8 @@ from qgis.core import (QGis,
 from impactcalculator import ImpactCalculator
 from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent, getBufferedExtent
-
+from riabexceptions import (KeywordNotFoundException,
+                            InvalidParameterException)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -234,6 +235,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         self.calculator = ImpactCalculator()
         self.runner = None
         self.helpDialog = None
+        self.state = None
         self.getLayers()
         self.setOkButtonStatus()
 
@@ -386,6 +388,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Raises:
            no
         """
+        self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
         for i in range(len(self.iface.mapCanvas().layers())):
@@ -423,6 +426,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
+        self.restoreState()
         self.setOkButtonStatus()
         return
 
@@ -607,7 +611,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         else:
             # On success, display generated report
             self.displayHtml(myReport)
-
+        self.saveState()
         # Hide hour glass
         self.hideBusy()
 
@@ -665,7 +669,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         #settrace()
         # Finally, add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
-
+        self.restoreState()
         # Return text to display in report pane
         return myReport
 
@@ -930,3 +934,79 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         and display it in the wvResults widget."""
         self.wvResults.setHtml(self.htmlHeader() + theMessage +
                                   self.htmlFooter())
+
+    def layerChanged(self, theLayer):
+        """Handler for when the QGIS active layer is changed.
+        If the active layer is changed and it has keywords and a report,
+        show the report..
+
+        .. see also:: :func:`Riab.layerChanged`.
+
+        Args:
+           theLayer - the QgsMapLayer instance that is now active..
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        myReport = None
+        if theLayer is not None:
+            try:
+                myReport = self.calculator.getKeywordFromFile(
+                        str(theLayer.source()),
+                        'caption')
+            except KeywordNotFoundException, e:
+                self.setOkButtonStatus()
+            except InvalidParameterException, e:
+                self.setOkButtonStatus()
+            except Exception, e:
+                myReport = getExceptionWithStacktrace(e, html=True)
+            if myReport is not None:
+                self.displayHtml(myReport)
+
+    def saveState(self):
+        """Save the current state of the ui to an internal class member
+        so that it can be restored again easily.
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myStateDict = {'hazard': self.cboHazard.currentText(),
+                       'exposure': self.cboExposure.currentText(),
+                       'function': self.cboFunction.currentText(),
+                       'report':
+                         self.wvResults.page().currentFrame().toHtml()
+                    }
+        self.state = myStateDict
+
+    def restoreState(self):
+        """Restore the state of the dock to the last known state.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        if self.state is None:
+            return
+        for myCount in range(0, self.cboExposure.count()):
+            myItemText = self.cboExposure.itemText(myCount)
+            if myItemText == self.state['exposure']:
+                self.cboExposure.setCurrentIndex(myCount)
+                break
+        for myCount in range(0, self.cboHazard.count()):
+            myItemText = self.cboHazard.itemText(myCount)
+            if myItemText == self.state['hazard']:
+                self.cboHazard.setCurrentIndex(myCount)
+                break
+        for myCount in range(0, self.cboFunction.count()):
+            myItemText = self.cboFunction.itemText(myCount)
+            if myItemText == self.state['function']:
+                self.cboFunction.setCurrentIndex(myCount)
+                break
+        self.wvResults.setHtml(self.state['report'])
