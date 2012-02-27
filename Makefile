@@ -23,21 +23,42 @@ NONGUI := storage engine impact_functions
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
 
+# POFILES = list of files to be harvested for translation strings
+POFILES = storage/test_io.py \
+					impact_functions/flood/flood_building_impact.py
+
+# LOCALES = space delimited list of iso codes to generate po files for
+LOCALES = id
+
 default: compile
 
 compile:
-	make -C gui
+	@echo
+	@echo "-----------------"
+	@echo "Compile GUI forms"
+	@echo "-----------------"
+	make -C gui >/dev/null
 
 docs: compile
-	cd docs; make html; cd ..
+	@echo
+	@echo "-------------------------------"
+	@echo "Compile documentation into html"
+	@echo "-------------------------------"
+	cd docs; make html >/dev/null; cd ..
 
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
-	cd gui; pylupdate4 riab.pro; cd ..
+	# Qt translation stuff first.
+	cd gui; pylupdate4 riab.pro; cd .
+	# Gettext translation stuff next.
+	# todo script this so we can loop through the locale list
+	# and apply same xgettext for each supported locale. TS
+	$(foreach LOCALE,$(LOCALES),xgettext -j -d id -o i18n/$(LOCALE)/LC_MESSAGES/riab.po $(POFILES);)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in gui
 compile-translation-strings: compile
 	cd gui; lrelease riab.pro; cd ..
+	msgfmt -o i18n/id/LC_MESSAGES/riab.mo i18n/id/LC_MESSAGES/riab.po
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
@@ -50,7 +71,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
-test: test_suite pep8 disabled_tests dependency_test unwanted_strings
+test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
@@ -61,7 +82,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203 --exclude ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py . || true
+	@pep8 --repeat --ignore=E203 --exclude riabkeywordsdialogbase.py,ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py . || true
 
 # Run entire test suite
 test_suite: compile testdata
@@ -77,7 +98,7 @@ test_suite: compile testdata
 	@# newline in.
 
 	@# Report expected failures if any!
-	@echo Expecting 1 test to fail in support of issue #3
+	@#echo Expecting 1 test to fail in support of issue #3
 
 # Run gui test suite only
 gui_test_suite: compile testdata

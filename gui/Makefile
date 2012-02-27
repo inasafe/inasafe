@@ -25,7 +25,9 @@ PY_FILES = riab.py riabdock.py riabhelp.py __init__.py
 
 EXTRAS = icon.png
 
-UI_FILES = ui_riabdock.py ui_riabhelp.py
+UI_FILES = ui_riabdock.py \
+					 ui_riabhelp.py \
+					 riabkeywordsdialogbase.py
 
 RESOURCE_FILES = resources.py
 
@@ -38,6 +40,9 @@ compile: $(UI_FILES) $(RESOURCE_FILES)
 	@#this is ugly but the resource referenced by the ui
 	@#looks for a file generated with a different name
 	cp resources.py resources_rc.py
+
+clean: compile
+	rm $(UI_FILES)
 
 %.py : %.ui
 	pyuic4 -o $@ $<

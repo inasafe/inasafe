@@ -20,14 +20,16 @@ You can find out more about the Risk in a Box project by visiting
 
 
 Contents
-=========
+========
 
 .. toctree::
    :maxdepth: 2
 
-   README
-   development
-   faq
+   user-docs/index
+   developer-docs/index
+   api-docs/index
+   authors
+
 
 Indices and tables
 ==================

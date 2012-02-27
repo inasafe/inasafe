@@ -1,0 +1,97 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-27 03:05+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: storage/test_io.py:1648
+msgid "Hello!"
+msgstr "Hi"
+
+#: storage/test_io.py:1649
+msgid "Hello2!"
+msgstr "Hi2"
+
+#: impact_functions/flood/flood_building_impact.py:75
+#: impact_functions/flood/flood_building_impact.py:76
+#: impact_functions/flood/flood_building_impact.py:77
+#: impact_functions/flood/flood_building_impact.py:78
+#, python-format
+msgid ""
+"<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of &#58;"
+"</b><br><br><p>"
+msgstr ""
+"<b>Apabila terjadi\"%s\" Perkiraan dampak\"%s\" Kemungkinan terjadi &#58;</"
+"b><br><br><p>"
+
+#: impact_functions/flood/flood_building_impact.py:86
+#: impact_functions/flood/flood_building_impact.py:87
+msgid "Building"
+msgstr "Bangunan"
+
+#: impact_functions/flood/flood_building_impact.py:86
+#: impact_functions/flood/flood_building_impact.py:87
+msgid "Number of"
+msgstr "Jumlah"
+
+#: impact_functions/flood/flood_building_impact.py:87
+#: impact_functions/flood/flood_building_impact.py:88
+msgid "All"
+msgstr "Semua"
+
+#: impact_functions/flood/flood_building_impact.py:90
+#: impact_functions/flood/flood_building_impact.py:101
+#: impact_functions/flood/flood_building_impact.py:91
+#: impact_functions/flood/flood_building_impact.py:102
+#: impact_functions/flood/flood_building_impact.py:88
+#: impact_functions/flood/flood_building_impact.py:99
+#: impact_functions/flood/flood_building_impact.py:89
+#: impact_functions/flood/flood_building_impact.py:100
+msgid "Closed"
+msgstr "Ditutup"
+
+#: impact_functions/flood/flood_building_impact.py:91
+#: impact_functions/flood/flood_building_impact.py:99
+#: impact_functions/flood/flood_building_impact.py:92
+#: impact_functions/flood/flood_building_impact.py:100
+#: impact_functions/flood/flood_building_impact.py:89
+#: impact_functions/flood/flood_building_impact.py:97
+#: impact_functions/flood/flood_building_impact.py:90
+#: impact_functions/flood/flood_building_impact.py:98
+msgid "Opened"
+msgstr "Dibuka"
+
+#: impact_functions/flood/flood_building_impact.py:94
+#: impact_functions/flood/flood_building_impact.py:95
+#: impact_functions/flood/flood_building_impact.py:92
+#: impact_functions/flood/flood_building_impact.py:93
+msgid "Assumption"
+msgstr "Anggapan"
+
+#: impact_functions/flood/flood_building_impact.py:95
+#: impact_functions/flood/flood_building_impact.py:96
+#: impact_functions/flood/flood_building_impact.py:93
+#: impact_functions/flood/flood_building_impact.py:94
+#, python-format
+msgid "Buildings that will need to closed when floodingmore than %.1f m"
+msgstr "Bangunan yang perlu ditutup ketika banjir lebih dari % 1 f m"
+
+#: impact_functions/flood/flood_building_impact.py:110
+#: impact_functions/flood/flood_building_impact.py:111
+#: impact_functions/flood/flood_building_impact.py:108
+#: impact_functions/flood/flood_building_impact.py:109
+msgid "Estimated buildings affected"
+msgstr "Bangunan yang diperkirakan terdampak"

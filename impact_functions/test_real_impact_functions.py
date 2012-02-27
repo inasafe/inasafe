@@ -29,7 +29,7 @@ class Test_real_plugins(unittest.TestCase):
         # when impact functions change.
         assert 'Earthquake Guidelines Function' in P
         assert 'Padang Earthquake Building Damage Function' in P
-        assert 'Ditutup Sementara' in P
+        assert 'Temporarily Closed' in P
         assert 'Earthquake Population Exposure Function' in P
         assert 'Tsunami Population Impact Function' in P
         assert 'Perlu Evakuasi' in P
@@ -65,8 +65,8 @@ class Test_real_plugins(unittest.TestCase):
 
         # This one should get 3 flood population impact functions
         D1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}
-        D2 = {'category': 'exposure', 'datatype': 'population',
-              'subcategory': 'population'}
+        D2 = {'category': 'exposure', 'subcategory': 'population',
+              'datatype': 'density'}
 
         # Add layertype
         D1['layertype'] = 'raster'
@@ -84,14 +84,14 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Terdampak' in P
         assert 'Perlu Evakuasi' in P
         assert 'Meninggal' in P
-        assert 'Ditutup Sementara' in P
+        assert 'Temporarily Closed' in P
         assert 'Flood Road Impact Function' in P
         assert 'Dalam bahaya' in P
 
         # Try to get general tsunami building impact function (e.g. BB data)
         f_name = 'Tsunami Building Impact Function'
 
-        D1 = {'category': 'hazard', 'subcategory': 'tsunami', 'unit': 'm'}
+        D1 = {'category': 'hazard', 'subcategory': 'tsunami'}
         D2 = {'category': 'exposure', 'subcategory': 'building'}
 
         # Add layertype

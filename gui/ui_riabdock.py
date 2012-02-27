@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riabdock.ui'
 #
-# Created: Mon Feb 20 07:03:43 2012
+# Created: Sun Feb 26 08:48:39 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -28,7 +28,7 @@ class Ui_RiabDock(object):
         self.grpQuestion.setTitle(QtGui.QApplication.translate("RiabDock", "Questions", None, QtGui.QApplication.UnicodeUTF8))
         self.grpQuestion.setObjectName(_fromUtf8("grpQuestion"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpQuestion)
-        self.gridLayout_3.setMargin(0)
+        self.gridLayout_3.setContentsMargins(0, 6, 0, 0)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
         self.label_6 = QtGui.QLabel(self.grpQuestion)
         self.label_6.setText(QtGui.QApplication.translate("RiabDock", "In the event of", None, QtGui.QApplication.UnicodeUTF8))

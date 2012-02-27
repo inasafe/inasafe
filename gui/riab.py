@@ -32,6 +32,7 @@ from PyQt4.QtGui import QAction, QIcon, QApplication
 
 # Import RIAB modules
 from riabdock import RiabDock
+from riabkeywordsdialog import RiabKeywordsDialog
 from riabexceptions import TranslationLoadException
 #see if we can import pydev - see development docs for details
 try:
@@ -71,9 +72,9 @@ class Riab:
         self.iface = iface
         self.translator = None
         self.setupI18n()
-        #print QCoreApplication.translate('Riab', 'Translations loaded')
+        #print self.tr('Risk in a Box')
 
-    def setupI18n(self):
+    def setupI18n(self, thePreferredLocale=None):
         """Setup internationalisation for the plugin.
 
         See if QGIS wants to override the system locale
@@ -81,24 +82,27 @@ class Riab:
         for whatever locale is effectively being used.
 
         Args:
-           None.
+           thePreferredLocale - optional parameter which if set
+           will override any other way of determining locale..
         Returns:
            None.
         Raises:
            no exceptions explicitly raised.
         """
-        #settrace()
         myOverrideFlag = QSettings().value('locale/overrideFlag',
                                             QVariant(False)).toBool()
         myLocaleName = None
-        if not myOverrideFlag:
-            myLocaleName = QLocale.system().name()
-        else:
+        if thePreferredLocale is not None:
+            myLocaleName = thePreferredLocale
+        elif myOverrideFlag:
             myLocaleName = QSettings().value('locale/userLocale',
-                                            QVariant('')).toString()
+                                             QVariant('')).toString()
+        else:
+            myLocaleName = QLocale.system().name()
         # Also set the system locale to the user overridden local
         # so that the riab library functions gettext will work
-        #os.environ['LANG'] = myLocaleName
+        # .. see:: :py:func:`storage.utilities`
+        os.environ['LANG'] = str(myLocaleName)
 
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'gui', 'i18n',
@@ -110,7 +114,18 @@ class Riab:
                 myMessage = 'Failed to load translation for %s' % myLocaleName
                 raise TranslationLoadException(myMessage)
             QCoreApplication.installTranslator(self.translator)
-        #print QCoreApplication.translate('Riab', 'Translations loaded')
+
+    def tr(self, theString):
+        """We implement this ourself since we do not inherit QObject.
+
+        Args:
+           theString - string for translation.
+        Returns:
+           Translated version of theString.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        return QCoreApplication.translate('Riab', theString)
 
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
@@ -128,33 +143,59 @@ class Riab:
            no exceptions explicitly raised.
         """
         self.dockWidget = None
-
+        #--------------------------------------
         # Create action for plugin dockable window (show/hide)
+        #--------------------------------------
         self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
-                                QCoreApplication.translate('Riab',
-                                'Risk in a Box'), self.iface.mainWindow())
-        self.actionDock.setStatusTip(QCoreApplication.translate(
-                                'Riab', 'Show/hide Risk in a Box dock widget'))
-        self.actionDock.setWhatsThis(QCoreApplication.translate(
-                                'Riab', 'Show/hide Risk in a Box dock widget'))
+                         self.tr('Toggle RIAB Dock'), self.iface.mainWindow())
+        self.actionDock.setStatusTip(self.tr(
+                                    'Show/hide Risk in a Box dock widget'))
+        self.actionDock.setWhatsThis(self.tr(
+                                    'Show/hide Risk in a Box dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
         QObject.connect(self.actionDock, SIGNAL('triggered()'),
                         self.showHideDockWidget)
-
+        # add to plugin toolbar
         self.iface.addToolBarIcon(self.actionDock)
-        self.iface.addPluginToMenu(QCoreApplication.translate(
-                                    'Riab', 'Risk in a Box'), self.actionDock)
+        # add to plugin menu
+        self.iface.addPluginToMenu(self.tr('Risk in a Box'),
+                                   self.actionDock)
 
+        #--------------------------------------
+        # Create action for keywords editor
+        #--------------------------------------
+        self.actionKeywordsDialog = QAction(
+                            QIcon(':/plugins/riab/keywords.png'),
+                            self.tr('Keyword Editor'), self.iface.mainWindow())
+        self.actionKeywordsDialog.setStatusTip(self.tr(
+                                    'Open the keywords editor'))
+        self.actionKeywordsDialog.setWhatsThis(self.tr(
+                                    'Open the keywords editor'))
+        QObject.connect(self.actionKeywordsDialog, SIGNAL('triggered()'),
+                        self.showKeywordsEditor)
+
+        self.iface.addToolBarIcon(self.actionKeywordsDialog)
+        self.iface.addPluginToMenu(self.tr('Risk in a Box'),
+                                   self.actionKeywordsDialog)
+
+        #--------------------------------------
         # create dockwidget and tabify it with the legend
+        #--------------------------------------
         self.dockWidget = RiabDock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
-        myLegendTab = self.iface.mainWindow().findChild(QApplication,
-                                                        'Legend')
+        myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
         if myLegendTab:
-            self.iface.mainWindow().tabifyDockWidget(myLegendTab,
-                                                     self.dockWidget)
+            self.iface.mainWindow().tabifyDockWidget(
+                                            myLegendTab, self.dockWidget)
             self.dockWidget.raise_()
+
+        #
+        # Hook up a slot for when the current layer is changed
+        #
+        QObject.connect(self.iface,
+            SIGNAL("currentLayerChanged(QgsMapLayer*)"),
+            self.layerChanged)
 
     def unload(self):
         """Gui breakdown procedure (for QGIS plugin api).
@@ -170,16 +211,22 @@ class Riab:
            no exceptions explicitly raised.
         """
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(QCoreApplication.translate(
-                                    'Riab', '&Risk in a Box'), self.actionDock)
+        self.iface.removePluginMenu(self.tr('Risk in a Box'),
+                                    self.actionDock)
         self.iface.removeToolBarIcon(self.actionDock)
+        self.iface.removePluginMenu(self.tr('Risk in a Box'),
+                                    self.actionKeywordsDialog)
+        self.iface.removeToolBarIcon(self.actionKeywordsDialog)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
+        QObject.disconnect(self.iface,
+            SIGNAL("currentLayerChanged(QgsMapLayer*)"),
+            self.layerChanged)
 
     # Run method that performs all the real work
     def showHideDockWidget(self):
-        """Gui run procedure.
+        """Show or hide the dock widget.
 
         This slot is called when the user clicks the toolbar icon or
         menu item associated with this plugin. It will hide or show
@@ -199,3 +246,45 @@ class Riab:
         else:
             self.dockWidget.setVisible(True)
             self.dockWidget.raise_()
+
+    def showKeywordsEditor(self):
+        """Show the keywords editor.
+
+        This slot is called when the user clicks the keyword editor toolbar
+        icon or menu item associated with this plugin
+
+        .. see also:: :func:`Riab.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        if self.iface.activeLayer() is None:
+            return
+        myDialog = RiabKeywordsDialog(self.iface.mainWindow(),
+                                      self.iface,
+                                      self.dockWidget)
+        myDialog.show()
+
+    def layerChanged(self, theLayer):
+        """Enable or disable the keywords editor icon.
+
+        This slot is called when the user clicks the keyword editor toolbar
+        icon or menu item associated with this plugin
+
+        .. see also:: :func:`Riab.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        if theLayer is None:
+            self.actionKeywordsDialog.setEnabled(False)
+        else:
+            self.actionKeywordsDialog.setEnabled(True)

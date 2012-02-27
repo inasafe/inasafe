@@ -21,42 +21,37 @@ import unittest
 import sys
 import os
 
-# Add parent directory to path to make test aware of other modules
+# Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle,
                        QgsCoordinateReferenceSystem)
-from qgis.gui import QgsMapCanvas, QgsMapCanvasLayer
-from qgisinterface import QgisInterface
+from qgis.gui import QgsMapCanvasLayer
 from utilities_test import getQgisTestApp
-from gui.riabdock import RiabDock
+from gui.riabdock import (RiabDock, setRasterStyle)
 from storage.utilities import read_keywords
 from storage.utilities_test import TESTDATA
+try:
+    from pydevd import *
+    print 'Remote debugging is enabled.'
+    DEBUG = True
+except Exception, e:
+    print 'Debugging was disabled'
 
-# Get QGis app handle
-QGISAPP = getQgisTestApp()
-
-# Set form to test against
-parent = QtGui.QWidget()
-canvas = QgsMapCanvas(parent)
-canvas.resize(QtCore.QSize(400, 400))
-
-# QgisInterface is a stub implementation of the QGIS plugin interface
-iface = QgisInterface(canvas)
-myGuiContextFlag = False
-form = RiabDock(iface, myGuiContextFlag)
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+DOCK = RiabDock(IFACE)
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 
 
 def getUiState(ui):
-    """Get state of the 3 combos on the form ui
+    """Get state of the 3 combos on the DOCK ui
     """
 
     myHazard = str(ui.cboHazard.currentText())
@@ -71,18 +66,18 @@ def getUiState(ui):
             'Run Button Enabled': myRunButton}
 
 
-def clearForm():
-    """Helper function to  set all form elements to default state"""
-    form.cboHazard.clear()
-    form.cboExposure.clear()
+def clearmyDock():
+    """Helper function to  set all DOCK elements to default state"""
+    DOCK.cboHazard.clear()
+    DOCK.cboExposure.clear()
 
 
-def populateForm():
-    """A helper function to populate the form and set it to a valid state.
+def populatemyDock():
+    """A helper function to populate the DOCK and set it to a valid state.
     """
     loadStandardLayers()
-    form.cboHazard.setCurrentIndex(0)
-    form.cboExposure.setCurrentIndex(0)
+    DOCK.cboHazard.setCurrentIndex(0)
+    DOCK.cboExposure.setCurrentIndex(0)
     #QTest.mouseClick(myHazardItem, Qt.LeftButton)
     #QTest.mouseClick(myExposureItem, Qt.LeftButton)
 
@@ -151,73 +146,73 @@ def loadLayers(theLayerList, theClearFlag=True):
         # Create Map Canvas Layer Instance and add to list
         myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
 
-    # Quickly add any existing canvas layers to our list first
-    for myLayer in canvas.layers():
+    # Quickly add any existing CANVAS layers to our list first
+    for myLayer in CANVAS.layers():
         myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-    # now load all these layers in the canvas
-    canvas.setLayerSet(myCanvasLayers)
-    form.getLayers()
+    # now load all these layers in the CANVAS
+    CANVAS.setLayerSet(myCanvasLayers)
+    DOCK.getLayers()
 
-    # Add MCL's to the canvas
+    # Add MCL's to the CANVAS
     return myHazardLayerCount, myExposureLayerCount
 
 
 def setCanvasCrs(theEpsgId, theOtfpFlag=False):
-    """Helper to set the crs for the canvas before a test is run.
+    """Helper to set the crs for the CANVAS before a test is run.
 
     Args:
 
         * theEpsgId  - Valid EPSG identifier (int)
         * theOtfpFlag - whether on the fly projections should be enabled
-                        on the canvas. Default to False.
+                        on the CANVAS. Default to False.
     """
         # Enable on-the-fly reprojection
-    canvas.mapRenderer().setProjectionsEnabled(theOtfpFlag)
+    CANVAS.mapRenderer().setProjectionsEnabled(theOtfpFlag)
 
     # Create CRS Instance
     myCrs = QgsCoordinateReferenceSystem()
     myCrs.createFromId(theEpsgId, QgsCoordinateReferenceSystem.EpsgCrsId)
 
     # Reproject all layers to WGS84 geographic CRS
-    canvas.mapRenderer().setDestinationCrs(myCrs)
+    CANVAS.mapRenderer().setDestinationCrs(myCrs)
 
 
 def setPadangGeoExtent():
     """Zoom to an area known to be occupied by both both Padang layers"""
     myRect = QgsRectangle(100.21, -1.05, 100.63, -0.84)
-    canvas.setExtent(myRect)
+    CANVAS.setExtent(myRect)
 
 
 def setJakartaGeoExtent():
     """Zoom to an area know to be occupied by both Jakarta layers in Geo"""
     myRect = QgsRectangle(106.52, -6.38, 107.14, -6.07)
-    canvas.setExtent(myRect)
+    CANVAS.setExtent(myRect)
 
 
 def setJakartaGoogleExtent():
     """Zoom to an area know to be occupied by both Jakarta layers in 900913 crs
     """
     myRect = QgsRectangle(11873524, -695798, 11913804, -675295)
-    canvas.setExtent(myRect)
+    CANVAS.setExtent(myRect)
 
 
 def setBatemansBayGeoExtent():
     """Zoom to an area know to be occupied by both Batemans Bay
      layers in geo crs"""
     myRect = QgsRectangle(150.162, -35.741, 150.207, -35.719)
-    canvas.setExtent(myRect)
+    CANVAS.setExtent(myRect)
 
 
 def setYogyaGeoExtent():
     """Zoom to an area know to be occupied by both Jakarta layers in Geo"""
     myRect = QgsRectangle(110.348, -7.732, 110.368, -7.716)
-    canvas.setExtent(myRect)
+    CANVAS.setExtent(myRect)
 
 
 def setGeoExtent(theBoundingBox):
     """Zoom to an area specified given bounding box (list)"""
     myRect = QgsRectangle(*theBoundingBox)
-    canvas.setExtent(myRect)
+    CANVAS.setExtent(myRect)
 
 
 class RiabDockTest(unittest.TestCase):
@@ -225,60 +220,60 @@ class RiabDockTest(unittest.TestCase):
 
     def test_defaults(self):
         """Test the GUI in its default state"""
-        clearForm()
-        self.assertEqual(form.cboHazard.currentIndex(), -1)
-        self.assertEqual(form.cboExposure.currentIndex(), -1)
-        self.assertEqual(form.cboFunction.currentIndex(), -1)
+        clearmyDock()
+        self.assertEqual(DOCK.cboHazard.currentIndex(), -1)
+        self.assertEqual(DOCK.cboExposure.currentIndex(), -1)
+        self.assertEqual(DOCK.cboFunction.currentIndex(), -1)
 
     def test_validate(self):
         """Validate function work as expected"""
 
-        # First check that we DONT validate a clear form
-        clearForm()
-        myFlag, myMessage = form.validate()
+        # First check that we DONT validate a clear DOCK
+        clearmyDock()
+        myFlag, myMessage = DOCK.validate()
         assert myMessage is not None, 'No reason for failure given'
 
-        myMessage = 'Validation expected to fail on a cleared form.'
+        myMessage = 'Validation expected to fail on a cleared DOCK.'
         self.assertEquals(myFlag, False, myMessage)
 
-        # Now check we DO validate a populated form
-        populateForm()
-        myFlag = form.validate()
+        # Now check we DO validate a populated DOCK
+        populatemyDock()
+        myFlag = DOCK.validate()
         myMessage = ('Validation expected to pass on '
                      'a populated for with selections.')
         assert myFlag, myMessage
 
     def test_setOkButtonStatus(self):
-        """OK button changes properly according to form validity"""
+        """OK button changes properly according to DOCK validity"""
 
-        # First check that we ok ISNT enabled on a clear form
-        clearForm()
-        myFlag, myMessage = form.validate()
+        # First check that we ok ISNT enabled on a clear DOCK
+        clearmyDock()
+        myFlag, myMessage = DOCK.validate()
 
         assert myMessage is not None, 'No reason for failure given'
-        myMessage = 'Validation expected to fail on a cleared form.'
+        myMessage = 'Validation expected to fail on a cleared DOCK.'
         self.assertEquals(myFlag, False, myMessage)
 
-        # Now check OK IS enabled on a populated form
-        populateForm()
-        myFlag = form.validate()
+        # Now check OK IS enabled on a populated DOCK
+        populatemyDock()
+        myFlag = DOCK.validate()
         myMessage = ('Validation expected to pass on a ' +
-                     'populated form with selections.')
+                     'populated DOCK with selections.')
         assert myFlag, myMessage
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
 
         # Push OK with the left mouse button
-        clearForm()
+        clearmyDock()
         loadStandardLayers()
-        myButton = form.pbnRunStop
+        myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        myDict = getUiState(form)
+        myDict = getUiState(DOCK)
         expectDict = {'Hazard': 'Shakemap_Padang_2009',
                         'Exposure': 'Padang_WGS84',
                         'Impact Function': 'Earthquake Guidelines Function',
@@ -287,7 +282,7 @@ class RiabDockTest(unittest.TestCase):
         assert myDict == expectDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
         # Expected output:
         #Buildings    Total
         #All:    3160
@@ -306,9 +301,9 @@ class RiabDockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly - small extent"""
 
         # Push OK with the left mouse button
-        clearForm()
+        clearmyDock()
         loadStandardLayers()
-        myButton = form.pbnRunStop
+        myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
 
@@ -317,10 +312,10 @@ class RiabDockTest(unittest.TestCase):
 
         # Simulate choosing another combo item and running
         # the model again
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
-        myDict = getUiState(form)
+        myDict = getUiState(DOCK)
         expectDict = {'Hazard': 'Shakemap_Padang_2009',
                         'Exposure': 'Population Density Estimate (5kmx5km)',
                         'Impact Function': 'Earthquake Fatality Function',
@@ -330,7 +325,7 @@ class RiabDockTest(unittest.TestCase):
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
-        myResult = form.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         # Check against expected output
         myMessage = ('Unexpected result returned for Earthquake Fatality '
@@ -347,9 +342,9 @@ class RiabDockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly"""
 
         # Push OK with the left mouse button
-        clearForm()
+        clearmyDock()
         loadStandardLayers()
-        myButton = form.pbnRunStop
+        myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setGeoExtent([96, -5, 105, 2])  # This covers all of the 2009 shaking
         myMessage = 'Run button was not enabled'
@@ -357,10 +352,10 @@ class RiabDockTest(unittest.TestCase):
 
         # Simulate choosing another combo item and running
         # the model again
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
-        myDict = getUiState(form)
+        myDict = getUiState(DOCK)
         expectDict = {'Hazard': 'Shakemap_Padang_2009',
                       'Exposure': 'Population Density Estimate (5kmx5km)',
                       'Impact Function': 'Earthquake Fatality Function',
@@ -370,7 +365,7 @@ class RiabDockTest(unittest.TestCase):
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
-        myResult = form.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         # Check against expected output
         myMessage = ('Unexpected result returned for Earthquake Fatality '
@@ -388,24 +383,24 @@ class RiabDockTest(unittest.TestCase):
         """Raster and vector based function runs as expected."""
 
         # Push OK with the left mouse button
-        clearForm()
+        clearmyDock()
         loadStandardLayers()
-        myButton = form.pbnRunStop
+        myButton = DOCK.pbnRunStop
 
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        myDict = getUiState(form)
+        myDict = getUiState(DOCK)
 
         expectDict = {'Run Button Enabled': True,
                         'Impact Function': 'Tsunami Building Impact Function',
@@ -419,7 +414,7 @@ class RiabDockTest(unittest.TestCase):
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         #print myResult
         # Post clip on steroids refactor
@@ -436,30 +431,30 @@ class RiabDockTest(unittest.TestCase):
            Raster on raster based function runs as expected."""
 
         # Push OK with the left mouse button
-        clearForm()
+        clearmyDock()
         loadStandardLayers()
-        myButton = form.pbnRunStop
+        myButton = DOCK.pbnRunStop
 
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function (second item in the list)
-        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        myDict = getUiState(form)
+        myDict = getUiState(DOCK)
 
         expectDict = {'Run Button Enabled': True,
                         'Impact Function': 'Terdampak',
@@ -474,7 +469,7 @@ class RiabDockTest(unittest.TestCase):
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         #Apabila terjadi "Flood Depth (current) Jakarta"
         # perkiraan dampak terhadap "clip_CCaFFQ" kemungkinan yang terjadi:
@@ -505,28 +500,28 @@ class RiabDockTest(unittest.TestCase):
            Raster on raster based function runs as expected with scaling."""
 
         # Push OK with the left mouse button
-        clearForm()
+        clearmyDock()
         loadStandardLayers()
-        myButton = form.pbnRunStop
+        myButton = DOCK.pbnRunStop
 
         msg = 'Run button was not enabled'
         assert myButton.isEnabled(), msg
 
         # Hazard layers
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function (second item in the list)
-        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        myDict = getUiState(form)
+        myDict = getUiState(DOCK)
 
         msg = 'Got unexpected state: %s' % str(myDict)
         expectDict = {'Run Button Enabled': True,
@@ -541,7 +536,7 @@ class RiabDockTest(unittest.TestCase):
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         msg = 'Result not as expected: %s' % myResult
 
@@ -549,35 +544,91 @@ class RiabDockTest(unittest.TestCase):
         assert '10484' in myResult, msg
         assert '2312' in myResult, msg  # These are expected impact number
 
+    def test_ResultStyling(self):
+        """Test that ouputs from a model are correctly styled (colours and
+        opacity. """
+
+        # Push OK with the left mouse button
+        clearmyDock()
+        loadStandardLayers()
+        myButton = DOCK.pbnRunStop
+
+        msg = 'Run button was not enabled'
+        assert myButton.isEnabled(), msg
+
+        # Hazard layers
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+
+        # Exposure layers
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+
+        # Choose impact function (second item in the list)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
+        myFunction = DOCK.cboFunction.currentText()
+        myMessage = ('Incorrect function selected - expected Terdampak, got %s'
+                     % myFunction)
+        assert myFunction == 'Terdampak', myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # Run manually so we can get the output layer
+        DOCK.setupCalculator()
+        myRunner = DOCK.calculator.getRunner()
+        myRunner.run()  # Run in same thread
+        myEngineImpactLayer = myRunner.impactLayer()
+        myQgisImpactLayer = DOCK.readImpactLayer(myEngineImpactLayer)
+        myStyle = myEngineImpactLayer.get_style_info()
+        #print myStyle
+        setRasterStyle(myQgisImpactLayer, myStyle)
+        # simple test for now - we could test explicity for style state
+        # later if needed.
+        myMessage = ('Raster layer was not assigned a ColorRampShader'
+                     ' as expected.')
+        assert myQgisImpactLayer.colorShadingAlgorithm() == \
+                QgsRasterLayer.ColorRampShader, myMessage
+
+        myMessage = ('Raster layer was not assigned transparency'
+                     'classes as expected.')
+        myTransparencyList = (myQgisImpactLayer.rasterTransparency().
+                transparentSingleValuePixelList())
+        #print "Transparency list:" + str(myTransparencyList)
+        assert (len(myTransparencyList) > 0)
+
     def test_Issue47(self):
         """Issue47: Problem when hazard & exposure data are in different
         proj to viewport.
         See https://github.com/AIFDR/risk_in_a_box/issues/47"""
 
-        clearForm()
+        clearmyDock()
         loadStandardLayers()
-        myButton = form.pbnRunStop
+        myButton = DOCK.pbnRunStop
 
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function (second item in the list)
-        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        myDict = getUiState(form)
+        myDict = getUiState(DOCK)
         expectDict = {'Run Button Enabled': True,
                         'Impact Function': 'Terdampak',
                         'Hazard': 'Banjir Jakarta seperti 2007',
@@ -591,7 +642,7 @@ class RiabDockTest(unittest.TestCase):
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
         #Terdampak (x 1000):    2366
@@ -600,9 +651,9 @@ class RiabDockTest(unittest.TestCase):
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
-        clearForm()
+        clearmyDock()
         loadStandardLayers()
-        myButton = form.pbnRunStop
+        myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setYogyaGeoExtent()
 
@@ -610,32 +661,36 @@ class RiabDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboHazard, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function
-        QTest.keyClick(form.cboFunction, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
-        myDict = getUiState(form)
+        myDict = getUiState(DOCK)
         expectDict = {'Hazard': 'Yogya2006',
-                        'Exposure': 'OSM_building_polygons_20110905',
-                        'Impact Function': 'Earthquake Guidelines Function',
-                        'Run Button Enabled': True}
+                      'Exposure': 'OSM_building_polygons_20110905',
+                      'Impact Function': 'Earthquake Guidelines Function',
+                      'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s' % str(myDict)
         assert myDict == expectDict, myMessage
 
+        # This is the where nosetest sometims hangs when running the
+        # guitest suite (Issue #103)
+        # The QTest.mouseClick call some times never returns when run
+        # with nosetest, but OK when run normally.
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = form.wvResults.page().currentFrame().toPlainText()
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         # Check that none of these  get a NaN value:
         assert 'Unknown' in myResult
@@ -654,24 +709,24 @@ class RiabDockTest(unittest.TestCase):
         """Layers can be loaded and list widget was updated appropriately
         """
 
-        clearForm()
+        clearmyDock()
         myHazardLayerCount, myExposureLayerCount = loadStandardLayers()
         myMessage = 'Expect %s layer(s) in hazard list widget but got %s' \
-                     % (myHazardLayerCount, form.cboHazard.count())
-        self.assertEqual(form.cboHazard.count(),
+                     % (myHazardLayerCount, DOCK.cboHazard.count())
+        self.assertEqual(DOCK.cboHazard.count(),
                          myHazardLayerCount), myMessage
 
         myMessage = 'Expect %s layer(s) in exposure list widget but got %s' \
-              % (myExposureLayerCount, form.cboExposure.count())
-        self.assertEqual(form.cboExposure.count(),
+              % (myExposureLayerCount, DOCK.cboExposure.count())
+        self.assertEqual(DOCK.cboExposure.count(),
                          myExposureLayerCount), myMessage
 
     def test_Issue71(self):
         """Test issue #71 in githib - cbo changes should update ok button."""
         # See https://github.com/AIFDR/risk_in_a_box/issues/71
         # Push OK with the left mouse button
-        clearForm()
-        myButton = form.pbnRunStop
+        clearmyDock()
+        myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
         myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
                       'Population_Jakarta_geographic.asc']
@@ -693,18 +748,18 @@ class RiabDockTest(unittest.TestCase):
         myClearFlag = False
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
-        myDict = getUiState(form)
+        myDict = getUiState(DOCK)
         myMessage = ('Run button was not disabled when exposure set to \n%s'
-                     '\nUI State: \n%s') % (form.cboExposure.currentText(),
+                     '\nUI State: \n%s') % (DOCK.cboExposure.currentText(),
                                             myDict)
         assert myButton.isEnabled() == False, myMessage
 
         # Now select again a valid layer and the run button
         # should be enabled
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(form.cboExposure, QtCore.Qt.Key_Enter)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         myMessage = 'Run button was not enabled when exposure set to \n%s' % \
-            form.cboExposure.currentText()
+            DOCK.cboExposure.currentText()
         assert myButton.isEnabled(), myMessage
 
 

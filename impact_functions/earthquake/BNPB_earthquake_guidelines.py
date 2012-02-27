@@ -135,11 +135,11 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
 
         # Create style
         style_classes = [dict(label=_('Low damage'), min=0.5, max=1.5,
-                              colour='#fecc5c', opacity=1),
+                              colour='#fecc5c', transparency=1),
                          dict(label=_('Medium damage'), min=1.5, max=2.5,
-                              colour='#fd8d3c', opacity=1),
+                              colour='#fd8d3c', transparency=1),
                          dict(label=_('High damage'), min=2.5, max=3.5,
-                              colour='#f31a1c', opacity=1)]
+                              colour='#f31a1c', transparency=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 

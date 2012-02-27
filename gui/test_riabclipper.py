@@ -16,10 +16,15 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
-import os
-import numpy
 import unittest
+import sys
+import os
+
+# Add PARENT directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
+import numpy
 
 from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer)
@@ -33,11 +38,11 @@ from storage.utilities import nanallclose
 
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-rasterPath = os.path.join(TESTDATA, 'Shakemap_Padang_2009.asc')
-rasterPath2 = os.path.join(TESTDATA, 'population_padang_1.asc')
+RASTERPATH = os.path.join(TESTDATA, 'Shakemap_Padang_2009.asc')
+RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 
 # Handle to common QGis test app
-QGISAPP = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 class RiabClipper(unittest.TestCase):
@@ -76,10 +81,10 @@ class RiabClipper(unittest.TestCase):
 
         # Create a raster layer
         myName = 'shake'
-        myRasterLayer = QgsRasterLayer(rasterPath, myName)
+        myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
 
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        rasterPath)
+                                                        RASTERPATH)
         assert myRasterLayer is not None, msg
 
         # Create a bounding box
@@ -115,10 +120,10 @@ class RiabClipper(unittest.TestCase):
 
         # Create a raster layer
         myName = 'shake'
-        myRasterLayer = QgsRasterLayer(rasterPath, myName)
+        myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
 
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
-                                                        rasterPath)
+                                                        RASTERPATH)
         assert myRasterLayer is not None, msg
 
         # Create a bounding box
@@ -292,39 +297,28 @@ class RiabClipper(unittest.TestCase):
                     msg = 'Tuple argument should have raised exception'
                     raise Exception(msg)
 
-                # Check None option without existence of density keyword
+                # Check None option without keyword datatype == 'density'
+                R.keywords['datatype'] = 'undefined'
                 A_none = R.get_data(scaling=None)
                 msg = 'Data should not have changed'
                 assert nanallclose(A_native, A_none,
                                    rtol=1.0e-12, atol=1.0e-12), msg
 
                 # Try with None and density keyword
-                R.keywords['density'] = 'true'
+                R.keywords['datatype'] = 'density'
                 A_none = R.get_data(scaling=None)
                 msg = 'Resampled raster was not rescaled correctly'
                 assert nanallclose(A_scaled, A_none,
                                    rtol=1.0e-12, atol=1.0e-12), msg
 
-                R.keywords['density'] = 'Yes'
-                A_none = R.get_data(scaling=None)
-                msg = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(A_scaled, A_none,
-                                   rtol=1.0e-12, atol=1.0e-12), msg
-
-                R.keywords['density'] = 'False'
-                A_none = R.get_data(scaling=None)
-                msg = 'Data should not have changed'
-                assert nanallclose(A_native, A_none,
-                                   rtol=1.0e-12, atol=1.0e-12), msg
-
-                R.keywords['density'] = 'no'
+                R.keywords['datatype'] = 'counts'
                 A_none = R.get_data(scaling=None)
                 msg = 'Data should not have changed'
                 assert nanallclose(A_native, A_none,
                                    rtol=1.0e-12, atol=1.0e-12), msg
 
     def test_extentToKml(self):
-        """Test if extent too KML is working."""
+        """Test if extent to KML is working."""
         myExtent = [100.03, -1.14, 100.81, -0.73]
         kmlFilename = extentToKml(myExtent)
         assert os.path.exists(kmlFilename)

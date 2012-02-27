@@ -30,6 +30,7 @@ from utilities import points_along_line
 from utilities import geotransform2bbox
 from utilities import geotransform2resolution
 from utilities import nanallclose
+from utilities import ugettext as _
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
@@ -1634,6 +1635,20 @@ class Test_IO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
+    def test_i18n(self):
+        """Test to see if internationalisation is working correctly.
+        Make sure to include this file when using xgettext to scan for
+        translatable strings.
+        .. see:: :doc:`i18n`
+        """
+        # Make sure the lang environment is set before using
+        # translation layer
+        os.environ['LANG'] = 'id'
+        #must be after above
+        string1 = _('Hello!')  # translate as 'Hi'
+        string2 = _('Hello2!')  # translate as 'Hi2'
+        assert string1 == 'Hi'
+        assert string2 == 'Hi2'
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test')

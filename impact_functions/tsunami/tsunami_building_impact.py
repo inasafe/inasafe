@@ -9,8 +9,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
     :param requires category=='hazard' and \
                     subcategory.startswith('tsunami') and \
-                    layertype in ['raster', 'vector'] and \
-                    unit=='m'
+                    layertype in ['raster', 'vector']
 
     :param requires category=='exposure' and \
                     subcategory.startswith('building') and \
