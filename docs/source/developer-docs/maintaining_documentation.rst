@@ -1,17 +1,17 @@
 
 ============================
-Maintining the documentation
+Maintaining the documentation
 ============================
 
 The documentation for Risk in a Box is written using ReSTructured text (.rst)
 and the Sphinx documenation builder. The best way to learn how to write .rst
 is to look at the source of existing documentation - the markup syntax is
-very simple. There are a number of useful tags that you can use to make 
-your documentation clear and visually interesting, the more commonly used in 
-this document are listed below. For a more detailed list, please visit 
+very simple. There are a number of useful tags that you can use to make
+your documentation clear and visually interesting, the more commonly used in
+this document are listed below. For a more detailed list, please visit
 the `Spinx Inline Markup page <http://sphinx.pocoo.org/markup/inline.html>`_
 
-A complete list of supported .rst markup is also available 
+A complete list of supported .rst markup is also available
 `here <http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#block-quotes>`_.
 
 Common tags
@@ -21,25 +21,25 @@ Here are some common useful tags::
 
    Heading
    =======
-   
+
    SubHeading
    ----------
-   
+
    Sub subheading
    ..............
-   
+
    `web link<http://foo.org>`_
-   
+
    :doc:filename  (rst file without  extension)
-   
+
    *italics*
-   
+
    **bold**
-   
+
    .. note:: Note in a little call out box
-   
+
    .. todo:: Todo item in a call out box
-   
+
    .. table:: table title
 
    ============  ================
@@ -63,7 +63,7 @@ Creating API Documentation
 --------------------------
 
 Each class method and function in the code base must include a docstring
-explaining its usage and purpose as per the example listed below (taken from 
+explaining its usage and purpose as per the example listed below (taken from
 the riab.py setupI18n method)::
 
         """Setup internationalisation for the plugin.
@@ -81,7 +81,7 @@ the riab.py setupI18n method)::
            no exceptions explicitly raised.
         """
 
-Where multiple inputs or outputs are used, a ReSTructured text bullet list 
+Where multiple inputs or outputs are used, a ReSTructured text bullet list
 should be used to list them.
 
 .. note:: You can use any ReSTructured text withing the docstring to deliver
@@ -90,12 +90,12 @@ should be used to list them.
 In order for a new module's documentation to appear in the API docs, the
 following steps are required:
 
-+ Create a new file in :file:`docs/sources/api-docs/<package_name>`
-  named after the module. For example, for the gui/riab.py module we would create 
-  :file:`docs/sources/api-docs/gui/riab.rst` (note the .rst extension).
-* Add the new file to the API docs master index (:file:`docs/sources/api-docs/index.rst`).
++ Create a new file in :file:`docs/source/api-docs/<package_name>`
+  named after the module. For example, for the gui/riab.py module we would create
+  :file:`docs/source/api-docs/gui/riab.rst` (note the .rst extension). See below for an example of its contents
+* Add the new file to the API docs master index (:file:`docs/source/api-docs/index.rst`).
   The .rst extension is not needed or desired when adding to the index list.
-* Regenerate the documentation using the :command:`make docs` command from 
+* Regenerate the documentation using the :command:`make docs` command from
   the top level directory in the source tree.
 * Add the new .rst file and generated html files to the revision control system.
 
@@ -106,9 +106,9 @@ An example of the contents of a module's API .rst if provided below::
 
    Module: riab
    ============
-   This page contains the documentation for the  Risk-In-A-Box code **riab** 
+   This page contains the documentation for the  Risk-In-A-Box code **riab**
    module.
-   
+
    .. automodule:: gui.riab
       :members:
 
@@ -131,7 +131,7 @@ should see it appear in the API section of the Risk in a Box documentation.
 Documenting new features
 ------------------------
 
-New features should be well documented and that documentation should be made 
+New features should be well documented and that documentation should be made
 available uder the :file:`user-docs` subfolder of the sphinx sources tree.
 
 For example, when the keywords editor dialog feature was introduced, we created
@@ -147,5 +147,5 @@ the help dialog in the context of the new help document e.g.::
 
 Where the 'keywords' parameter indicates the user-docs/*.rst document that
 should be opened when the help button is clicked. The general style and
-approach used in existing documentation should inform your documentation 
+approach used in existing documentation should inform your documentation
 process so that all the documentation is constent.
