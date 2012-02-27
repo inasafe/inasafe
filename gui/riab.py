@@ -178,6 +178,22 @@ class Riab:
         self.iface.addToolBarIcon(self.actionKeywordsDialog)
         self.iface.addPluginToMenu(self.tr('Risk in a Box'),
                                    self.actionKeywordsDialog)
+        #--------------------------------------
+        # Create action for reset icon
+        #--------------------------------------
+        self.actionResetDock = QAction(
+                            QIcon(':/plugins/riab/reset.png'),
+                            self.tr('Reset Dock'), self.iface.mainWindow())
+        self.actionResetDock.setStatusTip(self.tr(
+                                    'Reset the Risk in a Box Dock'))
+        self.actionResetDock.setWhatsThis(self.tr(
+                                    'Reset the Risk in a Box Dock'))
+        QObject.connect(self.actionResetDock, SIGNAL('triggered()'),
+                        self.resetDock)
+
+        self.iface.addToolBarIcon(self.actionResetDock)
+        self.iface.addPluginToMenu(self.tr('Risk in a Box'),
+                                   self.actionResetDock)
 
         #--------------------------------------
         # create dockwidget and tabify it with the legend
@@ -268,6 +284,23 @@ class Riab:
                                       self.iface,
                                       self.dockWidget)
         myDialog.show()
+
+    def resetDock(self):
+        """Reset the dock to its default state.
+
+        This slot is called when the user clicks the reset icon in the toolbar
+        or the reset menu item associated with this plugin
+
+        .. see also:: :func:`Riab.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        self.dockWidget.getLayers()
 
     def layerChanged(self, theLayer):
         """Enable or disable the keywords editor icon.
