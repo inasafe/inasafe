@@ -40,7 +40,8 @@ from qgis.core import (QGis,
 from impactcalculator import ImpactCalculator
 from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent, getBufferedExtent
-
+from riabexceptions import (KeywordNotFoundException,
+                            InvalidParameterException)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -933,6 +934,35 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         and display it in the wvResults widget."""
         self.wvResults.setHtml(self.htmlHeader() + theMessage +
                                   self.htmlFooter())
+
+    def layerChanged(self, theLayer):
+        """Handler for when the QGIS active layer is changed.
+        If the active layer is changed and it has keywords and a report,
+        show the report..
+
+        .. see also:: :func:`Riab.layerChanged`.
+
+        Args:
+           theLayer - the QgsMapLayer instance that is now active..
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        myReport = None
+        if theLayer is not None:
+            try:
+                myReport = self.calculator.getKeywordFromFile(
+                        str(theLayer.source()),
+                        'caption')
+            except KeywordNotFoundException, e:
+                self.setOkButtonStatus()
+            except InvalidParameterException, e:
+                self.setOkButtonStatus()
+            except Exception, e:
+                myReport = getExceptionWithStacktrace(e, html=True)
+            if myReport is not None:
+                self.displayHtml(myReport)
 
     def saveState(self):
         """Save the current state of the ui to an internal class member
