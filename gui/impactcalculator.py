@@ -476,7 +476,7 @@ class ImpactCalculatorThread(threading.Thread):
         return self._notifier
 
     def impactLayer(self):
-        """Return the RIAB file which is the output from the
+        """Return the RIAB layer instance which is the output from the
         last run."""
         return self._impactLayer
 
