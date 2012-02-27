@@ -387,6 +387,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Raises:
            no
         """
+        self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
         for i in range(len(self.iface.mapCanvas().layers())):
@@ -424,6 +425,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
+        self.restoreState()
         self.setOkButtonStatus()
         return
 
@@ -608,7 +610,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         else:
             # On success, display generated report
             self.displayHtml(myReport)
-
+        self.saveState()
         # Hide hour glass
         self.hideBusy()
 
@@ -666,7 +668,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         #settrace()
         # Finally, add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
-
+        self.restoreState()
         # Return text to display in report pane
         return myReport
 
@@ -952,7 +954,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         self.state = myStateDict
 
     def restoreState(self):
-        """
+        """Restore the state of the dock to the last known state.
         Args:
             None
         Returns:
