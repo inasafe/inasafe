@@ -52,29 +52,46 @@ class RiabMap():
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
+        myPageHeight = 297  # height in mm
+        myPageWidth = 210  # width in mm
+        myDpi = 300
+        myMargin = 10  # margin in mm
         myRenderer = self.iface.mapCanvas().mapRenderer()
         myComposition = QgsComposition(myRenderer)
         myComposition.setPlotStyle(QgsComposition.Print)
+        myComposition.setPaperSize(myPageWidth, myPageHeight)
+        myComposition.setPrintResolution(myDpi)
+        myWidth = myComposition.paperWidth()
+        myHeight = myComposition.paperWidth()
         #
         # Create a printer device (we are 'printing' to a pdf
         #
         myPrinter = QtGui.QPrinter()
         myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
         myPrinter.setOutputFileName(theFilename)
-        myPrinter.setPaperSize(QtCore.QSizeF(myComposition.paperWidth(),
-                                             myComposition.paperHeight()),
+        myPrinter.setPaperSize(QtCore.QSizeF(myWidth,
+                                             myHeight),
                                              QtGui.QPrinter.Millimeter)
         myPrinter.setFullPage(True)
         myPrinter.setColorMode(QtGui.QPrinter.Color)
         myResolution = myComposition.printResolution()
         myPrinter.setResolution(myResolution)
         #
-        # Add a map to the composition
+        # Add a picture - riab logo on right
         #
-        x, y = 0, 0
-        w, h = myComposition.paperWidth(), myComposition.paperHeight()
-        myComposerMap = QgsComposerMap(myComposition, x, y, w, h)
-        myComposition.addItem(myComposerMap)
+        myPicture1 = QgsComposerPicture(myComposition)
+        myPicture1.setPictureFile(':/plugins/riab/icon.png')
+        myPicture1.setItemPosition(myWidth - 30, 1, 30, 30)
+        myPicture1.setFrame(False)
+        myComposition.addItem(myPicture1)
+        #
+        # Add a picture - bnpb logo on left
+        #
+        myPicture2 = QgsComposerPicture(myComposition)
+        myPicture2.setPictureFile(':/plugins/riab/bnpb_logo.png')
+        myPicture2.setItemPosition(1, 1, 30, 30)
+        myPicture2.setFrame(False)
+        myComposition.addItem(myPicture2)
         #
         # Add a label
         #
@@ -91,30 +108,23 @@ class RiabMap():
         myLabel.setText(myHeading)
         myLabel.adjustSizeToText()
         myFontMetrics = QtGui.QFontMetrics(myFont)
-        myWidth = myFontMetrics.width(myHeading)
-        myHeight = myFontMetrics.height()
-        myLabel.setItemPosition(int((w / 2) - int(myWidth / 2)),
+        myWidth = (myPicture1.boundingRect().width() +
+                   myPicture2.boundingRect().width() +
+                   10)
+        myHeight = myFontMetrics.height() + 10
+        myLabel.setItemPosition(myPicture1.boundingRect().width() + 5,
                                 1,
                                 myWidth,
                                 myHeight)
         myLabel.setFrame(False)
         myComposition.addItem(myLabel)
         #
-        # Add a picture - riab logo on right
+        # Add a map to the composition
         #
-        myPicture = QgsComposerPicture(myComposition)
-        myPicture.setPictureFile(':/plugins/riab/icon.png')
-        myPicture.setItemPosition(w - 30, 1, 30, 30)
-        myPicture.setFrame(False)
-        myComposition.addItem(myPicture)\
-        #
-        # Add a picture - bnpb logo on left
-        #
-        myPicture = QgsComposerPicture(myComposition)
-        myPicture.setPictureFile(':/plugins/riab/bnpb_logo.png')
-        myPicture.setItemPosition(1, 1, 30, 30)
-        myPicture.setFrame(False)
-        myComposition.addItem(myPicture)
+        x, y = 0, 0
+        w, h = myComposition.paperWidth(), myComposition.paperHeight()
+        myComposerMap = QgsComposerMap(myComposition, x, y, w, h)
+        myComposition.addItem(myComposerMap)
         #
         # Render the composition to our pdf printer
         #
