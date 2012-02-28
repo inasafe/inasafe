@@ -62,17 +62,17 @@ class RiabDockTest(unittest.TestCase):
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myLegend = myMap.getLegend()
-        myLegend.save("'/tmp/getVectorLegend.png", 'png')
+        myLegend.save('/tmp/getVectorLegend.png', 'PNG')
         assert False
 
     def test_getVectorLegend(self):
         """Getting a legend for a vector layer works."""
-        myLayer, myType = loadLayer('issue58.tif')
+        myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getVectorLegend()
-        myMap.legend.save("'/tmp/getVectorLegend.png", 'png')
+        myMap.legend.save('/tmp/getVectorLegend.png', 'PNG')
         assert False
 
     def test_getRasterLegend(self):
@@ -82,7 +82,7 @@ class RiabDockTest(unittest.TestCase):
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getRasterLegend()
-        myMap.legend.save("'/tmp/getRasterLegend.png", 'png')
+        myMap.legend.save('/tmp/getRasterLegend.png', 'PNG')
         assert False
 
     def addSymbolToLegend(self):
@@ -94,29 +94,33 @@ class RiabDockTest(unittest.TestCase):
         myMap.legend = None
         mySymbol = QgsSymbol()
         mySymbol.setColor(QtGui.QColor(12, 34, 56))
-        myMap.addSymbolToLegend(self,
-                         mySymbol,
-                         theMin=0,
-                         theMax=2,
-                         theCategory=None,
-                         theLabel='Foo')
-        myMap.legend.save("'/tmp/addSymbolToLegend.png", 'png')
+        myMap.addSymbolToLegend(mySymbol,
+                                theMin=0,
+                                theMax=2,
+                                theCategory=None,
+                                theLabel='Foo')
+        myMap.legend.save('/tmp/addSymbolToLegend.png', 'PNG')
         assert False
 
     def test_addClassToLegend(self):
         """Test we can add a class to the map legend."""
-        myLayer, myType = loadLayer('issue58.tif')
+        myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.legend = None
-        myMap.addClassToLegend(self,
-                         theColour=QtGui.QColor(123, 45, 6),
-                         theMin=None,
-                         theMax=None,
-                         theCategory='foo',
-                         theLabel='bar')
-        myMap.legend.save("'/tmp/addClassToLegend.png", 'png')
+        myColour = QtGui.QColor(12, 34, 126)
+        myMap.addClassToLegend(myColour,
+                               theMin=None,
+                               theMax=None,
+                               theCategory='foo',
+                               theLabel='bar')
+        myMap.addClassToLegend(myColour,
+                               theMin=None,
+                               theMax=None,
+                               theCategory='foo',
+                               theLabel='foo')
+        myMap.legend.save('/tmp/addClassToLegend.png', 'PNG')
         assert False
 
 if __name__ == '__main__':

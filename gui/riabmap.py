@@ -44,6 +44,8 @@ class RiabMap():
         self.iface = theIface
         self.layer = None
         self.legend = None
+        # how high each row of the legend should be
+        self.legendIncrement = 40
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -156,7 +158,7 @@ class RiabMap():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
-        raise
+        raise False
 
     def addSymbolToLegend(self,
                          theSymbol,
@@ -187,10 +189,10 @@ class RiabMap():
             some reason..
         """
         myColour = theSymbol.color()
-        self.addClassToLegend(theMin=theMin,
+        self.addClassToLegend(myColour,
+                              theMin=theMin,
                               theMax=theMax,
-                              theLabel=theLabel,
-                              theColor=myColour)
+                              theLabel=theLabel)
 
     def addClassToLegend(self,
                          theColour,
@@ -217,7 +219,39 @@ class RiabMap():
             Throws an exception if the class could not be added for
             some reason..
         """
-        assert False
+        self.extendLegend()
+        myOffset = self.legend.height() - self.legendIncrement
+        myPainter = QtGui.QPainter(self.legend)
+        myBrush = QtGui.QBrush(theColour)
+        myPainter.setBrush(myBrush)
+        myPainter.drawRect(QtCore.QRectF(10, myOffset + 10, 20, 20))
+        myPainter.setPen(QtGui.QColor(0, 0, 0))
+        myPainter.drawText(40, myOffset + 25, theLabel)
+
+    def extendLegend(self):
+        """Grow the legend pixmap enough to accommodate one more legend entry.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        if self.legend is None:
+            self.legend = QtGui.QPixmap(300, 40)
+            self.legend.fill(QtGui.QColor(255, 255, 255))
+        else:
+            # extend the existing legend down for the next class
+            myPixmap = QtGui.QPixmap(300, self.legend.height() +
+                                          self.legendIncrement)
+            myPixmap.fill(QtGui.QColor(255, 255, 255))
+            myPainter = QtGui.QPainter(myPixmap)
+
+            myRect = QtCore.QRectF(0, 0,
+                                   self.legend.width(),
+                                   self.legend.height())
+            myPainter.drawPixmap(myRect, self.legend, myRect)
+            self.legend = myPixmap
 
     def makePdf(self, theFilename):
         """Method to createa  nice little pdf map.
@@ -314,6 +348,14 @@ class RiabMap():
                                 myHeight)
         myLabel.setFrame(False)
         myComposition.addItem(myLabel)
+        #
+        # Update the top offset for the next horizontal row of items
+        #
+        myTopOffset = myMargin + myMapHeight + myBuffer
+        #
+        # Draw the legend
+        #
+
         #
         # Render the composition to our pdf printer
         #
