@@ -24,6 +24,7 @@ from qgis.core import (QgsComposition,
                        QgsMapLayer)
 from riabexceptions import LegendLayerException
 from PyQt4 import QtCore, QtGui
+from impactcalculator import getKeywordFromFile
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -85,6 +86,7 @@ class RiabMap():
             myMessage = self.tr('Unable to make a legend when map generator'
                                 'has no layer set.')
             raise LegendLayerException(myMessage)
+        getKeywordFromFile
         if self.layer.type() == QgsMapLayer.VectorLayer:
             return self.getVectorLegend()
         else:

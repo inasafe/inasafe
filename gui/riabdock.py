@@ -37,7 +37,10 @@ from qgis.core import (QGis,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
                        QgsRasterTransparency)
-from impactcalculator import ImpactCalculator
+from impactcalculator import (ImpactCalculator,
+                              getKeywordFromFile,
+                              getKeywordFromLayer,
+                              availableFunctions)
 from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent, getBufferedExtent
 from riabexceptions import (KeywordNotFoundException,
@@ -299,11 +302,9 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
         if self.cboFunction.currentIndex() == -1:
             myHazardFunction = str(self.getHazardLayer().source())
-            myHazardKeywords = self.calculator.getKeywordFromFile(
-                                                            myHazardFunction)
+            myHazardKeywords = getKeywordFromFile(myHazardFunction)
             myExposureFunction = str(self.getExposureLayer().source())
-            myExposureKeywords = self.calculator.getKeywordFromFile(
-                                                            myExposureFunction)
+            myExposureKeywords = getKeywordFromFile(myExposureFunction)
             myMessage = self.tr('<span class="label important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
@@ -412,8 +413,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
             try:
-                myCategory = self.calculator.getKeywordFromFile(
-                                str(myLayer.source()), 'category')
+                myCategory = getKeywordFromFile(str(myLayer.source()), 'category')
             except:
                 # continue ignoring this layer
                 continue
@@ -421,8 +421,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             # fallback to the layer's filename
             myTitle = None
             try:
-                myTitle = self.calculator.getKeywordFromFile(
-                            str(myLayer.source()), 'title')
+                myTitle = getKeywordFromFile(str(myLayer.source()), 'title')
             except:
                 myTitle = myName
 
@@ -459,16 +458,14 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         if myExposureLayer is None:
             return
         myExposureFile = myExposureLayer.source()
-        myHazardKeywords = self.calculator.getKeywordFromFile(
-                                            str(myHazardFile))
+        myHazardKeywords = getKeywordFromFile(str(myHazardFile))
         # We need to add the layer type to the returned keywords
         if myHazardLayer.type() == QgsMapLayer.VectorLayer:
             myHazardKeywords['layertype'] = 'vector'
         elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
             myHazardKeywords['layertype'] = 'raster'
 
-        myExposureKeywords = self.calculator.getKeywordFromFile(
-                                            str(myExposureFile))
+        myExposureKeywords = getKeywordFromFile(str(myExposureFile))
         # We need to add the layer type to the returned keywords
         if myExposureLayer.type() == QgsMapLayer.VectorLayer:
             myExposureKeywords['layertype'] = 'vector'
@@ -478,7 +475,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         # Find out which functions can be used with these layers
         myList = [myHazardKeywords, myExposureKeywords]
         try:
-            myDict = self.calculator.availableFunctions(myList)
+            myDict = availableFunctions(myList)
             # Populate the hazard combo with the available functions
             for myFunction in myDict:  # Use only key
                 self.cboFunction.addItem(myFunction)
@@ -644,8 +641,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             raise Exception(myMessage)
 
         # Get tabular information from impact layer
-        myReport = self.calculator.getKeywordFromLayer(myEngineImpactLayer,
-                                               'caption')
+        myReport = getKeywordFromLayer(myEngineImpactLayer, 'caption')
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
@@ -959,9 +955,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         myReport = None
         if theLayer is not None:
             try:
-                myReport = self.calculator.getKeywordFromFile(
-                        str(theLayer.source()),
-                        'caption')
+                myReport = getKeywordFromFile(str(theLayer.source()),
+                                              'caption')
             except KeywordNotFoundException, e:
                 self.setOkButtonStatus()
             except InvalidParameterException, e:
