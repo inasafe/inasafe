@@ -20,8 +20,9 @@ __copyright__ += 'Disaster Reduction'
 from qgis.core import (QgsComposition,
                        QgsComposerMap,
                        QgsComposerLabel,
-                       QgsComposerPicture)
-
+                       QgsComposerPicture,
+                       QgsMapLayer)
+from riabexceptions import LegendLayerException
 from PyQt4 import QtCore, QtGui
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -40,6 +41,78 @@ class RiabMap():
             Any exceptions raised by the RIAB library will be propogated.
         """
         self.iface = theIface
+        self.layer = None
+
+    def tr(self, theString):
+        """We implement this ourself since we do not inherit QObject.
+
+        Args:
+           theString - string for translation.
+        Returns:
+           Translated version of theString.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        return QtCore.QCoreApplication.translate('RiabMap', theString)
+
+    def setImpactLayer(self, theLayer):
+        """Mutator for the impact layer that will be used for stats,
+        legend and reporting.
+        Args:
+            theLayer - a valid QgsMapLayer
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        self.layer = theLayer
+
+    def makeLegend(self):
+        """Examine the classes of the impact layer associated with this print
+        job.
+
+        .. note: This is a wrapper for the rasterLegend and vectorLegend
+           methods.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            An InvalidLegendLayer will be raised if a legend cannot be
+            created from the layer.
+        """
+        if self.layer is None:
+            myMessage = self.tr('Unable to make a legend when map generator'
+                                'has no layer set.')
+            raise LegendLayerException(myMessage)
+        if self.layer.type() == QgsMapLayer.VectorLayer:
+            return self.getVectorLegend()
+        else:
+            return self.getRasterLegend()
+
+    def getVectorLegend(self):
+        """
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            An InvalidLegendLayer will be raised if a legend cannot be
+            created from the layer.
+        """
+        raise
+
+    def getRasterLegend(self):
+        """
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            An InvalidLegendLayer will be raised if a legend cannot be
+            created from the layer.
+        """
+        raise
 
     def makePdf(self, theFilename):
         """Method to createa  nice little pdf map.
@@ -52,44 +125,62 @@ class RiabMap():
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        myPageHeight = 297  # height in mm
         myPageWidth = 210  # width in mm
+        myPageHeight = 297  # height in mm
         myDpi = 300
         myMargin = 10  # margin in mm
+        myBuffer = 10  # vertical spacing between elements
         myRenderer = self.iface.mapCanvas().mapRenderer()
         myComposition = QgsComposition(myRenderer)
         myComposition.setPlotStyle(QgsComposition.Print)
         myComposition.setPaperSize(myPageWidth, myPageHeight)
         myComposition.setPrintResolution(myDpi)
-        myWidth = myComposition.paperWidth()
-        myHeight = myComposition.paperWidth()
         #
         # Create a printer device (we are 'printing' to a pdf
         #
         myPrinter = QtGui.QPrinter()
         myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
         myPrinter.setOutputFileName(theFilename)
-        myPrinter.setPaperSize(QtCore.QSizeF(myWidth,
-                                             myHeight),
+        myPrinter.setPaperSize(QtCore.QSizeF(myPageWidth,
+                                             myPageHeight),
                                              QtGui.QPrinter.Millimeter)
         myPrinter.setFullPage(True)
         myPrinter.setColorMode(QtGui.QPrinter.Color)
         myResolution = myComposition.printResolution()
         myPrinter.setResolution(myResolution)
         #
-        # Add a picture - riab logo on right
+        # Add a map to the composition
         #
-        myPicture1 = QgsComposerPicture(myComposition)
-        myPicture1.setPictureFile(':/plugins/riab/icon.png')
-        myPicture1.setItemPosition(myWidth - 30, 1, 30, 30)
-        myPicture1.setFrame(False)
-        myComposition.addItem(myPicture1)
+        # make a square map where width = height = page width
+        myMapHeight = myPageWidth - (myMargin * 2)
+        myTopOffset = myMargin
+        myComposerMap = QgsComposerMap(myComposition,
+                                       myMargin,
+                                       myTopOffset,
+                                       myMapHeight,
+                                       myMapHeight)
+        myComposition.addItem(myComposerMap)
+        #
+        # Update the top offset for the next horizontal row of items
+        #
+        myTopOffset = myMargin + myMapHeight + myBuffer
         #
         # Add a picture - bnpb logo on left
         #
+        myPicture1 = QgsComposerPicture(myComposition)
+        myPicture1.setPictureFile(':/plugins/riab/bnpb_logo.png')
+        myPicture1.setItemPosition(myMargin, myTopOffset, 30, 30)
+        myPicture1.setFrame(False)
+        myComposition.addItem(myPicture1)
+        #
+        # Add a picture - riab logo on right
+        #
         myPicture2 = QgsComposerPicture(myComposition)
-        myPicture2.setPictureFile(':/plugins/riab/bnpb_logo.png')
-        myPicture2.setItemPosition(1, 1, 30, 30)
+        myPicture2.setPictureFile(':/plugins/riab/icon.png')
+        myPicture2.setItemPosition(myPageWidth - myMargin - 30,
+                                   myTopOffset,
+                                   30,
+                                   30)
         myPicture2.setFrame(False)
         myComposition.addItem(myPicture2)
         #
@@ -104,27 +195,20 @@ class RiabMap():
                              myItalicsFlag)
         myLabel = QgsComposerLabel(myComposition)
         myLabel.setFont(myFont)
-        myHeading = 'Risk in a Box'
+        myHeading = self.tr('Risk in a Box')
         myLabel.setText(myHeading)
         myLabel.adjustSizeToText()
         myFontMetrics = QtGui.QFontMetrics(myFont)
-        myWidth = (myPicture1.boundingRect().width() +
-                   myPicture2.boundingRect().width() +
-                   10)
+        myWidth = myPageWidth - (myPicture1.boundingRect().width() +
+                  myPicture2.boundingRect().width() +
+                  10)
         myHeight = myFontMetrics.height() + 10
-        myLabel.setItemPosition(myPicture1.boundingRect().width() + 5,
-                                1,
+        myLabel.setItemPosition(35,
+                                myTopOffset,
                                 myWidth,
                                 myHeight)
         myLabel.setFrame(False)
         myComposition.addItem(myLabel)
-        #
-        # Add a map to the composition
-        #
-        x, y = 0, 0
-        w, h = myComposition.paperWidth(), myComposition.paperHeight()
-        myComposerMap = QgsComposerMap(myComposition, x, y, w, h)
-        myComposition.addItem(myComposerMap)
         #
         # Render the composition to our pdf printer
         #

@@ -4,9 +4,13 @@
 import os
 import sys
 from PyQt4 import QtGui, QtCore
-from qgis.core import QgsApplication
+from qgis.core import (QgsApplication,
+                      QgsVectorLayer,
+                      QgsRasterLayer)
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
+from storage.utilities_test import TESTDATA
+from storage.utilities import read_keywords
 QGISAPP = None  # Static variable used to hold hand to running QGis app
 CANVAS = None
 PARENT = None
@@ -55,3 +59,31 @@ def getQgisTestApp():
         IFACE = QgisInterface(CANVAS)
 
     return QGISAPP, CANVAS, IFACE, PARENT
+
+
+def loadLayer(theLayerFile):
+    """Helper to load and return a single QGIS layer"""
+    # Extract basename and absolute path
+    myBaseName, myExt = os.path.splitext(theLayerFile)
+    myPath = os.path.join(TESTDATA, theLayerFile)
+    myKeywordPath = myPath[:-4] + '.keywords'
+    # Determine if layer is hazard or exposure
+    myKeywords = read_keywords(myKeywordPath)
+    myType = 'undefined'
+    if 'category' in myKeywords:
+        myType = myKeywords['category']
+    msg = 'Could not read %s' % myKeywordPath
+    assert myKeywords is not None, msg
+
+    # Create QGis Layer Instance
+    if myExt in ['.asc', '.tif']:
+        myLayer = QgsRasterLayer(myPath, myBaseName)
+    elif myExt in ['.shp']:
+        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+    else:
+        myMessage = 'File %s had illegal extension' % myPath
+        raise Exception(myMessage)
+
+    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
+    assert myLayer.isValid(), myMessage
+    return myLayer, myType

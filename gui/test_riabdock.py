@@ -27,8 +27,7 @@ sys.path.append(pardir)
 
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
-from qgis.core import (QgsVectorLayer,
-                       QgsRasterLayer,
+from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle,
                        QgsCoordinateReferenceSystem)
@@ -36,8 +35,8 @@ from qgis.gui import QgsMapCanvasLayer
 from utilities_test import getQgisTestApp
 from gui.riabdock import (RiabDock, setRasterStyle)
 from gui.riabmap import RiabMap
-from storage.utilities import read_keywords
-from storage.utilities_test import TESTDATA
+from utilities_test import loadLayer
+
 try:
     from pydevd import *
     print 'Remote debugging is enabled.'
@@ -138,34 +137,6 @@ def loadLayers(theLayerList, theClearFlag=True):
 
     # Add MCL's to the CANVAS
     return myHazardLayerCount, myExposureLayerCount
-
-
-def loadLayer(theLayerFile):
-    """Helper to load and return a single QGIS layer"""
-    # Extract basename and absolute path
-    myBaseName, myExt = os.path.splitext(theLayerFile)
-    myPath = os.path.join(TESTDATA, theLayerFile)
-    myKeywordPath = myPath[:-4] + '.keywords'
-    # Determine if layer is hazard or exposure
-    myKeywords = read_keywords(myKeywordPath)
-    myType = 'undefined'
-    if 'category' in myKeywords:
-        myType = myKeywords['category']
-    msg = 'Could not read %s' % myKeywordPath
-    assert myKeywords is not None, msg
-
-    # Create QGis Layer Instance
-    if myExt in ['.asc', '.tif']:
-        myLayer = QgsRasterLayer(myPath, myBaseName)
-    elif myExt in ['.shp']:
-        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
-    else:
-        myMessage = 'File %s had illegal extension' % myPath
-        raise Exception(myMessage)
-
-    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
-    assert myLayer.isValid(), myMessage
-    return myLayer, myType
 
 
 def setCanvasCrs(theEpsgId, theOtfpFlag=False):

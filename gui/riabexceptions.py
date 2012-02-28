@@ -65,3 +65,11 @@ class TranslationLoadException(Exception):
 class InvalidKVPException(Exception):
     """An exception raised when a key value pair is invalid -
     for example if the key of value is None or an empty string."""
+    pass
+
+
+class LegendLayerException(Exception):
+    """An exception raised when trying to create a legend from
+    a QgsMapLayer that does not have suitable characteristics to
+    allow a legend to be created from it."""
+    pass
