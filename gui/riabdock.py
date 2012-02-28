@@ -551,14 +551,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('<p><span class="label important">'
-                    'Error:</span> '
-                   'An exception occurred when creating layer '
-                   'subsets clipped to the optimal extent: %s</p>' %
-                   ((str(e))))
-            myMessage += getExceptionWithStacktrace(e, html=True)
-            self.displayHtml(myMessage)
-            return
+            raise
         self.calculator.setHazardLayer(myHazardFilename)
         self.calculator.setExposureLayer(myExposureFilename)
         self.calculator.setFunction(self.cboFunction.currentText())
@@ -576,15 +569,15 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             self.hideBusy()
             return
 
-        self.setupCalculator()
-
-        # Start it in its own thread
-        self.runner = self.calculator.getRunner()
-        QtCore.QObject.connect(self.runner.notifier(),
+        try:
+            self.setupCalculator()
+            # Start it in its own thread
+            self.runner = self.calculator.getRunner()
+            QtCore.QObject.connect(self.runner.notifier(),
                                QtCore.SIGNAL('done()'),
                                self.completed)
-        #self.runner.start()  # Run in different thread
-        try:
+            #self.runner.start()  # Run in different thread
+
             QtGui.qApp.setOverrideCursor(
                     QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.repaint()
@@ -596,8 +589,11 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('An exception occurred when starting'
-                                ' the model: %s' % ((str(e))))
+            myMessage = self.tr('<p><span class="label important">'
+                                'Error:</span> '
+                                'An exception occurred when starting'
+                                ' the model.')
+            myMessage += getExceptionWithStacktrace(e, html=True)
             self.displayHtml(myMessage)
 
     def completed(self):

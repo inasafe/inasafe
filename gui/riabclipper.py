@@ -30,7 +30,9 @@ from qgis.core import (QgsCoordinateTransform,
 
 from storage.utilities import read_keywords, write_keywords, verify
 
-from riabexceptions import InvalidParameterException, KeywordNotFoundException
+from riabexceptions import (InvalidParameterException,
+                            KeywordNotFoundException,
+                            NoFeaturesInExtentException)
 from utilities import getTempDir
 from subprocess import call
 
@@ -154,6 +156,7 @@ def _clipVectorLayer(theLayer, theExtent,
                       myProjectedExtent,
                       myFetchGeometryFlag,
                       myUseIntersectFlag)
+
     myFieldList = myProvider.fields()
 
     myWriter = QgsVectorFileWriter(myFilename,
@@ -170,9 +173,17 @@ def _clipVectorLayer(theLayer, theExtent,
 
     # Retrieve every feature with its geometry and attributes
     myFeature = QgsFeature()
+    myCount = 0
     while myProvider.nextFeature(myFeature):
         myWriter.addFeature(myFeature)
+        myCount += 1
     del myWriter  # Flush to disk
+
+    if myCount < 1:
+        myMessage = tr('No features fall within the clip extents. '
+                       'Try panning / zooming to an area containing data '
+                       'and then try to run your analysis again.')
+        raise NoFeaturesInExtentException(myMessage)
 
     copyKeywords(theLayer.source(), myFilename, extraKeywords=extraKeywords)
 
@@ -262,6 +273,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # Now run GDAL warp scottie...
     try:
         myResult = call(myCommand, shell=True)
+        del myResult
     except Exception, e:
         myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'

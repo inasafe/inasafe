@@ -65,3 +65,10 @@ class TranslationLoadException(Exception):
 class InvalidKVPException(Exception):
     """An exception raised when a key value pair is invalid -
     for example if the key of value is None or an empty string."""
+    pass
+
+
+class NoFeaturesInExtentException(Exception):
+    """An exception that gets thrown when no features are within
+    the extent being clipped."""
+    pass
