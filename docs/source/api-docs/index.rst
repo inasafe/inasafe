@@ -14,13 +14,14 @@ Packages
 --------
 
 Package::gui
-..............
+............
 .. toctree::
    :maxdepth: 2
 
    gui/init
    gui/riab
    gui/riabdock
+   gui/riabmap
    gui/riabkeywordsdialog
    gui/riabhelp
    gui/riabclipper
@@ -35,7 +36,7 @@ Package::impact_functions
    impact_functions/core
 
 Package::engine
-.........................
+...............
 .. toctree::
    :maxdepth: 2
 
@@ -53,6 +54,7 @@ Gui Unit Tests
    gui/qgisinterface
    gui/test_riab
    gui/test_riabdock
+   gui/test_riabmap
    gui/test_impactcalculator
    gui/test_riabkeywordsdialog
 

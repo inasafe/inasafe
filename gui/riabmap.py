@@ -86,7 +86,14 @@ class RiabMap():
             myMessage = self.tr('Unable to make a legend when map generator'
                                 'has no layer set.')
             raise LegendLayerException(myMessage)
-        getKeywordFromFile
+        try:
+            getKeywordFromFile(self.layer.source(), 'caption')
+        except Exception:
+            myMessage = self.tr('This layer does not appear to be an impact '
+                                'layer. Try selecting an impact layer in the '
+                                'QGIS layers list or creating a new impact '
+                                'scenario before using the print tool.')
+            raise Exception(myMessage)
         if self.layer.type() == QgsMapLayer.VectorLayer:
             return self.getVectorLegend()
         else:

@@ -44,17 +44,7 @@ class RiabDockTest(unittest.TestCase):
     """Test the risk in a box GUI"""
 
     def test_riabMap(self):
-        """Test making a pdf using the RiabMap class.
-
-        .. todo:: Move this into its own test class
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the RIAB library will be propogated.
-        """
+        """Test making a pdf using the RiabMap class."""
         loadLayer('issue58.tif')
         myMap = RiabMap(IFACE)
         myPdf = '/tmp/out.pdf'
@@ -63,6 +53,18 @@ class RiabDockTest(unittest.TestCase):
         myMap.makePdf(myPdf)
         assert os.path.exists(myPdf)
         os.remove(myPdf)
+
+    def test_getLegend(self):
+        """Getting a legend for a generic layer works."""
+        assert False
+
+    def test_getVectorLegend(self):
+        """Getting a legend for a vector layer works."""
+        assert False
+
+    def test_getRasterLegend(self):
+        """Getting a legend for a raster layer works."""
+        assert False
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')
