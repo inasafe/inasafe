@@ -413,7 +413,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
             try:
-                myCategory = getKeywordFromFile(str(myLayer.source()), 'category')
+                myCategory = getKeywordFromFile(str(myLayer.source()),
+                                                'category')
             except:
                 # continue ignoring this layer
                 continue
