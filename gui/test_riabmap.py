@@ -28,7 +28,8 @@ sys.path.append(pardir)
 
 from utilities_test import getQgisTestApp
 from gui.riabmap import RiabMap
-
+from PyQt4 import QtGui
+from qgis.core import QgsSymbol
 from utilities_test import loadLayer
 try:
     from pydevd import *
@@ -56,14 +57,66 @@ class RiabDockTest(unittest.TestCase):
 
     def test_getLegend(self):
         """Getting a legend for a generic layer works."""
+        myLayer, myType = loadLayer('issue58.tif')
+        del myType
+        myMap = RiabMap(IFACE)
+        myMap.setImpactLayer(myLayer)
+        myLegend = myMap.getLegend()
+        myLegend.save("'/tmp/getVectorLegend.png", 'png')
         assert False
 
     def test_getVectorLegend(self):
         """Getting a legend for a vector layer works."""
+        myLayer, myType = loadLayer('issue58.tif')
+        del myType
+        myMap = RiabMap(IFACE)
+        myMap.setImpactLayer(myLayer)
+        myMap.getVectorLegend()
+        myMap.legend.save("'/tmp/getVectorLegend.png", 'png')
         assert False
 
     def test_getRasterLegend(self):
         """Getting a legend for a raster layer works."""
+        myLayer, myType = loadLayer('issue58.tif')
+        del myType
+        myMap = RiabMap(IFACE)
+        myMap.setImpactLayer(myLayer)
+        myMap.getRasterLegend()
+        myMap.legend.save("'/tmp/getRasterLegend.png", 'png')
+        assert False
+
+    def addSymbolToLegend(self):
+        """Test we can add a symbol to the legend."""
+        myLayer, myType = loadLayer('issue58.tif')
+        del myType
+        myMap = RiabMap(IFACE)
+        myMap.setImpactLayer(myLayer)
+        myMap.legend = None
+        mySymbol = QgsSymbol()
+        mySymbol.setColor(QtGui.QColor(12, 34, 56))
+        myMap.addSymbolToLegend(self,
+                         mySymbol,
+                         theMin=0,
+                         theMax=2,
+                         theCategory=None,
+                         theLabel='Foo')
+        myMap.legend.save("'/tmp/addSymbolToLegend.png", 'png')
+        assert False
+
+    def test_addClassToLegend(self):
+        """Test we can add a class to the map legend."""
+        myLayer, myType = loadLayer('issue58.tif')
+        del myType
+        myMap = RiabMap(IFACE)
+        myMap.setImpactLayer(myLayer)
+        myMap.legend = None
+        myMap.addClassToLegend(self,
+                         theColour=QtGui.QColor(123, 45, 6),
+                         theMin=None,
+                         theMax=None,
+                         theCategory='foo',
+                         theLabel='bar')
+        myMap.legend.save("'/tmp/addClassToLegend.png", 'png')
         assert False
 
 if __name__ == '__main__':

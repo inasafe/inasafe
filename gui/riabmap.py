@@ -43,6 +43,7 @@ class RiabMap():
         """
         self.iface = theIface
         self.layer = None
+        self.legend = None
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -68,7 +69,7 @@ class RiabMap():
         """
         self.layer = theLayer
 
-    def makeLegend(self):
+    def getLegend(self):
         """Examine the classes of the impact layer associated with this print
         job.
 
@@ -98,6 +99,7 @@ class RiabMap():
             return self.getVectorLegend()
         else:
             return self.getRasterLegend()
+        return self.legend
 
     def getVectorLegend(self):
         """
@@ -109,7 +111,40 @@ class RiabMap():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
-        raise
+        if not self.layer.isUsingRendererV2():
+            myMessage = self.tr('A legend can only be generated for '
+                                'vector layers that use the "new symbology" '
+                                'implementation in QGIS.')
+            raise LegendLayerException(myMessage)
+        # new symbology - subclass of QgsFeatureRendererV2 class
+        self.legend = None
+        myRenderer = self.layer.rendererV2()
+        myType = myRenderer.type()
+        if myType == "singleSymbol":
+            mySymbol = myRenderer.symbol()
+            self.addSymbolToLegend(theLabel=self.layer.name(),
+                                   theSymbol=mySymbol)
+        elif myType == "categorizedSymbol":
+            for myCategory in myRenderer.categories():
+                mySymbol = myCategory.symbol()
+                self.addSymbolToLegend(
+                                myCategory=myCategory.value().toString(),
+                                theLabel=myCategory.label(),
+                                theSymbol=mySymbol)
+        elif myType == "graduatedSymbol":
+            for myRange in myRenderer.ranges():
+                mySymbol = myRange.symbol()
+                self.addSymbolToLegend(theMin=myRange.lowerValue(),
+                                       theMax=myRange.upperValue(),
+                                       theLabel=myRange.label(),
+                                       theSymbol=mySymbol)
+        else:
+            #type unknown
+            myMessage = self.tr('Unrecognised renderer type found for the '
+                                'impact layer. Please use one of these: '
+                                'single symbol, categorised symbol or '
+                                'graduated symbol and then try again.')
+            raise LegendLayerException(myMessage)
 
     def getRasterLegend(self):
         """
@@ -122,6 +157,67 @@ class RiabMap():
             created from the layer.
         """
         raise
+
+    def addSymbolToLegend(self,
+                         theSymbol,
+                         theMin=None,
+                         theMax=None,
+                         theCategory=None,
+                         theLabel=None):
+        """Add a class to the current legend. If the legend is not defined,
+        a new one will be created. A legend is just an image file with nicely
+        rendered classes in it.
+
+        .. note:: This method just extracts the colour from the symbol and then
+           delegates to the addClassToLegend function.
+
+        Args:
+
+            * theSymbol - **Required** symbol for the class as a QgsSymbol
+            * theMin - Optional minimum value for the class
+            * theMax - Optional maximum value for the class\
+            * theCategory - Optional category name (will be used in lieu of
+                       min/max)
+            * theLabel - Optional text label for the class
+
+        Returns:
+            None
+        Raises:
+            Throws an exception if the class could not be added for
+            some reason..
+        """
+        myColour = theSymbol.color()
+        self.addClassToLegend(theMin=theMin,
+                              theMax=theMax,
+                              theLabel=theLabel,
+                              theColor=myColour)
+
+    def addClassToLegend(self,
+                         theColour,
+                         theMin=None,
+                         theMax=None,
+                         theCategory=None,
+                         theLabel=None):
+        """Add a class to the current legend. If the legend is not defined,
+        a new one will be created. A legend is just an image file with nicely
+        rendered classes in it.
+
+        Args:
+
+            * theColour - **Required** colour for the class as a QColor
+            * theMin - Optional minimum value for the class
+            * theMax - Optional maximum value for the class\
+            * theCategory - Optional category name (will be used in lieu of
+                       min/max)
+            * theLabel - Optional text label for the class
+
+        Returns:
+            None
+        Raises:
+            Throws an exception if the class could not be added for
+            some reason..
+        """
+        assert False
 
     def makePdf(self, theFilename):
         """Method to createa  nice little pdf map.
