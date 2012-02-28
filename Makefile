@@ -48,11 +48,11 @@ docs: compile
 
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
-	# Qt translation stuff first.
+        # Qt translation stuff first.
 	cd gui; pylupdate4 riab.pro; cd .
-	# Gettext translation stuff next.
-	# todo script this so we can loop through the locale list
-	# and apply same xgettext for each supported locale. TS
+        # Gettext translation stuff next.
+        # todo script this so we can loop through the locale list
+        # and apply same xgettext for each supported locale. TS
 	$(foreach LOCALE,$(LOCALES),xgettext -j -d id -o i18n/$(LOCALE)/LC_MESSAGES/riab.po $(POFILES);)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in gui
@@ -67,6 +67,7 @@ clean:
 	@# See http://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter
 	@-find . -name '*~' -exec rm {} \;
 	@-find . -name '*.pyc' -exec rm {} \;
+	@-find . -name '*.pyo' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
 
@@ -131,6 +132,7 @@ unwanted_strings:
 	@echo "Strings that should be deleted"
 	@echo "------------------------------"
 	@grep -R "settrace()" * | grep ".py:" | grep -v Makefile || true
+	@grep -R "assert " * | grep ".py:" | grep -v Makefile | grep -v test_ || true
 
 dependency_test:
 	@echo

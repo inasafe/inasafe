@@ -161,7 +161,7 @@ def write_keywords(keywords, filename):
 
     msg = ('Unknown extension for file %s. '
            'Expected %s.keywords' % (filename, basename))
-    assert ext == '.keywords', msg
+    verify(ext == '.keywords', msg)
 
     # Write
     fid = open(filename, 'w')
@@ -170,12 +170,12 @@ def write_keywords(keywords, filename):
         # Create key
         msg = ('Key in keywords dictionary must be a string. '
                'I got %s with type %s' % (k, str(type(k))[1:-1]))
-        assert isinstance(k, basestring), msg
+        verify(isinstance(k, basestring), msg)
 
         key = k
         msg = ('Key in keywords dictionary must not contain the ":" '
                'character. I got "%s"' % key)
-        assert ':' not in key, msg
+        verify(':' not in key, msg)
 
         # Create value
         msg = ('Value in keywords dictionary must be convertible to a string. '
@@ -212,7 +212,7 @@ def read_keywords(filename):
 
     msg = ('Unknown extension for file %s. '
            'Expected %s.keywords' % (filename, basename))
-    assert ext == '.keywords', msg
+    verify(ext == '.keywords', msg)
 
     if not os.path.isfile(filename):
         return {}
@@ -230,7 +230,7 @@ def read_keywords(filename):
 
         msg = ('Keyword entry must have the form "string: string". '
                'I got %s ' % text)
-        assert ':' in text, msg
+        verify(':' in text, msg)
 
         # Get splitting point
         idx = text.find(':')
@@ -314,8 +314,8 @@ def geotransform2resolution(geotransform, isotropic=False,
                'resolutions in the horizontal and vertical '
                'are different: resx = %.12f, resy = %.12f. '
                % (resx, resy))
-        assert numpy.allclose(resx, resy,
-                              rtol=rtol, atol=atol), msg
+        verify(numpy.allclose(resx, resy,
+                              rtol=rtol, atol=atol), msg)
 
         return resx
     else:
@@ -336,7 +336,7 @@ def bbox_intersection(*args):
     """
 
     msg = 'Function bbox_intersection must take at least 2 arguments.'
-    assert len(args) > 1, msg
+    verify(len(args) > 1, msg)
 
     result = [-180, -90, 180, 90]
     for a in args:
@@ -348,13 +348,13 @@ def bbox_intersection(*args):
         except:
             raise Exception(msg)
 
-        assert len(box) == 4, msg
+        verify(len(box) == 4, msg)
 
         msg = 'Western boundary must be less than eastern. I got %s' % box
-        assert box[0] < box[2], msg
+        verify(box[0] < box[2], msg)
 
         msg = 'Southern boundary must be less than northern. I got %s' % box
-        assert box[1] < box[3], msg
+        verify(box[1] < box[3], msg)
 
         # Compute intersection
 
@@ -473,12 +473,12 @@ def get_geometry_type(geometry):
     """
 
     msg = 'Argument geometry must be a sequence. I got %s ' % type(geometry)
-    assert is_sequence(geometry), msg
+    verify(is_sequence(geometry), msg)
 
     msg = ('The first element in geometry must be a sequence of length > 2. '
            'I got %s ' % str(geometry[0]))
-    assert is_sequence(geometry[0]), msg
-    assert len(geometry[0]) >= 2, msg
+    verify(is_sequence(geometry[0]), msg)
+    verify(len(geometry[0]) >= 2, msg)
 
     if len(geometry[0]) == 2:
         try:
@@ -622,7 +622,7 @@ def calculate_polygon_area(polygon, signed=False):
 
     msg = ('Polygon is assumed to consist of coordinate pairs. '
            'I got second dimension %i instead of 2' % P.shape[1])
-    assert P.shape[1] == 2, msg
+    verify(P.shape[1] == 2, msg)
 
     x = P[:, 0]
     y = P[:, 1]
@@ -789,6 +789,28 @@ def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
 
     # Compare non NaN's and return
     return numpy.allclose(x, y, rtol=rtol, atol=atol)
+
+
+class VerificationError(RuntimeError):
+    """Exception thrown by verify()
+    """
+    pass
+
+
+def verify(statement, message=None):
+    """Verification of logical statement similar to assertions
+    Input
+        statement: expression
+        message: error message in case statement evaluates as False
+
+    Output
+        None
+    Raises
+        VerificationError in case statement evaluates to False
+    """
+
+    if bool(statement) is False:
+        raise VerificationError(message)
 
 
 def ugettext(s):

@@ -31,6 +31,7 @@ from utilities import geotransform2bbox
 from utilities import geotransform2resolution
 from utilities import nanallclose
 from utilities import ugettext as _
+from utilities import VerificationError
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
@@ -226,7 +227,7 @@ class Test_IO(unittest.TestCase):
             # Check exceptions
             try:
                 L = layer.get_topN(attribute='FLOOR_AREA', N=0)
-            except AssertionError:
+            except VerificationError:
                 pass
             else:
                 msg = 'Exception should have been raised for N == 0'
@@ -766,11 +767,11 @@ class Test_IO(unittest.TestCase):
 
                 try:
                     L.get_extrema('NONEXISTING_ATTRIBUTE_NAME_8462')
-                except AssertionError:
+                except VerificationError:
                     pass
                 else:
                     msg = ('Non existing attribute name should have '
-                           'raised AssertionError')
+                           'raised VerificationError')
                     raise Exception(msg)
 
                 try:
@@ -1080,7 +1081,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             write_keywords(keywords, kwd_filename)
-        except AssertionError:
+        except VerificationError:
             pass
         else:
             msg = 'Colon in keywords key %s was not caught' % keywords
@@ -1200,7 +1201,7 @@ class Test_IO(unittest.TestCase):
         # Deal with invalid boxes
         try:
             bbox_intersection(bbox1, [53, 2, 40, 4])
-        except AssertionError:
+        except VerificationError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1208,7 +1209,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection(bbox1, [50, 7, 53, 4])
-        except AssertionError:
+        except VerificationError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1216,7 +1217,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection(bbox1, 'blko ho skrle')
-        except AssertionError:
+        except VerificationError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1224,7 +1225,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection(bbox1)
-        except AssertionError:
+        except VerificationError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1232,7 +1233,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection('')
-        except AssertionError:
+        except VerificationError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1240,7 +1241,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection()
-        except AssertionError:
+        except VerificationError:
             pass
         else:
             msg = 'Should have raised exception'

@@ -56,7 +56,8 @@ def interpolate1d(x, z, points, mode='linear', bounds_error=False):
     msg = ('Interpolation point outside domain. This should never happen. '
            'Please email Ole.Moller.Nielsen@gmail.com')
     if len(idx) > 0:
-        assert max(idx) < len(x), msg
+        if not max(idx) < len(x):
+            raise RuntimeError(msg)
 
     # Get the two neighbours for each interpolation point
     x0 = x[idx - 1]
@@ -91,7 +92,8 @@ def interpolate1d(x, z, points, mode='linear', bounds_error=False):
         msg = ('Internal check failed. Max interpolated value %.15f '
                'exceeds max grid value %.15f ' % (mzeta, mz))
         if not(numpy.isnan(mzeta) or numpy.isnan(mz)):
-            assert mzeta <= mz, msg
+            if not mzeta <= mz:
+                raise RuntimeError(msg)
 
     # Populate result with interpolated values for points inside domain
     # and NaN for values outside
@@ -107,7 +109,8 @@ def check_inputs(x, z, points, mode, bounds_error):
     """
 
     msg = 'Only mode "linear" and "constant" are implemented. I got %s' % mode
-    assert mode in ['linear', 'constant'], msg
+    if mode not in ['linear', 'constant']:
+        raise RuntimeError(msg)
 
     try:
         x = numpy.array(x)
@@ -118,11 +121,13 @@ def check_inputs(x, z, points, mode, bounds_error):
 
     msg = ('Input vector x must be monotoneously increasing. I got '
            'min(x) == %.15f, but x[0] == %.15f' % (min(x), x[0]))
-    assert min(x) == x[0], msg
+    if not min(x) == x[0]:
+        raise RuntimeError(msg)
 
     msg = ('Input vector x must be monotoneously increasing. I got '
            'max(x) == %.15f, but x[-1] == %.15f' % (max(x), x[-1]))
-    assert max(x) == x[-1], msg
+    if not max(x) == x[-1]:
+        raise RuntimeError(msg)
 
     msg = 'Z must be a 1d numpy array'
     try:
@@ -130,18 +135,21 @@ def check_inputs(x, z, points, mode, bounds_error):
     except Exception, e:
         raise Exception(msg)
 
-    assert len(z.shape) == 1, msg
-    m = len(z)
+    if not len(z.shape) == 1:
+        raise RuntimeError(msg)
 
+    m = len(z)
     Nx = len(x)
     msg = ('Input array z must have same length as x (%i).'
            'However, Z has length %i.' % (Nx, m))
-    assert Nx == m, msg
+    if not Nx == m:
+        raise RuntimeError(msg)
 
     # Get interpolation points
     points = numpy.array(points)
     msg = 'Interpolation points must be a 1d array'
-    assert len(points.shape) == 1, msg
+    if not len(points.shape) == 1:
+        raise RuntimeError(msg)
     xi = points[:]
 
     if bounds_error:

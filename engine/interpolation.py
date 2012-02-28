@@ -8,6 +8,7 @@ import numpy
 from engine.interpolation2d import interpolate_raster
 from storage.vector import Vector
 from storage.vector import convert_polygons_to_centroids
+from storage.utilities import verify
 
 
 def interpolate_raster_vector_points(R, V, name=None):
@@ -26,18 +27,18 @@ def interpolate_raster_vector_points(R, V, name=None):
 
     msg = ('There are no data points to interpolate to. Perhaps zoom out '
            'and try again')
-    assert len(V) > 0, msg
+    verify(len(V) > 0, msg)
 
     # Input checks
-    assert R.is_raster
-    assert V.is_vector
-    assert V.is_point_data
+    verify(R.is_raster)
+    verify(V.is_vector)
+    verify(V.is_point_data)
 
     # Get raster data and corresponding x and y axes
     A = R.get_data(nan=True)
     longitudes, latitudes = R.get_geometry()
-    assert len(longitudes) == A.shape[1]
-    assert len(latitudes) == A.shape[0]
+    verify(len(longitudes) == A.shape[1])
+    verify(len(latitudes) == A.shape[0])
 
     # Get vector point geometry as Nx2 array
     coordinates = numpy.array(V.get_geometry(),
@@ -78,8 +79,8 @@ def interpolate_raster_vector(R, V, name=None):
     """
 
     # Input checks
-    assert R.is_raster
-    assert V.is_vector
+    verify(R.is_raster)
+    verify(V.is_vector)
 
     if V.is_polygon_data:
         # Use centroids, in case of polygons

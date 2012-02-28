@@ -11,6 +11,7 @@ from utilities import read_keywords
 from utilities import write_keywords
 from utilities import nanallclose
 from utilities import geotransform2bbox, geotransform2resolution
+from utilities import verify
 
 
 class Raster:
@@ -69,7 +70,7 @@ class Raster:
             else:
                 msg = ('Specified keywords must be either None or a '
                        'dictionary. I got %s' % keywords)
-                assert isinstance(keywords, dict), msg
+                verify(isinstance(keywords, dict), msg)
                 self.keywords = keywords
 
             if style_info is None:
@@ -77,7 +78,7 @@ class Raster:
             else:
                 msg = ('Specified style_info must be either None or a '
                        'dictionary. I got %s' % style_info)
-                assert isinstance(style_info, dict), msg
+                verify(isinstance(style_info, dict), msg)
                 self.style_info = style_info
 
             self.data = numpy.array(data, dtype='d', copy=False)
@@ -248,7 +249,7 @@ class Raster:
 
         msg = ('Invalid file type for file %s. Only extension '
                'tif allowed.' % filename)
-        assert extension in ['.tif', '.asc'], msg
+        verify(extension in ['.tif', '.asc'], msg)
         format = DRIVER_MAP[extension]
 
         # Get raster data
@@ -306,7 +307,7 @@ class Raster:
             # Interpolate this raster layer to geometry of X
             msg = ('Name must be either a string or None. I got %s'
                    % (str(type(X)))[1:-1])
-            assert name is None or isinstance(name, basestring), msg
+            verify(name is None or isinstance(name, basestring), msg)
 
             return interpolate_raster_vector(self, X, name)
 
@@ -338,7 +339,7 @@ class Raster:
 
         if hasattr(self, 'data'):
             A = self.data
-            assert A.shape[0] == self.rows and A.shape[1] == self.columns
+            verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
         else:
             # Read from raster file
             A = self.band.ReadAsArray()
@@ -350,8 +351,8 @@ class Raster:
             M, N = A.shape
             msg = ('Dimensions of raster array do not match those of '
                    'raster file %s' % self.filename)
-            assert M == self.rows, msg
-            assert N == self.columns, msg
+            verify(M == self.rows, msg)
+            verify(N == self.columns, msg)
 
         # Handle no data value
         if nan is False:
@@ -446,8 +447,8 @@ class Raster:
         nx = self.columns
         ny = self.rows
 
-        assert dx > 0
-        assert dy > 0
+        verify(dx > 0)
+        verify(dy > 0)
 
         # Coordinates of lower left corner
         lon_ll = lon_ul
@@ -535,7 +536,7 @@ class Raster:
 
             A.sort()
 
-            assert len(A) == A.shape[0]
+            verify(len(A) == A.shape[0])
 
             d = float(len(A) + 0.5) / N
             for i in range(N):
@@ -585,8 +586,8 @@ class Raster:
 
                     msg = ('Unknown format for resolution keyword: %s'
                            % resolution)
-                    assert (resolution.startswith('(') and
-                            resolution.endswith(')')), msg
+                    verify((resolution.startswith('(') and
+                            resolution.endswith(')')), msg)
 
                     dx, dy = [float(s) for s in resolution[1:-1].split(',')]
                     if not isotropic:
@@ -594,8 +595,8 @@ class Raster:
                     else:
                         msg = ('Resolution of layer "%s" was not isotropic: '
                                '[dx, dy] == %s' % (self.get_name(), res))
-                        assert numpy.allclose(dx, dy,
-                                              rtol=1.0e-12, atol=1.0e-12), msg
+                        verify(numpy.allclose(dx, dy,
+                                              rtol=1.0e-12, atol=1.0e-12), msg)
                         res = dx
                 else:
                     if not isotropic:

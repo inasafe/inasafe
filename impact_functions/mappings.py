@@ -2,6 +2,7 @@
 """
 import numpy
 from storage.vector import Vector
+from storage.utilities import verify
 
 
 def osm2padang(E):
@@ -44,7 +45,7 @@ def osm2padang(E):
     msg = ('Input data to osm2padang must have attributes %s. '
            'It has %s' % (str(required), str(actual)))
     for attribute in required:
-        assert attribute in actual, msg
+        verify(attribute in actual, msg)
 
     # Start mapping
     N = len(E)
@@ -97,8 +98,8 @@ def osm2padang(E):
                           attributes[i]['TestBLDGCl'],
                           levels,
                           structure))
-                assert numpy.allclose(attributes[i]['TestBLDGCl'],
-                                      vulnerability_class), msg
+                verify(numpy.allclose(attributes[i]['TestBLDGCl'],
+                                      vulnerability_class), msg)
 
     #print 'Got %i without levels or structure (out of %i total)' % (count, N)
 
@@ -130,7 +131,7 @@ def sigab2padang(E):
     msg = ('Input data to sigab2bnpb must have attributes %s. '
            'It has %s' % (str(required), str(actual)))
     for attribute in required:
-        assert attribute in actual, msg
+        verify(attribute in actual, msg)
 
     # Start mapping
     N = len(E)
@@ -168,8 +169,8 @@ def sigab2padang(E):
                           attributes[i]['TestBLDGCl'],
                           levels,
                           structure))
-                assert numpy.allclose(attributes[i]['TestBLDGCl'],
-                                      vulnerability_class), msg
+                verify(numpy.allclose(attributes[i]['TestBLDGCl'],
+                                      vulnerability_class), msg)
 
     # Create new vector instance and return
     V = Vector(data=attributes,
@@ -205,7 +206,7 @@ def osm2bnpb(E, target_attribute='VCLASS'):
     msg = ('Input data to osm2bnpb must have attributes %s. '
            'It has %s' % (str(required), str(actual)))
     for attribute in required:
-        assert attribute in actual, msg
+        verify(attribute in actual, msg)
 
     # Start mapping
     N = len(E)
@@ -312,7 +313,7 @@ def sigab2bnpb(E, target_attribute='VCLASS'):
     msg = ('Input data to sigab2bnpb must have attributes %s. '
            'It has %s' % (str(required), str(actual)))
     for attribute in required:
-        assert attribute in actual, msg
+        verify(attribute in actual, msg)
 
     # Start mapping
     N = len(E)
@@ -368,7 +369,7 @@ def sigab2bnpb(E, target_attribute='VCLASS'):
 #     #msg = ('Input data to osm2bnpb must have attributes %s. '
 #     #       'It has %s' % (str(required), str(actual)))
 #     #for attribute in required:
-#     #    assert attribute in actual, msg
+#     #    verify(attribute in actual, msg)
 
 #     # Start mapping
 #     fields = {}

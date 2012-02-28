@@ -15,6 +15,7 @@ from engine.numerics import cdf, erf, ensure_numeric
 from storage.core import read_layer
 
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
+from storage.utilities import VerificationError
 from storage.core import write_vector_data
 from storage.core import write_raster_data
 from storage.vector import Vector
@@ -1393,12 +1394,12 @@ class Test_Engine(unittest.TestCase):
         # Check projection mismatch is caught
         try:
             H.interpolate(E)
-        except AssertionError, e:
+        except VerificationError, e:
             msg = ('Projection mismatch shoud have been caught: %s'
                    % str(e))
             assert 'Projections' in str(e), msg
         else:
-            msg = 'Should have raised assertError about projection mismatch'
+            msg = 'Should have raised error about projection mismatch'
             raise Exception(msg)
 
     def test_layer_integrity_raises_exception(self):
@@ -1432,7 +1433,7 @@ class Test_Engine(unittest.TestCase):
             try:
                 impact_layer = calculate_impact(layers=[H, E],
                                                 impact_fcn=IF)
-            except AssertionError, e:
+            except VerificationError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
             else:
@@ -1451,7 +1452,7 @@ class Test_Engine(unittest.TestCase):
             try:
                 impact_layer = calculate_impact(layers=[H, E],
                                                 impact_fcn=IF)
-            except AssertionError, e:
+            except Exception, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)
             else:
