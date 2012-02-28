@@ -517,7 +517,7 @@ def is_sequence(x):
         return False
 
     try:
-        x[0]
+        list(x)
     except:
         return False
     else:

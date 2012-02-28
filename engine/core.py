@@ -159,6 +159,9 @@ def check_data_integrity(layer_objects):
                                       rtol=1.0e-12), msg
 
         # In case of vector layers, we just check that they are non-empty
+        # FIXME (Ole): Not good as nasty error is raised in cases where
+        # there are no buildings in the hazard area. Need to be more graceful
+        # See e.g. shakemap dated 20120227190230
         if layer.is_vector:
             msg = ('There are no vector data features. '
                    'Perhaps zoom out or pan to the study area '
