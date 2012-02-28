@@ -8,6 +8,7 @@ import os
 
 from vector import Vector
 from raster import Raster
+from utilities import verify
 
 # FIXME (Ole): make logging work again
 import logging
@@ -102,7 +103,7 @@ def bboxlist2string(bbox, decimals=6):
     """
 
     msg = 'Got string %s, but expected bounding box as a list' % str(bbox)
-    assert not isinstance(bbox, basestring), msg
+    verify(not isinstance(bbox, basestring), msg)
 
     try:
         bbox = list(bbox)
@@ -112,7 +113,7 @@ def bboxlist2string(bbox, decimals=6):
 
     msg = ('Bounding box must have 4 coordinates [W, S, E, N]. '
            'I got %s' % str(bbox))
-    assert len(bbox) == 4, msg
+    verify(len(bbox) == 4, msg)
 
     for x in bbox:
         try:
@@ -142,12 +143,12 @@ def bboxstring2list(bbox_string):
            'format 105.592,-7.809,110.159,-5.647\n'
            'Instead I got %s of type %s.' % (str(bbox_string),
                                              type(bbox_string)))
-    assert isinstance(bbox_string, basestring), msg
+    verify(isinstance(bbox_string, basestring), msg)
 
     fields = bbox_string.split(',')
     msg = ('Bounding box string must have 4 coordinates in the form '
            '"W,S,E,N". I got bbox == "%s"' % bbox_string)
-    assert len(fields) == 4, msg
+    verify(len(fields) == 4, msg)
 
     for x in fields:
         try:
@@ -178,7 +179,7 @@ def check_bbox_string(bbox_string):
     """
 
     msg = 'Expected bbox as a string with format "W,S,E,N"'
-    assert isinstance(bbox_string, basestring), msg
+    verify(isinstance(bbox_string, basestring), msg)
 
     # Use checks from string to list conversion
     # FIXME (Ole): Would be better to separate the checks from the conversion
@@ -188,24 +189,24 @@ def check_bbox_string(bbox_string):
     # Check semantic integrity
     msg = ('Western border %.5f of bounding box %s was out of range '
            'for longitudes ([-180:180])' % (minx, bbox_string))
-    assert -180 <= minx <= 180, msg
+    verify(-180 <= minx <= 180, msg)
 
     msg = ('Eastern border %.5f of bounding box %s was out of range '
            'for longitudes ([-180:180])' % (maxx, bbox_string))
-    assert -180 <= maxx <= 180, msg
+    verify(-180 <= maxx <= 180, msg)
 
     msg = ('Southern border %.5f of bounding box %s was out of range '
            'for latitudes ([-90:90])' % (miny, bbox_string))
-    assert -90 <= miny <= 90, msg
+    verify(-90 <= miny <= 90, msg)
 
     msg = ('Northern border %.5f of bounding box %s was out of range '
            'for latitudes ([-90:90])' % (maxy, bbox_string))
-    assert -90 <= maxy <= 90, msg
+    verify(-90 <= maxy <= 90, msg)
 
     msg = ('Western border %.5f was greater than or equal to eastern border '
            '%.5f of bounding box %s' % (minx, maxx, bbox_string))
-    assert minx < maxx, msg
+    verify(minx < maxx, msg)
 
     msg = ('Southern border %.5f was greater than or equal to northern border '
            '%.5f of bounding box %s' % (miny, maxy, bbox_string))
-    assert miny < maxy, msg
+    verify(miny < maxy, msg)

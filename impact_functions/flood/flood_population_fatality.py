@@ -56,12 +56,13 @@ class FloodFatalityFunction(FunctionProvider):
 
                     msg = ('Unit for gender ratio must be either '
                            '"percent" or "ratio"')
-                    assert gender_ratio_unit in ['percent', 'ratio'], msg
-
+                    if gender_ratio_unit not in ['percent', 'ratio']:
+                        raise RuntimeError(msg)
                     gender_ratio = layer
 
         msg = 'No population layer was found in: %s' % str(layers)
-        assert population is not None, msg
+        if population is None:
+            raise RuntimeError(msg)
 
         # Extract data as numeric arrays
         D = inundation.get_data(nan=0.0)  # Depth

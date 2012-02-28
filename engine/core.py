@@ -13,6 +13,7 @@ from storage.utilities import unique_filename
 from storage.utilities import bbox_intersection
 from storage.utilities import buffered_bounding_box
 from storage.utilities import is_sequence
+from storage.utilities import verify
 from storage.core import bboxlist2string, bboxstring2list
 from storage.core import check_bbox_string
 from storage.core import read_layer
@@ -55,7 +56,7 @@ def calculate_impact(layers, impact_fcn,
     F = impact_function.run(layers)
 
     msg = 'Impact function %s returned None' % str(impact_function)
-    assert F is not None, msg
+    verify(F is not None, msg)
 
     # Write result and return filename
     if F.is_raster:
@@ -129,12 +130,12 @@ def check_data_integrity(layer_objects):
         for kw in REQUIRED_KEYWORDS:
             msg = ('Layer %s did not have required keyword "%s". '
                    '%s' % (layer.name, kw, instructions))
-            assert kw in keywords, msg
+            verify(kw in keywords, msg)
 
             val = keywords[kw]
             msg = ('No value found for keyword "%s" in layer %s. '
                    '%s' % (kw, layer.name, instructions))
-            assert val, msg
+            verify(val, msg)
 
         # Ensure that projection is consistent across all layers
         if reference_projection is None:
@@ -144,7 +145,7 @@ def check_data_integrity(layer_objects):
                    'projection: %s\n'
                    'default:    %s'
                    '' % (layer, layer.projection, reference_projection))
-            assert reference_projection == layer.projection, msg
+            verify(reference_projection == layer.projection, msg)
 
         # Ensure that geotransform and dimensions is consistent across
         # all *raster* layers
@@ -154,9 +155,9 @@ def check_data_integrity(layer_objects):
             else:
                 msg = ('Geotransforms in input raster layers are different: '
                        '%s %s' % (geotransform, layer.get_geotransform()))
-                assert numpy.allclose(geotransform,
+                verify(numpy.allclose(geotransform,
                                       layer.get_geotransform(),
-                                      rtol=1.0e-12), msg
+                                      rtol=1.0e-12), msg)
 
         # In case of vector layers, we just check that they are non-empty
         # FIXME (Ole): Not good as nasty error is raised in cases where
@@ -166,7 +167,7 @@ def check_data_integrity(layer_objects):
             msg = ('There are no vector data features. '
                    'Perhaps zoom out or pan to the study area '
                    'and try again')
-            assert len(layer) > 0, msg
+            verify(len(layer) > 0, msg)
 
     # Check that arrays are aligned.
 
@@ -184,14 +185,14 @@ def check_data_integrity(layer_objects):
                    'Refer to issue #102' % (layer.get_name(),
                                             layer.rows,
                                             refname, M))
-            assert layer.rows == M, msg
+            verify(layer.rows == M, msg)
 
             msg = ('Rasters are not aligned!\n'
                    'Raster %s has %i columns but raster %s has %i columns\n'
                    'Refer to issue #102' % (layer.get_name(),
                                             layer.columns,
                                             refname, N))
-            assert layer.columns == N, msg
+            verify(layer.columns == N, msg)
 
 # FIXME (Ole): This needs to be rewritten as it
 # directly depends on ows metadata. See issue #54

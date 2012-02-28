@@ -3,6 +3,7 @@ from numpy import nansum as sum
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layers
 from storage.raster import Raster
+from storage.utilities import verify
 
 
 class HKVFloodImpactFunctionTEST(FunctionProvider):
@@ -58,12 +59,13 @@ class HKVFloodImpactFunctionTEST(FunctionProvider):
 
                     msg = ('Unit for gender ratio must be either '
                            '"percent" or "ratio"')
-                    assert gender_ratio_unit in ['percent', 'ratio'], msg
+                    if gender_ratio_unit not in ['percent', 'ratio']:
+                        raise Exception(msg)
 
                     gender_ratio = layer
 
         msg = 'No population layer was found in: %s' % str(layers)
-        assert population is not None, msg
+        verify(population is not None, msg)
 
         # Extract data as numeric arrays
         D = inundation.get_data(nan=0.0)  # Depth
