@@ -98,7 +98,7 @@ class Test_plugins(unittest.TestCase):
 
         try:
             plugin_list = get_plugins('NotRegistered')
-        except AssertionError:
+        except RuntimeError:
             pass
         else:
             msg = 'Search should fail'

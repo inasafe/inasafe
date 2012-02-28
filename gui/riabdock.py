@@ -293,6 +293,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             return (False, myMessage)
 
         if self.cboFunction.currentIndex() == -1:
+            # FIXME (Ole): Don't like the naming *Function - should be *Filename
             myHazardFunction = str(self.getHazardLayer().source())
             myHazardKeywords = self.calculator.getKeywordFromFile(
                                                             myHazardFunction)
