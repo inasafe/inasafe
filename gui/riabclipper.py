@@ -28,7 +28,7 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsFeature,
                        QgsVectorFileWriter)
 
-from storage.utilities import read_keywords, write_keywords
+from storage.utilities import read_keywords, write_keywords, verify
 
 from riabexceptions import InvalidParameterException, KeywordNotFoundException
 from utilities import getTempDir
@@ -223,7 +223,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     msg = tr('Input file to be clipped "%s" does not have the '
            'expected keywords file %s' % (myWorkingLayer,
                                           myKeywordsPath))
-    assert os.path.isfile(myKeywordsPath), msg
+    verify(os.path.isfile(myKeywordsPath), msg)
 
     # We need to provide gdalwarp with a dataset for the clip
     # because unline gdal_translate, it does not take projwin.
@@ -305,7 +305,7 @@ def copyKeywords(sourceFile, destinationFile, extraKeywords=None):
         extraKeywords = {}
     msg = tr('Expected extraKeywords to be a dictionary. Got %s'
            % str(type(extraKeywords))[1:-1])
-    assert isinstance(extraKeywords, dict), msg
+    verify(isinstance(extraKeywords, dict), msg)
 
     try:
         srcKeywords = read_keywords(myNewSource)

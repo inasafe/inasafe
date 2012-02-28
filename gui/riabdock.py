@@ -820,7 +820,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                 # ensure there are enough pixels for points at the edge of
                 # the view port to be interpolated correctly. This requires
                 # resolution to be available
-                assert myExposureLayer.type() == QgsMapLayer.VectorLayer
+                if myExposureLayer.type() != QgsMapLayer.VectorLayer:
+                    raise RuntimeError
                 myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
                                                         myHazardGeoCellSize)
         else:
@@ -863,9 +864,10 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         #myMessage = ('Resampled pixels sizes did not match: '
         #       'Exposure pixel size = %.12f, '
         #       'Hazard pixel size = %.12f' % (myExposureUPP, myHazardUPP))
-        #assert numpy.allclose(myExposureUPP, myHazardUPP,
+        #if not numpy.allclose(myExposureUPP, myHazardUPP,
         #                      # FIXME (Ole): I would like to make this tighter
-        #                      rtol=1.0e-6, atol=1.0e-3), myMessage
+        #                      rtol=1.0e-6, atol=1.0e-3):
+        #    raise RuntimeError(myMessage)
 
         #print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
         #print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP

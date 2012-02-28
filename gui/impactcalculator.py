@@ -37,7 +37,7 @@ from impact_functions import get_admissible_plugins, get_plugins
 from engine.core import calculate_impact
 from storage.core import read_layer
 from storage.utilities import read_keywords, bbox_intersection
-from storage.utilities import buffered_bounding_box
+from storage.utilities import buffered_bounding_box, verify
 import threading
 from PyQt4.QtCore import (QObject,
                           pyqtSignal,
@@ -120,8 +120,7 @@ def getOptimalExtent(theHazardGeoExtent,
             list(x)
         except:
             raise Exception(msg)
-
-        assert len(x) == 4, msg
+        verify(len(x) == 4, msg)
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326

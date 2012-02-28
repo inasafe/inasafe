@@ -117,7 +117,8 @@ def getWGS84resolution(theLayer, theGeoExtent=None):
 
     msg = tr('Input layer to getWGS84resolution must be a raster layer. '
            'I got: %s' % str(theLayer.type())[1:-1])
-    assert theLayer.type() == QgsMapLayer.RasterLayer, msg
+    if not theLayer.type() == QgsMapLayer.RasterLayer:
+        raise RuntimeError(msg)
 
     if theLayer.crs().authid() == 'EPSG:4326':
         # If it is already in EPSG:4326, simply use the native resolution
