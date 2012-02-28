@@ -293,13 +293,12 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             return (False, myMessage)
 
         if self.cboFunction.currentIndex() == -1:
-            # FIXME (Ole): Don't like the naming *Function - should be *Filename
-            myHazardFunction = str(self.getHazardLayer().source())
+            myHazardFilename = str(self.getHazardLayer().source())
             myHazardKeywords = self.calculator.getKeywordFromFile(
-                                                            myHazardFunction)
-            myExposureFunction = str(self.getExposureLayer().source())
+                                                            myHazardFilename)
+            myExposureFilename = str(self.getExposureLayer().source())
             myExposureKeywords = self.calculator.getKeywordFromFile(
-                                                            myExposureFunction)
+                                                            myExposureFilename)
             myMessage = self.tr('<span class="label important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
@@ -310,8 +309,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                          'a given risk function. <br>'
                          'Hazard keywords [%s]: %s <br>'
                          'Exposure keywords [%s]: %s' % (
-                                myHazardFunction, myHazardKeywords,
-                                myExposureFunction, myExposureKeywords))
+                                myHazardFilename, myHazardKeywords,
+                                myExposureFilename, myExposureKeywords))
             return (False, myMessage)
         else:
             myMessage = self.tr('<span class="label success">Ready:</span> '
