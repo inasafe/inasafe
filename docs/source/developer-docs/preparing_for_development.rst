@@ -55,8 +55,145 @@ notes on running tests below.
 To run the plugin start QGIS and enable it from the 
 :menuselection:`Plugins --> Manage Plugins` menu.
 
+Windows installation guide for developers
+-----------------------------------------
+
+Setup msysgit
+......................
+
+To check out the code for development, you first need to install a git client.
+We cover msysgit here, but you can also use `tortoisegit <http://code.google.com/p/tortoisegit/downloads/list>`_
+if you prefer (although the tortoise git procedure is not covered here.
+
+To install msysgit (which is a command line git client), download the latest
+version of the software from the `msysgit web site <http://code.google.com/p/msysgit/downloads/list>`_.
+There is no need to get the 'full install' - just fetching the latest 'preview'
+is good enough. For example at the time of writing I downloaded
+:samp:`Git-1.7.9-preview20120201.exe`. The download is around 14mb in size.
+
+Once the file is downloaded, run it and respnd to the installer prompts as
+illustrated below:
+
+.. figure::  ../../msysgit-step1.jpg
+   :align:   center
+
+
+.. figure::  ../../msysgit-step2.jpg
+   :align:   center
+
+
+.. figure::  ../../msysgit-step3.jpg
+   :align:   center
+
+
+.. figure::  ../../msysgit-step4.jpg
+   :align:   center
+
+
+.. figure::  ../../msysgit-step5.jpg
+   :align:   center
+
+
+.. figure::  ../../msysgit-step6.jpg
+   :align:   center
+
+   
+
+.. figure::  ../../msysgit-step7.jpg
+   :align:   center
+
+
+.. figure::  ../../msysgit-step8.jpg
+   :align:   center
+
+
+.. figure::  ../../msysgit-step9.jpg
+   :align:   center
+
+
+Clone the repository
+.............................
+
+First open a GIT bash prompt as illustrated below:
+
+.. figure::  ../../msysgit-step10.jpg
+   :align:   center
+
+
+The repository can now be closed by issuing the commands listed below.::
+
+   cd  /c/Documents\ and\ Settings/<your username>/
+
+   mkdir -p .qgis/python/plugins
+
+   cd .qgis/python/plugins/
+
+   git clone https://<your username>@github.com/AIFDR/risk_in_a_box.git
+
+.. note:: The items in angle brackets above should be replaced with your personal
+   details as required.
+
+When the final command above runs, you should see something like this in the 
+console when the clone process is completed::
+
+   $ git clone https://timlinux@github.com/AIFDR/risk_in_a_box.git
+   Cloning into 'risk_in_a_box'...
+   remote: Counting objects: 5002, done.
+   remote: Compressing objects: 100% (1526/1526), done.
+   remote: Total 5002 (delta 3505), reused 4835 (delta 3338)
+   Receiving objects: 100% (5002/5002), 2.38 MiB | 7 KiB/s, done.
+   Resolving deltas: 100% (3505/3505), done.
+
+
+Install an SVN client
+..............................
+
+The test data for Risk in a Box is hosted on an svn server, so to obtain it
+you first need to install an SVN client. Start by downloading `this installer
+<http://sourceforge.net/projects/win32svn/files/latest/download>`_ (it is
+about 4.8mb to download).
+
+Now run the installer, accepting the defaults options throughout.
+
+Checkout the test data
+..................................
+
+To check out the test data from svn, first open a command prompt (
+:menuselection:`Start --> Run...` then type :kbd:`cmd.exe` and press
+enter). Now navigate to the plugins directory and check out the 
+svn repository by typing the commands as listed below::
+
+   cd "c:\Documents and Settings\user\.qgis\python\plugins\"
+   svn co http://www.aifdr.org/svn/riab_test_data ../riab_test_data
+
+You will be prompted for a username and password for svn - please
+contect Ole Nielson for a log in account.
+
+Install QGIS
+..................
+
+Download the latest QGIS 'standalone' installer from http://download.qgis.org and
+install it by running the installation wizard and accepting the defaults throughout.
+
+After opening QGIS (:menuselection:`Start --> All Programs --> Quantum GIS Wroclaw --> Quantum GIS`)
+you need to enable the plugin from the plugin menu by doing :menuselection:`Plugins --> Manage Plugins` 
+and then search for the Risk in a Box plugin in the list and enable it.
+
+Windows Caveats
+..........................
+
+Our primary development platform is Linux (specifically Ubuntu Linux). Some features
+of the development environment - particularly the **Make** tools do not run on Windows.
+
+As a work around, you can set up the eclipse IDE which is described below.
+
+
 Development using Eclipse IDE with PyDev
 ----------------------------------------
+
+.. note:: This is optional - you can use any environment you like for editing
+   python, or even a simple text editor.
+
 
 If you wish to use an IDE for development, please refer to
 `this article <http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/>`_
