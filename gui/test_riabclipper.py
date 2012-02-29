@@ -32,12 +32,16 @@ from qgis.core import (QgsVectorLayer,
 from storage.core import read_layer
 from riabclipper import clipLayer, extentToKml
 from impactcalculator import getOptimalExtent
-from utilities_test import getQgisTestApp
+from utilities_test import (getQgisTestApp,
+                            setCanvasCrs,
+                            GEOCRS,
+                            setJakartaGeoExtent)
 from storage.utilities_test import TESTDATA
 from storage.utilities import nanallclose
 
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+VECTOR_PATH2 = os.path.join(TESTDATA, 'OSM_building_polygons_20110905.shp')
 RASTERPATH = os.path.join(TESTDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 
@@ -333,7 +337,26 @@ class RiabClipper(unittest.TestCase):
 
     def test_vectorProjections(self):
         """Test that vector input data is reprojected properly during clip"""
-        assert False
+        # Input data is OSM in GOOGLE CRS
+        # We are reprojecting to GEO and expecting the output shp to be in GEO
+        # see https://github.com/AIFDR/risk_in_a_box/issues/119
+        myVectorLayer = QgsVectorLayer(VECTOR_PATH2,
+                                       'OSM Buildings',
+                                       'ogr')
+        myMessage = 'Failed to load osm buildings'
+        assert myVectorLayer is not None, myMessage
+        assert myVectorLayer.isValid()
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        myClipRect = [106.52, -6.38, 107.14, -6.07]
+
+        # Clip the vector to the bbox
+        myResult = clipLayer(myVectorLayer, myClipRect)
+
+        # Check the output is valid
+        assert(os.path.exists(myResult))
+        #  Enable on-the-fly reprojection
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabClipper, 'test')

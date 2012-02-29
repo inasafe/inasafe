@@ -38,7 +38,9 @@ from utilities_test import (getQgisTestApp,
                             setJakartaGeoExtent,
                             setYogyaGeoExtent,
                             setJakartaGoogleExtent,
-                            setGeoExtent)
+                            setGeoExtent,
+                            GEOCRS,
+                            GOOGLECRS)
 
 from gui.riabdock import (RiabDock, setRasterStyle)
 from storage.utilities import read_keywords
@@ -52,8 +54,6 @@ except Exception, e:
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = RiabDock(IFACE)
-GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
-GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 
 
 def getUiState(ui):
