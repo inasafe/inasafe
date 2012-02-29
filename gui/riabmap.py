@@ -166,7 +166,19 @@ class RiabMap():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
-        assert False
+        myShader = self.layer.rasterShader().rasterShaderFunction()
+        myRampItems = myShader.colorRampItemList()
+        myLastValue = 0  # Making an assumption here...
+        for myItem in myRampItems:
+            myValue = myItem.value
+            myLabel = myItem.label
+            myColor = myItem.color
+            print 'Value: %s' % myValue
+            self.addClassToLegend(myColor,
+                      theMin=myLastValue,
+                      theMax=myValue,
+                      theLabel=myLabel)
+            myLastValue = myValue
 
     def addSymbolToLegend(self,
                          theSymbol,

@@ -89,7 +89,7 @@ class RiabDockTest(unittest.TestCase):
 
     def test_getRasterLegend(self):
         """Getting a legend for a raster layer works."""
-        myLayer, myType = loadLayer('issue58.tif')
+        myLayer, myType = loadLayer('test_floodimpact.tif')
         del myType
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
@@ -101,7 +101,7 @@ class RiabDockTest(unittest.TestCase):
 
     def addSymbolToLegend(self):
         """Test we can add a symbol to the legend."""
-        myLayer, myType = loadLayer('issue58.tif')
+        myLayer, myType = loadLayer('test_floodimpact.tif')
         del myType
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
