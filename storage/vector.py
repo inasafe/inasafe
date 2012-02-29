@@ -797,13 +797,13 @@ class Vector:
             lines = X.get_geometry()
             line_attributes = X.get_data()
             N = len(X)
-            assert len(lines) == N
-            assert len(line_attributes) == N
+            verify(len(lines) == N)
+            verify(len(line_attributes) == N)
 
             # Extract polygon features
             polygons = self.get_geometry()
             poly_attributes = self.get_data()
-            assert len(polygons) == len(poly_attributes)
+            verify(len(polygons) == len(poly_attributes))
 
             # Data structure for resulting line segments
             clipped_geometry = []

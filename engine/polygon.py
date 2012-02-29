@@ -516,7 +516,8 @@ def clip_lines_by_polygon(lines, polygon,
     if check_input:
         # Input checks
         msg = 'Keyword argument "closed" must be boolean'
-        assert isinstance(closed, bool), msg
+        if not isinstance(closed, bool):
+            raise RuntimeError(msg)
 
         for i in range(len(lines)):
             try:
@@ -534,15 +535,18 @@ def clip_lines_by_polygon(lines, polygon,
             raise Exception(msg)
 
         msg = 'Polygon array must be a 2d array of vertices'
-        assert len(polygon.shape) == 2, msg
+        if not len(polygon.shape) == 2:
+            raise RuntimeError(msg)
 
         msg = 'Polygon array must have two columns'
-        assert polygon.shape[1] == 2, msg
+        if not polygon.shape[1] == 2:
+            raise RuntimeError(msg)
 
         for line in lines:
             msg = ('Each line segment must be 2 dimensional. '
                    'I got %d dimensions' % len(line.shape))
-            assert len(line.shape) == 2, msg
+            if not len(line.shape) == 2:
+                raise RuntimeError(msg)
 
     N = polygon.shape[0]  # Number of vertices in polygon
     M = len(lines)  # Number of lines
@@ -591,10 +595,10 @@ def clip_line_by_polygon(line, polygon,
         inside_line_segments, outside_line_segments = \
             clip_line_by_polygon(line, polygon)
 
-        assert numpy.allclose(inside_line_segments,
+        print numpy.allclose(inside_line_segments,
                               [[[0, 0.5], [1, 0.5]]])
 
-        assert numpy.allclose(outside_line_segments,
+        print numpy.allclose(outside_line_segments,
                               [[[-1, 0.5], [0, 0.5]],
                                [[1, 0.5], [2, 0.5]]])
 
@@ -607,7 +611,8 @@ def clip_line_by_polygon(line, polygon,
     if check_input:
         # Input checks
         msg = 'Keyword argument "closed" must be boolean'
-        assert isinstance(closed, bool), msg
+        if not isinstance(closed, bool):
+            raise RuntimeError(msg)
 
         try:
             line = ensure_numeric(line, numpy.float)
@@ -617,10 +622,12 @@ def clip_line_by_polygon(line, polygon,
             raise Exception(msg)
 
         msg = 'Line segment array must be a 2d array of vertices'
-        assert len(line.shape) == 2, msg
+        if not len(line.shape) == 2:
+            raise RuntimeError(msg)
 
         msg = 'Line array must have two columns'
-        assert line.shape[1] == 2, msg
+        if not line.shape[1] == 2:
+            raise RuntimeError(msg)
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
@@ -630,10 +637,12 @@ def clip_line_by_polygon(line, polygon,
             raise Exception(msg)
 
         msg = 'Polygon array must be a 2d array of vertices'
-        assert len(polygon.shape) == 2, msg
+        if not len(polygon.shape) == 2:
+            raise RuntimeError(msg)
 
         msg = 'Polygon array must have two columns'
-        assert polygon.shape[1] == 2, msg
+        if not polygon.shape[1] == 2:
+            raise RuntimeError(msg)
 
     N = polygon.shape[0]  # Number of vertices in polygon
     M = line.shape[0]  # Number of segments

@@ -483,9 +483,9 @@ def get_geometry_type(geometry, geometry_type):
     # FIXME (Ole): Perhaps use OGR's own symbols
     msg = ('Argument geometry_type must be either "point", "line", '
            '"polygon" or None')
-    assert (geometry_type is None or
-            geometry_type in [1, 2, 3] or
-            geometry_type.lower() in ['point', 'line', 'polygon']), msg
+    verify(geometry_type is None or
+           geometry_type in [1, 2, 3] or
+           geometry_type.lower() in ['point', 'line', 'polygon'], msg)
 
     if geometry_type is not None:
         if isinstance(geometry_type, basestring):
@@ -571,10 +571,10 @@ def array2wkt(A, geom_type='POLYGON'):
         raise Exception(msg)
 
     msg = 'Array must be a 2d array of vertices. I got %s' % (str(A.shape))
-    assert len(A.shape) == 2, msg
+    verify(len(A.shape) == 2, msg)
 
     msg = 'A array must have two columns. I got %s' % (str(A.shape[0]))
-    assert A.shape[1] == 2, msg
+    verify(A.shape[1] == 2, msg)
 
     if geom_type == 'LINESTRING':
         # One bracket
