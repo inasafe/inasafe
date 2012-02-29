@@ -13,6 +13,8 @@ QGISAPP = None  # Static variable used to hold hand to running QGis app
 CANVAS = None
 PARENT = None
 IFACE = None
+GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
+GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 
 
 def getQgisTestApp():
@@ -80,33 +82,33 @@ def setCanvasCrs(theEpsgId, theOtfpFlag=False):
 
 
 def setPadangGeoExtent():
-    """Zoom to an area known to be occupied by both both Padang layers"""
+    """Zoom to an area occupied by both both Padang layers"""
     myRect = QgsRectangle(100.21, -1.05, 100.63, -0.84)
     CANVAS.setExtent(myRect)
 
 
 def setJakartaGeoExtent():
-    """Zoom to an area know to be occupied by both Jakarta layers in Geo"""
+    """Zoom to an area occupied by both Jakarta layers in Geo"""
     myRect = QgsRectangle(106.52, -6.38, 107.14, -6.07)
     CANVAS.setExtent(myRect)
 
 
 def setJakartaGoogleExtent():
-    """Zoom to an area know to be occupied by both Jakarta layers in 900913 crs
+    """Zoom to an area occupied by both Jakarta layers in 900913 crs
     """
     myRect = QgsRectangle(11873524, -695798, 11913804, -675295)
     CANVAS.setExtent(myRect)
 
 
 def setBatemansBayGeoExtent():
-    """Zoom to an area know to be occupied by both Batemans Bay
+    """Zoom to an area occupied by both Batemans Bay
      layers in geo crs"""
     myRect = QgsRectangle(150.162, -35.741, 150.207, -35.719)
     CANVAS.setExtent(myRect)
 
 
 def setYogyaGeoExtent():
-    """Zoom to an area know to be occupied by both Jakarta layers in Geo"""
+    """Zoom to an area occupied by both Jakarta layers in Geo"""
     myRect = QgsRectangle(110.348, -7.732, 110.368, -7.716)
     CANVAS.setExtent(myRect)
 
@@ -115,4 +117,3 @@ def setGeoExtent(theBoundingBox):
     """Zoom to an area specified given bounding box (list)"""
     myRect = QgsRectangle(*theBoundingBox)
     CANVAS.setExtent(myRect)
-
