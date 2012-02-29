@@ -84,7 +84,7 @@ class RiabDockTest(unittest.TestCase):
         myMap.getVectorLegend()
         myPath = '/tmp/getVectorLegend.png'
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = 'b2f37386f57cea585ce995a1339661d6'
+        myExpectedHash = 'e1560513c21ee3262c3942e873f11875'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getRasterLegend(self):
@@ -138,16 +138,16 @@ class RiabDockTest(unittest.TestCase):
                                theLabel='foo')
         myPath = '/tmp/addClassToLegend.png'
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = '653c297a945d7e37a847e9fa9c41aec5'
+        myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
 
-    def test_pointsToCm(self):
+    def test_pointsToMM(self):
         """Test that points to cm conversion is working"""
         myMap = RiabMap(IFACE)
         myPoints = 200
         myDpi = 300
         myExpectedResult = 16.9333333333
-        myResult = myMap.pointsToCm(myPoints, myDpi)
+        myResult = myMap.pointsToMM(myPoints, myDpi)
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedResult, myResult)
         assert  numpy.allclose(myResult, myExpectedResult), myMessage
 
