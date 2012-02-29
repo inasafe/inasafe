@@ -1035,4 +1035,6 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
+        QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
+                                 QtCore.QUrl.TolerantMode))
         self.hideBusy()
