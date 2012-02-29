@@ -331,6 +331,9 @@ class RiabClipper(unittest.TestCase):
         for x in myExtent:
             assert str(x) in kml, msg
 
+    def test_vectorProjections(self):
+        """Test that vector input data is reprojected properly during clip"""
+        assert False
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabClipper, 'test')
