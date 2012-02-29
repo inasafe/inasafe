@@ -756,6 +756,8 @@ class Vector:
             name: Optional name of interpolated layer
             attribute: Optional attribute name to use.
                        If None, all attributes are used.
+                       FIXME (Ole): Single attribute not tested well yet and
+                                    not implemented for lines
 
         Output
             Y: Layer object with values of this vector layer interpolated to
@@ -814,12 +816,8 @@ class Vector:
                 for j, line in enumerate(lines):
                     inside, outside = clip_line_by_polygon(line, polygon)
 
-                    # FIXME (Ole): Join adjacent segments again
-                    # (maybe do in clipping function)
-
                     # Create new attributes
-                    # FIXME (Ole): Todo DEFAULT_ATTRIBUTE and single
-                    # specified polygon attribute
+                    # FIXME (Ole): Not yet done single specified polygon attribute
                     inside_attributes = {}
                     outside_attributes = {}
                     for key in line_attributes[j]:
@@ -829,6 +827,11 @@ class Vector:
                     for key in poly_attributes[i]:
                         inside_attributes[key] = poly_attributes[i][key]
                         outside_attributes[key] = None
+
+                    # Always create default attribute flagging if segment was
+                    # inside any of the polygons
+                    inside_attributes[DEFAULT_ATTRIBUTE] = True
+                    outside_attributes[DEFAULT_ATTRIBUTE] = False
 
                     # Assign new attribute set to clipped lines
                     for segment in inside:
@@ -889,9 +892,10 @@ class Vector:
                     a[key] = None
             else:
                 # Use only requested attribute
+                # FIXME (Ole): Test for this is not finished
                 a[attribute] = None
 
-            # Always create attribute to indicate if point was
+            # Always create default attribute flagging if point was
             # inside any of the polygons
             a[DEFAULT_ATTRIBUTE] = None
 

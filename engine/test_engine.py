@@ -1294,8 +1294,9 @@ class Test_Engine(unittest.TestCase):
                    'but got only %i' % (DEFAULT_ATTRIBUTE,
                                         counts[DEFAULT_ATTRIBUTE]))
             assert counts[DEFAULT_ATTRIBUTE] == 3452, msg
+
             msg = ('Expected 76 points tagged with default attribute '
-                   '"%s = True", '
+                   '"%s = False", '
                    'but got only %i' % (DEFAULT_ATTRIBUTE,
                                         counts['Not ' + DEFAULT_ATTRIBUTE]))
             assert counts['Not ' + DEFAULT_ATTRIBUTE] == 76, msg
@@ -1307,11 +1308,15 @@ class Test_Engine(unittest.TestCase):
         #for key in counts:
         #    print key, counts[key]
 
-    def test_interpolation_from_polygons_one_attribute(self):
+    def Xtest_point_interpolation_from_polygons_one_attribute(self):
         """Point interpolation from multiple polygons works with attribute
 
         This is a test for interpolation (issue #48)
         """
+
+        # FIXME: test passes, but it is not tested that nothing *but* the requested attribute
+        # has been carried over. Do we need this?
+
 
         # Name file names for hazard and exposure
         hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
@@ -1351,6 +1356,8 @@ class Test_Engine(unittest.TestCase):
         name = 'Catergory'
         msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
         assert name in I_names, msg
+
+        print I_names
 
         for name in E_names:
             msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
@@ -1534,7 +1541,6 @@ class Test_Engine(unittest.TestCase):
                    projection=H.get_projection())
         H_attributes = H.get_data()
         H_geometry = H.get_geometry()
-        #H.write_to_file('MM_799.shp')  # E.g. to view with QGis
 
         E = read_layer(exposure_filename)
         E_geometry = E.get_geometry()
@@ -1572,59 +1578,130 @@ class Test_Engine(unittest.TestCase):
 
         # Verify interpolated values with test result
         count = 0
-        #counts = {}
+        counts = {}
         for i in range(N):
 
-            #attrs = I_attributes[i]
-            #msg = ('Did not find default attribute %s in %s'
-            #       % (DEFAULT_ATTRIBUTE, attrs.keys()))
-            #assert DEFAULT_ATTRIBUTE in attrs, msg
-            #
-            ## Count items using default attribute
-            #if DEFAULT_ATTRIBUTE not in counts:
-            #    counts[DEFAULT_ATTRIBUTE] = 0
-            #    counts['Not ' + DEFAULT_ATTRIBUTE] = 0
-            #
-            #if attrs[DEFAULT_ATTRIBUTE] is True:
-            #    counts[DEFAULT_ATTRIBUTE] += 1
-            #else:
-            #    counts['Not ' + DEFAULT_ATTRIBUTE] += 1
+            # Check that default attribute is present
+            attrs = I_attributes[i]
+            msg = ('Did not find default attribute %s in %s'
+                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+            assert DEFAULT_ATTRIBUTE in attrs, msg
 
+            # Count items using default attribute
+            if DEFAULT_ATTRIBUTE not in counts:
+                counts[DEFAULT_ATTRIBUTE] = 0
+                counts['Not ' + DEFAULT_ATTRIBUTE] = 0
+
+            if attrs[DEFAULT_ATTRIBUTE] is True:
+                counts[DEFAULT_ATTRIBUTE] += 1
+            else:
+                counts['Not ' + DEFAULT_ATTRIBUTE] += 1
+
+            # Check specific attribute
             category = I_attributes[i]['Catergory']  # The typo is as the data
             if category is not None:
                 assert category.lower() in ['high', 'very high']
                 count += 1
 
-        msg = ('Expected 34 points tagged with category, '
+        msg = ('Expected 14 points tagged with category, '
                'but got only %i' % count)
         assert count == 14, msg
 
         assert len(I_geometry) == 181
 
-        #print I_geometry[100]
-        #print I_attributes[100]
-        #print I_geometry[135]
-        #print I_attributes[135]
-
         assert I_attributes[129]['Catergory'] == 'Very High'
         assert I_attributes[135]['Catergory'] is None
 
-        # TODOOOOOOOOOOOOOOOO
         # Check default attribute too
-        #msg = ('Expected 3452 points tagged with default attribute '
-        #       '"%s = True", '
-        #       'but got only %i' % (DEFAULT_ATTRIBUTE,
-        #                            counts[DEFAULT_ATTRIBUTE]))
-        #assert counts[DEFAULT_ATTRIBUTE] == 3452, msg
-        #msg = ('Expected 76 points tagged with default attribute '
-        #       '"%s = True", '
-        #       'but got only %i' % (DEFAULT_ATTRIBUTE,
-        #                            counts['Not ' + DEFAULT_ATTRIBUTE]))
-        #assert counts['Not ' + DEFAULT_ATTRIBUTE] == 76, msg
-        #
-        #msg = 'Affected and not affected does not add up'
-        #assert (counts[DEFAULT_ATTRIBUTE] +
-        #        counts['Not ' + DEFAULT_ATTRIBUTE]) == len(E), msg
+        msg = ('Expected 14 segments tagged with default attribute '
+               '"%s = True", '
+               'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                    counts[DEFAULT_ATTRIBUTE]))
+        assert counts[DEFAULT_ATTRIBUTE] == 14, msg
+
+        msg = ('Expected 167 points tagged with default attribute '
+               '"%s = False", '
+               'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                    counts['Not ' + DEFAULT_ATTRIBUTE]))
+        assert counts['Not ' + DEFAULT_ATTRIBUTE] == 167, msg
+
+        msg = 'Affected and not affected does not add up'
+        assert (counts[DEFAULT_ATTRIBUTE] +
+                counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
+
+    def Xtest_line_interpolation_from_polygons_one_attribute(self):
+        """Line interpolation using one polygon works with attribute
+
+        This is a test for road interpolation (issue #55)
+        """
+
+        # FIXME: test passes, but functionality is not really there. Do we need it?
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
+        exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        # Cut down to polygon #799 to make test quick
+        H = Vector(data=H_attributes[799:800],
+                   geometry=H_geometry[799:800],
+                   projection=H.get_projection())
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+
+        # Test riab's interpolation function
+        I = H.interpolate(E, name='depth',
+                          attribute='Catergory')  # Spelling is as in test data
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+
+        N = len(I_attributes)
+
+        # Possibly generate files for visual inspection with e.g. QGis
+        if False:
+            L = Vector(geometry=H_geometry, geometry_type='polygon',
+                       data=H_attributes)
+            L.write_to_file('test_polygon.shp')
+
+            L = Vector(geometry=I_geometry, geometry_type='line',
+                       data=I_attributes)
+            L.write_to_file('interpolated_lines.shp')
+
+        # Assert that expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+
+        name = 'Catergory'
+        msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+        assert name in I_names, msg
+
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # Verify interpolated values with test result
+        counts = {}
+        for i in range(N):
+
+            # Check specific attribute
+            category = I_attributes[i]['Catergory']  # The typo is as the data
+            if category not in counts:
+                counts[category] = 0
+
+            counts[category] += 1
+
+        msg = ('Expected 14 segments tagged with category "Very High", '
+               'but got only %i' % counts['Very High'])
+        assert counts['Very High'] == 14, msg
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
