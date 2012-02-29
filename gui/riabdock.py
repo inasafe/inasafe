@@ -180,13 +180,14 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     myRangeList = []
     myTransparencyList = []
     myLastValue = 0
+    #settrace()
     for myClass in myClasses:
         myMax = myClass['quantity']
         myRange = range(myLastValue, myMax)
         myColour = QtGui.QColor(myClass['colour'])
-        myLabel = None
+        myLabel = QtCore.QString()
         if 'label' in myClass:
-            myLabel = myClass['label']
+            myLabel = QtCore.QString(myClass['label'])
         myShader = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
         myRangeList.append(myShader)
         # Create opacity entries for this range

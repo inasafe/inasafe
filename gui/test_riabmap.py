@@ -96,7 +96,7 @@ class RiabDockTest(unittest.TestCase):
         myMap.getRasterLegend()
         myPath = '/tmp/getRasterLegend.png'
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = '1234'
+        myExpectedHash = 'a6a0cfd59a438edd291a92b842e49880'
         assertHashForFile(myExpectedHash, myPath)
 
     def addSymbolToLegend(self):

@@ -169,11 +169,12 @@ class RiabMap():
         myShader = self.layer.rasterShader().rasterShaderFunction()
         myRampItems = myShader.colorRampItemList()
         myLastValue = 0  # Making an assumption here...
+        print 'Source: %s' % self.layer.source()
         for myItem in myRampItems:
             myValue = myItem.value
             myLabel = myItem.label
             myColor = myItem.color
-            print 'Value: %s' % myValue
+            print 'Value: %s Label %s' % (myValue, myLabel)
             self.addClassToLegend(myColor,
                       theMin=myLastValue,
                       theMax=myValue,
