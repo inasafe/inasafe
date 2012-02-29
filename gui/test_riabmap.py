@@ -138,7 +138,7 @@ class RiabDockTest(unittest.TestCase):
                                theLabel='foo')
         myPath = '/tmp/addClassToLegend.png'
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = 'fd28fa6703453a8aa3198e0362e56d01'
+        myExpectedHash = '653c297a945d7e37a847e9fa9c41aec5'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_pointsToCm(self):

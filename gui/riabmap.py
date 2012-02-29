@@ -246,8 +246,18 @@ class RiabMap():
             Any exceptions raised by the RIAB library will be propogated.
         """
         if self.legend is None:
-            self.legend = QtGui.QPixmap(300, 40)
+            self.legend = QtGui.QPixmap(300, 80)
             self.legend.fill(QtGui.QColor(255, 255, 255))
+            myPainter = QtGui.QPainter(self.legend)
+            myFontSize = 12
+            myFontWeight = QtGui.QFont.Bold
+            myItalicsFlag = False
+            myFont = QtGui.QFont('verdana',
+                             myFontSize,
+                             myFontWeight,
+                             myItalicsFlag)
+            myPainter.setFont(myFont)
+            myPainter.drawText(10, 25, self.tr('Legend'))
         else:
             # extend the existing legend down for the next class
             myPixmap = QtGui.QPixmap(300, self.legend.height() +
