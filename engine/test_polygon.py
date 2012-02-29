@@ -2087,6 +2087,7 @@ class Test_Polygon(unittest.TestCase):
         for i in range(len(lines)):
             assert numpy.allclose(lines[i], segments[i])
 
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Polygon, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

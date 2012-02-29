@@ -644,6 +644,13 @@ def clip_line_by_polygon(line, polygon,
         if not polygon.shape[1] == 2:
             raise RuntimeError(msg)
 
+    # Get polygon extents to quickly rule out points that
+    # are outside its bounding box
+    minpx = min(polygon[:, 0])
+    maxpx = max(polygon[:, 0])
+    minpy = min(polygon[:, 1])
+    maxpy = max(polygon[:, 1])
+
     N = polygon.shape[0]  # Number of vertices in polygon
     M = line.shape[0]  # Number of segments
 
@@ -665,50 +672,92 @@ def clip_line_by_polygon(line, polygon,
     outside_line_segments = []
 
     for k in range(M - 1):
-        segment = [line[k, :], line[k + 1, :]]
+        p0 = line[k, :]
+        p1 = line[k + 1, :]
+        segment = [p0, p1]
 
-        intersections = list(segment)  # Initialise with end points
-        for i in range(N):
-            # Loop through polygon edges
-            j = (i + 1) % N
-            edge = [polygon[i, :], polygon[j, :]]
+        #-------------
+        # Optimisation
+        #-------------
+        # Skip segments where both end points are outside polygon bounding box
+        # and which don't intersect the bounding box
 
+        #Multiple lines are clipped correctly by complex polygon ... ok
+        #Ran 1 test in 187.759s
+        #Ran 1 test in 12.517s
+        segment_is_outside_bbox = True
+        for p in [p0, p1]:
+            x = p[0]
+            y = p[1]
+            if not (x > maxpx or x < minpx or y > maxpy or y < minpy):
+                #  This end point is inside polygon bounding box
+                segment_is_outside_bbox = False
+                break
+
+        # Does segment intersect polygon bounding box?
+        corners = numpy.array([[minpx, minpy], [maxpx, minpy],
+                               [maxpx, maxpy], [minpx, maxpy]])
+        for i in range(3):
+            edge = [corners[i, :], corners[i + 1, :]]
             status, value = intersection(segment, edge)
-            if status == 2:
-                # Collinear overlapping lines found
-                # Use midpoint of common segment
-                value = (value[0] + value[1]) / 2
-
             if value is not None:
-                # Record intersection point found
-                intersections.append(value)
-            else:
-                pass
+                # Segment intersects polygon bounding box
+                segment_is_outside_bbox = False
+                break
+        #-----------------
+        # End optimisation
+        #-----------------
 
-        # Loop through intersections for this line segment
-        distances = {}
-        P = len(intersections)
-        for i in range(P):
-            v = segment[0] - intersections[i]
-            d = numpy.dot(v, v)
-            distances[d] = intersections[i]  # Don't record duplicates
+        # Separate segments that are inside from those outside
+        if segment_is_outside_bbox:
+            outside_line_segments.append(segment)
+        else:
+            # Intersect segment with all polygon edges
+            # and decide for each sub-segment
+            intersections = list(segment)  # Initialise with end points
+            for i in range(N):
+                # Loop through polygon edges
+                j = (i + 1) % N
+                edge = [polygon[i, :], polygon[j, :]]
 
-        # Sort by Schwarzian transform
-        A = zip(distances.keys(), distances.values())
-        A.sort()
-        _, intersections = zip(*A)
+                status, value = intersection(segment, edge)
+                if status == 2:
+                    # Collinear overlapping lines found
+                    # Use midpoint of common segment
+                    # FIXME (Ole): Maybe better to use
+                    #              common segment directly
+                    value = (value[0] + value[1]) / 2
 
-        P = len(intersections)
+                if value is not None:
+                    # Record intersection point found
+                    intersections.append(value)
+                else:
+                    pass
 
-        # Separate segments according to polygon
-        for i in range(P - 1):
-            segment = [intersections[i], intersections[i + 1]]
-            midpoint = (segment[0] + segment[1]) / 2
+            # Loop through intersections for this line segment
+            distances = {}
+            P = len(intersections)
+            for i in range(P):
+                v = segment[0] - intersections[i]
+                d = numpy.dot(v, v)
+                distances[d] = intersections[i]  # Don't record duplicates
 
-            if is_inside_polygon(midpoint, polygon, closed=closed):
-                inside_line_segments.append(segment)
-            else:
-                outside_line_segments.append(segment)
+            # Sort by Schwarzian transform
+            A = zip(distances.keys(), distances.values())
+            A.sort()
+            _, intersections = zip(*A)
+
+            P = len(intersections)
+
+            # Separate segments according to polygon
+            for i in range(P - 1):
+                segment = [intersections[i], intersections[i + 1]]
+                midpoint = (segment[0] + segment[1]) / 2
+
+                if is_inside_polygon(midpoint, polygon, closed=closed):
+                    inside_line_segments.append(segment)
+                else:
+                    outside_line_segments.append(segment)
 
     # Rejoin adjacent segments and add to result lines
     inside_lines = join_line_segments(inside_line_segments)
