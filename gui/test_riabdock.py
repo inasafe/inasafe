@@ -45,6 +45,8 @@ from utilities_test import (getQgisTestApp,
 from gui.riabdock import (RiabDock, setRasterStyle)
 from gui.riabmap import RiabMap
 from utilities_test import loadLayer
+from storage.utilities_test import TESTDATA
+from storage.utilities import read_keywords
 
 try:
     from pydevd import *
