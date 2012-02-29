@@ -2,6 +2,7 @@ import numpy
 from numpy import nansum as sum
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layers
+from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
 
 
@@ -144,18 +145,6 @@ class FloodImpactFunction(FunctionProvider):
         caption += '- Jumlah dalam ribuan<br>'
         caption += ('- Penduduk dianggap terdampak ketika '
                     'banjir lebih dari %.1f m.' % threshold)
-
-        # Create style
-        style_classes = [dict(colour='#38A800', quantity=2, transparency=100),
-                         dict(colour='#38A800', quantity=5, transparency=0),
-                         dict(colour='#79C900', quantity=10, transparency=0),
-                         dict(colour='#CEED00', quantity=20, transparency=0),
-                         dict(colour='#FFCC00', quantity=50, transparency=0),
-                         dict(colour='#FF6600', quantity=100, transparency=0),
-                         dict(colour='#FF0000', quantity=200, transparency=0),
-                         dict(colour='#7A0000', quantity=300, transparency=0)]
-        style_info = dict(target_field=None,
-                          style_classes=style_classes)
 
         # Create raster object and return
         R = Raster(I,
