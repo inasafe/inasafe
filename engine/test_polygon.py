@@ -60,7 +60,7 @@ class Test_Polygon(unittest.TestCase):
         assert not point_on_line([40, 19], [[40, 40], [40, 40]])
 
     def test_point_on_line_vector(self):
-        """Points coinciding with lines are correctly detected
+        """Points coinciding with lines are correctly detected (vector version)
 
         Vectorised version
         """
