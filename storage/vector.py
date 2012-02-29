@@ -817,7 +817,8 @@ class Vector:
                     inside, outside = clip_line_by_polygon(line, polygon)
 
                     # Create new attributes
-                    # FIXME (Ole): Not yet done single specified polygon attribute
+                    # FIXME (Ole): Not done single specified polygon
+                    #              attribute
                     inside_attributes = {}
                     outside_attributes = {}
                     for key in line_attributes[j]:

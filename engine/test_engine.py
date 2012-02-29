@@ -1314,9 +1314,9 @@ class Test_Engine(unittest.TestCase):
         This is a test for interpolation (issue #48)
         """
 
-        # FIXME: test passes, but it is not tested that nothing *but* the requested attribute
-        # has been carried over. Do we need this?
-
+        # FIXME: test passes, but it is not tested that
+        #        nothing *but* the requested attribute
+        #        has been carried over. Do we need this?
 
         # Name file names for hazard and exposure
         hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
@@ -1635,7 +1635,8 @@ class Test_Engine(unittest.TestCase):
         This is a test for road interpolation (issue #55)
         """
 
-        # FIXME: test passes, but functionality is not really there. Do we need it?
+        # FIXME: test passes, but functionality is not really there.
+        # Do we need it?
 
         # Name file names for hazard level and exposure
         hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
