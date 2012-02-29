@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riabdock.ui'
 #
-# Created: Sun Feb 26 08:48:39 2012
+# Created: Wed Feb 29 03:28:27 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,7 +18,7 @@ class Ui_RiabDock(object):
     def setupUi(self, RiabDock):
         RiabDock.setObjectName(_fromUtf8("RiabDock"))
         RiabDock.resize(394, 547)
-        RiabDock.setWindowTitle(QtGui.QApplication.translate("RiabDock", "Risk-In-A-Box", None, QtGui.QApplication.UnicodeUTF8))
+        RiabDock.setWindowTitle(QtGui.QApplication.translate("RiabDock", "S.A.F.E", None, QtGui.QApplication.UnicodeUTF8))
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.dockWidgetContents)

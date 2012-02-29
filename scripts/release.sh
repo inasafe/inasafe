@@ -27,6 +27,9 @@ mv ${TMP} __init__.py
 rm *.pyc
 rm *.*~
 
+#regenerate docs
+make docs
+
 echo "You need to commit the version number change before we can package"
 git commit -m "Updated version number to ${VERSION}" -a
 
