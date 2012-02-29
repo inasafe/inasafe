@@ -15,7 +15,7 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
 from utilities import verify
-from engine.polygon import inside_polygon
+from engine.polygon import inside_polygon, clip_line_by_polygon
 from engine.numerics import ensure_numeric
 
 
@@ -24,6 +24,7 @@ class Vector:
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
+                 geometry_type=None,
                  name='', keywords=None, style_info=None):
         """Initialise object with either geometry or filename
 
@@ -35,7 +36,12 @@ class Vector:
                 * None
             projection: Geospatial reference in WKT format.
                         Only used if geometry is provide as a numeric array,
-            geometry: A list of either point coordinates or polygons
+            geometry: A list of either point coordinates or polygons/lines
+                      (see note below)
+            geometry_type: Desired interpretation of geometry.
+                           Valid options are 'point', 'line', 'polygon' or
+                           the ogr types: 1, 2, 3
+                           If None, a geometry_type will be inferred
             name: Optional name for layer.
                   Only used if geometry is provide as a numeric array
             keywords: Optional dictionary with keywords that describe the
@@ -46,12 +52,17 @@ class Vector:
                       Keywords can for example be used to display text
                       about the layer in a web application.
 
-        Note that if data is a filename, all other arguments are ignored
+        Notes
+
+        If data is a filename, all other arguments are ignored
         as they will be inferred from the file.
 
         The geometry type will be inferred from the dimensions of geometry.
         If each entry is one set of coordinates the type will be ogr.wkbPoint,
         if it is an array of coordinates the type will be ogr.wkbPolygon.
+
+        Each polygon or line feature take the form of an Nx2 array representing
+        vertices where line segments are joined
         """
 
         if data is None and projection is None and geometry is None:
@@ -100,12 +111,20 @@ class Vector:
             verify(is_sequence(geometry), msg)
             self.geometry = geometry
 
-            self.geometry_type = get_geometry_type(geometry)
+            self.geometry_type = get_geometry_type(geometry, geometry_type)
 
             #msg = 'Projection must be specified'
             #verify(projection is not None, msg)
             self.projection = Projection(projection)
 
+            if data is None:
+                # Generate default attribute as OGR will do that anyway
+                # when writing
+                data = []
+                for i in range(len(geometry)):
+                    data.append({'ID': i})
+
+            # Check data
             self.data = data
             if data is not None:
                 msg = 'Data must be a sequence'
@@ -149,62 +168,86 @@ class Vector:
                    ' as its type is %s ' % (str(other), type(other)))
             raise TypeError(msg)
 
+        # Check number of features match
+        if len(self) != len(other):
+            return False
+
         # Check projection
         if self.projection != other.projection:
             return False
 
-        # Check geometry
-        if not numpy.allclose(self.get_geometry(),
-                              other.get_geometry(),
-                              rtol=rtol, atol=atol):
+        # Check geometry type
+        if self.geometry_type != other.geometry_type:
             return False
+
+        # Check geometry
+        geom0 = self.get_geometry()
+        geom1 = other.get_geometry()
+        if len(geom0) != len(geom1):
+            return False
+
+        if self.is_point_data:
+            if not numpy.allclose(geom0, geom1,
+                                  rtol=rtol, atol=atol):
+                return False
+        else:
+            # Line or Polygon data
+            for i in range(len(geom0)):
+                if not numpy.allclose(geom0[i], geom1[i],
+                                      rtol=rtol, atol=atol):
+                    return False
 
         # Check keys
         x = self.get_data()
         y = other.get_data()
 
-        for key in x[0]:
-            for i in range(len(y)):
-                if key not in y[i]:
-                    return False
-
-        for key in y[0]:
-            for i in range(len(x)):
-                if key not in x[i]:
-                    return False
-
-        # Check data
-        for i, a in enumerate(x):
-            for key in a:
-                X = a[key]
-                Y = y[i][key]
-                if X != Y:
-                    # Not obviously equal, try some special cases
-
-                    res = None
-                    try:
-                        # try numerical comparison with tolerances
-                        res = numpy.allclose(X, Y,
-                                             rtol=rtol, atol=atol)
-                    except:
-                        pass
-                    else:
-                        if not res:
-                            return False
-
-                    try:
-                        # Try to cast as booleans. This will take care of
-                        # None, '', True, False, ...
-                        res = (bool(X) is bool(Y))
-                    except:
-                        pass
-                    else:
-                        if not res:
-                            return False
-
-                    if res is None:
-                        # None of the comparisons could be done
+        if x is None:
+            if y is not None:
+                return False
+        else:
+            for key in x[0]:
+                for i in range(len(y)):
+                    if key not in y[i]:
                         return False
+
+            for key in y[0]:
+                for i in range(len(x)):
+                    if key not in x[i]:
+                        return False
+
+            # Check data
+            for i, a in enumerate(x):
+                for key in a:
+                    X = a[key]
+                    Y = y[i][key]
+
+                    if X != Y:
+                        # Not obviously equal, try some special cases
+
+                        res = None
+                        try:
+                            # try numerical comparison with tolerances
+                            res = numpy.allclose(X, Y,
+                                                 rtol=rtol, atol=atol)
+                        except:
+                            pass
+                        else:
+                            if not res:
+                                return False
+
+                        try:
+                            # Try to cast as booleans. This will take care of
+                            # None, '', True, False, ...
+                            res = (bool(X) is bool(Y))
+                        except:
+                            pass
+                        else:
+                            if not res:
+                                return False
+
+                        if res is None:
+                            # None of the comparisons could be done
+                            return False
 
         # Check keywords
         if self.keywords != other.keywords:
@@ -527,6 +570,9 @@ class Vector:
             elif self.geometry_type == ogr.wkbPolygon:
                 wkt = array2wkt(geometry[i], geom_type='POLYGON')
                 geom = ogr.CreateGeometryFromWkt(wkt)
+            elif self.geometry_type == ogr.wkbLineString:
+                wkt = array2wkt(geometry[i], geom_type='LINESTRING')
+                geom = ogr.CreateGeometryFromWkt(wkt)
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
                 raise Exception(msg)
@@ -625,11 +671,13 @@ class Vector:
 
         geometry type     output type
         -----------------------------
-        point             coordinates (Nx2 array of longitudes and latitudes)
-        line              TODO
+        point             list of 2x1 array of longitudes and latitudes)
+        line              list of arrays of coordinates
         polygon           list of arrays of coordinates
 
         """
+
+        # FIXME (Ole): Do some checking
         return self.geometry
 
     def get_projection(self, proj4=False):
@@ -708,6 +756,8 @@ class Vector:
             name: Optional name of interpolated layer
             attribute: Optional attribute name to use.
                        If None, all attributes are used.
+                       FIXME (Ole): Single attribute not tested well yet and
+                                    not implemented for lines
 
         Output
             Y: Layer object with values of this vector layer interpolated to
@@ -730,10 +780,78 @@ class Vector:
         verify(self.is_polygon_data, msg)
 
         # FIXME (Ole): Maybe organise this the same way it is done with rasters
+        # FIXME (Ole): Retain original geometry to use with returned data here
         if X.is_polygon_data:
             # Use centroids, in case of polygons
             X = convert_polygons_to_centroids(X)
+        elif X.is_line_data:
 
+            # Clip lines to polygon and return centroids
+
+            # FIXME (Ole): Need to separate this out, but identify what is
+            #              common with points and lines
+            #
+
+            #X.write_to_file('line_data.shp')
+            #self.write_to_file('poly_data.shp')
+
+            # Extract line features
+            lines = X.get_geometry()
+            line_attributes = X.get_data()
+            N = len(X)
+            verify(len(lines) == N)
+            verify(len(line_attributes) == N)
+
+            # Extract polygon features
+            polygons = self.get_geometry()
+            poly_attributes = self.get_data()
+            verify(len(polygons) == len(poly_attributes))
+
+            # Data structure for resulting line segments
+            clipped_geometry = []
+            clipped_attributes = []
+
+            # Clip line lines to polygons
+            for i, polygon in enumerate(polygons):
+                for j, line in enumerate(lines):
+                    inside, outside = clip_line_by_polygon(line, polygon)
+
+                    # Create new attributes
+                    # FIXME (Ole): Not done single specified polygon
+                    #              attribute
+                    inside_attributes = {}
+                    outside_attributes = {}
+                    for key in line_attributes[j]:
+                        inside_attributes[key] = line_attributes[j][key]
+                        outside_attributes[key] = line_attributes[j][key]
+
+                    for key in poly_attributes[i]:
+                        inside_attributes[key] = poly_attributes[i][key]
+                        outside_attributes[key] = None
+
+                    # Always create default attribute flagging if segment was
+                    # inside any of the polygons
+                    inside_attributes[DEFAULT_ATTRIBUTE] = True
+                    outside_attributes[DEFAULT_ATTRIBUTE] = False
+
+                    # Assign new attribute set to clipped lines
+                    for segment in inside:
+                        clipped_geometry.append(segment)
+                        clipped_attributes.append(inside_attributes)
+
+                    for segment in outside:
+                        clipped_geometry.append(segment)
+                        clipped_attributes.append(outside_attributes)
+
+            # Create new Vector instance and return
+            V = Vector(data=clipped_attributes,
+                       projection=X.get_projection(),
+                       geometry=clipped_geometry,
+                       geometry_type='line')
+            #V.write_to_file('clipped_and_tagged.shp')
+            return V
+
+        # The following applies only to Polygon-Point interpolation
         msg = ('Vector layer to interpolate to must be point geometry. '
                'I got OGR geometry type %s'
                % geometrytype2string(X.geometry_type))
@@ -775,9 +893,10 @@ class Vector:
                     a[key] = None
             else:
                 # Use only requested attribute
+                # FIXME (Ole): Test for this is not finished
                 a[attribute] = None
 
-            # Always create attribute to indicate if point was
+            # Always create default attribute flagging if point was
             # inside any of the polygons
             a[DEFAULT_ATTRIBUTE] = None
 

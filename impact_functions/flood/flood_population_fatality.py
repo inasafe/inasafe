@@ -2,6 +2,7 @@ import numpy
 from numpy import nansum as sum
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layers
+from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
 
 
@@ -149,5 +150,7 @@ class FloodFatalityFunction(FunctionProvider):
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name='Penduduk yang %s' % (self.plugin_name.lower()),
-                   keywords={'caption': caption})
+                   keywords={'caption': caption},
+                   style_info=style_info)
+
         return R

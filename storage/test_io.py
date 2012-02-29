@@ -15,7 +15,6 @@ from vector import convert_polygons_to_centroids
 from projection import Projection
 from projection import DEFAULT_PROJECTION
 from core import read_layer
-from core import write_vector_data
 from core import write_raster_data
 from utilities import unique_filename
 from utilities import write_keywords
@@ -169,10 +168,12 @@ class Test_IO(unittest.TestCase):
             # FIXME (Ole): I would like to use gml here, but OGR does not
             #              store the spatial reference! Ticket #18
             out_filename = unique_filename(suffix='.shp')
-            write_vector_data(attributes, wkt, coords, out_filename)
+            Vector(geometry=coords, data=attributes, projection=wkt,
+                   geometry_type='point').write_to_file(out_filename)
 
             # Read again and check
             layer = read_layer(out_filename)
+            assert layer.is_point_data
             coords = numpy.array(layer.get_geometry())
             attributes = layer.get_data()
 
@@ -293,6 +294,71 @@ class Test_IO(unittest.TestCase):
         else:
             msg = 'Should have raised TypeError'
             raise Exception(msg)
+
+    def test_vector_class_geometry_types(self):
+        """Admissible geometry types work in vector class
+        """
+
+        # So far the admissible classes are Point, Line and Polygon
+
+        test_data = [numpy.array([[122.226889, -8.625599],
+                                  [122.227299, -8.624500],
+                                  [122.227409, -8.624221],
+                                  [122.227536, -8.624059]]),
+                     numpy.array([[122.237129, -8.628637],
+                                  [122.233170, -8.627332],
+                                  [122.231621, -8.626837],
+                                  [122.231021, -8.626557]]),
+                     numpy.array([[122.247938, -8.632926],
+                                  [122.247940, -8.633560],
+                                  [122.247390, -8.636220]])]
+        # Point data
+        v_ref = Vector(geometry=test_data[0])
+        assert v_ref.is_point_data
+        assert v_ref.geometry_type == 1
+
+        tmp_filename = unique_filename(suffix='.shp')
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        assert v_file == v_ref
+        assert v_ref == v_file
+
+        v = Vector(geometry=test_data[0], geometry_type='point')
+        assert v.is_point_data
+        assert v_ref == v
+
+        v = Vector(geometry=test_data[0], geometry_type=1)
+        assert v.is_point_data
+        assert v_ref == v
+
+        # Polygon data
+        v_ref = Vector(geometry=test_data)
+        assert v_ref.is_polygon_data
+        assert v_ref.geometry_type == 3
+
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        assert v_file == v_ref
+        assert v_ref == v_file
+
+        v = Vector(geometry=test_data, geometry_type='polygon')
+        assert v == v_ref
+
+        v = Vector(geometry=test_data, geometry_type=3)
+        assert v == v_ref
+
+        # Line data
+        v_ref = Vector(geometry=test_data, geometry_type='line')
+        assert v_ref.is_line_data
+        assert v_ref.geometry_type == 2
+
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        assert v_file == v_ref
+        assert v_ref == v_file
+
+        v = Vector(geometry=test_data, geometry_type=2)
+        assert v == v_ref
 
     def test_attribute_types(self):
         """Different attribute types are handled correctly in vector data
@@ -431,10 +497,12 @@ class Test_IO(unittest.TestCase):
         # FIXME (Ole): I would like to use gml here, but OGR does not
         #              store the spatial reference! Ticket #18
         out_filename = unique_filename(suffix='.shp')
-        write_vector_data(attributes, wkt, geometry, out_filename)
+        Vector(geometry=geometry, data=attributes, projection=wkt,
+               geometry_type='polygon').write_to_file(out_filename)
 
         # Read again and check
         layer = read_layer(out_filename)
+        assert layer.is_polygon_data
         geometry_new = layer.get_geometry()
         attributes_new = layer.get_data()
 
@@ -1616,10 +1684,12 @@ class Test_IO(unittest.TestCase):
         # FIXME (Ole): I would like to use gml here, but OGR does not
         #              store the spatial reference! Ticket #18
         out_filename = unique_filename(suffix='.shp')
-        write_vector_data(attributes, wkt, geometry, out_filename)
+        Vector(geometry=geometry, data=attributes, projection=wkt,
+               geometry_type='line').write_to_file(out_filename)
 
         # Read again and check
         layer = read_layer(out_filename)
+        assert layer.is_line_data
         geometry_new = layer.get_geometry()
         attributes_new = layer.get_data()
 
