@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.0.1'
+__version__ = '0.2.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -180,13 +180,14 @@ class ImpactCalculatorTest(unittest.TestCase):
 
         myKeywords = self.calculator.getKeywordFromFile(
             self.rasterPopulationPath)
-        assert myKeywords == {'category': 'exposure', 'density': 'yes',
+        assert myKeywords == {'category': 'exposure',
                               'subcategory': 'population',
-                              'datatype': 'population',
+                              'datatype': 'density',
                               'title': 'Population Density Estimate (5kmx5km)'}
 
         myKeywords = self.calculator.getKeywordFromFile(self.vectorPath)
-        assert myKeywords == {'category': 'exposure', 'datatype': 'itb',
+        assert myKeywords == {'category': 'exposure',
+                              'datatype': 'itb',
                               'subcategory': 'building'}
 
         # BB tsunami example (one layer is UTM)
@@ -328,6 +329,31 @@ class ImpactCalculatorTest(unittest.TestCase):
         else:
             msg = ('Wrong input data should have raised an exception')
             raise Exception(msg)
+
+    def test_issue100(self):
+        """Test for issue 100: unhashable type dict"""
+        exposure_path = os.path.join(TESTDATA,
+                            'OSM_building_polygons_20110905.shp')
+        hazard_path = os.path.join(TESTDATA,
+                            'Flood_Current_Depth_Jakarta_geographic.asc')
+        # Verify relevant metada is ok
+        #H = read_layer(hazard_path)
+        #E = read_layer(exposure_path)
+        self.calculator.setHazardLayer(hazard_path)
+        self.calculator.setExposureLayer(exposure_path)
+        self.calculator.setFunction('Temporarily Closed')
+        try:
+            myRunner = self.calculator.getRunner()
+            # run non threaded
+            myRunner.run()
+            myMessage = myRunner.result()
+            myImpactLayer = myRunner.impactLayer()
+            myFilename = myImpactLayer.get_filename()
+            assert(myFilename and not myFilename == '')
+            assert(myMessage and not myMessage == '')
+        except Exception, e:
+            msg = 'Calculator run failed. %s' % str(e)
+            assert(), msg
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactCalculatorTest, 'test')

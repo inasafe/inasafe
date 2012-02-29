@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.0.1'
+__version__ = '0.2.0'
 __date__ = '12/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -52,5 +52,23 @@ class StyleInfoNotFoundException(Exception):
 
 class InvalidParameterException(Exception):
     """Custom exception for when an invalid parameter is
-    passed to a functio."""
+    passed to a function."""
+    pass
+
+
+class TranslationLoadException(Exception):
+    """Custom exception handler for whe translation file fails
+    to load."""
+    pass
+
+
+class InvalidKVPException(Exception):
+    """An exception raised when a key value pair is invalid -
+    for example if the key of value is None or an empty string."""
+    pass
+
+
+class NoFeaturesInExtentException(Exception):
+    """An exception that gets thrown when no features are within
+    the extent being clipped."""
     pass

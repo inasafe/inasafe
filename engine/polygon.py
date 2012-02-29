@@ -65,7 +65,8 @@ def separate_points_by_polygon(points, polygon,
     if check_input:
         # Input checks
         msg = 'Keyword argument "closed" must be boolean'
-        assert isinstance(closed, bool), msg
+        if not isinstance(closed, bool):
+            raise Exception(msg)
 
         try:
             points = ensure_numeric(points, numpy.float)
@@ -82,14 +83,17 @@ def separate_points_by_polygon(points, polygon,
             raise Exception(msg)
 
         msg = 'Polygon array must be a 2d array of vertices'
-        assert len(polygon.shape) == 2, msg
+        if len(polygon.shape) != 2:
+            raise Exception(msg)
 
         msg = 'Polygon array must have two columns'
-        assert polygon.shape[1] == 2, msg
+        if polygon.shape[1] != 2:
+            raise Exception(msg)
 
         msg = ('Points array must be 1 or 2 dimensional. '
                'I got %d dimensions' % len(points.shape))
-        assert 0 < len(points.shape) < 3, msg
+        if not 0 < len(points.shape) < 3:
+            raise Exception(msg)
 
         if len(points.shape) == 1:
             # Only one point was passed in. Convert to array of points.
@@ -97,14 +101,17 @@ def separate_points_by_polygon(points, polygon,
 
         msg = ('Point array must have two columns (x,y), '
                'I got points.shape[1]=%d' % points.shape[0])
-        assert points.shape[1] == 2, msg
+        if points.shape[1] != 2:
+            raise Exception(msg)
 
         msg = ('Points array must be a 2d array. I got %s...'
                % str(points[:30]))
-        assert len(points.shape) == 2, msg
+        if len(points.shape) != 2:
+            raise Exception(msg)
 
         msg = 'Points array must have two columns'
-        assert points.shape[1] == 2, msg
+        if points.shape[1] != 2:
+            raise Exception(msg)
 
     N = polygon.shape[0]  # Number of vertices in polygon
     M = points.shape[0]  # Number of points
@@ -328,9 +335,13 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
         one_point = False
 
     msg = 'Argument points must be either [x, y] or an Nx2 array of points'
-    assert len(points.shape) == 2, msg
-    assert points.shape[0] > 0, msg
-    assert points.shape[1] == 2, msg
+    if len(points.shape) != 2:
+        raise Exception(msg)
+    if not points.shape[0] > 0:
+        raise Exception(msg)
+    if points.shape[1] != 2:
+        raise Exception(msg)
+
     N = points.shape[0]  # Number of points
 
     x = points[:, 0]
@@ -374,7 +385,6 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
 
     # Return either boolean scalar or boolean vector
     if one_point:
-        assert len(result) == 1
         return result[0]
     else:
         return result
@@ -899,8 +909,10 @@ def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
         y = y0 + u0 * (y1 - y0)
 
         # Sanity check - can be removed to speed up if needed
-        #assert numpy.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol)
-        #assert numpy.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol)
+        if not numpy.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol):
+            raise Exception
+        if not numpy.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol):
+            raise Exception
 
         # Check if point found lies within given line segments
         if 0.0 <= u0 <= 1.0 and 0.0 <= u1 <= 1.0:

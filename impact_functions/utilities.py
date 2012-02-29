@@ -18,10 +18,12 @@ class Damage_curve:
             raise Exception(msg)
 
         msg = 'Damage curve data must be a 2d array or a list of lists'
-        assert len(data.shape) == 2, msg
+        if len(data.shape) != 2:
+            raise RuntimeError(msg)
 
         msg = 'Damage curve data must have two columns'
-        assert data.shape[1] == 2, msg
+        if data.shape[1] != 2:
+            raise RuntimeError(msg)
 
         self.x = data[:, 0]
         self.y = data[:, 1]

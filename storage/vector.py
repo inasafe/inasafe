@@ -14,6 +14,7 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
+from utilities import verify
 from engine.polygon import inside_polygon, clip_line_by_polygon
 from engine.numerics import ensure_numeric
 
@@ -92,7 +93,7 @@ class Vector:
             else:
                 msg = ('Specified keywords must be either None or a '
                        'dictionary. I got %s' % keywords)
-                assert isinstance(keywords, dict), msg
+                verify(isinstance(keywords, dict), msg)
                 self.keywords = keywords
 
             if style_info is None:
@@ -100,20 +101,20 @@ class Vector:
             else:
                 msg = ('Specified style_info must be either None or a '
                        'dictionary. I got %s' % style_info)
-                assert isinstance(style_info, dict), msg
+                verify(isinstance(style_info, dict), msg)
                 self.style_info = style_info
 
             msg = 'Geometry must be specified'
-            assert geometry is not None, msg
+            verify(geometry is not None, msg)
 
             msg = 'Geometry must be a sequence'
-            assert is_sequence(geometry), msg
+            verify(is_sequence(geometry), msg)
             self.geometry = geometry
 
             self.geometry_type = get_geometry_type(geometry, geometry_type)
 
             #msg = 'Projection must be specified'
-            #assert projection is not None, msg
+            #verify(projection is not None, msg)
             self.projection = Projection(projection)
 
             if data is None:
@@ -125,12 +126,13 @@ class Vector:
 
             # Check data
             self.data = data
-            msg = 'Data must be a sequence'
-            assert is_sequence(data), msg
+            if data is not None:
+                msg = 'Data must be a sequence'
+                verify(is_sequence(data), msg)
 
-            msg = ('The number of entries in geometry and data '
-                   'must be the same')
-            assert len(geometry) == len(data), msg
+                msg = ('The number of entries in geometry and data '
+                       'must be the same')
+                verify(len(geometry) == len(data), msg)
 
             # FIXME: Need to establish extent here
 
@@ -460,7 +462,7 @@ class Vector:
 
         msg = ('Invalid file type for file %s. Only extensions '
                'shp or gml allowed.' % filename)
-        assert extension == '.shp' or extension == '.gml', msg
+        verify(extension == '.shp' or extension == '.gml', msg)
         driver = DRIVER_MAP[extension]
 
         # FIXME (Ole): Tempory flagging of GML issue (ticket #18)
@@ -523,7 +525,7 @@ class Vector:
                         py_type = type(att)
                         msg = ('Unknown type for storing vector '
                                'data: %s, %s' % (name, str(py_type)[1:-1]))
-                        assert py_type in TYPE_MAP, msg
+                        verify(py_type in TYPE_MAP, msg)
                         ogrtypes[name] = TYPE_MAP[py_type]
 
             else:
@@ -641,7 +643,7 @@ class Vector:
                 msg = ('Specified attribute %s does not exist in '
                        'vector layer %s. Valid names are %s'
                        '' % (attribute, self, self.data[0].keys()))
-                assert attribute in self.data[0], msg
+                verify(attribute in self.data[0], msg)
 
                 if index is None:
                     # Return all values for specified attribute
@@ -650,12 +652,12 @@ class Vector:
                     # Return value for specified attribute and index
                     msg = ('Specified index must be either None or '
                            'an integer. I got %s' % index)
-                    assert type(index) == type(0)
+                    verify(type(index) == type(0))
 
                     msg = ('Specified index must lie within the bounds '
                            'of vector layer %s which is [%i, %i]'
                            '' % (self, 0, len(self) - 1))
-                    assert 0 <= index < len(self)
+                    verify(0 <= index < len(self))
 
                     return self.data[index][attribute]
         else:
@@ -723,13 +725,13 @@ class Vector:
         # Input checks
         msg = ('Specfied attribute must be a string. '
                'I got %s' % (type(attribute)))
-        assert isinstance(attribute, basestring), msg
+        verify(isinstance(attribute, basestring), msg)
 
         msg = 'Specified attribute was empty'
-        assert attribute != '', msg
+        verify(attribute != '', msg)
 
         msg = 'N must be a positive number. I got %i' % N
-        assert N > 0, msg
+        verify(N > 0, msg)
 
         # Create list of values for specified attribute
         values = self.get_data(attribute)
@@ -761,19 +763,19 @@ class Vector:
         """
 
         msg = 'Input to Vector.interpolate must be a vector layer instance'
-        assert X.is_vector, msg
+        verify(X.is_vector, msg)
 
         X_projection = X.get_projection()
         S_projection = self.get_projection()
 
         msg = ('Projections must be the same: I got %s and %s'
                % (S_projection, X_projection))
-        assert S_projection == X_projection, msg
+        verify(S_projection == X_projection, msg)
 
         msg = ('Vector layer to interpolate from must be polygon geometry. '
                'I got OGR geometry type %s'
                % geometrytype2string(self.geometry_type))
-        assert self.is_polygon_data, msg
+        verify(self.is_polygon_data, msg)
 
         # FIXME (Ole): Maybe organise this the same way it is done with rasters
         # FIXME (Ole): Retain original geometry to use with returned data here
@@ -849,21 +851,21 @@ class Vector:
         msg = ('Vector layer to interpolate to must be point geometry. '
                'I got OGR geometry type %s'
                % geometrytype2string(X.geometry_type))
-        assert X.is_point_data, msg
+        verify(X.is_point_data, msg)
 
         msg = ('Name must be either a string or None. I got %s'
                % (str(type(X)))[1:-1])
-        assert name is None or isinstance(name, basestring), msg
+        verify(name is None or isinstance(name, basestring), msg)
 
         msg = ('Attribute must be either a string or None. I got %s'
                % (str(type(X)))[1:-1])
-        assert attribute is None or isinstance(attribute, basestring), msg
+        verify(attribute is None or isinstance(attribute, basestring), msg)
 
         attribute_names = self.get_attribute_names()
         if attribute is not None:
             msg = ('Requested attribute "%s" did not exist in %s'
                    % (attribute, attribute_names))
-            assert attribute in attribute_names, msg
+            verify(attribute in attribute_names, msg)
 
         #----------------
         # Start algorithm
@@ -877,7 +879,7 @@ class Vector:
         # Extract polygon features
         geom = self.get_geometry()
         data = self.get_data()
-        assert len(geom) == len(data)
+        verify(len(geom) == len(data))
 
         # Augment point features with empty attributes from polygon
         for a in attributes:
@@ -957,7 +959,7 @@ def convert_line_to_points(V, delta):
     """
 
     msg = 'Input data %s must be line vector data' % V
-    assert V.is_line_data, msg
+    verify(V.is_line_data, msg)
 
     geometry = V.get_geometry()
     data = V.get_data()
@@ -992,7 +994,7 @@ def convert_polygons_to_centroids(V):
     """
 
     msg = 'Input data %s must be polygon vector data' % V
-    assert V.is_polygon_data, msg
+    verify(V.is_polygon_data, msg)
 
     geometry = V.get_geometry()
     N = len(V)

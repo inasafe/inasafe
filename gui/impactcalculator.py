@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
-__version__ = '0.0.1'
+__version__ = '0.2.0'
 __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -37,9 +37,25 @@ from impact_functions import get_admissible_plugins, get_plugins
 from engine.core import calculate_impact
 from storage.core import read_layer
 from storage.utilities import read_keywords, bbox_intersection
-from storage.utilities import buffered_bounding_box
+from storage.utilities import buffered_bounding_box, verify
 import threading
-from PyQt4.QtCore import QObject, pyqtSignal
+from PyQt4.QtCore import (QObject,
+                          pyqtSignal,
+                          QCoreApplication)
+
+
+def tr(theText):
+    """We define a tr() alias here since the RiabClipper implementation below
+    is not a class and does not inherit from QObject.
+    .. note:: see http://tinyurl.com/pyqt-differences
+    Args:
+       theText - string to be translated
+    Returns:
+       Translated version of the given string if available, otherwise
+       the original string.
+    """
+    myContext = "ImpactCalculator"
+    return QCoreApplication.translate(myContext, theText)
 
 
 def makeAscii(x):
@@ -97,15 +113,14 @@ def getOptimalExtent(theHazardGeoExtent,
               theViewportGeoExtent]:
 
         # Err message
-        msg = ('Invalid bounding box %s (%s). It must be a sequence of the '
+        msg = tr('Invalid bounding box %s (%s). It must be a sequence of the '
                'form [west, south, east, north]' % (str(x),
                                                     str(type(x))[1:-1]))
         try:
             list(x)
         except:
             raise Exception(msg)
-
-        assert len(x) == 4, msg
+        verify(len(x) == 4, msg)
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
@@ -114,7 +129,7 @@ def getOptimalExtent(theHazardGeoExtent,
                                         theViewportGeoExtent)
     if myOptimalExtent is None:
         # Bounding boxes did not overlap
-        msg = ('Bounding boxes of hazard data, exposure data '
+        msg = tr('Bounding boxes of hazard data, exposure data '
                'and viewport did not overlap, so no computation was '
                'done. Please make sure you pan to where the data is and '
                'that hazard and exposure data overlaps.')
@@ -188,17 +203,17 @@ class ImpactCalculator():
         del self.__function
 
     _hazard_layer = property(getHazardLayer, setHazardLayer,
-        delHazardLayer, """Hazard layer property  (e.g. a flood depth
-        raster).""")
+        delHazardLayer, tr("""Hazard layer property  (e.g. a flood depth
+        raster)."""))
 
     _exposure_layer = property(getExposureLayer, setExposureLayer,
-        delExposureLayer, """Exposure layer property (e.g. buildings or
-        features that will be affected).""")
+        delExposureLayer, tr("""Exposure layer property (e.g. buildings or
+        features that will be affected)."""))
 
     _function = property(getFunction, setFunction,
-        delFunction, """Function property (specifies which
+        delFunction, tr("""Function property (specifies which
         riab function to use to process the hazard and exposure
-        layers with.""")
+        layers with."""))
 
     def availableFunctions(self, theKeywordList=None):
         """ Query the riab engine to see what plugins are available.
@@ -253,12 +268,12 @@ class ImpactCalculator():
         try:
             myValue = theLayer.get_keywords(keyword)
         except Exception, e:
-            msg = 'Keyword retrieval failed for %s (%s) \n %s' % (
-                    theLayer.get_filename(), keyword, str(e))
+            msg = tr('Keyword retrieval failed for %s (%s) \n %s' % (
+                    theLayer.get_filename(), keyword, str(e)))
             raise KeywordNotFoundException(msg)
         if not myValue or myValue == '':
-            msg = 'No value was found for keyword %s in layer %s' % (
-                        theLayer.get_filename(), keyword)
+            msg = tr('No value was found for keyword %s in layer %s' % (
+                        theLayer.get_filename(), keyword))
             raise KeywordNotFoundException(msg)
         return myValue
 
@@ -287,7 +302,7 @@ class ImpactCalculator():
         """
         # check the source layer path is valid
         if not os.path.isfile(theLayerPath):
-            msg = ('Cannot get keywords from a non-existant file.'
+            msg = tr('Cannot get keywords from a non-existant file.'
                    '%s does not exist.' % theLayerPath)
             raise InvalidParameterException(msg)
 
@@ -295,7 +310,7 @@ class ImpactCalculator():
         myKeywordFilePath = os.path.splitext(theLayerPath)[0]
         myKeywordFilePath += '.keywords'
         if not os.path.isfile(myKeywordFilePath):
-            msg = ('No keywords file found for %s' % theLayerPath)
+            msg = tr('No keywords file found for %s' % theLayerPath)
             raise InvalidParameterException(msg)
 
         #now get the requested keyword using the riab library
@@ -303,16 +318,16 @@ class ImpactCalculator():
         try:
             myDictionary = read_keywords(myKeywordFilePath)
         except Exception, e:
-            msg = 'Keyword retrieval failed for %s (%s) \n %s' % (
-                    myKeywordFilePath, keyword, str(e))
+            msg = tr('Keyword retrieval failed for %s (%s) \n %s' % (
+                    myKeywordFilePath, keyword, str(e)))
             raise KeywordNotFoundException(msg)
 
         # if no keyword was supplied, just return the dict
         if keyword is None:
             return myDictionary
         if not keyword in myDictionary:
-            msg = 'No value was found for in file %s in keyword %s' % (
-                        myKeywordFilePath, keyword)
+            msg = tr('No value was found for in file %s in keyword %s' % (
+                        myKeywordFilePath, keyword))
             raise KeywordNotFoundException(msg)
 
         myValue = myDictionary[keyword]
@@ -338,19 +353,19 @@ class ImpactCalculator():
             raise InvalidParameterException()
 
         if not hasattr(theLayer, 'get_style_info'):
-            msg = ('Argument "%s" was not a valid layer instance' %
+            msg = tr('Argument "%s" was not a valid layer instance' %
                    theLayer)
             raise StyleInfoNotFoundException(msg)
 
         try:
             myValue = theLayer.get_style_info()
         except Exception, e:
-            msg = 'Styleinfo retrieval failed for %s\n %s' % (
-                        theLayer.get_filename(), str(e))
+            msg = tr('Styleinfo retrieval failed for %s\n %s' % (
+                        theLayer.get_filename(), str(e)))
             raise StyleInfoNotFoundException(msg)
 
         if not myValue or myValue == '':
-            msg = ('No styleInfo was found for layer %s' % (
+            msg = tr('No styleInfo was found for layer %s' % (
                     theLayer.get_filename()))
             raise StyleInfoNotFoundException(msg)
 
@@ -377,15 +392,15 @@ class ImpactCalculator():
         self.__filename = None
         self.__result = None
         if not self.__hazard_layer or self.__hazard_layer == '':
-            msg = 'Error: Hazard layer not set.'
+            msg = tr('Error: Hazard layer not set.')
             raise InsufficientParametersException(msg)
 
         if not self.__exposure_layer or self.__exposure_layer == '':
-            msg = 'Error: Exposure layer not set.'
+            msg = tr('Error: Exposure layer not set.')
             raise InsufficientParametersException(msg)
 
         if not self.__function or self.__function == '':
-            msg = 'Error: Function not set.'
+            msg = tr('Error: Function not set.')
             raise InsufficientParametersException(msg)
 
         # Call impact calculation engine
@@ -460,7 +475,7 @@ class ImpactCalculatorThread(threading.Thread):
         return self._notifier
 
     def impactLayer(self):
-        """Return the RIAB file which is the output from the
+        """Return the RIAB layer instance which is the output from the
         last run."""
         return self._impactLayer
 
@@ -507,12 +522,12 @@ class ImpactCalculatorThread(threading.Thread):
             self._impactLayer = calculate_impact(layers=myLayers,
                                                  impact_fcn=self._function)
         except Exception, e:
-            msg = 'Calculation error encountered:\n'
+            msg = tr('Calculation error encountered:\n')
             msg += getExceptionWithStacktrace(e, html=True)
             print msg
             self._result = msg
         else:
-            self._result = 'Calculation completed successfully.'
+            self._result = tr('Calculation completed successfully.')
 
         #  Let any listending slots know we are done
         self._notifier.done.emit()

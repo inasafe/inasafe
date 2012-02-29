@@ -11,13 +11,19 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.0.1'
+__version__ = '0.2.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-from qgis.core import QgsApplication
+import sys
+import os
+
+# Add parent directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from PyQt4.QtGui import QWidget
@@ -25,7 +31,7 @@ from utilities_test import getQgisTestApp
 
 from gui.riab import Riab
 
-QGISAPP = getQgisTestApp()
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 class RiabTest(unittest.TestCase):
@@ -38,6 +44,23 @@ class RiabTest(unittest.TestCase):
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
         Riab(myIface)
+
+    def test_setupI18n(self):
+        """Gui translations are working."""
+
+        myUntranslatedString = 'Show/hide Risk in a Box dock widget'
+        myExpectedString = 'Tampilkan/hilangkan widget Risk in a Box'
+        myParent = QWidget()
+        myCanvas = QgsMapCanvas(myParent)
+        myIface = QgisInterface(myCanvas)
+        myRiab = Riab(myIface)
+        myRiab.setupI18n('id')
+        myTranslation = myRiab.tr(myUntranslatedString)
+        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
+                            myUntranslatedString,
+                            myTranslation,
+                            myExpectedString)
+        assert myTranslation == myExpectedString, myMessage
 
 if __name__ == '__main__':
     unittest.main()

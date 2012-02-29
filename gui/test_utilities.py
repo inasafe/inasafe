@@ -32,7 +32,7 @@ class Test_U(unittest.TestCase):
             # Display message and traceback
 
             msg = getExceptionWithStacktrace(e, html=False)
-            print msg
+            #print msg
             assert str(e) in msg
             assert 'line' in msg
             assert 'File' in msg

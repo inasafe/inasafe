@@ -68,8 +68,9 @@ def get_plugins(name=None):
         msg = ('No plugin named "%s" was found. '
                'List of available plugins is: %s'
                % (name, ', '.join(plugins_dict.keys())))
+        if name not in plugins_dict:
+            raise RuntimeError(msg)
 
-        assert name in plugins_dict, msg
         return [{name: plugins_dict[name]}]
     else:
         msg = ('get_plugins expects either no parameters or a string '

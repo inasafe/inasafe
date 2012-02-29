@@ -1,10 +1,10 @@
-====================
-RISK IN A BOX - QGIS
-====================
+===========================
+Risk in a Box - QGIS Plugin
+===========================
 
 This is the project: Risk in a Box - QGIS
 
-.. figure::  ../../gui/resources/img/screenshot.jpg
+.. figure::  ../../../gui/resources/img/screenshot.jpg
    :align:   center
 
 The latest source code is available in https://github.com/AIFDR/risk_in_a_box
@@ -44,7 +44,7 @@ System Requirements
 
 
 ===========
-LIMITATIONS
+Limitations
 ===========
 
 Risk in a Box is a very new project. The current code development started

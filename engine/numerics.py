@@ -58,7 +58,8 @@ def cdf(x, mu=0, sigma=1, kind='normal'):
     """
 
     msg = 'Argument "kind" must be either normal or lognormal'
-    assert kind in ['normal', 'lognormal'], msg
+    if kind not in ['normal', 'lognormal']:
+        raise RuntimeError(msg)
 
     if kind == 'lognormal':
         return cdf(numpy.log(x), mu=mu, sigma=sigma, kind='normal')

@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.0.1'
+__version__ = '0.2.0'
 __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
@@ -21,8 +21,22 @@ import os
 import sys
 import traceback
 import tempfile
-
+from PyQt4.QtCore import QCoreApplication
 from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem
+
+
+def tr(theText):
+    """We define a tr() alias here since the utilities implementation below
+    is not a class and does not inherit from QObject.
+    .. note:: see http://tinyurl.com/pyqt-differences
+    Args:
+       theText - string to be translated
+    Returns:
+       Translated version of the given string if available, otherwise
+       the original string.
+    """
+    myContext = "Utilities"
+    return QCoreApplication.translate(myContext, theText)
 
 
 def getExceptionWithStacktrace(e, html=False):
@@ -44,10 +58,10 @@ def getExceptionWithStacktrace(e, html=False):
     else:
         # Wrap string in html
         s = '<div>'
-        s += '<span class="label important">Problem:</span> ' + errmsg
+        s += tr('<span class="label important">Problem:</span> ') + errmsg
         s += '</div>'
         s += '<div>'
-        s += '<span class="label warning">Traceback:</span> '
+        s += tr('<span class="label warning">Traceback:</span> ')
         s += '<pre id="traceback" class="prettyprint">\n'
         s += info
         s += '</pre></div>'
@@ -101,9 +115,10 @@ def getWGS84resolution(theLayer, theGeoExtent=None):
     If not, work it out based on EPSG:4326 representations of its extent
     """
 
-    msg = ('Input layer to getWGS84resolution must be a raster layer. '
+    msg = tr('Input layer to getWGS84resolution must be a raster layer. '
            'I got: %s' % str(theLayer.type())[1:-1])
-    assert theLayer.type() == QgsMapLayer.RasterLayer, msg
+    if not theLayer.type() == QgsMapLayer.RasterLayer:
+        raise RuntimeError(msg)
 
     if theLayer.crs().authid() == 'EPSG:4326':
         # If it is already in EPSG:4326, simply use the native resolution

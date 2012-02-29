@@ -17,6 +17,7 @@ from engine.numerics import cdf, erf, ensure_numeric
 from storage.core import read_layer
 
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
+from storage.utilities import VerificationError
 from storage.core import write_vector_data
 from storage.core import write_raster_data
 from storage.vector import Vector
@@ -237,7 +238,7 @@ class Test_Engine(unittest.TestCase):
         # Name file names for hazard level, exposure and expected fatalities
 
         population = 'Population_Jakarta_geographic.asc'
-        plugin_name = 'Flood Impact Function'
+        plugin_name = 'HKVtest'
 
         # Expected values from HKV
         expected_values = [2485442, 1537920]
@@ -323,6 +324,42 @@ class Test_Engine(unittest.TestCase):
             assert numpy.alltrue(C >= 0)
 
             i += 1
+
+    def test_flood_building_impact_function(self):
+        """Flood building impact function works
+
+        This test also exercises interpolation of hazard level (raster) to
+        building locations (vector data).
+        """
+
+        for haz_filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
+                             'Flood_Design_Depth_Jakarta_geographic.asc']:
+
+            # Name file names for hazard level and exposure
+            hazard_filename = '%s/%s' % (TESTDATA, haz_filename)
+            exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
+                                 % TESTDATA)
+
+            # Calculate impact using API
+            H = read_layer(hazard_filename)
+            E = read_layer(exposure_filename)
+
+            plugin_name = 'FloodBuildingImpactFunction'
+            plugin_list = get_plugins(plugin_name)
+            assert len(plugin_list) == 1
+            assert plugin_list[0].keys()[0] == plugin_name
+
+            IF = plugin_list[0][plugin_name]
+
+            impact_vector = calculate_impact(layers=[H, E],
+                                             impact_fcn=IF)
+            impact_filename = impact_vector.get_filename()
+
+            # Extract calculated result
+            icoordinates = impact_vector.get_geometry()
+            iattributes = impact_vector.get_data()
+
+            # FIXME (Ole): check some numbers
 
     def test_earthquake_damage_schools(self):
         """Lembang building damage from ground shaking works
@@ -1359,12 +1396,12 @@ class Test_Engine(unittest.TestCase):
         # Check projection mismatch is caught
         try:
             H.interpolate(E)
-        except AssertionError, e:
+        except VerificationError, e:
             msg = ('Projection mismatch shoud have been caught: %s'
                    % str(e))
             assert 'Projections' in str(e), msg
         else:
-            msg = 'Should have raised assertError about projection mismatch'
+            msg = 'Should have raised error about projection mismatch'
             raise Exception(msg)
 
     def test_line_clipping_by_polygon(self):
@@ -1594,7 +1631,7 @@ class Test_Engine(unittest.TestCase):
         """
 
         population = 'Population_Jakarta_geographic.asc'
-        plugin_name = 'Flood Impact Function'
+        plugin_name = 'HKVtest'
 
         hazard_layers = ['Flood_Current_Depth_Jakarta_geographic.asc',
                          'Flood_Design_Depth_Jakarta_geographic.asc']
@@ -1620,7 +1657,7 @@ class Test_Engine(unittest.TestCase):
             try:
                 impact_layer = calculate_impact(layers=[H, E],
                                                 impact_fcn=IF)
-            except AssertionError, e:
+            except VerificationError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
             else:
@@ -1639,7 +1676,7 @@ class Test_Engine(unittest.TestCase):
             try:
                 impact_layer = calculate_impact(layers=[H, E],
                                                 impact_fcn=IF)
-            except AssertionError, e:
+            except Exception, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)
             else:

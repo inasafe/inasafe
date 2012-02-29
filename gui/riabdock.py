@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.0.1'
+__version__ = '0.2.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -24,16 +24,24 @@ from PyQt4.QtCore import pyqtSignature
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
 from utilities import getExceptionWithStacktrace, getWGS84resolution
-from qgis.core import (QGis, QgsMapLayer, QgsVectorLayer, QgsRasterLayer,
-                       QgsMapLayerRegistry, QgsGraduatedSymbolRendererV2,
-                       QgsSymbolV2, QgsRendererRangeV2,
-                       QgsSymbolLayerV2Registry, QgsColorRampShader,
+from qgis.core import (QGis,
+                       QgsMapLayer,
+                       QgsVectorLayer,
+                       QgsRasterLayer,
+                       QgsMapLayerRegistry,
+                       QgsGraduatedSymbolRendererV2,
+                       QgsSymbolV2,
+                       QgsRendererRangeV2,
+                       QgsSymbolLayerV2Registry,
+                       QgsColorRampShader,
                        QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform)
+                       QgsCoordinateTransform,
+                       QgsRasterTransparency)
 from impactcalculator import ImpactCalculator
 from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent, getBufferedExtent
-
+from riabexceptions import (KeywordNotFoundException,
+                            InvalidParameterException)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -73,7 +81,11 @@ def setVectorStyle(qgisVectorLayer, style):
 
     myRangeList = []
     for myClass in myClasses:
-        myOpacity = myClass['opacity']
+        # Transparency 100: transparent
+        # Transparency 0: opaque
+        myTransparencyPercent = 0
+        if 'transparency' in myClass:
+            myTransparencyPercent = myClass['transparency']
         myMax = myClass['max']
         myMin = myClass['min']
         myColour = myClass['colour']
@@ -91,16 +103,16 @@ def setVectorStyle(qgisVectorLayer, style):
         # the border colour of a symbol can not be set otherwise
         myRegistry = QgsSymbolLayerV2Registry.instance()
         if myGeometryType == QGis.Point:
-            myMetadata = myRegistry.symbolLayerMetadata("SimpleMarker")
+            myMetadata = myRegistry.symbolLayerMetadata('SimpleMarker')
             # note that you can get a list of available layer properties
             # that you can set by doing e.g.
             # QgsSimpleMarkerSymbolLayerV2.properties()
-            mySymbolLayer = myMetadata.createSymbolLayer({"color_border":
+            mySymbolLayer = myMetadata.createSymbolLayer({'color_border':
                                                           myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         elif myGeometryType == QGis.Polygon:
-            myMetadata = myRegistry.symbolLayerMetadata("SimpleFill")
-            mySymbolLayer = myMetadata.createSymbolLayer({"color_border":
+            myMetadata = myRegistry.symbolLayerMetadata('SimpleFill')
+            mySymbolLayer = myMetadata.createSymbolLayer({'color_border':
                                                           myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         else:
@@ -109,7 +121,12 @@ def setVectorStyle(qgisVectorLayer, style):
             pass
 
         mySymbol.setColor(myColour)
-        mySymbol.setAlpha(myOpacity)
+        # .. todo:: Check that vectors use alpha as % otherwise scale TS
+        # Convert transparency % to opacity
+        # alpha = 0: transparent
+        # alpha = 1: opaque
+        alpha = 1 - myTransparencyPercent / 100
+        mySymbol.setAlpha(alpha)
         myRange = QgsRendererRangeV2(myMin,
                                      myMax,
                                      mySymbol,
@@ -124,13 +141,23 @@ def setVectorStyle(qgisVectorLayer, style):
 
 
 def setRasterStyle(theQgsRasterLayer, theStyle):
-    """Set QGIS raster style based on RIAB style dictionary
+    """Set QGIS raster style based on RIAB style dictionary.
+
+    This function will set both the colour map and the transparency
+    for the passed in layer.
+
+    .. note:: There is currently a limitation in QGIS in that
+       pixel transparency values can not be specified in ranges and
+       consequently the opacity is of limited value and seems to
+       only work effectively with integer values.
+
+    .. todo:: Get Tim to implement range based transparency in
+       the core QGIS library.
 
     Input
         theQgsRasterLayer: Qgis layer
         style: Dictionary of the form as in the example below
-        style_classes = [dict(colour='#ffffff', quantity=-9999, opacity=0),
-                         dict(colour='#38A800', quantity=2, opacity=0),
+        style_classes = [dict(colour='#38A800', quantity=2, opacity=0),
                          dict(colour='#38A800', quantity=5, opacity=1),
                          dict(colour='#79C900', quantity=10, opacity=1),
                          dict(colour='#CEED00', quantity=20, opacity=1),
@@ -143,16 +170,27 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
         Sets and saves style for theQgsRasterLayer
 
     """
+    #if DEBUG: settrace()
     theQgsRasterLayer.setDrawingStyle(QgsRasterLayer.PalettedColor)
     myClasses = theStyle['style_classes']
     myRangeList = []
+    myTransparencyList = []
+    myLastValue = 0
     for myClass in myClasses:
         myMax = myClass['quantity']
+        myRange = range(myLastValue, myMax)
         myColour = QtGui.QColor(myClass['colour'])
-        #myColour = myClass['opacity']  # ?
-        #myLabel = myClass['label']
         myShader = QgsColorRampShader.ColorRampItem(myMax, myColour)
         myRangeList.append(myShader)
+        # Create opacity entries for this range
+        myTransparencyPercent = int(myClass['transparency'])
+        if myTransparencyPercent > 0:
+            for myValue in myRange:
+                myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
+                myPixel.pixelValue = myValue
+                myPixel.percentTransparent = myTransparencyPercent
+                myTransparencyList.append(myPixel)
+        #myLabel = myClass['label']
 
     # Apply the shading algorithm and design their ramp
     theQgsRasterLayer.setColorShadingAlgorithm(QgsRasterLayer.ColorRampShader)
@@ -160,11 +198,16 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
     myFunction.setColorRampItemList(myRangeList)
 
+    # Now set the raster transparency
+    theQgsRasterLayer.rasterTransparency().setTransparentSingleValuePixelList(
+                                                myTransparencyList)
+    return myRangeList, myTransparencyList
+
 
 class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
     """Dock implementation class for the Risk In A Box plugin."""
 
-    def __init__(self, iface, guiContext=True):
+    def __init__(self, iface):
         """Constructor for the dialog.
 
         This dialog will allow the user to select layers and scenario details
@@ -179,9 +222,6 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Args:
 
            * iface - a Quantum GIS QGisAppInterface instance.
-           * guiContext - an optional paramter, defaults to True. Set to
-             False if you do not wish to see popup messages etc. Used
-             mainly by init tests.
 
         Returns:
            not applicable
@@ -194,10 +234,10 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         self.iface = iface
         self.header = None  # for storing html header template
         self.footer = None  # for storing html footer template
-        self.suppressDialogsFlag = guiContext
         self.calculator = ImpactCalculator()
         self.runner = None
         self.helpDialog = None
+        self.state = None
         self.getLayers()
         self.setOkButtonStatus()
 
@@ -235,7 +275,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
            Example::
 
-               flag,msg = self.validate()
+               flag,myMessage = self.validate()
 
         Raises:
            no exceptions explicitly raised
@@ -243,7 +283,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         myHazardIndex = self.cboHazard.currentIndex()
         myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
-            myMessage = (
+            myMessage = self.tr(
             '<span class="label notice">Getting started:'
             '</span> To use this tool you need to add some layers to your '
             'QGIS project. Ensure that at least one <em>hazard</em> layer '
@@ -253,13 +293,14 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             return (False, myMessage)
 
         if self.cboFunction.currentIndex() == -1:
-            myHazardFunction = str(self.getHazardLayer().source())
+            myHazardFilename = str(self.getHazardLayer().source())
             myHazardKeywords = self.calculator.getKeywordFromFile(
-                                                            myHazardFunction)
-            myExposureFunction = str(self.getExposureLayer().source())
+                                                            myHazardFilename)
+            myExposureFilename = str(self.getExposureLayer().source())
             myExposureKeywords = self.calculator.getKeywordFromFile(
-                                                            myExposureFunction)
-            myMessage = ('<span class="label important">No valid functions:'
+                                                            myExposureFilename)
+            myMessage = self.tr('<span class="label important">No valid '
+                         'functions:'
                          '</span> No functions are available for the inputs '
                          'you have specified. '
                          'Try selecting a different combination of inputs. '
@@ -268,11 +309,11 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                          'a given risk function. <br>'
                          'Hazard keywords [%s]: %s <br>'
                          'Exposure keywords [%s]: %s' % (
-                                myHazardFunction, myHazardKeywords,
-                                myExposureFunction, myExposureKeywords))
+                                myHazardFilename, myHazardKeywords,
+                                myExposureFilename, myExposureKeywords))
             return (False, myMessage)
         else:
-            myMessage = ('<span class="label success">Ready:</span> '
+            myMessage = self.tr('<span class="label success">Ready:</span> '
             'You can now proceed to run your model by clicking the <em> '
             'Run</em> button.')
             return (True, myMessage)
@@ -349,6 +390,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Raises:
            no
         """
+        self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
         for i in range(len(self.iface.mapCanvas().layers())):
@@ -386,6 +428,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
+        self.restoreState()
         self.setOkButtonStatus()
         return
 
@@ -437,11 +480,11 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         except Exception, e:
             raise e
 
-    def readImpactLayer(self, engineImpactLayer):
+    def readImpactLayer(self, myEngineImpactLayer):
         """Helper function to read and validate layer
 
         Args
-            engineImpactLayer: Layer object as provided by the riab engine
+            myEngineImpactLayer: Layer object as provided by the riab engine
 
         Returns
             validated qgis layer or None
@@ -450,29 +493,30 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             Exception if layer is not valid
         """
 
-        msg = ('Input argument must be a RIAB spatial object. '
-               'I got %s' % type(engineImpactLayer))
-        if not hasattr(engineImpactLayer, 'is_riab_spatial_object'):
-            raise Exception(msg)
-        if not engineImpactLayer.is_riab_spatial_object:
-            raise Exception(msg)
+        myMessage = ('Input argument must be a RIAB spatial object. '
+               'I got %s' % type(myEngineImpactLayer))
+        if not hasattr(myEngineImpactLayer, 'is_riab_spatial_object'):
+            raise Exception(myMessage)
+        if not myEngineImpactLayer.is_riab_spatial_object:
+            raise Exception(myMessage)
 
         # Get associated filename and symbolic name
-        myFilename = engineImpactLayer.get_filename()
-        myName = engineImpactLayer.get_name()
+        myFilename = myEngineImpactLayer.get_filename()
+        myName = myEngineImpactLayer.get_name()
 
         # Read layer
-        if engineImpactLayer.is_vector:
-            qgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
-        elif engineImpactLayer.is_raster:
-            qgisLayer = QgsRasterLayer(myFilename, myName)
+        if myEngineImpactLayer.is_vector:
+            myQgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
+        elif myEngineImpactLayer.is_raster:
+            myQgisLayer = QgsRasterLayer(myFilename, myName)
 
         # Verify that new qgis layer is valid
-        if qgisLayer.isValid():
-            return qgisLayer
+        if myQgisLayer.isValid():
+            return myQgisLayer
         else:
-            msg = 'Loaded impact layer "%s" is not valid' % myFilename
-            raise Exception(msg)
+            myMessage = self.tr('Loaded impact layer "%s" is not'
+                                ' valid' % myFilename)
+            raise Exception(myMessage)
 
     def getHazardLayer(self):
         """Obtain qgsmaplayer id from the userrole of the QtCombo for exposure
@@ -497,18 +541,9 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
-    def accept(self):
-        """Execute analysis when ok button is clicked."""
-        #.. todo:: FIXME (Tim) We may have to implement some polling logic
-        # because the putton click accept() function and the updating
-        # of the web view after model completion are asynchronous.
-        self.showBusy()
-        myFlag, myMessage = self.validate()
-        if not myFlag:
-            self.displayHtml(myMessage)
-            self.hideBusy()
-            return
-
+    def setupCalculator(self):
+        """Initialise the ImpactCalculator based on the current
+        state of the ui."""
         myHazardFilename = None
         myExposureFilename = None
         try:
@@ -516,25 +551,33 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            msg = ('<p><span class="label important">Error:</span> '
-                   'An exception occurred when creating layer '
-                   'subsets clipped to the optimal extent: %s</p>' %
-                   ((str(e))))
-            msg += getExceptionWithStacktrace(e, html=True)
-            self.displayHtml(msg)
-            return
-
+            raise
         self.calculator.setHazardLayer(myHazardFilename)
         self.calculator.setExposureLayer(myExposureFilename)
         self.calculator.setFunction(self.cboFunction.currentText())
 
-        # Start it in its own thread
-        self.runner = self.calculator.getRunner()
-        QtCore.QObject.connect(self.runner.notifier(),
+    def accept(self):
+        """Execute analysis when ok button is clicked."""
+        #.. todo:: FIXME (Tim) We may have to implement some polling logic
+        # because the putton click accept() function and the updating
+        # of the web view after model completion are asynchronous (when
+        # threading mode is enabled especially)
+        self.showBusy()
+        myFlag, myMessage = self.validate()
+        if not myFlag:
+            self.displayHtml(myMessage)
+            self.hideBusy()
+            return
+
+        try:
+            self.setupCalculator()
+            # Start it in its own thread
+            self.runner = self.calculator.getRunner()
+            QtCore.QObject.connect(self.runner.notifier(),
                                QtCore.SIGNAL('done()'),
                                self.completed)
-        #self.runner.start()  # Run in different thread
-        try:
+            #self.runner.start()  # Run in different thread
+
             QtGui.qApp.setOverrideCursor(
                     QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.repaint()
@@ -546,9 +589,12 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            msg = 'An exception occurred when starting the model: %s' % (
-                    (str(e)))
-            self.displayHtml(msg)
+            myMessage = self.tr('<p><span class="label important">'
+                                'Error:</span> '
+                                'An exception occurred when starting'
+                                ' the model.')
+            myMessage += getExceptionWithStacktrace(e, html=True)
+            self.displayHtml(myMessage)
 
     def completed(self):
         """Slot activated when the process is done."""
@@ -558,13 +604,13 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             myReport = self._completed()
         except Exception, e:
             # Display message and traceback
-            msg = getExceptionWithStacktrace(e, html=True)
-            self.displayHtml(msg)
+            myMessage = getExceptionWithStacktrace(e, html=True)
+            self.displayHtml(myMessage)
         else:
-            # On succes, display generated report
+            # On success, display generated report
             self.displayHtml(myReport)
-
-        # Hide hourglass
+        self.saveState()
+        # Hide hour glass
         self.hideBusy()
 
     def _completed(self):
@@ -581,61 +627,61 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         """
 
         myMessage = self.runner.result()
-        engineImpactLayer = self.runner.impactLayer()
+        myEngineImpactLayer = self.runner.impactLayer()
 
-        if engineImpactLayer is None:
-            msg = ('No impact layer was calculated. '
+        if myEngineImpactLayer is None:
+            myMessage = self.tr('No impact layer was calculated. '
                    'Error message: %s\n' % str(myMessage))
-            raise Exception(msg)
+            raise Exception(myMessage)
 
         # Get tabular information from impact layer
-        myReport = self.calculator.getKeywordFromLayer(engineImpactLayer,
+        myReport = self.calculator.getKeywordFromLayer(myEngineImpactLayer,
                                                'caption')
 
         # Get requested style for impact layer of either kind
-        myStyle = engineImpactLayer.get_style_info()
+        myStyle = myEngineImpactLayer.get_style_info()
 
         # Load impact layer into QGIS
-        qgisImpactLayer = self.readImpactLayer(engineImpactLayer)
+        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
 
         # Determine styling for QGIS layer
-        if engineImpactLayer.is_vector:
+        if myEngineImpactLayer.is_vector:
             if not myStyle:
                 # Set default style if possible
                 pass
             else:
-                setVectorStyle(qgisImpactLayer, myStyle)
-        elif engineImpactLayer.is_raster:
+                setVectorStyle(myQgisImpactLayer, myStyle)
+        elif myEngineImpactLayer.is_raster:
             if not myStyle:
-                qgisImpactLayer.setDrawingStyle(
+                myQgisImpactLayer.setDrawingStyle(
                                 QgsRasterLayer.SingleBandPseudoColor)
-                qgisImpactLayer.setColorShadingAlgorithm(
+                myQgisImpactLayer.setColorShadingAlgorithm(
                                 QgsRasterLayer.PseudoColorShader)
             else:
-                setRasterStyle(qgisImpactLayer, myStyle)
+                setRasterStyle(myQgisImpactLayer, myStyle)
 
         else:
-            msg = ('Impact layer %s was neither a raster or a '
-                   'vector layer' % qgisImpactLayer.source())
-            raise Exception(msg)
-
+            myMessage = self.tr('Impact layer %s was neither a raster or a '
+                   'vector layer' % myQgisImpactLayer.source())
+            raise Exception(myMessage)
+        #settrace()
         # Finally, add layer to QGIS
-        QgsMapLayerRegistry.instance().addMapLayer(qgisImpactLayer)
-
+        QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
+        self.restoreState()
         # Return text to display in report pane
         return myReport
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
         if not self.helpDialog:
-            self.helpDialog = RiabHelp(self.iface.mainWindow())
+            self.helpDialog = RiabHelp(self.iface.mainWindow(), 'dock')
         self.helpDialog.show()
 
     def showBusy(self):
         """A helper function to indicate the plugin is processing."""
         #self.pbnRunStop.setText('Cancel')
         self.pbnRunStop.setEnabled(False)
-        myHtml = ('<div><span class="label success">'
+        myHtml = self.tr('<div><span class="label success">'
                    'Analyzing this question...</span></div>'
                    '<div><img src="qrc:/plugins/riab/ajax-loader.gif" />'
                    '</div>')
@@ -714,7 +760,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                                            myExposureGeoExtent,
                                            myViewportGeoExtent)
         except Exception, e:
-            msg = ('<p>There '
+            myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
                    'and / or the layers and the viewport. Please select '
                    'two overlapping layers and zoom or pan to them. Full '
@@ -733,7 +779,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                     myHazardGeoExtent,
                     myExposureGeoExtent,
                     str(e)))
-            raise Exception(msg)
+            raise Exception(myMessage)
 
         # Next work out the ideal spatial resolution for rasters
         # in the analysis. If layers are not native WGS84, we estimate
@@ -770,14 +816,16 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                 # ensure there are enough pixels for points at the edge of
                 # the view port to be interpolated correctly. This requires
                 # resolution to be available
-                assert myExposureLayer.type() == QgsMapLayer.VectorLayer
+                if myExposureLayer.type() != QgsMapLayer.VectorLayer:
+                    raise RuntimeError
                 myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
                                                         myHazardGeoCellSize)
         else:
             # Hazard layer is vector
             if myExposureLayer.type() == QgsMapLayer.RasterLayer:
-                msg = 'Raster exposure with vector hazard not implemented'
-                raise Exception(msg)
+                myMessage = self.tr('Raster exposure with vector hazard not '
+                              'implemented')
+                raise Exception(myMessage)
             else:
                 # Both layers are vector
                 pass
@@ -809,12 +857,13 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         # FIXME (Ole): This causes some strange failures. Revisit!
         # Check that resolutions are equal up to some precision
 
-        #msg = ('Resampled pixels sizes did not match: '
+        #myMessage = ('Resampled pixels sizes did not match: '
         #       'Exposure pixel size = %.12f, '
         #       'Hazard pixel size = %.12f' % (myExposureUPP, myHazardUPP))
-        #assert numpy.allclose(myExposureUPP, myHazardUPP,
+        #if not numpy.allclose(myExposureUPP, myHazardUPP,
         #                      # FIXME (Ole): I would like to make this tighter
-        #                      rtol=1.0e-6, atol=1.0e-3), msg
+        #                      rtol=1.0e-6, atol=1.0e-3):
+        #    raise RuntimeError(myMessage)
 
         #print "Resampled Exposure Units Per Pixel: %s" % myExposureUPP
         #print "Resampled Hazard Units Per Pixel: %s" % myHazardUPP
@@ -885,3 +934,78 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         and display it in the wvResults widget."""
         self.wvResults.setHtml(self.htmlHeader() + theMessage +
                                   self.htmlFooter())
+
+    def layerChanged(self, theLayer):
+        """Handler for when the QGIS active layer is changed.
+        If the active layer is changed and it has keywords and a report,
+        show the report..
+
+        .. see also:: :func:`Riab.layerChanged`.
+
+        Args:
+           theLayer - the QgsMapLayer instance that is now active..
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        myReport = None
+        if theLayer is not None:
+            try:
+                myReport = self.calculator.getKeywordFromFile(
+                        str(theLayer.source()),
+                        'caption')
+            except KeywordNotFoundException, e:
+                self.setOkButtonStatus()
+            except InvalidParameterException, e:
+                self.setOkButtonStatus()
+            except Exception, e:
+                myReport = getExceptionWithStacktrace(e, html=True)
+            if myReport is not None:
+                self.displayHtml(myReport)
+
+    def saveState(self):
+        """Save the current state of the ui to an internal class member
+        so that it can be restored again easily.
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myStateDict = {'hazard': self.cboHazard.currentText(),
+                       'exposure': self.cboExposure.currentText(),
+                       'function': self.cboFunction.currentText(),
+                       'report':
+                           self.wvResults.page().currentFrame().toHtml()}
+        self.state = myStateDict
+
+    def restoreState(self):
+        """Restore the state of the dock to the last known state.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        if self.state is None:
+            return
+        for myCount in range(0, self.cboExposure.count()):
+            myItemText = self.cboExposure.itemText(myCount)
+            if myItemText == self.state['exposure']:
+                self.cboExposure.setCurrentIndex(myCount)
+                break
+        for myCount in range(0, self.cboHazard.count()):
+            myItemText = self.cboHazard.itemText(myCount)
+            if myItemText == self.state['hazard']:
+                self.cboHazard.setCurrentIndex(myCount)
+                break
+        for myCount in range(0, self.cboFunction.count()):
+            myItemText = self.cboFunction.itemText(myCount)
+            if myItemText == self.state['function']:
+                self.cboFunction.setCurrentIndex(myCount)
+                break
+        self.wvResults.setHtml(self.state['report'])

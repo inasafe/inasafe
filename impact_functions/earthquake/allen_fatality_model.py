@@ -43,20 +43,22 @@ class EarthquakeFatalityFunction(FunctionProvider):
             else:
                 datatype = keywords['datatype']
 
-                if 'population' in datatype:
+                if not 'ratio' in datatype:
                     population = layer
-
-                if 'female' in datatype and 'ratio' in datatype:
+                else:
+                    # 'female' in datatype and 'ratio' in datatype:
                     gender_ratio_unit = keywords['unit']
 
                     msg = ('Unit for gender ratio must be either '
                            '"percent" or "ratio"')
-                    assert gender_ratio_unit in ['percent', 'ratio'], msg
+                    if gender_ratio_unit not in ['percent', 'ratio']:
+                        raise RuntimeError(msg)
 
                     gender_ratio = layer
 
         msg = 'No population layer was found in: %s' % str(layers)
-        assert population is not None, msg
+        if population is None:
+            raise RuntimeError(msg)
 
         # Extract data
         H = intensity.get_data(nan=0)

@@ -16,9 +16,9 @@ class FloodImpactFunction(FunctionProvider):
                     unit=='m'
 
     :param requires category=='exposure' and \
-                    subcategory.startswith('population') and \
+                    subcategory=='population' and \
                     layertype=='raster' and \
-                    datatype=='population'
+                    datatype=='density'
     """
 
     plugin_name = 'Terdampak'
@@ -48,20 +48,22 @@ class FloodImpactFunction(FunctionProvider):
             else:
                 datatype = keywords['datatype']
 
-                if 'population' in datatype:
+                if 'ratio' not in datatype:
                     population = layer
-
-                if 'female' in datatype and 'ratio' in datatype:
+                else:
+                    #if 'female' in datatype and 'ratio' in datatype:
                     gender_ratio_unit = keywords['unit']
 
                     msg = ('Unit for gender ratio must be either '
                            '"percent" or "ratio"')
-                    assert gender_ratio_unit in ['percent', 'ratio'], msg
+                    if gender_ratio_unit not in ['percent', 'ratio']:
+                        raise RuntimeError(msg)
 
                     gender_ratio = layer
 
         msg = 'No population layer was found in: %s' % str(layers)
-        assert population is not None, msg
+        if population is None:
+            raise RuntimeError(msg)
 
         # Extract data as numeric arrays
         D = inundation.get_data(nan=0.0)  # Depth
@@ -144,15 +146,14 @@ class FloodImpactFunction(FunctionProvider):
                     'banjir lebih dari %.1f m.' % threshold)
 
         # Create style
-        style_classes = [dict(colour='#ffffff', quantity=-9999, opacity=0),
-                         dict(colour='#38A800', quantity=2, opacity=0),
-                         dict(colour='#38A800', quantity=5, opacity=1),
-                         dict(colour='#79C900', quantity=10, opacity=1),
-                         dict(colour='#CEED00', quantity=20, opacity=1),
-                         dict(colour='#FFCC00', quantity=50, opacity=1),
-                         dict(colour='#FF6600', quantity=100, opacity=1),
-                         dict(colour='#FF0000', quantity=200, opacity=1),
-                         dict(colour='#7A0000', quantity=300, opacity=1)]
+        style_classes = [dict(colour='#38A800', quantity=2, transparency=100),
+                         dict(colour='#38A800', quantity=5, transparency=0),
+                         dict(colour='#79C900', quantity=10, transparency=0),
+                         dict(colour='#CEED00', quantity=20, transparency=0),
+                         dict(colour='#FFCC00', quantity=50, transparency=0),
+                         dict(colour='#FF6600', quantity=100, transparency=0),
+                         dict(colour='#FF0000', quantity=200, transparency=0),
+                         dict(colour='#7A0000', quantity=300, transparency=0)]
         style_info = dict(target_field=None,
                           style_classes=style_classes)
 

@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.0.1'
+__version__ = '0.2.0'
 __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
@@ -20,16 +20,35 @@ import os
 import sys
 import tempfile
 
-from PyQt4.QtCore import QString
-from qgis.core import (QgsCoordinateTransform, QgsCoordinateReferenceSystem,
-                       QgsRectangle, QgsMapLayer, QgsFeature,
+from PyQt4.QtCore import QCoreApplication
+from qgis.core import (QgsCoordinateTransform,
+                       QgsCoordinateReferenceSystem,
+                       QgsRectangle,
+                       QgsMapLayer,
+                       QgsFeature,
                        QgsVectorFileWriter)
 
-from storage.utilities import read_keywords, write_keywords
+from storage.utilities import read_keywords, write_keywords, verify
 
-from riabexceptions import InvalidParameterException, KeywordNotFoundException
+from riabexceptions import (InvalidParameterException,
+                            KeywordNotFoundException,
+                            NoFeaturesInExtentException)
 from utilities import getTempDir
 from subprocess import call
+
+
+def tr(theText):
+    """We define a tr() alias here since the RiabClipper implementation below
+    is not a class and does not inherit from QObject.
+    .. note:: see http://tinyurl.com/pyqt-differences
+    Args:
+       theText - string to be translated
+    Returns:
+       Translated version of the given string if available, otherwise
+       the original string.
+    """
+    myContext = "RiabClipper"
+    return QCoreApplication.translate(myContext, theText)
 
 
 def clipLayer(theLayer, theExtent, theCellSize=None, extraKeywords=None):
@@ -92,11 +111,11 @@ def _clipVectorLayer(theLayer, theExtent,
 
     """
     if not theLayer or not theExtent:
-        msg = 'Layer or Extent passed to clip is None.'
+        msg = tr('Layer or Extent passed to clip is None.')
         raise InvalidParameterException(msg)
 
     if theLayer.type() != QgsMapLayer.VectorLayer:
-        msg = ('Expected a vector layer but received a %s.' %
+        msg = tr('Expected a vector layer but received a %s.' %
                 str(theLayer.type()))
         raise InvalidParameterException(msg)
 
@@ -122,7 +141,7 @@ def _clipVectorLayer(theLayer, theExtent,
     # Get vector layer
     myProvider = theLayer.dataProvider()
     if myProvider is None:
-        msg = ('Could not obtain data provider from '
+        msg = tr('Could not obtain data provider from '
                'layer "%s"' % theLayer.source())
         raise Exception(msg)
 
@@ -137,6 +156,7 @@ def _clipVectorLayer(theLayer, theExtent,
                       myProjectedExtent,
                       myFetchGeometryFlag,
                       myUseIntersectFlag)
+
     myFieldList = myProvider.fields()
 
     myWriter = QgsVectorFileWriter(myFilename,
@@ -146,16 +166,24 @@ def _clipVectorLayer(theLayer, theExtent,
                                    myGeoCrs,
                                    'ESRI Shapefile')
     if myWriter.hasError() != QgsVectorFileWriter.NoError:
-        msg = ('Error when creating shapefile: <br>Filename:'
+        msg = tr('Error when creating shapefile: <br>Filename:'
                '%s<br>Error: %s' %
             (myFilename, myWriter.hasError()))
         raise Exception(msg)
 
     # Retrieve every feature with its geometry and attributes
     myFeature = QgsFeature()
+    myCount = 0
     while myProvider.nextFeature(myFeature):
         myWriter.addFeature(myFeature)
+        myCount += 1
     del myWriter  # Flush to disk
+
+    if myCount < 1:
+        myMessage = tr('No features fall within the clip extents. '
+                       'Try panning / zooming to an area containing data '
+                       'and then try to run your analysis again.')
+        raise NoFeaturesInExtentException(myMessage)
 
     copyKeywords(theLayer.source(), myFilename, extraKeywords=extraKeywords)
 
@@ -191,11 +219,11 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
 
     """
     if not theLayer or not theExtent:
-        msg = 'Layer or Extent passed to clip is None.'
+        msg = tr('Layer or Extent passed to clip is None.')
         raise InvalidParameterException(msg)
 
     if theLayer.type() != QgsMapLayer.RasterLayer:
-        msg = ('Expected a raster layer but received a %s.' %
+        msg = tr('Expected a raster layer but received a %s.' %
                str(theLayer.type()))
         raise InvalidParameterException(msg)
 
@@ -203,10 +231,10 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
 
     # Check for existence of keywords file
     myKeywordsPath = str(myWorkingLayer)[:-4] + '.keywords'
-    msg = ('Input file to be clipped "%s" does not have the '
+    msg = tr('Input file to be clipped "%s" does not have the '
            'expected keywords file %s' % (myWorkingLayer,
                                           myKeywordsPath))
-    assert os.path.isfile(myKeywordsPath), msg
+    verify(os.path.isfile(myKeywordsPath), msg)
 
     # We need to provide gdalwarp with a dataset for the clip
     # because unline gdal_translate, it does not take projwin.
@@ -245,8 +273,9 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # Now run GDAL warp scottie...
     try:
         myResult = call(myCommand, shell=True)
+        del myResult
     except Exception, e:
-        myMessage = ('<p>Error while executing the following shell command:'
+        myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'
                      % (myCommand, str(e)))
         raise Exception(myMessage)
@@ -280,15 +309,15 @@ def copyKeywords(sourceFile, destinationFile, extraKeywords=None):
     myNewDestination = myDestinationBase + '.keywords'
 
     if not os.path.isfile(myNewSource):
-        msg = ('Keywords file associated with dataset could not be found: \n%s'
-               % myNewSource)
+        msg = tr('Keywords file associated with dataset could not be found:'
+                 ' \n%s' % myNewSource)
         raise KeywordNotFoundException(msg)
 
     if extraKeywords is None:
         extraKeywords = {}
-    msg = ('Expected extraKeywords to be a dictionary. Got %s'
+    msg = tr('Expected extraKeywords to be a dictionary. Got %s'
            % str(type(extraKeywords))[1:-1])
-    assert isinstance(extraKeywords, dict), msg
+    verify(isinstance(extraKeywords, dict), msg)
 
     try:
         srcKeywords = read_keywords(myNewSource)
@@ -297,7 +326,7 @@ def copyKeywords(sourceFile, destinationFile, extraKeywords=None):
             dstKeywords[key] = extraKeywords[key]
         write_keywords(dstKeywords, myNewDestination)
     except Exception, e:
-        msg = ('Failed to copy keywords file from :\n%s\nto\%s: %s' %
+        msg = tr('Failed to copy keywords file from :\n%s\nto\%s: %s' %
                (myNewSource, myNewDestination, str(e)))
         raise Exception(msg)
 
