@@ -59,11 +59,11 @@ except Exception, e:
     print 'Debugging was disabled'
 
 
-def setVectorStyle(qgisVectorLayer, style):
+def setVectorStyle(theQgisVectorLayer, style):
     """Set QGIS vector style based on RIAB style dictionary
 
     Input
-        qgisVectorLayer: Qgis layer
+        theQgisVectorLayer: Qgis layer
         style: Dictionary of the form as in the example below
 
         {'target_field': 'DMGLEVEL',
@@ -76,12 +76,12 @@ def setVectorStyle(qgisVectorLayer, style):
          'min': 2.5, 'label': 'High damage'}]}
 
     Output
-        Sets and saves style for qgisVectorLayer
+        Sets and saves style for theQgisVectorLayer
 
     """
     myTargetField = style['target_field']
     myClasses = style['style_classes']
-    myGeometryType = qgisVectorLayer.geometryType()
+    myGeometryType = theQgisVectorLayer.geometryType()
 
     myRangeList = []
     for myClass in myClasses:
@@ -140,8 +140,8 @@ def setVectorStyle(qgisVectorLayer, style):
     myRenderer = QgsGraduatedSymbolRendererV2('', myRangeList)
     myRenderer.setMode(QgsGraduatedSymbolRendererV2.EqualInterval)
     myRenderer.setClassAttribute(myTargetField)
-    qgisVectorLayer.setRendererV2(myRenderer)
-    qgisVectorLayer.saveDefaultStyle()
+    theQgisVectorLayer.setRendererV2(myRenderer)
+    theQgisVectorLayer.saveDefaultStyle()
 
 
 def setRasterStyle(theQgsRasterLayer, theStyle):
@@ -205,6 +205,7 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     # Now set the raster transparency
     theQgsRasterLayer.rasterTransparency().setTransparentSingleValuePixelList(
                                                 myTransparencyList)
+    theQgsRasterLayer.saveDefaultStyle()
     return myRangeList, myTransparencyList
 
 
