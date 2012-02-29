@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
+import numpy
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -29,7 +30,7 @@ sys.path.append(pardir)
 from utilities_test import (getQgisTestApp, assertHashForFile)
 from gui.riabmap import RiabMap
 from PyQt4 import QtGui
-from qgis.core import QgsSymbol
+from qgis.core import QgsSymbol, QgsMapLayerRegistry
 from utilities_test import loadLayer
 try:
     from pydevd import *
@@ -43,21 +44,27 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 class RiabDockTest(unittest.TestCase):
     """Test the risk in a box GUI"""
+    def setUp(self):
+        """Setup fixture run before each tests"""
+        for myLayer in QgsMapLayerRegistry.instance().mapLayers():
+            QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
 
     def test_riabMap(self):
         """Test making a pdf using the RiabMap class."""
-        loadLayer('issue58.tif')
+        myLayer, myType = loadLayer('test_shakeimpact.shp')
+        del myType
         myMap = RiabMap(IFACE)
+        myMap.setImpactLayer(myLayer)
         myPath = '/tmp/out.pdf'
         if os.path.exists(myPath):
             os.remove(myPath)
         myMap.makePdf(myPath)
         assert os.path.exists(myPath)
-        os.remove(myPath)
+        #os.remove(myPath)
 
     def test_getLegend(self):
         """Getting a legend for a generic layer works."""
-        myLayer, myType = loadLayer('issue58.tif')
+        myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
@@ -132,6 +139,17 @@ class RiabDockTest(unittest.TestCase):
         myMap.legend.save(myPath, 'PNG')
         myExpectedHash = 'fd28fa6703453a8aa3198e0362e56d01'
         assertHashForFile(myExpectedHash, myPath)
+
+    def test_pointsToCm(self):
+        """Test that points to cm conversion is working"""
+        myMap = RiabMap(IFACE)
+        myPoints = 200
+        myDpi = 300
+        myExpectedResult = 16.9333333333
+        myResult = myMap.pointsToCm(myPoints, myDpi)
+        myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedResult, myResult)
+        assert  numpy.allclose(myResult, myExpectedResult), myMessage
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')

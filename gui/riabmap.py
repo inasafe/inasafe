@@ -90,12 +90,13 @@ class RiabMap():
                                 'has no layer set.')
             raise LegendLayerException(myMessage)
         try:
-            getKeywordFromFile(self.layer.source(), 'caption')
-        except Exception:
+            getKeywordFromFile(str(self.layer.source()), 'caption')
+        except Exception, e:
             myMessage = self.tr('This layer does not appear to be an impact '
                                 'layer. Try selecting an impact layer in the '
                                 'QGIS layers list or creating a new impact '
-                                'scenario before using the print tool.')
+                                'scenario before using the print tool.'
+                                '\nMessage: %s' % str(e))
             raise Exception(myMessage)
         if self.layer.type() == QgsMapLayer.VectorLayer:
             return self.getVectorLegend()
@@ -266,7 +267,7 @@ class RiabMap():
         """
         myPageWidth = 210  # width in mm
         myPageHeight = 297  # height in mm
-        myDpi = 300
+        myDpi = 300.0
         myMargin = 10  # margin in mm
         myBuffer = 10  # vertical spacing between elements
         myRenderer = self.iface.mapCanvas().mapRenderer()
@@ -304,26 +305,7 @@ class RiabMap():
         #
         myTopOffset = myMargin + myMapHeight + myBuffer
         #
-        # Add a picture - bnpb logo on left
-        #
-        myPicture1 = QgsComposerPicture(myComposition)
-        myPicture1.setPictureFile(':/plugins/riab/bnpb_logo.png')
-        myPicture1.setItemPosition(myMargin, myTopOffset, 30, 30)
-        myPicture1.setFrame(False)
-        myComposition.addItem(myPicture1)
-        #
-        # Add a picture - riab logo on right
-        #
-        myPicture2 = QgsComposerPicture(myComposition)
-        myPicture2.setPictureFile(':/plugins/riab/icon.png')
-        myPicture2.setItemPosition(myPageWidth - myMargin - 30,
-                                   myTopOffset,
-                                   30,
-                                   30)
-        myPicture2.setFrame(False)
-        myComposition.addItem(myPicture2)
-        #
-        # Add a label
+        # Add the heading
         #
         myFontSize = 24
         myFontWeight = 1
@@ -338,16 +320,44 @@ class RiabMap():
         myLabel.setText(myHeading)
         myLabel.adjustSizeToText()
         myFontMetrics = QtGui.QFontMetrics(myFont)
-        myWidth = myPageWidth - (myPicture1.boundingRect().width() +
-                  myPicture2.boundingRect().width() +
-                  10)
-        myHeight = myFontMetrics.height() + 10
+        myHeadingHeight = myFontMetrics.height() + 10
         myLabel.setItemPosition(35,
                                 myTopOffset,
-                                myWidth,
-                                myHeight)
+                                myPageWidth,
+                                myHeadingHeight)
         myLabel.setFrame(False)
         myComposition.addItem(myLabel)
+        #
+        # Update the top offset for the next horizontal row of items
+        #
+        myTopOffset = myMargin + myMapHeight + myHeadingHeight + myBuffer
+        #
+        # Add a picture - legend
+        #
+        myPicture1 = QgsComposerPicture(myComposition)
+        self.getLegend()
+        myLegendFile = '/tmp/legend.png'
+        self.legend.save(myLegendFile, 'PNG')
+        myPicture1.setPictureFile(myLegendFile)
+        myLegendHeight = (float(self.legend.height()) / myDpi) * 25.4
+        myLegendWidth = (float(self.legend.width()) / myDpi) * 25.4
+        myPicture1.setItemPosition(myMargin,
+                                   myTopOffset,
+                                   myLegendWidth,
+                                   myLegendHeight)
+        myPicture1.setFrame(False)
+        myComposition.addItem(myPicture1)
+        #
+        # Add a picture - riab logo on right
+        #
+        myPicture2 = QgsComposerPicture(myComposition)
+        myPicture2.setPictureFile(':/plugins/riab/icon.png')
+        myPicture2.setItemPosition(myPageWidth - myMargin - 30,
+                                   myTopOffset,
+                                   30,
+                                   30)
+        myPicture2.setFrame(False)
+        myComposition.addItem(myPicture2)
         #
         # Update the top offset for the next horizontal row of items
         #
@@ -364,3 +374,16 @@ class RiabMap():
         myPaperRectPx = myPrinter.pageRect(QtGui.QPrinter.DevicePixel)
         myComposition.render(myPainter, myPaperRectPx, myPaperRectMM)
         myPainter.end()
+
+    def pointsToCm(self, thePoints, theDpi):
+        """Convert measurement in points to one in cm
+        Args:
+            thePoints - distance in pixels
+            theDpi - dots per inch for conversion
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myCm = (float(thePoints) / theDpi) * 25.4
+        return myCm

@@ -163,4 +163,3 @@ def setGeoExtent(theBoundingBox):
     """Zoom to an area specified given bounding box (list)"""
     myRect = QgsRectangle(*theBoundingBox)
     CANVAS.setExtent(myRect)
-
