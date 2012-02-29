@@ -68,6 +68,7 @@ class RiabDockTest(unittest.TestCase):
         del myType
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
+        assert myMap.layer is not None
         myLegend = myMap.getLegend()
         myPath = '/tmp/getLegend.png'
         myLegend.save(myPath, 'PNG')

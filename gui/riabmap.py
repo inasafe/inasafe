@@ -28,6 +28,12 @@ from impactcalculator import getKeywordFromFile
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
+try:
+    from pydevd import *
+    print 'Remote debugging is enabled.'
+    DEBUG = True
+except Exception, e:
+    print 'Debugging was disabled'
 
 
 class RiabMap():
@@ -42,7 +48,7 @@ class RiabMap():
             Any exceptions raised by the RIAB library will be propogated.
         """
         self.iface = theIface
-        self.layer = None
+        self.layer = theIface.activeLayer()
         self.legend = None
         # how high each row of the legend should be
         self.legendIncrement = 40
@@ -85,8 +91,9 @@ class RiabMap():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
+        #settrace()
         if self.layer is None:
-            myMessage = self.tr('Unable to make a legend when map generator'
+            myMessage = self.tr('Unable to make a legend when map generator '
                                 'has no layer set.')
             raise LegendLayerException(myMessage)
         try:

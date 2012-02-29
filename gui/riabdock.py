@@ -242,7 +242,6 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         self.runner = None
         self.helpDialog = None
         self.state = None
-        self.impactLayer = None
         self.getLayers()
         self.setOkButtonStatus()
 
@@ -646,7 +645,6 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
         # Load impact layer into QGIS
         myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
-        self.impactLayer = myQgisImpactLayer
         # Determine styling for QGIS layer
         if myEngineImpactLayer.is_vector:
             if not myStyle:
@@ -964,7 +962,6 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             except Exception, e:
                 myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
-                self.impactLayer = theLayer
                 self.displayHtml(myReport)
 
     def saveState(self):
@@ -1027,16 +1024,18 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                             '/tmp',
                             self.tr('Pdf File (*.pdf)'))
         myMap = RiabMap(self.iface)
+        myMap.setImpactLayer(self.iface.activeLayer())
         self.showBusy()
         try:
             myMap.makePdf(myFilename)
             self.displayHtml(self.tr('<div><span class="label success">'
                              'PDF Created</div>'
                              'Your map was saved as %s' % myFilename))
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
+                                 QtCore.QUrl.TolerantMode))
         except Exception, e:
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
-        QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
-                                 QtCore.QUrl.TolerantMode))
+
         self.hideBusy()
