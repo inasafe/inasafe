@@ -908,7 +908,7 @@ def multiple_intersection(segments0, segments1, rtol=1.0e-5, atol=1.0e-8):
     pass
 
 
-def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
+def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
     """Returns intersecting point between two line segments.
 
     However, if parallel lines coincide partly (i.e. share a common segment),
@@ -919,6 +919,7 @@ def intersection(line0, line1, rtol=1.0e-5, atol=1.0e-8):
                       [[x0, y0], [x1, y1]]
                       A line can also be a 2x2 numpy array with each row
                       corresponding to a point.
+        rtol, atol: Tolerances passed onto numpy.allclose
 
     Output:
         status, value - where status and value is interpreted as follows:

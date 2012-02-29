@@ -1194,22 +1194,14 @@ class Test_Engine(unittest.TestCase):
         H_attributes = H.get_data()
         H_geometry = H.get_geometry()
 
-        # Cut down to make test quick
-        #H = Vector(data=H_attributes[658:850],
-        #           geometry=H_geometry[658:850],
-        #           projection=H.get_projection())
-
         # Full version
         H = Vector(data=H_attributes,
                    geometry=H_geometry,
                    projection=H.get_projection())
-        #H.write_to_file('MM_cut.shp')  # E.g. to view with QGis
-        #print 'Size H', len(H)
 
         E = read_layer(exposure_filename)
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
-        #print 'Size E', len(E)
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
@@ -1704,6 +1696,116 @@ class Test_Engine(unittest.TestCase):
                'but got only %i' % counts['Very High'])
         assert counts['Very High'] == 14, msg
 
+    def test_line_interpolation_from_polygons(self):
+        """Line clipping and interpolation using multiple polygons works
+
+        This is a test for road interpolation (issue #55)
+        """
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
+        exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        # MakeCut down to a few polygons
+        H = Vector(data=H_attributes[799:],
+                   geometry=H_geometry[799:],
+                   projection=H.get_projection())
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        E = read_layer(exposure_filename)
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+
+        # Test riab's interpolation function
+        I = H.interpolate(E, name='depth',
+                          attribute=None)  # Take all attributes across
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+
+        N = len(I_attributes)
+
+        # Possibly generate files for visual inspection with e.g. QGis
+        if True:
+            L = Vector(geometry=H_geometry, geometry_type='polygon',
+                       data=H_attributes)
+            L.write_to_file('test_polygon.shp')
+
+            L = Vector(geometry=I_geometry, geometry_type='line',
+                       data=I_attributes)
+            L.write_to_file('interpolated_lines.shp')
+
+        # Assert that expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+        for name in H_names:
+            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # Verify interpolated values with test result
+        count = 0
+        counts = {}
+        for i in range(N):
+
+            # Check that default attribute is present
+            attrs = I_attributes[i]
+            msg = ('Did not find default attribute %s in %s'
+                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+            assert DEFAULT_ATTRIBUTE in attrs, msg
+
+            # Count items using default attribute
+            if DEFAULT_ATTRIBUTE not in counts:
+                counts[DEFAULT_ATTRIBUTE] = 0
+                counts['Not ' + DEFAULT_ATTRIBUTE] = 0
+
+            if attrs[DEFAULT_ATTRIBUTE] is True:
+                counts[DEFAULT_ATTRIBUTE] += 1
+            else:
+                counts['Not ' + DEFAULT_ATTRIBUTE] += 1
+
+            # Check specific attribute
+            category = I_attributes[i]['Catergory']  # The typo is as the data
+            if category is not None:
+                assert category.lower() in ['high', 'very high']
+                count += 1
+
+        msg = ('Expected 14 points tagged with category, '
+               'but got only %i' % count)
+        assert count == 14, msg
+
+        assert len(I_geometry) == 181
+
+        assert I_attributes[129]['Catergory'] == 'Very High'
+        assert I_attributes[135]['Catergory'] is None
+
+        # Check default attribute too
+        msg = ('Expected 14 segments tagged with default attribute '
+               '"%s = True", '
+               'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                    counts[DEFAULT_ATTRIBUTE]))
+        assert counts[DEFAULT_ATTRIBUTE] == 14, msg
+
+        msg = ('Expected 167 points tagged with default attribute '
+               '"%s = False", '
+               'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                    counts['Not ' + DEFAULT_ATTRIBUTE]))
+        assert counts['Not ' + DEFAULT_ATTRIBUTE] == 167, msg
+
+        msg = 'Affected and not affected does not add up'
+        assert (counts[DEFAULT_ATTRIBUTE] +
+                counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
+
+
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
         """
@@ -1993,6 +2095,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_line_interpolation_from_polygons')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
