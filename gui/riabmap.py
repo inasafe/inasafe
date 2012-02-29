@@ -274,9 +274,9 @@ class RiabMap():
         """
         myPageWidth = 210  # width in mm
         myPageHeight = 297  # height in mm
-        myDpi = 300.0
+        myDpi = 150.0
         myMargin = 10  # margin in mm
-        myBuffer = 10  # vertical spacing between elements
+        myBuffer = 1  # vertical spacing between elements
         myRenderer = self.iface.mapCanvas().mapRenderer()
         myComposition = QgsComposition(myRenderer)
         myComposition.setPlotStyle(QgsComposition.Print)
@@ -326,28 +326,30 @@ class RiabMap():
         myHeading = self.tr('Risk in a Box')
         myLabel.setText(myHeading)
         myLabel.adjustSizeToText()
-        myFontMetrics = QtGui.QFontMetrics(myFont)
-        myHeadingHeight = myFontMetrics.height() + 10
-        myLabel.setItemPosition(35,
+        myLabelHeight = 13
+        myLabel.setItemPosition(myMargin,
                                 myTopOffset,
-                                myPageWidth,
-                                myHeadingHeight)
-        myLabel.setFrame(False)
+                                myMapHeight,  # height is == width for the map
+                                myLabelHeight,
+                                )
+        myLabel.setFrame(True)
         myComposition.addItem(myLabel)
         #
         # Update the top offset for the next horizontal row of items
         #
-        myTopOffset = myMargin + myMapHeight + myHeadingHeight + myBuffer
+        myTopOffset = myMargin + myMapHeight + myLabelHeight + myBuffer + 2
         #
         # Add a picture - legend
+        # .. note:: getLegend generates a pixmap in 150dpi so if you set
+        #    the map to a higher dpi it will appear undersized
         #
         myPicture1 = QgsComposerPicture(myComposition)
         self.getLegend()
         myLegendFile = '/tmp/legend.png'
         self.legend.save(myLegendFile, 'PNG')
         myPicture1.setPictureFile(myLegendFile)
-        myLegendHeight = (float(self.legend.height()) / myDpi) * 25.4
-        myLegendWidth = (float(self.legend.width()) / myDpi) * 25.4
+        myLegendHeight = self.pointsToMM(self.legend.height(), myDpi)
+        myLegendWidth = self.pointsToMM(self.legend.width(), myDpi)
         myPicture1.setItemPosition(myMargin,
                                    myTopOffset,
                                    myLegendWidth,
@@ -382,15 +384,15 @@ class RiabMap():
         myComposition.render(myPainter, myPaperRectPx, myPaperRectMM)
         myPainter.end()
 
-    def pointsToCm(self, thePoints, theDpi):
-        """Convert measurement in points to one in cm
+    def pointsToMM(self, thePoints, theDpi):
+        """Convert measurement in points to one in mm
         Args:
             thePoints - distance in pixels
             theDpi - dots per inch for conversion
         Returns:
-            None
+            mm converted value
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        myCm = (float(thePoints) / theDpi) * 25.4
-        return myCm
+        myMM = (float(thePoints) / theDpi) * 25.4
+        return myMM
