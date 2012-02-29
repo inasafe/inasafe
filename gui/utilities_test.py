@@ -13,12 +13,26 @@ from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from storage.utilities_test import TESTDATA
 from storage.utilities import read_keywords
+import hashlib
+
 QGISAPP = None  # Static variable used to hold hand to running QGis app
 CANVAS = None
 PARENT = None
 IFACE = None
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
+
+
+def assertHashForFile(theHash, theFilename):
+        myPath = theFilename
+        myData = file(myPath).read()
+        myHash = hashlib.md5()
+        myHash.update(myData)
+        myHash = myHash.hexdigest()
+        myMessage = ('Unexpected hash'
+                     '\nGot: %s'
+                     '\nExpected: %s' % (myHash, theHash))
+        assert myHash == theHash, myMessage
 
 
 def getQgisTestApp():

@@ -20,14 +20,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
-import hashlib  # for checking files are like we expect them to be
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 
-from utilities_test import getQgisTestApp
+from utilities_test import (getQgisTestApp, assertHashForFile)
 from gui.riabmap import RiabMap
 from PyQt4 import QtGui
 from qgis.core import QgsSymbol
@@ -49,12 +48,12 @@ class RiabDockTest(unittest.TestCase):
         """Test making a pdf using the RiabMap class."""
         loadLayer('issue58.tif')
         myMap = RiabMap(IFACE)
-        myPdf = '/tmp/out.pdf'
-        if os.path.exists(myPdf):
-            os.remove(myPdf)
-        myMap.makePdf(myPdf)
-        assert os.path.exists(myPdf)
-        os.remove(myPdf)
+        myPath = '/tmp/out.pdf'
+        if os.path.exists(myPath):
+            os.remove(myPath)
+        myMap.makePdf(myPath)
+        assert os.path.exists(myPath)
+        os.remove(myPath)
 
     def test_getLegend(self):
         """Getting a legend for a generic layer works."""
@@ -63,8 +62,10 @@ class RiabDockTest(unittest.TestCase):
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myLegend = myMap.getLegend()
-        myLegend.save('/tmp/getVectorLegend.png', 'PNG')
-        assert False
+        myPath = '/tmp/getLegend.png'
+        myLegend.save(myPath, 'PNG')
+        myExpectedHash = '1234'
+        assertHashForFile(myExpectedHash, myPath)
 
     def test_getVectorLegend(self):
         """Getting a legend for a vector layer works."""
@@ -75,15 +76,8 @@ class RiabDockTest(unittest.TestCase):
         myMap.getVectorLegend()
         myPath = '/tmp/getVectorLegend.png'
         myMap.legend.save(myPath, 'PNG')
-        myData = file(myPath).read()
-        myHash = hashlib.md5()
-        myHash.update(myData)
         myExpectedHash = 'b2f37386f57cea585ce995a1339661d6'
-        myHash = myHash.hexdigest()
-        myMessage = ('Unexpected hash for vectorLegend'
-                     '\nGot: %s'
-                     '\nExpected: %s' % (myHash, myExpectedHash))
-        assert myHash == myExpectedHash, myMessage
+        assertHashForFile(myExpectedHash, myPath)
 
     def test_getRasterLegend(self):
         """Getting a legend for a raster layer works."""
@@ -92,8 +86,10 @@ class RiabDockTest(unittest.TestCase):
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getRasterLegend()
-        myMap.legend.save('/tmp/getRasterLegend.png', 'PNG')
-        assert False
+        myPath = '/tmp/getRasterLegend.png'
+        myMap.legend.save(myPath, 'PNG')
+        myExpectedHash = '1234'
+        assertHashForFile(myExpectedHash, myPath)
 
     def addSymbolToLegend(self):
         """Test we can add a symbol to the legend."""
@@ -109,8 +105,10 @@ class RiabDockTest(unittest.TestCase):
                                 theMax=2,
                                 theCategory=None,
                                 theLabel='Foo')
-        myMap.legend.save('/tmp/addSymbolToLegend.png', 'PNG')
-        assert False
+        myPath = '/tmp/addSymbolToLegend.png'
+        myMap.legend.save(myPath, 'PNG')
+        myExpectedHash = '1234'
+        assertHashForFile(myExpectedHash, myPath)
 
     def test_addClassToLegend(self):
         """Test we can add a class to the map legend."""
@@ -130,9 +128,10 @@ class RiabDockTest(unittest.TestCase):
                                theMax=None,
                                theCategory='foo',
                                theLabel='foo')
-        #
-        #myMap.legend.save('/tmp/addClassToLegend.png', 'PNG')
-        assert False
+        myPath = '/tmp/addClassToLegend.png'
+        myMap.legend.save(myPath, 'PNG')
+        myExpectedHash = 'fd28fa6703453a8aa3198e0362e56d01'
+        assertHashForFile(myExpectedHash, myPath)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')
