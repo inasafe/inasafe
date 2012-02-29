@@ -158,7 +158,7 @@ class RiabMap():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
-        raise False
+        assert False
 
     def addSymbolToLegend(self,
                          theSymbol,
