@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
+import hashlib  # for checking files are like we expect them to be
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -72,8 +73,17 @@ class RiabDockTest(unittest.TestCase):
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getVectorLegend()
-        myMap.legend.save('/tmp/getVectorLegend.png', 'PNG')
-        assert False
+        myPath = '/tmp/getVectorLegend.png'
+        myMap.legend.save(myPath, 'PNG')
+        myData = file(myPath).read()
+        myHash = hashlib.md5()
+        myHash.update(myData)
+        myExpectedHash = 'b2f37386f57cea585ce995a1339661d6'
+        myHash = myHash.hexdigest()
+        myMessage = ('Unexpected hash for vectorLegend'
+                     '\nGot: %s'
+                     '\nExpected: %s' % (myHash, myExpectedHash))
+        assert myHash == myExpectedHash, myMessage
 
     def test_getRasterLegend(self):
         """Getting a legend for a raster layer works."""
@@ -120,7 +130,8 @@ class RiabDockTest(unittest.TestCase):
                                theMax=None,
                                theCategory='foo',
                                theLabel='foo')
-        myMap.legend.save('/tmp/addClassToLegend.png', 'PNG')
+        #
+        #myMap.legend.save('/tmp/addClassToLegend.png', 'PNG')
         assert False
 
 if __name__ == '__main__':
