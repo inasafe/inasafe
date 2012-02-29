@@ -21,6 +21,7 @@ from qgis.core import (QgsComposition,
                        QgsComposerMap,
                        QgsComposerLabel,
                        QgsComposerPicture,
+                       QgsComposerScaleBar,
                        QgsMapLayer)
 from riabexceptions import LegendLayerException
 from PyQt4 import QtCore, QtGui
@@ -380,16 +381,31 @@ class RiabMap():
         myPicture1.setFrame(False)
         myComposition.addItem(myPicture1)
         #
+        # Add a numeric scale to the right
+        #
+        myScaleBar = QgsComposerScaleBar(myComposition)
+        myScaleBar.setStyle('Numeric')  # optionally modify the style
+        myScaleBar.setComposerMap(myComposerMap)
+        myScaleBar.applyDefaultSize()
+        myScaleBarHeight = myScaleBar.boundingRect().height()
+        myScaleBarWidth = myScaleBar.boundingRect().width()
+        myScaleBar.setItemPosition(myMargin + myMapHeight - myScaleBarWidth,
+                                   myTopOffset,
+                                   myScaleBarWidth,
+                                   myScaleBarHeight)
+        myScaleBar.setFrame(False)
+        myComposition.addItem(myScaleBar)
+        #
         # Add a picture - riab logo on right
         #
-        myPicture2 = QgsComposerPicture(myComposition)
-        myPicture2.setPictureFile(':/plugins/riab/icon.png')
-        myPicture2.setItemPosition(myPageWidth - myMargin - 30,
-                                   myTopOffset,
-                                   30,
-                                   30)
-        myPicture2.setFrame(False)
-        myComposition.addItem(myPicture2)
+        #myPicture2 = QgsComposerPicture(myComposition)
+        #myPicture2.setPictureFile(':/plugins/riab/icon.png')
+        #myPicture2.setItemPosition(myPageWidth - myMargin - 30,
+        #                           myTopOffset,
+        #                           30,
+        #                           30)
+        #myPicture2.setFrame(False)
+        #myComposition.addItem(myPicture2)
         #
         # Update the top offset for the next horizontal row of items
         #

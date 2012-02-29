@@ -30,8 +30,9 @@ sys.path.append(pardir)
 from utilities_test import (getQgisTestApp, assertHashForFile)
 from gui.riabmap import RiabMap
 from PyQt4 import QtGui
-from qgis.core import QgsSymbol, QgsMapLayerRegistry
-from utilities_test import loadLayer
+from qgis.core import (QgsSymbol, QgsMapLayerRegistry)
+from qgis.gui import QgsMapCanvasLayer
+from utilities_test import (loadLayer, setJakartaGeoExtent)
 try:
     from pydevd import *
     print 'Remote debugging is enabled.'
@@ -53,9 +54,13 @@ class RiabDockTest(unittest.TestCase):
         """Test making a pdf using the RiabMap class."""
         myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
+
+        myCanvasLayer = QgsMapCanvasLayer(myLayer)
+        CANVAS.setLayerSet([myCanvasLayer])
         myMap = RiabMap(IFACE)
+        setJakartaGeoExtent()
         myMap.setImpactLayer(myLayer)
-        myPath = '/tmp/out.pdf'
+        myPath = '/tmp/out2.pdf'
         if os.path.exists(myPath):
             os.remove(myPath)
         myMap.makePdf(myPath)
