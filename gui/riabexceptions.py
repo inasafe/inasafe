@@ -73,3 +73,9 @@ class LegendLayerException(Exception):
     a QgsMapLayer that does not have suitable characteristics to
     allow a legend to be created from it."""
     pass
+
+
+class NoFeaturesInExtentException(Exception):
+    """An exception that gets thrown when no features are within
+    the extent being clipped."""
+    pass
