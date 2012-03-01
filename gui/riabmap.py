@@ -385,6 +385,30 @@ class RiabMap():
                                        myTopOffset,
                                        myMapWidth,
                                        myMapHeight)
+        #myExtent = self.iface.mapCanvas().extent()
+        # The dimensions of the map canvas and the print compser map may
+        # differ. So we set the map composer extent using the canvas and
+        # then defer to the map canvas's map extents thereafter
+        #myComposerMap.setNewExtent(myExtent)
+        myComposerExtent = myComposerMap.extent()
+        myComposerMap.setGridEnabled(True)
+        myXInterval = myComposerExtent.width() / 5
+        myComposerMap.setGridIntervalX(myXInterval)
+        myYInterval = myComposerExtent.height() / 5
+        myComposerMap.setGridIntervalY(myYInterval)
+        myComposerMap.setGridStyle(QgsComposerMap.Cross)
+        myFontSize = 8
+        myFontWeight = QtGui.QFont.Bold
+        myItalicsFlag = False
+        myFont = QtGui.QFont('verdana',
+                             myFontSize,
+                             myFontWeight,
+                             myItalicsFlag)
+        myComposerMap.setGridAnnotationFont(myFont)
+        myComposerMap.setGridAnnotationPrecision(3)
+        myComposerMap.setShowGridAnnotation(True)
+        myComposerMap.setGridAnnotationDirection(
+                                        QgsComposerMap.BoundaryDirection)
         myComposition.addItem(myComposerMap)
                 #
         # Add a numeric scale to the bottom left of the map
@@ -413,7 +437,7 @@ class RiabMap():
         myTitle = self.getMapTitle()
         if myTitle is not None:
             myFontSize = 20
-            myFontWeight = 1
+            myFontWeight = QtGui.QFont.Bold
             myItalicsFlag = False
             myFont = QtGui.QFont('verdana',
                              myFontSize,
