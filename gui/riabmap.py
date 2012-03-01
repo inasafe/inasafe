@@ -55,7 +55,7 @@ class RiabMap():
         self.header = None
         self.footer = None
         # how high each row of the legend should be
-        self.legendIncrement = 40
+        self.legendIncrement = 30
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -249,9 +249,16 @@ class RiabMap():
         myPainter = QtGui.QPainter(self.legend)
         myBrush = QtGui.QBrush(theColour)
         myPainter.setBrush(myBrush)
-        myPainter.drawRect(QtCore.QRectF(10, myOffset + 10, 20, 20))
-        myPainter.setPen(QtGui.QColor(0, 0, 0))
-        myPainter.drawText(40, myOffset + 25, theLabel)
+        myPainter.setPen(theColour)
+        myWhitespace = 0  # white space above and below each class itcon
+        mySquareSize = self.legendIncrement - (myWhitespace * 2)
+        myLeftIndent = 10
+        myPainter.drawRect(QtCore.QRectF(myLeftIndent,
+                                         myOffset + myWhitespace,
+                                         mySquareSize, mySquareSize))
+        myPainter.setPen(QtGui.QColor(0, 0, 0))  # outline colour
+        myLabelX = myLeftIndent + mySquareSize + 10
+        myPainter.drawText(myLabelX, myOffset + 25, theLabel)
 
     def extendLegend(self):
         """Grow the legend pixmap enough to accommodate one more legend entry.
