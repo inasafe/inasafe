@@ -304,6 +304,7 @@ class RiabMap():
         myDpi = 150.0
         myMargin = 10  # margin in mm
         myBuffer = 1  # vertical spacing between elements
+        myShowFrameFlag = False
         myRenderer = self.iface.mapCanvas().mapRenderer()
         myComposition = QgsComposition(myRenderer)
         myComposition.setPlotStyle(QgsComposition.Print)
@@ -331,12 +332,12 @@ class RiabMap():
         # Add a picture - riab logo on right
         #
         myLogo = QgsComposerPicture(myComposition)
-        myLogo.setPictureFile(':/plugins/riab/bnpd_logo.png')
+        myLogo.setPictureFile(':/plugins/riab/bnpb_logo.png')
         myLogo.setItemPosition(myMargin,
                                    myTopOffset,
                                    10,
                                    10)
-        myLogo.setFrame(False)
+        myLogo.setFrame(myShowFrameFlag)
         myComposition.addItem(myLogo)
         #
         # Add the title
@@ -360,7 +361,7 @@ class RiabMap():
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
-        myLabel.setFrame(True)
+        myLabel.setFrame(myShowFrameFlag)
         myComposition.addItem(myLabel)
         #
         # Update the map offset for the next row of content
@@ -383,32 +384,34 @@ class RiabMap():
         #
         myTopOffset += myMapHeight + myBuffer
         #
-        # Add the heading
+        # Add the map title
         #
-        myFontSize = 20
-        myFontWeight = 1
-        myItalicsFlag = False
-        myFont = QtGui.QFont('verdana',
+        myTitle = self.getMapTitle()
+        if myTitle is not None:
+            myFontSize = 20
+            myFontWeight = 1
+            myItalicsFlag = False
+            myFont = QtGui.QFont('verdana',
                              myFontSize,
                              myFontWeight,
                              myItalicsFlag)
-        myLabel = QgsComposerLabel(myComposition)
-        myLabel.setFont(myFont)
-        myHeading = self.tr('Risk in a Box')
-        myLabel.setText(myHeading)
-        myLabel.adjustSizeToText()
-        myLabelHeight = 12
-        myLabel.setItemPosition(myMargin,
+            myLabel = QgsComposerLabel(myComposition)
+            myLabel.setFont(myFont)
+            myHeading = myTitle
+            myLabel.setText(myHeading)
+            myLabel.adjustSizeToText()
+            myLabelHeight = 12
+            myLabel.setItemPosition(myMargin,
                                 myTopOffset,
                                 myMapHeight,  # height is == width for the map
                                 myLabelHeight,
                                 )
-        myLabel.setFrame(True)
-        myComposition.addItem(myLabel)
-        #
-        # Update the top offset for the next horizontal row of items
-        #
-        myTopOffset += myLabelHeight + myBuffer + 2
+            myLabel.setFrame(myShowFrameFlag)
+            myComposition.addItem(myLabel)
+            #
+            # Update the top offset for the next horizontal row of items
+            #
+            myTopOffset += myLabelHeight + myBuffer + 2
         #
         # Add a picture - legend
         # .. note:: getLegend generates a pixmap in 150dpi so if you set
