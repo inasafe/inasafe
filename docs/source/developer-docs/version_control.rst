@@ -112,3 +112,28 @@ Example::
    git remote update
    git checkout -b impact_map jeff/impact_map
 
+
+Windows Specific Notes:
+-----------------------
+
+To Switch branches using TortioiseGIT:
+
+* Navigate to the risk_in_a_box plugin folder
+* Right click on any whitespace
+* From the context menu choose TortoiseGIT->Switch/Checkout
+* Tick 'Branch radio button and choose 'master' from the list
+* Click ok
+
+To update the master branch:
+
+
+* Right click on the whitespace again
+* TortoiseGIT->Pull from the context menu
+* Tick the remote radio
+* Set remote to origin
+* Tick the ellipses button next to 'Remote Branch'
+* Choose 'master' from the list
+* Click OK
+
+For subsequent pull requests on that branch you can just do TortoiseGIT->Pull
+from the context menu and press ok
