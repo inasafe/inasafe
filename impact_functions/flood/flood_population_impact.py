@@ -103,13 +103,14 @@ class FloodImpactFunction(FunctionProvider):
         # Create report
         iname = inundation.get_name()
         pname = population.get_name()
-        caption = ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
-                   'kemungkinan yang terjadi&#58;</b><br><br><p>' % (iname,
+        caption = ('<table  class="table table-condensed">')
+        caption += ('<caption>Apabila terjadi "%s" '
+                    'perkiraan dampak terhadap "%s" '
+                    'kemungkinan yang terjadi&#58;</caption>' % (iname,
                                                                      pname))
-        caption += ('<table border="0" width="320px">')
-                   #'   <tr><td><b>%s&#58;</b></td>'
-                   #'<td align="right"><b>%s</b></td></tr>'
-                   #% ('Jumlah Penduduk', total))
+        #           '   <tr><td><b>%s&#58;</b></td>'
+        #           '<td align="right"><b>%s</b></td></tr>'
+        #           % ('Jumlah Penduduk', total))
         # if gender_ratio is not None:
         #     total_female = str(int(sum(P_female.flat) / 1000))
         #     total_male = str(int(sum(P_male.flat) / 1000))
@@ -121,36 +122,97 @@ class FloodImpactFunction(FunctionProvider):
         #                 '<td align="right">%s</td></tr>'
         #                 % (' - Pria', total_male))
         #    caption += '<tr><td>&nbsp;</td></tr>'  # Blank separation row
-
-        caption += ('   <tr><td><b>%s&#58;</b></td>'
-                    '<td align="right"><b>%s</b></td></tr>'
+        caption += ('<tbody>')
+        caption += ('   <tr><th>%s&#58;</th>'
+                    '<td align="right">%s</td></tr>'
                     % ('Terdampak (x 1000)', count))
 
         if gender_ratio is not None:
             affected_female = str(int(numpy.sum(I_female) / 1000))
             affected_male = str(int(numpy.sum(I_male) / 1000))
 
-            caption += ('        <tr><td>%s&#58;</td>'
+            caption += ('        <tr><th>%s&#58;</th>'
                         '<td align="right">%s</td></tr>'
                         % (' - Wanita', affected_female))
-            caption += ('        <tr><td>%s&#58;</td>'
+            caption += ('        <tr><th>%s&#58;</th>'
                         '<td align="right">%s</td></tr>'
                         % (' - Pria', affected_male))
-
+        caption += ('</tbody>')
         caption += '</table>'
 
         caption += '<br>'  # Blank separation row
-        caption += '<b>Catatan&#58;</b><br>'
-        caption += '- Jumlah penduduk Jakarta %s<br>' % total
-        caption += '- Jumlah dalam ribuan<br>'
-        caption += ('- Penduduk dianggap terdampak ketika '
-                    'banjir lebih dari %.1f m.' % threshold)
+        caption += '<span class="label success">Catatan&#58;</span>'
+        caption += '<ul>'
+        caption += '  <li>Jumlah penduduk Jakarta %s</li>' % total
+        caption += '  <li>Jumlah dalam ribuan</li>'
+        caption += (' <li>Penduduk dianggap terdampak ketika '
+                    'banjir lebih dari %.1f m.</li>' % threshold)
+        caption += '</ul>'
+
+        title = 'Jumlah Penduduk Yang Mungkin Dievakuasi'
+
+        disclaimer = 'Sumber: Badan Pusat Statistik'
+
+        table = ('<table>'
+                 '  <thead>'
+                 '    <tr>'
+                 '      <th rowspan="2">Wilayah</th>'
+                 '      <th colspan="2">Jumlah Penduduk</th>'
+                 '      <th rowspan="2" colspan="2" width="100px">'
+                            'Jumlah Penduduk yang Mungkin dievakuasi</th>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <th>Perempuan</th>'
+                 '      <th>Laki-Laki</th>'
+                 '    </tr>'
+                 '  </thead>'
+                 '  <tbody>'
+                 '    <tr>'
+                 '      <td>Jakarta Barat</td>'
+                 '      <td>87510</td>'
+                 '      <td>93076</td>'
+                 '      <td>180586</td>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <td>Jakarta Pusat</td>'
+                 '      <td>87510</td>'
+                 '      <td>93076</td>'
+                 '      <td>180586</td>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <td>Jakarta Seletan</td>'
+                 '      <td>87510</td>'
+                 '      <td>93076</td>'
+                 '      <td>180586</td>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <td>Jakarta Timur</td>'
+                 '      <td>87510</td>'
+                 '      <td>93076</td>'
+                 '      <td>180586</td>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <td>Jakarta Utara</td>'
+                 '      <td>87510</td>'
+                 '      <td>93076</td>'
+                 '      <td>180586</td>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <td class="align-right">Total</td>'
+                 '      <td>87510</td>'
+                 '      <td>93076</td>'
+                 '      <td>180586</td>'
+                 '    </tr>'
+                 '  </tbody>')
 
         # Create raster object and return
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name='Penduduk yang %s' % (self.plugin_name.lower()),
-                   keywords={'caption': caption},
+                   keywords={'caption': caption,
+                             'table': table,
+                             'title': title,
+                             'disclaimer': disclaimer},
                    style_info=style_info)
         return R

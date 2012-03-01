@@ -23,8 +23,9 @@ from qgis.core import (QgsComposition,
                        QgsComposerPicture,
                        QgsComposerScaleBar,
                        QgsMapLayer)
+import utilities
 from riabexceptions import LegendLayerException
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, QtWebKit
 from impactcalculator import getKeywordFromFile
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -51,6 +52,8 @@ class RiabMap():
         self.iface = theIface
         self.layer = theIface.activeLayer()
         self.legend = None
+        self.header = None
+        self.footer = None
         # how high each row of the legend should be
         self.legendIncrement = 40
 
@@ -411,9 +414,22 @@ class RiabMap():
         #
         myTopOffset = myMargin + myMapHeight + myBuffer
         #
-        # Draw the legend
+        # Draw the table
         #
-
+        myTable = QgsComposerPicture(myComposition)
+        myImage = self.renderTable()
+        if myImage is not None:
+            myTableFile = '/tmp/table.png'
+            myImage.save(myTableFile, 'PNG')
+            myTable.setPictureFile(myTableFile)
+            myLegendHeight = self.pointsToMM(self.legend.height(), myDpi)
+            myLegendWidth = self.pointsToMM(self.legend.width(), myDpi)
+            myTable.setItemPosition(myMargin,
+                                       myTopOffset,
+                                       myLegendWidth,
+                                       myLegendHeight)
+            myTable.setFrame(False)
+            myComposition.addItem(myTable)
         #
         # Render the composition to our pdf printer
         #
@@ -422,6 +438,53 @@ class RiabMap():
         myPaperRectPx = myPrinter.pageRect(QtGui.QPrinter.DevicePixel)
         myComposition.render(myPainter, myPaperRectPx, myPaperRectMM)
         myPainter.end()
+
+    def renderTable(self):
+        """Render the table in the keywords if present. The table is an
+        html table with statistics for the impact layer.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        try:
+            myHtml = getKeywordFromFile(str(self.layer.source()), 'table')
+            return self.renderHtml(myHtml)
+        except Exception, e:
+            return None
+
+    def renderHtml(self, theHtml):
+        """Render some HTML to a pixmap..
+
+        Args:
+            theHtml - HTML to be rendered. It is assumed that the html
+            is a snippet only, containing no body element - a standard
+            header and footer will be appended.
+        Returns:
+            A QPixmap
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myPage = QtWebKit.QWebPage()
+        mySize = QtCore.QSize(600, 300)
+        myPage.setViewportSize(mySize)
+        myFrame = myPage.mainFrame()
+        myHeader = self.htmlHeader()
+        myFooter = self.htmlFooter()
+        print 'Header:\n', myHeader
+        print 'Footer:\n', myFooter
+        myHtml = myHeader + theHtml + myFooter
+        myFrame.setHtml(myHtml)
+        print '\n\n\nPage:\n', myFrame.toHtml()
+        #mySize = myFrame.contentsSize()
+        myPixmap = QtGui.QPixmap(mySize)
+        myPixmap.fill(QtGui.QColor(255, 255, 255))
+        myPainter = QtGui.QPainter(myPixmap)
+        myFrame.render(myPainter)
+        myPainter.save()
+        return myPixmap
 
     def pointsToMM(self, thePoints, theDpi):
         """Convert measurement in points to one in mm
@@ -435,3 +498,15 @@ class RiabMap():
         """
         myMM = (float(thePoints) / theDpi) * 25.4
         return myMM
+
+    def htmlHeader(self):
+        """Get a standard html header for wrapping content in."""
+        if self.header is None:
+            self.header = utilities.htmlHeader()
+        return self.header
+
+    def htmlFooter(self):
+        """Get a standard html footer for wrapping content in."""
+        if self.footer is None:
+            self.footer = utilities.htmlFooter()
+        return self.footer

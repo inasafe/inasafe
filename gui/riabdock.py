@@ -23,6 +23,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
+import utilities
 from utilities import getExceptionWithStacktrace, getWGS84resolution
 from qgis.core import (QGis,
                        QgsMapLayer,
@@ -916,23 +917,13 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
         if self.header is None:
-            myFile = QtCore.QFile(':/plugins/riab/header.html')
-            if not myFile.open(QtCore.QIODevice.ReadOnly):
-                return '----'
-            myStream = QtCore.QTextStream(myFile)
-            self.header = myStream.readAll()
-            myFile.close()
+            self.header = utilities.htmlHeader()
         return self.header
 
     def htmlFooter(self):
         """Get a standard html footer for wrapping content in."""
         if self.footer is None:
-            myFile = QtCore.QFile(':/plugins/riab/footer.html')
-            if not myFile.open(QtCore.QIODevice.ReadOnly):
-                return '----'
-            myStream = QtCore.QTextStream(myFile)
-            self.footer = myStream.readAll()
-            myFile.close()
+            self.footer = utilities.htmlFooter()
         return self.footer
 
     def displayHtml(self, theMessage):

@@ -156,6 +156,15 @@ class RiabDockTest(unittest.TestCase):
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedResult, myResult)
         assert  numpy.allclose(myResult, myExpectedResult), myMessage
 
+    def test_renderHtml(self):
+        """Test that html renders nicely."""
+        myHtml = 'Hello<h1>Hellooooooooo<h1>'
+        myMap = RiabMap(IFACE)
+        myPixmap = myMap.renderHtml(myHtml)
+        myPath = '/tmp/renderHtml.png'
+        myPixmap.save(myPath, 'PNG')
+        myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
+        assertHashForFile(myExpectedHash, myPath)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')
