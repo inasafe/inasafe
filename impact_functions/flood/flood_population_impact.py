@@ -149,11 +149,8 @@ class FloodImpactFunction(FunctionProvider):
                     'banjir lebih dari %.1f m.</li>' % threshold)
         caption += '</ul>'
 
-        title = 'Jumlah Penduduk Yang Mungkin Dievakuasi'
-
-        disclaimer = 'Sumber: Badan Pusat Statistik'
-
         table = ('<table>'
+                 '  <caption>Jumlah Penduduk Yang Mungkin Dieakuasi</caption>'
                  '  <thead>'
                  '    <tr>'
                  '      <th rowspan="2">Wilayah</th>'
@@ -203,8 +200,10 @@ class FloodImpactFunction(FunctionProvider):
                  '      <td>93076</td>'
                  '      <td>180586</td>'
                  '    </tr>'
-                 '  </tbody>')
-
+                 '  </tbody>'
+                 '  <caption>Sumber: Badan Pusat Statistik</caption>'
+                 '</table>')
+        map_title = 'Penduduk yang Mungkin dievakuasi'
         # Create raster object and return
         R = Raster(I,
                    projection=inundation.get_projection(),
@@ -212,7 +211,6 @@ class FloodImpactFunction(FunctionProvider):
                    name='Penduduk yang %s' % (self.plugin_name.lower()),
                    keywords={'caption': caption,
                              'table': table,
-                             'title': title,
-                             'disclaimer': disclaimer},
+                             'map_title': map_title},
                    style_info=style_info)
         return R

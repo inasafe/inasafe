@@ -146,6 +146,17 @@ class RiabDockTest(unittest.TestCase):
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
 
+    def test_getMapTitle(self):
+        """Getting the map title from the keywords"""
+        myLayer, myType = loadLayer('test_floodimpact.tif')
+        del myType
+        myMap = RiabMap(IFACE)
+        myMap.setImpactLayer(myLayer)
+        myTitle = myMap.getMapTitle()
+        myExpectedTitle = 'ffff'
+        myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
+        assert myTitle == myExpectedTitle, myMessage
+
     def test_pointsToMM(self):
         """Test that points to cm conversion is working"""
         myMap = RiabMap(IFACE)

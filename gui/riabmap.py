@@ -323,25 +323,69 @@ class RiabMap():
         myResolution = myComposition.printResolution()
         myPrinter.setResolution(myResolution)
         #
+        # Keep track of our vertical positioning as we work our way down
+        # the page placing elements on it.
+        #
+        myTopOffset = myMargin
+        #
+        # Add a picture - riab logo on right
+        #
+        myLogo = QgsComposerPicture(myComposition)
+        myLogo.setPictureFile(':/plugins/riab/bnpd_logo.png')
+        myLogo.setItemPosition(myMargin,
+                                   myTopOffset,
+                                   10,
+                                   10)
+        myLogo.setFrame(False)
+        myComposition.addItem(myLogo)
+        #
+        # Add the title
+        #
+        myFontSize = 14
+        myFontWeight = QtGui.QFont.Bold
+        myItalicsFlag = False
+        myFont = QtGui.QFont('verdana',
+                             myFontSize,
+                             myFontWeight,
+                             myItalicsFlag)
+        myLabel = QgsComposerLabel(myComposition)
+        myLabel.setFont(myFont)
+        myHeading = self.tr('S.A.F.E. - Scenario Assement For Emergencies')
+        myLabel.setText(myHeading)
+        myLabel.adjustSizeToText()
+        myLabelHeight = 10  # determined using qgis map composer
+        myLabelWidth = 131.412   # item - position and size...option
+        myLabel.setItemPosition(myPageWidth - myMargin - myLabelWidth,
+                                myTopOffset,
+                                myLabelWidth,
+                                myLabelHeight,
+                                )
+        myLabel.setFrame(True)
+        myComposition.addItem(myLabel)
+        #
+        # Update the map offset for the next row of content
+        #
+        myTopOffset += myLabelHeight + myBuffer
+        #
         # Add a map to the composition
         #
         # make a square map where width = height = page width
         myMapHeight = myPageWidth - (myMargin * 2)
-        myTopOffset = myMargin
+        myMapWidth = myMapHeight
         myComposerMap = QgsComposerMap(myComposition,
                                        myMargin,
                                        myTopOffset,
-                                       myMapHeight,
+                                       myMapWidth,
                                        myMapHeight)
         myComposition.addItem(myComposerMap)
         #
         # Update the top offset for the next horizontal row of items
         #
-        myTopOffset = myMargin + myMapHeight + myBuffer
+        myTopOffset += myMapHeight + myBuffer
         #
         # Add the heading
         #
-        myFontSize = 24
+        myFontSize = 20
         myFontWeight = 1
         myItalicsFlag = False
         myFont = QtGui.QFont('verdana',
@@ -353,7 +397,7 @@ class RiabMap():
         myHeading = self.tr('Risk in a Box')
         myLabel.setText(myHeading)
         myLabel.adjustSizeToText()
-        myLabelHeight = 13
+        myLabelHeight = 12
         myLabel.setItemPosition(myMargin,
                                 myTopOffset,
                                 myMapHeight,  # height is == width for the map
@@ -364,7 +408,7 @@ class RiabMap():
         #
         # Update the top offset for the next horizontal row of items
         #
-        myTopOffset = myMargin + myMapHeight + myLabelHeight + myBuffer + 2
+        myTopOffset += myLabelHeight + myBuffer + 2
         #
         # Add a picture - legend
         # .. note:: getLegend generates a pixmap in 150dpi so if you set
@@ -399,20 +443,9 @@ class RiabMap():
         myScaleBar.setFrame(False)
         myComposition.addItem(myScaleBar)
         #
-        # Add a picture - riab logo on right
-        #
-        #myPicture2 = QgsComposerPicture(myComposition)
-        #myPicture2.setPictureFile(':/plugins/riab/icon.png')
-        #myPicture2.setItemPosition(myPageWidth - myMargin - 30,
-        #                           myTopOffset,
-        #                           30,
-        #                           30)
-        #myPicture2.setFrame(False)
-        #myComposition.addItem(myPicture2)
-        #
         # Update the top offset for the next horizontal row of items
         #
-        myTopOffset = myMargin + myMapHeight + myBuffer
+        myTopOffset += myLabelHeight + myBuffer + 2 + myScaleBarHeight
         #
         # Draw the table
         #
@@ -422,12 +455,12 @@ class RiabMap():
             myTableFile = '/tmp/table.png'
             myImage.save(myTableFile, 'PNG')
             myTable.setPictureFile(myTableFile)
-            myLegendHeight = self.pointsToMM(self.legend.height(), myDpi)
-            myLegendWidth = self.pointsToMM(self.legend.width(), myDpi)
-            myTable.setItemPosition(myMargin,
+            myTableHeight = self.pointsToMM(self.legend.height(), myDpi)
+            myTableWidth = self.pointsToMM(self.legend.width(), myDpi)
+            myTable.setItemPosition(myMargin + myMapHeight - myTableWidth,
                                        myTopOffset,
-                                       myLegendWidth,
-                                       myLegendHeight)
+                                       myTableWidth,
+                                       myTableHeight)
             myTable.setFrame(False)
             myComposition.addItem(myTable)
         #
@@ -438,6 +471,21 @@ class RiabMap():
         myPaperRectPx = myPrinter.pageRect(QtGui.QPrinter.DevicePixel)
         myComposition.render(myPainter, myPaperRectPx, myPaperRectMM)
         myPainter.end()
+
+    def getMapTitle(self):
+        """Get the map title from the layer keywords if possible
+        Args:
+            None
+        Returns:
+            None on error, otherwise the title
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        try:
+            myTitle = getKeywordFromFile(str(self.layer.source()), 'map_title')
+            return myTitle
+        except Exception, e:
+            return None
 
     def renderTable(self):
         """Render the table in the keywords if present. The table is an
