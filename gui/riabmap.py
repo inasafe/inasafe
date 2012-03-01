@@ -386,6 +386,23 @@ class RiabMap():
                                        myMapWidth,
                                        myMapHeight)
         myComposition.addItem(myComposerMap)
+                #
+        # Add a numeric scale to the bottom left of the map
+        #
+        myScaleBar = QgsComposerScaleBar(myComposition)
+        myScaleBar.setStyle('Numeric')  # optionally modify the style
+        myScaleBar.setComposerMap(myComposerMap)
+        myScaleBar.applyDefaultSize()
+        myScaleBarHeight = myScaleBar.boundingRect().height()
+        myScaleBarWidth = myScaleBar.boundingRect().width()
+        # -1 to avoid overlapping the map border
+        myScaleBar.setItemPosition(myMargin + 1,
+                                   myTopOffset + myMapHeight -
+                                     myScaleBarHeight - 1,
+                                   myScaleBarWidth,
+                                   myScaleBarHeight)
+        myScaleBar.setFrame(myShowFrameFlag)
+        myComposition.addItem(myScaleBar)
         #
         # Update the top offset for the next horizontal row of items
         #
@@ -438,25 +455,6 @@ class RiabMap():
         myPicture1.setFrame(False)
         myComposition.addItem(myPicture1)
         #
-        # Add a numeric scale to the right
-        #
-        myScaleBar = QgsComposerScaleBar(myComposition)
-        myScaleBar.setStyle('Numeric')  # optionally modify the style
-        myScaleBar.setComposerMap(myComposerMap)
-        myScaleBar.applyDefaultSize()
-        myScaleBarHeight = myScaleBar.boundingRect().height()
-        myScaleBarWidth = myScaleBar.boundingRect().width()
-        myScaleBar.setItemPosition(myMargin + myMapHeight - myScaleBarWidth,
-                                   myTopOffset,
-                                   myScaleBarWidth,
-                                   myScaleBarHeight)
-        myScaleBar.setFrame(myShowFrameFlag)
-        myComposition.addItem(myScaleBar)
-        #
-        # Update the top offset for the next horizontal row of items
-        #
-        myTopOffset += myBuffer + 2 + myScaleBarHeight
-        #
         # Draw the table
         #
         myTable = QgsComposerPicture(myComposition)
@@ -465,16 +463,16 @@ class RiabMap():
             myTableFile = '/tmp/table.png'
             myImage.save(myTableFile, 'PNG')
             myTable.setPictureFile(myTableFile)
-            myScaleFactor = 1.8
-            myTableHeight = self.pointsToMM(self.legend.height(),
+            myScaleFactor = 1
+            myTableHeight = self.pointsToMM(myImage.height(),
                                              myDpi) * myScaleFactor
-            myTableWidth = self.pointsToMM(self.legend.width(),
+            myTableWidth = self.pointsToMM(myImage.width(),
                                            myDpi) * myScaleFactor
             myTable.setItemPosition(myMargin + myMapHeight - myTableWidth,
                                        myTopOffset,
                                        myTableWidth,
                                        myTableHeight)
-            myTable.setFrame(True)
+            myTable.setFrame(False)
             myComposition.addItem(myTable)
         #
         # Render the composition to our pdf printer
