@@ -450,7 +450,7 @@ class RiabMap():
                                    myTopOffset,
                                    myScaleBarWidth,
                                    myScaleBarHeight)
-        myScaleBar.setFrame(False)
+        myScaleBar.setFrame(myShowFrameFlag)
         myComposition.addItem(myScaleBar)
         #
         # Update the top offset for the next horizontal row of items
@@ -465,13 +465,13 @@ class RiabMap():
             myTableFile = '/tmp/table.png'
             myImage.save(myTableFile, 'PNG')
             myTable.setPictureFile(myTableFile)
-            myTableHeight = self.pointsToMM(self.legend.height(), myDpi)
-            myTableWidth = self.pointsToMM(self.legend.width(), myDpi)
+            myTableHeight = self.pointsToMM(self.legend.height(), myDpi) * 2
+            myTableWidth = self.pointsToMM(self.legend.width(), myDpi) * 2
             myTable.setItemPosition(myMargin + myMapHeight - myTableWidth,
                                        myTopOffset,
                                        myTableWidth,
                                        myTableHeight)
-            myTable.setFrame(False)
+            myTable.setFrame(True)
             myComposition.addItem(myTable)
         #
         # Render the composition to our pdf printer
@@ -526,7 +526,7 @@ class RiabMap():
             Any exceptions raised by the RIAB library will be propogated.
         """
         myPage = QtWebKit.QWebPage()
-        mySize = QtCore.QSize(600, 300)
+        mySize = QtCore.QSize(600, 200)
         myPage.setViewportSize(mySize)
         myFrame = myPage.mainFrame()
         myHeader = self.htmlHeader()
@@ -542,6 +542,10 @@ class RiabMap():
         myPainter = QtGui.QPainter(myPixmap)
         myFrame.render(myPainter)
         myPainter.save()
+        # for testing
+        myView = QtWebKit.QWebView()
+        myView.setPage(myPage)
+        myView.show()
         return myPixmap
 
     def pointsToMM(self, thePoints, theDpi):

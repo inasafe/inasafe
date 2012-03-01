@@ -89,7 +89,7 @@ class RiabDockTest(unittest.TestCase):
         myMap.getVectorLegend()
         myPath = '/tmp/getVectorLegend.png'
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = 'e1560513c21ee3262c3942e873f11875'
+        myExpectedHash = '5e67f182a7e8f0d065c32cbebcef8561'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getRasterLegend(self):
@@ -101,7 +101,7 @@ class RiabDockTest(unittest.TestCase):
         myMap.getRasterLegend()
         myPath = '/tmp/getRasterLegend.png'
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = 'a6a0cfd59a438edd291a92b842e49880'
+        myExpectedHash = '1a47a474981fc1acfae8e751e5afe5f0'
         assertHashForFile(myExpectedHash, myPath)
 
     def addSymbolToLegend(self):
@@ -143,7 +143,7 @@ class RiabDockTest(unittest.TestCase):
                                theLabel='foo')
         myPath = '/tmp/addClassToLegend.png'
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
+        myExpectedHash = '5fe2c1748d974fbb49ddb513208e242b'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getMapTitle(self):
@@ -153,7 +153,7 @@ class RiabDockTest(unittest.TestCase):
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myTitle = myMap.getMapTitle()
-        myExpectedTitle = 'ffff'
+        myExpectedTitle = 'Penduduk yang Mungkin dievakuasi'
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
         assert myTitle == myExpectedTitle, myMessage
 
@@ -167,12 +167,14 @@ class RiabDockTest(unittest.TestCase):
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedResult, myResult)
         assert  numpy.allclose(myResult, myExpectedResult), myMessage
 
-    def test_renderHtml(self):
+    def test_renderTable(self):
         """Test that html renders nicely."""
-        myHtml = 'Hello<h1>Hellooooooooo<h1>'
+        myLayer, myType = loadLayer('test_floodimpact.tif')
+        del myType
         myMap = RiabMap(IFACE)
-        myPixmap = myMap.renderHtml(myHtml)
-        myPath = '/tmp/renderHtml.png'
+        myMap.setImpactLayer(myLayer)
+        myPixmap = myMap.renderTable()
+        myPath = '/tmp/renderTable.png'
         myPixmap.save(myPath, 'PNG')
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
