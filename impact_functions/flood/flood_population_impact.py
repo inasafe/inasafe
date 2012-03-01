@@ -103,7 +103,7 @@ class FloodImpactFunction(FunctionProvider):
         # Create report
         iname = inundation.get_name()
         pname = population.get_name()
-        caption = ('<table  class="table table-condensed">')
+        caption = ('<table class="table table-striped condensed">')
         caption += ('<caption>Apabila terjadi "%s" '
                     'perkiraan dampak terhadap "%s" '
                     'kemungkinan yang terjadi&#58;</caption>' % (iname,
@@ -149,7 +149,7 @@ class FloodImpactFunction(FunctionProvider):
                     'banjir lebih dari %.1f m.</li>' % threshold)
         caption += '</ul>'
 
-        table = ('<table>'
+        table = ('<table class="table table-striped condensed">'
                  '  <caption>Jumlah Penduduk Yang Mungkin Dieakuasi</caption>'
                  '  <thead>'
                  '    <tr>'

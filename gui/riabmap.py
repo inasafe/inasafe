@@ -455,7 +455,7 @@ class RiabMap():
         #
         # Update the top offset for the next horizontal row of items
         #
-        myTopOffset += myLabelHeight + myBuffer + 2 + myScaleBarHeight
+        myTopOffset += myBuffer + 2 + myScaleBarHeight
         #
         # Draw the table
         #
@@ -465,8 +465,11 @@ class RiabMap():
             myTableFile = '/tmp/table.png'
             myImage.save(myTableFile, 'PNG')
             myTable.setPictureFile(myTableFile)
-            myTableHeight = self.pointsToMM(self.legend.height(), myDpi) * 2
-            myTableWidth = self.pointsToMM(self.legend.width(), myDpi) * 2
+            myScaleFactor = 1.8
+            myTableHeight = self.pointsToMM(self.legend.height(),
+                                             myDpi) * myScaleFactor
+            myTableWidth = self.pointsToMM(self.legend.width(),
+                                           myDpi) * myScaleFactor
             myTable.setItemPosition(myMargin + myMapHeight - myTableWidth,
                                        myTopOffset,
                                        myTableWidth,
@@ -526,27 +529,32 @@ class RiabMap():
             Any exceptions raised by the RIAB library will be propogated.
         """
         myPage = QtWebKit.QWebPage()
-        mySize = QtCore.QSize(600, 200)
-        myPage.setViewportSize(mySize)
         myFrame = myPage.mainFrame()
         myHeader = self.htmlHeader()
         myFooter = self.htmlFooter()
-        print 'Header:\n', myHeader
-        print 'Footer:\n', myFooter
         myHtml = myHeader + theHtml + myFooter
         myFrame.setHtml(myHtml)
-        print '\n\n\nPage:\n', myFrame.toHtml()
-        #mySize = myFrame.contentsSize()
-        myPixmap = QtGui.QPixmap(mySize)
-        myPixmap.fill(QtGui.QColor(255, 255, 255))
-        myPainter = QtGui.QPainter(myPixmap)
-        myFrame.render(myPainter)
-        myPainter.save()
-        # for testing
-        myView = QtWebKit.QWebView()
-        myView.setPage(myPage)
-        myView.show()
-        return myPixmap
+        #file('/tmp/report.html', 'wt').write(myHtml).close()
+        #print '\n\n\nPage:\n', myFrame.toHtml()
+        #mySize = QtCore.QSize(600, 200)
+        mySize = myFrame.contentsSize()
+        mySize.setWidth(800)
+        myPage.setViewportSize(mySize)
+        myQImageFlag = False
+        if myQImageFlag:
+            myImage = QtGui.QImage(mySize, QtGui.QImage.Format_ARGB32)
+            myImage.fill(QtGui.QColor(255, 255, 255))
+            myPainter = QtGui.QPainter(myImage)
+            myFrame.render(myPainter)
+            myPainter.end()
+            return myImage
+        else:  # render with qpixmap rather
+            myPixmap = QtGui.QPixmap(mySize)
+            myPixmap.fill(QtGui.QColor(255, 255, 255))
+            myPainter = QtGui.QPainter(myPixmap)
+            myFrame.render(myPainter)
+            myPainter.end()
+            return myPixmap
 
     def pointsToMM(self, thePoints, theDpi):
         """Convert measurement in points to one in mm
