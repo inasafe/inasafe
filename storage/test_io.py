@@ -1061,7 +1061,7 @@ class Test_IO(unittest.TestCase):
         """
 
         kwd_filename = unique_filename(suffix='.keywords')
-        keywords = {'caption': 'Describing the layer',
+        keywords = {'impact_summary': 'Describing the layer',
                     'category': 'impact',
                     'subcategory': 'flood',
                     'layer': None,

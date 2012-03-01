@@ -788,7 +788,7 @@ class RiabDockTest(unittest.TestCase):
             Any exceptions raised by the RIAB library will be propogated.
         """
         clearDock()
-        loadLayer('issue58.tif')
+        loadLayer('test_floodimpact.tif')
         myMap = RiabMap(DOCK.iface)
         myMap.makePdf('/tmp/out.pdf')
         assert os.path.exists('/tmp/out.pdf')

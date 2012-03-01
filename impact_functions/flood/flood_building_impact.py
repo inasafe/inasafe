@@ -75,10 +75,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
-        caption = _('<b>In case of "%s" the estimated impact to "%s" '
+        impact_summary =  _('<b>In case of "%s" the estimated impact to "%s" '
                    'the possibility of &#58;</b><br><br><p>' % (Hname,
                                                                 Ename))
-        caption += ('<table border="0" width="320px">'
+        impact_summary +=  ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
@@ -89,9 +89,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                   _('Closed'), count,
                                   _('Opened'), N - count))
 
-        caption += '<br>'  # Blank separation row
-        caption += '<b>' + _('Assumption') + '&#58;</b><br>'
-        caption += _('Buildings that will need to closed when flooding'
+        impact_summary +=  '<br>'  # Blank separation row
+        impact_summary +=  '<b>' + _('Assumption') + '&#58;</b><br>'
+        impact_summary +=  _('Buildings that will need to closed when flooding'
                    'more than %.1f m' % threshold)
 
         # Create style
@@ -107,6 +107,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
                    projection=E.get_projection(),
                    geometry=E.get_geometry(),
                    name=_('Estimated buildings affected'),
-                   keywords={'caption': caption},
+                   keywords={'impact_summary': impact_summary},
                    style_info=style_info)
         return V

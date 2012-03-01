@@ -101,7 +101,7 @@ class EarthquakeFatalityFunctionPodes(FunctionProvider):
             total += population_count
 
         # Create report
-        caption = ('<table border="0" width="320px">'
+        impact_summary =  ('<table border="0" width="320px">'
                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                    '</table>' % ('Jumlah Penduduk', int(total),
@@ -112,6 +112,6 @@ class EarthquakeFatalityFunctionPodes(FunctionProvider):
                    projection=E.get_projection(),
                    geometry=coordinates,
                    name='Estimated fatalities',
-                   keywords={'caption': caption})
+                   keywords={'impact_summary': impact_summary})
 
         return V

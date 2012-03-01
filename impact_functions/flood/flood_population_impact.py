@@ -103,8 +103,8 @@ class FloodImpactFunction(FunctionProvider):
         # Create report
         iname = inundation.get_name()
         pname = population.get_name()
-        caption = ('<table class="table table-striped condensed">')
-        caption += ('<caption>Apabila terjadi "%s" '
+        impact_summary = ('<table class="table table-striped condensed">')
+        impact_summary += ('<caption>Apabila terjadi "%s" '
                     'perkiraan dampak terhadap "%s" '
                     'kemungkinan yang terjadi&#58;</caption>' % (iname,
                                                                      pname))
@@ -115,15 +115,15 @@ class FloodImpactFunction(FunctionProvider):
         #     total_female = str(int(sum(P_female.flat) / 1000))
         #     total_male = str(int(sum(P_male.flat) / 1000))
 
-        #     caption += ('        <tr><td>%s&#58;</td>'
+        #     impact_summary += ('        <tr><td>%s&#58;</td>'
         #                 '<td align="right">%s</td></tr>'
         #                 % (' - Wanita', total_female))
-        #     caption += ('        <tr><td>%s&#58;</td>'
+        #     impact_summary += ('        <tr><td>%s&#58;</td>'
         #                 '<td align="right">%s</td></tr>'
         #                 % (' - Pria', total_male))
-        #    caption += '<tr><td>&nbsp;</td></tr>'  # Blank separation row
-        caption += ('<tbody>')
-        caption += ('   <tr><th>%s&#58;</th>'
+        #    impact_summary += '<tr><td>&nbsp;</td></tr>'  # Blank separation row
+        impact_summary += ('<tbody>')
+        impact_summary += ('   <tr><th>%s&#58;</th>'
                     '<td align="right">%s</td></tr>'
                     % ('Terdampak (x 1000)', count))
 
@@ -131,25 +131,25 @@ class FloodImpactFunction(FunctionProvider):
             affected_female = str(int(numpy.sum(I_female) / 1000))
             affected_male = str(int(numpy.sum(I_male) / 1000))
 
-            caption += ('        <tr><th>%s&#58;</th>'
+            impact_summary += ('        <tr><th>%s&#58;</th>'
                         '<td align="right">%s</td></tr>'
                         % (' - Wanita', affected_female))
-            caption += ('        <tr><th>%s&#58;</th>'
+            impact_summary += ('        <tr><th>%s&#58;</th>'
                         '<td align="right">%s</td></tr>'
                         % (' - Pria', affected_male))
-        caption += ('</tbody>')
-        caption += '</table>'
+        impact_summary += ('</tbody>')
+        impact_summary += '</table>'
 
-        caption += '<br>'  # Blank separation row
-        caption += '<span class="label success">Catatan&#58;</span>'
-        caption += '<ul>'
-        caption += '  <li>Jumlah penduduk Jakarta %s</li>' % total
-        caption += '  <li>Jumlah dalam ribuan</li>'
-        caption += (' <li>Penduduk dianggap terdampak ketika '
+        impact_summary += '<br>'  # Blank separation row
+        impact_summary += '<span class="label success">Catatan&#58;</span>'
+        impact_summary += '<ul>'
+        impact_summary += '  <li>Jumlah penduduk Jakarta %s</li>' % total
+        impact_summary += '  <li>Jumlah dalam ribuan</li>'
+        impact_summary += (' <li>Penduduk dianggap terdampak ketika '
                     'banjir lebih dari %.1f m.</li>' % threshold)
-        caption += '</ul>'
+        impact_summary += '</ul>'
 
-        table = ('<table class="table table-striped condensed">'
+        impact_table = ('<table class="table table-striped condensed">'
                  '  <caption>Jumlah Penduduk Yang Mungkin Dieakuasi</caption>'
                  '  <thead>'
                  '    <tr>'
@@ -204,13 +204,15 @@ class FloodImpactFunction(FunctionProvider):
                  '  <caption>Sumber: Badan Pusat Statistik</caption>'
                  '</table>')
         map_title = 'Penduduk yang Mungkin dievakuasi'
+
+        style_info['legend_title'] = 'Kepadatan Penduduk'
         # Create raster object and return
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name='Penduduk yang %s' % (self.plugin_name.lower()),
-                   keywords={'caption': caption,
-                             'table': table,
+                   keywords={'impact_summary': impact_summary,
+                             'impact_table': impact_table,
                              'map_title': map_title},
                    style_info=style_info)
         return R

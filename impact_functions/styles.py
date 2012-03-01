@@ -9,7 +9,7 @@ R = Raster(I,
            projection=inundation.get_projection(),
            geotransform=inundation.get_geotransform(),
            name='Penduduk yang %s' % (self.plugin_name.lower()),
-           keywords={'caption': caption},
+           keywords={'impact_summary': impact_summary},
            style_info=style_info)
 return R
 
@@ -29,4 +29,5 @@ style_classes = [dict(label=_('Low'), colour='#38A800', quantity=2,
                  dict(label=_('High'), colour='#7A0000', quantity=300,
                       transparency=0)]
 flood_population_style = dict(target_field=None,
+                              legend_title=None,
                               style_classes=style_classes)

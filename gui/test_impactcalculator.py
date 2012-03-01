@@ -144,7 +144,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         myRunner.run()
         myImpactLayer = myRunner.impactLayer()
         myKeyword = getKeywordFromLayer(
-                                        myImpactLayer, 'caption')
+                                        myImpactLayer, 'impact_summary')
         msg = 'Keyword request returned an empty string'
         assert(myKeyword is not ''), msg
         # Test we get an exception if keyword is not found

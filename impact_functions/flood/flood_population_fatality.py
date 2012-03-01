@@ -102,10 +102,10 @@ class FloodFatalityFunction(FunctionProvider):
         # Create report
         iname = inundation.get_name()
         pname = population.get_name()
-        caption = ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
+        impact_summary =  ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
                    'kemungkinan yang terjadi&#58;</b><br><br><p>' % (iname,
                                                                      pname))
-        caption += ('<table border="0" width="320px">')
+        impact_summary +=  ('<table border="0" width="320px">')
                    #'   <tr><td><b>%s&#58;</b></td>'
                    #'<td align="right"><b>%s</b></td></tr>'
                    #% ('Jumlah Penduduk', total))
@@ -113,15 +113,15 @@ class FloodFatalityFunction(FunctionProvider):
         #     total_female = str(int(sum(P_female.flat) / 1000))
         #     total_male = str(int(sum(P_male.flat) / 1000))
 
-        #     caption += ('        <tr><td>%s&#58;</td>'
+        #     impact_summary +=  ('        <tr><td>%s&#58;</td>'
         #                 '<td align="right">%s</td></tr>'
         #                 % (' - Wanita', total_female))
-        #     caption += ('        <tr><td>%s&#58;</td>'
+        #     impact_summary +=  ('        <tr><td>%s&#58;</td>'
         #                 '<td align="right">%s</td></tr>'
         #                 % (' - Pria', total_male))
-        #    caption += '<tr><td>&nbsp;</td></tr>'  # Blank separation row
+        #    impact_summary +=  '<tr><td>&nbsp;</td></tr>'  # Blank separation row
 
-        caption += ('   <tr><td><b>%s&#58;</b></td>'
+        impact_summary +=  ('   <tr><td><b>%s&#58;</b></td>'
                     '<td align="right"><b>%s</b></td></tr>'
                     % ('Meninggal (x 1000)', count))
 
@@ -129,20 +129,20 @@ class FloodFatalityFunction(FunctionProvider):
             affected_female = str(int(numpy.sum(I_female) / 1000))
             affected_male = str(int(numpy.sum(I_male) / 1000))
 
-            caption += ('        <tr><td>%s&#58;</td>'
+            impact_summary +=  ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'
                         % (' - Wanita', affected_female))
-            caption += ('        <tr><td>%s&#58;</td>'
+            impact_summary +=  ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'
                         % (' - Pria', affected_male))
 
-        caption += '</table>'
+        impact_summary +=  '</table>'
 
-        caption += '<br>'  # Blank separation row
-        caption += '<b>Catatan&#58;</b><br>'
-        caption += '- Jumlah penduduk Jakarta %s<br>' % total
-        caption += '- Jumlah dalam ribuan<br>'
-        caption += ('- Penduduk dianggap meninggal ketika '
+        impact_summary +=  '<br>'  # Blank separation row
+        impact_summary +=  '<b>Catatan&#58;</b><br>'
+        impact_summary +=  '- Jumlah penduduk Jakarta %s<br>' % total
+        impact_summary +=  '- Jumlah dalam ribuan<br>'
+        impact_summary +=  ('- Penduduk dianggap meninggal ketika '
                     'banjir lebih dari %.1f m.' % threshold)
 
         # Create raster object and return
@@ -150,7 +150,7 @@ class FloodFatalityFunction(FunctionProvider):
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name='Penduduk yang %s' % (self.plugin_name.lower()),
-                   keywords={'caption': caption},
+                   keywords={'impact_summary': impact_summary},
                    style_info=style_info)
 
         return R

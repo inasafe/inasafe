@@ -54,26 +54,26 @@ class FloodPovertyImpactFunction(FunctionProvider):
         # Create report
         iname = inundation.get_name()
         pname = poor_households.get_name()
-        caption = ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
+        impact_summary =  ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
                    'kemungkinan yang terjadi&#58;</b><br><br><p>' % (iname,
                                                                      pname))
 
-        caption += ('<table border="0" width="320px">')
+        impact_summary +=  ('<table border="0" width="320px">')
                    #'   <tr><td><b>%s&#58;</b></td>'
                    #'<td align="right"><b>%s</b></td></tr>'
                    #% ('Jumlah Rumah Tangga Miskin', total))
 
-        caption += ('   <tr><td><b>%s&#58;</b></td>'
+        impact_summary +=  ('   <tr><td><b>%s&#58;</b></td>'
                     '<td align="right"><b>%s</b></td></tr>'
                     % ('Jumlah Rumah Tangga Terdampak (x 1000)', count))
 
-        caption += '</table>'
+        impact_summary +=  '</table>'
 
-        caption += '<br>'  # Blank separation row
-        caption += '<b>Catatan&#58;</b><br>'
-        caption += '- Jumlah Rumah Tangga Miskin %s<br>' % total
-        caption += '- Jumlah dalam ribuan<br>'
-        caption += ('- Rumah Tangga Miskin dalam bahaya ketika '
+        impact_summary +=  '<br>'  # Blank separation row
+        impact_summary +=  '<b>Catatan&#58;</b><br>'
+        impact_summary +=  '- Jumlah Rumah Tangga Miskin %s<br>' % total
+        impact_summary +=  '- Jumlah dalam ribuan<br>'
+        impact_summary +=  ('- Rumah Tangga Miskin dalam bahaya ketika '
                     'banjir lebih dari %.1f m. ' % threshold)
 
         # Create raster object and return
@@ -81,5 +81,5 @@ class FloodPovertyImpactFunction(FunctionProvider):
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name='People affected',
-                   keywords={'caption': caption})
+                   keywords={'impact_summary': impact_summary})
         return R

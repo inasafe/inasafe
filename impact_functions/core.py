@@ -159,9 +159,9 @@ def requirement_check(params, require_str, verbose=False):
 
     # Some keyword should never go into the requirement check
     # FIXME (Ole): This is not the most robust way. If we get a
-    # more general way of doing metadata we can treat caption and
+    # more general way of doing metadata we can treat impact_summary and
     # many other things separately. See issue #148
-    excluded_keywords = ['caption']
+    excluded_keywords = ['impact_summary']
 
     execstr = 'def check():\n'
     for key in params.keys():

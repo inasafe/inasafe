@@ -101,7 +101,7 @@ class RiabMap():
                                 'has no layer set.')
             raise LegendLayerException(myMessage)
         try:
-            getKeywordFromFile(str(self.layer.source()), 'caption')
+            getKeywordFromFile(str(self.layer.source()), 'impact_summary')
         except Exception, e:
             myMessage = self.tr('This layer does not appear to be an impact '
                                 'layer. Try selecting an impact layer in the '
@@ -509,7 +509,8 @@ class RiabMap():
             Any exceptions raised by the RIAB library will be propogated.
         """
         try:
-            myHtml = getKeywordFromFile(str(self.layer.source()), 'table')
+            myHtml = getKeywordFromFile(str(self.layer.source()),
+                                        'impact_table')
             return self.renderHtml(myHtml)
         except Exception, e:
             return None
@@ -528,6 +529,11 @@ class RiabMap():
         """
         myPage = QtWebKit.QWebPage()
         myFrame = myPage.mainFrame()
+        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
+                                   QtCore.Qt.ScrollBarAlwaysOff)
+        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
+                                   QtCore.Qt.ScrollBarAlwaysOff)
+
         myHeader = self.htmlHeader()
         myFooter = self.htmlFooter()
         myHtml = myHeader + theHtml + myFooter

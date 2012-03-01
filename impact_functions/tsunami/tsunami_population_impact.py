@@ -44,7 +44,7 @@ class TsunamiPopulationImpactFunction(FunctionProvider):
         # Do breakdown
 
         # Create report
-        caption = ('<table border="0" width="320px">'
+        impact_summary =  ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                    '   <tr></tr>' % ('Ambang batas', 'Jumlah orang terdampak'))
 
@@ -53,15 +53,15 @@ class TsunamiPopulationImpactFunction(FunctionProvider):
             I = numpy.where(D > threshold, P, 0)
             counts.append(numpy.nansum(I.flat))
 
-            caption += '   <tr><td>%s m</td><td>%i</td></tr>' % (threshold,
+            impact_summary +=  '   <tr><td>%s m</td><td>%i</td></tr>' % (threshold,
                                                                  counts[i])
 
-        caption += '</table>'
+        impact_summary +=  '</table>'
 
         # Create raster object and return
         R = Raster(I_map,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name='People affected by more than 1m of inundation',
-                   keywords={'caption': caption})
+                   keywords={'impact_summary': impact_summary})
         return R

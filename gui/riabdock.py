@@ -644,7 +644,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             raise Exception(myMessage)
 
         # Get tabular information from impact layer
-        myReport = getKeywordFromLayer(myEngineImpactLayer, 'caption')
+        myReport = getKeywordFromLayer(myEngineImpactLayer, 'impact_summary')
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
@@ -950,7 +950,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         if theLayer is not None:
             try:
                 myReport = getKeywordFromFile(str(theLayer.source()),
-                                              'caption')
+                                              'impact_summary')
             except KeywordNotFoundException, e:
                 self.setOkButtonStatus()
             except InvalidParameterException, e:

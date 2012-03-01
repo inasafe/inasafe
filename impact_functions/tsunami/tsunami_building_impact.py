@@ -81,7 +81,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
         # Create report
         if H.is_raster:
-            caption = ('<table border="0" width="320px">'
+            impact_summary =  ('<table border="0" width="320px">'
                        '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
@@ -92,7 +92,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                                      '1 - 3 m', count1,
                                      '> 3 m', count3))
         else:
-            caption = ('<table border="0" width="320px">'
+            impact_summary =  ('<table border="0" width="320px">'
                        '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
@@ -108,5 +108,5 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                    projection=E.get_projection(),
                    geometry=coordinates,
                    name='Estimate of buildings affected',
-                   keywords={'caption': caption})
+                   keywords={'impact_summary': impact_summary})
         return V

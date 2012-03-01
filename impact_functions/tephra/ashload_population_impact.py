@@ -45,7 +45,7 @@ class TephraPopulationImpactFunction(FunctionProvider):
 
         # Generate text with result for this study
         number_of_people_affected = numpy.nansum(I.flat)
-        caption = ('%i people affected by ash levels greater '
+        impact_summary =  ('%i people affected by ash levels greater '
                    'than %i kg/m^2' % (number_of_people_affected,
                                        threshold))
 
@@ -54,5 +54,5 @@ class TephraPopulationImpactFunction(FunctionProvider):
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name='People affected',
-                   keywords={'caption': caption})
+                   keywords={'impact_summary': impact_summary})
         return R
