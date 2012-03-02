@@ -489,7 +489,18 @@ class RiabMap():
         # workaround for missing setTransparentFill missing from python api
         myRect.setBrush(myBrush)
         myComposition.addItem(myRect)
-
+        # Draw the km label
+        myLabel = QgsComposerLabel(myComposition)
+        myFont.setWeight(QtGui.QFont.Normal)
+        myFont.setPointSize(10)
+        myLabel.setFont(myFont)
+        myLabel.setText('km')
+        myLabel.adjustSizeToText()
+        myLabel.setItemPosition(myScaleBarX + myScaleBarWidthMM + 1,
+                                  myScaleBarY + myScaleBarHeight - 5,
+                                  10, 6)
+        myLabel.setFrame(myShowFrameFlag)
+        myComposition.addItem(myLabel)
         # Draw the bottom line
         myRect = QgsComposerShape(myScaleBarX,
                                   myScaleBarY + myScaleBarHeight,
