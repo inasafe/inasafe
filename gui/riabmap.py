@@ -22,7 +22,10 @@ from qgis.core import (QgsComposition,
                        QgsComposerLabel,
                        QgsComposerPicture,
                        QgsComposerScaleBar,
-                       QgsMapLayer)
+                       QgsComposerShape,
+                       QgsMapLayer,
+                       QgsDistanceArea,
+                       QgsPoint)
 import utilities
 from riabexceptions import LegendLayerException
 from PyQt4 import QtCore, QtGui, QtWebKit
@@ -312,7 +315,8 @@ class RiabMap():
         myMargin = 10  # margin in mm
         myBuffer = 1  # vertical spacing between elements
         myShowFrameFlag = False
-        myRenderer = self.iface.mapCanvas().mapRenderer()
+        myCanvas = self.iface.mapCanvas()
+        myRenderer = myCanvas.mapRenderer()
         myComposition = QgsComposition(myRenderer)
         myComposition.setPlotStyle(QgsComposition.Print)
         myComposition.setPaperSize(myPageWidth, myPageHeight)
@@ -389,12 +393,19 @@ class RiabMap():
         # The dimensions of the map canvas and the print compser map may
         # differ. So we set the map composer extent using the canvas and
         # then defer to the map canvas's map extents thereafter
+        # Update: disabled as it results in a rectangular rather than
+        # square map
         #myComposerMap.setNewExtent(myExtent)
         myComposerExtent = myComposerMap.extent()
         myComposerMap.setGridEnabled(True)
-        myXInterval = myComposerExtent.width() / 5
+
+        myNumberOfSplits = 5
+        # .. todo:: Write logic to adjust preciosn so that adjacent tick marks
+        #    always have different displayed values
+        myPrecision = 2
+        myXInterval = myComposerExtent.width() / myNumberOfSplits
         myComposerMap.setGridIntervalX(myXInterval)
-        myYInterval = myComposerExtent.height() / 5
+        myYInterval = myComposerExtent.height() / myNumberOfSplits
         myComposerMap.setGridIntervalY(myYInterval)
         myComposerMap.setGridStyle(QgsComposerMap.Cross)
         myFontSize = 8
@@ -405,7 +416,7 @@ class RiabMap():
                              myFontWeight,
                              myItalicsFlag)
         myComposerMap.setGridAnnotationFont(myFont)
-        myComposerMap.setGridAnnotationPrecision(3)
+        myComposerMap.setGridAnnotationPrecision(myPrecision)
         myComposerMap.setShowGridAnnotation(True)
         myComposerMap.setGridAnnotationDirection(
                                         QgsComposerMap.BoundaryDirection)
@@ -422,11 +433,79 @@ class RiabMap():
         # -1 to avoid overlapping the map border
         myScaleBar.setItemPosition(myMargin + 1,
                                    myTopOffset + myMapHeight -
-                                     myScaleBarHeight - 1,
+                                     (myScaleBarHeight * 2),
                                    myScaleBarWidth,
                                    myScaleBarHeight)
         myScaleBar.setFrame(myShowFrameFlag)
         myComposition.addItem(myScaleBar)
+        #
+        # Add a linear map scale
+        #
+        myDistanceArea = QgsDistanceArea()
+        myDistanceArea.setSourceCrs(myRenderer.destinationCrs().srsid())
+        myDistanceArea.setProjectionsEnabled(True)
+        # Determine how wide our map is in km/m
+        # Starting point at BL corner
+        myStartPoint = QgsPoint(myComposerExtent.xMinimum(),
+                                myComposerExtent.yMinimum())
+        # Ending point at BR corner
+        myEndPoint = QgsPoint(myComposerExtent.xMaximum(),
+                              myComposerExtent.yMinimum())
+        myDistance = myDistanceArea.measureLine(myStartPoint, myEndPoint)
+        # Get the equivalent map distance per page mm
+        myMMDistance = myDistance / myMapWidth
+        print 'MM:', myMMDistance
+        myUnits = 'km'  # myDistanceArea.textUnit()
+        # How long we want the scale bar to be in relation to the map
+        myScaleBarToMapRatio = 0.4
+        # How many divisions the scale bar should have
+        myTickCount = 5
+        myScaleBarWidthMM = myMapWidth * myScaleBarToMapRatio
+        mySegmentWidthMM = myScaleBarWidthMM / myTickCount
+        mySegmentMapUnits = ((myDistance * myScaleBarToMapRatio) /
+                            (myTickCount * 1000))  # km
+        print "SBWMM:", myScaleBarWidthMM
+        print "SWMM:", mySegmentWidthMM
+        # start drawing in line segments
+        myScaleBarX = myMargin + 1  # _1 to avoid overlapping border
+        myScaleBarHeight = 5  # mm
+        myLineWidth = 0.1  # mm
+        myScaleBarY = myTopOffset + myMapHeight - 1 - myScaleBarHeight  # mm
+
+        # Draw an outer box
+        myRect = QgsComposerShape(myScaleBarX,
+                                      myScaleBarY,
+                                      myScaleBarWidthMM,
+                                      myScaleBarHeight,
+                                      myComposition)
+
+        myRect.setShapeType(QgsComposerShape.Rectangle)
+        myRect.setLineWidth(myLineWidth)
+        myRect.setFrame(False)
+        myComposition.addItem(myRect)
+
+        # Now draw the scalebar ticks
+        for myTickCountIterator in range(0, myTickCount):
+            myRealWorldDistance = ('%.2f %s' % (
+                myTickCountIterator * mySegmentMapUnits,
+                myUnits))
+            print 'RW:', myRealWorldDistance
+            myMMOffset = myScaleBarX + (myTickCountIterator * mySegmentWidthMM)
+            print 'MM:', myMMOffset
+            myTickWidth = 0.1  # mm
+            myTickHeight = myScaleBarHeight
+            # Lines are not exposed by the api yet so we
+            # bodge drawing lines using rectangles with 1px height or width
+            myUpTickLine = QgsComposerShape(myMMOffset,
+                                      myScaleBarY,
+                                      myTickWidth,
+                                      myTickHeight,
+                                      myComposition)
+
+            myUpTickLine.setShapeType(QgsComposerShape.Rectangle)
+            myUpTickLine.setLineWidth(myLineWidth)
+            myUpTickLine.setFrame(False)
+            myComposition.addItem(myUpTickLine)
         #
         # Update the top offset for the next horizontal row of items
         #
