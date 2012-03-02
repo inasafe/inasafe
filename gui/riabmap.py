@@ -470,17 +470,29 @@ class RiabMap():
         # start drawing in line segments
         myScaleBarHeight = 5  # mm
         myLineWidth = 0.3  # mm
-        myInsetDistance = 4  # how much to inset the scalebar into the map by
+        myInsetDistance = 7  # how much to inset the scalebar into the map by
         myScaleBarX = myMargin + myInsetDistance
         myScaleBarY = (myTopOffset + myMapHeight -
                       myInsetDistance - myScaleBarHeight)  # mm
 
-        # Draw an outer box
+        # Draw an outer background box
+        myRect = QgsComposerShape(myScaleBarX - 4,
+                                  myScaleBarY - 8,
+                                  myScaleBarWidthMM + 17,
+                                  myScaleBarHeight + 10,
+                                  myComposition)
+
+        myRect.setShapeType(QgsComposerShape.Rectangle)
+        myRect.setLineWidth(myLineWidth)
+        myRect.setFrame(False)
+        myComposition.addItem(myRect)
+
+        # Draw the bottom line
         myRect = QgsComposerShape(myScaleBarX,
-                                      myScaleBarY + myScaleBarHeight,
-                                      myScaleBarWidthMM,
-                                      0.1,
-                                      myComposition)
+                                  myScaleBarY + myScaleBarHeight,
+                                  myScaleBarWidthMM,
+                                  0.1,
+                                  myComposition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
         myRect.setLineWidth(myLineWidth)
