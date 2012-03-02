@@ -437,7 +437,8 @@ class RiabMap():
                                    myScaleBarWidth,
                                    myScaleBarHeight)
         myScaleBar.setFrame(myShowFrameFlag)
-        myComposition.addItem(myScaleBar)
+        # Disabled for now
+        #myComposition.addItem(myScaleBar)
         #
         # Add a linear map scale
         #
@@ -457,7 +458,7 @@ class RiabMap():
         print 'MM:', myMMDistance
         myUnits = 'km'  # myDistanceArea.textUnit()
         # How long we want the scale bar to be in relation to the map
-        myScaleBarToMapRatio = 0.4
+        myScaleBarToMapRatio = 0.5
         # How many divisions the scale bar should have
         myTickCount = 5
         myScaleBarWidthMM = myMapWidth * myScaleBarToMapRatio
@@ -467,16 +468,18 @@ class RiabMap():
         print "SBWMM:", myScaleBarWidthMM
         print "SWMM:", mySegmentWidthMM
         # start drawing in line segments
-        myScaleBarX = myMargin + 1  # _1 to avoid overlapping border
         myScaleBarHeight = 5  # mm
-        myLineWidth = 0.1  # mm
-        myScaleBarY = myTopOffset + myMapHeight - 1 - myScaleBarHeight  # mm
+        myLineWidth = 0.3  # mm
+        myInsetDistance = 4  # how much to inset the scalebar into the map by
+        myScaleBarX = myMargin + myInsetDistance
+        myScaleBarY = (myTopOffset + myMapHeight -
+                      myInsetDistance - myScaleBarHeight)  # mm
 
         # Draw an outer box
         myRect = QgsComposerShape(myScaleBarX,
-                                      myScaleBarY,
+                                      myScaleBarY + myScaleBarHeight,
                                       myScaleBarWidthMM,
-                                      myScaleBarHeight,
+                                      0.1,
                                       myComposition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
@@ -485,27 +488,39 @@ class RiabMap():
         myComposition.addItem(myRect)
 
         # Now draw the scalebar ticks
-        for myTickCountIterator in range(0, myTickCount):
-            myRealWorldDistance = ('%.2f %s' % (
-                myTickCountIterator * mySegmentMapUnits,
-                myUnits))
+        for myTickCountIterator in range(0, myTickCount + 1):
+            myRealWorldDistance = ('%.2f' %
+                                   (myTickCountIterator * mySegmentMapUnits))
             print 'RW:', myRealWorldDistance
             myMMOffset = myScaleBarX + (myTickCountIterator * mySegmentWidthMM)
             print 'MM:', myMMOffset
-            myTickWidth = 0.1  # mm
-            myTickHeight = myScaleBarHeight
+            myTickHeight = myScaleBarHeight / 2
             # Lines are not exposed by the api yet so we
             # bodge drawing lines using rectangles with 1px height or width
+            myTickWidth = 0.1  # width or rectangle to be drawn
             myUpTickLine = QgsComposerShape(myMMOffset,
-                                      myScaleBarY,
-                                      myTickWidth,
-                                      myTickHeight,
-                                      myComposition)
+                                myScaleBarY + myScaleBarHeight - myTickHeight,
+                                myTickWidth,
+                                myTickHeight,
+                                myComposition)
 
             myUpTickLine.setShapeType(QgsComposerShape.Rectangle)
             myUpTickLine.setLineWidth(myLineWidth)
             myUpTickLine.setFrame(False)
             myComposition.addItem(myUpTickLine)
+            #
+            # Add a tick label
+            #
+            myLabel = QgsComposerLabel(myComposition)
+            myFont.setWeight(QtGui.QFont.Normal)
+            myFont.setPointSize(10)
+            myLabel.setFont(myFont)
+            myLabel.setText(myRealWorldDistance)
+            myLabel.adjustSizeToText()
+            myLabel.setItemPosition(myMMOffset - 3,
+                                myScaleBarY - myScaleBarHeight)
+            myLabel.setFrame(myShowFrameFlag)
+            myComposition.addItem(myLabel)
         #
         # Update the top offset for the next horizontal row of items
         #
