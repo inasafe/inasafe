@@ -475,7 +475,7 @@ class RiabMap():
         myScaleBarY = (myTopOffset + myMapHeight -
                       myInsetDistance - myScaleBarHeight)  # mm
 
-        # Draw an outer background box
+        # Draw an outer background box - shamelessly hardcoded
         myRect = QgsComposerShape(myScaleBarX - 4,
                                   myScaleBarY - 8,
                                   myScaleBarWidthMM + 17,
@@ -485,6 +485,9 @@ class RiabMap():
         myRect.setShapeType(QgsComposerShape.Rectangle)
         myRect.setLineWidth(myLineWidth)
         myRect.setFrame(False)
+        myBrush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        # workaround for missing setTransparentFill missing from python api
+        myRect.setBrush(myBrush)
         myComposition.addItem(myRect)
 
         # Draw the bottom line
