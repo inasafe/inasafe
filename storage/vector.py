@@ -652,12 +652,12 @@ class Vector:
                     # Return value for specified attribute and index
                     msg = ('Specified index must be either None or '
                            'an integer. I got %s' % index)
-                    verify(type(index) == type(0))
+                    verify(type(index) == type(0), msg)
 
                     msg = ('Specified index must lie within the bounds '
                            'of vector layer %s which is [%i, %i]'
                            '' % (self, 0, len(self) - 1))
-                    verify(0 <= index < len(self))
+                    verify(0 <= index < len(self), msg)
 
                     return self.data[index][attribute]
         else:
