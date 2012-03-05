@@ -8,11 +8,11 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
     """Risk plugin for tsunami impact on building data
 
     :param requires category=='hazard' and \
-                    subcategory.startswith('tsunami') and \
+                    subcategory=='tsunami' and \
                     layertype in ['raster', 'vector']
 
     :param requires category=='exposure' and \
-                    subcategory.startswith('building') and \
+                    subcategory in ['building', 'road'] and \
                     layertype=='vector'
     """
 
@@ -30,7 +30,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
         Hi = H.interpolate(E)
 
         # Extract relevant numerical data
-        coordinates = E.get_geometry()
+        coordinates = Hi.get_geometry()
         depth = Hi.get_data()
         N = len(depth)
 
@@ -73,8 +73,9 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                            'DEPTH': dep}
 
             # Carry all original attributes forward
-            for key in attributes:
-                result_dict[key] = E.get_data(key, i)
+            # FIXME: This should be done in interpolation. Check.
+            #for key in attributes:
+            #    result_dict[key] = E.get_data(key, i)
 
             # Record result for this feature
             population_impact.append(result_dict)
@@ -103,10 +104,26 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                                      'Tidak terdampak', count0,
                                      'Semua', N))
 
+        # Create style
+        style_classes = [dict(label=_('OK'), min=0, max=2,
+                              colour='#1EFC7C', transparency=0),
+                         dict(label=_('Flooded'), min=2, max=4,
+                              colour='#F31A1C', transparency=0)]
+        style_info = dict(target_field=self.target_field,
+                          style_classes=style_classes)
+
+
         # Create vector layer and return
+        if Hi.is_line_data:
+            name = 'Roads flooded'
+        elif Hi.is_point_data:
+            name = 'Buildings flooded'
+
         V = Vector(data=population_impact,
                    projection=E.get_projection(),
                    geometry=coordinates,
-                   name='Estimate of buildings affected',
-                   keywords={'caption': caption})
+                   geometry_type=Hi.geometry_type,
+                   name=name,
+                   keywords={'caption': caption},
+                   style_info=style_info)
         return V
