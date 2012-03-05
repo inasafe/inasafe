@@ -3,48 +3,22 @@ Setting up your development environment
 =======================================
 
 Risk-in-a-box is built in python and runs as a plugin in `QGIS
-<http://qgis.org>`_.  The Graphical User Interface components are built using
-`PyQt4 <http://www.riverbankcomputing.co.uk/software/pyqt/intro>`_ and the QGIS
-plugin API (useful resources: `the QGIS Python Cookbook
-<http://qgis.org/pyqgis-cookbook/>`_ and `the QGIS C++ API documentation
-<http://qgis.org/api/>`_).  As such it is helpful if you are familiar with these
-technologies (python, Qt4, PyQt4, QGIS). In addition, the following are needed
-on your machine in order to work effectively with the code base:
-
-* git
-* subversion
-* pep8
-* nosetests (with coverage plugin)
-* python-numpy (for numerical computations)
-* python-gdal (python bindings to underlying gis functionality)
-* python-sphinx (compilation of documents)
-* pyqt4-dev-tools (compiling ui and resources)
-* qt4-doc (qt4 API documentation)
+<http://qgis.org>`_.
 
 
-On an ubuntu system you can install these requirements using apt::
+Quick Installation Guide - Linux (Debian based)
+-----------------------------------------------
 
-   sudo apt-get install git subversion pep8 python-nose python-coverage \
-   python-gdal python-numpy python-sphinx pyqt4-dev-tools
+These instructions are for setting up a development version on a Debian based linux system such as Ubuntu or Mint.
 
-
-In some cases these dependencies may already be on your system via installation
-process you followed for QGIS.
-
-Quick Installation Guide - Developers
--------------------------------------
-
-To develop on the plugin, you first need to copy it to your local system. If
-you are a developer, the simplest way to do that is go to
-`~/.qgis/python/plugins` and clone risk_in_a_box from our GitHub repository
-page like this::
-
-   git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
-   git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)
+1. Goto the area where you do development, e.g cd ~/sandbox
+2. wget https://raw.github.com/AIFDR/risk_in_a_box/master/scripts/riab-install
+3. source ./riab-install
 
 To verify that the installation works you can run the test suite from the
 command line::
 
+   cd risk_in_a_box
    make test
 
 This will run all the regression tests and also highlight any code issues.
@@ -52,8 +26,10 @@ Note that first time the tests are run they will pull 250MB of test data from
 our subversion repository (If asked for a password just hit Enter). See further
 notes on running tests below.
 
-To run the plugin start QGIS and enable it from the 
+To run the plugin start QGIS and enable it from the
 :menuselection:`Plugins --> Manage Plugins` menu.
+
+If this doesn't work see section towards the end of this document about dependencies and try to do a manual install.
 
 Windows installation guide for developers
 -----------------------------------------
@@ -97,7 +73,7 @@ illustrated below:
 .. figure::  ../../msysgit-step6.jpg
    :align:   center
 
-   
+
 
 .. figure::  ../../msysgit-step7.jpg
    :align:   center
@@ -133,7 +109,7 @@ The repository can now be closed by issuing the commands listed below.::
 .. note:: The items in angle brackets above should be replaced with your personal
    details as required.
 
-When the final command above runs, you should see something like this in the 
+When the final command above runs, you should see something like this in the
 console when the clone process is completed::
 
    $ git clone https://timlinux@github.com/AIFDR/risk_in_a_box.git
@@ -160,7 +136,7 @@ Checkout the test data
 
 To check out the test data from svn, first open a command prompt (
 :menuselection:`Start --> Run...` then type :kbd:`cmd.exe` and press
-enter). Now navigate to the plugins directory and check out the 
+enter). Now navigate to the plugins directory and check out the
 svn repository by typing the commands as listed below::
 
    cd "c:\Documents and Settings\user\.qgis\python\plugins\"
@@ -176,7 +152,7 @@ Download the latest QGIS 'standalone' installer from http://download.qgis.org an
 install it by running the installation wizard and accepting the defaults throughout.
 
 After opening QGIS (:menuselection:`Start --> All Programs --> Quantum GIS Wroclaw --> Quantum GIS`)
-you need to enable the plugin from the plugin menu by doing :menuselection:`Plugins --> Manage Plugins` 
+you need to enable the plugin from the plugin menu by doing :menuselection:`Plugins --> Manage Plugins`
 and then search for the Risk in a Box plugin in the list and enable it.
 
 Windows Caveats
@@ -202,7 +178,7 @@ for detailed information on how to get the basic Eclipse with PyDev setup.
 Configuring your Eclipse project
 ................................
 
-The procedure for doing this is to do: 
+The procedure for doing this is to do:
 :menuselection:`File --> New --> Project...` and
 then from the resulting dialog do :menuselection:`PyDev --> PyDev Project`.
 
@@ -226,7 +202,7 @@ In the dialog that appears do:
 * :guilabel:`Interpreter Executable` : :kbd:`/usr/bin/python`
 * :guilabel:`OK Button` : :kbd:`click this button`
 
-Another dialog will appear. Tick the first entry in the list that points to 
+Another dialog will appear. Tick the first entry in the list that points to
 your::
 
    ~/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev_2.3.0.2011121518/
@@ -286,6 +262,49 @@ before launching QGIS e.g.::
 Additional development environment notes
 ----------------------------------------
 
+Dependencies
+............
+
+The Graphical User Interface components are built using
+`PyQt4 <http://www.riverbankcomputing.co.uk/software/pyqt/intro>`_ and the QGIS
+plugin API (useful resources: `the QGIS Python Cookbook
+<http://qgis.org/pyqgis-cookbook/>`_ and `the QGIS C++ API documentation
+<http://qgis.org/api/>`_).  As such it is helpful if you are familiar with these
+technologies (python, Qt4, PyQt4, QGIS). In addition, the following are needed
+on your machine in order to work effectively with the code base:
+
+* git
+* subversion
+* pep8
+* nosetests (with coverage plugin)
+* python-numpy (for numerical computations)
+* python-gdal (python bindings to underlying gis functionality)
+* python-sphinx (compilation of documents)
+* pyqt4-dev-tools (compiling ui and resources)
+* qt4-doc (qt4 API documentation)
+
+
+On an ubuntu system you can install these requirements using apt::
+
+   sudo apt-get install git subversion pep8 python-nose python-coverage \
+   python-gdal python-numpy python-sphinx pyqt4-dev-tools
+
+
+In some cases these dependencies may already be on your system via installation
+process you followed for QGIS.
+
+Cloning the source code from git
+................................
+
+To develop on the plugin, you first need to copy it to your local system. If
+you are a developer, the simplest way to do that is go to
+`~/.qgis/python/plugins` and clone risk_in_a_box from our GitHub repository
+page like this::
+
+   git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
+   git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)
+
+
 QGIS installed in a non-standard location
 .........................................
 
@@ -309,7 +328,7 @@ package and module paths can be resolved correctly. E.g::
 
 	export PYTHONPATH=$PYTHONPATH:${HOME}/.qgis/python/plugins/risk_in_a_box
 
-Once again you could add this to your .bashrc or set it in Eclipse for 
+Once again you could add this to your .bashrc or set it in Eclipse for
 convenience if needed.
 
 .. _running-tests-label:
