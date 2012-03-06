@@ -1811,7 +1811,6 @@ class Test_Engine(unittest.TestCase):
         assert (counts[DEFAULT_ATTRIBUTE] +
                 counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
 
-
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
         """

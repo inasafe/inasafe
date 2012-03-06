@@ -112,7 +112,6 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 
-
         # Create vector layer and return
         if Hi.is_line_data:
             name = 'Roads flooded'

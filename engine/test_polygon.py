@@ -1420,8 +1420,6 @@ class Test_Polygon(unittest.TestCase):
         Test all cases in top-right quadrant
         """
 
-        # DISABLED (Ole): Because I wan't the tighter tolerances in intersection
-
         # define 4 collinear points in top-right quadrant
         #    P1---P2---P3---P4
         P1 = [1.0, 1.0]
@@ -1447,8 +1445,6 @@ class Test_Polygon(unittest.TestCase):
 
         Test all cases in top-left quadrant
         """
-
-        # DISABLED (Ole): Because I wan't the tighter tolerances in intersection
 
         # define 4 collinear points in top-left quadrant
         #    P1---P2---P3---P4
@@ -1476,8 +1472,6 @@ class Test_Polygon(unittest.TestCase):
         Test all cases in bottom-left quadrant
         """
 
-        # DISABLED (Ole): Because I wan't the tighter tolerances in intersection
-
         # define 4 collinear points in bottom-left quadrant
         #    P1---P2---P3---P4
         P1 = [-1.0, -1.0]
@@ -1504,7 +1498,8 @@ class Test_Polygon(unittest.TestCase):
         Test all cases in bottom-right quadrant
         """
 
-        # DISABLED (Ole): Because I wan't the tighter tolerances in intersection
+        # DISABLED (Ole): Because we have the tighter tolerances
+        # in intersection. These tests make no sense at all.
 
         # define 4 collinear points in bottom-right quadrant
         #    P1---P2---P3---P4
@@ -1779,7 +1774,6 @@ class Test_Polygon(unittest.TestCase):
         Vector(geometry=[line0, line1],
                geometry_type='line').write_to_file('impossible_state.shp')
         status, value = intersection(line0, line1)
-
 
     def test_clip_line_by_polygon_simple(self):
         """Simple lines are clipped and classified by polygon
