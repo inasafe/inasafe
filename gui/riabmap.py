@@ -98,7 +98,6 @@ class RiabMap():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
-        #settrace()
         if self.layer is None:
             myMessage = self.tr('Unable to make a legend when map generator '
                                 'has no layer set.')
@@ -162,6 +161,7 @@ class RiabMap():
                                 'single symbol, categorised symbol or '
                                 'graduated symbol and then try again.')
             raise LegendLayerException(myMessage)
+        return self.legend
 
     def getRasterLegend(self):
         """
@@ -187,6 +187,7 @@ class RiabMap():
                       theMax=myValue,
                       theLabel=myLabel)
             myLastValue = myValue
+        return self.legend
 
     def addSymbolToLegend(self,
                          theSymbol,

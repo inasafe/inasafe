@@ -77,7 +77,7 @@ class RiabDockTest(unittest.TestCase):
         myLegend = myMap.getLegend()
         myPath = '/tmp/getLegend.png'
         myLegend.save(myPath, 'PNG')
-        myExpectedHash = '1234'
+        myExpectedHash = '5e67f182a7e8f0d065c32cbebcef8561'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getVectorLegend(self):
