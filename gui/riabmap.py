@@ -69,6 +69,7 @@ class RiabMap():
         self.showFramesFlag = False  # intended for debugging use only
         # make a square map where width = height = page width
         self.mapHeight = self.pageWidth - (self.pageMargin * 2)
+        self.mapWidth = self.mapHeight
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -433,7 +434,7 @@ class RiabMap():
         myLabelWidth = 131.412   # item - position and size...option
         myLeftOffset = self.pageWidth - self.pageMargin - myLabelWidth
         myLabel.setItemPosition(myLeftOffset,
-                                theTopOffset,
+                                theTopOffset - 2,  # -2 to push it up a little
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
@@ -450,7 +451,7 @@ class RiabMap():
         Raises:
             None
         """
-        myMapWidth = self.mapHeight
+        myMapWidth = self.mapWidth
         myComposerMap = QgsComposerMap(self.composition,
                                        self.pageMargin,
                                        theTopOffset,
@@ -508,7 +509,33 @@ class RiabMap():
         myComposerMap.setGridAnnotationDirection(
                                         QgsComposerMap.BoundaryDirection)
         self.composition.addItem(myComposerMap)
+        self.drawGraticuleMask(theTopOffset)
         return myComposerMap
+
+    def drawGraticuleMask(self, theTopOffset):
+        """A helper funtion to mask out graticule labels on the right side
+           by overpainting a white rectangle on them.
+        Args:
+            theTopOffset - vertical offset at which the map should be drawn
+        Returns:
+            None
+        Raises:
+            None
+        """
+        myLeftOffset = self.pageMargin + self.mapWidth
+        myRect = QgsComposerShape(myLeftOffset + 0.5,
+                                  theTopOffset,
+                                  self.pageWidth - myLeftOffset,
+                                  self.mapHeight,
+                                  self.composition)
+
+        myRect.setShapeType(QgsComposerShape.Rectangle)
+        myRect.setLineWidth(-1)
+        myRect.setFrame(False)
+        myBrush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        # workaround for missing setTransparentFill missing from python api
+        myRect.setBrush(myBrush)
+        self.composition.addItem(myRect)
 
     def drawNativeScaleBar(self, theComposerMap, theTopOffset):
         """Draw a scale bar using QGIS' native drawing - in the case of
@@ -773,10 +800,8 @@ class RiabMap():
         """
         self.setupComposition()
         self.setupPrinter(theFilename)
-        #
         # Keep track of our vertical positioning as we work our way down
         # the page placing elements on it.
-        #
         myTopOffset = self.pageMargin
         self.drawLogo(myTopOffset)
         myLabelHeight = self.drawTitle(myTopOffset)
