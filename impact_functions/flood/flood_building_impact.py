@@ -56,10 +56,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
             # Tag and count
             if x is True:
-                affected = 1
+                affected = 1  # FIXME Ole this is unused
                 count += 1
             else:
-                affected = 0
+                affected = 0  # FIXME Ole this is unused
 
             # Collect depth and calculated damage
             result_dict = {self.target_field: x}
@@ -75,10 +75,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
-        impact_summary =  _('<b>In case of "%s" the estimated impact to "%s" '
+        impact_summary = ('<b>In case of "%s" the estimated impact to "%s" '
                    'the possibility of &#58;</b><br><br><p>' % (Hname,
                                                                 Ename))
-        impact_summary +=  ('<table border="0" width="320px">'
+        impact_summary += ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
@@ -89,9 +89,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                   _('Closed'), count,
                                   _('Opened'), N - count))
 
-        impact_summary +=  '<br>'  # Blank separation row
-        impact_summary +=  '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary +=  _('Buildings that will need to closed when flooding'
+        impact_summary += '<br>'  # Blank separation row
+        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
+        impact_summary += ('Buildings that will need to closed when flooding'
                    'more than %.1f m' % threshold)
 
         # Create style

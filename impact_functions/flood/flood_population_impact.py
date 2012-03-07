@@ -149,8 +149,9 @@ class FloodImpactFunction(FunctionProvider):
                     'banjir lebih dari %.1f m.</li>' % threshold)
         impact_summary += '</ul>'
 
-        impact_table = ('<table class="table table-striped condensed">'
-                 '  <caption>Jumlah Penduduk Yang Mungkin Dieakuasi</caption>'
+        impact_table = ('<table class="table table-striped condensed'
+                        ' bordered-table">'
+                 '  <caption>Jumlah Penduduk Yang Mungkin Dievakuasi</caption>'
                  '  <thead>'
                  '    <tr>'
                  '      <th rowspan="2">Wilayah</th>'
