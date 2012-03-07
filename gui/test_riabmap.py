@@ -30,7 +30,9 @@ sys.path.append(pardir)
 from utilities_test import (getQgisTestApp, assertHashForFile)
 from gui.riabmap import RiabMap
 from PyQt4 import QtGui
-from qgis.core import (QgsSymbol, QgsMapLayerRegistry)
+from qgis.core import (QgsSymbol,
+                       QgsMapLayerRegistry,
+                       QgsRectangle)
 from qgis.gui import QgsMapCanvasLayer
 from utilities_test import (loadLayer, setJakartaGeoExtent)
 try:
@@ -54,13 +56,14 @@ class RiabDockTest(unittest.TestCase):
         """Test making a pdf using the RiabMap class."""
         myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
-
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
         myMap = RiabMap(IFACE)
-        setJakartaGeoExtent()
+        myRect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
+        CANVAS.setExtent(myRect)
+        CANVAS.refresh()
         myMap.setImpactLayer(myLayer)
-        myPath = '/tmp/out2.pdf'
+        myPath = '/tmp/outCustom.pdf'
         if os.path.exists(myPath):
             os.remove(myPath)
         myMap.makePdf(myPath)
@@ -171,6 +174,7 @@ class RiabDockTest(unittest.TestCase):
         """Test that html renders nicely."""
         myFilename = 'test_floodimpact.tif'
         myLayer, myType = loadLayer(myFilename)
+        CANVAS.refresh()
         del myType
         myMessage = 'Layer is not valid: %s' % myFilename
         assert myLayer.isValid(), myMessage
@@ -192,6 +196,25 @@ class RiabDockTest(unittest.TestCase):
         myPixmap.save(myPath, 'PNG')
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
+
+    def test_renderTemplate(self):
+        """Test that load template works"""
+        #Use the template from our resources bundle
+        myInPath = ':/plugins/riab/basic.qpt'
+        myLayer, myType = loadLayer('test_shakeimpact.shp')
+        del myType
+
+        myCanvasLayer = QgsMapCanvasLayer(myLayer)
+        CANVAS.setLayerSet([myCanvasLayer])
+        myMap = RiabMap(IFACE)
+        setJakartaGeoExtent()
+        myMap.setImpactLayer(myLayer)
+        myOutPath = '/tmp/outTemplate.pdf'
+        if os.path.exists(myOutPath):
+            os.remove(myOutPath)
+        myMap.renderTemplate(myInPath, myOutPath)
+        assert os.path.exists(myOutPath)
+        #os.remove(myPath)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')

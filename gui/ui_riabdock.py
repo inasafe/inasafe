@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_riabdock.ui'
 #
-# Created: Wed Feb 29 06:34:18 2012
+# Created: Wed Mar  7 15:10:17 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!

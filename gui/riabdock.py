@@ -1035,3 +1035,4 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                 self.displayHtml(myReport)
 
         self.hideBusy()
+        myMap.showComposer()
