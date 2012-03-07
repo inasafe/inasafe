@@ -25,10 +25,12 @@ from qgis.core import (QgsComposition,
                        QgsComposerShape,
                        QgsMapLayer,
                        QgsDistanceArea,
-                       QgsPoint)
+                       QgsPoint,
+                       QgsRectangle)
+from qgis.gui import QgsComposerView
 import utilities
 from riabexceptions import LegendLayerException
-from PyQt4 import QtCore, QtGui, QtWebKit
+from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
 from impactcalculator import getKeywordFromFile
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -91,6 +93,31 @@ class RiabMap():
             Any exceptions raised by the RIAB library will be propogated.
         """
         self.layer = theLayer
+
+    def renderTemplate(self, theTemplateFilePath, theOutputFilePath):
+        """Load a QgsComposer map from a template and render it
+
+        .. note:: THIS METHOD IS EXPERIMENTAL AND CURRENTLY NON FUNCTIONAL
+
+        Args:
+            theTemplateFilePath - path to the template that should be loaded.
+            theOutputFilePath - path for the output pdf
+        Returns:
+            None
+        Raises:
+            None
+        """
+        self.setupComposition()
+        self.setupPrinter(theOutputFilePath)
+        if self.composition:
+            myFile = QtCore.QFile(theTemplateFilePath)
+            myDocument = QtXml.QDomDocument()
+            myDocument.setContent(myFile, False)  # .. todo:: fix magic param
+            myNodeList = myDocument.elementsByTagName('Composer')
+            if myNodeList.size() > 0:
+                myElement = myNodeList.at(0).toElement()
+                self.composition.readXML(myElement, myDocument)
+        self.renderPrintout()
 
     def getLegend(self):
         """Examine the classes of the impact layer associated with this print
@@ -307,6 +334,22 @@ class RiabMap():
             myPainter.drawPixmap(myRect, self.legend, myRect)
             self.legend = myPixmap
 
+    def setupComposition(self):
+        """Set up the composition ready for drawing elements onto it.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        myCanvas = self.iface.mapCanvas()
+        myRenderer = myCanvas.mapRenderer()
+        self.composition = QgsComposition(myRenderer)
+        self.composition.setPlotStyle(QgsComposition.Print)
+        self.composition.setPaperSize(self.pageWidth, self.pageHeight)
+        self.composition.setPrintResolution(self.pageDpi)
+
     def setupPrinter(self, theFilename):
         """Create a QPrinter instance set up to print to an A4 portrait pdf
 
@@ -420,8 +463,25 @@ class RiabMap():
         # square map
         #myComposerMap.setNewExtent(myExtent)
         myComposerExtent = myComposerMap.extent()
-        myComposerMap.setGridEnabled(True)
+        # Recenter the composer map on the center of the canvas
+        # Note that since the composer map is square and the canvas may be
+        # arbitrarily shaped, we center based on the longest edge
+        myCanvasExtent = self.iface.mapCanvas().extent()
+        myWidth = myCanvasExtent.width()
+        myHeight = myCanvasExtent.height()
+        myLongestLength = myWidth
+        if myWidth < myHeight:
+            myLongestLength = myHeight
+        myHalfLength = myLongestLength / 2
+        myCenter = myCanvasExtent.center()
+        myMinX = myCenter.x() - myHalfLength
+        myMaxX = myCenter.x() + myHalfLength
+        myMinY = myCenter.y() - myHalfLength
+        myMaxY = myCenter.y() + myHalfLength
+        mySquareExtent = QgsRectangle(myMinX, myMinY, myMaxX, myMaxY)
+        myComposerMap.setNewExtent(mySquareExtent)
 
+        myComposerMap.setGridEnabled(True)
         myNumberOfSplits = 5
         # .. todo:: Write logic to adjust preciosn so that adjacent tick marks
         #    always have different displayed values
@@ -446,23 +506,16 @@ class RiabMap():
         self.composition.addItem(myComposerMap)
         return myComposerMap
 
-    def drawScaleBar(self, theComposerMap, theTopOffset):
-        """Add a numeric scale to the bottom left of the map
-
-        We draw the scale bar manually because QGIS does not yet support
-        rendering a scalebar for a geographic map in km.
-
+    def drawNativeScaleBar(self, theComposerMap, theTopOffset):
+        """Draw a scale bar using QGIS' native drawing - in the case of
+        geographic maps, scale will be in degrees, not km.
         Args:
-            * theComposerMap - QgsComposerMap instance used as the basis
-              scale calculations.
-            * theTopOffset - vertical offset at which the map should be drawn
+            None
         Returns:
             None
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        myCanvas = self.iface.mapCanvas()
-        myRenderer = myCanvas.mapRenderer()
         myScaleBar = QgsComposerScaleBar(self.composition)
         myScaleBar.setStyle('Numeric')  # optionally modify the style
         myScaleBar.setComposerMap(theComposerMap)
@@ -478,6 +531,26 @@ class RiabMap():
         myScaleBar.setFrame(self.showFramesFlag)
         # Disabled for now
         #self.composition.addItem(myScaleBar)
+
+    def drawScaleBar(self, theComposerMap, theTopOffset):
+        """Add a numeric scale to the bottom left of the map
+
+        We draw the scale bar manually because QGIS does not yet support
+        rendering a scalebar for a geographic map in km.
+
+        .. seealso:: :meth:`drawNativeScaleBar`
+
+        Args:
+            * theComposerMap - QgsComposerMap instance used as the basis
+              scale calculations.
+            * theTopOffset - vertical offset at which the map should be drawn
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myCanvas = self.iface.mapCanvas()
+        myRenderer = myCanvas.mapRenderer()
         #
         # Add a linear map scale
         #
@@ -516,7 +589,7 @@ class RiabMap():
         myScaleBarY = (theTopOffset + self.mapHeight -
                       myInsetDistance - myScaleBarHeight)  # mm
 
-        # Draw an outer background box - shamelessly hardcoded
+        # Draw an outer background box - shamelessly hardcoded buffer
         myRect = QgsComposerShape(myScaleBarX - 4,
                                   myScaleBarY - 8,
                                   myScaleBarWidthMM + 17,
@@ -694,12 +767,7 @@ class RiabMap():
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        myCanvas = self.iface.mapCanvas()
-        myRenderer = myCanvas.mapRenderer()
-        self.composition = QgsComposition(myRenderer)
-        self.composition.setPlotStyle(QgsComposition.Print)
-        self.composition.setPaperSize(self.pageWidth, self.pageHeight)
-        self.composition.setPrintResolution(self.pageDpi)
+        self.setupComposition()
         self.setupPrinter(theFilename)
         #
         # Keep track of our vertical positioning as we work our way down
@@ -825,3 +893,16 @@ class RiabMap():
         if self.footer is None:
             self.footer = utilities.htmlFooter()
         return self.footer
+
+    def showComposer(self):
+        """Show the composition in a composer view so the user can tweak it
+        if they want to
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        myView = QgsComposerView(self.iface.mainWindow())
+        myView.show()
