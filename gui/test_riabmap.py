@@ -169,11 +169,25 @@ class RiabDockTest(unittest.TestCase):
 
     def test_renderTable(self):
         """Test that html renders nicely."""
-        myLayer, myType = loadLayer('test_floodimpact.tif')
+        myFilename = 'test_floodimpact.tif'
+        myLayer, myType = loadLayer(myFilename)
         del myType
+        myMessage = 'Layer is not valid: %s' % myFilename
+        assert myLayer.isValid(), myMessage
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myPixmap = myMap.renderTable()
+        assert myPixmap is not None
+        myExpectedWidth = 800
+        myExpectedHeight = 300
+        myMessage = 'Invalid width - got %s expected %s' % (
+                                    myPixmap.width(),
+                                    myExpectedWidth)
+        assert myPixmap.width() == myExpectedWidth, myMessage
+        myMessage = 'Invalid height - got %s expected %s' % (
+                                    myPixmap.height(),
+                                    myExpectedHeight)
+        assert myPixmap.height() == myExpectedHeight
         myPath = '/tmp/renderTable.png'
         myPixmap.save(myPath, 'PNG')
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'

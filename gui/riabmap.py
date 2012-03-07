@@ -59,6 +59,14 @@ class RiabMap():
         self.footer = None
         # how high each row of the legend should be
         self.legendIncrement = 30
+        self.pageWidth = 210  # width in mm
+        self.pageHeight = 297  # height in mm
+        self.pageDpi = 150.0
+        self.pageMargin = 10  # margin in mm
+        self.verticalSpacing = 1  # vertical spacing between elements
+        self.showFramesFlag = False  # intended for debugging use only
+        # make a square map where width = height = page width
+        self.mapHeight = self.pageWidth - (self.pageMargin * 2)
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -299,61 +307,72 @@ class RiabMap():
             myPainter.drawPixmap(myRect, self.legend, myRect)
             self.legend = myPixmap
 
-    def makePdf(self, theFilename):
-        """Method to createa  nice little pdf map.
+    def setupPrinter(self, theFilename):
+        """Create a QPrinter instance set up to print to an A4 portrait pdf
 
         Args:
-            theFilename - a string containing a filename path with .pdf
-            extension
+            theFilename - filename for pdf generated using this printer
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            None
         """
-        myPageWidth = 210  # width in mm
-        myPageHeight = 297  # height in mm
-        myDpi = 150.0
-        myMargin = 10  # margin in mm
-        myBuffer = 1  # vertical spacing between elements
-        myShowFrameFlag = False
-        myCanvas = self.iface.mapCanvas()
-        myRenderer = myCanvas.mapRenderer()
-        myComposition = QgsComposition(myRenderer)
-        myComposition.setPlotStyle(QgsComposition.Print)
-        myComposition.setPaperSize(myPageWidth, myPageHeight)
-        myComposition.setPrintResolution(myDpi)
         #
         # Create a printer device (we are 'printing' to a pdf
         #
-        myPrinter = QtGui.QPrinter()
-        myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
-        myPrinter.setOutputFileName(theFilename)
-        myPrinter.setPaperSize(QtCore.QSizeF(myPageWidth,
-                                             myPageHeight),
+        self.printer = QtGui.QPrinter()
+        self.printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
+        self.printer.setOutputFileName(theFilename)
+        self.printer.setPaperSize(QtCore.QSizeF(self.pageWidth,
+                                             self.pageHeight),
                                              QtGui.QPrinter.Millimeter)
-        myPrinter.setFullPage(True)
-        myPrinter.setColorMode(QtGui.QPrinter.Color)
-        myResolution = myComposition.printResolution()
-        myPrinter.setResolution(myResolution)
-        #
-        # Keep track of our vertical positioning as we work our way down
-        # the page placing elements on it.
-        #
-        myTopOffset = myMargin
-        #
-        # Add a picture - riab logo on right
-        #
-        myLogo = QgsComposerPicture(myComposition)
+        self.printer.setFullPage(True)
+        self.printer.setColorMode(QtGui.QPrinter.Color)
+        myResolution = self.composition.printResolution()
+        self.printer.setResolution(myResolution)
+
+    def renderPrintout(self):
+        """Generate the printout for our final map composition.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        myPainter = QtGui.QPainter(self.printer)
+        myPaperRectMM = self.printer.pageRect(QtGui.QPrinter.Millimeter)
+        myPaperRectPx = self.printer.pageRect(QtGui.QPrinter.DevicePixel)
+        self.composition.render(myPainter, myPaperRectPx, myPaperRectMM)
+        myPainter.end()
+
+    def drawLogo(self, theTopOffset):
+        """Add a picture containing the logo to the map top left corner
+        Args:
+            theTopOffset - vertical offset at which the logo shoudl be drawn
+        Returns:
+            None
+        Raises:
+            None
+        """
+        myLogo = QgsComposerPicture(self.composition)
         myLogo.setPictureFile(':/plugins/riab/bnpb_logo.png')
-        myLogo.setItemPosition(myMargin,
-                                   myTopOffset,
+        myLogo.setItemPosition(self.pageMargin,
+                                   theTopOffset,
                                    10,
                                    10)
-        myLogo.setFrame(myShowFrameFlag)
-        myComposition.addItem(myLogo)
-        #
-        # Add the title
-        #
+        myLogo.setFrame(self.showFramesFlag)
+        self.composition.addItem(myLogo)
+
+    def drawTitle(self, theTopOffset):
+        """Add a title to the composition
+        Args:
+            theTopOffset - vertical offset at which the map should be drawn
+        Returns:
+            float - the height of the label as rendered
+        Raises:
+            None
+        """
         myFontSize = 14
         myFontWeight = QtGui.QFont.Bold
         myItalicsFlag = False
@@ -361,35 +380,38 @@ class RiabMap():
                              myFontSize,
                              myFontWeight,
                              myItalicsFlag)
-        myLabel = QgsComposerLabel(myComposition)
+        myLabel = QgsComposerLabel(self.composition)
         myLabel.setFont(myFont)
         myHeading = self.tr('S.A.F.E. - Scenario Assement For Emergencies')
         myLabel.setText(myHeading)
         myLabel.adjustSizeToText()
-        myLabelHeight = 10  # determined using qgis map composer
+        myLabelHeight = 10.0  # determined using qgis map composer
         myLabelWidth = 131.412   # item - position and size...option
-        myLabel.setItemPosition(myPageWidth - myMargin - myLabelWidth,
-                                myTopOffset,
+        myLeftOffset = self.pageWidth - self.pageMargin - myLabelWidth
+        myLabel.setItemPosition(myLeftOffset,
+                                theTopOffset,
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
-        myLabel.setFrame(myShowFrameFlag)
-        myComposition.addItem(myLabel)
-        #
-        # Update the map offset for the next row of content
-        #
-        myTopOffset += myLabelHeight + myBuffer
-        #
-        # Add a map to the composition
-        #
-        # make a square map where width = height = page width
-        myMapHeight = myPageWidth - (myMargin * 2)
-        myMapWidth = myMapHeight
-        myComposerMap = QgsComposerMap(myComposition,
-                                       myMargin,
-                                       myTopOffset,
+        myLabel.setFrame(self.showFramesFlag)
+        self.composition.addItem(myLabel)
+        return myLabelHeight
+
+    def drawMap(self, theTopOffset):
+        """Add a map to the composition and return the compsermap instance
+        Args:
+            theTopOffset - vertical offset at which the map should be drawn
+        Returns:
+            A QgsComposerMap instance is returned
+        Raises:
+            None
+        """
+        myMapWidth = self.mapHeight
+        myComposerMap = QgsComposerMap(self.composition,
+                                       self.pageMargin,
+                                       theTopOffset,
                                        myMapWidth,
-                                       myMapHeight)
+                                       self.mapHeight)
         #myExtent = self.iface.mapCanvas().extent()
         # The dimensions of the map canvas and the print compser map may
         # differ. So we set the map composer extent using the canvas and
@@ -421,25 +443,41 @@ class RiabMap():
         myComposerMap.setShowGridAnnotation(True)
         myComposerMap.setGridAnnotationDirection(
                                         QgsComposerMap.BoundaryDirection)
-        myComposition.addItem(myComposerMap)
-                #
-        # Add a numeric scale to the bottom left of the map
-        #
-        myScaleBar = QgsComposerScaleBar(myComposition)
+        self.composition.addItem(myComposerMap)
+        return myComposerMap
+
+    def drawScaleBar(self, theComposerMap, theTopOffset):
+        """Add a numeric scale to the bottom left of the map
+
+        We draw the scale bar manually because QGIS does not yet support
+        rendering a scalebar for a geographic map in km.
+
+        Args:
+            * theComposerMap - QgsComposerMap instance used as the basis
+              scale calculations.
+            * theTopOffset - vertical offset at which the map should be drawn
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myCanvas = self.iface.mapCanvas()
+        myRenderer = myCanvas.mapRenderer()
+        myScaleBar = QgsComposerScaleBar(self.composition)
         myScaleBar.setStyle('Numeric')  # optionally modify the style
-        myScaleBar.setComposerMap(myComposerMap)
+        myScaleBar.setComposerMap(theComposerMap)
         myScaleBar.applyDefaultSize()
         myScaleBarHeight = myScaleBar.boundingRect().height()
         myScaleBarWidth = myScaleBar.boundingRect().width()
         # -1 to avoid overlapping the map border
-        myScaleBar.setItemPosition(myMargin + 1,
-                                   myTopOffset + myMapHeight -
+        myScaleBar.setItemPosition(self.pageMargin + 1,
+                                   theTopOffset + self.mapHeight -
                                      (myScaleBarHeight * 2),
                                    myScaleBarWidth,
                                    myScaleBarHeight)
-        myScaleBar.setFrame(myShowFrameFlag)
+        myScaleBar.setFrame(self.showFramesFlag)
         # Disabled for now
-        #myComposition.addItem(myScaleBar)
+        #self.composition.addItem(myScaleBar)
         #
         # Add a linear map scale
         #
@@ -448,6 +486,7 @@ class RiabMap():
         myDistanceArea.setProjectionsEnabled(True)
         # Determine how wide our map is in km/m
         # Starting point at BL corner
+        myComposerExtent = theComposerMap.extent()
         myStartPoint = QgsPoint(myComposerExtent.xMinimum(),
                                 myComposerExtent.yMinimum())
         # Ending point at BR corner
@@ -455,6 +494,7 @@ class RiabMap():
                               myComposerExtent.yMinimum())
         myDistance = myDistanceArea.measureLine(myStartPoint, myEndPoint)
         # Get the equivalent map distance per page mm
+        myMapWidth = self.mapHeight
         myMMDistance = myDistance / myMapWidth
         print 'MM:', myMMDistance
         myUnits = 'km'  # myDistanceArea.textUnit()
@@ -472,8 +512,8 @@ class RiabMap():
         myScaleBarHeight = 5  # mm
         myLineWidth = 0.3  # mm
         myInsetDistance = 7  # how much to inset the scalebar into the map by
-        myScaleBarX = myMargin + myInsetDistance
-        myScaleBarY = (myTopOffset + myMapHeight -
+        myScaleBarX = self.pageMargin + myInsetDistance
+        myScaleBarY = (theTopOffset + self.mapHeight -
                       myInsetDistance - myScaleBarHeight)  # mm
 
         # Draw an outer background box - shamelessly hardcoded
@@ -481,7 +521,7 @@ class RiabMap():
                                   myScaleBarY - 8,
                                   myScaleBarWidthMM + 17,
                                   myScaleBarHeight + 10,
-                                  myComposition)
+                                  self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
         myRect.setLineWidth(myLineWidth)
@@ -489,30 +529,35 @@ class RiabMap():
         myBrush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         # workaround for missing setTransparentFill missing from python api
         myRect.setBrush(myBrush)
-        myComposition.addItem(myRect)
+        self.composition.addItem(myRect)
         # Draw the km label
-        myLabel = QgsComposerLabel(myComposition)
-        myFont.setWeight(QtGui.QFont.Normal)
-        myFont.setPointSize(10)
+        myLabel = QgsComposerLabel(self.composition)
+        myFontWeight = QtGui.QFont.Normal
+        myFontSize = 10
+        myItalicsFlag = False
+        myFont = QtGui.QFont('verdana',
+                             myFontSize,
+                             myFontWeight,
+                             myItalicsFlag)
         myLabel.setFont(myFont)
-        myLabel.setText('km')
+        myLabel.setText(myUnits)
         myLabel.adjustSizeToText()
         myLabel.setItemPosition(myScaleBarX + myScaleBarWidthMM + 1,
                                   myScaleBarY + myScaleBarHeight - 5,
                                   10, 6)
-        myLabel.setFrame(myShowFrameFlag)
-        myComposition.addItem(myLabel)
+        myLabel.setFrame(self.showFramesFlag)
+        self.composition.addItem(myLabel)
         # Draw the bottom line
         myRect = QgsComposerShape(myScaleBarX,
                                   myScaleBarY + myScaleBarHeight,
                                   myScaleBarWidthMM,
                                   0.1,
-                                  myComposition)
+                                  self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
         myRect.setLineWidth(myLineWidth)
         myRect.setFrame(False)
-        myComposition.addItem(myRect)
+        self.composition.addItem(myRect)
 
         # Now draw the scalebar ticks
         for myTickCountIterator in range(0, myTickCount + 1):
@@ -529,16 +574,16 @@ class RiabMap():
                                 myScaleBarY + myScaleBarHeight - myTickHeight,
                                 myTickWidth,
                                 myTickHeight,
-                                myComposition)
+                                self.composition)
 
             myUpTickLine.setShapeType(QgsComposerShape.Rectangle)
             myUpTickLine.setLineWidth(myLineWidth)
             myUpTickLine.setFrame(False)
-            myComposition.addItem(myUpTickLine)
+            self.composition.addItem(myUpTickLine)
             #
             # Add a tick label
             #
-            myLabel = QgsComposerLabel(myComposition)
+            myLabel = QgsComposerLabel(self.composition)
             myFont.setWeight(QtGui.QFont.Normal)
             myFont.setPointSize(10)
             myLabel.setFont(myFont)
@@ -546,15 +591,18 @@ class RiabMap():
             myLabel.adjustSizeToText()
             myLabel.setItemPosition(myMMOffset - 3,
                                 myScaleBarY - myScaleBarHeight)
-            myLabel.setFrame(myShowFrameFlag)
-            myComposition.addItem(myLabel)
-        #
-        # Update the top offset for the next horizontal row of items
-        #
-        myTopOffset += myMapHeight + myBuffer
-        #
-        # Add the map title
-        #
+            myLabel.setFrame(self.showFramesFlag)
+            self.composition.addItem(myLabel)
+
+    def drawImpactTitle(self, theTopOffset):
+        """Draw the map subtitle - obtained from the impact layer keywords.
+        Args:
+            theTopOffset - vertical offset at which to begin drawing
+        Returns:
+            float - the height of the label as rendered
+        Raises:
+            None
+        """
         myTitle = self.getMapTitle()
         if myTitle is not None:
             myFontSize = 20
@@ -564,45 +612,59 @@ class RiabMap():
                              myFontSize,
                              myFontWeight,
                              myItalicsFlag)
-            myLabel = QgsComposerLabel(myComposition)
+            myLabel = QgsComposerLabel(self.composition)
             myLabel.setFont(myFont)
             myHeading = myTitle
             myLabel.setText(myHeading)
             myLabel.adjustSizeToText()
             myLabelHeight = 12
-            myLabel.setItemPosition(myMargin,
-                                myTopOffset,
-                                myMapHeight,  # height is == width for the map
+            myLabel.setItemPosition(self.pageMargin,
+                                theTopOffset,
+                                self.mapHeight,
                                 myLabelHeight,
                                 )
-            myLabel.setFrame(myShowFrameFlag)
-            myComposition.addItem(myLabel)
-            #
-            # Update the top offset for the next horizontal row of items
-            #
-            myTopOffset += myLabelHeight + myBuffer + 2
-        #
-        # Add a picture - legend
-        # .. note:: getLegend generates a pixmap in 150dpi so if you set
-        #    the map to a higher dpi it will appear undersized
-        #
-        myPicture1 = QgsComposerPicture(myComposition)
+            myLabel.setFrame(self.showFramesFlag)
+            self.composition.addItem(myLabel)
+            return myLabelHeight
+        else:
+            return None
+
+    def drawLegend(self, theTopOffset):
+        """Add a legend to the map using our custom legend renderer
+        .. note:: getLegend generates a pixmap in 150dpi so if you set
+           the map to a higher dpi it will appear undersized
+        Args:
+            theTopOffset - vertical offset at which to begin drawing
+        Returns:
+            None
+        Raises:
+            None
+        """
+        myPicture1 = QgsComposerPicture(self.composition)
         self.getLegend()
         myLegendFile = '/tmp/legend.png'
         self.legend.save(myLegendFile, 'PNG')
         myPicture1.setPictureFile(myLegendFile)
-        myLegendHeight = self.pointsToMM(self.legend.height(), myDpi)
-        myLegendWidth = self.pointsToMM(self.legend.width(), myDpi)
-        myPicture1.setItemPosition(myMargin,
-                                   myTopOffset,
+        myLegendHeight = self.pointsToMM(self.legend.height(), self.pageDpi)
+        myLegendWidth = self.pointsToMM(self.legend.width(), self.pageDpi)
+        myPicture1.setItemPosition(self.pageMargin,
+                                   theTopOffset,
                                    myLegendWidth,
                                    myLegendHeight)
         myPicture1.setFrame(False)
-        myComposition.addItem(myPicture1)
-        #
+        self.composition.addItem(myPicture1)
+
+    def drawImpactTable(self, theTopOffset):
+        """Render the impact table
+        Args:
+            theTopOffset - vertical offset at which to begin drawing
+        Returns:
+            None
+        Raises:
+            None
+        """
         # Draw the table
-        #
-        myTable = QgsComposerPicture(myComposition)
+        myTable = QgsComposerPicture(self.composition)
         myImage = self.renderTable()
         if myImage is not None:
             myTableFile = '/tmp/table.png'
@@ -610,23 +672,55 @@ class RiabMap():
             myTable.setPictureFile(myTableFile)
             myScaleFactor = 1
             myTableHeight = self.pointsToMM(myImage.height(),
-                                             myDpi) * myScaleFactor
+                                             self.pageDpi) * myScaleFactor
             myTableWidth = self.pointsToMM(myImage.width(),
-                                           myDpi) * myScaleFactor
-            myTable.setItemPosition(myMargin + myMapHeight - myTableWidth,
-                                       myTopOffset,
-                                       myTableWidth,
-                                       myTableHeight)
+                                           self.pageDpi) * myScaleFactor
+            myLeftOffset = self.pageMargin + self.mapHeight - myTableWidth
+            myTable.setItemPosition(myLeftOffset,
+                                    theTopOffset,
+                                    myTableWidth,
+                                    myTableHeight)
             myTable.setFrame(False)
-            myComposition.addItem(myTable)
+            self.composition.addItem(myTable)
+
+    def makePdf(self, theFilename):
+        """Method to createa  nice little pdf map.
+
+        Args:
+            theFilename - a string containing a filename path with .pdf
+            extension
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myCanvas = self.iface.mapCanvas()
+        myRenderer = myCanvas.mapRenderer()
+        self.composition = QgsComposition(myRenderer)
+        self.composition.setPlotStyle(QgsComposition.Print)
+        self.composition.setPaperSize(self.pageWidth, self.pageHeight)
+        self.composition.setPrintResolution(self.pageDpi)
+        self.setupPrinter(theFilename)
         #
-        # Render the composition to our pdf printer
+        # Keep track of our vertical positioning as we work our way down
+        # the page placing elements on it.
         #
-        myPainter = QtGui.QPainter(myPrinter)
-        myPaperRectMM = myPrinter.pageRect(QtGui.QPrinter.Millimeter)
-        myPaperRectPx = myPrinter.pageRect(QtGui.QPrinter.DevicePixel)
-        myComposition.render(myPainter, myPaperRectPx, myPaperRectMM)
-        myPainter.end()
+        myTopOffset = self.pageMargin
+        self.drawLogo(myTopOffset)
+        myLabelHeight = self.drawTitle(myTopOffset)
+        # Update the map offset for the next row of content
+        myTopOffset += myLabelHeight + self.verticalSpacing
+        myComposerMap = self.drawMap(myTopOffset)
+        self.drawScaleBar(myComposerMap, myTopOffset)
+        # Update the top offset for the next horizontal row of items
+        myTopOffset += self.mapHeight + self.verticalSpacing
+        myImpactTitleHeight = self.drawImpactTitle(myTopOffset)
+        # Update the top offset for the next horizontal row of items
+        if myImpactTitleHeight:
+            myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
+        self.drawLegend(myTopOffset)
+        self.drawImpactTable(myTopOffset)
+        self.renderPrintout()
 
     def getMapTitle(self):
         """Get the map title from the layer keywords if possible
@@ -689,6 +783,8 @@ class RiabMap():
         mySize = myFrame.contentsSize()
         mySize.setWidth(800)
         myPage.setViewportSize(mySize)
+        # Disabled for now but please keep this as we may want to render using
+        # a QImage due to device constraints (eg. headless server)
         myQImageFlag = False
         if myQImageFlag:
             myImage = QtGui.QImage(mySize, QtGui.QImage.Format_ARGB32)
