@@ -26,8 +26,10 @@ How do I get Open Street Map building data into Risk in a Box?
   or you can add our Open Street Map building PostGIS mirror to riab::
 
  * Add PostGIS layer with host=203.77.224.77, database=osm, username=aifdr, port 5432, SSL mode=disable
- * Select table planet_osm_polygon
- * Build query: upper(geometrytype("way")) IN ('POLYGON','MULTIPOLYGON') AND BUILDING != ''
+ * Select view named vw_planet_osm_polygon
+ * We don't yet have direct support for PostGIS, so save the layer as a
+   shapefile, load it and add the appropriate keywords (category: exposure, subcategory: building)
+# * Build query: upper(geometrytype("way")) IN ('POLYGON','MULTIPOLYGON') AND BUILDING != ''
 
 How do I take screen capture e.g. for use in a presentation?
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
