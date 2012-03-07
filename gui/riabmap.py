@@ -405,6 +405,7 @@ class RiabMap():
                                    10,
                                    10)
         myLogo.setFrame(self.showFramesFlag)
+        myLogo.setZValue(1)  # To ensure it overlays graticule markers
         self.composition.addItem(myLogo)
 
     def drawTitle(self, theTopOffset):
@@ -491,8 +492,11 @@ class RiabMap():
         myYInterval = myComposerExtent.height() / myNumberOfSplits
         myComposerMap.setGridIntervalY(myYInterval)
         myComposerMap.setGridStyle(QgsComposerMap.Cross)
-        myFontSize = 8
-        myFontWeight = QtGui.QFont.Bold
+        myCrossLengthMM = 1
+        myComposerMap.setCrossLength(myCrossLengthMM)
+        myComposerMap.setZValue(0)  # To ensure it does not overlay logo
+        myFontSize = 6
+        myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = False
         myFont = QtGui.QFont('verdana',
                              myFontSize,
