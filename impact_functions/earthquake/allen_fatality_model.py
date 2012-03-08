@@ -88,24 +88,24 @@ class EarthquakeFatalityFunction(FunctionProvider):
         total = numpy.nansum(P.flat)
 
         # Create report
-        impact_summary =  ('<table border="0" width="320px">'
+        impact_summary = ('<table border="0" width="320px">'
                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                    % ('Jumlah Penduduk', int(total)))
         if gender_ratio is not None:
-            impact_summary +=  ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
+            impact_summary += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
                         % (' - Wanita', int(numpy.nansum(P_female.flat))))
-            impact_summary +=  ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
+            impact_summary += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
                         % (' - Pria', int(numpy.nansum(P_male.flat))))
-        impact_summary +=  ('   <tr><td>%s&#58;</td><td>%i</td></tr>'
+        impact_summary += ('   <tr><td>%s&#58;</td><td>%i</td></tr>'
                     % ('Perkiraan Orang Meninggal', int(count)))
 
         if gender_ratio is not None:
-            impact_summary +=  ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
+            impact_summary += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
                         % (' - Wanita', int(numpy.nansum(F_female.flat))))
-            impact_summary +=  ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
+            impact_summary += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
                         % (' - Pria', int(numpy.nansum(F_male.flat))))
 
-        impact_summary +=  '</table>'
+        impact_summary += '</table>'
 
         # Create new layer and return
         R = Raster(F,
@@ -115,4 +115,3 @@ class EarthquakeFatalityFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary})
                    #style_info=style_info)  # See issue #126
         return R
-

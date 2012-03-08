@@ -95,9 +95,9 @@ class USGSFatalityFunction(FunctionProvider):
         print 'Max', numpy.amax(F)
 
         # Generate text with result for this study
-        impact_summary =  generate_exposure_table(mmi_range,
-                                          number_of_people_affected)
-        impact_summary +=  generate_fatality_table(fatalities)
+        impact_summary = generate_exposure_table(
+                            mmi_range, number_of_people_affected)
+        impact_summary += generate_fatality_table(fatalities)
 
         # Create new layer and return
         R = Raster(F,
@@ -114,16 +114,16 @@ def generate_exposure_table(mmi_range,
     """
 
     header = 'Jumlah Orang yg terkena dampak (x1000)'
-    impact_summary =  ('<font size="3"><table border="0" width="400px">'
+    impact_summary = ('<font size="3"><table border="0" width="400px">'
                '   <tr><td><b>MMI</b></td><td><b>%s</b></td></tr>'
                % header)
 
     for mmi in mmi_range:
-        impact_summary +=  ('   <tr><td>%i&#58;</td><td>%i</td></tr>'
+        impact_summary += ('   <tr><td>%i&#58;</td><td>%i</td></tr>'
                     % (mmi,
                        number_of_people_affected[mmi] / 1000))
-    impact_summary +=  '<tr></tr>'
-    impact_summary +=  '</table></font>'
+    impact_summary += '<tr></tr>'
+    impact_summary += '</table></font>'
 
     return impact_summary
 
@@ -132,7 +132,7 @@ def generate_fatality_table(fatalities):
     """Helper to make html report
     """
 
-    impact_summary =  ('<br>'
+    impact_summary = ('<br>'
                '<font size="3"><table border="0" width="300px">'
                '    <tr><td><b>Jumlah Perkiraan Kematian</b></td>'
                '    <td><b>%i</b></td></tr>'

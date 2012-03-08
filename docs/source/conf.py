@@ -32,7 +32,7 @@ sys.path.append(os.path.abspath('../../../'))
 # They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo',
-              'sphinx.ext.coverage', 'sphinx.ext.viewcode', 
+              'sphinx.ext.coverage', 'sphinx.ext.viewcode',
               'sphinx.ext.pngmath']
 
 # Added by Tim so todo's get rendered

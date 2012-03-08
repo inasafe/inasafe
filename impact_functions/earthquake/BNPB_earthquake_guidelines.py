@@ -117,7 +117,7 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
             building_damage.append(result_dict)
 
         # Create report
-        impact_summary =  ('<table border="0" width="320px">'
+        impact_summary = ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
                     '   <tr><td>%s&#58;</td><td>%i</td></tr>'
@@ -129,9 +129,9 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
                        _('Low damage'), count1,
                        _('Medium damage'), count2,
                        _('High damage'), count3))
-        impact_summary +=  ('   <tr><td>%s (NaN)&#58;</td><td>%i</td></tr>'
+        impact_summary += ('   <tr><td>%s (NaN)&#58;</td><td>%i</td></tr>'
                     % ('Unknown', count_unknown))
-        impact_summary +=  '</table>'
+        impact_summary += '</table>'
 
         # Create style
         style_classes = [dict(label=_('Low damage'), min=0.5, max=1.5,

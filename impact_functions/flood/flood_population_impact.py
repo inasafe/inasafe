@@ -121,7 +121,7 @@ class FloodImpactFunction(FunctionProvider):
         #     impact_summary += ('        <tr><td>%s&#58;</td>'
         #                 '<td align="right">%s</td></tr>'
         #                 % (' - Pria', total_male))
-        #    impact_summary += '<tr><td>&nbsp;</td></tr>'  # Blank separation row
+        #    impact_summary += '<tr><td>&nbsp;</td></tr>'  # Blank row
         impact_summary += ('<tbody>')
         impact_summary += ('   <tr><th>%s&#58;</th>'
                     '<td align="right">%s</td></tr>'

@@ -54,26 +54,26 @@ class FloodPovertyImpactFunction(FunctionProvider):
         # Create report
         iname = inundation.get_name()
         pname = poor_households.get_name()
-        impact_summary =  ('<b>Apabila terjadi "%s" perkiraan dampak terhadap "%s" '
-                   'kemungkinan yang terjadi&#58;</b><br><br><p>' % (iname,
-                                                                     pname))
+        impact_summary = ('<b>Apabila terjadi "%s" perkiraan dampak terhadap '
+                          '"%s" kemungkinan yang terjadi&#58;</b><br><br><p>' %
+                          (iname, pname))
 
-        impact_summary +=  ('<table border="0" width="320px">')
+        impact_summary += ('<table border="0" width="320px">')
                    #'   <tr><td><b>%s&#58;</b></td>'
                    #'<td align="right"><b>%s</b></td></tr>'
                    #% ('Jumlah Rumah Tangga Miskin', total))
 
-        impact_summary +=  ('   <tr><td><b>%s&#58;</b></td>'
+        impact_summary += ('   <tr><td><b>%s&#58;</b></td>'
                     '<td align="right"><b>%s</b></td></tr>'
                     % ('Jumlah Rumah Tangga Terdampak (x 1000)', count))
 
-        impact_summary +=  '</table>'
+        impact_summary += '</table>'
 
-        impact_summary +=  '<br>'  # Blank separation row
-        impact_summary +=  '<b>Catatan&#58;</b><br>'
-        impact_summary +=  '- Jumlah Rumah Tangga Miskin %s<br>' % total
-        impact_summary +=  '- Jumlah dalam ribuan<br>'
-        impact_summary +=  ('- Rumah Tangga Miskin dalam bahaya ketika '
+        impact_summary += '<br>'  # Blank separation row
+        impact_summary += '<b>Catatan&#58;</b><br>'
+        impact_summary += '- Jumlah Rumah Tangga Miskin %s<br>' % total
+        impact_summary += '- Jumlah dalam ribuan<br>'
+        impact_summary += ('- Rumah Tangga Miskin dalam bahaya ketika '
                     'banjir lebih dari %.1f m. ' % threshold)
 
         # Create raster object and return

@@ -133,7 +133,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                 count50 += 1
 
         # Create report
-        impact_summary =  ('<font size="3"> <table border="0" width="320px">'
+        impact_summary = ('<font size="3"> <table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
                     '   <tr><td>%s&#58;</td><td>%i</td></tr>'

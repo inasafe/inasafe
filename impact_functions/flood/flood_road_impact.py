@@ -77,7 +77,7 @@ class FloodRoadImpactFunction(FunctionProvider):
             road_impact.append(result_dict)
 
         # Create report
-        impact_summary =  ('')
+        impact_summary = ('')
 
         # Create vector layer and return
         V = Vector(data=road_impact,

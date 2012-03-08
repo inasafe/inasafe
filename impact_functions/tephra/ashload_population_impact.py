@@ -45,7 +45,7 @@ class TephraPopulationImpactFunction(FunctionProvider):
 
         # Generate text with result for this study
         number_of_people_affected = numpy.nansum(I.flat)
-        impact_summary =  ('%i people affected by ash levels greater '
+        impact_summary = ('%i people affected by ash levels greater '
                    'than %i kg/m^2' % (number_of_people_affected,
                                        threshold))
 

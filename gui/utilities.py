@@ -142,6 +142,7 @@ def getWGS84resolution(theLayer, theGeoExtent=None):
 
     return myCellSize
 
+
 def htmlHeader():
     """Get a standard html header for wrapping content in."""
     myFile = QtCore.QFile(':/plugins/riab/header.html')
@@ -151,6 +152,7 @@ def htmlHeader():
     myHeader = myStream.readAll()
     myFile.close()
     return myHeader
+
 
 def htmlFooter():
     """Get a standard html footer for wrapping content in."""

@@ -101,7 +101,7 @@ class EarthquakeFatalityFunctionPodes(FunctionProvider):
             total += population_count
 
         # Create report
-        impact_summary =  ('<table border="0" width="320px">'
+        impact_summary = ('<table border="0" width="320px">'
                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                    '</table>' % ('Jumlah Penduduk', int(total),

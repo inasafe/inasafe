@@ -102,7 +102,7 @@ class HKVFloodImpactFunctionTEST(FunctionProvider):
         count = str(int(sum(I.flat) / 1000))
 
         # Create report
-        impact_summary =  ('<table border="0" width="320px">'
+        impact_summary = ('<table border="0" width="320px">'
                    '   <tr><td><b>%s&#58;</b></td>'
                    '<td align="right"><b>%s</b></td></tr>'
                    % ('Jumlah Penduduk', total))
@@ -110,15 +110,15 @@ class HKVFloodImpactFunctionTEST(FunctionProvider):
             total_female = str(int(sum(P_female.flat) / 1000))
             total_male = str(int(sum(P_male.flat) / 1000))
 
-            impact_summary +=  ('        <tr><td>%s&#58;</td>'
+            impact_summary += ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'
                         % (' - Wanita', total_female))
-            impact_summary +=  ('        <tr><td>%s&#58;</td>'
+            impact_summary += ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'
                         % (' - Pria', total_male))
-            impact_summary +=  '<tr><td>&nbsp;</td></tr>'  # Blank separation row
+            impact_summary += '<tr><td>&nbsp;</td></tr>'  # Blank row
 
-        impact_summary +=  ('   <tr><td><b>%s&#58;</b></td>'
+        impact_summary += ('   <tr><td><b>%s&#58;</b></td>'
                     '<td align="right"><b>%s</b></td></tr>'
                     % ('Perkiraan Jumlah Terdampak (> %.1fm)' % threshold,
                        count))
@@ -127,17 +127,17 @@ class HKVFloodImpactFunctionTEST(FunctionProvider):
             affected_female = str(int(sum(I_female.flat) / 1000))
             affected_male = str(int(sum(I_male.flat) / 1000))
 
-            impact_summary +=  ('        <tr><td>%s&#58;</td>'
+            impact_summary += ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'
                         % (' - Wanita', affected_female))
-            impact_summary +=  ('        <tr><td>%s&#58;</td>'
+            impact_summary += ('        <tr><td>%s&#58;</td>'
                         '<td align="right">%s</td></tr>'
                         % (' - Pria', affected_male))
 
-        impact_summary +=  '</table>'
+        impact_summary += '</table>'
 
-        impact_summary +=  '<br>'  # Blank separation row
-        impact_summary +=  'Catatan&#58; Semua nomor x 1000'
+        impact_summary += '<br>'  # Blank separation row
+        impact_summary += 'Catatan&#58; Semua nomor x 1000'
 
         # Create raster object and return
         R = Raster(I,

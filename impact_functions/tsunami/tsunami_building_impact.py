@@ -82,7 +82,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
         # Create report
         if H.is_raster:
-            impact_summary =  ('<table border="0" width="320px">'
+            impact_summary = ('<table border="0" width="320px">'
                        '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
@@ -93,7 +93,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                                      '1 - 3 m', count1,
                                      '> 3 m', count3))
         else:
-            impact_summary =  ('<table border="0" width="320px">'
+            impact_summary = ('<table border="0" width="320px">'
                        '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
