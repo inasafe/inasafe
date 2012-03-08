@@ -532,6 +532,7 @@ class RiabMap():
                                   self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
+        # .. note:: Using -1 abuses the Qt api but QGIS refuses to hide border
         myRect.setLineWidth(-1)
         myRect.setFrame(False)
         myBrush = QtGui.QBrush(QtGui.QColor(255, 255, 255))

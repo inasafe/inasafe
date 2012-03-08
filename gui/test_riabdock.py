@@ -775,24 +775,6 @@ class RiabDockTest(unittest.TestCase):
                                 myExpectedString)
         assert myExpectedString in myHtml, myMessage
 
-    def test_riabMap(self):
-        """Test making a pdf using the RiabMap class.
-
-        .. todo:: Move this into its own test class
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the RIAB library will be propogated.
-        """
-        clearDock()
-        loadLayer('test_floodimpact.tif')
-        myMap = RiabMap(DOCK.iface)
-        myMap.makePdf('/tmp/out.pdf')
-        assert os.path.exists('/tmp/out.pdf')
-
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
