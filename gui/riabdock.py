@@ -47,6 +47,7 @@ from impactcalculator import getOptimalExtent, getBufferedExtent
 from riabexceptions import (KeywordNotFoundException,
                             InvalidParameterException)
 from riabmap import RiabMap
+from utilities import getTempDir
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -1020,7 +1021,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         """
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to pdf'),
-                            '/tmp',
+                            getTempDir(),
                             self.tr('Pdf File (*.pdf)'))
         myMap = RiabMap(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())

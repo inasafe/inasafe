@@ -35,6 +35,7 @@ from qgis.core import (QgsSymbol,
                        QgsRectangle)
 from qgis.gui import QgsMapCanvasLayer
 from utilities_test import (loadLayer, setJakartaGeoExtent)
+from utilities import getTempDir
 try:
     from pydevd import *
     print 'Remote debugging is enabled.'
@@ -63,11 +64,13 @@ class RiabDockTest(unittest.TestCase):
         CANVAS.setExtent(myRect)
         CANVAS.refresh()
         myMap.setImpactLayer(myLayer)
-        myPath = '/tmp/outCustom.pdf'
+        myPath = os.path.join(getTempDir(), 'outCustom.pdf')
         if os.path.exists(myPath):
             os.remove(myPath)
         myMap.makePdf(myPath)
         assert os.path.exists(myPath)
+        # ,, note:: Template writing is experimental
+        myMap.writeTemplate(os.path.join(getTempDir(), 'template.qpt'))
         #os.remove(myPath)
 
     def test_getLegend(self):
@@ -78,7 +81,7 @@ class RiabDockTest(unittest.TestCase):
         myMap.setImpactLayer(myLayer)
         assert myMap.layer is not None
         myLegend = myMap.getLegend()
-        myPath = '/tmp/getLegend.png'
+        myPath = os.path.join(getTempDir(), 'getLegend.png')
         myLegend.save(myPath, 'PNG')
         myExpectedHash = '5e67f182a7e8f0d065c32cbebcef8561'
         assertHashForFile(myExpectedHash, myPath)
@@ -90,7 +93,7 @@ class RiabDockTest(unittest.TestCase):
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getVectorLegend()
-        myPath = '/tmp/getVectorLegend.png'
+        myPath = os.path.join(getTempDir(), 'getVectorLegend.png')
         myMap.legend.save(myPath, 'PNG')
         myExpectedHash = '5e67f182a7e8f0d065c32cbebcef8561'
         assertHashForFile(myExpectedHash, myPath)
@@ -102,7 +105,7 @@ class RiabDockTest(unittest.TestCase):
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getRasterLegend()
-        myPath = '/tmp/getRasterLegend.png'
+        myPath = os.path.join(getTempDir(), 'getRasterLegend.png')
         myMap.legend.save(myPath, 'PNG')
         myExpectedHash = '1a47a474981fc1acfae8e751e5afe5f0'
         assertHashForFile(myExpectedHash, myPath)
@@ -121,7 +124,7 @@ class RiabDockTest(unittest.TestCase):
                                 theMax=2,
                                 theCategory=None,
                                 theLabel='Foo')
-        myPath = '/tmp/addSymbolToLegend.png'
+        myPath = os.path.join(getTempDir(), 'addSymbolToLegend.png')
         myMap.legend.save(myPath, 'PNG')
         myExpectedHash = '1234'
         assertHashForFile(myExpectedHash, myPath)
@@ -144,7 +147,7 @@ class RiabDockTest(unittest.TestCase):
                                theMax=None,
                                theCategory='foo',
                                theLabel='foo')
-        myPath = '/tmp/addClassToLegend.png'
+        myPath = os.path.join(getTempDir(), 'addClassToLegend.png')
         myMap.legend.save(myPath, 'PNG')
         myExpectedHash = '5fe2c1748d974fbb49ddb513208e242b'
         assertHashForFile(myExpectedHash, myPath)
@@ -193,7 +196,7 @@ class RiabDockTest(unittest.TestCase):
                                     myPixmap.height(),
                                     myExpectedHeight)
         assert myPixmap.height() == myExpectedHeight
-        myPath = '/tmp/renderImpactTable.png'
+        myPath = os.path.join(getTempDir(), 'renderImpactTable.png')
         myPixmap.save(myPath, 'PNG')
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
@@ -210,7 +213,7 @@ class RiabDockTest(unittest.TestCase):
         myMap = RiabMap(IFACE)
         setJakartaGeoExtent()
         myMap.setImpactLayer(myLayer)
-        myOutPath = '/tmp/outTemplate.pdf'
+        myOutPath = os.path.join(getTempDir(), 'outTemplate.pdf')
         if os.path.exists(myOutPath):
             os.remove(myOutPath)
         myMap.renderTemplate(myInPath, myOutPath)

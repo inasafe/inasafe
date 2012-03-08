@@ -26,8 +26,7 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsRectangle,
                        QgsMapLayer,
                        QgsFeature,
-                       QgsVectorFileWriter,
-                       QgsGeometry)
+                       QgsVectorFileWriter)
 
 from storage.utilities import read_keywords, write_keywords, verify
 

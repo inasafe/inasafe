@@ -17,6 +17,7 @@ __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import os
 from qgis.core import (QgsComposition,
                        QgsComposerMap,
                        QgsComposerLabel,
@@ -32,6 +33,7 @@ import utilities
 from riabexceptions import LegendLayerException
 from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
 from impactcalculator import getKeywordFromFile
+from utilities import getTempDir
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -96,6 +98,18 @@ class RiabMap():
             Any exceptions raised by the RIAB library will be propogated.
         """
         self.layer = theLayer
+
+    def writeTemplate(self, theTemplateFilePath):
+        """Write the current composition as a template that can be
+        re-used in QGIS."""
+        myDocument = QtXml.QDomDocument()
+        myElement = myDocument.createElement('Composer')
+        myDocument.appendChild(myElement)
+        self.composition.writeXML(myElement, myDocument)
+        myXml = myDocument.toByteArray()
+        myFile = file(theTemplateFilePath, 'wb')
+        myFile.write(myXml)
+        myFile.close()
 
     def renderTemplate(self, theTemplateFilePath, theOutputFilePath):
         """Load a QgsComposer map from a template and render it
@@ -764,7 +778,7 @@ class RiabMap():
         """
         myPicture1 = QgsComposerPicture(self.composition)
         self.getLegend()
-        myLegendFile = '/tmp/legend.png'
+        myLegendFile = os.path.join(getTempDir(), 'legend.png')
         self.legend.save(myLegendFile, 'PNG')
         myPicture1.setPictureFile(myLegendFile)
         myLegendHeight = self.pointsToMM(self.legend.height(), self.pageDpi)
@@ -789,7 +803,7 @@ class RiabMap():
         myTable = QgsComposerPicture(self.composition)
         myImage = self.renderImpactSummary()
         if myImage is not None:
-            myTableFile = '/tmp/table.png'
+            myTableFile = os.path.join(getTempDir(), 'table.png')
             myImage.save(myTableFile, 'PNG')
             myTable.setPictureFile(myTableFile)
             myScaleFactor = 1
@@ -818,7 +832,7 @@ class RiabMap():
         myTable = QgsComposerPicture(self.composition)
         myImage = self.renderImpactTable()
         if myImage is not None:
-            myTableFile = '/tmp/table.png'
+            myTableFile = os.path.join(getTempDir(), 'table.png')
             myImage.save(myTableFile, 'PNG')
             myTable.setPictureFile(myTableFile)
             myScaleFactor = 1
