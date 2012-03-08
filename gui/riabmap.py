@@ -600,7 +600,7 @@ class RiabMap():
         # Get the equivalent map distance per page mm
         myMapWidth = self.mapHeight
         myMMDistance = myDistance / myMapWidth
-        print 'MM:', myMMDistance
+        #print 'MM:', myMMDistance
         myUnits = 'km'  # myDistanceArea.textUnit()
         # How long we want the scale bar to be in relation to the map
         myScaleBarToMapRatio = 0.5
@@ -610,8 +610,8 @@ class RiabMap():
         mySegmentWidthMM = myScaleBarWidthMM / myTickCount
         mySegmentMapUnits = ((myDistance * myScaleBarToMapRatio) /
                             (myTickCount * 1000))  # km
-        print "SBWMM:", myScaleBarWidthMM
-        print "SWMM:", mySegmentWidthMM
+        #print "SBWMM:", myScaleBarWidthMM
+        #print "SWMM:", mySegmentWidthMM
         # start drawing in line segments
         myScaleBarHeight = 5  # mm
         myLineWidth = 0.3  # mm
@@ -621,10 +621,10 @@ class RiabMap():
                       myInsetDistance - myScaleBarHeight)  # mm
 
         # Draw an outer background box - shamelessly hardcoded buffer
-        myRect = QgsComposerShape(myScaleBarX - 4,
-                                  myScaleBarY - 8,
-                                  myScaleBarWidthMM + 17,
-                                  myScaleBarHeight + 10,
+        myRect = QgsComposerShape(myScaleBarX - 4,  # left edge
+                                  myScaleBarY - 3,  # top edge
+                                  myScaleBarWidthMM + 13,  # right edge
+                                  myScaleBarHeight + 6,  # bottom edge
                                   self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
@@ -634,23 +634,14 @@ class RiabMap():
         # workaround for missing setTransparentFill missing from python api
         myRect.setBrush(myBrush)
         self.composition.addItem(myRect)
-        # Draw the km label
-        myLabel = QgsComposerLabel(self.composition)
+        # Set up the tick label font
         myFontWeight = QtGui.QFont.Normal
-        myFontSize = 10
+        myFontSize = 6
         myItalicsFlag = False
         myFont = QtGui.QFont('verdana',
                              myFontSize,
                              myFontWeight,
                              myItalicsFlag)
-        myLabel.setFont(myFont)
-        myLabel.setText(myUnits)
-        myLabel.adjustSizeToText()
-        myLabel.setItemPosition(myScaleBarX + myScaleBarWidthMM + 1,
-                                  myScaleBarY + myScaleBarHeight - 5,
-                                  10, 6)
-        myLabel.setFrame(self.showFramesFlag)
-        self.composition.addItem(myLabel)
         # Draw the bottom line
         myRect = QgsComposerShape(myScaleBarX,
                                   myScaleBarY + myScaleBarHeight,
@@ -665,11 +656,15 @@ class RiabMap():
 
         # Now draw the scalebar ticks
         for myTickCountIterator in range(0, myTickCount + 1):
-            myRealWorldDistance = ('%.2f' %
-                                   (myTickCountIterator * mySegmentMapUnits))
-            print 'RW:', myRealWorldDistance
+            myDistanceSuffix = ''
+            if myTickCountIterator == myTickCount:
+                myDistanceSuffix = self.tr(' km')
+            myRealWorldDistance = ('%.2f%s' %
+                                   (myTickCountIterator * mySegmentMapUnits,
+                                    myDistanceSuffix))
+            #print 'RW:', myRealWorldDistance
             myMMOffset = myScaleBarX + (myTickCountIterator * mySegmentWidthMM)
-            print 'MM:', myMMOffset
+            #print 'MM:', myMMOffset
             myTickHeight = myScaleBarHeight / 2
             # Lines are not exposed by the api yet so we
             # bodge drawing lines using rectangles with 1px height or width
@@ -688,13 +683,11 @@ class RiabMap():
             # Add a tick label
             #
             myLabel = QgsComposerLabel(self.composition)
-            myFont.setWeight(QtGui.QFont.Normal)
-            myFont.setPointSize(10)
             myLabel.setFont(myFont)
             myLabel.setText(myRealWorldDistance)
             myLabel.adjustSizeToText()
             myLabel.setItemPosition(myMMOffset - 3,
-                                myScaleBarY - myScaleBarHeight)
+                                myScaleBarY - myTickHeight)
             myLabel.setFrame(self.showFramesFlag)
             self.composition.addItem(myLabel)
 
