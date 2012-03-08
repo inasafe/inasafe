@@ -959,6 +959,9 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                 myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
+                self.pbnPrint.setEnabled(True)
+            else:
+                self.pbnPrint.setEnabled(False)
 
     def saveState(self):
         """Save the current state of the ui to an internal class member
