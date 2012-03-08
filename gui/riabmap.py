@@ -596,22 +596,33 @@ class RiabMap():
         # Ending point at BR corner
         myEndPoint = QgsPoint(myComposerExtent.xMaximum(),
                               myComposerExtent.yMinimum())
-        myDistance = myDistanceArea.measureLine(myStartPoint, myEndPoint)
+        myGroundDistance = myDistanceArea.measureLine(myStartPoint, myEndPoint)
         # Get the equivalent map distance per page mm
-        myMapWidth = self.mapHeight
-        myMMDistance = myDistance / myMapWidth
+        myMapWidth = self.mapWidth
+        # How far is 1mm on map on the ground in meters?
+        myMMToGroundDistance = myGroundDistance / myMapWidth
         #print 'MM:', myMMDistance
-        myUnits = 'km'  # myDistanceArea.textUnit()
         # How long we want the scale bar to be in relation to the map
         myScaleBarToMapRatio = 0.5
         # How many divisions the scale bar should have
         myTickCount = 5
         myScaleBarWidthMM = myMapWidth * myScaleBarToMapRatio
-        mySegmentWidthMM = myScaleBarWidthMM / myTickCount
-        mySegmentMapUnits = ((myDistance * myScaleBarToMapRatio) /
-                            (myTickCount * 1000))  # km
+        myPrintSegmentWidthMM = myScaleBarWidthMM / myTickCount
+        # Segment with in real world (m)
+        myUnits = 'm'
+        myGroundSegmentWidth = round(myPrintSegmentWidthMM *
+                                     myMMToGroundDistance)
+        # adjust the segment width now to account for rounding
+        myPrintSegmentWidthMM = myGroundSegmentWidth / myMMToGroundDistance
+        if myGroundSegmentWidth > 1000:
+            myUnits = 'km'
+            # Segment with in real world (km)
+            myGroundSegmentWidth = myGroundSegmentWidth / 1000
+
         #print "SBWMM:", myScaleBarWidthMM
-        #print "SWMM:", mySegmentWidthMM
+        #print "SWMM:", myPrintSegmentWidthMM
+        #print "SWM:", myGroundSegmentWidthM
+        #print "SWKM:", myGroundSegmentWidthKM
         # start drawing in line segments
         myScaleBarHeight = 5  # mm
         myLineWidth = 0.3  # mm
@@ -658,12 +669,14 @@ class RiabMap():
         for myTickCountIterator in range(0, myTickCount + 1):
             myDistanceSuffix = ''
             if myTickCountIterator == myTickCount:
-                myDistanceSuffix = self.tr(' km')
-            myRealWorldDistance = ('%.2f%s' %
-                                   (myTickCountIterator * mySegmentMapUnits,
+                myDistanceSuffix = ' ' + myUnits
+            myRealWorldDistance = ('%.0f%s' %
+                                   (myTickCountIterator *
+                                    myGroundSegmentWidth,
                                     myDistanceSuffix))
             #print 'RW:', myRealWorldDistance
-            myMMOffset = myScaleBarX + (myTickCountIterator * mySegmentWidthMM)
+            myMMOffset = myScaleBarX + (myTickCountIterator *
+                                        myPrintSegmentWidthMM)
             #print 'MM:', myMMOffset
             myTickHeight = myScaleBarHeight / 2
             # Lines are not exposed by the api yet so we
