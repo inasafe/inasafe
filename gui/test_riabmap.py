@@ -182,7 +182,7 @@ class RiabDockTest(unittest.TestCase):
         myMap.setImpactLayer(myLayer)
         myPixmap = myMap.renderImpactTable()
         assert myPixmap is not None
-        myExpectedWidth = 800
+        myExpectedWidth = 500
         myExpectedHeight = 300
         myMessage = 'Invalid width - got %s expected %s' % (
                                     myPixmap.width(),
