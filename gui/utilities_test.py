@@ -5,16 +5,34 @@ import os
 import sys
 from PyQt4 import QtGui, QtCore
 from qgis.core import (QgsApplication,
-                       QgsRectangle,
-                       QgsCoordinateReferenceSystem)
+                      QgsVectorLayer,
+                      QgsRasterLayer,
+                      QgsRectangle,
+                      QgsCoordinateReferenceSystem)
 from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
+from storage.utilities_test import TESTDATA
+from storage.utilities import read_keywords
+import hashlib
+
 QGISAPP = None  # Static variable used to hold hand to running QGis app
 CANVAS = None
 PARENT = None
 IFACE = None
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
+
+
+def assertHashForFile(theHash, theFilename):
+        myPath = theFilename
+        myData = file(myPath).read()
+        myHash = hashlib.md5()
+        myHash.update(myData)
+        myHash = myHash.hexdigest()
+        myMessage = ('Unexpected hash'
+                     '\nGot: %s'
+                     '\nExpected: %s' % (myHash, theHash))
+        assert myHash == theHash, myMessage
 
 
 def getQgisTestApp():
@@ -59,6 +77,34 @@ def getQgisTestApp():
         IFACE = QgisInterface(CANVAS)
 
     return QGISAPP, CANVAS, IFACE, PARENT
+
+
+def loadLayer(theLayerFile):
+    """Helper to load and return a single QGIS layer"""
+    # Extract basename and absolute path
+    myBaseName, myExt = os.path.splitext(theLayerFile)
+    myPath = os.path.join(TESTDATA, theLayerFile)
+    myKeywordPath = myPath[:-4] + '.keywords'
+    # Determine if layer is hazard or exposure
+    myKeywords = read_keywords(myKeywordPath)
+    myType = 'undefined'
+    if 'category' in myKeywords:
+        myType = myKeywords['category']
+    msg = 'Could not read %s' % myKeywordPath
+    assert myKeywords is not None, msg
+
+    # Create QGis Layer Instance
+    if myExt in ['.asc', '.tif']:
+        myLayer = QgsRasterLayer(myPath, myBaseName)
+    elif myExt in ['.shp']:
+        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+    else:
+        myMessage = 'File %s had illegal extension' % myPath
+        raise Exception(myMessage)
+
+    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
+    assert myLayer.isValid(), myMessage
+    return myLayer, myType
 
 
 def setCanvasCrs(theEpsgId, theOtfpFlag=False):

@@ -88,31 +88,31 @@ class EarthquakeFatalityFunction(FunctionProvider):
         total = numpy.nansum(P.flat)
 
         # Create report
-        caption = ('<table border="0" width="320px">'
+        impact_summary =  ('<table border="0" width="320px">'
                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                    % ('Jumlah Penduduk', int(total)))
         if gender_ratio is not None:
-            caption += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
+            impact_summary +=  ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
                         % (' - Wanita', int(numpy.nansum(P_female.flat))))
-            caption += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
+            impact_summary +=  ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
                         % (' - Pria', int(numpy.nansum(P_male.flat))))
-        caption += ('   <tr><td>%s&#58;</td><td>%i</td></tr>'
+        impact_summary +=  ('   <tr><td>%s&#58;</td><td>%i</td></tr>'
                     % ('Perkiraan Orang Meninggal', int(count)))
 
         if gender_ratio is not None:
-            caption += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
+            impact_summary +=  ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
                         % (' - Wanita', int(numpy.nansum(F_female.flat))))
-            caption += ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
+            impact_summary +=  ('        <tr><td>%s&#58;</td><td>%i</td></tr>'
                         % (' - Pria', int(numpy.nansum(F_male.flat))))
 
-        caption += '</table>'
+        impact_summary +=  '</table>'
 
         # Create new layer and return
         R = Raster(F,
                    projection=population.get_projection(),
                    geotransform=population.get_geotransform(),
                    name='Estimated fatalities',
-                   keywords={'caption': caption})
+                   keywords={'impact_summary': impact_summary})
                    #style_info=style_info)  # See issue #126
         return R
 

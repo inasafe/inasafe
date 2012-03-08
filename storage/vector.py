@@ -289,10 +289,10 @@ class Vector:
         return self.style_info
 
     def get_caption(self):
-        """Return 'caption' keyword if present. Otherwise ''.
+        """Return 'impact_summary' keyword if present. Otherwise ''.
         """
-        if 'caption' in self.keywords:
-            return self.keywords['caption']
+        if 'impact_summary' in self.keywords:
+            return self.keywords['impact_summary']
         else:
             return ''
 

@@ -21,8 +21,11 @@ import os
 import sys
 import traceback
 import tempfile
+from PyQt4 import QtCore
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem
+
+import resources
 
 
 def tr(theText):
@@ -138,3 +141,23 @@ def getWGS84resolution(theLayer, theGeoExtent=None):
         myCellSize = myGeoWidth / myColumns
 
     return myCellSize
+
+def htmlHeader():
+    """Get a standard html header for wrapping content in."""
+    myFile = QtCore.QFile(':/plugins/riab/header.html')
+    if not myFile.open(QtCore.QIODevice.ReadOnly):
+        return '----'
+    myStream = QtCore.QTextStream(myFile)
+    myHeader = myStream.readAll()
+    myFile.close()
+    return myHeader
+
+def htmlFooter():
+    """Get a standard html footer for wrapping content in."""
+    myFile = QtCore.QFile(':/plugins/riab/footer.html')
+    if not myFile.open(QtCore.QIODevice.ReadOnly):
+        return '----'
+    myStream = QtCore.QTextStream(myFile)
+    myFooter = myStream.readAll()
+    myFile.close()
+    return myFooter

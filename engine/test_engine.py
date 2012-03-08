@@ -289,12 +289,12 @@ class Test_Engine(unittest.TestCase):
             calculated_raster = read_layer(impact_filename)
             C = calculated_raster.get_data(nan=0)
 
-            # Check caption
-            caption = calculated_raster.get_caption()
+            # Check impact_summary
+            impact_summary = calculated_raster.get_impact_summary()
             expct = expected_strings[i]  # Number of people affected (HTML)
-            msg = ('Caption %s did not contain expected '
-                   'string %s' % (caption, expct))
-            assert expct in caption, msg
+            msg = ('impact_summary %s did not contain expected '
+                   'string %s' % (impact_summary, expct))
+            assert expct in impact_summary, msg
 
             # Compare shape and extrema
             msg = ('Shape of calculated raster differs from reference raster: '

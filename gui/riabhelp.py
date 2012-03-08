@@ -23,7 +23,12 @@ import os
 
 
 class RiabHelp(QtGui.QDialog):
-    """Help dialog class for the Risk In A Box plugin."""
+    """Help dialog class for the Risk In A Box plugin.
+
+    .. todo:: Add navigation buttons. See url for example of how to do so.
+       http://www.rkblog.rk.edu.pl/w/p/webkit-pyqt-rendering-web-pages/
+
+    """
 
     def __init__(self, theParent=None, theContext=None):
         """Constructor for the dialog.

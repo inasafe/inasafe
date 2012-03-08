@@ -77,12 +77,12 @@ class FloodRoadImpactFunction(FunctionProvider):
             road_impact.append(result_dict)
 
         # Create report
-        caption = ('')
+        impact_summary =  ('')
 
         # Create vector layer and return
         V = Vector(data=road_impact,
                    projection=E.get_projection(),
                    geometry=coordinates,
                    name='Estimated roads affected',
-                   keywords={'caption': caption})
+                   keywords={'impact_summary': impact_summary})
         return V

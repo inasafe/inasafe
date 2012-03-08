@@ -68,6 +68,13 @@ class InvalidKVPException(Exception):
     pass
 
 
+class LegendLayerException(Exception):
+    """An exception raised when trying to create a legend from
+    a QgsMapLayer that does not have suitable characteristics to
+    allow a legend to be created from it."""
+    pass
+
+
 class NoFeaturesInExtentException(Exception):
     """An exception that gets thrown when no features are within
     the extent being clipped."""

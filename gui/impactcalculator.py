@@ -1,6 +1,9 @@
 """
 Disaster risk assessment tool developed by AusAid - **impactcalculator.**
 
+The purpose of the module is to centralise interactions between the gui
+package and the underlying Risk in a Box packages.
+
 Contact : ole.moller.nielsen@gmail.com
 
 .. note:: This program is free software; you can redistribute it and/or modify
@@ -157,6 +160,166 @@ def getBufferedExtent(theGeoExtent, theCellSize):
     return buffered_bounding_box(theGeoExtent, theCellSize)
 
 
+def availableFunctions(theKeywordList=None):
+    """ Query the riab engine to see what plugins are available.
+    Args:
+
+       theKeywordList - an optional parameter which should contain
+       a list of 2 dictionaries (the number of items in the list
+       is not enforced). The dictionaries should be obtained by using
+       getKeywordFromFile e.g.::
+
+           myFile1 = foo.shp
+           myFile2 = bar.asc
+           myKeywords1 = getKeywordFromFile(myFile1)
+           myKeywords2 = getKeywordFromFile(myFile2)
+           myList = [myKeywords1, myKeywords2]
+           myFunctions = availableFunctions(myList)
+
+    Returns:
+       A dictionary of strings where each is a plugin name.
+       .. note:: If theKeywordList is not provided, all available
+        plugins will be returned in the list.
+    Raises:
+       NoFunctionsFoundException if no functions are found.
+    """
+    myDict = get_admissible_plugins(theKeywordList)
+    #if len(myDict) < 1:
+    #    myMessage = 'No RIAB impact functions could be found'
+    #    raise NoFunctionsFoundException(myMessage)
+
+    return myDict
+
+
+def getKeywordFromLayer(theLayer, keyword):
+    """Get metadata from the keywords file associated with a layer.
+
+    .. note:: Requires a riab layer instance as parameter.
+    .. see:: getKeywordFromPath
+
+    Args:
+
+       * theLayer - a RIAB layer (vector or raster)
+       * keyword - the metadata keyword to retrieve e.g. 'title'
+
+    Returns:
+       A string containing the retrieved value for the keyword.
+
+    Raises:
+       KeywordNotFoundException if the keyword is not recognised.
+    """
+    myValue = None
+    if theLayer is None:
+        raise InvalidParameterException()
+    try:
+        myValue = theLayer.get_keywords(keyword)
+    except Exception, e:
+        msg = tr('Keyword retrieval failed for %s (%s) \n %s' % (
+                theLayer.get_filename(), keyword, str(e)))
+        raise KeywordNotFoundException(msg)
+    if not myValue or myValue == '':
+        msg = tr('No value was found for keyword %s in layer %s' % (
+                    theLayer.get_filename(), keyword))
+        raise KeywordNotFoundException(msg)
+    return myValue
+
+
+def getKeywordFromFile(theLayerPath, keyword=None):
+    """Get metadata from the keywords file associated with a layer.
+
+    .. note:: Requires a str representing a file path instance
+              as parameter As opposed to getKeywordFromLayer which
+              takes a riab file object as parameter.
+
+    .. see:: getKeywordFromLayer
+
+    Args:
+
+       * theLayerPath - a string representing a path to a layer
+           (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
+       * keyword - the metadata keyword to retrieve e.g. 'title'
+
+    Returns:
+       A string containing the retrieved value for the keyword if
+       the keyword argument is specified, otherwise the
+       complete keywords dictionary is returned.
+
+    Raises:
+       KeywordNotFoundException if the keyword is not recognised.
+    """
+    # check the source layer path is valid
+    if not os.path.isfile(theLayerPath):
+        msg = tr('Cannot get keywords from a non-existant file.'
+               '%s does not exist.' % theLayerPath)
+        raise InvalidParameterException(msg)
+
+    # check there really is a keywords file for this layer
+    myKeywordFilePath = os.path.splitext(theLayerPath)[0]
+    myKeywordFilePath += '.keywords'
+    if not os.path.isfile(myKeywordFilePath):
+        msg = tr('No keywords file found for %s' % theLayerPath)
+        raise InvalidParameterException(msg)
+
+    #now get the requested keyword using the riab library
+    myDictionary = None
+    try:
+        myDictionary = read_keywords(myKeywordFilePath)
+    except Exception, e:
+        msg = tr('Keyword retrieval failed for %s (%s) \n %s' % (
+                myKeywordFilePath, keyword, str(e)))
+        raise KeywordNotFoundException(msg)
+
+    # if no keyword was supplied, just return the dict
+    if keyword is None:
+        return myDictionary
+    if not keyword in myDictionary:
+        msg = tr('No value was found for in file %s in keyword %s' % (
+                    myKeywordFilePath, keyword))
+        raise KeywordNotFoundException(msg)
+
+    myValue = myDictionary[keyword]
+
+    return myValue
+
+
+def getStyleInfo(theLayer):
+    """Get styleinfo associated with a layer.
+    Args:
+
+       * theLayer - RIAB layer (raster or vector)
+
+    Returns:
+       A list of dictionaries containing styleinfo info for a layer.
+
+    Raises:
+
+       * StyleInfoNotFoundException if the style is not found.
+       * InvalidParameterException if the paramers are not correct.
+    """
+
+    if not theLayer:
+        raise InvalidParameterException()
+
+    if not hasattr(theLayer, 'get_style_info'):
+        msg = tr('Argument "%s" was not a valid layer instance' %
+               theLayer)
+        raise StyleInfoNotFoundException(msg)
+
+    try:
+        myValue = theLayer.get_style_info()
+    except Exception, e:
+        msg = tr('Styleinfo retrieval failed for %s\n %s' % (
+                    theLayer.get_filename(), str(e)))
+        raise StyleInfoNotFoundException(msg)
+
+    if not myValue or myValue == '':
+        msg = tr('No styleInfo was found for layer %s' % (
+                theLayer.get_filename()))
+        raise StyleInfoNotFoundException(msg)
+
+    return myValue
+
+
 class ImpactCalculator():
     """A class to compute an impact scenario."""
 
@@ -214,162 +377,6 @@ class ImpactCalculator():
         delFunction, tr("""Function property (specifies which
         riab function to use to process the hazard and exposure
         layers with."""))
-
-    def availableFunctions(self, theKeywordList=None):
-        """ Query the riab engine to see what plugins are available.
-        Args:
-
-           theKeywordList - an optional parameter which should contain
-           a list of 2 dictionaries (the number of items in the list
-           is not enforced). The dictionaries should be obtained by using
-           getKeywordFromFile e.g.::
-
-               myFile1 = foo.shp
-               myFile2 = bar.asc
-               myKeywords1 = getKeywordFromFile(myFile1)
-               myKeywords2 = getKeywordFromFile(myFile2)
-               myList = [myKeywords1, myKeywords2]
-               myFunctions = availableFunctions(myList)
-
-        Returns:
-           A dictionary of strings where each is a plugin name.
-           .. note:: If theKeywordList is not provided, all available
-            plugins will be returned in the list.
-        Raises:
-           NoFunctionsFoundException if no functions are found.
-        """
-        myDict = get_admissible_plugins(theKeywordList)
-        #if len(myDict) < 1:
-        #    myMessage = 'No RIAB impact functions could be found'
-        #    raise NoFunctionsFoundException(myMessage)
-
-        return myDict
-
-    def getKeywordFromLayer(self, theLayer, keyword):
-        """Get metadata from the keywords file associated with a layer.
-
-        .. note:: Requires a riab layer instance as parameter.
-        .. see:: getKeywordFromPath
-
-        Args:
-
-           * theLayer - a RIAB layer (vector or raster)
-           * keyword - the metadata keyword to retrieve e.g. 'title'
-
-        Returns:
-           A string containing the retrieved value for the keyword.
-
-        Raises:
-           KeywordNotFoundException if the keyword is not recognised.
-        """
-        myValue = None
-        if theLayer is None:
-            raise InvalidParameterException()
-        try:
-            myValue = theLayer.get_keywords(keyword)
-        except Exception, e:
-            msg = tr('Keyword retrieval failed for %s (%s) \n %s' % (
-                    theLayer.get_filename(), keyword, str(e)))
-            raise KeywordNotFoundException(msg)
-        if not myValue or myValue == '':
-            msg = tr('No value was found for keyword %s in layer %s' % (
-                        theLayer.get_filename(), keyword))
-            raise KeywordNotFoundException(msg)
-        return myValue
-
-    def getKeywordFromFile(self, theLayerPath, keyword=None):
-        """Get metadata from the keywords file associated with a layer.
-
-        .. note:: Requires a str representing a file path instance
-                  as parameter As opposed to getKeywordFromLayer which
-                  takes a riab file object as parameter.
-
-        .. see:: getKeywordFromLayer
-
-        Args:
-
-           * theLayerPath - a string representing a path to a layer
-               (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
-           * keyword - the metadata keyword to retrieve e.g. 'title'
-
-        Returns:
-           A string containing the retrieved value for the keyword if
-           the keyword argument is specified, otherwise the
-           complete keywords dictionary is returned.
-
-        Raises:
-           KeywordNotFoundException if the keyword is not recognised.
-        """
-        # check the source layer path is valid
-        if not os.path.isfile(theLayerPath):
-            msg = tr('Cannot get keywords from a non-existant file.'
-                   '%s does not exist.' % theLayerPath)
-            raise InvalidParameterException(msg)
-
-        # check there really is a keywords file for this layer
-        myKeywordFilePath = os.path.splitext(theLayerPath)[0]
-        myKeywordFilePath += '.keywords'
-        if not os.path.isfile(myKeywordFilePath):
-            msg = tr('No keywords file found for %s' % theLayerPath)
-            raise InvalidParameterException(msg)
-
-        #now get the requested keyword using the riab library
-        myDictionary = None
-        try:
-            myDictionary = read_keywords(myKeywordFilePath)
-        except Exception, e:
-            msg = tr('Keyword retrieval failed for %s (%s) \n %s' % (
-                    myKeywordFilePath, keyword, str(e)))
-            raise KeywordNotFoundException(msg)
-
-        # if no keyword was supplied, just return the dict
-        if keyword is None:
-            return myDictionary
-        if not keyword in myDictionary:
-            msg = tr('No value was found for in file %s in keyword %s' % (
-                        myKeywordFilePath, keyword))
-            raise KeywordNotFoundException(msg)
-
-        myValue = myDictionary[keyword]
-
-        return myValue
-
-    def getStyleInfo(self, theLayer):
-        """Get styleinfo associated with a layer.
-        Args:
-
-           * theLayer - RIAB layer (raster or vector)
-
-        Returns:
-           A list of dictionaries containing styleinfo info for a layer.
-
-        Raises:
-
-           * StyleInfoNotFoundException if the style is not found.
-           * InvalidParameterException if the paramers are not correct.
-        """
-
-        if not theLayer:
-            raise InvalidParameterException()
-
-        if not hasattr(theLayer, 'get_style_info'):
-            msg = tr('Argument "%s" was not a valid layer instance' %
-                   theLayer)
-            raise StyleInfoNotFoundException(msg)
-
-        try:
-            myValue = theLayer.get_style_info()
-        except Exception, e:
-            msg = tr('Styleinfo retrieval failed for %s\n %s' % (
-                        theLayer.get_filename(), str(e)))
-            raise StyleInfoNotFoundException(msg)
-
-        if not myValue or myValue == '':
-            msg = tr('No styleInfo was found for layer %s' % (
-                    theLayer.get_filename()))
-            raise StyleInfoNotFoundException(msg)
-
-        return myValue
 
     def getRunner(self):
         """ Factory to create a new runner thread.

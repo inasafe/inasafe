@@ -20,7 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import numpy
 import unittest
-from gui.impactcalculator import ImpactCalculator, getOptimalExtent
+from gui.impactcalculator import (ImpactCalculator,
+                                  getOptimalExtent,
+                                  getStyleInfo,
+                                  availableFunctions,
+                                  getKeywordFromLayer,
+                                  getKeywordFromFile)
 #from riabexceptions import TestNotImplementedException
 from gui.riabexceptions import (InsufficientParametersException,
                                 KeywordNotFoundException,
@@ -120,16 +125,16 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_availableFunctions(self):
         """Check we can get the available functions from the impactcalculator.
         """
-        myList = self.calculator.availableFunctions()
+        myList = availableFunctions()
         assert myList > 1
 
         # Also test if it works when we give it two layers
         # to see if we can determine which functions will
         # work for them.
-        myKeywords1 = self.calculator.getKeywordFromFile(self.rasterShakePath)
-        myKeywords2 = self.calculator.getKeywordFromFile(self.vectorPath)
+        myKeywords1 = getKeywordFromFile(self.rasterShakePath)
+        myKeywords2 = getKeywordFromFile(self.vectorPath)
         myList = [myKeywords1, myKeywords2]
-        myList = self.calculator.availableFunctions(myList)
+        myList = availableFunctions(myList)
         assert myList > 1
 
     def test_getKeywordFromLayer(self):
@@ -138,13 +143,13 @@ class ImpactCalculatorTest(unittest.TestCase):
         myRunner = self.calculator.getRunner()
         myRunner.run()
         myImpactLayer = myRunner.impactLayer()
-        myKeyword = self.calculator.getKeywordFromLayer(
-                                        myImpactLayer, 'caption')
+        myKeyword = getKeywordFromLayer(
+                                        myImpactLayer, 'impact_summary')
         msg = 'Keyword request returned an empty string'
         assert(myKeyword is not ''), msg
         # Test we get an exception if keyword is not found
         try:
-            myKeyword = self.calculator.getKeywordFromLayer(
+            myKeyword = getKeywordFromLayer(
                             myImpactLayer, 'boguskeyword')
         except KeywordNotFoundException:
             pass  # this is good
@@ -157,14 +162,14 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test that we can get keyword data from a file with
         a .keyword metadata file associated with it."""
 
-        myKeyword = self.calculator.getKeywordFromFile(
+        myKeyword = getKeywordFromFile(
                                     self.rasterShakePath, 'category')
         msg = 'Keyword request did not return expected value'
         assert myKeyword == 'hazard', msg
 
         # Test we get an exception if keyword is not found
         try:
-            myKeyword = self.calculator.getKeywordFromFile(
+            myKeyword = getKeywordFromFile(
                             self.rasterShakePath, 'boguskeyword')
         except KeywordNotFoundException:
             pass  # this is good
@@ -173,30 +178,27 @@ class ImpactCalculatorTest(unittest.TestCase):
                     ' type: \n %s') % str(e)
             assert(), msg
 
-        myKeywords = self.calculator.getKeywordFromFile(self.rasterShakePath)
+        myKeywords = getKeywordFromFile(self.rasterShakePath)
         assert myKeywords == {'category': 'hazard',
                               'subcategory': 'earthquake',
                               'unit': 'MMI'}
 
-        myKeywords = self.calculator.getKeywordFromFile(
-            self.rasterPopulationPath)
+        myKeywords = getKeywordFromFile(self.rasterPopulationPath)
         assert myKeywords == {'category': 'exposure',
                               'subcategory': 'population',
                               'datatype': 'density',
                               'title': 'Population Density Estimate (5kmx5km)'}
 
-        myKeywords = self.calculator.getKeywordFromFile(self.vectorPath)
+        myKeywords = getKeywordFromFile(self.vectorPath)
         assert myKeywords == {'category': 'exposure',
                               'datatype': 'itb',
                               'subcategory': 'building'}
 
         # BB tsunami example (one layer is UTM)
-        myKeywords = self.calculator.getKeywordFromFile(
-            self.rasterTsunamiBBPath)
+        myKeywords = getKeywordFromFile(self.rasterTsunamiBBPath)
         assert myKeywords == {'category': 'hazard',
                               'subcategory': 'tsunami', 'unit': 'm'}
-        myKeywords = self.calculator.getKeywordFromFile(
-            self.rasterExposureBBPath)
+        myKeywords = getKeywordFromFile(self.rasterExposureBBPath)
         print myKeywords == {'category': 'exposure',
                              'subcategory': 'building'}
 
@@ -214,14 +216,14 @@ class ImpactCalculatorTest(unittest.TestCase):
                'but received a %s' % type(myImpactLayer))
         assert hasattr(myImpactLayer, 'get_style_info'), msg
 
-        myStyleInfo = self.calculator.getStyleInfo(myImpactLayer)
+        myStyleInfo = getStyleInfo(myImpactLayer)
         msg = 'Style inforrequest returned an empty string'
         assert myStyleInfo is not '', msg
         #print myStyleInfo
 
         # Test we get an exception if style info is not found
         try:
-            myStyleInfo = self.calculator.getStyleInfo('boguspath')
+            myStyleInfo = getStyleInfo('boguspath')
         except StyleInfoNotFoundException:
             pass  # This is good
         except Exception, e:

@@ -10,5 +10,6 @@
     <file alias="css/bootstrap.css">resources/css/bootstrap.css</file>
     <file alias="header.html">resources/header.html</file>
     <file alias="footer.html">resources/footer.html</file>
+    <file alias="basic.qpt">resources/qgis-composer-templates/basic.qpt</file>
   </qresource>
 </RCC>

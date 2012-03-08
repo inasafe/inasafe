@@ -29,6 +29,7 @@ from riabhelp import RiabHelp
 from PyQt4.QtCore import pyqtSignature
 from storage.utilities import write_keywords
 from riabexceptions import InvalidParameterException
+from impactcalculator import getKeywordFromFile
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -471,7 +472,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         mySource = str(self.layer.source())
         self.calculator = ImpactCalculator()
         try:
-            myKeywords = self.calculator.getKeywordFromFile(mySource)
+            myKeywords = getKeywordFromFile(mySource)
         except InvalidParameterException:
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume

@@ -23,6 +23,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from ui_riabdock import Ui_RiabDock
 from riabhelp import RiabHelp
+import utilities
 from utilities import getExceptionWithStacktrace, getWGS84resolution
 from qgis.core import (QGis,
                        QgsMapLayer,
@@ -37,11 +38,15 @@ from qgis.core import (QGis,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
                        QgsRasterTransparency)
-from impactcalculator import ImpactCalculator
+from impactcalculator import (ImpactCalculator,
+                              getKeywordFromFile,
+                              getKeywordFromLayer,
+                              availableFunctions)
 from riabclipper import clipLayer
 from impactcalculator import getOptimalExtent, getBufferedExtent
 from riabexceptions import (KeywordNotFoundException,
                             InvalidParameterException)
+from riabmap import RiabMap
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -55,11 +60,11 @@ except Exception, e:
     print 'Debugging was disabled'
 
 
-def setVectorStyle(qgisVectorLayer, style):
+def setVectorStyle(theQgisVectorLayer, style):
     """Set QGIS vector style based on RIAB style dictionary
 
     Input
-        qgisVectorLayer: Qgis layer
+        theQgisVectorLayer: Qgis layer
         style: Dictionary of the form as in the example below
 
         {'target_field': 'DMGLEVEL',
@@ -72,12 +77,12 @@ def setVectorStyle(qgisVectorLayer, style):
          'min': 2.5, 'label': 'High damage'}]}
 
     Output
-        Sets and saves style for qgisVectorLayer
+        Sets and saves style for theQgisVectorLayer
 
     """
     myTargetField = style['target_field']
     myClasses = style['style_classes']
-    myGeometryType = qgisVectorLayer.geometryType()
+    myGeometryType = theQgisVectorLayer.geometryType()
 
     myRangeList = []
     for myClass in myClasses:
@@ -136,8 +141,8 @@ def setVectorStyle(qgisVectorLayer, style):
     myRenderer = QgsGraduatedSymbolRendererV2('', myRangeList)
     myRenderer.setMode(QgsGraduatedSymbolRendererV2.EqualInterval)
     myRenderer.setClassAttribute(myTargetField)
-    qgisVectorLayer.setRendererV2(myRenderer)
-    qgisVectorLayer.saveDefaultStyle()
+    theQgisVectorLayer.setRendererV2(myRenderer)
+    theQgisVectorLayer.saveDefaultStyle()
 
 
 def setRasterStyle(theQgsRasterLayer, theStyle):
@@ -176,11 +181,15 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     myRangeList = []
     myTransparencyList = []
     myLastValue = 0
+    #settrace()
     for myClass in myClasses:
         myMax = myClass['quantity']
         myRange = range(myLastValue, myMax)
         myColour = QtGui.QColor(myClass['colour'])
-        myShader = QgsColorRampShader.ColorRampItem(myMax, myColour)
+        myLabel = QtCore.QString()
+        if 'label' in myClass:
+            myLabel = QtCore.QString(myClass['label'])
+        myShader = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
         myRangeList.append(myShader)
         # Create opacity entries for this range
         myTransparencyPercent = int(myClass['transparency'])
@@ -201,6 +210,7 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     # Now set the raster transparency
     theQgsRasterLayer.rasterTransparency().setTransparentSingleValuePixelList(
                                                 myTransparencyList)
+    theQgsRasterLayer.saveDefaultStyle()
     return myRangeList, myTransparencyList
 
 
@@ -244,6 +254,10 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
+
+        myButton = self.pbnPrint
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                               self.printMap)
         #self.showHelp()
         myButton = self.pbnRunStop
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -294,11 +308,9 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
 
         if self.cboFunction.currentIndex() == -1:
             myHazardFilename = str(self.getHazardLayer().source())
-            myHazardKeywords = self.calculator.getKeywordFromFile(
-                                                            myHazardFilename)
+            myHazardKeywords = getKeywordFromFile(myHazardFilename)
             myExposureFilename = str(self.getExposureLayer().source())
-            myExposureKeywords = self.calculator.getKeywordFromFile(
-                                                            myExposureFilename)
+            myExposureKeywords = getKeywordFromFile(myExposureFilename)
             myMessage = self.tr('<span class="label important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
@@ -407,8 +419,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
             try:
-                myCategory = self.calculator.getKeywordFromFile(
-                                str(myLayer.source()), 'category')
+                myCategory = getKeywordFromFile(str(myLayer.source()),
+                                                'category')
             except:
                 # continue ignoring this layer
                 continue
@@ -416,8 +428,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             # fallback to the layer's filename
             myTitle = None
             try:
-                myTitle = self.calculator.getKeywordFromFile(
-                            str(myLayer.source()), 'title')
+                myTitle = getKeywordFromFile(str(myLayer.source()), 'title')
             except:
                 myTitle = myName
 
@@ -454,16 +465,14 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         if myExposureLayer is None:
             return
         myExposureFile = myExposureLayer.source()
-        myHazardKeywords = self.calculator.getKeywordFromFile(
-                                            str(myHazardFile))
+        myHazardKeywords = getKeywordFromFile(str(myHazardFile))
         # We need to add the layer type to the returned keywords
         if myHazardLayer.type() == QgsMapLayer.VectorLayer:
             myHazardKeywords['layertype'] = 'vector'
         elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
             myHazardKeywords['layertype'] = 'raster'
 
-        myExposureKeywords = self.calculator.getKeywordFromFile(
-                                            str(myExposureFile))
+        myExposureKeywords = getKeywordFromFile(str(myExposureFile))
         # We need to add the layer type to the returned keywords
         if myExposureLayer.type() == QgsMapLayer.VectorLayer:
             myExposureKeywords['layertype'] = 'vector'
@@ -473,7 +482,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         # Find out which functions can be used with these layers
         myList = [myHazardKeywords, myExposureKeywords]
         try:
-            myDict = self.calculator.availableFunctions(myList)
+            myDict = availableFunctions(myList)
             # Populate the hazard combo with the available functions
             for myFunction in myDict:  # Use only key
                 self.cboFunction.addItem(myFunction)
@@ -635,15 +644,13 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             raise Exception(myMessage)
 
         # Get tabular information from impact layer
-        myReport = self.calculator.getKeywordFromLayer(myEngineImpactLayer,
-                                               'caption')
+        myReport = getKeywordFromLayer(myEngineImpactLayer, 'impact_summary')
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
 
         # Load impact layer into QGIS
         myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
-
         # Determine styling for QGIS layer
         if myEngineImpactLayer.is_vector:
             if not myStyle:
@@ -910,23 +917,13 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
         if self.header is None:
-            myFile = QtCore.QFile(':/plugins/riab/header.html')
-            if not myFile.open(QtCore.QIODevice.ReadOnly):
-                return '----'
-            myStream = QtCore.QTextStream(myFile)
-            self.header = myStream.readAll()
-            myFile.close()
+            self.header = utilities.htmlHeader()
         return self.header
 
     def htmlFooter(self):
         """Get a standard html footer for wrapping content in."""
         if self.footer is None:
-            myFile = QtCore.QFile(':/plugins/riab/footer.html')
-            if not myFile.open(QtCore.QIODevice.ReadOnly):
-                return '----'
-            myStream = QtCore.QTextStream(myFile)
-            self.footer = myStream.readAll()
-            myFile.close()
+            self.footer = utilities.htmlFooter()
         return self.footer
 
     def displayHtml(self, theMessage):
@@ -952,9 +949,8 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         myReport = None
         if theLayer is not None:
             try:
-                myReport = self.calculator.getKeywordFromFile(
-                        str(theLayer.source()),
-                        'caption')
+                myReport = getKeywordFromFile(str(theLayer.source()),
+                                              'impact_summary')
             except KeywordNotFoundException, e:
                 self.setOkButtonStatus()
             except InvalidParameterException, e:
@@ -963,6 +959,9 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                 myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
+                self.pbnPrint.setEnabled(True)
+            else:
+                self.pbnPrint.setEnabled(False)
 
     def saveState(self):
         """Save the current state of the ui to an internal class member
@@ -1009,3 +1008,34 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                 self.cboFunction.setCurrentIndex(myCount)
                 break
         self.wvResults.setHtml(self.state['report'])
+
+    def printMap(self):
+        """Slot to print map when print map button pressed.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myFilename = QtGui.QFileDialog.getSaveFileName(self,
+                            self.tr('Write to pdf'),
+                            '/tmp',
+                            self.tr('Pdf File (*.pdf)'))
+        myMap = RiabMap(self.iface)
+        myMap.setImpactLayer(self.iface.activeLayer())
+        self.showBusy()
+        try:
+            myMap.makePdf(myFilename)
+            self.displayHtml(self.tr('<div><span class="label success">'
+                             'PDF Created</div>'
+                             'Your map was saved as %s' % myFilename))
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
+                                 QtCore.QUrl.TolerantMode))
+        except Exception, e:
+            myReport = getExceptionWithStacktrace(e, html=True)
+            if myReport is not None:
+                self.displayHtml(myReport)
+
+        self.hideBusy()
+        myMap.showComposer()
