@@ -70,6 +70,8 @@ class RiabMap():
         # make a square map where width = height = page width
         self.mapHeight = self.pageWidth - (self.pageMargin * 2)
         self.mapWidth = self.mapHeight
+        self.disclaimer = self.tr('S.A.F.E. has been jointly developed by'
+                                  ' BNPD, AusAid & the World Bank')
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -802,6 +804,38 @@ class RiabMap():
             myTable.setFrame(False)
             self.composition.addItem(myTable)
 
+    def drawDisclaimer(self):
+        """Add a disclaimer to the composition
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        myFontSize = 10
+        myFontWeight = QtGui.QFont.Normal
+        myItalicsFlag = True
+        myFont = QtGui.QFont('verdana',
+                             myFontSize,
+                             myFontWeight,
+                             myItalicsFlag)
+        myLabel = QgsComposerLabel(self.composition)
+        myLabel.setFont(myFont)
+        myLabel.setText(self.disclaimer)
+        myLabel.adjustSizeToText()
+        myLabelHeight = 7.0  # mm determined using qgis map composer
+        myLabelWidth = self.pageWidth   # item - position and size...option
+        myLeftOffset = self.pageMargin
+        myTopOffset = self.pageHeight - self.pageMargin
+        myLabel.setItemPosition(myLeftOffset,
+                                myTopOffset,
+                                myLabelWidth,
+                                myLabelHeight,
+                                )
+        myLabel.setFrame(self.showFramesFlag)
+        self.composition.addItem(myLabel)
+
     def makePdf(self, theFilename):
         """Method to createa  nice little pdf map.
 
@@ -832,6 +866,7 @@ class RiabMap():
             myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
         self.drawLegend(myTopOffset)
         self.drawImpactTable(myTopOffset)
+        self.drawDisclaimer()
         self.renderPrintout()
 
     def getMapTitle(self):
