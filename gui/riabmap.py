@@ -608,16 +608,25 @@ class RiabMap():
         myTickCount = 5
         myScaleBarWidthMM = myMapWidth * myScaleBarToMapRatio
         myPrintSegmentWidthMM = myScaleBarWidthMM / myTickCount
-        # Segment with in real world (m)
-        myUnits = 'm'
-        myGroundSegmentWidth = round(myPrintSegmentWidthMM *
-                                     myMMToGroundDistance)
-        # adjust the segment width now to account for rounding
-        myPrintSegmentWidthMM = myGroundSegmentWidth / myMMToGroundDistance
-        if myGroundSegmentWidth > 1000:
+        # Segment width in real world (m)
+        # We apply some logic here so that segments are displayed in meters
+        # if each segment is less that 1000m otherwise km. Also the segment
+        # lengths are rounded down to human looking numbers e.g. 1km not 1.1km
+        myUnits = ''
+        myGroundSegmentWidth = myPrintSegmentWidthMM * myMMToGroundDistance
+        if myGroundSegmentWidth < 1000:
+            myUnits = 'm'
+            myGroundSegmentWidth = round(myGroundSegmentWidth)
+            # adjust the segment width now to account for rounding
+            myPrintSegmentWidthMM = myGroundSegmentWidth / myMMToGroundDistance
+        else:
             myUnits = 'km'
             # Segment with in real world (km)
-            myGroundSegmentWidth = myGroundSegmentWidth / 1000
+            myGroundSegmentWidth = round(myGroundSegmentWidth / 1000)
+            myPrintSegmentWidthMM = ((myGroundSegmentWidth * 1000) /
+                                    myMMToGroundDistance)
+        # Now adjust the scalebar width to account for rounding
+        myScaleBarWidthMM = myTickCount * myPrintSegmentWidthMM
 
         #print "SBWMM:", myScaleBarWidthMM
         #print "SWMM:", myPrintSegmentWidthMM
