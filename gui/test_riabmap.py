@@ -180,7 +180,7 @@ class RiabDockTest(unittest.TestCase):
         assert myLayer.isValid(), myMessage
         myMap = RiabMap(IFACE)
         myMap.setImpactLayer(myLayer)
-        myPixmap = myMap.renderTable()
+        myPixmap = myMap.renderImpactTable()
         assert myPixmap is not None
         myExpectedWidth = 800
         myExpectedHeight = 300
@@ -192,7 +192,7 @@ class RiabDockTest(unittest.TestCase):
                                     myPixmap.height(),
                                     myExpectedHeight)
         assert myPixmap.height() == myExpectedHeight
-        myPath = '/tmp/renderTable.png'
+        myPath = '/tmp/renderImpactTable.png'
         myPixmap.save(myPath, 'PNG')
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)

@@ -775,6 +775,35 @@ class RiabMap():
         myPicture1.setFrame(False)
         self.composition.addItem(myPicture1)
 
+    def drawImpactSummary(self, theTopOffset):
+        """Render the impact summary
+        Args:
+            theTopOffset - vertical offset at which to begin drawing
+        Returns:
+            None
+        Raises:
+            None
+        """
+        # Draw the table
+        myTable = QgsComposerPicture(self.composition)
+        myImage = self.renderImpactSummary()
+        if myImage is not None:
+            myTableFile = '/tmp/table.png'
+            myImage.save(myTableFile, 'PNG')
+            myTable.setPictureFile(myTableFile)
+            myScaleFactor = 1
+            myTableHeight = self.pointsToMM(myImage.height(),
+                                             self.pageDpi) * myScaleFactor
+            myTableWidth = self.pointsToMM(myImage.width(),
+                                           self.pageDpi) * myScaleFactor
+            myLeftOffset = self.pageMargin + 30
+            myTable.setItemPosition(myLeftOffset,
+                                    theTopOffset,
+                                    myTableWidth,
+                                    myTableHeight)
+            myTable.setFrame(False)
+            self.composition.addItem(myTable)
+
     def drawImpactTable(self, theTopOffset):
         """Render the impact table
         Args:
@@ -786,7 +815,7 @@ class RiabMap():
         """
         # Draw the table
         myTable = QgsComposerPicture(self.composition)
-        myImage = self.renderTable()
+        myImage = self.renderImpactTable()
         if myImage is not None:
             myTableFile = '/tmp/table.png'
             myImage.save(myTableFile, 'PNG')
@@ -865,6 +894,7 @@ class RiabMap():
         if myImpactTitleHeight:
             myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
         self.drawLegend(myTopOffset)
+        self.drawImpactSummary(myTopOffset)
         self.drawImpactTable(myTopOffset)
         self.drawDisclaimer()
         self.renderPrintout()
@@ -884,7 +914,24 @@ class RiabMap():
         except Exception, e:
             return None
 
-    def renderTable(self):
+    def renderImpactSummary(self):
+        """Render the impact summary in the keywords if present. The table is
+        an html table with a summary for the impact layer.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        try:
+            myHtml = getKeywordFromFile(str(self.layer.source()),
+                                        'impact_summary')
+            return self.renderHtml(myHtml, 300)
+        except Exception, e:
+            return None
+
+    def renderImpactTable(self):
         """Render the table in the keywords if present. The table is an
         html table with statistics for the impact layer.
         Args:
@@ -897,17 +944,18 @@ class RiabMap():
         try:
             myHtml = getKeywordFromFile(str(self.layer.source()),
                                         'impact_table')
-            return self.renderHtml(myHtml)
+            return self.renderHtml(myHtml, 500)
         except Exception, e:
             return None
 
-    def renderHtml(self, theHtml):
+    def renderHtml(self, theHtml, theWidth):
         """Render some HTML to a pixmap..
 
         Args:
-            theHtml - HTML to be rendered. It is assumed that the html
-            is a snippet only, containing no body element - a standard
-            header and footer will be appended.
+            * theHtml - HTML to be rendered. It is assumed that the html
+              is a snippet only, containing no body element - a standard
+              header and footer will be appended.
+            * theWidth- width of the table in pixels
         Returns:
             A QPixmap
         Raises:
@@ -928,7 +976,7 @@ class RiabMap():
         #print '\n\n\nPage:\n', myFrame.toHtml()
         #mySize = QtCore.QSize(600, 200)
         mySize = myFrame.contentsSize()
-        mySize.setWidth(800)
+        mySize.setWidth(theWidth)
         myPage.setViewportSize(mySize)
         # Disabled for now but please keep this as we may want to render using
         # a QImage due to device constraints (eg. headless server)
