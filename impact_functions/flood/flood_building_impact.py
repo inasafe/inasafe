@@ -17,7 +17,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'AFFECTED'
-    plugin_name = 'Temporarily Closed'
+
+    # FIXME (Ole): Change back when issue #122 has been addressed
+    #plugin_name = 'Temporarily Closed'
+    plugin_name = 'Ditutup Sementara'
 
     def run(self, layers):
         """Risk plugin for tsunami population
