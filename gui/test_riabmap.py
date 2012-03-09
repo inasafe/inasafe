@@ -163,16 +163,6 @@ class RiabDockTest(unittest.TestCase):
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
         assert myTitle == myExpectedTitle, myMessage
 
-    def test_pointsToMM(self):
-        """Test that points to cm conversion is working"""
-        myMap = RiabMap(IFACE)
-        myPoints = 200
-        myDpi = 300
-        myExpectedResult = 16.9333333333
-        myResult = myMap.pointsToMM(myPoints, myDpi)
-        myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedResult, myResult)
-        assert  numpy.allclose(myResult, myExpectedResult), myMessage
-
     def Xtest_renderTable(self):
         """Test that html renders nicely. Commented out for now until we work
         out how to get webkit to do offscreen rendering nicely."""
@@ -219,6 +209,20 @@ class RiabDockTest(unittest.TestCase):
         myMap.renderTemplate(myInPath, myOutPath)
         assert os.path.exists(myOutPath)
         #os.remove(myPath)
+
+    def test_mmPointConversion(self):
+        """Test that conversions between pixel and page dimensions work."""
+        myMap = RiabMap(IFACE)
+        myDpi = 300
+        myMap.pageDpi = myDpi
+        myPixels = 300
+        myMM = 25.4  # 1 inch
+        myResult = myMap.pointsToMM(myPixels)
+        myMessage = "Expected: %s\nGot: %s" % (myMM, myResult)
+        assert myResult == myMM, myMessage
+        myResult = myMap.mmToPoints(myMM)
+        myMessage = "Expected: %s\nGot: %s" % (myPixels, myResult)
+        assert myResult == myPixels, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')

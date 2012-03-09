@@ -65,7 +65,7 @@ class RiabMap():
         self.legendIncrement = 30
         self.pageWidth = 210  # width in mm
         self.pageHeight = 297  # height in mm
-        self.pageDpi = 150.0
+        self.pageDpi = 300.0
         self.pageMargin = 10  # margin in mm
         self.verticalSpacing = 1  # vertical spacing between elements
         self.showFramesFlag = False  # intended for debugging use only
@@ -682,8 +682,9 @@ class RiabMap():
                              myFontWeight,
                              myItalicsFlag)
         # Draw the bottom line
+        myUpshift = 0.3  # shift the bottom line up for better rendering
         myRect = QgsComposerShape(myScaleBarX,
-                                  myScaleBarY + myScaleBarHeight,
+                                  myScaleBarY + myScaleBarHeight - 0.3,
                                   myScaleBarWidthMM,
                                   0.1,
                                   self.composition)
@@ -783,8 +784,8 @@ class RiabMap():
         myLegendFile = os.path.join(getTempDir(), 'legend.png')
         self.legend.save(myLegendFile, 'PNG')
         myPicture1.setPictureFile(myLegendFile)
-        myLegendHeight = self.pointsToMM(self.legend.height(), self.pageDpi)
-        myLegendWidth = self.pointsToMM(self.legend.width(), self.pageDpi)
+        myLegendHeight = self.pointsToMM(self.legend.height())
+        myLegendWidth = self.pointsToMM(self.legend.width())
         myPicture1.setItemPosition(self.pageMargin,
                                    theTopOffset,
                                    myLegendWidth,
@@ -809,10 +810,8 @@ class RiabMap():
             myImage.save(myTableFile, 'PNG')
             myTable.setPictureFile(myTableFile)
             myScaleFactor = 1
-            myTableHeight = self.pointsToMM(myImage.height(),
-                                             self.pageDpi) * myScaleFactor
-            myTableWidth = self.pointsToMM(myImage.width(),
-                                           self.pageDpi) * myScaleFactor
+            myTableHeight = self.pointsToMM(myImage.height()) * myScaleFactor
+            myTableWidth = self.pointsToMM(myImage.width()) * myScaleFactor
             myLeftOffset = self.pageMargin + 30
             myTable.setItemPosition(myLeftOffset,
                                     theTopOffset,
@@ -838,10 +837,8 @@ class RiabMap():
             myImage.save(myTableFile, 'PNG')
             myTable.setPictureFile(myTableFile)
             myScaleFactor = 1
-            myTableHeight = self.pointsToMM(myImage.height(),
-                                             self.pageDpi) * myScaleFactor
-            myTableWidth = self.pointsToMM(myImage.width(),
-                                           self.pageDpi) * myScaleFactor
+            myTableHeight = self.pointsToMM(myImage.height()) * myScaleFactor
+            myTableWidth = self.pointsToMM(myImage.width()) * myScaleFactor
             myLeftOffset = self.pageMargin + self.mapHeight - myTableWidth
             myTable.setItemPosition(myLeftOffset,
                                     theTopOffset,
@@ -944,7 +941,7 @@ class RiabMap():
         try:
             myHtml = getKeywordFromFile(str(self.layer.source()),
                                         'impact_summary')
-            return self.renderHtml(myHtml, 300)
+            return self.renderHtml(myHtml, 58)
         except Exception, e:
             return None
 
@@ -961,25 +958,33 @@ class RiabMap():
         try:
             myHtml = getKeywordFromFile(str(self.layer.source()),
                                         'impact_table')
-            return self.renderHtml(myHtml, 500)
+            return self.renderHtml(myHtml, 98)
         except Exception, e:
             return None
 
-    def renderHtml(self, theHtml, theWidth):
+    def renderHtml(self, theHtml, theWidthMM):
         """Render some HTML to a pixmap..
 
         Args:
             * theHtml - HTML to be rendered. It is assumed that the html
               is a snippet only, containing no body element - a standard
               header and footer will be appended.
-            * theWidth- width of the table in pixels
+            * theWidthMM- width of the table in mm - will be converted to
+              points based on the resolution of our page.
         Returns:
             A QPixmap
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
+        # Using 150dpi as the baseline, work out a standard text size
+        # multiplier so that page renders equally well at different print
+        # resolutions.
+        myBaselineDpi = 150
+        myFactor = float(self.pageDpi) / myBaselineDpi
+        myWidthPx = self.mmToPoints(theWidthMM)
         myPage = QtWebKit.QWebPage()
         myFrame = myPage.mainFrame()
+        myFrame.setTextSizeMultiplier(myFactor)
         myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
                                    QtCore.Qt.ScrollBarAlwaysOff)
         myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
@@ -993,7 +998,7 @@ class RiabMap():
         #print '\n\n\nPage:\n', myFrame.toHtml()
         #mySize = QtCore.QSize(600, 200)
         mySize = myFrame.contentsSize()
-        mySize.setWidth(theWidth)
+        mySize.setWidth(myWidthPx)
         myPage.setViewportSize(mySize)
         # Disabled for now but please keep this as we may want to render using
         # a QImage due to device constraints (eg. headless server)
@@ -1013,18 +1018,31 @@ class RiabMap():
             myPainter.end()
             return myPixmap
 
-    def pointsToMM(self, thePoints, theDpi):
+    def pointsToMM(self, thePoints):
         """Convert measurement in points to one in mm
         Args:
             thePoints - distance in pixels
-            theDpi - dots per inch for conversion
         Returns:
             mm converted value
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
         """
-        myMM = (float(thePoints) / theDpi) * 25.4
+        myInchAsMM = 25.4
+        myMM = (float(thePoints) / self.pageDpi) * myInchAsMM
         return myMM
+
+    def mmToPoints(self, theMM):
+        """Convert measurement in points to one in mm
+        Args:
+            theMM - distance in milimeters
+        Returns:
+            mm converted value
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        myInchAsMM = 25.4
+        myPoints = (theMM * self.pageDpi) / myInchAsMM
+        return myPoints
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
