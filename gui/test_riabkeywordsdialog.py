@@ -33,6 +33,7 @@ from riabkeywordsdialog import RiabKeywordsDialog
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
 from storage.utilities_test import TESTDATA
+from odict import OrderedDict
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -138,8 +139,19 @@ class RiabKeywordsDialogTest(unittest.TestCase):
     def test_setSubcategoryList(self):
         """Test set subcategory list works"""
         myDialog = RiabKeywordsDialog(PARENT, IFACE)
-        myList = ['a', 'b', 'c']
-        mySelectedItem = 'c'
+        myList = OrderedDict([('population [density]',
+                                      'population [density]'),
+                                     ('population [count]',
+                                      'population [count]'),
+                                     ('building',
+                                      'building'),
+                                     ('building [osm]',
+                                      'building [osm]'),
+                                     ('building [sigab]',
+                                      'building [sigab]'),
+                                     ('roads',
+                                      'roads')])
+        mySelectedItem = 'building'
         myDialog.setSubcategoryList(myList, mySelectedItem)
         myResult = str(myDialog.cboSubcategory.currentText())
         myMessage = ('\nGot: %s\nExpected: %s\n' %
