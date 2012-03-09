@@ -83,7 +83,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203 --exclude riabkeywordsdialogbase.py,ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py . || true
+	@pep8 --repeat --ignore=E203 --exclude odict.py,riabkeywordsdialogbase.py,ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py . || true
 
 # Run entire test suite
 test_suite: compile testdata
