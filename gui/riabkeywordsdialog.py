@@ -231,14 +231,16 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         # we block signals from the combo while updating it
         self.cboSubcategory.blockSignals(True)
         self.cboSubcategory.clear()
-        if (theSelectedItem is not None and theSelectedItem
-           not in theEntries.values()):
+        if (theSelectedItem is not None and
+            theSelectedItem not in theEntries.values() and
+            theSelectedItem not in theEntries.keys()):
             # Add it to the OrderedList
             theEntries[theSelectedItem] = theSelectedItem
         myIndex = 0
         mySelectedIndex = 0
         for myKey, myValue in theEntries.iteritems():
-            if myValue == theSelectedItem:
+            if (myValue == theSelectedItem or
+               myKey == theSelectedItem):
                 mySelectedIndex = myIndex
             myIndex += 1
             self.cboSubcategory.addItem(myValue, myKey)
