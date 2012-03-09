@@ -1,7 +1,7 @@
 import numpy
 from numpy import nansum as sum
 from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layers
+from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
 
@@ -38,32 +38,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation [m]
-
-        # Get population and gender ratio
-        population = gender_ratio = None
-        for layer in get_exposure_layers(layers):
-            keywords = layer.get_keywords()
-
-            if 'datatype' not in keywords:
-                population = layer
-            else:
-                datatype = keywords['datatype']
-
-                if 'ratio' not in datatype:
-                    population = layer
-                else:
-                    #if 'female' in datatype and 'ratio' in datatype:
-                    gender_ratio_unit = keywords['unit']
-
-                    msg = ('Unit for gender ratio must be either '
-                           '"percent" or "ratio"')
-                    if gender_ratio_unit not in ['percent', 'ratio']:
-                        raise RuntimeError(msg)
-                    gender_ratio = layer
-
-        msg = 'No population layer was found in: %s' % str(layers)
-        if population is None:
-            raise RuntimeError(msg)
+        population = get_exposure_layer(layers)
 
         # Extract data as numeric arrays
         D = inundation.get_data(nan=0.0)  # Depth
@@ -82,19 +57,6 @@ class FloodEvacuationFunction(FunctionProvider):
             P = population.get_data(nan=0.0, scaling=True)
             I = numpy.where(D > threshold, P, 0)
 
-        if gender_ratio is not None:
-            # Extract gender ratio at each pixel (as ratio)
-            G = gender_ratio.get_data(nan=0.0)
-            if gender_ratio_unit == 'percent':
-                G /= 100
-
-            # Calculate breakdown
-            P_female = P * G
-            P_male = P - P_female
-
-            I_female = I * G
-            I_male = I - I_female
-
         # Generate text with result for this study
         total = str(int(numpy.sum(P) / 1000))
         count = str(int(numpy.sum(I) / 1000))
@@ -106,35 +68,9 @@ class FloodEvacuationFunction(FunctionProvider):
                           'terhadap "%s" kemungkinan yang terjadi&#58;'
                           '</b><br><br><p>' % (iname, pname))
         impact_summary += ('<table border="0" width="320px">')
-                   #'   <tr><td><b>%s&#58;</b></td>'
-                   #'<td align="right"><b>%s</b></td></tr>'
-                   #% ('Jumlah Penduduk', total))
-        # if gender_ratio is not None:
-        #     total_female = str(int(sum(P_female.flat) / 1000))
-        #     total_male = str(int(sum(P_male.flat) / 1000))
-
-        #     impact_summary += ('        <tr><td>%s&#58;</td>'
-        #                 '<td align="right">%s</td></tr>'
-        #                 % (' - Wanita', total_female))
-        #     impact_summary += ('        <tr><td>%s&#58;</td>'
-        #                 '<td align="right">%s</td></tr>'
-        #                 % (' - Pria', total_male))
-        #    impact_summary += '<tr><td>&nbsp;</td></tr>'  # Blank row
-
         impact_summary += ('   <tr><td><b>%s&#58;</b></td>'
                     '<td align="right"><b>%s</b></td></tr>'
                     % ('Perlu Evakuasi (x 1000)', count))
-
-        if gender_ratio is not None:
-            affected_female = str(int(sum(I_female.flat) / 1000))
-            affected_male = str(int(sum(I_male.flat) / 1000))
-
-            impact_summary += ('        <tr><td>%s&#58;</td>'
-                        '<td align="right">%s</td></tr>'
-                        % (' - Wanita', affected_female))
-            impact_summary += ('        <tr><td>%s&#58;</td>'
-                        '<td align="right">%s</td></tr>'
-                        % (' - Pria', affected_male))
 
         impact_summary += '</table>'
 
