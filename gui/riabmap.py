@@ -530,7 +530,7 @@ class RiabMap():
 
     def drawGraticuleMask(self, theTopOffset):
         """A helper funtion to mask out graticule labels on the right side
-           by overpainting a white rectangle on them.
+           by overpainting a white rectangle with white border on them.
         Args:
             theTopOffset - vertical offset at which the map should be drawn
         Returns:
@@ -546,11 +546,13 @@ class RiabMap():
                                   self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
-        # .. note:: Using -1 abuses the Qt api but QGIS refuses to hide border
-        myRect.setLineWidth(-1)
+        myRect.setLineWidth(0.1)
         myRect.setFrame(False)
+        myRect.setOutlineColor(QtGui.QColor(255, 255, 255))
+        myRect.setFillColor(QtGui.QColor(255, 255, 255))
+        myRect.setOpacity(100)
+        # These two lines seem superfluous but are needed
         myBrush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        # workaround for missing setTransparentFill missing from python api
         myRect.setBrush(myBrush)
         self.composition.addItem(myRect)
 
