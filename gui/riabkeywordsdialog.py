@@ -30,6 +30,7 @@ from PyQt4.QtCore import pyqtSignature
 from storage.utilities import write_keywords
 from riabexceptions import InvalidParameterException
 from impactcalculator import getKeywordFromFile
+from odict import OrderedDict
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -62,20 +63,37 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         """
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.standardExposureList = [self.tr('population [density]'),
-                                     self.tr('population [count]'),
-                                     self.tr('building'),
-                                     self.tr('building [osm]'),
-                                     self.tr('building [sigab]'),
-                                     self.tr('roads')]
-        self.standardHazardList = [self.tr('earthquake [mmi]'),
-                                     self.tr('tsunami [m]'),
-                                     self.tr('tsunami [wet/dry]'),
-                                     self.tr('tsunami [feet]'),
-                                     self.tr('flood [m]'),
-                                     self.tr('flood [wet/dry]'),
-                                     self.tr('flood [feet]'),
-                                     self.tr('tephra [kg2/m2]')]
+        # note the keys should remain untranslated as we need to write
+        # english to the keywords file. The keys will be written as user data
+        # in the combo entries.
+        # .. seealso:: http://www.voidspace.org.uk/python/odict.html
+        self.standardExposureList = OrderedDict([('population [density]',
+                                      self.tr('population [density]')),
+                                     ('population [count]',
+                                      self.tr('population [count]')),
+                                     ('building',
+                                      self.tr('building')),
+                                     ('building [osm]',
+                                      self.tr('building [osm]')),
+                                     ('building [sigab]',
+                                      self.tr('building [sigab]')),
+                                     ('roads',
+                                      self.tr('roads'))])
+        self.standardHazardList = OrderedDict([('earthquake [mmi]',
+                                    self.tr('earthquake [mmi]')),
+                                     ('tsunami [m]',
+                                      self.tr('tsunami [m]')),
+                                     ('tsunami [wet/dry]',
+                                      self.tr('tsunami [wet/dry]')),
+                                     ('tsunami [feet]',
+                                      self.tr('tsunami [feet]')),
+                                     ('flood [m]',
+                                      self.tr('flood [m]')),
+                                     ('flood [wet/dry]',
+                                      self.tr('flood [wet/dry]')),
+                                     ('flood [feet]', self.tr('flood [feet]')),
+                                     ('tephra [kg2/m2',
+                                      self.tr('tephra [kg2/m2]'))])
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -167,8 +185,9 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-
-        myText = str(self.cboSubcategory.currentText())
+        myItem = self.cboSubcategory.itemData(
+                            self.cboSubcategory.currentIndex()).toString()
+        myText = str(myItem)
         if myText == self.tr('Not Set'):
             self.removeItemByKey('subcategory')
             return
@@ -190,15 +209,19 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
             myDataType = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('datatype', myDataType)
 
-    def setSubcategoryList(self, theList, theSelectedItem=None):
+    def setSubcategoryList(self, theEntries, theSelectedItem=None):
         """Helper to populate the subcategory list based on category context.
 
         Args:
 
-           * theList - a list of subcategories e.g. ['earthquake','tephra']
+           * theEntries - an OrderedDict of subcategories. The dict entries
+             should be ('earthquake', self.tr('earthquake')). See
+             http://www.voidspace.org.uk/python/odict.html for info on
+             OrderedDict.
            * theSelectedItem - optional parameter indicating which item
              should be selected in the combo. If the selected item is not
              in theList, it will be appended to it.
+
         Returns:
            None.
         Raises:
@@ -208,15 +231,17 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
         # we block signals from the combo while updating it
         self.cboSubcategory.blockSignals(True)
         self.cboSubcategory.clear()
-        if theSelectedItem is not None and theSelectedItem not in theList:
-            theList.append(theSelectedItem)
+        if (theSelectedItem is not None and theSelectedItem
+           not in theEntries.values()):
+            # Add it to the OrderedList
+            theEntries[theSelectedItem] = theSelectedItem
         myIndex = 0
         mySelectedIndex = 0
-        for myItem in theList:
-            if myItem == theSelectedItem:
+        for myKey, myValue in theEntries.iteritems():
+            if myValue == theSelectedItem:
                 mySelectedIndex = myIndex
             myIndex += 1
-            self.cboSubcategory.addItem(myItem)
+            self.cboSubcategory.addItem(myValue, myKey)
         self.cboSubcategory.setCurrentIndex(mySelectedIndex)
         self.cboSubcategory.blockSignals(False)
 
