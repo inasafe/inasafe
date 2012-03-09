@@ -122,7 +122,8 @@ class FloodEvacuationFunction(FunctionProvider):
                  '    </tr>'
                  '  </tbody>'
                  '  <caption>Sumber: BNPB Perka 7/2008</caption>'
-                 '</table>' % (rice, drinking_water, water, family_kits, toilets))
+                 '</table>' % (rice, drinking_water, water, family_kits,
+                               toilets))
 
         map_title = 'Penduduk yang Mungkin dievakuasi'
 
@@ -138,4 +139,3 @@ class FloodEvacuationFunction(FunctionProvider):
                              'map_title': map_title},
                    style_info=style_info)
         return R
-
