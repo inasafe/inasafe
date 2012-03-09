@@ -79,7 +79,7 @@ class FloodFatalityFunction(FunctionProvider):
         impact_summary += '- Jumlah penduduk Jakarta %s<br>' % total
         impact_summary += '- Jumlah dalam ribuan<br>'
         impact_summary += ('- Penduduk dianggap meninggal ketika '
-                    'banjir lebih dari %.1f m.' % threshold)
+                           'banjir lebih dari %.1f m.' % threshold)
 
         # Create raster object and return
         R = Raster(I,

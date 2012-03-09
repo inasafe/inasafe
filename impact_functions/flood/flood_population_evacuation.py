@@ -59,7 +59,8 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Generate text with result for this study
         total = str(int(numpy.sum(P) / 1000))
-        count = str(int(numpy.sum(I) / 1000))
+        number_of_people_affected = int(numpy.sum(I) / 1000)
+        count = str(number_of_people_affected)
 
         # Create report
         iname = inundation.get_name()
@@ -81,11 +82,60 @@ class FloodEvacuationFunction(FunctionProvider):
         impact_summary += ('- Penduduk dianggap perlu dievakuasi ketika '
                     'banjir lebih dari %.1f m.' % threshold)
 
+        # Create impact_table based on BNPB Perka 7/2008 minimum bantuan
+        # Weekly needs (see issue #82)
+        rice = number_of_people_affected * 2.8
+        drinking_water = number_of_people_affected * 17.5
+        water = number_of_people_affected * 67
+        family_kits = number_of_people_affected / 5
+        toilets = number_of_people_affected / 20
+
+        impact_table = ('<table class="table table-striped condensed'
+                        ' bordered-table">'
+                 '  <caption>Minmum Bantuan per minggu</caption>'
+                 '  <thead>'
+                 '    <tr>'
+                 '      <th>Bantuan</th>'
+                 '      <th>Jumlah</th>'
+                 '    </tr>'
+                 '  </thead>'
+                 '  <tbody>'
+                 '    <tr>'
+                 '      <td>Beras [kg]</td>'
+                 '      <td>%i</td>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <td>Air Minum [l]</td>'
+                 '      <td>%i</td>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <td>Air Bersih [l]</td>'
+                 '      <td>%i</td>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <td>Kit Keluarga</td>'
+                 '      <td>%i</td>'
+                 '    </tr>'
+                 '    <tr>'
+                 '      <td>Jamban Keluarga</td>'
+                 '      <td>%i</td>'
+                 '    </tr>'
+                 '  </tbody>'
+                 '  <caption>Sumber: BNPB Perka 7/2008</caption>'
+                 '</table>' % (rice, drinking_water, water, family_kits, toilets))
+
+        map_title = 'Penduduk yang Mungkin dievakuasi'
+
+        style_info['legend_title'] = 'Kepadatan Penduduk'
+
         # Create raster object and return
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
                    name='Penduduk yang %s' % (self.plugin_name.lower()),
-                   keywords={'impact_summary': impact_summary},
+                   keywords={'impact_summary': impact_summary,
+                             'impact_table': impact_table,
+                             'map_title': map_title},
                    style_info=style_info)
         return R
+
