@@ -151,17 +151,17 @@
           <widget class="QComboBox" name="cboKeyword">
            <item>
             <property name="text">
-             <string>subcategory</string>
+             <string notr="true">subcategory</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>unit</string>
+             <string notr="true">unit</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>datatype</string>
+             <string notr="true">datatype</string>
             </property>
            </item>
           </widget>

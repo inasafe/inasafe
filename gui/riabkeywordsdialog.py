@@ -49,6 +49,10 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
 
     def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
+        .. note:: In QtDesigner the advanced editor's predefined keywords
+           list should be shown in english always, so when adding entries to
+           cboKeyword, be sure to choose :gui:`Properties<<` and untick the
+           :gui:`translatable` property.
 
         Args:
            * parent - parent widget of this dialog

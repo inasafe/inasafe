@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'riabkeywordsdialogbase.ui'
 #
-# Created: Mon Feb 27 04:08:17 2012
+# Created: Fri Mar  9 13:39:58 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -99,11 +99,11 @@ class Ui_RiabKeywordsDialogBase(object):
         self.cboKeyword = QtGui.QComboBox(self.framePredefined)
         self.cboKeyword.setObjectName(_fromUtf8("cboKeyword"))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(0, QtGui.QApplication.translate("RiabKeywordsDialogBase", "subcategory", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(0, _fromUtf8("subcategory"))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(1, QtGui.QApplication.translate("RiabKeywordsDialogBase", "unit", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(1, _fromUtf8("unit"))
         self.cboKeyword.addItem(_fromUtf8(""))
-        self.cboKeyword.setItemText(2, QtGui.QApplication.translate("RiabKeywordsDialogBase", "datatype", None, QtGui.QApplication.UnicodeUTF8))
+        self.cboKeyword.setItemText(2, _fromUtf8("datatype"))
         self.horizontalLayout.addWidget(self.cboKeyword)
         self.label_5 = QtGui.QLabel(self.framePredefined)
         self.label_5.setText(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Value", None, QtGui.QApplication.UnicodeUTF8))
