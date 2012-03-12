@@ -786,15 +786,43 @@ class RiabDockTest(unittest.TestCase):
         # Note the float quantity values below
         myStyleInfo = {}
         myStyleInfo['style_classes'] = [
-                        dict(colour='#38A800', quantity=1.1, transparency=0),
-                        dict(colour='#38A800', quantity=1.4, transparency=1),
-                        dict(colour='#79C900', quantity=10.1, transparency=1)]
+                        dict(colour='#38A800', quantity=1.1, transparency=100),
+                        dict(colour='#38A800', quantity=1.4, transparency=0),
+                        dict(colour='#79C900', quantity=10.1, transparency=0)]
         myMessage = ('Setting style info with float based ranges should fail '
                     'gracefully.')
         try:
             setRasterStyle(myLayer, myStyleInfo)
         except:
-            raise  # Exception(myMessage)
+            raise Exception(myMessage)
+        # Now validate the transparency values were set to 255 because
+        # they are floats and we cant specify pixel ranges to floats
+        myValue1 = myLayer.rasterTransparency().alphaValue(1.1)
+        myValue2 = myLayer.rasterTransparency().alphaValue(1.4)
+        myMessage = ('Transparency should be ignored when style class'
+                     ' quantities are floats')
+        assert myValue1 == myValue2 == 255, myMessage
+
+        # Now run the same test again
+
+        myStyleInfo['style_classes'] = [
+                        dict(colour='#38A800', quantity=2, transparency=100),
+                        dict(colour='#38A800', quantity=4, transparency=0),
+                        dict(colour='#79C900', quantity=10, transparency=0)]
+        myMessage = ('Setting style info with generate valid transparent '
+                     'pixel entries.')
+        try:
+            setRasterStyle(myLayer, myStyleInfo)
+        except:
+            raise Exception(myMessage)
+        # Now validate the transparency values were set to 255 because
+        # they are floats and we cant specify pixel ranges to floats
+        myValue1 = myLayer.rasterTransparency().alphaValue(1)
+        myValue2 = myLayer.rasterTransparency().alphaValue(3)
+        myMessage1 = myMessage + 'Expected 0 got %i' % myValue1
+        myMessage2 = myMessage + 'Expected 255 got %i' % myValue2
+        assert myValue1 == 0, myMessage1
+        assert myValue2 == 255, myMessage2
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')
