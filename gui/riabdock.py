@@ -163,14 +163,14 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     Input
         theQgsRasterLayer: Qgis layer
         style: Dictionary of the form as in the example below
-        style_classes = [dict(colour='#38A800', quantity=2, opacity=0),
-                         dict(colour='#38A800', quantity=5, opacity=1),
-                         dict(colour='#79C900', quantity=10, opacity=1),
-                         dict(colour='#CEED00', quantity=20, opacity=1),
-                         dict(colour='#FFCC00', quantity=50, opacity=1),
-                         dict(colour='#FF6600', quantity=100, opacity=1),
-                         dict(colour='#FF0000', quantity=200, opacity=1),
-                         dict(colour='#7A0000', quantity=300, opacity=1)]
+        style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
+                         dict(colour='#38A800', quantity=5, transparency=1),
+                         dict(colour='#79C900', quantity=10, transparency=1),
+                         dict(colour='#CEED00', quantity=20, transparency=1),
+                         dict(colour='#FFCC00', quantity=50, transparency=1),
+                         dict(colour='#FF6600', quantity=100, transparency=1),
+                         dict(colour='#FF0000', quantity=200, transparency=1),
+                         dict(colour='#7A0000', quantity=300, transparency=1)]
 
     Output
         Sets and saves style for theQgsRasterLayer
@@ -185,7 +185,6 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     #settrace()
     for myClass in myClasses:
         myMax = myClass['quantity']
-        myRange = range(myLastValue, myMax)
         myColour = QtGui.QColor(myClass['colour'])
         myLabel = QtCore.QString()
         if 'label' in myClass:
@@ -193,18 +192,26 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
         myShader = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
         myRangeList.append(myShader)
         # Create opacity entries for this range
-        myTransparencyPercent = int(myClass['transparency'])
+        myTransparencyPercent = 0
+        if 'transparency' in myClass:
+            myTransparencyPercent = int(myClass['transparency'])
         if myTransparencyPercent > 0:
-            for myValue in myRange:
+            #check if range extrema are integers so we know if we can
+            #use them to calculate a value range
+            if ((myLastValue == int(myLastValue)) and (myMax == int(myMax))):
+                myRange = range(myLastValue, myMax)
                 myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
-                myPixel.pixelValue = myValue
-                myPixel.percentTransparent = myTransparencyPercent
-                myTransparencyList.append(myPixel)
+                for myValue in myRange:
+                    myPixel.pixelValue = myValue
+                    myPixel.percentTransparent = myTransparencyPercent
+                    myTransparencyList.append(myPixel)
         #myLabel = myClass['label']
 
     # Apply the shading algorithm and design their ramp
     theQgsRasterLayer.setColorShadingAlgorithm(QgsRasterLayer.ColorRampShader)
     myFunction = theQgsRasterLayer.rasterShader().rasterShaderFunction()
+    # Discrete will shade any cell between maxima of this break
+    # and mamima of previous break to the colour of this break
     myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
     myFunction.setColorRampItemList(myRangeList)
 

@@ -775,6 +775,27 @@ class RiabDockTest(unittest.TestCase):
                                 myExpectedString)
         assert myExpectedString in myHtml, myMessage
 
+    def test_issue126(self):
+        """Test that non integer transparency ranges fail gracefully.
+        .. seealso:: https://github.com/AIFDR/risk_in_a_box/issues/126
+        """
+        clearDock()
+        # This dataset has all cells with value 1.3
+        myLayer, myType = loadLayer('issue126.tif')
+        del myType
+        # Note the float quantity values below
+        myStyleInfo = {}
+        myStyleInfo['style_classes'] = [
+                        dict(colour='#38A800', quantity=1.1, transparency=0),
+                        dict(colour='#38A800', quantity=1.4, transparency=1),
+                        dict(colour='#79C900', quantity=10.1, transparency=1)]
+        myMessage = ('Setting style info with float based ranges should fail '
+                    'gracefully.')
+        try:
+            setRasterStyle(myLayer, myStyleInfo)
+        except:
+            raise  # Exception(myMessage)
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
