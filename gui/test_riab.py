@@ -28,7 +28,7 @@ from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from PyQt4.QtGui import QWidget
 from utilities_test import getQgisTestApp
-
+from storage.utilities import ugettext as _
 from gui.riab import Riab
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -56,6 +56,31 @@ class RiabTest(unittest.TestCase):
         myRiab = Riab(myIface)
         myRiab.setupI18n('id')
         myTranslation = myRiab.tr(myUntranslatedString)
+        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
+                            myUntranslatedString,
+                            myTranslation,
+                            myExpectedString)
+        assert myTranslation == myExpectedString, myMessage
+
+    def test_ImpactFunctionI18n(self):
+        """Library translations are working."""
+
+        myUntranslatedString = 'Temporarily Closed'
+        myExpectedString = 'Tydelik gesluit'  # afrikaans
+        myParent = QWidget()
+        myCanvas = QgsMapCanvas(myParent)
+        myIface = QgisInterface(myCanvas)
+        myRiab = Riab(myIface)
+        myRiab.setupI18n('af')  # afrikaans
+        myTranslation = _(myUntranslatedString)
+        myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
+                            myUntranslatedString,
+                            myTranslation,
+                            myExpectedString)
+        assert myTranslation == myExpectedString, myMessage
+        myRiab.setupI18n('id')  # indonesian
+        myExpectedString = 'xxxxx'  # can be updated when proper tr is made
+        myTranslation = _(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
                             myUntranslatedString,
                             myTranslation,

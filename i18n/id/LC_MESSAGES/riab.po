@@ -182,4 +182,4 @@ msgstr ""
 #: impact_functions/flood/flood_building_impact.py:20
 #: impact_functions/flood/flood_building_impact.py:20
 msgid "Temporarily Closed"
-msgstr ""
+msgstr "xxxxx"
