@@ -343,10 +343,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         #E = read_layer(exposure_path)
         self.calculator.setHazardLayer(hazard_path)
         self.calculator.setExposureLayer(exposure_path)
-
-        # FIXME (Ole): Change back when issue #122 has been addressed
-        #self.calculator.setFunction('Temporarily Closed')
-        self.calculator.setFunction('Ditutup Sementara')
+        self.calculator.setFunction('Temporarily Closed')
         try:
             myRunner = self.calculator.getRunner()
             # run non threaded
