@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-12 16:24+0200\n"
+"POT-Creation-Date: 2012-03-12 16:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,8 @@ msgstr "Jumlah"
 
 #: impact_functions/flood/flood_building_impact.py:87
 #: impact_functions/flood/flood_building_impact.py:88
+#: impact_functions/earthquake/BNPB_earthquake_guidelines.py:128
+#: impact_functions/earthquake/padang_building_impact_model.py:145
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:128
 #: impact_functions/earthquake/padang_building_impact_model.py:145
 #: impact_functions/flood/flood_building_impact.py:88
@@ -111,14 +113,21 @@ msgstr "Bangunan yang diperkirakan terdampak"
 
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:127
 #: impact_functions/earthquake/padang_building_impact_model.py:144
+#: impact_functions/earthquake/BNPB_earthquake_guidelines.py:127
+#: impact_functions/earthquake/padang_building_impact_model.py:144
 msgid "Buildings"
 msgstr ""
 
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:127
 #: impact_functions/earthquake/padang_building_impact_model.py:144
+#: impact_functions/earthquake/BNPB_earthquake_guidelines.py:127
+#: impact_functions/earthquake/padang_building_impact_model.py:144
 msgid "Total"
 msgstr ""
 
+#: impact_functions/earthquake/BNPB_earthquake_guidelines.py:129
+#: impact_functions/earthquake/BNPB_earthquake_guidelines.py:137
+#: impact_functions/earthquake/padang_building_impact_model.py:147
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:129
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:137
 #: impact_functions/earthquake/padang_building_impact_model.py:147
@@ -128,9 +137,15 @@ msgstr ""
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:130
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:139
 #: impact_functions/earthquake/padang_building_impact_model.py:148
+#: impact_functions/earthquake/BNPB_earthquake_guidelines.py:130
+#: impact_functions/earthquake/BNPB_earthquake_guidelines.py:139
+#: impact_functions/earthquake/padang_building_impact_model.py:148
 msgid "Medium damage"
 msgstr ""
 
+#: impact_functions/earthquake/BNPB_earthquake_guidelines.py:131
+#: impact_functions/earthquake/BNPB_earthquake_guidelines.py:141
+#: impact_functions/earthquake/padang_building_impact_model.py:149
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:131
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:141
 #: impact_functions/earthquake/padang_building_impact_model.py:149
@@ -138,25 +153,33 @@ msgid "High damage"
 msgstr ""
 
 #: impact_functions/earthquake/padang_building_impact_model.py:146
+#: impact_functions/earthquake/padang_building_impact_model.py:146
 msgid "No damage"
 msgstr ""
 
-#: impact_functions/styles.py:21
+#: impact_functions/styles.py:21 impact_functions/styles.py:21
 msgid "Low"
 msgstr ""
 
-#: impact_functions/styles.py:25
+#: impact_functions/styles.py:25 impact_functions/styles.py:25
 msgid "Medium"
 msgstr ""
 
-#: impact_functions/styles.py:29
+#: impact_functions/styles.py:29 impact_functions/styles.py:29
 msgid "High"
 msgstr ""
 
+#: impact_functions/tsunami/tsunami_building_impact.py:108
 #: impact_functions/tsunami/tsunami_building_impact.py:108
 msgid "OK"
 msgstr ""
 
 #: impact_functions/tsunami/tsunami_building_impact.py:110
+#: impact_functions/tsunami/tsunami_building_impact.py:110
 msgid "Flooded"
+msgstr ""
+
+#: impact_functions/flood/flood_building_impact.py:20
+#: impact_functions/flood/flood_building_impact.py:20
+msgid "Temporarily Closed"
 msgstr ""

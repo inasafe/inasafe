@@ -24,7 +24,7 @@ GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
 
 # LOCALES = space delimited list of iso codes to generate po files for
-LOCALES = id af_ZA
+LOCALES = id af
 
 default: compile
 
@@ -55,7 +55,7 @@ compile-translation-strings: compile
 	@#Compile qt messages binary
 	cd gui; lrelease riab.pro; cd ..
 	@#compile gettext messages binary
-	$(foreach LOCALE,$(LOCALES), msgfmt -o i18n/$(LOCALE)/LC_MESSAGES/riab.mo;)
+	$(foreach LOCALE,$(LOCALES), msgfmt -o i18n/$(LOCALE)/LC_MESSAGES/riab.mo i18n/$(LOCALE)/LC_MESSAGES/riab.po;)
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead

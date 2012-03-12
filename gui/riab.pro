@@ -11,4 +11,4 @@ FORMS = ui_riabdock.ui \
         riabkeywordsdialogbase.ui
 
 TRANSLATIONS = i18n/riab_id.ts \
-               i18n/riab_en_ZA.ts
+               i18n/riab_af.ts
