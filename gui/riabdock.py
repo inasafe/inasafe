@@ -176,7 +176,6 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
         Sets and saves style for theQgsRasterLayer
 
     """
-    #if DEBUG: settrace()
     theQgsRasterLayer.setDrawingStyle(QgsRasterLayer.PalettedColor)
     myClasses = theStyle['style_classes']
     myRangeList = []
@@ -200,8 +199,9 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
             #use them to calculate a value range
             if ((myLastValue == int(myLastValue)) and (myMax == int(myMax))):
                 myRange = range(myLastValue, myMax)
-                myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
                 for myValue in myRange:
+                    myPixel = \
+                         QgsRasterTransparency.TransparentSingleValuePixel()
                     myPixel.pixelValue = myValue
                     myPixel.percentTransparent = myTransparencyPercent
                     myTransparencyList.append(myPixel)
