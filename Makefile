@@ -23,12 +23,8 @@ NONGUI := storage engine impact_functions
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
 
-# POFILES = list of files to be harvested for translation strings
-POFILES = storage/test_io.py \
-					impact_functions/flood/flood_building_impact.py
-
 # LOCALES = space delimited list of iso codes to generate po files for
-LOCALES = id
+LOCALES = id af_ZA
 
 default: compile
 
@@ -48,17 +44,18 @@ docs: compile
 
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
-        # Qt translation stuff first.
+	@# Qt translation stuff first.
 	cd gui; pylupdate4 riab.pro; cd .
-        # Gettext translation stuff next.
-        # todo script this so we can loop through the locale list
-        # and apply same xgettext for each supported locale. TS
-	$(foreach LOCALE,$(LOCALES),xgettext -j -d id -o i18n/$(LOCALE)/LC_MESSAGES/riab.po $(POFILES);)
+	@# Gettext translation stuff next.
+	@# apply same xgettext command for each supported locale. TS
+	$(foreach LOCALE,$(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in gui
 compile-translation-strings: compile
+	@#Compile qt messages binary
 	cd gui; lrelease riab.pro; cd ..
-	msgfmt -o i18n/id/LC_MESSAGES/riab.mo i18n/id/LC_MESSAGES/riab.po
+	@#compile gettext messages binary
+	$(foreach LOCALE,$(LOCALES), msgfmt -o i18n/$(LOCALE)/LC_MESSAGES/riab.mo;)
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
