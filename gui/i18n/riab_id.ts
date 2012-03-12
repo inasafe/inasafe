@@ -252,7 +252,7 @@ ke %s: %s</translation>
     <message>
         <location filename="ui_riabdock.ui" line="71"/>
         <source>&amp;Might</source>
-        <translation>Yang Mungkin</translation>
+        <translation>Yang mungkin</translation>
     </message>
     <message>
         <location filename="ui_riabdock.ui" line="93"/>
