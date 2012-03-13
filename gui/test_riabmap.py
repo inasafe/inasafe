@@ -27,12 +27,13 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 
-from utilities_test import (getQgisTestApp, assertHashForFile)
+from utilities_test import (getQgisTestApp, assertHashForFile, hashForFile)
 from gui.riabmap import RiabMap
 from PyQt4 import QtGui
 from qgis.core import (QgsSymbol,
                        QgsMapLayerRegistry,
-                       QgsRectangle)
+                       QgsRectangle,
+                       QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
 from utilities_test import (loadLayer, setJakartaGeoExtent)
 from utilities import getTempDir
@@ -223,6 +224,35 @@ class RiabDockTest(unittest.TestCase):
         myResult = myMap.mmToPoints(myMM)
         myMessage = "Expected: %s\nGot: %s" % (myPixels, myResult)
         assert myResult == myPixels, myMessage
+
+    def test_windowsDrawingArtifacts(self):
+        """Test that windows rendering does not make artifacts"""
+        # sometimes spurious lines are drawn on the layout
+        myMap = RiabMap(IFACE)
+        myMap.setupComposition()
+        myPdfPath = os.path.join(getTempDir(), 'outArtifactsTest.pdf')
+        myMap.setupPrinter(myPdfPath)
+
+        myPixmap = QtGui.QPixmap(100, 100)
+        myPixmap.fill(QtGui.QColor(250, 250, 250))
+        myFilename = os.path.join(getTempDir(), 'greyBox')
+        myPixmap.save(myFilename, 'PNG')
+        for i in range(10, 190, 10):
+            myPicture = QgsComposerPicture(myMap.composition)
+            myPicture.setPictureFile(myFilename)
+            myPicture.setFrame(False)
+            myPicture.setItemPosition(i,  # x
+                                      i,  # y
+                                      10,  # width
+                                      10)  # height
+            myMap.composition.addItem(myPicture)
+        myMap.renderPrintout()
+        myUnwantedHash = 'd05e9223d50baf8bb147475aa96d6ba3'
+        myHash = hashForFile(myPdfPath)
+        # when this test no longer matches our broken render hash
+        # we know the issue is fixed
+        myMessage = 'Windows map render still draws with artifacts.'
+        assert myHash != myUnwantedHash, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')

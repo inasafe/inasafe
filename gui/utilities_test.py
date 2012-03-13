@@ -24,15 +24,22 @@ GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 
 
 def assertHashForFile(theHash, theFilename):
-        myPath = theFilename
-        myData = file(myPath).read()
-        myHash = hashlib.md5()
-        myHash.update(myData)
-        myHash = myHash.hexdigest()
-        myMessage = ('Unexpected hash'
-                     '\nGot: %s'
-                     '\nExpected: %s' % (myHash, theHash))
-        assert myHash == theHash, myMessage
+    """Assert that a files has matches its expected hash"""
+    myHash = hashForFile(theFilename)
+    myMessage = ('Unexpected hash'
+                 '\nGot: %s'
+                 '\nExpected: %s' % (myHash, theHash))
+    assert myHash == theHash, myMessage
+
+
+def hashForFile(theFilename):
+    """Return an md5 checksum for a file"""
+    myPath = theFilename
+    myData = file(myPath).read()
+    myHash = hashlib.md5()
+    myHash.update(myData)
+    myHash = myHash.hexdigest()
+    return myHash
 
 
 def getQgisTestApp():
