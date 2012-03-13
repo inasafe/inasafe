@@ -29,6 +29,7 @@ from qgisinterface import QgisInterface
 from PyQt4.QtGui import QWidget
 from utilities_test import getQgisTestApp
 from storage.utilities import ugettext as _
+from impact_functions import get_plugins
 from gui.riab import Riab
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -78,6 +79,15 @@ class RiabTest(unittest.TestCase):
                             myTranslation,
                             myExpectedString)
         assert myTranslation == myExpectedString, myMessage
+
+        # Now see if the same function is delivered for the function
+        myLang = os.environ['LANG']
+        assert myLang == 'af'
+        # for some reason the LANG environment is reverted to original system
+        # lang in the context of the ugettext function in riab libs
+        myFunctions = get_plugins('Tydelik gesluit')
+        assert len(myFunctions) > 0
+        # Test indonesian too
         myRiab.setupI18n('id')  # indonesian
         myExpectedString = 'xxxxx'  # can be updated when proper tr is made
         myTranslation = _(myUntranslatedString)
