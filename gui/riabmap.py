@@ -450,7 +450,7 @@ class RiabMap():
         myLabelWidth = 131.412   # item - position and size...option
         myLeftOffset = self.pageWidth - self.pageMargin - myLabelWidth
         myLabel.setItemPosition(myLeftOffset,
-                                theTopOffset - 2,  # -2 to push it up a little
+                                theTopOffset - 2, # -2 to push it up a little
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
@@ -542,7 +542,7 @@ class RiabMap():
         myRect = QgsComposerShape(myLeftOffset + 0.5,
                                   theTopOffset,
                                   self.pageWidth - myLeftOffset,
-                                  self.mapHeight,
+                                  self.mapHeight + 1,
                                   self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
@@ -660,10 +660,10 @@ class RiabMap():
                       myInsetDistance - myScaleBarHeight)  # mm
 
         # Draw an outer background box - shamelessly hardcoded buffer
-        myRect = QgsComposerShape(myScaleBarX - 4,  # left edge
-                                  myScaleBarY - 3,  # top edge
-                                  myScaleBarWidthMM + 13,  # right edge
-                                  myScaleBarHeight + 6,  # bottom edge
+        myRect = QgsComposerShape(myScaleBarX - 4, # left edge
+                                  myScaleBarY - 3, # top edge
+                                  myScaleBarWidthMM + 13, # right edge
+                                  myScaleBarHeight + 6, # bottom edge
                                   self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
@@ -743,30 +743,30 @@ class RiabMap():
             None
         """
         myTitle = self.getMapTitle()
-        if myTitle is not None:
-            myFontSize = 20
-            myFontWeight = QtGui.QFont.Bold
-            myItalicsFlag = False
-            myFont = QtGui.QFont('verdana',
-                             myFontSize,
-                             myFontWeight,
-                             myItalicsFlag)
-            myLabel = QgsComposerLabel(self.composition)
-            myLabel.setFont(myFont)
-            myHeading = myTitle
-            myLabel.setText(myHeading)
-            myLabel.adjustSizeToText()
-            myLabelHeight = 12
-            myLabel.setItemPosition(self.pageMargin,
-                                theTopOffset,
-                                self.mapHeight,
-                                myLabelHeight,
-                                )
-            myLabel.setFrame(self.showFramesFlag)
-            self.composition.addItem(myLabel)
-            return myLabelHeight
-        else:
-            return None
+        if myTitle is None:
+            myTitle = ''
+        myFontSize = 20
+        myFontWeight = QtGui.QFont.Bold
+        myItalicsFlag = False
+        myFont = QtGui.QFont('verdana',
+                         myFontSize,
+                         myFontWeight,
+                         myItalicsFlag)
+        myLabel = QgsComposerLabel(self.composition)
+        myLabel.setFont(myFont)
+        myHeading = myTitle
+        myLabel.setText(myHeading)
+        myLabelWidth = self.pageWidth - (self.pageMargin * 2)
+        myLabelHeight = 12
+        myLabel.setItemPosition(self.pageMargin,
+                            theTopOffset,
+                            myLabelWidth,
+                            myLabelHeight,
+                            )
+        myLabel.setFrame(self.showFramesFlag)
+        self.composition.addItem(myLabel)
+        return myLabelHeight
+
 
     def drawLegend(self, theTopOffset):
         """Add a legend to the map using our custom legend renderer
