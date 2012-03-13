@@ -29,10 +29,6 @@ from PyQt4.QtCore import (QObject,
                           QSettings,
                           QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication
-
-# Import RIAB modules
-from riabdock import RiabDock
-from riabkeywordsdialog import RiabKeywordsDialog
 from riabexceptions import TranslationLoadException
 #see if we can import pydev - see development docs for details
 try:
@@ -142,6 +138,8 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
+        # Import riabdock her as it needs to be imported AFTER i18n is set up
+        from riabdock import RiabDock
         self.dockWidget = None
         #--------------------------------------
         # Create action for plugin dockable window (show/hide)
@@ -281,6 +279,9 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
+        # import here only so that it is AFTER i18n set up
+        from riabkeywordsdialog import RiabKeywordsDialog
+
         if self.iface.activeLayer() is None:
             return
         myDialog = RiabKeywordsDialog(self.iface.mainWindow(),

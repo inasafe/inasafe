@@ -27,12 +27,12 @@ DRIVER_MAP = {'.shp': 'ESRI Shapefile',
 
 # Map between Python types and OGR field types
 # FIXME (Ole): I can't find a double precision type for OGR
-TYPE_MAP = {type(None): ogr.OFTString,  # What else should this be?
+TYPE_MAP = {type(None): ogr.OFTString, # What else should this be?
             type(''): ogr.OFTString,
             type(True): ogr.OFTInteger,
             type(0): ogr.OFTInteger,
             type(0.0): ogr.OFTReal,
-            type(numpy.array([0.0])[0]): ogr.OFTReal,  # numpy.float64
+            type(numpy.array([0.0])[0]): ogr.OFTReal, # numpy.float64
             type(numpy.array([[0.0]])[0]): ogr.OFTReal}  # numpy.ndarray
 
 # Map between verbose types and OGR geometry types
@@ -854,6 +854,8 @@ def ugettext(s):
     """
     path = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         '..', 'i18n'))
+    if 'LANG' not in os.environ:
+        return s
     lang = os.environ['LANG']
     filename_prefix = 'riab'
     t = gettext.translation(filename_prefix,
