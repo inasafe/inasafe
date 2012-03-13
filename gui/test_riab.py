@@ -28,7 +28,6 @@ from qgis.gui import QgsMapCanvas
 from qgisinterface import QgisInterface
 from PyQt4.QtGui import QWidget
 from utilities_test import getQgisTestApp
-from storage.utilities import ugettext as _
 from gui.riab import Riab
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -72,6 +71,8 @@ class RiabTest(unittest.TestCase):
         myIface = QgisInterface(myCanvas)
         myRiab = Riab(myIface)
         myRiab.setupI18n('af')  # afrikaans
+        # import this late so that i18n setup is already in place
+        from storage.utilities import ugettext as _
         myTranslation = _(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
                             myUntranslatedString,
@@ -79,15 +80,29 @@ class RiabTest(unittest.TestCase):
                             myExpectedString)
         assert myTranslation == myExpectedString, myMessage
 
+        # This is part test and part demonstrator of how to reload riab
         # Now see if the same function is delivered for the function
+        # Because of the way impact plugins are loaded in riab
+        # (see http://effbot.org/zone/metaclass-plugins.htm)
+        # lang in the context of the ugettext function in riab libs
+        # must be imported late so that i18n is set up already
+        del myRiab
+        # reload all riab modules so that i18n get picked up afresh
+        for myMod in sys.modules.values():
+            try:
+                reload(myMod)
+            except:
+                pass
+        myRiab = Riab(myIface)
+        myRiab.setupI18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
-        # for some reason the LANG environment is reverted to original system
-        # lang in the context of the ugettext function in riab libs
-        # import late so that i18n is set up already
         from impact_functions import get_plugins
+        myFunctions = get_plugins()
+        print myFunctions
         myFunctions = get_plugins('Tydelik gesluit')
         assert len(myFunctions) > 0
+
         # Test indonesian too
         myRiab.setupI18n('id')  # indonesian
         myExpectedString = 'xxxxx'  # can be updated when proper tr is made
