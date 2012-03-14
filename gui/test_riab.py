@@ -90,7 +90,10 @@ class RiabTest(unittest.TestCase):
         # reload all riab modules so that i18n get picked up afresh
         for myMod in sys.modules.values():
             try:
-                reload(myMod)
+                if ('storage' in str(myMod) or
+                   'impact' in str(myMod)):
+                    print 'Reloading:', str(myMod)
+                    reload(myMod)
             except:
                 pass
         myRiab = Riab(myIface)
@@ -98,14 +101,14 @@ class RiabTest(unittest.TestCase):
         myLang = os.environ['LANG']
         assert myLang == 'af'
         from impact_functions import get_plugins
-        myFunctions = get_plugins()
-        print myFunctions
+        #myFunctions = get_plugins()
+        #print myFunctions
         myFunctions = get_plugins('Tydelik gesluit')
         assert len(myFunctions) > 0
 
         # Test indonesian too
         myRiab.setupI18n('id')  # indonesian
-        myExpectedString = 'xxxxx'  # can be updated when proper tr is made
+        myExpectedString = 'Sementara Ditutup'
         myTranslation = _(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
                             myUntranslatedString,
