@@ -19,6 +19,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
     target_field = 'AFFECTED'
     plugin_name = _('Temporarily Closed')
 
+    # Is never called but would be nice to do here
+    #def __init__(self):
+    #    self.target_field = 'AFFECTED'
+    #    self.plugin_name = _('Temporarily Closed')
+
     def run(self, layers):
         """Risk plugin for tsunami population
         """
