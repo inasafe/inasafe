@@ -570,7 +570,8 @@ class RiabDockTest(unittest.TestCase):
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
-        myMessage = 'Run button was not enabled'
+        myDict = getUiState(DOCK)
+        myMessage = 'Run button was not enabled - UI State: %s' % myDict
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
@@ -640,7 +641,7 @@ class RiabDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
         expectDict = {'Hazard': 'Yogya2006',
-                      'Exposure': 'OSM_building_polygons_20110905',
+                      'Exposure': 'OSM Building Polygons',
                       'Impact Function': 'Earthquake Guidelines Function',
                       'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s' % str(myDict)
