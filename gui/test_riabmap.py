@@ -84,7 +84,7 @@ class RiabDockTest(unittest.TestCase):
         myLegend = myMap.getLegend()
         myPath = os.path.join(getTempDir(), 'getLegend.png')
         myLegend.save(myPath, 'PNG')
-        myExpectedHash = '5e67f182a7e8f0d065c32cbebcef8561'
+        myExpectedHash = '56ec8a71c21afefe05cca02bf47b4d3d'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getVectorLegend(self):
@@ -96,7 +96,7 @@ class RiabDockTest(unittest.TestCase):
         myMap.getVectorLegend()
         myPath = os.path.join(getTempDir(), 'getVectorLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = '5e67f182a7e8f0d065c32cbebcef8561'
+        myExpectedHash = '56ec8a71c21afefe05cca02bf47b4d3d'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getRasterLegend(self):
@@ -108,7 +108,7 @@ class RiabDockTest(unittest.TestCase):
         myMap.getRasterLegend()
         myPath = os.path.join(getTempDir(), 'getRasterLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = '1a47a474981fc1acfae8e751e5afe5f0'
+        myExpectedHash = 'b7f2f2c0c5012803dc353031e05f2a36'
         assertHashForFile(myExpectedHash, myPath)
 
     def addSymbolToLegend(self):
@@ -150,7 +150,7 @@ class RiabDockTest(unittest.TestCase):
                                theLabel='foo')
         myPath = os.path.join(getTempDir(), 'addClassToLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = '5fe2c1748d974fbb49ddb513208e242b'
+        myExpectedHash = 'ffc0c9715a847b9513f6ab80d33fe56e'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getMapTitle(self):
@@ -233,8 +233,8 @@ class RiabDockTest(unittest.TestCase):
         myPdfPath = os.path.join(getTempDir(), 'outArtifactsTest.pdf')
         myMap.setupPrinter(myPdfPath)
 
-        myPixmap = QtGui.QPixmap(100, 100)
-        myPixmap.fill(QtGui.QColor(250, 250, 250))
+        myPixmap = QtGui.QPixmap(10, 10)
+        myPixmap.fill(QtGui.QColor(250, 25, 25))
         myFilename = os.path.join(getTempDir(), 'greyBox')
         myPixmap.save(myFilename, 'PNG')
         for i in range(10, 190, 10):
@@ -246,6 +246,13 @@ class RiabDockTest(unittest.TestCase):
                                       10,  # width
                                       10)  # height
             myMap.composition.addItem(myPicture)
+            # Same drawing drawn directly as a pixmap
+            myPixmapItem = myMap.composition.addPixmap(myPixmap)
+            myPixmapItem.setOffset(i, i + 20)
+            # Same drawing using our drawPixmap Helper
+            myWidthMM = 1
+            myMap.drawPixmap(myPixmap, myWidthMM, i, i + 40)
+
         myMap.renderPrintout()
         myUnwantedHash = 'd05e9223d50baf8bb147475aa96d6ba3'
         myHash = hashForFile(myPdfPath)

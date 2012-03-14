@@ -314,6 +314,14 @@ class RiabMap():
                                          mySquareSize, mySquareSize))
         myPainter.setPen(QtGui.QColor(0, 0, 0))  # outline colour
         myLabelX = myLeftIndent + mySquareSize + 10
+        myFontSize = 8
+        myFontWeight = QtGui.QFont.Bold
+        myItalicsFlag = False
+        myFont = QtGui.QFont('verdana',
+                         myFontSize,
+                         myFontWeight,
+                         myItalicsFlag)
+        myPainter.setFont(myFont)
         myPainter.drawText(myLabelX, myOffset + 25, theLabel)
 
     def extendLegend(self):
@@ -450,7 +458,7 @@ class RiabMap():
         myLabelWidth = 131.412   # item - position and size...option
         myLeftOffset = self.pageWidth - self.pageMargin - myLabelWidth
         myLabel.setItemPosition(myLeftOffset,
-                                theTopOffset - 2, # -2 to push it up a little
+                                theTopOffset - 2,  # -2 to push it up a little
                                 myLabelWidth,
                                 myLabelHeight,
                                 )
@@ -660,10 +668,10 @@ class RiabMap():
                       myInsetDistance - myScaleBarHeight)  # mm
 
         # Draw an outer background box - shamelessly hardcoded buffer
-        myRect = QgsComposerShape(myScaleBarX - 4, # left edge
-                                  myScaleBarY - 3, # top edge
-                                  myScaleBarWidthMM + 13, # right edge
-                                  myScaleBarHeight + 6, # bottom edge
+        myRect = QgsComposerShape(myScaleBarX - 4,  # left edge
+                                  myScaleBarY - 3,  # top edge
+                                  myScaleBarWidthMM + 13,  # right edge
+                                  myScaleBarHeight + 6,  # bottom edge
                                   self.composition)
 
         myRect.setShapeType(QgsComposerShape.Rectangle)
@@ -684,7 +692,7 @@ class RiabMap():
         # Draw the bottom line
         myUpshift = 0.3  # shift the bottom line up for better rendering
         myRect = QgsComposerShape(myScaleBarX,
-                                  myScaleBarY + myScaleBarHeight - 0.3,
+                                  myScaleBarY + myScaleBarHeight - myUpshift,
                                   myScaleBarWidthMM,
                                   0.1,
                                   self.composition)
@@ -767,7 +775,6 @@ class RiabMap():
         self.composition.addItem(myLabel)
         return myLabelHeight
 
-
     def drawLegend(self, theTopOffset):
         """Add a legend to the map using our custom legend renderer
         .. note:: getLegend generates a pixmap in 150dpi so if you set
@@ -779,19 +786,62 @@ class RiabMap():
         Raises:
             None
         """
-        myPicture1 = QgsComposerPicture(self.composition)
-        self.getLegend()
-        myLegendFile = os.path.join(getTempDir(), 'legend.png')
-        self.legend.save(myLegendFile, 'PNG')
-        myPicture1.setPictureFile(myLegendFile)
-        myLegendHeight = self.pointsToMM(self.legend.height())
-        myLegendWidth = self.pointsToMM(self.legend.width())
-        myPicture1.setItemPosition(self.pageMargin,
-                                   theTopOffset,
-                                   myLegendWidth,
-                                   myLegendHeight)
-        myPicture1.setFrame(False)
-        self.composition.addItem(myPicture1)
+        myPixmap = self.getLegend()
+        myQGISDrawingFlag = True
+        if myQGISDrawingFlag:
+            # Old approach: This works fine on linux and uses QGIS api
+            # but has occassional artifacts under windows.
+            myPicture1 = QgsComposerPicture(self.composition)
+            myLegendFile = os.path.join(getTempDir(), 'legend.png')
+            self.legend.save(myLegendFile, 'PNG')
+            myPicture1.setPictureFile(myLegendFile)
+            myLegendHeight = self.pointsToMM(self.legend.height())
+            myLegendWidth = self.pointsToMM(self.legend.width())
+            myPicture1.setItemPosition(self.pageMargin,
+                                       theTopOffset,
+                                       myLegendWidth,
+                                       myLegendHeight)
+            myPicture1.setFrame(False)
+            self.composition.addItem(myPicture1)
+        else:
+            # New approach: Ues QGraphicsScene directly to draw the pix
+            myWidthMM = 20
+            self.drawPixmap(myPixmap, myWidthMM, self.pageMargin, theTopOffset)
+
+    def drawPixmap(self, thePixmap, theWidthMM, theLeftOffset, theTopOffset):
+        """Helper to draw a pixmap directly onto the QGraphicsScene.
+        This is an alternative to using QgsComposerPicture which in
+        some cases leaves artifacts under windows.
+
+        The Pixmap will have a transform applied to it so that
+        it is rendered with the same resolution as the composition.
+
+        Args:
+
+            * thePixmap
+            * theWidthMM - desired width in mm of output on page
+            * theLeftOffset
+            * theTopOffset
+
+        Returns:
+            QGraphicsSceneItem is returned
+        Raises:
+            None
+        """
+        myDesiredWidthMM = theWidthMM  # mm
+        myDesiredWidthPX = self.mmToPoints(myDesiredWidthMM)
+        myActualWidthPX = thePixmap.width()
+        myScaleFactor = myDesiredWidthPX / myActualWidthPX
+
+        print myScaleFactor, myActualWidthPX, myDesiredWidthPX
+        myTransform = QtGui.QTransform()
+        myTransform.scale(myScaleFactor, myScaleFactor)
+        myTransform.rotate(0.5)
+        myItem = self.composition.addPixmap(thePixmap)
+        myItem.setTransform(myTransform)
+        myItem.setOffset(theLeftOffset / myScaleFactor,
+                         theTopOffset / myScaleFactor)
+        return myItem
 
     def drawImpactSummary(self, theTopOffset):
         """Render the impact summary
