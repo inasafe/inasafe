@@ -57,7 +57,8 @@ def _same_API(X, Y, exclude=None):
         attr = getattr(X, name)
         if isinstance(attr, types.MethodType):
             if name not in dir(Y):
-                msg = 'Method %s of %s was not found in %s' % (name, X, Y)
+                msg = ('Method "%s" of "%s" was not found in "%s"'
+                       % (name, X, Y))
                 raise Exception(msg)
 
 

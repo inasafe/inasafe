@@ -172,6 +172,14 @@ class Raster:
         """
         return self.style_info
 
+    def get_caption(self):
+        """Return 'impact_summary' keyword if present. Otherwise ''.
+        """
+        if 'impact_summary' in self.keywords:
+            return self.keywords['impact_summary']
+        else:
+            return ''
+
     def get_impact_summary(self):
         """Return 'impact_summary' keyword if present. Otherwise ''.
         """

@@ -151,7 +151,10 @@ class Vector:
         """Size of vector layer defined as number of features
         """
 
-        return len(self.geometry)
+        if hasattr(self, 'geometry') and self.geometry is not None:
+            return len(self.geometry)
+        else:
+            return 0
 
     def __eq__(self, other, rtol=1.0e-5, atol=1.0e-8):
         """Override '==' to allow comparison with other vector objecs
@@ -289,6 +292,14 @@ class Vector:
         return self.style_info
 
     def get_caption(self):
+        """Return 'impact_summary' keyword if present. Otherwise ''.
+        """
+        if 'impact_summary' in self.keywords:
+            return self.keywords['impact_summary']
+        else:
+            return ''
+
+    def get_impact_summary(self):
         """Return 'impact_summary' keyword if present. Otherwise ''.
         """
         if 'impact_summary' in self.keywords:
