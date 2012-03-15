@@ -35,7 +35,7 @@ Windows installation guide for developers
 -----------------------------------------
 
 Setup msysgit
-......................
+.............
 
 To check out the code for development, you first need to install a git client.
 We cover msysgit here, but you can also use `tortoisegit <http://code.google.com/p/tortoisegit/downloads/list>`_
@@ -88,7 +88,7 @@ illustrated below:
 
 
 Clone the repository
-.............................
+....................
 
 First open a GIT bash prompt as illustrated below:
 
@@ -122,7 +122,7 @@ console when the clone process is completed::
 
 
 Install an SVN client
-..............................
+.....................
 
 The test data for Risk in a Box is hosted on an svn server, so to obtain it
 you first need to install an SVN client. Start by downloading `this installer
@@ -132,7 +132,7 @@ about 4.8mb to download).
 Now run the installer, accepting the defaults options throughout.
 
 Checkout the test data
-..................................
+......................
 
 To check out the test data from svn, first open a command prompt (
 :menuselection:`Start --> Run...` then type :kbd:`cmd.exe` and press
@@ -146,7 +146,7 @@ You will be prompted for a username and password for svn - please
 contect Ole Nielson for a log in account.
 
 Install QGIS
-..................
+............
 
 Download the latest QGIS 'standalone' installer from http://download.qgis.org and
 install it by running the installation wizard and accepting the defaults throughout.
@@ -156,7 +156,7 @@ you need to enable the plugin from the plugin menu by doing :menuselection:`Plug
 and then search for the Risk in a Box plugin in the list and enable it.
 
 Windows Caveats
-..........................
+...............
 
 Our primary development platform is Linux (specifically Ubuntu Linux). Some features
 of the development environment - particularly the **Make** tools do not run on Windows.
@@ -345,4 +345,75 @@ You can also run individual tests using nose. For example to run the
 riabclipper test you would do::
 
 	nosetests -v gui.test_riabclipper
+
+
+Setting up your windows environment for running tests
+.....................................................
+
+First you should create a custom shell launcher that will give you a python
+shell environment using the python that comes bundled with QGIS. Save the 
+following listing in <QGIS Install Dir>/bin/python-shell.bat::
+
+   @echo off
+   SET OSGEO4W_ROOT=C:\PROGRA~2\QUANTU~1
+   call "%OSGEO4W_ROOT%"\bin\o4w_env.bat
+   call "%OSGEO4W_ROOT%"\apps\grass\grass-6.4.2RC2\etc\env.bat
+   @echo off
+   SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.8
+   path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2RC2\lib
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
+   start "Quantum GIS" /B "cmd.exe" %*
+
+Now we need to install easy_setup so that we can install pip so that we can
+install notetests. Download the script on 
+`this page <http://pypi.python.org/pypi/setuptools#windows>`_ called ez_setup.py
+and save it somewhere familiar e.g. :samp:`c:\temp`.
+
+Next launch the shell (python-shell.bat) as administrator (by right clicking the
+file and choosing run as administrator). Then from the command line, launch the 
+ez_setup.py by typing this::
+
+   python c:\temp\ez_setup.py
+
+.. note:: You will need to launch the shell as administrator whenever you 
+   need to install python packages by pypi.
+
+Now in the same shell, use easy setup to install pip::
+   
+   "c:\Program Files (x86)\Quantum GIS Wroclaw\apps\Python25\Scripts\easy_install.exe" pip
+
+Verifying your system path
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To verify your path, launch your python shell (by clicking the python-shell.bat)
+and then start a python shell. Now enter the follow simple script::
+
+   import sys
+   for item in sys.path:
+       print item
+
+Which should produce output like this::
+
+   C:\Program Files (x86)\Quantum GIS Wroclaw\bin
+   C:\PROGRA~2\QUANTU~1\apps\qgis\python
+   C:\PROGRA~2\QUANTU~1\apps\Python25\Lib\site-packages
+   C:\Program Files (x86)\Quantum GIS Wroclaw\bin\python25.zip
+   C:\PROGRA~2\QUANTU~1\apps\Python25\DLLs
+   C:\PROGRA~2\QUANTU~1\apps\Python25\lib
+   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\plat-win
+   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\lib-tk
+   C:\PROGRA~2\QUANTU~1\apps\Python25
+   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\win32
+   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\win32\lib
+   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\Pythonwin
+   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\wx-2.8-msw-unicode
+
+It is particularly the second and third lines that you need to have in place
+so that the QGIS libs can found::
+
+   from qgis.core import *
+   exit()
+
+Assuming you get no error messages, you have a functional python command
+line environment which you can use to test QGIS functionality with.
 
