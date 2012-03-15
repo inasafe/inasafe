@@ -361,6 +361,8 @@ following listing in <QGIS Install Dir>/bin/python-shell.bat::
    @echo off
    SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.8
    path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2RC2\lib
+   rem pip and easyinstall will get added to this dir so add it to our path
+   path %PATH%;"c:\Program Files (x86)\Quantum GIS Wroclaw\apps\Python25\Scripts\"
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
    start "Quantum GIS" /B "cmd.exe" %*
 
@@ -378,9 +380,48 @@ ez_setup.py by typing this::
 .. note:: You will need to launch the shell as administrator whenever you 
    need to install python packages by pypi.
 
-Now in the same shell, use easy setup to install pip::
+Now in the same shell, use easy setup to install pip (make sure you have added
+the QGIS scripts dir to your shell launchers path as described in the comments
+of python-shell.bat)::
    
-   "c:\Program Files (x86)\Quantum GIS Wroclaw\apps\Python25\Scripts\easy_install.exe" pip
+   easy_install pip
+
+If the installation goes successfully, you should see output like this::
+
+   Searching for pip
+   Reading http://pypi.python.org/simple/pip/
+   Reading http://pip.openplans.org
+   Reading http://www.pip-installer.org
+   Best match: pip 1.1
+   Downloading http://pypi.python.org/packages/source/p/pip/pip-1.1.tar.gz#md5=62a9f08dd5dc69d76734568a6c040508
+   Processing pip-1.1.tar.gz
+   Running pip-1.1\setup.py -q bdist_egg --dist-dir c:\users\timsut~1\appdata\local
+   \temp\easy_install--zkw-t\pip-1.1\egg-dist-tmp-mgb9he
+   warning: no files found matching '*.html' under directory 'docs'
+   warning: no previously-included files matching '*.txt' found under directory 'docs\_build'
+   no previously-included directories found matching 'docs\_build\_sources'
+   Adding pip 1.1 to easy-install.pth file
+   Installing pip-script.py script to C:\PROGRA~2\QUANTU~1\apps\Python25\Scripts
+   Installing pip.exe script to C:\PROGRA~2\QUANTU~1\apps\Python25\Scripts
+   Installing pip.exe.manifest script to C:\PROGRA~2\QUANTU~1\apps\Python25\Scripts
+   Installing pip-2.5-script.py script to C:\PROGRA~2\QUANTU~1\apps\Python25\Scripts
+   Installing pip-2.5.exe script to C:\PROGRA~2\QUANTU~1\apps\Python25\Scripts
+   Installing pip-2.5.exe.manifest script to C:\PROGRA~2\QUANTU~1\apps\Python25\Scripts
+   
+   Installed c:\progra~2\quantu~1\apps\python25\lib\site-packages\pip-1.1-py2.5.egg
+   Processing dependencies for pip
+   Finished processing dependencies for pip
+
+
+Next you need to install nose and nose-cov::
+
+   pip install nose nose-cov
+   
+Once they are installed, you can run the nose tests from windows by going to
+the plugin directory (in your python-shell.bat shell session) and running::
+
+   runtests.bat
+
 
 Verifying your system path
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -416,4 +457,5 @@ so that the QGIS libs can found::
 
 Assuming you get no error messages, you have a functional python command
 line environment which you can use to test QGIS functionality with.
+
 
