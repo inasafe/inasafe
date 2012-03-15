@@ -364,6 +364,7 @@ following listing in <QGIS Install Dir>/bin/python-shell.bat::
    rem pip and easyinstall will get added to this dir so add it to our path
    path %PATH%;"c:\Program Files (x86)\Quantum GIS Wroclaw\apps\Python25\Scripts\"
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
+   set QGISPATH "C:\PROGRA~2\QUANTU~1\apps\qgis"
    start "Quantum GIS" /B "cmd.exe" %*
 
 Now we need to install easy_setup so that we can install pip so that we can
