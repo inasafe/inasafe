@@ -88,14 +88,19 @@ class RiabTest(unittest.TestCase):
         # must be imported late so that i18n is set up already
         del myRiab
         # reload all riab modules so that i18n get picked up afresh
-        for myMod in sys.modules.values():
-            try:
-                if ('storage' in str(myMod) or
-                   'impact' in str(myMod)):
-                    print 'Reloading:', str(myMod)
-                    reload(myMod)
-            except:
-                pass
+        # Note this has really bad side effects....disabled for now
+        # be sure nose tests all run cleanly before reintroducing this!
+        #for myMod in sys.modules.values():
+        #    try:
+        #        if ('storage' in str(myMod) or
+        #           'impact' in str(myMod)):
+        #            print 'Reloading:', str(myMod)
+        #            reload(myMod)
+        #    except:
+        #        pass
+        #
+        # And this will fail with above commented out....
+        #
         myRiab = Riab(myIface)
         myRiab.setupI18n('af')  # afrikaans
         myLang = os.environ['LANG']
