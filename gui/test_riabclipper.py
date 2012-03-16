@@ -222,6 +222,8 @@ class RiabClipper(unittest.TestCase):
             # Get reference values
             R = read_layer(myRasterPath)
             R_min_ref, R_max_ref = R.get_extrema()
+            del R_max_ref
+            del R_min_ref
             native_resolution = R.get_resolution()
 
             # Get the Hazard extents as an array in EPSG:4326
