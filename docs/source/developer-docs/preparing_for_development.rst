@@ -361,11 +361,15 @@ following listing in <QGIS Install Dir>/bin/python-shell.bat::
    @echo off
    SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.8
    path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2RC2\lib
-   rem pip and easyinstall will get added to this dir so add it to our path
    path %PATH%;"c:\Program Files (x86)\Quantum GIS Wroclaw\apps\Python25\Scripts\"
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
-   set QGISPATH "C:\PROGRA~2\QUANTU~1\apps\qgis"
+   set QGISPATH=C:\PROGRA~2\QUANTU~1\apps\qgis
+   cd "\Users\Tim Sutton\.qgis\python\plugins\risk_in_a_box"
    start "Quantum GIS" /B "cmd.exe" %*
+
+.. note:: (1) The QGISPATH environment variable should be unquoted. 
+          (2) The second last line is optional and should be adjusted to your 
+          user home.
 
 Now we need to install easy_setup so that we can install pip so that we can
 install notetests. Download the script on 
