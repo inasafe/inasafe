@@ -463,7 +463,7 @@ For remote debugging, you should add pydevd to your PYTHONPATH before starting
 *QGIS*. Under Windows, the best way to do this is to add the following line to
 :command:`qgis.bat` under C:\Program Files (x86)\Quantum GIS Wroclaw\bin::
 
-   SET PYTHONPATH=%PYTHONPATH%;"C:\Program Files\eclipse\plugins\org.python.pydev_2.3.0.2011121518\PySrc"
+   SET PYTHONPATH=%PYTHONPATH%;C:\Progra~1\eclipse\plugins\org.python.pydev.debug_2.3.0.2011121518\pysrc
 
 
 .. note::
