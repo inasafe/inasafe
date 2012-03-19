@@ -315,7 +315,7 @@ class RiabMap():
         myPainter.setPen(QtGui.QColor(0, 0, 0))  # outline colour
         myLabelX = myLeftIndent + mySquareSize + 10
         myFontSize = 8
-        myFontWeight = QtGui.QFont.Bold
+        myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = False
         myFont = QtGui.QFont('verdana',
                          myFontSize,
@@ -806,27 +806,20 @@ class RiabMap():
         Raises:
             None
         """
-        myPixmap = self.getLegend()
-        myQGISDrawingFlag = True
-        if myQGISDrawingFlag:
-            # Old approach: This works fine on linux and uses QGIS api
-            # but has occassional artifacts under windows.
-            myPicture1 = QgsComposerPicture(self.composition)
-            myLegendFile = os.path.join(getTempDir(), 'legend.png')
-            self.legend.save(myLegendFile, 'PNG')
-            myPicture1.setPictureFile(myLegendFile)
-            myLegendHeight = self.pointsToMM(self.legend.height())
-            myLegendWidth = self.pointsToMM(self.legend.width())
-            myPicture1.setItemPosition(self.pageMargin,
-                                       theTopOffset,
-                                       myLegendWidth,
-                                       myLegendHeight)
-            myPicture1.setFrame(False)
-            self.composition.addItem(myPicture1)
-        else:
-            # New approach: Ues QGraphicsScene directly to draw the pix
-            myWidthMM = 20
-            self.drawPixmap(myPixmap, myWidthMM, self.pageMargin, theTopOffset)
+        self.getLegend()
+        myPicture1 = QgsComposerPicture(self.composition)
+        myLegendFile = os.path.join(getTempDir(), 'legend.png')
+        self.legend.save(myLegendFile, 'PNG')
+        myPicture1.setPictureFile(myLegendFile)
+        myLegendHeight = self.pointsToMM(self.legend.height())
+        myLegendWidth = self.pointsToMM(self.legend.width())
+        myPicture1.setItemPosition(self.pageMargin,
+                                   theTopOffset,
+                                   myLegendWidth,
+                                   myLegendHeight)
+        myPicture1.setFrame(False)
+        self.composition.addItem(myPicture1)
+        os.remove(myLegendFile)
 
     def drawPixmap(self, thePixmap, theWidthMM, theLeftOffset, theTopOffset):
         """Helper to draw a pixmap directly onto the QGraphicsScene.
@@ -889,6 +882,7 @@ class RiabMap():
                                     myTableHeight)
             myTable.setFrame(False)
             self.composition.addItem(myTable)
+            #os.remove(myTableFile)
 
     def drawImpactTable(self, theTopOffset):
         """Render the impact table
