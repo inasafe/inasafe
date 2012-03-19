@@ -12,9 +12,10 @@ You can find out more about the Risk in a Box project by visiting
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
-   preparing_for_development
+   platform_linux
+   platform_windows
    coding_standards
    i18n
    version_control

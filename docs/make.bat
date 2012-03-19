@@ -2,6 +2,7 @@
 
 REM Command file for Sphinx documentation
 
+path %PATH%;"%OSGEO4W_ROOT%\apps\Python25\Scripts\"
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
 )
