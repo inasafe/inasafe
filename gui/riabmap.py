@@ -374,6 +374,7 @@ class RiabMap():
         self.composition.setPlotStyle(QgsComposition.Print)
         self.composition.setPaperSize(self.pageWidth, self.pageHeight)
         self.composition.setPrintResolution(self.pageDpi)
+        self.composition.setPrintAsRaster(True)
 
     def setupPrinter(self, theFilename):
         """Create a QPrinter instance set up to print to an A4 portrait pdf
@@ -409,10 +410,27 @@ class RiabMap():
             None
         """
         myPainter = QtGui.QPainter(self.printer)
-        myPaperRectMM = self.printer.pageRect(QtGui.QPrinter.Millimeter)
-        myPaperRectPx = self.printer.pageRect(QtGui.QPrinter.DevicePixel)
-        self.composition.render(myPainter, myPaperRectPx, myPaperRectMM)
-        myPainter.end()
+        self.composition.setPlotStyle(QgsComposition.Print)  # or preview
+
+        if self.composition.printAsRaster():
+            myWidth = (int)(self.pageDpi * self.pageWidth / 25.4)
+            myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
+            myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
+                                   QtGui.QImage.Format_ARGB32)
+            myImage.setDotsPerMeterX(self.pageDpi / 25.4 * 1000)
+            myImage.setDotsPerMeterY(self.pageDpi / 25.4 * 1000)
+            myImage.fill(0)
+            myImagePainter = QtGui.QPainter(myImage)
+            mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
+                                                   self.pageHeight)
+            myTargetArea = QtCore.QRectF(0, 0, myWidth, myHeight)
+            self.composition.render(myImagePainter, myTargetArea, mySourceArea)
+            myPainter.drawImage(myTargetArea, myImage, myTargetArea)
+        else:
+            #Each composer element will be rendered as its own layer in the pdf
+            myPaperRectMM = self.printer.pageRect(QtGui.QPrinter.Millimeter)
+            myPaperRectPx = self.printer.pageRect(QtGui.QPrinter.DevicePixel)
+            self.composition.render(myPainter, myPaperRectPx, myPaperRectMM)
 
     def drawLogo(self, theTopOffset):
         """Add a picture containing the logo to the map top left corner
