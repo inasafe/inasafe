@@ -425,12 +425,14 @@ class RiabMap():
                                                    self.pageHeight)
             myTargetArea = QtCore.QRectF(0, 0, myWidth, myHeight)
             self.composition.render(myImagePainter, myTargetArea, mySourceArea)
+            myImagePainter.end()
             myPainter.drawImage(myTargetArea, myImage, myTargetArea)
         else:
             #Each composer element will be rendered as its own layer in the pdf
             myPaperRectMM = self.printer.pageRect(QtGui.QPrinter.Millimeter)
             myPaperRectPx = self.printer.pageRect(QtGui.QPrinter.DevicePixel)
             self.composition.render(myPainter, myPaperRectPx, myPaperRectMM)
+        myPainter.end()
 
     def drawLogo(self, theTopOffset):
         """Add a picture containing the logo to the map top left corner
