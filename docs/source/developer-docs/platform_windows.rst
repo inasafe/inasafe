@@ -73,7 +73,7 @@ illustrated below:
 Install an SVN client
 .....................
 
-The test data for Risk in a Box is hosted on an svn server, so to obtain it
+The test data for |project_name| is hosted on an svn server, so to obtain it
 you first need to install an SVN client. Start by downloading `this installer
 <http://sourceforge.net/projects/win32svn/files/latest/download>`_ (it is
 about 4.8mb to download).
@@ -137,12 +137,13 @@ contect Ole Nielson for a log in account.
 Install QGIS
 ............
 
-Download the latest QGIS 'standalone' installer from http://download.qgis.org and
-install it by running the installation wizard and accepting the defaults throughout.
+Download the latest QGIS 'standalone' installer from http://download.qgis.org
+and install it by running the installation wizard and accepting the defaults
+throughout.
 
 After opening QGIS (:menuselection:`Start --> All Programs --> Quantum GIS Wroclaw --> Quantum GIS`)
 you need to enable the plugin from the plugin menu by doing :menuselection:`Plugins --> Manage Plugins`
-and then search for the Risk in a Box plugin in the list and enable it.
+and then search for the |project_name| plugin in the list and enable it.
 
 Windows Caveats
 ...............
@@ -162,7 +163,7 @@ Create a shell launcher
 .......................
 
 A command line environment is useful for running unit tests and for developing
-and testing standalone scripts written to use the Risk in a Box libraries.
+and testing standalone scripts written to use the |project_name| libraries.
 
 We will create a custom shell launcher that will give you a python
 shell environment using the python that comes bundled with QGIS, and that sets
@@ -313,7 +314,7 @@ Building sphinx documentation
 `Sphinx <http://sphinx.pocoo.org>`_ is a tool for building documentation that
 has been written in the ReSTructured text markup language (a simple wiki like
 format). You can build the sphinx documentation under windows using a helper
-script provided in the docs directory of the Risk in a Box source directory,
+script provided in the docs directory of the |project_name| source directory,
 but first you need to actually install sphinx.
 
 Installing sphinx
@@ -340,7 +341,7 @@ Viewing the documentation
 .........................
 
 The documentation can be viewed from withing QGIS by clicking the :guilabel:`help`
-button on the Risk in a Box dock panel, or you can view it in your browser by
+button on the |project_name| dock panel, or you can view it in your browser by
 opening a url similar to this one::
 
    file:///C:/Users/Tim%20Sutton/.qgis/python/plugins/risk_in_a_box/docs/_build/html/index.html
@@ -429,7 +430,7 @@ In the dialog that appears do:
 Another dialog will appear. Tick the first entry in the list that points to
 your::
 
-      ~/.eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev_2.3.0.2011121518/
+      eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev_2.3.0.2011121518/
 
 The resulting list of python paths should look something like this::
    

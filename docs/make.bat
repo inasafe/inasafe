@@ -3,6 +3,11 @@
 REM Command file for Sphinx documentation
 
 path %PATH%;"%OSGEO4W_ROOT%\apps\Python25\Scripts\"
+set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python
+set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
+
+echo %PYTHONPATH%
+
 if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
 )

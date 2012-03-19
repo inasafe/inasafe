@@ -2,11 +2,11 @@
 Using QGIS
 ==========
 
-Risk in a box uses `Quantum GIS (QGIS)<http://qgis.org>`- as the platform on 
+|project_name| uses `Quantum GIS (QGIS)<http://qgis.org>`- as the platform on 
 which to provide its functionality. QGIS itself has good documentation and 
 a very helpful user community. In this section we focus on those aspects of
 QGIS functionality that will be helpful to someone wanting to carry out
-impact scenario assessments using Risk in a Box.
+impact scenario assessments using |project_name|.
 
 Things to cover (suggested by Trias Aditya)
 

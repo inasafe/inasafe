@@ -8,7 +8,7 @@ here: https://github.com/AIFDR/risk_in_a_box
 Branching guide
 ---------------
 
-Risk In A Box follows the following simple branching model:
+|project_name| follows the following simple branching model:
 
 .. figure::  ../../release-workflow.png
    :align:   center

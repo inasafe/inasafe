@@ -18,7 +18,7 @@ How do I reproject a spatial data file to WGS84 geographic coordinates
   For vector data use ogr2ogr. For example from TM-3 zone 48.2
   ogr2ogr -s_srs EPSG:23834 -t_srs EPSG:4326 <target>.shp <source>.shp
 
-How do I get Open Street Map building data into Risk in a Box?
+How do I get Open Street Map building data into |project_name|?
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
   For Indonesia, you can download latest collections at http://data.kompetisiosm.org
@@ -43,7 +43,7 @@ How do I take screen capture e.g. for use in a presentation?
 
 How does the documentation work?::
 
-  The Risk in a Box documentation files are written using the RST format
+  The |project_name| documentation files are written using the RST format
   (http://docutils.sourceforge.net/docs/user/rst/quickref.html) and stored with
   the source code in github:
   https://github.com/AIFDR/risk_in_a_box/tree/master/docs/source
@@ -52,7 +52,7 @@ How does the documentation work?::
   * HTML files generated using Sphinx (http://sphinx.pocoo.org) by running
     https://github.com/AIFDR/risk_in_a_box/blob/master/docs/Makefile. These
     files are accessible through both the file browser and the help button
-    available in Risk in a Box
+    available in |project_name|
   * The web site http://readthedocs.org/docs/risk-in-a-box which automatically
     reads the RST files from github to update its content. The steps to achieve
     this are

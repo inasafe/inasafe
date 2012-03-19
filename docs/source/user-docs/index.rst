@@ -1,16 +1,16 @@
-Risk in a Box user documentation!
+|project_name| user documentation!
 =================================
 
-Risk in a Box is a Quantum GIS plugin that enables you to perform risk scenario
+|project_name| is a Quantum GIS plugin that enables you to perform risk scenario
 analysis of natural disaster events such as a flood, tsunami, earthquake
 etc.
 
 It is developed jointly by AusAID (AIFDR) and World Bank (GFDRR) as an Open Source project
 
-You can find out more about the Risk in a Box project by visiting
+You can find out more about the |project_name| project by visiting
 `riskinabox.org <http://riskinabox.org/>`_.
 
-This document describes how to use the Risk in a box system.
+This document describes how to use the |project_name| system.
 
 .. toctree::
    :maxdepth: 2

@@ -1,13 +1,13 @@
 
 ==============================
-Using the Risk in a Box Plugin
+Using the |project_name| Plugin
 ==============================
 
-This document describes the useage of the Risk in a Box 'dock panel' - which
+This document describes the useage of the |project_name| 'dock panel' - which
 is the main interface for running risk scenarios within the Quantum GIS
 environment.
 
-In order to use the Risk in a Box tool effectively, you should probably also 
+In order to use the |project_name| tool effectively, you should probably also 
 read the  :doc:`keywords` and :doc:`impact_functions` documentation before 
 you get started.
 

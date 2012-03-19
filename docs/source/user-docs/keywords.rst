@@ -3,7 +3,7 @@
 Keywords System
 ===============
 
-This document describes the purpose and usage of the Risk in a Box *keywords*
+This document describes the purpose and usage of the |project_name| *keywords*
 system.
 
 Purpose
@@ -12,7 +12,7 @@ Purpose
 The keywords system is used by the :doc:`impact_functions` to determine the
 nature of the input layers that have been passed to them.
 
-Each input GIS dataset used by Risk in a Box needs to have an accompanying
+Each input GIS dataset used by |project_name| needs to have an accompanying
 keywords file. The purpose of the keywords file is to provide additional
 metadata needed by the impact functions. For example, the keywords file
 will indicate whether a given dataset should be treated as a *hazard* or an
@@ -32,7 +32,7 @@ Would need to have an accompanying keywords file saved as::
 .. note:: We recommend to **avoid using spaces** in your file
    names and file paths!
 
-The Risk in a Box QGIS plugin provides an editor for these keywords.
+The |project_name| QGIS plugin provides an editor for these keywords.
 The purpose of this document is to describe the keywords editor and to
 provide guidelines as to the use of keywords.
 
@@ -253,7 +253,7 @@ Invoking the keywords editor
 
 The keyword editor can easily be invoked by selecting any layer in the
 QGIS layers list, and then using the plugin menu to start the editor
-(:menuselection:`Plugins --> Risk in a Box --> Keyword Editor`).
+(:menuselection:`Plugins --> |project_name| --> Keyword Editor`).
 Alternatively, you may use the keywords editor icon on the
 plugins toolbar as illustrated below.
 

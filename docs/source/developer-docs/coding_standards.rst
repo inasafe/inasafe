@@ -81,7 +81,7 @@ are listed here for your convenience:
   widgets that are not visible.
 + Try to avoid technical terms and rather use a laymans equivalent e.g. use
   the word 'Transparency' rather than 'Alpha Channel' (contrived example),
- 'Text' instead of 'String' and so on.
+  'Text' instead of 'String' and so on.
 + Use consistent iconography. If you need an icon or icon elements, please
   contact Robert Szczepanek on the mailing list for assistance.
 + Place long lists of widgets into scroll boxes. No dialog should exceed 580

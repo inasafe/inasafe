@@ -3,7 +3,7 @@ Preparing a release
 ===================
 
 This document outlines the steps that need to be carried out in order
-to issue a new release of the Risk in a Box plugin. The steps can be outlined
+to issue a new release of the |project_name| plugin. The steps can be outlined
 as follows and are described in detail below:
 
 + Identify what version number the new release will be assigned.
@@ -36,7 +36,7 @@ as follows and are described in detail below:
 Release numbering
 .................
 
-Risk in a Box will follow the `semantic versioning system <http://semver.org/>`_.
+|project_name| will follow the `semantic versioning system <http://semver.org/>`_.
 Simply put, the following scheme should be applied to version numbers:
 
 .. table::
@@ -263,7 +263,7 @@ the release cycle.
 Finalise translations
 .....................
 
-The Risk in a Box plugin is built from the ground up for internationalization.
+The |project_name| plugin is built from the ground up for internationalization.
 In particular the following two languages are supported as part of this
 project:
 
@@ -274,7 +274,7 @@ There are three components of the project that require translation:
 
 + The Graphical User Interface - primarily the :file:`gui` python package.
   Qt4 .ts files are used for these translations.
-+ The Risk in a Box libraries - these components provide the underlying
++ The |project_name| libraries - these components provide the underlying
   functionality of the scenario assessment. Python gettext is used for these
   translations.
 + The sphinx documentation - this is translated using gettext.
@@ -316,7 +316,7 @@ in the top level directory of the source tree::
 
    def name():
       """A user friendly name for the plugin."""
-      return 'Risk in a box'
+      return '|project_name|'
 
 
    def description():
@@ -439,10 +439,10 @@ Once the release has been made, an announcement should be made to inform
 interested parties about the availability of the new software. A pro-forma
 announcement is provided below **(Trevor or Ole todo)**::
 
-   Dear Risk in a Box Users
+   Dear |project_name| Users
 
    We are pleased to announce the immediate availability of the newest
-   version of Risk in a Box (version X.X.X). This version includes numerous
+   version of |project_name| (version X.X.X). This version includes numerous
    bug fixes and improvements over the previous release::
 
    ----- changelog goes here -------------

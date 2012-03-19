@@ -3,7 +3,7 @@
 Maintaining the documentation
 ============================
 
-The documentation for Risk in a Box is written using ReSTructured text (.rst)
+The documentation for |project_name| is written using ReSTructured text (.rst)
 and the Sphinx documenation builder. The best way to learn how to write .rst
 is to look at the source of existing documentation - the markup syntax is
 very simple. There are a number of useful tags that you can use to make
@@ -123,7 +123,7 @@ A couple of things should be noted here:
 
 
 Once the new document has been added and the documentation generated, you
-should see it appear in the API section of the Risk in a Box documentation.
+should see it appear in the API section of the |project_name| documentation.
 
 
 .. _documenting-new-features-howto-label:

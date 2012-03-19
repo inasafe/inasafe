@@ -6,7 +6,7 @@ Whats new?
 Changelog for version 0.1.0:
 ............................
 
-+ First QGIS plugin implementation of Risk in a Box.
++ First QGIS plugin implementation of |project_name|.
 + Migrated calculation engine from Risiko project.
 + Implemented support for polygon hazard layers.
 + Added dock widget for designing and executing a scenario model.
