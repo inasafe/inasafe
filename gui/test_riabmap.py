@@ -234,7 +234,7 @@ class RiabDockTest(unittest.TestCase):
         myMap.setupPrinter(myPdfPath)
 
         myPixmap = QtGui.QPixmap(10, 10)
-        myPixmap.fill(QtGui.QColor(250, 25, 25))
+        myPixmap.fill(QtGui.QColor(250, 250, 250))
         myFilename = os.path.join(getTempDir(), 'greyBox')
         myPixmap.save(myFilename, 'PNG')
         for i in range(10, 190, 10):
