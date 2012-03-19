@@ -84,7 +84,12 @@ class RiabDockTest(unittest.TestCase):
         myLegend = myMap.getLegend()
         myPath = os.path.join(getTempDir(), 'getLegend.png')
         myLegend.save(myPath, 'PNG')
-        myExpectedHash = '56ec8a71c21afefe05cca02bf47b4d3d'
+        myExpectedHash = None
+        if  os.name is'nt':
+            # windows renders fonts slightly differently
+            myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
+        else:
+            myExpectedHash = '56ec8a71c21afefe05cca02bf47b4d3d'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getVectorLegend(self):
@@ -96,7 +101,12 @@ class RiabDockTest(unittest.TestCase):
         myMap.getVectorLegend()
         myPath = os.path.join(getTempDir(), 'getVectorLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = '56ec8a71c21afefe05cca02bf47b4d3d'
+        myExpectedHash = None
+        if  os.name is'nt':
+            # windows renders fonts slightly differently
+            myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
+        else:
+            myExpectedHash = '56ec8a71c21afefe05cca02bf47b4d3d'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getRasterLegend(self):
@@ -108,7 +118,12 @@ class RiabDockTest(unittest.TestCase):
         myMap.getRasterLegend()
         myPath = os.path.join(getTempDir(), 'getRasterLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = 'b7f2f2c0c5012803dc353031e05f2a36'
+        myExpectedHash = None
+        if  os.name is'nt':
+            # windows renders fonts slightly differently
+            myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
+        else:
+            myExpectedHash = 'b7f2f2c0c5012803dc353031e05f2a36'
         assertHashForFile(myExpectedHash, myPath)
 
     def addSymbolToLegend(self):
@@ -150,7 +165,12 @@ class RiabDockTest(unittest.TestCase):
                                theLabel='foo')
         myPath = os.path.join(getTempDir(), 'addClassToLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = 'ffc0c9715a847b9513f6ab80d33fe56e'
+        myExpectedHash = None
+        if  os.name is'nt':
+            # windows renders fonts slightly differently
+            myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
+        else:
+            myExpectedHash = 'ffc0c9715a847b9513f6ab80d33fe56e'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getMapTitle(self):
