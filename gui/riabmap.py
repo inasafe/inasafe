@@ -972,7 +972,7 @@ class RiabMap():
         myComposerMap = self.drawMap(myTopOffset)
         self.drawScaleBar(myComposerMap, myTopOffset)
         # Update the top offset for the next horizontal row of items
-        myTopOffset += self.mapHeight + self.verticalSpacing
+        myTopOffset += self.mapHeight + self.verticalSpacing - 1
         myImpactTitleHeight = self.drawImpactTitle(myTopOffset)
         # Update the top offset for the next horizontal row of items
         if myImpactTitleHeight:
