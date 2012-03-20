@@ -48,7 +48,7 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 class RiabDockTest(unittest.TestCase):
-    """Test the risk in a box GUI"""
+    """Test the InaSAFE GUI"""
     def setUp(self):
         """Setup fixture run before each tests"""
         for myLayer in QgsMapLayerRegistry.instance().mapLayers():

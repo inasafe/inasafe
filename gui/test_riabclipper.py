@@ -50,7 +50,7 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 class RiabClipper(unittest.TestCase):
-    """Test the risk in a box clipper"""
+    """Test the InaSAFE clipper"""
 
     def setUp(self):
         pass

@@ -35,7 +35,7 @@ from storage.utilities_test import TESTDATA
 
 
 class ImpactCalculatorTest(unittest.TestCase):
-    """Test the risk in a box plugin stub"""
+    """Test the InaSAFE plugin stub"""
 
     def setUp(self):
         """Create shared resources that all tests can use"""

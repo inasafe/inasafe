@@ -28,7 +28,7 @@ from riabhelp import RiabHelp
 
 
 class RiabHelpTest(unittest.TestCase):
-    """Test the risk in a box help GUI
+    """Test the InaSAFE help GUI
     .. note:: Currently these tests will all fail unless you comment out the
     APP.exec_() lines because the web view does not load content without
     the main application event loop running.

@@ -176,7 +176,7 @@ def loadLayer(theLayerFile):
 
 
 class RiabDockTest(unittest.TestCase):
-    """Test the risk in a box GUI"""
+    """Test the InaSAFE GUI"""
 
     def test_defaults(self):
         """Test the GUI in its default state"""

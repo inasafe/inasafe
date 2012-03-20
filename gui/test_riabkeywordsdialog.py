@@ -55,7 +55,7 @@ def clearLayers():
 
 
 class RiabKeywordsDialogTest(unittest.TestCase):
-    """Test the risk in a box keywords GUI"""
+    """Test the InaSAFE keywords GUI"""
 
     def setUp(self):
         """Create fresh dialog for each test"""
