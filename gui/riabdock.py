@@ -71,12 +71,14 @@ def setVectorStyle(theQgisVectorLayer, style):
         {'target_field': 'DMGLEVEL',
         'style_classes':
         [{'opacity': 1, 'max': 1.5, 'colour': '#fecc5c',
-          'min': 0.5, 'label': 'Low damage'},
+          'min': 0.5, 'label': 'Low damage', 'size' : 1},
         {'opacity': 1, 'max': 2.5, 'colour': '#fd8d3c',
-         'min': 1.5, 'label': 'Medium damage'},
+         'min': 1.5, 'label': 'Medium damage', 'size' : 1},
         {'opacity': 1, 'max': 3.5, 'colour': '#f31a1c',
-         'min': 2.5, 'label': 'High damage'}]}
+         'min': 2.5, 'label': 'High damage', 'size' : 1}]}
 
+        .. note:: The transparency and size keys are optional. Size applies
+           to points only.
     Output
         Sets and saves style for theQgisVectorLayer
 
@@ -89,6 +91,9 @@ def setVectorStyle(theQgisVectorLayer, style):
     for myClass in myClasses:
         # Transparency 100: transparent
         # Transparency 0: opaque
+        mySize = 2  # mm
+        if 'size' in myClass:
+            mySize = myClass['size']
         myTransparencyPercent = 0
         if 'transparency' in myClass:
             myTransparencyPercent = myClass['transparency']
@@ -115,6 +120,7 @@ def setVectorStyle(theQgisVectorLayer, style):
             # QgsSimpleMarkerSymbolLayerV2.properties()
             mySymbolLayer = myMetadata.createSymbolLayer({'color_border':
                                                           myColourString})
+            mySymbolLayer.setSize(mySize)
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         elif myGeometryType == QGis.Polygon:
             myMetadata = myRegistry.symbolLayerMetadata('SimpleFill')

@@ -42,8 +42,7 @@ from utilities_test import (getQgisTestApp,
                             GEOCRS,
                             GOOGLECRS)
 
-from gui.riabdock import (RiabDock, setRasterStyle)
-from gui.riabmap import RiabMap
+from gui.riabdock import (RiabDock, setRasterStyle, setVectorStyle)
 from utilities_test import loadLayer
 from storage.utilities_test import TESTDATA
 from storage.utilities import read_keywords
@@ -824,6 +823,48 @@ class RiabDockTest(unittest.TestCase):
         myMessage2 = myMessage + 'Expected 255 got %i' % myValue2
         assert myValue1 == 0, myMessage1
         assert myValue2 == 255, myMessage2
+
+    def test_issue121(self):
+        """Test that point symbol size can be set from style (issue 121).
+        .. seealso:: https://github.com/AIFDR/risk_in_a_box/issues/121
+        """
+        clearDock()
+        # This dataset has all cells with value 1.3
+        myLayer, myType = loadLayer('kecamatan_geo_centroids.shp')
+        del myType
+        # Note the float quantity values below
+        myStyleInfo = {'target_field': 'KEPADATAN',
+                     'style_classes':
+                     [{'opacity': 1, 'max': 200, 'colour': '#fecc5c',
+                       'min': 45, 'label': 'Low', 'size': 1},
+                      {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
+                       'min': 201, 'label': 'Medium', 'size': 2},
+                      {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
+                       'min': 351, 'label': 'High', 'size': 3}]}
+        myMessage = ('Setting style with point sizes should work.')
+        try:
+            setVectorStyle(myLayer, myStyleInfo)
+        except:
+            raise Exception(myMessage)
+        # Now validate the size values were set as expected
+
+        if myLayer.isUsingRendererV2():
+            # new symbology - subclass of QgsFeatureRendererV2 class
+            myRenderer = myLayer.rendererV2()
+            myType = myRenderer.type()
+            assert myType == 'graduatedSymbol'
+            mySize = 1
+            for myRange in myRenderer.ranges():
+                mySymbol = myRange.symbol()
+                mySymbolLayer = mySymbol.symbolLayer(0)
+                myActualSize = mySymbolLayer.size()
+                myMessage = (('Expected symbol layer 0 for range %s to have'
+                             ' a size of %s, got %s') %
+                             (mySize, mySize, myActualSize))
+                assert mySize == myActualSize, myMessage
+
+                mySize += 1
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RiabDockTest, 'test')
