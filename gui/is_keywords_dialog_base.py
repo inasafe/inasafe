@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_keywords_dialog_base.ui'
 #
-# Created: Tue Mar 20 13:27:53 2012
+# Created: Tue Mar 20 15:18:38 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -19,6 +19,9 @@ class Ui_ISKeywordsDialogBase(object):
         ISKeywordsDialogBase.setObjectName(_fromUtf8("ISKeywordsDialogBase"))
         ISKeywordsDialogBase.resize(520, 580)
         ISKeywordsDialogBase.setWindowTitle(QtGui.QApplication.translate("ISKeywordsDialogBase", "InaSAFE - Keyword Editor", None, QtGui.QApplication.UnicodeUTF8))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        ISKeywordsDialogBase.setWindowIcon(icon)
         self.gridLayout_2 = QtGui.QGridLayout(ISKeywordsDialogBase)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.lblLayerName = QtGui.QLabel(ISKeywordsDialogBase)
@@ -175,8 +178,8 @@ class Ui_ISKeywordsDialogBase(object):
         self.label_8.setBuddy(self.lstKeywords)
 
         self.retranslateUi(ISKeywordsDialogBase)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ISKeywordsDialogBase.ISKeywordsDialogBase.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ISKeywordsDialogBase.ISKeywordsDialogBase.reject)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ISKeywordsDialogBase.accept)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ISKeywordsDialogBase.reject)
         QtCore.QObject.connect(self.pbnAdvanced, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.grpAdvanced.setVisible)
         QtCore.QObject.connect(self.radPredefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.framePredefined.setVisible)
         QtCore.QObject.connect(self.radPredefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.frameUserDefined.setHidden)
@@ -198,3 +201,4 @@ class Ui_ISKeywordsDialogBase(object):
     def retranslateUi(self, ISKeywordsDialogBase):
         pass
 
+import resources_rc

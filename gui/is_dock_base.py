@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_dock_base.ui'
 #
-# Created: Tue Mar 20 13:27:53 2012
+# Created: Tue Mar 20 15:18:38 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,7 +18,10 @@ class Ui_ISDockBase(object):
     def setupUi(self, ISDockBase):
         ISDockBase.setObjectName(_fromUtf8("ISDockBase"))
         ISDockBase.resize(394, 547)
-        ISDockBase.setWindowTitle(QtGui.QApplication.translate("ISDockBase", "Risk-In-A-Box", None, QtGui.QApplication.UnicodeUTF8))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        ISDockBase.setWindowIcon(icon)
+        ISDockBase.setWindowTitle(QtGui.QApplication.translate("ISDockBase", "InaSAFE", None, QtGui.QApplication.UnicodeUTF8))
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.dockWidgetContents)

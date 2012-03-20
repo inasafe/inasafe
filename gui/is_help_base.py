@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_help_base.ui'
 #
-# Created: Tue Mar 20 13:57:45 2012
+# Created: Tue Mar 20 15:18:38 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,7 +18,7 @@ class Ui_ISHelpBase(object):
     def setupUi(self, ISHelpBase):
         ISHelpBase.setObjectName(_fromUtf8("ISHelpBase"))
         ISHelpBase.resize(727, 403)
-        ISHelpBase.setWindowTitle(QtGui.QApplication.translate("ISHelpBase", "Risk In A Box Help", None, QtGui.QApplication.UnicodeUTF8))
+        ISHelpBase.setWindowTitle(QtGui.QApplication.translate("ISHelpBase", "InaSAFE Help", None, QtGui.QApplication.UnicodeUTF8))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         ISHelpBase.setWindowIcon(icon)
@@ -35,8 +35,6 @@ class Ui_ISHelpBase(object):
         self.gridLayout.addWidget(self.buttonBox, 1, 0, 1, 1)
 
         self.retranslateUi(ISHelpBase)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ISHelpBase.ISHelp.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ISHelpBase.ISHelp.reject)
         QtCore.QMetaObject.connectSlotsByName(ISHelpBase)
 
     def retranslateUi(self, ISHelpBase):

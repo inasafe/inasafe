@@ -10,8 +10,12 @@
     <height>547</height>
    </rect>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/plugins/inasafe/icon.png</normaloff>:/plugins/inasafe/icon.png</iconset>
+  </property>
   <property name="windowTitle">
-   <string>Risk-In-A-Box</string>
+   <string>InaSAFE</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
    <layout class="QGridLayout" name="gridLayout">
