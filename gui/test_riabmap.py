@@ -20,7 +20,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
-import numpy
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -89,7 +88,7 @@ class RiabDockTest(unittest.TestCase):
             # windows renders fonts slightly differently
             myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
         else:
-            myExpectedHash = '56ec8a71c21afefe05cca02bf47b4d3d'
+            myExpectedHash = 'f2169dd3146aca6b30a10cddfb5ebf68'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getVectorLegend(self):
@@ -106,7 +105,7 @@ class RiabDockTest(unittest.TestCase):
             # windows renders fonts slightly differently
             myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
         else:
-            myExpectedHash = '56ec8a71c21afefe05cca02bf47b4d3d'
+            myExpectedHash = 'f2169dd3146aca6b30a10cddfb5ebf68'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getRasterLegend(self):
@@ -123,7 +122,7 @@ class RiabDockTest(unittest.TestCase):
             # windows renders fonts slightly differently
             myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
         else:
-            myExpectedHash = 'b7f2f2c0c5012803dc353031e05f2a36'
+            myExpectedHash = '1fc706f7c08e7d3057a685f9e6c4df3f'
         assertHashForFile(myExpectedHash, myPath)
 
     def addSymbolToLegend(self):
@@ -170,7 +169,7 @@ class RiabDockTest(unittest.TestCase):
             # windows renders fonts slightly differently
             myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
         else:
-            myExpectedHash = 'ffc0c9715a847b9513f6ab80d33fe56e'
+            myExpectedHash = 'ea0702782c2ed5d950c427fbe1743858'
         assertHashForFile(myExpectedHash, myPath)
 
     def test_getMapTitle(self):

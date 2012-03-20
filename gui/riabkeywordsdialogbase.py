@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'riabkeywordsdialogbase.ui'
 #
-# Created: Fri Mar  9 13:39:58 2012
+# Created: Tue Mar 20 11:32:24 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
