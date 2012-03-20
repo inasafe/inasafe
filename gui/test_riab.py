@@ -1,5 +1,5 @@
 """
-Disaster risk assessment tool developed by AusAid - **QGIS plugin test suite.**
+InaSafe Disaster risk assessment tool developed by AusAid - **QGIS plugin test suite.**
 
 Contact : ole.moller.nielsen@gmail.com
 

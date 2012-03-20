@@ -321,7 +321,7 @@ in the top level directory of the source tree::
 
    def description():
        """A one line description for the plugin."""
-       return 'Disaster risk assessment tool developed by AusAid and World Bank'
+       return 'InaSafe Disaster risk assessment tool developed by AusAid and World Bank'
 
 
    def version():

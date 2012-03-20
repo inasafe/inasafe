@@ -1,5 +1,5 @@
 """
-Disaster risk assessment tool developed by AusAid - **Help Dialog.**
+InaSafe Disaster risk assessment tool developed by AusAid - **Help Dialog.**
 
 Contact : ole.moller.nielsen@gmail.com
 

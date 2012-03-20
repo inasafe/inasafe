@@ -1,5 +1,5 @@
 """
-Disaster risk assessment tool developed by AusAid - **impactcalculator.**
+InaSafe Disaster risk assessment tool developed by AusAid - **impactcalculator.**
 
 The purpose of the module is to centralise interactions between the gui
 package and the underlying Risk in a Box packages.

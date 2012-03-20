@@ -1,5 +1,5 @@
 """
-Disaster risk assessment tool developed by AusAid -
+InaSafe Disaster risk assessment tool developed by AusAid -
 **Impact calculator test suite.**
 
 Contact : ole.moller.nielsen@gmail.com
