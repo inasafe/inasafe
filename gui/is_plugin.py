@@ -138,8 +138,8 @@ class ISPlugin:
         Raises:
            no exceptions explicitly raised.
         """
-        # Import inasafedock her as it needs to be imported AFTER i18n is set up
-        from is_dock import IsDock
+        # Import dock here as it needs to be imported AFTER i18n is set up
+        from is_dock import ISDock
         self.dockWidget = None
         #--------------------------------------
         # Create action for plugin dockable window (show/hide)
@@ -196,7 +196,7 @@ class ISPlugin:
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
-        self.dockWidget = IsDock(self.iface)
+        self.dockWidget = ISDock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
         if myLegendTab:
