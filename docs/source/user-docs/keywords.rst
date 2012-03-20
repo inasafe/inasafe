@@ -184,7 +184,7 @@ Assumptions
 -----------
 
 The following assumptions are made about keywords, which may or may not be
-programmatically enforced by the RIAB library and GUI:
+programmatically enforced by the InaSAFE library and GUI:
 
 * There should only be **one keyword for a given key** in the keywords file
 * Switching from hazard to exposure will clear parts of the GUI since in

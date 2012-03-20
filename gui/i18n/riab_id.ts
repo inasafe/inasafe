@@ -207,8 +207,8 @@ ke %s: %s</translation>
     </message>
     <message>
         <location filename="riab.py" line="149"/>
-        <source>Toggle RIAB Dock</source>
-        <translation>Tombol untuk beralih ke RIAB</translation>
+        <source>Toggle InaSAFE Dock</source>
+        <translation>Tombol untuk beralih ke InaSAFE</translation>
     </message>
     <message>
         <location filename="riab.py" line="168"/>

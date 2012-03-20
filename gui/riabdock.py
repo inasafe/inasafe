@@ -1,5 +1,5 @@
 """
-InaSafe Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -62,7 +62,7 @@ except Exception, e:
 
 
 def setVectorStyle(theQgisVectorLayer, style):
-    """Set QGIS vector style based on RIAB style dictionary
+    """Set QGIS vector style based on InaSAFE style dictionary
 
     Input
         theQgisVectorLayer: Qgis layer
@@ -153,7 +153,7 @@ def setVectorStyle(theQgisVectorLayer, style):
 
 
 def setRasterStyle(theQgsRasterLayer, theStyle):
-    """Set QGIS raster style based on RIAB style dictionary.
+    """Set QGIS raster style based on InaSAFE style dictionary.
 
     This function will set both the colour map and the transparency
     for the passed in layer.
@@ -516,7 +516,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             Exception if layer is not valid
         """
 
-        myMessage = ('Input argument must be a RIAB spatial object. '
+        myMessage = ('Input argument must be a InaSAFE spatial object. '
                'I got %s' % type(myEngineImpactLayer))
         if not hasattr(myEngineImpactLayer, 'is_riab_spatial_object'):
             raise Exception(myMessage)
@@ -748,7 +748,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
             exposure layers.
 
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
 
         # Get the hazard and exposure layers selected in the combos
@@ -986,7 +986,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         myStateDict = {'hazard': self.cboHazard.currentText(),
                        'exposure': self.cboExposure.currentText(),
@@ -1002,7 +1002,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         if self.state is None:
             return
@@ -1030,7 +1030,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to pdf'),

@@ -26,7 +26,7 @@ echo "Moving .bash_alias to .bash_aliases_risiko_copy"
 sudo mv -f ~/.bash_aliases ~/.bash_aliases_risiko_copy
 
 echo "Removing Risk in a Box"
-/bin/rm -rf $RIABQGIS
+/bin/rm -rf $InaSAFEQGIS
 cd
 
 echo

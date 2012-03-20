@@ -1,7 +1,7 @@
 #/***************************************************************************
 # Riab
 #
-# InaSafe Disaster risk assessment tool developed by AusAid and World Bank
+# InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 #                             -------------------
 #        begin                : 2012-01-09
 #        copyright            : (C) 2012 by Australia Indonesia Facility for Disaster Reduction
@@ -134,7 +134,7 @@ unwanted_strings:
 dependency_test:
 	@echo
 	@echo "---------------------------------------------"
-	@echo "List of unwanted dependencies in RIAB library"
+	@echo "List of unwanted dependencies in InaSAFE library"
 	@echo "---------------------------------------------"
 
 	@# Need disjunction with "true" because grep returns non-zero error code if no matches were found

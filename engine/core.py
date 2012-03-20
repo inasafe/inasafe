@@ -95,7 +95,7 @@ def check_data_integrity(layer_objects):
     """Check list of layer objects
 
     Input
-        layer_objects: List of RIAB layer instances
+        layer_objects: List of InaSAFE layer instances
 
     Output
         Nothing

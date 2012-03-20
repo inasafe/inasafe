@@ -64,7 +64,7 @@ Save and close the .pro file. Next run :samp:`make update-translation-strings`
 to generate the new .ts file under gui/i18n. Don't forget to :samp:`git add` 
 the new file and place it under version control. 
 
-RIAB Library Translations
+InaSAFE Library Translations
 -------------------------
 
 Low level gettext usage

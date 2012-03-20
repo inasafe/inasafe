@@ -11,7 +11,7 @@
 [general]
 name=Risk in a box
 qgisMinimumVersion=1.7
-description=InaSafe Disaster risk assessment tool developed by AusAid
+description=InaSAFE Disaster risk assessment tool developed by AusAid
 version=0.1
 
 # end of mandatory metadata

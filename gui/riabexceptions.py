@@ -1,5 +1,5 @@
 """
-InaSafe Disaster risk assessment tool developed by AusAid - **Exception Classes.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **Exception Classes.**
 
 Custom exception classes for the Riab application.
 

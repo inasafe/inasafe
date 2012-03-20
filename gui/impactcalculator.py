@@ -1,5 +1,5 @@
 """
-InaSafe Disaster risk assessment tool developed by AusAid - **impactcalculator.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **impactcalculator.**
 
 The purpose of the module is to centralise interactions between the gui
 package and the underlying Risk in a Box packages.
@@ -107,7 +107,7 @@ def getOptimalExtent(theHazardGeoExtent,
         [100.03, -1.14, 100.81, -0.73]
 
     Raises:
-        Any exceptions raised by the RIAB library will be propogated.
+        Any exceptions raised by the InaSAFE library will be propogated.
     """
 
     # Check that inputs are valid
@@ -185,7 +185,7 @@ def availableFunctions(theKeywordList=None):
     """
     myDict = get_admissible_plugins(theKeywordList)
     #if len(myDict) < 1:
-    #    myMessage = 'No RIAB impact functions could be found'
+    #    myMessage = 'No InaSAFE impact functions could be found'
     #    raise NoFunctionsFoundException(myMessage)
 
     return myDict
@@ -199,7 +199,7 @@ def getKeywordFromLayer(theLayer, keyword):
 
     Args:
 
-       * theLayer - a RIAB layer (vector or raster)
+       * theLayer - a InaSAFE layer (vector or raster)
        * keyword - the metadata keyword to retrieve e.g. 'title'
 
     Returns:
@@ -286,7 +286,7 @@ def getStyleInfo(theLayer):
     """Get styleinfo associated with a layer.
     Args:
 
-       * theLayer - RIAB layer (raster or vector)
+       * theLayer - InaSAFE layer (raster or vector)
 
     Returns:
        A list of dictionaries containing styleinfo info for a layer.
@@ -452,10 +452,10 @@ class ImpactCalculatorThread(threading.Thread):
 
         Args:
 
-          * Hazard layer - a RIAB read_layer object containing the Hazard data.
-          * Exposure layer - a RIAB read_layer object containing the Exposure
+          * Hazard layer - a InaSAFE read_layer object containing the Hazard data.
+          * Exposure layer - a InaSAFE read_layer object containing the Exposure
             data.
-          * Function - a RIAB function that defines how the Hazard assessment
+          * Function - a InaSAFE function that defines how the Hazard assessment
             will be computed.
 
         Returns:
@@ -482,7 +482,7 @@ class ImpactCalculatorThread(threading.Thread):
         return self._notifier
 
     def impactLayer(self):
-        """Return the RIAB layer instance which is the output from the
+        """Return the InaSAFE layer instance which is the output from the
         last run."""
         return self._impactLayer
 

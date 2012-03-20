@@ -27,7 +27,7 @@ Please observe the following coding standards when working on the codebase:
 **Example standard header**::
 
    """
-   InaSafe Disaster risk assessment tool developed by AusAid -
+   InaSAFE Disaster risk assessment tool developed by AusAid -
      **QGIS plugin implementation.**
    
    Contact : ole.moller.nielsen@gmail.com

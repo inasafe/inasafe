@@ -3,7 +3,7 @@ Development under MS Windows
 ============================
 
 In this document we will walk you through the different activities you will
-need to do as a windows developer wishing to work on the RIAB codebase.
+need to do as a windows developer wishing to work on the InaSAFE codebase.
 
 Installation of version control tools
 -------------------------------------

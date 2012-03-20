@@ -1,5 +1,5 @@
 """
-InaSafe Disaster risk assessment tool developed by AusAid and World Bank
+InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **GUI Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com

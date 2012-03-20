@@ -184,7 +184,7 @@ The compilation of these resources if the default make target in the root and
 HIG Compliance
 ..............
 
-The RIAB human interface guidelnes (HIG) are described in the :ref:`hig-label`
+The InaSAFE human interface guidelnes (HIG) are described in the :ref:`hig-label`
 document. User interface should strive to comply with these guidelines. As
 an over-arching principle, before any release, the user interface elements that
 comprise that release should be tested both for usability and to ensure that
@@ -321,7 +321,7 @@ in the top level directory of the source tree::
 
    def description():
        """A one line description for the plugin."""
-       return 'InaSafe Disaster risk assessment tool developed by AusAid and World Bank'
+       return 'InaSAFE Disaster risk assessment tool developed by AusAid and World Bank'
 
 
    def version():

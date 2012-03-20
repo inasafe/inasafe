@@ -1,4 +1,4 @@
-"""InaSafe Disaster risk assessment tool developed by AusAid -
+"""InaSAFE Disaster risk assessment tool developed by AusAid -
   **RiabClipper implementation.**
 
 Contact : ole.moller.nielsen@gmail.com

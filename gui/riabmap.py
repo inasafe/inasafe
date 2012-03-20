@@ -1,6 +1,6 @@
 """
-InaSafe Disaster risk assessment tool developed by AusAid -
-  **RIAB map making module.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+  **InaSAFE map making module.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -54,7 +54,7 @@ class RiabMap():
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         self.iface = theIface
         self.layer = theIface.activeLayer()
@@ -95,7 +95,7 @@ class RiabMap():
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         self.layer = theLayer
 
@@ -331,7 +331,7 @@ class RiabMap():
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         if self.legend is None:
             self.legend = QtGui.QPixmap(300, 80)
@@ -592,7 +592,7 @@ class RiabMap():
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         myScaleBar = QgsComposerScaleBar(self.composition)
         myScaleBar.setStyle('Numeric')  # optionally modify the style
@@ -625,7 +625,7 @@ class RiabMap():
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         myCanvas = self.iface.mapCanvas()
         myRenderer = myCanvas.mapRenderer()
@@ -952,7 +952,7 @@ class RiabMap():
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         self.setupComposition()
         self.setupPrinter(theFilename)
@@ -984,7 +984,7 @@ class RiabMap():
         Returns:
             None on error, otherwise the title
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         try:
             myTitle = getKeywordFromFile(str(self.layer.source()), 'map_title')
@@ -1000,7 +1000,7 @@ class RiabMap():
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         try:
             myHtml = getKeywordFromFile(str(self.layer.source()),
@@ -1017,7 +1017,7 @@ class RiabMap():
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         try:
             myHtml = getKeywordFromFile(str(self.layer.source()),
@@ -1038,7 +1038,7 @@ class RiabMap():
         Returns:
             A QPixmap
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         # Using 150dpi as the baseline, work out a standard text size
         # multiplier so that page renders equally well at different print
@@ -1089,7 +1089,7 @@ class RiabMap():
         Returns:
             mm converted value
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         myInchAsMM = 25.4
         myMM = (float(thePoints) / self.pageDpi) * myInchAsMM
@@ -1102,7 +1102,7 @@ class RiabMap():
         Returns:
             mm converted value
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propogated.
         """
         myInchAsMM = 25.4
         myPoints = (theMM * self.pageDpi) / myInchAsMM

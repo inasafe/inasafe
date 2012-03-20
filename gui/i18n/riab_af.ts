@@ -178,7 +178,7 @@ to%s: %s</source>
     <name>Riab</name>
     <message>
         <location filename="riab.py" line="149"/>
-        <source>Toggle RIAB Dock</source>
+        <source>Toggle InaSAFE Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -1,5 +1,5 @@
 """
-InaSafe Disaster risk assessment tool developed by AusAid -
+InaSAFE Disaster risk assessment tool developed by AusAid -
   **QGIS plugin implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
@@ -43,7 +43,7 @@ class Riab:
     """The QGIS interface implementation for the Risk in a box plugin.
 
     This class acts as the 'glue' between QGIS and our custom logic.
-    It creates a toolbar and menubar entry and launches the RIAB user
+    It creates a toolbar and menubar entry and launches the InaSAFE user
     interface if these are activated.
     """
 
@@ -145,7 +145,7 @@ class Riab:
         # Create action for plugin dockable window (show/hide)
         #--------------------------------------
         self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
-                         self.tr('Toggle RIAB Dock'), self.iface.mainWindow())
+                         self.tr('Toggle InaSAFE Dock'), self.iface.mainWindow())
         self.actionDock.setStatusTip(self.tr(
                                     'Show/hide Risk in a Box dock widget'))
         self.actionDock.setWhatsThis(self.tr(
