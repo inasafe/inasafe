@@ -1,5 +1,6 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **ISClipper test suite.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+ **ISClipper test suite.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -30,8 +31,8 @@ from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer)
 
 from storage.core import read_layer
-from inasafeclipper import clipLayer, extentToKml
-from impactcalculator import getOptimalExtent
+from is_clipper import clipLayer, extentToKml
+from is_impact_calculator import getOptimalExtent
 from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
                             GEOCRS,
