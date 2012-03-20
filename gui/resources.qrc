@@ -1,5 +1,5 @@
 <RCC>
-  <qresource prefix="/plugins/riab">
+  <qresource prefix="/plugins/inasafe">
     <file alias="icon.png">resources/img/icon.png</file>
     <file alias="keywords.png">resources/img/keywords.png</file>
     <file alias="reset.png">resources/img/arrow_rotate_clockwise.png</file>

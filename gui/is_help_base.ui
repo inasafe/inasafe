@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RiabHelp</class>
- <widget class="QDialog" name="RiabHelp">
+ <class>ISHelpBase</class>
+ <widget class="QDialog" name="ISHelpBase">
   <property name="geometry">
    <rect>
     <x>0</x>

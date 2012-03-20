@@ -47,7 +47,7 @@ def qgisMinimumVersion():
 
 
 def classFactory(iface):
-    """Load Riab class from file Riab"""
+    """Load ISPlugin class from file ISPlugin"""
 
     # setup the logging
     #import logging
@@ -69,5 +69,5 @@ def classFactory(iface):
     # FIXME (TD): reload doesn't seem to reload the plugins anything
 
     #logger.debug("reload core 3")
-    from gui.riab import Riab
-    return Riab(iface)
+    from gui.riab import ISPlugin
+    return ISPlugin(iface)

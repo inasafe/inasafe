@@ -29,7 +29,7 @@ from PyQt4.QtCore import (QObject,
                           QSettings,
                           QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication
-from riabexceptions import TranslationLoadException
+from is_exceptions import TranslationLoadException
 #see if we can import pydev - see development docs for details
 try:
     from pydevd import *
@@ -39,7 +39,7 @@ except Exception, e:
     print 'Debugging was disabled'
 
 
-class Riab:
+class ISPlugin:
     """The QGIS interface implementation for the Risk in a box plugin.
 
     This class acts as the 'glue' between QGIS and our custom logic.
@@ -96,13 +96,13 @@ class Riab:
         else:
             myLocaleName = QLocale.system().name()
         # Also set the system locale to the user overridden local
-        # so that the riab library functions gettext will work
+        # so that the inasafe library functions gettext will work
         # .. see:: :py:func:`storage.utilities`
         os.environ['LANG'] = str(myLocaleName)
 
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         myTranslationPath = os.path.join(myRoot, 'gui', 'i18n',
-                        'riab_' + str(myLocaleName) + '.qm')
+                        'inasafe_' + str(myLocaleName) + '.qm')
         if os.path.exists(myTranslationPath):
             self.translator = QTranslator()
             myResult = self.translator.load(myTranslationPath)
@@ -121,7 +121,7 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
-        return QCoreApplication.translate('Riab', theString)
+        return QCoreApplication.translate('ISPlugin', theString)
 
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
@@ -138,18 +138,18 @@ class Riab:
         Raises:
            no exceptions explicitly raised.
         """
-        # Import riabdock her as it needs to be imported AFTER i18n is set up
-        from riabdock import RiabDock
+        # Import inasafedock her as it needs to be imported AFTER i18n is set up
+        from is_dock import IsDock
         self.dockWidget = None
         #--------------------------------------
         # Create action for plugin dockable window (show/hide)
         #--------------------------------------
-        self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
-                         self.tr('Toggle InaSAFE Dock'), self.iface.mainWindow())
+        self.actionDock = QAction(QIcon(':/plugins/inasafe/icon.png'),
+                    self.tr('Toggle InaSAFE Dock'), self.iface.mainWindow())
         self.actionDock.setStatusTip(self.tr(
-                                    'Show/hide InaSAFE dock widget'))
+                            'Show/hide InaSAFE dock widget'))
         self.actionDock.setWhatsThis(self.tr(
-                                    'Show/hide InaSAFE dock widget'))
+                            'Show/hide InaSAFE dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
         QObject.connect(self.actionDock, SIGNAL('triggered()'),
@@ -164,7 +164,7 @@ class Riab:
         # Create action for keywords editor
         #--------------------------------------
         self.actionKeywordsDialog = QAction(
-                            QIcon(':/plugins/riab/keywords.png'),
+                            QIcon(':/plugins/inasafe/keywords.png'),
                             self.tr('Keyword Editor'), self.iface.mainWindow())
         self.actionKeywordsDialog.setStatusTip(self.tr(
                                     'Open the keywords editor'))
@@ -180,7 +180,7 @@ class Riab:
         # Create action for reset icon
         #--------------------------------------
         self.actionResetDock = QAction(
-                            QIcon(':/plugins/riab/reset.png'),
+                            QIcon(':/plugins/inasafe/reset.png'),
                             self.tr('Reset Dock'), self.iface.mainWindow())
         self.actionResetDock.setStatusTip(self.tr(
                                     'Reset the InaSAFE Dock'))
@@ -196,7 +196,7 @@ class Riab:
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
-        self.dockWidget = RiabDock(self.iface)
+        self.dockWidget = IsDock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
         if myLegendTab:
@@ -249,7 +249,7 @@ class Riab:
         menu item associated with this plugin. It will hide or show
         the dock depending on its current state.
 
-        .. see also:: :func:`Riab.initGui`.
+        .. see also:: :func:`ISPlugin.initGui`.
 
         Args:
            None.
@@ -270,7 +270,7 @@ class Riab:
         This slot is called when the user clicks the keyword editor toolbar
         icon or menu item associated with this plugin
 
-        .. see also:: :func:`Riab.initGui`.
+        .. see also:: :func:`ISPlugin.initGui`.
 
         Args:
            None.
@@ -280,11 +280,11 @@ class Riab:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from riabkeywordsdialog import RiabKeywordsDialog
+        from is_keywords_dialog import ISKeywordsDialog
 
         if self.iface.activeLayer() is None:
             return
-        myDialog = RiabKeywordsDialog(self.iface.mainWindow(),
+        myDialog = ISKeywordsDialog(self.iface.mainWindow(),
                                       self.iface,
                                       self.dockWidget)
         myDialog.show()
@@ -295,7 +295,7 @@ class Riab:
         This slot is called when the user clicks the reset icon in the toolbar
         or the reset menu item associated with this plugin
 
-        .. see also:: :func:`Riab.initGui`.
+        .. see also:: :func:`ISPlugin.initGui`.
 
         Args:
            None.
@@ -312,7 +312,7 @@ class Riab:
         This slot is called when the user clicks the keyword editor toolbar
         icon or menu item associated with this plugin
 
-        .. see also:: :func:`Riab.initGui`.
+        .. see also:: :func:`ISPlugin.initGui`.
 
         Args:
            None.

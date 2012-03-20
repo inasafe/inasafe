@@ -21,13 +21,13 @@
 
 PLUGINNAME = riab
 
-PY_FILES = riab.py riabdock.py riabhelp.py __init__.py
+PY_FILES = is_plugin.py is_dock.py is_help.py __init__.py
 
 EXTRAS = icon.png
 
-UI_FILES = ui_riabdock.py \
-					 ui_riabhelp.py \
-					 riabkeywordsdialogbase.py
+UI_FILES = is_dock_base.py \
+					 is_help_base.py \
+					 is_keywords_dialog_base.py
 
 RESOURCE_FILES = resources.py
 
@@ -56,7 +56,7 @@ pep8: compile
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	pep8 --repeat --ignore=E203 --exclude ui_riabhelp.py,ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py .
+	pep8 --repeat --ignore=E203 --exclude is_help_base.py,is_dock_base.py,resources.py,resources_rc.py .
 
 # Run test suite only
 test_suite: compile

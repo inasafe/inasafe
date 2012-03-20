@@ -25,24 +25,16 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from qgis.gui import QgsMapCanvas
-from qgisinterface import QgisInterface
+from qgis_interface import QgisInterface
 from PyQt4.QtGui import QWidget
 from utilities_test import getQgisTestApp
-from gui.riab import Riab
+from gui.is_plugin import ISPlugin
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
-class RiabTest(unittest.TestCase):
+class ISPluginTest(unittest.TestCase):
     """Test suite for InaSAFE QGis plugin"""
-
-    def test_load(self):
-        """InaSAFE QGis plugin can be loaded"""
-
-        myParent = QWidget()
-        myCanvas = QgsMapCanvas(myParent)
-        myIface = QgisInterface(myCanvas)
-        Riab(myIface)
 
     def test_setupI18n(self):
         """Gui translations are working."""
@@ -52,9 +44,9 @@ class RiabTest(unittest.TestCase):
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
-        myRiab = Riab(myIface)
-        myRiab.setupI18n('id')
-        myTranslation = myRiab.tr(myUntranslatedString)
+        myPlugin = ISPlugin(myIface)
+        myPlugin.setupI18n('id')
+        myTranslation = myPlugin.tr(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
                             myUntranslatedString,
                             myTranslation,
@@ -70,8 +62,8 @@ class RiabTest(unittest.TestCase):
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
-        myRiab = Riab(myIface)
-        myRiab.setupI18n('id')  # indonesian
+        myPlugin = ISPlugin(myIface)
+        myPlugin.setupI18n('id')  # indonesian
         myExpectedString = 'Sementara Ditutup'
         myTranslation = _(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
@@ -118,8 +110,8 @@ class RiabTest(unittest.TestCase):
                     reload(myMod)
             except:
                 pass
-        myRiab = Riab(myIface)
-        myRiab.setupI18n('af')  # afrikaans
+        myPlugin = ISPlugin(myIface)
+        myPlugin.setupI18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
         from impact_functions import get_plugins

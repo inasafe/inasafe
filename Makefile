@@ -45,7 +45,7 @@ docs: compile
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
 	@# Qt translation stuff first.
-	cd gui; pylupdate4 riab.pro; cd .
+	cd gui; pylupdate4 inasafe.pro; cd .
 	@# Gettext translation stuff next.
 	@# apply same xgettext command for each supported locale. TS
 	$(foreach LOCALE,$(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
@@ -53,7 +53,7 @@ update-translation-strings: compile
 #Qt .qm file updates - run to create binary representation of translated strings for translation in gui
 compile-translation-strings: compile
 	@#Compile qt messages binary
-	cd gui; lrelease riab.pro; cd ..
+	cd gui; lrelease inasafe.pro; cd ..
 	@#compile gettext messages binary
 	$(foreach LOCALE,$(LOCALES), msgfmt -o i18n/$(LOCALE)/LC_MESSAGES/riab.mo i18n/$(LOCALE)/LC_MESSAGES/riab.po;)
 

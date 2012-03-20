@@ -10,7 +10,7 @@ from qgis.core import (QgsApplication,
                       QgsRectangle,
                       QgsCoordinateReferenceSystem)
 from qgis.gui import QgsMapCanvas
-from qgisinterface import QgisInterface
+from qgis_interface import QgisInterface
 from storage.utilities_test import TESTDATA
 from storage.utilities import read_keywords
 import hashlib

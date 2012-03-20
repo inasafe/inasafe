@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RiabOptionsBase</class>
- <widget class="QDialog" name="RiabOptionsBase">
+ <class>ISOptionsBase</class>
+ <widget class="QDialog" name="ISOptionsBase">
   <property name="geometry">
    <rect>
     <x>0</x>
