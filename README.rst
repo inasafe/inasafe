@@ -7,13 +7,13 @@ This is the project: Risk in a Box - QGIS
 .. figure::  ../../../gui/resources/img/screenshot.jpg
    :align:   center
 
-The latest source code is available in https://github.com/AIFDR/risk_in_a_box
+The latest source code is available in https://github.com/AIFDR/inasafe
 which contains modules for risk calculations, gis functionality and functions for impact modelling.
 
 For more information about Risk In a Box please look at
-the documentation at http://risk-in-a-box.readthedocs.org
+the documentation at http://inasafe.readthedocs.org
 
-Risk in a Box - QGis web site: http://aifdr.github.com/risk_in_a_box
+Risk in a Box - QGis web site: http://aifdr.github.com/inasafe
 
 ========================
 Quick Installation Guide
