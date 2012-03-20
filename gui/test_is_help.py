@@ -17,14 +17,13 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import sys
 import unittest
 # Needed though not used below
 from PyQt4.QtGui import QApplication
 from utilities_test import getQgisTestApp
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
-from inasafehelp import ISHelp
+from is_help import ISHelp
 
 
 class ISHelpTest(unittest.TestCase):
@@ -33,7 +32,7 @@ class ISHelpTest(unittest.TestCase):
     APP.exec_() lines because the web view does not load content without
     the main application event loop running.
     """
-    def XtestDialogLoads(self):
+    def testDialogLoads(self):
         """Basic test to ensure the keyword dialog has loaded"""
 
         myHelp = ISHelp(PARENT)
@@ -47,7 +46,7 @@ class ISHelpTest(unittest.TestCase):
                      % (myExpectedText, myText))
         assert myText.contains(myExpectedText), myMessage
 
-    def XtestDockHelp(self):
+    def testDockHelp(self):
         """Test help dialog works with context set to 'dock'"""
         myHelp = ISHelp(PARENT, theContext='dock')
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
@@ -56,7 +55,7 @@ class ISHelpTest(unittest.TestCase):
                      % (myExpectedText, myText))
         assert myText.contains(myExpectedText), myMessage
 
-    def XtestKeywordsHelp(self):
+    def testKeywordsHelp(self):
         """Test help dialog works with context set to 'keywords'"""
         myHelp = ISHelp(PARENT, theContext='keywords')
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()

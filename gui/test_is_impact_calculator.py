@@ -20,14 +20,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import numpy
 import unittest
-from gui.impactcalculator import (ImpactCalculator,
+from is_impact_calculator import (ImpactCalculator,
                                   getOptimalExtent,
                                   getStyleInfo,
                                   availableFunctions,
                                   getKeywordFromLayer,
                                   getKeywordFromFile)
 #from inasafeexceptions import TestNotImplementedException
-from gui.inasafeexceptions import (InsufficientParametersException,
+from gui.is_exceptions import (InsufficientParametersException,
                                 KeywordNotFoundException,
                                 StyleInfoNotFoundException)
 from storage.core import read_layer
