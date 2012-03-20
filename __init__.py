@@ -18,7 +18,7 @@ __version__ = '0.2.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
+import os
 
 def name():
     """A user friendly name for the plugin."""
@@ -27,17 +27,19 @@ def name():
 
 def description():
     """A one line description for the plugin."""
-    return 'InaSAFE Disaster risk assessment tool developed by AusAid and World Bank'
+    return ('InaSAFE Disaster risk assessment tool developed by'
+           ' AusAid and World Bank')
 
 
 def version():
     """Version of the plugin."""
-    return 'Version 0.1'
+    return 'Version 0.2'
 
 
 def icon():
     """Icon path for the plugin."""
-    return 'icon.png'
+    return os.path.join(os.path.dirname(__file__), 'gui', 'resources',
+                        'img', 'icon.png')
 
 
 def qgisMinimumVersion():

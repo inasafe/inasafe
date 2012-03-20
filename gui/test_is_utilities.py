@@ -45,6 +45,6 @@ class ISUtilitiesTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_U, 'test')
+    suite = unittest.makeSuite(ISUtilitiesTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

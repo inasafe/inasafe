@@ -281,6 +281,6 @@ class ISMapTest(unittest.TestCase):
         assert myHash != myUnwantedHash, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISDockTest, 'test')
+    suite = unittest.makeSuite(ISMapTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
