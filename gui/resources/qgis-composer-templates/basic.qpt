@@ -41,7 +41,7 @@
    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
   </ComposerItem>
  </ComposerScaleBar>
- <ComposerPicture pictureWidth="15.38089514632327" file="../risk_in_a_box/gui/resources/img/bnpb_logo.png" pictureHeight="16.69103140861515" mapId="-1">
+ <ComposerPicture pictureWidth="15.38089514632327" file="../inasafe/gui/resources/img/bnpb_logo.png" pictureHeight="16.69103140861515" mapId="-1">
   <ComposerItem width="15.38089514632327" x="9.507746279066481" y="12.17979264483697" rotation="0" height="16.69103140861515" frame="false" outlineWidth="0.3" zValue="2" lastValidViewScaleFactor="3.013422818791947" positionLock="false">
    <FrameColor alpha="255" red="0" blue="0" green="0"/>
    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>

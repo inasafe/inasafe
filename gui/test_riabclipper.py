@@ -341,8 +341,8 @@ class RiabClipper(unittest.TestCase):
         """Test that vector input data is reprojected properly during clip"""
         # Input data is OSM in GOOGLE CRS
         # We are reprojecting to GEO and expecting the output shp to be in GEO
-        # see https://github.com/AIFDR/risk_in_a_box/issues/119
-        # and https://github.com/AIFDR/risk_in_a_box/issues/95
+        # see https://github.com/AIFDR/inasafe/issues/119
+        # and https://github.com/AIFDR/inasafe/issues/95
         myVectorLayer = QgsVectorLayer(VECTOR_PATH2,
                                        'OSM Buildings',
                                        'ogr')

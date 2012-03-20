@@ -74,7 +74,7 @@ There is no fixed rule on which tickets should be tagged for the release - the
 best judgment of developers and managers should be used based on severity of
 issues, available time to deadline, budget etc.
 
-**Outcome:** At the end of  this step all `issues <https://github.com/AIFDR/risk_in_a_box/issues>`_
+**Outcome:** At the end of  this step all `issues <https://github.com/AIFDR/inasafe/issues>`_
 tagged for the release should be closed.
 
 
@@ -377,7 +377,7 @@ personal plugin directory. For example under Linux::
 
    mkdir -p ~/.qgis/python/plugins
    cd ~/.qgis/python/plugins
-   unzip risk_in_a_box.0.1.0.zip
+   unzip inasafe.0.1.0.zip
 
 Now start QGIS and enable the plugin in the QGIS plugin manager (
 :menuselection:`Plugins --> Manage Plugins`).
@@ -451,7 +451,7 @@ announcement is provided below **(Trevor or Ole todo)**::
    issue tracker (requires free account) to notify us of any issues you may
    have encountered whilst using the system. The tracker is available here:
 
-   https://github.com/AIFDR/risk_in_a_box/issues
+   https://github.com/AIFDR/inasafe/issues
 
    This project is supported by the Australian Aid Agency and the World Bank.
 

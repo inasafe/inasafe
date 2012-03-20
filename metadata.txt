@@ -26,7 +26,7 @@ tags=risk disaster flood
 
 homepage=http://www.aifdr.org/
 tracker=to be defined
-repository=https://github.com/AIFDR/risk_in_a_box
+repository=https://github.com/AIFDR/inasafe
 icon=icon.png
 # experimental flag
 experimental=True

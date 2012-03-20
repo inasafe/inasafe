@@ -13,13 +13,13 @@ These instructions are for setting up a development version on a Debian based
 linux system such as Ubuntu or Mint.
 
 1. Goto the area where you do development, e.g cd ~/sandbox
-2. wget https://raw.github.com/AIFDR/risk_in_a_box/master/scripts/riab-install
+2. wget https://raw.github.com/AIFDR/inasafe/master/scripts/riab-install
 3. source ./riab-install
 
 To verify that the installation works you can run the test suite from the
 command line::
 
-   cd risk_in_a_box
+   cd inasafe
    make test
 
 This will run all the regression tests and also highlight any code issues.
@@ -72,11 +72,11 @@ Cloning the source code from git
 
 To develop on the plugin, you first need to copy it to your local system. If
 you are a developer, the simplest way to do that is go to
-`~/.qgis/python/plugins` and clone risk_in_a_box from our GitHub repository
+`~/.qgis/python/plugins` and clone inasafe from our GitHub repository
 page like this::
 
-   git clone git://github.com/AIFDR/risk_in_a_box.git  (for read only)
-   git clone git@github.com:AIFDR/risk_in_a_box.git    (to commit changes)
+   git clone git://github.com/AIFDR/inasafe.git  (for read only)
+   git clone git@github.com:AIFDR/inasafe.git    (to commit changes)
 
 
 QGIS installed in a non-standard location
@@ -94,13 +94,13 @@ option disabled), you could run these commands (or add them to your ~/.bashrc)::
     running your tests using the PyDev IDE environment.
 
 
-Adding risk_in_a_box to your python path:
+Adding inasafe to your python path:
 .........................................
 
 Lastly, you should add the riab plugin folder to your PYTHONPATH so that
 package and module paths can be resolved correctly. E.g::
 
-   export PYTHONPATH=$PYTHONPATH:${HOME}/.qgis/python/plugins/risk_in_a_box
+   export PYTHONPATH=$PYTHONPATH:${HOME}/.qgis/python/plugins/inasafe
 
 Once again you could add this to your .bashrc or set it in Eclipse for
 convenience if needed.
@@ -111,7 +111,7 @@ Running tests
 .............
 
 You can run all tests (which includes code coverage reports and other
-diagnostics) by doing this within the risk_in_a_box plugin folder::
+diagnostics) by doing this within the inasafe plugin folder::
 
    make test
 
@@ -139,10 +139,10 @@ then from the resulting dialog do :menuselection:`PyDev --> PyDev Project`.
 
 In the resulting project dialog, set the following details:
 
-* :guilabel:`Project name:` : :kbd:`risk_in_a_box`
+* :guilabel:`Project name:` : :kbd:`inasafe`
 * :guilabel:`Use default` : :kbd:`uncheck`
-* :guilabel (linux):`Directory` : :kbd:`/home/<your user name/.qgis/python/plugins/risk_in_a_box/`
-* :guilabel (windows):`Directory` : :kbd:`/home/<your user name/.qgis/python/plugins/risk_in_a_box/`
+* :guilabel (linux):`Directory` : :kbd:`/home/<your user name/.qgis/python/plugins/inasafe/`
+* :guilabel (windows):`Directory` : :kbd:`/home/<your user name/.qgis/python/plugins/inasafe/`
 * :guilabel:`Choose project type` : :kbd:`Python`
 * :guilabel:`Grammar Version` : :kbd:`2.7`
 * :guilabel:`Add project directory to PYTHONPATH?` : :kbd:`check`
@@ -201,7 +201,7 @@ Python has very good integrated support for unit testing. The first thing
 you should do after setting up the IDE project is to run the tests. You can run tests
 in the following ways:
 
-* For the entire risk_in_a_box package
+* For the entire inasafe package
 * For individual sub packages (e.g. engine, gui, storage, impact_functions)
 * for an individual test module within a package
 * for an class within a test module
@@ -210,7 +210,7 @@ in the following ways:
 You can view these individual entities by browsing and expanding nodes in the project
 panel in the left of the IDE.
 
-.. note:: If you run the test suite for the entire risk_in_a_box package, it
+.. note:: If you run the test suite for the entire inasafe package, it
     will mistakenly treat the sphinx documentation conf.py (docs.source.conf)
     as a test and fail for that test. This is 'normal' and can be ignored.
 

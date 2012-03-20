@@ -3,7 +3,7 @@ Version Control
 ===============
 
 We are using git for version control. You can find all the latest source code
-here: https://github.com/AIFDR/risk_in_a_box
+here: https://github.com/AIFDR/inasafe
 
 Branching guide
 ---------------
@@ -35,7 +35,7 @@ After the release, development should take place in master. Additional short liv
 branches can be made off master while new features are worked on, and then merged into
 master when they are ready.
 
-Optionally, development can also be carried out in independent forks of the risk_in_a_box
+Optionally, development can also be carried out in independent forks of the inasafe
 repository and then merged into master when they are ready via a pull request or patch.
 
 Commits to master that constitute bug fixes to existing features should be backported to
@@ -118,7 +118,7 @@ Windows Specific Notes:
 
 To Switch branches using TortioiseGIT:
 
-* Navigate to the risk_in_a_box plugin folder
+* Navigate to the inasafe plugin folder
 * Right click on any whitespace
 * From the context menu choose TortoiseGIT->Switch/Checkout
 * Tick 'Branch radio button and choose 'master' from the list

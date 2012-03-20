@@ -1,7 +1,7 @@
-Module: risk_in_a_box
+Module: inasafe
 =====================
 
-This page contains the documentation for the  Risk-In-A-Box code **risk_in_a_box** module.
+This page contains the documentation for the  Risk-In-A-Box code **inasafe** module.
 
-.. automodule:: risk_in_a_box
+.. automodule:: inasafe
       :members:

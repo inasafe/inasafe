@@ -1,6 +1,6 @@
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
- - **Module risk_in_a_box.**
+ - **Module inasafe.**
 
 This script initializes the plugin, making it known to QGIS.
 

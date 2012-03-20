@@ -35,6 +35,6 @@ echo
 echo "If you want to reinstall "
 echo "1) Make an area (say ~/work) and cd to it"
 #echo "2) wget http://bit.ly/riab-install"
-echo "2) wget https://raw.github.com/AIFDR/risk_in_a_box/master/scripts/riab-install"
+echo "2) wget https://raw.github.com/AIFDR/inasafe/master/scripts/riab-install"
 echo "3) ./riab-install"
 echo

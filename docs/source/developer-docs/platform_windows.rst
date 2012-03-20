@@ -103,7 +103,7 @@ The repository can now be closed by issuing the commands listed below.::
 
    cd .qgis/python/plugins/
 
-   git clone https://<your username>@github.com/AIFDR/risk_in_a_box.git
+   git clone https://<your username>@github.com/AIFDR/inasafe.git
 
 .. note:: The items in angle brackets above should be replaced with your 
    personal details as required.
@@ -111,8 +111,8 @@ The repository can now be closed by issuing the commands listed below.::
 When the final command above runs, you should see something like this in the
 console when the clone process is completed::
 
-   $ git clone https://timlinux@github.com/AIFDR/risk_in_a_box.git
-   Cloning into 'risk_in_a_box'...
+   $ git clone https://timlinux@github.com/AIFDR/inasafe.git
+   Cloning into 'inasafe'...
    remote: Counting objects: 5002, done.
    remote: Compressing objects: 100% (1526/1526), done.
    remote: Total 5002 (delta 3505), reused 4835 (delta 3338)
@@ -183,7 +183,7 @@ following listing in <QGIS Install Dir>/bin/python-shell.bat::
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
    set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
-   cd "%HOMEPATH%\.qgis\python\plugins\risk_in_a_box"
+   cd "%HOMEPATH%\.qgis\python\plugins\inasafe"
    start "Quantum GIS Shell" /B "cmd.exe" %*
 
 .. note:: The QGISPATH environment variable should be unquoted!.
@@ -330,7 +330,7 @@ Building the documentation
 ..........................
 
 To build the documentation, open a QGIS python shell (no need to be admin) and
-go into your risk_in_a_box\docs directory. Now run the following command::
+go into your inasafe\docs directory. Now run the following command::
 
    make.bat html
 
@@ -344,7 +344,7 @@ The documentation can be viewed from withing QGIS by clicking the :guilabel:`hel
 button on the |project_name| dock panel, or you can view it in your browser by
 opening a url similar to this one::
 
-   file:///C:/Users/Tim%20Sutton/.qgis/python/plugins/risk_in_a_box/docs/_build/html/index.html
+   file:///C:/Users/Tim%20Sutton/.qgis/python/plugins/inasafe/docs/_build/html/index.html
 
 
 Developing using Eclipse (Windows)
@@ -404,9 +404,9 @@ then from the resulting dialog do :menuselection:`PyDev --> PyDev Project`.
 
 In the resulting project dialog, set the following details:
 
-* :guilabel:`Project name:` : :kbd:`risk_in_a_box`
+* :guilabel:`Project name:` : :kbd:`inasafe`
 * :guilabel:`Use default` : :kbd:`uncheck`
-* :guilabel (windows):`Directory` : :kbd:`C:\Users\Tim Sutton\.qgis\python\plugins\risk_in_a_box\`
+* :guilabel (windows):`Directory` : :kbd:`C:\Users\Tim Sutton\.qgis\python\plugins\inasafe\`
 * :guilabel:`Choose project type` : :kbd:`Python`
 * :guilabel:`Grammar Version` : :kbd:`2.5`
 * :guilabel:`Add project directory to PYTHONPATH?` : :kbd:`check`
@@ -499,7 +499,7 @@ Python has very good integrated support for unit testing. The first thing
 you should do after setting up the IDE project is to run the tests. You can run tests
 in the following ways:
 
-* For the entire risk_in_a_box package
+* For the entire inasafe package
 * For individual sub packages (e.g. engine, gui, storage, impact_functions)
 * for an individual test module within a package
 * for an class within a test module
@@ -508,7 +508,7 @@ in the following ways:
 You can view these individual entities by browsing and expanding nodes in the project
 panel in the left of the IDE.
 
-.. note:: If you run the test suite for the entire risk_in_a_box package, it
+.. note:: If you run the test suite for the entire inasafe package, it
     will mistakenly treat the sphinx documentation conf.py (docs.source.conf)
     as a test and fail for that test. This is 'normal' and can be ignored.
 

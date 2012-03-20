@@ -46,11 +46,11 @@ How does the documentation work?::
   The |project_name| documentation files are written using the RST format
   (http://docutils.sourceforge.net/docs/user/rst/quickref.html) and stored with
   the source code in github:
-  https://github.com/AIFDR/risk_in_a_box/tree/master/docs/source
+  https://github.com/AIFDR/inasafe/tree/master/docs/source
 
   The RST files are used for two products:
   * HTML files generated using Sphinx (http://sphinx.pocoo.org) by running
-    https://github.com/AIFDR/risk_in_a_box/blob/master/docs/Makefile. These
+    https://github.com/AIFDR/inasafe/blob/master/docs/Makefile. These
     files are accessible through both the file browser and the help button
     available in |project_name|
   * The web site http://readthedocs.org/docs/risk-in-a-box which automatically
@@ -64,7 +64,7 @@ How does the documentation work?::
   2. Either manually build the project by clicking 'Build latest version' on
      http://readthedocs.org/dashboard/risk-in-a-box/ or by activating the
      service hook for ReadTheDocs at github:
-     https://github.com/AIFDR/risk_in_a_box/admin/hooks
+     https://github.com/AIFDR/inasafe/admin/hooks
 
 
 How do I replace a string across multiple files

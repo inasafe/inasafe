@@ -138,8 +138,8 @@ dependency_test:
 	@echo "---------------------------------------------"
 
 	@# Need disjunction with "true" because grep returns non-zero error code if no matches were found
-	@# nielso@shakti:~/sandpit/risk_in_a_box$ grep PyQt4 engine
-	@# nielso@shakti:~/sandpit/risk_in_a_box$ echo $?
+	@# nielso@shakti:~/sandpit/inasafe$ grep PyQt4 engine
+	@# nielso@shakti:~/sandpit/inasafe$ echo $?
 	@# 1
 	@# See http://stackoverflow.com/questions/4761728/gives-an-error-in-makefile-not-in-bash-when-grep-output-is-empty why we need "|| true"
 

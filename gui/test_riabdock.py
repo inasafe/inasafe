@@ -563,7 +563,7 @@ class RiabDockTest(unittest.TestCase):
     def test_Issue47(self):
         """Issue47: Problem when hazard & exposure data are in different
         proj to viewport.
-        See https://github.com/AIFDR/risk_in_a_box/issues/47"""
+        See https://github.com/AIFDR/inasafe/issues/47"""
 
         clearDock()
         loadStandardLayers()
@@ -686,7 +686,7 @@ class RiabDockTest(unittest.TestCase):
 
     def test_Issue71(self):
         """Test issue #71 in githib - cbo changes should update ok button."""
-        # See https://github.com/AIFDR/risk_in_a_box/issues/71
+        # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         clearDock()
         myButton = DOCK.pbnRunStop
@@ -729,7 +729,7 @@ class RiabDockTest(unittest.TestCase):
 
     def test_state(self):
         """Check if the save/restart state methods work. See also
-        https://github.com/AIFDR/risk_in_a_box/issues/58
+        https://github.com/AIFDR/inasafe/issues/58
         """
         clearDock()
         loadStandardLayers()
@@ -758,7 +758,7 @@ class RiabDockTest(unittest.TestCase):
         """Test the metadata is updated as the user highlights different
         QGIS layers. For riab outputs, the table of results should be shown
         See also
-        https://github.com/AIFDR/risk_in_a_box/issues/58
+        https://github.com/AIFDR/inasafe/issues/58
         """
         clearDock()
         myLayer, myType = loadLayer('issue58.tif')
@@ -777,7 +777,7 @@ class RiabDockTest(unittest.TestCase):
 
     def test_issue126(self):
         """Test that non integer transparency ranges fail gracefully.
-        .. seealso:: https://github.com/AIFDR/risk_in_a_box/issues/126
+        .. seealso:: https://github.com/AIFDR/inasafe/issues/126
         """
         clearDock()
         # This dataset has all cells with value 1.3
@@ -826,7 +826,7 @@ class RiabDockTest(unittest.TestCase):
 
     def test_issue121(self):
         """Test that point symbol size can be set from style (issue 121).
-        .. seealso:: https://github.com/AIFDR/risk_in_a_box/issues/121
+        .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
         clearDock()
         # This dataset has all cells with value 1.3
