@@ -23,13 +23,13 @@ from PyQt4 import QtGui, QtCore
 #from PyQt4.QtCore import pyqtSignature
 #from ui_inasafedock import Ui_ISDock
 #from utilities import getExceptionWithStacktrace
-from impactcalculator import ImpactCalculator
-from inasafekeywordsdialogbase import Ui_ISKeywordsDialogBase
-from inasafehelp import ISHelp
+from is_impact_calculator import ISImpactCalculator
+from is_keywords_dialog_base import Ui_ISKeywordsDialogBase
+from is_help import ISHelp
 from PyQt4.QtCore import pyqtSignature
 from storage.utilities import write_keywords
-from inasafeexceptions import InvalidParameterException
-from impactcalculator import getKeywordFromFile
+from is_exceptions import InvalidParameterException
+from is_impact_calculator import getKeywordFromFile
 from odict import OrderedDict
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -501,7 +501,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         mySource = str(self.layer.source())
-        self.calculator = ImpactCalculator()
+        self.calculator = ISImpactCalculator()
         try:
             myKeywords = getKeywordFromFile(mySource)
         except InvalidParameterException:

@@ -28,7 +28,7 @@ sys.path.append(pardir)
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
 from utilities_test import getQgisTestApp
-from inasafekeywordsdialog import ISKeywordsDialog
+from is_keywords_dialog import ISKeywordsDialog
 
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)

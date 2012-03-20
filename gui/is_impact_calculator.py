@@ -57,7 +57,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "ImpactCalculator"
+    myContext = "ISImpactCalculator"
     return QCoreApplication.translate(myContext, theText)
 
 
@@ -320,7 +320,7 @@ def getStyleInfo(theLayer):
     return myValue
 
 
-class ImpactCalculator():
+class ISImpactCalculator():
     """A class to compute an impact scenario."""
 
     def __init__(self):
@@ -503,7 +503,7 @@ class ImpactCalculatorThread(threading.Thread):
         After the thread is complete, you can use the filename and
         result accessors to determine what the result of the analysis was::
 
-          calculator = ImpactCalculator()
+          calculator = ISImpactCalculator()
           rasterPath = os.path.join(TESTDATA, 'xxx.asc')
           vectorPath = os.path.join(TESTDATA, 'xxx.shp')
           calculator.setHazardLayer(self.rasterPath)

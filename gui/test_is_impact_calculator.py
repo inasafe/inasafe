@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import numpy
 import unittest
-from is_impact_calculator import (ImpactCalculator,
+from is_impact_calculator import (ISImpactCalculator,
                                   getOptimalExtent,
                                   getStyleInfo,
                                   availableFunctions,
@@ -39,7 +39,7 @@ class ImpactCalculatorTest(unittest.TestCase):
 
     def setUp(self):
         """Create shared resources that all tests can use"""
-        self.calculator = ImpactCalculator()
+        self.calculator = ISImpactCalculator()
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
         self.rasterShakePath = os.path.join(TESTDATA,
                                             'Shakemap_Padang_2009.asc')

@@ -37,7 +37,7 @@ from qgis.core import (QGis,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
                        QgsRasterTransparency)
-from is_impact_calculator import (ImpactCalculator,
+from is_impact_calculator import (ISImpactCalculator,
                               getKeywordFromFile,
                               getKeywordFromLayer,
                               availableFunctions)
@@ -257,7 +257,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.iface = iface
         self.header = None  # for storing html header template
         self.footer = None  # for storing html footer template
-        self.calculator = ImpactCalculator()
+        self.calculator = ISImpactCalculator()
         self.runner = None
         self.helpDialog = None
         self.state = None
@@ -564,7 +564,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         return myLayer
 
     def setupCalculator(self):
-        """Initialise the ImpactCalculator based on the current
+        """Initialise the ISImpactCalculator based on the current
         state of the ui."""
         myHazardFilename = None
         myExposureFilename = None
