@@ -957,7 +957,7 @@ class Vector:
         return self.is_vector and self.geometry_type == ogr.wkbPolygon
 
     @property
-    def is_riab_spatial_object(self):
+    def is_inasafe_spatial_object(self):
         return True
 
 

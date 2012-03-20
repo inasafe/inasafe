@@ -622,5 +622,5 @@ class Raster:
         return False
 
     @property
-    def is_riab_spatial_object(self):
+    def is_inasafe_spatial_object(self):
         return True

@@ -517,9 +517,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         myMessage = ('Input argument must be a InaSAFE spatial object. '
                'I got %s' % type(myEngineImpactLayer))
-        if not hasattr(myEngineImpactLayer, 'is_riab_spatial_object'):
+        if not hasattr(myEngineImpactLayer, 'is_inasafe_spatial_object'):
             raise Exception(myMessage)
-        if not myEngineImpactLayer.is_riab_spatial_object:
+        if not myEngineImpactLayer.is_inasafe_spatial_object:
             raise Exception(myMessage)
 
         # Get associated filename and symbolic name
