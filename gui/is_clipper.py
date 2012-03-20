@@ -1,5 +1,5 @@
 """InaSAFE Disaster risk assessment tool developed by AusAid -
-  **RiabClipper implementation.**
+  **ISClipper implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -30,15 +30,15 @@ from qgis.core import (QgsCoordinateTransform,
 
 from storage.utilities import read_keywords, write_keywords, verify
 
-from riabexceptions import (InvalidParameterException,
+from is_exceptions import (InvalidParameterException,
                             KeywordNotFoundException,
                             NoFeaturesInExtentException)
-from utilities import getTempDir
+from is_utilities import getTempDir
 from subprocess import call
 
 
 def tr(theText):
-    """We define a tr() alias here since the RiabClipper implementation below
+    """We define a tr() alias here since the ISClipper implementation below
     is not a class and does not inherit from QObject.
     .. note:: see http://tinyurl.com/pyqt-differences
     Args:
@@ -47,7 +47,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "RiabClipper"
+    myContext = "ISClipper"
     return QCoreApplication.translate(myContext, theText)
 
 
@@ -124,7 +124,7 @@ def _clipVectorLayer(theLayer, theExtent,
 
     # Ensure the file is deleted before we try to write to it
     # fixes windows specific issue where you get a message like this
-    # ERROR 1: c:\temp\riab\clip_jpxjnt.shp is not a directory.
+    # ERROR 1: c:\temp\inasafe\clip_jpxjnt.shp is not a directory.
     # This is because mkstemp creates the file handle and leaves
     # the file open.
     os.close(myHandle)

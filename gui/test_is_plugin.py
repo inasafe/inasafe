@@ -82,11 +82,11 @@ class ISPluginTest(unittest.TestCase):
         # different locales ever becomes a requirement.
         # Be sure nose tests all run cleanly before reintroducing this!
 
-        # This is part test and part demonstrator of how to reload riab
+        # This is part test and part demonstrator of how to reload inasafe
         # Now see if the same function is delivered for the function
-        # Because of the way impact plugins are loaded in riab
+        # Because of the way impact plugins are loaded in inasafe
         # (see http://effbot.org/zone/metaclass-plugins.htm)
-        # lang in the context of the ugettext function in riab libs
+        # lang in the context of the ugettext function in inasafe libs
         # must be imported late so that i18n is set up already
         from storage.utilities import ugettext as _
         myUntranslatedString = 'Temporarily Closed'
@@ -100,7 +100,7 @@ class ISPluginTest(unittest.TestCase):
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
-        # reload all riab modules so that i18n get picked up afresh
+        # reload all inasafe modules so that i18n get picked up afresh
         # this is the part that produces bad side effects
         for myMod in sys.modules.values():
             try:

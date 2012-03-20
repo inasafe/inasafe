@@ -182,7 +182,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>RiabOptionsBase</receiver>
+   <receiver>ISOptionsBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -198,7 +198,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>RiabOptionsBase</receiver>
+   <receiver>ISOptionsBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

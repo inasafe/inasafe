@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.0.1'
+__version__ = '0.2.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -22,7 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 def name():
     """A user friendly name for the plugin."""
-    return 'Risk in a box'
+    return 'InaSAFE'
 
 
 def description():
@@ -69,5 +69,5 @@ def classFactory(iface):
     # FIXME (TD): reload doesn't seem to reload the plugins anything
 
     #logger.debug("reload core 3")
-    from gui.riab import ISPlugin
+    from gui.is_plugin import ISPlugin
     return ISPlugin(iface)

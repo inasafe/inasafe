@@ -134,7 +134,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="resources.qrc">:/plugins/riab/bnpb_logo_64.png</pixmap>
+            <pixmap resource="resources.qrc">:/plugins/inasafe/bnpb_logo_64.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>

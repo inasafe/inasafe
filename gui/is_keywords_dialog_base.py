@@ -175,8 +175,8 @@ class Ui_ISKeywordsDialogBase(object):
         self.label_8.setBuddy(self.lstKeywords)
 
         self.retranslateUi(ISKeywordsDialogBase)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ISKeywordsDialogBase.RiabKeywordsDialogBase.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ISKeywordsDialogBase.RiabKeywordsDialogBase.reject)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ISKeywordsDialogBase.ISKeywordsDialogBase.accept)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ISKeywordsDialogBase.ISKeywordsDialogBase.reject)
         QtCore.QObject.connect(self.pbnAdvanced, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.grpAdvanced.setVisible)
         QtCore.QObject.connect(self.radPredefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.framePredefined.setVisible)
         QtCore.QObject.connect(self.radPredefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.frameUserDefined.setHidden)

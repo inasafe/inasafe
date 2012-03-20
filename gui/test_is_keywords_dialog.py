@@ -28,7 +28,7 @@ sys.path.append(pardir)
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
 from utilities_test import getQgisTestApp
-from riabkeywordsdialog import RiabKeywordsDialog
+from inasafekeywordsdialog import ISKeywordsDialog
 
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
@@ -54,7 +54,7 @@ def clearLayers():
         QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
 
 
-class RiabKeywordsDialogTest(unittest.TestCase):
+class ISKeywordsDialogTest(unittest.TestCase):
     """Test the InaSAFE keywords GUI"""
 
     def setUp(self):
@@ -66,7 +66,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_showHelp(self):
         """Test that help button works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
@@ -75,7 +75,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
     def test_on_pbnAdvanced_toggled(self):
         """Test advanced button toggle behaviour works"""
         makePadangLayer()
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myButton = myDialog.pbnAdvanced
         myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -98,7 +98,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_on_radHazard_toggled(self):
         """Test hazard radio button toggle behaviour works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radHazard
         myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -110,7 +110,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         """Test exposure radio button toggle behaviour works"""
 
         # Cannot get this test to work, but it works fine in the gui
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radExposure
         myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -120,7 +120,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_on_cboSubcategory_currentIndexChanged(self):
         """Test subcategory combo change event works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radHazard
         myButton.setChecked(True)
         myButton = myDialog.radExposure
@@ -138,7 +138,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_setSubcategoryList(self):
         """Test set subcategory list works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myList = OrderedDict([('population [density]',
                                       'population [density]'),
                                      ('population [count]',
@@ -161,7 +161,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_on_pbnAddToList1_clicked(self):
         """Test adding an item to the list using predefined form works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.radPredefined.setChecked(True)
         myDialog.cboKeyword.setCurrentIndex(2)
@@ -178,7 +178,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_on_pbnAddToList2_clicked(self):
         """Test adding an item to the list using user defened form works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.radUserDefined.setChecked(True)
         myDialog.leKey.setText('foo')
@@ -196,7 +196,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_on_pbnRemove_clicked(self):
         """Test pressing remove works on key list"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
 
         myResult = myDialog.lstKeywords.count()
@@ -216,7 +216,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_addListEntry(self):
         """Test add entry to list works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.addListEntry('bar', 'foo')
         myResult = myDialog.getValueForKey('bar')
@@ -228,7 +228,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_addWarningsForColons(self):
         """Test add entry to list works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.addListEntry('bar', 'fo:o')
         myResult = myDialog.getValueForKey('bar')
@@ -259,7 +259,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_setCategory(self):
         """Test set category works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.setCategory('hazard')
         myExpectedResult = 'hazard'
@@ -271,7 +271,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_reset(self, thePrimaryKeywordsOnlyFlag=True):
         """Test form reset works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.leTitle.setText('Foo')
         myDialog.reset(False)
         myExpectedResult = ''
@@ -282,7 +282,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_removeItemByKey(self):
         """Test remove item by its key works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.addListEntry('bar', 'foo')
         myDialog.removeItemByKey('bar')
@@ -296,7 +296,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
     def test_removeItemByValue(self):
         """Test remove item by its value works"""
         makePadangLayer()
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.removeItemByValue('hazard')
 
         myKeywords = myDialog.getKeywords()
@@ -310,7 +310,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
     def test_getValueForKey(self):
         """Test get value for key works"""
         makePadangLayer()
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myExpectedValue = 'hazard'
         myValue = myDialog.getValueForKey('category')
         myMessage = ('\nExpected key value of %s\nGot %s' %
@@ -319,7 +319,7 @@ class RiabKeywordsDialogTest(unittest.TestCase):
 
     def test_loadStateFromKeywords(self):
         """Test load state from keywords works"""
-        myDialog = RiabKeywordsDialog(PARENT, IFACE)
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
         myLayer = makePadangLayer()
         myDialog.layer = myLayer
         myDialog.loadStateFromKeywords()
@@ -334,6 +334,6 @@ class RiabKeywordsDialogTest(unittest.TestCase):
         assert myKeywords == myExpectedKeywords, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(RiabKeywordsDialogTest, 'test')
+    suite = unittest.makeSuite(ISKeywordsDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

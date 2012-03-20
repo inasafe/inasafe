@@ -29,11 +29,10 @@ from qgis.core import (QgsComposition,
                        QgsPoint,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
-import utilities
-from riabexceptions import LegendLayerException
+from is_exceptions import LegendLayerException
 from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
-from impactcalculator import getKeywordFromFile
-from utilities import getTempDir
+from is_impact_calculator import getKeywordFromFile
+from is_utilities import getTempDir, htmlHeader, htmlFooter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -45,10 +44,10 @@ except Exception, e:
     print 'Debugging was disabled'
 
 
-class RiabMap():
+class ISMap():
     """A class for creating a map."""
     def __init__(self, theIface):
-        """Constructor for the RiabMap class.
+        """Constructor for the ISMap class.
         Args:
             theIface - reference to the QGIS iface object
         Returns:
@@ -85,7 +84,7 @@ class RiabMap():
         Raises:
            no exceptions explicitly raised.
         """
-        return QtCore.QCoreApplication.translate('RiabMap', theString)
+        return QtCore.QCoreApplication.translate('ISMap', theString)
 
     def setImpactLayer(self, theLayer):
         """Mutator for the impact layer that will be used for stats,
@@ -444,7 +443,7 @@ class RiabMap():
             None
         """
         myLogo = QgsComposerPicture(self.composition)
-        myLogo.setPictureFile(':/plugins/riab/bnpb_logo.png')
+        myLogo.setPictureFile(':/plugins/inasafe/bnpb_logo.png')
         myLogo.setItemPosition(self.pageMargin,
                                    theTopOffset,
                                    10,
@@ -1111,13 +1110,13 @@ class RiabMap():
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
         if self.header is None:
-            self.header = utilities.htmlHeader()
+            self.header = htmlHeader()
         return self.header
 
     def htmlFooter(self):
         """Get a standard html footer for wrapping content in."""
         if self.footer is None:
-            self.footer = utilities.htmlFooter()
+            self.footer = htmlFooter()
         return self.footer
 
     def showComposer(self):

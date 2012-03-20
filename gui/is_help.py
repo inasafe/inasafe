@@ -18,11 +18,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from PyQt4 import QtGui, QtCore
-from ui_riabhelp import Ui_RiabHelp
+from is_help_base import Ui_ISHelpBase
 import os
 
 
-class RiabHelp(QtGui.QDialog):
+class ISHelp(QtGui.QDialog):
     """Help dialog class for the Risk In A Box plugin.
 
     .. todo:: Add navigation buttons. See url for example of how to do so.
@@ -47,7 +47,7 @@ class RiabHelp(QtGui.QDialog):
         """
         QtGui.QDialog.__init__(self, theParent)
         # Set up the user interface from Designer.
-        self.ui = Ui_RiabHelp()
+        self.ui = Ui_ISHelpBase()
         self.ui.setupUi(self)
         self.context = theContext
         self.showContexthelp()

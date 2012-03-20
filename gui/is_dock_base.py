@@ -68,7 +68,7 @@ class Ui_ISDockBase(object):
         self.label_9.setMinimumSize(QtCore.QSize(64, 64))
         self.label_9.setMaximumSize(QtCore.QSize(64, 64))
         self.label_9.setText(_fromUtf8(""))
-        self.label_9.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/riab/bnpb_logo_64.png")))
+        self.label_9.setPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/bnpb_logo_64.png")))
         self.label_9.setScaledContents(True)
         self.label_9.setAlignment(QtCore.Qt.AlignCenter)
         self.label_9.setObjectName(_fromUtf8("label_9"))

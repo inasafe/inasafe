@@ -1,6 +1,6 @@
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-  **Riab Utilitles implementation.**
+  **IS Utilitles implementation.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -75,12 +75,12 @@ def getExceptionWithStacktrace(e, html=False):
 def getTempDir(theSubDirectory=None):
     """Obtain the temporary working directory for the operating system.
 
-    A riab subdirectory will automatically be created under this and
+    A inasafe subdirectory will automatically be created under this and
     if specified, a user subdirectory under that.
 
     Args:
         theSubDirectory - optional argument which will cause an additional
-                subirectory to be created e.g. /tmp/riab/foo/
+                subirectory to be created e.g. /tmp/inasafe/foo/
 
     Returns:
         Path to the output clipped layer (placed in the
@@ -94,7 +94,7 @@ def getTempDir(theSubDirectory=None):
         myDir = 'c://temp'
     elif os.name is 'posix':  # linux, osx
         myDir = '/tmp'
-    myPath = os.path.join(myDir, 'riab')
+    myPath = os.path.join(myDir, 'inasafe')
     if theSubDirectory is not None:
         myPath = os.path.join(myPath, 'theSubDirectory')
     if not os.path.exists(myPath):
@@ -145,7 +145,7 @@ def getWGS84resolution(theLayer, theGeoExtent=None):
 
 def htmlHeader():
     """Get a standard html header for wrapping content in."""
-    myFile = QtCore.QFile(':/plugins/riab/header.html')
+    myFile = QtCore.QFile(':/plugins/inasafe/header.html')
     if not myFile.open(QtCore.QIODevice.ReadOnly):
         return '----'
     myStream = QtCore.QTextStream(myFile)
@@ -156,7 +156,7 @@ def htmlHeader():
 
 def htmlFooter():
     """Get a standard html footer for wrapping content in."""
-    myFile = QtCore.QFile(':/plugins/riab/footer.html')
+    myFile = QtCore.QFile(':/plugins/inasafe/footer.html')
     if not myFile.open(QtCore.QIODevice.ReadOnly):
         return '----'
     myStream = QtCore.QTextStream(myFile)

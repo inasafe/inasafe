@@ -1,5 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **RiabClipper test suite.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **ISClipper test suite.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -30,7 +30,7 @@ from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer)
 
 from storage.core import read_layer
-from riabclipper import clipLayer, extentToKml
+from inasafeclipper import clipLayer, extentToKml
 from impactcalculator import getOptimalExtent
 from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
@@ -49,7 +49,7 @@ RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
-class RiabClipper(unittest.TestCase):
+class ISClipper(unittest.TestCase):
     """Test the InaSAFE clipper"""
 
     def setUp(self):
@@ -357,6 +357,6 @@ class RiabClipper(unittest.TestCase):
         assert(os.path.exists(myResult))
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(RiabClipper, 'test')
+    suite = unittest.makeSuite(ISClipper, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

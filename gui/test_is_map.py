@@ -27,7 +27,7 @@ sys.path.append(pardir)
 
 
 from utilities_test import (getQgisTestApp, assertHashForFile, hashForFile)
-from gui.riabmap import RiabMap
+from gui.inasafemap import ISMap
 from PyQt4 import QtGui
 from qgis.core import (QgsSymbol,
                        QgsMapLayerRegistry,
@@ -46,20 +46,20 @@ except Exception, e:
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
-class RiabDockTest(unittest.TestCase):
+class ISDockTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
     def setUp(self):
         """Setup fixture run before each tests"""
         for myLayer in QgsMapLayerRegistry.instance().mapLayers():
             QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
 
-    def test_riabMap(self):
-        """Test making a pdf using the RiabMap class."""
+    def test_inasafeMap(self):
+        """Test making a pdf using the ISMap class."""
         myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myRect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
         CANVAS.setExtent(myRect)
         CANVAS.refresh()
@@ -77,7 +77,7 @@ class RiabDockTest(unittest.TestCase):
         """Getting a legend for a generic layer works."""
         myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myMap.setImpactLayer(myLayer)
         assert myMap.layer is not None
         myLegend = myMap.getLegend()
@@ -95,7 +95,7 @@ class RiabDockTest(unittest.TestCase):
         """Getting a legend for a vector layer works."""
         myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getVectorLegend()
         myPath = os.path.join(getTempDir(), 'getVectorLegend.png')
@@ -112,7 +112,7 @@ class RiabDockTest(unittest.TestCase):
         """Getting a legend for a raster layer works."""
         myLayer, myType = loadLayer('test_floodimpact.tif')
         del myType
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getRasterLegend()
         myPath = os.path.join(getTempDir(), 'getRasterLegend.png')
@@ -129,7 +129,7 @@ class RiabDockTest(unittest.TestCase):
         """Test we can add a symbol to the legend."""
         myLayer, myType = loadLayer('test_floodimpact.tif')
         del myType
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.legend = None
         mySymbol = QgsSymbol()
@@ -148,7 +148,7 @@ class RiabDockTest(unittest.TestCase):
         """Test we can add a class to the map legend."""
         myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.legend = None
         myColour = QtGui.QColor(12, 34, 126)
@@ -176,7 +176,7 @@ class RiabDockTest(unittest.TestCase):
         """Getting the map title from the keywords"""
         myLayer, myType = loadLayer('test_floodimpact.tif')
         del myType
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myTitle = myMap.getMapTitle()
         myExpectedTitle = 'Penduduk yang Mungkin dievakuasi'
@@ -192,7 +192,7 @@ class RiabDockTest(unittest.TestCase):
         del myType
         myMessage = 'Layer is not valid: %s' % myFilename
         assert myLayer.isValid(), myMessage
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myPixmap = myMap.renderImpactTable()
         assert myPixmap is not None
@@ -214,13 +214,13 @@ class RiabDockTest(unittest.TestCase):
     def test_renderTemplate(self):
         """Test that load template works"""
         #Use the template from our resources bundle
-        myInPath = ':/plugins/riab/basic.qpt'
+        myInPath = ':/plugins/inasafe/basic.qpt'
         myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
 
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         setJakartaGeoExtent()
         myMap.setImpactLayer(myLayer)
         myOutPath = os.path.join(getTempDir(), 'outTemplate.pdf')
@@ -232,7 +232,7 @@ class RiabDockTest(unittest.TestCase):
 
     def test_mmPointConversion(self):
         """Test that conversions between pixel and page dimensions work."""
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myDpi = 300
         myMap.pageDpi = myDpi
         myPixels = 300
@@ -247,7 +247,7 @@ class RiabDockTest(unittest.TestCase):
     def test_windowsDrawingArtifacts(self):
         """Test that windows rendering does not make artifacts"""
         # sometimes spurious lines are drawn on the layout
-        myMap = RiabMap(IFACE)
+        myMap = ISMap(IFACE)
         myMap.setupComposition()
         myPdfPath = os.path.join(getTempDir(), 'outArtifactsTest.pdf')
         myMap.setupPrinter(myPdfPath)
@@ -281,6 +281,6 @@ class RiabDockTest(unittest.TestCase):
         assert myHash != myUnwantedHash, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(RiabDockTest, 'test')
+    suite = unittest.makeSuite(ISDockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

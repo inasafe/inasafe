@@ -21,14 +21,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 from PyQt4 import QtGui, QtCore
 #from PyQt4.QtCore import pyqtSignature
-#from ui_riabdock import Ui_RiabDock
+#from ui_inasafedock import Ui_ISDock
 #from utilities import getExceptionWithStacktrace
 from impactcalculator import ImpactCalculator
-from riabkeywordsdialogbase import Ui_RiabKeywordsDialogBase
-from riabhelp import RiabHelp
+from inasafekeywordsdialogbase import Ui_ISKeywordsDialogBase
+from inasafehelp import ISHelp
 from PyQt4.QtCore import pyqtSignature
 from storage.utilities import write_keywords
-from riabexceptions import InvalidParameterException
+from inasafeexceptions import InvalidParameterException
 from impactcalculator import getKeywordFromFile
 from odict import OrderedDict
 # Don't remove this even if it is flagged as unused by your ide
@@ -44,7 +44,7 @@ except Exception, e:
     print 'Debugging was disabled'
 
 
-class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
+class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
 
     def __init__(self, parent, iface, theDock=None):
@@ -122,7 +122,7 @@ class RiabKeywordsDialog(QtGui.QDialog, Ui_RiabKeywordsDialogBase):
     def showHelp(self):
         """Load the help text for the keywords gui"""
         if not self.helpDialog:
-            self.helpDialog = RiabHelp(self.iface.mainWindow(), 'keywords')
+            self.helpDialog = ISHelp(self.iface.mainWindow(), 'keywords')
         self.helpDialog.show()
 
     @pyqtSignature('bool')  # prevents actions being handled twice

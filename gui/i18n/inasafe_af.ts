@@ -128,7 +128,7 @@ to%s: %s</source>
     <message>
         <location filename="is_impact_calculator.py" line="376"/>
         <source>Function property (specifies which
-        riab function to use to process the hazard and exposure
+        inasafe function to use to process the hazard and exposure
         layers with.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -215,57 +215,57 @@ to%s: %s</source>
 <context>
     <name>ISDock</name>
     <message>
-        <location filename="ui_riabdock.ui" line="14"/>
+        <location filename="ui_inasafedock.ui" line="14"/>
         <source>Risk-In-A-Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="33"/>
+        <location filename="ui_inasafedock.ui" line="33"/>
         <source>Questions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="51"/>
+        <location filename="ui_inasafedock.ui" line="51"/>
         <source>In the event of</source>
         <translation>In geval van</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="61"/>
+        <location filename="ui_inasafedock.ui" line="61"/>
         <source>How many</source>
         <translation>Hoe veel</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="71"/>
+        <location filename="ui_inasafedock.ui" line="71"/>
         <source>&amp;Might</source>
         <translation>&amp;Mag</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="93"/>
+        <location filename="ui_inasafedock.ui" line="93"/>
         <source>Results</source>
         <translation>Resultate</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="112"/>
+        <location filename="ui_inasafedock.ui" line="112"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="150"/>
+        <location filename="ui_inasafedock.ui" line="150"/>
         <source>Supported by AusAID and World Bank</source>
         <translation>Ondersteun deur AusAID en die Wêreld Bank</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="170"/>
+        <location filename="ui_inasafedock.ui" line="170"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="190"/>
+        <location filename="ui_inasafedock.ui" line="190"/>
         <source>Print...</source>
         <translation>Druk...</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="210"/>
+        <location filename="ui_inasafedock.ui" line="210"/>
         <source>Run</source>
         <translation>Begin</translation>
     </message>
@@ -307,7 +307,7 @@ to%s: %s</source>
     </message>
     <message>
         <location filename="is_dock.py" line="699"/>
-        <source>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Analyzing this question...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/riab/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</source>
+        <source>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Analyzing this question...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/inasafe/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -339,12 +339,12 @@ to%s: %s</source>
 <context>
     <name>ISHelp</name>
     <message>
-        <location filename="ui_riabhelp.ui" line="14"/>
+        <location filename="ui_inasafehelp.ui" line="14"/>
         <source>Risk In A Box Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui_riabhelp.ui" line="25"/>
+        <location filename="ui_inasafehelp.ui" line="25"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
@@ -456,102 +456,102 @@ to%s: %s</source>
 <context>
     <name>ISKeywordsDialogBase</name>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="14"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="14"/>
         <source>InaSAFE - Keyword Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="30"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="30"/>
         <source>Quick edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="36"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="36"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="46"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="46"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="55"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="55"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="58"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="58"/>
         <source>Hazard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="65"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="65"/>
         <source>Where people and property are situated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="68"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="68"/>
         <source>Exposure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="80"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="80"/>
         <source>Subcategory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="90"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="90"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="100"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="100"/>
         <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="110"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="110"/>
         <source>Advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="118"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="118"/>
         <source>Predefined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="125"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="125"/>
         <source>User defined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="143"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="143"/>
         <source>Keyword</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="214"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="214"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="227"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="227"/>
         <source>Add to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="201"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="201"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="237"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="237"/>
         <source>Current keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="273"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="273"/>
         <source>Remove selected</source>
         <translation type="unfinished"></translation>
     </message>

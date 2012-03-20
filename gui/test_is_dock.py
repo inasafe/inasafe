@@ -42,7 +42,7 @@ from utilities_test import (getQgisTestApp,
                             GEOCRS,
                             GOOGLECRS)
 
-from gui.riabdock import (RiabDock, setRasterStyle, setVectorStyle)
+from gui.is_dock import (ISDock, setRasterStyle, setVectorStyle)
 from utilities_test import loadLayer
 from storage.utilities_test import TESTDATA
 from storage.utilities import read_keywords
@@ -55,13 +55,13 @@ except Exception, e:
     print 'Debugging was disabled'
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
-DOCK = RiabDock(IFACE)
+DOCK = ISDock(IFACE)
 
 
 def getUiState(ui):
     """Get state of the 3 combos on the DOCK ui. This method is purely for
     testing and not to be confused with the saveState and restoreState methods
-    of riabdock.
+    of inasafedock.
     """
 
     myHazard = str(ui.cboHazard.currentText())
@@ -107,6 +107,7 @@ def loadStandardLayers():
                   'eq_yogya_2006.asc',
                   'OSM_building_polygons_20110905.shp']
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+    assert myHazardLayerCount + myExposureLayerCount == len(myFileList)
     return myHazardLayerCount, myExposureLayerCount
 
 
@@ -175,7 +176,7 @@ def loadLayer(theLayerFile):
     return myLayer, myType
 
 
-class RiabDockTest(unittest.TestCase):
+class ISDockTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
     def test_defaults(self):
@@ -756,7 +757,7 @@ class RiabDockTest(unittest.TestCase):
 
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
-        QGIS layers. For riab outputs, the table of results should be shown
+        QGIS layers. For inasafe outputs, the table of results should be shown
         See also
         https://github.com/AIFDR/inasafe/issues/58
         """
@@ -867,6 +868,6 @@ class RiabDockTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(RiabDockTest, 'test')
+    suite = unittest.makeSuite(ISDockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

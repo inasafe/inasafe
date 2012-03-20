@@ -1,5 +1,5 @@
 #/***************************************************************************
-# Riab
+# IS
 #
 # InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 #                             -------------------
@@ -19,7 +19,7 @@
 
 # Makefile for a PyQGIS plugin
 
-PLUGINNAME = riab
+PLUGINNAME = inasafe
 
 PY_FILES = is_plugin.py is_dock.py is_help.py __init__.py
 

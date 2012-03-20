@@ -1,7 +1,7 @@
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Exception Classes.**
 
-Custom exception classes for the Riab application.
+Custom exception classes for the IS application.
 
 Contact : ole.moller.nielsen@gmail.com
 

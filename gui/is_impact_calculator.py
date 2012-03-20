@@ -29,12 +29,12 @@ pardir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(pardir)
 
 
-from riabexceptions import (InsufficientParametersException,
+from is_exceptions import (InsufficientParametersException,
                             KeywordNotFoundException,
                             StyleInfoNotFoundException,
                             InvalidParameterException)
 
-from utilities import getExceptionWithStacktrace
+from is_utilities import getExceptionWithStacktrace
 
 from impact_functions import get_admissible_plugins, get_plugins
 from engine.core import calculate_impact
@@ -48,7 +48,7 @@ from PyQt4.QtCore import (QObject,
 
 
 def tr(theText):
-    """We define a tr() alias here since the RiabClipper implementation below
+    """We define a tr() alias here since the ISClipper implementation below
     is not a class and does not inherit from QObject.
     .. note:: see http://tinyurl.com/pyqt-differences
     Args:
@@ -73,7 +73,7 @@ def getOptimalExtent(theHazardGeoExtent,
                      theViewportGeoExtent):
     """ A helper function to determine what the optimal extent is.
     Optimal extent should be considered as the intersection between
-    the three inputs. The riab library will perform various checks
+    the three inputs. The inasafe library will perform various checks
     to ensure that the extent is tenable, includes data from both
     etc.
 
@@ -97,7 +97,7 @@ def getOptimalExtent(theHazardGeoExtent,
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
 
-       ..note:: We do minimal checking as the riab library takes
+       ..note:: We do minimal checking as the inasafe library takes
          care of it for us.
 
     Returns:
@@ -161,7 +161,7 @@ def getBufferedExtent(theGeoExtent, theCellSize):
 
 
 def availableFunctions(theKeywordList=None):
-    """ Query the riab engine to see what plugins are available.
+    """ Query the inasafe engine to see what plugins are available.
     Args:
 
        theKeywordList - an optional parameter which should contain
@@ -194,7 +194,7 @@ def availableFunctions(theKeywordList=None):
 def getKeywordFromLayer(theLayer, keyword):
     """Get metadata from the keywords file associated with a layer.
 
-    .. note:: Requires a riab layer instance as parameter.
+    .. note:: Requires a inasafe layer instance as parameter.
     .. see:: getKeywordFromPath
 
     Args:
@@ -229,7 +229,7 @@ def getKeywordFromFile(theLayerPath, keyword=None):
 
     .. note:: Requires a str representing a file path instance
               as parameter As opposed to getKeywordFromLayer which
-              takes a riab file object as parameter.
+              takes a inasafe file object as parameter.
 
     .. see:: getKeywordFromLayer
 
@@ -260,7 +260,7 @@ def getKeywordFromFile(theLayerPath, keyword=None):
         msg = tr('No keywords file found for %s' % theLayerPath)
         raise InvalidParameterException(msg)
 
-    #now get the requested keyword using the riab library
+    #now get the requested keyword using the inasafe library
     myDictionary = None
     try:
         myDictionary = read_keywords(myKeywordFilePath)
@@ -375,7 +375,7 @@ class ImpactCalculator():
 
     _function = property(getFunction, setFunction,
         delFunction, tr("""Function property (specifies which
-        riab function to use to process the hazard and exposure
+        inasafe function to use to process the hazard and exposure
         layers with."""))
 
     def getRunner(self):
@@ -452,10 +452,10 @@ class ImpactCalculatorThread(threading.Thread):
 
         Args:
 
-          * Hazard layer - a InaSAFE read_layer object containing the Hazard data.
-          * Exposure layer - a InaSAFE read_layer object containing the Exposure
+          * Hazard layer: InaSAFE read_layer object containing the Hazard data.
+          * Exposure layer: InaSAFE read_layer object containing the Exposure
             data.
-          * Function - a InaSAFE function that defines how the Hazard assessment
+          * Function: a InaSAFE function that defines how the Hazard assessment
             will be computed.
 
         Returns:

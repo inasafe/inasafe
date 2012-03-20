@@ -24,10 +24,10 @@ from PyQt4.QtGui import QApplication
 from utilities_test import getQgisTestApp
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
-from riabhelp import RiabHelp
+from inasafehelp import ISHelp
 
 
-class RiabHelpTest(unittest.TestCase):
+class ISHelpTest(unittest.TestCase):
     """Test the InaSAFE help GUI
     .. note:: Currently these tests will all fail unless you comment out the
     APP.exec_() lines because the web view does not load content without
@@ -36,7 +36,7 @@ class RiabHelpTest(unittest.TestCase):
     def XtestDialogLoads(self):
         """Basic test to ensure the keyword dialog has loaded"""
 
-        myHelp = RiabHelp(PARENT)
+        myHelp = ISHelp(PARENT)
         #myHelp.show()
         #QGISAPP.exec_()
 
@@ -49,7 +49,7 @@ class RiabHelpTest(unittest.TestCase):
 
     def XtestDockHelp(self):
         """Test help dialog works with context set to 'dock'"""
-        myHelp = RiabHelp(PARENT, theContext='dock')
+        myHelp = ISHelp(PARENT, theContext='dock')
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'Using the InaSAFE Plugin'
         myMessage = ('Expected to find "%s" in \n\n"%s"'
@@ -58,7 +58,7 @@ class RiabHelpTest(unittest.TestCase):
 
     def XtestKeywordsHelp(self):
         """Test help dialog works with context set to 'keywords'"""
-        myHelp = RiabHelp(PARENT, theContext='keywords')
+        myHelp = ISHelp(PARENT, theContext='keywords')
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'avoid using spaces'
         myMessage = ('Expected to find "%s" in \n\n"%s"'
@@ -66,6 +66,6 @@ class RiabHelpTest(unittest.TestCase):
         assert myText.contains(myExpectedText), myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(RiabHelpTest, 'test')
+    suite = unittest.makeSuite(ISHelpTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

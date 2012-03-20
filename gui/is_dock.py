@@ -21,10 +21,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
-from ui_riabdock import Ui_RiabDock
-from riabhelp import RiabHelp
-import utilities
-from utilities import getExceptionWithStacktrace, getWGS84resolution
+from is_dock_base import Ui_ISDockBase
+from is_help import ISHelp
+from is_utilities import getExceptionWithStacktrace, getWGS84resolution
 from qgis.core import (QGis,
                        QgsMapLayer,
                        QgsVectorLayer,
@@ -38,16 +37,16 @@ from qgis.core import (QGis,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
                        QgsRasterTransparency)
-from impactcalculator import (ImpactCalculator,
+from is_impact_calculator import (ImpactCalculator,
                               getKeywordFromFile,
                               getKeywordFromLayer,
                               availableFunctions)
-from riabclipper import clipLayer
-from impactcalculator import getOptimalExtent, getBufferedExtent
-from riabexceptions import (KeywordNotFoundException,
+from is_clipper import clipLayer
+from is_impact_calculator import getOptimalExtent, getBufferedExtent
+from is_exceptions import (KeywordNotFoundException,
                             InvalidParameterException)
-from riabmap import RiabMap
-from utilities import getTempDir
+from is_map import ISMap
+from is_utilities import getTempDir, htmlHeader, htmlFooter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -228,7 +227,7 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     return myRangeList, myTransparencyList
 
 
-class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
+class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     """Dock implementation class for the Risk In A Box plugin."""
 
     def __init__(self, iface):
@@ -507,7 +506,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         """Helper function to read and validate layer
 
         Args
-            myEngineImpactLayer: Layer object as provided by the riab engine
+            myEngineImpactLayer: Layer object as provided by the inasafe engine
 
         Returns
             validated qgis layer or None
@@ -695,7 +694,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
     def showHelp(self):
         """Load the help text into the wvResults widget"""
         if not self.helpDialog:
-            self.helpDialog = RiabHelp(self.iface.mainWindow(), 'dock')
+            self.helpDialog = ISHelp(self.iface.mainWindow(), 'dock')
         self.helpDialog.show()
 
     def showBusy(self):
@@ -704,7 +703,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         self.pbnRunStop.setEnabled(False)
         myHtml = self.tr('<div><span class="label success">'
                    'Analyzing this question...</span></div>'
-                   '<div><img src="qrc:/plugins/riab/ajax-loader.gif" />'
+                   '<div><img src="qrc:/plugins/inasafe/ajax-loader.gif" />'
                    '</div>')
         self.displayHtml(myHtml)
         self.repaint()
@@ -733,7 +732,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
     def optimalClip(self):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
-        the three inputs. The riab library will perform various checks
+        the three inputs. The inasafe library will perform various checks
         to ensure that the extent is tenable, includes data from both
         etc.
 
@@ -931,13 +930,13 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
         if self.header is None:
-            self.header = utilities.htmlHeader()
+            self.header = htmlHeader()
         return self.header
 
     def htmlFooter(self):
         """Get a standard html footer for wrapping content in."""
         if self.footer is None:
-            self.footer = utilities.htmlFooter()
+            self.footer = htmlFooter()
         return self.footer
 
     def displayHtml(self, theMessage):
@@ -951,7 +950,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
         If the active layer is changed and it has keywords and a report,
         show the report..
 
-        .. see also:: :func:`Riab.layerChanged`.
+        .. see also:: :func:`IS.layerChanged`.
 
         Args:
            theLayer - the QgsMapLayer instance that is now active..
@@ -1036,7 +1035,7 @@ class RiabDock(QtGui.QDockWidget, Ui_RiabDock):
                             self.tr('Write to pdf'),
                             getTempDir(),
                             self.tr('Pdf File (*.pdf)'))
-        myMap = RiabMap(self.iface)
+        myMap = ISMap(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())
         self.showBusy()
         try:

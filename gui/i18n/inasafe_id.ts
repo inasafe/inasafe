@@ -86,10 +86,10 @@ ke %s: %s</translation>
     <message>
         <location filename="is_impact_calculator.py" line="376"/>
         <source>Function property (specifies which
-        riab function to use to process the hazard and exposure
+        inasafe function to use to process the hazard and exposure
         layers with.</source>
         <translation>Properti fungsi (yang ditentukan
-        fungsi riab untuk digunakan untuk diproses dengan lapisan ancaman dan terpapar.
+        fungsi inasafe untuk digunakan untuk diproses dengan lapisan ancaman dan terpapar.
 </translation>
     </message>
     <message>
@@ -235,52 +235,52 @@ ke %s: %s</translation>
 <context>
     <name>ISDock</name>
     <message>
-        <location filename="ui_riabdock.ui" line="14"/>
+        <location filename="ui_inasafedock.ui" line="14"/>
         <source>Risk-In-A-Box</source>
         <translation>Risk-In-A-Box</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="33"/>
+        <location filename="ui_inasafedock.ui" line="33"/>
         <source>Questions</source>
         <translation>Pertanyaan</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="51"/>
+        <location filename="ui_inasafedock.ui" line="51"/>
         <source>In the event of</source>
         <translation>Jika terjadi</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="61"/>
+        <location filename="ui_inasafedock.ui" line="61"/>
         <source>How many</source>
         <translation>Berapa banyak</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="71"/>
+        <location filename="ui_inasafedock.ui" line="71"/>
         <source>&amp;Might</source>
         <translation>Yang &amp;mungkin</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="93"/>
+        <location filename="ui_inasafedock.ui" line="93"/>
         <source>Results</source>
         <translation>Hasil</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="112"/>
+        <location filename="ui_inasafedock.ui" line="112"/>
         <source>about:blank</source>
         <translation>Tentang:kosong</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="150"/>
+        <location filename="ui_inasafedock.ui" line="150"/>
         <source>Supported by AusAID and World Bank</source>
         <translation>Didukung oleh AusAID dan Bank Dunia</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="170"/>
+        <location filename="ui_inasafedock.ui" line="170"/>
         <source>Help</source>
         <translation>Bantuan</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="210"/>
+        <location filename="ui_inasafedock.ui" line="210"/>
         <source>Run</source>
         <translation>Jalankan</translation>
     </message>
@@ -323,8 +323,8 @@ ke %s: %s</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="699"/>
-        <source>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Analyzing this question...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/riab/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</source>
-        <translation>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Menganalisa pertanyaan...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/riab/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</translation>
+        <source>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Analyzing this question...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/inasafe/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</source>
+        <translation>&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Menganalisa pertanyaan...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/inasafe/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="778"/>
@@ -342,7 +342,7 @@ ke %s: %s</translation>
         <translation>&lt;span class=&quot;label notice&quot;&gt;Memulai:&lt;/span&gt; Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik &lt;em&gt; tombol&lt;/em&gt; jalankan di bawah ini.</translation>
     </message>
     <message>
-        <location filename="ui_riabdock.ui" line="190"/>
+        <location filename="ui_inasafedock.ui" line="190"/>
         <source>Print...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -370,12 +370,12 @@ ke %s: %s</translation>
 <context>
     <name>ISHelp</name>
     <message>
-        <location filename="ui_riabhelp.ui" line="14"/>
+        <location filename="ui_inasafehelp.ui" line="14"/>
         <source>Risk In A Box Help</source>
         <translation>Bantuan Risk In A Box</translation>
     </message>
     <message>
-        <location filename="ui_riabhelp.ui" line="25"/>
+        <location filename="ui_inasafehelp.ui" line="25"/>
         <source>about:blank</source>
         <translation>Tentang:kosong</translation>
     </message>
@@ -488,122 +488,122 @@ ke %s: %s</translation>
 <context>
     <name>ISKeywordsDialogBase</name>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="14"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="14"/>
         <source>InaSAFE - Keyword Editor</source>
         <translation>InaSAFE - Editor kata kunci</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="46"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="46"/>
         <source>Category</source>
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="55"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="55"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
         <translation>Bahaya merupakan suatu keadaan yang dapat mengakibatkan tingkat ancaman tertentu pada kehidupan, harta benda, atau lingkungan (Wikipedia)</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="58"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="58"/>
         <source>Hazard</source>
         <translation>Bahaya</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="65"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="65"/>
         <source>Where people and property are situated.</source>
         <translation>Dimana lokasi manusia dan harta benda.</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="68"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="68"/>
         <source>Exposure</source>
         <translation>Terpapar</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="80"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="80"/>
         <source>Subcategory</source>
         <translation>Sub-kategori</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="90"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="90"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation>Sub-kategori menunjukan jenis bahaya.</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="110"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="110"/>
         <source>Advanced editor</source>
         <translation>Editor lanjutan</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="143"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="143"/>
         <source>Keyword</source>
         <translation>Kata kunci</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="214"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="214"/>
         <source>Value</source>
         <translation>Nilai</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="227"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="227"/>
         <source>Add to list</source>
         <translation>Tambahkan ke dalam daftar</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="237"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="237"/>
         <source>Current keywords</source>
         <translation>Kata kunci saat ini</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="273"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="273"/>
         <source>Remove selected</source>
         <translation>hilangkan yang dipilih</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="118"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="118"/>
         <source>Predefined</source>
         <translation>Yang telah ditentukan</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="201"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="201"/>
         <source>Key</source>
         <translation>kunci</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="30"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="30"/>
         <source>Quick edit</source>
         <translation>Edit cepat</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="36"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="36"/>
         <source>Title</source>
         <translation>Judul</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="100"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="100"/>
         <source>Show advanced editor</source>
         <translation>Tampilkan editor lanjutan</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="125"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="125"/>
         <source>User defined</source>
         <translation>Yang ditentukan oleh pengguna</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="154"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="154"/>
         <source>subcategory</source>
         <translation type="obsolete">sub-kategori</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="159"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="159"/>
         <source>units</source>
         <translation type="obsolete">satuan</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="164"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="164"/>
         <source>datatype</source>
         <translation type="obsolete">jenis data</translation>
     </message>
     <message>
-        <location filename="riabkeywordsdialogbase.ui" line="159"/>
+        <location filename="inasafekeywordsdialogbase.ui" line="159"/>
         <source>unit</source>
         <translation type="obsolete">satuan</translation>
     </message>

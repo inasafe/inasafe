@@ -26,8 +26,8 @@ from gui.impactcalculator import (ImpactCalculator,
                                   availableFunctions,
                                   getKeywordFromLayer,
                                   getKeywordFromFile)
-#from riabexceptions import TestNotImplementedException
-from gui.riabexceptions import (InsufficientParametersException,
+#from inasafeexceptions import TestNotImplementedException
+from gui.inasafeexceptions import (InsufficientParametersException,
                                 KeywordNotFoundException,
                                 StyleInfoNotFoundException)
 from storage.core import read_layer
@@ -138,7 +138,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         assert myList > 1
 
     def test_getKeywordFromLayer(self):
-        """Test that we can get keyword data from a riab layer with
+        """Test that we can get keyword data from a inasafe layer with
         a .keyword metadata file associated with it."""
         myRunner = self.calculator.getRunner()
         myRunner.run()

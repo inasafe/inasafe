@@ -1,5 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **RiabClipper test suite.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **ISClipper test suite.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -23,7 +23,7 @@ from utilities_test import getQgisTestApp
 QGISAPP = getQgisTestApp()
 
 
-class RiabTest(unittest.TestCase):
+class ISTest(unittest.TestCase):
     """Test the QGIS Environment"""
 
     def test_QGISEnvironment(self):

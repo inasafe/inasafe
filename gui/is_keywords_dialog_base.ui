@@ -308,7 +308,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>RiabKeywordsDialogBase</receiver>
+   <receiver>ISKeywordsDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -324,7 +324,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>RiabKeywordsDialogBase</receiver>
+   <receiver>ISKeywordsDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
