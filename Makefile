@@ -1,5 +1,4 @@
 #/***************************************************************************
-# Riab
 #
 # InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 #                             -------------------
@@ -55,7 +54,7 @@ compile-translation-strings: compile
 	@#Compile qt messages binary
 	cd gui; lrelease inasafe.pro; cd ..
 	@#compile gettext messages binary
-	$(foreach LOCALE,$(LOCALES), msgfmt -o i18n/$(LOCALE)/LC_MESSAGES/riab.mo i18n/$(LOCALE)/LC_MESSAGES/riab.po;)
+	$(foreach LOCALE,$(LOCALES), msgfmt -o i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
@@ -80,7 +79,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203 --exclude odict.py,riabkeywordsdialogbase.py,ui_riab.py,ui_riabdock.py,resources.py,resources_rc.py,ui_riabhelp.py . || true
+	@pep8 --repeat --ignore=E203 --exclude odict.py,is_keywords_dialog_base.py,is_dock_base.py,resources.py,resources_rc.py,is_help_base.py . || true
 
 # Run entire test suite
 test_suite: compile testdata
