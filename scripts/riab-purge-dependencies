@@ -1,13 +1,13 @@
 #! /bin/bash
 
 echo "---------------------------------------------------------"
-echo "Removing Risk in a Box dependencies                      "
+echo "Removing InaSAFE dependencies                      "
 echo
 echo "This will completely remove QGis, GDAL, geos etc         "
 echo
 echo "THIS IS DANGEROUS AND COULD AFFECT YOUR ENTIRE SYSTEM    "
 
-read -p "Do you wish to remove all Risk in a Box dependencies [Y/N](N) ?" answer
+read -p "Do you wish to remove all InaSAFE dependencies [Y/N](N) ?" answer
 case $answer in
     y | Y | yes | YES | Yes) answer="y";;
     * ) echo "OK - nothing done"; exit 0;

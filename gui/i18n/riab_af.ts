@@ -183,12 +183,12 @@ to%s: %s</source>
     </message>
     <message>
         <location filename="riab.py" line="153"/>
-        <source>Show/hide Risk in a Box dock widget</source>
+        <source>Show/hide InaSAFE dock widget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="riab.py" line="236"/>
-        <source>Risk in a Box</source>
+        <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -208,7 +208,7 @@ to%s: %s</source>
     </message>
     <message>
         <location filename="riab.py" line="189"/>
-        <source>Reset the Risk in a Box Dock</source>
+        <source>Reset the InaSAFE Dock</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -457,7 +457,7 @@ to%s: %s</source>
     <name>RiabKeywordsDialogBase</name>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="14"/>
-        <source>Risk in a Box - Keyword Editor</source>
+        <source>InaSAFE - Keyword Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

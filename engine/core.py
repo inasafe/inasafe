@@ -1,4 +1,4 @@
-"""Computational engine for Risk in a Box core.
+"""Computational engine for InaSAFE core.
 
 Provides the function calculate_impact()
 """

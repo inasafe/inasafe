@@ -8,7 +8,7 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-# Import Risk in a Box modules
+# Import InaSAFE modules
 from engine.core import calculate_impact
 from engine.interpolation2d import interpolate_raster
 from engine.polygon import separate_points_by_polygon, clip_lines_by_polygon

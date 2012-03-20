@@ -7,7 +7,7 @@ import unittest
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-# Import Risk in a Box modules
+# Import InaSAFE modules
 from interpolation2d import interpolate2d, interpolate_raster
 from interpolation1d import interpolate1d
 from storage.utilities_test import combine_coordinates

@@ -20,7 +20,7 @@ sys.path.append(os.path.abspath('../../../'))
 
 # see http://sphinx.pocoo.org/config.html#confval-rst_epilog
 rst_epilog = """
-.. |project_name| replace:: Risk in a Box
+.. |project_name| replace:: InaSAFE
 """
 
 # If extensions (or modules to document with autodoc) are in another directory,

@@ -192,18 +192,18 @@ ke %s: %s</translation>
     </message>
     <message>
         <location filename="riab.py" line="236"/>
-        <source>Risk in a Box</source>
-        <translation>Risk in a Box</translation>
+        <source>InaSAFE</source>
+        <translation>InaSAFE</translation>
     </message>
     <message>
         <location filename="riab.py" line="153"/>
-        <source>Show/hide Risk in a Box dock widget</source>
-        <translation>Tampilkan/hilangkan widget Risk in a Box</translation>
+        <source>Show/hide InaSAFE dock widget</source>
+        <translation>Tampilkan/hilangkan widget InaSAFE</translation>
     </message>
     <message>
         <location filename="riab.py" line="182"/>
-        <source>&amp;Risk in a Box</source>
-        <translation type="obsolete">&amp;Risk in a Box</translation>
+        <source>&amp;InaSAFE</source>
+        <translation type="obsolete">&amp;InaSAFE</translation>
     </message>
     <message>
         <location filename="riab.py" line="149"/>
@@ -227,8 +227,8 @@ ke %s: %s</translation>
     </message>
     <message>
         <location filename="riab.py" line="189"/>
-        <source>Reset the Risk in a Box Dock</source>
-        <translation>Reset panel Risk in a Box</translation>
+        <source>Reset the InaSAFE Dock</source>
+        <translation>Reset panel InaSAFE</translation>
     </message>
 </context>
 <context>
@@ -488,8 +488,8 @@ ke %s: %s</translation>
     <name>RiabKeywordsDialogBase</name>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="14"/>
-        <source>Risk in a Box - Keyword Editor</source>
-        <translation>Risk in a Box - Editor kata kunci</translation>
+        <source>InaSAFE - Keyword Editor</source>
+        <translation>InaSAFE - Editor kata kunci</translation>
     </message>
     <message>
         <location filename="riabkeywordsdialogbase.ui" line="46"/>

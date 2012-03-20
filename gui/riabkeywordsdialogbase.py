@@ -18,7 +18,7 @@ class Ui_RiabKeywordsDialogBase(object):
     def setupUi(self, RiabKeywordsDialogBase):
         RiabKeywordsDialogBase.setObjectName(_fromUtf8("RiabKeywordsDialogBase"))
         RiabKeywordsDialogBase.resize(520, 580)
-        RiabKeywordsDialogBase.setWindowTitle(QtGui.QApplication.translate("RiabKeywordsDialogBase", "Risk in a Box - Keyword Editor", None, QtGui.QApplication.UnicodeUTF8))
+        RiabKeywordsDialogBase.setWindowTitle(QtGui.QApplication.translate("RiabKeywordsDialogBase", "InaSAFE - Keyword Editor", None, QtGui.QApplication.UnicodeUTF8))
         self.gridLayout_2 = QtGui.QGridLayout(RiabKeywordsDialogBase)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.lblLayerName = QtGui.QLabel(RiabKeywordsDialogBase)

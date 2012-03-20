@@ -68,7 +68,7 @@ class Riab:
         self.iface = iface
         self.translator = None
         self.setupI18n()
-        #print self.tr('Risk in a Box')
+        #print self.tr('InaSAFE')
 
     def setupI18n(self, thePreferredLocale=None):
         """Setup internationalisation for the plugin.
@@ -147,9 +147,9 @@ class Riab:
         self.actionDock = QAction(QIcon(':/plugins/riab/icon.png'),
                          self.tr('Toggle InaSAFE Dock'), self.iface.mainWindow())
         self.actionDock.setStatusTip(self.tr(
-                                    'Show/hide Risk in a Box dock widget'))
+                                    'Show/hide InaSAFE dock widget'))
         self.actionDock.setWhatsThis(self.tr(
-                                    'Show/hide Risk in a Box dock widget'))
+                                    'Show/hide InaSAFE dock widget'))
         self.actionDock.setCheckable(True)
         self.actionDock.setChecked(True)
         QObject.connect(self.actionDock, SIGNAL('triggered()'),
@@ -157,7 +157,7 @@ class Riab:
         # add to plugin toolbar
         self.iface.addToolBarIcon(self.actionDock)
         # add to plugin menu
-        self.iface.addPluginToMenu(self.tr('Risk in a Box'),
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionDock)
 
         #--------------------------------------
@@ -174,7 +174,7 @@ class Riab:
                         self.showKeywordsEditor)
 
         self.iface.addToolBarIcon(self.actionKeywordsDialog)
-        self.iface.addPluginToMenu(self.tr('Risk in a Box'),
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionKeywordsDialog)
         #--------------------------------------
         # Create action for reset icon
@@ -183,14 +183,14 @@ class Riab:
                             QIcon(':/plugins/riab/reset.png'),
                             self.tr('Reset Dock'), self.iface.mainWindow())
         self.actionResetDock.setStatusTip(self.tr(
-                                    'Reset the Risk in a Box Dock'))
+                                    'Reset the InaSAFE Dock'))
         self.actionResetDock.setWhatsThis(self.tr(
-                                    'Reset the Risk in a Box Dock'))
+                                    'Reset the InaSAFE Dock'))
         QObject.connect(self.actionResetDock, SIGNAL('triggered()'),
                         self.resetDock)
 
         self.iface.addToolBarIcon(self.actionResetDock)
-        self.iface.addPluginToMenu(self.tr('Risk in a Box'),
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionResetDock)
 
         #--------------------------------------
@@ -225,13 +225,13 @@ class Riab:
            no exceptions explicitly raised.
         """
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(self.tr('Risk in a Box'),
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionDock)
         self.iface.removeToolBarIcon(self.actionDock)
-        self.iface.removePluginMenu(self.tr('Risk in a Box'),
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionKeywordsDialog)
         self.iface.removeToolBarIcon(self.actionKeywordsDialog)
-        self.iface.removePluginMenu(self.tr('Risk in a Box'),
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionResetDock)
         self.iface.removeToolBarIcon(self.actionResetDock)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)

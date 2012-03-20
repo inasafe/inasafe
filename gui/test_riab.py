@@ -34,10 +34,10 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 class RiabTest(unittest.TestCase):
-    """Test suite for Risk in a Box QGis plugin"""
+    """Test suite for InaSAFE QGis plugin"""
 
     def test_load(self):
-        """Risk in a Box QGis plugin can be loaded"""
+        """InaSAFE QGis plugin can be loaded"""
 
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
@@ -47,8 +47,8 @@ class RiabTest(unittest.TestCase):
     def test_setupI18n(self):
         """Gui translations are working."""
 
-        myUntranslatedString = 'Show/hide Risk in a Box dock widget'
-        myExpectedString = 'Tampilkan/hilangkan widget Risk in a Box'
+        myUntranslatedString = 'Show/hide InaSAFE dock widget'
+        myExpectedString = 'Tampilkan/hilangkan widget InaSAFE'
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)

@@ -5,14 +5,14 @@ InaSAFEDIR="risk_in_a_box"
 InaSAFEREPO="AIFDR/$InaSAFEDIR.git"
 
 echo "---------------------------------------------------------"
-echo "Installing Risk in a Box and all its dependencies."
+echo "Installing InaSAFE and all its dependencies."
 echo "This will take a little while depending on"
 echo "the internet speed."
 echo
 echo "In any case, now is great time to go get a cup of coffee!"
 echo "---------------------------------------------------------"
 
-echo "Installing Ubuntu packages for running Risk in a Box"
+echo "Installing Ubuntu packages for running InaSAFE"
 gpg --keyserver keyserver.ubuntu.com --recv 1F9ADD375CA44993
 gpg --export --armor 1F9ADD375CA44993 | sudo apt-key add -
 sudo apt-get install python-software-properties
@@ -66,7 +66,7 @@ function checkup() {
   popd
 }
 
-echo "Downloading Risk in a Box"
+echo "Downloading InaSAFE"
 checkup ${InaSAFEREPO} ${InaSAFEDIR} master
 
 echo "Downloading test and demo data"
@@ -77,7 +77,7 @@ popd
 
 
 echo
-echo "Congratulations, you have installed Risk in a Box - QGIS"
+echo "Congratulations, you have installed InaSAFE - QGIS"
 echo
 echo "To verify that the installation works, you can run the test suite"
 echo "cd $InaSAFEQGIS"

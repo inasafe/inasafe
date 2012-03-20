@@ -17,7 +17,7 @@
 # *                                                                         *
 # ***************************************************************************/
 
-# Makefile for Risk in a Box - QGIS
+# Makefile for InaSAFE - QGIS
 
 NONGUI := storage engine impact_functions
 GUI := gui

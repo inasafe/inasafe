@@ -42,7 +42,7 @@ class RiabHelpTest(unittest.TestCase):
 
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myHelp.close()
-        myExpectedText = 'This is the project: Risk in a Box - QGIS'
+        myExpectedText = 'This is the project: InaSAFE - QGIS'
         myMessage = ('Expected to find "%s" in \n\n"%s"'
                      % (myExpectedText, myText))
         assert myText.contains(myExpectedText), myMessage
@@ -51,7 +51,7 @@ class RiabHelpTest(unittest.TestCase):
         """Test help dialog works with context set to 'dock'"""
         myHelp = RiabHelp(PARENT, theContext='dock')
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
-        myExpectedText = 'Using the Risk in a Box Plugin'
+        myExpectedText = 'Using the InaSAFE Plugin'
         myMessage = ('Expected to find "%s" in \n\n"%s"'
                      % (myExpectedText, myText))
         assert myText.contains(myExpectedText), myMessage
