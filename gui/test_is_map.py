@@ -27,7 +27,7 @@ sys.path.append(pardir)
 
 
 from utilities_test import (getQgisTestApp, assertHashForFile, hashForFile)
-from gui.inasafemap import ISMap
+from gui.is_map import ISMap
 from PyQt4 import QtGui
 from qgis.core import (QgsSymbol,
                        QgsMapLayerRegistry,
@@ -35,7 +35,7 @@ from qgis.core import (QgsSymbol,
                        QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
 from utilities_test import (loadLayer, setJakartaGeoExtent)
-from utilities import getTempDir
+from is_utilities import getTempDir
 try:
     from pydevd import *
     print 'Remote debugging is enabled.'
@@ -46,8 +46,8 @@ except Exception, e:
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
-class ISDockTest(unittest.TestCase):
-    """Test the InaSAFE GUI"""
+class ISMapTest(unittest.TestCase):
+    """Test the InaSAFE Map generator"""
     def setUp(self):
         """Setup fixture run before each tests"""
         for myLayer in QgsMapLayerRegistry.instance().mapLayers():
