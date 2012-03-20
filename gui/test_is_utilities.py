@@ -8,11 +8,11 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from utilities import getExceptionWithStacktrace
+from is_utilities import getExceptionWithStacktrace
 from storage.utilities import bbox_intersection
 
 
-class Test_U(unittest.TestCase):
+class ISUtilitiesTest(unittest.TestCase):
     """Tests for reading and writing of raster and vector data
     """
 
