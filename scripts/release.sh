@@ -65,4 +65,5 @@ zip -r ${OUT} ../${DIR} --exclude \*.pyc \
 
 
 echo "Your plugin archive has been generated as"
+ls -lah ${OUT}
 echo "${OUT}"
