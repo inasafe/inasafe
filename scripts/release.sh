@@ -48,6 +48,7 @@ zip -r ${OUT} ../${DIR} --exclude \*.pyc \
                                   ../${DIR}/.settings\* \
                                   ../${DIR}/.pydev\* \
                                   ../${DIR}/.coverage\* \
+                                  \*.noseids \
                                   ../${DIR}/scripts\* \
                                   ../${DIR}/impossible_state.* \
                                   ../${DIR}/riab_demo_data\* \
