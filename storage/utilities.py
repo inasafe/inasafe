@@ -856,7 +856,7 @@ def ugettext(s):
     if 'LANG' not in os.environ:
         return s
     lang = os.environ['LANG']
-    filename_prefix = 'riab'
+    filename_prefix = 'inasafe'
     t = gettext.translation(filename_prefix,
                             path, languages=[lang], fallback=True)
     return t.ugettext(s)
