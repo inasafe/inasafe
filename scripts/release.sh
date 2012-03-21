@@ -45,6 +45,7 @@ OUT="/tmp/${DIR}.${1}.zip"
 zip -r ${OUT} ../${DIR} --exclude \*.pyc \
                                   ../${DIR}/docs/source\* \
                                   ../${DIR}/.git\* \
+                                  ../${DIR}/.settings\* \
                                   ../${DIR}/impossible_state.* \
                                   ../${DIR}/riab_demo_data\* \
                                   \*.*~
