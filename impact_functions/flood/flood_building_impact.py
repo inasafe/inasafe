@@ -101,9 +101,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         # Create style
         style_classes = [dict(label=_('Opened'), min=0, max=0,
-                              colour='#1EFC7C', transparency=0),
+                              colour='#1EFC7C', transparency=0, size=1),
                          dict(label=_('Closed'), min=1, max=1,
-                              colour='#F31A1C', transparency=0)]
+                              colour='#F31A1C', transparency=0, size=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 
