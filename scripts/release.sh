@@ -46,7 +46,8 @@ zip -r ${OUT} ../${DIR} --exclude \*.pyc \
                                   ../${DIR}/docs/source\* \
                                   ../${DIR}/.git\* \
                                   ../${DIR}/.settings\* \
-                                  ../${DIR}/.scripts* \
+                                  ../${DIR}/.scripts\* \
+                                  ../${DIR}/.coverage\* \
                                   ../${DIR}/impossible_state.* \
                                   ../${DIR}/riab_demo_data\* \
                                   \*.*~ \
