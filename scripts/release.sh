@@ -42,7 +42,12 @@ OUT="/tmp/${DIR}.${1}.zip"
 #git archive --prefix=${DIR}/ --format zip --output ${OUT} master
 
 # The \* tells zip to ignore recursively
-zip -r ${OUT} ../${DIR} --exclude \*.pyc ../${DIR}/docs/source\* ../${DIR}/.git\* ../${DIR}/impossible_state.* ../${DIR}/riab_demo_data\*
+zip -r ${OUT} ../${DIR} --exclude \*.pyc \
+                                  ../${DIR}/docs/source\* \
+                                  ../${DIR}/.git\* \
+                                  ../${DIR}/impossible_state.* \
+                                  ../${DIR}/riab_demo_data\* \
+                                  \*.*~
 
 
 echo "Your plugin archive has been generated as"
