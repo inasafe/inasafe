@@ -47,6 +47,10 @@ cd ..
 pwd
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
                                   ${DIR}/docs/source\* \
+                                  ${DIR}/docs/*.jpeg\
+                                  ${DIR}/docs/*.jpg\
+                                  ${DIR}/docs/*.odf\
+                                  ${DIR}/docs/*.png\
                                   ${DIR}/docs/build/doctrees\* \
                                   ${DIR}/docs/build/html\.buildinfo\* \
                                   ${DIR}/.git\* \
