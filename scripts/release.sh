@@ -41,7 +41,8 @@ OUT="/tmp/${DIR}.${1}.zip"
 # Cant use git archive since we need generated docs to be bundled
 #git archive --prefix=${DIR}/ --format zip --output ${OUT} master
 
-zip -r ${OUT} ../${DIR} --exclude \*.pyc ../${DIR}/docs/source ../${DIR}/.git ../${DIR}/impossible_state.* ../${DIR}/riab_demo_data
+# The \* tells zip to ignore recursively
+zip -r ${OUT} ../${DIR} --exclude \*.pyc ../${DIR}/docs/source\* ../${DIR}/.git\* ../${DIR}/impossible_state.* ../${DIR}/riab_demo_data\*
 
 
 echo "Your plugin archive has been generated as"
