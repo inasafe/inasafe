@@ -42,6 +42,7 @@ OUT="/tmp/${DIR}.${1}.zip"
 #git archive --prefix=${DIR}/ --format zip --output ${OUT} master
 
 # The \* tells zip to ignore recursively
+rm ${OUT}
 zip -r ${OUT} ../${DIR} --exclude \*.pyc \
                                   ../${DIR}/docs/source\* \
                                   ../${DIR}/.git\* \
@@ -57,7 +58,8 @@ zip -r ${OUT} ../${DIR} --exclude \*.pyc \
                                   \*.*~ \
                                   \*test_*.py \
                                   \*.*.orig \
-                                  \*.bat
+                                  \*.bat \
+                                  \*.xcf
                                   
 
 
