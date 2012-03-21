@@ -48,6 +48,8 @@ zip -r ${OUT} ../${DIR} --exclude \*.pyc \
                                   ../${DIR}/.settings\* \
                                   ../${DIR}/.pydev\* \
                                   ../${DIR}/.coverage\* \
+                                  ../${DIR}/.project\* \
+                                  ../${DIR}/.achievements\* \
                                   \*.noseids \
                                   ../${DIR}/scripts\* \
                                   ../${DIR}/impossible_state.* \
