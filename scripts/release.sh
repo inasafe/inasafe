@@ -46,9 +46,13 @@ zip -r ${OUT} ../${DIR} --exclude \*.pyc \
                                   ../${DIR}/docs/source\* \
                                   ../${DIR}/.git\* \
                                   ../${DIR}/.settings\* \
+                                  ../${DIR}/.scripts* \
                                   ../${DIR}/impossible_state.* \
                                   ../${DIR}/riab_demo_data\* \
-                                  \*.*~
+                                  \*.*~ \
+                                  \*.bat
+                                  
+
 
 
 echo "Your plugin archive has been generated as"
