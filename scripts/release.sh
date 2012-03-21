@@ -45,20 +45,19 @@ OUT="/tmp/${DIR}.${1}.zip"
 rm ${OUT}
 cd ..
 pwd
-set -x
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
-                                  ../${DIR}/docs/source\* \
-                                  ../${DIR}/docs/build/doctrees\* \
-                                  ../${DIR}/.git\* \
-                                  ../${DIR}/.settings\* \
-                                  ../${DIR}/.pydev\* \
-                                  ../${DIR}/.coverage\* \
-                                  ../${DIR}/.project\* \
-                                  ../${DIR}/.achievements\* \
+                                  ${DIR}/docs/source\* \
+                                  ${DIR}/docs/build/doctrees\* \
+                                  ${DIR}/.git\* \
+                                  ${DIR}/.settings\* \
+                                  ${DIR}/.pydev\* \
+                                  ${DIR}/.coverage\* \
+                                  ${DIR}/.project\* \
+                                  ${DIR}/.achievements\* \
                                   \*.noseids \
-                                  ../${DIR}/scripts\* \
-                                  ../${DIR}/impossible_state.* \
-                                  ../${DIR}/riab_demo_data\* \
+                                  ${DIR}/scripts\* \
+                                  ${DIR}/impossible_state.* \
+                                  ${DIR}/riab_demo_data\* \
                                   \*.*~ \
                                   \*test_*.py \
                                   \*.*.orig \
