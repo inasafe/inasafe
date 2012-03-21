@@ -55,7 +55,7 @@ zip -r ${OUT} ../${DIR} --exclude \*.pyc \
                                   ../${DIR}/impossible_state.* \
                                   ../${DIR}/riab_demo_data\* \
                                   \*.*~ \
-                                  test\*.py \
+                                  \*test_*.py \
                                   \*.*.orig \
                                   \*.bat
                                   
