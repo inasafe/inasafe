@@ -1,19 +1,28 @@
-===========================
-InaSAFE - QGIS Plugin
-===========================
+========================================================
+InaSAFE - Indonesian Scenario Assessment for Emergencies
+========================================================
 
-This is the project: InaSAFE - QGIS
+This is the project: InaSAFE a Quantum GIS plugin
 
 .. figure::  ../../../gui/resources/img/screenshot.jpg
    :align:   center
 
-The latest source code is available in https://github.com/AIFDR/inasafe
-which contains modules for risk calculations, gis functionality and functions for impact modelling.
+A completed assement using the QGIS InaSAFE plugin, with an example of 
+the print ready pdf output the plugin produces.
 
-For more information about Risk In a Box please look at
-the documentation at http://inasafe.readthedocs.org
+.. figure::  ../../../gui/resources/img/screenshot2.jpg
+   :align:   center
 
-InaSAFE - QGis web site: http://aifdr.github.com/inasafe
+Vulnerable building footprints shown in red.
+
+For more information about InaSAFE please visit 
+`www.inasafe.org <http://www.inasafe.org>`_ and look at the documentation at
+`inasafe.readthedocs.org <http://inasafe.readthedocs.org>`_
+
+The latest source code is available at
+`aifdr.github.com/inasafe <http://aifdr.github.com/inasafe>`_
+which contains modules for risk calculations, gis functionality and functions
+for impact modelling.
 
 ========================
 Quick Installation Guide
