@@ -1,7 +1,7 @@
 Module: gui
 ===========
 
-This page contains the documentation for the  Risk-In-A-Box code 
+This page contains the documentation for the  InaSAFE code 
 **gui** module.
 
 .. automodule:: gui

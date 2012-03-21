@@ -106,7 +106,7 @@ An example of the contents of a module's API .rst if provided below::
 
    Module: riab
    ============
-   This page contains the documentation for the  Risk-In-A-Box code **riab**
+   This page contains the documentation for the  InaSAFE code **riab**
    module.
 
    .. automodule:: gui.riab

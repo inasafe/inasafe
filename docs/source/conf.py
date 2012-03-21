@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Risk-In-A-Box documentation build configuration file, created by
+# InaSAFE documentation build configuration file, created by
 # sphinx-quickstart on Tue Jan 10 12:22:06 2012.
 #
 # This file is execfile()d with the current directory set to its containing
@@ -56,7 +56,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Risk-In-A-Box'
+project = u'InaSAFE'
 copyright = u'2012, BNPB/AIFDR/GFDRR'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -181,7 +181,7 @@ html_static_path = ['riabstatic']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Risk-In-A-Boxdoc'
+htmlhelp_basename = 'InaSAFEdoc'
 
 
 # -- Options for LaTeX output -----------------------------------------------
@@ -201,8 +201,8 @@ latex_elements = {
 # (source start file, target name, title, author,
 # documentclass [howto/manual]).
 latex_documents = [('index',
-                    'Risk-In-A-Box.tex',
-                    u'Risk-In-A-Box Documentation',
+                    'InaSAFE.tex',
+                    u'InaSAFE Documentation',
                     u'Ole Moeller Nielsen',
                     'manual')]
 
@@ -231,7 +231,7 @@ latex_documents = [('index',
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [('index', 'risk-in-a-box', u'Risk-In-A-Box Documentation',
+man_pages = [('index', 'risk-in-a-box', u'InaSAFE Documentation',
               [u'Ole Moeller Nielsen'], 1)]
 
 # If true, show URL addresses after external links.
@@ -243,8 +243,8 @@ man_pages = [('index', 'risk-in-a-box', u'Risk-In-A-Box Documentation',
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'Risk-In-A-Box', u'Risk-In-A-Box Documentation',
-   u'Ole Nielsen', 'Risk-In-A-Box', 'One line description of project.',
+  ('index', 'InaSAFE', u'InaSAFE Documentation',
+   u'Ole Nielsen', 'InaSAFE', 'One line description of project.',
    'Miscellaneous'),
 ]
 

@@ -1,7 +1,7 @@
 Module: is_plugin
 =================
 
-This page contains the documentation for the  Risk-In-A-Box code 
+This page contains the documentation for the  InaSAFE code 
 **is_plugin** module.
 
 .. automodule:: gui.is_plugin

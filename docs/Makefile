@@ -77,17 +77,17 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/Risk-In-A-Box.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/InaSAFE.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/Risk-In-A-Box.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/InaSAFE.qhc"
 
 devhelp:
 	$(SPHINXBUILD) -b devhelp $(ALLSPHINXOPTS) $(BUILDDIR)/devhelp
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/Risk-In-A-Box"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/Risk-In-A-Box"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/InaSAFE"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/InaSAFE"
 	@echo "# devhelp"
 
 epub:

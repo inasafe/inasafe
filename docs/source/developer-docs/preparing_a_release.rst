@@ -340,7 +340,7 @@ in the top level directory of the source tree::
        return '1.7'
 
 In general only the version function needs to be updated to reflect the new
-version of the Risk-In-A-Box plugin.
+version of the InaSAFE plugin.
 
 .. note:: The above will be deprecated with the release of QGIS 2.0, see
    below for the alternative method of describing the plugin.
