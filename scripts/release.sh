@@ -44,6 +44,8 @@ OUT="/tmp/${DIR}.${1}.zip"
 # The \* tells zip to ignore recursively
 rm ${OUT}
 cd ..
+pwd
+set -x
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
                                   ../${DIR}/docs/source\* \
                                   ../${DIR}/docs/build/doctrees\* \
