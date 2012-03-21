@@ -41,7 +41,7 @@ OUT="/tmp/${DIR}.${1}.zip"
 # Cant use git archive since we need generated docs to be bundled
 #git archive --prefix=${DIR}/ --format zip --output ${OUT} master
 
-zip -r ../${DIR} ${OUT} --exclude \*.pyc docs/source .git
+zip -r ${OUT} ../${DIR} --exclude \*.pyc docs/source .git
 
 
 echo "Your plugin archive has been generated as"
