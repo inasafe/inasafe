@@ -48,6 +48,7 @@ pwd
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
                                   ${DIR}/docs/source\* \
                                   ${DIR}/docs/build/doctrees\* \
+                                  ${DIR}/docs/build/html\.buildinfo\* \
                                   ${DIR}/.git\* \
                                   ${DIR}/.settings\* \
                                   ${DIR}/.pydev\* \
@@ -62,7 +63,8 @@ zip -r ${OUT} ${DIR} --exclude \*.pyc \
                                   \*test_*.py \
                                   \*.*.orig \
                                   \*.bat \
-                                  \*.xcf
+                                  \*.xcf \
+                                  \Makefile
                                   
 
 cd ${DIR}
