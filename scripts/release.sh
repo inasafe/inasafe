@@ -43,8 +43,9 @@ OUT="/tmp/${DIR}.${1}.zip"
 
 # The \* tells zip to ignore recursively
 rm ${OUT}
-zip -r ${OUT} ../${DIR} --exclude \*.pyc \
+zip -r ${OUT} ${DIR} --exclude \*.pyc \
                                   ../${DIR}/docs/source\* \
+                                  ../${DIR}/docs/build/doctrees\* \
                                   ../${DIR}/.git\* \
                                   ../${DIR}/.settings\* \
                                   ../${DIR}/.pydev\* \
