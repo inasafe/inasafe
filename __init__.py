@@ -23,7 +23,7 @@ import os
 
 def name():
     """A user friendly name for the plugin."""
-    return 'InaSAFE'
+    return 'InaSAFE-dev'
 
 
 def description():

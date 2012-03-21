@@ -9,7 +9,7 @@
 
 
 [general]
-name=Risk in a box
+name=InaSAFE-dev
 qgisMinimumVersion=1.7
 description=InaSAFE Disaster risk assessment tool developed by AusAid
 version=0.2.0
