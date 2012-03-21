@@ -27,7 +27,7 @@ from is_impact_calculator import (ISImpactCalculator,
                                   getKeywordFromLayer,
                                   getKeywordFromFile)
 #from inasafeexceptions import TestNotImplementedException
-from gui.is_exceptions import (InsufficientParametersException,
+from is_exceptions import (InsufficientParametersException,
                                 KeywordNotFoundException,
                                 StyleInfoNotFoundException)
 from storage.core import read_layer
@@ -62,17 +62,17 @@ class ImpactCalculatorTest(unittest.TestCase):
     def test_properties(self):
         """Test if the properties work as expected."""
 
-        msg = 'Vector property incorrect.'
+        myMessage = 'Vector property incorrect.'
         assert (self.calculator.getExposureLayer() ==
-                self.vectorPath), msg
+                self.vectorPath), myMessage
 
-        msg = 'Raster property incorrect.'
+        myMessage = 'Raster property incorrect.'
         assert (self.calculator.getHazardLayer() ==
-                self.rasterShakePath), msg
+                self.rasterShakePath), myMessage
 
-        msg = 'Function property incorrect.'
+        myMessage = 'Function property incorrect.'
         assert (self.calculator.getFunction() ==
-                'Earthquake Guidelines Function'), msg
+                'Earthquake Guidelines Function'), myMessage
 
     def test_run(self):
         """Test that run works as expected in non threading mode"""
@@ -86,8 +86,8 @@ class ImpactCalculatorTest(unittest.TestCase):
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
         except Exception, e:
-            msg = 'Calculator run failed. %s' % str(e)
-            assert(), msg
+            myMessage = 'Calculator run failed. %s' % str(e)
+            assert(), myMessage
 
     def test_thread(self):
         """Test that starting it in a thread works as expected."""
@@ -102,12 +102,12 @@ class ImpactCalculatorTest(unittest.TestCase):
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
         except Exception, e:
-            msg = 'Calculator run failed:\n' + str(e)
-            assert(), msg
+            myMessage = 'Calculator run failed:\n' + str(e)
+            assert(), myMessage
 
     def test_startWithNoParameters(self):
-        """Test that run raises an error properly
-           when no parameters are defined."""
+        """Test that run raises an error properly when no parameters defined.
+        """
         try:
             self.calculator.setExposureLayer(None)
             self.calculator.setHazardLayer(None)
@@ -117,13 +117,13 @@ class ImpactCalculatorTest(unittest.TestCase):
         except InsufficientParametersException:
             return  # expected outcome
         except:
-            msg = 'Missing parameters not raised as error.'
-            assert(), msg
-        msg = 'Expected an error, none encountered.'
-        assert(), msg
+            myMessage = 'Missing parameters not raised as error.'
+            assert(), myMessage
+        myMessage = 'Expected an error, none encountered.'
+        assert(), myMessage
 
     def test_availableFunctions(self):
-        """Check we can get the available functions from the impactcalculator.
+        """Check we can get the available functions from the impact calculator.
         """
         myList = availableFunctions()
         assert myList > 1
@@ -138,15 +138,14 @@ class ImpactCalculatorTest(unittest.TestCase):
         assert myList > 1
 
     def test_getKeywordFromLayer(self):
-        """Test that we can get keyword data from a inasafe layer with
-        a .keyword metadata file associated with it."""
+        """Get keyword data from a inasafe layer's metadata file."""
         myRunner = self.calculator.getRunner()
         myRunner.run()
         myImpactLayer = myRunner.impactLayer()
         myKeyword = getKeywordFromLayer(
                                         myImpactLayer, 'impact_summary')
-        msg = 'Keyword request returned an empty string'
-        assert(myKeyword is not ''), msg
+        myMessage = 'Keyword request returned an empty string'
+        assert(myKeyword is not ''), myMessage
         # Test we get an exception if keyword is not found
         try:
             myKeyword = getKeywordFromLayer(
@@ -154,18 +153,17 @@ class ImpactCalculatorTest(unittest.TestCase):
         except KeywordNotFoundException:
             pass  # this is good
         except Exception, e:
-            msg = ('Request for bogus keyword raised incorrect exception' +
-                    ' type: \n %s') % str(e)
-            assert(), msg
+            myMessage = ('Request for bogus keyword raised incorrect '
+                         'exception type: \n %s') % str(e)
+            assert(), myMessage
 
     def test_getKeywordFromFile(self):
-        """Test that we can get keyword data from a file with
-        a .keyword metadata file associated with it."""
+        """Get keyword from a filesystem file's .keyword file."""
 
         myKeyword = getKeywordFromFile(
                                     self.rasterShakePath, 'category')
-        msg = 'Keyword request did not return expected value'
-        assert myKeyword == 'hazard', msg
+        myMessage = 'Keyword request did not return expected value'
+        assert myKeyword == 'hazard', myMessage
 
         # Test we get an exception if keyword is not found
         try:
@@ -174,9 +172,9 @@ class ImpactCalculatorTest(unittest.TestCase):
         except KeywordNotFoundException:
             pass  # this is good
         except Exception, e:
-            msg = ('Request for bogus keyword raised incorrect exception' +
-                    ' type: \n %s') % str(e)
-            assert(), msg
+            myMessage = ('Request for bogus keyword raised incorrect '
+                         'exception type: \n %s') % str(e)
+            assert(), myMessage
 
         myKeywords = getKeywordFromFile(self.rasterShakePath)
         assert myKeywords == {'category': 'hazard',
@@ -203,22 +201,22 @@ class ImpactCalculatorTest(unittest.TestCase):
                              'subcategory': 'building'}
 
     def test_getStyleInfo(self):
-        """Test that we can get styleInfo data from a vector
-        file with a .keyword metadata file associated with it."""
+        """Test that we can get styleInfo data from a vector's keyword file
+        """
 
         myRunner = self.calculator.getRunner()
         myRunner.start()
         myRunner.join()
         myImpactLayer = myRunner.impactLayer()
 
-        msg = ('Incorrect type returned from '
+        myMessage = ('Incorrect type returned from '
                'myRunner.impactlayer(). Expected an impactlayer'
                'but received a %s' % type(myImpactLayer))
-        assert hasattr(myImpactLayer, 'get_style_info'), msg
+        assert hasattr(myImpactLayer, 'get_style_info'), myMessage
 
         myStyleInfo = getStyleInfo(myImpactLayer)
-        msg = 'Style inforrequest returned an empty string'
-        assert myStyleInfo is not '', msg
+        myMessage = 'Style info request returned an empty string'
+        assert myStyleInfo is not '', myMessage
         #print myStyleInfo
 
         # Test we get an exception if style info is not found
@@ -227,9 +225,9 @@ class ImpactCalculatorTest(unittest.TestCase):
         except StyleInfoNotFoundException:
             pass  # This is good
         except Exception, e:
-            msg = ('StyleInfo request for bogus file raised incorrect' +
+            myMessage = ('StyleInfo request for bogus file raised incorrect' +
                    ' exception type: \n %s') % str(e)
-            raise StyleInfoNotFoundException(msg)
+            raise StyleInfoNotFoundException(myMessage)
 
     def test_getOptimalExtent(self):
         """Optimal extent is calculated correctly
@@ -297,40 +295,40 @@ class ImpactCalculatorTest(unittest.TestCase):
         try:
             getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
         except Exception, e:
-            msg = 'Did not find expected error message in %s' % str(e)
-            assert 'did not overlap' in str(e), msg
+            myMessage = 'Did not find expected error message in %s' % str(e)
+            assert 'did not overlap' in str(e), myMessage
         else:
-            msg = ('Non ovelapping bounding boxes should have raised '
+            myMessage = ('Non ovelapping bounding boxes should have raised '
                    'an exception')
-            raise Exception(msg)
+            raise Exception(myMessage)
 
         # Try with wrong input data
         try:
             getOptimalExtent(haz_metadata, exp_metadata, view_port)
         except Exception, e:
-            msg = 'Did not find expected error message in %s' % str(e)
-            assert 'Invalid' in str(e), msg
+            myMessage = 'Did not find expected error message in %s' % str(e)
+            assert 'Invalid' in str(e), myMessage
         else:
-            msg = ('Wrong input data should have raised an exception')
-            raise Exception(msg)
+            myMessage = ('Wrong input data should have raised an exception')
+            raise Exception(myMessage)
 
         try:
             getOptimalExtent(None, None, view_port)
         except Exception, e:
-            msg = 'Did not find expected error message in %s' % str(e)
-            assert 'Invalid' in str(e), msg
+            myMessage = 'Did not find expected error message in %s' % str(e)
+            assert 'Invalid' in str(e), myMessage
         else:
-            msg = ('Wrong input data should have raised an exception')
-            raise Exception(msg)
+            myMessage = ('Wrong input data should have raised an exception')
+            raise Exception(myMessage)
 
         try:
             getOptimalExtent('aoeush', 'oeuuoe', view_port)
         except Exception, e:
-            msg = 'Did not find expected error message in %s' % str(e)
-            assert 'Invalid' in str(e), msg
+            myMessage = 'Did not find expected error message in %s' % str(e)
+            assert 'Invalid' in str(e), myMessage
         else:
-            msg = ('Wrong input data should have raised an exception')
-            raise Exception(msg)
+            myMessage = ('Wrong input data should have raised an exception')
+            raise Exception(myMessage)
 
     def test_issue100(self):
         """Test for issue 100: unhashable type dict"""
@@ -354,8 +352,8 @@ class ImpactCalculatorTest(unittest.TestCase):
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
         except Exception, e:
-            msg = 'Calculator run failed. %s' % str(e)
-            assert(), msg
+            myMessage = 'Calculator run failed. %s' % str(e)
+            assert(), myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactCalculatorTest, 'test')

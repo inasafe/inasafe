@@ -22,7 +22,7 @@ sudo apt-get install -q -y qgis python-qgis
 echo "Installing Ubuntu packages for development"
 sudo apt-get install -y git subversion pep8 python-nose python-coverage python-numpy pyqt4-dev-tools python-pip
 echo "Installing sphinx from pip because at least 1.1 is needed for i18n support"
-sudo pip install sphinx
+sudo pip install sphinx yanc
 # To get the gui test suite to pass.
 # FIXME (Ole): gdal version is currently hardwired
 sudo apt-get install libgdal1-1.8.0-grass

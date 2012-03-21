@@ -186,7 +186,6 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     myRangeList = []
     myTransparencyList = []
     myLastValue = 0
-    #settrace()
     for myClass in myClasses:
         myMax = myClass['quantity']
         myColour = QtGui.QColor(myClass['colour'])
@@ -684,7 +683,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myMessage = self.tr('Impact layer %s was neither a raster or a '
                    'vector layer' % myQgisImpactLayer.source())
             raise Exception(myMessage)
-        #settrace()
         # Finally, add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
         self.restoreState()

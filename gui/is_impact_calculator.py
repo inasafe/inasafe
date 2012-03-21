@@ -1,5 +1,6 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **impactcalculator.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**ISImpactCalculator.**
 
 The purpose of the module is to centralise interactions between the gui
 package and the underlying InaSAFE packages.
@@ -273,7 +274,7 @@ def getKeywordFromFile(theLayerPath, keyword=None):
     if keyword is None:
         return myDictionary
     if not keyword in myDictionary:
-        msg = tr('No value was found for in file %s in keyword %s' % (
+        msg = tr('No value was found in file %s for keyword %s' % (
                     myKeywordFilePath, keyword))
         raise KeywordNotFoundException(msg)
 

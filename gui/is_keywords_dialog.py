@@ -108,7 +108,6 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
         self.helpDialog = None
-        #settrace()
         # set some inital ui state:
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
