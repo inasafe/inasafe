@@ -18,13 +18,13 @@ You can find out more about the |project_name| project by visiting
 `www.inasafe.org <http://www.inasafe.org/>`_.
 
 
-.. figure::  ../../../gui/resources/img/screenshot.jpg
+.. figure::  ../screenshot.jpg
    :align:   center
 
 A completed assement using the QGIS InaSAFE plugin, with an example of 
 the print ready pdf output the plugin produces.
 
-.. figure::  ../../../gui/resources/img/screenshot2.jpg
+.. figure::  ../screenshot2.jpg
    :align:   center
 
 Vulnerable building footprints shown in red.

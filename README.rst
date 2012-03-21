@@ -4,13 +4,13 @@ InaSAFE - Indonesian Scenario Assessment for Emergencies
 
 This is the project: InaSAFE a Quantum GIS plugin
 
-.. figure::  ../../../gui/resources/img/screenshot.jpg
+.. figure::  docs/screenshot.jpg
    :align:   center
 
 A completed assement using the QGIS InaSAFE plugin, with an example of 
 the print ready pdf output the plugin produces.
 
-.. figure::  ../../../gui/resources/img/screenshot2.jpg
+.. figure::  docs/screenshot2.jpg
    :align:   center
 
 Vulnerable building footprints shown in red.
