@@ -233,54 +233,54 @@ ke %s: %s</translation>
     </message>
 </context>
 <context>
-    <name>ISDock</name>
+    <name>ISDockBase</name>
     <message>
-        <location filename="ui_inasafedock.ui" line="14"/>
+        <location filename="is_dock_base.ui" line="14"/>
         <source>Risk-In-A-Box</source>
         <translation>Risk-In-A-Box</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="33"/>
+        <location filename="is_dock_base.ui" line="33"/>
         <source>Questions</source>
         <translation>Pertanyaan</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="51"/>
+        <location filename="is_dock_base.ui" line="51"/>
         <source>In the event of</source>
         <translation>Jika terjadi</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="61"/>
+        <location filename="is_dock_base.ui" line="61"/>
         <source>How many</source>
         <translation>Berapa banyak</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="71"/>
+        <location filename="is_dock_base.ui" line="71"/>
         <source>&amp;Might</source>
         <translation>Yang &amp;mungkin</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="93"/>
+        <location filename="is_dock_base.ui" line="93"/>
         <source>Results</source>
         <translation>Hasil</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="112"/>
+        <location filename="is_dock_base.ui" line="112"/>
         <source>about:blank</source>
         <translation>Tentang:kosong</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="150"/>
+        <location filename="is_dock_base.ui" line="150"/>
         <source>Supported by AusAID and World Bank</source>
         <translation>Didukung oleh AusAID dan Bank Dunia</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="170"/>
+        <location filename="is_dock_base.ui" line="170"/>
         <source>Help</source>
         <translation>Bantuan</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="210"/>
+        <location filename="is_dock_base.ui" line="210"/>
         <source>Run</source>
         <translation>Jalankan</translation>
     </message>
@@ -342,7 +342,7 @@ ke %s: %s</translation>
         <translation>&lt;span class=&quot;label notice&quot;&gt;Memulai:&lt;/span&gt; Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik &lt;em&gt; tombol&lt;/em&gt; jalankan di bawah ini.</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="190"/>
+        <location filename="is_dock_base.ui" line="190"/>
         <source>Print...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -370,12 +370,12 @@ ke %s: %s</translation>
 <context>
     <name>ISHelp</name>
     <message>
-        <location filename="ui_inasafehelp.ui" line="14"/>
+        <location filename="is_help_base.ui" line="14"/>
         <source>Risk In A Box Help</source>
         <translation>Bantuan Risk In A Box</translation>
     </message>
     <message>
-        <location filename="ui_inasafehelp.ui" line="25"/>
+        <location filename="is_help_base.ui" line="25"/>
         <source>about:blank</source>
         <translation>Tentang:kosong</translation>
     </message>

@@ -213,59 +213,59 @@ to%s: %s</source>
     </message>
 </context>
 <context>
-    <name>ISDock</name>
+    <name>ISDockBase</name>
     <message>
-        <location filename="ui_inasafedock.ui" line="14"/>
+        <location filename="is_dock_base.ui" line="14"/>
         <source>Risk-In-A-Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="33"/>
+        <location filename="is_dock_base.ui" line="33"/>
         <source>Questions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="51"/>
+        <location filename="is_dock_base.ui" line="51"/>
         <source>In the event of</source>
         <translation>In geval van</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="61"/>
+        <location filename="is_dock_base.ui" line="61"/>
         <source>How many</source>
         <translation>Hoe veel</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="71"/>
+        <location filename="is_dock_base.ui" line="71"/>
         <source>&amp;Might</source>
         <translation>&amp;Mag</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="93"/>
+        <location filename="is_dock_base.ui" line="93"/>
         <source>Results</source>
         <translation>Resultate</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="112"/>
+        <location filename="is_dock_base.ui" line="112"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="150"/>
+        <location filename="is_dock_base.ui" line="150"/>
         <source>Supported by AusAID and World Bank</source>
         <translation>Ondersteun deur AusAID en die Wêreld Bank</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="170"/>
+        <location filename="is_dock_base.ui" line="170"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="190"/>
+        <location filename="is_dock_base.ui" line="190"/>
         <source>Print...</source>
         <translation>Druk...</translation>
     </message>
     <message>
-        <location filename="ui_inasafedock.ui" line="210"/>
+        <location filename="is_dock_base.ui" line="210"/>
         <source>Run</source>
         <translation>Begin</translation>
     </message>
@@ -337,14 +337,14 @@ to%s: %s</source>
     </message>
 </context>
 <context>
-    <name>ISHelp</name>
+    <name>ISHelpBase</name>
     <message>
-        <location filename="ui_inasafehelp.ui" line="14"/>
+        <location filename="is_help_base.ui" line="14"/>
         <source>Risk In A Box Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ui_inasafehelp.ui" line="25"/>
+        <location filename="is_help_base.ui" line="25"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
