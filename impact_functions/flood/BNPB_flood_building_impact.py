@@ -4,38 +4,32 @@ from storage.vector import Vector
 from storage.utilities import ugettext as _
 
 
-class FloodBuildingImpactFunction(FunctionProvider):
-    """Risk plugin for flood impact on building data
+class BNPBFloodBuildingImpactFunction(FunctionProvider):
+    """Flood impact on building data according to BNPB Perka 2
 
-    :param requires category=='hazard' and \
-                    subcategory.startswith('flood') and \
-                    layertype in ['raster', 'vector']
+    :param requires category == 'hazard' and \
+                    subcategory == 'flood' and \
+                    layertype == 'raster'
 
-    :param requires category=='exposure' and \
-                    subcategory.startswith('building') and \
-                    layertype=='vector'
+    :param requires category == 'exposure' and \
+                    subcategory == 'building' and \
+                    layertype == 'vector'
     """
 
     target_field = 'AFFECTED'
-    plugin_name = _('Temporarily Closed')
-
-    # Is never called but would be nice to do here
-    #def __init__(self):
-    #    self.target_field = 'AFFECTED'
-    #    self.plugin_name = _('Temporarily Closed')
+    plugin_name = _('Rawan Banjir')  # In Bahasa I. for the time being.
+                                     # Should be Flood Prone
 
     def run(self, layers):
-        """Risk plugin for tsunami population
+        """Separate exposed elements by depth [m]:
+        < 1     Rendah
+        1 - 3   Sedang
+        > 3     Tinggi
         """
-
-        threshold = 1.0  # Flood threshold [m]
 
         # Extract data
         H = get_hazard_layer(layers)    # Depth
         E = get_exposure_layer(layers)  # Building locations
-
-        # FIXME (Ole): interpolate does not carry original name through,
-        # so get_name gives "Vector Layer" :-)
 
         # Interpolate hazard level to building locations
         I = H.interpolate(E)
@@ -48,29 +42,30 @@ class FloodBuildingImpactFunction(FunctionProvider):
         attribute_names = E.get_attribute_names()
 
         # Calculate population impact
-        count = 0
+        rendah = 0
+        sedang = 0
+        tinggi = 0
         building_impact = []
         for i in range(N):
-            if H.is_raster:
-                # Get the interpolated depth
-                x = float(attributes[i].values()[0])
-                x = x > threshold
-            elif H.is_vector:
-                # Use interpolated polygon attribute
-                x = attributes[i]['Affected']
 
-            # Tag and count
-            if x is True:
-                affected = 1  # FIXME Ole this is unused
-                count += 1
+            # Get the interpolated depth
+            x = float(attributes[i].values()[0])
+            if x < 1:
+                nilai = 1
+                rendah += 1
+            elif 1 <= x < 3:
+                nilai = 2
+                sedang += 1
             else:
-                affected = 0  # FIXME Ole this is unused
+                nilai = 3
+                tinggi += 1
 
-            # Collect depth and calculated damage
-            result_dict = {self.target_field: x}
+            # Collect depth and impact level
+            result_dict = {'depth': x,
+                           self.target_field: nilai}
 
             # Carry all original attributes forward
-            # FIXME (Ole): Make this part of the interpolation (see issue #101)
+            # FIXME (Ole): Do this is interpolation
             for key in attribute_names:
                 result_dict[key] = E.get_data(key, i)
 
@@ -89,21 +84,24 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                    '</table>' % (_('Building'), _('Number of'),
+                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
+                    '</table>' % (_('Ketinggian Banjir'), _('Jumlah gedung'),
                                   _('All'), N,
-                                  _('Closed'), count,
-                                  _('Opened'), N - count))
+                                  _('< 1 m'), rendah,
+                                  _('1 - 3 m'), sedang,
+                                  _('> 3 m'), tinggi))
 
         impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _('Buildings that will need to closed when flooding'
-                   'more than %.1f m' % threshold)
+        impact_summary += '<b>' + _('Based on BNPB Perka 2 - 2012') + '</b><br>'
 
         # Create style
-        style_classes = [dict(label=_('Opened'), min=0, max=0,
-                              colour='#1EFC7C', transparency=0, size=1),
-                         dict(label=_('Closed'), min=1, max=1,
-                              colour='#F31A1C', transparency=0, size=1)]
+        style_classes = [dict(label=_('< 1 m'), min=1, max=1,
+                              colour='#00FF00', transparency=0, size=1),
+                         dict(label=_('1 - 3 m'), min=2, max=2,
+                              colour='#FFFF00', transparency=0, size=1),
+                         dict(label=_('> 3 m'), min=3, max=3,
+                              colour='#FF0000', transparency=0, size=1)]
+
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 
