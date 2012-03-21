@@ -175,7 +175,7 @@ to%s: %s</source>
     </message>
 </context>
 <context>
-    <name>IS</name>
+    <name>ISPlugin</name>
     <message>
         <location filename="is_plugin.py" line="149"/>
         <source>Toggle InaSAFE Dock</source>
