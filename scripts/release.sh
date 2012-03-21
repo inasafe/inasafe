@@ -32,9 +32,6 @@ find . -name "*.*~" -exec rm -rf {} \;
 #regenerate docs
 make docs
 
-echo "You need to commit the version number change before we can package"
-git commit -m "Updated version number to ${VERSION}" -a
-
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
 DIR=${PWD##*/}
 OUT="/tmp/${DIR}.${1}.zip"
@@ -77,3 +74,4 @@ cd ${DIR}
 echo "Your plugin archive has been generated as"
 ls -lah ${OUT}
 echo "${OUT}"
+echo "You should git commit the changes made by this script now" 
