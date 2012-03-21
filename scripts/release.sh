@@ -64,7 +64,7 @@ zip -r ${OUT} ${DIR} --exclude \*.pyc \
                                   \*.*.orig \
                                   \*.bat \
                                   \*.xcf \
-                                  \Makefile
+                                  \Makefile*
                                   
 
 cd ${DIR}
