@@ -43,6 +43,7 @@ OUT="/tmp/${DIR}.${1}.zip"
 
 # The \* tells zip to ignore recursively
 rm ${OUT}
+cd ..
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
                                   ../${DIR}/docs/source\* \
                                   ../${DIR}/docs/build/doctrees\* \
@@ -63,7 +64,7 @@ zip -r ${OUT} ${DIR} --exclude \*.pyc \
                                   \*.xcf
                                   
 
-
+cd ${DIR}
 
 echo "Your plugin archive has been generated as"
 ls -lah ${OUT}
