@@ -19,14 +19,14 @@ Package::gui
    :maxdepth: 2
 
    gui/init
-   gui/riab
-   gui/riabdock
-   gui/riabmap
-   gui/riabkeywordsdialog
-   gui/riabhelp
-   gui/riabclipper
-   gui/impactcalculator
-   gui/riabexceptions
+   gui/is_plugin
+   gui/is_dock
+   gui/is_map
+   gui/is_keywords_dialog
+   gui/is_help
+   gui/is_clipper
+   gui/is_impact_calculator
+   gui/is_exceptions
 
 Package::impact_functions
 .........................
@@ -51,12 +51,12 @@ Gui Unit Tests
 .. toctree::
    :maxdepth: 2
 
-   gui/qgisinterface
-   gui/test_riab
-   gui/test_riabdock
-   gui/test_riabmap
-   gui/test_impactcalculator
-   gui/test_riabkeywordsdialog
+   gui/qgis_interface
+   gui/test_is_plugin
+   gui/test_is_dock
+   gui/test_is_map
+   gui/test_is_impact_calculator
+   gui/test_is_keywords_dialog
 
 
 Impact Function Unit Tests

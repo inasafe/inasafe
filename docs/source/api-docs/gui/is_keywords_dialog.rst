@@ -1,8 +1,8 @@
-Module:  riabkeywordsdialog
+Module:  is_keywords_dialog
 ===========================
 
 This page contains the documentation for the Risk-In-A-Box 
-**riabkeywordsdialog** module.
+**is_keywords_dialog** module.
 
-.. automodule:: gui.riabkeywordsdialog
+.. automodule:: gui.is_keywords_dialog
       :members:

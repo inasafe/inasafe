@@ -1,7 +1,8 @@
-Module: inasafe
-=====================
+Module: gui
+===========
 
-This page contains the documentation for the  Risk-In-A-Box code **inasafe** module.
+This page contains the documentation for the  Risk-In-A-Box code 
+**gui** module.
 
-.. automodule:: inasafe
+.. automodule:: gui
       :members:
