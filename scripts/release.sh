@@ -46,11 +46,14 @@ zip -r ${OUT} ../${DIR} --exclude \*.pyc \
                                   ../${DIR}/docs/source\* \
                                   ../${DIR}/.git\* \
                                   ../${DIR}/.settings\* \
-                                  ../${DIR}/.scripts\* \
+                                  ../${DIR}/.pydev\* \
                                   ../${DIR}/.coverage\* \
+                                  ../${DIR}/scripts\* \
                                   ../${DIR}/impossible_state.* \
                                   ../${DIR}/riab_demo_data\* \
                                   \*.*~ \
+                                  \test*.py \
+                                  \*.*.orig \
                                   \*.bat
                                   
 
