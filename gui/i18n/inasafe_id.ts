@@ -284,6 +284,9 @@ ke %s: %s</translation>
         <source>Run</source>
         <translation>Jalankan</translation>
     </message>
+</context>
+<context>
+    <name>ISDock</name>
     <message>
         <location filename="is_dock.py" line="322"/>
         <source>&lt;span class=&quot;label important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%s]: %s &lt;br&gt;Exposure keywords [%s]: %s</source>
