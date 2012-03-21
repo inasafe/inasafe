@@ -71,7 +71,7 @@ class ISMap():
         # make a square map where width = height = page width
         self.mapHeight = self.pageWidth - (self.pageMargin * 2)
         self.mapWidth = self.mapHeight
-        self.disclaimer = self.tr('S.A.F.E. has been jointly developed by'
+        self.disclaimer = self.tr('InaSAFE has been jointly developed by'
                                   ' BNPD, AusAid & the World Bank')
 
     def tr(self, theString):
@@ -470,11 +470,12 @@ class ISMap():
                              myItalicsFlag)
         myLabel = QgsComposerLabel(self.composition)
         myLabel.setFont(myFont)
-        myHeading = self.tr('S.A.F.E. - Scenario Assement For Emergencies')
+        myHeading = self.tr('InaSAFE - Indonesian Scenario Assessment'
+                            ' for Emergencies')
         myLabel.setText(myHeading)
         myLabel.adjustSizeToText()
         myLabelHeight = 10.0  # determined using qgis map composer
-        myLabelWidth = 131.412   # item - position and size...option
+        myLabelWidth = 170.0   # item - position and size...option
         myLeftOffset = self.pageWidth - self.pageMargin - myLabelWidth
         myLabel.setItemPosition(myLeftOffset,
                                 theTopOffset - 2,  # -2 to push it up a little
