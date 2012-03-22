@@ -17,8 +17,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'AFFECTED'
-    plugin_name = _('Rawan Banjir')  # In Bahasa I for the time being.
-                                     # Should be Flood Prone
+    plugin_name = _('Rawan Banjir')  # Name that will show up in GUI
 
     def run(self, layers):
         """Separate exposed elements by depth [m]:
@@ -41,7 +40,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
         # List attributes to carry forward to result layer
         attribute_names = E.get_attribute_names()
 
-        # Calculate population impact
+        # Calculate building impact
         rendah = 0
         sedang = 0
         tinggi = 0
@@ -50,6 +49,8 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
 
             # Get the interpolated depth
             x = float(attributes[i].values()[0])
+
+            # Assign impact level (nilai) depending on depth and count 
             if x < 1:
                 nilai = 1
                 rendah += 1
@@ -60,24 +61,17 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
                 nilai = 3
                 tinggi += 1
 
-            # Collect depth and impact level
-            result_dict = {'depth': x,
-                           self.target_field: nilai}
+            # Record depth and impact level for this feature
+            building_impact.append({'depth': x,
+                                    self.target_field: nilai})	
 
-            # Carry all original attributes forward
-            # FIXME (Ole): Do this is interpolation
-            for key in attribute_names:
-                result_dict[key] = E.get_data(key, i)
 
-            # Record result for this feature
-            building_impact.append(result_dict)
-
-        # Create report
+        # Create summary report
         Hname = H.get_name()
         Ename = E.get_name()
         table = _('<b>In case of "%s" the estimated impact to "%s" '
                   'the possibility of &#58;</b><br><br><p>' % (Hname,
-                                                                Ename))
+                                                               Ename))
         table += ('<table border="0" width="320px">'
                   '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                   '   <tr></tr>'
@@ -96,11 +90,11 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
 
         # Create style
         style_classes = [dict(label=_('< 1 m'), min=1, max=1,
-                              colour='#00FF00', transparency=0, size=1),
+                              colour='#00FF00', transparency=0, size=1),  # Green
                          dict(label=_('1 - 3 m'), min=2, max=2,
-                              colour='#FFFF00', transparency=0, size=1),
+                              colour='#FFFF00', transparency=0, size=1),  # Yellow
                          dict(label=_('> 3 m'), min=3, max=3,
-                              colour='#FF0000', transparency=0, size=1)]
+                              colour='#FF0000', transparency=0, size=1)]  # Red 
 
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
