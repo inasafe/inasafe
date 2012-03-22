@@ -7,7 +7,7 @@ This is the project: InaSAFE a Quantum GIS plugin
 .. figure::  docs/screenshot.jpg
    :align:   center
 
-A completed assement using the QGIS InaSAFE plugin, with an example of 
+A completed assement using the QGIS InaSAFE plugin, with an example of
 the print ready pdf output the plugin produces.
 
 .. figure::  docs/screenshot2.jpg
@@ -15,12 +15,12 @@ the print ready pdf output the plugin produces.
 
 Vulnerable building footprints shown in red.
 
-For more information about InaSAFE please visit 
+For more information about InaSAFE please visit
 `www.inasafe.org <http://www.inasafe.org>`_ and look at the documentation at
 `inasafe.readthedocs.org <http://inasafe.readthedocs.org>`_
 
 The latest source code is available at
-`aifdr.github.com/inasafe <http://aifdr.github.com/inasafe>`_
+`https://github.com/AIFDR/inasafe <https://github.com/AIFDR/inasafe>`_
 which contains modules for risk calculations, gis functionality and functions
 for impact modelling.
 
