@@ -21,7 +21,7 @@ You can find out more about the |project_name| project by visiting
 .. figure::  ../screenshot.jpg
    :align:   center
 
-A completed assement using the QGIS InaSAFE plugin, with an example of 
+A completed assement using the QGIS InaSAFE plugin, with an example of
 the print ready pdf output the plugin produces.
 
 .. figure::  ../screenshot2.jpg
@@ -30,9 +30,10 @@ the print ready pdf output the plugin produces.
 Vulnerable building footprints shown in red.
 
 The latest source code is available at
-`aifdr.github.com/inasafe <http://aifdr.github.com/inasafe>`_
+`https://github.com/AIFDR/inasafe <https://github.com/AIFDR/inasafe>`_
 which contains modules for risk calculations, gis functionality and functions
 for impact modelling.
+
 
 Contents
 ========
