@@ -17,7 +17,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'AFFECTED'
-    plugin_name = _('Rawan Banjir')  # In Bahasa I. for the time being.
+    plugin_name = _('Rawan Banjir')  # In Bahasa I for the time being.
                                      # Should be Flood Prone
 
     def run(self, layers):
@@ -75,24 +75,24 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
-        impact_summary = _('<b>In case of "%s" the estimated impact to "%s" '
-                   'the possibility of &#58;</b><br><br><p>' % (Hname,
+        table = _('<b>In case of "%s" the estimated impact to "%s" '
+                  'the possibility of &#58;</b><br><br><p>' % (Hname,
                                                                 Ename))
-        impact_summary += ('<table border="0" width="320px">'
-                   '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
-                    '   <tr></tr>'
-                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                    '</table>' % (_('Ketinggian Banjir'), _('Jumlah gedung'),
-                                  _('All'), N,
-                                  _('< 1 m'), rendah,
-                                  _('1 - 3 m'), sedang,
-                                  _('> 3 m'), tinggi))
+        table += ('<table border="0" width="320px">'
+                  '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+                  '   <tr></tr>'
+                  '   <tr><td>%s &#58;</td><td>%i</td></tr>'
+                  '   <tr><td>%s &#58;</td><td>%i</td></tr>'
+                  '   <tr><td>%s &#58;</td><td>%i</td></tr>'
+                  '   <tr><td>%s &#58;</td><td>%i</td></tr>'
+                  '</table>' % (_('Ketinggian Banjir'), _('Jumlah gedung'),
+                                _('All'), N,
+                                _('< 1 m'), rendah,
+                                _('1 - 3 m'), sedang,
+                                _('> 3 m'), tinggi))
 
-        impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<b>' + _('Based on BNPB Perka 2 - 2012') + '</b><br>'
+        table += '<br>'  # Blank separation row
+        table += '<b>' + _('Based on BNPB Perka 2 - 2012') + '</b><br>'
 
         # Create style
         style_classes = [dict(label=_('< 1 m'), min=1, max=1,
@@ -110,6 +110,6 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
                    projection=E.get_projection(),
                    geometry=E.get_geometry(),
                    name=_('Estimated buildings affected'),
-                   keywords={'impact_summary': impact_summary},
+                   keywords={'impact_summary': table},
                    style_info=style_info)
         return V
