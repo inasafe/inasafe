@@ -389,7 +389,10 @@ environment has been imported. Here are the typical contexts of the file::
    @echo off
    SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.8
    path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2RC2\lib
-   start "Quantum GIS" /B ""C:\Progra~1\eclipse\eclipse.exe" %* 
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
+   set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
+   start "Quantum GIS" /B ""C:\Progra~1\eclipse\eclipse.exe" %*
 
 Save this file under <QGIS Install Dir>/bin/python-shell.bat and then right-drag
 it from explorer to your Windows start button to create an easily accessible 
