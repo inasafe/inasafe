@@ -282,7 +282,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock_base.ui" line="210"/>
         <source>Run</source>
-        <translation>Jalankan</translation>
+        <translation>Hitung</translation>
     </message>
 </context>
 <context>
@@ -295,7 +295,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="336"/>
         <source>&lt;span class=&quot;label success&quot;&gt;Ready:&lt;/span&gt; You can now proceed to run your model by clicking the &lt;em&gt; Run&lt;/em&gt; button.</source>
-        <translation>&lt;span class=&quot;label success&quot;&gt;Siap:&lt;/span&gt; Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Jalankan.</translation>
+        <translation>&lt;span class=&quot;label success&quot;&gt;Siap:&lt;/span&gt; Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung.</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="534"/>
