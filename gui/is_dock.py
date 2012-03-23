@@ -252,6 +252,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         """
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
+        self.setWindowTitle(self.tr('InaSAFE %s' % __version__))
         # Save reference to the QGIS interface
         self.iface = iface
         self.header = None  # for storing html header template
