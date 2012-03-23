@@ -1664,9 +1664,11 @@ class Test_Polygon(unittest.TestCase):
         p4 = [122.22472918310231, -8.6218197001101728]
         line0 = [p1, p2]
         line1 = [p3, p4]
-        Vector(geometry=[line0, line1],
-               geometry_type='line').write_to_file('impossible_state.shp')
+        #Vector(geometry=[line0, line1],
+        #       geometry_type='line').write_to_file('impossible_state.shp')
         status, value = intersection(line0, line1)
+        assert status == 0
+        assert value is None
 
     def test_clip_line_by_polygon_simple(self):
         """Simple lines are clipped and classified by polygon
