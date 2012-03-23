@@ -1088,6 +1088,7 @@ class Test_IO(unittest.TestCase):
             msg = 'Got value "%s", expected "%s"' % (v.strip(),
                                                      str(keywords[k]).strip())
             assert v.strip() == str(keywords[k]).strip(), msg
+        fid.close()
 
         x = read_keywords(kwd_filename)
         os.remove(kwd_filename)
