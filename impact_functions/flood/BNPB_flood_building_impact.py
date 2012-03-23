@@ -50,7 +50,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
             # Get the interpolated depth
             x = float(attributes[i].values()[0])
 
-            # Assign impact level (nilai) depending on depth and count 
+            # Assign impact level (nilai) depending on depth and count
             if x < 1:
                 nilai = 1
                 rendah += 1
@@ -63,8 +63,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
 
             # Record depth and impact level for this feature
             building_impact.append({'depth': x,
-                                    self.target_field: nilai})	
-
+                                    self.target_field: nilai})
 
         # Create summary report
         Hname = H.get_name()
@@ -90,11 +89,14 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
 
         # Create style
         style_classes = [dict(label=_('< 1 m'), min=1, max=1,
-                              colour='#00FF00', transparency=0, size=1),  # Green
+                              colour='#00FF00',  # Green
+                              transparency=0, size=1),
                          dict(label=_('1 - 3 m'), min=2, max=2,
-                              colour='#FFFF00', transparency=0, size=1),  # Yellow
+                              colour='#FFFF00',  # Yellow
+                              transparency=0, size=1),
                          dict(label=_('> 3 m'), min=3, max=3,
-                              colour='#FF0000', transparency=0, size=1)]  # Red 
+                              colour='#FF0000',  # Red
+                              transparency=0, size=1)]
 
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
