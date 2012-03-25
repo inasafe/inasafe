@@ -16,7 +16,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
                     layertype == 'vector'
     """
 
-    target_field = 'AFFECTED'
+    target_field = 'LEVEL'  # The levels are 1: < 1m, 2: 1-3m and 3: > 3m
     plugin_name = _('Rawan Banjir')  # Name that will show up in GUI
 
     def run(self, layers):

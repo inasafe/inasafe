@@ -314,6 +314,28 @@ def extract_layers(layers, keyword, value):
     return extracted_layers
 
 
+def aggregate(data=None, boundaries=None, attribute_name=None):
+    """Clip data to boundaries and sum up their values for each.
+
+    Input
+        data: Point or Raster dataset
+        boundaries: Polygon dataset
+
+    Output
+        Dictionary of {boundary_name: aggregated value}
+    """
+
+    msg = ('Input argument "data" must be point type. I got type: %s'
+           % data.get_geometry_type())
+    if not data.is_point_data():
+        raise Exception(msg)
+
+    msg = ('Input argument "boundaries" must be polygon type. I got type: %s'
+           % boundaries.get_geometry_type())
+    if not boundaries.is_polygon_data():
+        raise Exception(msg)
+
+
 # FIXME (Ole): Maybe filter by name too, rename to get_impact_functions
 #              and remove some of the other functions.
 def get_admissible_plugins(keywords=None):  # , name=None):
