@@ -314,12 +314,16 @@ def extract_layers(layers, keyword, value):
     return extracted_layers
 
 
-def aggregate(data=None, boundaries=None, attribute_name=None):
-    """Clip data to boundaries and sum up their values for each.
+def aggregate_point_data(data=None, boundaries=None,
+                         attribute_name=None,
+                         aggregation_function='count'):
+    """Clip data to boundaries and aggregate their values for each.
 
     Input
-        data: Point or Raster dataset
+        data: Point dataset
         boundaries: Polygon dataset
+        attribute_name: Name of attribute to aggrate over.
+        aggregation_function: Function to apply ('count' or 'sum')
 
     Output
         Dictionary of {boundary_name: aggregated value}
@@ -327,12 +331,45 @@ def aggregate(data=None, boundaries=None, attribute_name=None):
 
     msg = ('Input argument "data" must be point type. I got type: %s'
            % data.get_geometry_type())
-    if not data.is_point_data():
+    if not data.is_point_data:
         raise Exception(msg)
 
     msg = ('Input argument "boundaries" must be polygon type. I got type: %s'
            % boundaries.get_geometry_type())
-    if not boundaries.is_polygon_data():
+    if not boundaries.is_polygon_data:
+        raise Exception(msg)
+
+    # FIXME (Ole): READY FOR IMPLEMENTATION
+
+
+def aggregate(data=None, boundaries=None,
+              attribute_name=None,
+              aggregation_function='count'):
+    """Clip data to boundaries and aggregate their values for each.
+
+    Input
+        data: Point or Raster dataset
+        boundaries: Polygon dataset
+        attribute_name: Name of attribute to aggrate over.
+                        This is only applicable for vector data
+        aggregation_function: Function to apply ('count' or 'sum')
+
+    Output
+        Dictionary of {boundary_name: aggregated value}
+    """
+
+    if data.is_point_data:
+        aggregate_point_data(data, boundaries,
+                             attribute_name, aggregation_function)
+    elif data.is_raster_data:
+        # Convert to point data
+        # Call point aggregation function
+        #aggregate_point_data(data, boundaries,
+        #                     attribute_name, aggregation_function)
+        pass
+    else:
+        msg = ('Input argument "data" must be point or raster data. '
+               'I got type: %s' % data.get_geometry_type())
         raise Exception(msg)
 
 
