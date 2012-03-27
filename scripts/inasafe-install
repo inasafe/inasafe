@@ -1,8 +1,9 @@
 #! /bin/bash
 
 # Name of root dir and repository
-InaSAFEDIR="inasafe-dev"  # Master advertises as inasafe-dev
-InaSAFEREPO="AIFDR/$InaSAFEDIR.git"
+PROJECTNAME="inasafe"
+InaSAFEDIR="$PROJECTNAME-dev"   # Master advertises as inasafe-dev
+InaSAFEREPO="AIFDR/$PROJECTNAME.git"
 
 echo "---------------------------------------------------------"
 echo "Installing InaSAFE and all its dependencies."
@@ -69,6 +70,13 @@ function checkup() {
 
 echo "Downloading InaSAFE"
 checkup ${InaSAFEREPO} ${InaSAFEDIR} master
+
+echo "Create symlink $InaSAFEQGIS from QGis plugin area"
+mkdir ~/.qgis/python 2>/dev/null
+mkdir ~/.qgis/python/plugins 2>/dev/null
+pushd ~/.qgis/python/plugins
+ln -sf $InaSAFEQGIS
+popd
 
 echo "Downloading test and demo data"
 echo dir $InaSAFEQGIS
