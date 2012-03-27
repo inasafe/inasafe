@@ -31,9 +31,9 @@ sys.path.append(pardir)
 
 
 from is_exceptions import (InsufficientParametersException,
-                            KeywordNotFoundException,
-                            StyleInfoNotFoundException,
-                            InvalidParameterException)
+                           KeywordNotFoundException,
+                           StyleInfoNotFoundException,
+                           InvalidParameterException)
 
 from is_utilities import getExceptionWithStacktrace
 
