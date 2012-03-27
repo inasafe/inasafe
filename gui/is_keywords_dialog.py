@@ -510,7 +510,10 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
             # exposure to start with
             myKeywords = {'category': 'exposure'}
 
-        self.lblLayerName.setText(self.layer.name())
+        myLayerName = self.layer.name()
+        if 'title' not in myKeywords:
+            self.leTitle.setText(myLayerName)
+        self.lblLayerName.setText(myLayerName)
         #if we have a category key, unpack it first so radio button etc get set
         if 'category' in myKeywords:
             self.setCategory(myKeywords['category'])
@@ -537,8 +540,11 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         myTitle = self.getValueForKey('title')
         if myTitle is not None:
             self.leTitle.setText(myTitle)
+        elif self.layer is not None:
+            myLayerName = self.layer.name()
+            self.lblLayerName.setText(myLayerName)
         else:
-            self.leTitle.setText('')
+            self.lblLayerName.setText('')
 
         if self.radExposure.isChecked():
             if mySubcategory is not None and myType is not None:
