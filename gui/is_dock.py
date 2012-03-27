@@ -82,6 +82,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised
         """
+        #settrace()
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s' % __version__))
@@ -107,11 +108,41 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myButton = self.pbnRunStop
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.accept)
+        self.connectLayerListener()
+        #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
+        #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
+
+    def connectLayerListener(self):
+        """Establish a signal/slot to listen for changes in the layers loaded
+        in QGIS.
+
+        ..seealso:: disconnectLayerListener
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+        """
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
-        #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
-        #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
+
+    def disconnectLayerListener(self):
+        """Destroy the signal/slot to listen for changes in the layers loaded
+        in QGIS.
+
+        ..seealso:: connectLayerListener
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+        """
+        QtCore.QObject.disconnect(self.iface.mapCanvas(),
+                               QtCore.SIGNAL('layersChanged()'),
+                               self.getLayers)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -170,9 +201,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                 myExposureFilename, myExposureKeywords))
             return (False, myMessage)
         else:
-            myMessage = self.tr('<span class="label label-success">Ready:</span> '
-            'You can now proceed to run your model by clicking the <em> '
-            'Run</em> button.')
+            myMessage = self.tr('<span class="label label-success">Ready:'
+            '</span> You can now proceed to run your model by clicking '
+            'the <em> Run</em> button.')
             return (True, myMessage)
 
     @pyqtSignature('int')  # prevents actions being handled twice
@@ -299,6 +330,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no
         """
+        # remember what the current function is
+        myOriginalFunction = self.cboFunction.currentText()
         self.cboFunction.clear()
 
         # Get the keyword dictionaries for hazard and exposure
@@ -333,6 +366,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 self.cboFunction.addItem(myFunction)
         except Exception, e:
             raise e
+
+        self.restoreFunctionState()
 
     def readImpactLayer(self, myEngineImpactLayer):
         """Helper function to read and validate layer
@@ -906,12 +941,25 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             if myItemText == self.state['hazard']:
                 self.cboHazard.setCurrentIndex(myCount)
                 break
+        self.restoreFunctionState(self.state['function'])
+        self.wvResults.setHtml(self.state['report'])
+
+
+    def restoreFunctionState(self, theOriginalFunction):
+        """Restore the function combo to a known state.
+        Args:
+            theOriginalFunction - name of function that should be selected
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        # Restore previous state of combo
         for myCount in range(0, self.cboFunction.count()):
             myItemText = self.cboFunction.itemText(myCount)
-            if myItemText == self.state['function']:
+            if myItemText == theOriginalFunction:
                 self.cboFunction.setCurrentIndex(myCount)
                 break
-        self.wvResults.setHtml(self.state['report'])
 
     def printMap(self):
         """Slot to print map when print map button pressed.
