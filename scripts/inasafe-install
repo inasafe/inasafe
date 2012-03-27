@@ -1,8 +1,9 @@
 #! /bin/bash
 
 # Name of root dir and repository
-InaSAFEDIR="inasafe"
-InaSAFEREPO="AIFDR/$InaSAFEDIR.git"
+PROJECTNAME="inasafe"
+InaSAFEDIR="$PROJECTNAME-dev"   # Master advertises as inasafe-dev
+InaSAFEREPO="AIFDR/$PROJECTNAME.git"
 
 echo "---------------------------------------------------------"
 echo "Installing InaSAFE and all its dependencies."
@@ -28,7 +29,7 @@ sudo pip install sphinx
 # FIXME (Ole): gdal version is currently hardwired
 sudo apt-get install libgdal1-1.8.0-grass
 
-
+# Setup environment variable. FIXME: Not used (yet)
 if grep -q InaSAFEQGIS ~/.bash_aliases
 then
     echo "You already have InaSAFEQGIS in your ~/.bash_aliases"
@@ -69,6 +70,13 @@ function checkup() {
 
 echo "Downloading InaSAFE"
 checkup ${InaSAFEREPO} ${InaSAFEDIR} master
+
+echo "Create symlink $InaSAFEQGIS from QGis plugin area"
+mkdir ~/.qgis/python 2>/dev/null
+mkdir ~/.qgis/python/plugins 2>/dev/null
+pushd ~/.qgis/python/plugins
+ln -sf $InaSAFEQGIS
+popd
 
 echo "Downloading test and demo data"
 echo dir $InaSAFEQGIS
