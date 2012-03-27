@@ -237,13 +237,16 @@ def getExceptionWithStacktrace(e, html=False):
         s = '<div>'
         s += tr('<span class="label label-important">Problem:</span> ')
         s += errmsg
-        s += '</div>'
-        s += '<div>'
-        s += tr('<span class="label label-warning">Traceback:</span> ')
-        s += '<pre id="traceback" class="prettyprint">\n'
+        s += ('</div>'
+        '<div>'
+        '<span class="label label-warning" style="cursor:pointer;"'
+        ' onclick="$(\'#traceback\').toggle();">')
+        s += tr('Toggle traceback...')
+        s += '</span>'
+        s += ('<pre id="traceback" class="prettyprint"'
+              ' style="display: none;">\n')
         s += info
         s += '</pre></div>'
-
         return s
 
 
