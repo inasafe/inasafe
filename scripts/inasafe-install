@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Name of root dir and repository
-InaSAFEDIR="inasafe"
+InaSAFEDIR="inasafe-dev"  # Master advertises as inasafe-dev
 InaSAFEREPO="AIFDR/$InaSAFEDIR.git"
 
 echo "---------------------------------------------------------"
@@ -28,7 +28,7 @@ sudo pip install sphinx
 # FIXME (Ole): gdal version is currently hardwired
 sudo apt-get install libgdal1-1.8.0-grass
 
-
+# Setup environment variable. FIXME: Not used (yet)
 if grep -q InaSAFEQGIS ~/.bash_aliases
 then
     echo "You already have InaSAFEQGIS in your ~/.bash_aliases"
