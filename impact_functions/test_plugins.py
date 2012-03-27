@@ -17,6 +17,7 @@ from impact_functions.core import get_plugins
 from core import requirements_collect
 from core import requirement_check
 from core import compatible_layers
+from core import aggregate
 
 from storage.core import read_layer
 from storage.utilities_test import TESTDATA
@@ -136,7 +137,7 @@ class Test_plugins(unittest.TestCase):
         msg = 'No compatible layers returned'
         assert len(annotated_plugins) > 0, msg
 
-    def Xtest_aggregate():
+    def test_aggregate(self):
         """Aggregation by boundaries works
         """
 
@@ -144,7 +145,18 @@ class Test_plugins(unittest.TestCase):
         boundary_filename = ('%s/kecamatan_geo.shp' % TESTDATA)
         #data_filename = ('%s/Population_Jakarta_geographic.asc' % TESTDATA)
 
-        # Get school impact data (BNPB perga 2)
+        # Get building impact data (BNPB perga 2)
+        building_filename = ('%s/building_impact_scenario.shp' % TESTDATA)
+
+        boundary_layer = read_layer(boundary_filename)
+        building_layer = read_layer(building_filename)
+
+        res = aggregate(data=building_layer,
+                        boundaries=boundary_layer,
+                        attribute_name='AFFECTED',
+                        aggregation_function='count')
+
+        # FIXME (Ole): Test that output is as expected
 
 
 if __name__ == '__main__':
