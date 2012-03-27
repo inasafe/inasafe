@@ -18,7 +18,7 @@ version=0.2.0
 
 # Optional items:
 
- # Uncomment the following line and add your changelog entries:
+# Uncomment the following line and add your changelog entries:
 # changelog=
 
 # tags are comma separated with spaces allowed
