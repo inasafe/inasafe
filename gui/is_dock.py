@@ -425,25 +425,35 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         try:
             self.setupCalculator()
-            # Start it in its own thread
-            self.runner = self.calculator.getRunner()
-            QtCore.QObject.connect(self.runner.notifier(),
+        except Exception, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('<p><span class="label label-important">'
+                                'Error:</span> '
+                                'An exception occurred when setting up the '
+                                'impact calculator.')
+            myMessage += getExceptionWithStacktrace(e, html=True)
+            self.displayHtml(myMessage)
+
+        self.runner = self.calculator.getRunner()
+        QtCore.QObject.connect(self.runner.notifier(),
                                QtCore.SIGNAL('done()'),
                                self.completed)
-            #self.runner.start()  # Run in different thread
 
+        try:
             QtGui.qApp.setOverrideCursor(
                     QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.repaint()
             QtGui.qApp.processEvents()
 
             myTitle = self.tr('Calculating impact...')
-            myMessage = self.tr('This may take a little while - we are'
-                                'computing the areas that will be impacted'
+            myMessage = self.tr('This may take a little while - we are '
+                                'computing the areas that will be impacted '
                                 'by the hazard and writing the result to '
                                 'a new layer.')
             myProgress = 66
             self.showBusy(myTitle, myMessage, myProgress)
+            #self.runner.start()  # Run in different thread
             self.runner.run()  # Run in same thread
             #self.runner.start() # Run in separate thread
             QtGui.qApp.restoreOverrideCursor()
@@ -487,6 +497,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         Provides report out from impact_function to canvas
         """
+
+        myTitle = self.tr('Loading results...')
+        myMessage = self.tr('The impact assessment is complete - loading '
+                            'the results into QGIS now...')
+        myProgress = 99
+        self.showBusy(myTitle, myMessage, myProgress)
 
         myMessage = self.runner.result()
         myEngineImpactLayer = self.runner.impactLayer()
@@ -561,7 +577,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                   '<div>' + str(theMessage) + '</div>'
                   '<div class="progress">'
                   '  <div class="bar" '
-                  '       style="width: ' + str(theProgress) + '%;>'
+                  '       style="width: ' + str(theProgress) + '%;">'
                   '  </div>'
                   '</div>')
         self.displayHtml(myHtml)
@@ -573,6 +589,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
+            QtCore.QObject.disconnect(self.runner.notifier(),
+                               QtCore.SIGNAL('done()'),
+                               self.completed)
             del self.runner
             self.runner = None
 
