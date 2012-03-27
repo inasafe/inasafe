@@ -469,6 +469,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                 'impact calculator.')
             myMessage += getExceptionWithStacktrace(e, html=True)
             self.displayHtml(myMessage)
+            return
 
         self.runner = self.calculator.getRunner()
         QtCore.QObject.connect(self.runner.notifier(),
