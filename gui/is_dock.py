@@ -436,6 +436,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                     QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.repaint()
             QtGui.qApp.processEvents()
+            myMessage = self.tr('Calculating impact...')
+            self.showBusy(myMessage)
             self.runner.run()  # Run in same thread
             #self.runner.start() # Run in separate thread
             QtGui.qApp.restoreOverrideCursor()
@@ -528,14 +530,23 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             self.helpDialog = ISHelp(self.iface.mainWindow(), 'dock')
         self.helpDialog.show()
 
-    def showBusy(self):
-        """A helper function to indicate the plugin is processing."""
+    def showBusy(self, theMessage=None):
+        """A helper function to indicate the plugin is processing.
+        Args:
+            theMessage - an optional message to pass to the busy indicator.
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
         #self.pbnRunStop.setText('Cancel')
         self.pbnRunStop.setEnabled(False)
-        myHtml = self.tr('<div><span class="label success">'
-                   'Analyzing this question...</span></div>'
-                   '<div><img src="qrc:/plugins/inasafe/ajax-loader.gif" />'
-                   '</div>')
+        if theMessage is None:
+            theMessage = self.tr('Analyzing this question...')
+        myHtml = ('<div><span class="label success">'
+                  + theMessage + '</span></div>'
+                  '<div><img src="qrc:/plugins/inasafe/ajax-loader.gif" />'
+                  '</div>')
         self.displayHtml(myHtml)
         self.repaint()
         QtGui.qApp.processEvents()
@@ -684,8 +695,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
+        myMessage = self.tr('Preparing hazard data...')
+        self.showBusy(myMessage)
         myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
                                         myCellSize)
+        myMessage = self.tr('Preparing exposure data...')
+        self.showBusy(myMessage)
         myClippedExposurePath = clipLayer(myExposureLayer,
                                           myGeoExtent, myCellSize,
                                           extraKeywords=extraExposureKeywords)
