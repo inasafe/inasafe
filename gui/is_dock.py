@@ -367,7 +367,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         except Exception, e:
             raise e
 
-        self.restoreFunctionState()
+        self.restoreFunctionState(myOriginalFunction)
 
     def readImpactLayer(self, myEngineImpactLayer):
         """Helper function to read and validate layer
