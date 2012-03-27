@@ -389,7 +389,10 @@ environment has been imported. Here are the typical contexts of the file::
    @echo off
    SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.8
    path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2RC2\lib
-   start "Quantum GIS" /B ""C:\Progra~1\eclipse\eclipse.exe" %* 
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
+   set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
+   start "Quantum GIS" /B ""C:\Progra~1\eclipse\eclipse.exe" %*
 
 Save this file under <QGIS Install Dir>/bin/python-shell.bat and then right-drag
 it from explorer to your Windows start button to create an easily accessible 
@@ -453,7 +456,16 @@ Click on the :guilabel:`New folder` button and add the QGIS python dir::
 * :guilabel:`OK Button` : :kbd:`click this button`
 
 You will be returned to the Python Interpreters list and should see an entry for
-**QGIS Python 2.5** listed there. Now do in the **Libraries** tab:
+**QGIS Python 2.5** listed there. Now do in the **Environment** tab:
+
+:guilabel:`New`
+
+In the dialog that appears 
+
+:guilabel:`Name` : :kbd:`QGISPATH`
+:guilabel:`Value` : :kbd:`C:\PROGRA~2\QUANTU~1\apps\qgis`
+
+Then click ok to close the environment variable editor.
 
 * :guilabel:`Finish` : :kbd:`click this button`
 
@@ -495,9 +507,12 @@ perspective).
 Running Unit tests from the IDE
 ...............................
 
+Using PyDev's build in test runner
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Python has very good integrated support for unit testing. The first thing
-you should do after setting up the IDE project is to run the tests. You can run tests
-in the following ways:
+you should do after setting up the IDE project is to run the tests. You can run
+tests in the following ways:
 
 * For the entire inasafe package
 * For individual sub packages (e.g. engine, gui, storage, impact_functions)
@@ -505,11 +520,27 @@ in the following ways:
 * for an class within a test module
 * for an individual method within a test class
 
-You can view these individual entities by browsing and expanding nodes in the project
-panel in the left of the IDE.
+You can view these individual entities by browsing and expanding nodes in the
+project panel in the left of the IDE.
 
 .. note:: If you run the test suite for the entire inasafe package, it
     will mistakenly treat the sphinx documentation conf.py (docs.source.conf)
     as a test and fail for that test. This is 'normal' and can be ignored.
 
+Setting PyDev to use the Nose test runner
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can also configure Eclipse to run the tests using nose (which is
+recommended). To do this first do:
+
+:menuselection:`Window --> Preferences --> PyDev -- PyUnit`
+
+Now set :guilabel:`TestRunner` to :kbd:`Nosetests` and set the following
+options::
+
+    -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui
+
+As with using Pydev's built in test runner, you can also run any module, class
+etc. while using the nose test runner by right clicking on the item in the
+PyDev package explorer.
 

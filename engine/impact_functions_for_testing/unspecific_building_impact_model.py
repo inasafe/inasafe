@@ -35,14 +35,14 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
         building_damage = []
         for i in range(len(shaking)):
             x = float(shaking[i].values()[0])
-            if x < 6.0:
+            if x < 6.0 or (x != x):  # x != x -> check for nan pre python 2.6
                 value = 0.0
             else:
+                print x
                 value = (0.692 * (x ** 4) -
                          15.82 * (x ** 3) +
                          135.0 * (x ** 2) -
-                         509.0 * x +
-                         714.4)
+                         509.0 * x + 714.4)
 
             building_damage.append({'DAMAGE': value, 'MMI': x})
 

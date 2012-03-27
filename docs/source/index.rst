@@ -34,6 +34,8 @@ The latest source code is available at
 which contains modules for risk calculations, gis functionality and functions
 for impact modelling.
 
+The documentation pages are available at `http://inasafe.readthedocs.org`_ which contains both user and developer guides.
+
 
 Contents
 ========

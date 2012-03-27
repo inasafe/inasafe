@@ -13,8 +13,8 @@ These instructions are for setting up a development version on a Debian based
 linux system such as Ubuntu or Mint.
 
 1. Goto the area where you do development, e.g cd ~/sandbox
-2. wget https://raw.github.com/AIFDR/inasafe/master/scripts/riab-install
-3. source ./riab-install
+2. wget https://raw.github.com/AIFDR/inasafe/master/scripts/inasafe-install
+3. source ./inasafe-install
 
 To verify that the installation works you can run the test suite from the
 command line::
@@ -97,7 +97,7 @@ option disabled), you could run these commands (or add them to your ~/.bashrc)::
 Adding inasafe to your python path:
 .........................................
 
-Lastly, you should add the riab plugin folder to your PYTHONPATH so that
+Lastly, you should add the inasafe plugin folder to your PYTHONPATH so that
 package and module paths can be resolved correctly. E.g::
 
    export PYTHONPATH=$PYTHONPATH:${HOME}/.qgis/python/plugins/inasafe

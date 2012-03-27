@@ -136,6 +136,16 @@ class Test_plugins(unittest.TestCase):
         msg = 'No compatible layers returned'
         assert len(annotated_plugins) > 0, msg
 
+    def Xtest_aggregate():
+        """Aggregation by boundaries works
+        """
+
+        # Name file names for hazard level and exposure
+        boundary_filename = ('%s/kecamatan_geo.shp' % TESTDATA)
+        #data_filename = ('%s/Population_Jakarta_geographic.asc' % TESTDATA)
+
+        # Get school impact data (BNPB perga 2)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugins, 'test')
