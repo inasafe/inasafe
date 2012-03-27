@@ -143,7 +143,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
             myMessage = self.tr(
-            '<span class="label notice">Getting started:'
+            '<span class="label label-notice">Getting started:'
             '</span> To use this tool you need to add some layers to your '
             'QGIS project. Ensure that at least one <em>hazard</em> layer '
             '(e.g. earthquake MMI) and one <em>exposure</em> layer (e.g. '
@@ -156,7 +156,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myHazardKeywords = getKeywordFromFile(myHazardFilename)
             myExposureFilename = str(self.getExposureLayer().source())
             myExposureKeywords = getKeywordFromFile(myExposureFilename)
-            myMessage = self.tr('<span class="label important">No valid '
+            myMessage = self.tr('<span class="label label-important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
                          'you have specified. '
@@ -170,7 +170,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                 myExposureFilename, myExposureKeywords))
             return (False, myMessage)
         else:
-            myMessage = self.tr('<span class="label success">Ready:</span> '
+            myMessage = self.tr('<span class="label label-success">Ready:</span> '
             'You can now proceed to run your model by clicking the <em> '
             'Run</em> button.')
             return (True, myMessage)
@@ -436,8 +436,14 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                     QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.repaint()
             QtGui.qApp.processEvents()
-            myMessage = self.tr('Calculating impact...')
-            self.showBusy(myMessage)
+
+            myTitle = self.tr('Calculating impact...')
+            myMessage = self.tr('This may take a little while - we are'
+                                'computing the areas that will be impacted'
+                                'by the hazard and writing the result to '
+                                'a new layer.')
+            myProgress = 66
+            self.showBusy(myTitle, myMessage, myProgress)
             self.runner.run()  # Run in same thread
             #self.runner.start() # Run in separate thread
             QtGui.qApp.restoreOverrideCursor()
@@ -445,7 +451,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('<p><span class="label important">'
+            myMessage = self.tr('<p><span class="label label-important">'
                                 'Error:</span> '
                                 'An exception occurred when starting'
                                 ' the model.')
@@ -530,22 +536,33 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             self.helpDialog = ISHelp(self.iface.mainWindow(), 'dock')
         self.helpDialog.show()
 
-    def showBusy(self, theMessage=None):
+    def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.
         Args:
-            theMessage - an optional message to pass to the busy indicator.
+            * theTitle - an optional title for the status update. Should be
+              plain text only
+            * theMessage - an optional message to pass to the busy indicator.
+              Can be an html snippet.
+            * theProgress - a number between 0 and 100 indicating % complete
+
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the RIAB library will be propagated.
+
+        ..note:: Uses bootstrap css for progress bar.
         """
         #self.pbnRunStop.setText('Cancel')
         self.pbnRunStop.setEnabled(False)
-        if theMessage is None:
-            theMessage = self.tr('Analyzing this question...')
-        myHtml = ('<div><span class="label success">'
-                  + theMessage + '</span></div>'
-                  '<div><img src="qrc:/plugins/inasafe/ajax-loader.gif" />'
+        if theTitle is None:
+            theTitle = self.tr('Analyzing this question...')
+        myHtml = ('<div><span class="label label-success">'
+                  + str(theTitle) + '</span></div>'
+                  '<div>' + str(theMessage) + '</div>'
+                  '<div class="progress">'
+                  '  <div class="bar" '
+                  '       style="width: ' + str(theProgress) + '%;>'
+                  '  </div>'
                   '</div>')
         self.displayHtml(myHtml)
         self.repaint()
@@ -695,12 +712,21 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
-        myMessage = self.tr('Preparing hazard data...')
-        self.showBusy(myMessage)
+        myTitle = self.tr('Preparing hazard data...')
+        myMessage = self.tr('We are resampling and clipping the hazard'
+                            'layer to match the intersection of the exposure'
+                            'layer and the current view extents.')
+        myProgress = 22
+        self.showBusy(myTitle, myMessage, myProgress)
         myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
                                         myCellSize)
-        myMessage = self.tr('Preparing exposure data...')
-        self.showBusy(myMessage)
+
+        myTitle = self.tr('Preparing exposure data...')
+        myMessage = self.tr('We are resampling and clipping the exposure'
+                            'layer to match the intersection of the hazard'
+                            'layer and the current view extents.')
+        myProgress = 44
+        self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(myExposureLayer,
                                           myGeoExtent, myCellSize,
                                           extraKeywords=extraExposureKeywords)
@@ -886,7 +912,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.showBusy()
         try:
             myMap.makePdf(myFilename)
-            self.displayHtml(self.tr('<div><span class="label success">'
+            self.displayHtml(self.tr('<div><span class="label label-success">'
                              'PDF Created</div>'
                              'Your map was saved as %s' % myFilename))
             QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
