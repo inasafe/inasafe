@@ -675,6 +675,11 @@ class Vector:
             msg = 'Vector data instance does not have any attributes'
             raise Exception(msg)
 
+    def get_geometry_type(self):
+        """Return geometry type for vector layer
+        """
+        return self.geometry_type
+
     def get_geometry(self):
         """Return geometry for vector layer.
 

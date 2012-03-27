@@ -1040,7 +1040,8 @@ class Test_IO(unittest.TestCase):
                    'get_geotransform',
                    'get_nodata_value',
                    'get_attribute_names',
-                   'get_resolution']
+                   'get_resolution',
+                   'get_geometry_type']
 
         V = Vector()  # Empty vector instance
         R = Raster()  # Empty raster instance
