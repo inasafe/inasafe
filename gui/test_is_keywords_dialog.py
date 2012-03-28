@@ -300,7 +300,8 @@ class ISKeywordsDialogTest(unittest.TestCase):
         myDialog.removeItemByValue('hazard')
 
         myKeywords = myDialog.getKeywords()
-        myExpectedKeywords = {'subcategory': 'earthquake',
+        myExpectedKeywords = {'title': 'Shakemap_Padang_2009',
+                              'subcategory': 'earthquake',
                              'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
@@ -325,13 +326,19 @@ class ISKeywordsDialogTest(unittest.TestCase):
         myDialog.loadStateFromKeywords()
         myKeywords = myDialog.getKeywords()
 
-        myExpectedKeywords = {'category': 'hazard',
+        myExpectedKeywords = {'title': 'Shakemap_Padang_2009',
+                              'category': 'hazard',
                              'subcategory': 'earthquake',
                              'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
-
         assert myKeywords == myExpectedKeywords, myMessage
+
+        #check that a default title is given (see
+        #https://github.com/AIFDR/inasafe/issues/111)
+        myMessage = ('Expected title to be defaulted from '
+            'filename but it was not.')
+        assert myDialog.leTitle.text() == myDialog.layer.name(), myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISKeywordsDialogTest, 'test')

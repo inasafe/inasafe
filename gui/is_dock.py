@@ -82,6 +82,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised
         """
+        #settrace()
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s' % __version__))
@@ -107,11 +108,41 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myButton = self.pbnRunStop
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.accept)
+        self.connectLayerListener()
+        #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
+        #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
+
+    def connectLayerListener(self):
+        """Establish a signal/slot to listen for changes in the layers loaded
+        in QGIS.
+
+        ..seealso:: disconnectLayerListener
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+        """
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
-        #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
-        #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
+
+    def disconnectLayerListener(self):
+        """Destroy the signal/slot to listen for changes in the layers loaded
+        in QGIS.
+
+        ..seealso:: connectLayerListener
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+        """
+        QtCore.QObject.disconnect(self.iface.mapCanvas(),
+                               QtCore.SIGNAL('layersChanged()'),
+                               self.getLayers)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -143,7 +174,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
             myMessage = self.tr(
-            '<span class="label notice">Getting started:'
+            '<span class="label label-notice">Getting started:'
             '</span> To use this tool you need to add some layers to your '
             'QGIS project. Ensure that at least one <em>hazard</em> layer '
             '(e.g. earthquake MMI) and one <em>exposure</em> layer (e.g. '
@@ -156,7 +187,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myHazardKeywords = getKeywordFromFile(myHazardFilename)
             myExposureFilename = str(self.getExposureLayer().source())
             myExposureKeywords = getKeywordFromFile(myExposureFilename)
-            myMessage = self.tr('<span class="label important">No valid '
+            myMessage = self.tr('<span class="label label-important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
                          'you have specified. '
@@ -170,9 +201,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                 myExposureFilename, myExposureKeywords))
             return (False, myMessage)
         else:
-            myMessage = self.tr('<span class="label success">Ready:</span> '
-            'You can now proceed to run your model by clicking the <em> '
-            'Run</em> button.')
+            myMessage = self.tr('<span class="label label-success">Ready:'
+            '</span> You can now proceed to run your model by clicking '
+            'the <em> Run</em> button.')
             return (True, myMessage)
 
     @pyqtSignature('int')  # prevents actions being handled twice
@@ -299,6 +330,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no
         """
+        # remember what the current function is
+        myOriginalFunction = self.cboFunction.currentText()
         self.cboFunction.clear()
 
         # Get the keyword dictionaries for hazard and exposure
@@ -333,6 +366,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 self.cboFunction.addItem(myFunction)
         except Exception, e:
             raise e
+
+        self.restoreFunctionState(myOriginalFunction)
 
     def readImpactLayer(self, myEngineImpactLayer):
         """Helper function to read and validate layer
@@ -425,19 +460,36 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         try:
             self.setupCalculator()
-            # Start it in its own thread
-            self.runner = self.calculator.getRunner()
-            QtCore.QObject.connect(self.runner.notifier(),
+        except Exception, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('<p><span class="label label-important">'
+                                'Error:</span> '
+                                'An exception occurred when setting up the '
+                                'impact calculator.')
+            myMessage += getExceptionWithStacktrace(e, html=True)
+            self.displayHtml(myMessage)
+            return
+
+        self.runner = self.calculator.getRunner()
+        QtCore.QObject.connect(self.runner.notifier(),
                                QtCore.SIGNAL('done()'),
                                self.completed)
-            #self.runner.start()  # Run in different thread
 
+        try:
             QtGui.qApp.setOverrideCursor(
                     QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.repaint()
             QtGui.qApp.processEvents()
-            myMessage = self.tr('Calculating impact...')
-            self.showBusy(myMessage)
+
+            myTitle = self.tr('Calculating impact...')
+            myMessage = self.tr('This may take a little while - we are '
+                                'computing the areas that will be impacted '
+                                'by the hazard and writing the result to '
+                                'a new layer.')
+            myProgress = 66
+            self.showBusy(myTitle, myMessage, myProgress)
+            #self.runner.start()  # Run in different thread
             self.runner.run()  # Run in same thread
             #self.runner.start() # Run in separate thread
             QtGui.qApp.restoreOverrideCursor()
@@ -445,7 +497,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('<p><span class="label important">'
+            myMessage = self.tr('<p><span class="label label-important">'
                                 'Error:</span> '
                                 'An exception occurred when starting'
                                 ' the model.')
@@ -481,6 +533,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         Provides report out from impact_function to canvas
         """
+
+        myTitle = self.tr('Loading results...')
+        myMessage = self.tr('The impact assessment is complete - loading '
+                            'the results into QGIS now...')
+        myProgress = 99
+        self.showBusy(myTitle, myMessage, myProgress)
 
         myMessage = self.runner.result()
         myEngineImpactLayer = self.runner.impactLayer()
@@ -530,22 +588,33 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             self.helpDialog = ISHelp(self.iface.mainWindow(), 'dock')
         self.helpDialog.show()
 
-    def showBusy(self, theMessage=None):
+    def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.
         Args:
-            theMessage - an optional message to pass to the busy indicator.
+            * theTitle - an optional title for the status update. Should be
+              plain text only
+            * theMessage - an optional message to pass to the busy indicator.
+              Can be an html snippet.
+            * theProgress - a number between 0 and 100 indicating % complete
+
         Returns:
             None
         Raises:
-            Any exceptions raised by the RIAB library will be propogated.
+            Any exceptions raised by the RIAB library will be propagated.
+
+        ..note:: Uses bootstrap css for progress bar.
         """
         #self.pbnRunStop.setText('Cancel')
         self.pbnRunStop.setEnabled(False)
-        if theMessage is None:
-            theMessage = self.tr('Analyzing this question...')
-        myHtml = ('<div><span class="label success">'
-                  + theMessage + '</span></div>'
-                  '<div><img src="qrc:/plugins/inasafe/ajax-loader.gif" />'
+        if theTitle is None:
+            theTitle = self.tr('Analyzing this question...')
+        myHtml = ('<div><span class="label label-success">'
+                  + str(theTitle) + '</span></div>'
+                  '<div>' + str(theMessage) + '</div>'
+                  '<div class="progress">'
+                  '  <div class="bar" '
+                  '       style="width: ' + str(theProgress) + '%;">'
+                  '  </div>'
                   '</div>')
         self.displayHtml(myHtml)
         self.repaint()
@@ -556,6 +625,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
+            QtCore.QObject.disconnect(self.runner.notifier(),
+                               QtCore.SIGNAL('done()'),
+                               self.completed)
             del self.runner
             self.runner = None
 
@@ -695,12 +767,21 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
-        myMessage = self.tr('Preparing hazard data...')
-        self.showBusy(myMessage)
+        myTitle = self.tr('Preparing hazard data...')
+        myMessage = self.tr('We are resampling and clipping the hazard'
+                            'layer to match the intersection of the exposure'
+                            'layer and the current view extents.')
+        myProgress = 22
+        self.showBusy(myTitle, myMessage, myProgress)
         myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
                                         myCellSize)
-        myMessage = self.tr('Preparing exposure data...')
-        self.showBusy(myMessage)
+
+        myTitle = self.tr('Preparing exposure data...')
+        myMessage = self.tr('We are resampling and clipping the exposure'
+                            'layer to match the intersection of the hazard'
+                            'layer and the current view extents.')
+        myProgress = 44
+        self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(myExposureLayer,
                                           myGeoExtent, myCellSize,
                                           extraKeywords=extraExposureKeywords)
@@ -788,8 +869,11 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def displayHtml(self, theMessage):
         """Given an html snippet, wrap it in a page header and footer
         and display it in the wvResults widget."""
-        self.wvResults.setHtml(self.htmlHeader() + theMessage +
-                                  self.htmlFooter())
+        myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
+        #f = file('/tmp/h.thml', 'wa')  # for debugging
+        #f.write(myHtml)
+        #f.close()
+        self.wvResults.setHtml(myHtml)
 
     def layerChanged(self, theLayer):
         """Handler for when the QGIS active layer is changed.
@@ -861,12 +945,25 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             if myItemText == self.state['hazard']:
                 self.cboHazard.setCurrentIndex(myCount)
                 break
+        self.restoreFunctionState(self.state['function'])
+        self.wvResults.setHtml(self.state['report'])
+
+
+    def restoreFunctionState(self, theOriginalFunction):
+        """Restore the function combo to a known state.
+        Args:
+            theOriginalFunction - name of function that should be selected
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        # Restore previous state of combo
         for myCount in range(0, self.cboFunction.count()):
             myItemText = self.cboFunction.itemText(myCount)
-            if myItemText == self.state['function']:
+            if myItemText == theOriginalFunction:
                 self.cboFunction.setCurrentIndex(myCount)
                 break
-        self.wvResults.setHtml(self.state['report'])
 
     def printMap(self):
         """Slot to print map when print map button pressed.
@@ -886,7 +983,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.showBusy()
         try:
             myMap.makePdf(myFilename)
-            self.displayHtml(self.tr('<div><span class="label success">'
+            self.displayHtml(self.tr('<div><span class="label label-success">'
                              'PDF Created</div>'
                              'Your map was saved as %s' % myFilename))
             QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,

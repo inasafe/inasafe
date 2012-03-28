@@ -72,7 +72,7 @@ class ISMap():
         self.mapHeight = self.pageWidth - (self.pageMargin * 2)
         self.mapWidth = self.mapHeight
         self.disclaimer = self.tr('InaSAFE has been jointly developed by'
-                                  ' BNPD, AusAid & the World Bank')
+                                  ' BNPB, AusAid & the World Bank')
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.

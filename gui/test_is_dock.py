@@ -757,6 +757,30 @@ class ISDockTest(unittest.TestCase):
                                 myResultDict)
         assert myExpectedDict == myResultDict, myMessage
 
+        # corner case test when two layers can have the
+        # same functions
+        clearDock()
+        myFileList = ['Flood_Design_Depth_Jakarta_geographic.asc',
+                      'Flood_Current_Depth_Jakarta_geographic.asc',
+                      'Population_Jakarta_geographic.asc']
+        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+        assert myHazardLayerCount == 2
+        assert myExposureLayerCount == 1
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
+        # will need to udpate this when localisation is set up nicely
+        myExpectation = 'Terdampak'
+        myFunction = DOCK.cboFunction.currentText()
+        myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
+        assert myFunction == myExpectation, myMessage
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        # selected function should remain the same
+        myExpectation = 'Terdampak'
+        myFunction = DOCK.cboFunction.currentText()
+        myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
+        assert myFunction == myExpectation, myMessage
+
     def test_layerChanged(self):
         """Test the metadata is updated as the user highlights different
         QGIS layers. For inasafe outputs, the table of results should be shown

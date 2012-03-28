@@ -77,7 +77,8 @@ class FloodImpactFunction(FunctionProvider):
         impact_summary += '</table>'
 
         impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<span class="label success">Catatan&#58;</span>'
+        impact_summary += '<span class="label label-success">'
+        impact_summary += 'Catatan&#58;</span>'
         impact_summary += '<ul>'
         impact_summary += '  <li>Jumlah penduduk Jakarta %s</li>' % total
         impact_summary += '  <li>Jumlah dalam ribuan</li>'
