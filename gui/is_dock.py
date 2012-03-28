@@ -94,6 +94,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.runner = None
         self.helpDialog = None
         self.state = None
+        self.runInThreadFlag = False
+        self.showOnlyVisibleLayersFlag = False
         self.getLayers()
         self.setOkButtonStatus()
 
@@ -124,9 +126,23 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             None
         Raises:
         """
+        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWillBeRemoved(QString)'),
+                               self.getLayers)
+        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+                               self.getLayers)
+        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('removedAll()'),
+                               self.getLayers)
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
-                               self.getLayers)
+                               self.canvasLayersetChanged)
+        # old implementation - bad because it triggers with every layer
+        # visibility change
+        #QtCore.QObject.connect(self.iface.mapCanvas(),
+        #                       QtCore.SIGNAL('layersChanged()'),
+        #                       self.getLayers)
 
     def disconnectLayerListener(self):
         """Destroy the signal/slot to listen for changes in the layers loaded
@@ -140,9 +156,23 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             None
         Raises:
         """
+        QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWillBeRemoved(QString)'),
+                               self.getLayers)
+        QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+                               self.getLayers)
+        QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('removedAll()'),
+                               self.getLayers)
         QtCore.QObject.disconnect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
-                               self.getLayers)
+                               self.canvasLayersetChanged)
+        # old implementation - bad because it triggers with every layer
+        # visibility change
+        #QtCore.QObject.disconnect(self.iface.mapCanvas(),
+        #                       QtCore.SIGNAL('layersChanged()'),
+        #                       self.getLayers)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -262,6 +292,21 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         if myMessage is not '':
             self.displayHtml(myMessage)
 
+    def canvasLayersetChanged(self):
+        """A helper slot to update the dock combos if the canvas layerset
+        has been changed (e.g. one or more layer visibilities changed).
+        If self.showOnlyVisibleLayersFlag is set to False this method will
+        simply return, doing nothing.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        if self.showOnlyVisibleLayersFlag:
+            self.getLayers()
+
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
 
@@ -281,9 +326,15 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
-        for i in range(len(self.iface.mapCanvas().layers())):
+        # mapLayers returns a QMap<QString id, QgsMapLayer layer>
+        myLayers = QgsMapLayerRegistry.instance().mapLayers().values()
+        for myLayer in myLayers:
+        #for i in range(len(self.iface.mapCanvas().layers())):
+            #myLayer = self.iface.mapCanvas().layer(i)
+            if (self.showOnlyVisibleLayersFlag and myLayer not in
+                self.iface.mapCanvas().layers()):
+                continue
 
-            myLayer = self.iface.mapCanvas().layer(i)
             """
             .. todo:: check raster is single band
             store uuid in user property of list widget for layers
@@ -489,9 +540,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                 'a new layer.')
             myProgress = 66
             self.showBusy(myTitle, myMessage, myProgress)
-            #self.runner.start()  # Run in different thread
-            self.runner.run()  # Run in same thread
-            #self.runner.start() # Run in separate thread
+            if self.runInThreadFlag:
+                self.runner.start()  # Run in different thread
+            else:
+                self.runner.run()  # Run in same thread
             QtGui.qApp.restoreOverrideCursor()
             # .. todo :: Disconnect done slot/signal
         except Exception, e:
@@ -947,7 +999,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 break
         self.restoreFunctionState(self.state['function'])
         self.wvResults.setHtml(self.state['report'])
-
 
     def restoreFunctionState(self, theOriginalFunction):
         """Restore the function combo to a known state.
