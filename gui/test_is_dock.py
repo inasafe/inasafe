@@ -78,14 +78,6 @@ def getUiState(ui):
             'Run Button Enabled': myRunButton}
 
 
-def clearDock():
-    """Helper function to  set all DOCK elements to default state"""
-    DOCK.cboHazard.clear()
-    DOCK.cboExposure.clear()
-    QgsMapLayerRegistry.instance().removeAllMapLayers()
-    DOCK.showOnlyVisibleLayersFlag = True
-
-
 def populatemyDock():
     """A helper function to populate the DOCK and set it to a valid state.
     """
@@ -183,9 +175,18 @@ def loadLayer(theLayerFile):
 class ISDockTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
+    def setUp(self):
+        """Fixture run before all tests"""
+        DOCK.showOnlyVisibleLayersFlag = True
+
+    def tearDown(self):
+        """Fixture run after each test"""
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        DOCK.cboHazard.clear()
+        DOCK.cboExposure.clear()
+
     def test_defaults(self):
         """Test the GUI in its default state"""
-        clearDock()
         self.assertEqual(DOCK.cboHazard.currentIndex(), -1)
         self.assertEqual(DOCK.cboExposure.currentIndex(), -1)
         self.assertEqual(DOCK.cboFunction.currentIndex(), -1)
@@ -194,7 +195,6 @@ class ISDockTest(unittest.TestCase):
         """Validate function work as expected"""
 
         # First check that we DONT validate a clear DOCK
-        clearDock()
         myFlag, myMessage = DOCK.validate()
         assert myMessage is not None, 'No reason for failure given'
 
@@ -212,7 +212,6 @@ class ISDockTest(unittest.TestCase):
         """OK button changes properly according to DOCK validity"""
 
         # First check that we ok ISNT enabled on a clear DOCK
-        clearDock()
         myFlag, myMessage = DOCK.validate()
 
         assert myMessage is not None, 'No reason for failure given'
@@ -230,7 +229,6 @@ class ISDockTest(unittest.TestCase):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
 
         # Push OK with the left mouse button
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
@@ -266,7 +264,6 @@ class ISDockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly - small extent"""
 
         # Push OK with the left mouse button
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
@@ -307,7 +304,6 @@ class ISDockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly"""
 
         # Push OK with the left mouse button
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
@@ -348,7 +344,6 @@ class ISDockTest(unittest.TestCase):
         """Raster and vector based function runs as expected."""
 
         # Push OK with the left mouse button
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -396,7 +391,6 @@ class ISDockTest(unittest.TestCase):
            Raster on raster based function runs as expected."""
 
         # Push OK with the left mouse button
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -465,7 +459,6 @@ class ISDockTest(unittest.TestCase):
            Raster on raster based function runs as expected with scaling."""
 
         # Push OK with the left mouse button
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -514,7 +507,6 @@ class ISDockTest(unittest.TestCase):
         opacity. """
 
         # Push OK with the left mouse button
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -570,7 +562,6 @@ class ISDockTest(unittest.TestCase):
         proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""
 
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
 
@@ -617,7 +608,6 @@ class ISDockTest(unittest.TestCase):
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
@@ -677,7 +667,6 @@ class ISDockTest(unittest.TestCase):
         """Layers can be loaded and list widget was updated appropriately
         """
 
-        clearDock()
         myHazardLayerCount, myExposureLayerCount = loadStandardLayers()
         myMessage = 'Expect %s layer(s) in hazard list widget but got %s' \
                      % (myHazardLayerCount, DOCK.cboHazard.count())
@@ -693,7 +682,6 @@ class ISDockTest(unittest.TestCase):
         """Test issue #71 in githib - cbo changes should update ok button."""
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
-        clearDock()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
         myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
@@ -736,7 +724,6 @@ class ISDockTest(unittest.TestCase):
         """Check if the save/restart state methods work. See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-        clearDock()
         loadStandardLayers()
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
@@ -748,7 +735,7 @@ class ISDockTest(unittest.TestCase):
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
-        clearDock()
+        self.tearDown()
         loadStandardLayers()
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
@@ -789,7 +776,6 @@ class ISDockTest(unittest.TestCase):
         See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-        clearDock()
         myLayer, myType = loadLayer('issue58.tif')
         myMessage = ('Unexpected category for issue58.tif.\nGot:'
                      ' %s\nExpected: undefined' % myType)

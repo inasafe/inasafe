@@ -80,13 +80,25 @@
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QComboBox" name="cboFunction"/>
+        <widget class="QComboBox" name="cboFunction">
+         <property name="insertPolicy">
+          <enum>QComboBox::InsertAlphabetically</enum>
+         </property>
+        </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QComboBox" name="cboExposure"/>
+        <widget class="QComboBox" name="cboExposure">
+         <property name="insertPolicy">
+          <enum>QComboBox::InsertAlphabetically</enum>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QComboBox" name="cboHazard"/>
+        <widget class="QComboBox" name="cboHazard">
+         <property name="insertPolicy">
+          <enum>QComboBox::InsertAlphabetically</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

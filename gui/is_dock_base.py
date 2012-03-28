@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_dock_base.ui'
 #
-# Created: Wed Mar 21 14:31:11 2012
+# Created: Wed Mar 28 22:17:39 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -46,12 +46,15 @@ class Ui_ISDockBase(object):
         self.label_8.setObjectName(_fromUtf8("label_8"))
         self.gridLayout_3.addWidget(self.label_8, 5, 0, 1, 1)
         self.cboFunction = QtGui.QComboBox(self.grpQuestion)
+        self.cboFunction.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
         self.cboFunction.setObjectName(_fromUtf8("cboFunction"))
         self.gridLayout_3.addWidget(self.cboFunction, 6, 0, 1, 1)
         self.cboExposure = QtGui.QComboBox(self.grpQuestion)
+        self.cboExposure.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
         self.cboExposure.setObjectName(_fromUtf8("cboExposure"))
         self.gridLayout_3.addWidget(self.cboExposure, 4, 0, 1, 1)
         self.cboHazard = QtGui.QComboBox(self.grpQuestion)
+        self.cboHazard.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
         self.cboHazard.setObjectName(_fromUtf8("cboHazard"))
         self.gridLayout_3.addWidget(self.cboHazard, 1, 0, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 0, 0, 1, 1)
