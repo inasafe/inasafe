@@ -82,6 +82,8 @@ def clearDock():
     """Helper function to  set all DOCK elements to default state"""
     DOCK.cboHazard.clear()
     DOCK.cboExposure.clear()
+    QgsMapLayerRegistry.instance().removeAllMapLayers()
+    DOCK.showOnlyVisibleLayersFlag = True
 
 
 def populatemyDock():

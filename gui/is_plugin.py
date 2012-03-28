@@ -180,7 +180,7 @@ class ISPlugin:
         # Create action for reset icon
         #--------------------------------------
         self.actionResetDock = QAction(
-                            QIcon(':/plugins/inasafe/reset.png'),
+                            QIcon(':/plugins/inasafe/reload.png'),
                             self.tr('Reset Dock'), self.iface.mainWindow())
         self.actionResetDock.setStatusTip(self.tr(
                                     'Reset the InaSAFE Dock'))
