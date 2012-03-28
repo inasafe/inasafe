@@ -21,12 +21,13 @@
 
 PLUGINNAME = inasafe
 
-PY_FILES = is_plugin.py is_dock.py is_help.py __init__.py
+PY_FILES = is_plugin.py is_dock.py is_help.py is_options_base.py __init__.py
 
 EXTRAS = icon.png
 
 UI_FILES = is_dock_base.py \
 					 is_help_base.py \
+					 is_options_base.py \
 					 is_keywords_dialog_base.py
 
 RESOURCE_FILES = resources.py

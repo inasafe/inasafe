@@ -135,6 +135,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('removedAll()'),
                                self.getLayers)
+        # to detect layer visibility changes which registry is ignorant of
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.canvasLayersetChanged)
@@ -326,8 +327,14 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
+        # Map registry may be invalid if QGIS is shutting down
+        myRegistry = None
+        try:
+            myRegistry = QgsMapLayerRegistry.instance()
+        except:
+            return
         # mapLayers returns a QMap<QString id, QgsMapLayer layer>
-        myLayers = QgsMapLayerRegistry.instance().mapLayers().values()
+        myLayers = myRegistry.mapLayers().values()
         for myLayer in myLayers:
         #for i in range(len(self.iface.mapCanvas().layers())):
             #myLayer = self.iface.mapCanvas().layer(i)

@@ -194,6 +194,23 @@ class ISPlugin:
                                    self.actionResetDock)
 
         #--------------------------------------
+        # Create action for options dialog
+        #--------------------------------------
+        self.actionOptions = QAction(
+                        QIcon(':/plugins/inasafe/options.png'),
+                        self.tr('InaSAFE Options'), self.iface.mainWindow())
+        self.actionOptions.setStatusTip(self.tr(
+                                    'Open InaSAFE options dialog'))
+        self.actionOptions.setWhatsThis(self.tr(
+                                    'Open InaSAFE options dialog'))
+        QObject.connect(self.actionOptions, SIGNAL('triggered()'),
+                        self.showOptions)
+
+        self.iface.addToolBarIcon(self.actionOptions)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
+                                   self.actionOptions)
+
+        #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
         self.dockWidget = ISDock(self.iface)
@@ -263,6 +280,29 @@ class ISPlugin:
         else:
             self.dockWidget.setVisible(True)
             self.dockWidget.raise_()
+
+    def showOptions(self):
+        """Show the options dialog.
+
+        This slot is called when the user clicks the options toolbar
+        icon or menu item associated with this plugin
+
+        .. see also:: :func:`ISPlugin.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        # import here only so that it is AFTER i18n set up
+        from is_options import ISOptions
+
+        myDialog = ISOptions(self.iface.mainWindow(),
+                                      self.iface,
+                                      self.dockWidget)
+        myDialog.show()
 
     def showKeywordsEditor(self):
         """Show the keywords editor.
