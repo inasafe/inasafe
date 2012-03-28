@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>473</width>
-    <height>524</height>
+    <width>507</width>
+    <height>478</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,20 +38,16 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>453</width>
-        <height>471</height>
+        <width>487</width>
+        <height>425</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="checkBox">
-         <property name="text">
-          <string>Run analysis in a separate thread (experimental)</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QCheckBox" name="checkBox_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Set QGIS layer name from 'title' in keywords</string>
          </property>
@@ -59,6 +55,9 @@
        </item>
        <item row="3" column="0">
         <widget class="QCheckBox" name="checkBox_3">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Bubble exposure and hazard layers to top when selected</string>
          </property>
@@ -66,6 +65,9 @@
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Location for results</string>
          </property>
@@ -74,7 +76,11 @@
        <item row="5" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="lineEdit"/>
+          <widget class="QLineEdit" name="lineEdit">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton">
@@ -87,6 +93,9 @@
        </item>
        <item row="6" column="0">
         <widget class="QLabel" name="label_2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Report template</string>
          </property>
@@ -95,7 +104,11 @@
        <item row="7" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLineEdit" name="lineEdit_2"/>
+          <widget class="QLineEdit" name="lineEdit_2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_2">
@@ -108,6 +121,9 @@
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="label_3">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Logo for maps (must be x x y) </string>
          </property>
@@ -116,7 +132,11 @@
        <item row="9" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLineEdit" name="lineEdit_3"/>
+          <widget class="QLineEdit" name="lineEdit_3">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="toolButton_3">
@@ -129,6 +149,9 @@
        </item>
        <item row="10" column="0">
         <widget class="QLabel" name="label_4">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Organisation name (for maps, reports etc.)</string>
          </property>
@@ -152,17 +175,24 @@
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <widget class="QLabel" name="label_5">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>DPI (Maps and reports)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="spinBox"/>
+          <widget class="QSpinBox" name="spinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
-       <item row="13" column="0">
+       <item row="14" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -176,9 +206,16 @@
         </spacer>
        </item>
        <item row="1" column="0">
-        <widget class="QCheckBox" name="checkBox_4">
+        <widget class="QCheckBox" name="cbxVisibleLayersOnly">
          <property name="text">
           <string>Only show visible layers in InaSAFE dock</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0">
+        <widget class="QCheckBox" name="cbxUseThread">
+         <property name="text">
+          <string>Run analysis in a separate thread (experimental)</string>
          </property>
         </widget>
        </item>
@@ -188,6 +225,23 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>cbxVisibleLayersOnly</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>checkBox_3</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>toolButton</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>toolButton_2</tabstop>
+  <tabstop>lineEdit_3</tabstop>
+  <tabstop>toolButton_3</tabstop>
+  <tabstop>lineEdit_4</tabstop>
+  <tabstop>toolButton_4</tabstop>
+  <tabstop>spinBox</tabstop>
+  <tabstop>cbxUseThread</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>scrollArea</tabstop>
+ </tabstops>
  <resources>
   <include location="resources.qrc"/>
  </resources>

@@ -95,7 +95,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.helpDialog = None
         self.state = None
         self.runInThreadFlag = False
-        self.showOnlyVisibleLayersFlag = False
+        self.showOnlyVisibleLayersFlag = True
+        self.readSettings()
         self.getLayers()
         self.setOkButtonStatus()
 
@@ -113,6 +114,26 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.connectLayerListener()
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
+
+    def readSettings(self):
+        """Set the dock state from QSettings. Do this on init and after
+        changing options in the options dialog.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+        """
+
+        mySettings = QtCore.QSettings()
+        myFlag = mySettings.value(
+                            'inasafe/useThreadingFlag', False).toBool()
+        self.runInThreadFlag = myFlag
+
+        myFlag = mySettings.value(
+                            'inasafe/visibleLayersOnlyFlag', True).toBool()
+        self.showOnlyVisibleLayersFlag = myFlag
+        self.getLayers()
 
     def connectLayerListener(self):
         """Establish a signal/slot to listen for changes in the layers loaded
@@ -134,6 +155,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                self.getLayers)
         QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('removedAll()'),
+                               self.getLayers)
+        QtCore.QObject.connect(self.iface,
+                               QtCore.SIGNAL('projectRead()'),
+                               self.getLayers)
+        QtCore.QObject.connect(self.iface,
+                               QtCore.SIGNAL('newProjectCreated()'),
                                self.getLayers)
         # to detect layer visibility changes which registry is ignorant of
         QtCore.QObject.connect(self.iface.mapCanvas(),

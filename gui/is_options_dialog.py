@@ -65,9 +65,54 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
+        self.restoreState()
+
+    def restoreState(self):
+        """
+        Args: Reinstate the options based on the user's stored session info
+            None
+        Returns:
+            None
+        Raises:
+        """
+        mySettings = QtCore.QSettings()
+        myFlag = mySettings.value(
+                            'inasafe/useThreadingFlag', False).toBool()
+        self.cbxUseThread.setChecked(myFlag)
+        myFlag = mySettings.value(
+                            'inasafe/visibleLayersOnlyFlag', True).toBool()
+        self.cbxVisibleLayersOnly.setChecked(myFlag)
+
+    def saveState(self):
+        """
+        Args: Store the options into the user's stored session info
+            None
+        Returns:
+            None
+        Raises:
+        """
+        mySettings = QtCore.QSettings()
+        myFlag = mySettings.setValue(
+                            'inasafe/useThreadingFlag',
+                            self.cbxUseThread.isChecked())
+        myFlag = mySettings.setValue(
+                            'inasafe/visibleLayersOnlyFlag',
+                            self.cbxVisibleLayersOnly.isChecked())
 
     def showHelp(self):
         """Load the help text for the options gui"""
         if not self.helpDialog:
             self.helpDialog = ISHelp(self.iface.mainWindow(), 'options')
         self.helpDialog.show()
+
+    def accept(self):
+        """Method invoked when ok button is clicked
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+        """
+        self.saveState()
+        self.dock.readSettings()
+        self.close()

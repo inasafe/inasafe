@@ -251,6 +251,9 @@ class ISPlugin:
         self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionResetDock)
         self.iface.removeToolBarIcon(self.actionResetDock)
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
+                                    self.actionOptions)
+        self.iface.removeToolBarIcon(self.actionOptions)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
