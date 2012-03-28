@@ -1,5 +1,5 @@
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
+InaSAFE Disaster risk assessment tool developed by AusAid - **Options Dialog.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
-from is_options_base import Ui_ISOptionsBase
+from is_options_dialog_base import Ui_ISOptionsDialogBase
 from is_help import ISHelp
 from is_utilities import getExceptionWithStacktrace
 
@@ -37,7 +37,7 @@ except Exception, e:
     print 'Debugging was disabled'
 
 
-class ISOptions(QtGui.QDialog, Ui_ISOptionsBase):
+class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
     """Options dialog for the InaSAFE plugin."""
     def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.

@@ -297,9 +297,9 @@ class ISPlugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from is_options import ISOptions
+        from is_options_dialog import ISOptionsDialog
 
-        myDialog = ISOptions(self.iface.mainWindow(),
+        myDialog = ISOptionsDialog(self.iface.mainWindow(),
                                       self.iface,
                                       self.dockWidget)
         myDialog.show()
