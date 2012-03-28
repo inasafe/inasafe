@@ -96,6 +96,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.state = None
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
+        self.setLayerNameFromTitleFlag = True
         self.readSettings()
         self.getLayers()
         self.setOkButtonStatus()
@@ -127,12 +128,17 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         mySettings = QtCore.QSettings()
         myFlag = mySettings.value(
-                            'inasafe/useThreadingFlag', False).toBool()
+                        'inasafe/useThreadingFlag', False).toBool()
         self.runInThreadFlag = myFlag
 
         myFlag = mySettings.value(
-                            'inasafe/visibleLayersOnlyFlag', True).toBool()
+                        'inasafe/visibleLayersOnlyFlag', True).toBool()
         self.showOnlyVisibleLayersFlag = myFlag
+
+        myFlag = mySettings.value(
+                        'inasafe/setLayerNameFromTitleFlag', True).toBool()
+        self.setLayerNameFromTitleFlag = myFlag
+
         self.getLayers()
 
     def connectLayerListener(self):
@@ -149,6 +155,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         """
         QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('layerWillBeRemoved(QString)'),
+                               self.getLayers)
+        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
                                self.getLayers)
         QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
@@ -192,6 +201,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                self.getLayers)
         QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('removedAll()'),
+                               self.getLayers)
+        QtCore.QObject.disconnect(self.iface,
+                               QtCore.SIGNAL('projectRead()'),
+                               self.getLayers)
+        QtCore.QObject.disconnect(self.iface,
+                               QtCore.SIGNAL('newProjectCreated()'),
                                self.getLayers)
         QtCore.QObject.disconnect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
@@ -376,6 +391,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
             myName = myLayer.name()
             mySource = str(myLayer.id())
+            # See if there is a title for this layer, if not,
+            # fallback to the layer's filename
+            myTitle = None
+            try:
+                myTitle = getKeywordFromFile(str(myLayer.source()), 'title')
+            except:
+                myTitle = myName
+            if myTitle and self.setLayerNameFromTitleFlag:
+                myLayer.setLayerName(myTitle)
+
             # find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
@@ -385,14 +410,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             except:
                 # continue ignoring this layer
                 continue
-            # See if there is a title for this layer, if not,
-            # fallback to the layer's filename
-            myTitle = None
-            try:
-                myTitle = getKeywordFromFile(str(myLayer.source()), 'title')
-            except:
-                myTitle = myName
-
             if myCategory == 'hazard':
                 self.cboHazard.addItem(myTitle, mySource)
             elif myCategory == 'exposure':

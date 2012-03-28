@@ -79,9 +79,14 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         myFlag = mySettings.value(
                             'inasafe/useThreadingFlag', False).toBool()
         self.cbxUseThread.setChecked(myFlag)
+
         myFlag = mySettings.value(
                             'inasafe/visibleLayersOnlyFlag', True).toBool()
         self.cbxVisibleLayersOnly.setChecked(myFlag)
+
+        myFlag = mySettings.value(
+                            'inasafe/setLayerNameFromTitleFlag', True).toBool()
+        self.cbxSetLayerNameFromTitle.setChecked(myFlag)
 
     def saveState(self):
         """
@@ -92,12 +97,12 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         Raises:
         """
         mySettings = QtCore.QSettings()
-        myFlag = mySettings.setValue(
-                            'inasafe/useThreadingFlag',
+        mySettings.setValue('inasafe/useThreadingFlag',
                             self.cbxUseThread.isChecked())
-        myFlag = mySettings.setValue(
-                            'inasafe/visibleLayersOnlyFlag',
+        mySettings.setValue('inasafe/visibleLayersOnlyFlag',
                             self.cbxVisibleLayersOnly.isChecked())
+        mySettings.setValue('inasafe/setLayerNameFromTitleFlag',
+                            self.cbxSetLayerNameFromTitle.isChecked())
 
     def showHelp(self):
         """Load the help text for the options gui"""

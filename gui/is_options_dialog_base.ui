@@ -44,9 +44,9 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="2" column="0">
-        <widget class="QCheckBox" name="checkBox_2">
+        <widget class="QCheckBox" name="cbxSetLayerNameFromTitle">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>Set QGIS layer name from 'title' in keywords</string>
@@ -227,7 +227,7 @@
  </widget>
  <tabstops>
   <tabstop>cbxVisibleLayersOnly</tabstop>
-  <tabstop>checkBox_2</tabstop>
+  <tabstop>cbxSetLayerNameFromTitle</tabstop>
   <tabstop>checkBox_3</tabstop>
   <tabstop>lineEdit</tabstop>
   <tabstop>toolButton</tabstop>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_options_dialog_base.ui'
 #
-# Created: Wed Mar 28 16:44:32 2012
+# Created: Wed Mar 28 17:03:54 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -37,11 +37,11 @@ class Ui_ISOptionsDialogBase(object):
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.gridLayout_2 = QtGui.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.checkBox_2 = QtGui.QCheckBox(self.scrollAreaWidgetContents)
-        self.checkBox_2.setEnabled(False)
-        self.checkBox_2.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None, QtGui.QApplication.UnicodeUTF8))
-        self.checkBox_2.setObjectName(_fromUtf8("checkBox_2"))
-        self.gridLayout_2.addWidget(self.checkBox_2, 2, 0, 1, 1)
+        self.cbxSetLayerNameFromTitle = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.cbxSetLayerNameFromTitle.setEnabled(True)
+        self.cbxSetLayerNameFromTitle.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxSetLayerNameFromTitle.setObjectName(_fromUtf8("cbxSetLayerNameFromTitle"))
+        self.gridLayout_2.addWidget(self.cbxSetLayerNameFromTitle, 2, 0, 1, 1)
         self.checkBox_3 = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.checkBox_3.setEnabled(False)
         self.checkBox_3.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None, QtGui.QApplication.UnicodeUTF8))
@@ -139,8 +139,8 @@ class Ui_ISOptionsDialogBase(object):
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ISOptionsDialogBase.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ISOptionsDialogBase.reject)
         QtCore.QMetaObject.connectSlotsByName(ISOptionsDialogBase)
-        ISOptionsDialogBase.setTabOrder(self.cbxVisibleLayersOnly, self.checkBox_2)
-        ISOptionsDialogBase.setTabOrder(self.checkBox_2, self.checkBox_3)
+        ISOptionsDialogBase.setTabOrder(self.cbxVisibleLayersOnly, self.cbxSetLayerNameFromTitle)
+        ISOptionsDialogBase.setTabOrder(self.cbxSetLayerNameFromTitle, self.checkBox_3)
         ISOptionsDialogBase.setTabOrder(self.checkBox_3, self.lineEdit)
         ISOptionsDialogBase.setTabOrder(self.lineEdit, self.toolButton)
         ISOptionsDialogBase.setTabOrder(self.toolButton, self.lineEdit_2)
