@@ -49,5 +49,22 @@
  <resources>
   <include location="resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ISHelpBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>650</x>
+     <y>376</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>727</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
