@@ -54,9 +54,9 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QCheckBox" name="checkBox_3">
+        <widget class="QCheckBox" name="cbxBubbleLayersUp">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>Bubble exposure and hazard layers to top when selected</string>
@@ -228,7 +228,7 @@
  <tabstops>
   <tabstop>cbxVisibleLayersOnly</tabstop>
   <tabstop>cbxSetLayerNameFromTitle</tabstop>
-  <tabstop>checkBox_3</tabstop>
+  <tabstop>cbxBubbleLayersUp</tabstop>
   <tabstop>lineEdit</tabstop>
   <tabstop>toolButton</tabstop>
   <tabstop>lineEdit_2</tabstop>

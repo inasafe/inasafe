@@ -18,6 +18,7 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import copy
 import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
@@ -31,6 +32,7 @@ from qgis.core import (QGis,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
+from qgis.gui import QgsMapCanvasLayer
 from is_impact_calculator import (ISImpactCalculator,
                               getKeywordFromFile,
                               getKeywordFromLayer,
@@ -97,6 +99,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
         self.setLayerNameFromTitleFlag = True
+        self.bubbleLayersUpFlag = False
+        self.hazardLayers = None  # array of all hazard layers
+        self.exposureLayers = None  # array of all exposure layers
         self.readSettings()
         self.getLayers()
         self.setOkButtonStatus()
@@ -138,6 +143,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myFlag = mySettings.value(
                         'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.setLayerNameFromTitleFlag = myFlag
+
+        myFlag = mySettings.value(
+                        'inasafe/bubbleLayersUpFlag', False).toBool()
+        self.bubbleLayersUpFlag = myFlag
 
         self.getLayers()
 
@@ -369,6 +378,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
+        self.hazardLayers = []
+        self.exposureLayers = []
         # Map registry may be invalid if QGIS is shutting down
         myRegistry = None
         try:
@@ -412,8 +423,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 continue
             if myCategory == 'hazard':
                 self.addComboItemInOrder(self.cboHazard, myTitle, mySource)
+                self.hazardLayers.append(myLayer)
             elif myCategory == 'exposure':
                 self.addComboItemInOrder(self.cboExposure, myTitle, mySource)
+                self.exposureLayers.append(myLayer)
 
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
@@ -1124,3 +1137,54 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 return
         #otherwise just add it to the end
         theCombo.insertItem(mySize, theItemText, theItemData)
+
+    def bubbleLayers(self):
+        """Bubble active exposure layer up so that it is before any other
+        exposure layers or hazard layers. Bubble active hazard layer up so that
+        it is before any other hazard layer.
+
+        if self.bubbleLayersUpFlag is False this function will do nothing.
+
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        if (self.bubbleLayersUpFlag is None or
+            self.hazardLayers is None or
+            len(self.hazardLayers) < 1 or
+            self.exposureLayers is None or
+            len(self.exposureLayers) < 1):
+            return
+        self.disconnectLayerListener()
+        myHazardLayers = copy.copy(self.hazardLayers)
+        myExposureLayers = copy.copy(self.exposureLayers)
+        myCanvas = self.iface.mapCanvas()
+        myCanvasLayers = myCanvas.layers()
+        myExposureLayer = self.cboHazard.itemData(
+                                        self.cboExposure.currentIndex())
+        myHazardLayer = self.cboHazard.itemData(
+                                        self.cboHazard.currentIndex())
+
+        # First discard any layers that arent visible in the canvas
+        for myLayer in myExposureLayers:
+            if myLayer not in myCanvasLayers and myLayer != myExposureLayer:
+                myExposureLayers.remove(myLayer)
+        for myLayer in myHazardLayers:
+            if myLayer not in myCanvasLayers and myLayer != myHazardLayer:
+                myHazardLayers.remove(myLayer)
+
+        myNewLayers = []
+        # Do the exposure layer first - it must be put above all other
+        # exposure or hazard layers
+        for myLayer in myExposureLayers:
+            myNewLayers.append(QgsMapCanvasLayer(myLayer))
+
+        # Do the hazard layer
+        for myLayer in myHazardLayers:
+            myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
+
+        myCanvas.setLayerSet(myCanvasLayers)
+        self.connectLayerListener()

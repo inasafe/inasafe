@@ -860,6 +860,23 @@ class ISDockTest(unittest.TestCase):
                                 myExpectedString)
         assert myExpectedString in myHtml, myMessage
 
+    def test_bubbleLayers(self):
+        """Test the bubbleLayers method works
+        """
+        DOCK.bubbleLayersUpFlag = True
+        DOCK.bubbleLayers()
+        myExpectedList = []
+        myExpectedString = ''
+        for myLayer in myExpectedList:
+            myExpectedString += myLayer + '\n'
+        myListString = ''
+        for myLayer in CANVAS.layers():
+            myListString += str(myLayer.name()) + '\n'
+        myMessage = '\nGot: \n%s\nExpected: %s\n%s' % (
+                            myListString, myExpectedString,
+                            combosToString(DOCK))
+        assert myExpectedString == myListString, myMessage
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISDockTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
