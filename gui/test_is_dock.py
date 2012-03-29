@@ -218,6 +218,10 @@ class ISDockTest(unittest.TestCase):
     def setUp(self):
         """Fixture run before all tests"""
         DOCK.showOnlyVisibleLayersFlag = True
+        loadStandardLayers()
+        DOCK.cboHazard.setCurrentIndex(0)
+        DOCK.cboExposure.setCurrentIndex(0)
+        DOCK.cboFunction.setCurrentIndex(0)
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -269,7 +273,7 @@ class ISDockTest(unittest.TestCase):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
 
         # Push OK with the left mouse button
-        loadStandardLayers()
+
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
@@ -304,7 +308,7 @@ class ISDockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly - small extent"""
 
         # Push OK with the left mouse button
-        loadStandardLayers()
+
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
@@ -344,7 +348,7 @@ class ISDockTest(unittest.TestCase):
         """Padang 2009 fatalities estimated correctly"""
 
         # Push OK with the left mouse button
-        loadStandardLayers()
+
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setGeoExtent([96, -5, 105, 2])  # This covers all of the 2009 shaking
@@ -384,7 +388,7 @@ class ISDockTest(unittest.TestCase):
         """Raster and vector based function runs as expected."""
 
         # Push OK with the left mouse button
-        loadStandardLayers()
+
         myButton = DOCK.pbnRunStop
 
         myMessage = 'Run button was not enabled'
@@ -431,7 +435,7 @@ class ISDockTest(unittest.TestCase):
            Raster on raster based function runs as expected."""
 
         # Push OK with the left mouse button
-        loadStandardLayers()
+
         myButton = DOCK.pbnRunStop
 
         myMessage = 'Run button was not enabled'
@@ -499,7 +503,7 @@ class ISDockTest(unittest.TestCase):
            Raster on raster based function runs as expected with scaling."""
 
         # Push OK with the left mouse button
-        loadStandardLayers()
+
         myButton = DOCK.pbnRunStop
 
         msg = 'Run button was not enabled'
@@ -547,27 +551,26 @@ class ISDockTest(unittest.TestCase):
         opacity. """
 
         # Push OK with the left mouse button
-        loadStandardLayers()
+
         myButton = DOCK.pbnRunStop
 
         msg = 'Run button was not enabled'
         assert myButton.isEnabled(), msg
 
-        # Hazard layers
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
-
-        # Exposure layers
+        # Hazard layers -already set to correct entry
+        # Exposure layers - set to Penduduk Jakarta
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function (second item in the list)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
         myFunction = DOCK.cboFunction.currentText()
-        myMessage = ('Incorrect function selected - expected Terdampak, got %s'
-                     % myFunction)
+        myMessage = ('Incorrect function selected - expected Terdampak,'
+                     ' got %s \n%s'
+                     % (myFunction, combosToString(DOCK)))
         assert myFunction == 'Terdampak', myMessage
 
         # Enable on-the-fly reprojection
@@ -602,23 +605,20 @@ class ISDockTest(unittest.TestCase):
         proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""
 
-        loadStandardLayers()
         myButton = DOCK.pbnRunStop
-
         myDict = getUiState(DOCK)
-        myMessage = 'Run button was not enabled - UI State: %s' % myDict
+        myMessage = 'Run button was not enabled - UI State: %s\n%s' % (
+                        myDict, combosToString(DOCK))
         assert myButton.isEnabled(), myMessage
 
-        # Hazard layers
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
-
+        # Hazard layers - already on correct entry
         # Exposure layers
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function (second item in the list)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
@@ -647,7 +647,7 @@ class ISDockTest(unittest.TestCase):
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
-        loadStandardLayers()
+
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setYogyaGeoExtent()
@@ -655,19 +655,11 @@ class ISDockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        # Hazard layers
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        # Hazard layers  -Yogya2006
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
-
-        # Exposure layers
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-
+        # Exposure layers - OSM Building Polygons
         # Choose impact function
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
@@ -677,7 +669,8 @@ class ISDockTest(unittest.TestCase):
                       'Exposure': 'OSM Building Polygons',
                       'Impact Function': 'Earthquake Guidelines Function',
                       'Run Button Enabled': True}
-        myMessage = 'Got unexpected state: %s' % str(myDict)
+        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
+                            str(myDict), expectDict, combosToString(DOCK))
         assert myDict == expectDict, myMessage
 
         # This is the where nosetest sometims hangs when running the
@@ -764,7 +757,7 @@ class ISDockTest(unittest.TestCase):
         """Check if the save/restart state methods work. See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-        loadStandardLayers()
+
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
@@ -776,7 +769,7 @@ class ISDockTest(unittest.TestCase):
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
         self.tearDown()
-        loadStandardLayers()
+
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
         DOCK.restoreState()
