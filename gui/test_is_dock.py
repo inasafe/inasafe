@@ -258,6 +258,7 @@ class ISDockTest(unittest.TestCase):
     def test_setOkButtonStatus(self):
         """OK button changes properly according to DOCK validity"""
         # First check that we ok ISNT enabled on a clear DOCK
+        self.tearDown()
         myFlag, myMessage = DOCK.validate()
 
         assert myMessage is not None, 'No reason for failure given'
@@ -794,20 +795,16 @@ class ISDockTest(unittest.TestCase):
         https://github.com/AIFDR/inasafe/issues/58
         """
 
-        myButton = DOCK.pbnRunStop
-        setCanvasCrs(GEOCRS, True)
-        setPadangGeoExtent()
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         DOCK.saveState()
         myExpectedDict = getUiState(DOCK)
         #myState = DOCK.state
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
-        self.tearDown()
-
-        setCanvasCrs(GEOCRS, True)
-        setPadangGeoExtent()
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         DOCK.restoreState()
         myResultDict = getUiState(DOCK)
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -816,7 +813,7 @@ class ISDockTest(unittest.TestCase):
 
         # corner case test when two layers can have the
         # same functions
-        self.tearDown()()
+        self.tearDown()
         myFileList = ['Flood_Design_Depth_Jakarta_geographic.asc',
                       'Flood_Current_Depth_Jakarta_geographic.asc',
                       'Population_Jakarta_geographic.asc']
@@ -824,12 +821,17 @@ class ISDockTest(unittest.TestCase):
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
         # will need to udpate this when localisation is set up nicely
-        myExpectation = 'Terdampak'
-        myFunction = DOCK.cboFunction.currentText()
-        myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
-        assert myFunction == myExpectation, myMessage
+        myExpectedDict = {'Run Button Enabled': True,
+                          'Impact Function': 'Terdampak',
+                          'Hazard': 'Banjir Jakarta seperti 2007',
+                          'Exposure': 'Penduduk Jakarta'}
+        myDict = getUiState(DOCK)
+        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
+                            myDict, myExpectedDict, combosToString(DOCK))
+        assert myExpectedDict == myDict, myMessage
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
         # selected function should remain the same
