@@ -240,7 +240,7 @@ class ISDockTest(unittest.TestCase):
 
     def test_validate(self):
         """Validate function work as expected"""
-
+        self.tearDown()
         # First check that we DONT validate a clear DOCK
         myFlag, myMessage = DOCK.validate()
         assert myMessage is not None, 'No reason for failure given'
