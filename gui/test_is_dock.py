@@ -530,16 +530,16 @@ class ISDockTest(unittest.TestCase):
         msg = 'Run button was not enabled'
         assert myButton.isEnabled(), msg
 
-        # Hazard layers
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        # Hazard layers use default - Banjir Jakarta seperti 2007
 
-        # Exposure layers
+        # Exposure layers - Population Density Estimate (5kmx5km)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
-        # Choose impact function (second item in the list)
+        # Choose impact function Terdampak
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
