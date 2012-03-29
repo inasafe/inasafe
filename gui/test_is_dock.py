@@ -282,12 +282,19 @@ class ISDockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+
         myDict = getUiState(DOCK)
         expectDict = {'Hazard': 'Shakemap_Padang_2009',
                         'Exposure': 'Padang_WGS84',
                         'Impact Function': 'Earthquake Guidelines Function',
                         'Run Button Enabled': True}
-        myMessage = 'Got unexpected state: %s' % str(myDict)
+        myMessage = 'Got:\n %s\nExpected:\n%s\n%s' % (
+                        str(myDict), expectDict, combosToString(DOCK))
         assert myDict == expectDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
