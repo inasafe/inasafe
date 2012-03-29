@@ -375,6 +375,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no
         """
+        self.disconnectLayerListener()
         self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
@@ -432,6 +433,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getFunctions()
         self.restoreState()
         self.setOkButtonStatus()
+        self.bubbleLayers()
+        self.connectLayerListener()
         return
 
     def getFunctions(self):
@@ -1184,7 +1187,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         # Do the hazard layer
         for myLayer in myHazardLayers:
-            myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
+            myNewLayers.append(QgsMapCanvasLayer(myLayer))
 
-        myCanvas.setLayerSet(myCanvasLayers)
+        myCanvas.setLayerSet(myNewLayers)
         self.connectLayerListener()
