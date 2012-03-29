@@ -202,24 +202,46 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             None
         Raises:
         """
-        QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
+        try:
+            QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('layerWillBeRemoved(QString)'),
                                self.getLayers)
-        QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
+        except:
+            pass
+
+        try:
+            QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
                                self.getLayers)
-        QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
+        except:
+            pass
+
+        try:
+            QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('removedAll()'),
                                self.getLayers)
-        QtCore.QObject.disconnect(self.iface,
+        except:
+            pass
+        try:
+            QtCore.QObject.disconnect(self.iface,
                                QtCore.SIGNAL('projectRead()'),
                                self.getLayers)
-        QtCore.QObject.disconnect(self.iface,
+        except:
+            pass
+
+        try:
+            QtCore.QObject.disconnect(self.iface,
                                QtCore.SIGNAL('newProjectCreated()'),
                                self.getLayers)
-        QtCore.QObject.disconnect(self.iface.mapCanvas(),
+        except:
+            pass
+
+        try:
+            QtCore.QObject.disconnect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.canvasLayersetChanged)
+        except:
+            pass
         # old implementation - bad because it triggers with every layer
         # visibility change
         #QtCore.QObject.disconnect(self.iface.mapCanvas(),
