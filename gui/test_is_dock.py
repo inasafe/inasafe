@@ -256,7 +256,6 @@ class ISDockTest(unittest.TestCase):
 
     def test_setOkButtonStatus(self):
         """OK button changes properly according to DOCK validity"""
-
         # First check that we ok ISNT enabled on a clear DOCK
         myFlag, myMessage = DOCK.validate()
 
@@ -289,13 +288,13 @@ class ISDockTest(unittest.TestCase):
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         myDict = getUiState(DOCK)
-        expectDict = {'Hazard': 'Shakemap_Padang_2009',
+        myExpectedDict = {'Hazard': 'Shakemap_Padang_2009',
                         'Exposure': 'Padang_WGS84',
                         'Impact Function': 'Earthquake Guidelines Function',
                         'Run Button Enabled': True}
         myMessage = 'Got:\n %s\nExpected:\n%s\n%s' % (
-                        str(myDict), expectDict, combosToString(DOCK))
-        assert myDict == expectDict, myMessage
+                        myDict, myExpectedDict, combosToString(DOCK))
+        assert myDict == myExpectedDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
@@ -327,16 +326,23 @@ class ISDockTest(unittest.TestCase):
 
         # Simulate choosing another combo item and running
         # the model again
+        # set hazard to Shakemap_Padang_2009
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        # set exposure to Population Density Estimate (5kmx5km)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         myDict = getUiState(DOCK)
-        expectDict = {'Hazard': 'Shakemap_Padang_2009',
+        myExpectedDict = {'Hazard': 'Shakemap_Padang_2009',
                         'Exposure': 'Population Density Estimate (5kmx5km)',
                         'Impact Function': 'Earthquake Fatality Function',
                         'Run Button Enabled': True}
-        myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == expectDict, myMessage
+        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
+                            myDict, myExpectedDict, combosToString(DOCK))
+        assert myDict == myExpectedDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
@@ -364,18 +370,24 @@ class ISDockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
+        # set hazard to Shakemap_Padang_2009
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
         # Simulate choosing another combo item and running
-        # the model again
+        # the model again - Population Density Estimate (5kmx5km)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         myDict = getUiState(DOCK)
-        expectDict = {'Hazard': 'Shakemap_Padang_2009',
+        myExpectedDict = {'Hazard': 'Shakemap_Padang_2009',
                       'Exposure': 'Population Density Estimate (5kmx5km)',
                       'Impact Function': 'Earthquake Fatality Function',
                       'Run Button Enabled': True}
-        myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == expectDict, myMessage
+        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
+                            myDict, myExpectedDict, combosToString(DOCK))
+        assert myDict == myExpectedDict, myMessage
 
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
 
@@ -415,12 +427,13 @@ class ISDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
 
-        expectDict = {'Run Button Enabled': True,
+        myExpectedDict = {'Run Button Enabled': True,
                         'Impact Function': 'Tsunami Building Impact Function',
                         'Hazard': 'tsunami_max_inundation_depth_BB_utm',
                         'Exposure': 'tsunami_exposure_BB'}
-        myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == expectDict, myMessage
+        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
+                            myDict, myExpectedDict, combosToString(DOCK))
+        assert myDict == myExpectedDict, myMessage
 
         setCanvasCrs(GEOCRS, True)
         setBatemansBayGeoExtent()
@@ -468,12 +481,13 @@ class ISDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
 
-        expectDict = {'Run Button Enabled': True,
+        myExpectedDict = {'Run Button Enabled': True,
                         'Impact Function': 'Terdampak',
                         'Hazard': 'Banjir Jakarta seperti 2007',
                         'Exposure': 'Penduduk Jakarta'}
-        myMessage = 'Got unexpected state: %s' % str(myDict)
-        assert myDict == expectDict, myMessage
+        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
+                            myDict, myExpectedDict, combosToString(DOCK))
+        assert myDict == myExpectedDict, myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
@@ -534,12 +548,13 @@ class ISDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
 
-        msg = 'Got unexpected state: %s' % str(myDict)
-        expectDict = {'Run Button Enabled': True,
+        myExpectedDict = {'Run Button Enabled': True,
                         'Impact Function': 'Terdampak',
                         'Hazard': 'Banjir Jakarta seperti 2007',
                         'Exposure': 'Population Density Estimate (5kmx5km)'}
-        assert myDict == expectDict, msg
+        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
+                            myDict, myExpectedDict, combosToString(DOCK))
+        assert myDict == myExpectedDict, myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
@@ -633,13 +648,13 @@ class ISDockTest(unittest.TestCase):
 
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
-        expectDict = {'Run Button Enabled': True,
+        myExpectedDict = {'Run Button Enabled': True,
                         'Impact Function': 'Terdampak',
                         'Hazard': 'Banjir Jakarta seperti 2007',
                         'Exposure': 'Penduduk Jakarta'}
         myMessage = 'Got: %s\nExpected: %s \n%s' % (
-                        str(myDict), str(expectDict), combosToString(DOCK))
-        assert myDict == expectDict, myMessage
+                        myDict, str(myExpectedDict), combosToString(DOCK))
+        assert myDict == myExpectedDict, myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GOOGLECRS, True)
@@ -674,13 +689,13 @@ class ISDockTest(unittest.TestCase):
 
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
-        expectDict = {'Hazard': 'Yogya2006',
+        myExpectedDict = {'Hazard': 'Yogya2006',
                       'Exposure': 'OSM Building Polygons',
                       'Impact Function': 'Earthquake Guidelines Function',
                       'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-                            str(myDict), expectDict, combosToString(DOCK))
-        assert myDict == expectDict, myMessage
+                            myDict, myExpectedDict, combosToString(DOCK))
+        assert myDict == myExpectedDict, myMessage
 
         # This is the where nosetest sometims hangs when running the
         # guitest suite (Issue #103)
@@ -793,9 +808,8 @@ class ISDockTest(unittest.TestCase):
         setPadangGeoExtent()
         DOCK.restoreState()
         myResultDict = getUiState(DOCK)
-        myMessage = "Got:\n%s\nExpected:\n%s" % (
-                                myExpectedDict,
-                                myResultDict)
+        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
+                            myResultDict, myExpectedDict, combosToString(DOCK))
         assert myExpectedDict == myResultDict, myMessage
 
         # corner case test when two layers can have the
