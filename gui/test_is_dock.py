@@ -418,9 +418,13 @@ class ISDockTest(unittest.TestCase):
 
         # Hazard layers
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
 
         # Exposure layers
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
