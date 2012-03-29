@@ -7,6 +7,8 @@ using it.
 """
 
 from impact_functions.utilities import ColorMapEntry
+from engine.polygon import inside_polygon
+import numpy
 import types
 import keyword
 
@@ -326,7 +328,14 @@ def aggregate_point_data(data=None, boundaries=None,
         aggregation_function: Function to apply ('count' or 'sum')
 
     Output
-        Dictionary of {boundary_name: aggregated value}
+        List of aggregated values for each polygon.
+
+    Note
+        Aggregated values depend on aggregation function:
+        'sum': Sum of values for attribute_name
+        'count': Dictionary with counts of occurences of each value
+                 of attribute_name
+
     """
 
     msg = ('Input argument "data" must be point type. I got type: %s'
@@ -339,7 +348,37 @@ def aggregate_point_data(data=None, boundaries=None,
     if not boundaries.is_polygon_data:
         raise Exception(msg)
 
-    # FIXME (Ole): READY FOR IMPLEMENTATION
+    polygon_geoms = boundaries.get_geometry()
+    polygon_attrs = boundaries.get_data()
+
+    points = data.get_geometry()
+    attributes = data.get_data()
+
+    result = []
+    for i, polygon in enumerate(polygon_geoms):
+        indices = inside_polygon(points, polygon)
+
+        #print 'Found %i points in polygon %i' % (len(indices), i)
+
+        # Aggregate numbers
+        if aggregation_function == 'count':
+            bins = {}
+            for att in numpy.take(attributes, indices):
+                val = att[attribute_name]
+
+                # Count occurences of val
+                if val not in bins:
+                    bins[val] = 0
+                bins[val] += 1
+            result.append(bins)
+        elif aggregation_function == 'sum':
+            sum = 0
+            for att in numpy.take(attributes, indices):
+                val = att[attribute_name]
+                sum += val
+            result.append(sum)
+
+    return result
 
 
 def aggregate(data=None, boundaries=None,
@@ -359,8 +398,8 @@ def aggregate(data=None, boundaries=None,
     """
 
     if data.is_point_data:
-        aggregate_point_data(data, boundaries,
-                             attribute_name, aggregation_function)
+        res = aggregate_point_data(data, boundaries,
+                                   attribute_name, aggregation_function)
     elif data.is_raster_data:
         # Convert to point data
         # Call point aggregation function
@@ -371,6 +410,8 @@ def aggregate(data=None, boundaries=None,
         msg = ('Input argument "data" must be point or raster data. '
                'I got type: %s' % data.get_geometry_type())
         raise Exception(msg)
+
+    return res
 
 
 # FIXME (Ole): Maybe filter by name too, rename to get_impact_functions

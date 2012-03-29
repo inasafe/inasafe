@@ -156,7 +156,15 @@ class Test_plugins(unittest.TestCase):
                         attribute_name='AFFECTED',
                         aggregation_function='count')
 
-        # FIXME (Ole): Test that output is as expected
+        print res, len(res)
+        print boundary_layer, len(boundary_layer)
+        msg = ('Number of aggregations %i should be the same as the '
+               'number of specified boundaries %i' % (len(res),
+                                                      len(boundary_layer)))
+        assert len(res) == len(boundary_layer), msg
+
+        # FIXME (Ole): Need test by manual inspection in QGis
+        #print res
 
 
 if __name__ == '__main__':

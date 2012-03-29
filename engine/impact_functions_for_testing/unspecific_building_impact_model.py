@@ -38,7 +38,6 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
             if x < 6.0 or (x != x):  # x != x -> check for nan pre python 2.6
                 value = 0.0
             else:
-                print x
                 value = (0.692 * (x ** 4) -
                          15.82 * (x ** 3) +
                          135.0 * (x ** 2) -

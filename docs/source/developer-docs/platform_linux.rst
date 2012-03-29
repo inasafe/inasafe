@@ -19,7 +19,7 @@ linux system such as Ubuntu or Mint.
 To verify that the installation works you can run the test suite from the
 command line::
 
-   cd inasafe
+   cd inasafe-dev
    make test
 
 This will run all the regression tests and also highlight any code issues.
