@@ -78,6 +78,46 @@ def getUiState(ui):
             'Run Button Enabled': myRunButton}
 
 
+def combosToString(ui):
+    """Helper to return a string showing the state of all combos (all their
+    entries"""
+    myString = 'Hazard Layers\n'
+    myString += '-------------------------\n'
+    myCurrentId = ui.cboHazard.currentIndex()
+    for myCount in range(0, ui.cboHazard.count()):
+        myItemText = ui.cboHazard.itemText(myCount)
+        if myCount == myCurrentId:
+            myString += '>> '
+        else:
+            myString += '   '
+        myString += str(myItemText) + '\n'
+
+    myString += 'Exposure Layers\n'
+    myString += '-------------------------\n'
+    myCurrentId = ui.cboExposure.currentIndex()
+    for myCount in range(0, ui.cboExposure.count()):
+        myItemText = ui.cboExposure.itemText(myCount)
+        if myCount == myCurrentId:
+            myString += '>> '
+        else:
+            myString += '   '
+        myString += str(myItemText) + '\n'
+
+    myString += 'Functions\n'
+    myString += '-------------------------\n'
+    myCurrentId = ui.cboExposure.currentIndex()
+    for myCount in range(0, ui.cboFunction.count()):
+        myItemText = ui.cboFunction.itemText(myCount)
+        if myCount == myCurrentId:
+            myString += '>> '
+        else:
+            myString += '   '
+        myString += str(myItemText) + '\n'
+
+    myString += '\n\n >> means combo item is selected'
+    return myString
+
+
 def populatemyDock():
     """A helper function to populate the DOCK and set it to a valid state.
     """
@@ -576,8 +616,6 @@ class ISDockTest(unittest.TestCase):
 
         # Exposure layers
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact function (second item in the list)
@@ -590,7 +628,8 @@ class ISDockTest(unittest.TestCase):
                         'Impact Function': 'Terdampak',
                         'Hazard': 'Banjir Jakarta seperti 2007',
                         'Exposure': 'Penduduk Jakarta'}
-        myMessage = 'Got unexpected state: %s' % str(myDict)
+        myMessage = 'Got: %s\nExpected: %s \n%s' % (
+                        str(myDict), str(expectDict), combosToString(DOCK))
         assert myDict == expectDict, myMessage
 
         # Enable on-the-fly reprojection
@@ -705,6 +744,7 @@ class ISDockTest(unittest.TestCase):
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         myDict = getUiState(DOCK)
         myMessage = ('Run button was not disabled when exposure set to \n%s'
@@ -748,7 +788,7 @@ class ISDockTest(unittest.TestCase):
 
         # corner case test when two layers can have the
         # same functions
-        clearDock()
+        self.tearDown()()
         myFileList = ['Flood_Design_Depth_Jakarta_geographic.asc',
                       'Flood_Current_Depth_Jakarta_geographic.asc',
                       'Population_Jakarta_geographic.asc']

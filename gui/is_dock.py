@@ -411,9 +411,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 # continue ignoring this layer
                 continue
             if myCategory == 'hazard':
-                self.cboHazard.addItem(myTitle, mySource)
+                self.addComboItemInOrder(self.cboHazard, myTitle, mySource)
             elif myCategory == 'exposure':
-                self.cboExposure.addItem(myTitle, mySource)
+                self.addComboItemInOrder(self.cboExposure, myTitle, mySource)
 
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
@@ -465,7 +465,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myDict = availableFunctions(myList)
             # Populate the hazard combo with the available functions
             for myFunction in myDict:  # Use only key
-                self.cboFunction.addItem(myFunction)
+                self.addComboItemInOrder(self.cboFunction, myFunction)
         except Exception, e:
             raise e
 
@@ -1097,3 +1097,30 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         self.hideBusy()
         myMap.showComposer()
+
+    def addComboItemInOrder(self, theCombo, theItemText, theItemData=None):
+        """Although QComboBox allows you to set an InsertAlphabetically enum
+        this only has effect when a user interactively adds combo items to
+        an editable combo. This we have this little function to ensure that
+        combos are always sorted alphabetically.
+        Args:
+            * theCombo - combo box receiving the new item
+            * theItemText - display text for the combo
+            * theItemData - optional UserRole data to be associated with
+              the item
+
+        Returns:
+            None
+        Raises:
+
+        ..todo:: Move this to utilities
+        """
+        mySize = theCombo.count()
+        for myCount in range(0, mySize):
+            myItemText = str(theCombo.itemText(myCount))
+            # see if theItemText alphabetically precedes myItemText
+            if cmp(theItemText, myItemText) < 0:
+                theCombo.insertItem(myCount, theItemText, theItemData)
+                return
+        #otherwise just add it to the end
+        theCombo.insertItem(mySize, theItemText, theItemData)
