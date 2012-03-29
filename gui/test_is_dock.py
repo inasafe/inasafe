@@ -78,6 +78,24 @@ def getUiState(ui):
             'Run Button Enabled': myRunButton}
 
 
+def formattedList(theList):
+    """Return a string representing a list of layers (in correct order)
+    but formatted with line breaks between each entry."""
+    myListString = ''
+    for myItem in theList:
+        myListString += myItem + '\n'
+    return myListString
+
+
+def canvasList():
+    """Return a string representing the list of canvas layers (in correct
+    order) but formatted with line breaks between each entry."""
+    myListString = ''
+    for myLayer in CANVAS.layers():
+        myListString += str(myLayer.name()) + '\n'
+    return myListString
+
+
 def combosToString(ui):
     """Helper to return a string showing the state of all combos (all their
     entries"""
@@ -674,7 +692,6 @@ class ISDockTest(unittest.TestCase):
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
-
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setYogyaGeoExtent()
@@ -863,19 +880,36 @@ class ISDockTest(unittest.TestCase):
     def test_bubbleLayers(self):
         """Test the bubbleLayers method works
         """
+        self.tearDown()
+        # First part of scenario should have enabled run
+        myFileList = ['Flood_Design_Depth_Jakarta_geographic.asc',
+                      'Flood_Current_Depth_Jakarta_geographic.asc',
+                      'Population_Jakarta_geographic.asc']
+        loadLayers(myFileList)
         DOCK.bubbleLayersUpFlag = True
         DOCK.bubbleLayers()
-        myExpectedList = []
-        myExpectedString = ''
-        for myLayer in myExpectedList:
-            myExpectedString += myLayer + '\n'
-        myListString = ''
-        for myLayer in CANVAS.layers():
-            myListString += str(myLayer.name()) + '\n'
-        myMessage = '\nGot: \n%s\nExpected: %s\n%s' % (
-                            myListString, myExpectedString,
+        myExpectedList = ['Penduduk Jakarta',
+                          'Banjir Jakarta seperti 2007',
+                          'Banjir Jakarta Mungkin']
+        myExpectedString = formattedList(myExpectedList)
+        myCanvasListString = canvasList()
+        myMessage = '\nGot Canvas Layer Order: \n%s\nExpected:\n%s\n\n%s' % (
+                            myCanvasListString, myExpectedString,
                             combosToString(DOCK))
-        assert myExpectedString == myListString, myMessage
+        assert myExpectedString == myCanvasListString, myMessage
+
+        # Now select a differnt hazard and check the layers have bubbled
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+
+        myExpectedList = ['Penduduk Jakarta',
+                          'Banjir Jakarta Mungkin',
+                          'Banjir Jakarta seperti 2007']
+        myExpectedString = formattedList(myExpectedList)
+        myCanvasListString = canvasList()
+        myMessage = '\nGot Canvas Layer Order: \n%s\nExpected:\n%s\n\n%s' % (
+                            myCanvasListString, myExpectedString,
+                            combosToString(DOCK))
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISDockTest, 'test')
