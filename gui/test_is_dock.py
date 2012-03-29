@@ -233,9 +233,9 @@ class ISDockTest(unittest.TestCase):
 
     def test_defaults(self):
         """Test the GUI in its default state"""
-        self.assertEqual(DOCK.cboHazard.currentIndex(), -1)
-        self.assertEqual(DOCK.cboExposure.currentIndex(), -1)
-        self.assertEqual(DOCK.cboFunction.currentIndex(), -1)
+        self.assertEqual(DOCK.cboHazard.currentIndex(), 0)
+        self.assertEqual(DOCK.cboExposure.currentIndex(), 0)
+        self.assertEqual(DOCK.cboFunction.currentIndex(), 0)
 
     def test_validate(self):
         """Validate function work as expected"""
