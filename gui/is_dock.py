@@ -84,7 +84,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised
         """
-        #settrace()
+        settrace()
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s' % __version__))
@@ -1188,28 +1188,40 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myExposureLayers = copy.copy(self.exposureLayers)
         myCanvas = self.iface.mapCanvas()
         myCanvasLayers = myCanvas.layers()
-        myExposureLayer = self.cboHazard.itemData(
-                                        self.cboExposure.currentIndex())
-        myHazardLayer = self.cboHazard.itemData(
-                                        self.cboHazard.currentIndex())
+        # Get the layer source names from the combo
+        # Todo - unique layer id should probably be used instead in case
+        # the same layer is present twice
+        myExposureLayer = self.getExposureLayer()
+        myHazardLayer = self.getHazardLayer()
+        myHazardSource = str(self.cboHazard.itemData(
+                                        self.cboHazard.currentIndex()
+                                        ).toString())
 
         # First discard any layers that arent visible in the canvas
+        # but only if they arent the active hazard / exposure
         for myLayer in myExposureLayers:
-            if myLayer not in myCanvasLayers and myLayer != myExposureLayer:
+            if (myLayer not in myCanvasLayers and
+                myLayer != myExposureLayer):
                 myExposureLayers.remove(myLayer)
         for myLayer in myHazardLayers:
-            if myLayer not in myCanvasLayers and myLayer != myHazardLayer:
+            if (myLayer not in myCanvasLayers and
+                myLayer != myHazardLayer):
                 myHazardLayers.remove(myLayer)
 
         myNewLayers = []
-        # Do the exposure layer first - it must be put above all other
-        # exposure or hazard layers
-        for myLayer in myExposureLayers:
-            myNewLayers.append(QgsMapCanvasLayer(myLayer))
-
-        # Do the hazard layer
-        for myLayer in myHazardLayers:
-            myNewLayers.append(QgsMapCanvasLayer(myLayer))
+        for myLayer in myCanvasLayers:
+            if (myLayer in myExposureLayers or
+                myLayer in myHazardLayers):
+                if myExposureLayer is not None:
+                    #insert active exposure layer into new list
+                    myNewLayers.append(QgsMapCanvasLayer(myExposureLayer))
+                    myExposureLayer = None
+                if myHazardLayer is not None and myLayer in myHazardLayers:
+                    #insert active hazard into new list
+                    myNewLayers.append(QgsMapCanvasLayer(myHazardLayer))
+                    myHazardLayer = None
+            if myLayer not in myNewLayers:
+                myNewLayers.append(QgsMapCanvasLayer(myLayer))
 
         myCanvas.setLayerSet(myNewLayers)
         self.connectLayerListener()
