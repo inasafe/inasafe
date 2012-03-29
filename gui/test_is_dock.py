@@ -81,6 +81,7 @@ def getUiState(ui):
 def combosToString(ui):
     """Helper to return a string showing the state of all combos (all their
     entries"""
+
     myString = 'Hazard Layers\n'
     myString += '-------------------------\n'
     myCurrentId = ui.cboHazard.currentIndex()
@@ -91,7 +92,7 @@ def combosToString(ui):
         else:
             myString += '   '
         myString += str(myItemText) + '\n'
-
+    myString += '\n'
     myString += 'Exposure Layers\n'
     myString += '-------------------------\n'
     myCurrentId = ui.cboExposure.currentIndex()
@@ -103,6 +104,7 @@ def combosToString(ui):
             myString += '   '
         myString += str(myItemText) + '\n'
 
+    myString += '\n'
     myString += 'Functions\n'
     myString += '-------------------------\n'
     myCurrentId = ui.cboExposure.currentIndex()
@@ -714,6 +716,7 @@ class ISDockTest(unittest.TestCase):
         """Test issue #71 in githib - cbo changes should update ok button."""
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
+        self.tearDown()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
         myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
@@ -736,18 +739,27 @@ class ISDockTest(unittest.TestCase):
         myClearFlag = False
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
+        # set exposure to : Population Density Estimate (5kmx5km)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         myDict = getUiState(DOCK)
+        myExpectedDict = {'Run Button Enabled': False,
+                          'Impact Function': '',
+                          'Hazard': 'Banjir Jakarta seperti 2007',
+                          'Exposure': 'Population Density Estimate (5kmx5km)'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'
-                     '\nUI State: \n%s') % (DOCK.cboExposure.currentText(),
-                                            myDict)
-        assert myButton.isEnabled() == False, myMessage
+                     '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
+                        DOCK.cboExposure.currentText(),
+                        myDict,
+                        myExpectedDict,
+                        combosToString(DOCK)
+                        )
+
+        assert myExpectedDict == myDict, myMessage
 
         # Now select again a valid layer and the run button
         # should be enabled
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         myMessage = 'Run button was not enabled when exposure set to \n%s' % \
             DOCK.cboExposure.currentText()
