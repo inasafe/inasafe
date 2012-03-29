@@ -132,9 +132,10 @@ def populatemyDock():
 
 def loadStandardLayers():
     """Helper function to load standard layers into the dialog."""
-    # List all layers in the correct order.
-    # NOTE: New layers *must* be added to the end of this list, otherwise
-    #       tests will break.
+    # NOTE: Adding new layers here may break existing tests since
+    # combos are populated alphabetically. Each test will
+    # provide a detailed diagnostic if you break it so make sure
+    # to consult that and clean up accordingly.
     myFileList = ['Padang_WGS84.shp',
                   'glp10ag.asc',
                   'Shakemap_Padang_2009.asc',
@@ -463,18 +464,15 @@ class ISDockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        # Hazard layers
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        # Hazard layers - default is already Banjir Jakarta seperti 2007
 
-        # Exposure layers
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        # Exposure layers - Penduduk Jakarta
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
-        # Choose impact function (second item in the list)
+        # Choose impact Terdampak
+        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
