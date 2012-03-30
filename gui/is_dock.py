@@ -18,15 +18,13 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import copy
 import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from is_dock_base import Ui_ISDockBase
 from is_help import ISHelp
 from is_utilities import getExceptionWithStacktrace, getWGS84resolution
-from qgis.core import (QGis,
-                       QgsMapLayer,
+from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
@@ -84,7 +82,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised
         """
-        settrace()
+        #settrace()
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s' % __version__))
@@ -320,7 +318,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        # Add any other logic you mught like here...
+        # Add any other logic you might like here...
         self.getFunctions()
         self.setOkButtonStatus()
         self.bubbleLayers()
@@ -1178,15 +1176,15 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
             None
         """
-        if (self.bubbleLayersUpFlag is None or
+        if (self.bubbleLayersUpFlag is False or
             self.hazardLayers is None or
             len(self.hazardLayers) < 1 or
             self.exposureLayers is None or
             len(self.exposureLayers) < 1):
             return
         self.disconnectLayerListener()
-        myHazardLayers = copy.copy(self.hazardLayers)
-        myExposureLayers = copy.copy(self.exposureLayers)
+        myHazardLayers = self.hazardLayers
+        myExposureLayers = self.exposureLayers
         myCanvas = self.iface.mapCanvas()
         myLayers = myCanvas.layers()
         # Get the layer source names from the combo
