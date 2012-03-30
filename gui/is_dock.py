@@ -1242,7 +1242,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                     #insert active exposure layer into new list
                     myNewCanvasLayers.append(myExposureCanvasLayer)
                     myExposureCanvasLayer = None
-                if (myHazardCanvasLayer is not None and myLayer
+                # As soon as soon as we hit the first hazard layer
+                # ensure the active one is dropped in before it
+                if (myHazardCanvasLayer is not None and myCanvasLayer
                    in myHazardCanvasLayers):
                     #insert active hazard into new list
                     myNewCanvasLayers.append(myHazardCanvasLayer)
