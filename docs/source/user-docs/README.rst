@@ -11,7 +11,7 @@ The latest source code is available in https://github.com/AIFDR/inasafe
 which contains modules for risk calculations, gis functionality and functions for impact modelling.
 
 For more information about |project_name| please look at
-the documentation at http://risk-in-a-box.readthedocs.org
+the documentation at http://inasafe.readthedocs.org
 
 |project_name| - QGis web site: http://aifdr.github.com/inasafe
 

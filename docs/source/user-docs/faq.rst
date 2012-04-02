@@ -57,16 +57,16 @@ How does the documentation work?::
     https://github.com/AIFDR/inasafe/blob/master/docs/Makefile. These
     files are accessible through both the file browser and the help button
     available in |project_name|
-  * The web site http://readthedocs.org/docs/risk-in-a-box which automatically
+  * The web site http://readthedocs.org/docs/inasafe which automatically
     reads the RST files from github to update its content. The steps to achieve
     this are
 
   1. Register the project on the dashboard at ReadTheDocs
-     (http://readthedocs.org/dashboard/risk-in-a-box/edit).
+     (http://readthedocs.org/dashboard/inasafe/edit).
      In particular, this form points to the github repository where the RST
      files reside.
   2. Either manually build the project by clicking 'Build latest version' on
-     http://readthedocs.org/dashboard/risk-in-a-box/ or by activating the
+     http://readthedocs.org/dashboard/inasafe/ or by activating the
      service hook for ReadTheDocs at github:
      https://github.com/AIFDR/inasafe/admin/hooks
 

@@ -231,7 +231,7 @@ latex_documents = [('index',
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [('index', 'risk-in-a-box', u'InaSAFE Documentation',
+man_pages = [('index', 'inasafe', u'InaSAFE Documentation',
               [u'Ole Moeller Nielsen'], 1)]
 
 # If true, show URL addresses after external links.
