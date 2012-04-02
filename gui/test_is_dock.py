@@ -239,6 +239,7 @@ class ISDockTest(unittest.TestCase):
     def setUp(self):
         """Fixture run before all tests"""
         DOCK.showOnlyVisibleLayersFlag = True
+        DOCK.bubbleLayersUpFlag = False
         loadStandardLayers()
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
