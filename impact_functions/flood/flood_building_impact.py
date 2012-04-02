@@ -80,8 +80,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
-        impact_summary = _('<b>In case of hazard "%s" the estimated impact to '
-                           'exposure "%s" '
+        impact_summary = _('<b>In case of "%s" the estimated impact to '
+                           '"%s" '
                            'is&#58;</b><br><br><p>' % (Hname, Ename))
         impact_summary += ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
@@ -98,7 +98,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _('Buildings that will need to close when flood'
+        impact_summary += _('Buildings will need to close if flood'
                             ' levels exceed %.1f m' % threshold)
 
         # Create style
