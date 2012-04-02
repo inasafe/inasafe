@@ -65,6 +65,8 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
+        self.grpNotImplemented.hide()
+        self.adjustSize()
         self.restoreState()
 
     def restoreState(self):
@@ -88,13 +90,6 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
                             'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.cbxSetLayerNameFromTitle.setChecked(myFlag)
 
-        myFlag = mySettings.value(
-                            'inasafe/bubbleLayersUpFlag', False).toBool()
-        self.cbxBubbleLayersUp.setChecked(myFlag)
-
-
-
-
     def saveState(self):
         """
         Args: Store the options into the user's stored session info
@@ -110,8 +105,6 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
                             self.cbxVisibleLayersOnly.isChecked())
         mySettings.setValue('inasafe/setLayerNameFromTitleFlag',
                             self.cbxSetLayerNameFromTitle.isChecked())
-        mySettings.setValue('inasafe/bubbleLayersUpFlag',
-                            self.cbxBubbleLayersUp.isChecked())
 
     def showHelp(self):
         """Load the help text for the options gui"""

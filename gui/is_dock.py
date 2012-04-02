@@ -99,7 +99,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
         self.setLayerNameFromTitleFlag = True
-        self.bubbleLayersUpFlag = False
         self.hazardLayers = None  # array of all hazard layers
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()
@@ -143,10 +142,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myFlag = mySettings.value(
                         'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.setLayerNameFromTitleFlag = myFlag
-
-        myFlag = mySettings.value(
-                        'inasafe/bubbleLayersUpFlag', False).toBool()
-        self.bubbleLayersUpFlag = myFlag
 
         self.getLayers()
 
@@ -323,7 +318,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         # Add any other logic you might like here...
         self.getFunctions()
         self.setOkButtonStatus()
-        self.bubbleLayers()
 
     @pyqtSignature('int')  # prevents actions being handled twice
     def on_cboExposure_currentIndexChanged(self, theIndex):
@@ -338,7 +332,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         # Add any other logic you mught like here...
         self.getFunctions()
         self.setOkButtonStatus()
-        self.bubbleLayers()
 
     @pyqtSignature('int')  # prevents actions being handled twice
     def on_cboFunction_currentIndexChanged(self, theIndex):
@@ -1163,95 +1156,3 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 return
         #otherwise just add it to the end
         theCombo.insertItem(mySize, theItemText, theItemData)
-
-    def bubbleLayers(self):
-        """Bubble active exposure layer up so that it is before any other
-        exposure layers or hazard layers. Bubble active hazard layer up so that
-        it is before any other hazard layer.
-
-        if self.bubbleLayersUpFlag is False this function will do nothing.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
-        """
-        if (self.bubbleLayersUpFlag is False or
-            self.hazardLayers is None or
-            len(self.hazardLayers) < 1 or
-            self.exposureLayers is None or
-            len(self.exposureLayers) < 1):
-            return
-        self.disconnectLayerListener()
-        myHazardLayers = self.hazardLayers
-        myExposureLayers = self.exposureLayers
-        myCanvas = self.iface.mapCanvas()
-        myLayers = myCanvas.layers()
-        # Get the layer source names from the combo
-        # Todo - unique layer id should probably be used instead in case
-        # the same layer is present twice
-        myExposureLayer = self.getExposureLayer()
-        myHazardLayer = self.getHazardLayer()
-
-        # First discard any layers that arent visible in the canvas
-        # but only if they arent the active hazard / exposure
-        for myLayer in myExposureLayers:
-            if (myLayer not in myLayers and
-                myLayer != myExposureLayer):
-                myExposureLayers.remove(myLayer)
-        for myLayer in myHazardLayers:
-            if (myLayer not in myLayers and
-                myLayer != myHazardLayer):
-                myHazardLayers.remove(myLayer)
-
-        # Now turn everyting into canvas layers so we can properly do
-        # comparisons between layers...
-        myCanvasLayers = []
-        myExposureCanvasLayers = []
-        myHazardCanvasLayers = []
-        myExposureCanvasLayer = None
-        myHazardCanvasLayer = None
-        for myLayer in myLayers:
-            myCanvasLayer = QgsMapCanvasLayer(myLayer)
-            if myLayer == myExposureLayer:
-                myExposureCanvasLayer = myCanvasLayer
-            if myLayer == myHazardLayer:
-                myHazardCanvasLayer = myCanvasLayer
-            if myLayer in myExposureLayers:
-                myExposureCanvasLayers.append(myCanvasLayer)
-            if myLayer in myHazardLayers:
-                myHazardCanvasLayers.append(myCanvasLayer)
-            myCanvasLayers.append(myCanvasLayer)
-
-        # Now we create a new version of the canvas layers list with
-        # the exposure and hazard layers bubbled to the top according to
-        # our rules:
-        #  - if the layer is the active exposure layer, bubble it up so that
-        #    it is before any other exposure layers or hazard layers.
-        #  - if the layer is the active hazard layer, bubble it up so that
-        #    it is before any other hazard layer.
-        #  - in all other cases preserve the original canvas render order
-
-        myNewCanvasLayers = []
-        for myCanvasLayer in myCanvasLayers:
-            if (myCanvasLayer in myExposureCanvasLayers or
-                myCanvasLayer in myHazardCanvasLayers):
-                if myExposureCanvasLayer is not None:
-                    #insert active exposure layer into new list
-                    myNewCanvasLayers.append(myExposureCanvasLayer)
-                    myExposureCanvasLayer = None
-                # As soon as soon as we hit the first hazard layer
-                # ensure the active one is dropped in before it
-                if (myHazardCanvasLayer is not None and myCanvasLayer
-                   in myHazardCanvasLayers):
-                    #insert active hazard into new list
-                    myNewCanvasLayers.append(myHazardCanvasLayer)
-                    myHazardCanvasLayer = None
-            if myCanvasLayer not in myNewCanvasLayers:
-                myNewCanvasLayers.append(myCanvasLayer)
-
-        myCanvas.setLayerSet(myNewCanvasLayers)
-        myCanvas.refresh()
-        self.connectLayerListener()

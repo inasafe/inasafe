@@ -239,7 +239,6 @@ class ISDockTest(unittest.TestCase):
     def setUp(self):
         """Fixture run before all tests"""
         DOCK.showOnlyVisibleLayersFlag = True
-        DOCK.bubbleLayersUpFlag = False
         loadStandardLayers()
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
@@ -877,40 +876,6 @@ class ISDockTest(unittest.TestCase):
                                 myHtml,
                                 myExpectedString)
         assert myExpectedString in myHtml, myMessage
-
-    def test_bubbleLayers(self):
-        """Test the bubbleLayers method works
-        """
-        self.tearDown()
-        # First part of scenario should have enabled run
-        myFileList = ['Flood_Design_Depth_Jakarta_geographic.asc',
-                      'Flood_Current_Depth_Jakarta_geographic.asc',
-                      'Population_Jakarta_geographic.asc']
-        loadLayers(myFileList)
-        DOCK.bubbleLayersUpFlag = True
-        DOCK.bubbleLayers()
-        myExpectedList = ['Penduduk Jakarta',
-                          'Banjir Jakarta seperti 2007',
-                          'Banjir Jakarta Mungkin']
-        myExpectedString = formattedList(myExpectedList)
-        myCanvasListString = canvasList()
-        myMessage = '\nGot Canvas Layer Order: \n%s\nExpected:\n%s\n\n%s' % (
-                            myCanvasListString, myExpectedString,
-                            combosToString(DOCK))
-        assert myExpectedString == myCanvasListString, myMessage
-
-        # Now select a differnt hazard and check the layers have bubbled
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-
-        myExpectedList = ['Penduduk Jakarta',
-                          'Banjir Jakarta Mungkin',
-                          'Banjir Jakarta seperti 2007']
-        myExpectedString = formattedList(myExpectedList)
-        myCanvasListString = canvasList()
-        myMessage = '\nGot Canvas Layer Order: \n%s\nExpected:\n%s\n\n%s' % (
-                            myCanvasListString, myExpectedString,
-                            combosToString(DOCK))
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISDockTest, 'test')
