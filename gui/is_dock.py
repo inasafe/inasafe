@@ -950,7 +950,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.restoreFunctionState(self.state['function'])
         self.wvResults.setHtml(self.state['report'])
 
-
     def restoreFunctionState(self, theOriginalFunction):
         """Restore the function combo to a known state.
         Args:
