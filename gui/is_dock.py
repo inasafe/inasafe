@@ -1109,19 +1109,31 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
-                            self.tr('Write to pdf'),
+                            self.tr('Write to PDF'),
                             getTempDir(),
                             self.tr('Pdf File (*.pdf)'))
         myMap = ISMap(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())
-        self.showBusy()
+        self.showBusy(self.tr('Map Creator'),
+                      self.tr('Generating your map as a PDF document...'),
+                      theProgress=20)
         try:
             myMap.makePdf(myFilename)
-            self.displayHtml(self.tr('<div><span class="label label-success">'
-                             'PDF Created</div>'
-                             'Your map was saved as %s' % myFilename))
+            self.showBusy(self.tr('Map Creator'),
+                             self.tr('Your PDF was created....opening using '
+                                     'the default PDF viewer on your system.'
+                                     'The generated pdf is saved as: %s' %
+                                     myFilename),
+                             theProgress=80
+                             )
             QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
                                  QtCore.QUrl.TolerantMode))
+            self.showBusy(self.tr('Map Creator'),
+                             self.tr('Processing complete.'
+                                     'The generated pdf is saved as: %s' %
+                                     myFilename),
+                             theProgress=100
+                             )
         except Exception, e:
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
