@@ -808,7 +808,7 @@ class ISDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
     def test_state(self):
-        """Check if the save/restart state methods work. See also
+        """Check if the save/restore state methods work. See also
         https://github.com/AIFDR/inasafe/issues/58
         """
 
