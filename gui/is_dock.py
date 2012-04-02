@@ -17,6 +17,7 @@ __version__ = '0.3.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+__type__ = 'alpha'  # beta, final etc will be shown in dock title
 
 import numpy
 from PyQt4 import QtGui, QtCore
@@ -85,7 +86,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         #settrace()
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
-        self.setWindowTitle(self.tr('InaSAFE %s' % __version__))
+        self.setWindowTitle(self.tr('InaSAFE %s %s' % (
+                                __version__, __type__)))
         # Save reference to the QGIS interface
         self.iface = iface
         self.header = None  # for storing html header template
