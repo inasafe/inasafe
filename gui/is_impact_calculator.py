@@ -117,14 +117,15 @@ def getOptimalExtent(theHazardGeoExtent,
               theViewportGeoExtent]:
 
         # Err message
-        msg = tr('Invalid bounding box %s (%s). It must be a sequence of the '
+        myMessage = tr('Invalid bounding box %s (%s). It must '
+                'be a sequence of the '
                'form [west, south, east, north]' % (str(x),
                                                     str(type(x))[1:-1]))
         try:
             list(x)
         except:
-            raise Exception(msg)
-        verify(len(x) == 4, msg)
+            raise Exception(myMessage)
+        verify(len(x) == 4, myMessage)
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
@@ -133,11 +134,11 @@ def getOptimalExtent(theHazardGeoExtent,
                                         theViewportGeoExtent)
     if myOptimalExtent is None:
         # Bounding boxes did not overlap
-        msg = tr('Bounding boxes of hazard data, exposure data '
+        myMessage = tr('Bounding boxes of hazard data, exposure data '
                'and viewport did not overlap, so no computation was '
                'done. Please make sure you pan to where the data is and '
                'that hazard and exposure data overlaps.')
-        raise Exception(msg)
+        raise Exception(myMessage)
 
     return myOptimalExtent
 
@@ -215,18 +216,67 @@ def getKeywordFromLayer(theLayer, keyword):
     try:
         myValue = theLayer.get_keywords(keyword)
     except Exception, e:
-        msg = tr('Keyword retrieval failed for %s (%s) \n %s' % (
+        myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 theLayer.get_filename(), keyword, str(e)))
-        raise KeywordNotFoundException(msg)
+        raise KeywordNotFoundException(myMessage)
     if not myValue or myValue == '':
-        msg = tr('No value was found for keyword %s in layer %s' % (
+        myMessage = tr('No value was found for keyword %s in layer %s' % (
                     theLayer.get_filename(), keyword))
-        raise KeywordNotFoundException(msg)
+        raise KeywordNotFoundException(myMessage)
     return myValue
 
 
+def getHashForDatasource(theDataSource):
+    """
+    Args:
+        None
+    Returns:
+        None
+    Raises:
+        None
+    """
+    import hashlib
+    myHash = hashlib.md5()
+    myHash.update(theDataSource)
+    myHash = myHash.hexdigest()
+    return myHash
+
+
+def getKeywordFromUri(theUri, keyword=None):
+    """Get metadata from the keywords file associated with a
+    non local layer (e.g. postgresql connection).
+
+    .. note:: Requires a str representing a layer uri as parameter.
+       .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\' 
+       password=\'bar\' sslmode=disable key=\'id\' srid=4326 
+       type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='
+
+    A hash will be constructed from the supplied uri and a lookup made
+    in a local SQLITE database for the keywords.
+
+    .. see:: getKeywordFromFile
+
+    Args:
+
+       * theLayerPath - a string representing a path to a layer
+           (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
+       * keyword - optional - the metadata keyword to retrieve e.g. 'title'
+
+    Returns:
+       A string containing the retrieved value for the keyword if
+       the keyword argument is specified, otherwise the
+       complete keywords dictionary is returned.
+
+    Raises:
+       KeywordNotFoundException if the keyword is not recognised.
+    """
+    myHash = getHashForDatasource(theUri)
+    
+
+
 def getKeywordFromFile(theLayerPath, keyword=None):
-    """Get metadata from the keywords file associated with a layer.
+    """Get metadata from the keywords file associated with a local
+     file in the file system.
 
     .. note:: Requires a str representing a file path instance
               as parameter As opposed to getKeywordFromLayer which
@@ -238,7 +288,7 @@ def getKeywordFromFile(theLayerPath, keyword=None):
 
        * theLayerPath - a string representing a path to a layer
            (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
-       * keyword - the metadata keyword to retrieve e.g. 'title'
+       * keyword - optional - the metadata keyword to retrieve e.g. 'title'
 
     Returns:
        A string containing the retrieved value for the keyword if
@@ -249,34 +299,35 @@ def getKeywordFromFile(theLayerPath, keyword=None):
        KeywordNotFoundException if the keyword is not recognised.
     """
     # check the source layer path is valid
+    myKeywordsFoundFlag = False
     if not os.path.isfile(theLayerPath):
-        msg = tr('Cannot get keywords from a non-existant file.'
+        myMessage = tr('Cannot get keywords from a non-existant file.'
                '%s does not exist.' % theLayerPath)
-        raise InvalidParameterException(msg)
+        raise InvalidParameterException(myMessage)
 
     # check there really is a keywords file for this layer
     myKeywordFilePath = os.path.splitext(theLayerPath)[0]
     myKeywordFilePath += '.keywords'
     if not os.path.isfile(myKeywordFilePath):
-        msg = tr('No keywords file found for %s' % theLayerPath)
-        raise InvalidParameterException(msg)
+        myMessage = tr('No keywords file found for %s' % theLayerPath)
+        raise InvalidParameterException(myMessage)
 
     #now get the requested keyword using the inasafe library
     myDictionary = None
     try:
         myDictionary = read_keywords(myKeywordFilePath)
     except Exception, e:
-        msg = tr('Keyword retrieval failed for %s (%s) \n %s' % (
+        myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 myKeywordFilePath, keyword, str(e)))
-        raise KeywordNotFoundException(msg)
+        raise KeywordNotFoundException(myMessage)
 
     # if no keyword was supplied, just return the dict
     if keyword is None:
         return myDictionary
     if not keyword in myDictionary:
-        msg = tr('No value was found in file %s for keyword %s' % (
+        myMessage = tr('No value was found in file %s for keyword %s' % (
                     myKeywordFilePath, keyword))
-        raise KeywordNotFoundException(msg)
+        raise KeywordNotFoundException(myMessage)
 
     myValue = myDictionary[keyword]
 
@@ -302,21 +353,21 @@ def getStyleInfo(theLayer):
         raise InvalidParameterException()
 
     if not hasattr(theLayer, 'get_style_info'):
-        msg = tr('Argument "%s" was not a valid layer instance' %
+        myMessage = tr('Argument "%s" was not a valid layer instance' %
                theLayer)
-        raise StyleInfoNotFoundException(msg)
+        raise StyleInfoNotFoundException(myMessage)
 
     try:
         myValue = theLayer.get_style_info()
     except Exception, e:
-        msg = tr('Styleinfo retrieval failed for %s\n %s' % (
+        myMessage = tr('Styleinfo retrieval failed for %s\n %s' % (
                     theLayer.get_filename(), str(e)))
-        raise StyleInfoNotFoundException(msg)
+        raise StyleInfoNotFoundException(myMessage)
 
     if not myValue or myValue == '':
-        msg = tr('No styleInfo was found for layer %s' % (
+        myMessage = tr('No styleInfo was found for layer %s' % (
                 theLayer.get_filename()))
-        raise StyleInfoNotFoundException(msg)
+        raise StyleInfoNotFoundException(myMessage)
 
     return myValue
 
@@ -400,16 +451,16 @@ class ISImpactCalculator():
         self.__filename = None
         self.__result = None
         if not self.__hazard_layer or self.__hazard_layer == '':
-            msg = tr('Error: Hazard layer not set.')
-            raise InsufficientParametersException(msg)
+            myMessage = tr('Error: Hazard layer not set.')
+            raise InsufficientParametersException(myMessage)
 
         if not self.__exposure_layer or self.__exposure_layer == '':
-            msg = tr('Error: Exposure layer not set.')
-            raise InsufficientParametersException(msg)
+            myMessage = tr('Error: Exposure layer not set.')
+            raise InsufficientParametersException(myMessage)
 
         if not self.__function or self.__function == '':
-            msg = tr('Error: Function not set.')
-            raise InsufficientParametersException(msg)
+            myMessage = tr('Error: Function not set.')
+            raise InsufficientParametersException(myMessage)
 
         # Call impact calculation engine
         myHazardLayer = read_layer(makeAscii(self.__hazard_layer))
@@ -530,10 +581,10 @@ class ImpactCalculatorThread(threading.Thread):
             self._impactLayer = calculate_impact(layers=myLayers,
                                                  impact_fcn=self._function)
         except Exception, e:
-            msg = tr('Calculation error encountered:\n')
-            msg += getExceptionWithStacktrace(e, html=True)
-            print msg
-            self._result = msg
+            myMessage = tr('Calculation error encountered:\n')
+            myMessage += getExceptionWithStacktrace(e, html=True)
+            print myMessage
+            self._result = myMessage
         else:
             self._result = tr('Calculation completed successfully.')
 
