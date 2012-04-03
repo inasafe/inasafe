@@ -25,13 +25,20 @@ from is_impact_calculator import (ISImpactCalculator,
                                   getStyleInfo,
                                   availableFunctions,
                                   getKeywordFromLayer,
-                                  getKeywordFromFile)
+                                  getKeywordFromFile,
+                                  getHashForDatasource,
+                                  writeKeywordsForUri,
+                                  readKeywordFromUri)
 #from inasafeexceptions import TestNotImplementedException
 from is_exceptions import (InsufficientParametersException,
                                 KeywordNotFoundException,
                                 StyleInfoNotFoundException)
 from storage.core import read_layer
 from storage.utilities_test import TESTDATA
+#Dont change this, not even formatting, you will break tests!
+URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
+         password=\'bar\' sslmode=disable key=\'id\' srid=4326
+         type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='"""
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -356,6 +363,21 @@ class ImpactCalculatorTest(unittest.TestCase):
             assert(), myMessage
 
     def test_getHashForDatasource(self):
+        """Test we can reliably get a hash for a uri"""
+        myHash = getHashForDatasource(URI)
+        myExpectedHash = '7cc153e1b119ca54a91ddb98a56ea95e'
+        myMessage = "Got: %s\nExpected: %s" % (myHash, myExpectedHash)
+        assert myHash == myExpectedHash, myMessage
+
+    def test_writeReadKeywordFromUri(self):
+        """Test we can set and get keywords for a non local datasource"""
+        myExpectedKeywords = {'category': 'exposure',
+                              'datatype': 'itb',
+                              'subcategory': 'building'}
+        writeKeywordsForUri(URI, myExpectedKeywords)
+        myKeywords = readKeywordFromUri(URI)
+        myMessage = 'Got: %s\n\nExpected %s' % (myKeywords, myExpectedKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactCalculatorTest, 'test')

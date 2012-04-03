@@ -21,9 +21,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+#Do not import any QGIS / Qt4 modules in this module!
 import sys
 import os
 import unicodedata
+import sqlite3 as sqlite
+import cPickle as pickle
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.dirname(__file__))
@@ -242,25 +245,61 @@ def getHashForDatasource(theDataSource):
     return myHash
 
 
-def getKeywordFromUri(theUri, keyword=None):
-    """Get metadata from the keywords file associated with a
-    non local layer (e.g. postgresql connection).
+def getCursor(theConnection):
+    try:
+        myCursor = theConnection.cursor()
+        myCursor.execute('SELECT SQLITE_VERSION()')
+        myData = myCursor.fetchone()
+        #print "SQLite version: %s" % myData
+        # Check if we have some tables, if not create them
+        mySQL = 'select sql from sqlite_master where type = \'table\';'
+        myCursor.execute(mySQL)
+        myData = myCursor.fetchone()
+        #print "Tables: %s" % myData
+        if myData is None:
+            print 'No tables found'
+            mySQL = ('create table keyword (hash varchar(32) primary key,'
+                     'dict text);')
+            print mySQL
+            myCursor.execute(mySQL)
+            myData = myCursor.fetchone()
+        else:
+            print 'Keywords table already exists'
+            pass
+        return myCursor
+    except sqlite.Error, e:
+        print "Error %s:" % e.args[0]
 
-    .. note:: Requires a str representing a layer uri as parameter.
-       .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\' 
-       password=\'bar\' sslmode=disable key=\'id\' srid=4326 
-       type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='
 
+def openConnection():
+    myConnection = None
+    try:
+        myConnection = sqlite.connect('keywords.db')
+    except sqlite.Error, e:
+        print "Error %s:" % e.args[0]
+    return myConnection
+
+
+def closeConnection(theConnection):
+    if theConnection:
+        theConnection.close()
+
+
+def writeKeywordsForUri(theUri, theKeywords):
+    """Write keywords for a URI into the keywords database. All the
+    keywords for the uri should be written in a single operation.
     A hash will be constructed from the supplied uri and a lookup made
-    in a local SQLITE database for the keywords.
+    in a local SQLITE database for the keywords. If there is an existing
+    record it will be updated, if not, a new one will be created.
 
-    .. see:: getKeywordFromFile
+    .. seealso:: getKeywordFrom, getKeywordsForUri
 
     Args:
 
-       * theLayerPath - a string representing a path to a layer
-           (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
-       * keyword - optional - the metadata keyword to retrieve e.g. 'title'
+       * theUri -  a str representing a layer uri as parameter.
+         .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
+         password=\'bar\' sslmode=disable key=\'id\' srid=4326
+       * keywords - mandatory - the metadata keyword to retrieve e.g. 'title'
 
     Returns:
        A string containing the retrieved value for the keyword if
@@ -271,7 +310,73 @@ def getKeywordFromUri(theUri, keyword=None):
        KeywordNotFoundException if the keyword is not recognised.
     """
     myHash = getHashForDatasource(theUri)
-    
+    myConnection = openConnection()
+    try:
+        myCursor = getCursor(myConnection)
+        #now see if we have any data for our hash
+        mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
+        myCursor.execute(mySQL)
+        myData = myCursor.fetchone()
+        myPickle = pickle.dumps(theKeywords, pickle.HIGHEST_PROTOCOL)
+        if myData is None:
+            #insert a new rec
+            myCursor.execute('insert into keyword(hash, dict) values(?, ?);',
+                         (myHash, sqlite.Binary(myPickle)))
+        else:
+            #update existing rec
+            #insert a new rec
+            myResult = myCursor.execute('update keyword set dict=? where hash = ?;',
+                         (sqlite.Binary(myPickle), myHash))
+            print myResult
+    except sqlite.Error, e:
+        print "SQLITE Error %s:" % e.args[0]
+    except Exception, e:
+        print "Error %s:" % e.args[0]
+    finally:
+        closeConnection(myConnection)
+
+
+def readKeywordFromUri(theUri, theKeyword=None):
+    """Get metadata from the keywords file associated with a
+    non local layer (e.g. postgresql connection).
+
+    A hash will be constructed from the supplied uri and a lookup made
+    in a local SQLITE database for the keywords. If there is an existing
+    record it will be returned, if not and error will be thrown.
+
+    .. seealso:: getKeywordFrom, writeKeywordsForUri
+
+    Args:
+
+       * theUri -  a str representing a layer uri as parameter.
+         .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
+         password=\'bar\' sslmode=disable key=\'id\' srid=4326
+       * keyword - optional - the metadata keyword to retrieve e.g. 'title'
+
+    Returns:
+       A string containing the retrieved value for the keyword if
+       the keyword argument is specified, otherwise the
+       complete keywords dictionary is returned.
+
+    Raises:
+       KeywordNotFoundException if the keyword is not found.
+    """
+    myHash = getHashForDatasource(theUri)
+    myConnection = openConnection()
+    try:
+        myCursor = getCursor(myConnection)
+        #now see if we have any data for our hash
+        mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
+        myCursor.execute(mySQL)
+        myData = myCursor.fetchone()
+        if myData is None:
+            raise KeywordNotFoundException('No keywords found for %s' % myHash)
+        else:
+            print myData
+    except sqlite.Error, e:
+        print "Error %s:" % e.args[0]
+    finally:
+        closeConnection(myConnection)
 
 
 def getKeywordFromFile(theLayerPath, keyword=None):
@@ -299,7 +404,6 @@ def getKeywordFromFile(theLayerPath, keyword=None):
        KeywordNotFoundException if the keyword is not recognised.
     """
     # check the source layer path is valid
-    myKeywordsFoundFlag = False
     if not os.path.isfile(theLayerPath):
         myMessage = tr('Cannot get keywords from a non-existant file.'
                '%s does not exist.' % theLayerPath)
