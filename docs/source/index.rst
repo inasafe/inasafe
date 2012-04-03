@@ -30,11 +30,11 @@ the print ready pdf output the plugin produces.
 Vulnerable building footprints shown in red.
 
 The latest source code is available at
-`https://github.com/AIFDR/inasafe <https://github.com/AIFDR/inasafe>`_
+`https://github.com/AIFDR/inasafe <https://github.com/AIFDR/inasafe>`_ (must open in new window using right click)
 which contains modules for risk calculations, gis functionality and functions
 for impact modelling.
 
-The documentation pages are available at `http://inasafe.readthedocs.org`_ which contains both user and developer guides.
+The documentation pages are available at `http://inasafe.readthedocs.org`_ (must open in new window using right click) which contains both user and developer guides.
 
 
 Contents
