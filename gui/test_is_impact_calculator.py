@@ -21,7 +21,12 @@ import os
 import unittest
 from is_impact_calculator import ISImpactCalculator
 #from inasafeexceptions import TestNotImplementedException
-from is_exceptions import InsufficientParametersException
+from is_exceptions import (InsufficientParametersException,
+                           KeywordNotFoundException,
+                           StyleInfoNotFoundException)
+
+from is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
+#TODO get rid of this....so we dont pull in stuff from storage...
 from storage.utilities_test import TESTDATA
 
 
@@ -112,6 +117,80 @@ class ImpactCalculatorTest(unittest.TestCase):
             assert(), myMessage
         myMessage = 'Expected an error, none encountered.'
         assert(), myMessage
+
+    def test_getKeywordFromImpactLayer(self):
+        """Check that we can get keywords from a created impact layer."""
+        myRunner = self.calculator.getRunner()
+        myRunner.run()
+        myImpactLayer = myRunner.impactLayer()
+        myKeyword = readKeywordsFromLayer(
+                                        myImpactLayer, 'impact_summary')
+        myMessage = 'Keyword request returned an empty string'
+        assert(myKeyword is not ''), myMessage
+        # Test we get an exception if keyword is not found
+        try:
+            myKeyword = readKeywordsFromLayer(
+                            myImpactLayer, 'boguskeyword')
+        except KeywordNotFoundException:
+            pass  # this is good
+        except Exception, e:
+            myMessage = ('Request for bogus keyword raised incorrect '
+                         'exception type: \n %s') % str(e)
+            assert(), myMessage
+
+    def test_issue100(self):
+        """Test for issue 100: unhashable type dict"""
+        exposure_path = os.path.join(TESTDATA,
+                            'OSM_building_polygons_20110905.shp')
+        hazard_path = os.path.join(TESTDATA,
+                            'Flood_Current_Depth_Jakarta_geographic.asc')
+        # Verify relevant metada is ok
+        #H = readSafeLayer(hazard_path)
+        #E = readSafeLayer(exposure_path)
+        self.calculator.setHazardLayer(hazard_path)
+        self.calculator.setExposureLayer(exposure_path)
+        self.calculator.setFunction('Temporarily Closed')
+        try:
+            myRunner = self.calculator.getRunner()
+            # run non threaded
+            myRunner.run()
+            myMessage = myRunner.result()
+            myImpactLayer = myRunner.impactLayer()
+            myFilename = myImpactLayer.get_filename()
+            assert(myFilename and not myFilename == '')
+            assert(myMessage and not myMessage == '')
+        except Exception, e:
+            myMessage = 'Calculator run failed. %s' % str(e)
+            assert(), myMessage
+
+    def test_getStyleInfo(self):
+        """Test that we can get styleInfo data from a vector's keyword file
+        """
+
+        myRunner = self.calculator.getRunner()
+        myRunner.start()
+        myRunner.join()
+        myImpactLayer = myRunner.impactLayer()
+
+        myMessage = ('Incorrect type returned from '
+               'myRunner.impactlayer(). Expected an impactlayer'
+               'but received a %s' % type(myImpactLayer))
+        assert hasattr(myImpactLayer, 'get_style_info'), myMessage
+
+        myStyleInfo = getStyleInfo(myImpactLayer)
+        myMessage = 'Style info request returned an empty string'
+        assert myStyleInfo is not '', myMessage
+        #print myStyleInfo
+
+        # Test we get an exception if style info is not found
+        try:
+            myStyleInfo = getStyleInfo('boguspath')
+        except StyleInfoNotFoundException:
+            pass  # This is good
+        except Exception, e:
+            myMessage = ('StyleInfo request for bogus file raised incorrect' +
+                   ' exception type: \n %s') % str(e)
+            raise StyleInfoNotFoundException(myMessage)
 
 
 if __name__ == '__main__':

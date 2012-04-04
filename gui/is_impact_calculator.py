@@ -252,8 +252,8 @@ class ImpactCalculatorThread(threading.Thread):
         """
         try:
             myLayers = [self._hazardLayer, self._exposureLayer]
-            self._impactLayer = calculateSafeImpact(layers=myLayers,
-                                                 impact_fcn=self._function)
+            self._impactLayer = calculateSafeImpact(theLayers=myLayers,
+                                        theFunction=self._function)
         except Exception, e:
             myMessage = tr('Calculation error encountered:\n')
             myMessage += getExceptionWithStacktrace(e, html=True)

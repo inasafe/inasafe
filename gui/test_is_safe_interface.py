@@ -21,18 +21,27 @@ import os
 import numpy
 import unittest
 from is_safe_interface import (getOptimalExtent,
-                               getStyleInfo,
                                availableFunctions,
-                               readKeywordsFromLayer,
                                readKeywordsFromFile,
                                readSafeLayer)
-from is_exceptions import (KeywordNotFoundException,
-                           StyleInfoNotFoundException)
+from is_exceptions import KeywordNotFoundException
 from storage.utilities_test import TESTDATA
 
 
 class SafeInterfaceTest(unittest.TestCase):
     """Test the SAFE API Wrapper"""
+
+    def setUp(self):
+        self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+        self.rasterShakePath = os.path.join(TESTDATA,
+                                            'Shakemap_Padang_2009.asc')
+        self.rasterTsunamiBBPath = os.path.join(TESTDATA,
+                                'tsunami_max_inundation_depth_BB_utm.asc')
+        self.rasterExposureBBPath = os.path.join(TESTDATA,
+                                                'tsunami_exposure_BB.shp')
+
+        self.rasterPopulationPath = os.path.join(TESTDATA, 'glp10ag.asc')
+
     def test_getOptimalExtent(self):
         """Optimal extent is calculated correctly
         """
@@ -149,32 +158,14 @@ class SafeInterfaceTest(unittest.TestCase):
         myList = availableFunctions(myList)
         assert myList > 1
 
-    def test_getKeywordFromLayer(self):
-        """Get keyword data from a inasafe layer's metadata file."""
-        myRunner = self.calculator.getRunner()
-        myRunner.run()
-        myImpactLayer = myRunner.impactLayer()
-        myKeyword = readKeywordsFromLayer(
-                                        myImpactLayer, 'impact_summary')
-        myMessage = 'Keyword request returned an empty string'
-        assert(myKeyword is not ''), myMessage
-        # Test we get an exception if keyword is not found
-        try:
-            myKeyword = readKeywordsFromLayer(
-                            myImpactLayer, 'boguskeyword')
-        except KeywordNotFoundException:
-            pass  # this is good
-        except Exception, e:
-            myMessage = ('Request for bogus keyword raised incorrect '
-                         'exception type: \n %s') % str(e)
-            assert(), myMessage
-
     def test_getKeywordFromFile(self):
         """Get keyword from a filesystem file's .keyword file."""
 
         myKeyword = readKeywordsFromFile(
                                     self.rasterShakePath, 'category')
-        myMessage = 'Keyword request did not return expected value'
+        myExpectedKeyword = 'hazard'
+        myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
+                    myKeyword, myExpectedKeyword, self.rasterShakePath)
         assert myKeyword == 'hazard', myMessage
 
         # Test we get an exception if keyword is not found
@@ -211,57 +202,3 @@ class SafeInterfaceTest(unittest.TestCase):
         myKeywords = readKeywordsFromFile(self.rasterExposureBBPath)
         print myKeywords == {'category': 'exposure',
                              'subcategory': 'building'}
-
-    def test_getStyleInfo(self):
-        """Test that we can get styleInfo data from a vector's keyword file
-        """
-
-        myRunner = self.calculator.getRunner()
-        myRunner.start()
-        myRunner.join()
-        myImpactLayer = myRunner.impactLayer()
-
-        myMessage = ('Incorrect type returned from '
-               'myRunner.impactlayer(). Expected an impactlayer'
-               'but received a %s' % type(myImpactLayer))
-        assert hasattr(myImpactLayer, 'get_style_info'), myMessage
-
-        myStyleInfo = getStyleInfo(myImpactLayer)
-        myMessage = 'Style info request returned an empty string'
-        assert myStyleInfo is not '', myMessage
-        #print myStyleInfo
-
-        # Test we get an exception if style info is not found
-        try:
-            myStyleInfo = getStyleInfo('boguspath')
-        except StyleInfoNotFoundException:
-            pass  # This is good
-        except Exception, e:
-            myMessage = ('StyleInfo request for bogus file raised incorrect' +
-                   ' exception type: \n %s') % str(e)
-            raise StyleInfoNotFoundException(myMessage)
-
-    def test_issue100(self):
-        """Test for issue 100: unhashable type dict"""
-        exposure_path = os.path.join(TESTDATA,
-                            'OSM_building_polygons_20110905.shp')
-        hazard_path = os.path.join(TESTDATA,
-                            'Flood_Current_Depth_Jakarta_geographic.asc')
-        # Verify relevant metada is ok
-        #H = readSafeLayer(hazard_path)
-        #E = readSafeLayer(exposure_path)
-        self.calculator.setHazardLayer(hazard_path)
-        self.calculator.setExposureLayer(exposure_path)
-        self.calculator.setFunction('Temporarily Closed')
-        try:
-            myRunner = self.calculator.getRunner()
-            # run non threaded
-            myRunner.run()
-            myMessage = myRunner.result()
-            myImpactLayer = myRunner.impactLayer()
-            myFilename = myImpactLayer.get_filename()
-            assert(myFilename and not myFilename == '')
-            assert(myMessage and not myMessage == '')
-        except Exception, e:
-            myMessage = 'Calculator run failed. %s' % str(e)
-            assert(), myMessage

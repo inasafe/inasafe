@@ -35,6 +35,21 @@ from storage.core import read_layer as safe_read_layer
 from storage.utilities import write_keywords as safe_write_keywords
 from impact_functions import get_plugins as safe_get_plugins
 from engine.core import calculate_impact as safe_calculate_impact
+from PyQt4.QtCore import QCoreApplication
+
+
+def tr(theText):
+    """We define a tr() alias here since the ISClipper implementation below
+    is not a class and does not inherit from QObject.
+    .. note:: see http://tinyurl.com/pyqt-differences
+    Args:
+       theText - string to be translated
+    Returns:
+       Translated version of the given string if available, otherwise
+       the original string.
+    """
+    myContext = "is_safe_interface"
+    return QCoreApplication.translate(myContext, theText)
 
 
 def verify(theStatement, theMessage=None):
