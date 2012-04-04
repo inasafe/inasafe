@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import numpy
+import tempfile
 import unittest
 from is_impact_calculator import (ISImpactCalculator,
                                   getOptimalExtent,
@@ -28,11 +29,13 @@ from is_impact_calculator import (ISImpactCalculator,
                                   getKeywordFromFile,
                                   getHashForDatasource,
                                   writeKeywordsForUri,
-                                  readKeywordFromUri)
+                                  readKeywordFromUri,
+                                  deleteKeywordsForUri)
 #from inasafeexceptions import TestNotImplementedException
 from is_exceptions import (InsufficientParametersException,
                                 KeywordNotFoundException,
                                 StyleInfoNotFoundException)
+from is_utilities import getTempDir
 from storage.core import read_layer
 from storage.utilities_test import TESTDATA
 #Dont change this, not even formatting, you will break tests!
@@ -371,12 +374,33 @@ class ImpactCalculatorTest(unittest.TestCase):
 
     def test_writeReadKeywordFromUri(self):
         """Test we can set and get keywords for a non local datasource"""
+        myHandle, myFilename = tempfile.mkstemp('.db', 'keywords_',
+                                            getTempDir())
+
+        # Ensure the file is deleted before we try to write to it
+        # fixes windows specific issue where you get a message like this
+        # ERROR 1: c:\temp\inasafe\clip_jpxjnt.shp is not a directory.
+        # This is because mkstemp creates the file handle and leaves
+        # the file open.
+        os.close(myHandle)
+        os.remove(myFilename)
         myExpectedKeywords = {'category': 'exposure',
                               'datatype': 'itb',
                               'subcategory': 'building'}
-        writeKeywordsForUri(URI, myExpectedKeywords)
-        myKeywords = readKeywordFromUri(URI)
-        myMessage = 'Got: %s\n\nExpected %s' % (myKeywords, myExpectedKeywords)
+        # SQL insert test
+        # On first write schema is empty and there is no matching hash
+        writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
+        # SQL Update test
+        # On second write schema is populated and we update matching hash
+        myExpectedKeywords = {'category': 'exposure',
+                              'datatype': 'OSM',  # <--note the change here!
+                              'subcategory': 'building'}
+        writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
+
+        myKeywords = readKeywordFromUri(URI, theDatabasePath=myFilename)
+        deleteKeywordsForUri(URI, myFilename)
+        myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
+                    myKeywords, myExpectedKeywords, myFilename)
         assert myKeywords == myExpectedKeywords, myMessage
 
 if __name__ == '__main__':
