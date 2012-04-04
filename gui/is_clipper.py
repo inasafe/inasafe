@@ -52,7 +52,7 @@ def tr(theText):
     return QCoreApplication.translate(myContext, theText)
 
 
-def clipLayer(theLayer, theExtent, theCellSize=None, extraKeywords=None):
+def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
     """Clip a Hazard or Exposure layer to the extents provided.
 
     .. note:: Will delegate to clipVectorLayer or clipRasterLayer as needed.
@@ -67,7 +67,7 @@ def clipLayer(theLayer, theExtent, theCellSize=None, extraKeywords=None):
         * theCellSize - cell size which the layer should be resampled to.
             This argument will be ignored for vector layers and if not provided
             for a raster layer, the native raster cell size will be used.
-        * extraKeywords - Optional keywords dictionary to be added to
+        * theExtraKeywords - Optional keywords dictionary to be added to
                           output layer
 
     Returns:
@@ -81,14 +81,14 @@ def clipLayer(theLayer, theExtent, theCellSize=None, extraKeywords=None):
     """
     if theLayer.type() == QgsMapLayer.VectorLayer:
         return _clipVectorLayer(theLayer, theExtent,
-                                extraKeywords=extraKeywords)
+                                theExtraKeywords=theExtraKeywords)
     else:
         return _clipRasterLayer(theLayer, theExtent, theCellSize,
-                                extraKeywords=extraKeywords)
+                                theExtraKeywords=theExtraKeywords)
 
 
 def _clipVectorLayer(theLayer, theExtent,
-                     extraKeywords=None):
+                     theExtraKeywords=None):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. The layer must be a
     vector layer or an exception will be thrown.
@@ -102,6 +102,8 @@ def _clipVectorLayer(theLayer, theExtent,
            extents in the form [xmin, ymin, xmax, ymax]. It is assumed
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
+        * theExtraKeywords - any additional keywords over and above the
+          original keywords that should be associated with the cliplayer.
 
     Returns:
         Path to the output clipped layer (placed in the
@@ -112,13 +114,13 @@ def _clipVectorLayer(theLayer, theExtent,
 
     """
     if not theLayer or not theExtent:
-        msg = tr('Layer or Extent passed to clip is None.')
-        raise InvalidParameterException(msg)
+        myMessage = tr('Layer or Extent passed to clip is None.')
+        raise InvalidParameterException(myMessage)
 
     if theLayer.type() != QgsMapLayer.VectorLayer:
-        msg = tr('Expected a vector layer but received a %s.' %
+        myMessage = tr('Expected a vector layer but received a %s.' %
                 str(theLayer.type()))
-        raise InvalidParameterException(msg)
+        raise InvalidParameterException(myMessage)
 
     myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
                                             getTempDir())
@@ -142,9 +144,9 @@ def _clipVectorLayer(theLayer, theExtent,
     # Get vector layer
     myProvider = theLayer.dataProvider()
     if myProvider is None:
-        msg = tr('Could not obtain data provider from '
+        myMessage = tr('Could not obtain data provider from '
                'layer "%s"' % theLayer.source())
-        raise Exception(msg)
+        raise Exception(myMessage)
 
     # get the layer field list, select by our extent then write to disk
     # .. todo:: FIXME - for different geometry types we should implement
@@ -167,10 +169,10 @@ def _clipVectorLayer(theLayer, theExtent,
                                    myGeoCrs,
                                    'ESRI Shapefile')
     if myWriter.hasError() != QgsVectorFileWriter.NoError:
-        msg = tr('Error when creating shapefile: <br>Filename:'
+        myMessage = tr('Error when creating shapefile: <br>Filename:'
                '%s<br>Error: %s' %
             (myFilename, myWriter.hasError()))
-        raise Exception(msg)
+        raise Exception(myMessage)
 
     # Reverse the coordinate xform now so that we can convert
     # geometries from layer crs to geocrs.
@@ -192,13 +194,14 @@ def _clipVectorLayer(theLayer, theExtent,
                        'and then try to run your analysis again.')
         raise NoFeaturesInExtentException(myMessage)
 
-    copyKeywords(theLayer.source(), myFilename, extraKeywords=extraKeywords)
+    copyKeywords(theLayer.source(), myFilename,
+                  theExtraKeywords=theExtraKeywords)
 
     return myFilename  # Filename of created file
 
 
 def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
-                     extraKeywords=None):
+                     theExtraKeywords=None):
     """Clip a Hazard or Exposure raster layer to the extents provided. The
     layer must be a raster layer or an exception will be thrown.
 
@@ -226,22 +229,22 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
 
     """
     if not theLayer or not theExtent:
-        msg = tr('Layer or Extent passed to clip is None.')
-        raise InvalidParameterException(msg)
+        myMessage = tr('Layer or Extent passed to clip is None.')
+        raise InvalidParameterException(myMessage)
 
     if theLayer.type() != QgsMapLayer.RasterLayer:
-        msg = tr('Expected a raster layer but received a %s.' %
+        myMessage = tr('Expected a raster layer but received a %s.' %
                str(theLayer.type()))
-        raise InvalidParameterException(msg)
+        raise InvalidParameterException(myMessage)
 
     myWorkingLayer = str(theLayer.source())
 
     # Check for existence of keywords file
     myKeywordsPath = myWorkingLayer[:-4] + '.keywords'
-    msg = tr('Input file to be clipped "%s" does not have the '
+    myMessage = tr('Input file to be clipped "%s" does not have the '
            'expected keywords file %s' % (myWorkingLayer,
                                           myKeywordsPath))
-    verify(os.path.isfile(myKeywordsPath), msg)
+    verify(os.path.isfile(myKeywordsPath), myMessage)
 
     # We need to provide gdalwarp with a dataset for the clip
     # because unline gdal_translate, it does not take projwin.
@@ -288,11 +291,11 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
         raise Exception(myMessage)
 
     # .. todo:: Check the result of the shell call is ok
-    copyKeywords(myWorkingLayer, myFilename, extraKeywords=extraKeywords)
+    copyKeywords(myWorkingLayer, myFilename, theExtraKeywords=theExtraKeywords)
     return myFilename  # Filename of created file
 
 
-def copyKeywords(sourceFile, destinationFile, extraKeywords=None):
+def copyKeywords(sourceFile, destinationFile, theExtraKeywords=None):
     """Helper to copy the keywords file from a source dataset
     to a destination dataset.
 
@@ -316,33 +319,33 @@ def copyKeywords(sourceFile, destinationFile, extraKeywords=None):
     myNewDestination = myDestinationBase + '.keywords'
 
     if not os.path.isfile(myNewSource):
-        msg = tr('Keywords file associated with dataset could not be found:'
-                 ' \n%s' % myNewSource)
-        raise KeywordNotFoundException(msg)
+        myMessage = tr('Keywords file associated with dataset could not be '
+                       'found: \n%s' % myNewSource)
+        raise KeywordNotFoundException(myMessage)
 
-    if extraKeywords is None:
-        extraKeywords = {}
-    msg = tr('Expected extraKeywords to be a dictionary. Got %s'
-           % str(type(extraKeywords))[1:-1])
-    verify(isinstance(extraKeywords, dict), msg)
+    if theExtraKeywords is None:
+        theExtraKeywords = {}
+    myMessage = tr('Expected extraKeywords to be a dictionary. Got %s'
+           % str(type(theExtraKeywords))[1:-1])
+    verify(isinstance(theExtraKeywords, dict), myMessage)
 
     try:
-        srcKeywords = readKeywordsFromFile(myNewSource)
-        dstKeywords = srcKeywords
-        for key in extraKeywords:
-            dstKeywords[key] = extraKeywords[key]
-        writeKeywordsToFile(dstKeywords, myNewDestination)
+        mySourceKeywords = readKeywordsFromFile(myNewSource)
+        myDestinationKeywords = mySourceKeywords
+        for key in theExtraKeywords:
+            myDestinationKeywords[key] = theExtraKeywords[key]
+        writeKeywordsToFile(myDestinationKeywords, myNewDestination)
     except Exception, e:
-        msg = tr('Failed to copy keywords file from :\n%s\nto\%s: %s' %
+        myMessage = tr('Failed to copy keywords file from :\n%s\nto\%s: %s' %
                (myNewSource, myNewDestination, str(e)))
-        raise Exception(msg)
+        raise Exception(myMessage)
 
     #try:
     #    shutil.copyfile(myNewSource, myNewDestination)
     #except Exception, e:
-    #    msg = ('Failed to copy keywords file from :\n%s\nto\%s: %s' %
+    #    myMessage = ('Failed to copy keywords file from :\n%s\nto\%s: %s' %
     #           (myNewSource, myNewDestination, str(e)))
-    #    raise Exception(msg)
+    #    raise Exception(myMessage)
 
     return
 

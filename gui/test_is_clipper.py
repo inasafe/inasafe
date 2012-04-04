@@ -173,7 +173,7 @@ class ISClipper(unittest.TestCase):
         # -------------------------------
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myGeoExtent,
-                             extraKeywords={'kermit': 'piggy'})
+                             theExtraKeywords={'kermit': 'piggy'})
 
         # Check the output is valid
         assert os.path.exists(myResult)
@@ -184,7 +184,7 @@ class ISClipper(unittest.TestCase):
 
         # Clip the raster to the bbox
         myResult = clipLayer(myRasterLayer, myGeoExtent,
-                             extraKeywords={'zoot': 'animal'})
+                             theExtraKeywords={'zoot': 'animal'})
 
         # Check the output is valid
         assert os.path.exists(myResult)

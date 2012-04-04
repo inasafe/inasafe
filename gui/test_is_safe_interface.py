@@ -28,7 +28,7 @@ from is_exceptions import KeywordNotFoundException
 from storage.utilities_test import TESTDATA
 
 
-class SafeInterfaceTest(unittest.TestCase):
+class ISSafeInterfaceTest(unittest.TestCase):
     """Test the SAFE API Wrapper"""
 
     def setUp(self):
@@ -202,3 +202,9 @@ class SafeInterfaceTest(unittest.TestCase):
         myKeywords = readKeywordsFromFile(self.rasterExposureBBPath)
         print myKeywords == {'category': 'exposure',
                              'subcategory': 'building'}
+
+
+if __name__ == '__main__':
+    suite = unittest.makeSuite(ISSafeInterfaceTest, 'test')
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)

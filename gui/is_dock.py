@@ -918,8 +918,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(myExposureLayer,
-                                          myGeoExtent, myCellSize,
-                                          extraKeywords=extraExposureKeywords)
+                                        myGeoExtent, myCellSize,
+                                        theExtraKeywords=extraExposureKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 

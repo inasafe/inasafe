@@ -13,6 +13,10 @@ from is_utilities import (getExceptionWithStacktrace,
                          setVectorStyle)
 from storage.utilities import bbox_intersection
 from utilities_test import loadLayer, getQgisTestApp
+from is_keyword_io import (getHashForDatasource,
+                          writeKeywordsForUri,
+                          readKeywordFromUri,
+                          deleteKeywordsForUri)
 from is_exceptions import HashNotFoundException
 from is_utilities import getTempDir
 
@@ -199,6 +203,6 @@ class ISUtilitiesTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISUtilitiesTest, 'test')
+    suite = unittest.makeSuite(ISKeywordIOTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
