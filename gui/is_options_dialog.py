@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import pyqtSignature
 from is_options_dialog_base import Ui_ISOptionsDialogBase
 from is_help import ISHelp
 from is_utilities import defaultKeywordDbPath
@@ -129,3 +130,20 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         self.saveState()
         self.dock.readSettings()
         self.close()
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_toolKeywordCachePath_clicked(self):
+        """Autoconnect slot activated when the select cache file tool button is
+        clicked,
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        myFilename = QtGui.QFileDialog.getSaveFileName(self,
+                    self.tr('Set keyword cache file'),
+                    defaultKeywordDbPath(),
+                    self.tr('Sqlite DB File (*.db)'))
+        self.leKeywordCachePath.setText(myFilename)
