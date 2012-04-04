@@ -19,10 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature
 from is_options_dialog_base import Ui_ISOptionsDialogBase
 from is_help import ISHelp
-from is_utilities import getExceptionWithStacktrace
+from is_utilities import defaultKeywordDbPath
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -90,6 +89,11 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
                             'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.cbxSetLayerNameFromTitle.setChecked(myFlag)
 
+        myPath = mySettings.value(
+                            'inasafe/keywordCachePath',
+                            defaultKeywordDbPath()).toString()
+        self.leKeywordCachePath.setText(myPath)
+
     def saveState(self):
         """
         Args: Store the options into the user's stored session info
@@ -105,6 +109,8 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
                             self.cbxVisibleLayersOnly.isChecked())
         mySettings.setValue('inasafe/setLayerNameFromTitleFlag',
                             self.cbxSetLayerNameFromTitle.isChecked())
+        mySettings.setValue('inasafe/keywordCachePath',
+                            self.leKeywordCachePath.text())
 
     def showHelp(self):
         """Load the help text for the options gui"""

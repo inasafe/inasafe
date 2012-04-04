@@ -401,6 +401,21 @@ def getCursor(theConnection):
         raise
 
 
+def defaultKeywordDbPath():
+    """Helper to get the default path for the keywords file (which is
+    <plugin dir>/keywords.db
+    Args:
+        None
+    Returns:
+        A string representing the path to where the keywords file is to be.
+    Raises:
+        None
+    """
+    myParentDir = os.path.abspath(
+                                os.path.join(os.path.dirname(__file__), '..'))
+    return os.path.join(myParentDir, 'keywords.db')
+
+
 def openConnection(thePath=None):
     """Open an sqlite connection to the keywords database.
     By default the keywords database will be used in the plugin dir,
@@ -414,10 +429,8 @@ def openConnection(thePath=None):
         An sqlite.Error is raised if anything goes wrong
     """
     myConnection = None
-    myParentDir = os.path.abspath(
-                                os.path.join(os.path.dirname(__file__), '..'))
     if thePath is None:
-        thePath = os.path.join(myParentDir, 'keywords.db')
+        thePath = defaultKeywordDbPath()
     try:
         myConnection = sqlite.connect(thePath)
     except sqlite.Error, e:
