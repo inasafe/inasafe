@@ -46,6 +46,11 @@ class KeywordNotFoundException(Exception):
     pass
 
 
+class HashNotFoundException(Exception):
+    """Custom exception for when a no keyword hash can be found."""
+    pass
+
+
 class StyleInfoNotFoundException(Exception):
     """Custom exception for when a no styleInfo can be found."""
     pass

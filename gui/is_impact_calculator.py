@@ -36,7 +36,8 @@ sys.path.append(pardir)
 from is_exceptions import (InsufficientParametersException,
                            KeywordNotFoundException,
                            StyleInfoNotFoundException,
-                           InvalidParameterException)
+                           InvalidParameterException,
+                           HashNotFoundException)
 
 from is_utilities import getExceptionWithStacktrace
 
@@ -274,7 +275,7 @@ def getCursor(theConnection):
 def openConnection():
     myConnection = None
     try:
-        myConnection = sqlite.connect('keywords.db')
+        myConnection = sqlite.connect('/tmp/keywords.db')
     except sqlite.Error, e:
         print "Error %s:" % e.args[0]
     return myConnection
@@ -320,18 +321,23 @@ def writeKeywordsForUri(theUri, theKeywords):
         myPickle = pickle.dumps(theKeywords, pickle.HIGHEST_PROTOCOL)
         if myData is None:
             #insert a new rec
-            myCursor.execute('insert into keyword(hash, dict) values(?, ?);',
-                         (myHash, sqlite.Binary(myPickle)))
+            #myCursor.execute('insert into keyword(hash) values(:hash);',
+            #             {'hash': myHash})
+            myCursor.execute('insert into keyword(hash, dict) values('
+                             ':hash, :dict);',
+                         {'hash': myHash, 'dict': sqlite.Binary(myPickle)})
+            myConnection.commit()
         else:
             #update existing rec
-            #insert a new rec
-            myResult = myCursor.execute('update keyword set dict=? where hash = ?;',
+            myCursor.execute('update keyword set dict=? where hash = ?;',
                          (sqlite.Binary(myPickle), myHash))
-            print myResult
     except sqlite.Error, e:
         print "SQLITE Error %s:" % e.args[0]
+        myConnection.rollback()
     except Exception, e:
         print "Error %s:" % e.args[0]
+        myConnection.rollback()
+        raise
     finally:
         closeConnection(myConnection)
 
@@ -368,13 +374,23 @@ def readKeywordFromUri(theUri, theKeyword=None):
         #now see if we have any data for our hash
         mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
         myCursor.execute(mySQL)
-        myData = myCursor.fetchone()
+        myData = myCursor.fetchone()[0]
+        #unpickle it to get our dict back
         if myData is None:
-            raise KeywordNotFoundException('No keywords found for %s' % myHash)
+            raise HashNotFoundException('No hash found for %s' % myHash)
+        myDict = pickle.loads(str(myData))
+        if theKeyword is None:
+            return myDict
+        if theKeyword in myDict:
+            return myDict[theKeyword]
         else:
-            print myData
+            raise KeywordNotFoundException('No hash found for %s' % myHash)
+
     except sqlite.Error, e:
         print "Error %s:" % e.args[0]
+    except Exception, e:
+        print "Error %s:" % e.args[0]
+        raise
     finally:
         closeConnection(myConnection)
 
