@@ -29,10 +29,9 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsFeature,
                        QgsVectorFileWriter)
 
-from is_safe_interface import (verify,
-                               readKeywordsFromFile)
+from is_safe_interface import verify
+from is_keyword_io import copyKeywords
 from is_exceptions import (InvalidParameterException,
-                            KeywordNotFoundException,
                             NoFeaturesInExtentException)
 from is_utilities import getTempDir
 from subprocess import call
@@ -293,61 +292,6 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # .. todo:: Check the result of the shell call is ok
     copyKeywords(myWorkingLayer, myFilename, theExtraKeywords=theExtraKeywords)
     return myFilename  # Filename of created file
-
-
-def copyKeywords(sourceFile, destinationFile, theExtraKeywords=None):
-    """Helper to copy the keywords file from a source dataset
-    to a destination dataset.
-
-    e.g.::
-
-    copyKeywords('foo.shp', 'bar.shp')
-
-    Will result in the foo.keywords file being copied to bar.keyword.
-
-    Optional argument extraKeywords is a dictionary with additional
-    keywords that will be added to the destination file
-    e.g::
-
-    copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
-    """
-
-    # FIXME (Ole): Need to turn qgis strings into normal strings earlier
-    mySourceBase = os.path.splitext(str(sourceFile))[0]
-    myDestinationBase = os.path.splitext(destinationFile)[0]
-    myNewSource = mySourceBase + '.keywords'
-    myNewDestination = myDestinationBase + '.keywords'
-
-    if not os.path.isfile(myNewSource):
-        myMessage = tr('Keywords file associated with dataset could not be '
-                       'found: \n%s' % myNewSource)
-        raise KeywordNotFoundException(myMessage)
-
-    if theExtraKeywords is None:
-        theExtraKeywords = {}
-    myMessage = tr('Expected extraKeywords to be a dictionary. Got %s'
-           % str(type(theExtraKeywords))[1:-1])
-    verify(isinstance(theExtraKeywords, dict), myMessage)
-
-    try:
-        mySourceKeywords = readKeywordsFromFile(myNewSource)
-        myDestinationKeywords = mySourceKeywords
-        for key in theExtraKeywords:
-            myDestinationKeywords[key] = theExtraKeywords[key]
-        writeKeywordsToFile(myDestinationKeywords, myNewDestination)
-    except Exception, e:
-        myMessage = tr('Failed to copy keywords file from :\n%s\nto\%s: %s' %
-               (myNewSource, myNewDestination, str(e)))
-        raise Exception(myMessage)
-
-    #try:
-    #    shutil.copyfile(myNewSource, myNewDestination)
-    #except Exception, e:
-    #    myMessage = ('Failed to copy keywords file from :\n%s\nto\%s: %s' %
-    #           (myNewSource, myNewDestination, str(e)))
-    #    raise Exception(myMessage)
-
-    return
 
 
 def extentToKml(theExtent):
