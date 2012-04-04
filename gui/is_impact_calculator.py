@@ -321,7 +321,7 @@ def closeConnection(theConnection):
         theConnection.close()
 
 
-def deleteKeywordsForUri(theUri, theDatbasePath=None, theDatabasePath=None):
+def deleteKeywordsForUri(theUri, theDatabasePath=None):
     """Delete keywords for a URI in the keywords database.
     A hash will be constructed from the supplied uri and a lookup made
     in a local SQLITE database for the keywords. If there is an existing
@@ -458,10 +458,11 @@ def readKeywordFromUri(theUri, theKeyword=None, theDatabasePath=None):
         #now see if we have any data for our hash
         mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
         myCursor.execute(mySQL)
-        myData = myCursor.fetchone()[0]
+        myData = myCursor.fetchone()
         #unpickle it to get our dict back
         if myData is None:
             raise HashNotFoundException('No hash found for %s' % myHash)
+        myData = myData[0]  # first field
         myDict = pickle.loads(str(myData))
         if theKeyword is None:
             return myDict

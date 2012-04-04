@@ -34,7 +34,8 @@ from is_impact_calculator import (ISImpactCalculator,
 #from inasafeexceptions import TestNotImplementedException
 from is_exceptions import (InsufficientParametersException,
                                 KeywordNotFoundException,
-                                StyleInfoNotFoundException)
+                                StyleInfoNotFoundException,
+                                HashNotFoundException)
 from is_utilities import getTempDir
 from storage.core import read_layer
 from storage.utilities_test import TESTDATA
@@ -396,12 +397,30 @@ class ImpactCalculatorTest(unittest.TestCase):
                               'datatype': 'OSM',  # <--note the change here!
                               'subcategory': 'building'}
         writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
-
+        # Test getting all keywords
         myKeywords = readKeywordFromUri(URI, theDatabasePath=myFilename)
-        deleteKeywordsForUri(URI, myFilename)
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeywords, myExpectedKeywords, myFilename)
         assert myKeywords == myExpectedKeywords, myMessage
+        # Test getting just a single keyword
+        myKeyword = readKeywordFromUri(URI, 'datatype',
+                                        theDatabasePath=myFilename)
+        myExpectedKeyword = 'OSM'
+        myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
+                    myKeyword, myExpectedKeyword, myFilename)
+        assert myKeyword == myExpectedKeyword, myMessage
+        # Test deleting keywords actually does delete
+        deleteKeywordsForUri(URI, myFilename)
+        try:
+            myKeyword = readKeywordFromUri(URI, 'datatype',
+                                        theDatabasePath=myFilename)
+            #if the above didnt cause an exception then bad
+            myMessage = 'Expected a HashNotFoundException to be raised'
+            assert myMessage
+        except HashNotFoundException:
+            #we expect this outcome so good!
+            pass
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactCalculatorTest, 'test')
