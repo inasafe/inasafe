@@ -31,7 +31,7 @@ from qgis.core import (QgsComposition,
 from qgis.gui import QgsComposerView
 from is_exceptions import LegendLayerException
 from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
-from is_impact_calculator import getKeywordFromFile
+from is_impact_calculator import readKeywordsFromFile
 from is_utilities import getTempDir, htmlHeader, htmlFooter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -154,7 +154,7 @@ class ISMap():
                                 'has no layer set.')
             raise LegendLayerException(myMessage)
         try:
-            getKeywordFromFile(str(self.layer.source()), 'impact_summary')
+            readKeywordsFromFile(str(self.layer.source()), 'impact_summary')
         except Exception, e:
             myMessage = self.tr('This layer does not appear to be an impact '
                                 'layer. Try selecting an impact layer in the '
@@ -987,7 +987,7 @@ class ISMap():
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         try:
-            myTitle = getKeywordFromFile(str(self.layer.source()), 'map_title')
+            myTitle = readKeywordsFromFile(str(self.layer.source()), 'map_title')
             return myTitle
         except Exception, e:
             return None
@@ -1003,7 +1003,7 @@ class ISMap():
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         try:
-            myHtml = getKeywordFromFile(str(self.layer.source()),
+            myHtml = readKeywordsFromFile(str(self.layer.source()),
                                         'impact_summary')
             return self.renderHtml(myHtml, 58)
         except Exception, e:
@@ -1020,7 +1020,7 @@ class ISMap():
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         try:
-            myHtml = getKeywordFromFile(str(self.layer.source()),
+            myHtml = readKeywordsFromFile(str(self.layer.source()),
                                         'impact_table')
             return self.renderHtml(myHtml, 98)
         except Exception, e:

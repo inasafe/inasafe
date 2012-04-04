@@ -28,8 +28,7 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsFeature,
                        QgsVectorFileWriter)
 
-from storage.utilities import read_keywords, write_keywords, verify
-
+from is_impact_calculator import verify
 from is_exceptions import (InvalidParameterException,
                             KeywordNotFoundException,
                             NoFeaturesInExtentException)
@@ -233,10 +232,10 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
                str(theLayer.type()))
         raise InvalidParameterException(msg)
 
-    myWorkingLayer = theLayer.source()
+    myWorkingLayer = str(theLayer.source())
 
     # Check for existence of keywords file
-    myKeywordsPath = str(myWorkingLayer)[:-4] + '.keywords'
+    myKeywordsPath = myWorkingLayer[:-4] + '.keywords'
     msg = tr('Input file to be clipped "%s" does not have the '
            'expected keywords file %s' % (myWorkingLayer,
                                           myKeywordsPath))
@@ -326,7 +325,7 @@ def copyKeywords(sourceFile, destinationFile, extraKeywords=None):
     verify(isinstance(extraKeywords, dict), msg)
 
     try:
-        srcKeywords = read_keywords(myNewSource)
+        srcKeywords = readKeywordsFromFile(myNewSource)
         dstKeywords = srcKeywords
         for key in extraKeywords:
             dstKeywords[key] = extraKeywords[key]

@@ -30,7 +30,7 @@ from is_help import ISHelp
 from PyQt4.QtCore import pyqtSignature
 from storage.utilities import write_keywords
 from is_exceptions import InvalidParameterException
-from is_impact_calculator import getKeywordFromFile
+from is_impact_calculator import readKeywordsFromFile
 from odict import OrderedDict
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -505,7 +505,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         mySource = str(self.layer.source())
         self.calculator = ISImpactCalculator()
         try:
-            myKeywords = getKeywordFromFile(mySource)
+            myKeywords = readKeywordsFromFile(mySource)
         except InvalidParameterException:
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume
