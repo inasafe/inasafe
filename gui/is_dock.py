@@ -31,13 +31,13 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
-from qgis.gui import QgsMapCanvasLayer
-from is_impact_calculator import (ISImpactCalculator,
-                              readKeywordsFromFile,
-                              readKeywordsFromLayer,
-                              availableFunctions)
+from is_impact_calculator import ISImpactCalculator
+from is_safe_interface import (readKeywordsFromFile,
+                               readKeywordsFromLayer,
+                               availableFunctions,
+                               getOptimalExtent,
+                               getBufferedExtent)
 from is_clipper import clipLayer
-from is_impact_calculator import getOptimalExtent, getBufferedExtent
 from is_exceptions import (KeywordNotFoundException,
                             InvalidParameterException)
 from is_map import ISMap

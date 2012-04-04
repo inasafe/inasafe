@@ -32,6 +32,7 @@ from is_exceptions import (KeywordNotFoundException,
                            StyleInfoNotFoundException,
                            InvalidParameterException)
 from storage.core import read_layer as safe_read_layer
+from storage.utilities import write_keywords as safe_write_keywords
 from impact_functions import get_plugins as safe_get_plugins
 from engine.core import calculate_impact as safe_calculate_impact
 
@@ -267,6 +268,19 @@ def readKeywordsFromFile(theLayerPath, keyword=None):
     return myValue
 
 
+def writeKeywordsToFile(theFilename, theKeywords):
+    """Thin wrapper around the safe write_keywords function.
+    Args:
+        * thePath - str representing path to layer that must be written.
+        * theKeywords - a dictionary of keywords to be written
+    Returns:
+        A safe readSafeLayer object is returned.
+    Raises:
+        None
+    """
+    safe_write_keywords(theFilename, theKeywords)
+
+
 def getStyleInfo(theLayer):
     """Get styleinfo associated with a layer.
     Args:
@@ -311,20 +325,20 @@ def makeAscii(x):
     return x
 
 
-def read_layer(thePath):
+def readSafeLayer(thePath):
     """Thin wrapper around the safe read_layer function.
     Args:
         thePath - str representing path to layer that must be opened.
     Returns:
-        A safe read_layer object is returned.
+        A safe readSafeLayer object is returned.
     Raises:
         None
     """
     return safe_read_layer(makeAscii(thePath))
 
 
-def get_plugins(theFunction=None):
-    """Thin wrapper around the safe get_plugins function.
+def getSafeImpactFunctions(theFunction=None):
+    """Thin wrapper around the safe impact_functions function.
     Args:
         theFunction - optional str giving a specific plugins name that should
         be fetched.
@@ -336,7 +350,7 @@ def get_plugins(theFunction=None):
     return safe_get_plugins(makeAscii(theFunction))
 
 
-def calculate_impact(theLayers, theFunction):
+def calculateSafeImpact(theLayers, theFunction):
     """Thin wrapper around the safe calculate_impact function.
     Args:
         * theLayers - a list of layers to be used. They should be ordered

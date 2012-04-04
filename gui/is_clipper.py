@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
+from gui.is_safe_interface import writeKeywordsToFile
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.3.0'
@@ -28,7 +29,8 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsFeature,
                        QgsVectorFileWriter)
 
-from is_impact_calculator import verify
+from is_safe_interface import (verify,
+                               readKeywordsFromFile)
 from is_exceptions import (InvalidParameterException,
                             KeywordNotFoundException,
                             NoFeaturesInExtentException)
@@ -329,7 +331,7 @@ def copyKeywords(sourceFile, destinationFile, extraKeywords=None):
         dstKeywords = srcKeywords
         for key in extraKeywords:
             dstKeywords[key] = extraKeywords[key]
-        write_keywords(dstKeywords, myNewDestination)
+        writeKeywordsToFile(dstKeywords, myNewDestination)
     except Exception, e:
         msg = tr('Failed to copy keywords file from :\n%s\nto\%s: %s' %
                (myNewSource, myNewDestination, str(e)))

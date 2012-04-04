@@ -18,23 +18,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-import tempfile
 import unittest
-from is_impact_calculator import (ISImpactCalculator,
-                                  getHashForDatasource,
-                                  writeKeywordsForUri,
-                                  readKeywordFromUri,
-                                  deleteKeywordsForUri)
+from is_impact_calculator import ISImpactCalculator
 #from inasafeexceptions import TestNotImplementedException
-from is_exceptions import (InsufficientParametersException,
-                                HashNotFoundException)
-from is_utilities import getTempDir
-
+from is_exceptions import InsufficientParametersException
 from storage.utilities_test import TESTDATA
-#Dont change this, not even formatting, you will break tests!
-URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
-         password=\'bar\' sslmode=disable key=\'id\' srid=4326
-         type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='"""
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -124,61 +112,6 @@ class ImpactCalculatorTest(unittest.TestCase):
             assert(), myMessage
         myMessage = 'Expected an error, none encountered.'
         assert(), myMessage
-
-    def test_getHashForDatasource(self):
-        """Test we can reliably get a hash for a uri"""
-        myHash = getHashForDatasource(URI)
-        myExpectedHash = '7cc153e1b119ca54a91ddb98a56ea95e'
-        myMessage = "Got: %s\nExpected: %s" % (myHash, myExpectedHash)
-        assert myHash == myExpectedHash, myMessage
-
-    def test_writeReadKeywordFromUri(self):
-        """Test we can set and get keywords for a non local datasource"""
-        myHandle, myFilename = tempfile.mkstemp('.db', 'keywords_',
-                                            getTempDir())
-
-        # Ensure the file is deleted before we try to write to it
-        # fixes windows specific issue where you get a message like this
-        # ERROR 1: c:\temp\inasafe\clip_jpxjnt.shp is not a directory.
-        # This is because mkstemp creates the file handle and leaves
-        # the file open.
-        os.close(myHandle)
-        os.remove(myFilename)
-        myExpectedKeywords = {'category': 'exposure',
-                              'datatype': 'itb',
-                              'subcategory': 'building'}
-        # SQL insert test
-        # On first write schema is empty and there is no matching hash
-        writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
-        # SQL Update test
-        # On second write schema is populated and we update matching hash
-        myExpectedKeywords = {'category': 'exposure',
-                              'datatype': 'OSM',  # <--note the change here!
-                              'subcategory': 'building'}
-        writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
-        # Test getting all keywords
-        myKeywords = readKeywordFromUri(URI, theDatabasePath=myFilename)
-        myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
-                    myKeywords, myExpectedKeywords, myFilename)
-        assert myKeywords == myExpectedKeywords, myMessage
-        # Test getting just a single keyword
-        myKeyword = readKeywordFromUri(URI, 'datatype',
-                                        theDatabasePath=myFilename)
-        myExpectedKeyword = 'OSM'
-        myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
-                    myKeyword, myExpectedKeyword, myFilename)
-        assert myKeyword == myExpectedKeyword, myMessage
-        # Test deleting keywords actually does delete
-        deleteKeywordsForUri(URI, myFilename)
-        try:
-            myKeyword = readKeywordFromUri(URI, 'datatype',
-                                        theDatabasePath=myFilename)
-            #if the above didnt cause an exception then bad
-            myMessage = 'Expected a HashNotFoundException to be raised'
-            assert myMessage
-        except HashNotFoundException:
-            #we expect this outcome so good!
-            pass
 
 
 if __name__ == '__main__':

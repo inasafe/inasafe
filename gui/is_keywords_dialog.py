@@ -30,7 +30,7 @@ from is_help import ISHelp
 from PyQt4.QtCore import pyqtSignature
 from storage.utilities import write_keywords
 from is_exceptions import InvalidParameterException
-from is_impact_calculator import readKeywordsFromFile
+from is_safe_interface import readKeywordsFromFile
 from odict import OrderedDict
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.

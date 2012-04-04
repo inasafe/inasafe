@@ -24,7 +24,8 @@ from is_safe_interface import (getOptimalExtent,
                                getStyleInfo,
                                availableFunctions,
                                readKeywordsFromLayer,
-                               readKeywordsFromFile)
+                               readKeywordsFromFile,
+                               readSafeLayer)
 from is_exceptions import (KeywordNotFoundException,
                            StyleInfoNotFoundException)
 from storage.utilities_test import TESTDATA
@@ -56,8 +57,8 @@ class SafeInterfaceTest(unittest.TestCase):
                                        0.0083333333333333003)}
 
         # Verify relevant metada is ok
-        H = read_layer(hazard_path)
-        E = read_layer(exposure_path)
+        H = readSafeLayer(hazard_path)
+        E = readSafeLayer(exposure_path)
 
         hazard_bbox = H.get_bounding_box()
         assert numpy.allclose(hazard_bbox, haz_metadata['bounding_box'],
@@ -247,8 +248,8 @@ class SafeInterfaceTest(unittest.TestCase):
         hazard_path = os.path.join(TESTDATA,
                             'Flood_Current_Depth_Jakarta_geographic.asc')
         # Verify relevant metada is ok
-        #H = read_layer(hazard_path)
-        #E = read_layer(exposure_path)
+        #H = readSafeLayer(hazard_path)
+        #E = readSafeLayer(exposure_path)
         self.calculator.setHazardLayer(hazard_path)
         self.calculator.setExposureLayer(exposure_path)
         self.calculator.setFunction('Temporarily Closed')

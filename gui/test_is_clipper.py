@@ -30,9 +30,9 @@ import numpy
 from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer)
 
-from storage.core import read_layer
+from is_safe_interface import readSafeLayer
 from is_clipper import clipLayer, extentToKml
-from is_impact_calculator import getOptimalExtent
+from is_safe_interface import getOptimalExtent
 from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
                             GEOCRS,
@@ -159,14 +159,14 @@ class ISClipper(unittest.TestCase):
 
         # Check the output is valid
         assert os.path.exists(myResult)
-        read_layer(myResult)
+        readSafeLayer(myResult)
 
         # Clip the raster to the bbox
         myResult = clipLayer(myRasterLayer, myGeoExtent)
 
         # Check the output is valid
         assert os.path.exists(myResult)
-        read_layer(myResult)
+        readSafeLayer(myResult)
 
         # -------------------------------
         # Check the extra keywords option
@@ -177,7 +177,7 @@ class ISClipper(unittest.TestCase):
 
         # Check the output is valid
         assert os.path.exists(myResult)
-        L = read_layer(myResult)
+        L = readSafeLayer(myResult)
         kwds = L.get_keywords()
         msg = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
         assert kwds['kermit'] == 'piggy'
@@ -188,7 +188,7 @@ class ISClipper(unittest.TestCase):
 
         # Check the output is valid
         assert os.path.exists(myResult)
-        L = read_layer(myResult)
+        L = readSafeLayer(myResult)
         kwds = L.get_keywords()
 
         msg = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
@@ -221,7 +221,7 @@ class ISClipper(unittest.TestCase):
             myRasterPath = ('%s/%s' % (TESTDATA, test_filename))
 
             # Get reference values
-            R = read_layer(myRasterPath)
+            R = readSafeLayer(myRasterPath)
             R_min_ref, R_max_ref = R.get_extrema()
             del R_max_ref
             del R_min_ref
@@ -246,7 +246,7 @@ class ISClipper(unittest.TestCase):
                 myResult = clipLayer(myRasterLayer, bounding_box, res,
                                      extraKeywords=extraKeywords)
 
-                R = read_layer(myResult)
+                R = readSafeLayer(myResult)
                 A_native = R.get_data(scaling=False)
                 A_scaled = R.get_data(scaling=True)
 
