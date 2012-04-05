@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -301,7 +301,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
         myKeywords = myDialog.getKeywords()
         myExpectedKeywords = {'subcategory': 'earthquake',
-                             'unit': 'MMI'}
+                             'unit': 'mmi'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
 
@@ -327,7 +327,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
         myExpectedKeywords = {'category': 'hazard',
                              'subcategory': 'earthquake',
-                             'unit': 'MMI'}
+                             'unit': 'mmi'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
 

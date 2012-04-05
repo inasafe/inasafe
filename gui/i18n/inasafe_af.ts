@@ -274,8 +274,8 @@ to%s: %s</source>
     <name>ISDock</name>
     <message>
         <location filename="is_dock.py" line="308"/>
-        <source>&lt;span class=&quot;label notice&quot;&gt;Getting started:&lt;/span&gt; To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
-        <translation>&lt;span class=&quot;label notice&quot;&gt;Om te begin:&lt;/span&gt; Om hierdie funksie te gebruik, moet daar eears data laers in jou QGIS projek bestaan. Maak sekere dat tenminste een &lt;em&gt;gevaar&lt;/em&gt; laer (b.w. aardskutting MMI) en een &lt;em&gt;blootstelling&lt;/em&gt;(b.w. wonings) beskikbaar is. Wanneer jy reg is, klik die &lt;em&gt;Begin&lt;/em&gt; knoppie onder.</translation>
+        <source>&lt;span class=&quot;label notice&quot;&gt;Getting started:&lt;/span&gt; To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake mmi) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
+        <translation>&lt;span class=&quot;label notice&quot;&gt;Om te begin:&lt;/span&gt; Om hierdie funksie te gebruik, moet daar eears data laers in jou QGIS projek bestaan. Maak sekere dat tenminste een &lt;em&gt;gevaar&lt;/em&gt; laer (b.w. aardskutting mmi) en een &lt;em&gt;blootstelling&lt;/em&gt;(b.w. wonings) beskikbaar is. Wanneer jy reg is, klik die &lt;em&gt;Begin&lt;/em&gt; knoppie onder.</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="322"/>

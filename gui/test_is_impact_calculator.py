@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -179,7 +179,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         myKeywords = getKeywordFromFile(self.rasterShakePath)
         assert myKeywords == {'category': 'hazard',
                               'subcategory': 'earthquake',
-                              'unit': 'MMI'}
+                              'unit': 'mmi'}
 
         myKeywords = getKeywordFromFile(self.rasterPopulationPath)
         assert myKeywords == {'category': 'exposure',

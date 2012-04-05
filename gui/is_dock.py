@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -314,7 +314,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             '<span class="label notice">Getting started:'
             '</span> To use this tool you need to add some layers to your '
             'QGIS project. Ensure that at least one <em>hazard</em> layer '
-            '(e.g. earthquake MMI) and one <em>exposure</em> layer (e.g. '
+            '(e.g. earthquake mmi) and one <em>exposure</em> layer (e.g. '
             'dwellings) re available. When you are ready, click the <em>'
             'run</em> button below.')
             return (False, myMessage)
