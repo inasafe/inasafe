@@ -276,7 +276,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     if sys.platform == 'darwin':  # Mac OS X
         # .. todo:: FIXME - softcode gdal version in this path
         myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
-                              'Versions/1.8/Programs/')
+                              'Versions/1.9/Programs/')
     myCommand = myExecutablePrefix + myCommand
 
     # Now run GDAL warp scottie...
@@ -287,7 +287,15 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
         myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'
                      % (myCommand, str(e)))
-        raise Exception(myMessage)
+        # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
+        if sys.platform == 'darwin':  # Mac OS X
+            if 'Errno 4' in str(e):
+                # continue as the error seems to be non critical
+                pass
+            else:
+                raise Exception(myMessage)
+        else:
+            raise Exception(myMessage)
 
     # .. todo:: Check the result of the shell call is ok
     copyKeywords(myWorkingLayer, myFilename, theExtraKeywords=theExtraKeywords)
