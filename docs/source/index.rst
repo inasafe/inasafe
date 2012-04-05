@@ -6,13 +6,12 @@
 Welcome to |project_name|'s documentation!
 ==========================================
 
-|project_name| (Indonesian Scenario Assessment for Emergencies) is a Quantum
+|project_name| (Indonesia Scenario Assessment for Emergencies) is a Quantum
 GIS plugin that enables you to perform risk scenario analysis of natural
 disaster events such as a flood, tsunami, earthquake
 etc.
 
-It is developed jointly by AusAID (AIFDR) and World Bank (GFDRR) as an
-Open Source project
+It is developed jointly by BNPB, AusAID (AIFDR) and World Bank (GFDRR/EAP) as an Open Source project
 
 You can find out more about the |project_name| project by visiting
 `www.inasafe.org <http://www.inasafe.org/>`_.
@@ -30,11 +29,11 @@ the print ready pdf output the plugin produces.
 Vulnerable building footprints shown in red.
 
 The latest source code is available at
-`https://github.com/AIFDR/inasafe <https://github.com/AIFDR/inasafe>`_
+`https://github.com/AIFDR/inasafe <https://github.com/AIFDR/inasafe>`_ (must open in new window using right click)
 which contains modules for risk calculations, gis functionality and functions
 for impact modelling.
 
-The documentation pages are available at `http://inasafe.readthedocs.org`_ which contains both user and developer guides.
+The documentation pages are available at `http://inasafe.readthedocs.org`_ (must open in new window using right click) which contains both user and developer guides.
 
 
 Contents
