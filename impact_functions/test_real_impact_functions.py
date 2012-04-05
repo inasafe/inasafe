@@ -51,7 +51,7 @@ class Test_real_plugins(unittest.TestCase):
         #    print p, P[p]
 
         # This one should get 2 earthquake building impact functions
-        D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'MMI'}
+        D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'mmi'}
         D2 = {'category': 'exposure', 'datatype': 'itb',
               'subcategory': 'building'}
 
