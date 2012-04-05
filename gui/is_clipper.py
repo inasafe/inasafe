@@ -273,7 +273,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     if sys.platform == 'darwin':  # Mac OS X
         # .. todo:: FIXME - softcode gdal version in this path
         myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
-                              'Versions/1.8/Programs/')
+                              'Versions/1.9/Programs/')
     myCommand = myExecutablePrefix + myCommand
 
     # Now run GDAL warp scottie...
