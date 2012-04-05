@@ -301,7 +301,8 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
         myKeywords = myDialog.getKeywords()
         myExpectedKeywords = {'subcategory': 'earthquake',
-                             'unit': 'mmi'}
+                             'unit': 'mmi',
+                              'title': 'Shakemap_Padang_2009'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
 
@@ -327,7 +328,8 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
         myExpectedKeywords = {'category': 'hazard',
                              'subcategory': 'earthquake',
-                             'unit': 'mmi'}
+                             'unit': 'mmi',
+                             'title': 'Shakemap_Padang_2009'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
 

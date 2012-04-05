@@ -179,7 +179,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         myKeywords = getKeywordFromFile(self.rasterShakePath)
         assert myKeywords == {'category': 'hazard',
                               'subcategory': 'earthquake',
-                              'unit': 'mmi'}
+                              'unit': 'mmi',
+                              'title': 'Shakemap_Padang_2009'}
 
         myKeywords = getKeywordFromFile(self.rasterPopulationPath)
         assert myKeywords == {'category': 'exposure',
