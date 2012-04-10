@@ -39,8 +39,8 @@ from PyQt4.QtCore import QCoreApplication
 
 
 def tr(theText):
-    """We define a tr() alias here since the ISClipper implementation below
-    is not a class and does not inherit from QObject.
+    """We define a tr() alias here since the is_safe_interface implementation
+    below is not a class and does not inherit from QObject.
     .. note:: see http://tinyurl.com/pyqt-differences
     Args:
        theText - string to be translated

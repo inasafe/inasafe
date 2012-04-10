@@ -20,7 +20,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unittest
 from is_impact_calculator import ISImpactCalculator
-#from inasafeexceptions import TestNotImplementedException
 from is_exceptions import (InsufficientParametersException,
                            KeywordNotFoundException,
                            StyleInfoNotFoundException)

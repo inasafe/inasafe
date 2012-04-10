@@ -8,15 +8,8 @@ import tempfile
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from is_utilities import (getExceptionWithStacktrace,
-                         setRasterStyle,
-                         setVectorStyle)
-from storage.utilities import bbox_intersection
-from utilities_test import loadLayer, getQgisTestApp
-from is_keyword_io import (getHashForDatasource,
-                          writeKeywordsForUri,
-                          readKeywordFromUri,
-                          deleteKeywordsForUri)
+from utilities_test import getQgisTestApp
+from is_keyword_io import ISKeywordIO
 from is_exceptions import HashNotFoundException
 from is_utilities import getTempDir
 
@@ -27,128 +20,19 @@ URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
          type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='"""
 
 
-class ISUtilitiesTest(unittest.TestCase):
+class ISKeywordIOTest(unittest.TestCase):
     """Tests for reading and writing of raster and vector data
     """
 
     def setUp(self):
-        pass
+        self.keywordIO = ISKeywordIO()
 
     def tearDown(self):
         pass
 
-    def test_stacktrace_html(self):
-        """Stack traces can be caught and rendered as html
-        """
-
-        try:
-            bbox_intersection('aoeu', 'oaeu', [])
-        except Exception, e:
-            # Display message and traceback
-
-            msg = getExceptionWithStacktrace(e, html=False)
-            #print msg
-            assert str(e) in msg
-            assert 'line' in msg
-            assert 'File' in msg
-
-            msg = getExceptionWithStacktrace(e, html=True)
-            assert str(e) in msg
-            assert '<pre id="traceback"' in msg
-            assert 'line' in msg
-            assert 'File' in msg
-
-    def test_issue126(self):
-        """Test that non integer transparency ranges fail gracefully.
-        .. seealso:: https://github.com/AIFDR/inasafe/issues/126
-        """
-        # This dataset has all cells with value 1.3
-        myLayer, myType = loadLayer('issue126.tif')
-        del myType
-        # Note the float quantity values below
-        myStyleInfo = {}
-        myStyleInfo['style_classes'] = [
-                        dict(colour='#38A800', quantity=1.1, transparency=100),
-                        dict(colour='#38A800', quantity=1.4, transparency=0),
-                        dict(colour='#79C900', quantity=10.1, transparency=0)]
-        myMessage = ('Setting style info with float based ranges should fail '
-                    'gracefully.')
-        try:
-            setRasterStyle(myLayer, myStyleInfo)
-        except:
-            raise Exception(myMessage)
-        # Now validate the transparency values were set to 255 because
-        # they are floats and we cant specify pixel ranges to floats
-        myValue1 = myLayer.rasterTransparency().alphaValue(1.1)
-        myValue2 = myLayer.rasterTransparency().alphaValue(1.4)
-        myMessage = ('Transparency should be ignored when style class'
-                     ' quantities are floats')
-        assert myValue1 == myValue2 == 255, myMessage
-
-        # Now run the same test again
-
-        myStyleInfo['style_classes'] = [
-                        dict(colour='#38A800', quantity=2, transparency=100),
-                        dict(colour='#38A800', quantity=4, transparency=0),
-                        dict(colour='#79C900', quantity=10, transparency=0)]
-        myMessage = ('Setting style info with generate valid transparent '
-                     'pixel entries.')
-        try:
-            setRasterStyle(myLayer, myStyleInfo)
-        except:
-            raise Exception(myMessage)
-        # Now validate the transparency values were set to 255 because
-        # they are floats and we cant specify pixel ranges to floats
-        myValue1 = myLayer.rasterTransparency().alphaValue(1)
-        myValue2 = myLayer.rasterTransparency().alphaValue(3)
-        myMessage1 = myMessage + 'Expected 0 got %i' % myValue1
-        myMessage2 = myMessage + 'Expected 255 got %i' % myValue2
-        assert myValue1 == 0, myMessage1
-        assert myValue2 == 255, myMessage2
-
-    def test_issue121(self):
-        """Test that point symbol size can be set from style (issue 121).
-        .. seealso:: https://github.com/AIFDR/inasafe/issues/121
-        """
-        # This dataset has all cells with value 1.3
-        myLayer, myType = loadLayer('kecamatan_geo_centroids.shp')
-        del myType
-        # Note the float quantity values below
-        myStyleInfo = {'target_field': 'KEPADATAN',
-                     'style_classes':
-                     [{'opacity': 1, 'max': 200, 'colour': '#fecc5c',
-                       'min': 45, 'label': 'Low', 'size': 1},
-                      {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
-                       'min': 201, 'label': 'Medium', 'size': 2},
-                      {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
-                       'min': 351, 'label': 'High', 'size': 3}]}
-        myMessage = ('Setting style with point sizes should work.')
-        try:
-            setVectorStyle(myLayer, myStyleInfo)
-        except:
-            raise Exception(myMessage)
-        # Now validate the size values were set as expected
-
-        if myLayer.isUsingRendererV2():
-            # new symbology - subclass of QgsFeatureRendererV2 class
-            myRenderer = myLayer.rendererV2()
-            myType = myRenderer.type()
-            assert myType == 'graduatedSymbol'
-            mySize = 1
-            for myRange in myRenderer.ranges():
-                mySymbol = myRange.symbol()
-                mySymbolLayer = mySymbol.symbolLayer(0)
-                myActualSize = mySymbolLayer.size()
-                myMessage = (('Expected symbol layer 0 for range %s to have'
-                             ' a size of %s, got %s') %
-                             (mySize, mySize, myActualSize))
-                assert mySize == myActualSize, myMessage
-
-                mySize += 1
-
     def test_getHashForDatasource(self):
         """Test we can reliably get a hash for a uri"""
-        myHash = getHashForDatasource(URI)
+        myHash = self.keywordIO.getHashForDatasource(URI)
         myExpectedHash = '7cc153e1b119ca54a91ddb98a56ea95e'
         myMessage = "Got: %s\nExpected: %s" % (myHash, myExpectedHash)
         assert myHash == myExpectedHash, myMessage
@@ -170,29 +54,30 @@ class ISUtilitiesTest(unittest.TestCase):
                               'subcategory': 'building'}
         # SQL insert test
         # On first write schema is empty and there is no matching hash
-        writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
+        self.keywordIO.writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
         # SQL Update test
         # On second write schema is populated and we update matching hash
         myExpectedKeywords = {'category': 'exposure',
                               'datatype': 'OSM',  # <--note the change here!
                               'subcategory': 'building'}
-        writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
+        self.keywordIO.writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
         # Test getting all keywords
-        myKeywords = readKeywordFromUri(URI, theDatabasePath=myFilename)
+        myKeywords = self.keywordIO.readKeywordFromUri(URI,
+                                            theDatabasePath=myFilename)
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeywords, myExpectedKeywords, myFilename)
         assert myKeywords == myExpectedKeywords, myMessage
         # Test getting just a single keyword
-        myKeyword = readKeywordFromUri(URI, 'datatype',
+        myKeyword = self.keywordIO.readKeywordFromUri(URI, 'datatype',
                                         theDatabasePath=myFilename)
         myExpectedKeyword = 'OSM'
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeyword, myExpectedKeyword, myFilename)
         assert myKeyword == myExpectedKeyword, myMessage
         # Test deleting keywords actually does delete
-        deleteKeywordsForUri(URI, myFilename)
+        self.keywordIO.deleteKeywordsForUri(URI, myFilename)
         try:
-            myKeyword = readKeywordFromUri(URI, 'datatype',
+            myKeyword = self.keywordIO.readKeywordFromUri(URI, 'datatype',
                                         theDatabasePath=myFilename)
             #if the above didnt cause an exception then bad
             myMessage = 'Expected a HashNotFoundException to be raised'
