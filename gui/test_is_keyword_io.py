@@ -38,6 +38,11 @@ class ISKeywordIOTest(unittest.TestCase):
         del myType
         self.fileVectorLayer, myType = loadLayer('Padang_WGS84.shp')
         del myType
+        self.expectedSqliteKeywords = {'category': 'exposure',
+                                       'datatype': 'OSM',
+                                       'subcategory': 'building'}
+        self.expectedVectorKeywords = {}
+        self.expectedRasterKeywords = {}
 
     def tearDown(self):
         pass
@@ -66,33 +71,29 @@ class ISKeywordIOTest(unittest.TestCase):
                               'subcategory': 'building'}
         # SQL insert test
         # On first write schema is empty and there is no matching hash
-        self.keywordIO.writeKeywordsForUri(PG_URI,
-                                           myExpectedKeywords, myFilename)
+        self.keywordIO.setKeywordDbPath(myFilename)
+        self.keywordIO.writeKeywordsForUri(PG_URI, myExpectedKeywords)
         # SQL Update test
         # On second write schema is populated and we update matching hash
         myExpectedKeywords = {'category': 'exposure',
                               'datatype': 'OSM',  # <--note the change here!
                               'subcategory': 'building'}
-        self.keywordIO.writeKeywordsForUri(PG_URI,
-                                           myExpectedKeywords, myFilename)
+        self.keywordIO.writeKeywordsForUri(PG_URI, myExpectedKeywords)
         # Test getting all keywords
-        myKeywords = self.keywordIO.readKeywordFromUri(PG_URI,
-                                            theDatabasePath=myFilename)
+        myKeywords = self.keywordIO.readKeywordFromUri(PG_URI)
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeywords, myExpectedKeywords, myFilename)
         assert myKeywords == myExpectedKeywords, myMessage
         # Test getting just a single keyword
-        myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype',
-                                        theDatabasePath=myFilename)
+        myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype')
         myExpectedKeyword = 'OSM'
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeyword, myExpectedKeyword, myFilename)
         assert myKeyword == myExpectedKeyword, myMessage
         # Test deleting keywords actually does delete
-        self.keywordIO.deleteKeywordsForUri(PG_URI, myFilename)
+        self.keywordIO.deleteKeywordsForUri(PG_URI)
         try:
-            myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype',
-                                        theDatabasePath=myFilename)
+            myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype')
             #if the above didnt cause an exception then bad
             myMessage = 'Expected a HashNotFoundException to be raised'
             assert myMessage
@@ -109,7 +110,14 @@ class ISKeywordIOTest(unittest.TestCase):
 
     def test_readKeywords(self):
         """Test we can read keywords using the generic readKeywords method"""
-        pass
+        myPath = os.path.join(TESTDATA, 'test_keywords.db')
+        self.keywordIO.setKeywordDbPath(myPath)
+        myKeywords = self.keywordIO.readKeywords(self.sqliteLayer)
+        myExpectedKeywords = self.expectedSqliteKeywords
+        mySource = self.sqliteLayer.source()
+        myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
+                    myKeywords, myExpectedKeywords, mySource)
+        assert myKeywords == myExpectedKeywords, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISKeywordIOTest, 'test')

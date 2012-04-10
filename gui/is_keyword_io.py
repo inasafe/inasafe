@@ -46,10 +46,26 @@ class ISKeywordIO(QObject):
             None
         """
         QObject.__init__(self)
+        # path to sqlite db path
+        self.keywordDbPath = None
+        self.setupKeywordDbPath()
+        self.connection = None
 
-##########################################################
-# Public API
-##########################################################
+    def setKeywordDbPath(self, thePath):
+        """Set the path for the keyword database (sqlite) that should be used
+        to search for keywords for non local datasets.
+        Args:
+            thePath - a valid path to a sqlite database. The database does
+            not need to exist already, but the user should be able to write
+            to the path provided.
+        Returns:
+            None
+        Raises:
+            None
+        """
+        self.keywordDbPath = str(thePath)
+
+
     def readKeywords(self, theLayer, theKeyword=None):
         """Read keywords for a datasource and return them as a dictionary.
         This is a wrapper method that will 'do the right thing' to fetch
@@ -75,6 +91,113 @@ class ISKeywordIO(QObject):
         else:
             myKeywords = self.readKeywordFromUri(mySource, theKeyword)
         return myKeywords
+
+# methods below here should be considered private
+
+    def defaultKeywordDbPath(self):
+        """Helper to get the default path for the keywords file (which is
+        <plugin dir>/keywords.db)
+        Args:
+            None
+        Returns:
+            A string representing the path to where the keywords file is to be.
+        Raises:
+            None
+        """
+        myParentDir = os.path.abspath(
+                                    os.path.join(
+                                        os.path.dirname(__file__), '..'))
+        return os.path.join(myParentDir, 'keywords.db')
+
+    def setupKeywordDbPath(self):
+        """Helper to set the active path for the keywords. Called at init time,
+        you can override this path by calling setKeywordDbPath.
+        Args:
+            None
+        Returns:
+            A string representing the path to where the keywords file is to be.
+            If the user has never specified what this path is, the
+            defaultKeywordDbPath is returned.
+        Raises:
+            None
+        """
+        mySettings = QSettings()
+        myPath = mySettings.value(
+                                'inasafe/keywordCachePath',
+                                self.defaultKeywordDbPath()).toString()
+        self.keywordDbPath = str(myPath)
+
+    def openConnection(self):
+        """Open an sqlite connection to the keywords database.
+        By default the keywords database will be used in the plugin dir,
+        unless an explicit path has been set using setKeywordDbPath, or
+        overridden in QSettings. If the db does not exist it will
+        be created.
+        Args:
+            thePath - path to the desired sqlite db to use.
+        Returns:
+            None
+        Raises:
+            An sqlite.Error is raised if anything goes wrong
+        """
+        self.connection = None
+        try:
+            self.connection = sqlite.connect(self.keywordDbPath)
+        except sqlite.Error, e:
+            print "Error %s:" % e.args[0]
+            raise
+
+    def closeConnection(self):
+        """Given an sqlite3 connection, close it
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        if self.connection is not None:
+            self.connection.close()
+            self.connection = None
+
+    def getCursor(self):
+        """Get a cursor for the active connection. The cursor can be used to
+        execute arbitrary queries against the database. This method also checks
+        that the keywords table exists in the schema, and if not, it creates
+        it.
+        Args:
+            theConnection - a valid, open sqlite3 database connection.
+        Returns:
+            a valid cursor opened against the connection.
+        Raises:
+            An sqlite.Error will be raised if anything goes wrong
+        """
+        if self.connection is None:
+            self.openConnection()
+        try:
+            myCursor = self.connection.cursor()
+            myCursor.execute('SELECT SQLITE_VERSION()')
+            myData = myCursor.fetchone()
+            #print "SQLite version: %s" % myData
+            # Check if we have some tables, if not create them
+            mySQL = 'select sql from sqlite_master where type = \'table\';'
+            myCursor.execute(mySQL)
+            myData = myCursor.fetchone()
+            #print "Tables: %s" % myData
+            if myData is None:
+                print 'No tables found'
+                mySQL = ('create table keyword (hash varchar(32) primary key,'
+                         'dict text);')
+                print mySQL
+                myCursor.execute(mySQL)
+                myData = myCursor.fetchone()
+            else:
+                print 'Keywords table already exists'
+                pass
+            return myCursor
+        except sqlite.Error, e:
+            print "Error %s:" % e.args[0]
+            raise
 
     def areKeywordsFileBased(self, theLayer):
         """Find out if keywords should be read/written to file or our keywords
@@ -119,9 +242,6 @@ class ISKeywordIO(QObject):
             myFileBasedKeywords = myProviderDict[myProviderType]
         return myFileBasedKeywords
 
-    ##########################################################
-    # Private API
-    ##########################################################
     def getHashForDatasource(self, theDataSource):
         """
         Args:
@@ -137,110 +257,7 @@ class ISKeywordIO(QObject):
         myHash = myHash.hexdigest()
         return myHash
 
-    def getCursor(self, theConnection):
-        """Get a cursor for the active connection. The cursor can be used to
-        execute arbitrary queries against the database. This method also checks
-        that the keywords table exists in the schema, and if not, it creates
-        it.
-        Args:
-            theConnection - a valid, open sqlite3 database connection.
-        Returns:
-            a valid cursor opened against the connection.
-        Raises:
-            An sqlite.Error will be raised if anything goes wrong
-        """
-        try:
-            myCursor = theConnection.cursor()
-            myCursor.execute('SELECT SQLITE_VERSION()')
-            myData = myCursor.fetchone()
-            #print "SQLite version: %s" % myData
-            # Check if we have some tables, if not create them
-            mySQL = 'select sql from sqlite_master where type = \'table\';'
-            myCursor.execute(mySQL)
-            myData = myCursor.fetchone()
-            #print "Tables: %s" % myData
-            if myData is None:
-                print 'No tables found'
-                mySQL = ('create table keyword (hash varchar(32) primary key,'
-                         'dict text);')
-                print mySQL
-                myCursor.execute(mySQL)
-                myData = myCursor.fetchone()
-            else:
-                print 'Keywords table already exists'
-                pass
-            return myCursor
-        except sqlite.Error, e:
-            print "Error %s:" % e.args[0]
-            raise
-
-    def defaultKeywordDbPath(self):
-        """Helper to get the default path for the keywords file (which is
-        <plugin dir>/keywords.db)
-        Args:
-            None
-        Returns:
-            A string representing the path to where the keywords file is to be.
-        Raises:
-            None
-        """
-        myParentDir = os.path.abspath(
-                                    os.path.join(
-                                        os.path.dirname(__file__), '..'))
-        return os.path.join(myParentDir, 'keywords.db')
-
-    def keywordDbPath(self):
-        """Helper to get the active path for the keywords
-        Args:
-            None
-        Returns:
-            A string representing the path to where the keywords file is to be.
-            If the user has never specified what this path is, the
-            defaultKeywordDbPath is returned.
-        Raises:
-            None
-        """
-        mySettings = QSettings()
-        myPath = mySettings.value(
-                                'inasafe/keywordCachePath',
-                                self.defaultKeywordDbPath()).toString()
-        return myPath
-
-    def openConnection(self, thePath=None):
-        """Open an sqlite connection to the keywords database.
-        By default the keywords database will be used in the plugin dir,
-        unless an explicit path is provided. If the db does not exist it will
-        be created.
-        Args:
-            thePath - path to the desired sqlite db to use.
-        Returns:
-            A valid open connection to the sqlite database
-        Raises:
-            An sqlite.Error is raised if anything goes wrong
-        """
-        myConnection = None
-        if thePath is None:
-            thePath = self.keywordDbPath()
-        try:
-            myConnection = sqlite.connect(thePath)
-        except sqlite.Error, e:
-            print "Error %s:" % e.args[0]
-            raise
-        return myConnection
-
-    def closeConnection(self, theConnection):
-        """Given an sqlite3 connection, close it
-        Args:
-            theConnection - an open SQLITE connection
-        Returns:
-            None
-        Raises:
-            None
-        """
-        if theConnection:
-            theConnection.close()
-
-    def deleteKeywordsForUri(self, theUri, theDatabasePath=None):
+    def deleteKeywordsForUri(self, theUri):
         """Delete keywords for a URI in the keywords database.
         A hash will be constructed from the supplied uri and a lookup made
         in a local SQLITE database for the keywords. If there is an existing
@@ -253,9 +270,6 @@ class ISKeywordIO(QObject):
            * theUri -  a str representing a layer uri as parameter.
              .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
              password=\'bar\' sslmode=disable key=\'id\' srid=4326
-           * theDatabasePath - optional string giving path to the sqlite
-             database to use. If the database does not exist it will be
-             created.
 
         Returns:
            None
@@ -264,24 +278,23 @@ class ISKeywordIO(QObject):
            None
         """
         myHash = self.getHashForDatasource(theUri)
-        myConnection = self.openConnection(theDatabasePath)
         try:
-            myCursor = self.getCursor(myConnection)
+            myCursor = self.getCursor()
             #now see if we have any data for our hash
             mySQL = 'delete from keyword where hash = \'' + myHash + '\';'
             myCursor.execute(mySQL)
-            myConnection.commit()
+            self.connection.commit()
         except sqlite.Error, e:
             print "SQLITE Error %s:" % e.args[0]
-            myConnection.rollback()
+            self.connection.rollback()
         except Exception, e:
             print "Error %s:" % e.args[0]
-            myConnection.rollback()
+            self.connection.rollback()
             raise
         finally:
-            self.closeConnection(myConnection)
+            self.closeConnection()
 
-    def writeKeywordsForUri(self, theUri, theKeywords, theDatabasePath=None):
+    def writeKeywordsForUri(self, theUri, theKeywords):
         """Write keywords for a URI into the keywords database. All the
         keywords for the uri should be written in a single operation.
         A hash will be constructed from the supplied uri and a lookup made
@@ -297,9 +310,6 @@ class ISKeywordIO(QObject):
              password=\'bar\' sslmode=disable key=\'id\' srid=4326
            * keywords - mandatory - the metadata keyword to retrieve e.g.
              'title'
-           * theDatabasePath - optional string giving path to the sqlite
-             database to use. If the database does not exist it will be
-             created.
 
         Returns:
            A string containing the retrieved value for the keyword if
@@ -310,9 +320,8 @@ class ISKeywordIO(QObject):
            KeywordNotFoundException if the keyword is not recognised.
         """
         myHash = self.getHashForDatasource(theUri)
-        myConnection = self.openConnection(theDatabasePath)
         try:
-            myCursor = self.getCursor(myConnection)
+            myCursor = self.getCursor()
             #now see if we have any data for our hash
             mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
             myCursor.execute(mySQL)
@@ -325,24 +334,23 @@ class ISKeywordIO(QObject):
                 myCursor.execute('insert into keyword(hash, dict) values('
                                  ':hash, :dict);',
                              {'hash': myHash, 'dict': sqlite.Binary(myPickle)})
-                myConnection.commit()
+                self.connection.commit()
             else:
                 #update existing rec
                 myCursor.execute('update keyword set dict=? where hash = ?;',
                              (sqlite.Binary(myPickle), myHash))
-                myConnection.commit()
+                self.connection.commit()
         except sqlite.Error, e:
             print "SQLITE Error %s:" % e.args[0]
-            myConnection.rollback()
+            self.connection.rollback()
         except Exception, e:
             print "Error %s:" % e.args[0]
-            myConnection.rollback()
+            self.connection.rollback()
             raise
         finally:
-            self.closeConnection(myConnection)
+            self.closeConnection()
 
-    def readKeywordFromUri(self,
-                           theUri, theKeyword=None, theDatabasePath=None):
+    def readKeywordFromUri(self, theUri, theKeyword=None):
         """Get metadata from the keywords file associated with a
         non local layer (e.g. postgresql connection).
 
@@ -358,9 +366,6 @@ class ISKeywordIO(QObject):
              .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
              password=\'bar\' sslmode=disable key=\'id\' srid=4326
            * keyword - optional - the metadata keyword to retrieve e.g. 'title'
-           * theDatabasePath - optional string giving path to the sqlite
-             database to use. If the database does not exist it will be
-             created.
 
         Returns:
            A string containing the retrieved value for the keyword if
@@ -371,9 +376,9 @@ class ISKeywordIO(QObject):
            KeywordNotFoundException if the keyword is not found.
         """
         myHash = self.getHashForDatasource(theUri)
-        myConnection = self.openConnection(theDatabasePath)
+        self.openConnection()
         try:
-            myCursor = self.getCursor(myConnection)
+            myCursor = self.getCursor()
             #now see if we have any data for our hash
             mySQL = 'select dict from keyword where hash = \'' + myHash + '\';'
             myCursor.execute(mySQL)
@@ -396,7 +401,7 @@ class ISKeywordIO(QObject):
             print "Error %s:" % e.args[0]
             raise
         finally:
-            self.closeConnection(myConnection)
+            self.closeConnection()
 
     def copyKeywords(self, sourceFile,
                      destinationFile, theExtraKeywords=None):
