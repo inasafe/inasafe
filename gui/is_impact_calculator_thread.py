@@ -21,8 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from is_safe_interface import calculateSafeImpact
 from is_utilities import getExceptionWithStacktrace
 import threading
-from PyQt4.QtCore import (QCoreApplication,
-                          QObject,
+from PyQt4.QtCore import (QObject,
                           pyqtSignal)
 from is_exceptions import InsufficientParametersException
 
@@ -33,6 +32,12 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
        based on this class are designed to be short lived.
        We inherit from QObject so that we can use Qt translation self.tr
        calls and emit signals.
+
+       .. todo:: implement this class using QThread as a base class since it
+          supports thread termination which python threading doesnt seem to do.
+          Also see the techbase article below for emitting signals across
+          threads using Qt.QueuedConnection.
+          http://techbase.kde.org/Development/Tutorials/Python_introduction_to_signals_and_slots
     """
     done = pyqtSignal()
     """Users of this of this class can listen for signals indicating
