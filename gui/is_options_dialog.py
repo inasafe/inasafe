@@ -22,7 +22,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from is_options_dialog_base import Ui_ISOptionsDialogBase
 from is_help import ISHelp
-from is_keyword_io import defaultKeywordDbPath
+from is_keyword_io import ISKeywordIO
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -92,7 +92,7 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
 
         myPath = mySettings.value(
                             'inasafe/keywordCachePath',
-                            defaultKeywordDbPath()).toString()
+                            ISKeywordIO.defaultKeywordDbPath()).toString()
         self.leKeywordCachePath.setText(myPath)
 
     def saveState(self):
@@ -144,6 +144,6 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         """
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                     self.tr('Set keyword cache file'),
-                    defaultKeywordDbPath(),
+                    ISKeywordIO.defaultKeywordDbPath(),
                     self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(myFilename)

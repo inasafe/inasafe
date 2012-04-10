@@ -31,7 +31,7 @@ class TestNotImplementedException(Exception):
 
 
 class InsufficientParametersException(Exception):
-    """Custom exception for when a test exists only as a stub."""
+    """Custom exception for when insufficient parameters have been set."""
     pass
 
 

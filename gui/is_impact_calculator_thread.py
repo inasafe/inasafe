@@ -21,32 +21,37 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from is_safe_interface import calculateSafeImpact
 from is_utilities import getExceptionWithStacktrace
 import threading
-from PyQt4.QtCore import (QObject,
+from PyQt4.QtCore import (QCoreApplication,
+                          QObject,
                           pyqtSignal)
+from is_exceptions import InsufficientParametersException
 
 
-class ISImpactCalculatorThread(QObject, threading.Thread):
+class ISImpactCalculatorThread(threading.Thread, QObject):
     """A threaded class to compute an impact scenario. Under
-        python a thread can only be run once, so the instances
-        based on this class are designed to be short lived.
-        We inherit from QObject so that we can use Qt translation self.tr
-        calls and emit signals."""
-
-    #def tr(theText):
-    #    """We define a tr() alias here since the ISImpactCalculatorThread
-    #     implementation below is not a class and does not inherit from QObject
-    ##    .. note:: see http://tinyurl.com/pyqt-differences
-    #    Args:
-    #       theText - string to be translated
-    #    Returns:
-    #       Translated version of the given string if available, otherwise
-    #       the original string.
-    ##    """
-    #    myContext = "ISImpactCalculatorThread"
-    #    return QCoreApplication.translate(myContext, theText)
-
+       python a thread can only be run once, so the instances
+       based on this class are designed to be short lived.
+       We inherit from QObject so that we can use Qt translation self.tr
+       calls and emit signals.
+    """
     done = pyqtSignal()
-    """so that we can emit a signal when processing is done."""
+    """Users of this of this class can listen for signals indicating
+       when processing is done. For example::
+
+         from is_impact_calculator_trhead import ISImpactCalculatorThread
+         n = ISImpactCalculatorThread()
+         n.done.connect(n.showMessage)
+         n.done.emit()
+
+       Prints 'hello' to the console
+
+       .. seealso:: http://techbase.kde.org/Development/Tutorials/Python_introduction_to_signals_and_slots
+          for an alternative (maybe nicer?) approach.
+       """
+
+    def showMessage(self):
+        """For testing only"""
+        print 'hello'
 
     def __init__(self, theHazardLayer, theExposureLayer,
                  theFunction):
@@ -69,8 +74,8 @@ class ISImpactCalculatorThread(QObject, threading.Thread):
         Requires three parameters to be set before execution
         can take place:
         """
-
         threading.Thread.__init__(self)
+        QObject.__init__(self)
         self._hazardLayer = theHazardLayer
         self._exposureLayer = theExposureLayer
         self._function = theFunction
@@ -125,6 +130,12 @@ class ISImpactCalculatorThread(QObject, threading.Thread):
            None
            set.
         """
+        if (self._hazardLayer is None or self._exposureLayer is None
+            or self._function is None):
+            myMessage = self.tr('Ensure that hazard, exposure and function '
+                                'are all set before trying to run the '
+                                'analysis.')
+            raise InsufficientParametersException(myMessage)
         try:
             myLayers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculateSafeImpact(theLayers=myLayers,

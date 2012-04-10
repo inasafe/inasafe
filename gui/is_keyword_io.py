@@ -34,6 +34,17 @@ class ISKeywordIO(QObject):
     and this plugins implemenation of keyword caching in a local sqlite db
     used for supporting keywords for remote datasources."""
 
+    def __init__(self):
+        """Constructor for the ISKeywordIO object
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        QObject.__init__(self)
+
     def getHashForDatasource(self, theDataSource):
         """
         Args:
@@ -341,7 +352,7 @@ class ISKeywordIO(QObject):
 
         if theExtraKeywords is None:
             theExtraKeywords = {}
-        myMessage = tr('Expected extraKeywords to be a dictionary. Got %s'
+        myMessage = self.tr('Expected extraKeywords to be a dictionary. Got %s'
                % str(type(theExtraKeywords))[1:-1])
         verify(isinstance(theExtraKeywords, dict), myMessage)
 

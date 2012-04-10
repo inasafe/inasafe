@@ -606,7 +606,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             return
 
         self.runner = self.calculator.getRunner()
-        QtCore.QObject.connect(self.runner.notifier(),
+        QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
                                self.completed)
 

@@ -32,9 +32,12 @@ class ISImpactCalculator(QObject):
 
     def __init__(self):
         """Constructor for the impact calculator."""
+        QObject.__init__(self)
         self._hazardLayer = None
         self._exposureLayer = None
         self._function = None
+        self._filename = None
+        self._result = None
 
     def setExposureLayer(self, theLayerPath):
         """Mutator for Exposure layer property (e.g. buildings or
@@ -47,7 +50,10 @@ class ISImpactCalculator(QObject):
         Raises:
             None
         """
-        self._exposureLayer = theLayerPath
+        if theLayerPath is None:
+            self._exposureLayer = None
+        else:
+            self._exposureLayer = str(theLayerPath)
 
     def setHazardLayer(self, theLayerPath):
         """Mutator: hazard layer. Hazard layer property  (e.g. a flood depth
@@ -60,7 +66,10 @@ class ISImpactCalculator(QObject):
         Raises:
             None
         """
-        self._hazardLayer = str(theLayerPath)
+        if theLayerPath is None:
+            self._hazardLayer = None
+        else:
+            self._hazardLayer = str(theLayerPath)
 
     def setFunction(self, theFunctionName):
         """Mutator: function layer. Function property (specifies which
@@ -94,17 +103,17 @@ class ISImpactCalculator(QObject):
            InsufficientParametersException if not all parameters are
            set.
         """
-        self.__filename = None
-        self.__result = None
-        if not self._hazardLayer or self._hazardLayer == '':
+        self._filename = None
+        self._result = None
+        if self._hazardLayer is None or self._hazardLayer == '':
             myMessage = self.tr('Error: Hazard layer not set.')
             raise InsufficientParametersException(myMessage)
 
-        if not self._exposureLayer or self._exposureLayer == '':
+        if self._exposureLayer is None or self._exposureLayer == '':
             myMessage = self.tr('Error: Exposure layer not set.')
             raise InsufficientParametersException(myMessage)
 
-        if not self._function or self._function == '':
+        if self._function is None or self._function == '':
             myMessage = self.tr('Error: Function not set.')
             raise InsufficientParametersException(myMessage)
 

@@ -58,15 +58,15 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test if the properties work as expected."""
 
         myMessage = 'Vector property incorrect.'
-        assert (self.calculator.getExposureLayer() ==
+        assert (self.calculator._exposureLayer ==
                 self.vectorPath), myMessage
 
         myMessage = 'Raster property incorrect.'
-        assert (self.calculator.getHazardLayer() ==
+        assert (self.calculator._hazardLayer ==
                 self.rasterShakePath), myMessage
 
         myMessage = 'Function property incorrect.'
-        assert (self.calculator.getFunction() ==
+        assert (self.calculator._function ==
                 'Earthquake Guidelines Function'), myMessage
 
     def test_run(self):
@@ -109,6 +109,9 @@ class ImpactCalculatorTest(unittest.TestCase):
             #next line should raise an error
             myRunner = self.calculator.getRunner()
             myRunner.start()
+        except RuntimeError, e:
+            myMessage = 'Runtime error encountered: %s' % str(e)
+            assert(), myMessage
         except InsufficientParametersException:
             return  # expected outcome
         except:

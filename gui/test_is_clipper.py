@@ -244,7 +244,7 @@ class ISClipper(unittest.TestCase):
                 extraKeywords = {'resolution': native_resolution}
                 myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
                 myResult = clipLayer(myRasterLayer, bounding_box, res,
-                                     extraKeywords=extraKeywords)
+                                     theExtraKeywords=extraKeywords)
 
                 R = readSafeLayer(myResult)
                 A_native = R.get_data(scaling=False)

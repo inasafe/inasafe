@@ -30,7 +30,7 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsVectorFileWriter)
 
 from is_safe_interface import verify
-from is_keyword_io import copyKeywords
+from is_keyword_io import ISKeywordIO
 from is_exceptions import (InvalidParameterException,
                             NoFeaturesInExtentException)
 from is_utilities import getTempDir
@@ -193,7 +193,8 @@ def _clipVectorLayer(theLayer, theExtent,
                        'and then try to run your analysis again.')
         raise NoFeaturesInExtentException(myMessage)
 
-    copyKeywords(theLayer.source(), myFilename,
+    myKeywordIO = ISKeywordIO()
+    myKeywordIO.copyKeywords(theLayer.source(), myFilename,
                   theExtraKeywords=theExtraKeywords)
 
     return myFilename  # Filename of created file
@@ -298,7 +299,9 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
             raise Exception(myMessage)
 
     # .. todo:: Check the result of the shell call is ok
-    copyKeywords(myWorkingLayer, myFilename, theExtraKeywords=theExtraKeywords)
+    myKeywordIO = ISKeywordIO()
+    myKeywordIO.copyKeywords(myWorkingLayer, myFilename,
+                             theExtraKeywords=theExtraKeywords)
     return myFilename  # Filename of created file
 
 
