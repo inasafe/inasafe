@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from gui import is_safe_interface
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.3.0'
@@ -26,6 +27,7 @@ from is_safe_interface import (verify,
                                readKeywordsFromFile,
                                writeKeywordsToFile)
 from PyQt4.QtCore import QObject
+from qgis.core import (QGis, QgsMapLayer)
 
 
 class ISKeywordIO(QObject):
@@ -45,6 +47,81 @@ class ISKeywordIO(QObject):
         """
         QObject.__init__(self)
 
+##########################################################
+# Public API
+##########################################################
+    def readKeywords(self, theLayer, theKeyword=None):
+        """Read keywords for a datasource and return them as a dictionary.
+        This is a wrapper method that will 'do the right thing' to fetch
+        keywords for the given datasource. In particular, if the datasource
+        is remote (e.g. a database connection) it will fetch the keywords from
+        the keywords store.
+        Args:
+            *  theLayer - A QGIS QgsMapLayer instance.
+            * theKeyword - optional - will extract only the specified keyword
+              from the keywords dict.
+        Returns:
+            A dict if theKeyword is omitted, otherwise the value for the
+            given key if it is present.
+        Raises:
+            None
+        """
+        mySource = str(theLayer.source())
+        myFlag = self.areKeywordsFileBased(theLayer)
+        myKeywords = None
+        if myFlag:
+            myKeywords = is_safe_interface.readKeywordsFromFile(
+                                        mySource, theKeyword)
+        else:
+            myKeywords = self.readKeywordFromUri(mySource, theKeyword)
+        return myKeywords
+
+    def areKeywordsFileBased(self, theLayer):
+        """Find out if keywords should be read/written to file or our keywords
+          db
+        Args:
+            * theLayer - A QGIS QgsMapLayer instance.
+
+        Returns:
+            True if keywords are storedin a file next to the dataset,
+            else False if the dataset is remove e.g. a database.
+        Raises:
+            None
+        """
+        # determine which keyword lookup system to use (file base or cache db)
+        # based on the layer's provider type. True indicates we should use the
+        # datasource as a file and look for a keywords file, false and we look
+        # in the keywords db.
+        myProviderType = None
+        myVersion = None
+        try:
+            myVersion = unicode(QGis.QGIS_VERSION_INT)
+        except:
+            myVersion = unicode(QGis.qgisVersion)[0]
+        myVersion = int(myVersion)
+        # check for old raster api with qgis < 1.8
+        # ..todo:: Add test for plugin layers too
+        if (myVersion < 10800 and
+                theLayer.type() == QgsMapLayer.RasterLayer):
+            myProviderType = str(theLayer.providerKey())
+        else:
+            myProviderType = str(theLayer.providerType())
+
+        myProviderDict = {'ogr': True,
+                          'gdal': True,
+                          'gpx': False,
+                          'wms': False,
+                          'spatialite': False,
+                          'delimitedtext': True,
+                          'postgres': False}
+        myFileBasedKeywords = False
+        if myProviderType in myProviderDict:
+            myFileBasedKeywords = myProviderDict[myProviderType]
+        return myFileBasedKeywords
+
+    ##########################################################
+    # Private API
+    ##########################################################
     def getHashForDatasource(self, theDataSource):
         """
         Args:

@@ -8,14 +8,17 @@ import tempfile
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from utilities_test import getQgisTestApp
+from utilities_test import (getQgisTestApp, loadLayer)
 from is_keyword_io import ISKeywordIO
 from is_exceptions import HashNotFoundException
 from is_utilities import getTempDir
 
+from storage.utilities_test import TESTDATA
+from qgis.core import (QgsDataSourceURI,
+                       QgsVectorLayer)
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 #Dont change this, not even formatting, you will break tests!
-URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
+PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
          password=\'bar\' sslmode=disable key=\'id\' srid=4326
          type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='"""
 
@@ -26,13 +29,22 @@ class ISKeywordIOTest(unittest.TestCase):
 
     def setUp(self):
         self.keywordIO = ISKeywordIO()
+        myUri = QgsDataSourceURI()
+        myUri.setDatabase(os.path.join(TESTDATA, 'js.sqlite'))
+        myUri.setDataSource('', 'osm_buildings', 'Geometry')
+        self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
+                                       'spatialite')
+        self.fileRasterLayer, myType = loadLayer('Shakemap_Padang_2009.asc')
+        del myType
+        self.fileVectorLayer, myType = loadLayer('Padang_WGS84.shp')
+        del myType
 
     def tearDown(self):
         pass
 
     def test_getHashForDatasource(self):
         """Test we can reliably get a hash for a uri"""
-        myHash = self.keywordIO.getHashForDatasource(URI)
+        myHash = self.keywordIO.getHashForDatasource(PG_URI)
         myExpectedHash = '7cc153e1b119ca54a91ddb98a56ea95e'
         myMessage = "Got: %s\nExpected: %s" % (myHash, myExpectedHash)
         assert myHash == myExpectedHash, myMessage
@@ -54,30 +66,32 @@ class ISKeywordIOTest(unittest.TestCase):
                               'subcategory': 'building'}
         # SQL insert test
         # On first write schema is empty and there is no matching hash
-        self.keywordIO.writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
+        self.keywordIO.writeKeywordsForUri(PG_URI,
+                                           myExpectedKeywords, myFilename)
         # SQL Update test
         # On second write schema is populated and we update matching hash
         myExpectedKeywords = {'category': 'exposure',
                               'datatype': 'OSM',  # <--note the change here!
                               'subcategory': 'building'}
-        self.keywordIO.writeKeywordsForUri(URI, myExpectedKeywords, myFilename)
+        self.keywordIO.writeKeywordsForUri(PG_URI,
+                                           myExpectedKeywords, myFilename)
         # Test getting all keywords
-        myKeywords = self.keywordIO.readKeywordFromUri(URI,
+        myKeywords = self.keywordIO.readKeywordFromUri(PG_URI,
                                             theDatabasePath=myFilename)
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeywords, myExpectedKeywords, myFilename)
         assert myKeywords == myExpectedKeywords, myMessage
         # Test getting just a single keyword
-        myKeyword = self.keywordIO.readKeywordFromUri(URI, 'datatype',
+        myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype',
                                         theDatabasePath=myFilename)
         myExpectedKeyword = 'OSM'
         myMessage = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
                     myKeyword, myExpectedKeyword, myFilename)
         assert myKeyword == myExpectedKeyword, myMessage
         # Test deleting keywords actually does delete
-        self.keywordIO.deleteKeywordsForUri(URI, myFilename)
+        self.keywordIO.deleteKeywordsForUri(PG_URI, myFilename)
         try:
-            myKeyword = self.keywordIO.readKeywordFromUri(URI, 'datatype',
+            myKeyword = self.keywordIO.readKeywordFromUri(PG_URI, 'datatype',
                                         theDatabasePath=myFilename)
             #if the above didnt cause an exception then bad
             myMessage = 'Expected a HashNotFoundException to be raised'
@@ -86,6 +100,16 @@ class ISKeywordIOTest(unittest.TestCase):
             #we expect this outcome so good!
             pass
 
+    def test_areKeywordsFileBased(self):
+        """Can we correctly determine if keywords should be written to file or
+        to database?"""
+        assert not self.keywordIO.areKeywordsFileBased(self.sqliteLayer)
+        assert self.keywordIO.areKeywordsFileBased(self.fileRasterLayer)
+        assert self.keywordIO.areKeywordsFileBased(self.fileVectorLayer)
+
+    def test_readKeywords(self):
+        """Test we can read keywords using the generic readKeywords method"""
+        pass
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISKeywordIOTest, 'test')
