@@ -638,11 +638,12 @@ class Test_Engine(unittest.TestCase):
             # Ignore NaN's
             if numpy.isnan(depth):
                 continue
-
+            
             structural_damage = iattributes[i]['STRUCT_DAM']
             contents_damage = iattributes[i]['CONTENTS_D']
             for imp in [structural_damage, contents_damage]:
-                msg = ('Percent damage was outside range: %f' % imp)
+                msg = ('Percent damage was outside range [0,1] at depth %f: %f' 
+                       % (depth, imp))
                 assert 0 <= imp <= 1, msg
 
             structural_loss = iattributes[i]['STRUCT_LOS']

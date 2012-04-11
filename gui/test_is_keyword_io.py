@@ -41,8 +41,13 @@ class ISKeywordIOTest(unittest.TestCase):
         self.expectedSqliteKeywords = {'category': 'exposure',
                                        'datatype': 'OSM',
                                        'subcategory': 'building'}
-        self.expectedVectorKeywords = {}
-        self.expectedRasterKeywords = {}
+        self.expectedVectorKeywords =  {'category': 'exposure',
+                                        'datatype': 'itb',
+                                        'subcategory': 'building'}
+        self.expectedRasterKeywords = {'category': 'hazard',
+                                         'subcategory': 'earthquake',
+                                         'unit': 'mmi',
+                                         'title': 'Shakemap_Padang_2009'}
 
     def tearDown(self):
         pass
@@ -108,8 +113,29 @@ class ISKeywordIOTest(unittest.TestCase):
         assert self.keywordIO.areKeywordsFileBased(self.fileRasterLayer)
         assert self.keywordIO.areKeywordsFileBased(self.fileVectorLayer)
 
-    def test_readKeywords(self):
-        """Test we can read keywords using the generic readKeywords method"""
+    def test_readRasterFileKeywords(self):
+        """Can we read raster file keywords with the generic readKeywords method
+        """
+        myKeywords = self.keywordIO.readKeywords(self.fileRasterLayer)
+        myExpectedKeywords = self.expectedRasterKeywords
+        mySource = self.fileRasterLayer.source()
+        myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
+                    myKeywords, myExpectedKeywords, mySource)
+        assert myKeywords == myExpectedKeywords, myMessage
+
+    def test_readVectorFileKeywords(self):
+        """Can we read vector file keywords with the generic readKeywords method
+        """
+        myKeywords = self.keywordIO.readKeywords(self.fileVectorLayer)
+        myExpectedKeywords = self.expectedVectorKeywords
+        mySource = self.fileVectorLayer.source()
+        myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
+                    myKeywords, myExpectedKeywords, mySource)
+        assert myKeywords == myExpectedKeywords, myMessage
+
+    def test_readDBKeywords(self):
+        """Can we read sqlite keywords with the generic readKeywords method
+        """
         myPath = os.path.join(TESTDATA, 'test_keywords.db')
         self.keywordIO.setKeywordDbPath(myPath)
         myKeywords = self.keywordIO.readKeywords(self.sqliteLayer)
