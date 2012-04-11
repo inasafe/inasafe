@@ -32,11 +32,10 @@ from qgis.core import (QgsMapLayer,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
 from is_impact_calculator import ISImpactCalculator
-from is_safe_interface import (readKeywordsFromFile,
-                               readKeywordsFromLayer,
-                               availableFunctions,
+from is_safe_interface import (availableFunctions,
                                getOptimalExtent,
                                getBufferedExtent)
+from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
 from is_exceptions import (KeywordNotFoundException,
                             InvalidParameterException)
@@ -93,6 +92,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.header = None  # for storing html header template
         self.footer = None  # for storing html footer template
         self.calculator = ISImpactCalculator()
+        self.keywordIO = ISKeywordIO()
         self.runner = None
         self.helpDialog = None
         self.state = None
@@ -283,9 +283,11 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         if self.cboFunction.currentIndex() == -1:
             myHazardFilename = str(self.getHazardLayer().source())
-            myHazardKeywords = readKeywordsFromFile(myHazardFilename)
+            myHazardKeywords = self.keywordIO.readKeywords(
+                                                    self.getHazardLayer())
             myExposureFilename = str(self.getExposureLayer().source())
-            myExposureKeywords = readKeywordsFromFile(myExposureFilename)
+            myExposureKeywords = self.keywordIO.readKeywords(
+                                                    self.getExposureLayer())
             myMessage = self.tr('<span class="label label-important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
@@ -424,7 +426,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             # fallback to the layer's filename
             myTitle = None
             try:
-                myTitle = readKeywordsFromFile(str(myLayer.source()), 'title')
+                myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:
                 myTitle = myName
             if myTitle and self.setLayerNameFromTitleFlag:
@@ -434,8 +436,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
             try:
-                myCategory = readKeywordsFromFile(str(myLayer.source()),
-                                                'category')
+                myCategory = self.keywordIO.readKeywords(myLayer, 'category')
             except:
                 # continue ignoring this layer
                 continue
@@ -472,19 +473,17 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myHazardLayer = self.getHazardLayer()
         if myHazardLayer is None:
             return
-        myHazardFile = myHazardLayer.source()
         myExposureLayer = self.getExposureLayer()
         if myExposureLayer is None:
             return
-        myExposureFile = myExposureLayer.source()
-        myHazardKeywords = readKeywordsFromFile(str(myHazardFile))
+        myHazardKeywords = self.keywordIO.readKeywords(myHazardLayer)
         # We need to add the layer type to the returned keywords
         if myHazardLayer.type() == QgsMapLayer.VectorLayer:
             myHazardKeywords['layertype'] = 'vector'
         elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
             myHazardKeywords['layertype'] = 'raster'
 
-        myExposureKeywords = readKeywordsFromFile(str(myExposureFile))
+        myExposureKeywords = self.keywordIO.readKeywords(myExposureLayer)
         # We need to add the layer type to the returned keywords
         if myExposureLayer.type() == QgsMapLayer.VectorLayer:
             myExposureKeywords['layertype'] = 'vector'
@@ -683,14 +682,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                    'Error message: %s\n' % str(myMessage))
             raise Exception(myMessage)
 
+        # Load impact layer into QGIS
+        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+        
         # Get tabular information from impact layer
-        myReport = readKeywordsFromLayer(myEngineImpactLayer, 'impact_summary')
+        myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
+                                               'impact_summary')
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
 
-        # Load impact layer into QGIS
-        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
         # Determine styling for QGIS layer
         if myEngineImpactLayer.is_vector:
             if not myStyle:
@@ -760,7 +761,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
-            QtCore.QObject.disconnect(self.runner.notifier(),
+            QtCore.QObject.disconnect(self.runner,
                                QtCore.SIGNAL('done()'),
                                self.completed)
             del self.runner
@@ -1027,8 +1028,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myReport = None
         if theLayer is not None:
             try:
-                myReport = readKeywordsFromFile(str(theLayer.source()),
-                                              'impact_summary')
+                myReport = myHazardLayer(theLayer, 'impact_summary')
             except KeywordNotFoundException, e:
                 self.setOkButtonStatus()
             except InvalidParameterException, e:

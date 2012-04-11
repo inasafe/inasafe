@@ -79,17 +79,20 @@ class ISKeywordIO(QObject):
             A dict if theKeyword is omitted, otherwise the value for the
             given key if it is present.
         Raises:
-            None
+            Propogates any exception from the underlying reader delegate.
         """
         mySource = str(theLayer.source())
         myFlag = self.areKeywordsFileBased(theLayer)
         myKeywords = None
-        if myFlag:
-            myKeywords = is_safe_interface.readKeywordsFromFile(
-                                        mySource, theKeyword)
-        else:
-            myKeywords = self.readKeywordFromUri(mySource, theKeyword)
-        return myKeywords
+        try:
+            if myFlag:
+                myKeywords = is_safe_interface.readKeywordsFromFile(
+                                            mySource, theKeyword)
+            else:
+                myKeywords = self.readKeywordFromUri(mySource, theKeyword)
+            return myKeywords
+        except:
+            raise
 
     def writeKeywords(self, theLayer, theKeywords):
         """Write keywords for a datasource.
@@ -109,13 +112,15 @@ class ISKeywordIO(QObject):
         mySource = str(theLayer.source())
         myFlag = self.areKeywordsFileBased(theLayer)
         myKeywords = None
-        if myFlag:
-            myKeywords = is_safe_interface.writeKeywordsToFile(
-                                        mySource, theKeywords)
-        else:
-            myKeywords = self.writeKeywordsForUri(mySource, theKeywords)
-        return myKeywords
-
+        try:
+            if myFlag:
+                myKeywords = is_safe_interface.writeKeywordsToFile(
+                                            mySource, theKeywords)
+            else:
+                myKeywords = self.writeKeywordsForUri(mySource, theKeywords)
+            return myKeywords
+        except:
+            raise
     def copyKeywords(self, theSourceLayer,
                      theDestinationFile, theExtraKeywords=None):
         """Helper to copy the keywords file from a source dataset

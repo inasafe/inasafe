@@ -87,11 +87,6 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
         self._impactLayer = None
         self._result = None
 
-    def notifier(self):
-        """Return a qobject that will emit a 'done' signal when the
-        thread completes."""
-        return self._notifier
-
     def impactLayer(self):
         """Return the InaSAFE layer instance which is the output from the
         last run."""
