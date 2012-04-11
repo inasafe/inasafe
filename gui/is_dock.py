@@ -1028,7 +1028,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myReport = None
         if theLayer is not None:
             try:
-                myReport = myHazardLayer(theLayer, 'impact_summary')
+                myReport = self.keywordIO.readKeywords(theLayer,
+                                                       'impact_summary')
             except KeywordNotFoundException, e:
                 self.setOkButtonStatus()
             except InvalidParameterException, e:

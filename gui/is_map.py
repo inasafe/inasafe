@@ -156,7 +156,7 @@ class ISMap():
                                 'has no layer set.')
             raise LegendLayerException(myMessage)
         try:
-            self.keywordIO(self.layer, 'impact_summary')
+            self.keywordIO.readKeywords(self.layer, 'impact_summary')
         except KeywordNotFoundException, e:
             myMessage = self.tr('This layer does not appear to be an impact '
                                 'layer. Try selecting an impact layer in the '
