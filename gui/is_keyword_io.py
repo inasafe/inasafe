@@ -65,7 +65,6 @@ class ISKeywordIO(QObject):
         """
         self.keywordDbPath = str(thePath)
 
-
     def readKeywords(self, theLayer, theKeyword=None):
         """Read keywords for a datasource and return them as a dictionary.
         This is a wrapper method that will 'do the right thing' to fetch
@@ -73,7 +72,7 @@ class ISKeywordIO(QObject):
         is remote (e.g. a database connection) it will fetch the keywords from
         the keywords store.
         Args:
-            *  theLayer - A QGIS QgsMapLayer instance.
+            * theLayer - A QGIS QgsMapLayer instance.
             * theKeyword - optional - will extract only the specified keyword
               from the keywords dict.
         Returns:
@@ -92,6 +91,87 @@ class ISKeywordIO(QObject):
             myKeywords = self.readKeywordFromUri(mySource, theKeyword)
         return myKeywords
 
+    def writeKeywords(self, theLayer, theKeywords):
+        """Write keywords for a datasource.
+        This is a wrapper method that will 'do the right thing' to store
+        keywords for the given datasource. In particular, if the datasource
+        is remote (e.g. a database connection) it will write the keywords from
+        the keywords store.
+        Args:
+            * theLayer - A QGIS QgsMapLayer instance.
+            * theKeywords - a dict containing all the keywords to be written
+              for the layer.
+        Returns:
+            None.
+        Raises:
+            None
+        """
+        mySource = str(theLayer.source())
+        myFlag = self.areKeywordsFileBased(theLayer)
+        myKeywords = None
+        if myFlag:
+            myKeywords = is_safe_interface.writeKeywordsToFile(
+                                        mySource, theKeywords)
+        else:
+            myKeywords = self.writeKeywords(mySource, theKeywords)
+        return myKeywords
+
+    def copyKeywords(self, sourceFile,
+                     destinationFile, theExtraKeywords=None):
+        """Helper to copy the keywords file from a source dataset
+        to a destination dataset.
+
+        e.g.::
+
+            copyKeywords('foo.shp', 'bar.shp')
+
+        Will result in the foo.keywords file being copied to bar.keyword.
+
+        Optional argument extraKeywords is a dictionary with additional
+        keywords that will be added to the destination file
+        e.g::
+
+        copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
+        """
+
+        # FIXME (Ole): Need to turn qgis strings into normal strings earlier
+        mySourceBase = os.path.splitext(str(sourceFile))[0]
+        myDestinationBase = os.path.splitext(destinationFile)[0]
+        myNewSource = mySourceBase + '.keywords'
+        myNewDestination = myDestinationBase + '.keywords'
+
+        if not os.path.isfile(myNewSource):
+            myMessage = tr('Keywords file associated with dataset could not be'
+                           ' found: \n%s' % myNewSource)
+            raise KeywordNotFoundException(myMessage)
+
+        if theExtraKeywords is None:
+            theExtraKeywords = {}
+        myMessage = self.tr('Expected extraKeywords to be a dictionary. Got %s'
+               % str(type(theExtraKeywords))[1:-1])
+        verify(isinstance(theExtraKeywords, dict), myMessage)
+
+        try:
+            mySourceKeywords = readKeywordsFromFile(myNewSource)
+            myDestinationKeywords = mySourceKeywords
+            for key in theExtraKeywords:
+                myDestinationKeywords[key] = theExtraKeywords[key]
+            writeKeywordsToFile(myDestinationKeywords, myNewDestination)
+        except Exception, e:
+            myMessage = tr('Failed to copy keywords file from :'
+                           '\n%s\nto\%s: %s' %
+                   (myNewSource, myNewDestination, str(e)))
+            raise Exception(myMessage)
+
+        #try:
+        #    shutil.copyfile(myNewSource, myNewDestination)
+        #except Exception, e:
+        #    myMessage = ('Failed to copy keywords file from '
+        #                  :\n%s\nto\%s: %s' %
+        #           (myNewSource, myNewDestination, str(e)))
+        #    raise Exception(myMessage)
+
+        return
 # methods below here should be considered private
 
     def defaultKeywordDbPath(self):
@@ -403,59 +483,3 @@ class ISKeywordIO(QObject):
         finally:
             self.closeConnection()
 
-    def copyKeywords(self, sourceFile,
-                     destinationFile, theExtraKeywords=None):
-        """Helper to copy the keywords file from a source dataset
-        to a destination dataset.
-
-        e.g.::
-
-            copyKeywords('foo.shp', 'bar.shp')
-
-        Will result in the foo.keywords file being copied to bar.keyword.
-
-        Optional argument extraKeywords is a dictionary with additional
-        keywords that will be added to the destination file
-        e.g::
-
-        copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
-        """
-
-        # FIXME (Ole): Need to turn qgis strings into normal strings earlier
-        mySourceBase = os.path.splitext(str(sourceFile))[0]
-        myDestinationBase = os.path.splitext(destinationFile)[0]
-        myNewSource = mySourceBase + '.keywords'
-        myNewDestination = myDestinationBase + '.keywords'
-
-        if not os.path.isfile(myNewSource):
-            myMessage = tr('Keywords file associated with dataset could not be'
-                           ' found: \n%s' % myNewSource)
-            raise KeywordNotFoundException(myMessage)
-
-        if theExtraKeywords is None:
-            theExtraKeywords = {}
-        myMessage = self.tr('Expected extraKeywords to be a dictionary. Got %s'
-               % str(type(theExtraKeywords))[1:-1])
-        verify(isinstance(theExtraKeywords, dict), myMessage)
-
-        try:
-            mySourceKeywords = readKeywordsFromFile(myNewSource)
-            myDestinationKeywords = mySourceKeywords
-            for key in theExtraKeywords:
-                myDestinationKeywords[key] = theExtraKeywords[key]
-            writeKeywordsToFile(myDestinationKeywords, myNewDestination)
-        except Exception, e:
-            myMessage = tr('Failed to copy keywords file from :'
-                           '\n%s\nto\%s: %s' %
-                   (myNewSource, myNewDestination, str(e)))
-            raise Exception(myMessage)
-
-        #try:
-        #    shutil.copyfile(myNewSource, myNewDestination)
-        #except Exception, e:
-        #    myMessage = ('Failed to copy keywords file from '
-        #                  :\n%s\nto\%s: %s' %
-        #           (myNewSource, myNewDestination, str(e)))
-        #    raise Exception(myMessage)
-
-        return

@@ -194,7 +194,7 @@ def _clipVectorLayer(theLayer, theExtent,
         raise NoFeaturesInExtentException(myMessage)
 
     myKeywordIO = ISKeywordIO()
-    myKeywordIO.copyKeywords(theLayer.source(), myFilename,
+    myKeywordIO.copyKeywords(theLayer, myFilename,
                   theExtraKeywords=theExtraKeywords)
 
     return myFilename  # Filename of created file
@@ -300,7 +300,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
 
     # .. todo:: Check the result of the shell call is ok
     myKeywordIO = ISKeywordIO()
-    myKeywordIO.copyKeywords(myWorkingLayer, myFilename,
+    myKeywordIO.copyKeywords(theLayer, myFilename,
                              theExtraKeywords=theExtraKeywords)
     return myFilename  # Filename of created file
 
