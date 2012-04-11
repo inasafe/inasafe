@@ -113,11 +113,11 @@ class ISKeywordIO(QObject):
             myKeywords = is_safe_interface.writeKeywordsToFile(
                                         mySource, theKeywords)
         else:
-            myKeywords = self.writeKeywords(mySource, theKeywords)
+            myKeywords = self.writeKeywordsForUri(mySource, theKeywords)
         return myKeywords
 
-    def copyKeywords(self, sourceFile,
-                     destinationFile, theExtraKeywords=None):
+    def copyKeywords(self, theSourceLayer,
+                     theDestinationFile, theExtraKeywords=None):
         """Helper to copy the keywords file from a source dataset
         to a destination dataset.
 
@@ -132,45 +132,41 @@ class ISKeywordIO(QObject):
         e.g::
 
         copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
+        
+        Args:
+            * theSourceLayer - A QGIS QgsMapLayer instance.
+            * theDestinationFile - the output filename that should be used
+              to store the keywords in. It can be a .shp or a .keywords for
+              exampled since the suffix will always be replaced with .keywords.
+            * theExtraKeywords - a dict containing all the extra keywords to be
+              written for the layer. The written keywords will consist of any
+              original keywords from the source layer's keywords file and
+              and the extra keywords (which will replace the source layers
+              keywords if the key is identical).
+        Returns:
+            None.
+        Raises:
+            None
         """
-
-        # FIXME (Ole): Need to turn qgis strings into normal strings earlier
-        mySourceBase = os.path.splitext(str(sourceFile))[0]
-        myDestinationBase = os.path.splitext(destinationFile)[0]
-        myNewSource = mySourceBase + '.keywords'
-        myNewDestination = myDestinationBase + '.keywords'
-
-        if not os.path.isfile(myNewSource):
-            myMessage = tr('Keywords file associated with dataset could not be'
-                           ' found: \n%s' % myNewSource)
-            raise KeywordNotFoundException(myMessage)
-
+        myKeywords = self.readKeywords(theSourceLayer)
         if theExtraKeywords is None:
             theExtraKeywords = {}
         myMessage = self.tr('Expected extraKeywords to be a dictionary. Got %s'
                % str(type(theExtraKeywords))[1:-1])
         verify(isinstance(theExtraKeywords, dict), myMessage)
-
+        # compute the output keywords file name
+        myDestinationBase = os.path.splitext(theDestinationFile)[0]
+        myNewDestination = myDestinationBase + '.keywords'
+        # write the extra keywords into the source dict
         try:
-            mySourceKeywords = readKeywordsFromFile(myNewSource)
-            myDestinationKeywords = mySourceKeywords
             for key in theExtraKeywords:
-                myDestinationKeywords[key] = theExtraKeywords[key]
-            writeKeywordsToFile(myDestinationKeywords, myNewDestination)
+                myKeywords[key] = theExtraKeywords[key]
+            writeKeywordsToFile(myNewDestination, myKeywords)
         except Exception, e:
-            myMessage = tr('Failed to copy keywords file from :'
+            myMessage = self.tr('Failed to copy keywords file from :'
                            '\n%s\nto\%s: %s' %
-                   (myNewSource, myNewDestination, str(e)))
+                   (theSourceLayer.source(), myNewDestination, str(e)))
             raise Exception(myMessage)
-
-        #try:
-        #    shutil.copyfile(myNewSource, myNewDestination)
-        #except Exception, e:
-        #    myMessage = ('Failed to copy keywords file from '
-        #                  :\n%s\nto\%s: %s' %
-        #           (myNewSource, myNewDestination, str(e)))
-        #    raise Exception(myMessage)
-
         return
 # methods below here should be considered private
 

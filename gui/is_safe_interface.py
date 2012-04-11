@@ -293,7 +293,7 @@ def writeKeywordsToFile(theFilename, theKeywords):
     Raises:
         None
     """
-    safe_write_keywords(theFilename, theKeywords)
+    safe_write_keywords(theKeywords, theFilename)
 
 
 def getStyleInfo(theLayer):
