@@ -66,11 +66,17 @@ class EarthquakePopulationExposureFunction(FunctionProvider):
         total = numpy.nansum(P.flat)
 
         # Create report
-        impact_summary = ('<table border="0" width="320px">'
+        Hname = H.get_name()
+        Ename = E.get_name()
+        impact_summary = _('<b>In case of "%s" the estimated impact to '
+                           '"%s" '
+                           'is&#58;</b><br><br><p>' % (Hname, Ename))
+        impact_summary += ('<table border="0" width="320px">'
                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                   '</table>' % ('Jumlah Penduduk', int(total),
-                                 'Perkiraan Orang Meninggal', int(count)))
+                   '</table>' % ('Number of people affected', int(total),
+                                 'Estimated number of fatalities', int(count)))
+        impact_summary += ('<p><br /><b> Impact function: Earthquake fatality function</b></p>')
 
         # Create new layer and return
         R = Raster(F,
