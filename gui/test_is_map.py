@@ -185,12 +185,15 @@ class ISMapTest(unittest.TestCase):
 
     def test_handleMissingMapTitle(self):
         """Missing map title from the keywords fails gracefully"""
+        # TODO running OSM Buildngs with Pendudk Jakarta
+        # wasthrowing an error when requesting map title
+        # that this test wasnt replicating well
         myLayer, myType = loadLayer('population_padang_1.asc')
         del myType
         myMap = ISMap(IFACE)
         myMap.setImpactLayer(myLayer)
         myTitle = myMap.getMapTitle()
-        myExpectedTitle = ''
+        myExpectedTitle = None
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
         assert myTitle == myExpectedTitle, myMessage
 
