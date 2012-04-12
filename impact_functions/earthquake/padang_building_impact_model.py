@@ -119,17 +119,20 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
             # Record result for this feature
             building_damage.append(result_dict)
 
+            #if percent_damage > 0.01:
+            #    print mmi, percent_damage
+
             # Calculate statistics
             if percent_damage < 10:
                 count0 += 1
 
-            if 10 <= percent_damage < 25:
+            if 10 <= percent_damage < 33:
                 count10 += 1
 
-            if 25 <= percent_damage < 50:
+            if 33 <= percent_damage < 66:
                 count25 += 1
 
-            if 50 <= percent_damage:
+            if 66 <= percent_damage:
                 count50 += 1
 
         # Create report
@@ -138,9 +141,9 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     '   <tr></tr>'
                     '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s (<10%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (10-25%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (25-50%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (50-100%%)&#58;</td><td>%i</td></tr>'
+                    '   <tr><td>%s (10-33%%)&#58;</td><td>%i</td></tr>'
+                    '   <tr><td>%s (33-66%%)&#58;</td><td>%i</td></tr>'
+                    '   <tr><td>%s (66-100%%)&#58;</td><td>%i</td></tr>'
                     '</table></font>' % (_('Buildings'), _('Total'),
                                   _('All'), N,
                                   _('No damage'), count0,
@@ -148,10 +151,23 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                                   _('Medium damage'), count25,
                                   _('High damage'), count50))
 
+        # Create style
+        style_classes = [dict(label=_('No damage'), min=0, max=10,
+                              colour='#00ff00', transparency=1),
+                         dict(label=_('Low damage'), min=10, max=33,
+                              colour='#ffff00', transparency=1),
+                         dict(label=_('Medium damage'), min=33, max=66,
+                              colour='#ffaa00', transparency=1),
+                         dict(label=_('High damage'), min=66, max=100,
+                              colour='#ff0000', transparency=1)]
+        style_info = dict(target_field=self.target_field,
+                          style_classes=style_classes)
+
         # Create vector layer and return
         V = Vector(data=building_damage,
                    projection=E.get_projection(),
                    geometry=coordinates,
                    name='Estimated pct damage',
-                   keywords={'impact_summary': impact_summary})
+                   keywords={'impact_summary': impact_summary},
+                   style_info=style_info)
         return V
