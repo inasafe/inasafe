@@ -81,14 +81,19 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
             population_impact.append(result_dict)
 
         # Create report
+        Hname = H.get_name()
+        Ename = E.get_name()
         if H.is_raster:
-            impact_summary = ('<table border="0" width="320px">'
+            impact_summary = _('<b>In case of "%s" the estimated impact to '
+                           '"%s" '
+                           'is&#58;</b><br><br><p>' % (Hname, Ename))
+            impact_summary += ('<table border="0" width="320px">'
                        '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                       '</table>' % ('ketinggian tsunami', 'Jumlah gedung',
+                       '</table>' % ('tsunami height', 'Number of buildings',
                                      '< 1 m', count0,
                                      '1 - 3 m', count1,
                                      '> 3 m', count3))
