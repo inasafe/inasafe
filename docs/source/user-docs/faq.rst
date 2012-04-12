@@ -36,10 +36,14 @@ How do I take screen capture e.g. for use in a presentation?
 
   On Ubuntu, get the packages gtk-recordmydesktop and mencoder
   Record using recordmydesktop (start and stop icon in the top bar)
-  Convert to other formats using mencoder, e.g.
+  Convert to other formats using mencoder, e.g:
+
   mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts vcodec=mpeg4:vpass=1 -of lavf -o yogya_analysis.avi
-  or
+ 
+  or::
+
   mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts vcodec=wmv2 -of lavf -o yogya_analysis.wmv
+
 
 How does the documentation work?::
 
@@ -53,16 +57,16 @@ How does the documentation work?::
     https://github.com/AIFDR/inasafe/blob/master/docs/Makefile. These
     files are accessible through both the file browser and the help button
     available in |project_name|
-  * The web site http://readthedocs.org/docs/risk-in-a-box which automatically
+  * The web site http://readthedocs.org/docs/inasafe which automatically
     reads the RST files from github to update its content. The steps to achieve
     this are
 
   1. Register the project on the dashboard at ReadTheDocs
-     (http://readthedocs.org/dashboard/risk-in-a-box/edit).
+     (http://readthedocs.org/dashboard/inasafe/edit).
      In particular, this form points to the github repository where the RST
      files reside.
   2. Either manually build the project by clicking 'Build latest version' on
-     http://readthedocs.org/dashboard/risk-in-a-box/ or by activating the
+     http://readthedocs.org/dashboard/inasafe/ or by activating the
      service hook for ReadTheDocs at github:
      https://github.com/AIFDR/inasafe/admin/hooks
 

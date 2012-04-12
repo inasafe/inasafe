@@ -2,7 +2,8 @@
   <qresource prefix="/plugins/inasafe">
     <file alias="icon.png">resources/img/icon.png</file>
     <file alias="keywords.png">resources/img/keywords.png</file>
-    <file alias="reset.png">resources/img/arrow_rotate_clockwise.png</file>
+    <file alias="reload.png">resources/img/reload.png</file>
+    <file alias="options.png">resources/img/options.png</file>
     <file alias="bnpb_logo.png">resources/img/bnpb_logo.png</file>
     <file alias="bnpb_logo_64.png">resources/img/bnpb_logo_64.png</file>
     <file alias="logo-flower.png">resources/img/logo-flower.png</file>

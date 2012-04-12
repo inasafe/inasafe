@@ -17,6 +17,7 @@ __version__ = '0.3.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+__type__ = 'alpha'  # beta, final etc will be shown in dock title
 
 import numpy
 from PyQt4 import QtGui, QtCore
@@ -24,13 +25,13 @@ from PyQt4.QtCore import pyqtSignature
 from is_dock_base import Ui_ISDockBase
 from is_help import ISHelp
 from is_utilities import getExceptionWithStacktrace, getWGS84resolution
-from qgis.core import (QGis,
-                       QgsMapLayer,
+from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
+from qgis.gui import QgsMapCanvasLayer
 from is_impact_calculator import (ISImpactCalculator,
                               getKeywordFromFile,
                               getKeywordFromLayer,
@@ -85,7 +86,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         #settrace()
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
-        self.setWindowTitle(self.tr('InaSAFE %s' % __version__))
+        self.setWindowTitle(self.tr('InaSAFE %s %s' % (
+                                __version__, __type__)))
         # Save reference to the QGIS interface
         self.iface = iface
         self.header = None  # for storing html header template
@@ -94,6 +96,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.runner = None
         self.helpDialog = None
         self.state = None
+        self.runInThreadFlag = False
+        self.showOnlyVisibleLayersFlag = True
+        self.setLayerNameFromTitleFlag = True
+        self.hazardLayers = None  # array of all hazard layers
+        self.exposureLayers = None  # array of all exposure layers
+        self.readSettings()
         self.getLayers()
         self.setOkButtonStatus()
 
@@ -112,6 +120,31 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
+    def readSettings(self):
+        """Set the dock state from QSettings. Do this on init and after
+        changing options in the options dialog.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+        """
+
+        mySettings = QtCore.QSettings()
+        myFlag = mySettings.value(
+                        'inasafe/useThreadingFlag', False).toBool()
+        self.runInThreadFlag = myFlag
+
+        myFlag = mySettings.value(
+                        'inasafe/visibleLayersOnlyFlag', True).toBool()
+        self.showOnlyVisibleLayersFlag = myFlag
+
+        myFlag = mySettings.value(
+                        'inasafe/setLayerNameFromTitleFlag', True).toBool()
+        self.setLayerNameFromTitleFlag = myFlag
+
+        self.getLayers()
+
     def connectLayerListener(self):
         """Establish a signal/slot to listen for changes in the layers loaded
         in QGIS.
@@ -124,9 +157,33 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             None
         Raises:
         """
+        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWillBeRemoved(QString)'),
+                               self.getLayers)
+        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+                               self.getLayers)
+        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+                               self.getLayers)
+        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('removedAll()'),
+                               self.getLayers)
+        QtCore.QObject.connect(self.iface,
+                               QtCore.SIGNAL('projectRead()'),
+                               self.getLayers)
+        QtCore.QObject.connect(self.iface,
+                               QtCore.SIGNAL('newProjectCreated()'),
+                               self.getLayers)
+        # to detect layer visibility changes which registry is ignorant of
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
-                               self.getLayers)
+                               self.canvasLayersetChanged)
+        # old implementation - bad because it triggers with every layer
+        # visibility change
+        #QtCore.QObject.connect(self.iface.mapCanvas(),
+        #                       QtCore.SIGNAL('layersChanged()'),
+        #                       self.getLayers)
 
     def disconnectLayerListener(self):
         """Destroy the signal/slot to listen for changes in the layers loaded
@@ -140,9 +197,51 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             None
         Raises:
         """
-        QtCore.QObject.disconnect(self.iface.mapCanvas(),
-                               QtCore.SIGNAL('layersChanged()'),
+        try:
+            QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWillBeRemoved(QString)'),
                                self.getLayers)
+        except:
+            pass
+
+        try:
+            QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+                               self.getLayers)
+        except:
+            pass
+
+        try:
+            QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
+                               QtCore.SIGNAL('removedAll()'),
+                               self.getLayers)
+        except:
+            pass
+        try:
+            QtCore.QObject.disconnect(self.iface,
+                               QtCore.SIGNAL('projectRead()'),
+                               self.getLayers)
+        except:
+            pass
+
+        try:
+            QtCore.QObject.disconnect(self.iface,
+                               QtCore.SIGNAL('newProjectCreated()'),
+                               self.getLayers)
+        except:
+            pass
+
+        try:
+            QtCore.QObject.disconnect(self.iface.mapCanvas(),
+                               QtCore.SIGNAL('layersChanged()'),
+                               self.canvasLayersetChanged)
+        except:
+            pass
+        # old implementation - bad because it triggers with every layer
+        # visibility change
+        #QtCore.QObject.disconnect(self.iface.mapCanvas(),
+        #                       QtCore.SIGNAL('layersChanged()'),
+        #                       self.getLayers)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -216,7 +315,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        # Add any other logic you mught like here...
+        # Add any other logic you might like here...
         self.getFunctions()
         self.setOkButtonStatus()
 
@@ -262,6 +361,21 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         if myMessage is not '':
             self.displayHtml(myMessage)
 
+    def canvasLayersetChanged(self):
+        """A helper slot to update the dock combos if the canvas layerset
+        has been changed (e.g. one or more layer visibilities changed).
+        If self.showOnlyVisibleLayersFlag is set to False this method will
+        simply return, doing nothing.
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            Any exceptions raised by the RIAB library will be propogated.
+        """
+        if self.showOnlyVisibleLayersFlag:
+            self.getLayers()
+
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
 
@@ -278,12 +392,27 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no
         """
+        self.disconnectLayerListener()
         self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
-        for i in range(len(self.iface.mapCanvas().layers())):
+        self.hazardLayers = []
+        self.exposureLayers = []
+        # Map registry may be invalid if QGIS is shutting down
+        myRegistry = None
+        try:
+            myRegistry = QgsMapLayerRegistry.instance()
+        except:
+            return
+        # mapLayers returns a QMap<QString id, QgsMapLayer layer>
+        myLayers = myRegistry.mapLayers().values()
+        for myLayer in myLayers:
+        #for i in range(len(self.iface.mapCanvas().layers())):
+            #myLayer = self.iface.mapCanvas().layer(i)
+            if (self.showOnlyVisibleLayersFlag and myLayer not in
+                self.iface.mapCanvas().layers()):
+                continue
 
-            myLayer = self.iface.mapCanvas().layer(i)
             """
             .. todo:: check raster is single band
             store uuid in user property of list widget for layers
@@ -291,6 +420,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
             myName = myLayer.name()
             mySource = str(myLayer.id())
+            # See if there is a title for this layer, if not,
+            # fallback to the layer's filename
+            myTitle = None
+            try:
+                myTitle = getKeywordFromFile(str(myLayer.source()), 'title')
+            except:
+                myTitle = myName
+            if myTitle and self.setLayerNameFromTitleFlag:
+                myLayer.setLayerName(myTitle)
+
             # find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
@@ -300,23 +439,18 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             except:
                 # continue ignoring this layer
                 continue
-            # See if there is a title for this layer, if not,
-            # fallback to the layer's filename
-            myTitle = None
-            try:
-                myTitle = getKeywordFromFile(str(myLayer.source()), 'title')
-            except:
-                myTitle = myName
-
             if myCategory == 'hazard':
-                self.cboHazard.addItem(myTitle, mySource)
+                self.addComboItemInOrder(self.cboHazard, myTitle, mySource)
+                self.hazardLayers.append(myLayer)
             elif myCategory == 'exposure':
-                self.cboExposure.addItem(myTitle, mySource)
+                self.addComboItemInOrder(self.cboExposure, myTitle, mySource)
+                self.exposureLayers.append(myLayer)
 
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
         self.restoreState()
         self.setOkButtonStatus()
+        self.connectLayerListener()
         return
 
     def getFunctions(self):
@@ -363,7 +497,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myDict = availableFunctions(myList)
             # Populate the hazard combo with the available functions
             for myFunction in myDict:  # Use only key
-                self.cboFunction.addItem(myFunction)
+                self.addComboItemInOrder(self.cboFunction, myFunction)
         except Exception, e:
             raise e
 
@@ -489,9 +623,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                 'a new layer.')
             myProgress = 66
             self.showBusy(myTitle, myMessage, myProgress)
-            #self.runner.start()  # Run in different thread
-            self.runner.run()  # Run in same thread
-            #self.runner.start() # Run in separate thread
+            if self.runInThreadFlag:
+                self.runner.start()  # Run in different thread
+            else:
+                self.runner.run()  # Run in same thread
             QtGui.qApp.restoreOverrideCursor()
             # .. todo :: Disconnect done slot/signal
         except Exception, e:
@@ -974,19 +1109,31 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
-                            self.tr('Write to pdf'),
+                            self.tr('Write to PDF'),
                             getTempDir(),
                             self.tr('Pdf File (*.pdf)'))
         myMap = ISMap(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())
-        self.showBusy()
+        self.showBusy(self.tr('Map Creator'),
+                      self.tr('Generating your map as a PDF document...'),
+                      theProgress=20)
         try:
             myMap.makePdf(myFilename)
-            self.displayHtml(self.tr('<div><span class="label label-success">'
-                             'PDF Created</div>'
-                             'Your map was saved as %s' % myFilename))
+            self.showBusy(self.tr('Map Creator'),
+                             self.tr('Your PDF was created....opening using '
+                                     'the default PDF viewer on your system.'
+                                     'The generated pdf is saved as: %s' %
+                                     myFilename),
+                             theProgress=80
+                             )
             QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
                                  QtCore.QUrl.TolerantMode))
+            self.showBusy(self.tr('Map Creator'),
+                             self.tr('Processing complete.'
+                                     'The generated pdf is saved as: %s' %
+                                     myFilename),
+                             theProgress=100
+                             )
         except Exception, e:
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
@@ -994,3 +1141,30 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         self.hideBusy()
         myMap.showComposer()
+
+    def addComboItemInOrder(self, theCombo, theItemText, theItemData=None):
+        """Although QComboBox allows you to set an InsertAlphabetically enum
+        this only has effect when a user interactively adds combo items to
+        an editable combo. This we have this little function to ensure that
+        combos are always sorted alphabetically.
+        Args:
+            * theCombo - combo box receiving the new item
+            * theItemText - display text for the combo
+            * theItemData - optional UserRole data to be associated with
+              the item
+
+        Returns:
+            None
+        Raises:
+
+        ..todo:: Move this to utilities
+        """
+        mySize = theCombo.count()
+        for myCount in range(0, mySize):
+            myItemText = str(theCombo.itemText(myCount))
+            # see if theItemText alphabetically precedes myItemText
+            if cmp(theItemText, myItemText) < 0:
+                theCombo.insertItem(myCount, theItemText, theItemData)
+                return
+        #otherwise just add it to the end
+        theCombo.insertItem(mySize, theItemText, theItemData)

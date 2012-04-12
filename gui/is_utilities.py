@@ -235,11 +235,11 @@ def getExceptionWithStacktrace(e, html=False):
     else:
         # Wrap string in html
         s = '<div>'
-        s += tr('<span class="label label-important">Problem:</span> ')
+        s += tr('<span class="label label-warning">Problem:</span> ')
         s += errmsg
         s += ('</div>'
         '<div>'
-        '<span class="label label-warning" style="cursor:pointer;"'
+        '<span class="label label-info" style="cursor:pointer;"'
         ' onclick="$(\'#traceback\').toggle();">')
         s += tr('Toggle traceback...')
         s += '</span>'

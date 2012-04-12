@@ -68,6 +68,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         """
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
+        self.setWindowTitle(self.tr(
+                            'InaSAFE %s Keywords Editor' % __version__))
         # note the keys should remain untranslated as we need to write
         # english to the keywords file. The keys will be written as user data
         # in the combo entries.

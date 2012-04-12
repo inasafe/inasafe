@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_help_base.ui'
 #
-# Created: Wed Mar 21 14:31:11 2012
+# Created: Wed Mar 28 11:30:12 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -35,6 +35,7 @@ class Ui_ISHelpBase(object):
         self.gridLayout.addWidget(self.buttonBox, 1, 0, 1, 1)
 
         self.retranslateUi(ISHelpBase)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ISHelpBase.reject)
         QtCore.QMetaObject.connectSlotsByName(ISHelpBase)
 
     def retranslateUi(self, ISHelpBase):

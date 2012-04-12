@@ -15,7 +15,7 @@ class USGSFatalityFunction(FunctionProvider):
     :param requires category == 'hazard' and \
                     subcategory == 'earthquake' and \
                     layertype == 'raster' and \
-                    unit=='MMI'
+                    unit=='mmi'
 
     :param requires category == 'exposure' and \
                     subcategory == 'population' and \
