@@ -65,7 +65,7 @@ class FloodEvacuationFunction(FunctionProvider):
         # Create report
         iname = inundation.get_name()
         pname = population.get_name()
-        impact_summary = ('<b>Apabila terjadi "%s" perkiraan dampak'
+        impact_summary = ('<b>Apabila terjadi "%s" perkiraan dampak '
                           'terhadap "%s" kemungkinan yang terjadi&#58;'
                           '</b><br><br><p>' % (iname, pname))
         impact_summary += ('<table border="0" width="320px">')
@@ -75,12 +75,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         impact_summary += '</table>'
 
-        impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<b>Catatan&#58;</b><br>'
-        impact_summary += '- Jumlah penduduk Jakarta %s<br>' % total
-        impact_summary += '- Jumlah dalam ribuan<br>'
-        impact_summary += ('- Penduduk dianggap perlu dievakuasi ketika '
-                    'banjir lebih dari %.1f m.' % threshold)
+
 
         # Create impact_table based on BNPB Perka 7/2008 minimum bantuan
         # Weekly needs (see issue #82)
@@ -90,9 +85,9 @@ class FloodEvacuationFunction(FunctionProvider):
         family_kits = number_of_people_affected / 5
         toilets = number_of_people_affected / 20
 
-        impact_table = ('<table class="table table-striped condensed'
+        impact_table = ('<br> <br> <table class="table table-striped condensed'
                         ' bordered-table">'
-                 '  <caption>Minmum Bantuan per minggu</caption>'
+                 #'  <caption>Minmum Bantuan per minggu</caption>'
                  '  <thead>'
                  '    <tr>'
                  '      <th>Bantuan</th>'
@@ -121,9 +116,20 @@ class FloodEvacuationFunction(FunctionProvider):
                  '      <td>%i</td>'
                  '    </tr>'
                  '  </tbody>'
-                 '  <caption>Sumber: BNPB Perka 7/2008</caption>'
+                 #'  <caption>Sumber: BNPB Perka 7/2008</caption>'
                  '</table>' % (rice, drinking_water, water, family_kits,
                                toilets))
+
+
+        impact_summary += impact_table
+        impact_summary += '<br>'  # Blank separation row
+        impact_summary += '<b>Catatan&#58;</b><br>'
+        impact_summary += '- Jumlah penduduk Jakarta %s<br>' % total
+        impact_summary += '- Jumlah dalam ribuan<br>'
+        impact_summary += ('- Penduduk perlu dievakuasi ketika '
+                    'banjir lebih dari %i m.<br>' % threshold)
+        impact_summary += '- Minmum Bantuan per minggu (BNPB Perka 7/2008)'
+
 
         map_title = 'Penduduk yang Mungkin dievakuasi'
 
