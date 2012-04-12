@@ -91,8 +91,10 @@ class ISKeywordIO(QObject):
             else:
                 myKeywords = self.readKeywordFromUri(mySource, theKeyword)
             return myKeywords
-        except:
-            raise
+        except KeywordNotFoundException, e:
+            raise e
+        except Exception, e:
+            raise e
 
     def writeKeywords(self, theLayer, theKeywords):
         """Write keywords for a datasource.

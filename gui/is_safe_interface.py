@@ -224,7 +224,7 @@ def readKeywordsFromLayer(theLayer, keyword):
     return myValue
 
 
-def readKeywordsFromFile(theLayerPath, keyword=None):
+def readKeywordsFromFile(theLayerPath, theKeyword=None):
     """Get metadata from the keywords file associated with a local
      file in the file system.
 
@@ -238,7 +238,7 @@ def readKeywordsFromFile(theLayerPath, keyword=None):
 
        * theLayerPath - a string representing a path to a layer
            (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
-       * keyword - optional - the metadata keyword to retrieve e.g. 'title'
+       * theKeyword - optional - the metadata keyword to retrieve e.g. 'title'
 
     Returns:
        A string containing the retrieved value for the keyword if
@@ -267,18 +267,18 @@ def readKeywordsFromFile(theLayerPath, keyword=None):
         myDictionary = read_keywords(myKeywordFilePath)
     except Exception, e:
         myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
-                myKeywordFilePath, keyword, str(e)))
+                myKeywordFilePath, theKeyword, str(e)))
         raise KeywordNotFoundException(myMessage)
 
     # if no keyword was supplied, just return the dict
-    if keyword is None:
+    if theKeyword is None:
         return myDictionary
-    if not keyword in myDictionary:
+    if not theKeyword in myDictionary:
         myMessage = tr('No value was found in file %s for keyword %s' % (
-                    myKeywordFilePath, keyword))
+                    myKeywordFilePath, theKeyword))
         raise KeywordNotFoundException(myMessage)
 
-    myValue = myDictionary[keyword]
+    myValue = myDictionary[theKeyword]
 
     return myValue
 

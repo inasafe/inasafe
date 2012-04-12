@@ -994,7 +994,8 @@ class ISMap():
         except KeywordNotFoundException, e:
             return None
         except Exception:
-            raise
+            # TODO maybe we want to handle other types of exceptions?
+            return None
 
     def renderImpactSummary(self):
         """Render the impact summary in the keywords if present. The table is
@@ -1030,7 +1031,8 @@ class ISMap():
         except KeywordNotFoundException:
             return None
         except Exception:
-            raise
+            # TODO maybe add some better handling here
+            return None
 
     def renderHtml(self, theHtml, theWidthMM):
         """Render some HTML to a pixmap..
