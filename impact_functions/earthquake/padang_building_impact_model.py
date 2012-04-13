@@ -52,7 +52,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     layertype=='vector' and \
                     datatype in ['osm', 'itb', 'sigab']
     """
-
+    plugin_name = 'be damaged'
     # FIXME (TD): make the plugin_name work
     # U just need to restart QGIS :-)
     # Anyway, we are onto something better where
@@ -72,24 +72,24 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
         datatype = E.get_keywords()['datatype']
         if datatype.lower() == 'osm':
             # Map from OSM attributes to the padang building classes
-            E = osm2padang(E)
+            Em = osm2padang(E)
             vclass_tag = 'VCLASS'
         elif datatype.lower() == 'sigab':
-            E = sigab2padang(E)
+            Em = sigab2padang(E)
             vclass_tag = 'VCLASS'
         else:
             vclass_tag = 'TestBLDGCl'
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E)
+        Hi = H.interpolate(Em)
 
         # Extract relevant numerical data
-        coordinates = E.get_geometry()
-        shaking = H.get_data()
+        coordinates = Em.get_geometry()
+        shaking = Hi.get_data()
         N = len(shaking)
 
         # List attributes to carry forward to result layer
-        attributes = E.get_attribute_names()
+        attributes = Em.get_attribute_names()
 
         # Calculate building damage
         count50 = 0
@@ -100,7 +100,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
         for i in range(N):
             mmi = float(shaking[i].values()[0])
 
-            building_class = E.get_data(vclass_tag, i)
+            building_class = Em.get_data(vclass_tag, i)
 
             building_type = str(int(building_class))
             damage_params = damage_curves[building_type]
@@ -114,7 +114,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
 
             # Carry all orginal attributes forward
             for key in attributes:
-                result_dict[key] = E.get_data(key, i)
+                result_dict[key] = Em.get_data(key, i)
 
             # Record result for this feature
             building_damage.append(result_dict)
@@ -136,7 +136,12 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                 count50 += 1
 
         # Create report
-        impact_summary = ('<font size="3"> <table border="0" width="320px">'
+        Hname = H.get_name()
+        Ename = E.get_name()
+        impact_summary = _('<b>In case of "%s" the estimated impact to '
+                           '"%s" '
+                           'is&#58;</b><br><br><p>' % (Hname, Ename))
+        impact_summary += ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
                     '   <tr><td>%s&#58;</td><td>%i</td></tr>'
@@ -150,7 +155,10 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                                   _('Low damage'), count10,
                                   _('Medium damage'), count25,
                                   _('High damage'), count50))
-
+        impact_summary += '<br>'  # Blank separation row
+        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
+        impact_summary += _("- Levels of impact are defined by post 2009 Padang earthquake survey conducted by Geoscience Australia and Institut of Teknologi Bandung.<br>" )
+        impact_summary += _("- Unreinforced masonry is assumed where no structural information is available. <br>")
         # Create style
         style_classes = [dict(label=_('No damage'), min=0, max=10,
                               colour='#00ff00', transparency=1),
