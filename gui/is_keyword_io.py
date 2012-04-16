@@ -26,6 +26,7 @@ from is_exceptions import (HashNotFoundException,
 from is_safe_interface import (verify,
                                readKeywordsFromFile,
                                writeKeywordsToFile)
+from is_utilities import qgisVersion
 from PyQt4.QtCore import QObject
 from qgis.core import (QGis, QgsMapLayer)
 
@@ -299,12 +300,7 @@ class ISKeywordIO(QObject):
         # datasource as a file and look for a keywords file, false and we look
         # in the keywords db.
         myProviderType = None
-        myVersion = None
-        try:
-            myVersion = unicode(QGis.QGIS_VERSION_INT)
-        except:
-            myVersion = unicode(QGis.qgisVersion)[0]
-        myVersion = int(myVersion)
+        myVersion = qgisVersion()
         # check for old raster api with qgis < 1.8
         # ..todo:: Add test for plugin layers too
         if (myVersion < 10800 and

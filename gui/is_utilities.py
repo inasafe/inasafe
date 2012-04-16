@@ -343,3 +343,20 @@ def htmlFooter():
     myFooter = myStream.readAll()
     myFile.close()
     return myFooter
+
+def qgisVersion():
+    """Get the version of QGIS
+   Args:
+       None
+    Returns:
+        QGIS Version where 10700 represents QGIS 1.7 etc.
+    Raises:
+       None
+    """
+    myVersion = None
+    try:
+        myVersion = unicode(QGis.QGIS_VERSION_INT)
+    except:
+        myVersion = unicode(QGis.qgisVersion)[0]
+    myVersion = int(myVersion)
+    return myVersion

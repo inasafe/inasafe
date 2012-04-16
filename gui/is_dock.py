@@ -44,7 +44,8 @@ from is_utilities import (getTempDir,
                           htmlHeader,
                           htmlFooter,
                           setVectorStyle,
-                          setRasterStyle)
+                          setRasterStyle,
+                          qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -157,15 +158,23 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             None
         Raises:
         """
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('layerWillBeRemoved(QString)'),
-                               self.getLayers)
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
-                               self.getLayers)
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
-                               self.getLayers)
+        if qgisVersion() < 10800:
+            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                                   QtCore.SIGNAL('layerWillBeRemoved(QString)'),
+                                   self.getLayers)
+            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                                   QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+                                   self.getLayers)
+            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                                   QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+                                   self.getLayers)
+        else:
+            #TODO check this!
+            QtCore.QObject.connect(self.iface.mapCanvas(),
+                                   QtCore.SIGNAL(
+                                     'layersChanged(QList<QgsMapLayer*>)'),
+                                   self.canvasLayersetChanged)
+        # All versions
         QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('removedAll()'),
                                self.getLayers)
@@ -175,10 +184,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         QtCore.QObject.connect(self.iface,
                                QtCore.SIGNAL('newProjectCreated()'),
                                self.getLayers)
-        # to detect layer visibility changes which registry is ignorant of
-        QtCore.QObject.connect(self.iface.mapCanvas(),
-                               QtCore.SIGNAL('layersChanged()'),
-                               self.canvasLayersetChanged)
         # old implementation - bad because it triggers with every layer
         # visibility change
         #QtCore.QObject.connect(self.iface.mapCanvas(),
