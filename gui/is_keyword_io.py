@@ -92,8 +92,8 @@ class ISKeywordIO(QObject):
             else:
                 myKeywords = self.readKeywordFromUri(mySource, theKeyword)
             return myKeywords
-        except KeywordNotFoundException, e:
-            raise e
+        except KeywordNotFoundException:
+            raise
         except Exception, e:
             raise e
 

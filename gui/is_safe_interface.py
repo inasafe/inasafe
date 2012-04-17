@@ -278,8 +278,10 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
                     myKeywordFilePath, theKeyword))
         raise KeywordNotFoundException(myMessage)
 
-    myValue = myDictionary[theKeyword]
-
+    try:
+        myValue = myDictionary[theKeyword]
+    except:
+        raise
     return myValue
 
 

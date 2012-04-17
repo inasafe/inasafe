@@ -491,6 +491,10 @@ For remote debugging, you should add pydevd to your PYTHONPATH before starting
 
    (3) Place the above PYTHONPATH command before the final line that launches
    QGIS!
+   
+   (4) The exact path used will vary on your system - check in your eclipse
+   plugins folder for "org.python.pydev.debug_<some date> to identify the
+   correct path.
 
 To initiate a remote debugging session, add the settrace() directive to your
 source file and then start the python remote debugging service from the PyDev
