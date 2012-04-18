@@ -33,6 +33,8 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency)
+#do not remove this even if it is marked as unused by your IDE
+#resources are used by htmlfooter and header
 import resources
 
 
@@ -234,19 +236,18 @@ def getExceptionWithStacktrace(e, html=False):
         return errmsg + "\n" + info
     else:
         # Wrap string in html
-        s = '<div>'
-        s += tr('<span class="label label-warning">Problem:</span> ')
+        s = '<span class="label label-warning">' + tr('Problem:') + '</span> '
+        s += '<div>'
         s += errmsg
-        s += ('</div>'
-        '<div>'
+        s += ('</div><br/>'
         '<span class="label label-info" style="cursor:pointer;"'
         ' onclick="$(\'#traceback\').toggle();">')
         s += tr('Toggle traceback...')
-        s += '</span>'
+        s += '</span><br />'
         s += ('<pre id="traceback" class="prettyprint"'
               ' style="display: none;">\n')
         s += info
-        s += '</pre></div>'
+        s += '</pre>'
         return s
 
 
@@ -341,3 +342,20 @@ def htmlFooter():
     myFooter = myStream.readAll()
     myFile.close()
     return myFooter
+
+def qgisVersion():
+    """Get the version of QGIS
+   Args:
+       None
+    Returns:
+        QGIS Version where 10700 represents QGIS 1.7 etc.
+    Raises:
+       None
+    """
+    myVersion = None
+    try:
+        myVersion = unicode(QGis.QGIS_VERSION_INT)
+    except:
+        myVersion = unicode(QGis.qgisVersion)[0]
+    myVersion = int(myVersion)
+    return myVersion

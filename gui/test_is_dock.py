@@ -755,8 +755,61 @@ class ISDockTest(unittest.TestCase):
                          myExposureLayerCount), myMessage
 
     def test_Issue71(self):
-        """Test issue #71 in githib - cbo changes should update ok button."""
+        """Test issue #71 in github - cbo changes should update ok button."""
         # See https://github.com/AIFDR/inasafe/issues/71
+        # Push OK with the left mouse button
+        self.tearDown()
+        myButton = DOCK.pbnRunStop
+        # First part of scenario should have enabled run
+        myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
+                      'Population_Jakarta_geographic.asc']
+        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+
+        myMessage = ("Incorrect number of Hazard layers: expected 1 got %s"
+                     % myHazardLayerCount)
+        assert myHazardLayerCount == 1, myMessage
+
+        myMessage = ("Incorrect number of Exposure layers: expected 1 got %s"
+                     % myExposureLayerCount)
+        assert myExposureLayerCount == 1, myMessage
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
+
+        # Second part of scenario - run disables when adding invalid layer
+        # and select it - run should be disabled
+        myFileList = ['issue71.tif']  # This layer has incorrect keywords
+        myClearFlag = False
+        myHazardLayerCount, myExposureLayerCount = (
+            loadLayers(myFileList, myClearFlag))
+        # set exposure to : Population Density Estimate (5kmx5km)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        myDict = getUiState(DOCK)
+        myExpectedDict = {'Run Button Enabled': False,
+                          'Impact Function': '',
+                          'Hazard': 'Banjir Jakarta seperti 2007',
+                          'Exposure': 'Population Density Estimate (5kmx5km)'}
+        myMessage = ('Run button was not disabled when exposure set to \n%s'
+                     '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
+                        DOCK.cboExposure.currentText(),
+                        myDict,
+                        myExpectedDict,
+                        combosToString(DOCK)
+                        )
+
+        assert myExpectedDict == myDict, myMessage
+
+        # Now select again a valid layer and the run button
+        # should be enabled
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
+        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        myMessage = 'Run button was not enabled when exposure set to \n%s' % \
+            DOCK.cboExposure.currentText()
+        assert myButton.isEnabled(), myMessage
+
+    def test_Issue95(self):
+        """Test issue #95 in github -check crs of impact layer."""
+        # See https://github.com/AIFDR/inasafe/issues/95
         # Push OK with the left mouse button
         self.tearDown()
         myButton = DOCK.pbnRunStop

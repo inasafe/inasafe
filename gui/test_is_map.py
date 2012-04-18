@@ -183,6 +183,20 @@ class ISMapTest(unittest.TestCase):
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
         assert myTitle == myExpectedTitle, myMessage
 
+    def test_handleMissingMapTitle(self):
+        """Missing map title from the keywords fails gracefully"""
+        # TODO running OSM Buildngs with Pendudk Jakarta
+        # wasthrowing an error when requesting map title
+        # that this test wasnt replicating well
+        myLayer, myType = loadLayer('population_padang_1.asc')
+        del myType
+        myMap = ISMap(IFACE)
+        myMap.setImpactLayer(myLayer)
+        myTitle = myMap.getMapTitle()
+        myExpectedTitle = None
+        myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
+        assert myTitle == myExpectedTitle, myMessage
+
     def Xtest_renderTable(self):
         """Test that html renders nicely. Commented out for now until we work
         out how to get webkit to do offscreen rendering nicely."""

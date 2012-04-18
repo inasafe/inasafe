@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-12 16:50+0200\n"
+"POT-Creation-Date: 2012-04-10 11:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,9 +34,12 @@ msgstr ""
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:128
 #: impact_functions/earthquake/padang_building_impact_model.py:145
 #: impact_functions/flood/flood_building_impact.py:88
+#: impact_functions/flood/BNPB_flood_building_impact.py:82
+#: impact_functions/flood/flood_building_impact.py:93
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:128
 #: impact_functions/earthquake/padang_building_impact_model.py:145
-#: impact_functions/flood/flood_building_impact.py:88
+#: impact_functions/flood/BNPB_flood_building_impact.py:82
+#: impact_functions/flood/flood_building_impact.py:93
 msgid "All"
 msgstr ""
 
@@ -78,7 +81,10 @@ msgid "Temporarily Closed"
 msgstr "Tydelik gesluit"
 
 #: impact_functions/flood/flood_building_impact.py:78
-#: impact_functions/flood/flood_building_impact.py:78
+#: impact_functions/flood/BNPB_flood_building_impact.py:71
+#: impact_functions/flood/flood_building_impact.py:83
+#: impact_functions/flood/BNPB_flood_building_impact.py:71
+#: impact_functions/flood/flood_building_impact.py:83
 #, python-format
 msgid ""
 "<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of &#58;"
@@ -86,42 +92,53 @@ msgid ""
 msgstr ""
 
 #: impact_functions/flood/flood_building_impact.py:87
-#: impact_functions/flood/flood_building_impact.py:87
+#: impact_functions/flood/flood_building_impact.py:92
+#: impact_functions/flood/flood_building_impact.py:92
 msgid "Building"
 msgstr ""
 
 #: impact_functions/flood/flood_building_impact.py:87
-#: impact_functions/flood/flood_building_impact.py:87
+#: impact_functions/flood/flood_building_impact.py:92
+#: impact_functions/flood/flood_building_impact.py:92
 msgid "Number of"
 msgstr ""
 
 #: impact_functions/flood/flood_building_impact.py:89
 #: impact_functions/flood/flood_building_impact.py:100
-#: impact_functions/flood/flood_building_impact.py:89
-#: impact_functions/flood/flood_building_impact.py:100
+#: impact_functions/flood/flood_building_impact.py:94
+#: impact_functions/flood/flood_building_impact.py:105
+#: impact_functions/flood/flood_building_impact.py:94
+#: impact_functions/flood/flood_building_impact.py:105
 msgid "Closed"
 msgstr ""
 
 #: impact_functions/flood/flood_building_impact.py:90
 #: impact_functions/flood/flood_building_impact.py:98
-#: impact_functions/flood/flood_building_impact.py:90
-#: impact_functions/flood/flood_building_impact.py:98
+#: impact_functions/flood/flood_building_impact.py:95
+#: impact_functions/flood/flood_building_impact.py:103
+#: impact_functions/flood/flood_building_impact.py:95
+#: impact_functions/flood/flood_building_impact.py:103
 msgid "Opened"
 msgstr ""
 
 #: impact_functions/flood/flood_building_impact.py:93
-#: impact_functions/flood/flood_building_impact.py:93
+#: impact_functions/flood/flood_building_impact.py:98
+#: impact_functions/flood/flood_building_impact.py:98
 msgid "Assumption"
 msgstr ""
 
 #: impact_functions/flood/flood_building_impact.py:94
-#: impact_functions/flood/flood_building_impact.py:94
+#: impact_functions/flood/flood_building_impact.py:99
+#: impact_functions/flood/flood_building_impact.py:99
 #, python-format
 msgid "Buildings that will need to closed when floodingmore than %.1f m"
 msgstr ""
 
 #: impact_functions/flood/flood_building_impact.py:109
-#: impact_functions/flood/flood_building_impact.py:109
+#: impact_functions/flood/BNPB_flood_building_impact.py:108
+#: impact_functions/flood/flood_building_impact.py:114
+#: impact_functions/flood/BNPB_flood_building_impact.py:108
+#: impact_functions/flood/flood_building_impact.py:114
 msgid "Estimated buildings affected"
 msgstr ""
 
@@ -147,10 +164,51 @@ msgstr ""
 msgid "Flooded"
 msgstr ""
 
-#: storage/test_io.py:1719 storage/test_io.py:1719
+#: storage/test_io.py:1719 storage/test_io.py:1721 storage/test_io.py:1721
 msgid "Hello!"
 msgstr ""
 
-#: storage/test_io.py:1720 storage/test_io.py:1720
+#: storage/test_io.py:1720 storage/test_io.py:1722 storage/test_io.py:1722
 msgid "Hello2!"
+msgstr ""
+
+#: impact_functions/flood/BNPB_flood_building_impact.py:20
+#: impact_functions/flood/BNPB_flood_building_impact.py:20
+msgid "Rawan Banjir"
+msgstr ""
+
+#: impact_functions/flood/BNPB_flood_building_impact.py:81
+#: impact_functions/flood/BNPB_flood_building_impact.py:81
+msgid "Ketinggian Banjir"
+msgstr ""
+
+#: impact_functions/flood/BNPB_flood_building_impact.py:81
+#: impact_functions/flood/BNPB_flood_building_impact.py:81
+msgid "Jumlah gedung"
+msgstr ""
+
+#: impact_functions/flood/BNPB_flood_building_impact.py:83
+#: impact_functions/flood/BNPB_flood_building_impact.py:91
+#: impact_functions/flood/BNPB_flood_building_impact.py:83
+#: impact_functions/flood/BNPB_flood_building_impact.py:91
+msgid "< 1 m"
+msgstr ""
+
+#: impact_functions/flood/BNPB_flood_building_impact.py:84
+#: impact_functions/flood/BNPB_flood_building_impact.py:94
+#: impact_functions/flood/BNPB_flood_building_impact.py:84
+#: impact_functions/flood/BNPB_flood_building_impact.py:94
+msgid "1 - 3 m"
+msgstr ""
+
+#: impact_functions/flood/BNPB_flood_building_impact.py:85
+#: impact_functions/flood/BNPB_flood_building_impact.py:97
+#: impact_functions/flood/BNPB_flood_building_impact.py:85
+#: impact_functions/flood/BNPB_flood_building_impact.py:97
+msgid "> 3 m"
+msgstr ""
+
+#: impact_functions/flood/BNPB_flood_building_impact.py:88
+#: impact_functions/flood/BNPB_flood_building_impact.py:88
+msgid "Based on BNPB Perka 2 - 2012"
 msgstr ""

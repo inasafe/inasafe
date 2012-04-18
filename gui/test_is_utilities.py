@@ -2,7 +2,6 @@ import unittest
 import sys
 import os
 
-
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -10,9 +9,11 @@ sys.path.append(pardir)
 
 from is_utilities import (getExceptionWithStacktrace,
                          setRasterStyle,
-                         setVectorStyle)
+                         setVectorStyle,
+                         qgisVersion)
 from storage.utilities import bbox_intersection
 from utilities_test import loadLayer, getQgisTestApp
+
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
@@ -132,9 +133,13 @@ class ISUtilitiesTest(unittest.TestCase):
                              ' a size of %s, got %s') %
                              (mySize, mySize, myActualSize))
                 assert mySize == myActualSize, myMessage
-
                 mySize += 1
 
+    def test_getQgisVersion(self):
+        """Test we can get the version of QGIS"""
+        myVersion = qgisVersion()
+        myMessage = 'Got version %s of QGIS, but at least 107000 is needed'
+        assert myVersion > 10700, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISUtilitiesTest, 'test')

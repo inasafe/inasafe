@@ -243,9 +243,10 @@ Download the script on
 `this page <http://pypi.python.org/pypi/setuptools#windows>`_ called ez_setup.py
 and save it somewhere familiar e.g. :samp:`c:\temp`.
 
-Next launch the shell (python-shell.bat as described in :ref:`windows-commandline_setup`)
-as administrator (by right clicking the file and choosing run as administrator).
-Then from the command line, launch :command:`ez_setup.py` by typing this::
+Next launch the shell (python-shell.bat as described in
+:ref:`windows-commandline_setup`) **as administrator** (by right clicking the
+file and choosing run as administrator). Then from the command line, launch
+:command:`ez_setup.py` by typing this::
 
    python c:\temp\ez_setup.py
 
@@ -491,6 +492,10 @@ For remote debugging, you should add pydevd to your PYTHONPATH before starting
 
    (3) Place the above PYTHONPATH command before the final line that launches
    QGIS!
+   
+   (4) The exact path used will vary on your system - check in your eclipse
+   plugins folder for "org.python.pydev.debug_<some date> to identify the
+   correct path.
 
 To initiate a remote debugging session, add the settrace() directive to your
 source file and then start the python remote debugging service from the PyDev

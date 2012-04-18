@@ -638,11 +638,12 @@ class Test_Engine(unittest.TestCase):
             # Ignore NaN's
             if numpy.isnan(depth):
                 continue
-
+            
             structural_damage = iattributes[i]['STRUCT_DAM']
             contents_damage = iattributes[i]['CONTENTS_D']
             for imp in [structural_damage, contents_damage]:
-                msg = ('Percent damage was outside range: %f' % imp)
+                msg = ('Percent damage was outside range [0,1] at depth %f: %f' 
+                       % (depth, imp))
                 assert 0 <= imp <= 1, msg
 
             structural_loss = iattributes[i]['STRUCT_LOS']
@@ -919,7 +920,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = hazard_raster.interpolate(exposure_vector,
-                                      name='mmi')
+                                      name='MMI')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -945,10 +946,10 @@ class Test_Engine(unittest.TestCase):
 
         # Verify interpolated MMI with test result
         for i in range(len(MMI)):
-            calculated_mmi = Iattributes[i]['mmi']
+            calculated_mmi = Iattributes[i]['MMI']
 
             # Check that interpolated points are within range
-            msg = ('Interpolated mmi %f was outside extrema: '
+            msg = ('Interpolated MMI %f was outside extrema: '
                    '[%f, %f]. ' % (calculated_mmi, mmi_min, mmi_max))
             assert mmi_min <= calculated_mmi <= mmi_max, msg
 

@@ -27,6 +27,8 @@ Package::gui
    gui/is_clipper
    gui/is_impact_calculator
    gui/is_exceptions
+   gui/is_safe_interface
+   gui/is_keyword_io
 
 Package::impact_functions
 .........................
@@ -57,7 +59,8 @@ Gui Unit Tests
    gui/test_is_map
    gui/test_is_impact_calculator
    gui/test_is_keywords_dialog
-
+   gui/test_is_safe_interface
+   gui/test_is_keyword_io
 
 Impact Function Unit Tests
 ..........................

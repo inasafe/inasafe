@@ -29,9 +29,10 @@ from qgis.core import (QgsComposition,
                        QgsPoint,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
-from is_exceptions import LegendLayerException
+from is_exceptions import (LegendLayerException, 
+                           KeywordNotFoundException)
 from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
-from is_impact_calculator import getKeywordFromFile
+from is_keyword_io import ISKeywordIO
 from is_utilities import getTempDir, htmlHeader, htmlFooter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -57,6 +58,7 @@ class ISMap():
         """
         self.iface = theIface
         self.layer = theIface.activeLayer()
+        self.keywordIO = ISKeywordIO()
         self.legend = None
         self.header = None
         self.footer = None
@@ -154,8 +156,8 @@ class ISMap():
                                 'has no layer set.')
             raise LegendLayerException(myMessage)
         try:
-            getKeywordFromFile(str(self.layer.source()), 'impact_summary')
-        except Exception, e:
+            self.keywordIO.readKeywords(self.layer, 'impact_summary')
+        except KeywordNotFoundException, e:
             myMessage = self.tr('This layer does not appear to be an impact '
                                 'layer. Try selecting an impact layer in the '
                                 'QGIS layers list or creating a new impact '
@@ -987,9 +989,12 @@ class ISMap():
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         try:
-            myTitle = getKeywordFromFile(str(self.layer.source()), 'map_title')
+            myTitle = self.keywordIO.readKeywords(self.layer, 'map_title')
             return myTitle
-        except Exception, e:
+        except KeywordNotFoundException, e:
+            return None
+        except Exception:
+            # TODO maybe we want to handle other types of exceptions?
             return None
 
     def renderImpactSummary(self):
@@ -1003,11 +1008,12 @@ class ISMap():
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         try:
-            myHtml = getKeywordFromFile(str(self.layer.source()),
-                                        'impact_summary')
+            myHtml = self.keywordIO.readKeywords(self.layer, 'impact_summary')
             return self.renderHtml(myHtml, 58)
-        except Exception, e:
+        except KeywordNotFoundException:
             return None
+        except Exception:
+            raise
 
     def renderImpactTable(self):
         """Render the table in the keywords if present. The table is an
@@ -1020,10 +1026,12 @@ class ISMap():
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         try:
-            myHtml = getKeywordFromFile(str(self.layer.source()),
-                                        'impact_table')
+            myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
             return self.renderHtml(myHtml, 98)
-        except Exception, e:
+        except KeywordNotFoundException:
+            return None
+        except Exception:
+            # TODO maybe add some better handling here
             return None
 
     def renderHtml(self, theHtml, theWidthMM):

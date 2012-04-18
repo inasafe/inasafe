@@ -31,21 +31,22 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
-from qgis.gui import QgsMapCanvasLayer
-from is_impact_calculator import (ISImpactCalculator,
-                              getKeywordFromFile,
-                              getKeywordFromLayer,
-                              availableFunctions)
+from is_impact_calculator import ISImpactCalculator
+from is_safe_interface import (availableFunctions,
+                               getOptimalExtent,
+                               getBufferedExtent)
+from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
-from is_impact_calculator import getOptimalExtent, getBufferedExtent
 from is_exceptions import (KeywordNotFoundException,
-                            InvalidParameterException)
+                            InvalidParameterException,
+                            HashNotFoundException)
 from is_map import ISMap
 from is_utilities import (getTempDir,
                           htmlHeader,
                           htmlFooter,
                           setVectorStyle,
-                          setRasterStyle)
+                          setRasterStyle,
+                          qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -93,6 +94,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.header = None  # for storing html header template
         self.footer = None  # for storing html footer template
         self.calculator = ISImpactCalculator()
+        self.keywordIO = ISKeywordIO()
         self.runner = None
         self.helpDialog = None
         self.state = None
@@ -157,15 +159,20 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             None
         Raises:
         """
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('layerWillBeRemoved(QString)'),
-                               self.getLayers)
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
-                               self.getLayers)
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
-                               self.getLayers)
+        if qgisVersion() < 10800:
+            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                                   QtCore.SIGNAL('layerWillBeRemoved(QString)'),
+                                   self.getLayers)
+            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                                   QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+                                   self.getLayers)
+        else:
+            #TODO check this!
+            QtCore.QObject.connect(self.iface.mapCanvas(),
+                                   QtCore.SIGNAL(
+                                     'layersChanged(QList<QgsMapLayer*>)'),
+                                   self.canvasLayersetChanged)
+        # All versions
         QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('removedAll()'),
                                self.getLayers)
@@ -175,10 +182,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         QtCore.QObject.connect(self.iface,
                                QtCore.SIGNAL('newProjectCreated()'),
                                self.getLayers)
-        # to detect layer visibility changes which registry is ignorant of
-        QtCore.QObject.connect(self.iface.mapCanvas(),
-                               QtCore.SIGNAL('layersChanged()'),
-                               self.canvasLayersetChanged)
         # old implementation - bad because it triggers with every layer
         # visibility change
         #QtCore.QObject.connect(self.iface.mapCanvas(),
@@ -283,9 +286,11 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         if self.cboFunction.currentIndex() == -1:
             myHazardFilename = str(self.getHazardLayer().source())
-            myHazardKeywords = getKeywordFromFile(myHazardFilename)
+            myHazardKeywords = self.keywordIO.readKeywords(
+                                                    self.getHazardLayer())
             myExposureFilename = str(self.getExposureLayer().source())
-            myExposureKeywords = getKeywordFromFile(myExposureFilename)
+            myExposureKeywords = self.keywordIO.readKeywords(
+                                                    self.getExposureLayer())
             myMessage = self.tr('<span class="label label-important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
@@ -424,7 +429,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             # fallback to the layer's filename
             myTitle = None
             try:
-                myTitle = getKeywordFromFile(str(myLayer.source()), 'title')
+                myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:
                 myTitle = myName
             if myTitle and self.setLayerNameFromTitleFlag:
@@ -434,8 +439,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
             try:
-                myCategory = getKeywordFromFile(str(myLayer.source()),
-                                                'category')
+                myCategory = self.keywordIO.readKeywords(myLayer, 'category')
             except:
                 # continue ignoring this layer
                 continue
@@ -472,19 +476,17 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myHazardLayer = self.getHazardLayer()
         if myHazardLayer is None:
             return
-        myHazardFile = myHazardLayer.source()
         myExposureLayer = self.getExposureLayer()
         if myExposureLayer is None:
             return
-        myExposureFile = myExposureLayer.source()
-        myHazardKeywords = getKeywordFromFile(str(myHazardFile))
+        myHazardKeywords = self.keywordIO.readKeywords(myHazardLayer)
         # We need to add the layer type to the returned keywords
         if myHazardLayer.type() == QgsMapLayer.VectorLayer:
             myHazardKeywords['layertype'] = 'vector'
         elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
             myHazardKeywords['layertype'] = 'raster'
 
-        myExposureKeywords = getKeywordFromFile(str(myExposureFile))
+        myExposureKeywords = self.keywordIO.readKeywords(myExposureLayer)
         # We need to add the layer type to the returned keywords
         if myExposureLayer.type() == QgsMapLayer.VectorLayer:
             myExposureKeywords['layertype'] = 'vector'
@@ -606,7 +608,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             return
 
         self.runner = self.calculator.getRunner()
-        QtCore.QObject.connect(self.runner.notifier(),
+        QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
                                self.completed)
 
@@ -683,14 +685,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                    'Error message: %s\n' % str(myMessage))
             raise Exception(myMessage)
 
+        # Load impact layer into QGIS
+        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+        
         # Get tabular information from impact layer
-        myReport = getKeywordFromLayer(myEngineImpactLayer, 'impact_summary')
+        myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
+                                               'impact_summary')
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
 
-        # Load impact layer into QGIS
-        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
         # Determine styling for QGIS layer
         if myEngineImpactLayer.is_vector:
             if not myStyle:
@@ -760,7 +764,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
-            QtCore.QObject.disconnect(self.runner.notifier(),
+            QtCore.QObject.disconnect(self.runner,
                                QtCore.SIGNAL('done()'),
                                self.completed)
             del self.runner
@@ -918,8 +922,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(myExposureLayer,
-                                          myGeoExtent, myCellSize,
-                                          extraKeywords=extraExposureKeywords)
+                                        myGeoExtent, myCellSize,
+                                        theExtraKeywords=extraExposureKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 
@@ -1004,7 +1008,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def displayHtml(self, theMessage):
         """Given an html snippet, wrap it in a page header and footer
         and display it in the wvResults widget."""
-        myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
+        myHtml =  '<div style="padding: 2px">'
+        myHtml += self.htmlHeader() + theMessage + self.htmlFooter()
+        myHtml += '</div>'
         #f = file('/tmp/h.thml', 'wa')  # for debugging
         #f.write(myHtml)
         #f.close()
@@ -1024,17 +1030,67 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised.
         """
-        myReport = None
+        myReport = ('<table class="table table-striped condensed'
+                        ' bordered-table">')  # will be overridden if needed
         if theLayer is not None:
             try:
-                myReport = getKeywordFromFile(str(theLayer.source()),
-                                              'impact_summary')
-            except KeywordNotFoundException, e:
-                self.setOkButtonStatus()
-            except InvalidParameterException, e:
-                self.setOkButtonStatus()
+                myKeywords = self.keywordIO.readKeywords(theLayer)
+                if 'impact_summary' in myKeywords:
+                    myReport = myKeywords['impact_summary']
+                else:
+                    if 'title' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Title') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['title'] + '</td>'
+                                     '</tr>')
+                    if 'category' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Category') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['category'] + '</td>'
+                                     '</tr>')
+                    if 'subcategory' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Subcategory') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['subcategory'] + 
+                                       '</td>'
+                                     '</tr>')
+                    if 'unit' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Units') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['unit'] + '</td>'
+                                     '</tr>')
+                    if 'datatype' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Data Type') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['datatype'] + '</td>'
+                                     '</tr>')
+                    myReport += '</table>'
+            except (KeywordNotFoundException, HashNotFoundException), e:
+                myReport = ('<span class="label label-important">' +
+                           self.tr('No keywords') + '</span><div>')
+                myReport += self.tr('No keywords have been defined'
+                        ' for this layer yet. If you wish to use it as'
+                        ' an impact or hazard layer in a scenario, please'
+                        ' use the keyword editor. You can open the keyword'
+                        ' editor by clicking on the'
+                        ' <img src="qrc:/plugins/inasafe/keywords.png" '
+                        ' width="16" height="16"> icon'
+                        ' in the toolbar, or choosing Plugins -> InaSAFE'
+                        ' -> Keyword Editor from the menus.') 
+                myReport += '</div><br />'
+                myReport += getExceptionWithStacktrace(e, html=True)
             except Exception, e:
-                myReport = getExceptionWithStacktrace(e, html=True)
+                myReport += getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
                 self.pbnPrint.setEnabled(True)

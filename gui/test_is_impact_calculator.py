@@ -18,19 +18,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-import numpy
 import unittest
-from is_impact_calculator import (ISImpactCalculator,
-                                  getOptimalExtent,
-                                  getStyleInfo,
-                                  availableFunctions,
-                                  getKeywordFromLayer,
-                                  getKeywordFromFile)
-#from inasafeexceptions import TestNotImplementedException
+from is_impact_calculator import ISImpactCalculator
 from is_exceptions import (InsufficientParametersException,
-                                KeywordNotFoundException,
-                                StyleInfoNotFoundException)
-from storage.core import read_layer
+                           KeywordNotFoundException,
+                           StyleInfoNotFoundException)
+
+from is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
+#TODO get rid of this....so we dont pull in stuff from storage...
 from storage.utilities_test import TESTDATA
 
 
@@ -63,15 +58,15 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test if the properties work as expected."""
 
         myMessage = 'Vector property incorrect.'
-        assert (self.calculator.getExposureLayer() ==
+        assert (self.calculator._exposureLayer ==
                 self.vectorPath), myMessage
 
         myMessage = 'Raster property incorrect.'
-        assert (self.calculator.getHazardLayer() ==
+        assert (self.calculator._hazardLayer ==
                 self.rasterShakePath), myMessage
 
         myMessage = 'Function property incorrect.'
-        assert (self.calculator.getFunction() ==
+        assert (self.calculator._function ==
                 'Earthquake Guidelines Function'), myMessage
 
     def test_run(self):
@@ -114,6 +109,9 @@ class ImpactCalculatorTest(unittest.TestCase):
             #next line should raise an error
             myRunner = self.calculator.getRunner()
             myRunner.start()
+        except RuntimeError, e:
+            myMessage = 'Runtime error encountered: %s' % str(e)
+            assert(), myMessage
         except InsufficientParametersException:
             return  # expected outcome
         except:
@@ -122,33 +120,18 @@ class ImpactCalculatorTest(unittest.TestCase):
         myMessage = 'Expected an error, none encountered.'
         assert(), myMessage
 
-    def test_availableFunctions(self):
-        """Check we can get the available functions from the impact calculator.
-        """
-        myList = availableFunctions()
-        assert myList > 1
-
-        # Also test if it works when we give it two layers
-        # to see if we can determine which functions will
-        # work for them.
-        myKeywords1 = getKeywordFromFile(self.rasterShakePath)
-        myKeywords2 = getKeywordFromFile(self.vectorPath)
-        myList = [myKeywords1, myKeywords2]
-        myList = availableFunctions(myList)
-        assert myList > 1
-
-    def test_getKeywordFromLayer(self):
-        """Get keyword data from a inasafe layer's metadata file."""
+    def test_getKeywordFromImpactLayer(self):
+        """Check that we can get keywords from a created impact layer."""
         myRunner = self.calculator.getRunner()
         myRunner.run()
         myImpactLayer = myRunner.impactLayer()
-        myKeyword = getKeywordFromLayer(
+        myKeyword = readKeywordsFromLayer(
                                         myImpactLayer, 'impact_summary')
         myMessage = 'Keyword request returned an empty string'
         assert(myKeyword is not ''), myMessage
         # Test we get an exception if keyword is not found
         try:
-            myKeyword = getKeywordFromLayer(
+            myKeyword = readKeywordsFromLayer(
                             myImpactLayer, 'boguskeyword')
         except KeywordNotFoundException:
             pass  # this is good
@@ -157,48 +140,30 @@ class ImpactCalculatorTest(unittest.TestCase):
                          'exception type: \n %s') % str(e)
             assert(), myMessage
 
-    def test_getKeywordFromFile(self):
-        """Get keyword from a filesystem file's .keyword file."""
-
-        myKeyword = getKeywordFromFile(
-                                    self.rasterShakePath, 'category')
-        myMessage = 'Keyword request did not return expected value'
-        assert myKeyword == 'hazard', myMessage
-
-        # Test we get an exception if keyword is not found
+    def test_issue100(self):
+        """Test for issue 100: unhashable type dict"""
+        exposure_path = os.path.join(TESTDATA,
+                            'OSM_building_polygons_20110905.shp')
+        hazard_path = os.path.join(TESTDATA,
+                            'Flood_Current_Depth_Jakarta_geographic.asc')
+        # Verify relevant metada is ok
+        #H = readSafeLayer(hazard_path)
+        #E = readSafeLayer(exposure_path)
+        self.calculator.setHazardLayer(hazard_path)
+        self.calculator.setExposureLayer(exposure_path)
+        self.calculator.setFunction('Temporarily Closed')
         try:
-            myKeyword = getKeywordFromFile(
-                            self.rasterShakePath, 'boguskeyword')
-        except KeywordNotFoundException:
-            pass  # this is good
+            myRunner = self.calculator.getRunner()
+            # run non threaded
+            myRunner.run()
+            myMessage = myRunner.result()
+            myImpactLayer = myRunner.impactLayer()
+            myFilename = myImpactLayer.get_filename()
+            assert(myFilename and not myFilename == '')
+            assert(myMessage and not myMessage == '')
         except Exception, e:
-            myMessage = ('Request for bogus keyword raised incorrect '
-                         'exception type: \n %s') % str(e)
+            myMessage = 'Calculator run failed. %s' % str(e)
             assert(), myMessage
-
-        myKeywords = getKeywordFromFile(self.rasterShakePath)
-        assert myKeywords == {'category': 'hazard',
-                              'subcategory': 'earthquake',
-                              'unit': 'MMI'}
-
-        myKeywords = getKeywordFromFile(self.rasterPopulationPath)
-        assert myKeywords == {'category': 'exposure',
-                              'subcategory': 'population',
-                              'datatype': 'density',
-                              'title': 'Population Density Estimate (5kmx5km)'}
-
-        myKeywords = getKeywordFromFile(self.vectorPath)
-        assert myKeywords == {'category': 'exposure',
-                              'datatype': 'itb',
-                              'subcategory': 'building'}
-
-        # BB tsunami example (one layer is UTM)
-        myKeywords = getKeywordFromFile(self.rasterTsunamiBBPath)
-        assert myKeywords == {'category': 'hazard',
-                              'subcategory': 'tsunami', 'unit': 'm'}
-        myKeywords = getKeywordFromFile(self.rasterExposureBBPath)
-        print myKeywords == {'category': 'exposure',
-                             'subcategory': 'building'}
 
     def test_getStyleInfo(self):
         """Test that we can get styleInfo data from a vector's keyword file
@@ -229,131 +194,6 @@ class ImpactCalculatorTest(unittest.TestCase):
                    ' exception type: \n %s') % str(e)
             raise StyleInfoNotFoundException(myMessage)
 
-    def test_getOptimalExtent(self):
-        """Optimal extent is calculated correctly
-        """
-
-        exposure_path = os.path.join(TESTDATA, 'Population_2010.asc')
-        hazard_path = os.path.join(TESTDATA,
-                                   'Lembang_Earthquake_Scenario.asc')
-
-        # Expected data
-        haz_metadata = {'bounding_box': (105.3000035,
-                                         -8.3749994999999995,
-                                         110.2914705,
-                                         -5.5667784999999999),
-                        'resolution': (0.0083330000000000001,
-                                       0.0083330000000000001)}
-
-        exp_metadata = {'bounding_box': (94.972335000000001,
-                                         -11.009721000000001,
-                                         141.0140016666665,
-                                         6.0736123333332639),
-                        'resolution': (0.0083333333333333003,
-                                       0.0083333333333333003)}
-
-        # Verify relevant metada is ok
-        H = read_layer(hazard_path)
-        E = read_layer(exposure_path)
-
-        hazard_bbox = H.get_bounding_box()
-        assert numpy.allclose(hazard_bbox, haz_metadata['bounding_box'],
-                              rtol=1.0e-12, atol=1.0e-12)
-
-        exposure_bbox = E.get_bounding_box()
-        assert numpy.allclose(exposure_bbox, exp_metadata['bounding_box'],
-                              rtol=1.0e-12, atol=1.0e-12)
-
-        hazard_res = H.get_resolution()
-        assert numpy.allclose(hazard_res, haz_metadata['resolution'],
-                              rtol=1.0e-12, atol=1.0e-12)
-
-        exposure_res = E.get_resolution()
-        assert numpy.allclose(exposure_res, exp_metadata['resolution'],
-                              rtol=1.0e-12, atol=1.0e-12)
-
-        # First, do some examples that produce valid results
-        ref_res = [105.3000035, -8.3749995, 110.2914705, -5.5667785]
-        view_port = [94.972335, -11.009721, 141.014002, 6.073612]
-
-        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
-
-        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
-
-        view_port = [105.3000035,
-                     -8.3749994999999995,
-                     110.2914705,
-                     -5.5667784999999999]
-        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        assert numpy.allclose(bbox, ref_res,
-                              rtol=1.0e-12, atol=1.0e-12)
-
-        # Then one where boxes don't overlap
-        view_port = [105.3, -4.3, 110.29, -2.5]
-        try:
-            getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        except Exception, e:
-            myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'did not overlap' in str(e), myMessage
-        else:
-            myMessage = ('Non ovelapping bounding boxes should have raised '
-                   'an exception')
-            raise Exception(myMessage)
-
-        # Try with wrong input data
-        try:
-            getOptimalExtent(haz_metadata, exp_metadata, view_port)
-        except Exception, e:
-            myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'Invalid' in str(e), myMessage
-        else:
-            myMessage = ('Wrong input data should have raised an exception')
-            raise Exception(myMessage)
-
-        try:
-            getOptimalExtent(None, None, view_port)
-        except Exception, e:
-            myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'Invalid' in str(e), myMessage
-        else:
-            myMessage = ('Wrong input data should have raised an exception')
-            raise Exception(myMessage)
-
-        try:
-            getOptimalExtent('aoeush', 'oeuuoe', view_port)
-        except Exception, e:
-            myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'Invalid' in str(e), myMessage
-        else:
-            myMessage = ('Wrong input data should have raised an exception')
-            raise Exception(myMessage)
-
-    def test_issue100(self):
-        """Test for issue 100: unhashable type dict"""
-        exposure_path = os.path.join(TESTDATA,
-                            'OSM_building_polygons_20110905.shp')
-        hazard_path = os.path.join(TESTDATA,
-                            'Flood_Current_Depth_Jakarta_geographic.asc')
-        # Verify relevant metada is ok
-        #H = read_layer(hazard_path)
-        #E = read_layer(exposure_path)
-        self.calculator.setHazardLayer(hazard_path)
-        self.calculator.setExposureLayer(exposure_path)
-        self.calculator.setFunction('Temporarily Closed')
-        try:
-            myRunner = self.calculator.getRunner()
-            # run non threaded
-            myRunner.run()
-            myMessage = myRunner.result()
-            myImpactLayer = myRunner.impactLayer()
-            myFilename = myImpactLayer.get_filename()
-            assert(myFilename and not myFilename == '')
-            assert(myMessage and not myMessage == '')
-        except Exception, e:
-            myMessage = 'Calculator run failed. %s' % str(e)
-            assert(), myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactCalculatorTest, 'test')
