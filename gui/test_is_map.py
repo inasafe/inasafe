@@ -26,7 +26,10 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 
-from utilities_test import (getQgisTestApp, assertHashForFile, hashForFile)
+from utilities_test import (getQgisTestApp,
+                            assertHashForFile,
+                            hashForFile,
+                            assertHashesForFile)
 from gui.is_map import ISMap
 from PyQt4 import QtGui
 from qgis.core import (QgsSymbol,
@@ -83,13 +86,14 @@ class ISMapTest(unittest.TestCase):
         myLegend = myMap.getLegend()
         myPath = os.path.join(getTempDir(), 'getLegend.png')
         myLegend.save(myPath, 'PNG')
-        myExpectedHash = None
-        if  os.name is'nt':
-            # windows renders fonts slightly differently
-            myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
-        else:
-            myExpectedHash = 'f2169dd3146aca6b30a10cddfb5ebf68'
-        assertHashForFile(myExpectedHash, myPath)
+        # As we have discovered, different versions of Qt and
+        # OS platforms cause different output, so hashes are a list
+        # of 'known good' renders.
+        myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
+                            'f2169dd3146aca6b30a10cddfb5ebf68',  # ub11.10
+                            'de6cbd59899d0077b11dd09c00a343e8',  # ub12.04
+                            ]
+        assertHashesForFile(myExpectedHashes, myPath)
 
     def test_getVectorLegend(self):
         """Getting a legend for a vector layer works."""
@@ -101,12 +105,14 @@ class ISMapTest(unittest.TestCase):
         myPath = os.path.join(getTempDir(), 'getVectorLegend.png')
         myMap.legend.save(myPath, 'PNG')
         myExpectedHash = None
-        if  os.name is'nt':
-            # windows renders fonts slightly differently
-            myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
-        else:
-            myExpectedHash = 'f2169dd3146aca6b30a10cddfb5ebf68'
-        assertHashForFile(myExpectedHash, myPath)
+        # As we have discovered, different versions of Qt and
+        # OS platforms cause different output, so hashes are a list
+        # of 'known good' renders.
+        myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
+                            'f2169dd3146aca6b30a10cddfb5ebf68',  # ub11.10
+                            'de6cbd59899d0077b11dd09c00a343e8',  # ub12.04
+                            ]
+        assertHashesForFile(myExpectedHashes, myPath)
 
     def test_getRasterLegend(self):
         """Getting a legend for a raster layer works."""
@@ -117,13 +123,14 @@ class ISMapTest(unittest.TestCase):
         myMap.getRasterLegend()
         myPath = os.path.join(getTempDir(), 'getRasterLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = None
-        if  os.name is'nt':
-            # windows renders fonts slightly differently
-            myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
-        else:
-            myExpectedHash = '1fc706f7c08e7d3057a685f9e6c4df3f'
-        assertHashForFile(myExpectedHash, myPath)
+        # As we have discovered, different versions of Qt and
+        # OS platforms cause different output, so hashes are a list
+        # of 'known good' renders.
+        myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
+                            '1fc706f7c08e7d3057a685f9e6c4df3f',  # ub11.10
+                            '2845879db127ce81d85baaac0b2c11b7',  # ub12.04
+                            ]
+        assertHashesForFile(myExpectedHashes, myPath)
 
     def addSymbolToLegend(self):
         """Test we can add a symbol to the legend."""
@@ -164,13 +171,14 @@ class ISMapTest(unittest.TestCase):
                                theLabel='foo')
         myPath = os.path.join(getTempDir(), 'addClassToLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = None
-        if  os.name is'nt':
-            # windows renders fonts slightly differently
-            myExpectedHash = '658e8dc0bf8b9a09b36994abf9242099'
-        else:
-            myExpectedHash = 'ea0702782c2ed5d950c427fbe1743858'
-        assertHashForFile(myExpectedHash, myPath)
+        # As we have discovered, different versions of Qt and
+        # OS platforms cause different output, so hashes are a list
+        # of 'known good' renders.
+        myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
+                            'ea0702782c2ed5d950c427fbe1743858',  # ub11.10
+                            '944cee3eb9d916816b60ef41e8069683',  # ub12.04
+                            ]
+        assertHashesForFile(myExpectedHashes, myPath)
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""

@@ -161,17 +161,17 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         """
         if qgisVersion() < 10800:
             QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                                   QtCore.SIGNAL('layerWillBeRemoved(QString)'),
-                                   self.getLayers)
+                                QtCore.SIGNAL('layerWillBeRemoved(QString)'),
+                                self.getLayers)
             QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                                   QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
-                                   self.getLayers)
+                                QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
+                                self.getLayers)
         else:
             #TODO check this!
             QtCore.QObject.connect(self.iface.mapCanvas(),
-                                   QtCore.SIGNAL(
-                                     'layersChanged(QList<QgsMapLayer*>)'),
-                                   self.canvasLayersetChanged)
+                                QtCore.SIGNAL(
+                                  'layersChanged(QList<QgsMapLayer*>)'),
+                                self.canvasLayersetChanged)
         # All versions
         QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('removedAll()'),
@@ -687,7 +687,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         # Load impact layer into QGIS
         myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
-        
+
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
                                                'impact_summary')
@@ -1008,7 +1008,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def displayHtml(self, theMessage):
         """Given an html snippet, wrap it in a page header and footer
         and display it in the wvResults widget."""
-        myHtml =  '<div style="padding: 2px">'
+        myHtml = '<div style="padding: 2px">'
         myHtml += self.htmlHeader() + theMessage + self.htmlFooter()
         myHtml += '</div>'
         #f = file('/tmp/h.thml', 'wa')  # for debugging
@@ -1041,39 +1041,39 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                     if 'title' in myKeywords:
                         myReport += ('<tr>'
                                        '<th>' + self.tr('Title') + '</th>'
-                                     '</tr>' 
+                                     '</tr>'
                                      '<tr>'
                                        '<td>' + myKeywords['title'] + '</td>'
                                      '</tr>')
                     if 'category' in myKeywords:
                         myReport += ('<tr>'
-                                       '<th>' + self.tr('Category') + '</th>'
-                                     '</tr>' 
-                                     '<tr>'
-                                       '<td>' + myKeywords['category'] + '</td>'
-                                     '</tr>')
+                                 '<th>' + self.tr('Category') + '</th>'
+                                 '</tr>'
+                                 '<tr>'
+                                   '<td>' + myKeywords['category'] + '</td>'
+                                 '</tr>')
                     if 'subcategory' in myKeywords:
                         myReport += ('<tr>'
-                                       '<th>' + self.tr('Subcategory') + '</th>'
-                                     '</tr>' 
-                                     '<tr>'
-                                       '<td>' + myKeywords['subcategory'] + 
-                                       '</td>'
-                                     '</tr>')
+                                   '<th>' + self.tr('Subcategory') + '</th>'
+                                 '</tr>'
+                                 '<tr>'
+                                   '<td>' + myKeywords['subcategory'] +
+                                   '</td>'
+                                 '</tr>')
                     if 'unit' in myKeywords:
                         myReport += ('<tr>'
-                                       '<th>' + self.tr('Units') + '</th>'
-                                     '</tr>' 
-                                     '<tr>'
-                                       '<td>' + myKeywords['unit'] + '</td>'
-                                     '</tr>')
+                                   '<th>' + self.tr('Units') + '</th>'
+                                 '</tr>'
+                                 '<tr>'
+                                   '<td>' + myKeywords['unit'] + '</td>'
+                                 '</tr>')
                     if 'datatype' in myKeywords:
                         myReport += ('<tr>'
-                                       '<th>' + self.tr('Data Type') + '</th>'
-                                     '</tr>' 
-                                     '<tr>'
-                                       '<td>' + myKeywords['datatype'] + '</td>'
-                                     '</tr>')
+                                   '<th>' + self.tr('Data Type') + '</th>'
+                                 '</tr>'
+                                 '<tr>'
+                                   '<td>' + myKeywords['datatype'] + '</td>'
+                                 '</tr>')
                     myReport += '</table>'
             except (KeywordNotFoundException, HashNotFoundException), e:
                 myReport = ('<span class="label label-important">' +
@@ -1086,7 +1086,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                         ' <img src="qrc:/plugins/inasafe/keywords.png" '
                         ' width="16" height="16"> icon'
                         ' in the toolbar, or choosing Plugins -> InaSAFE'
-                        ' -> Keyword Editor from the menus.') 
+                        ' -> Keyword Editor from the menus.')
                 myReport += '</div><br />'
                 myReport += getExceptionWithStacktrace(e, html=True)
             except Exception, e:
