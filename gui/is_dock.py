@@ -84,7 +84,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised
         """
-        settrace()
+        #settrace()
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (
@@ -1054,7 +1054,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                      '</tr>')
                     if 'subcategory' in myKeywords:
                         myReport += ('<tr>'
-                                       '<th>' + self.tr('subcategory') + '</th>'
+                                       '<th>' + self.tr('Subcategory') + '</th>'
                                      '</tr>' 
                                      '<tr>'
                                        '<td>' + myKeywords['subcategory'] + 
@@ -1066,6 +1066,13 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                      '</tr>' 
                                      '<tr>'
                                        '<td>' + myKeywords['unit'] + '</td>'
+                                     '</tr>')
+                    if 'datatype' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Data Type') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['datatype'] + '</td>'
                                      '</tr>')
                     myReport += '</table>'
             except (KeywordNotFoundException, HashNotFoundException), e:
