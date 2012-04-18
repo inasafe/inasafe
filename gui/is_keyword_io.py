@@ -9,7 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from gui import is_safe_interface
+import is_safe_interface
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.3.0'
@@ -28,7 +28,7 @@ from is_safe_interface import (verify,
                                writeKeywordsToFile)
 from is_utilities import qgisVersion
 from PyQt4.QtCore import QObject
-from qgis.core import (QGis, QgsMapLayer)
+from qgis.core import QgsMapLayer
 
 
 class ISKeywordIO(QObject):
@@ -87,8 +87,7 @@ class ISKeywordIO(QObject):
         myKeywords = None
         try:
             if myFlag:
-                myKeywords = is_safe_interface.readKeywordsFromFile(
-                                            mySource, theKeyword)
+                myKeywords = readKeywordsFromFile(mySource, theKeyword)
             else:
                 myKeywords = self.readKeywordFromUri(mySource, theKeyword)
             return myKeywords
@@ -124,6 +123,7 @@ class ISKeywordIO(QObject):
             return myKeywords
         except:
             raise
+
     def copyKeywords(self, theSourceLayer,
                      theDestinationFile, theExtraKeywords=None):
         """Helper to copy the keywords file from a source dataset
@@ -140,7 +140,7 @@ class ISKeywordIO(QObject):
         e.g::
 
         copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
-        
+
         Args:
             * theSourceLayer - A QGIS QgsMapLayer instance.
             * theDestinationFile - the output filename that should be used
@@ -481,4 +481,3 @@ class ISKeywordIO(QObject):
             raise
         finally:
             self.closeConnection()
-

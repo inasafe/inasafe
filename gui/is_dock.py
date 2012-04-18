@@ -38,7 +38,6 @@ from is_safe_interface import (availableFunctions,
 from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
 from is_exceptions import (KeywordNotFoundException,
-                            InvalidParameterException,
                             HashNotFoundException)
 from is_map import ISMap
 from is_utilities import (getTempDir,
@@ -159,7 +158,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             None
         Raises:
         """
-        if qgisVersion() < 10800:
+        if qgisVersion() < 10800:  # older than QGIS 1.8
             QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                 QtCore.SIGNAL('layerWillBeRemoved(QString)'),
                                 self.getLayers)
@@ -167,7 +166,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                 QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
                                 self.getLayers)
         else:
-            #TODO check this!
+            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
+                    QtCore.SIGNAL('layersWillBeRemoved(QList<QgsMapLayer*>)'),
+                    self.getLayers)
+            #TODO check this! - Possibly we can monitor legend rather?
             QtCore.QObject.connect(self.iface.mapCanvas(),
                                 QtCore.SIGNAL(
                                   'layersChanged(QList<QgsMapLayer*>)'),

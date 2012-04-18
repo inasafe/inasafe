@@ -61,6 +61,7 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         self.parent = parent
         self.dock = theDock
         self.helpDialog = None
+        self.keywordIO = ISKeywordIO()
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -92,7 +93,7 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
 
         myPath = mySettings.value(
                             'inasafe/keywordCachePath',
-                            ISKeywordIO.defaultKeywordDbPath()).toString()
+                            self.keywordIO.defaultKeywordDbPath()).toString()
         self.leKeywordCachePath.setText(myPath)
 
     def saveState(self):
