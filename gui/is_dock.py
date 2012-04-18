@@ -38,7 +38,8 @@ from is_safe_interface import (availableFunctions,
 from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
 from is_exceptions import (KeywordNotFoundException,
-                            InvalidParameterException)
+                            InvalidParameterException,
+                            HashNotFoundException)
 from is_map import ISMap
 from is_utilities import (getTempDir,
                           htmlHeader,
@@ -83,7 +84,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised
         """
-        #settrace()
+        settrace()
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (
@@ -161,9 +162,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         if qgisVersion() < 10800:
             QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                    QtCore.SIGNAL('layerWillBeRemoved(QString)'),
-                                   self.getLayers)
-            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                                   QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
                                    self.getLayers)
             QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                    QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
@@ -1010,7 +1008,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def displayHtml(self, theMessage):
         """Given an html snippet, wrap it in a page header and footer
         and display it in the wvResults widget."""
-        myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
+        myHtml =  '<div style="padding: 2px">'
+        myHtml += self.htmlHeader() + theMessage + self.htmlFooter()
+        myHtml += '</div>'
         #f = file('/tmp/h.thml', 'wa')  # for debugging
         #f.write(myHtml)
         #f.close()
@@ -1030,17 +1030,64 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised.
         """
-        myReport = None
+        myReport = ('<table class="table table-striped condensed'
+                        ' bordered-table">')  # will be overridden if needed
         if theLayer is not None:
             try:
-                myReport = self.keywordIO.readKeywords(theLayer,
-                                                       'impact_summary')
+                myKeywords = self.keywordIO.readKeywords(theLayer)
+                if 'impact_summary' in myKeywords:
+                    myReport = myKeywords['impact_summary']
+                else:
+                    if 'title' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Title') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['title'] + '</td>'
+                                     '</tr>')
+                    if 'category' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Category') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['category'] + '</td>'
+                                     '</tr>')
+                    if 'subcategory' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('subcategory') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['subcategory'] + 
+                                       '</td>'
+                                     '</tr>')
+                    if 'unit' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Units') + '</th>'
+                                     '</tr>' 
+                                     '<tr>'
+                                       '<td>' + myKeywords['unit'] + '</td>'
+                                     '</tr>')
+                    myReport += '</table>'
             except KeywordNotFoundException, e:
                 self.setOkButtonStatus()
             except InvalidParameterException, e:
                 self.setOkButtonStatus()
+            except HashNotFoundException, e:
+                myReport = ('<span class="label label-important">' +
+                           self.tr('No keywords') + '</span><div>')
+                myReport += self.tr('No keywords have been defined'
+                        ' for this layer yet. If you wish to use it as'
+                        ' an impact or hazard layer in a scenario, please'
+                        ' use the keyword editor. You can open the keyword'
+                        ' editor by clicking on the'
+                        ' <img src="qrc:/plugins/inasafe/keywords.png" '
+                        ' width="16" height="16"> icon'
+                        ' in the toolbar, or choosing Plugins -> InaSAFE'
+                        ' -> Keyword Editor from the menus.') 
+                myReport += '</div><br />'
+                myReport += getExceptionWithStacktrace(e, html=True)
             except Exception, e:
-                myReport = getExceptionWithStacktrace(e, html=True)
+                myReport += getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
                 self.pbnPrint.setEnabled(True)

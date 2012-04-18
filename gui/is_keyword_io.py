@@ -21,8 +21,8 @@ import os
 from PyQt4.QtCore import QSettings
 import sqlite3 as sqlite
 import cPickle as pickle
-from is_exceptions import (HashNotFoundException,
-                           KeywordNotFoundException)
+from is_exceptions import HashNotFoundException
+from is_exceptions import KeywordNotFoundException
 from is_safe_interface import (verify,
                                readKeywordsFromFile,
                                writeKeywordsToFile)
@@ -92,8 +92,8 @@ class ISKeywordIO(QObject):
             else:
                 myKeywords = self.readKeywordFromUri(mySource, theKeyword)
             return myKeywords
-        except KeywordNotFoundException:
-            raise
+        except KeywordNotFoundException, e:
+            raise e
         except Exception, e:
             raise e
 
