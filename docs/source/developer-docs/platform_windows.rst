@@ -243,9 +243,10 @@ Download the script on
 `this page <http://pypi.python.org/pypi/setuptools#windows>`_ called ez_setup.py
 and save it somewhere familiar e.g. :samp:`c:\temp`.
 
-Next launch the shell (python-shell.bat as described in :ref:`windows-commandline_setup`)
-as administrator (by right clicking the file and choosing run as administrator).
-Then from the command line, launch :command:`ez_setup.py` by typing this::
+Next launch the shell (python-shell.bat as described in
+:ref:`windows-commandline_setup`) **as administrator** (by right clicking the
+file and choosing run as administrator). Then from the command line, launch
+:command:`ez_setup.py` by typing this::
 
    python c:\temp\ez_setup.py
 
