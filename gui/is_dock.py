@@ -1068,11 +1068,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                        '<td>' + myKeywords['unit'] + '</td>'
                                      '</tr>')
                     myReport += '</table>'
-            except KeywordNotFoundException, e:
-                self.setOkButtonStatus()
-            except InvalidParameterException, e:
-                self.setOkButtonStatus()
-            except HashNotFoundException, e:
+            except (KeywordNotFoundException, HashNotFoundException), e:
                 myReport = ('<span class="label label-important">' +
                            self.tr('No keywords') + '</span><div>')
                 myReport += self.tr('No keywords have been defined'
