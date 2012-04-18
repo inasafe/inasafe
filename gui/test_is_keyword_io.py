@@ -114,7 +114,7 @@ class ISKeywordIOTest(unittest.TestCase):
         assert self.keywordIO.areKeywordsFileBased(self.fileVectorLayer)
 
     def test_readRasterFileKeywords(self):
-        """Can we read raster file keywords with the generic readKeywords method
+        """Can we read raster file keywords using generic readKeywords method
         """
         myKeywords = self.keywordIO.readKeywords(self.fileRasterLayer)
         myExpectedKeywords = self.expectedRasterKeywords
