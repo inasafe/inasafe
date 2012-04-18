@@ -46,7 +46,7 @@ class ISKeywordIOTest(unittest.TestCase):
                                         'subcategory': 'building'}
         self.expectedRasterKeywords = {'category': 'hazard',
                                          'subcategory': 'earthquake',
-                                         'unit': 'mmi',
+                                         'unit': 'MMI',
                                          'title': 'Shakemap_Padang_2009'}
 
     def tearDown(self):

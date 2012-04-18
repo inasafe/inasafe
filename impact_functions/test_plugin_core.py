@@ -105,7 +105,7 @@ class Test_plugin_core(unittest.TestCase):
         """Basic plugin requirements collection
         """
         requirelines = requirements_collect(BasicFunction)
-        params = {'category': 'hazard', 'unit': 'mmi'}
+        params = {'category': 'hazard', 'unit': 'MMI'}
         assert requirements_met(requirelines, params)
 
         params = {'category': 'exposure', 'unit': 'mmi2'}
@@ -115,7 +115,7 @@ class Test_plugin_core(unittest.TestCase):
         """Basic plugin requirements met
         """
         requirelines = requirements_collect(BasicFunction)
-        valid_return = ['category=="hazard"', 'unit=="mmi"']
+        valid_return = ['category=="hazard"', 'unit=="MMI"']
         for ret1, ret2 in zip(valid_return, requirelines):
             assert ret1 == ret2, "Error in requirements extraction"
 
