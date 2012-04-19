@@ -83,7 +83,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised
         """
-        #settrace()
+        settrace()
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (
@@ -102,8 +102,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.setLayerNameFromTitleFlag = True
         self.hazardLayers = None  # array of all hazard layers
         self.exposureLayers = None  # array of all exposure layers
-        self.readSettings()
-        self.getLayers()
+        self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
 
         myButton = self.pbnHelp
@@ -117,7 +116,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myButton = self.pbnRunStop
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.accept)
-        self.connectLayerListener()
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
@@ -171,16 +169,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                 QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
                                 self.getLayers)
-        else:
-            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                    QtCore.SIGNAL('layersWillBeRemoved(QList<QgsMapLayer*>)'),
-                    self.getLayers)
-            #TODO check this! - Possibly we can monitor legend rather?
-            QtCore.QObject.connect(self.iface.mapCanvas(),
-                                QtCore.SIGNAL(
-                                  'layersChanged(QList<QgsMapLayer*>)'),
-                                self.canvasLayersetChanged)
-        # All versions
+        else:  # 1.8 or better
+            QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
+                                                            self.getLayers)
+            QgsMapLayerRegistry.instance().layersAdded.connect(
+                                                            self.getLayers)
+        # All versions of QGIS
         QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                QtCore.SIGNAL('removedAll()'),
                                self.getLayers)
@@ -430,6 +424,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
            no
         """
         self.disconnectLayerListener()
+        self.blockSignals(True)
         self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
@@ -486,6 +481,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getFunctions()
         self.restoreState()
         self.setOkButtonStatus()
+        self.blockSignals(False)
         self.connectLayerListener()
         return
 
