@@ -49,6 +49,7 @@ class ISMap():
     """A class for creating a map."""
     def __init__(self, theIface):
         """Constructor for the ISMap class.
+
         Args:
             theIface - reference to the QGIS iface object
         Returns:
@@ -91,6 +92,7 @@ class ISMap():
     def setImpactLayer(self, theLayer):
         """Mutator for the impact layer that will be used for stats,
         legend and reporting.
+
         Args:
             theLayer - a valid QgsMapLayer
         Returns:
@@ -143,6 +145,7 @@ class ISMap():
 
         .. note: This is a wrapper for the rasterLegend and vectorLegend
            methods.
+
         Args:
             None
         Returns:
@@ -171,11 +174,13 @@ class ISMap():
         return self.legend
 
     def getVectorLegend(self):
-        """
+        """Get the legend for this layer as a graphic.
+
         Args:
             None
         Returns:
-            None
+            A QImage object.
+            self.legend is also populated with the image.
         Raises:
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
@@ -217,11 +222,13 @@ class ISMap():
         return self.legend
 
     def getRasterLegend(self):
-        """
+        """Get the legend for a raster layer as an image.
+
         Args:
             None
         Returns:
-            None
+            An image representing the layer's legend.
+            self.legend is also populated
         Raises:
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
@@ -327,6 +334,7 @@ class ISMap():
 
     def extendLegend(self):
         """Grow the legend pixmap enough to accommodate one more legend entry.
+
         Args:
             None
         Returns:
@@ -362,6 +370,7 @@ class ISMap():
 
     def setupComposition(self):
         """Set up the composition ready for drawing elements onto it.
+
         Args:
             None
         Returns:
@@ -403,6 +412,7 @@ class ISMap():
 
     def renderPrintout(self):
         """Generate the printout for our final map composition.
+
         Args:
             None
         Returns:
@@ -437,6 +447,7 @@ class ISMap():
 
     def drawLogo(self, theTopOffset):
         """Add a picture containing the logo to the map top left corner
+
         Args:
             theTopOffset - vertical offset at which the logo shoudl be drawn
         Returns:
@@ -455,7 +466,8 @@ class ISMap():
         self.composition.addItem(myLogo)
 
     def drawTitle(self, theTopOffset):
-        """Add a title to the composition
+        """Add a title to the composition.
+
         Args:
             theTopOffset - vertical offset at which the map should be drawn
         Returns:
@@ -489,7 +501,8 @@ class ISMap():
         return myLabelHeight
 
     def drawMap(self, theTopOffset):
-        """Add a map to the composition and return the compsermap instance
+        """Add a map to the composition and return the compsermap instance.
+
         Args:
             theTopOffset - vertical offset at which the map should be drawn
         Returns:
@@ -561,6 +574,7 @@ class ISMap():
     def drawGraticuleMask(self, theTopOffset):
         """A helper funtion to mask out graticule labels on the right side
            by overpainting a white rectangle with white border on them.
+
         Args:
             theTopOffset - vertical offset at which the map should be drawn
         Returns:
@@ -589,6 +603,7 @@ class ISMap():
     def drawNativeScaleBar(self, theComposerMap, theTopOffset):
         """Draw a scale bar using QGIS' native drawing - in the case of
         geographic maps, scale will be in degrees, not km.
+
         Args:
             None
         Returns:
@@ -765,6 +780,7 @@ class ISMap():
 
     def drawImpactTitle(self, theTopOffset):
         """Draw the map subtitle - obtained from the impact layer keywords.
+
         Args:
             theTopOffset - vertical offset at which to begin drawing
         Returns:
@@ -798,9 +814,11 @@ class ISMap():
         return myLabelHeight
 
     def drawLegend(self, theTopOffset):
-        """Add a legend to the map using our custom legend renderer
+        """Add a legend to the map using our custom legend renderer.
+
         .. note:: getLegend generates a pixmap in 150dpi so if you set
-           the map to a higher dpi it will appear undersized
+           the map to a higher dpi it will appear undersized.
+
         Args:
             theTopOffset - vertical offset at which to begin drawing
         Returns:
@@ -860,6 +878,7 @@ class ISMap():
 
     def drawImpactSummary(self, theTopOffset):
         """Render the impact summary
+
         Args:
             theTopOffset - vertical offset at which to begin drawing
         Returns:
@@ -887,7 +906,8 @@ class ISMap():
             #os.remove(myTableFile)
 
     def drawImpactTable(self, theTopOffset):
-        """Render the impact table
+        """Render the impact table.
+
         Args:
             theTopOffset - vertical offset at which to begin drawing
         Returns:
@@ -914,7 +934,8 @@ class ISMap():
             self.composition.addItem(myTable)
 
     def drawDisclaimer(self):
-        """Add a disclaimer to the composition
+        """Add a disclaimer to the composition.
+
         Args:
             None
         Returns:
@@ -980,7 +1001,8 @@ class ISMap():
         self.renderPrintout()
 
     def getMapTitle(self):
-        """Get the map title from the layer keywords if possible
+        """Get the map title from the layer keywords if possible.
+
         Args:
             None
         Returns:
@@ -1000,6 +1022,7 @@ class ISMap():
     def renderImpactSummary(self):
         """Render the impact summary in the keywords if present. The table is
         an html table with a summary for the impact layer.
+
         Args:
             None
         Returns:
@@ -1018,6 +1041,7 @@ class ISMap():
     def renderImpactTable(self):
         """Render the table in the keywords if present. The table is an
         html table with statistics for the impact layer.
+
         Args:
             None
         Returns:
@@ -1035,7 +1059,7 @@ class ISMap():
             return None
 
     def renderHtml(self, theHtml, theWidthMM):
-        """Render some HTML to a pixmap..
+        """Render some HTML to a pixmap.
 
         Args:
             * theHtml - HTML to be rendered. It is assumed that the html
@@ -1091,7 +1115,8 @@ class ISMap():
             return myPixmap
 
     def pointsToMM(self, thePoints):
-        """Convert measurement in points to one in mm
+        """Convert measurement in points to one in mm.
+
         Args:
             thePoints - distance in pixels
         Returns:
@@ -1104,7 +1129,8 @@ class ISMap():
         return myMM
 
     def mmToPoints(self, theMM):
-        """Convert measurement in points to one in mm
+        """Convert measurement in points to one in mm.
+
         Args:
             theMM - distance in milimeters
         Returns:
@@ -1130,7 +1156,8 @@ class ISMap():
 
     def showComposer(self):
         """Show the composition in a composer view so the user can tweak it
-        if they want to
+        if they want to.
+
         Args:
             None
         Returns:

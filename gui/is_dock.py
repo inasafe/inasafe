@@ -124,11 +124,13 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
         changing options in the options dialog.
+
         Args:
             None
         Returns:
             None
         Raises:
+            None
         """
 
         mySettings = QtCore.QSettings()
@@ -154,9 +156,13 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         Args:
             None
+
         Returns:
             None
+
         Raises:
+            None
+
         """
         if qgisVersion() < 10800:  # older than QGIS 1.8
             QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
@@ -198,9 +204,13 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         Args:
             None
+
         Returns:
             None
+
         Raises:
+            None
+
         """
         try:
             QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
@@ -316,12 +326,17 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def on_cboHazard_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Hazard combo is changed
         so that we can see if the ok button should be enabled.
+
         Args:
-           None.
+            None.
+
         Returns:
-           None.
+            None.
+
         Raises:
-           no exceptions explicitly raised."""
+            No exceptions explicitly raised.
+
+        """
         # Add any other logic you might like here...
         self.getFunctions()
         self.setOkButtonStatus()
@@ -330,12 +345,17 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def on_cboExposure_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Exposure combo is changed
         so that we can see if the ok button should be enabled.
+
         Args:
            None.
+
         Returns:
            None.
+
         Raises:
-           no exceptions explicitly raised."""
+           No exceptions explicitly raised.
+
+        """
         # Add any other logic you mught like here...
         self.getFunctions()
         self.setOkButtonStatus()
@@ -344,18 +364,24 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
+
         Args:
            None.
+
         Returns:
            None.
+
         Raises:
-           no exceptions explicitly raised."""
+           no exceptions explicitly raised.
+
+    """
         # Add any other logic you mught like here...
         self.setOkButtonStatus()
 
     def setOkButtonStatus(self):
         """Helper function to set the ok button status if the
         form is valid and disable it if it is not.
+
         Args:
            None.
         Returns:
@@ -373,12 +399,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         has been changed (e.g. one or more layer visibilities changed).
         If self.showOnlyVisibleLayersFlag is set to False this method will
         simply return, doing nothing.
+
         Args:
             None
+
         Returns:
             None
+
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
+
         """
         if self.showOnlyVisibleLayersFlag:
             self.getLayers()
@@ -508,7 +538,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.restoreFunctionState(myOriginalFunction)
 
     def readImpactLayer(self, myEngineImpactLayer):
-        """Helper function to read and validate layer
+        """Helper function to read and validate layer.
 
         Args
             myEngineImpactLayer: Layer object as provided by the inasafe engine
@@ -731,6 +761,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.
+
         Args:
             * theTitle - an optional title for the status update. Should be
               plain text only
@@ -793,7 +824,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         The result of this function will be two layers which are
         clipped and resampled if needed, and in the EPSG:4326 geographic
-        coordinate reference system..
+        coordinate reference system.
 
         Args:
             None
@@ -1119,6 +1150,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     def restoreState(self):
         """Restore the state of the dock to the last known state.
+
         Args:
             None
         Returns:
@@ -1143,6 +1175,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     def restoreFunctionState(self, theOriginalFunction):
         """Restore the function combo to a known state.
+
         Args:
             theOriginalFunction - name of function that should be selected
         Returns:
@@ -1159,6 +1192,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     def printMap(self):
         """Slot to print map when print map button pressed.
+
         Args:
             None
         Returns:
@@ -1205,6 +1239,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         this only has effect when a user interactively adds combo items to
         an editable combo. This we have this little function to ensure that
         combos are always sorted alphabetically.
+
         Args:
             * theCombo - combo box receiving the new item
             * theItemText - display text for the combo
@@ -1213,6 +1248,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         Returns:
             None
+
         Raises:
 
         ..todo:: Move this to utilities

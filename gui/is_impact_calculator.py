@@ -42,6 +42,7 @@ class ISImpactCalculator(QObject):
     def setExposureLayer(self, theLayerPath):
         """Mutator for Exposure layer property (e.g. buildings or
         features that will be affected).
+
         Args:
             theLayerPath - This should be a string representing a
             path to a file which can be loaded as a SAFE readlayer instance.
@@ -58,6 +59,7 @@ class ISImpactCalculator(QObject):
     def setHazardLayer(self, theLayerPath):
         """Mutator: hazard layer. Hazard layer property  (e.g. a flood depth
         raster). This should be a SAFE readlayer instance.
+
         Args:
             theLayerPath - This should be a string representing a
             path to a file which can be loaded as a SAFE readlayer instance.
@@ -75,6 +77,7 @@ class ISImpactCalculator(QObject):
         """Mutator: function layer. Function property (specifies which
         inasafe function to use to process the hazard and exposure
         layers with.
+
         Args:
             theFunctionName - This should be a string containing the name of a
             valid SAFE impact_function.

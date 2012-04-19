@@ -41,7 +41,9 @@ from PyQt4.QtCore import QCoreApplication
 def tr(theText):
     """We define a tr() alias here since the is_safe_interface implementation
     below is not a class and does not inherit from QObject.
+
     .. note:: see http://tinyurl.com/pyqt-differences
+
     Args:
        theText - string to be translated
     Returns:
@@ -53,7 +55,8 @@ def tr(theText):
 
 
 def verify(theStatement, theMessage=None):
-    """This is just a think wrapper around storage.utilities.verify
+    """This is just a thin wrapper around storage.utilities.verify.
+
     Args:
         * theStatement - expression to verify
         * theMessage - message to display on failure
@@ -104,7 +107,7 @@ def getOptimalExtent(theHazardGeoExtent,
        An array containing an extent in the form [xmin, ymin, xmax, ymax]
        e.g.::
 
-        [100.03, -1.14, 100.81, -0.73]
+          [100.03, -1.14, 100.81, -0.73]
 
     Raises:
         Any exceptions raised by the InaSAFE library will be propogated.
@@ -143,13 +146,13 @@ def getOptimalExtent(theHazardGeoExtent,
 
 
 def getBufferedExtent(theGeoExtent, theCellSize):
-    """Grow bounding box with one unit of resolution in each direction
+    """Grow bounding box with one unit of resolution in each direction.
 
     Input
-        bbox: Bounding box with format [W, S, E, N]
-        resolution: (resx, resy) - Raster resolution in each direction.
-                    res - Raster resolution in either direction
-                    If resolution is None bbox is returned unchanged.
+        theGeoExtent - Bounding box with format [W, S, E, N]
+        theCellSize - (resx, resy) Raster resolution in each direction.
+
+        If resolution is None bbox is returned unchanged.
 
     Ouput
         Adjusted bounding box
@@ -163,6 +166,7 @@ def getBufferedExtent(theGeoExtent, theCellSize):
 
 def availableFunctions(theKeywordList=None):
     """ Query the inasafe engine to see what plugins are available.
+
     Args:
 
        theKeywordList - an optional parameter which should contain
@@ -179,8 +183,10 @@ def availableFunctions(theKeywordList=None):
 
     Returns:
        A dictionary of strings where each is a plugin name.
+
        .. note:: If theKeywordList is not provided, all available
         plugins will be returned in the list.
+
     Raises:
        NoFunctionsFoundException if no functions are found.
     """
@@ -195,7 +201,7 @@ def readKeywordsFromLayer(theLayer, keyword):
     """Get metadata from the keywords file associated with a layer.
 
     .. note:: Requires a inasafe layer instance as parameter.
-    .. see:: getKeywordFromPath
+    .. seealso:: getKeywordFromPath
 
     Args:
 
@@ -232,7 +238,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
               as parameter As opposed to readKeywordsFromLayer which
               takes a inasafe file object as parameter.
 
-    .. see:: readKeywordsFromLayer
+    .. seealso:: readKeywordsFromLayer
 
     Args:
 
@@ -287,6 +293,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
 
 def writeKeywordsToFile(theFilename, theKeywords):
     """Thin wrapper around the safe write_keywords function.
+
     Args:
         * thePath - str representing path to layer that must be written.
         * theKeywords - a dictionary of keywords to be written
@@ -300,6 +307,7 @@ def writeKeywordsToFile(theFilename, theKeywords):
 
 def getStyleInfo(theLayer):
     """Get styleinfo associated with a layer.
+
     Args:
 
        * theLayer - InaSAFE layer (raster or vector)
@@ -344,6 +352,7 @@ def makeAscii(x):
 
 def readSafeLayer(thePath):
     """Thin wrapper around the safe read_layer function.
+
     Args:
         thePath - str representing path to layer that must be opened.
     Returns:
@@ -356,6 +365,7 @@ def readSafeLayer(thePath):
 
 def getSafeImpactFunctions(theFunction=None):
     """Thin wrapper around the safe impact_functions function.
+
     Args:
         theFunction - optional str giving a specific plugins name that should
         be fetched.
@@ -369,6 +379,7 @@ def getSafeImpactFunctions(theFunction=None):
 
 def calculateSafeImpact(theLayers, theFunction):
     """Thin wrapper around the safe calculate_impact function.
+
     Args:
         * theLayers - a list of layers to be used. They should be ordered
           with hazard layer first and exposure layer second.

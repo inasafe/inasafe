@@ -38,7 +38,8 @@ class ISKeywordIO(QObject):
     used for supporting keywords for remote datasources."""
 
     def __init__(self):
-        """Constructor for the ISKeywordIO object
+        """Constructor for the ISKeywordIO object.
+
         Args:
             None
         Returns:
@@ -55,6 +56,7 @@ class ISKeywordIO(QObject):
     def setKeywordDbPath(self, thePath):
         """Set the path for the keyword database (sqlite) that should be used
         to search for keywords for non local datasets.
+
         Args:
             thePath - a valid path to a sqlite database. The database does
             not need to exist already, but the user should be able to write
@@ -72,6 +74,7 @@ class ISKeywordIO(QObject):
         keywords for the given datasource. In particular, if the datasource
         is remote (e.g. a database connection) it will fetch the keywords from
         the keywords store.
+
         Args:
             * theLayer - A QGIS QgsMapLayer instance.
             * theKeyword - optional - will extract only the specified keyword
@@ -102,6 +105,7 @@ class ISKeywordIO(QObject):
         keywords for the given datasource. In particular, if the datasource
         is remote (e.g. a database connection) it will write the keywords from
         the keywords store.
+
         Args:
             * theLayer - A QGIS QgsMapLayer instance.
             * theKeywords - a dict containing all the keywords to be written
@@ -139,7 +143,7 @@ class ISKeywordIO(QObject):
         keywords that will be added to the destination file
         e.g::
 
-        copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
+            copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
 
         Args:
             * theSourceLayer - A QGIS QgsMapLayer instance.
@@ -181,6 +185,7 @@ class ISKeywordIO(QObject):
     def defaultKeywordDbPath(self):
         """Helper to get the default path for the keywords file (which is
         <plugin dir>/keywords.db)
+
         Args:
             None
         Returns:
@@ -196,6 +201,7 @@ class ISKeywordIO(QObject):
     def setupKeywordDbPath(self):
         """Helper to set the active path for the keywords. Called at init time,
         you can override this path by calling setKeywordDbPath.
+
         Args:
             None
         Returns:
@@ -217,6 +223,7 @@ class ISKeywordIO(QObject):
         unless an explicit path has been set using setKeywordDbPath, or
         overridden in QSettings. If the db does not exist it will
         be created.
+
         Args:
             thePath - path to the desired sqlite db to use.
         Returns:
@@ -232,7 +239,8 @@ class ISKeywordIO(QObject):
             raise
 
     def closeConnection(self):
-        """Given an sqlite3 connection, close it
+        """Given an sqlite3 connection, close it.
+
         Args:
             None
         Returns:
@@ -249,6 +257,7 @@ class ISKeywordIO(QObject):
         execute arbitrary queries against the database. This method also checks
         that the keywords table exists in the schema, and if not, it creates
         it.
+
         Args:
             theConnection - a valid, open sqlite3 database connection.
         Returns:
@@ -285,7 +294,8 @@ class ISKeywordIO(QObject):
 
     def areKeywordsFileBased(self, theLayer):
         """Find out if keywords should be read/written to file or our keywords
-          db
+          db.
+
         Args:
             * theLayer - A QGIS QgsMapLayer instance.
 
@@ -322,7 +332,8 @@ class ISKeywordIO(QObject):
         return myFileBasedKeywords
 
     def getHashForDatasource(self, theDataSource):
-        """
+        """Given a datasource, return its hash.
+
         Args:
             None
         Returns:

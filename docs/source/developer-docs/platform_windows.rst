@@ -410,7 +410,8 @@ In the resulting project dialog, set the following details:
 
 * :guilabel:`Project name:` : :kbd:`inasafe`
 * :guilabel:`Use default` : :kbd:`uncheck`
-* :guilabel (windows):`Directory` : :kbd:`C:\Users\Tim Sutton\.qgis\python\plugins\inasafe\`
+* :guilabel (windows):`Directory` : 
+  :kbd:`C:\\Users\\<user>\\.qgis\\python\\plugins\\inasafe\\`
 * :guilabel:`Choose project type` : :kbd:`Python`
 * :guilabel:`Grammar Version` : :kbd:`2.5`
 * :guilabel:`Add project directory to PYTHONPATH?` : :kbd:`check`
