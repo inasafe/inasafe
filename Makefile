@@ -39,7 +39,7 @@ docs: compile
 	@echo "-------------------------------"
 	@echo "Compile documentation into html"
 	@echo "-------------------------------"
-	cd docs; make clean; make html >/dev/null; cd ..
+	cd docs; make html >/dev/null; cd ..
 
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
