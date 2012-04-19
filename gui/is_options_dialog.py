@@ -145,6 +145,6 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         """
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                     self.tr('Set keyword cache file'),
-                    ISKeywordIO.defaultKeywordDbPath(),
+                    self.keywordIO.defaultKeywordDbPath(),
                     self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(myFilename)
