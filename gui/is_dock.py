@@ -217,9 +217,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         except:
             pass
 
-        QtCore.QObject.disconnect(self.iface.mapCanvas(),
+        try:
+            QtCore.QObject.disconnect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
+        except:
+            pass
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
