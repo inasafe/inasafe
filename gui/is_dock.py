@@ -21,7 +21,7 @@ __type__ = 'alpha'  # beta, final etc will be shown in dock title
 
 import numpy
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSlot
 from is_dock_base import Ui_ISDockBase
 from is_help import ISHelp
 from is_utilities import getExceptionWithStacktrace, getWGS84resolution
@@ -165,30 +165,19 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         if qgisVersion() < 10800:  # older than QGIS 1.8
             QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                 QtCore.SIGNAL('layerWillBeRemoved(QString)'),
-                                self.getLayers)
+                                self.layerWillBeRemoved)
             QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
                                 QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
                                 self.getLayers)
         else:  # 1.8 or better
             QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
-                                                            self.getLayers)
+                                                self.layersWillBeRemoved)
             QgsMapLayerRegistry.instance().layersAdded.connect(
-                                                            self.getLayers)
+                                                 self.layersAdded)
         # All versions of QGIS
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('removedAll()'),
+        QtCore.QObject.connect(self.iface.mapCanvas(),
+                               QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
-        QtCore.QObject.connect(self.iface,
-                               QtCore.SIGNAL('projectRead()'),
-                               self.getLayers)
-        QtCore.QObject.connect(self.iface,
-                               QtCore.SIGNAL('newProjectCreated()'),
-                               self.getLayers)
-        # old implementation - bad because it triggers with every layer
-        # visibility change
-        #QtCore.QObject.connect(self.iface.mapCanvas(),
-        #                       QtCore.SIGNAL('layersChanged()'),
-        #                       self.getLayers)
 
     def disconnectLayerListener(self):
         """Destroy the signal/slot to listen for changes in the layers loaded
@@ -221,36 +210,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             pass
 
         try:
-            QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('removedAll()'),
-                               self.getLayers)
-        except:
-            pass
-        try:
-            QtCore.QObject.disconnect(self.iface,
-                               QtCore.SIGNAL('projectRead()'),
-                               self.getLayers)
+            QgsMapLayerRegistry.instance().layersWillBeRemoved.disconnect(
+                                                self.layersWillBeRemoved)
+            QgsMapLayerRegistry.instance().layersAdded.disconnect(
+                                                 self.layersAdded)
         except:
             pass
 
-        try:
-            QtCore.QObject.disconnect(self.iface,
-                               QtCore.SIGNAL('newProjectCreated()'),
-                               self.getLayers)
-        except:
-            pass
-
-        try:
-            QtCore.QObject.disconnect(self.iface.mapCanvas(),
+        QtCore.QObject.disconnect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
-                               self.canvasLayersetChanged)
-        except:
-            pass
-        # old implementation - bad because it triggers with every layer
-        # visibility change
-        #QtCore.QObject.disconnect(self.iface.mapCanvas(),
-        #                       QtCore.SIGNAL('layersChanged()'),
-        #                       self.getLayers)
+                               self.getLayers)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -316,7 +285,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             'the <em> Run</em> button.')
             return (True, myMessage)
 
-    @pyqtSignature('int')  # prevents actions being handled twice
+    @pyqtSlot()
     def on_cboHazard_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Hazard combo is changed
         so that we can see if the ok button should be enabled.
@@ -335,7 +304,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getFunctions()
         self.setOkButtonStatus()
 
-    @pyqtSignature('int')  # prevents actions being handled twice
+    @pyqtSlot()
     def on_cboExposure_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Exposure combo is changed
         so that we can see if the ok button should be enabled.
@@ -354,7 +323,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getFunctions()
         self.setOkButtonStatus()
 
-    @pyqtSignature('int')  # prevents actions being handled twice
+    @pyqtSlot()
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
@@ -407,6 +376,46 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         if self.showOnlyVisibleLayersFlag:
             self.getLayers()
 
+    @pyqtSlot()
+    def layersWillBeRemoved(self):
+        """Slot for the new (QGIS 1.8 and beyond api) to notify us when
+        a group of layers is are removed. This is optimal since if many layers
+        are removed this slot gets called only once. This slot simply
+        delegates to getLayers and is only implemented here to make the
+        connections between the different signals and slots clearer and
+        better documented."""
+        self.getLayers()
+
+    @pyqtSlot()
+    def layersAdded(self, theLayers):
+        """Slot for the new (QGIS 1.8 and beyond api) to notify us when
+        a group of layers is are added. This is optimal since if many layers
+        are added this slot gets called only once. This slot simply
+        delegates to getLayers and is only implemented here to make the
+        connections between the different signals and slots clearer and
+        better documented."""
+        self.getLayers()
+
+    @pyqtSlot()
+    def layerWillBeRemoved(self):
+        """Slot for the old (pre QGIS 1.8 api) to notify us when
+        a layer is removed. This is suboptimal since if many layers are
+        removed this slot gets called multiple times. This slot simply
+        delegates to getLayers and is only implemented here to make the
+        connections between the different signals and slots clearer and
+        better documented."""
+        self.getLayers()
+
+    @pyqtSlot()
+    def layerWasAdded(self):
+        """Slot for the old (pre QGIS 1.8 api) to notify us when
+        a layer is added. This is suboptimal since if many layers are
+        added this slot gets called multiple times. This slot simply
+        delegates to getLayers and is only implemented here to make the
+        connections between the different signals and slots clearer and
+        better documented."""
+        self.getLayers()
+
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
 
@@ -436,13 +445,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myRegistry = QgsMapLayerRegistry.instance()
         except:
             return
+        myCanvasLayers = self.iface.mapCanvas().layers()
         # mapLayers returns a QMap<QString id, QgsMapLayer layer>
         myLayers = myRegistry.mapLayers().values()
         for myLayer in myLayers:
-        #for i in range(len(self.iface.mapCanvas().layers())):
-            #myLayer = self.iface.mapCanvas().layer(i)
-            if (self.showOnlyVisibleLayersFlag and myLayer not in
-                self.iface.mapCanvas().layers()):
+            if (self.showOnlyVisibleLayersFlag and
+                myLayer not in myCanvasLayers):
                 continue
 
             """
@@ -481,8 +489,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getFunctions()
         self.restoreState()
         self.setOkButtonStatus()
-        self.blockSignals(False)
+        # Note: Don't change the order of the next two lines otherwise there
+        # will be a lot of unneeded looping around as the signal is handled
         self.connectLayerListener()
+        self.blockSignals(False)
         return
 
     def getFunctions(self):
