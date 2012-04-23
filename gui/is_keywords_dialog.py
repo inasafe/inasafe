@@ -86,8 +86,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
                                       self.tr('building [sigab]')),
                                      ('roads',
                                       self.tr('roads'))])
-        self.standardHazardList = OrderedDict([('earthquake [mmi]',
-                                    self.tr('earthquake [mmi]')),
+        self.standardHazardList = OrderedDict([('earthquake [MMI]',
+                                    self.tr('earthquake [MMI]')),
                                      ('tsunami [m]',
                                       self.tr('tsunami [m]')),
                                      ('tsunami [wet/dry]',
