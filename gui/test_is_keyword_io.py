@@ -41,7 +41,7 @@ class ISKeywordIOTest(unittest.TestCase):
         self.expectedSqliteKeywords = {'category': 'exposure',
                                        'datatype': 'OSM',
                                        'subcategory': 'building'}
-        self.expectedVectorKeywords =  {'category': 'exposure',
+        self.expectedVectorKeywords = {'category': 'exposure',
                                         'datatype': 'itb',
                                         'subcategory': 'building'}
         self.expectedRasterKeywords = {'category': 'hazard',
@@ -124,8 +124,8 @@ class ISKeywordIOTest(unittest.TestCase):
         assert myKeywords == myExpectedKeywords, myMessage
 
     def test_readVectorFileKeywords(self):
-        """Can we read vector file keywords with the generic readKeywords method
-        """
+        """Can we read vector file keywords with the generic readKeywords
+        method """
         myKeywords = self.keywordIO.readKeywords(self.fileVectorLayer)
         myExpectedKeywords = self.expectedVectorKeywords
         mySource = self.fileVectorLayer.source()

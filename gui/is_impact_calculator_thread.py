@@ -50,7 +50,8 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
 
        Prints 'hello' to the console
 
-       .. seealso:: http://techbase.kde.org/Development/Tutorials/Python_introduction_to_signals_and_slots
+       .. seealso::
+          http://techbase.kde.org/Development/Tutorials/Python_introduction_to_signals_and_slots
           for an alternative (maybe nicer?) approach.
        """
 

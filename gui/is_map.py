@@ -29,7 +29,7 @@ from qgis.core import (QgsComposition,
                        QgsPoint,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
-from is_exceptions import (LegendLayerException, 
+from is_exceptions import (LegendLayerException,
                            KeywordNotFoundException)
 from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
 from is_keyword_io import ISKeywordIO

@@ -343,6 +343,7 @@ def htmlFooter():
     myFile.close()
     return myFooter
 
+
 def qgisVersion():
     """Get the version of QGIS
    Args:

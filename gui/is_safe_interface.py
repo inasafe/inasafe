@@ -296,12 +296,17 @@ def writeKeywordsToFile(theFilename, theKeywords):
 
     Args:
         * thePath - str representing path to layer that must be written.
+          If the file does not end in .keywords, its extension will be
+          stripped off and the basename + .keywords will be used as the file.
         * theKeywords - a dictionary of keywords to be written
     Returns:
         A safe readSafeLayer object is returned.
     Raises:
         None
     """
+    myBasename, myExtension = os.path.splitext(theFilename)
+    if 'keywords' not in myExtension:
+        theFilename = myBasename + '.keywords'
     safe_write_keywords(theKeywords, theFilename)
 
 

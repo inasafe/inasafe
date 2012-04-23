@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_options_dialog_base.ui'
 #
-# Created: Mon Apr 23 21:51:32 2012
+# Created: Mon Apr 23 22:33:47 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
