@@ -281,10 +281,11 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             'the <em> Run</em> button.')
             return (True, myMessage)
 
-    @pyqtSlot()
     def on_cboHazard_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Hazard combo is changed
         so that we can see if the ok button should be enabled.
+
+        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
 
         Args:
             None.
@@ -300,10 +301,11 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getFunctions()
         self.setOkButtonStatus()
 
-    @pyqtSlot()
     def on_cboExposure_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Exposure combo is changed
         so that we can see if the ok button should be enabled.
+
+        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
 
         Args:
            None.
@@ -319,10 +321,11 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getFunctions()
         self.setOkButtonStatus()
 
-    @pyqtSlot()
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
+
+        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
 
         Args:
            None.

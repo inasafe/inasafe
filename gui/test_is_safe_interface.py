@@ -172,7 +172,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         try:
             myKeyword = readKeywordsFromFile(
                             self.rasterShakePath, 'boguskeyword')
-        except KeywordNotFoundException():
+        except KeywordNotFoundException:
             pass  # this is good
         except Exception, e:
             myMessage = ('Request for bogus keyword raised incorrect '
