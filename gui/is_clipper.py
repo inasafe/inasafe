@@ -9,7 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
-from is_safe_interface import writeKeywordsToFile
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.3.0'
