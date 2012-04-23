@@ -19,7 +19,6 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 from PyQt4 import QtGui, QtCore
 #from PyQt4.QtCore import pyqtSignature
 #from ui_inasafedock import Ui_ISDock
