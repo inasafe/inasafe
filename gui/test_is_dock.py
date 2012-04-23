@@ -44,8 +44,8 @@ from utilities_test import (getQgisTestApp,
                             loadLayer)
 
 from gui.is_dock import ISDock
-from is_utilities import (setVectorStyle,
-                          setRasterStyle)
+from is_utilities import (setRasterStyle,
+                          qgisVersion)
 from storage.utilities_test import TESTDATA
 from storage.utilities import read_keywords
 
@@ -758,6 +758,7 @@ class ISDockTest(unittest.TestCase):
         """Test issue #71 in github - cbo changes should update ok button."""
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
+        print 'Using QGIS: %s' % qgisVersion()
         self.tearDown()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
@@ -775,7 +776,7 @@ class ISDockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        # Second part of scenario - run disables when adding invalid layer
+        # Second part of scenario - run disabled when adding invalid layer
         # and select it - run should be disabled
         myFileList = ['issue71.tif']  # This layer has incorrect keywords
         myClearFlag = False

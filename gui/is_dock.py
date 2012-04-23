@@ -162,14 +162,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             None
 
         """
-        if qgisVersion() < 10800:  # older than QGIS 1.8
-            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                                QtCore.SIGNAL('layerWillBeRemoved(QString)'),
-                                self.layerWillBeRemoved)
-            QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                                QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
-                                self.getLayers)
-        else:  # 1.8 or better
+        if qgisVersion() >= 10800:  # 1.8 or newer
             QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
                                                 self.layersWillBeRemoved)
             QgsMapLayerRegistry.instance().layersAdded.connect(
