@@ -222,12 +222,11 @@ An example of the keywords editor in minimal mode is shown below.
 .. figure::  ../../keyword-editor-simple.jpeg
    :align:   center
 
-
 2) **Advanced mode**: In this mode several extra options are provided in
-  addition to the minimal mode options. Unlike minimal mode, in advanced mode
-  only basic validation is performed and the user is given more flexibility to
-  manually define and remove key/value pairs. Three sections are provided for
-  this:
+   addition to the minimal mode options. Unlike minimal mode, in advanced mode
+   only basic validation is performed and the user is given more flexibility to
+   manually define and remove key/value pairs. Three sections are provided for
+   this:
 
   * **Predefined** - In this section, the user selects from a constrained list
     of keywords, enters a free-form value and then adds the key/value pair to

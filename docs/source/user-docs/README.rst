@@ -4,11 +4,12 @@
 
 This is the project: |project_name| - QGIS
 
-.. figure::  ../../../gui/resources/img/screenshot.jpg
+.. figure::  ../../screenshot.jpg
    :align:   center
 
 The latest source code is available in https://github.com/AIFDR/inasafe
-which contains modules for risk calculations, gis functionality and functions for impact modelling.
+which contains modules for risk calculations, gis functionality and functions
+for impact modelling.
 
 For more information about |project_name| please look at
 the documentation at http://inasafe.readthedocs.org

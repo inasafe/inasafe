@@ -5,54 +5,61 @@ Frequently Asked Questions
 How do I rename a shape file and all the helper files?
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  Use the rename command. rename [ -v ] [ -n ] [ -f ] perlexpr [ files ].
-  For example
+Use the rename command. rename [ -v ] [ -n ] [ -f ] perlexpr [ files ].
+For example::
+  
     rename -v "s/^building/OSM_building_polygons_20110905/" building.*
 
 How do I reproject a spatial data file to WGS84 geographic coordinates
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  For raster data, use gdalwarp, for example
-  gdalwarp -t_srs EPSG:4326 <source>.tif <target>.tif
+For raster data, use gdalwarp, for example::
 
-  For vector data use ogr2ogr. For example from TM-3 zone 48.2
-  ogr2ogr -s_srs EPSG:23834 -t_srs EPSG:4326 <target>.shp <source>.shp
+   gdalwarp -t_srs EPSG:4326 <source>.tif <target>.tif
+
+For vector data use ogr2ogr. For example from TM-3 zone 48.2::
+
+   ogr2ogr -s_srs EPSG:23834 -t_srs EPSG:4326 <target>.shp <source>.shp
 
 How do I get Open Street Map building data into |project_name|?
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  For Indonesia, you can download latest collections at http://data.kompetisiosm.org
+For Indonesia, you can download latest collections at
+`data.kompetisiosm.org <http://data.kompetisiosm.org>`_. or you can add our
+Open Street Map building PostGIS mirror to InaSAFE:
 
-  or you can add our Open Street Map building PostGIS mirror to riab::
-
- * Add PostGIS layer with host=203.77.224.77, database=osm, username=aifdr, port 5432, SSL mode=disable
+ * Add PostGIS layer with host=203.77.224.77, database=osm, 
+   username=aifdr, port 5432, SSL mode=disable
  * Select view named vw_planet_osm_polygon
- * We don't yet have direct support for PostGIS, so save the layer as a
-   shapefile, load it and add the appropriate keywords (category: exposure, subcategory: building)
+
 # * Build query: upper(geometrytype("way")) IN ('POLYGON','MULTIPOLYGON') AND BUILDING != ''
 
 How do I take screen capture e.g. for use in a presentation?
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  On Ubuntu, get the packages gtk-recordmydesktop and mencoder
-  Record using recordmydesktop (start and stop icon in the top bar)
-  Convert to other formats using mencoder, e.g:
+On Ubuntu, get the packages gtk-recordmydesktop and mencoder
+Record using recordmydesktop (start and stop icon in the top bar)
+Convert to other formats using mencoder, e.g::
 
-  mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts vcodec=mpeg4:vpass=1 -of lavf -o yogya_analysis.avi
+   mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts \
+   vcodec=mpeg4:vpass=1 -of lavf -o yogya_analysis.avi
  
-  or::
+or::
 
-  mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts vcodec=wmv2 -of lavf -o yogya_analysis.wmv
+   mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts \
+   vcodec=wmv2 -of lavf -o yogya_analysis.wmv
 
 
-How does the documentation work?::
+How does the documentation work?
+::::::::::::::::::::::::::::::::
 
-  The |project_name| documentation files are written using the RST format
-  (http://docutils.sourceforge.net/docs/user/rst/quickref.html) and stored with
-  the source code in github:
-  https://github.com/AIFDR/inasafe/tree/master/docs/source
+The |project_name| documentation files are written using the RST format
+(`quickreference guide <http://docutils.sourceforge.net/docs/user/rst/quickref.html>`_)
+and stored with the source code in github::
 
-  The RST files are used for two products:
+   https://github.com/AIFDR/inasafe/tree/master/docs/source
+
+The RST files are used for two products:
   * HTML files generated using Sphinx (http://sphinx.pocoo.org) by running
     https://github.com/AIFDR/inasafe/blob/master/docs/Makefile. These
     files are accessible through both the file browser and the help button
@@ -88,6 +95,5 @@ Using rpl is much simpler, just do::
    rpl "oldstring" "newstring" *.py
 
 
-For details see
-http://rushi.wordpress.com/2008/08/05/find-replace-across-multiple-files-in-linux/
+For details on the find command see `this article <http://rushi.wordpress.com/2008/08/05/find-replace-across-multiple-files-in-linux/>`_.
 

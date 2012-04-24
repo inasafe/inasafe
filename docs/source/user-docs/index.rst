@@ -1,4 +1,4 @@
-|project_name| user documentation!
+|project_name| user documentation
 =================================
 
 |project_name| is a Quantum GIS plugin that enables you to perform risk scenario

@@ -23,7 +23,7 @@ class BasicFunction(FunctionProvider):
     :author Allen
     :rating 1
     :param requires category=="hazard"
-    :param requires unit=="mmi"
+    :param requires unit=="MMI"
     """
 
     @staticmethod
@@ -88,7 +88,7 @@ class SyntaxErrorFunction(FunctionProvider):
     :author Allen
     :rating 1
     :param requires category=="hazard"
-    :param requires unit="mmi" #Note the error should be ==
+    :param requires unit="MMI" #Note the error should be ==
     """
 
     @staticmethod
@@ -105,7 +105,7 @@ class Test_plugin_core(unittest.TestCase):
         """Basic plugin requirements collection
         """
         requirelines = requirements_collect(BasicFunction)
-        params = {'category': 'hazard', 'unit': 'mmi'}
+        params = {'category': 'hazard', 'unit': 'MMI'}
         assert requirements_met(requirelines, params)
 
         params = {'category': 'exposure', 'unit': 'mmi2'}
@@ -115,7 +115,7 @@ class Test_plugin_core(unittest.TestCase):
         """Basic plugin requirements met
         """
         requirelines = requirements_collect(BasicFunction)
-        valid_return = ['category=="hazard"', 'unit=="mmi"']
+        valid_return = ['category=="hazard"', 'unit=="MMI"']
         for ret1, ret2 in zip(valid_return, requirelines):
             assert ret1 == ret2, "Error in requirements extraction"
 
@@ -128,7 +128,7 @@ class Test_plugin_core(unittest.TestCase):
             check = requirement_check(params, line)
             assert check == False
 
-        line = "unit='mmi'"
+        line = "unit='MMI'"
         params = {'category': 'exposure'}
         msg = 'Malformed statement (logged)'
         assert requirement_check(params, line) == False, msg
@@ -136,7 +136,7 @@ class Test_plugin_core(unittest.TestCase):
 
     def test_keywords_error(self):
         """Handling of reserved python keywords """
-        line = "unit=='mmi'"
+        line = "unit=='MMI'"
         params = {'class': 'myclass'}
         msg = 'Reserved keyword in statement (logged)'
         assert requirement_check(params, line) == False, msg

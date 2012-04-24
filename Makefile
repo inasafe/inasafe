@@ -79,7 +79,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203 --exclude odict.py,is_keywords_dialog_base.py,is_dock_base.py,resources.py,resources_rc.py,is_help_base.py . || true
+	@pep8 --repeat --ignore=E203 --exclude odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py . || true
 
 # Run entire test suite
 test_suite: compile testdata

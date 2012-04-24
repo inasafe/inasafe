@@ -31,7 +31,8 @@ As developer, before a release you should do:
    choosing the same file you already have in the workspace will not refresh the
    workspace with any new changes that appeared on disk.
 
-.. note:: :samp:`make update-translation-strings` is non destructive. That is,
+.. note:: 
+   *make update-translation-strings* is non destructive. That is,
    you can safely run it as many times as you like, new strings will be added
    to it, deprecated strings will be left in place and already translated
    strings will remain translated.
@@ -65,7 +66,7 @@ to generate the new .ts file under gui/i18n. Don't forget to :samp:`git add`
 the new file and place it under version control. 
 
 InaSAFE Library Translations
--------------------------
+----------------------------
 
 Low level gettext usage
 .......................
@@ -130,7 +131,7 @@ As developer, before a release you should do:
    choosing the same file you already have in the workspace will not refresh the
    workspace with any new changes that appeared on disk.
 
-.. note:: :samp:`make update-translation-strings` is non destructive. That is,
+.. note:: *make update-translation-strings* is non destructive. That is,
    you can safely run it as many times as you like, new strings will be added
    to it, deprecated strings will be left in place and already translated
    strings will remain translated.
@@ -192,7 +193,7 @@ to generate the updated .po file under i18n/en_ZA/LC_MESSAGES. Don't forget to
 :samp:`git add` the new directory and file and place them under version control. 
 
 To convert the .po file to a binary .mo file (which is used at runtime for the
-actual translation), follow the :ref:`_library-release-label` section above.
+actual translation), follow the :ref:`library-release-label` section above.
 
 Adding a new source file for translation
 ........................................
@@ -220,7 +221,7 @@ translatable source files. Now run::
 to generate the updated .po file and make it available to translators. When the
 translated file is returned, convert the .po file to a binary .mo file (which is
 used at runtime for the actual translation), then follow the 
-:ref:`_library-release-label` section above.
+:ref:`library-release-label` section above.
 
 Sphinx Translation
 ------------------

@@ -19,18 +19,16 @@ __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 from PyQt4 import QtGui, QtCore
 #from PyQt4.QtCore import pyqtSignature
 #from ui_inasafedock import Ui_ISDock
 #from utilities import getExceptionWithStacktrace
-from is_impact_calculator import ISImpactCalculator
 from is_keywords_dialog_base import Ui_ISKeywordsDialogBase
+from is_keyword_io import ISKeywordIO
 from is_help import ISHelp
+from is_utilities import getExceptionWithStacktrace
 from PyQt4.QtCore import pyqtSignature
-from storage.utilities import write_keywords
-from is_exceptions import InvalidParameterException
-from is_impact_calculator import getKeywordFromFile
+from is_exceptions import HashNotFoundException
 from odict import OrderedDict
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -70,6 +68,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
                             'InaSAFE %s Keywords Editor' % __version__))
+        self.keywordIO = ISKeywordIO()
         # note the keys should remain untranslated as we need to write
         # english to the keywords file. The keys will be written as user data
         # in the combo entries.
@@ -86,8 +85,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
                                       self.tr('building [sigab]')),
                                      ('roads',
                                       self.tr('roads'))])
-        self.standardHazardList = OrderedDict([('earthquake [mmi]',
-                                    self.tr('earthquake [mmi]')),
+        self.standardHazardList = OrderedDict([('earthquake [MMI]',
+                                    self.tr('earthquake [MMI]')),
                                      ('tsunami [m]',
                                       self.tr('tsunami [m]')),
                                      ('tsunami [wet/dry]',
@@ -502,11 +501,9 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        mySource = str(self.layer.source())
-        self.calculator = ISImpactCalculator()
         try:
-            myKeywords = getKeywordFromFile(mySource)
-        except InvalidParameterException:
+            myKeywords = self.keywordIO.readKeywords(self.layer)
+        except HashNotFoundException:
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume
             # exposure to start with
@@ -616,15 +613,13 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        myFileName = self.layer.source()
-        myFileName = os.path.splitext(str(myFileName))[0] + '.keywords'
         myKeywords = self.getKeywords()
         try:
-            write_keywords(myKeywords, myFileName)
+            self.keywordIO.writeKeywords(self.layer, myKeywords)
         except Exception, e:
             QtGui.QMessageBox.warning(self, self.tr('Risk in a box'),
-            ((self.tr('An error was encountered when saving the keywords:\n')
-                + str(e))))
+            ((self.tr('An error was encountered when saving the keywords:\n'
+                      '%s' % str(getExceptionWithStacktrace(e))))))
         if self.dock is not None:
             self.dock.getLayers()
         self.close()

@@ -23,6 +23,15 @@ GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 900913  # constant for EPSG:GOOGLECRS Google Mercator id
 
 
+def assertHashesForFile(theHashes, theFilename):
+    """Assert that a files has matches one of a list of expected hashes"""
+    myHash = hashForFile(theFilename)
+    myMessage = ('Unexpected hash'
+                 '\nGot: %s'
+                 '\nExpected: %s' % (myHash, theHashes))
+    assert myHash in theHashes, myMessage
+
+
 def assertHashForFile(theHash, theFilename):
     """Assert that a files has matches its expected hash"""
     myHash = hashForFile(theFilename)

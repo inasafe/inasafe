@@ -12,7 +12,7 @@ class EarthquakePopulationExposureFunction(FunctionProvider):
     :param requires category=='hazard' and \
                 subcategory.startswith('earthquake') and \
                 layertype=='raster' and \
-                unit=='mmi'
+                unit=='MMI'
 
     :param requires category=='exposure' and \
                 subcategory.startswith('population') and \

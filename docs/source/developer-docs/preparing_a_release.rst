@@ -120,7 +120,7 @@ you could issue the following command at the root of the plugin source tree::
 PEP8 and PEP257 compliance
 ..........................
 
-These **P**ython **E**nhancement **P**roposals (PEP) relate to the formatting
+These **Python Enhancement Proposals** (PEP) relate to the formatting
 of python source code. In particular they mandate spacing, layout, line lengths
 and so on. The outcome of PEP8 and PEP257 compliance is code that is
 consistently formatted accross the whole code base, regardless of authorship.

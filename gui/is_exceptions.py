@@ -31,7 +31,7 @@ class TestNotImplementedException(Exception):
 
 
 class InsufficientParametersException(Exception):
-    """Custom exception for when a test exists only as a stub."""
+    """Custom exception for when insufficient parameters have been set."""
     pass
 
 
@@ -43,6 +43,11 @@ class NoFunctionsFoundException(Exception):
 
 class KeywordNotFoundException(Exception):
     """Custom exception for when a no keyword can be found."""
+    pass
+
+
+class HashNotFoundException(Exception):
+    """Custom exception for when a no keyword hash can be found."""
     pass
 
 

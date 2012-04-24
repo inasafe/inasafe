@@ -115,10 +115,10 @@ class ISPluginTest(unittest.TestCase):
         myPlugin.setupI18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
-        from impact_functions import get_plugins
-        #myFunctions = get_plugins()
+        from impact_functions import getSafeImpactFunctions
+        #myFunctions = getSafeImpactFunctions()
         #print myFunctions
-        myFunctions = get_plugins('Tydelik gesluit')
+        myFunctions = getSafeImpactFunctions('Tydelik gesluit')
         assert len(myFunctions) > 0
 
 if __name__ == '__main__':

@@ -21,7 +21,7 @@ __type__ = 'alpha'  # beta, final etc will be shown in dock title
 
 import numpy
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSlot
 from is_dock_base import Ui_ISDockBase
 from is_help import ISHelp
 from is_utilities import getExceptionWithStacktrace, getWGS84resolution
@@ -31,21 +31,21 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
-from qgis.gui import QgsMapCanvasLayer
-from is_impact_calculator import (ISImpactCalculator,
-                              getKeywordFromFile,
-                              getKeywordFromLayer,
-                              availableFunctions)
+from is_impact_calculator import ISImpactCalculator
+from is_safe_interface import (availableFunctions,
+                               getOptimalExtent,
+                               getBufferedExtent)
+from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
-from is_impact_calculator import getOptimalExtent, getBufferedExtent
 from is_exceptions import (KeywordNotFoundException,
-                            InvalidParameterException)
+                            HashNotFoundException)
 from is_map import ISMap
 from is_utilities import (getTempDir,
                           htmlHeader,
                           htmlFooter,
                           setVectorStyle,
-                          setRasterStyle)
+                          setRasterStyle,
+                          qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -93,6 +93,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.header = None  # for storing html header template
         self.footer = None  # for storing html footer template
         self.calculator = ISImpactCalculator()
+        self.keywordIO = ISKeywordIO()
         self.runner = None
         self.helpDialog = None
         self.state = None
@@ -101,8 +102,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.setLayerNameFromTitleFlag = True
         self.hazardLayers = None  # array of all hazard layers
         self.exposureLayers = None  # array of all exposure layers
-        self.readSettings()
-        self.getLayers()
+        self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
 
         myButton = self.pbnHelp
@@ -116,18 +116,19 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myButton = self.pbnRunStop
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.accept)
-        self.connectLayerListener()
         #myAttribute = QtWebKit.QWebSettings.DeveloperExtrasEnabled
         #QtWebKit.QWebSettings.setAttribute(myAttribute, True)
 
     def readSettings(self):
         """Set the dock state from QSettings. Do this on init and after
         changing options in the options dialog.
+
         Args:
             None
         Returns:
             None
         Raises:
+            None
         """
 
         mySettings = QtCore.QSettings()
@@ -153,37 +154,23 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         Args:
             None
+
         Returns:
             None
+
         Raises:
+            None
+
         """
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('layerWillBeRemoved(QString)'),
-                               self.getLayers)
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
-                               self.getLayers)
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('layerWasAdded(QgsMapLayer)'),
-                               self.getLayers)
-        QtCore.QObject.connect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('removedAll()'),
-                               self.getLayers)
-        QtCore.QObject.connect(self.iface,
-                               QtCore.SIGNAL('projectRead()'),
-                               self.getLayers)
-        QtCore.QObject.connect(self.iface,
-                               QtCore.SIGNAL('newProjectCreated()'),
-                               self.getLayers)
-        # to detect layer visibility changes which registry is ignorant of
+        if qgisVersion() >= 10800:  # 1.8 or newer
+            QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(
+                                                self.layersWillBeRemoved)
+            QgsMapLayerRegistry.instance().layersAdded.connect(
+                                                 self.layersAdded)
+        # All versions of QGIS
         QtCore.QObject.connect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
-                               self.canvasLayersetChanged)
-        # old implementation - bad because it triggers with every layer
-        # visibility change
-        #QtCore.QObject.connect(self.iface.mapCanvas(),
-        #                       QtCore.SIGNAL('layersChanged()'),
-        #                       self.getLayers)
+                               self.getLayers)
 
     def disconnectLayerListener(self):
         """Destroy the signal/slot to listen for changes in the layers loaded
@@ -193,9 +180,13 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         Args:
             None
+
         Returns:
             None
+
         Raises:
+            None
+
         """
         try:
             QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
@@ -212,36 +203,19 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             pass
 
         try:
-            QtCore.QObject.disconnect(QgsMapLayerRegistry.instance(),
-                               QtCore.SIGNAL('removedAll()'),
-                               self.getLayers)
-        except:
-            pass
-        try:
-            QtCore.QObject.disconnect(self.iface,
-                               QtCore.SIGNAL('projectRead()'),
-                               self.getLayers)
-        except:
-            pass
-
-        try:
-            QtCore.QObject.disconnect(self.iface,
-                               QtCore.SIGNAL('newProjectCreated()'),
-                               self.getLayers)
+            QgsMapLayerRegistry.instance().layersWillBeRemoved.disconnect(
+                                                self.layersWillBeRemoved)
+            QgsMapLayerRegistry.instance().layersAdded.disconnect(
+                                                 self.layersAdded)
         except:
             pass
 
         try:
             QtCore.QObject.disconnect(self.iface.mapCanvas(),
                                QtCore.SIGNAL('layersChanged()'),
-                               self.canvasLayersetChanged)
+                               self.getLayers)
         except:
             pass
-        # old implementation - bad because it triggers with every layer
-        # visibility change
-        #QtCore.QObject.disconnect(self.iface.mapCanvas(),
-        #                       QtCore.SIGNAL('layersChanged()'),
-        #                       self.getLayers)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -283,9 +257,11 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         if self.cboFunction.currentIndex() == -1:
             myHazardFilename = str(self.getHazardLayer().source())
-            myHazardKeywords = getKeywordFromFile(myHazardFilename)
+            myHazardKeywords = self.keywordIO.readKeywords(
+                                                    self.getHazardLayer())
             myExposureFilename = str(self.getExposureLayer().source())
-            myExposureKeywords = getKeywordFromFile(myExposureFilename)
+            myExposureKeywords = self.keywordIO.readKeywords(
+                                                    self.getExposureLayer())
             myMessage = self.tr('<span class="label label-important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
@@ -305,50 +281,69 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             'the <em> Run</em> button.')
             return (True, myMessage)
 
-    @pyqtSignature('int')  # prevents actions being handled twice
     def on_cboHazard_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Hazard combo is changed
         so that we can see if the ok button should be enabled.
+
+        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
+
         Args:
-           None.
+            None.
+
         Returns:
-           None.
+            None.
+
         Raises:
-           no exceptions explicitly raised."""
+            No exceptions explicitly raised.
+
+        """
         # Add any other logic you might like here...
         self.getFunctions()
         self.setOkButtonStatus()
 
-    @pyqtSignature('int')  # prevents actions being handled twice
     def on_cboExposure_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Exposure combo is changed
         so that we can see if the ok button should be enabled.
+
+        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
+
         Args:
            None.
+
         Returns:
            None.
+
         Raises:
-           no exceptions explicitly raised."""
+           No exceptions explicitly raised.
+
+        """
         # Add any other logic you mught like here...
         self.getFunctions()
         self.setOkButtonStatus()
 
-    @pyqtSignature('int')  # prevents actions being handled twice
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
+
+        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
+
         Args:
            None.
+
         Returns:
            None.
+
         Raises:
-           no exceptions explicitly raised."""
+           no exceptions explicitly raised.
+
+    """
         # Add any other logic you mught like here...
         self.setOkButtonStatus()
 
     def setOkButtonStatus(self):
         """Helper function to set the ok button status if the
         form is valid and disable it if it is not.
+
         Args:
            None.
         Returns:
@@ -366,15 +361,59 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         has been changed (e.g. one or more layer visibilities changed).
         If self.showOnlyVisibleLayersFlag is set to False this method will
         simply return, doing nothing.
+
         Args:
             None
+
         Returns:
             None
+
         Raises:
             Any exceptions raised by the RIAB library will be propogated.
+
         """
         if self.showOnlyVisibleLayersFlag:
             self.getLayers()
+
+    @pyqtSlot()
+    def layersWillBeRemoved(self):
+        """Slot for the new (QGIS 1.8 and beyond api) to notify us when
+        a group of layers is are removed. This is optimal since if many layers
+        are removed this slot gets called only once. This slot simply
+        delegates to getLayers and is only implemented here to make the
+        connections between the different signals and slots clearer and
+        better documented."""
+        self.getLayers()
+
+    @pyqtSlot()
+    def layersAdded(self, theLayers):
+        """Slot for the new (QGIS 1.8 and beyond api) to notify us when
+        a group of layers is are added. This is optimal since if many layers
+        are added this slot gets called only once. This slot simply
+        delegates to getLayers and is only implemented here to make the
+        connections between the different signals and slots clearer and
+        better documented."""
+        self.getLayers()
+
+    @pyqtSlot()
+    def layerWillBeRemoved(self):
+        """Slot for the old (pre QGIS 1.8 api) to notify us when
+        a layer is removed. This is suboptimal since if many layers are
+        removed this slot gets called multiple times. This slot simply
+        delegates to getLayers and is only implemented here to make the
+        connections between the different signals and slots clearer and
+        better documented."""
+        self.getLayers()
+
+    @pyqtSlot()
+    def layerWasAdded(self):
+        """Slot for the old (pre QGIS 1.8 api) to notify us when
+        a layer is added. This is suboptimal since if many layers are
+        added this slot gets called multiple times. This slot simply
+        delegates to getLayers and is only implemented here to make the
+        connections between the different signals and slots clearer and
+        better documented."""
+        self.getLayers()
 
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
@@ -393,6 +432,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
            no
         """
         self.disconnectLayerListener()
+        self.blockSignals(True)
         self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
@@ -404,13 +444,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myRegistry = QgsMapLayerRegistry.instance()
         except:
             return
+        myCanvasLayers = self.iface.mapCanvas().layers()
         # mapLayers returns a QMap<QString id, QgsMapLayer layer>
         myLayers = myRegistry.mapLayers().values()
         for myLayer in myLayers:
-        #for i in range(len(self.iface.mapCanvas().layers())):
-            #myLayer = self.iface.mapCanvas().layer(i)
-            if (self.showOnlyVisibleLayersFlag and myLayer not in
-                self.iface.mapCanvas().layers()):
+            if (self.showOnlyVisibleLayersFlag and
+                myLayer not in myCanvasLayers):
                 continue
 
             """
@@ -424,7 +463,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             # fallback to the layer's filename
             myTitle = None
             try:
-                myTitle = getKeywordFromFile(str(myLayer.source()), 'title')
+                myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:
                 myTitle = myName
             if myTitle and self.setLayerNameFromTitleFlag:
@@ -434,8 +473,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
             try:
-                myCategory = getKeywordFromFile(str(myLayer.source()),
-                                                'category')
+                myCategory = self.keywordIO.readKeywords(myLayer, 'category')
             except:
                 # continue ignoring this layer
                 continue
@@ -450,7 +488,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getFunctions()
         self.restoreState()
         self.setOkButtonStatus()
+        # Note: Don't change the order of the next two lines otherwise there
+        # will be a lot of unneeded looping around as the signal is handled
         self.connectLayerListener()
+        self.blockSignals(False)
         return
 
     def getFunctions(self):
@@ -472,19 +513,17 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myHazardLayer = self.getHazardLayer()
         if myHazardLayer is None:
             return
-        myHazardFile = myHazardLayer.source()
         myExposureLayer = self.getExposureLayer()
         if myExposureLayer is None:
             return
-        myExposureFile = myExposureLayer.source()
-        myHazardKeywords = getKeywordFromFile(str(myHazardFile))
+        myHazardKeywords = self.keywordIO.readKeywords(myHazardLayer)
         # We need to add the layer type to the returned keywords
         if myHazardLayer.type() == QgsMapLayer.VectorLayer:
             myHazardKeywords['layertype'] = 'vector'
         elif myHazardLayer.type() == QgsMapLayer.RasterLayer:
             myHazardKeywords['layertype'] = 'raster'
 
-        myExposureKeywords = getKeywordFromFile(str(myExposureFile))
+        myExposureKeywords = self.keywordIO.readKeywords(myExposureLayer)
         # We need to add the layer type to the returned keywords
         if myExposureLayer.type() == QgsMapLayer.VectorLayer:
             myExposureKeywords['layertype'] = 'vector'
@@ -504,7 +543,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.restoreFunctionState(myOriginalFunction)
 
     def readImpactLayer(self, myEngineImpactLayer):
-        """Helper function to read and validate layer
+        """Helper function to read and validate layer.
 
         Args
             myEngineImpactLayer: Layer object as provided by the inasafe engine
@@ -606,7 +645,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             return
 
         self.runner = self.calculator.getRunner()
-        QtCore.QObject.connect(self.runner.notifier(),
+        QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
                                self.completed)
 
@@ -683,14 +722,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                    'Error message: %s\n' % str(myMessage))
             raise Exception(myMessage)
 
+        # Load impact layer into QGIS
+        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+
         # Get tabular information from impact layer
-        myReport = getKeywordFromLayer(myEngineImpactLayer, 'impact_summary')
+        myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
+                                               'impact_summary')
 
         # Get requested style for impact layer of either kind
         myStyle = myEngineImpactLayer.get_style_info()
 
-        # Load impact layer into QGIS
-        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
         # Determine styling for QGIS layer
         if myEngineImpactLayer.is_vector:
             if not myStyle:
@@ -725,6 +766,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.
+
         Args:
             * theTitle - an optional title for the status update. Should be
               plain text only
@@ -760,7 +802,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         """A helper function to indicate processing is done."""
         #self.pbnRunStop.setText('Run')
         if self.runner:
-            QtCore.QObject.disconnect(self.runner.notifier(),
+            QtCore.QObject.disconnect(self.runner,
                                QtCore.SIGNAL('done()'),
                                self.completed)
             del self.runner
@@ -787,7 +829,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         The result of this function will be two layers which are
         clipped and resampled if needed, and in the EPSG:4326 geographic
-        coordinate reference system..
+        coordinate reference system.
 
         Args:
             None
@@ -918,8 +960,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
         myClippedExposurePath = clipLayer(myExposureLayer,
-                                          myGeoExtent, myCellSize,
-                                          extraKeywords=extraExposureKeywords)
+                                        myGeoExtent, myCellSize,
+                                        theExtraKeywords=extraExposureKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 
@@ -1004,7 +1046,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def displayHtml(self, theMessage):
         """Given an html snippet, wrap it in a page header and footer
         and display it in the wvResults widget."""
-        myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
+        myHtml = '<div style="padding: 2px">'
+        myHtml += self.htmlHeader() + theMessage + self.htmlFooter()
+        myHtml += '</div>'
         #f = file('/tmp/h.thml', 'wa')  # for debugging
         #f.write(myHtml)
         #f.close()
@@ -1024,17 +1068,67 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised.
         """
-        myReport = None
+        myReport = ('<table class="table table-striped condensed'
+                        ' bordered-table">')  # will be overridden if needed
         if theLayer is not None:
             try:
-                myReport = getKeywordFromFile(str(theLayer.source()),
-                                              'impact_summary')
-            except KeywordNotFoundException, e:
-                self.setOkButtonStatus()
-            except InvalidParameterException, e:
-                self.setOkButtonStatus()
+                myKeywords = self.keywordIO.readKeywords(theLayer)
+                if 'impact_summary' in myKeywords:
+                    myReport = myKeywords['impact_summary']
+                else:
+                    if 'title' in myKeywords:
+                        myReport += ('<tr>'
+                                       '<th>' + self.tr('Title') + '</th>'
+                                     '</tr>'
+                                     '<tr>'
+                                       '<td>' + myKeywords['title'] + '</td>'
+                                     '</tr>')
+                    if 'category' in myKeywords:
+                        myReport += ('<tr>'
+                                 '<th>' + self.tr('Category') + '</th>'
+                                 '</tr>'
+                                 '<tr>'
+                                   '<td>' + myKeywords['category'] + '</td>'
+                                 '</tr>')
+                    if 'subcategory' in myKeywords:
+                        myReport += ('<tr>'
+                                   '<th>' + self.tr('Subcategory') + '</th>'
+                                 '</tr>'
+                                 '<tr>'
+                                   '<td>' + myKeywords['subcategory'] +
+                                   '</td>'
+                                 '</tr>')
+                    if 'unit' in myKeywords:
+                        myReport += ('<tr>'
+                                   '<th>' + self.tr('Units') + '</th>'
+                                 '</tr>'
+                                 '<tr>'
+                                   '<td>' + myKeywords['unit'] + '</td>'
+                                 '</tr>')
+                    if 'datatype' in myKeywords:
+                        myReport += ('<tr>'
+                                   '<th>' + self.tr('Data Type') + '</th>'
+                                 '</tr>'
+                                 '<tr>'
+                                   '<td>' + myKeywords['datatype'] + '</td>'
+                                 '</tr>')
+                    myReport += '</table>'
+            except (KeywordNotFoundException, HashNotFoundException), e:
+                myReport = ('<span class="label label-important">' +
+                           self.tr('No keywords') + '</span><div>')
+                myReport += self.tr('No keywords have been defined'
+                        ' for this layer yet. If you wish to use it as'
+                        ' an impact or hazard layer in a scenario, please'
+                        ' use the keyword editor. You can open the keyword'
+                        ' editor by clicking on the'
+                        ' <img src="qrc:/plugins/inasafe/keywords.png" '
+                        ' width="16" height="16"> icon'
+                        ' in the toolbar, or choosing Plugins -> InaSAFE'
+                        ' -> Keyword Editor from the menus.')
+                myReport += '</div><br />'
+                myReport += getExceptionWithStacktrace(e, html=True)
             except Exception, e:
-                myReport = getExceptionWithStacktrace(e, html=True)
+                myReport += getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
                 self.pbnPrint.setEnabled(True)
@@ -1061,6 +1155,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     def restoreState(self):
         """Restore the state of the dock to the last known state.
+
         Args:
             None
         Returns:
@@ -1085,6 +1180,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     def restoreFunctionState(self, theOriginalFunction):
         """Restore the function combo to a known state.
+
         Args:
             theOriginalFunction - name of function that should be selected
         Returns:
@@ -1101,6 +1197,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     def printMap(self):
         """Slot to print map when print map button pressed.
+
         Args:
             None
         Returns:
@@ -1147,6 +1244,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         this only has effect when a user interactively adds combo items to
         an editable combo. This we have this little function to ensure that
         combos are always sorted alphabetically.
+
         Args:
             * theCombo - combo box receiving the new item
             * theItemText - display text for the combo
@@ -1155,6 +1253,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         Returns:
             None
+
         Raises:
 
         ..todo:: Move this to utilities
