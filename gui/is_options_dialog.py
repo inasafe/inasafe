@@ -22,7 +22,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from is_options_dialog_base import Ui_ISOptionsDialogBase
 from is_help import ISHelp
-from is_utilities import getExceptionWithStacktrace
+from is_keyword_io import ISKeywordIO
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -61,6 +61,7 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         self.parent = parent
         self.dock = theDock
         self.helpDialog = None
+        self.keywordIO = ISKeywordIO()
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -90,6 +91,11 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
                             'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.cbxSetLayerNameFromTitle.setChecked(myFlag)
 
+        myPath = mySettings.value(
+                            'inasafe/keywordCachePath',
+                            self.keywordIO.defaultKeywordDbPath()).toString()
+        self.leKeywordCachePath.setText(myPath)
+
     def saveState(self):
         """
         Args: Store the options into the user's stored session info
@@ -105,6 +111,8 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
                             self.cbxVisibleLayersOnly.isChecked())
         mySettings.setValue('inasafe/setLayerNameFromTitleFlag',
                             self.cbxSetLayerNameFromTitle.isChecked())
+        mySettings.setValue('inasafe/keywordCachePath',
+                            self.leKeywordCachePath.text())
 
     def showHelp(self):
         """Load the help text for the options gui"""
@@ -123,3 +131,20 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         self.saveState()
         self.dock.readSettings()
         self.close()
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_toolKeywordCachePath_clicked(self):
+        """Autoconnect slot activated when the select cache file tool button is
+        clicked,
+        Args:
+            None
+        Returns:
+            None
+        Raises:
+            None
+        """
+        myFilename = QtGui.QFileDialog.getSaveFileName(self,
+                    self.tr('Set keyword cache file'),
+                    self.keywordIO.defaultKeywordDbPath(),
+                    self.tr('Sqlite DB File (*.db)'))
+        self.leKeywordCachePath.setText(myFilename)

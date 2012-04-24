@@ -75,8 +75,6 @@ class FloodEvacuationFunction(FunctionProvider):
 
         impact_summary += '</table>'
 
-
-
         # Create impact_table based on BNPB Perka 7/2008 minimum bantuan
         # Weekly needs (see issue #82)
         rice = number_of_people_affected * 2.8
@@ -120,7 +118,6 @@ class FloodEvacuationFunction(FunctionProvider):
                  '</table>' % (rice, drinking_water, water, family_kits,
                                toilets))
 
-
         impact_summary += impact_table
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>Catatan&#58;</b><br>'
@@ -129,7 +126,6 @@ class FloodEvacuationFunction(FunctionProvider):
         impact_summary += ('- Penduduk perlu dievakuasi ketika '
                     'banjir lebih dari %i m.<br>' % threshold)
         impact_summary += '- Minmum Bantuan per minggu (BNPB Perka 7/2008)'
-
 
         map_title = 'Penduduk yang Mungkin dievakuasi'
 

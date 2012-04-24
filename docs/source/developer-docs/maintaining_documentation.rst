@@ -1,7 +1,7 @@
 
-============================
+=============================
 Maintaining the documentation
-============================
+=============================
 
 The documentation for |project_name| is written using ReSTructured text (.rst)
 and the Sphinx documenation builder. The best way to learn how to write .rst
@@ -81,6 +81,8 @@ the riab.py setupI18n method)::
            no exceptions explicitly raised.
         """
 
+There should be a blank line between each paragraph and before the Args option.
+
 Where multiple inputs or outputs are used, a ReSTructured text bullet list
 should be used to list them.
 
@@ -90,10 +92,12 @@ should be used to list them.
 In order for a new module's documentation to appear in the API docs, the
 following steps are required:
 
-+ Create a new file in :file:`docs/source/api-docs/<package_name>`
-  named after the module. For example, for the gui/riab.py module we would create
-  :file:`docs/source/api-docs/gui/riab.rst` (note the .rst extension). See below for an example of its contents
-* Add the new file to the API docs master index (:file:`docs/source/api-docs/index.rst`).
+* Create a new file in :file:`docs/source/api-docs/<package_name>`
+  named after the module. For example, for the gui/riab.py module we would
+  create :file:`docs/source/api-docs/gui/riab.rst` (note the .rst extension).
+  See below for an example of its contents
+* Add the new file to the API docs master index 
+  (:file:`docs/source/api-docs/index.rst`).
   The .rst extension is not needed or desired when adding to the index list.
 * Regenerate the documentation using the :command:`make docs` command from
   the top level directory in the source tree.
@@ -145,7 +149,7 @@ the help dialog in the context of the new help document e.g.::
          self.helpDialog = RiabHelp(self.iface.mainWindow(), 'keywords')
       self.helpDialog.show()
 
-Where the 'keywords' parameter indicates the user-docs/*.rst document that
+Where the 'keywords' parameter indicates the user-docs/\*.rst document that
 should be opened when the help button is clicked. The general style and
 approach used in existing documentation should inform your documentation
 process so that all the documentation is constent.

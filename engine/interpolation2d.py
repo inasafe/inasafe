@@ -1,6 +1,7 @@
 """Module for 2D interpolation over a rectangular mesh
 
 This module
+
 * provides piecewise constant (nearest neighbour) and bilinear interpolation
 * is fast (based on numpy vector operations)
 * depends only on numpy
@@ -23,13 +24,16 @@ def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
         Z: 2D array of values for each x, y pair
         points: Nx2 array of coordinates where interpolated values are sought
         mode: Determines the interpolation order. Options are
-              'constant' - piecewise constant nearest neighbour interpolation
-              'linear' - bilinear interpolation using the four
-                         nearest neighbours (default)
+
+            * 'constant' - piecewise constant nearest neighbour interpolation
+            * 'linear' - bilinear interpolation using the four
+              nearest neighbours (default)
+
         bounds_error: Boolean flag. If True (default) an exception will
                       be raised when interpolated values are requested
                       outside the domain of the input data. If False, nan
                       is returned for those values
+
     Output
         1D array with same length as points with interpolated values
 
