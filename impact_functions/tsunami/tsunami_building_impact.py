@@ -17,6 +17,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'ICLASS'
+    plugin_name = _('Be affected by tsunami')
 
     def run(self, layers):
         """Risk plugin for tsunami population
@@ -88,18 +89,18 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                            '"%s" '
                            'is&#58;</b><br><br><p>' % (Hname, Ename))
             impact_summary += ('<table border="0" width="320px">'
-                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></tr>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                       '</table>' % ('tsunami height', 'Number of buildings',
-                                     '< 1 m', count0,
-                                     '1 - 3 m', count1,
-                                     '> 3 m', count3))
+                       '</table>' % (_('Impact'), _('Number of buildings'),
+                                     _('Low'), count0,
+                                     _('Medium'), count1,
+                                     _('High'), count3))
         else:
             impact_summary = ('<table border="0" width="320px">'
-                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></tr>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
@@ -109,13 +110,28 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                                      'Tidak terdampak', count0,
                                      'Semua', N))
 
+        impact_summary += '<br>'  # Blank separation row
+        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
+        impact_summary += _("Levels of impact are defined by BNPB's <i>Pengkajian Risiko Bencana</i>")
+        impact_summary += _('<table border="0" width="320px">'
+                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></tr>'
+                       '   <tr></tr>'
+                       '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'
+                       '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'
+                       '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'
+                       '</table>' % (_('Impact'), _('Tsunami height'),
+                                     _('Low'), '<1 m',
+                                     _('Medium'), '1-3 m',
+                                     _('High'), '>3 m'))
+
         # Create style
-        style_classes = [dict(label='< 1 m', min=0, max=1,
-                              colour='#1EFC7C', transparency=0,size=1),
-                         dict(label='1 - 3 m', min=1, max=2,
-                              colour='#FFA500', transparency=0,size=1),
-                         dict(label='> 3 m', min=2, max=4,
-                              colour='#F31A1C', transparency=0,size=1)]
+        style_classes = [dict(label=_('<1 m'), min=0, max=1,
+                              colour='#1EFC7C', transparency=0, size=1),
+                         dict(label=_('1-3 m'), min=1, max=3,
+                              colour='#FFAA00', transparency=0, size=1),
+                         dict(label=_('>3 m'), min=3, max=10,
+                              colour='#F31A1C', transparency=0, size=1)]
+
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 
