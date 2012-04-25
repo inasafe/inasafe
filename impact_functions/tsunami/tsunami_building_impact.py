@@ -106,11 +106,11 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
         # Create style
         style_classes = [dict(label='< 1 m', min=0, max=1,
-                              colour='#1EFC7C', transparency=0,size=1),
+                              colour='#1EFC7C', transparency=0, size=1),
                          dict(label='1 - 3 m', min=1, max=2,
-                              colour='#FFA500', transparency=0,size=1),
+                              colour='#FFA500', transparency=0, size=1),
                          dict(label='> 3 m', min=2, max=4,
-                              colour='#F31A1C', transparency=0,size=1)]
+                              colour='#F31A1C', transparency=0, size=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 
