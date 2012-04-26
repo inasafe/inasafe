@@ -136,19 +136,26 @@ class ISKeywordIOTest(unittest.TestCase):
     def test_readDBKeywords(self):
         """Can we read sqlite keywords with the generic readKeywords method
         """
+        myLocalPath = os.path.join(os.path.dirname(__file__),
+                                   '..', 'jk.sqlite')
         myPath = os.path.join(TESTDATA, 'test_keywords.db')
         self.keywordIO.setKeywordDbPath(myPath)
         # We need to make a local copy of the dataset so
         # that we can use a local path that will hash properly on the
         # database to return us the correct / valid keywords record.
-        shutil.copy2(os.path.join(TESTDATA, 'jk.sqlite'), 'jk.sqlite')
+        shutil.copy2(os.path.join(TESTDATA, 'jk.sqlite'), myLocalPath)
         myUri = QgsDataSourceURI()
-        myUri.setDatabase('jk.sqlite')
+        # always use relative path!
+        myUri.setDatabase('../jk.sqlite')
         myUri.setDataSource('', 'osm_buildings', 'Geometry')
-        myKeywords = self.keywordIO.readKeywords(self.sqliteLayer)
+        # create a local version that has the relative url
+        mySqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
+                                       'spatialite')
+        myKeywords = self.keywordIO.readKeywords(mySqliteLayer)
         myExpectedKeywords = self.expectedSqliteKeywords
+
         mySource = self.sqliteLayer.source()
-        os.remove('jk.sqlite')
+        os.remove(myLocalPath)
         myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
                     myKeywords, myExpectedKeywords, mySource)
         assert myKeywords == myExpectedKeywords, myMessage
