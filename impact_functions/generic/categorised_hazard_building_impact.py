@@ -3,6 +3,7 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 
+
 #FIXME: need to normalise all raster data Ole/Kristy
 class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
@@ -47,16 +48,16 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
             val = float(category[i].values()[0])
 
             # Classify buildings according to value
-            if val >= 2.0/3:
-                affected = 2  
-                count2 += 1          
-            elif 1.0/3 <= val < 2.0/3:
+            if val >= 2.0 / 3:
+                affected = 2
+                count2 += 1
+            elif 1.0 / 3 <= val < 2.0 / 3:
                 affected = 1
                 count1 += 1
             else:
                 affected = 0
                 count0 += 1
-            
+
             # Collect depth and calculated damage
             result_dict = {self.target_field: affected,
                            'CATEGORY': val}
@@ -71,7 +72,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 
         # Create report
         #FIXME: makes the output format the same as all other results
-        
+
         impact_summary = ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                    '   <tr></tr>'
@@ -84,12 +85,12 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                                  _('High'), count2))
 
         # Create style
-        style_classes = [dict(label= _('Low'), min=0, max=0,
-                              colour='#1EFC7C', transparency=0,size=1),
-                         dict(label= _('Medium'), min=1, max=1,
-                              colour='#FFA500', transparency=0,size=1),
-                         dict(label= _('High'), min=2, max=2,
-                              colour='#F31A1C', transparency=0,size=1)]
+        style_classes = [dict(label=_('Low'), min=0, max=0,
+                              colour='#1EFC7C', transparency=0, size=1),
+                         dict(label=_('Medium'), min=1, max=1,
+                              colour='#FFA500', transparency=0, size=1),
+                         dict(label=_('High'), min=2, max=2,
+                              colour='#F31A1C', transparency=0, size=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 
@@ -104,4 +105,3 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                    name=name,
                    style_info=style_info)
         return V
-

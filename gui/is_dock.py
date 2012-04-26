@@ -1076,42 +1076,14 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
                 else:
-                    if 'title' in myKeywords:
+                    for kwd in myKeywords:
                         myReport += ('<tr>'
-                                       '<th>' + self.tr('Title') + '</th>'
+                                     # FIXME (Ole): Not sure if this will work with translations
+                                       '<th>' + self.tr(kwd.capitalize()) + '</th>'
                                      '</tr>'
                                      '<tr>'
-                                       '<td>' + myKeywords['title'] + '</td>'
+                                       '<td>' + myKeywords[kwd] + '</td>'
                                      '</tr>')
-                    if 'category' in myKeywords:
-                        myReport += ('<tr>'
-                                 '<th>' + self.tr('Category') + '</th>'
-                                 '</tr>'
-                                 '<tr>'
-                                   '<td>' + myKeywords['category'] + '</td>'
-                                 '</tr>')
-                    if 'subcategory' in myKeywords:
-                        myReport += ('<tr>'
-                                   '<th>' + self.tr('Subcategory') + '</th>'
-                                 '</tr>'
-                                 '<tr>'
-                                   '<td>' + myKeywords['subcategory'] +
-                                   '</td>'
-                                 '</tr>')
-                    if 'unit' in myKeywords:
-                        myReport += ('<tr>'
-                                   '<th>' + self.tr('Units') + '</th>'
-                                 '</tr>'
-                                 '<tr>'
-                                   '<td>' + myKeywords['unit'] + '</td>'
-                                 '</tr>')
-                    if 'datatype' in myKeywords:
-                        myReport += ('<tr>'
-                                   '<th>' + self.tr('Data Type') + '</th>'
-                                 '</tr>'
-                                 '<tr>'
-                                   '<td>' + myKeywords['datatype'] + '</td>'
-                                 '</tr>')
                     myReport += '</table>'
             except (KeywordNotFoundException, HashNotFoundException), e:
                 myReport = ('<span class="label label-important">' +
