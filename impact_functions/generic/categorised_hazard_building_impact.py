@@ -3,16 +3,16 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 
-
-class TsunamiBuildingImpactFunction(FunctionProvider):
+#FIXME: need to normalise all raster data Ole/Kristy
+class CatergorisedHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
 
     :param requires category=='hazard' and \
                     unit=='normalised' and \
-                    layertype in ['raster']
+                    layertype=='raster'
 
     :param requires category=='exposure' and \
-                    subcategory in ['building', 'road'] and \
+                    subcategory=='building' and \
                     layertype=='vector'
     """
 
@@ -41,7 +41,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
         count2 = 0
         count1 = 0
         count0 = 0
-        population_impact = []
+        building_impact = []
         for i in range(N):
             # Get catergory value
             val = float(category[i].values()[0])
@@ -59,17 +59,18 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
             
             # Collect depth and calculated damage
             result_dict = {self.target_field: affected,
-                           'CATERGORY': cat}
+                           'CATEGORY': val}
 
             # Carry all original attributes forward
             # FIXME: This should be done in interpolation. Check.
-            #for key in attributes:
-            #    result_dict[key] = E.get_data(key, i)
+            for key in attributes:
+                result_dict[key] = E.get_data(key, i)
 
             # Record result for this feature
-            population_impact.append(result_dict)
+            building_impact.append(result_dict)
 
         # Create report
+        #FIXME: makes the output format the same as all other results
         
         impact_summary = ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
@@ -92,4 +93,15 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 
-        
+        # Create vector layer and return
+        name = 'Buildings Affected'
+
+        V = Vector(data=building_impact,
+                   projection=E.get_projection(),
+                   geometry=coordinates,
+                   keywords={'impact_summary': impact_summary},
+                   geometry_type=Hi.geometry_type,
+                   name=name,
+                   style_info=style_info)
+        return V
+
