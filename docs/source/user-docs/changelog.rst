@@ -2,6 +2,26 @@
 ==========
 Whats new?
 ==========
+
+Changelog for version 0.3.0
+...........................
+* Documentation updates - extended guides for using the |project_name| dock and
+  keyword editors.
+* Support for remote layers in keywords editor and scenario modelling
+* Added options dialog
+* Support for using all layers in hazard and exposure combos, not just visible
+  ones (configurable in options dialog)
+* Support for displaying keywords title in QGIS layer list (configurable in
+  options dialog)
+* When selecting a hazard or exposure layer, its keywords are now displayed
+  in the results area.
+* Performance improvements when toggling layer visibility and adding and
+  removing layers.
+* Support for QGIS 1.8 when it is released
+* Numerous other 'under the hood' bug fixes and improvements
+* Migrated code base from RIAB to InaSAFE and restructured the code base
+* Added additional tests
+
 Changelog for version 0.2.1:
 ............................
 * Correct translation of 'run' in indonesian. Closes #128
