@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 import tempfile
-
+import shutil
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -30,7 +30,7 @@ class ISKeywordIOTest(unittest.TestCase):
     def setUp(self):
         self.keywordIO = ISKeywordIO()
         myUri = QgsDataSourceURI()
-        myUri.setDatabase(os.path.join(TESTDATA, 'js.sqlite'))
+        myUri.setDatabase(os.path.join(TESTDATA, 'jk.sqlite'))
         myUri.setDataSource('', 'osm_buildings', 'Geometry')
         self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                        'spatialite')
@@ -138,9 +138,17 @@ class ISKeywordIOTest(unittest.TestCase):
         """
         myPath = os.path.join(TESTDATA, 'test_keywords.db')
         self.keywordIO.setKeywordDbPath(myPath)
+        # We need to make a local copy of the dataset so
+        # that we can use a local path that will hash properly on the
+        # database to return us the correct / valid keywords record.
+        shutil.copy2(os.path.join(TESTDATA, 'jk.sqlite'), 'jk.sqlite')
+        myUri = QgsDataSourceURI()
+        myUri.setDatabase('jk.sqlite')
+        myUri.setDataSource('', 'osm_buildings', 'Geometry')
         myKeywords = self.keywordIO.readKeywords(self.sqliteLayer)
         myExpectedKeywords = self.expectedSqliteKeywords
         mySource = self.sqliteLayer.source()
+        os.remove('jk.sqlite')
         myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
                     myKeywords, myExpectedKeywords, mySource)
         assert myKeywords == myExpectedKeywords, myMessage

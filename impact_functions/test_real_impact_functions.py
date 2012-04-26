@@ -9,9 +9,8 @@ import unittest
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from impact_functions.core import get_admissible_plugins, get_plugins
+from impact_functions.core import get_admissible_plugins
 from impact_functions.core import requirements_collect
-from impact_functions.core import FunctionProvider  # Load all real plugins
 
 
 class Test_real_plugins(unittest.TestCase):
@@ -28,14 +27,13 @@ class Test_real_plugins(unittest.TestCase):
         # NOTE: These are hardwired tests that will need to change
         # when impact functions change.
         assert 'Earthquake Guidelines Function' in P
-        assert 'Padang Earthquake Building Damage Function' in P
+        assert 'be damaged' in P
         assert 'Temporarily Closed' in P
         assert 'Earthquake Population Exposure Function' in P
         assert 'Tsunami Population Impact Function' in P
         assert 'Perlu Evakuasi' in P
         assert 'Tsunami Building Impact Function' in P
         assert 'Tephra Impact Function' in P
-        assert 'Padang Earthquake Building Damage Function' in P
         assert 'Earthquake Fatality Function' in P
         assert 'Earthquake Guidelines Function' in P
         assert 'Tephra Population Impact Function' in P
@@ -61,7 +59,7 @@ class Test_real_plugins(unittest.TestCase):
         P = get_admissible_plugins([D1, D2])
         assert len(P) >= 2  # Depending on other tests there could be more
         assert 'Earthquake Guidelines Function' in P
-        assert 'Padang Earthquake Building Damage Function' in P
+        assert 'be damaged' in P
 
         # This one should get 3 flood population impact functions
         D1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}
