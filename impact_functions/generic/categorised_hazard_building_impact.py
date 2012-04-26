@@ -4,7 +4,7 @@ from storage.vector import Vector
 from storage.utilities import ugettext as _
 
 #FIXME: need to normalise all raster data Ole/Kristy
-class CatergorisedHazardBuildingImpactFunction(FunctionProvider):
+class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
 
     :param requires category=='hazard' and \
@@ -63,8 +63,8 @@ class CatergorisedHazardBuildingImpactFunction(FunctionProvider):
 
             # Carry all original attributes forward
             # FIXME: This should be done in interpolation. Check.
-            for key in attributes:
-                result_dict[key] = E.get_data(key, i)
+##            for key in attributes:
+##                result_dict[key] = E.get_data(key, i)
 
             # Record result for this feature
             building_impact.append(result_dict)
@@ -84,11 +84,11 @@ class CatergorisedHazardBuildingImpactFunction(FunctionProvider):
                                  _('High'), count2))
 
         # Create style
-        style_classes = [dict(label= _('Low'), min=0, max=1,
+        style_classes = [dict(label= _('Low'), min=0, max=0,
                               colour='#1EFC7C', transparency=0,size=1),
-                         dict(label= _('Medium'), min=1, max=2,
+                         dict(label= _('Medium'), min=1, max=1,
                               colour='#FFA500', transparency=0,size=1),
-                         dict(label= _('High'), min=2, max=4,
+                         dict(label= _('High'), min=2, max=2,
                               colour='#F31A1C', transparency=0,size=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
