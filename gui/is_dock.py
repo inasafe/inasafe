@@ -1076,13 +1076,15 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
                 else:
-                    for kwd in myKeywords:
+                    for myKeyword in myKeywords:
                         myReport += ('<tr>'
-                                     # FIXME (Ole): Not sure if this will work with translations
-                                       '<th>' + self.tr(kwd.capitalize()) + '</th>'
+                                     # FIXME (Ole): Not sure if this will work
+                                     # with translations
+                                       '<th>' + self.tr(myKeyword.capitalize())
+                                       + '</th>'
                                      '</tr>'
                                      '<tr>'
-                                       '<td>' + myKeywords[kwd] + '</td>'
+                                       '<td>' + myKeywords[myKeyword] + '</td>'
                                      '</tr>')
                     myReport += '</table>'
             except (KeywordNotFoundException, HashNotFoundException), e:
