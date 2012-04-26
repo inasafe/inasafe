@@ -1078,6 +1078,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 else:
                     for kwd in myKeywords:
                         myReport += ('<tr>'
+                                     # FIXME (Ole): Not sure if this will work with translations
                                        '<th>' + self.tr(kwd.capitalize()) + '</th>'
                                      '</tr>'
                                      '<tr>'
