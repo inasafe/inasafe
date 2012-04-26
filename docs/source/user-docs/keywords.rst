@@ -254,12 +254,12 @@ Invoking the keywords editor
 
 The keyword editor can easily be invoked by selecting any layer in the
 QGIS layers list, and then using the plugin menu to start the editor
-(:menuselection:`Plugins --> |project_name| --> Keyword Editor`).
+(:menuselection:`Plugins --> InaSAFE --> Keyword Editor`).
 Alternatively, you may use the keywords editor icon on the
 plugins toolbar as illustrated below.
 
 .. figure:: ../../keyword-editor-icon.png
-   ::align: center
+   :align:   center
 
 Saving your edits
 -----------------
@@ -289,14 +289,14 @@ options icon (as shown below) or my doing :menuselection:`Plugins --> InaSAFE
 --> InaSAFE Options`.
 
 .. figure:: ../../inasafe-options-icon.png
-   ::align: center
+   :align:   center
 
 When the options dialog is opened, the keywords database path can be specified
 using the :guilabel:`keyword cache for remote datasources` option as shown
 below. 
 
 .. figure:: ../../options-keyword-db-path.png
-   ::align: center
+   :align:   center
 
 .. note:: (1) Support for remote and non-file based layers was added in
    InaSAFE version 0.3.
