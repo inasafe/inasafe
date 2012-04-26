@@ -151,9 +151,14 @@ class ISKeywordIOTest(unittest.TestCase):
         # create a local version that has the relative url
         mySqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                        'spatialite')
+        myExpectedSource = ('dbname=\'../jk.sqlite\' table="osm_buildings"'
+             ' (Geometry) sql=')
+        myMessage = 'Got source: %s\n\nExpected %s\n' % (
+                    mySqliteLayer.source, myExpectedSource)
+        assert mySqliteLayer.source() == myExpectedSource, myMessage
         myKeywords = self.keywordIO.readKeywords(mySqliteLayer)
         myExpectedKeywords = self.expectedSqliteKeywords
-
+        assert myKeywords == myExpectedKeywords, myMessage
         mySource = self.sqliteLayer.source()
         os.remove(myLocalPath)
         myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
