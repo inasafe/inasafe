@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 import tempfile
-
+import shutil
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -30,7 +30,7 @@ class ISKeywordIOTest(unittest.TestCase):
     def setUp(self):
         self.keywordIO = ISKeywordIO()
         myUri = QgsDataSourceURI()
-        myUri.setDatabase(os.path.join(TESTDATA, 'js.sqlite'))
+        myUri.setDatabase(os.path.join(TESTDATA, 'jk.sqlite'))
         myUri.setDataSource('', 'osm_buildings', 'Geometry')
         self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                        'spatialite')
@@ -136,11 +136,31 @@ class ISKeywordIOTest(unittest.TestCase):
     def test_readDBKeywords(self):
         """Can we read sqlite keywords with the generic readKeywords method
         """
+        myLocalPath = os.path.join(os.path.dirname(__file__),
+                                   '..', 'jk.sqlite')
         myPath = os.path.join(TESTDATA, 'test_keywords.db')
         self.keywordIO.setKeywordDbPath(myPath)
-        myKeywords = self.keywordIO.readKeywords(self.sqliteLayer)
+        # We need to make a local copy of the dataset so
+        # that we can use a local path that will hash properly on the
+        # database to return us the correct / valid keywords record.
+        shutil.copy2(os.path.join(TESTDATA, 'jk.sqlite'), myLocalPath)
+        myUri = QgsDataSourceURI()
+        # always use relative path!
+        myUri.setDatabase('../jk.sqlite')
+        myUri.setDataSource('', 'osm_buildings', 'Geometry')
+        # create a local version that has the relative url
+        mySqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
+                                       'spatialite')
+        myExpectedSource = ('dbname=\'../jk.sqlite\' table="osm_buildings"'
+             ' (Geometry) sql=')
+        myMessage = 'Got source: %s\n\nExpected %s\n' % (
+                    mySqliteLayer.source, myExpectedSource)
+        assert mySqliteLayer.source() == myExpectedSource, myMessage
+        myKeywords = self.keywordIO.readKeywords(mySqliteLayer)
         myExpectedKeywords = self.expectedSqliteKeywords
+        assert myKeywords == myExpectedKeywords, myMessage
         mySource = self.sqliteLayer.source()
+        os.remove(myLocalPath)
         myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
                     myKeywords, myExpectedKeywords, mySource)
         assert myKeywords == myExpectedKeywords, myMessage

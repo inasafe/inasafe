@@ -24,6 +24,7 @@ You can find out more about the |PROJECT_NAME| project by visiting
    bug_reporting
    preparing_a_release
    ../api-docs/index
+   faq
    todo
 
 

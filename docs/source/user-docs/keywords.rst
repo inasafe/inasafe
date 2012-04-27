@@ -193,9 +193,11 @@ programmatically enforced by the InaSAFE library and GUI:
   **'exposure'** will remove the **'units'** key value pair.
 * Keywords for **category** are **enforced** to be one of 'hazard' or
   'exposure' by the GUI.
-* All keywords and values should be in **lower case**, **without spaces**
+* All keywords should be in **lower case**, **without spaces**
   with the exception of 'Title' whose value may contain both spaces and
   mixed case letters.
+* Values for keywords should generally be lower case, with the exception of
+  **datatype values may be in upper case** (e.g. MMI)
 * Keys and values should **not contain colons**. In the keyword editor, any
   colons will be replaced with a full stop character.
 * All other Keywords and values that do not fit the above domain lists may be
@@ -252,11 +254,12 @@ Invoking the keywords editor
 
 The keyword editor can easily be invoked by selecting any layer in the
 QGIS layers list, and then using the plugin menu to start the editor
-(:menuselection:`Plugins --> |project_name| --> Keyword Editor`).
+(:menuselection:`Plugins --> InaSAFE --> Keyword Editor`).
 Alternatively, you may use the keywords editor icon on the
 plugins toolbar as illustrated below.
 
- XXXX Add screenshot here xxxxxxx
+.. figure:: ../../keyword-editor-icon.png
+   :align:   center
 
 Saving your edits
 -----------------
@@ -270,6 +273,74 @@ Cancelling your edits
 You can cancel your changes at any time by pressing the :guilabel:`Cancel`
 button. No changes will be written to disk and your .keywords file will
 remain in its original state.
+
+Keywords for remote and non-file based layers
+---------------------------------------------
+
+If you are using a PostgreSQL, WFS, Spatialite or other non-file based
+resources, you can still create keywords. In these circumstances the keywords
+will be written to a sqlite database - by default this database is stored
+as :file:`keywords.db` within the InaSAFE plugin directory root.
+
+You may wish to use a different location for the :file:`keywords.db` keywords
+database - you can configure this by using the InaSAFE options dialog. The
+options dialog can be launched by clicking on the InaSAFE plugin toolbar's
+options icon (as shown below) or my doing :menuselection:`Plugins --> InaSAFE
+--> InaSAFE Options`.
+
+.. figure:: ../../inasafe-options-icon.png
+   :align:   center
+
+When the options dialog is opened, the keywords database path can be specified
+using the :guilabel:`keyword cache for remote datasources` option as shown
+below. 
+
+.. figure:: ../../options-keyword-db-path.png
+   :align:   center
+
+.. note:: (1) Support for remote and non-file based layers was added in
+   InaSAFE version 0.3.
+   (2) The database can be opened using a sqlite editor such as sqliteman,
+   but the data in the keywords table is not intended to be human readable 
+   or edited. The table columns consist of an MD5 hash based on the URI for
+   the datasource (typically the database connection details) and a blob
+   which contains the keywords as a pickled python dictionary.
+
+
+Sharing your keywords cache
+---------------------------
+
+In theory you can place the keywords file on a network share and create
+a shared keyword repository in a multi-user environment, but you should note
+that the layer URI hashes need to be identical in order for a layer's keyword
+to be found. This means that, for (contrived), example::
+
+   connection=postgresql,user=joe,password=secret,resource=osm_buildings
+
+would not be considered the same as::
+
+   connection=postgresql,user=anne,password=secret,resource=osm_buildings
+
+since the user credentials differ, resulting in a different URI. To work
+around this you could create a common account so that every user will
+effectively use the same URI to load that layer e.g.::
+
+   connection=postgresql,user=public,password=secret,resource=osm_buildings
+
+For certain resources (e.g. ArcInfo coverages, Spatialite databases) where
+the keywords cache is also used, you should take care to use a common mount
+point or network share to access the data if you wish to successfull hit the
+cache with the layer's URI. For example you could have all users mount your
+data to the same place. Under Unix like operating systems this could look
+something like this::
+   
+   /mnt/gisdata/jk.sqlite
+
+Under Windows you could always the same drive letter and path the to share
+e.g.::
+   
+   Z:\gisdata\jk.sqlite
+
 
 Getting help
 ------------
