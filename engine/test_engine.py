@@ -13,7 +13,7 @@ from engine.core import calculate_impact
 from engine.interpolation2d import interpolate_raster
 from engine.polygon import separate_points_by_polygon, clip_lines_by_polygon
 from engine.polygon import is_inside_polygon
-from engine.numerics import cdf, erf, ensure_numeric
+from engine.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from storage.core import read_layer
 
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
@@ -2024,28 +2024,28 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Simple tests
-        x = cdf(0.0)
+        x = normal_cdf(0.0)
         r = 0.5
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
-        x = cdf(0.5)
+        x = normal_cdf(0.5)
         r = 0.69146246127401312
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
-        x = cdf(3.50)
+        x = normal_cdf(3.50)
         r = 0.99976737092096446
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
         # Out of bounds
-        x = cdf(-6)
+        x = normal_cdf(-6)
         r = 0
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
-        x = cdf(10)
+        x = normal_cdf(10)
         r = 1
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
@@ -2057,7 +2057,7 @@ class Test_Engine(unittest.TestCase):
              0.88493033, 0.91924334, 0.94520071, 0.96406968]
 
         A = (numpy.arange(20) - 10.) / 5
-        X = cdf(A)
+        X = normal_cdf(A)
         msg = ('CDF was not correct. I got %s but expected %s' %
                (str(X), str(R)))
         assert numpy.allclose(X, R, atol=1.0e-6, rtol=1.0e-12), msg
@@ -2077,25 +2077,25 @@ class Test_Engine(unittest.TestCase):
         old_numpy_setting = numpy.seterr(divide='ignore')
 
         # Simple tests
-        x = cdf(0.0, kind='lognormal')
-        r = cdf(numpy.log(0.0))
+        x = lognormal_cdf(0.0)
+        r = normal_cdf(numpy.log(0.0))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
         numpy.seterr(**old_numpy_setting)
 
-        x = cdf(0.5, kind='lognormal')
-        r = cdf(numpy.log(0.5))
+        x = lognormal_cdf(0.5)
+        r = normal_cdf(numpy.log(0.5))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
-        x = cdf(3.50, kind='lognormal')
-        r = cdf(numpy.log(3.5))
+        x = lognormal_cdf(3.50)
+        r = normal_cdf(numpy.log(3.5))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
         # Out of bounds
-        x = cdf(10, kind='lognormal')
-        r = cdf(numpy.log(10))
+        x = lognormal_cdf(10)
+        r = normal_cdf(numpy.log(10))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 

@@ -3,7 +3,7 @@ import numpy
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.raster import Raster
-from engine.numerics import cdf
+from engine.numerics import normal_cdf
 
 
 class EmpiricalFatalityFunction(FunctionProvider):
@@ -47,7 +47,7 @@ class EmpiricalFatalityFunction(FunctionProvider):
         arrayout = numpy.array([[float(value) for value in row]
                                for row in logHazard])
         x = arrayout * P
-        F = cdf(x)
+        F = normal_cdf(x)
 
         numpy.seterr(**old_numpy_setting)
 
