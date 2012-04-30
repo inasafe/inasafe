@@ -1869,15 +1869,16 @@ class Test_Engine(unittest.TestCase):
                 msg = 'Missing keyword should have raised exception'
                 raise Exception(msg)
 
-    def Xtest_padang_building_examples(self):
+    def test_padang_building_examples(self):
         """Padang building impact calculation works through the API
         """
 
-        plugin_name = 'Padang Earthquake Building Damage Function'
+        #plugin_name = 'Padang Earthquake Building Damage Function'
+        plugin_name = 'Be damaged according to building type'
 
         # Test for a range of hazard layers
         for mmi_filename in ['Shakemap_Padang_2009.asc']:
-                               #'Lembang_Earthquake_Scenario.asc']:
+                             #'Lembang_Earthquake_Scenario.asc']:
 
             # Upload input data
             hazard_filename = os.path.join(TESTDATA, mmi_filename)
@@ -2101,6 +2102,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_padang')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
