@@ -1,7 +1,7 @@
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.raster import Raster
-from engine.numerics import cdf
+from engine.numerics import normal_cdf
 
 import numpy
 
@@ -84,7 +84,7 @@ class USGSFatalityFunction(FunctionProvider):
         # Convert array to be standard floats expected by cdf
         arrayout = numpy.array([[float(value) for value in row]
                                for row in logHazard])
-        F = cdf(arrayout * P)
+        F = normal_cdf(arrayout * P)
 
         # Stats
         total = numpy.nansum(P.flat)
