@@ -2075,8 +2075,11 @@ class Test_Engine(unittest.TestCase):
                 if i == 3895:
                     expected_damage = 1.28296234734
                     msg = ('Damage for MMI = %f was not as expected. '
-                           'I got %f, expected %f ' % (mmi, calculated_damage, expected_damage))
-                    assert numpy.allclose(calculated_damage, expected_damage), msg
+                           'I got %f, expected %f ' % (mmi,
+                                                       calculated_damage,
+                                                       expected_damage))
+                    assert numpy.allclose(calculated_damage,
+                                          expected_damage), msg
 
                 # FIXME(Ole): Hyeuk to put tests in here
 
