@@ -75,7 +75,7 @@ class Test_IO(unittest.TestCase):
         """
 
         # Read and verify test data
-        for vectorname in ['lembang_schools.shp',
+        for vectorname in ['test_buildings.shp',
                            'tsunami_exposure_BB.shp',
                            'Padang_WGS84.shp',
                            'OSM_building_polygons_20110905.shp',
@@ -116,7 +116,7 @@ class Test_IO(unittest.TestCase):
             raise Exception(msg)
 
         # Read and verify test data
-        for vectorname in ['lembang_schools.shp',
+        for vectorname in ['test_buildings.shp',
                            'tsunami_exposure_BB.shp',
                            'Padang_WGS84.shp']:
 
@@ -217,7 +217,7 @@ class Test_IO(unittest.TestCase):
         """Analysis of vector data - get top N of an attribute
         """
 
-        for vectorname in ['lembang_schools.shp',
+        for vectorname in ['test_buildings.shp',
                            'tsunami_exposure_BB.shp']:
 
             filename = '%s/%s' % (TESTDATA, vectorname)
@@ -236,7 +236,7 @@ class Test_IO(unittest.TestCase):
 
             # Check results
             for N in [5, 10, 11, 17]:
-                if vectorname == 'lembang_schools.shp':
+                if vectorname == 'test_buildings.shp':
                     L = layer.get_topN(attribute='FLOOR_AREA', N=N)
                     assert len(L) == N
                     assert L.get_projection() == layer.get_projection()
@@ -260,7 +260,7 @@ class Test_IO(unittest.TestCase):
         """
 
         # Read data file
-        layername = 'lembang_schools.shp'
+        layername = 'test_buildings.shp'
         filename = '%s/%s' % (TESTDATA, layername)
         V = read_layer(filename)
 
@@ -365,7 +365,7 @@ class Test_IO(unittest.TestCase):
         """
 
         # Read a data file
-        layername = 'lembang_schools.shp'
+        layername = 'test_buildings.shp'
         filename = '%s/%s' % (TESTDATA, layername)
         V = read_layer(filename)
 
@@ -810,7 +810,7 @@ class Test_IO(unittest.TestCase):
         """Vector extremum calculation works
         """
 
-        for layername in ['lembang_schools.shp',
+        for layername in ['test_buildings.shp',
                           'tsunami_exposure_BB.shp']:
 
             filename = '%s/%s' % (TESTDATA, layername)
@@ -828,7 +828,7 @@ class Test_IO(unittest.TestCase):
                                           [minimum, maximum],
                                           rtol=1.0e-12, atol=1.0e-12)
 
-            elif layername == 'lembang_schools.shp':
+            elif layername == 'test_buildings.shp':
                 minimum, maximum = L.get_extrema('FLOOR_AREA')
                 assert minimum == maximum  # All identical
                 assert maximum == 250
@@ -1048,7 +1048,7 @@ class Test_IO(unittest.TestCase):
 
         assert same_API(V, R, exclude=exclude)
 
-        for layername in ['lembang_schools.shp',
+        for layername in ['test_buildings.shp',
                           'Lembang_Earthquake_Scenario.asc']:
 
             filename = '%s/%s' % (TESTDATA, layername)
