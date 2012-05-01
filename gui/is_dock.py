@@ -1191,20 +1191,18 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         try:
             myMap.makePdf(myFilename)
             self.showBusy(self.tr('Map Creator'),
-                             self.tr('Your PDF was created....opening using '
-                                     'the default PDF viewer on your system.'
-                                     'The generated pdf is saved as: %s' %
-                                     myFilename),
-                             theProgress=80
-                             )
+                          self.tr('Your PDF was created....opening using '
+                                  'the default PDF viewer on your system.'
+                                  'The generated pdf is saved as: %s' %
+                                  myFilename),
+                          theProgress=80)
             QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
                                  QtCore.QUrl.TolerantMode))
             self.showBusy(self.tr('Map Creator'),
-                             self.tr('Processing complete.'
-                                     'The generated pdf is saved as: %s' %
-                                     myFilename),
-                             theProgress=100
-                             )
+                          self.tr('Processing complete.'
+                                  'The generated pdf is saved as: %s' %
+                                  myFilename),
+                          theProgress=100)
         except Exception, e:
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:

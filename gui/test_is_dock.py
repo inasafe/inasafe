@@ -792,11 +792,10 @@ class ISDockTest(unittest.TestCase):
                           'Exposure': 'Population Density Estimate (5kmx5km)'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'
                      '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-                        DOCK.cboExposure.currentText(),
-                        myDict,
-                        myExpectedDict,
-                        combosToString(DOCK)
-                        )
+            DOCK.cboExposure.currentText(),
+            myDict,
+            myExpectedDict,
+            combosToString(DOCK))
 
         assert myExpectedDict == myDict, myMessage
 
@@ -845,11 +844,10 @@ class ISDockTest(unittest.TestCase):
                           'Exposure': 'Population Density Estimate (5kmx5km)'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'
                      '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-                        DOCK.cboExposure.currentText(),
-                        myDict,
-                        myExpectedDict,
-                        combosToString(DOCK)
-                        )
+            DOCK.cboExposure.currentText(),
+            myDict,
+            myExpectedDict,
+            combosToString(DOCK))
 
         assert myExpectedDict == myDict, myMessage
 

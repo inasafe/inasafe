@@ -202,12 +202,15 @@ class Test_Engine(unittest.TestCase):
 
         # Check aggregated values
         expected_population = 85424650
-        msg = 'Expected population was %f, I got %f' % (expected_population, population)
+        msg = ('Expected population was %f, I got %f'
+               % (expected_population, population))
         assert population == expected_population, msg
 
         expected_fatalities = 40871.3028
-        msg = 'Expected fatalities was %f, I got %f' % (expected_fatalities, fatalities)
-        assert numpy.allclose(fatalities, expected_fatalities, rtol=1.0e-5), msg
+        msg = ('Expected fatalities was %f, I got %f'
+               % (expected_fatalities, fatalities))
+        assert numpy.allclose(fatalities, expected_fatalities,
+        rtol=1.0e-5), msg
 
         # Compare with reference data
         F = read_layer(fatality_filename)
@@ -216,15 +219,18 @@ class Test_Engine(unittest.TestCase):
         msg = ('Calculated fatality map did not match expected result: '
                'I got %s\n'
                'Expected %s' % (calculated_result, fatality_result))
-        assert nanallclose(calculated_result, fatality_result, rtol=1.0e-4), msg
+        assert nanallclose(calculated_result, fatality_result,
+                           rtol=1.0e-4), msg
 
         # Check for expected numbers (from Hadi Ghasemi) in keywords
-        for population_count in [2649040.0, 50273440.0, 7969610.0, 19320620.0, 5211940.0]:
-            assert str(int(population_count/1000)) in keywords['impact_summary']
+        for population_count in [2649040.0, 50273440.0, 7969610.0,
+                                 19320620.0, 5211940.0]:
+            assert str(int(population_count / 1000)) in \
+                keywords['impact_summary']
 
-        for fatality_count in [31.8937368131, 2539.26369372, 1688.72362573, 17174.9261705, 19436.834531]:
+        for fatality_count in [31.8937368131, 2539.26369372,
+                               1688.72362573, 17174.9261705, 19436.834531]:
             assert str(int(fatality_count)) in keywords['impact_summary']
-
 
     def test_earthquake_fatality_estimation_ghasemi(self):
         """Fatalities from ground shaking can be computed correctly 2

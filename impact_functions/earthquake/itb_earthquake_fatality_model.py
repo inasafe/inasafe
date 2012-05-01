@@ -64,13 +64,14 @@ class ITBFatalityFunction(FunctionProvider):
         # based on ITB power model
         R = numpy.zeros(H.shape)
         for mmi in mmi_range:
+
+            # Select population exposed to this mmi level
             mask = numpy.logical_and(mmi - 0.5 < H,
                                      H <= mmi + 0.5)
             I = numpy.where(mask, P, 0)
 
-            fatality_rate = numpy.power(10.0, x*mmi-y)
-
             # Calculate expected number of fatalities
+            fatality_rate = numpy.power(10.0, x * mmi - y)
             F = fatality_rate * I
 
             # Sum up fatalities to create map
@@ -80,19 +81,19 @@ class ITBFatalityFunction(FunctionProvider):
             number_of_people_affected[mmi] = numpy.nansum(I.flat)
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
 
-
         # Stats
         total = numpy.nansum(P.flat)
         fatalities = numpy.nansum(number_of_fatalities.values())
 
         # Generate text with result for this study
         impact_summary = generate_exposure_table(
-                            mmi_range, number_of_people_affected,
-                            header= 'Jumlah Orang yg terkena dampak (x1000)',
-                            scale=1000)
+            mmi_range, number_of_people_affected,
+            header='Jumlah Orang yg terkena dampak (x1000)',
+            scale=1000)
         impact_summary += generate_exposure_table(
-                            mmi_range, number_of_fatalities,
-                            header= 'Jumlah Orang yg meninggal')
+            mmi_range,
+            number_of_fatalities,
+            header='Jumlah Orang yg meninggal')
         impact_summary += generate_fatality_table(fatalities)
 
         # Create new layer and return

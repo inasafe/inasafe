@@ -17,8 +17,7 @@ class EarthquakeFatalityFunction(FunctionProvider):
 
     :param requires category=='exposure' and \
                 subcategory.startswith('population') and \
-                layertype=='raster' and \
-                disabled=='true'
+                layertype=='raster'
     """
 
     @staticmethod
