@@ -166,10 +166,38 @@ class Test_Engine(unittest.TestCase):
         assert numpy.alltrue(C <= xmax)
         assert numpy.alltrue(C >= 0)
 
+    def test_ITB_earthquake_fatality_estimation(self):
+        """Fatalities from ground shaking can be computed correctly
+           using the ITB fatality model (Test data from Hadi Ghasemi).
+        """
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
+        exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        plugin_name = 'I T B Fatality Function'
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+
     def test_earthquake_fatality_estimation_ghasemi(self):
         """Fatalities from ground shaking can be computed correctly 2
            using the Hadi Ghasemi function.
         """
+
+        # FIXME (Ole): Maybe this is no longer relevant (20120501)
 
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/Earthquake_Ground_Shaking_clip.tif' % TESTDATA
@@ -2101,6 +2129,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_ITB')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

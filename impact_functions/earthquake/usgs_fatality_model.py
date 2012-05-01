@@ -19,7 +19,7 @@ class USGSFatalityFunction(FunctionProvider):
 
     :param requires category == 'exposure' and \
                     subcategory == 'population' and \
-                    layertype == 'raster' and
+                    layertype == 'raster'
     """
 
     @staticmethod
