@@ -374,7 +374,7 @@ class Test_Engine(unittest.TestCase):
 
             # Name file names for hazard level and exposure
             hazard_filename = '%s/%s' % (TESTDATA, mmi_filename)
-            exposure_filename = '%s/lembang_schools.shp' % TESTDATA
+            exposure_filename = '%s/test_buildings.shp' % TESTDATA
 
             # Calculate impact using API
             H = read_layer(hazard_filename)
@@ -405,7 +405,7 @@ class Test_Engine(unittest.TestCase):
             iattributes = impact_vector.get_data()
 
             # First check that interpolated MMI was done as expected
-            fid = open('%s/lembang_schools_percentage_loss_and_mmi.txt'
+            fid = open('%s/test_buildings_percentage_loss_and_mmi.txt'
                        % TESTDATA)
             reference_points = []
             MMI = []
@@ -686,7 +686,7 @@ class Test_Engine(unittest.TestCase):
         # file with UTM version (i.e. without _geographic).
         hazard_filename = os.path.join(TESTDATA,
                                        'Ashload_Gede_VEI4_geographic.asc')
-        exposure_filename = os.path.join(TESTDATA, 'lembang_schools.shp')
+        exposure_filename = os.path.join(TESTDATA, 'test_buildings.shp')
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
@@ -907,7 +907,7 @@ class Test_Engine(unittest.TestCase):
 
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/lembang_mmi_hazmap.asc' % TESTDATA
-        exposure_filename = '%s/lembang_schools.shp' % TESTDATA
+        exposure_filename = '%s/test_buildings.shp' % TESTDATA
 
         # Read input data
         hazard_raster = read_layer(hazard_filename)
@@ -926,7 +926,7 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(Icoordinates, coordinates)
 
         # Check that interpolated MMI was done as expected
-        fid = open('%s/lembang_schools_percentage_loss_and_mmi.txt' % TESTDATA)
+        fid = open('%s/test_buildings_percentage_loss_and_mmi.txt' % TESTDATA)
         reference_points = []
         MMI = []
         DAM = []
