@@ -60,7 +60,6 @@ class ITBFatalityFunction(FunctionProvider):
         number_of_people_affected = {}
         number_of_fatalities = {}
 
-        # START HERE
         # Calculate fatality rates for observed Intensity values (H
         # based on ITB power model
         R = numpy.zeros(H.shape)
@@ -81,22 +80,11 @@ class ITBFatalityFunction(FunctionProvider):
             number_of_people_affected[mmi] = numpy.nansum(I.flat)
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
 
-            print
-            print mmi
-            print number_of_people_affected[mmi]
-            print number_of_fatalities[mmi]
-
 
         # Stats
         total = numpy.nansum(P.flat)
         fatalities = numpy.nansum(number_of_fatalities.values())
-        print
-        print 'Total', total
-        print 'Estimated fatalities', fatalities
-        print 'Min', numpy.amin(number_of_fatalities.values())
-        print 'Max', numpy.amax(number_of_fatalities.values())
 
-        # STOP HERE
         # Generate text with result for this study
         impact_summary = generate_exposure_table(
                             mmi_range, number_of_people_affected,

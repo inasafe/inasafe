@@ -197,8 +197,6 @@ class Test_Engine(unittest.TestCase):
         calculated_result = I.get_data()
 
         keywords = I.get_keywords()
-        print keywords
-
         population = float(keywords['total_population'])
         fatalities = float(keywords['total_fatalities'])
 
@@ -211,42 +209,22 @@ class Test_Engine(unittest.TestCase):
         msg = 'Expected fatalities was %f, I got %f' % (expected_fatalities, fatalities)
         assert numpy.allclose(fatalities, expected_fatalities, rtol=1.0e-5), msg
 
-        # Read reference data
+        # Compare with reference data
         F = read_layer(fatality_filename)
         fatality_result = F.get_data()
-
-
-        #print 'reference_result', fatality_result
 
         msg = ('Calculated fatality map did not match expected result: '
                'I got %s\n'
                'Expected %s' % (calculated_result, fatality_result))
         assert nanallclose(calculated_result, fatality_result, rtol=1.0e-4), msg
 
-        """
-                5
-        2649040.0
-        31.8937368131
+        # Check for expected numbers (from Hadi Ghasemi) in keywords
+        for population_count in [2649040.0, 50273440.0, 7969610.0, 19320620.0, 5211940.0]:
+            assert str(int(population_count/1000)) in keywords['impact_summary']
 
-        6
-        50273440.0
-        2539.26369372
+        for fatality_count in [31.8937368131, 2539.26369372, 1688.72362573, 17174.9261705, 19436.834531]:
+            assert str(int(fatality_count)) in keywords['impact_summary']
 
-        7
-        7969610.0
-        1688.72362573
-
-        8
-        19320620.0
-        17174.9261705
-
-        9
-        5211940.0
-        19436.834531
-
-        Total 85424650.0
-        Estimated fatalities 40871.6417577
-        """
 
     def test_earthquake_fatality_estimation_ghasemi(self):
         """Fatalities from ground shaking can be computed correctly 2
@@ -2185,6 +2163,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_ITB')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
