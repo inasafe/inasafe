@@ -52,41 +52,45 @@ class ITBFatalityFunction(FunctionProvider):
         population = get_exposure_layer(layers)
 
         # Extract data grids
-        H = intensity.get_data(nan=0)   # Ground Shaking
-        P = population.get_data(nan=0)  # Population Density
+        H = intensity.get_data()   # Ground Shaking
+        P = population.get_data()  # Population Density
 
         # Calculate population affected by each MMI level
         mmi_range = range(2, 10)
         number_of_people_affected = {}
         number_of_fatalities = {}
-        
+
         # START HERE
-        # Calculate fatality rates for observed Intensity values (H)
+        # Calculate fatality rates for observed Intensity values (H
         # based on ITB power model
-        FR = numpy.power(10.0,x*H-y)
+        R = numpy.zeros(H.shape)
         for mmi in mmi_range:
             mask = numpy.logical_and(mmi - 0.5 < H,
                                      H <= mmi + 0.5)
             I = numpy.where(mask, P, 0)
+
+            fatality_rate = numpy.power(10.0, x*mmi-y)
+
             # Calculate expected number of fatalities
-            F = FR*I
+            F = fatality_rate * I
+
+            # Sum up fatalities to create map
+            R += F
+
             # Generate text with result for this study
             number_of_people_affected[mmi] = numpy.nansum(I.flat)
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
-            
-        # Commented out        
-        ## Calculate impact according to ITB model
-        #logHazard = 1 / beta * numpy.log(H / teta)
 
-        ## Convert array to be standard floats expected by cdf
-        #arrayout = numpy.array([[float(value) for value in row]
-        #                       for row in logHazard])
-        #F = normal_cdf(arrayout * P)
-        
+            print
+            print mmi
+            print number_of_people_affected[mmi]
+            print number_of_fatalities[mmi]
+
 
         # Stats
         total = numpy.nansum(P.flat)
         fatalities = numpy.nansum(number_of_fatalities.values())
+        print
         print 'Total', total
         print 'Estimated fatalities', fatalities
         print 'Min', numpy.amin(number_of_fatalities.values())
@@ -95,24 +99,32 @@ class ITBFatalityFunction(FunctionProvider):
         # STOP HERE
         # Generate text with result for this study
         impact_summary = generate_exposure_table(
-                            mmi_range, number_of_people_affected)
+                            mmi_range, number_of_people_affected,
+                            header= 'Jumlah Orang yg terkena dampak (x1000)',
+                            scale=1000)
+        impact_summary += generate_exposure_table(
+                            mmi_range, number_of_fatalities,
+                            header= 'Jumlah Orang yg meninggal')
         impact_summary += generate_fatality_table(fatalities)
 
         # Create new layer and return
-        R = Raster(F,
+        L = Raster(R,
                    projection=population.get_projection(),
                    geotransform=population.get_geotransform(),
-                   keywords={'impact_summary': impact_summary},
+                   keywords={'impact_summary': impact_summary,
+                             'total_population': total,
+                             'total_fatalities': fatalities},
                    name='Estimated fatalities')
-        return R
+        return L
 
 
 def generate_exposure_table(mmi_range,
-                            number_of_people_affected):
+                            number_of_people,
+                            header='',
+                            scale=1):
     """Helper to make html report
     """
 
-    header = 'Jumlah Orang yg terkena dampak (x1000)'
     impact_summary = ('<font size="3"><table border="0" width="400px">'
                '   <tr><td><b>MMI</b></td><td><b>%s</b></td></tr>'
                % header)
@@ -120,7 +132,7 @@ def generate_exposure_table(mmi_range,
     for mmi in mmi_range:
         impact_summary += ('   <tr><td>%i&#58;</td><td>%i</td></tr>'
                     % (mmi,
-                       number_of_people_affected[mmi] / 1000))
+                       number_of_people[mmi] / scale))
     impact_summary += '<tr></tr>'
     impact_summary += '</table></font>'
 

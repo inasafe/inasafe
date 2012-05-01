@@ -18,6 +18,7 @@ from storage.core import read_layer
 
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
 from storage.utilities import VerificationError
+from storage.utilities import nanallclose
 from storage.core import write_vector_data
 from storage.core import write_raster_data
 from storage.vector import Vector
@@ -174,6 +175,7 @@ class Test_Engine(unittest.TestCase):
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
         exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
+        fatality_filename = '%s/itb_test_fat.asc' % TESTDATA
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
@@ -191,6 +193,60 @@ class Test_Engine(unittest.TestCase):
                                         impact_fcn=IF)
         impact_filename = impact_layer.get_filename()
 
+        I = read_layer(impact_filename)
+        calculated_result = I.get_data()
+
+        keywords = I.get_keywords()
+        print keywords
+
+        population = float(keywords['total_population'])
+        fatalities = float(keywords['total_fatalities'])
+
+        # Check aggregated values
+        expected_population = 85424650
+        msg = 'Expected population was %f, I got %f' % (expected_population, population)
+        assert population == expected_population, msg
+
+        expected_fatalities = 40871.3028
+        msg = 'Expected fatalities was %f, I got %f' % (expected_fatalities, fatalities)
+        assert numpy.allclose(fatalities, expected_fatalities, rtol=1.0e-5), msg
+
+        # Read reference data
+        F = read_layer(fatality_filename)
+        fatality_result = F.get_data()
+
+
+        #print 'reference_result', fatality_result
+
+        msg = ('Calculated fatality map did not match expected result: '
+               'I got %s\n'
+               'Expected %s' % (calculated_result, fatality_result))
+        assert nanallclose(calculated_result, fatality_result, rtol=1.0e-4), msg
+
+        """
+                5
+        2649040.0
+        31.8937368131
+
+        6
+        50273440.0
+        2539.26369372
+
+        7
+        7969610.0
+        1688.72362573
+
+        8
+        19320620.0
+        17174.9261705
+
+        9
+        5211940.0
+        19436.834531
+
+        Total 85424650.0
+        Estimated fatalities 40871.6417577
+        """
 
     def test_earthquake_fatality_estimation_ghasemi(self):
         """Fatalities from ground shaking can be computed correctly 2
