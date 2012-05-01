@@ -23,7 +23,7 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
-from engine.numerics import lognormal_cdf;
+from engine.numerics import lognormal_cdf
 from impact_functions.mappings import osm2padang, sigab2padang
 
 
@@ -101,7 +101,9 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
             damage_params = damage_curves[building_type]
             beta = damage_params['beta']
             median = damage_params['median']
-            percent_damage = lognormal_cdf(mmi, median=median, sigma=beta) * 100
+            percent_damage = lognormal_cdf(mmi,
+                                           median=median,
+                                           sigma=beta) * 100
 
             # Collect shake level and calculated damage
             result_dict = {self.target_field: percent_damage,
