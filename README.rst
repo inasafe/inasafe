@@ -65,7 +65,7 @@ comments, suggestions and contributions.
 
 As such, InaSAFE currently has some major limitations, including
 
- * Hazard layers must be provided as raster data
+ * Hazard layers must be provided as raster or polygon data
  * Exposure data must be either raster data or vector data but only
    point, line and polygon types are supported.
  * All data must be provided in WGS84 geographic coordinates

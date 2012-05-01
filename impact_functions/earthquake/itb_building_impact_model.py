@@ -39,21 +39,19 @@ damage_curves = {'1': dict(median=7.5, beta=0.11),
                  '9': dict(median=10.5, beta=0.15)}
 
 
-class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
-    """Risk plugin for Padang earthquake damage to buildings
+class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
+    """Risk plugin for ITB earthquake damage to buildings in Padang
 
     :param requires category=='hazard' and \
-                    subcategory.startswith('earthquake') and \
+                    subcategory=='earthquake' and \
                     layertype=='raster' and \
                     unit=='MMI'
 
     :param requires category=='exposure' and \
-                    subcategory.startswith('building') and \
+                    subcategory=='building' and \
                     layertype=='vector' and \
                     datatype in ['osm', 'itb', 'sigab']
     """
-
-    plugin_name = 'Be damaged according to building type'
 
     def run(self, layers):
         """Risk plugin for Padang building survey
@@ -64,16 +62,16 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         datatype = E.get_keywords()['datatype']
+        vclass_tag = 'VCLASS'
         if datatype.lower() == 'osm':
             # Map from OSM attributes to the padang building classes
             Emap = osm2padang(E)
-            vclass_tag = 'VCLASS'
         elif datatype.lower() == 'sigab':
             Emap = sigab2padang(E)
-            vclass_tag = 'VCLASS'
+        elif datatype.lower() == 'padang':
+            Emap = padang2itb(E)
         else:
             Emap = E
-            vclass_tag = 'VCLASS'
 
         # Interpolate hazard level to building locations
         Hi = H.interpolate(Emap)
