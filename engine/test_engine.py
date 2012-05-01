@@ -1999,10 +1999,10 @@ class Test_Engine(unittest.TestCase):
                 mmi = attributes[i]['MMI']
                 calculated_damage = attributes[i]['DAMAGE']
 
-                #print
-                #print i
-                #print 'MMI', mmi
-                #print 'DAM', calculated_damage
+                print
+                print i
+                print 'MMI', mmi
+                print 'DAM', calculated_damage
 
                 if i == 3895:
                     expected_damage = 1.28296234734
@@ -2159,6 +2159,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_itb')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
