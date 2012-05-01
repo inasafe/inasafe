@@ -62,16 +62,16 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         datatype = E.get_keywords()['datatype']
+        vclass_tag = 'VCLASS'
         if datatype.lower() == 'osm':
             # Map from OSM attributes to the padang building classes
             Emap = osm2padang(E)
-            vclass_tag = 'VCLASS'
         elif datatype.lower() == 'sigab':
             Emap = sigab2padang(E)
-            vclass_tag = 'VCLASS'
+        elif datatype.lower() == 'padang':
+            Emap = padang2itb(E)
         else:
             Emap = E
-            vclass_tag = 'TestBLDGCl'
 
         # Interpolate hazard level to building locations
         Hi = H.interpolate(Emap)

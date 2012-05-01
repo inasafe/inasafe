@@ -1955,6 +1955,62 @@ class Test_Engine(unittest.TestCase):
             msg = 'Number buildings was not 3896.'
             assert count == 3896, msg
 
+    def test_itb_building_function(self):
+        """ITB building impact function works
+        """
+
+        plugin_name = 'I T B Earthquake Building Damage Function'
+
+        # Test for a range of hazard layers
+        for mmi_filename in ['Shakemap_Padang_2009.asc']:
+                             #'Lembang_Earthquake_Scenario.asc']:
+
+            # Upload input data
+            hazard_filename = os.path.join(TESTDATA, mmi_filename)
+            exposure_filename = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+
+            # Call calculation routine
+            bbox = '96.956, -5.51, 104.63933, 2.289497'
+
+            # Get layers using API
+            H = read_layer(hazard_filename)
+            E = read_layer(exposure_filename)
+
+            # Get impact function (FIXME: should be nicer)
+            plugin_list = get_plugins(plugin_name)
+            assert len(plugin_list) == 1
+            assert plugin_list[0].keys()[0] == plugin_name
+            IF = plugin_list[0][plugin_name]
+
+            # Call impact calculation engine
+            impact_vector = calculate_impact(layers=[H, E],
+                                             impact_fcn=IF)
+            impact_filename = impact_vector.get_filename()
+
+            # Extract calculated result
+            coordinates = impact_vector.get_geometry()
+            attributes = impact_vector.get_data()
+
+            # Verify calculated result
+            for i in range(len(attributes)):
+                building_class = attributes[i]['TestBLDGCl']
+
+                # Check calculated damage
+                mmi = attributes[i]['MMI']
+                calculated_damage = attributes[i]['DAMAGE']
+
+                print
+                print i
+                print 'MMI', mmi
+                print 'DAM', calculated_damage
+
+                if i == 3895:
+                    expected_damage = 1.28296234734
+                    msg = ('Damage for MMI = %f was not as expected. '
+                           'I got %f, expected %f ' % (mmi, calculated_damage, expected_damage))
+                    assert numpy.allclose(calculated_damage, expected_damage), msg
+
+
     def test_flood_on_roads(self):
         """Jakarta flood impact on roads calculated correctly
         """
@@ -2102,6 +2158,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_padang')
+    suite = unittest.makeSuite(Test_Engine, 'test_itb')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
