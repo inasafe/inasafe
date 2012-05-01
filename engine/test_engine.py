@@ -1930,7 +1930,7 @@ class Test_Engine(unittest.TestCase):
                                        lon, lat))
                 assert mmi_min <= calculated_mmi <= mmi_max, msg
 
-                building_class = attributes[i]['TestBLDGCl']
+                building_class = attributes[i]['VCLASS']
 
                 # Check calculated damage
                 calculated_dam = attributes[i]['DAMAGE']
@@ -1993,16 +1993,16 @@ class Test_Engine(unittest.TestCase):
 
             # Verify calculated result
             for i in range(len(attributes)):
-                building_class = attributes[i]['TestBLDGCl']
+                building_class = attributes[i]['VCLASS']
 
                 # Check calculated damage
                 mmi = attributes[i]['MMI']
                 calculated_damage = attributes[i]['DAMAGE']
 
-                print
-                print i
-                print 'MMI', mmi
-                print 'DAM', calculated_damage
+                #print
+                #print i
+                #print 'MMI', mmi
+                #print 'DAM', calculated_damage
 
                 if i == 3895:
                     expected_damage = 1.28296234734
@@ -2010,6 +2010,7 @@ class Test_Engine(unittest.TestCase):
                            'I got %f, expected %f ' % (mmi, calculated_damage, expected_damage))
                     assert numpy.allclose(calculated_damage, expected_damage), msg
 
+                # FIXME(Ole): Hyeuk to put tests in here
 
     def test_flood_on_roads(self):
         """Jakarta flood impact on roads calculated correctly
@@ -2158,6 +2159,6 @@ class Test_Engine(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_itb')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

@@ -73,7 +73,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
             vclass_tag = 'VCLASS'
         else:
             Emap = E
-            vclass_tag = 'TestBLDGCl'
+            vclass_tag = 'VCLASS'
 
         # Interpolate hazard level to building locations
         Hi = H.interpolate(Emap)
