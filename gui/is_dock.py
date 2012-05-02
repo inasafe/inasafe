@@ -1092,7 +1092,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myKeywords = self.keywordIO.readKeywords(theLayer)
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
+                    self.pbnPrint.setEnabled(True)
                 else:
+                    self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
                         myReport += ('<tr>'
                                      # FIXME (Ole): Not sure if this will work
@@ -1122,9 +1124,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myReport += getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
-                self.pbnPrint.setEnabled(True)
-            else:
-                self.pbnPrint.setEnabled(False)
 
     def saveState(self):
         """Save the current state of the ui to an internal class member
