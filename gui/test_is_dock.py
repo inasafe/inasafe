@@ -243,6 +243,11 @@ class ISDockTest(unittest.TestCase):
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
+        DOCK.runInThreadFlag = False
+        DOCK.showOnlyVisibleLayersFlag = False
+        DOCK.setLayerNameFromTitleFlag = False
+        DOCK.zoomToImpactFlag = False
+        DOCK.hideExposureFlag = False
 
     def tearDown(self):
         """Fixture run after each test"""
