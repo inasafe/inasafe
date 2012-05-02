@@ -91,6 +91,14 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
                             'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.cbxSetLayerNameFromTitle.setChecked(myFlag)
 
+        myFlag = mySettings.value(
+                            'inasafe/setZoomToImpactFlag', True).toBool()
+        self.cbxZoomToImpact.setChecked(myFlag)
+        # whether exposure layer should be hidden after model completes
+        myFlag = mySettings.value(
+                            'inasafe/setHideExposureFlag', False).toBool()
+        self.cbxHideExposure.setChecked(myFlag)
+
         myPath = mySettings.value(
                             'inasafe/keywordCachePath',
                             self.keywordIO.defaultKeywordDbPath()).toString()
@@ -111,6 +119,10 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
                             self.cbxVisibleLayersOnly.isChecked())
         mySettings.setValue('inasafe/setLayerNameFromTitleFlag',
                             self.cbxSetLayerNameFromTitle.isChecked())
+        mySettings.setValue('inasafe/setZoomToImpactFlag',
+                            self.cbxZoomToImpact.isChecked())
+        mySettings.setValue('inasafe/setHideExposureFlag',
+                            self.cbxHideExposure.isChecked())
         mySettings.setValue('inasafe/keywordCachePath',
                             self.leKeywordCachePath.text())
 

@@ -100,6 +100,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
         self.setLayerNameFromTitleFlag = True
+        self.zoomToImpactFlag = True
+        self.hideExposureFlag = True
         self.hazardLayers = None  # array of all hazard layers
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()  # getLayers called by this
@@ -143,6 +145,14 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myFlag = mySettings.value(
                         'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.setLayerNameFromTitleFlag = myFlag
+
+        myFlag = mySettings.value(
+                            'inasafe/setZoomToImpactFlag', True).toBool()
+        self.zoomToImpactFlag = myFlag
+        # whether exposure layer should be hidden after model completes
+        myFlag = mySettings.value(
+                            'inasafe/setHideExposureFlag', False).toBool()
+        self.hideExposureFlag = myFlag
 
         self.getLayers()
 
@@ -752,8 +762,15 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myMessage = self.tr('Impact layer %s was neither a raster or a '
                    'vector layer' % myQgisImpactLayer.source())
             raise Exception(myMessage)
-        # Finally, add layer to QGIS
+        # Add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
+        # then zoom to it
+        if self.zoomToImpactFlag:
+            self.iface.zoomToActiveLayer()
+        if self.hideExposureFlag:
+            myExposureLayer = self.getExposureLayer()
+            myLegend = self.iface.legendInterface()
+            myLegend.setLayerVisible(myExposureLayer, False)
         self.restoreState()
         # Return text to display in report pane
         return myReport

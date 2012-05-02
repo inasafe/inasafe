@@ -39,6 +39,17 @@ class ISImpactCalculator(QObject):
         self._filename = None
         self._result = None
 
+    def exposureLayer(self):
+        """Accessor for the exposure layer
+        Args:
+            None
+        Returns:
+            A QgsMapLayer or None depending on if the layer is set
+        Raises:
+            None
+        """
+        return self._exposureLayer
+
     def setExposureLayer(self, theLayerPath):
         """Mutator for Exposure layer property (e.g. buildings or
         features that will be affected).

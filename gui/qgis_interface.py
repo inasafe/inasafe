@@ -52,6 +52,10 @@ class QgisInterface(QObject):
         """Zoom to next view extent"""
         pass
 
+    def zoomToActiveLayer(self):
+        """Zoom to extent of active layer"""
+        pass
+
     def addVectorLayer(self, vectorLayerPath, baseName, providerKey):
         """Add a vector layer"""
         pass
