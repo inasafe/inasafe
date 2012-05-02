@@ -21,6 +21,8 @@ import os
 import sys
 import traceback
 import tempfile
+import getpass
+from datetime import date
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QGis,
@@ -268,12 +270,15 @@ def getTempDir(theSubDirectory=None):
     Raises:
        Any errors from the underlying system calls.
     """
-    myDir = tempfile.gettempdir()
-    if os.name is 'nt':  # Windows
-        myDir = 'c://temp'
-    elif os.name is 'posix':  # linux, osx
-        myDir = '/tmp'
-    myPath = os.path.join(myDir, 'inasafe')
+    myUser = getpass.getuser()
+    myCurrentDate = date.today()
+    myDateString = myCurrentDate.strftime("%d-%m-%Y")
+    # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
+    myHandle, myFilename = tempfile.mkstemp()
+    os.close(myHandle)
+    myDir = os.path.dirname(myFilename)
+    os.remove(myFilename)
+    myPath = os.path.join(myDir, 'inasafe', myDateString, myUser, 'work')
     if theSubDirectory is not None:
         myPath = os.path.join(myPath, 'theSubDirectory')
     if not os.path.exists(myPath):
