@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-10 11:32+0200\n"
+"POT-Creation-Date: 2012-05-02 15:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,7 +64,8 @@ msgstr "Jumlah"
 #: impact_functions/flood/BNPB_flood_building_impact.py:82
 #: impact_functions/flood/flood_building_impact.py:93
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:128
-#: impact_functions/earthquake/padang_building_impact_model.py:145
+#: impact_functions/earthquake/itb_building_impact_model.py:149
+#: impact_functions/earthquake/padang_building_impact_model.py:151
 #: impact_functions/flood/BNPB_flood_building_impact.py:82
 #: impact_functions/flood/flood_building_impact.py:93
 msgid "All"
@@ -105,6 +106,8 @@ msgstr "Dibuka"
 #: impact_functions/flood/flood_building_impact.py:92
 #: impact_functions/flood/flood_building_impact.py:93
 #: impact_functions/flood/flood_building_impact.py:98
+#: impact_functions/earthquake/itb_building_impact_model.py:155
+#: impact_functions/earthquake/padang_building_impact_model.py:157
 #: impact_functions/flood/flood_building_impact.py:98
 msgid "Assumption"
 msgstr "Anggapan"
@@ -133,14 +136,16 @@ msgstr "Bangunan yang diperkirakan terdampak"
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:127
 #: impact_functions/earthquake/padang_building_impact_model.py:144
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:127
-#: impact_functions/earthquake/padang_building_impact_model.py:144
+#: impact_functions/earthquake/itb_building_impact_model.py:148
+#: impact_functions/earthquake/padang_building_impact_model.py:150
 msgid "Buildings"
 msgstr ""
 
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:127
 #: impact_functions/earthquake/padang_building_impact_model.py:144
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:127
-#: impact_functions/earthquake/padang_building_impact_model.py:144
+#: impact_functions/earthquake/itb_building_impact_model.py:148
+#: impact_functions/earthquake/padang_building_impact_model.py:150
 msgid "Total"
 msgstr ""
 
@@ -149,7 +154,10 @@ msgstr ""
 #: impact_functions/earthquake/padang_building_impact_model.py:147
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:129
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:137
-#: impact_functions/earthquake/padang_building_impact_model.py:147
+#: impact_functions/earthquake/itb_building_impact_model.py:151
+#: impact_functions/earthquake/itb_building_impact_model.py:165
+#: impact_functions/earthquake/padang_building_impact_model.py:153
+#: impact_functions/earthquake/padang_building_impact_model.py:167
 msgid "Low damage"
 msgstr ""
 
@@ -158,7 +166,10 @@ msgstr ""
 #: impact_functions/earthquake/padang_building_impact_model.py:148
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:130
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:139
-#: impact_functions/earthquake/padang_building_impact_model.py:148
+#: impact_functions/earthquake/itb_building_impact_model.py:152
+#: impact_functions/earthquake/itb_building_impact_model.py:167
+#: impact_functions/earthquake/padang_building_impact_model.py:154
+#: impact_functions/earthquake/padang_building_impact_model.py:169
 msgid "Medium damage"
 msgstr ""
 
@@ -167,33 +178,46 @@ msgstr ""
 #: impact_functions/earthquake/padang_building_impact_model.py:149
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:131
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:141
-#: impact_functions/earthquake/padang_building_impact_model.py:149
+#: impact_functions/earthquake/itb_building_impact_model.py:153
+#: impact_functions/earthquake/itb_building_impact_model.py:169
+#: impact_functions/earthquake/padang_building_impact_model.py:155
+#: impact_functions/earthquake/padang_building_impact_model.py:171
 msgid "High damage"
 msgstr ""
 
 #: impact_functions/earthquake/padang_building_impact_model.py:146
-#: impact_functions/earthquake/padang_building_impact_model.py:146
+#: impact_functions/earthquake/itb_building_impact_model.py:150
+#: impact_functions/earthquake/itb_building_impact_model.py:163
+#: impact_functions/earthquake/padang_building_impact_model.py:152
+#: impact_functions/earthquake/padang_building_impact_model.py:165
 msgid "No damage"
 msgstr ""
 
-#: impact_functions/styles.py:21 impact_functions/styles.py:21
+#: impact_functions/styles.py:21
+#: impact_functions/generic/categorised_hazard_building_impact.py:83
+#: impact_functions/generic/categorised_hazard_building_impact.py:88
+#: impact_functions/styles.py:21
 msgid "Low"
 msgstr ""
 
-#: impact_functions/styles.py:25 impact_functions/styles.py:25
+#: impact_functions/styles.py:25
+#: impact_functions/generic/categorised_hazard_building_impact.py:84
+#: impact_functions/generic/categorised_hazard_building_impact.py:90
+#: impact_functions/styles.py:25
 msgid "Medium"
 msgstr ""
 
-#: impact_functions/styles.py:29 impact_functions/styles.py:29
+#: impact_functions/styles.py:29
+#: impact_functions/generic/categorised_hazard_building_impact.py:85
+#: impact_functions/generic/categorised_hazard_building_impact.py:92
+#: impact_functions/styles.py:29
 msgid "High"
 msgstr ""
 
 #: impact_functions/tsunami/tsunami_building_impact.py:108
-#: impact_functions/tsunami/tsunami_building_impact.py:108
 msgid "OK"
 msgstr ""
 
-#: impact_functions/tsunami/tsunami_building_impact.py:110
 #: impact_functions/tsunami/tsunami_building_impact.py:110
 msgid "Flooded"
 msgstr ""
@@ -242,4 +266,33 @@ msgstr ""
 #: impact_functions/flood/BNPB_flood_building_impact.py:88
 #: impact_functions/flood/BNPB_flood_building_impact.py:88
 msgid "Based on BNPB Perka 2 - 2012"
+msgstr ""
+
+#: impact_functions/earthquake/itb_building_impact_model.py:137
+#: impact_functions/earthquake/padang_building_impact_model.py:139
+#, python-format
+msgid ""
+"<b>In case of \"%s\" the estimated impact to \"%s\" is&#58;</b><br><br><p>"
+msgstr ""
+
+#: impact_functions/earthquake/itb_building_impact_model.py:156
+#: impact_functions/earthquake/padang_building_impact_model.py:158
+msgid ""
+"- Levels of impact are defined by post 2009 Padang earthquake survey "
+"conducted by Geoscience Australia and Institut of Teknologi Bandung.<br>"
+msgstr ""
+
+#: impact_functions/earthquake/itb_building_impact_model.py:160
+#: impact_functions/earthquake/padang_building_impact_model.py:162
+msgid ""
+"- Unreinforced masonry is assumed where no structural information is "
+"available. <br>"
+msgstr ""
+
+#: impact_functions/generic/categorised_hazard_building_impact.py:82
+msgid "Category"
+msgstr ""
+
+#: impact_functions/generic/categorised_hazard_building_impact.py:82
+msgid "Affected"
 msgstr ""
