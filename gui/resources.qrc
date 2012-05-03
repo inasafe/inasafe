@@ -1,3 +1,4 @@
+
 <RCC>
   <qresource prefix="/plugins/inasafe">
     <file alias="icon.png">resources/img/icon.png</file>
@@ -9,6 +10,7 @@
     <file alias="logo-flower.png">resources/img/logo-flower.png</file>
     <file alias="ajax-loader.gif">resources/img/ajax-loader.gif</file>
     <file alias="css/bootstrap.css">resources/css/bootstrap.css</file>
+    <file alias="css/bootstrap.css">resources/css/InaSAFE.css</file>
     <file alias="js/jquery-1.7.1.min.js">resources/js/jquery-1.7.1.min.js</file>
     <file alias="header.html">resources/header.html</file>
     <file alias="footer.html">resources/footer.html</file>
