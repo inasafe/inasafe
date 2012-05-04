@@ -9,6 +9,7 @@ This section of the documention describes how to use the |project_name| system.
    install
    dock
    keywords
+   options
    impact_functions
    data_types
    using-qgis

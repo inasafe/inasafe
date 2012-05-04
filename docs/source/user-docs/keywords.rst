@@ -285,7 +285,7 @@ as :file:`keywords.db` within the InaSAFE plugin directory root.
 You may wish to use a different location for the :file:`keywords.db` keywords
 database - you can configure this by using the InaSAFE options dialog. The
 options dialog can be launched by clicking on the InaSAFE plugin toolbar's
-options icon (as shown below) or my doing :menuselection:`Plugins --> InaSAFE
+options icon (as shown below) or by doing :menuselection:`Plugins --> InaSAFE
 --> InaSAFE Options`.
 
 .. figure:: ../../inasafe-options-icon.png
@@ -306,6 +306,8 @@ below.
    the datasource (typically the database connection details) and a blob
    which contains the keywords as a pickled python dictionary.
 
+See the :doc:`options` document for more information about the InaSAFE options
+dialog.
 
 Sharing your keywords cache
 ---------------------------
