@@ -44,6 +44,7 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo',
 todo_include_todos = True
 
 # Add any paths that contain templates here, relative to this directory.
+# Set by Tim so we can modify the templates (see README in that dir)
 templates_path = ['_templates']
 
 # The suffix of source filenames.
@@ -52,7 +53,7 @@ source_suffix = '.rst'
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
 
-# The master toctree document.
+# The master toctree document. - Modified by Tim
 master_doc = 'contents'
 
 # General information about the project.
@@ -153,7 +154,8 @@ html_static_path = ['_static']
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
 #html_additional_pages = {}
-# Added by Tim to make landing page a static page
+# Added by Tim to make landing page a
+# static page implemented in _templates/index.html
 html_additional_pages = {'index': 'index.html'}
 
 # If false, no module index is generated.

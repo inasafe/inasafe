@@ -86,12 +86,35 @@ the print ready pdf output the plugin produces.</p>
 (must open in new window using right click) which contains modules for risk
 calculations, gis functionality and functions for impact modelling.</p>
 </div>
+
+<div class="section" id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<p>InaSAFE is a very new project. The current code development started
+in earnest in March 2011 and there is still much to be done.
+However, we work on the philosophy that stakeholders should have access
+to the development and source code from the very beginning and invite
+comments, suggestions and contributions.</p>
+
+<p>As such, |project_name| currently has some major limitations, including</p>
+
+<ul>
+  <li>Hazard layers must be provided as raster data</li>
+  <li>Exposure data must be either raster data or vector data but only
+   point, line and polygon types are supported.</li>
+  <li>All data must be provided in WGS84 geographic coordinates</li>
+  <li>Neither AIFDR nor GFDRR take any responsibility for the correctness of
+   outputs from |project_name| or decisions derived as a consequence</li>
+</ul>
+</div>
+
 <div class="section" id="contact-details">
 <h2>Contact Details<a class="headerlink" href="#contact-details" title="Permalink to this headline">¶</a></h2>
 <p>Australia-Indonesia Facility for Disaster Reduction (AIFDR)
 Menara Thamrin Suite 1505 | Jl. MH Thamrin Kav. 3, Jakarta 10250, Indonesia
 Ph: +62 21 398 30088 | Fax: +62 21 398 30068 | www.aifdr.org</p>
 </div>
+
+
 
 
 {% endblock %}

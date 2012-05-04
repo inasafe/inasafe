@@ -40,7 +40,8 @@ class ISImpactCalculator(QObject):
         self._result = None
 
     def exposureLayer(self):
-        """Accessor for the exposure layer
+        """Accessor for the exposure layer.
+
         Args:
             None
         Returns:
