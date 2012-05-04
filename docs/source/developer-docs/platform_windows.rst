@@ -324,8 +324,10 @@ Installing sphinx
 Launch your QGIS python shell environment (see :ref:`windows-pip-setup`) as 
 administrator and then run the following command::
 
-   pip install sphinx
-   
+   pip install sphinx cloud-sptheme
+
+The cloud-sptheme package installs the sphinx theme we are using.
+
 
 Building the documentation
 ..........................

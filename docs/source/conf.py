@@ -18,6 +18,10 @@ sys.path.append(os.path.abspath('../../'))
 sys.path.append(os.path.abspath('../../../'))
 #print sys.path
 
+# import Cloud - the sphinx theme we are using - pip install cloud-sptheme
+# see http://packages.python.org/cloud_sptheme/cloud_theme.html
+import cloud_sptheme as csp
+
 # see http://sphinx.pocoo.org/config.html#confval-rst_epilog
 rst_epilog = """
 .. |project_name| replace:: InaSAFE
@@ -109,15 +113,16 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'agogo'
+html_theme = 'cloud'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+# Root target added by Tim for cloud theme
+html_theme_options = {"roottarget": "contents"}
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = ['themes']
+html_theme_path = [csp.get_theme_dir()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
