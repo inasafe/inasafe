@@ -7,7 +7,7 @@ I found a bug, how should I report it?
 --------------------------------------
 
 We manage the project issues using a GitHub issue tracker. The
-`|project_name| <https://github.com/AIFDR/inasafe/issues?direction=desc&sort=created&state=open>`_
+`InaSAFE <https://github.com/AIFDR/inasafe/issues?direction=desc&sort=created&state=open>`_
 issue tracker is open to everyone, though you will first need to register a
 (free) account on GitHub to use it. You can find the GitHub self-registration
 page `here <https://github.com/signup/free>`_.
@@ -47,6 +47,7 @@ jointly developed by `BNPB <http://www.bnpb.go.id/>`_,
 Could we request a new feature?
 -------------------------------
 
-If you have a feature request, please use the issue tracker to let us know
-about it, using the same procedure as for bug reporting.
+If you have a feature request, please use the 
+`issue tracker <https://github.com/AIFDR/inasafe/issues?direction=desc&sort=created&state=open>`_ 
+to let us know about it, using the same procedure as for bug reporting.
 
