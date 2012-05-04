@@ -16,22 +16,7 @@ the documentation at http://inasafe.readthedocs.org
 
 |project_name| - QGis web site: http://aifdr.github.com/inasafe
 
-========================
-Quick Installation Guide
-========================
 
-.. note::
-
-  |project_name| is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS), so
-  QGIS must be installed first.
-
-
-To install the |project_name|, use the plugin manager in QGIS::
-
-  Plugins -> Fetch Python Plugins
-
-Then search for '|project_name|', select it and click the install button.
-The plugin will now be added to your plugins menu.
 
 
 -------------------
