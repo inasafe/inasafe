@@ -32,7 +32,7 @@ class VolcanoPopulationImpactFunction(FunctionProvider):
         """
 
         # Identify hazard and exposure layers
-        volcanic_hazard_level = get_hazard_layer(layers)    # Volcanic hazard level [0-1]
+        volcanic_hazard_level = get_hazard_layer(layers)  # Normalised [0-1]
         population = get_exposure_layer(layers)  # Density [people/area]
 
         # Extract data as numeric arrays
@@ -40,12 +40,12 @@ class VolcanoPopulationImpactFunction(FunctionProvider):
         P = population.get_data(nan=0.0, scaling=True)  # Population density
 
         # Calculate impact as population exposed to depths > threshold
-        I = numpy.where(V > 2.0/3, P, 0)
+        I = numpy.where(V > 2.0 / 3, P, 0)
 
         # Generate text with result for this study
         number_of_people_affected = numpy.nansum(I.flat)
-        impact_summary = ('%i people affected by volcanic hazard level greater '
-                          'than 0.667' % number_of_people_affected)
+        impact_summary = _('%i people affected by high volcanic hazard '
+                           % number_of_people_affected)
 
         # Create raster object and return
         R = Raster(I,
