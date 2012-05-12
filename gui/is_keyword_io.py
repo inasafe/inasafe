@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 import is_safe_interface
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
