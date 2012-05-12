@@ -28,6 +28,7 @@ mv ${TMP} __init__.py
 #remove any crud
 find . -name "*.pyc" -exec rm -rf {} \;
 find . -name "*.*~" -exec rm -rf {} \;
+rm Makefile~
 
 #regenerate docs
 make docs
@@ -50,6 +51,8 @@ zip -r ${OUT} ${DIR} --exclude \*.pyc \
                                   ${DIR}/docs/*.png\
                                   ${DIR}/docs/build/doctrees\* \
                                   ${DIR}/docs/build/html\.buildinfo\* \
+                                  ${DIR}/docs/cloud_sptheme\* \
+                                  ${DIR}/docs/Flyer_InaSafe_FINAL.pdf \
                                   ${DIR}/.git\* \
                                   ${DIR}/.settings\* \
                                   ${DIR}/.pydev\* \
