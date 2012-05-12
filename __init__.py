@@ -23,7 +23,7 @@ import os
 
 def name():
     """A user friendly name for the plugin."""
-    return 'InaSAFE-dev'
+    return 'InaSAFE'
 
 
 def description():
@@ -34,7 +34,7 @@ def description():
 
 def version():
     """Version of the plugin."""
-    return 'Version 0.3.0-alpha'
+    return 'Version 0.3.0'
 
 
 def icon():
