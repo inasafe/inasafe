@@ -2,7 +2,7 @@
 Using QGIS
 ==========
 
-|project_name| uses `Quantum GIS (QGIS)<http://qgis.org>`_ - as the platform on 
+|project_name| uses `Quantum GIS (QGIS) <http://qgis.org>`_ - as the platform on 
 which to provide its functionality. QGIS itself has good documentation and 
 a very helpful user community. In this section we focus on those aspects of
 QGIS functionality that will be helpful to someone wanting to carry out

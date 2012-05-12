@@ -3,9 +3,8 @@ Installing InaSAFE
 ==================
 
 .. note::
-
-  |project_name| is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS), so
-  QGIS must be installed first.
+   |project_name| is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS), so
+   QGIS must be installed first.
 
 From Zip Archive
 ----------------
@@ -15,9 +14,11 @@ https://github.com/AIFDR/inasafe/downloads. Simply choose the most recent (i.e.
 the one with the largest version number) and save it to your hard disk.
 
 Now extract the zip file into the QGIS plugins directory. Under windows the
-plugins directory is under :file:`c:\\Users\\<your username>\\.qgis\\python\\plugins`.
+plugins directory is under
+:file:`c:\\Users\\<your username>\\.qgis\\python\\plugins`.
 
-After extracting the plugin, it should be available as :file:`c:\\Users\\<your username>\\.qgis\\python\\plugins\\inasafe\\`.
+After extracting the plugin, it should be available as
+:file:`c:\\Users\\<your username>\\.qgis\\python\\plugins\\inasafe\\`.
 
 Mac and Linux users need to follow the same procedure but instead the plugin
 directory will be under your $HOME directory.
@@ -31,9 +32,8 @@ appear in the list. Now tick the checkbox next to it to enable the plugin.
    :align: center
 
 
-
-Via QGIS Plugin Manager
------------------------
+Via QGIS Python Plugin Repository
+---------------------------------
 
 .. note:: This installation method is not yet supported - watch this space it
    will be available in the near future.
@@ -44,3 +44,10 @@ To install the |project_name|, use the plugin manager in QGIS::
 
 Then search for '|project_name|', select it and click the install button.
 The plugin will now be added to your plugins menu.
+
+System Requirements
+-------------------
+
+ - A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X
+ - The Open Source Geographic Information System QGIS (http://www.qgis.org).
+   InaSAFE requires QGIS version 1.7 or newer.
