@@ -15,6 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.3.0'
+__revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
