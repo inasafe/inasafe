@@ -18,7 +18,7 @@ __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'alpha'  # beta, final etc will be shown in dock title
+__type__ = ''  # beta, final etc will be shown in dock title
 
 import numpy
 from PyQt4 import QtGui, QtCore
