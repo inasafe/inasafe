@@ -27,7 +27,7 @@ tags=risk disaster flood
 homepage=http://www.inasafe.org/
 tracker=https://github.com/AIFDR/inasafe/issues
 repository=https://github.com/AIFDR/inasafe
-icon=icon.png
+icon=gui/resources/img/icon.png
 # experimental flag
 experimental=True
 

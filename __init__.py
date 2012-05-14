@@ -38,9 +38,10 @@ def version():
 
 
 def icon():
-    """Icon path for the plugin."""
-    return os.path.join(os.path.dirname(__file__), 'gui', 'resources',
+    """Icon path for the plugin - metadata.txt it will override this"""
+    myPath = os.path.join(os.path.dirname(__file__), 'gui', 'resources',
                         'img', 'icon.png')
+    return myPath
 
 
 def qgisMinimumVersion():
