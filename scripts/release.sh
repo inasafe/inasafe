@@ -9,6 +9,9 @@ fi
 
 VERSION=$1
 
+# TODO
+#replace _type_ = 'alpha' or 'beta' with final
+
 #update the metadata file version
 TMP=metdata.txt$$
 cat metadata.txt | \

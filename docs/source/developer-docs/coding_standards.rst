@@ -9,7 +9,8 @@ Please observe the following coding standards when working on the codebase:
 
 * Docstrings quoted with :samp:`"""`
 * Simple strings in source code should be quoted with :samp:`'`
-* Coding must follow a style guide. In case of Python it is `pep8 <http://www.python.org/dev/peps/pep-0008>`_ and
+* Coding must follow a style guide. In case of Python it is 
+  `pep8 <http://www.python.org/dev/peps/pep-0008>`_ and
   using the command line tool pep8 (or :samp:`make pep8`) to enforce this
 * `Python documentation guide <http://www.python.org/dev/peps/pep-0257>`_
 * Adherence to regression/unit testing wherever possible (:samp:`make test`)
@@ -41,9 +42,14 @@ Please observe the following coding standards when working on the codebase:
    
    __author__ = 'tim@linfiniti.com'
    __version__ = '0.0.1'
+   __revision__ = '$Format:%H$'
    __date__ = '10/01/2011'
    __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
    __copyright__ += 'Disaster Reduction'
+
+.. note:: Please see :ref:`faq-revision-label` for details on how the revision
+   tag is replaced with the SHA1 for the file when the release packages are
+   made.
 
 .. _hig-label:
 
