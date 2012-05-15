@@ -283,8 +283,12 @@ def getTempDir(theSubDirectory=None):
     if theSubDirectory is not None:
         myPath = os.path.join(myPath, 'theSubDirectory')
     if not os.path.exists(myPath):
-        os.makedirs(myPath)
-
+        # Ensure that the dir is world writable
+        # Umask sets the new mask and returns the old
+        myOldMask = os.umask(0o000)
+        os.makedirs(myPath, 0o777)
+        # resinstate the old mask for tmp
+        os.umask(myOldMask)
     return myPath
 
 
