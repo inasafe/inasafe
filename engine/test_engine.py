@@ -1025,6 +1025,18 @@ class Test_Engine(unittest.TestCase):
             # as this was calculated using EQRM and thus different.
             assert numpy.allclose(calculated_mmi, MMI[i], rtol=0.02)
 
+            # Check that all original attributes were carried through
+            # according to issue #101
+            for key in attributes[i]:
+                msg = 'Expected key %s in interpolated attributes' % key
+                assert key in Iattributes[i], msg
+
+                Ival = Iattributes[i][key]
+                val = attributes[i][key]
+                msg = ('Interpolated attribute %s did not have the '
+                       'expected value %s. I got %s' % (key, val, Ival))
+                assert Ival == val, msg
+
     def test_interpolation_tsunami(self):
         """Interpolation using tsunami data set works
 

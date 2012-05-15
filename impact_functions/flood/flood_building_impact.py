@@ -8,11 +8,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """Risk plugin for flood impact on building data
 
     :param requires category=='hazard' and \
-                    subcategory.startswith('flood') and \
+                    subcategory=='flood' and \
                     layertype in ['raster', 'vector']
 
     :param requires category=='exposure' and \
-                    subcategory.startswith('building') and \
+                    subcategory=='building' and \
                     layertype=='vector'
     """
 
@@ -38,7 +38,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # so get_name gives "Vector Layer" :-)
 
         # Interpolate hazard level to building locations
-        I = H.interpolate(E)
+        I = H.interpolate(E, name='flood_level')
 
         # Extract relevant numerical data
         attributes = I.get_data()
@@ -53,7 +53,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         for i in range(N):
             if H.is_raster:
                 # Get the interpolated depth
-                x = float(attributes[i].values()[0])
+                x = float(attributes[i]['flood_level'])
                 x = x > threshold
             elif H.is_vector:
                 # Use interpolated polygon attribute
@@ -71,6 +71,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
             # Carry all original attributes forward
             # FIXME (Ole): Make this part of the interpolation (see issue #101)
+            # FIXME (Ole): Now we can just augment the interpolated attributes
             for key in attribute_names:
                 result_dict[key] = E.get_data(key, i)
 

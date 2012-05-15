@@ -27,7 +27,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(E)
+        Hi = H.interpolate(E, name='depth')
 
         # Extract relevant numerical data
         coordinates = Hi.get_geometry()
@@ -46,7 +46,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
             if H.is_raster:
                 # Get depth
-                dep = float(depth[i].values()[0])
+                dep = float(depth[i]['depth'])
 
                 # Classify buildings according to depth
                 if dep >= 3:

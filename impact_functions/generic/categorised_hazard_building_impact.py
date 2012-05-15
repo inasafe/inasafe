@@ -28,7 +28,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(E)
+        Hi = H.interpolate(E, name='hazard_level')
 
         # Extract relevant numerical data
         coordinates = Hi.get_geometry()
@@ -45,7 +45,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         building_impact = []
         for i in range(N):
             # Get catergory value
-            val = float(category[i].values()[0])
+            val = float(category[i]['hazard_level'])
 
             # Classify buildings according to value
             if val >= 2.0 / 3:

@@ -25,7 +25,7 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E)
+        H = H.interpolate(E, name='MMI')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()
@@ -34,7 +34,7 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
         # Calculate building damage
         building_damage = []
         for i in range(len(shaking)):
-            x = float(shaking[i].values()[0])
+            x = float(shaking[i]['MMI'])
             if x < 6.0 or (x != x):  # x != x -> check for nan pre python 2.6
                 value = 0.0
             else:

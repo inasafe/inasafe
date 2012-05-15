@@ -44,19 +44,20 @@ def interpolate_raster_vector_points(R, V, name=None):
     coordinates = numpy.array(V.get_geometry(),
                               dtype='d',
                               copy=False)
+    # Get original attributes
+    attributes = V.get_data()
 
-    # Interpolate and create new attribute
+    # Create new attribute and interpolate
     N = len(V)
-    attributes = []
     if name is None:
         name = R.get_name()
 
     values = interpolate_raster(longitudes, latitudes, A,
                                 coordinates, mode='linear')
 
-    # Create list of dictionaries for this attribute and return
+    # Add interpolated attribute to existing attributes and return
     for i in range(N):
-        attributes.append({name: values[i]})
+        attributes[i][name] = values[i]
 
     return Vector(data=attributes, projection=V.get_projection(),
                   geometry=coordinates)

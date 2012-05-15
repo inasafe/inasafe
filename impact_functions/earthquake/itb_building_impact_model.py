@@ -74,7 +74,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
             Emap = E
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(Emap)
+        Hi = H.interpolate(Emap, name='MMI')
 
         # Extract relevant numerical data
         coordinates = Emap.get_geometry()
@@ -91,7 +91,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         count0 = 0
         building_damage = []
         for i in range(N):
-            mmi = float(shaking[i].values()[0])
+            mmi = float(shaking[i]['MMI'])
 
             building_class = Emap.get_data(vclass_tag, i)
 

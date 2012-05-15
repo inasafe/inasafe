@@ -31,7 +31,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        I = H.interpolate(E)
+        I = H.interpolate(E, name='depth')
 
         # Extract relevant numerical data
         attributes = I.get_data()
@@ -48,7 +48,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
         for i in range(N):
 
             # Get the interpolated depth
-            x = float(attributes[i].values()[0])
+            x = float(attributes[i]['depth'])
 
             # Assign impact level (nilai) depending on depth and count
             if x < 1:
