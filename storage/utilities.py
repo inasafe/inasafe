@@ -80,8 +80,6 @@ def unique_filename(**kwargs):
         os.makedirs(kwargs['dir'], 0o777)
         # resinstate the old mask for tmp dir
         os.umask(umask)
-
-
     # Now we have the working dir set up go on and return the filename
     handle, filename = mkstemp(**kwargs)
     try:

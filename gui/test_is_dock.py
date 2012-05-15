@@ -886,7 +886,8 @@ class ISDockTest(unittest.TestCase):
         assert myExpectedDict == myResultDict, myMessage
 
         # corner case test when two layers can have the
-        # same functions - when switching layers the selected function should remain unchanged
+        # same functions - when switching layers the selected function should
+        # remain unchanged
         self.tearDown()
         myFileList = ['Flood_Design_Depth_Jakarta_geographic.asc',
                       'Flood_Current_Depth_Jakarta_geographic.asc',
@@ -898,12 +899,13 @@ class ISDockTest(unittest.TestCase):
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
         myExpectedFunction = str(DOCK.cboFunction.currentText())
-        # now move down one hazard in the combo then verify the function remains unchanged
+        # now move down one hazard in the combo then verify
+        # the function remains unchanged
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
         myCurrentFunction = str(DOCK.cboFunction.currentText())
-	myMessage = ('Expected selected impact function to remain unchanged when'
-		    ' choosing a different hazard of the same category:'
+        myMessage = ('Expected selected impact function to remain unchanged '
+                     'when choosing a different hazard of the same category:'
                     ' %s\nExpected: %s\n%s' % (
                     myExpectedFunction,
                     myCurrentFunction,
