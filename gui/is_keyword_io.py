@@ -277,14 +277,14 @@ class ISKeywordIO(QObject):
             myData = myCursor.fetchone()
             #print "Tables: %s" % myData
             if myData is None:
-                print 'No tables found'
+                #print 'No tables found'
                 mySQL = ('create table keyword (hash varchar(32) primary key,'
                          'dict text);')
                 print mySQL
                 myCursor.execute(mySQL)
                 myData = myCursor.fetchone()
             else:
-                print 'Keywords table already exists'
+                #print 'Keywords table already exists'
                 pass
             return myCursor
         except sqlite.Error, e:
