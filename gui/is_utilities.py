@@ -287,7 +287,7 @@ def getTempDir(theSubDirectory=None):
         # Umask sets the new mask and returns the old
         myOldMask = os.umask(0000)
         os.makedirs(myPath, 0777)
-        # resinstate the old mask for tmp
+        # Resinstate the old mask for tmp
         os.umask(myOldMask)
     return myPath
 

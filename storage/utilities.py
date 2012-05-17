@@ -78,7 +78,7 @@ def unique_filename(**kwargs):
         umask = os.umask(0000)
         # Ensure that the dir is world writable by explictly setting mode
         os.makedirs(kwargs['dir'], 0777)
-        # reinstate the old mask for tmp dir
+        # Reinstate the old mask for tmp dir
         os.umask(umask)
     # Now we have the working dir set up go on and return the filename
     handle, filename = mkstemp(**kwargs)
