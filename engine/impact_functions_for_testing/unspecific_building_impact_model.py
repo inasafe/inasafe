@@ -25,7 +25,7 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E, name='MMI')
+        H = H.interpolate(E, attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()

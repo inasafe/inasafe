@@ -19,11 +19,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
     target_field = 'AFFECTED'
     plugin_name = _('Temporarily Closed')
 
-    # Is never called but would be nice to do here
-    #def __init__(self):
-    #    self.target_field = 'AFFECTED'
-    #    self.plugin_name = _('Temporarily Closed')
-
     def run(self, layers):
         """Risk plugin for tsunami population
         """
@@ -34,22 +29,18 @@ class FloodBuildingImpactFunction(FunctionProvider):
         H = get_hazard_layer(layers)    # Depth
         E = get_exposure_layer(layers)  # Building locations
 
-        # FIXME (Ole): interpolate does not carry original name through,
-        # so get_name gives "Vector Layer" :-)
-
         # Interpolate hazard level to building locations
-        I = H.interpolate(E, name='flood_level')
+        I = H.interpolate(E, attribute_name='flood_level')
 
         # Extract relevant numerical data
         attributes = I.get_data()
         N = len(I)
 
         # List attributes to carry forward to result layer
-        attribute_names = E.get_attribute_names()
+        attribute_names = I.get_attribute_names()
 
         # Calculate population impact
         count = 0
-        building_impact = []
         for i in range(N):
             if H.is_raster:
                 # Get the interpolated depth
@@ -61,22 +52,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
             # Tag and count
             if x is True:
-                affected = 1  # FIXME Ole this is unused
                 count += 1
-            else:
-                affected = 0  # FIXME Ole this is unused
 
-            # Collect depth and calculated damage
-            result_dict = {self.target_field: x}
-
-            # Carry all original attributes forward
-            # FIXME (Ole): Make this part of the interpolation (see issue #101)
-            # FIXME (Ole): Now we can just augment the interpolated attributes
-            for key in attribute_names:
-                result_dict[key] = E.get_data(key, i)
-
-            # Record result for this feature
-            building_impact.append(result_dict)
+            # Add calculated impact to existing attributes
+            # FIXME (Ole): Do it like this in all impact functions
+            attributes[i][self.target_field] = x
 
         # Create report
         Hname = H.get_name()
@@ -109,9 +89,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
                           style_classes=style_classes)
 
         # Create vector layer and return
-        V = Vector(data=building_impact,
-                   projection=E.get_projection(),
-                   geometry=E.get_geometry(),
+        V = Vector(data=attributes,
+                   projection=I.get_projection(),
+                   geometry=I.get_geometry(),
                    name=_('Estimated buildings affected'),
                    keywords={'impact_summary': impact_summary},
                    style_info=style_info)

@@ -76,7 +76,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
             vclass_tag = 'VCLASS'
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(Emap, name='MMI')
+        Hi = H.interpolate(Emap, attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = Emap.get_geometry()

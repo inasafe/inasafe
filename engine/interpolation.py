@@ -11,14 +11,14 @@ from storage.vector import convert_polygons_to_centroids
 from storage.utilities import verify
 
 
-def interpolate_raster_vector_points(R, V, name=None):
+def interpolate_raster_vector_points(R, V, attribute_name=None):
     """Interpolate from raster layer to point data
 
     Input
         R: Raster data set (grid)
         V: Vector data set (points)
-        name: Name for new attribute.
-              If None (default) the name of R is used
+        attribute_name: Name for new attribute.
+              If None (default) the name of layer R is used
 
     Output
         I: Vector data set; points located as V with values interpolated from R
@@ -49,27 +49,29 @@ def interpolate_raster_vector_points(R, V, name=None):
 
     # Create new attribute and interpolate
     N = len(V)
-    if name is None:
-        name = R.get_name()
+    if attribute_name is None:
+        attribute_name = R.get_name()
 
     values = interpolate_raster(longitudes, latitudes, A,
                                 coordinates, mode='linear')
 
     # Add interpolated attribute to existing attributes and return
     for i in range(N):
-        attributes[i][name] = values[i]
+        attributes[i][attribute_name] = values[i]
 
-    return Vector(data=attributes, projection=V.get_projection(),
-                  geometry=coordinates)
+    return Vector(data=attributes,
+                  projection=V.get_projection(),
+                  geometry=coordinates,
+                  name=V.get_name())
 
 
-def interpolate_raster_vector(R, V, name=None):
+def interpolate_raster_vector(R, V, attribute_name=None):
     """Interpolate from raster layer to vector data
 
     Input
         R: Raster data set (grid)
         V: Vector data set (points or polygons)
-        name: Name for new attribute.
+        attribute_name: Name for new attribute.
               If None (default) the name of R is used
 
     Output
@@ -89,4 +91,17 @@ def interpolate_raster_vector(R, V, name=None):
     else:
         P = V
 
-    return interpolate_raster_vector_points(R, P, name=name)
+    # Interpolate from raster to point data
+    R = interpolate_raster_vector_points(R, P,
+                                         attribute_name=attribute_name)
+    if V.is_polygon_data:
+        # In case of polygon data, restore the polygon geometry
+        # Do this setting the geometry of the returned set to
+        # that of the original polygon
+        R = Vector(data=R.get_data(),
+                   projection=R.get_projection(),
+                   geometry=V.get_geometry(),
+                   name=R.get_name())
+
+    # Return interpolated vector layer
+    return R

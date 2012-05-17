@@ -58,7 +58,7 @@ class EarthquakeFatalityFunctionPodes(FunctionProvider):
         E = get_exposure_layer(layers)  # Exposure - population counts
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E, name='MMI')
+        H = H.interpolate(E, attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()  # Stay with polygons

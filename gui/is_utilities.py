@@ -271,7 +271,7 @@ def getTempDir(theSubDirectory=None):
     Raises:
        Any errors from the underlying system calls.
     """
-    myUser = getpass.getuser().replace(' ','_')
+    myUser = getpass.getuser().replace(' ', '_')
     myCurrentDate = date.today()
     myDateString = myCurrentDate.strftime("%d-%m-%Y")
     # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
@@ -287,7 +287,7 @@ def getTempDir(theSubDirectory=None):
         # Umask sets the new mask and returns the old
         myOldMask = os.umask(0000)
         os.makedirs(myPath, 0777)
-        # resinstate the old mask for tmp
+        # Resinstate the old mask for tmp
         os.umask(myOldMask)
     return myPath
 

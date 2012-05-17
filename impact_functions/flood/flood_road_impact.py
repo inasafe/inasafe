@@ -37,7 +37,7 @@ class FloodRoadImpactFunction(FunctionProvider):
         E = convert_line_to_points(R, delta)
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E, name='flood_level')
+        H = H.interpolate(E, attribute_name='flood_level')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()
