@@ -293,7 +293,8 @@ class Raster:
         Input
             X: Layer object defining target
             attribute_name: Optional name of interpolated layer.
-                            If attribute_name is None, the name of self is used.
+                            If attribute_name is None,
+                            the name of self is used.
 
         Output
             Y: Layer object with values of this raster layer interpolated to
@@ -315,7 +316,8 @@ class Raster:
             # Interpolate this raster layer to geometry of X
             msg = ('Name must be either a string or None. I got %s'
                    % (str(type(X)))[1:-1])
-            verify(attribute_name is None or isinstance(attribute_name, basestring), msg)
+            verify(attribute_name is None
+                   or isinstance(attribute_name, basestring), msg)
 
             return interpolate_raster_vector(self, X,
                                              attribute_name=attribute_name)

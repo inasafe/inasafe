@@ -764,17 +764,18 @@ class Vector:
                       projection=self.get_projection(),
                       geometry=geometry)
 
+    # FIXME (Ole): Name should be layer_name
     def interpolate(self, X, name=None, attribute_name=None):
         """Interpolate values of this vector layer to other layer
 
         Input
             X: Layer object defining target
-            name: Optional name of returned interpolated layer  # FIXME: Should be layer_name
+            name: Optional name of returned interpolated layer
             attribute_name: Optional attribute name to use.
                             If None, all attributes are used.
 
-                            FIXME (Ole): Single attribute not tested well yet and
-                            not implemented for lines
+                            FIXME (Ole): Single attribute not tested well yet
+                            and not implemented for lines
 
         Output
             Y: Layer object with values of this vector layer interpolated to
@@ -880,7 +881,8 @@ class Vector:
 
         msg = ('Attribute must be either a string or None. I got %s'
                % (str(type(X)))[1:-1])
-        verify(attribute_name is None or isinstance(attribute_name, basestring), msg)
+        verify(attribute_name is None or
+               isinstance(attribute_name, basestring), msg)
 
         attribute_names = self.get_attribute_names()
         if attribute_name is not None:
