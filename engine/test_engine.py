@@ -948,7 +948,7 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(AA, A), msg
 
         # Test riab's interpolation function
-        I = R.interpolate(V, name='value')
+        I = R.interpolate(V, attribute_name='value')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
 
@@ -988,7 +988,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = hazard_raster.interpolate(exposure_vector,
-                                      name='MMI')
+                                      attribute_name='MMI')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1059,7 +1059,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = hazard_raster.interpolate(exposure_vector,
-                                      name='depth')
+                                      attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1100,8 +1100,8 @@ class Test_Engine(unittest.TestCase):
         coordinates = E.get_geometry()
         attributes = E.get_data()
 
-        # Test riab's interpolation function
-        I = H.interpolate(E, name='depth')
+        # Test the interpolation function
+        I = H.interpolate(E, attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1226,7 +1226,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -1286,7 +1286,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
         #I.write_to_file('MM_res.shp')
 
         I_geometry = I.get_geometry()
@@ -1621,7 +1621,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 

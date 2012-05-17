@@ -28,7 +28,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(E, name='hazard_level')
+        Hi = H.interpolate(E, attribute_name='hazard_level')
 
         # Extract relevant numerical data
         coordinates = Hi.get_geometry()
@@ -61,11 +61,6 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
             # Collect depth and calculated damage
             result_dict = {self.target_field: affected,
                            'CATEGORY': val}
-
-            # Carry all original attributes forward
-            # FIXME: This should be done in interpolation. Check.
-##            for key in attributes:
-##                result_dict[key] = E.get_data(key, i)
 
             # Record result for this feature
             building_impact.append(result_dict)

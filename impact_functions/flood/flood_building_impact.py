@@ -34,11 +34,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
         H = get_hazard_layer(layers)    # Depth
         E = get_exposure_layer(layers)  # Building locations
 
-        # FIXME (Ole): interpolate does not carry original name through,
-        # so get_name gives "Vector Layer" :-)
-
         # Interpolate hazard level to building locations
-        I = H.interpolate(E, name='flood_level')
+        I = H.interpolate(E, attribute_name='flood_level')
 
         # Extract relevant numerical data
         attributes = I.get_data()

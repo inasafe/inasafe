@@ -66,7 +66,7 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
             E = unspecific2bnpb(E, target_attribute=self.vclass_tag)
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E, name='MMI')
+        H = H.interpolate(E, attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()

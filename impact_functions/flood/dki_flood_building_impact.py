@@ -36,7 +36,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        I = H.interpolate(E, name='depth')
+        I = H.interpolate(E, attribute_name='depth')
 
         # Extract relevant numerical data
         attributes = I.get_data()
@@ -65,6 +65,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 pass
 
             # Add calculated impact to existing attributes
+            # FIXME (Ole): Do it like this in all impact functions
             attributes[i][self.target_field] = x
 
         # Create report
