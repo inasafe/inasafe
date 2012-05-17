@@ -28,11 +28,11 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(E, attribute_name='hazard_level')
+        H = H.interpolate(E, attribute_name='hazard_level')
 
         # Extract relevant numerical data
-        coordinates = Hi.get_geometry()
-        category = Hi.get_data()
+        coordinates = H.get_geometry()
+        category = H.get_data()
         N = len(category)
 
         # List attributes to carry forward to result layer
@@ -44,7 +44,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         count0 = 0
         building_impact = []
         for i in range(N):
-            # Get catergory value
+            # Get category value
             val = float(category[i]['hazard_level'])
 
             # Classify buildings according to value
@@ -96,7 +96,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                    projection=E.get_projection(),
                    geometry=coordinates,
                    keywords={'impact_summary': impact_summary},
-                   geometry_type=Hi.geometry_type,
+                   geometry_type=H.geometry_type,
                    name=name,
                    style_info=style_info)
         return V
