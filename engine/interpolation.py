@@ -91,8 +91,17 @@ def interpolate_raster_vector(R, V, attribute_name=None):
     else:
         P = V
 
-    # FIXME (Ole): In case of polygon data, we should return a polygon
-    #              Do this setting the geometry of the returned set to
-    #              the original polygon
-    return interpolate_raster_vector_points(R, P,
-                                            attribute_name=attribute_name)
+    # Interpolate from raster to point data
+    R = interpolate_raster_vector_points(R, P,
+                                         attribute_name=attribute_name)
+    if V.is_polygon_data:
+        # In case of polygon data, restore the polygon geometry
+        # Do this setting the geometry of the returned set to
+        # that of the original polygon
+        R = Vector(data=R.get_data(),
+                   projection=R.get_projection(),
+                   geometry=V.get_geometry(),
+                   name=R.get_name())
+
+    # Return interpolated vector layer
+    return R

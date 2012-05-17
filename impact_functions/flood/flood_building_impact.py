@@ -58,10 +58,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
             # FIXME (Ole): Do it like this in all impact functions
             attributes[i][self.target_field] = x
 
-
         # Create report
         Hname = H.get_name()
-        Ename = I.get_name()
+        Ename = E.get_name()
         impact_summary = _('<b>In case of "%s" the estimated impact to "%s" '
                    'the possibility of &#58;</b><br><br><p>' % (Hname,
                                                                 Ename))
@@ -91,8 +90,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         # Create vector layer and return
         V = Vector(data=attributes,
-                   projection=E.get_projection(),
-                   geometry=E.get_geometry(),
+                   projection=I.get_projection(),
+                   geometry=I.get_geometry(),
                    name=_('Estimated buildings affected'),
                    keywords={'impact_summary': impact_summary},
                    style_info=style_info)
