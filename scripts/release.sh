@@ -23,8 +23,8 @@ rm -rf /tmp/${DIR}
 mkdir /tmp/${DIR}
 git archive `git branch | grep '\*'| sed 's/^\* //g'` | tar -x -C /tmp/${DIR}
 rm -rf /tmp/${DIR}/docs/
-mkdir -p /tmp/${DIR}/docs/_build
-cp -r docs/build/html /tmp/${DIR}/docs/_build/
+mkdir -p /tmp/${DIR}/docs/build
+cp -r docs/build/html /tmp/${DIR}/docs/build/html
 pushd .
 cd /tmp/
 # The \* tells zip to ignore recursively
