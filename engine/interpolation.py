@@ -59,8 +59,10 @@ def interpolate_raster_vector_points(R, V, name=None):
     for i in range(N):
         attributes[i][name] = values[i]
 
-    return Vector(data=attributes, projection=V.get_projection(),
-                  geometry=coordinates)
+    return Vector(data=attributes,
+                  projection=V.get_projection(),
+                  geometry=coordinates,
+                  name=V.get_name())
 
 
 def interpolate_raster_vector(R, V, name=None):

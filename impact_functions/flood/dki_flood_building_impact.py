@@ -26,7 +26,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     #    self.plugin_name = _('Temporarily Closed')
 
     def run(self, layers):
-        """Risk plugin for tsunami population
+        """Risk plugin for flood building impact
         """
 
         threshold = 1.0  # Flood threshold [m]
@@ -34,9 +34,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Extract data
         H = get_hazard_layer(layers)    # Depth
         E = get_exposure_layer(layers)  # Building locations
-
-        # FIXME (Ole): interpolate does not carry original name through,
-        # so get_name gives "Vector Layer" :-)
 
         # Interpolate hazard level to building locations
         I = H.interpolate(E, name='depth')
