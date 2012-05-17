@@ -67,4 +67,9 @@ class ISHelp(QtGui.QDialog):
                                             self.context + '.html'))
             if os.path.isfile(myContextPath):
                 myPath = myContextPath
+        if not os.path.isfile(myPath):
+            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
+            (self.tr('Documentation could not be found at:\n'
+                      '%s' % myPath)))
+            return
         self.ui.webView.setUrl(QtCore.QUrl('file:///' + myPath))
