@@ -39,7 +39,8 @@ from is_safe_interface import (availableFunctions,
 from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
 from is_exceptions import (KeywordNotFoundException,
-                            HashNotFoundException)
+                            HashNotFoundException,
+                            InvalidParameterException)
 from is_map import ISMap
 from is_utilities import (getTempDir,
                           htmlHeader,
@@ -1107,7 +1108,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                        '<td>' + myKeywords[myKeyword] + '</td>'
                                      '</tr>')
                     myReport += '</table>'
-            except (KeywordNotFoundException, HashNotFoundException), e:
+            except (KeywordNotFoundException, HashNotFoundException,
+                    InvalidParameterException), e:
                 myReport = ('<span class="label label-important">' +
                            self.tr('No keywords') + '</span><div>')
                 myReport += self.tr('No keywords have been defined'
