@@ -66,7 +66,7 @@ def unique_filename(**kwargs):
 
     path = None
     if 'dir' not in kwargs:
-        user = getpass.getuser().replace(' ','_')
+        user = getpass.getuser().replace(' ', '_')
         current_date = date.today()
         date_string = current_date.strftime("%d-%m-%Y")
         path = os.path.dirname(filename)
