@@ -66,7 +66,7 @@ def unique_filename(**kwargs):
 
     path = None
     if 'dir' not in kwargs:
-        user = getpass.getuser()
+        user = getpass.getuser().replace(' ','_')
         current_date = date.today()
         date_string = current_date.strftime("%d-%m-%Y")
         path = os.path.dirname(filename)
@@ -75,10 +75,10 @@ def unique_filename(**kwargs):
     if not os.path.exists(kwargs['dir']):
         # Ensure that the dir mask won't conflict with the mode
         # Umask sets the new mask and returns the old
-        umask = os.umask(0o000)
+        umask = os.umask(0000)
         # Ensure that the dir is world writable by explictly setting mode
-        os.makedirs(kwargs['dir'], 0o777)
-        # resinstate the old mask for tmp dir
+        os.makedirs(kwargs['dir'], 0777)
+        # reinstate the old mask for tmp dir
         os.umask(umask)
     # Now we have the working dir set up go on and return the filename
     handle, filename = mkstemp(**kwargs)

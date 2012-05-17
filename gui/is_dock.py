@@ -397,7 +397,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getLayers()
 
     @pyqtSlot()
-    def layersAdded(self, theLayers):
+    def layersAdded(self, theLayers=None):
         """Slot for the new (QGIS 1.8 and beyond api) to notify us when
         a group of layers is are added. This is optimal since if many layers
         are added this slot gets called only once. This slot simply
