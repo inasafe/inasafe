@@ -72,5 +72,5 @@ class ISHelp(QtGui.QDialog):
             (self.tr('Documentation could not be found at:\n'
                       '%s' % myPath)))
         self.ui.webView.settings().setAttribute(
-            QtWebKit.QWebSettings.WebAttribute.DeveloperExtrasEnabled, True)
+            QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
         self.ui.webView.setUrl(QtCore.QUrl('file:///' + myPath))
