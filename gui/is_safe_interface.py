@@ -149,20 +149,26 @@ def getOptimalExtent(theHazardGeoExtent,
 def getBufferedExtent(theGeoExtent, theCellSize):
     """Grow bounding box with one unit of resolution in each direction.
 
-    Input
-        theGeoExtent - Bounding box with format [W, S, E, N]
-        theCellSize - (resx, resy) Raster resolution in each direction.
+    Args:
+
+        * theGeoExtent - Bounding box with format [W, S, E, N]
+        * theCellSize - (resx, resy) Raster resolution in each direction.
 
         If resolution is None bbox is returned unchanged.
 
-    Ouput
+    Returns:
         Adjusted bounding box
 
+    Raises:
+
+        Any exceptions are propogated
     Note: See docstring for underlying function buffered_bounding_box
           for more details.
     """
-
-    return buffered_bounding_box(theGeoExtent, theCellSize)
+    try:
+        return buffered_bounding_box(theGeoExtent, theCellSize)
+    except:
+        raise
 
 
 def availableFunctions(theKeywordList=None):
@@ -191,11 +197,14 @@ def availableFunctions(theKeywordList=None):
     Raises:
        NoFunctionsFoundException if no functions are found.
     """
-    myDict = get_admissible_plugins(theKeywordList)
-    #if len(myDict) < 1:
-    #    myMessage = 'No InaSAFE impact functions could be found'
-    #    raise NoFunctionsFoundException(myMessage)
-    return myDict
+    try:
+        myDict = get_admissible_plugins(theKeywordList)
+        #if len(myDict) < 1:
+        #    myMessage = 'No InaSAFE impact functions could be found'
+        #    raise NoFunctionsFoundException(myMessage)
+        return myDict
+    except:
+        raise
 
 
 def readKeywordsFromLayer(theLayer, keyword):
@@ -303,12 +312,15 @@ def writeKeywordsToFile(theFilename, theKeywords):
     Returns:
         A safe readSafeLayer object is returned.
     Raises:
-        None
+        Any exceptions are propogated
     """
     myBasename, myExtension = os.path.splitext(theFilename)
     if 'keywords' not in myExtension:
         theFilename = myBasename + '.keywords'
-    safe_write_keywords(theKeywords, theFilename)
+    try:
+        safe_write_keywords(theKeywords, theFilename)
+    except:
+        raise
 
 
 def getStyleInfo(theLayer):
@@ -364,9 +376,12 @@ def readSafeLayer(thePath):
     Returns:
         A safe readSafeLayer object is returned.
     Raises:
-        None
+        Any exceptions are propogated
     """
-    return safe_read_layer(makeAscii(thePath))
+    try:
+        return safe_read_layer(makeAscii(thePath))
+    except:
+        raise
 
 
 def getSafeImpactFunctions(theFunction=None):
@@ -378,9 +393,12 @@ def getSafeImpactFunctions(theFunction=None):
     Returns:
         A safe impact function is returned
     Raises:
-        None
+        Any exceptions are propogated
     """
-    return safe_get_plugins(makeAscii(theFunction))
+    try:
+        return safe_get_plugins(makeAscii(theFunction))
+    except:
+        raise
 
 
 def calculateSafeImpact(theLayers, theFunction):
@@ -393,6 +411,9 @@ def calculateSafeImpact(theLayers, theFunction):
     Returns:
         A safe impact function is returned
     Raises:
-        None
+        Any exceptions are propogated
     """
-    return safe_calculate_impact(theLayers, theFunction)
+    try:
+        return safe_calculate_impact(theLayers, theFunction)
+    except:
+        raise
