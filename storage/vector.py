@@ -411,7 +411,18 @@ class Vector:
                     geometry.append(numpy.array(coordinates,
                                                 dtype='d',
                                                 copy=False))
-                #elif self.geometry_type == ogr.wkbMultiPolygon:
+                elif self.geometry_type == ogr.wkbMultiPolygon:
+                    msg = ('Got geometry type Multipolygon (%s) for filename %s '
+                           'which is not yet supported.'
+                           'Only point, line and polygon geometries are '
+                           'supported. '
+                           'However, you can use QGIS functionality to convert multipart vector '
+                           'data to singlepart (Vector -> Geometry Tools -> Multipart to Singleparts'
+                           'and use the resulting dataset.'
+                           % (ogr.wkbMultiPolygon,
+                              filename))
+                    raise Exception(msg)
+
                 #    # FIXME: Unpact multiple polygons to simple polygons
                 #    # For hints on how to unpack see
 #http://osgeo-org.1803224.n2.nabble.com/
