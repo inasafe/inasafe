@@ -8,8 +8,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """Risk plugin for flood impact on building data
 
     :param requires category=='hazard' and \
-                    subcategory=='flood' and \
-                    layertype=='raster'
+                    subcategory=='flood'
 
     :param requires category=='exposure' and \
                     subcategory=='building' and \
@@ -18,7 +17,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'AFFECTED'
-    plugin_name = _('unavailable to DKI')
+    plugin_name = _('Be unavailable to DKI')
 
     # Is never called but would be nice to do here
     #def __init__(self):
@@ -36,7 +35,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        I = H.interpolate(E, attribute_name='depth')
+        # FIXME (Ole): How can we reconsile these?
+        if H.is_raster:
+            I = H.interpolate(E, attribute_name='depth')
+        else:
+            I = H.interpolate(E)
 
         # Extract relevant numerical data
         attributes = I.get_data()
@@ -47,7 +50,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         # Calculate population impact
         count = 0
-        building_impact = []
+        buildings = {}
+        affected_buildings = {}
         for i in range(N):
             if H.is_raster:
                 # Get the interpolated depth
@@ -55,40 +59,79 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 x = x > threshold
             elif H.is_vector:
                 # Use interpolated polygon attribute
-                x = attributes[i]['Affected']
+                res = attributes[i]['FLOODPRONE']
+                if res is None:
+                    x = False
+                else:
+                    x = (res.lower() == 'yes')
 
-            #print 'Type', i, attributes[i]['type']
-            # Tag and count
+            usage = attributes[i]['type']
+            if usage is not None and usage != 0:
+                key = usage
+            else:
+                key = 'unknown'
+
+            if key not in buildings:
+                buildings[key] = 0
+                affected_buildings[key] = 0
+
+            # Count all buildings by type
+            buildings[key] += 1
+            if x is True:
+                # Count affected buildings by type
+                affected_buildings[key] += 1
+
+            # Count total
             if x is True:
                 count += 1
-            else:
-                pass
 
             # Add calculated impact to existing attributes
-            # FIXME (Ole): Do it like this in all impact functions
             attributes[i][self.target_field] = x
+
+        # Lump small entries and 'unknown' into 'other' category
+        for usage in buildings.keys():
+            x = buildings[usage]
+            if x < 25 or usage == 'unknown':
+                if 'other' not in buildings:
+                    buildings['other'] = 0
+                    affected_buildings['other'] = 0
+
+                buildings['other'] += x
+                affected_buildings['other'] += affected_buildings[usage]
+                del buildings[usage]
+                del affected_buildings[usage]
+
+
+        print 'Building usage types'
+        for usage in buildings:
+            print usage, buildings[usage], affected_buildings[usage]
+
 
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
         impact_summary = _('<b>In case of "%s" the estimated impact to "%s" '
-                   'the possibility of &#58;</b><br><br><p>' % (Hname,
-                                                                Ename))
-        impact_summary += ('<table border="0" width="320px">'
-                   '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
-                    '   <tr></tr>'
-                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                    '</table>' % (_('Building'), _('Number of'),
-                                  _('All'), N,
-                                  _('Closed'), count,
-                                  _('Opened'), N - count))
+                           'the possibility of &#58;</b><br><br><p>' % (Hname,
+                                                                        Ename))
+        impact_summary += ('<table class="table table-striped condensed'
+                           ' bordered-table">'
+                           '   <tr><th><b>%s</b></th>'
+                           '<th><b>%s</b></th>'
+                           '<th><b>%s</b></th></tr>'
+                           '   <tr></tr>'
+                           % (_('Building type'), _('Flooded'), _('Total')))
+
+        for usage in buildings:
+            s = ('   <tr><td>%s&#58;</td><td>%i</td><td>%i</td></tr>'
+                 % (usage, affected_buildings[usage], buildings[usage]))
+            impact_summary += s
+
+        impact_summary += '</table>'
 
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _('Buildings that will need to closed when flooding'
-                   'more than %.1f m' % threshold)
+        impact_summary += _('Buildings will need to be closed when flooding '
+                            ' levels exceed %.1f m' % threshold)
 
         # Create style
         style_classes = [dict(label=_('Opened'), min=0, max=0,
@@ -100,8 +143,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         # Create vector layer and return
         V = Vector(data=attributes,
-                   projection=E.get_projection(),
-                   geometry=E.get_geometry(),
+                   projection=I.get_projection(),
+                   geometry=I.get_geometry(),
                    name=_('Estimated buildings affected'),
                    keywords={'impact_summary': impact_summary},
                    style_info=style_info)
