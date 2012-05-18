@@ -618,7 +618,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         try:
             self.keywordIO.writeKeywords(self.layer, myKeywords)
         except Exception, e:
-            QtGui.QMessageBox.warning(self, self.tr('Risk in a box'),
+            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
             ((self.tr('An error was encountered when saving the keywords:\n'
                       '%s' % str(getExceptionWithStacktrace(e))))))
         if self.dock is not None:
