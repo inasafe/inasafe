@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0-alpha'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -23,7 +23,7 @@ import os
 
 def name():
     """A user friendly name for the plugin."""
-    return 'InaSAFE-dev'
+    return 'InaSAFE'
 
 
 def description():
@@ -34,13 +34,14 @@ def description():
 
 def version():
     """Version of the plugin."""
-    return 'Version 0.3.0-alpha'
+    return 'Version 0.4.0'
 
 
 def icon():
-    """Icon path for the plugin."""
-    return os.path.join(os.path.dirname(__file__), 'gui', 'resources',
+    """Icon path for the plugin - metadata.txt it will override this"""
+    myPath = os.path.join(os.path.dirname(__file__), 'gui', 'resources',
                         'img', 'icon.png')
+    return myPath
 
 
 def qgisMinimumVersion():

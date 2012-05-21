@@ -27,7 +27,7 @@ class Test_real_plugins(unittest.TestCase):
         # NOTE: These are hardwired tests that will need to change
         # when impact functions change.
         assert 'Earthquake Guidelines Function' in P
-        assert 'be damaged' in P
+        assert 'Be damaged according to building type' in P
         assert 'Temporarily Closed' in P
         assert 'Earthquake Population Exposure Function' in P
         assert 'Tsunami Population Impact Function' in P
@@ -40,6 +40,7 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Flood Road Impact Function' in P
         assert 'Dalam bahaya' in P
         assert 'U S G S Fatality Function' in P
+        assert 'I T B Earthquake Building Damage Function' in P
         assert 'Earthquake Fatality Function Podes' in P
         assert 'Terdampak' in P
         assert 'Meninggal' in P
@@ -59,7 +60,7 @@ class Test_real_plugins(unittest.TestCase):
         P = get_admissible_plugins([D1, D2])
         assert len(P) >= 2  # Depending on other tests there could be more
         assert 'Earthquake Guidelines Function' in P
-        assert 'be damaged' in P
+        assert 'Be damaged according to building type' in P
 
         # This one should get 3 flood population impact functions
         D1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}

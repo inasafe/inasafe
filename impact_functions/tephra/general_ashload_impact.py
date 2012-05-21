@@ -29,7 +29,7 @@ class TephraImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E, 'load')
+        H = H.interpolate(E, attribute_name='load')
 
         # Calculate building damage
         count3 = 0

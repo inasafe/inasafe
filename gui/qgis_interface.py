@@ -17,7 +17,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
                  'Copyright (c) 2011 German Carrillo, '
@@ -50,6 +51,10 @@ class QgisInterface(QObject):
 
     def zoomToNext(self):
         """Zoom to next view extent"""
+        pass
+
+    def zoomToActiveLayer(self):
+        """Zoom to extent of active layer"""
         pass
 
     def addVectorLayer(self, vectorLayerPath, baseName, providerKey):

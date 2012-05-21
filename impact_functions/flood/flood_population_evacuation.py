@@ -58,9 +58,10 @@ class FloodEvacuationFunction(FunctionProvider):
             I = numpy.where(D > threshold, P, 0)
 
         # Generate text with result for this study
-        total = str(int(numpy.sum(P) / 1000))
-        number_of_people_affected = int(numpy.sum(I) / 1000)
-        count = str(number_of_people_affected)
+        total = int(numpy.sum(P))
+        number_of_people_affected = int(numpy.sum(I))
+        total1000 = str(total / 1000)
+        count1000 = str(number_of_people_affected / 1000)
 
         # Create report
         iname = inundation.get_name()
@@ -71,7 +72,7 @@ class FloodEvacuationFunction(FunctionProvider):
         impact_summary += ('<table border="0" width="320px">')
         impact_summary += ('   <tr><td><b>%s&#58;</b></td>'
                     '<td align="right"><b>%s</b></td></tr>'
-                    % ('Perlu Evakuasi (x 1000)', count))
+                    % ('Perlu Evakuasi (x 1000)', count1000))
 
         impact_summary += '</table>'
 
@@ -121,7 +122,7 @@ class FloodEvacuationFunction(FunctionProvider):
         impact_summary += impact_table
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>Catatan&#58;</b><br>'
-        impact_summary += '- Jumlah penduduk Jakarta %s<br>' % total
+        impact_summary += '- Jumlah penduduk Jakarta %s<br>' % total1000
         impact_summary += '- Jumlah dalam ribuan<br>'
         impact_summary += ('- Penduduk perlu dievakuasi ketika '
                     'banjir lebih dari %i m.<br>' % threshold)

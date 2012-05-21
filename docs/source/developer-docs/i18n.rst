@@ -2,6 +2,41 @@
 Internationalisation Support
 ============================
 
+This document is divided into three parts:
+
+* Quick reference - use this is you just want to quickly remember how to mark
+  a word or phrase for translation
+* QGIS Plugin - this is in-depth information on how the translation framework
+  is set up for Qt based code components
+* Library - this is in-depth information on how the translation framework is
+  set up for the pure python library implementation.
+
+Quick Reference
+---------------
+
+*Only* for the modules under gui.
+
+* Classes and anonymous functions that do not inherit QObject should use 
+  the format :samp:`QCoreApplication.translate('Riab', 'Translations loaded')`
+* Classes that inherit QObject should use the form :samp:`self.tr('foo')`
+
+*Only* for the modules under *not* under gui. 
+
+* Import the gettext helper e.g::
+
+   `from storage.utilities import ugettext as _`
+
+* All strings should be wrapped using the _ helper e.g. :samp:`foo = _('bar')`
+* The library will use at run-time the :samp:`LANG` environment variable which 
+  should be set to the iso code e.g. 'id' for 'Indonesia' of the Locale
+  you wish to use. This is done automatically for you by the QGIS Plugin, but
+  if you are using the riab library in another context, be sure to set it before 
+  using any libary functions if you want them to return translated strings e.g.::
+  
+      os.environ['LANG'] = 'id'
+      # do stuff with riab lib
+
+
 QGIS Plugin
 -----------
 
@@ -27,7 +62,7 @@ As developer, before a release you should do:
 
 .. note:: Translators should take heed - when refreshing the .ts file in
    QtLinguist, the file *must be closed* (:menuselection:`File --> Close`) and
-   then reopened. Simply loading doing (:menuselection:`File --< Open`) and
+   then reopened. Simply loading doing (:menuselection:`File --> Open`) and
    choosing the same file you already have in the workspace will not refresh the
    workspace with any new changes that appeared on disk.
 
@@ -36,15 +71,6 @@ As developer, before a release you should do:
    you can safely run it as many times as you like, new strings will be added
    to it, deprecated strings will be left in place and already translated
    strings will remain translated.
-
-Rules of the road for developers
-................................
-
-These notes relate *only* to the modules under gui.
-
-* Classes and anonymous functions that do not inherit QObject should use 
-  the format :samp:`QCoreApplication.translate('Riab', 'Translations loaded')`
-* Classes that inherit QObject should use the form :samp:`self.tr('foo')`
 
 
 Adding a new language
@@ -136,25 +162,6 @@ As developer, before a release you should do:
    to it, deprecated strings will be left in place and already translated
    strings will remain translated.
 
-Rules of the road for developers
-................................
-
-These notes relate *only* to the modules under *not* under gui. See the gui
-section at the start of this document for notes on what to do in the gui module. 
-
-* Import the gettext helper e.g::
-
-   `from storage.utilities import ugettext as _`
-
-* All strings should be wrapped using the _ helper e.g. :samp:`foo = _('bar')`
-* The library will use at run-time the :samp:`LANG` environment variable which 
-  should be set to the iso code e.g. 'id' for 'Indonesia' of the Locale
-  you wish to use. This is done automatically for you by the QGIS Plugin, but
-  if you are using the riab library in another context, be sure to set it before 
-  using any libary functions if you want them to return translated strings e.g.::
-  
-      os.environ['LANG'] = 'id'
-      # do stuff with riab lib
 
 
 Adding a new language

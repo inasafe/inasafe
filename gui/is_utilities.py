@@ -12,7 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
@@ -21,6 +22,8 @@ import os
 import sys
 import traceback
 import tempfile
+import getpass
+from datetime import date
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QGis,
@@ -268,17 +271,24 @@ def getTempDir(theSubDirectory=None):
     Raises:
        Any errors from the underlying system calls.
     """
-    myDir = tempfile.gettempdir()
-    if os.name is 'nt':  # Windows
-        myDir = 'c://temp'
-    elif os.name is 'posix':  # linux, osx
-        myDir = '/tmp'
-    myPath = os.path.join(myDir, 'inasafe')
+    myUser = getpass.getuser().replace(' ', '_')
+    myCurrentDate = date.today()
+    myDateString = myCurrentDate.strftime("%d-%m-%Y")
+    # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
+    myHandle, myFilename = tempfile.mkstemp()
+    os.close(myHandle)
+    myDir = os.path.dirname(myFilename)
+    os.remove(myFilename)
+    myPath = os.path.join(myDir, 'inasafe', myDateString, myUser, 'work')
     if theSubDirectory is not None:
         myPath = os.path.join(myPath, 'theSubDirectory')
     if not os.path.exists(myPath):
-        os.makedirs(myPath)
-
+        # Ensure that the dir is world writable
+        # Umask sets the new mask and returns the old
+        myOldMask = os.umask(0000)
+        os.makedirs(myPath, 0777)
+        # Resinstate the old mask for tmp
+        os.umask(myOldMask)
     return myPath
 
 

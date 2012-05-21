@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -243,6 +243,11 @@ class ISDockTest(unittest.TestCase):
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
+        DOCK.runInThreadFlag = False
+        DOCK.showOnlyVisibleLayersFlag = False
+        DOCK.setLayerNameFromTitleFlag = False
+        DOCK.zoomToImpactFlag = False
+        DOCK.hideExposureFlag = False
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -792,11 +797,10 @@ class ISDockTest(unittest.TestCase):
                           'Exposure': 'Population Density Estimate (5kmx5km)'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'
                      '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-                        DOCK.cboExposure.currentText(),
-                        myDict,
-                        myExpectedDict,
-                        combosToString(DOCK)
-                        )
+            DOCK.cboExposure.currentText(),
+            myDict,
+            myExpectedDict,
+            combosToString(DOCK))
 
         assert myExpectedDict == myDict, myMessage
 
@@ -845,11 +849,10 @@ class ISDockTest(unittest.TestCase):
                           'Exposure': 'Population Density Estimate (5kmx5km)'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'
                      '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-                        DOCK.cboExposure.currentText(),
-                        myDict,
-                        myExpectedDict,
-                        combosToString(DOCK)
-                        )
+            DOCK.cboExposure.currentText(),
+            myDict,
+            myExpectedDict,
+            combosToString(DOCK))
 
         assert myExpectedDict == myDict, myMessage
 
@@ -883,7 +886,8 @@ class ISDockTest(unittest.TestCase):
         assert myExpectedDict == myResultDict, myMessage
 
         # corner case test when two layers can have the
-        # same functions
+        # same functions - when switching layers the selected function should
+        # remain unchanged
         self.tearDown()
         myFileList = ['Flood_Design_Depth_Jakarta_geographic.asc',
                       'Flood_Current_Depth_Jakarta_geographic.asc',
@@ -891,18 +895,23 @@ class ISDockTest(unittest.TestCase):
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        DOCK.cboHazard.setCurrentIndex(0)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
-        # will need to udpate this when localisation is set up nicely
-        myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function': 'Terdampak',
-                          'Hazard': 'Banjir Jakarta seperti 2007',
-                          'Exposure': 'Penduduk Jakarta'}
-        myDict = getUiState(DOCK)
-        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-                            myDict, myExpectedDict, combosToString(DOCK))
-        assert myExpectedDict == myDict, myMessage
+        myExpectedFunction = str(DOCK.cboFunction.currentText())
+        # now move down one hazard in the combo then verify
+        # the function remains unchanged
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        myCurrentFunction = str(DOCK.cboFunction.currentText())
+        myMessage = ('Expected selected impact function to remain unchanged '
+                     'when choosing a different hazard of the same category:'
+                    ' %s\nExpected: %s\n%s' % (
+                    myExpectedFunction,
+                    myCurrentFunction,
+                    combosToString(DOCK)))
+
+        assert myExpectedFunction == myCurrentFunction, myMessage
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
         # selected function should remain the same

@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -37,7 +37,8 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
           supports thread termination which python threading doesnt seem to do.
           Also see the techbase article below for emitting signals across
           threads using Qt.QueuedConnection.
-          http://techbase.kde.org/Development/Tutorials/Python_introduction_to_signals_and_slots
+          http://techbase.kde.org/Development/Tutorials/
+          Python_introduction_to_signals_and_slots
     """
     done = pyqtSignal()
     """Users of this of this class can listen for signals indicating
@@ -51,7 +52,9 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
        Prints 'hello' to the console
 
        .. seealso::
-          http://techbase.kde.org/Development/Tutorials/Python_introduction_to_signals_and_slots
+          http://techbase.kde.org/Development/Tutorials/
+          Python_introduction_to_signals_and_slots
+
           for an alternative (maybe nicer?) approach.
        """
 

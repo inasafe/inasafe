@@ -23,7 +23,7 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
-from engine.numerics import cdf
+from engine.numerics import lognormal_cdf
 from impact_functions.mappings import osm2padang, sigab2padang
 
 
@@ -52,14 +52,8 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     layertype=='vector' and \
                     datatype in ['osm', 'itb', 'sigab']
     """
-    plugin_name = 'be damaged'
-    # FIXME (TD): make the plugin_name work
-    # U just need to restart QGIS :-)
-    # Anyway, we are onto something better where
-    # more than one plugin can have the same title - e.g.
-    # perlu evacuasi for both population and poor households.
-    # Watch this space. (OLe)
-    #plugin_name = "My Padang Test Function 4"
+
+    plugin_name = 'Be damaged according to building type'
 
     def run(self, layers):
         """Risk plugin for Padang building survey
@@ -72,24 +66,25 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
         datatype = E.get_keywords()['datatype']
         if datatype.lower() == 'osm':
             # Map from OSM attributes to the padang building classes
-            Em = osm2padang(E)
+            Emap = osm2padang(E)
             vclass_tag = 'VCLASS'
         elif datatype.lower() == 'sigab':
-            Em = sigab2padang(E)
+            Emap = sigab2padang(E)
             vclass_tag = 'VCLASS'
         else:
-            vclass_tag = 'TestBLDGCl'
+            Emap = E
+            vclass_tag = 'VCLASS'
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(Em)
+        Hi = H.interpolate(Emap, attribute_name='MMI')
 
         # Extract relevant numerical data
-        coordinates = Em.get_geometry()
+        coordinates = Emap.get_geometry()
         shaking = Hi.get_data()
         N = len(shaking)
 
         # List attributes to carry forward to result layer
-        attributes = Em.get_attribute_names()
+        attributes = Emap.get_attribute_names()
 
         # Calculate building damage
         count50 = 0
@@ -98,15 +93,17 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
         count0 = 0
         building_damage = []
         for i in range(N):
-            mmi = float(shaking[i].values()[0])
+            mmi = float(shaking[i]['MMI'])
 
-            building_class = Em.get_data(vclass_tag, i)
+            building_class = Emap.get_data(vclass_tag, i)
 
             building_type = str(int(building_class))
             damage_params = damage_curves[building_type]
             beta = damage_params['beta']
             median = damage_params['median']
-            percent_damage = cdf(mmi, mu=median, sigma=beta) * 100
+            percent_damage = lognormal_cdf(mmi,
+                                           median=median,
+                                           sigma=beta) * 100
 
             # Collect shake level and calculated damage
             result_dict = {self.target_field: percent_damage,
@@ -114,11 +111,12 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
 
             # Carry all orginal attributes forward
             for key in attributes:
-                result_dict[key] = Em.get_data(key, i)
+                result_dict[key] = Emap.get_data(key, i)
 
             # Record result for this feature
             building_damage.append(result_dict)
 
+            # Debugging
             #if percent_damage > 0.01:
             #    print mmi, percent_damage
 

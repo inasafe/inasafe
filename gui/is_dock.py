@@ -13,7 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -38,7 +39,8 @@ from is_safe_interface import (availableFunctions,
 from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
 from is_exceptions import (KeywordNotFoundException,
-                            HashNotFoundException)
+                            HashNotFoundException,
+                            InvalidParameterException)
 from is_map import ISMap
 from is_utilities import (getTempDir,
                           htmlHeader,
@@ -100,6 +102,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
         self.setLayerNameFromTitleFlag = True
+        self.zoomToImpactFlag = True
+        self.hideExposureFlag = True
         self.hazardLayers = None  # array of all hazard layers
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()  # getLayers called by this
@@ -143,6 +147,14 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myFlag = mySettings.value(
                         'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.setLayerNameFromTitleFlag = myFlag
+
+        myFlag = mySettings.value(
+                            'inasafe/setZoomToImpactFlag', True).toBool()
+        self.zoomToImpactFlag = myFlag
+        # whether exposure layer should be hidden after model completes
+        myFlag = mySettings.value(
+                            'inasafe/setHideExposureFlag', False).toBool()
+        self.hideExposureFlag = myFlag
 
         self.getLayers()
 
@@ -386,7 +398,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getLayers()
 
     @pyqtSlot()
-    def layersAdded(self, theLayers):
+    def layersAdded(self, theLayers=None):
         """Slot for the new (QGIS 1.8 and beyond api) to notify us when
         a group of layers is are added. This is optimal since if many layers
         are added this slot gets called only once. This slot simply
@@ -752,8 +764,15 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myMessage = self.tr('Impact layer %s was neither a raster or a '
                    'vector layer' % myQgisImpactLayer.source())
             raise Exception(myMessage)
-        # Finally, add layer to QGIS
+        # Add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
+        # then zoom to it
+        if self.zoomToImpactFlag:
+            self.iface.zoomToActiveLayer()
+        if self.hideExposureFlag:
+            myExposureLayer = self.getExposureLayer()
+            myLegend = self.iface.legendInterface()
+            myLegend.setLayerVisible(myExposureLayer, False)
         self.restoreState()
         # Return text to display in report pane
         return myReport
@@ -1075,7 +1094,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myKeywords = self.keywordIO.readKeywords(theLayer)
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
+                    self.pbnPrint.setEnabled(True)
                 else:
+                    self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
                         myReport += ('<tr>'
                                      # FIXME (Ole): Not sure if this will work
@@ -1087,7 +1108,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                        '<td>' + myKeywords[myKeyword] + '</td>'
                                      '</tr>')
                     myReport += '</table>'
-            except (KeywordNotFoundException, HashNotFoundException), e:
+            except (KeywordNotFoundException, HashNotFoundException,
+                    InvalidParameterException), e:
                 myReport = ('<span class="label label-important">' +
                            self.tr('No keywords') + '</span><div>')
                 myReport += self.tr('No keywords have been defined'
@@ -1105,9 +1127,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myReport += getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
-                self.pbnPrint.setEnabled(True)
-            else:
-                self.pbnPrint.setEnabled(False)
 
     def saveState(self):
         """Save the current state of the ui to an internal class member
@@ -1191,20 +1210,18 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         try:
             myMap.makePdf(myFilename)
             self.showBusy(self.tr('Map Creator'),
-                             self.tr('Your PDF was created....opening using '
-                                     'the default PDF viewer on your system.'
-                                     'The generated pdf is saved as: %s' %
-                                     myFilename),
-                             theProgress=80
-                             )
+                          self.tr('Your PDF was created....opening using '
+                                  'the default PDF viewer on your system.'
+                                  'The generated pdf is saved as: %s' %
+                                  myFilename),
+                          theProgress=80)
             QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
                                  QtCore.QUrl.TolerantMode))
             self.showBusy(self.tr('Map Creator'),
-                             self.tr('Processing complete.'
-                                     'The generated pdf is saved as: %s' %
-                                     myFilename),
-                             theProgress=100
-                             )
+                          self.tr('Processing complete.'
+                                  'The generated pdf is saved as: %s' %
+                                  myFilename),
+                          theProgress=100)
         except Exception, e:
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:

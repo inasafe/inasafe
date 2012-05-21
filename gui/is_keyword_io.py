@@ -12,7 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 import is_safe_interface
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
@@ -94,10 +95,8 @@ class ISKeywordIO(QObject):
             else:
                 myKeywords = self.readKeywordFromUri(mySource, theKeyword)
             return myKeywords
-        except KeywordNotFoundException, e:
-            raise KeywordNotFoundException(e)
-        except Exception, e:
-            raise e
+        except Exception:
+            raise
 
     def writeKeywords(self, theLayer, theKeywords):
         """Write keywords for a datasource.
@@ -278,14 +277,14 @@ class ISKeywordIO(QObject):
             myData = myCursor.fetchone()
             #print "Tables: %s" % myData
             if myData is None:
-                print 'No tables found'
+                #print 'No tables found'
                 mySQL = ('create table keyword (hash varchar(32) primary key,'
                          'dict text);')
                 print mySQL
                 myCursor.execute(mySQL)
                 myData = myCursor.fetchone()
             else:
-                print 'Keywords table already exists'
+                #print 'Keywords table already exists'
                 pass
             return myCursor
         except sqlite.Error, e:

@@ -13,11 +13,12 @@ from engine.core import calculate_impact
 from engine.interpolation2d import interpolate_raster
 from engine.polygon import separate_points_by_polygon, clip_lines_by_polygon
 from engine.polygon import is_inside_polygon
-from engine.numerics import cdf, erf, ensure_numeric
+from engine.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from storage.core import read_layer
 
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
 from storage.utilities import VerificationError
+from storage.utilities import nanallclose
 from storage.core import write_vector_data
 from storage.core import write_raster_data
 from storage.vector import Vector
@@ -166,10 +167,77 @@ class Test_Engine(unittest.TestCase):
         assert numpy.alltrue(C <= xmax)
         assert numpy.alltrue(C >= 0)
 
+    def test_ITB_earthquake_fatality_estimation(self):
+        """Fatalities from ground shaking can be computed correctly
+           using the ITB fatality model (Test data from Hadi Ghasemi).
+        """
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
+        exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
+        fatality_filename = '%s/itb_test_fat.asc' % TESTDATA
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        plugin_name = 'I T B Fatality Function'
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+        I = read_layer(impact_filename)
+        calculated_result = I.get_data()
+
+        keywords = I.get_keywords()
+        population = float(keywords['total_population'])
+        fatalities = float(keywords['total_fatalities'])
+
+        # Check aggregated values
+        expected_population = 85424650
+        msg = ('Expected population was %f, I got %f'
+               % (expected_population, population))
+        assert population == expected_population, msg
+
+        expected_fatalities = 40871.3028
+        msg = ('Expected fatalities was %f, I got %f'
+               % (expected_fatalities, fatalities))
+        assert numpy.allclose(fatalities, expected_fatalities,
+        rtol=1.0e-5), msg
+
+        # Compare with reference data
+        F = read_layer(fatality_filename)
+        fatality_result = F.get_data()
+
+        msg = ('Calculated fatality map did not match expected result: '
+               'I got %s\n'
+               'Expected %s' % (calculated_result, fatality_result))
+        assert nanallclose(calculated_result, fatality_result,
+                           rtol=1.0e-4), msg
+
+        # Check for expected numbers (from Hadi Ghasemi) in keywords
+        for population_count in [2649040.0, 50273440.0, 7969610.0,
+                                 19320620.0, 5211940.0]:
+            assert str(int(population_count / 1000)) in \
+                keywords['impact_summary']
+
+        for fatality_count in [31.8937368131, 2539.26369372,
+                               1688.72362573, 17174.9261705, 19436.834531]:
+            assert str(int(fatality_count)) in keywords['impact_summary']
+
     def test_earthquake_fatality_estimation_ghasemi(self):
         """Fatalities from ground shaking can be computed correctly 2
            using the Hadi Ghasemi function.
         """
+
+        # FIXME (Ole): Maybe this is no longer relevant (20120501)
 
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/Earthquake_Ground_Shaking_clip.tif' % TESTDATA
@@ -374,7 +442,7 @@ class Test_Engine(unittest.TestCase):
 
             # Name file names for hazard level and exposure
             hazard_filename = '%s/%s' % (TESTDATA, mmi_filename)
-            exposure_filename = '%s/lembang_schools.shp' % TESTDATA
+            exposure_filename = '%s/test_buildings.shp' % TESTDATA
 
             # Calculate impact using API
             H = read_layer(hazard_filename)
@@ -405,7 +473,7 @@ class Test_Engine(unittest.TestCase):
             iattributes = impact_vector.get_data()
 
             # First check that interpolated MMI was done as expected
-            fid = open('%s/lembang_schools_percentage_loss_and_mmi.txt'
+            fid = open('%s/test_buildings_percentage_loss_and_mmi.txt'
                        % TESTDATA)
             reference_points = []
             MMI = []
@@ -686,7 +754,7 @@ class Test_Engine(unittest.TestCase):
         # file with UTM version (i.e. without _geographic).
         hazard_filename = os.path.join(TESTDATA,
                                        'Ashload_Gede_VEI4_geographic.asc')
-        exposure_filename = os.path.join(TESTDATA, 'lembang_schools.shp')
+        exposure_filename = os.path.join(TESTDATA, 'test_buildings.shp')
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
@@ -880,7 +948,7 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(AA, A), msg
 
         # Test riab's interpolation function
-        I = R.interpolate(V, name='value')
+        I = R.interpolate(V, attribute_name='value')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
 
@@ -907,7 +975,7 @@ class Test_Engine(unittest.TestCase):
 
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/lembang_mmi_hazmap.asc' % TESTDATA
-        exposure_filename = '%s/lembang_schools.shp' % TESTDATA
+        exposure_filename = '%s/test_buildings.shp' % TESTDATA
 
         # Read input data
         hazard_raster = read_layer(hazard_filename)
@@ -920,13 +988,13 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = hazard_raster.interpolate(exposure_vector,
-                                      name='MMI')
+                                      attribute_name='MMI')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
 
         # Check that interpolated MMI was done as expected
-        fid = open('%s/lembang_schools_percentage_loss_and_mmi.txt' % TESTDATA)
+        fid = open('%s/test_buildings_percentage_loss_and_mmi.txt' % TESTDATA)
         reference_points = []
         MMI = []
         DAM = []
@@ -957,6 +1025,18 @@ class Test_Engine(unittest.TestCase):
             # as this was calculated using EQRM and thus different.
             assert numpy.allclose(calculated_mmi, MMI[i], rtol=0.02)
 
+            # Check that all original attributes were carried through
+            # according to issue #101
+            for key in attributes[i]:
+                msg = 'Expected key %s in interpolated attributes' % key
+                assert key in Iattributes[i], msg
+
+                Ival = Iattributes[i][key]
+                val = attributes[i][key]
+                msg = ('Interpolated attribute %s did not have the '
+                       'expected value %s. I got %s' % (key, val, Ival))
+                assert Ival == val, msg
+
     def test_interpolation_tsunami(self):
         """Interpolation using tsunami data set works
 
@@ -979,7 +1059,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = hazard_raster.interpolate(exposure_vector,
-                                      name='depth')
+                                      attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1020,8 +1100,8 @@ class Test_Engine(unittest.TestCase):
         coordinates = E.get_geometry()
         attributes = E.get_data()
 
-        # Test riab's interpolation function
-        I = H.interpolate(E, name='depth')
+        # Test the interpolation function
+        I = H.interpolate(E, attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1146,7 +1226,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -1206,7 +1286,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
         #I.write_to_file('MM_res.shp')
 
         I_geometry = I.get_geometry()
@@ -1541,7 +1621,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
@@ -1869,15 +1949,16 @@ class Test_Engine(unittest.TestCase):
                 msg = 'Missing keyword should have raised exception'
                 raise Exception(msg)
 
-    def Xtest_padang_building_examples(self):
+    def test_padang_building_examples(self):
         """Padang building impact calculation works through the API
         """
 
-        plugin_name = 'Padang Earthquake Building Damage Function'
+        #plugin_name = 'Padang Earthquake Building Damage Function'
+        plugin_name = 'Be damaged according to building type'
 
         # Test for a range of hazard layers
         for mmi_filename in ['Shakemap_Padang_2009.asc']:
-                               #'Lembang_Earthquake_Scenario.asc']:
+                             #'Lembang_Earthquake_Scenario.asc']:
 
             # Upload input data
             hazard_filename = os.path.join(TESTDATA, mmi_filename)
@@ -1929,7 +2010,7 @@ class Test_Engine(unittest.TestCase):
                                        lon, lat))
                 assert mmi_min <= calculated_mmi <= mmi_max, msg
 
-                building_class = attributes[i]['TestBLDGCl']
+                building_class = attributes[i]['VCLASS']
 
                 # Check calculated damage
                 calculated_dam = attributes[i]['DAMAGE']
@@ -1953,6 +2034,66 @@ class Test_Engine(unittest.TestCase):
 
             msg = 'Number buildings was not 3896.'
             assert count == 3896, msg
+
+    def test_itb_building_function(self):
+        """ITB building impact function works
+        """
+
+        plugin_name = 'I T B Earthquake Building Damage Function'
+
+        # Test for a range of hazard layers
+        for mmi_filename in ['Shakemap_Padang_2009.asc']:
+                             #'Lembang_Earthquake_Scenario.asc']:
+
+            # Upload input data
+            hazard_filename = os.path.join(TESTDATA, mmi_filename)
+            exposure_filename = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+
+            # Call calculation routine
+            bbox = '96.956, -5.51, 104.63933, 2.289497'
+
+            # Get layers using API
+            H = read_layer(hazard_filename)
+            E = read_layer(exposure_filename)
+
+            # Get impact function (FIXME: should be nicer)
+            plugin_list = get_plugins(plugin_name)
+            assert len(plugin_list) == 1
+            assert plugin_list[0].keys()[0] == plugin_name
+            IF = plugin_list[0][plugin_name]
+
+            # Call impact calculation engine
+            impact_vector = calculate_impact(layers=[H, E],
+                                             impact_fcn=IF)
+            impact_filename = impact_vector.get_filename()
+
+            # Extract calculated result
+            coordinates = impact_vector.get_geometry()
+            attributes = impact_vector.get_data()
+
+            # Verify calculated result
+            for i in range(len(attributes)):
+                building_class = attributes[i]['VCLASS']
+
+                # Check calculated damage
+                mmi = attributes[i]['MMI']
+                calculated_damage = attributes[i]['DAMAGE']
+
+                #print
+                #print i
+                #print 'MMI', mmi
+                #print 'DAM', calculated_damage
+
+                if i == 3895:
+                    expected_damage = 1.28296234734
+                    msg = ('Damage for MMI = %f was not as expected. '
+                           'I got %f, expected %f ' % (mmi,
+                                                       calculated_damage,
+                                                       expected_damage))
+                    assert numpy.allclose(calculated_damage,
+                                          expected_damage), msg
+
+                # FIXME(Ole): Hyeuk to put tests in here
 
     def test_flood_on_roads(self):
         """Jakarta flood impact on roads calculated correctly
@@ -2024,28 +2165,28 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Simple tests
-        x = cdf(0.0)
+        x = normal_cdf(0.0)
         r = 0.5
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
-        x = cdf(0.5)
+        x = normal_cdf(0.5)
         r = 0.69146246127401312
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
-        x = cdf(3.50)
+        x = normal_cdf(3.50)
         r = 0.99976737092096446
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
         # Out of bounds
-        x = cdf(-6)
+        x = normal_cdf(-6)
         r = 0
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
-        x = cdf(10)
+        x = normal_cdf(10)
         r = 1
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
@@ -2057,7 +2198,7 @@ class Test_Engine(unittest.TestCase):
              0.88493033, 0.91924334, 0.94520071, 0.96406968]
 
         A = (numpy.arange(20) - 10.) / 5
-        X = cdf(A)
+        X = normal_cdf(A)
         msg = ('CDF was not correct. I got %s but expected %s' %
                (str(X), str(R)))
         assert numpy.allclose(X, R, atol=1.0e-6, rtol=1.0e-12), msg
@@ -2077,25 +2218,25 @@ class Test_Engine(unittest.TestCase):
         old_numpy_setting = numpy.seterr(divide='ignore')
 
         # Simple tests
-        x = cdf(0.0, kind='lognormal')
-        r = cdf(numpy.log(0.0))
+        x = lognormal_cdf(0.0)
+        r = normal_cdf(numpy.log(0.0))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
         numpy.seterr(**old_numpy_setting)
 
-        x = cdf(0.5, kind='lognormal')
-        r = cdf(numpy.log(0.5))
+        x = lognormal_cdf(0.5)
+        r = normal_cdf(numpy.log(0.5))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
-        x = cdf(3.50, kind='lognormal')
-        r = cdf(numpy.log(3.5))
+        x = lognormal_cdf(3.50)
+        r = normal_cdf(numpy.log(3.5))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-12), msg
 
         # Out of bounds
-        x = cdf(10, kind='lognormal')
-        r = cdf(numpy.log(10))
+        x = lognormal_cdf(10)
+        r = normal_cdf(numpy.log(10))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 

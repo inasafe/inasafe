@@ -66,7 +66,7 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
             E = unspecific2bnpb(E, target_attribute=self.vclass_tag)
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E)
+        H = H.interpolate(E, attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()
@@ -83,7 +83,7 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
         count_unknown = 0
         building_damage = []
         for i in range(N):
-            mmi = float(shaking[i].values()[0])
+            mmi = float(shaking[i]['MMI'])
 
             building_class = E.get_data(self.vclass_tag, i)
             lo, hi = damage_parameters[building_class]

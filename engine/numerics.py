@@ -39,14 +39,13 @@ def ensure_numeric(A, typecode=None):
         return numpy.array(A, dtype=typecode, copy=False)
 
 
-def cdf(x, mu=0, sigma=1, kind='normal'):
+def normal_cdf(x, mu=0, sigma=1):
     """Cumulative Normal Distribution Function
 
     Input
         x: scalar or array of real numbers
         mu: Mean value. Default 0
         sigma: Standard deviation. Default 1
-        kind: Either 'normal' (default) or 'lognormal'
 
     Output
         An approximation of the cdf of the normal
@@ -57,17 +56,30 @@ def cdf(x, mu=0, sigma=1, kind='normal'):
     Source: http://en.wikipedia.org/wiki/Normal_distribution
     """
 
-    msg = 'Argument "kind" must be either normal or lognormal'
-    if kind not in ['normal', 'lognormal']:
-        raise RuntimeError(msg)
-
-    if kind == 'lognormal':
-        return cdf(numpy.log(x), mu=mu, sigma=sigma, kind='normal')
-
     arg = (x - mu) / (sigma * numpy.sqrt(2))
     res = (1 + erf(arg)) / 2
 
     return res
+
+
+def lognormal_cdf(x, median=1, sigma=1):
+    """Cumulative Log Normal Distribution Function
+
+    Input
+        x: scalar or array of real numbers
+        mu: Median (exp(mean of log(x)). Default 1
+        sigma: Log normal standard deviation. Default 1
+
+    Output
+        An approximation of the cdf of the normal
+
+    CDF of the normal distribution is defined as
+    \frac12 [1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})], x \in \R
+
+    Source: http://en.wikipedia.org/wiki/Normal_distribution
+    """
+
+    return normal_cdf(numpy.log(x), mu=numpy.log(median), sigma=sigma)
 
 
 def erf(z):

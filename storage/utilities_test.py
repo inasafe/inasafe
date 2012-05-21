@@ -22,7 +22,7 @@ DEMOREPO = 'http://www.aifdr.org/svn/%s' % DEMODATANAME
 DEMODATA = os.path.join(pardir, DEMODATANAME)
 
 # Known feature counts in test data
-FEATURE_COUNTS = {'lembang_schools.shp': 144,
+FEATURE_COUNTS = {'test_buildings.shp': 144,
                   'tsunami_exposure_BB.shp': 7529,
                   'kecamatan_geo.shp': 42,
                   'Padang_WGS84.shp': 3896,

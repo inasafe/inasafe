@@ -9,7 +9,8 @@ from tempfile import mkstemp
 import math
 from engine.numerics import ensure_numeric
 import gettext
-
+import getpass
+from datetime import date
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'Affected'
@@ -46,6 +47,11 @@ def unique_filename(**kwargs):
 
     Use mkstemp to create the file, then remove it and return the name
 
+    If dir is specified, the tempfile will be created in the path specified
+    otherwise the file will be created in a directory following this scheme:
+
+    :file:`/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'
+
     See http://docs.python.org/library/tempfile.html for details.
     """
 
@@ -58,6 +64,30 @@ def unique_filename(**kwargs):
     except:
         pass
 
+    path = None
+    if 'dir' not in kwargs:
+        user = getpass.getuser().replace(' ', '_')
+        current_date = date.today()
+        date_string = current_date.strftime("%d-%m-%Y")
+        path = os.path.dirname(filename)
+        path = os.path.join(path, 'inasafe', date_string, user, 'impacts')
+        kwargs['dir'] = path
+    if not os.path.exists(kwargs['dir']):
+        # Ensure that the dir mask won't conflict with the mode
+        # Umask sets the new mask and returns the old
+        umask = os.umask(0000)
+        # Ensure that the dir is world writable by explictly setting mode
+        os.makedirs(kwargs['dir'], 0777)
+        # Reinstate the old mask for tmp dir
+        os.umask(umask)
+    # Now we have the working dir set up go on and return the filename
+    handle, filename = mkstemp(**kwargs)
+    try:
+        # Need to close it using the filehandle first for windows!
+        os.close(handle)
+        os.remove(filename)
+    except:
+        pass
     return filename
 
 

@@ -75,7 +75,7 @@ class TsunamiBuildingLossFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E)
+        H = H.interpolate(E, attribute_name='depth')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()
@@ -89,7 +89,7 @@ class TsunamiBuildingLossFunction(FunctionProvider):
             #-------------------
             # Extract parameters
             #-------------------
-            depth = float(inundation[i].values()[0])
+            depth = float(inundation[i]['depth'])
             shore_distance = E.get_data('SHORE_DIST', i)
 
             # FIXME: Get rid of the type casting when
