@@ -35,7 +35,7 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Be temporarily closed' in P
         assert 'Earthquake Population Exposure Function' in P
         assert 'Tsunami Population Impact Function' in P
-        assert 'Perlu Evakuasi' in P
+        assert 'Need evacuation' in P
         assert 'Be affected by tsunami' in P
         assert 'Tephra Impact Function' in P
         assert 'Earthquake Fatality Function' in P
@@ -70,13 +70,13 @@ class Test_real_plugins(unittest.TestCase):
         D2['layertype'] = 'raster'
         P = get_admissible_plugins([D1, D2])
         assert len(P) >= 1  # Depending on other tests there could be more
-        assert 'Perlu Evakuasi' in P
+        assert 'Need evacuation' in P
 
         # Try form where only one dictionary is passed
         # This one gets all the flood related impact functions
         P = get_admissible_plugins(D1)
         assert len(P) >= 4
-        assert 'Perlu Evakuasi' in P
+        assert 'Need evacuation' in P
         assert 'Be temporarily closed' in P
         assert 'Flood Road Impact Function' in P
         assert 'Dalam bahaya' in P

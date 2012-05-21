@@ -6,6 +6,7 @@ from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
 from storage.utilities import ugettext as _
 
+
 class FloodEvacuationFunction(FunctionProvider):
     """Risk plugin for flood evacuation
 
