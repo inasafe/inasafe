@@ -75,8 +75,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                   _('Opened'), N - count,
                                   _('All'), N))
 
-
-
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
         impact_summary += _('Buildings will need to close if flood'
