@@ -508,7 +508,7 @@ class ISDockTest(unittest.TestCase):
         myDict = getUiState(DOCK)
 
         myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function': 'Perlu Evakuasi',
+                          'Impact Function': 'Need evacuation',
                           'Hazard': 'Banjir Jakarta seperti 2007',
                           'Exposure': 'Penduduk Jakarta'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -575,7 +575,7 @@ class ISDockTest(unittest.TestCase):
         myDict = getUiState(DOCK)
 
         myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function': 'Perlu Evakuasi',
+                          'Impact Function': 'Need evacuation',
                           'Hazard': 'Banjir Jakarta seperti 2007',
                           'Exposure': 'Population Density Estimate (5kmx5km)'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -621,7 +621,7 @@ class ISDockTest(unittest.TestCase):
         myMessage = ('Incorrect function selected - expected Terdampak,'
                      ' got %s \n%s'
                      % (myFunction, combosToString(DOCK)))
-        assert myFunction == 'Perlu Evakuasi', myMessage
+        assert myFunction == 'Need evacuation', myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
@@ -675,7 +675,7 @@ class ISDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
         myExpectedDict = {'Run Button Enabled': True,
-                        'Impact Function': 'Perlu Evakuasi',
+                        'Impact Function': 'Need evacuation',
                         'Hazard': 'Banjir Jakarta seperti 2007',
                         'Exposure': 'Penduduk Jakarta'}
         myMessage = 'Got: %s\nExpected: %s \n%s' % (
@@ -915,7 +915,7 @@ class ISDockTest(unittest.TestCase):
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
         # Selected function should remain the same
-        myExpectation = 'Perlu Evakuasi'
+        myExpectation = 'Need evacuation'
         myFunction = DOCK.cboFunction.currentText()
         myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
         assert myFunction == myExpectation, myMessage

@@ -4,7 +4,7 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
-
+from storage.utilities import ugettext as _
 
 class FloodEvacuationFunction(FunctionProvider):
     """Risk plugin for flood evacuation
@@ -22,10 +22,10 @@ class FloodEvacuationFunction(FunctionProvider):
                     datatype=='density'
     """
 
-    plugin_name = 'Perlu Evakuasi'
+    plugin_name = _('Need evacuation')
 
     def run(self, layers):
-        """Risk plugin for earthquake fatalities
+        """Impact function
 
         Input
           layers: List of layers expected to contain
