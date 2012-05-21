@@ -457,9 +457,9 @@ class ISDockTest(unittest.TestCase):
         myDict = getUiState(DOCK)
 
         myExpectedDict = {'Run Button Enabled': True,
-                        'Impact Function': 'Tsunami Building Impact Function',
-                        'Hazard': 'tsunami_max_inundation_depth_BB_utm',
-                        'Exposure': 'tsunami_exposure_BB'}
+                          'Impact Function': 'Be affected by tsunami',
+                          'Hazard': 'tsunami_max_inundation_depth_BB_utm',
+                          'Exposure': 'tsunami_exposure_BB'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
                             myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
