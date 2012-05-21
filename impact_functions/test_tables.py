@@ -26,7 +26,45 @@ class TablesTest(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
-        pass
+        self.table_header = ['1', '2', '3', '4']
+        self.table_data = [
+                   ['a', 'b', 'c', 'd'],
+                   ['a', 'b', 'c', 'd'],
+                   ['a', 'b', 'c', 'd'],
+                   ['a', 'b', 'c', 'd']
+                ]
+        self.html_table_start = '<table class="table table-striped condensed">\n'
+        self.html_table_end = '</table>\n'
+        self.html_header = (' <tr>\n'
+                              '  <th>1</th>\n'
+                              '  <th>2</th>\n'
+                              '  <th>3</th>\n'
+                              '  <th>4</th>\n'
+                              ' </tr>\n')
+        self.html_body = (' <tr>\n'
+                          '  <td>a</td>\n'
+                          '  <td>b</td>\n'
+                          '  <td>c</td>\n'
+                          '  <td>d</td>\n'
+                          ' </tr>\n'
+                          ' <tr>\n'
+                          '  <td>a</td>\n'
+                          '  <td>b</td>\n'
+                          '  <td>c</td>\n'
+                          '  <td>d</td>\n'
+                          ' </tr>\n'
+                          ' <tr>\n'
+                          '  <td>a</td>\n'
+                          '  <td>b</td>\n'
+                          '  <td>c</td>\n'
+                          '  <td>d</td>\n'
+                          ' </tr>\n'
+                          ' <tr>\n'
+                          '  <td>a</td>\n'
+                          '  <td>b</td>\n'
+                          '  <td>c</td>\n'
+                          '  <td>d</td>\n'
+                          ' </tr>\n')
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -34,41 +72,19 @@ class TablesTest(unittest.TestCase):
 
     def test_simple_table(self):
         """Test simple table creation"""
-        table = [
-                   ['a', 'b', 'c', 'd'],
-                   ['a', 'b', 'c', 'd'],
-                   ['a', 'b', 'c', 'd'],
-                   ['a', 'b', 'c', 'd']
-                ]
-        expected_result = (
-                        '<table class="table table-striped condensed">\n'
-                        ' <tr>\n'
-                        '  <td>a</td>\n'
-                        '  <td>b</td>\n'
-                        '  <td>c</td>\n'
-                        '  <td>d</td>\n'
-                        ' </tr>\n'
-                        ' <tr>\n'
-                        '  <td>a</td>\n'
-                        '  <td>b</td>\n'
-                        '  <td>c</td>\n'
-                        '  <td>d</td>\n'
-                        ' </tr>\n'
-                        ' <tr>\n'
-                        '  <td>a</td>\n'
-                        '  <td>b</td>\n'
-                        '  <td>c</td>\n'
-                        '  <td>d</td>\n'
-                        ' </tr>\n'
-                        ' <tr>\n'
-                        '  <td>a</td>\n'
-                        '  <td>b</td>\n'
-                        '  <td>c</td>\n'
-                        '  <td>d</td>\n'
-                        ' </tr>\n'
-                        '</table>\n'
-                        )
-        actual_result = Table(table)
+        expected_result = ('%s%s%s' % (self.html_table_start,
+                                       self.html_body,
+                                       self.html_table_end))
+        actual_result = Table(self.table_data)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
 
+    def test_table_with_header(self):
+        '''Test html render of a table with header row(s).'''
+        expected_result = ('%s%s%s%s' % (self.html_table_start,
+                                       self.html_header,
+                                       self.html_body,
+                                       self.html_table_end))
+        actual_result = Table(self.table_data, header_row=self.table_header)
+        message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        assert expected_result.strip() == str(actual_result).strip(), message
