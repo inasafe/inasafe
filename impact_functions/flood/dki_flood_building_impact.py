@@ -4,7 +4,7 @@ from storage.vector import Vector
 from storage.utilities import ugettext as _
 
 
-class FloodBuildingImpactFunction(FunctionProvider):
+class DKIFloodBuildingImpactFunction(FunctionProvider):
     """Risk plugin for flood impact on building data
 
     :param requires category=='hazard' and \
