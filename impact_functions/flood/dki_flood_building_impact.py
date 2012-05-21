@@ -101,11 +101,9 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                 del buildings[usage]
                 del affected_buildings[usage]
 
-
-        print 'Building usage types'
-        for usage in buildings:
-            print usage, buildings[usage], affected_buildings[usage]
-
+        #print 'Building usage types'
+        #for usage in buildings:
+        #    print usage, buildings[usage], affected_buildings[usage]
 
         # Create report
         Hname = H.get_name()
