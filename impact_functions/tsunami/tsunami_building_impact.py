@@ -105,14 +105,16 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                       '</table>' % ('Terdampak oleh tsunami', 'Jumlah gedung',
+                       '</table>' % ('Terdampak oleh tsunami',
+                                     'Jumlah gedung',
                                      'Terdampak', count3,
                                      'Tidak terdampak', count0,
                                      'Semua', N))
 
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _("Levels of impact are defined by BNPB's <i>Pengkajian Risiko Bencana</i>")
+        impact_summary += _('Levels of impact are defined by BNPB\'s '
+                            '<i>Pengkajian Risiko Bencana</i>')
         impact_summary += _('<table border="0" width="320px">'
                        '   <tr><th><b>%s</b></th><th><b>%s</b></th></tr>'
                        '   <tr></tr>'

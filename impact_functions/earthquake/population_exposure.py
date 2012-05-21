@@ -77,7 +77,8 @@ class EarthquakePopulationExposureFunction(FunctionProvider):
                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                    '</table>' % ('Number of people affected', int(total),
                                  'Estimated number of fatalities', int(count)))
-        impact_summary += ('<p><br /><b> Impact function: Earthquake fatality function</b></p>')
+        impact_summary += ('<p><br /><b> Impact function: '
+                           'Earthquake fatality function</b></p>')
 
         # Create new layer and return
         R = Raster(F,

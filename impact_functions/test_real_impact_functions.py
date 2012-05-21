@@ -46,8 +46,6 @@ class Test_real_plugins(unittest.TestCase):
         assert 'U S G S Fatality Function' in P
         assert 'I T B Earthquake Building Damage Function' in P
         assert 'Earthquake Fatality Function Podes' in P
-        assert 'Terdampak' in P
-        assert 'Meninggal' in P
 
         # This one should get 2 earthquake building impact functions
         D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'MMI'}
@@ -71,18 +69,14 @@ class Test_real_plugins(unittest.TestCase):
         D1['layertype'] = 'raster'
         D2['layertype'] = 'raster'
         P = get_admissible_plugins([D1, D2])
-        assert len(P) >= 3  # Depending on other tests there could be more
-        assert 'Terdampak' in P
+        assert len(P) >= 1  # Depending on other tests there could be more
         assert 'Perlu Evakuasi' in P
-        assert 'Meninggal' in P
 
         # Try form where only one dictionary is passed
         # This one gets all the flood related impact functions
         P = get_admissible_plugins(D1)
-        assert len(P) >= 6
-        assert 'Terdampak' in P
+        assert len(P) >= 4
         assert 'Perlu Evakuasi' in P
-        assert 'Meninggal' in P
         assert 'Be temporarily closed' in P
         assert 'Flood Road Impact Function' in P
         assert 'Dalam bahaya' in P
