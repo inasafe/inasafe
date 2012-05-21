@@ -508,9 +508,9 @@ class ISDockTest(unittest.TestCase):
         myDict = getUiState(DOCK)
 
         myExpectedDict = {'Run Button Enabled': True,
-                        'Impact Function': 'Terdampak',
-                        'Hazard': 'Banjir Jakarta seperti 2007',
-                        'Exposure': 'Penduduk Jakarta'}
+                          'Impact Function': 'Perlu Evakuasi',
+                          'Hazard': 'Banjir Jakarta seperti 2007',
+                          'Exposure': 'Penduduk Jakarta'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
                             myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
@@ -529,23 +529,23 @@ class ISDockTest(unittest.TestCase):
 
         # Pre clipping fix scores:
 
+        #Perlu Evakuasi (x 1000):	973
+        #
+        #Bantuan	Jumlah
+        #Beras [kg]	2725791
+        #Air Minum [l]	17036197
+        #Air Bersih [l]	65224299
+        #Kit Keluarga	194699
+        #Jamban Keluarga	48674
+        #
         #Catatan:
-        #- Jumlah penduduk Jakarta 2 <-- should be about 8000
+        #- Jumlah penduduk Jakarta 355987
         #- Jumlah dalam ribuan
-        #- Penduduk dianggap terdampak ketika banjir
-        #lebih dari 0.1 m.  <-- expecting around 2400
-        #Terdampak (x 1000): 2479
-
-        # Post clipping fix scores
-
-        #Catatan:
-        #- Jumlah penduduk Jakarta 356018
-        #- Jumlah dalam ribuan
-        #- Penduduk dianggap terdampak ketika banjir lebih dari 0.1 m.
-        #print myResult
+        #- Penduduk perlu dievakuasi ketika banjir lebih dari 1 m.
+        #- Minmum Bantuan per minggu (BNPB Perka 7/2008)
 
         msg = 'Result not as expected: %s' % myResult
-        assert '2480' in myResult, msg  # This is the expected impact number
+        assert '973' in myResult, msg  # This is the expected impact number
 
     def test_runFloodPopulationImpactFunction_scaling(self):
         """Flood function runs in GUI with 5x5km population data
@@ -575,9 +575,9 @@ class ISDockTest(unittest.TestCase):
         myDict = getUiState(DOCK)
 
         myExpectedDict = {'Run Button Enabled': True,
-                        'Impact Function': 'Terdampak',
-                        'Hazard': 'Banjir Jakarta seperti 2007',
-                        'Exposure': 'Population Density Estimate (5kmx5km)'}
+                          'Impact Function': 'Perlu Evakuasi',
+                          'Hazard': 'Banjir Jakarta seperti 2007',
+                          'Exposure': 'Population Density Estimate (5kmx5km)'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
                             myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
@@ -594,7 +594,7 @@ class ISDockTest(unittest.TestCase):
 
         # Check numbers are OK (within expected errors from resampling)
         assert '10484' in myResult, msg
-        assert '2312' in myResult, msg  # These are expected impact number
+        assert '977' in myResult, msg  # These are expected impact number
 
     def test_ResultStyling(self):
         """Test that ouputs from a model are correctly styled (colours and
@@ -621,7 +621,7 @@ class ISDockTest(unittest.TestCase):
         myMessage = ('Incorrect function selected - expected Terdampak,'
                      ' got %s \n%s'
                      % (myFunction, combosToString(DOCK)))
-        assert myFunction == 'Terdampak', myMessage
+        assert myFunction == 'Perlu Evakuasi', myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
@@ -675,7 +675,7 @@ class ISDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
         myExpectedDict = {'Run Button Enabled': True,
-                        'Impact Function': 'Terdampak',
+                        'Impact Function': 'Perlu Evakuasi',
                         'Hazard': 'Banjir Jakarta seperti 2007',
                         'Exposure': 'Penduduk Jakarta'}
         myMessage = 'Got: %s\nExpected: %s \n%s' % (
@@ -691,8 +691,8 @@ class ISDockTest(unittest.TestCase):
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
-        #Terdampak (x 1000):    2366
-        assert '2366' in myResult, myMessage
+        #Perlu Evakuasi (x 1000):	894
+        assert '894' in myResult, myMessage
 
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
@@ -715,9 +715,9 @@ class ISDockTest(unittest.TestCase):
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
         myExpectedDict = {'Hazard': 'Yogya2006',
-                      'Exposure': 'OSM Building Polygons',
-                      'Impact Function': 'Earthquake Guidelines Function',
-                      'Run Button Enabled': True}
+                          'Exposure': 'OSM Building Polygons',
+                          'Impact Function': 'Earthquake Guidelines Function',
+                          'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
                             myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
@@ -771,11 +771,11 @@ class ISDockTest(unittest.TestCase):
                       'Population_Jakarta_geographic.asc']
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
 
-        myMessage = ("Incorrect number of Hazard layers: expected 1 got %s"
+        myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
         assert myHazardLayerCount == 1, myMessage
 
-        myMessage = ("Incorrect number of Exposure layers: expected 1 got %s"
+        myMessage = ('Incorrect number of Exposure layers: expected 1 got %s'
                      % myExposureLayerCount)
         assert myExposureLayerCount == 1, myMessage
         myMessage = 'Run button was not enabled'
@@ -823,11 +823,11 @@ class ISDockTest(unittest.TestCase):
                       'Population_Jakarta_geographic.asc']
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
 
-        myMessage = ("Incorrect number of Hazard layers: expected 1 got %s"
+        myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
         assert myHazardLayerCount == 1, myMessage
 
-        myMessage = ("Incorrect number of Exposure layers: expected 1 got %s"
+        myMessage = ('Incorrect number of Exposure layers: expected 1 got %s'
                      % myExposureLayerCount)
         assert myExposureLayerCount == 1, myMessage
         myMessage = 'Run button was not enabled'
@@ -885,7 +885,7 @@ class ISDockTest(unittest.TestCase):
                             myResultDict, myExpectedDict, combosToString(DOCK))
         assert myExpectedDict == myResultDict, myMessage
 
-        # corner case test when two layers can have the
+        # Corner case test when two layers can have the
         # same functions - when switching layers the selected function should
         # remain unchanged
         self.tearDown()
@@ -899,23 +899,23 @@ class ISDockTest(unittest.TestCase):
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
         myExpectedFunction = str(DOCK.cboFunction.currentText())
-        # now move down one hazard in the combo then verify
+        # Now move down one hazard in the combo then verify
         # the function remains unchanged
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
         myCurrentFunction = str(DOCK.cboFunction.currentText())
         myMessage = ('Expected selected impact function to remain unchanged '
                      'when choosing a different hazard of the same category:'
-                    ' %s\nExpected: %s\n%s' % (
-                    myExpectedFunction,
-                    myCurrentFunction,
-                    combosToString(DOCK)))
+                     ' %s\nExpected: %s\n%s' % (
+                myExpectedFunction,
+                myCurrentFunction,
+                combosToString(DOCK)))
 
         assert myExpectedFunction == myCurrentFunction, myMessage
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
         QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
-        # selected function should remain the same
-        myExpectation = 'Terdampak'
+        # Selected function should remain the same
+        myExpectation = 'Perlu Evakuasi'
         myFunction = DOCK.cboFunction.currentText()
         myMessage = 'Expected: %s, Got: %s' % (myExpectation, myFunction)
         assert myFunction == myExpectation, myMessage
