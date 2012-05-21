@@ -37,7 +37,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         N = len(I)
 
         # List attributes to carry forward to result layer
-        attribute_names = I.get_attribute_names()
+        #attribute_names = I.get_attribute_names()
 
         # Calculate population impact
         count = 0
