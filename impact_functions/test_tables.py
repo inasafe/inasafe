@@ -18,7 +18,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import unittest
-from tables import (Table, TableRow, TableCell)
+from tables import (Table, TableRow, TableCell, Link)
 
 
 class TablesTest(unittest.TestCase):
@@ -251,6 +251,32 @@ class TablesTest(unittest.TestCase):
                                        body,
                                        self.html_table_end))
         actual_result = Table([table_row1, table_row2])
+        message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        assert expected_result.strip() == str(actual_result).strip(), message
+        self.html += str(actual_result)
+        self.writeHtml('table_rowspanning')
+
+    def test_cell_link(self):
+        """Test cell links work"""
+        table_cell_link = Link('InaSAFE', 'http://inasafe.org')
+        table_row = TableRow([TableCell(table_cell_link),
+                              self.table_cell_b,
+                              self.table_cell_c,
+                              self.table_cell_d
+                             ])
+        self.html += '  <h2>Link Cell Columns</h2>\n'
+        body = (' <tbody>\n'
+                '  <tr>\n'
+                '   <td><a href="http://inasafe.org">InaSAFE</a></td>\n'
+                '   <td>b</td>\n'
+                '   <td>c</td>\n'
+                '   <td>d</td>\n'
+                '  </tr>\n'
+                ' </tbody>\n')
+        expected_result = ('%s%s%s' % (self.html_table_start,
+                                       body,
+                                       self.html_table_end))
+        actual_result = Table([table_row])
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
         self.html += str(actual_result)
