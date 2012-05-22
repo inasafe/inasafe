@@ -246,7 +246,7 @@ class Table(object):
             table_class=None,
             col_width=None, col_align=None, col_valign=None,
             col_char=None, col_charoff=None, col_styles=None,
-            caption=None):
+            caption=None, caption_at_bottom=False):
         """TableCell constructor"""
         self.border = border
         self.style = style
@@ -254,6 +254,7 @@ class Table(object):
         if style == None: self.style = TABLE_STYLE_THINBORDER
         if table_class == None: self.table_class = DEFAULT_TABLE_CLASS
         self.caption = caption
+        self.caption_at_bottom = caption_at_bottom
         self.width = width
         self.cellspacing = cellspacing
         self.cellpadding = cellpadding
@@ -282,7 +283,17 @@ class Table(object):
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
         result = '<table%s>\n' % attribs_str
         if self.caption is not None:
-            result += ' <caption>%s</caption>\n' % self.caption
+            caption_class = ''
+            if self.caption_at_bottom:
+                # Note you can use css to place the caption at the bottom
+                #caption.caption-bottom
+                #{
+                #  caption-side:bottom;
+                #}
+                caption_class = ' class="caption-bottom"'
+            result += ' <caption%s>%s</caption>\n' % (
+                                    caption_class,
+                                    self.caption )
         # insert column tags and attributes if specified:
         if self.col_width:
             for width in self.col_width:

@@ -33,38 +33,45 @@ class TablesTest(unittest.TestCase):
                    ['a', 'b', 'c', 'd'],
                    ['a', 'b', 'c', 'd']
                 ]
-        self.html_table_start = '<table class="table table-striped condensed">\n'
+        self.table_caption = 'Man this is a nice table!'
+        self.html_table_start = ('<table class="table table-striped'
+                                 ' condensed">\n')
         self.html_table_end = '</table>\n'
-        self.html_header = (' <tr>\n'
-                              '  <th>1</th>\n'
-                              '  <th>2</th>\n'
-                              '  <th>3</th>\n'
-                              '  <th>4</th>\n'
-                              ' </tr>\n')
-        self.html_body = (' <tr>\n'
-                          '  <td>a</td>\n'
-                          '  <td>b</td>\n'
-                          '  <td>c</td>\n'
-                          '  <td>d</td>\n'
-                          ' </tr>\n'
-                          ' <tr>\n'
-                          '  <td>a</td>\n'
-                          '  <td>b</td>\n'
-                          '  <td>c</td>\n'
-                          '  <td>d</td>\n'
-                          ' </tr>\n'
-                          ' <tr>\n'
-                          '  <td>a</td>\n'
-                          '  <td>b</td>\n'
-                          '  <td>c</td>\n'
-                          '  <td>d</td>\n'
-                          ' </tr>\n'
-                          ' <tr>\n'
-                          '  <td>a</td>\n'
-                          '  <td>b</td>\n'
-                          '  <td>c</td>\n'
-                          '  <td>d</td>\n'
-                          ' </tr>\n')
+        self.html_caption = (' <caption>Man this is a nice table!</caption>\n')
+        self.html_header = (' <thead>\n'
+                            '  <tr>\n'
+                              '   <th>1</th>\n'
+                              '   <th>2</th>\n'
+                              '   <th>3</th>\n'
+                              '   <th>4</th>\n'
+                              '  </tr>\n'
+                              ' </thead>\n')
+        self.html_body = (' <tbody>\n'
+                          '  <tr>\n'
+                          '   <td>a</td>\n'
+                          '   <td>b</td>\n'
+                          '   <td>c</td>\n'
+                          '   <td>d</td>\n'
+                          '  </tr>\n'
+                          '  <tr>\n'
+                          '   <td>a</td>\n'
+                          '   <td>b</td>\n'
+                          '   <td>c</td>\n'
+                          '   <td>d</td>\n'
+                          '  </tr>\n'
+                          '  <tr>\n'
+                          '   <td>a</td>\n'
+                          '   <td>b</td>\n'
+                          '   <td>c</td>\n'
+                          '   <td>d</td>\n'
+                          '  </tr>\n'
+                          '  <tr>\n'
+                          '   <td>a</td>\n'
+                          '   <td>b</td>\n'
+                          '   <td>c</td>\n'
+                          '   <td>d</td>\n'
+                          '  </tr>\n'
+                          ' </tbody>\n')
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -86,5 +93,15 @@ class TablesTest(unittest.TestCase):
                                        self.html_body,
                                        self.html_table_end))
         actual_result = Table(self.table_data, header_row=self.table_header)
+        message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        assert expected_result.strip() == str(actual_result).strip(), message
+
+    def test_table_caption(self):
+        """Test table caption"""
+        expected_result = ('%s%s%s%s' % (self.html_table_start,
+                                       self.html_caption,
+                                       self.html_body,
+                                       self.html_table_end))
+        actual_result = Table(self.table_data, caption=self.table_caption)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
