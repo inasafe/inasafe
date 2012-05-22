@@ -18,7 +18,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import unittest
-from tables import Table
+from tables import (Table, TableRow)
 
 
 class TablesTest(unittest.TestCase):
@@ -56,6 +56,11 @@ class TablesTest(unittest.TestCase):
                    ['a', 'b', 'c', 'd'],
                    ['a', 'b', 'c', 'd']
                 ]
+        self.table_row = TableRow(['a', 'b', 'c', 'd'])
+        self.table_row_data = [self.table_row,
+                               self.table_row,
+                               self.table_row,
+                               self.table_row]
         self.table_caption = 'Man this is a nice table!'
         self.html_table_start = ('<table class="table table-striped'
                                  ' condensed">\n')
@@ -157,13 +162,13 @@ class TablesTest(unittest.TestCase):
 
     def test_table_by_rows(self):
         """Test table from infividual rows"""
-        expected_result = ('%s%s%s%s' % (self.html_table_start,
-                                       self.html_header,
+        self.html += '  <h2>Using Table Rows</h2>\n'
+        expected_result = ('%s%s%s' % (self.html_table_start,
                                        self.html_body,
                                        self.html_table_end))
-        actual_result = Table(self.table_data, header_row=self.table_header)
+        actual_result = Table(self.table_row_data)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
         self.html += str(actual_result)
-        self.writeHtml('table_by_rows')
+        self.writeHtml('table_by_row_objects')
 
