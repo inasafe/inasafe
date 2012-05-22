@@ -23,6 +23,29 @@ from tables import Table
 
 class TablesTest(unittest.TestCase):
     """Test the SAFE Table"""
+    html = ('<!DOCTYPE html>\n'
+        '<html lang="en">\n'
+        ' <head>\n'
+        '   <meta charset="utf-8">\n'
+        '   <title>InaSAFE</title>\n'
+        '   <meta name="description" content="">\n'
+        '   <meta name="author" content="">\n'
+        '   <link href="http://twitter.github.com/bootstrap/'
+        'assets/css/bootstrap.css" rel="stylesheet">\n'
+        '   <style>\n'
+        '      caption.caption-bottom\n'
+        '      {\n'
+        '          caption-side:bottom;\n'
+        '      }\n'
+        '   </style>\n'
+        ' </head>\n'
+        ' <body>\n'
+        '  <h2>Test Output</h2>\n'
+        )
+
+    def writeHtml(self, name):
+        self.html += ' </body>\n</html>\n'
+        file('/tmp/%s.html' % name, 'wt').write(self.html)
 
     def setUp(self):
         """Fixture run before all tests"""
@@ -81,15 +104,19 @@ class TablesTest(unittest.TestCase):
 
     def test_simple_table(self):
         """Test simple table creation"""
+        self.html += '  <h2>Simple Table</h2>\n'
         expected_result = ('%s%s%s' % (self.html_table_start,
                                        self.html_body,
                                        self.html_table_end))
         actual_result = Table(self.table_data)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
+        self.html += str(actual_result)
+        self.writeHtml('simple_table')
 
     def test_table_with_header(self):
         '''Test html render of a table with header row(s).'''
+        self.html += '  <h2>Table with header</h2>\n'
         expected_result = ('%s%s%s%s' % (self.html_table_start,
                                        self.html_header,
                                        self.html_body,
@@ -97,9 +124,12 @@ class TablesTest(unittest.TestCase):
         actual_result = Table(self.table_data, header_row=self.table_header)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
+        self.html += str(actual_result)
+        self.writeHtml('table_with_header')
 
     def test_table_caption(self):
         """Test table caption"""
+        self.html += '  <h2>Caption Top</h2>\n'
         expected_result = ('%s%s%s%s' % (self.html_table_start,
                                        self.html_caption,
                                        self.html_body,
@@ -107,7 +137,10 @@ class TablesTest(unittest.TestCase):
         actual_result = Table(self.table_data, caption=self.table_caption)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
+        self.html += str(actual_result)
+
         #also test bottom caption
+        self.html += '  <h2>Caption Bottom</h2>\n'
         expected_result = ('%s%s%s%s' % (self.html_table_start,
                                        self.html_bottom_caption,
                                        self.html_body,
@@ -116,4 +149,21 @@ class TablesTest(unittest.TestCase):
                               caption=self.table_caption,
                               caption_at_bottom=True)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        self.html += str(actual_result)
+        self.writeHtml('table_caption')
+
         assert expected_result.strip() == str(actual_result).strip(), message
+        self.html += str(actual_result)
+
+    def test_table_by_rows(self):
+        """Test table from infividual rows"""
+        expected_result = ('%s%s%s%s' % (self.html_table_start,
+                                       self.html_header,
+                                       self.html_body,
+                                       self.html_table_end))
+        actual_result = Table(self.table_data, header_row=self.table_header)
+        message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        assert expected_result.strip() == str(actual_result).strip(), message
+        self.html += str(actual_result)
+        self.writeHtml('table_by_rows')
+
