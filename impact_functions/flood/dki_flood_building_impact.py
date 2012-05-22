@@ -16,13 +16,8 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                     purpose=='dki'
     """
 
-    target_field = 'AFFECTED'
+    target_field = 'FLOODED'
     plugin_name = _('Be unavailable to DKI')
-
-    # Is never called but would be nice to do here
-    #def __init__(self):
-    #    self.target_field = 'AFFECTED'
-    #    self.plugin_name = _('Temporarily Closed')
 
     def run(self, layers):
         """Risk plugin for flood building impact
