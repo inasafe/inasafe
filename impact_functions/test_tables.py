@@ -220,3 +220,38 @@ class TablesTest(unittest.TestCase):
         assert expected_result.strip() == str(actual_result).strip(), message
         self.html += str(actual_result)
         self.writeHtml('table_colspanning')
+
+    def test_row_span(self):
+        """Testing row spanning"""
+        table_cell_aa = TableCell('aa spanned', row_span=2)
+        table_row1 = TableRow([table_cell_aa,
+                              self.table_cell_b,
+                              self.table_cell_c,
+                              self.table_cell_d
+                              ])
+        table_row2 = TableRow([self.table_cell_b,
+                               self.table_cell_c,
+                               self.table_cell_d
+                              ])
+        self.html += '  <h2>Spanning Table Columns</h2>\n'
+        body = (' <tbody>\n'
+                '  <tr>\n'
+                '   <td rowspan="2">aa spanned</td>\n'
+                '   <td>b</td>\n'
+                '   <td>c</td>\n'
+                '   <td>d</td>\n'
+                '  </tr>\n'
+                '  <tr>\n'
+                '   <td>b</td>\n'
+                '   <td>c</td>\n'
+                '   <td>d</td>\n'
+                '  </tr>\n'
+                ' </tbody>\n')
+        expected_result = ('%s%s%s' % (self.html_table_start,
+                                       body,
+                                       self.html_table_end))
+        actual_result = Table([table_row1, table_row2])
+        message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        assert expected_result.strip() == str(actual_result).strip(), message
+        self.html += str(actual_result)
+        self.writeHtml('table_colspanning')
