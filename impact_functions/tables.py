@@ -3,7 +3,7 @@
 """
 tables.py - v0.04 2009-07-28 Philippe Lagadec
 
-this module provides a few classes to easily generate HTML code such as tables
+This module provides a few classes to easily generate HTML code such as tables
 and lists.
 
 Project website: http://www.decalage.info/python/html
@@ -62,7 +62,9 @@ __author__ = 'Philippe Lagadec'
 # 2009-07-21 v0.03 PL: - added column attributes and styles (first attempt)
 #                        (thanks to an idea submitted by Michal Cernoevic)
 # 2009-07-28 v0.04 PL: - improved column styles, workaround for Mozilla
-
+# 2012-06-22 SAFE fork - refactored to use more modern table semantics and
+#                        various other additions / changes to support SAFE
+#                        Tim Sutton
 
 #------------------------------------------------------------------------------
 #TODO:
@@ -92,8 +94,8 @@ __author__ = 'Philippe Lagadec'
 
 TABLE_STYLE_THINBORDER = ''
 DEFAULT_TABLE_CLASS = 'table table-striped condensed'
+CAPTION_BOTTOM_CLASS = ' class="caption-bottom"'
 
-#=== CLASSES ==================================================================
 
 class TableCell (object):
     """
@@ -118,7 +120,7 @@ class TableCell (object):
 
     def __init__(self, text="", bgcolor=None, header=False, width=None,
             align=None, char=None, charoff=None, valign=None, style=None,
-            attribs=None):
+            attribs=None, cell_class=None, row_span=None, col_span=None):
         """TableCell constructor"""
         self.text = text
         self.bgcolor = bgcolor
@@ -130,6 +132,9 @@ class TableCell (object):
         self.valign = valign
         self.style = style
         self.attribs = attribs
+        self.cell_class = cell_class
+        self.row_span = row_span
+        self.col_span = col_span
         if attribs == None:
             self.attribs = {}
 
@@ -137,12 +142,15 @@ class TableCell (object):
         """return the HTML code for the table cell as a string"""
         attribs_str = ""
         if self.bgcolor: self.attribs['bgcolor'] = self.bgcolor
-        if self.width:   self.attribs['width']   = self.width
-        if self.align:   self.attribs['align']   = self.align
-        if self.char:    self.attribs['char']    = self.char
+        if self.width: self.attribs['width'] = self.width
+        if self.align: self.attribs['align'] = self.align
+        if self.char: self.attribs['char'] = self.char
         if self.charoff: self.attribs['charoff'] = self.charoff
-        if self.valign:  self.attribs['valign']  = self.valign
-        if self.style:   self.attribs['style']   = self.style
+        if self.valign: self.attribs['valign'] = self.valign
+        if self.style: self.attribs['style'] = self.style
+        if self.cell_class: self.attribs['class'] = self.cell_class
+        if self.row_span: self.attribs['rowspan'] = self.row_span
+        if self.col_span: self.attribs['colspan'] = self.col_span
         for attr in self.attribs:
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
         if self.text:
@@ -290,7 +298,7 @@ class Table(object):
                 #{
                 #  caption-side:bottom;
                 #}
-                caption_class = ' class="caption-bottom"'
+                caption_class = CAPTION_BOTTOM_CLASS
             result += ' <caption%s>%s</caption>\n' % (
                                     caption_class,
                                     self.caption )

@@ -18,7 +18,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import unittest
-from tables import (Table, TableRow)
+from tables import (Table, TableRow, TableCell)
 
 
 class TablesTest(unittest.TestCase):
@@ -61,6 +61,19 @@ class TablesTest(unittest.TestCase):
                                self.table_row,
                                self.table_row,
                                self.table_row]
+        self.table_cell_a = TableCell('a')
+        self.table_cell_b = TableCell('b')
+        self.table_cell_c = TableCell('c')
+        self.table_cell_d = TableCell('d')
+        self.table_row_cells = TableRow([self.table_cell_a,
+                                         self.table_cell_b,
+                                         self.table_cell_c,
+                                         self.table_cell_d
+                                         ])
+        self.table_cell_data = [self.table_row_cells,
+                                self.table_row_cells,
+                                self.table_row_cells,
+                                self.table_row_cells]
         self.table_caption = 'Man this is a nice table!'
         self.html_table_start = ('<table class="table table-striped'
                                  ' condensed">\n')
@@ -172,3 +185,38 @@ class TablesTest(unittest.TestCase):
         self.html += str(actual_result)
         self.writeHtml('table_by_row_objects')
 
+    def test_table_cells(self):
+        """Test table from individual cells"""
+        self.html += '  <h2>Using Table Cells</h2>\n'
+        expected_result = ('%s%s%s' % (self.html_table_start,
+                                       self.html_body,
+                                       self.html_table_end))
+        actual_result = Table(self.table_cell_data)
+        message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        assert expected_result.strip() == str(actual_result).strip(), message
+        self.html += str(actual_result)
+        self.writeHtml('table_by_cell_objects')
+
+    def test_col_span(self):
+        """Testing column spanning"""
+        table_cell_ab = TableCell('ab spanned', col_span=2)
+        table_row = TableRow([table_cell_ab,
+                                         self.table_cell_c,
+                                         self.table_cell_d
+                                         ])
+        self.html += '  <h2>Spanning Table Columns</h2>\n'
+        body = (' <tbody>\n'
+                '  <tr>\n'
+                '   <td colspan="2">ab spanned</td>\n'
+                '   <td>c</td>\n'
+                '   <td>d</td>\n'
+                '  </tr>\n'
+                ' </tbody>\n')
+        expected_result = ('%s%s%s' % (self.html_table_start,
+                                       body,
+                                       self.html_table_end))
+        actual_result = Table([table_row])
+        message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        assert expected_result.strip() == str(actual_result).strip(), message
+        self.html += str(actual_result)
+        self.writeHtml('table_colspanning')
