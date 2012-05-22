@@ -38,6 +38,8 @@ class TablesTest(unittest.TestCase):
                                  ' condensed">\n')
         self.html_table_end = '</table>\n'
         self.html_caption = (' <caption>Man this is a nice table!</caption>\n')
+        self.html_bottom_caption = (' <caption class="caption-bottom">'
+                                    'Man this is a nice table!</caption>\n')
         self.html_header = (' <thead>\n'
                             '  <tr>\n'
                               '   <th>1</th>\n'
@@ -103,5 +105,15 @@ class TablesTest(unittest.TestCase):
                                        self.html_body,
                                        self.html_table_end))
         actual_result = Table(self.table_data, caption=self.table_caption)
+        message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        assert expected_result.strip() == str(actual_result).strip(), message
+        #also test bottom caption
+        expected_result = ('%s%s%s%s' % (self.html_table_start,
+                                       self.html_bottom_caption,
+                                       self.html_body,
+                                       self.html_table_end))
+        actual_result = Table(self.table_data,
+                              caption=self.table_caption,
+                              caption_at_bottom=True)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
