@@ -959,7 +959,6 @@ class Vector:
                    name=X.get_name())
         return V
 
-
     @property
     def is_raster(self):
         return False
