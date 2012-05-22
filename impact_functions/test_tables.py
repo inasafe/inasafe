@@ -281,3 +281,13 @@ class TablesTest(unittest.TestCase):
         assert expected_result.strip() == str(actual_result).strip(), message
         self.html += str(actual_result)
         self.writeHtml('table_colspanning')
+
+    def test_cell_header(self):
+        """Test we can make a cell as a <th> element"""
+        cell = TableCell('Foo', header=True)
+        row = TableRow([cell])
+        table = Table(row)
+        del table
+
+
+

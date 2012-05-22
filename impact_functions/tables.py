@@ -361,8 +361,15 @@ class Table(object):
         result += '</table>'
         return result
 
+    def toNewlineFreeString(self):
+        """Return a string representation of the table which contains no
+        newlines.
+        
+        .. note:: any preformatted <pre> blocks will be adversely affected by
+           this.
+        """
+        return self.__str__().replace('\n','')
 
-#-------------------------------------------------------------------------------
 
 class List (object):
     """
@@ -403,39 +410,6 @@ class List (object):
             result += ' <LI>%s\n' % str(line)
         result += '</%s>\n' % tag
         return result
-
-
-##class Link (object):
-##    """
-##    a Link object is used to create link in HTML. (<a> tag)
-##
-##    Attributes:
-##    - text: str, text of the link
-##    - url: str, URL of the link
-##    - attribs: dict, additional attributes for the A tag
-##
-##    Reference: http://www.w3.org/tr/html4
-##    """
-##
-##    def __init__(self, text, url=None, attribs=None):
-##        """Link constructor"""
-##        self.text = text
-##        self.url = url
-##        if attribs:
-##            self.attribs = attribs
-##        else:
-##            self.attribs = {}
-##
-##    def __str__(self):
-##        """return the HTML code for the link as a string"""
-##        attribs_str = ""
-##        if self.url:  self.attribs['href'] = self.url
-##        for attr in self.attribs:
-##            attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
-##        return '<a%s>%s</a>' % (attribs_str, text)
-
-
-#=== FUNCTIONS ================================================================
 
 # much simpler definition of a link as a function:
 def Link(text, url):
