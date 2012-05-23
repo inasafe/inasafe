@@ -38,7 +38,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         self.rasterTsunamiPath = os.path.join(TESTDATA,
                                 'tsunami_max_inundation_depth_utm56s.tif')
         self.rasterExposurePath = os.path.join(TESTDATA,
-                                                'tsunami_building_exposure.shp')
+                                             'tsunami_building_exposure.shp')
 
         self.rasterPopulationPath = os.path.join(TESTDATA, 'glp10ag.asc')
 
@@ -198,8 +198,10 @@ class ISSafeInterfaceTest(unittest.TestCase):
 
         #  tsunami example (one layer is UTM)
         myKeywords = readKeywordsFromFile(self.rasterTsunamiPath)
-        assert myKeywords == {'category': 'hazard',
-                              'subcategory': 'tsunami', 'unit': 'm'}
+        assert myKeywords == {'title': 'Tsunami Max Inundation',
+                               'category': 'hazard',
+                              'subcategory': 'tsunami',
+                              'unit': 'm'}
         myKeywords = readKeywordsFromFile(self.rasterExposurePath)
         print myKeywords == {'category': 'exposure',
                              'subcategory': 'building'}
