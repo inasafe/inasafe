@@ -23,7 +23,7 @@ DEMODATA = os.path.join(pardir, DEMODATANAME)
 
 # Known feature counts in test data
 FEATURE_COUNTS = {'test_buildings.shp': 144,
-                  'tsunami_exposure_BB.shp': 7529,
+                  'tsunami_building_exposure.shp': 7529,
                   'kecamatan_geo.shp': 42,
                   'Padang_WGS84.shp': 3896,
                   'OSM_building_polygons_20110905.shp': 34960,

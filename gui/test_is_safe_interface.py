@@ -35,10 +35,10 @@ class ISSafeInterfaceTest(unittest.TestCase):
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
         self.rasterShakePath = os.path.join(TESTDATA,
                                             'Shakemap_Padang_2009.asc')
-        self.rasterTsunamiBBPath = os.path.join(TESTDATA,
-                                'tsunami_max_inundation_depth_BB_utm.asc')
-        self.rasterExposureBBPath = os.path.join(TESTDATA,
-                                                'tsunami_exposure_BB.shp')
+        self.rasterTsunamiPath = os.path.join(TESTDATA,
+                                'tsunami_max_inundation_depth_utm56s.tif')
+        self.rasterExposurePath = os.path.join(TESTDATA,
+                                                'tsunami_building_exposure.shp')
 
         self.rasterPopulationPath = os.path.join(TESTDATA, 'glp10ag.asc')
 
@@ -196,11 +196,11 @@ class ISSafeInterfaceTest(unittest.TestCase):
                               'datatype': 'itb',
                               'subcategory': 'building'}
 
-        # BB tsunami example (one layer is UTM)
-        myKeywords = readKeywordsFromFile(self.rasterTsunamiBBPath)
+        #  tsunami example (one layer is UTM)
+        myKeywords = readKeywordsFromFile(self.rasterTsunamiPath)
         assert myKeywords == {'category': 'hazard',
                               'subcategory': 'tsunami', 'unit': 'm'}
-        myKeywords = readKeywordsFromFile(self.rasterExposureBBPath)
+        myKeywords = readKeywordsFromFile(self.rasterExposurePath)
         print myKeywords == {'category': 'exposure',
                              'subcategory': 'building'}
 

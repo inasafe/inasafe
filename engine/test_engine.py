@@ -634,13 +634,13 @@ class Test_Engine(unittest.TestCase):
         # no reference data. It does check the sanity of values as
         # far as possible.
 
-        hazard_filename = ('%s/tsunami_max_inundation_depth_BB_'
-                           'geographic.asc' % TESTDATA)
-        exposure_filename = ('%s/tsunami_exposure_BB.shp' % TESTDATA)
-        exposure_with_depth_filename = ('%s/tsunami_exposure_BB_'
+        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
+                            % TESTDATA)
+        exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
+        exposure_with_depth_filename = ('%s/tsunami_building_exposure_'
                                         'with_depth.shp' % TESTDATA)
-        reference_impact_filename = ('%s/tsunami_impact_assessment_'
-                                     'BB.shp' % TESTDATA)
+        reference_impact_filename = ('%s/tsunami_building_assessment'
+                                     '.shp' % TESTDATA)
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
@@ -1044,9 +1044,9 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = ('%s/tsunami_max_inundation_depth_BB_'
-                           'geographic.asc' % TESTDATA)
-        exposure_filename = ('%s/tsunami_exposure_BB.shp' % TESTDATA)
+        hazard_filename = ('%s/tsunami_max_inundation_depth_utm56s.tif'
+                            % TESTDATA)
+        exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
 
         # Read input data
         hazard_raster = read_layer(hazard_filename)

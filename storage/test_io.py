@@ -76,7 +76,7 @@ class Test_IO(unittest.TestCase):
 
         # Read and verify test data
         for vectorname in ['test_buildings.shp',
-                           'tsunami_exposure_BB.shp',
+                           'tsunami_building_exposure.shp',
                            'Padang_WGS84.shp',
                            'OSM_building_polygons_20110905.shp',
                            'OSM_subset.shp']:
@@ -117,7 +117,7 @@ class Test_IO(unittest.TestCase):
 
         # Read and verify test data
         for vectorname in ['test_buildings.shp',
-                           'tsunami_exposure_BB.shp',
+                           'tsunami_building_exposure.shp',
                            'Padang_WGS84.shp']:
 
             filename = '%s/%s' % (TESTDATA, vectorname)
@@ -218,7 +218,7 @@ class Test_IO(unittest.TestCase):
         """
 
         for vectorname in ['test_buildings.shp',
-                           'tsunami_exposure_BB.shp']:
+                           'tsunami_building_exposure.shp']:
 
             filename = '%s/%s' % (TESTDATA, vectorname)
             layer = read_layer(filename)
@@ -241,7 +241,7 @@ class Test_IO(unittest.TestCase):
                     assert len(L) == N
                     assert L.get_projection() == layer.get_projection()
                     #print [a['FLOOR_AREA'] for a in L.attributes]
-                elif vectorname == 'tsunami_exposure_BB.shp':
+                elif vectorname == 'tsunami_building_exposure.shp':
                     L = layer.get_topN(attribute='STR_VALUE', N=N)
                     assert len(L) == N
                     assert L.get_projection() == layer.get_projection()
@@ -802,12 +802,12 @@ class Test_IO(unittest.TestCase):
         """
 
         for layername in ['test_buildings.shp',
-                          'tsunami_exposure_BB.shp']:
+                          'tsunami_building_exposure.shp']:
 
             filename = '%s/%s' % (TESTDATA, layername)
             L = read_layer(filename)
 
-            if layername == 'tsunami_exposure_BB.shp':
+            if layername == 'tsunami_building_exposure.shp':
                 attributes = L.get_data()
 
                 for name in ['STR_VALUE', 'CONT_VALUE']:
@@ -992,10 +992,10 @@ class Test_IO(unittest.TestCase):
             z = z[:-1]  # Remove trailing comma
 
         # Reference bbox for vector data
-        ref_bbox = {'tsunami_exposure_BB.shp': [150.124,
-                                                -35.7856,
-                                                150.295,
-                                                -35.6546]}
+        ref_bbox = {'tsunami_building_exposure.shp': [150.15238387897742,
+                                                      -35.71084183517241,
+                                                      150.18779267086208,
+                                                      -35.70131768155173]}
 
         # Select correct reference bbox for rasters
         if float(z) < 17:
@@ -1010,7 +1010,7 @@ class Test_IO(unittest.TestCase):
                                                               0.0]
 
         for filename in ['Earthquake_Ground_Shaking_clip.tif',
-                         'tsunami_exposure_BB.shp']:
+                         'tsunami_building_exposure.shp']:
             bbox = get_bounding_box(os.path.join(TESTDATA, filename))
             msg = ('Got bbox %s from filename %s, but expected %s '
                    % (str(bbox), filename, str(ref_bbox[filename])))
