@@ -43,7 +43,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         fn = 'tsunami_max_inundation_depth_BB_utm.asc'
         self.rasterTsunamiBBPath = os.path.join(TESTDATA, fn)
         self.rasterExposureBBPath = os.path.join(TESTDATA,
-                                            'tsunami_building_exposure.shp')
+                                                'tsunami_building_exposure.shp')
 
         self.rasterPopulationPath = os.path.join(TESTDATA, 'glp10ag.asc')
         self.calculator.setHazardLayer(self.rasterShakePath)
