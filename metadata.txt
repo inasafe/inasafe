@@ -12,7 +12,7 @@
 name=InaSAFE
 qgisMinimumVersion=1.7
 description=InaSAFE Disaster risk assessment tool developed by AusAid
-version=0.3.0
+version=0.3.1
 
 # end of mandatory metadata
 

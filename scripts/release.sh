@@ -3,7 +3,7 @@ echo "Export the plugin to a zip with no .git folder"
 if test -z "$1"
 then
   echo "usage: $0 <new version>"
-  echo "e.g. : $0 0.3.0"
+  echo "e.g. : $0 0.3.1"
   exit
 fi
 

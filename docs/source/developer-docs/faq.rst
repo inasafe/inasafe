@@ -120,7 +120,7 @@ substitutions will be replaced when running git-archive. The actual substition
 takes place at the time that a git archive is generated (git archive creates a
 copy of the repo with all repository metadata stripped out). For example::
   
-  git archive version-0_3 | tar -x -C /tmp/inasafe-0.3.0
+  git archive version-0_3 | tar -x -C /tmp/inasafe-0.3.1
 
 You can verify SHA1 replacement has been made by doing::
    
