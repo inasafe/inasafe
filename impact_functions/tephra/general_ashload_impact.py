@@ -6,7 +6,7 @@ from storage.vector import Vector
 # be different from Percen_da
 
 
-class TephraImpactFunction(FunctionProvider):
+class TephraBuildingImpactFunction(FunctionProvider):
     """Risk plugin for tephra damage (FIXME: Origin?)
 
     :param requires category=='hazard' and \

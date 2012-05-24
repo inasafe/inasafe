@@ -13,7 +13,7 @@ class FloodEvacuationFunction(FunctionProvider):
     :author HKV
     :rating 1
     :param requires category=='hazard' and \
-                    subcategory.startswith('flood') and \
+                    subcategory in ['flood', 'tsunami'] and \
                     layertype=='raster' and \
                     unit=='m'
 

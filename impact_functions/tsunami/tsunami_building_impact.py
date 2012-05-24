@@ -3,6 +3,9 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 
+# Largely superseded by flood impact functions, but keep as it
+# will be needed to test impact on roads from both raster and polygon
+# hazard layers
 
 class TsunamiBuildingImpactFunction(FunctionProvider):
     """Risk plugin for tsunami impact on building data
@@ -13,7 +16,8 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory in ['building', 'road'] and \
-                    layertype=='vector'
+                    layertype=='vector' and \
+                    disabled==True
     """
 
     target_field = 'ICLASS'

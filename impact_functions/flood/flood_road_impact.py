@@ -12,7 +12,7 @@ class FloodRoadImpactFunction(FunctionProvider):
     """Risk plugin for flood impact on road data
 
     :param requires category=='hazard' and \
-                    subcategory.startswith('flood') and \
+                    subcategory in ['flood', 'tsunami'] and \
                     layertype=='raster' and \
                     unit=='m'
 
@@ -23,7 +23,7 @@ class FloodRoadImpactFunction(FunctionProvider):
     target_field = 'AFFECTED'
 
     def run(self, layers):
-        """Risk plugin for tsunami population
+        """Impact algorithm
         """
 
         # Extract data

@@ -1,5 +1,5 @@
-
-import os, sys
+import os
+import sys
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -10,4 +10,3 @@ from storage.utilities_test import TESTDATA
 
 if __name__ == '__main__':
     IP_verified(TESTDATA)
-

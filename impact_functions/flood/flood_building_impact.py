@@ -8,7 +8,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """Risk plugin for flood impact on building data
 
     :param requires category=='hazard' and \
-                    subcategory=='flood' and \
+                    subcategory in ['flood', 'tsunami'] and \
                     layertype in ['raster', 'vector']
 
     :param requires category=='exposure' and \
