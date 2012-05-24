@@ -101,7 +101,7 @@ class ISUtilitiesTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
         # This dataset has all cells with value 1.3
-        myLayer, myType = loadLayer('kecamatan_geo_centroids.shp')
+        myLayer, myType = loadLayer('kecamatan_jakarta_osm_centroids.shp')
         del myType
         # Note the float quantity values below
         myStyleInfo = {'target_field': 'KEPADATAN',

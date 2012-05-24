@@ -412,12 +412,15 @@ class Vector:
                                                 dtype='d',
                                                 copy=False))
                 elif self.geometry_type == ogr.wkbMultiPolygon:
-                    msg = ('Got geometry type Multipolygon (%s) for filename %s '
+                    msg = ('Got geometry type Multipolygon (%s) for '
+                           'filename %s '
                            'which is not yet supported.'
                            'Only point, line and polygon geometries are '
                            'supported. '
-                           'However, you can use QGIS functionality to convert multipart vector '
-                           'data to singlepart (Vector -> Geometry Tools -> Multipart to Singleparts'
+                           'However, you can use QGIS functionality to '
+                           'convert multipart vector '
+                           'data to singlepart (Vector -> Geometry Tools '
+                           '-> Multipart to Singleparts'
                            'and use the resulting dataset.'
                            % (ogr.wkbMultiPolygon,
                               filename))
@@ -808,8 +811,8 @@ class Vector:
                % geometrytype2string(self.geometry_type))
         verify(self.is_polygon_data, msg)
 
-        # FIXME (Ole): Maybe organise this the same way it is done with rasters
-        # FIXME (Ole): Retain original geometry to use with returned data here
+        # FIXME (Ole): Organise this the same way it is done with rasters
+        original_geometry = X.get_geometry()  # Geometry for returned data
         if X.is_polygon_data:
             # Use centroids, in case of polygons
             X = convert_polygons_to_centroids(X)
@@ -952,7 +955,8 @@ class Vector:
         # Create new Vector instance and return
         V = Vector(data=attributes,
                    projection=X.get_projection(),
-                   geometry=X.get_geometry())
+                   geometry=original_geometry,
+                   name=X.get_name())
         return V
 
     @property

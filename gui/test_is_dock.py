@@ -157,8 +157,8 @@ def loadStandardLayers():
     myFileList = ['Padang_WGS84.shp',
                   'glp10ag.asc',
                   'Shakemap_Padang_2009.asc',
-                  'tsunami_max_inundation_depth_BB_utm.asc',
-                  'tsunami_exposure_BB.shp',
+                  'tsunami_max_inundation_depth_utm56s.tif',
+                  'tsunami_building_exposure.shp',
                   'Flood_Current_Depth_Jakarta_geographic.asc',
                   'Population_Jakarta_geographic.asc',
                   'eq_yogya_2006.asc',
@@ -338,7 +338,7 @@ class ISDockTest(unittest.TestCase):
         assert '2993' in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_small(self):
-        """Padang 2009 fatalities estimated correctly - small extent"""
+        """Padang 2009 fatalities estimated correctly (small extent)"""
 
         # Push OK with the left mouse button
 
@@ -351,14 +351,15 @@ class ISDockTest(unittest.TestCase):
 
         # Simulate choosing another combo item and running
         # the model again
-        # set hazard to Shakemap_Padang_2009
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
-        # set exposure to Population Density Estimate (5kmx5km)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        myIndex = DOCK.cboHazard.findText('Shakemap_Padang_2009')
+        assert myIndex != -1, 'Shakemap_Padang_2009 hazard layer not found'
+        DOCK.cboHazard.setCurrentIndex(myIndex)
+
+        # Exposure layers
+        myIndex = DOCK.cboExposure.findText(
+                                    'Population Density Estimate (5kmx5km)')
+        assert myIndex != -1, 'Population Density Estimate (5kmx5km) not found'
+        DOCK.cboExposure.setCurrentIndex(myIndex)
 
         myDict = getUiState(DOCK)
         myExpectedDict = {'Hazard': 'Shakemap_Padang_2009',
@@ -385,7 +386,7 @@ class ISDockTest(unittest.TestCase):
         assert '847529' in myResult, myMessage
 
     def test_runEarthquakeFatalityFunction_Padang_full(self):
-        """Padang 2009 fatalities estimated correctly"""
+        """Padang 2009 fatalities estimated correctly (large extent)"""
 
         # Push OK with the left mouse button
 
@@ -395,15 +396,16 @@ class ISDockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        # set hazard to Shakemap_Padang_2009
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
-        # Simulate choosing another combo item and running
-        # the model again - Population Density Estimate (5kmx5km)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        # Hazard layers
+        myIndex = DOCK.cboHazard.findText('Shakemap_Padang_2009')
+        assert myIndex != -1, 'Shakemap_Padang_2009 hazard layer not found'
+        DOCK.cboHazard.setCurrentIndex(myIndex)
+
+        # Exposure layers
+        myIndex = DOCK.cboExposure.findText(
+                                    'Population Density Estimate (5kmx5km)')
+        assert myIndex != -1, 'Population Density Estimate (5kmx5km) not found'
+        DOCK.cboExposure.setCurrentIndex(myIndex)
 
         myDict = getUiState(DOCK)
         myExpectedDict = {'Hazard': 'Shakemap_Padang_2009',
@@ -441,25 +443,22 @@ class ISDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        myIndex = DOCK.cboHazard.findText('Tsunami Max Inundation')
+        assert myIndex != -1, 'Tsunami Max Inundation hazard layer not found'
+        DOCK.cboHazard.setCurrentIndex(myIndex)
 
         # Exposure layers
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        myIndex = DOCK.cboExposure.findText('Tsunami Building Exposure')
+        assert myIndex != -1, 'Tsunami Building Exposure layer not found'
+        DOCK.cboExposure.setCurrentIndex(myIndex)
 
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
 
         myExpectedDict = {'Run Button Enabled': True,
                         'Impact Function': 'Tsunami Building Impact Function',
-                        'Hazard': 'tsunami_max_inundation_depth_BB_utm',
-                        'Exposure': 'tsunami_exposure_BB'}
+                        'Hazard': 'Tsunami Max Inundation',
+                        'Exposure': 'Tsunami Building Exposure'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
                             myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
@@ -476,9 +475,14 @@ class ISDockTest(unittest.TestCase):
         # < 1 m:    1923
         # 1 - 3 m:    89
         # > 3 m:    0
+        # Post replacement of Batemans Bay dataset
+        #< 1 m:  10
+        #1 - 3 m:    7
+        #> 3 m:  0
+
         myMessage = 'Result not as expected: %s' % myResult
-        assert '1923' in myResult, myMessage
-        assert '89' in myResult, myMessage
+        assert '10' in myResult, myMessage
+        assert '7' in myResult, myMessage
         assert '0' in myResult, myMessage
 
     def test_runFloodPopulationImpactFunction(self):
@@ -705,12 +709,15 @@ class ISDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers  -Yogya2006
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        myIndex = DOCK.cboHazard.findText('Yogya2006')
+        assert myIndex != -1, 'Yogya2006 hazard layer not found'
+        DOCK.cboHazard.setCurrentIndex(myIndex)
         # Exposure layers - OSM Building Polygons
+        myIndex = DOCK.cboExposure.findText('OSM Building Polygons')
+        assert myIndex != -1, 'OSM Building Polygons exposure layer not found'
+        DOCK.cboExposure.setCurrentIndex(myIndex)
         # Choose impact function
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
+        # QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)

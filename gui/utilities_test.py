@@ -165,7 +165,7 @@ def setJakartaGoogleExtent():
 def setBatemansBayGeoExtent():
     """Zoom to an area occupied by both Batemans Bay
      layers in geo crs"""
-    myRect = QgsRectangle(150.162, -35.741, 150.207, -35.719)
+    myRect = QgsRectangle(150.152, -35.710, 150.187, -35.7013)
     CANVAS.setExtent(myRect)
 
 
