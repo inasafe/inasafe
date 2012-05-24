@@ -64,25 +64,6 @@ class FloodEvacuationFunction(FunctionProvider):
         count1000 = str(number_of_people_affected / 1000)
 
         # Create report
-        iname = inundation.get_name()
-        pname = population.get_name()
-        table_caption = ('Apabila terjadi "%s" perkiraan dampak '
-                         'terhadap "%s" kemungkinan yang terjadi&#58;'
-                          % (iname, pname))
-        table_body = [['Perlu Evakuasi (x 1000)&#58;', '%s' % count1000],
-                      [TableCell('Catatan&#58;', header=True, col_span=2)],
-                      [TableCell('Jumlah penduduk Jakarta %s'
-                                         % total1000, col_span=2)],
-                      [TableCell('Jumlah dalam ribuan', col_span=2)],
-                      [TableCell('Penduduk perlu dievakuasi ketika'
-                                        'banjir lebih dari %i m.<br>'
-                                        % threshold, col_span=2)],
-                      [TableCell('Jumlah dalam ribuan', col_span=2)],
-                      [TableCell('Minmum Bantuan per minggu (BNPB Perka'
-                                 ' 7/2008)', col_span=2)]
-                      ]
-        impact_summary = Table(table_body, caption=table_caption
-                               ).toNewlineFreeString()
 
         # Create impact_table based on BNPB Perka 7/2008 minimum bantuan
         # Weekly needs (see issue #82)
@@ -101,6 +82,28 @@ class FloodEvacuationFunction(FunctionProvider):
                       ['Jamban Keluarga', toilets]]
         #table_caption = 'Sumber: BNPB Perka 7/2008'
         impact_table = Table(table_body).toNewlineFreeString()
+
+        #Summary table
+
+        iname = inundation.get_name()
+        pname = population.get_name()
+        table_caption = ('Apabila terjadi "%s" perkiraan dampak '
+                         'terhadap "%s" kemungkinan yang terjadi&#58;'
+                          % (iname, pname))
+        table_body.extend([['Perlu Evakuasi (x 1000)', '%s' % count1000],
+                      [TableCell('Catatan:', header=True, col_span=2)],
+                      [TableCell('Jumlah penduduk Jakarta %s'
+                                         % total1000, col_span=2)],
+                      [TableCell('Jumlah dalam ribuan', col_span=2)],
+                      [TableCell('Penduduk perlu dievakuasi ketika'
+                                        'banjir lebih dari %i m.<br>'
+                                        % threshold, col_span=2)],
+                      [TableCell('Jumlah dalam ribuan', col_span=2)],
+                      [TableCell('Minmum Bantuan per minggu (BNPB Perka'
+                                 ' 7/2008)', col_span=2)]
+                      ])
+        impact_summary = Table(table_body, caption=table_caption
+                               ).toNewlineFreeString()
 
         map_title = 'Penduduk yang Mungkin dievakuasi'
 
