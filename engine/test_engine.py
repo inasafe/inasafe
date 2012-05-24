@@ -25,6 +25,7 @@ from storage.vector import Vector
 from impact_functions import get_plugins
 
 from storage.utilities_test import TESTDATA
+# These imports are needed for impact function registration - dont remove
 from impact_functions_for_testing import empirical_fatality_model
 from impact_functions_for_testing import unspecific_building_impact_model
 from impact_functions_for_testing import NEXIS_building_impact_model
@@ -637,8 +638,8 @@ class Test_Engine(unittest.TestCase):
         hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
                             % TESTDATA)
         exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
-        exposure_with_depth_filename = ('%s/tsunami_building_exposure_'
-                                        'with_depth.shp' % TESTDATA)
+        exposure_with_depth_filename = ('%s/tsunami_building_exposure'
+                                        '.shp' % TESTDATA)
         reference_impact_filename = ('%s/tsunami_building_assessment'
                                      '.shp' % TESTDATA)
 
@@ -655,7 +656,6 @@ class Test_Engine(unittest.TestCase):
         impact_vector = calculate_impact(layers=[H, E],
                                          impact_fcn=IF)
         impact_filename = impact_vector.get_filename()
-
         # Read calculated result
         impact_vector = read_layer(impact_filename)  # Read to have truncation
         icoordinates = impact_vector.get_geometry()
@@ -676,19 +676,19 @@ class Test_Engine(unittest.TestCase):
         # original exposure point (with depth) locations
         ref_depth = read_layer(exposure_with_depth_filename)
         refdepth_coordinates = ref_depth.get_geometry()
-        refdepth_attributes = ref_depth.get_data()
+        #refdepth_attributes = ref_depth.get_data()
         assert N == len(refdepth_coordinates)
         msg = ('Coordinates of impact results do not match those of '
                'exposure data (with depth)')
         assert numpy.allclose(icoordinates, refdepth_coordinates), msg
 
         # Read reference results
-        hazard_raster = read_layer(hazard_filename)
-        A = hazard_raster.get_data()
-        depth_min, depth_max = hazard_raster.get_extrema()
+        #hazard_raster = read_layer(hazard_filename)
+        #A = hazard_raster.get_data()
+        #depth_min, depth_max = hazard_raster.get_extrema()
 
         ref_impact = read_layer(reference_impact_filename)
-        refimpact_coordinates = ref_impact.get_geometry()
+        #refimpact_coordinates = ref_impact.get_geometry()
         refimpact_attributes = ref_impact.get_data()
 
         # Check for None
@@ -699,7 +699,7 @@ class Test_Engine(unittest.TestCase):
 
         # Check sanity of calculated attributes
         for i in range(N):
-            lon, lat = icoordinates[i]
+            #lon, lat = icoordinates[i]
 
             depth = iattributes[i]['DEPTH']
 
