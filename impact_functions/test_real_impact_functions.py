@@ -33,19 +33,15 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Earthquake Guidelines Function' in P
         assert 'Be damaged according to building type' in P
         assert 'Be temporarily closed' in P
-        assert 'Earthquake Population Exposure Function' in P
         assert 'Tsunami Population Impact Function' in P
         assert 'Need evacuation' in P
         assert 'Be affected by tsunami' in P
         assert 'Tephra Impact Function' in P
-        assert 'Earthquake Fatality Function' in P
         assert 'Earthquake Guidelines Function' in P
         assert 'Tephra Population Impact Function' in P
         assert 'Flood Road Impact Function' in P
         assert 'Dalam bahaya' in P
-        assert 'U S G S Fatality Function' in P
         assert 'I T B Earthquake Building Damage Function' in P
-        assert 'Earthquake Fatality Function Podes' in P
 
         # This one should get 2 earthquake building impact functions
         D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'MMI'}
