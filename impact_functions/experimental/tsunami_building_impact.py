@@ -7,6 +7,7 @@ from storage.utilities import ugettext as _
 # will be needed to test impact on roads from both raster and polygon
 # hazard layers
 
+
 class TsunamiBuildingImpactFunction(FunctionProvider):
     """Risk plugin for tsunami impact on building data
 

@@ -17,13 +17,14 @@ extensions_to_ignore = ['.py','.c', '.h', '.cpp', '.f',
                         '.bat', '.m','.sh','.awk', '.pck']
 
 # Ignore shp file auxiliary files
-extensions_to_ignore += ['.prj', '.sbn', '.sbx']
+extensions_to_ignore += ['.prj', '.sbn', '.sbx', '.cpg']
 
 # Ignore InaSAFE .keywords files
 extensions_to_ignore += ['.keywords']
 
 # Ignore QGIS projects and styles
-extensions_to_ignore += ['.qml', '.qpj', '.qgs', '.sld', '.sqlite']
+extensions_to_ignore += ['.qml', '.qpj', '.qgs',
+                         '.sld', '.sqlite', '.db']
 
 # Ignore pdf, doc and csv documents
 extensions_to_ignore += ['.pdf', '.doc', '.csv']
@@ -34,7 +35,7 @@ extensions_to_ignore += ['.aux', '.log', '.idx', 'ilg', '.ind',
                          '.bbl', '.blg', '.syn', '.toc', '.xml']
 
 # Ignore license files themselves
-extensions_to_ignore += ['.lic']
+extensions_to_ignore += ['.lic', '.permission']
 
 # Ignore certain other files,
 files_to_ignore = ['README.txt', 'LICENSE.txt', 'Makefile',

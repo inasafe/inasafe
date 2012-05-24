@@ -36,11 +36,10 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Tsunami Population Impact Function' in P
         assert 'Need evacuation' in P
         assert 'Be affected by tsunami' in P
-        assert 'Tephra Impact Function' in P
+        assert 'Tephra Building Impact Function' in P
         assert 'Earthquake Guidelines Function' in P
         assert 'Tephra Population Impact Function' in P
         assert 'Flood Road Impact Function' in P
-        assert 'Dalam bahaya' in P
         assert 'I T B Earthquake Building Damage Function' in P
 
         # This one should get 2 earthquake building impact functions
@@ -75,10 +74,9 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Need evacuation' in P
         assert 'Be temporarily closed' in P
         assert 'Flood Road Impact Function' in P
-        assert 'Dalam bahaya' in P
 
-        # Try to get general tsunami building impact function (e.g. BB data)
-        f_name = 'Be affected by tsunami'
+        # Try to get general inundation building impact function
+        f_name = 'Be temporarily closed'
 
         D1 = {'category': 'hazard', 'subcategory': 'tsunami'}
         D2 = {'category': 'exposure', 'subcategory': 'building'}
@@ -88,7 +86,7 @@ class Test_real_plugins(unittest.TestCase):
         D2['layertype'] = 'vector'
         P = get_admissible_plugins([D1, D2])
 
-        msg = 'Expected name %s in P: %s' % (f_name, P)
+        msg = 'Expected name "%s" in P: %s' % (f_name, P)
         assert f_name in P, msg
 
         # Get requirements from expected function
