@@ -14,5 +14,6 @@ This section of the documention describes how to use the |project_name| system.
    data_types
    using-qgis
    faq
+   known_issues
    changelog
 
