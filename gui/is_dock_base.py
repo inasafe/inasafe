@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_dock_base.ui'
 #
-# Created: Wed May 23 05:27:08 2012
+# Created: Thu May 24 04:54:09 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!

@@ -141,16 +141,26 @@ class TableCell (object):
     def __str__(self):
         """return the HTML code for the table cell as a string"""
         attribs_str = ""
-        if self.bgcolor: self.attribs['bgcolor'] = self.bgcolor
-        if self.width: self.attribs['width'] = self.width
-        if self.align: self.attribs['align'] = self.align
-        if self.char: self.attribs['char'] = self.char
-        if self.charoff: self.attribs['charoff'] = self.charoff
-        if self.valign: self.attribs['valign'] = self.valign
-        if self.style: self.attribs['style'] = self.style
-        if self.cell_class: self.attribs['class'] = self.cell_class
-        if self.row_span: self.attribs['rowspan'] = self.row_span
-        if self.col_span: self.attribs['colspan'] = self.col_span
+        if self.bgcolor:
+            self.attribs['bgcolor'] = self.bgcolor
+        if self.width:
+            self.attribs['width'] = self.width
+        if self.align:
+            self.attribs['align'] = self.align
+        if self.char:
+            self.attribs['char'] = self.char
+        if self.charoff:
+            self.attribs['charoff'] = self.charoff
+        if self.valign:
+            self.attribs['valign'] = self.valign
+        if self.style:
+            self.attribs['style'] = self.style
+        if self.cell_class:
+            self.attribs['class'] = self.cell_class
+        if self.row_span:
+            self.attribs['rowspan'] = self.row_span
+        if self.col_span:
+            self.attribs['colspan'] = self.col_span
         for attr in self.attribs:
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
         if self.text:
@@ -163,7 +173,6 @@ class TableCell (object):
         else:
             return '   <td%s>%s</td>\n' % (attribs_str, text)
 
-#-------------------------------------------------------------------------------
 
 class TableRow (object):
     """
@@ -172,7 +181,8 @@ class TableRow (object):
     Attributes:
     - cells: list, tuple or any iterable, containing one string or TableCell
          object for each cell
-    - header: bool, true for a header row (th), false for a normal data row (td)
+    - header: bool, true for a header row (th),
+      false for a normal data row (td)
     - bgcolor: str, background color
     - col_align, col_valign, col_char, col_charoff, col_styles: see Table class
     - attribs: dict, additional attributes for the tr tag
@@ -193,13 +203,14 @@ class TableRow (object):
         self.col_charoff = col_charoff
         self.col_styles = col_styles
         self.attribs = attribs
-        if attribs==None:
+        if attribs == None:
             self.attribs = {}
 
     def __str__(self):
         """return the HTML code for the table row as a string"""
         attribs_str = ""
-        if self.bgcolor: self.attribs['bgcolor'] = self.bgcolor
+        if self.bgcolor:
+            self.attribs['bgcolor'] = self.bgcolor
         for attr in self.attribs:
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
         result = '  <tr%s>\n' % attribs_str
@@ -208,22 +219,21 @@ class TableRow (object):
             if not isinstance(cell, TableCell):
                 cell = TableCell(cell, header=self.header)
             # apply column alignment if specified:
-            if self.col_align and cell.align==None:
+            if self.col_align and cell.align == None:
                 cell.align = self.col_align[col]
-            if self.col_char and cell.char==None:
+            if self.col_char and cell.char == None:
                 cell.char = self.col_char[col]
-            if self.col_charoff and cell.charoff==None:
+            if self.col_charoff and cell.charoff == None:
                 cell.charoff = self.col_charoff[col]
-            if self.col_valign and cell.valign==None:
+            if self.col_valign and cell.valign == None:
                 cell.valign = self.col_valign[col]
             # apply column style if specified:
-            if self.col_styles and cell.style==None:
+            if self.col_styles and cell.style == None:
                 cell.style = self.col_styles[col]
             result += str(cell)
         result += '  </tr>\n'
         return result
 
-#-------------------------------------------------------------------------------
 
 class Table(object):
     """
@@ -232,7 +242,8 @@ class Table(object):
     Attributes:
     - rows: list, tuple or any iterable, containing one iterable or TableRow
         object for each row
-    - header_row: list, tuple or any iterable, containing the header row (optional)
+    - header_row: list, tuple or any iterable, containing the
+      header row (optional)
     - class: str, CSS class to use. Defaults to DEFAULT_TABLE_CLASS
     - caption: str, caption for the table
     - border: str or int, border width
@@ -259,34 +270,44 @@ class Table(object):
         self.border = border
         self.style = style
         # style for thin borders by default
-        if style == None: self.style = TABLE_STYLE_THINBORDER
-        if table_class == None: self.table_class = DEFAULT_TABLE_CLASS
+        if style == None:
+            self.style = TABLE_STYLE_THINBORDER
+        if table_class == None:
+            self.table_class = DEFAULT_TABLE_CLASS
         self.caption = caption
         self.caption_at_bottom = caption_at_bottom
         self.width = width
         self.cellspacing = cellspacing
         self.cellpadding = cellpadding
-        self.header_row  = header_row
+        self.header_row = header_row
         self.rows = rows
-        if not rows: self.rows = []
-        self.attribs     = attribs
-        if not attribs: self.attribs = {}
-        self.col_width   = col_width
-        self.col_align   = col_align
-        self.col_char    = col_char
+        if not rows:
+            self.rows = []
+        self.attribs = attribs
+        if not attribs:
+            self.attribs = {}
+        self.col_width = col_width
+        self.col_align = col_align
+        self.col_char = col_char
         self.col_charoff = col_charoff
-        self.col_valign  = col_valign
-        self.col_styles  = col_styles
+        self.col_valign = col_valign
+        self.col_styles = col_styles
 
     def __str__(self):
         """return the HTML code for the table as a string"""
         attribs_str = ""
-        if self.table_class: self.attribs['class'] = self.table_class
-        if self.border: self.attribs['border'] = self.border
-        if self.style:  self.attribs['style'] = self.style
-        if self.width:  self.attribs['width'] = self.width
-        if self.cellspacing:  self.attribs['cellspacing'] = self.cellspacing
-        if self.cellpadding:  self.attribs['cellpadding'] = self.cellpadding
+        if self.table_class:
+            self.attribs['class'] = self.table_class
+        if self.border:
+            self.attribs['border'] = self.border
+        if self.style:
+            self.attribs['style'] = self.style
+        if self.width:
+            self.attribs['width'] = self.width
+        if self.cellspacing:
+            self.attribs['cellspacing'] = self.cellspacing
+        if self.cellpadding:
+            self.attribs['cellpadding'] = self.cellpadding
         for attr in self.attribs:
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
         result = '<table%s>\n' % attribs_str
@@ -301,36 +322,12 @@ class Table(object):
                 caption_class = CAPTION_BOTTOM_CLASS
             result += ' <caption%s>%s</caption>\n' % (
                                     caption_class,
-                                    self.caption )
+                                    self.caption)
         # insert column tags and attributes if specified:
         if self.col_width:
             for width in self.col_width:
                 result += '  <col width="%s">\n' % width
-        # the following code would also generate column attributes for style
-        # and alignement according to HTML4 specs,
-        # BUT it is not supported completely (only width) on Mozilla Firefox:
-        # see https://bugzilla.mozilla.org/show_bug.cgi?id=915
-        ##        n_cols = max(len(self.col_styles), len(self.col_width),
-        ##                     len(self.col_align), len(self.col_valign))
-        ##        for i in range(n_cols):
-        ##            col = ''
-        ##            try:
-        ##                if self.col_styles[i]:
-        ##                    col += ' style="%s"' % self.col_styles[i]
-        ##            except: pass
-        ##            try:
-        ##                if self.col_width[i]:
-        ##                    col += ' width="%s"' % self.col_width[i]
-        ##            except: pass
-        ##            try:
-        ##                if self.col_align[i]:
-        ##                    col += ' align="%s"' % self.col_align[i]
-        ##            except: pass
-        ##            try:
-        ##                if self.col_valign[i]:
-        ##                    col += ' valign="%s"' % self.col_valign[i]
-        ##            except: pass
-        ##            result += '<COL%s>\n' % col
+
         # First insert a header row if specified:
         if self.header_row:
             result += ' <thead>\n'
@@ -364,11 +361,11 @@ class Table(object):
     def toNewlineFreeString(self):
         """Return a string representation of the table which contains no
         newlines.
-        
+
         .. note:: any preformatted <pre> blocks will be adversely affected by
            this.
         """
-        return self.__str__().replace('\n','')
+        return self.__str__().replace('\n', '')
 
 
 class List (object):
@@ -400,37 +397,40 @@ class List (object):
     def __str__(self):
         """return the HTML code for the list as a string"""
         attribs_str = ""
-        if self.start:  self.attribs['start'] = self.start
+        if self.start:
+            self.attribs['start'] = self.start
         for attr in self.attribs:
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
-        if self.ordered: tag = 'OL'
-        else:            tag = 'UL'
+        if self.ordered:
+            tag = 'ol'
+        else:
+            tag = 'ul'
         result = '<%s%s>\n' % (tag, attribs_str)
         for line in self.lines:
             result += ' <LI>%s\n' % str(line)
         result += '</%s>\n' % tag
         return result
 
+
 # much simpler definition of a link as a function:
 def Link(text, url):
     return '<a href="%s">%s</a>' % (url, text)
 
+
 def link(text, url):
     return '<a href="%s">%s</a>' % (url, text)
+
 
 def table(*args, **kwargs):
     'return HTML code for a table as a string. See Table class for parameters.'
     return str(Table(*args, **kwargs))
 
-def list(*args, **kwargs):
+
+def htmllist(*args, **kwargs):
     'return HTML code for a list as a string. See List class for parameters.'
     return str(List(*args, **kwargs))
 
-
-#=== MAIN =====================================================================
-
 # Show sample usage when this file is launched as a script.
-
 if __name__ == '__main__':
 
     # open an HTML file to show output in a browser
@@ -442,7 +442,7 @@ if __name__ == '__main__':
     t.rows.append(('i', 'j', 'k'))
     f.write(str(t) + '<p>\n')
     print str(t)
-    print '-'*79
+    print '-' * 79
 
     t2 = Table([
         ('1', '2'),
@@ -451,30 +451,30 @@ if __name__ == '__main__':
     col_width=('', '75%'))
     f.write(str(t2) + '<p>\n')
     print t2
-    print '-'*79
+    print '-' * 79
 
     t2.rows.append(['5', '6'])
     t2.rows[1][1] = TableCell('new', bgcolor='red')
     t2.rows.append(TableRow(['7', '8'], attribs={'align': 'center'}))
     f.write(str(t2) + '<p>\n')
     print t2
-    print '-'*79
+    print '-' * 79
 
     # sample table with column attributes and styles:
     table_data = [
-        ['Smith',       'John',         30,    4.5],
-        ['Carpenter',   'Jack',         47,    7],
-        ['Johnson',     'Paul',         62,    10.55],
+        ['Smith', 'John', 30, 4.5],
+        ['Carpenter', 'Jack', 47, 7],
+        ['Johnson', 'Paul', 62, 10.55],
     ]
     htmlcode = table(table_data,
-    header_row = ['Last name',   'First name',   'Age', 'Score'],
-    col_width=['', '20%', '10%', '10%'],
-    col_align=['left', 'center', 'right', 'char'],
-    col_styles=['font-size: large', '', 'font-size: small',
-                'background-color:yellow'])
+                     header_row=['Last name', 'First name', 'Age', 'Score'],
+                     col_width=['', '20%', '10%', '10%'],
+                     col_align=['left', 'center', 'right', 'char'],
+                     col_styles=['font-size: large', '', 'font-size: small',
+                                 'background-color:yellow'])
     f.write(htmlcode + '<p>\n')
     print htmlcode
-    print '-'*79
+    print '-' * 79
 
     def gen_table_squares(n):
         """
@@ -483,18 +483,18 @@ if __name__ == '__main__':
     ##        # First, header row:
     ##        yield TableRow(('x', 'square(x)'), header=True, bgcolor='blue')
     ##        # then all rows:
-        for x in range(1, n+1):
-            yield (x, x*x)
-    
+        for x in range(1, n + 1):
+            yield (x, x * x)
+
         t = Table(rows=gen_table_squares(10), header_row=('x', 'square(x)'))
         f.write(str(t) + '<p>\n')
-    
-        print '-'*79
+
+        print '-' * 79
         l = List(['aaa', 'bbb', 'ccc'])
         f.write(str(l) + '<p>\n')
         l.ordered = True
         f.write(str(l) + '<p>\n')
-        l.start=10
+        l.start = 10
         f.write(str(l) + '<p>\n')
-    
+
         f.close()

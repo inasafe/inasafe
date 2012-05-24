@@ -288,6 +288,3 @@ class TablesTest(unittest.TestCase):
         row = TableRow([cell])
         table = Table(row)
         del table
-
-
-
