@@ -7,13 +7,16 @@ import numpy
 
 
 class ITBFatalityFunction(FunctionProvider):
-    """Earthquake Fatality Model based on ITB .......sdfaasdfasdfd
+    """Earthquake Fatality Model based on ITB .......(TBA)
 
-    Reference:
+    Reference (To be provided by Hadi Ghasemi):
 
     xxxxx
     x
     xxx
+
+
+    Caveats and limitations (TBA)
 
 
     :author Hadi Ghasemi
@@ -36,9 +39,12 @@ class ITBFatalityFunction(FunctionProvider):
         """Risk plugin for earthquake fatalities
 
         Input
-          H: Numerical array of hazard data
-          E: Numerical array of exposure data
+          layers: List of layers expected to contain
+              H: Raster layer of MMI ground shaking
+              P: Raster layer of population density
 
+
+        To be provided by Hadi Ghasemi
         Algorithm and coefficients are from:
         xxxxxxx
 
@@ -55,6 +61,7 @@ class ITBFatalityFunction(FunctionProvider):
         P = population.get_data()  # Population Density
 
         # Calculate population affected by each MMI level
+        # FIXME (Ole): this range is 2-9. Should 10 be included?
         mmi_range = range(2, 10)
         number_of_people_affected = {}
         number_of_fatalities = {}
@@ -65,11 +72,17 @@ class ITBFatalityFunction(FunctionProvider):
         for mmi in mmi_range:
 
             # Select population exposed to this mmi level
-            mask = numpy.logical_and(mmi - 0.5 < H,
-                                     H <= mmi + 0.5)
+            #mask = numpy.logical_and(mmi - 0.5 < H,
+            #                         H <= mmi + 0.5)
+            #I = numpy.where(mask, P, 0)
+
+            # Identify cells where MMI is in class i
+            mask = (H > mmi - 0.5) * (H <= mmi + 0.5)
+
+            # Count population affected by this shake level
             I = numpy.where(mask, P, 0)
 
-            # Calculate expected number of fatalities
+            # Calculate expected number of fatalities per level
             fatality_rate = numpy.power(10.0, x * mmi - y)
             F = fatality_rate * I
 
