@@ -42,8 +42,7 @@ class ITBFatalityFunction(FunctionProvider):
         Algorithm and coefficients are from:
         xxxxxxx
 
-        teta=14.05, beta=0.17, zeta=2.1  # Coefficients for Indonesia.
-
+        x=0.62275231, y=8.03314466, zeta=2.15  # Coefficients for Indonesia.
 
         """
 
@@ -78,11 +77,14 @@ class ITBFatalityFunction(FunctionProvider):
             R += F
 
             # Generate text with result for this study
+            # This is what is used in the real time system exposure table
             number_of_people_affected[mmi] = numpy.nansum(I.flat)
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
 
-        # Stats
+        # Total statistics
         total = numpy.nansum(P.flat)
+
+        # This might be reported in real time system as well
         fatalities = numpy.nansum(number_of_fatalities.values())
 
         # Generate text with result for this study
@@ -104,6 +106,8 @@ class ITBFatalityFunction(FunctionProvider):
                              'total_population': total,
                              'total_fatalities': fatalities},
                    name='Estimated fatalities')
+
+        # Maybe return a shape file with contours instead
         return L
 
 

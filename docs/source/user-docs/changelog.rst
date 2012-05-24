@@ -5,6 +5,12 @@ Whats new?
 
 Changelog for version 0.3.0
 ...........................
+* Added AusAid and World Bank logos to dock
+* Fixed bug with flood population evacuation reporting units
+
+
+Changelog for version 0.3.0
+...........................
 * Documentation updates - extended guides for using the |project_name| dock and
   keyword editors.
 * Support for remote layers in keywords editor and scenario modelling
