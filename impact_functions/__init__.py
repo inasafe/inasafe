@@ -11,6 +11,9 @@ dirname = os.path.dirname(__file__)
 
 # Import all the subdirectories
 for f in os.listdir(dirname):
+    if f in ['experimental']:
+        continue
+
     if os.path.isdir(os.path.join(dirname, f)):
         cmd = 'from impact_functions.%s import *' % f
         #print cmd
