@@ -49,6 +49,9 @@ from is_utilities import (setRasterStyle,
 from storage.utilities_test import TESTDATA
 from storage.utilities import read_keywords
 
+# Retired impact function for characterisation
+from engine.impact_functions_for_testing import allen_fatality_model
+
 try:
     from pydevd import *
     print 'Remote debugging is enabled.'
