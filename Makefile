@@ -113,7 +113,7 @@ testdata:
 	@echo "-----------------------------------------------------------"
 	@echo "Updating test data - please hit Enter if asked for password"
 	@echo "-----------------------------------------------------------"
-	@svn co http://www.aifdr.org/svn/riab_test_data ../riab_test_data
+	@svn co http://www.aifdr.org/svn/inasafe_data ../inasafe_data
 
 disabled_tests:
 	@echo
