@@ -508,7 +508,8 @@ class ISDockTest(unittest.TestCase):
 
         # Hazard layers - default is already Banjir Jakarta seperti 2007
         myIndex = DOCK.cboHazard.findText('Banjir Jakarta seperti 2007')
-        assert myIndex != -1, 'Banjir Jakarta seperti 2007 hazard layer not found'
+        msg = 'Banjir Jakarta seperti 2007 hazard layer not found'
+        assert myIndex != -1, msg
         DOCK.cboHazard.setCurrentIndex(myIndex)
 
         # Exposure layers - Penduduk Jakarta
@@ -518,7 +519,9 @@ class ISDockTest(unittest.TestCase):
 
         # Choose impact function - HKVtest
         myIndex = DOCK.cboFunction.findText('HKVtest')
-        assert myIndex != -1, 'HKVtest impact function not found: ' + combosToString(DOCK)
+        msg = ('HKVtest impact function not '
+               'found: ' + combosToString(DOCK))
+        assert myIndex != -1, msg
         DOCK.cboFunction.setCurrentIndex(myIndex)
 
         # Exposure layers - Penduduk Jakarta
@@ -550,7 +553,8 @@ class ISDockTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
-        # Check that the number is as what was calculated by Marco Hartman form HKV
+        # Check that the number is as what was calculated by
+        # Marco Hartman form HKV
         msg = 'Result not as expected: %s' % myResult
         assert '2480' in myResult, msg  # This is the expected impact number
 
@@ -671,7 +675,8 @@ class ISDockTest(unittest.TestCase):
         # Hazard layers - already on correct entry
         # Hazard layers - default is already Banjir Jakarta seperti 2007
         myIndex = DOCK.cboHazard.findText('Banjir Jakarta seperti 2007')
-        assert myIndex != -1, 'Banjir Jakarta seperti 2007 hazard layer not found'
+        msg = 'Banjir Jakarta seperti 2007 hazard layer not found'
+        assert myIndex != -1, msg
         DOCK.cboHazard.setCurrentIndex(myIndex)
 
         # Exposure layers - Penduduk Jakarta
@@ -681,7 +686,9 @@ class ISDockTest(unittest.TestCase):
 
         # Choose impact function - HKVtest
         myIndex = DOCK.cboFunction.findText('HKVtest')
-        assert myIndex != -1, 'HKVtest impact function not found: ' + combosToString(DOCK)
+        msg = ('HKVtest impact function not '
+               'found: ' + combosToString(DOCK))
+        assert myIndex != -1, msg
         DOCK.cboFunction.setCurrentIndex(myIndex)
 
         # Check that layers and impact function are correct
