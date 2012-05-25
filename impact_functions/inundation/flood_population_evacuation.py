@@ -4,8 +4,7 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
 from storage.utilities import ugettext as _
-from impact_functions.tables import (Table, TableRow, TableCell)
-from storage.utilities import ugettext as _
+from impact_functions.tables import Table, TableRow
 
 
 class FloodEvacuationFunction(FunctionProvider):

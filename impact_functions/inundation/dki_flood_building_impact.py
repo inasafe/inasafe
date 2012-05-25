@@ -2,6 +2,7 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
+from impact_functions.tables import (Table, TableRow)
 
 
 class DKIFloodBuildingImpactFunction(FunctionProvider):
@@ -98,35 +99,33 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                 del buildings[usage]
                 del affected_buildings[usage]
 
-        # Create report
+        # Generate impact report for the pdf map
         Hname = H.get_name()
         Ename = E.get_name()
-        impact_summary = _('<b>In case of "%s" the estimated impact to '
-                           '"%s" is&#58;</b><br><br><p>' % (Hname,
-                                                            Ename))
-        impact_summary += ('<table class="table table-striped condensed'
-                           ' bordered-table">'
-                           '   <tr><th><b>%s</b></th>'
-                           '<th><b>%s</b></th>'
-                           '<th><b>%s</b></th></tr>'
-                           '   <tr></tr>'
-                           % (_('Building type'), _('Flooded'), _('Total')))
+
+        # Generate impact report for the pdf map
+        table_body = [_('In case of "%s" the estimated impact to '
+                           '"%s" is:') % (Hname, Ename),
+                      TableRow([_('Building type'), _('Flooded'), _('Total')],
+                               header=True)]
 
         for usage in buildings:
-            s = ('   <tr><td>%s&#58;</td><td>%i</td><td>%i</td></tr>'
-                 % (usage, affected_buildings[usage], buildings[usage]))
-            impact_summary += s
+            s = TableRow([usage.replace('_', ' '),
+                          affected_buildings[usage],
+                          buildings[usage]])
+            table_body.append(s)
 
-        impact_summary += '</table>'
-
-        impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<b>' + _('Assumptions') + '&#58;</b><br>'
-        impact_summary += _('Buildings are said to be flooded when ')
+        table_body.append(TableRow(_('Notes:'), header=True))
+        assumption = _('Buildings are said to be flooded when ')
         if hazard_type == 'depth':
-            impact_summary += _('flood levels exceed %.1f m' % threshold)
+            assumption += _('flood levels exceed %.1f m') % threshold
         else:
-            impact_summary += _('in areas marked as flood prone')
+            assumption += _('in areas marked as flood prone')
+        table_body.append(assumption)
 
+        impact_summary = Table(table_body).toNewlineFreeString()
+        impact_table = impact_summary
+        map_title = _('Buildings inundated')
         # Create style
         style_classes = [dict(label=_('Not Flooded'), min=0, max=0,
                               colour='#1EFC7C', transparency=0, size=1),
@@ -140,6 +139,8 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                    projection=I.get_projection(),
                    geometry=I.get_geometry(),
                    name=_('Estimated buildings affected'),
-                   keywords={'impact_summary': impact_summary},
+                   keywords={'impact_summary': impact_summary,
+                             'impact_table': impact_table,
+                             'map_title': map_title},
                    style_info=style_info)
         return V
