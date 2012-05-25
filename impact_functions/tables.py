@@ -207,7 +207,8 @@ class TableRow (object):
             self.attribs = {}
 
     def apply_properties(self, cell, col):
-    # apply column alignment if specified:
+        """Apply properties to the row"""
+        # apply column alignment if specified:
         if self.col_align and cell.align == None:
             cell.align = self.col_align[col]
         if self.col_char and cell.char == None:
@@ -220,6 +221,14 @@ class TableRow (object):
         if self.col_styles and cell.style == None:
             cell.style = self.col_styles[col]
 
+    def column_count(self):
+        """Return the number of columns in this row"""
+        if isinstance(self.cells, basestring):
+            #user instantiated the row with only a string for content\
+            return 1
+        else:
+            return len(self.cells)
+
     def __str__(self):
         """return the HTML code for the table row as a string"""
         attribs_str = ""
@@ -231,7 +240,10 @@ class TableRow (object):
         if isinstance(self.cells, basestring):
             #user instantiated the row with only a string for content\
             col = 1
-            cell = TableCell(self.cells)
+            # setting colspan to 100% will force rows that were
+            # created by passing s str for the ctor to span the full
+            # table width
+            cell = TableCell(self.cells, col_span='100%')
             self.apply_properties(cell, col)
             result += str(cell)
         else:
@@ -303,6 +315,19 @@ class Table(object):
         self.col_valign = col_valign
         self.col_styles = col_styles
 
+    def max_column_count(self):
+        """Get the maximum number of cells in any one row"""
+        if isinstance(self.rows, basestring):
+            return 1
+        else:
+            max_column_count = 0
+            for row in self.rows:
+                if not isinstance(row, TableRow):
+                    row = TableRow(row)
+                if row.column_count() > max_column_count:
+                    max_column_count = row.column_count()
+            return max_column_count
+
     def mozilla_row_fix(self, row):
     # apply column alignments  and styles to each row if specified:
     # (Mozilla bug workaround)
@@ -363,6 +388,7 @@ class Table(object):
             result += ' </thead>\n'
         # then all data rows:
         result += ' <tbody>\n'
+        max_column_count = self.max_column_count()
         if isinstance(self.rows, basestring):
             #user instantiated the table with only a string for content
             row = TableRow(self.rows)

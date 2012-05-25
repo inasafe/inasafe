@@ -291,7 +291,7 @@ class TablesTest(unittest.TestCase):
 
     def test_nested_table_in_cell(self):
         """Test nested table in cell"""
-        inner_table = Table(['1', '2', '3'])
+        inner_table = Table([['1', '2', '3']])
         cell = TableCell(inner_table)
         self.html += '  <h2>Table nested in Cell</h2>\n'
         body = (' <tbody>\n'
@@ -300,11 +300,7 @@ class TablesTest(unittest.TestCase):
                 ' <tbody>\n'
                 '  <tr>\n'
                 '   <td>1</td>\n'
-                '  </tr>\n'
-                '  <tr>\n'
                 '   <td>2</td>\n'
-                '  </tr>\n'
-                '  <tr>\n'
                 '   <td>3</td>\n'
                 '  </tr>\n'
                 ' </tbody>\n'
@@ -319,7 +315,6 @@ class TablesTest(unittest.TestCase):
         self.html += str(actual_result)
         self.writeHtml('table_nested_in_cell')
         assert expected_result.strip() == str(actual_result).strip(), message
-
 
     def test_row_from_string(self):
         """Test row from string - it should span to the table width too"""
@@ -337,14 +332,34 @@ class TablesTest(unittest.TestCase):
                 '   <td>d</td>\n'
                 '  </tr>\n'
                 '  <tr>\n'
-                '   <td>foobar</td>\n'
+                '   <td colspan="100%">foobar</td>\n'
+                '  </tr>\n'
+                '  <tr>\n'
+                '   <td colspan="100%">Piet Pompies</td>\n'
                 '  </tr>\n'
                 ' </tbody>\n')
         expected_result = ('%s%s%s' % (self.html_table_start,
                                        body,
                                        self.html_table_end))
-        actual_result = Table([table_row1, 'foobar'])
+        actual_result = Table([table_row1, 'foobar', 'Piet Pompies'])
+        message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
+        self.html += str(actual_result)
+        self.writeHtml('table_row_from_string')
+        assert expected_result.strip() == str(actual_result).strip(), message
+
+    def test_table_from_string(self):
+        """Test table from string - should be a single cell in a single row"""
+        self.html += '  <h2>Table from string</h2>\n'
+        body = (' <tbody>\n'
+                '  <tr>\n'
+                '   <td colspan="100%">foobar</td>\n'
+                '  </tr>\n'
+                ' </tbody>\n')
+        expected_result = ('%s%s%s' % (self.html_table_start,
+                                       body,
+                                       self.html_table_end))
+        actual_result = Table('foobar')
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
         self.html += str(actual_result)
-        self.writeHtml('table_colspanning')
+        self.writeHtml('table_table_from_string')
