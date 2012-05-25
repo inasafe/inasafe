@@ -48,10 +48,15 @@ class FloodEvacuationFunction(FunctionProvider):
         # Calculate impact as population exposed to depths > threshold
         P = population.get_data(nan=0.0, scaling=True)
         I = numpy.where(D > threshold, P, 0)
+        iname = inundation.get_name()
+        pname = population.get_name()
+
 
         # Count totals
         total = int(numpy.sum(P))
         number_of_people_affected = int(numpy.sum(I))
+        total1000 = str(total / 1000)
+        count1000 = str(number_of_people_affected / 1000)
 
         # Create impact_table based on BNPB Perka 7/2008 minimum bantuan
         # Weekly needs (see issue #82)
@@ -69,23 +74,21 @@ class FloodEvacuationFunction(FunctionProvider):
         #              [_('Kit Keluarga'), family_kits],
         #              [_('Jamban Keluarga'), toilets],
         #              _('Sumber: BNPB Perka 7/2008')]
-        table_header_row = TableRow(['Needs (per week)', 'Total'], header=True)
-        table_body = [table_header_row,
-                      [_('Rice [kg]'), rice],
-                      [_('Drinking Water [l]'), drinking_water],
-                      [_('Clean Water [l]'), water],
-                      [_('Family Kits'), family_kits],
-                      [_('Toilets'), toilets],
-                      _('Source: BNPB Regulation 7/2008')]
+
+        table_body = [_('In case of "%s" the estimated impact to '
+                        '"%s" is:' % (iname, pname)),
+                      TableRow([_('People needing evacuation'), '%s (*)' % count1000], header=True),
+                      TableRow(['Needs per week', 'Total (*)'], header=True),
+                      [_('Rice [kg]'), int(rice / 1000)],
+                      [_('Drinking Water [l]'), int(drinking_water / 1000)],
+                      [_('Clean Water [l]'), int(water / 1000)],
+                      [_('Family Kits'), int(family_kits / 1000)],
+                      [_('Toilets'), int(toilets / 1000)]]
+
         impact_table = Table(table_body).toNewlineFreeString()
 
 
         # Create summary table
-        total1000 = str(total / 1000)
-        count1000 = str(number_of_people_affected / 1000)
-
-        iname = inundation.get_name()
-        pname = population.get_name()
         #table_caption = _('Apabila terjadi "%s" perkiraan dampak '
         #                 'terhadap "%s" kemungkinan yang terjadi&#58;'
         #                  % (iname, pname))
@@ -100,22 +103,19 @@ class FloodEvacuationFunction(FunctionProvider):
         #              [TableCell(_('Minimum Bantuan per minggu (BNPB perka'
         #                         ' 7/2008)'), col_span=2)]
         #              ])
-        table_caption = _('In case of "%s" the estimated impact to '
-                         '"%s" is:'
-                          % (iname, pname))
-        table_body.extend([[_('Need Evacuation (x 1000)'), '%s' % count1000],
-                      [TableCell(_('Notes:'), header=True, col_span=2)],
-                      [TableCell(_('Total population Jakarta %s'
-                                         % total1000), col_span=2)],
-                      [TableCell(_('Totals are given in thousands'), col_span=2)],
-                      [TableCell(_('People need evacuation if flood levels '
-                                   'exceed %i m.' % threshold), col_span=2)],
-                      [TableCell(_('Minimum needs are defined '
-                                   'in BNPB regulation 7/2008)'), col_span=2)]
-                      ])
+        table_body.extend([TableRow(_('Notes:'), header=True),
+                           _('Total population Jakarta: %s' % total1000),
+                           _('* Counts are given in thousands'),
+                           _('People need evacuation if flood levels exceed %i m' % threshold),
+                           _('Minimum needs are defined in BNPB regulation 7/2008')])
 
-        impact_summary = Table(table_body,
-                               caption=table_caption).toNewlineFreeString()
+        impact_summary = Table(table_body)#.toNewlineFreeString()
+
+        fid = open('/home/nielso/test.html', 'w')
+        fid.write(str(impact_summary))
+        fid.close()
+
+        impact_summary = impact_summary.toNewlineFreeString()
 
         #map_title = _('Penduduk yang Mungkin dievakuasi')
         map_title = _('People in need of evacuation')
