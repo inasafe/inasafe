@@ -243,7 +243,7 @@ class TableRow (object):
             # setting colspan to 100% will force rows that were
             # created by passing s str for the ctor to span the full
             # table width
-            cell = TableCell(self.cells, col_span='100%')
+            cell = TableCell(self.cells, col_span='100%', header=self.header)
             self.apply_properties(cell, col)
             result += str(cell)
         else:
