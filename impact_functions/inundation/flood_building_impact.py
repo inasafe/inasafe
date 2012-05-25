@@ -8,7 +8,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """Risk plugin for flood impact on building data
 
     :param requires category=='hazard' and \
-                    subcategory=='flood' and \
+                    subcategory in ['flood', 'tsunami'] and \
                     layertype in ['raster', 'vector']
 
     :param requires category=='exposure' and \
@@ -17,7 +17,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'AFFECTED'
-    plugin_name = _('Temporarily Closed')
+    plugin_name = _('Be temporarily closed')
 
     def run(self, layers):
         """Risk plugin for tsunami population
@@ -61,24 +61,24 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
-        impact_summary = _('<b>In case of "%s" the estimated impact to "%s" '
-                   'the possibility of &#58;</b><br><br><p>' % (Hname,
-                                                                Ename))
+        impact_summary = _('<b>In case of "%s" the estimated impact to '
+                           '"%s" '
+                           'is&#58;</b><br><br><p>' % (Hname, Ename))
         impact_summary += ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                    '</table>' % (_('Building'), _('Number of'),
-                                  _('All'), N,
+                    '</table>' % (_('Status'), _('Number of buildings'),
                                   _('Closed'), count,
-                                  _('Opened'), N - count))
+                                  _('Opened'), N - count,
+                                  _('All'), N))
 
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _('Buildings that will need to closed when flooding'
-                   'more than %.1f m' % threshold)
+        impact_summary += _('Buildings will need to close if flood'
+                            ' levels exceed %.1f m' % threshold)
 
         # Create style
         style_classes = [dict(label=_('Opened'), min=0, max=0,

@@ -3,6 +3,7 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
+from storage.utilities import ugettext as _
 from impact_functions.tables import (Table, TableRow, TableCell)
 from storage.utilities import ugettext as _
 
@@ -13,7 +14,7 @@ class FloodEvacuationFunction(FunctionProvider):
     :author HKV
     :rating 1
     :param requires category=='hazard' and \
-                    subcategory.startswith('flood') and \
+                    subcategory in ['flood', 'tsunami'] and \
                     layertype=='raster' and \
                     unit=='m'
 
@@ -23,7 +24,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     datatype=='density'
     """
 
-    plugin_name = 'Perlu Evakuasi'
+    plugin_name = _('Need evacuation')
 
     def run(self, layers):
         """Risk plugin for flood population evacuation

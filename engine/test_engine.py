@@ -25,8 +25,10 @@ from storage.vector import Vector
 from impact_functions import get_plugins
 
 from storage.utilities_test import TESTDATA
+
 # These imports are needed for impact function registration - dont remove
 from impact_functions_for_testing import empirical_fatality_model
+from impact_functions_for_testing import allen_fatality_model
 from impact_functions_for_testing import unspecific_building_impact_model
 from impact_functions_for_testing import NEXIS_building_impact_model
 from impact_functions_for_testing import HKV_flood_study
@@ -760,7 +762,7 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        plugin_name = 'Tephra Impact Function'
+        plugin_name = 'Tephra Building Impact Function'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name

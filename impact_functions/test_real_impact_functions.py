@@ -24,30 +24,23 @@ class Test_real_plugins(unittest.TestCase):
         # Check empty call returns all
         P = get_admissible_plugins([])
 
-        # NOTE: These are hardwired tests that will need to change
-        # when impact functions change.
-        assert 'Earthquake Guidelines Function' in P
-        assert 'Be damaged according to building type' in P
-        assert 'Temporarily Closed' in P
-        assert 'Earthquake Population Exposure Function' in P
-        assert 'Tsunami Population Impact Function' in P
-        assert 'Perlu Evakuasi' in P
-        assert 'Tsunami Building Impact Function' in P
-        assert 'Tephra Impact Function' in P
-        assert 'Earthquake Fatality Function' in P
-        assert 'Earthquake Guidelines Function' in P
-        assert 'Tephra Population Impact Function' in P
-        assert 'Flood Road Impact Function' in P
-        assert 'Dalam bahaya' in P
-        assert 'U S G S Fatality Function' in P
-        assert 'I T B Earthquake Building Damage Function' in P
-        assert 'Earthquake Fatality Function Podes' in P
-        assert 'Terdampak' in P
-        assert 'Meninggal' in P
-
         #print
         #for p in P:
         #    print p, P[p]
+
+        # NOTE: These are hardwired tests that will need to change
+        # when impact functions change.
+        msg = 'Available impact functions are: %s' % str(P.keys())
+        assert 'Earthquake Guidelines Function' in P, msg
+        assert 'Be damaged according to building type' in P, msg
+        assert 'Be temporarily closed' in P, msg
+        assert 'Need evacuation' in P, msg
+        assert 'Tephra Building Impact Function' in P, msg
+        assert 'Earthquake Guidelines Function' in P, msg
+        assert 'Tephra Population Impact Function' in P, msg
+        assert 'Flood Road Impact Function' in P, msg
+        assert 'I T B Earthquake Building Damage Function' in P, msg
+        assert 'Categorised Hazard Building Impact Function' in P, msg
 
         # This one should get 2 earthquake building impact functions
         D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'MMI'}
@@ -71,24 +64,19 @@ class Test_real_plugins(unittest.TestCase):
         D1['layertype'] = 'raster'
         D2['layertype'] = 'raster'
         P = get_admissible_plugins([D1, D2])
-        assert len(P) >= 3  # Depending on other tests there could be more
-        assert 'Terdampak' in P
-        assert 'Perlu Evakuasi' in P
-        assert 'Meninggal' in P
+        assert len(P) >= 1  # Depending on other tests there could be more
+        assert 'Need evacuation' in P
 
         # Try form where only one dictionary is passed
         # This one gets all the flood related impact functions
         P = get_admissible_plugins(D1)
-        assert len(P) >= 6
-        assert 'Terdampak' in P
-        assert 'Perlu Evakuasi' in P
-        assert 'Meninggal' in P
-        assert 'Temporarily Closed' in P
+        assert len(P) >= 4
+        assert 'Need evacuation' in P
+        assert 'Be temporarily closed' in P
         assert 'Flood Road Impact Function' in P
-        assert 'Dalam bahaya' in P
 
-        # Try to get general tsunami building impact function (e.g. BB data)
-        f_name = 'Tsunami Building Impact Function'
+        # Try to get general inundation building impact function
+        f_name = 'Be temporarily closed'
 
         D1 = {'category': 'hazard', 'subcategory': 'tsunami'}
         D2 = {'category': 'exposure', 'subcategory': 'building'}
@@ -98,7 +86,8 @@ class Test_real_plugins(unittest.TestCase):
         D2['layertype'] = 'vector'
         P = get_admissible_plugins([D1, D2])
 
-        assert f_name in P
+        msg = 'Expected name "%s" in P: %s' % (f_name, P)
+        assert f_name in P, msg
 
         # Get requirements from expected function
         P_all = get_admissible_plugins()

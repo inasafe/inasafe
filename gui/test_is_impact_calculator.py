@@ -125,8 +125,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         myRunner = self.calculator.getRunner()
         myRunner.run()
         myImpactLayer = myRunner.impactLayer()
-        myKeyword = readKeywordsFromLayer(
-                                        myImpactLayer, 'impact_summary')
+        myKeyword = readKeywordsFromLayer(myImpactLayer,
+                                          'impact_summary')
         myMessage = 'Keyword request returned an empty string'
         assert(myKeyword is not ''), myMessage
         # Test we get an exception if keyword is not found
@@ -151,7 +151,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         #E = readSafeLayer(exposure_path)
         self.calculator.setHazardLayer(hazard_path)
         self.calculator.setExposureLayer(exposure_path)
-        self.calculator.setFunction('Temporarily Closed')
+        self.calculator.setFunction('Be temporarily closed')
         try:
             myRunner = self.calculator.getRunner()
             # run non threaded

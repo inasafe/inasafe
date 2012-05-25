@@ -5,6 +5,10 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.raster import Raster
 from storage.utilities import ugettext as _
 
+# Largely superseded by flood impact functions, but keep as it
+# shows a different way of breaking down the impact using
+# multiple thresholds
+
 
 class TsunamiPopulationImpactFunction(FunctionProvider):
     """Risk plugin for tsunami impact on population data
@@ -16,7 +20,8 @@ class TsunamiPopulationImpactFunction(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory.startswith('population') and \
-                    layertype=='raster'
+                    layertype=='raster' and \
+                    disabled==True
 
     """
 

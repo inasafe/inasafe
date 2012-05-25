@@ -68,7 +68,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
-test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings
+test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
@@ -159,6 +159,13 @@ list_gis_packages:
 	@dpkg -l | grep qgis || true
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
+
+data_audit:
+	@echo
+	@echo "---------------------------------------"
+	@echo "Audit of IP status for bundled data    "
+	@echo "---------------------------------------"
+	@python scripts/data_IP_audit.py
 
 pylint:
 	@echo
