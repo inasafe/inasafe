@@ -8,7 +8,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
     """Flood impact on building data according to BNPB Perka 2
 
     :param requires category == 'hazard' and \
-                    subcategory == 'flood' and \
+                    subcategory in ['flood', 'tsunami'] and \
                     layertype == 'raster'
 
     :param requires category == 'exposure' and \

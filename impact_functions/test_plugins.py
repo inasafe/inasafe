@@ -145,7 +145,7 @@ class Test_plugins(unittest.TestCase):
         boundary_filename = ('%s/kecamatan_jakarta_osm.shp' % TESTDATA)
         #data_filename = ('%s/Population_Jakarta_geographic.asc' % TESTDATA)
 
-        # Get building impact data (BNPB perga 2)
+        # Get reference building impact data
         building_filename = ('%s/building_impact_scenario.shp' % TESTDATA)
 
         boundary_layer = read_layer(boundary_filename)

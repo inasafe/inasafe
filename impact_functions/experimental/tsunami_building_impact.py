@@ -3,6 +3,10 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 
+# Largely superseded by flood impact functions, but keep as it
+# will be needed to test impact on roads from both raster and polygon
+# hazard layers
+
 
 class TsunamiBuildingImpactFunction(FunctionProvider):
     """Risk plugin for tsunami impact on building data
@@ -13,10 +17,12 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory in ['building', 'road'] and \
-                    layertype=='vector'
+                    layertype=='vector' and \
+                    disabled==True
     """
 
     target_field = 'ICLASS'
+    plugin_name = _('Be affected by tsunami')
 
     def run(self, layers):
         """Risk plugin for tsunami population
@@ -81,28 +87,49 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
             population_impact.append(result_dict)
 
         # Create report
+        Hname = H.get_name()
+        Ename = E.get_name()
         if H.is_raster:
-            impact_summary = ('<table border="0" width="320px">'
-                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+            impact_summary = _('<b>In case of "%s" the estimated impact to '
+                           '"%s" '
+                           'is&#58;</b><br><br><p>' % (Hname, Ename))
+            impact_summary += ('<table border="0" width="320px">'
+                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></tr>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                       '</table>' % ('ketinggian tsunami', 'Jumlah gedung',
-                                     '< 1 m', count0,
-                                     '1 - 3 m', count1,
-                                     '> 3 m', count3))
+                       '</table>' % (_('Impact'), _('Number of buildings'),
+                                     _('Low'), count0,
+                                     _('Medium'), count1,
+                                     _('High'), count3))
         else:
             impact_summary = ('<table border="0" width="320px">'
-                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></tr>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
                        '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                       '</table>' % ('Terdampak oleh tsunami', 'Jumlah gedung',
+                       '</table>' % ('Terdampak oleh tsunami',
+                                     'Jumlah gedung',
                                      'Terdampak', count3,
                                      'Tidak terdampak', count0,
                                      'Semua', N))
+
+        impact_summary += '<br>'  # Blank separation row
+        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
+        impact_summary += _('Levels of impact are defined by BNPB\'s '
+                            '<i>Pengkajian Risiko Bencana</i>')
+        impact_summary += _('<table border="0" width="320px">'
+                       '   <tr><th><b>%s</b></th><th><b>%s</b></th></tr>'
+                       '   <tr></tr>'
+                       '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'
+                       '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'
+                       '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'
+                       '</table>' % (_('Impact'), _('Tsunami height'),
+                                     _('Low'), '<1 m',
+                                     _('Medium'), '1-3 m',
+                                     _('High'), '>3 m'))
 
         # Create style
         style_classes = [dict(label='< 1 m', min=0, max=1,

@@ -8,7 +8,7 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
     """Risk plugin for flood impact on building data
 
     :param requires category=='hazard' and \
-                    subcategory=='flood'
+                    subcategory in ['flood', 'tsunami']
 
     :param requires category=='exposure' and \
                     subcategory=='building' and \
@@ -16,8 +16,8 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                     purpose=='dki'
     """
 
-    target_field = 'FLOODED'
-    plugin_name = _('Be unavailable to DKI')
+    target_field = 'INUNDATED'
+    plugin_name = _('Be inundated')
 
     def run(self, layers):
         """Risk plugin for flood building impact
