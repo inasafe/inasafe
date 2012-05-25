@@ -1934,6 +1934,7 @@ class Test_Engine(unittest.TestCase):
 
                 # Check calculated damage
                 calculated_dam = attributes[i]['DAMAGE']
+                print calculated_mmi
                 verified_dam = padang_check_results(calculated_mmi,
                                                     building_class)
                 #print calculated_mmi, building_class, calculated_dam
@@ -1959,6 +1960,17 @@ class Test_Engine(unittest.TestCase):
         """ITB building impact function works
         """
 
+        a = open('reference_result_itb.csv').readlines()[1:]
+        ref_mmi, ref_bldg_class, ref_impact = [], [], []
+        for item in a:
+            b = item.strip('\n').split(',')
+            ref_mmi.append(float(b[0]))
+            ref_bldg_class.append(b[1].strip(' '))
+            ref_impact.append(float(b[2]))
+        ref_mmi = numpy.array(ref_mmi)
+        ref_bldg_class = numpy.array(ref_bldg_class)
+        ref_impact = numpy.array(ref_impact)
+
         plugin_name = 'I T B Earthquake Building Damage Function'
 
         # Test for a range of hazard layers
@@ -1975,13 +1987,15 @@ class Test_Engine(unittest.TestCase):
             # Get layers using API
             H = read_layer(hazard_filename)
             E = read_layer(exposure_filename)
-
+#            print E.get_attribute_names() # Hyeuk
+#            print E.get_keywords()
+#            print E.get_keywords()['datatype']
             # Get impact function (FIXME: should be nicer)
             plugin_list = get_plugins(plugin_name)
             assert len(plugin_list) == 1
             assert plugin_list[0].keys()[0] == plugin_name
             IF = plugin_list[0][plugin_name]
-
+#            print IF
             # Call impact calculation engine
             impact_vector = calculate_impact(layers=[H, E],
                                              impact_fcn=IF)
@@ -1993,22 +2007,21 @@ class Test_Engine(unittest.TestCase):
 
             # Verify calculated result
             for i in range(len(attributes)):
-                building_class = attributes[i]['VCLASS']
+#                building_class = attributes[i]['VCLASS']
+                building_class = attributes[i]['ITB_Class']
 
                 # Check calculated damage
                 mmi = attributes[i]['MMI']
                 calculated_damage = attributes[i]['DAMAGE']
 
-                print
-                print i
-                print 'MMI', mmi
-                print 'DAM', calculated_damage
-
-                if i == 3895:
-                    expected_damage = 1.28296234734
-                    msg = ('Damage for MMI = %f was not as expected. '
-                           'I got %f, expected %f ' % (mmi, calculated_damage, expected_damage))
-                    assert numpy.allclose(calculated_damage, expected_damage), msg
+                idx = (ref_bldg_class == building_class)
+                assert numpy.sum(idx)>0, 'No reference value given for ' + building_class
+                temp_ref_impact = ref_impact[idx]
+                expected_damage = temp_ref_impact[numpy.abs(ref_mmi[idx]-mmi).argmin()]
+               
+                msg = ('%i, Damage for MMI = %f was not as expected. '
+                           'I got %f, expected %f, %s ' % (i, mmi, calculated_damage, expected_damage,building_class))
+                assert numpy.allclose(calculated_damage, expected_damage,rtol=1.0e-2), msg
 
                 # FIXME(Ole): Hyeuk to put tests in here
 
