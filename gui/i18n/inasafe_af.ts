@@ -3,57 +3,57 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="is_clipper.py" line="234"/>
+        <location filename="is_clipper.py" line="235"/>
         <source>Layer or Extent passed to clip is None.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_clipper.py" line="122"/>
+        <location filename="is_clipper.py" line="123"/>
         <source>Expected a vector layer but received a %s.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_clipper.py" line="148"/>
+        <location filename="is_clipper.py" line="149"/>
         <source>Could not obtain data provider from layer &quot;%s&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_clipper.py" line="173"/>
+        <location filename="is_clipper.py" line="174"/>
         <source>Error when creating shapefile: &lt;br&gt;Filename:%s&lt;br&gt;Error: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_clipper.py" line="193"/>
+        <location filename="is_clipper.py" line="194"/>
         <source>No features fall within the clip extents. Try panning / zooming to an area containing data and then try to run your analysis again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_clipper.py" line="238"/>
+        <location filename="is_clipper.py" line="239"/>
         <source>Expected a raster layer but received a %s.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_clipper.py" line="246"/>
+        <location filename="is_clipper.py" line="247"/>
         <source>Input file to be clipped &quot;%s&quot; does not have the expected keywords file %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_clipper.py" line="290"/>
+        <location filename="is_clipper.py" line="291"/>
         <source>&lt;p&gt;Error while executing the following shell command:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_utilities.py" line="300"/>
+        <location filename="is_utilities.py" line="310"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_utilities.py" line="245"/>
+        <location filename="is_utilities.py" line="248"/>
         <source>Toggle traceback...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_utilities.py" line="239"/>
+        <location filename="is_utilities.py" line="242"/>
         <source>Problem:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -66,143 +66,143 @@
         <translation type="obsolete">&lt;span class=&quot;label notice&quot;&gt;Om te begin:&lt;/span&gt; Om hierdie funksie te gebruik, moet daar eears data laers in jou QGIS projek bestaan. Maak sekere dat tenminste een &lt;em&gt;gevaar&lt;/em&gt; laer (b.w. aardskutting MMI) en een &lt;em&gt;blootstelling&lt;/em&gt;(b.w. wonings) beskikbaar is. Wanneer jy reg is, klik die &lt;em&gt;Begin&lt;/em&gt; knoppie onder.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="589"/>
+        <location filename="is_dock.py" line="591"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="731"/>
+        <location filename="is_dock.py" line="733"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="762"/>
+        <location filename="is_dock.py" line="764"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="891"/>
+        <location filename="is_dock.py" line="893"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %s&lt;/p&gt;&lt;p&gt;Exposure: %s&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %s&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %s&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="954"/>
+        <location filename="is_dock.py" line="956"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1199"/>
+        <location filename="is_dock.py" line="1201"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="89"/>
+        <location filename="is_dock.py" line="91"/>
         <source>InaSAFE %s %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="259"/>
+        <location filename="is_dock.py" line="261"/>
         <source>&lt;span class=&quot;label label-notice&quot;&gt;Getting started:&lt;/span&gt; To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="275"/>
+        <location filename="is_dock.py" line="277"/>
         <source>&lt;span class=&quot;label label-important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%s]: %s &lt;br&gt;Exposure keywords [%s]: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="289"/>
+        <location filename="is_dock.py" line="291"/>
         <source>&lt;span class=&quot;label label-success&quot;&gt;Ready:&lt;/span&gt; You can now proceed to run your model by clicking the &lt;em&gt; Run&lt;/em&gt; button.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="649"/>
+        <location filename="is_dock.py" line="651"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when setting up the impact calculator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="668"/>
+        <location filename="is_dock.py" line="670"/>
         <source>Calculating impact...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="669"/>
+        <location filename="is_dock.py" line="671"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="684"/>
+        <location filename="is_dock.py" line="686"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when starting the model.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="721"/>
+        <location filename="is_dock.py" line="723"/>
         <source>Loading results...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="722"/>
+        <location filename="is_dock.py" line="724"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="804"/>
+        <location filename="is_dock.py" line="806"/>
         <source>Analyzing this question...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="964"/>
+        <location filename="is_dock.py" line="966"/>
         <source>Preparing hazard data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="965"/>
+        <location filename="is_dock.py" line="967"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="973"/>
+        <location filename="is_dock.py" line="975"/>
         <source>Preparing exposure data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="974"/>
+        <location filename="is_dock.py" line="976"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1199"/>
+        <location filename="is_dock.py" line="1201"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1218"/>
+        <location filename="is_dock.py" line="1220"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1205"/>
+        <location filename="is_dock.py" line="1207"/>
         <source>Generating your map as a PDF document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1210"/>
+        <location filename="is_dock.py" line="1212"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1218"/>
+        <location filename="is_dock.py" line="1220"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1108"/>
+        <location filename="is_dock.py" line="1113"/>
         <source>No keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1110"/>
+        <location filename="is_dock.py" line="1115"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -235,33 +235,38 @@
         <translation>Resultate</translation>
     </message>
     <message>
-        <location filename="is_dock_base.ui" line="128"/>
+        <location filename="is_dock_base.ui" line="116"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="is_dock_base.ui" line="166"/>
         <source>Supported by AusAID and World Bank</source>
-        <translation>Ondersteun deur AusAID en die Wêreld Bank</translation>
+        <translation type="obsolete">Ondersteun deur AusAID en die Wêreld Bank</translation>
     </message>
     <message>
-        <location filename="is_dock_base.ui" line="186"/>
+        <location filename="is_dock_base.ui" line="237"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="is_dock_base.ui" line="206"/>
+        <location filename="is_dock_base.ui" line="257"/>
         <source>Print...</source>
         <translation>Druk...</translation>
     </message>
     <message>
-        <location filename="is_dock_base.ui" line="226"/>
+        <location filename="is_dock_base.ui" line="277"/>
         <source>Run</source>
         <translation>Begin</translation>
     </message>
     <message>
         <location filename="is_dock_base.ui" line="18"/>
         <source>InaSAFE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="is_dock_base.ui" line="162"/>
+        <source>Supported by:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -281,17 +286,17 @@
 <context>
     <name>ISImpactCalculator</name>
     <message>
-        <location filename="is_impact_calculator.py" line="123"/>
+        <location filename="is_impact_calculator.py" line="125"/>
         <source>Error: Hazard layer not set.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_impact_calculator.py" line="127"/>
+        <location filename="is_impact_calculator.py" line="129"/>
         <source>Error: Exposure layer not set.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_impact_calculator.py" line="131"/>
+        <location filename="is_impact_calculator.py" line="133"/>
         <source>Error: Function not set.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -318,12 +323,12 @@
 <context>
     <name>ISKeywordIO</name>
     <message>
-        <location filename="is_keyword_io.py" line="164"/>
+        <location filename="is_keyword_io.py" line="165"/>
         <source>Expected extraKeywords to be a dictionary. Got %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keyword_io.py" line="176"/>
+        <location filename="is_keyword_io.py" line="177"/>
         <source>Failed to copy keywords file from :
 %s
 to%s: %s</source>
@@ -333,109 +338,109 @@ to%s: %s</source>
 <context>
     <name>ISKeywordsDialog</name>
     <message>
-        <location filename="is_keywords_dialog.py" line="76"/>
+        <location filename="is_keywords_dialog.py" line="77"/>
         <source>population [density]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="76"/>
+        <location filename="is_keywords_dialog.py" line="77"/>
         <source>population [count]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="76"/>
+        <location filename="is_keywords_dialog.py" line="77"/>
         <source>building</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="76"/>
+        <location filename="is_keywords_dialog.py" line="77"/>
         <source>building [osm]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="76"/>
+        <location filename="is_keywords_dialog.py" line="77"/>
         <source>building [sigab]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="76"/>
+        <location filename="is_keywords_dialog.py" line="77"/>
         <source>roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="88"/>
+        <location filename="is_keywords_dialog.py" line="89"/>
         <source>tsunami [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="88"/>
+        <location filename="is_keywords_dialog.py" line="89"/>
         <source>tsunami [wet/dry]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="88"/>
+        <location filename="is_keywords_dialog.py" line="89"/>
         <source>tsunami [feet]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="88"/>
+        <location filename="is_keywords_dialog.py" line="89"/>
         <source>flood [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="88"/>
+        <location filename="is_keywords_dialog.py" line="89"/>
         <source>flood [wet/dry]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="88"/>
+        <location filename="is_keywords_dialog.py" line="89"/>
         <source>flood [feet]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="88"/>
+        <location filename="is_keywords_dialog.py" line="89"/>
         <source>tephra [kg2/m2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="144"/>
+        <location filename="is_keywords_dialog.py" line="145"/>
         <source>Hide advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="146"/>
+        <location filename="is_keywords_dialog.py" line="147"/>
         <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="566"/>
+        <location filename="is_keywords_dialog.py" line="567"/>
         <source>Not Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="351"/>
+        <location filename="is_keywords_dialog.py" line="352"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="620"/>
-        <source>Risk in a box</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="is_keywords_dialog.py" line="69"/>
+        <location filename="is_keywords_dialog.py" line="70"/>
         <source>InaSAFE %s Keywords Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="88"/>
+        <location filename="is_keywords_dialog.py" line="89"/>
         <source>earthquake [MMI]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_keywords_dialog.py" line="620"/>
+        <location filename="is_keywords_dialog.py" line="621"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="is_keywords_dialog.py" line="621"/>
+        <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -545,17 +550,17 @@ to%s: %s</source>
 <context>
     <name>ISOptionsDialog</name>
     <message>
-        <location filename="is_options_dialog.py" line="58"/>
+        <location filename="is_options_dialog.py" line="59"/>
         <source>InaSAFE %s Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_options_dialog.py" line="158"/>
+        <location filename="is_options_dialog.py" line="159"/>
         <source>Set keyword cache file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_options_dialog.py" line="158"/>
+        <location filename="is_options_dialog.py" line="159"/>
         <source>Sqlite DB File (*.db)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -641,47 +646,47 @@ to%s: %s</source>
 <context>
     <name>ISPlugin</name>
     <message>
-        <location filename="is_plugin.py" line="147"/>
+        <location filename="is_plugin.py" line="148"/>
         <source>Toggle InaSAFE Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_plugin.py" line="151"/>
+        <location filename="is_plugin.py" line="152"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_plugin.py" line="254"/>
+        <location filename="is_plugin.py" line="255"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_plugin.py" line="166"/>
+        <location filename="is_plugin.py" line="167"/>
         <source>Keyword Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_plugin.py" line="171"/>
+        <location filename="is_plugin.py" line="172"/>
         <source>Open the keywords editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_plugin.py" line="182"/>
+        <location filename="is_plugin.py" line="183"/>
         <source>Reset Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_plugin.py" line="187"/>
+        <location filename="is_plugin.py" line="188"/>
         <source>Reset the InaSAFE Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_plugin.py" line="199"/>
+        <location filename="is_plugin.py" line="200"/>
         <source>InaSAFE Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_plugin.py" line="204"/>
+        <location filename="is_plugin.py" line="205"/>
         <source>Open InaSAFE options dialog</source>
         <translation type="unfinished"></translation>
     </message>
