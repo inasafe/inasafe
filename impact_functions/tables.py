@@ -206,6 +206,20 @@ class TableRow (object):
         if attribs == None:
             self.attribs = {}
 
+    def apply_properties(self, cell, col):
+    # apply column alignment if specified:
+        if self.col_align and cell.align == None:
+            cell.align = self.col_align[col]
+        if self.col_char and cell.char == None:
+            cell.char = self.col_char[col]
+        if self.col_charoff and cell.charoff == None:
+            cell.charoff = self.col_charoff[col]
+        if self.col_valign and cell.valign == None:
+            # apply column style if specified:
+            cell.valign = self.col_valign[col]
+        if self.col_styles and cell.style == None:
+            cell.style = self.col_styles[col]
+
     def __str__(self):
         """return the HTML code for the table row as a string"""
         attribs_str = ""
@@ -214,23 +228,19 @@ class TableRow (object):
         for attr in self.attribs:
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
         result = '  <tr%s>\n' % attribs_str
-        for cell in self.cells:
-            col = self.cells.index(cell)    # cell column index
-            if not isinstance(cell, TableCell):
-                cell = TableCell(cell, header=self.header)
-            # apply column alignment if specified:
-            if self.col_align and cell.align == None:
-                cell.align = self.col_align[col]
-            if self.col_char and cell.char == None:
-                cell.char = self.col_char[col]
-            if self.col_charoff and cell.charoff == None:
-                cell.charoff = self.col_charoff[col]
-            if self.col_valign and cell.valign == None:
-                cell.valign = self.col_valign[col]
-            # apply column style if specified:
-            if self.col_styles and cell.style == None:
-                cell.style = self.col_styles[col]
+        if isinstance(self.cells, basestring):
+            #user instantiated the row with only a string for content\
+            col = 1
+            cell = TableCell(self.cells)
+            self.apply_properties(cell, col)
             result += str(cell)
+        else:
+            for cell in self.cells:
+                col = self.cells.index(cell)    # cell column index
+                if not isinstance(cell, TableCell):
+                    cell = TableCell(cell, header=self.header)
+                self.apply_properties(cell, col)
+                result += str(cell)
         result += '  </tr>\n'
         return result
 
@@ -293,6 +303,21 @@ class Table(object):
         self.col_valign = col_valign
         self.col_styles = col_styles
 
+    def mozilla_row_fix(self, row):
+    # apply column alignments  and styles to each row if specified:
+    # (Mozilla bug workaround)
+        if self.col_align and not row.col_align:
+            row.col_align = self.col_align
+        if self.col_char and not row.col_char:
+            row.col_char = self.col_char
+        if self.col_charoff and not row.col_charoff:
+            row.col_charoff = self.col_charoff
+        if self.col_valign and not row.col_valign:
+            row.col_valign = self.col_valign
+        if self.col_styles and not row.col_styles:
+            row.col_styles = self.col_styles
+        return row
+
     def __str__(self):
         """return the HTML code for the table as a string"""
         attribs_str = ""
@@ -338,22 +363,17 @@ class Table(object):
             result += ' </thead>\n'
         # then all data rows:
         result += ' <tbody>\n'
-        for row in self.rows:
-            if not isinstance(row, TableRow):
-                row = TableRow(row)
-            # apply column alignments  and styles to each row if specified:
-            # (Mozilla bug workaround)
-            if self.col_align and not row.col_align:
-                row.col_align = self.col_align
-            if self.col_char and not row.col_char:
-                row.col_char = self.col_char
-            if self.col_charoff and not row.col_charoff:
-                row.col_charoff = self.col_charoff
-            if self.col_valign and not row.col_valign:
-                row.col_valign = self.col_valign
-            if self.col_styles and not row.col_styles:
-                row.col_styles = self.col_styles
+        if isinstance(self.rows, basestring):
+            #user instantiated the table with only a string for content
+            row = TableRow(self.rows)
+            self.mozilla_row_fix(row)
             result += str(row)
+        else:
+            for row in self.rows:
+                if not isinstance(row, TableRow):
+                    row = TableRow(row)
+                self.mozilla_row_fix(row)
+                result += str(row)
         result += ' </tbody>\n'
         result += '</table>'
         return result
