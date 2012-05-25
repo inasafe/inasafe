@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="en_US">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID" sourcelanguage="en_US">
 <context>
     <name>@default</name>
     <message>
@@ -423,17 +424,17 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock_base.ui" line="18"/>
         <source>InaSAFE</source>
-        <translation type="unfinished">InaSAFE</translation>
+        <translation>InaSAFE</translation>
     </message>
     <message>
         <location filename="is_dock_base.ui" line="257"/>
         <source>Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>Cetak...</translation>
     </message>
     <message>
         <location filename="is_dock_base.ui" line="162"/>
         <source>Supported by:</source>
-        <translation type="unfinished"></translation>
+        <translation>Didukung oleh:</translation>
     </message>
 </context>
 <context>
