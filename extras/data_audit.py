@@ -179,7 +179,7 @@ def IP_verified(directory,
                 first_time_this_dir = False
             
 
-            print filename + ' (Checksum=%s): '\
+            print filename + ' (Checksum = %s): '\
                   %str(compute_checksum(join(dirpath, filename))),\
                   status
 
