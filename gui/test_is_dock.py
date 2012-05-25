@@ -51,6 +51,7 @@ from storage.utilities import read_keywords
 
 # Retired impact function for characterisation
 from engine.impact_functions_for_testing import allen_fatality_model
+from engine.impact_functions_for_testing import HKV_flood_study
 
 try:
     from pydevd import *
@@ -128,7 +129,7 @@ def combosToString(ui):
     myString += '\n'
     myString += 'Functions\n'
     myString += '-------------------------\n'
-    myCurrentId = ui.cboExposure.currentIndex()
+    myCurrentId = ui.cboFunction.currentIndex()
     for myCount in range(0, ui.cboFunction.count()):
         myItemText = ui.cboFunction.itemText(myCount)
         if myCount == myCurrentId:
@@ -492,6 +493,12 @@ class ISDockTest(unittest.TestCase):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
 
+        # FIXME (Ole):
+        # Temporarily disabled as it was depending on old scaling method
+        # specific to this dataset. After cleaning up the 'official'
+        # impact function, this one doesn't work. Use instead
+        # HKV impact function in engine/impact_functions_for_testing
+
         # Push OK with the left mouse button
 
         myButton = DOCK.pbnRunStop
@@ -500,22 +507,35 @@ class ISDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers - default is already Banjir Jakarta seperti 2007
+        myIndex = DOCK.cboHazard.findText('Banjir Jakarta seperti 2007')
+        assert myIndex != -1, 'Banjir Jakarta seperti 2007 hazard layer not found'
+        DOCK.cboHazard.setCurrentIndex(myIndex)
 
         # Exposure layers - Penduduk Jakarta
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        myIndex = DOCK.cboExposure.findText('Penduduk Jakarta')
+        assert myIndex != -1, 'Penduduk Jakarta exposure layer not found'
+        DOCK.cboExposure.setCurrentIndex(myIndex)
+
+        # Choose impact function - HKVtest
+        myIndex = DOCK.cboFunction.findText('HKVtest')
+        assert myIndex != -1, 'HKVtest impact function not found: ' + combosToString(DOCK)
+        DOCK.cboFunction.setCurrentIndex(myIndex)
+
+        # Exposure layers - Penduduk Jakarta
+        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Choose impact Terdampak
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
+        #QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        #QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
+        #QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
 
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
 
         myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function': 'Need evacuation',
+                          'Impact Function': 'HKVtest',
                           'Hazard': 'Banjir Jakarta seperti 2007',
                           'Exposure': 'Penduduk Jakarta'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -530,29 +550,9 @@ class ISDockTest(unittest.TestCase):
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
-        #Apabila terjadi "Flood Depth (current) Jakarta"
-        # perkiraan dampak terhadap "clip_CCaFFQ" kemungkinan yang terjadi:
-        #Terdampak (x 1000):    1
-
-        # Pre clipping fix scores:
-
-        #Perlu Evakuasi (x 1000):	973
-        #
-        #Bantuan	Jumlah
-        #Beras [kg]	2725791
-        #Air Minum [l]	17036197
-        #Air Bersih [l]	65224299
-        #Kit Keluarga	194699
-        #Jamban Keluarga	48674
-        #
-        #Catatan:
-        #- Jumlah penduduk Jakarta 355987
-        #- Jumlah dalam ribuan
-        #- Penduduk perlu dievakuasi ketika banjir lebih dari 1 m.
-        #- Minmum Bantuan per minggu (BNPB Perka 7/2008)
-
+        # Check that the number is as what was calculated by Marco Hartman form HKV
         msg = 'Result not as expected: %s' % myResult
-        assert '973' in myResult, msg  # This is the expected impact number
+        assert '2480' in myResult, msg  # This is the expected impact number
 
     def test_runFloodPopulationImpactFunction_scaling(self):
         """Flood function runs in GUI with 5x5km population data
@@ -669,22 +669,27 @@ class ISDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers - already on correct entry
-        # Exposure layers
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        # Hazard layers - default is already Banjir Jakarta seperti 2007
+        myIndex = DOCK.cboHazard.findText('Banjir Jakarta seperti 2007')
+        assert myIndex != -1, 'Banjir Jakarta seperti 2007 hazard layer not found'
+        DOCK.cboHazard.setCurrentIndex(myIndex)
 
-        # Choose impact function (second item in the list)
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
+        # Exposure layers - Penduduk Jakarta
+        myIndex = DOCK.cboExposure.findText('Penduduk Jakarta')
+        assert myIndex != -1, 'Penduduk Jakarta exposure layer not found'
+        DOCK.cboExposure.setCurrentIndex(myIndex)
+
+        # Choose impact function - HKVtest
+        myIndex = DOCK.cboFunction.findText('HKVtest')
+        assert myIndex != -1, 'HKVtest impact function not found: ' + combosToString(DOCK)
+        DOCK.cboFunction.setCurrentIndex(myIndex)
 
         # Check that layers and impact function are correct
         myDict = getUiState(DOCK)
         myExpectedDict = {'Run Button Enabled': True,
-                        'Impact Function': 'Need evacuation',
-                        'Hazard': 'Banjir Jakarta seperti 2007',
-                        'Exposure': 'Penduduk Jakarta'}
+                          'Impact Function': 'HKVtest',
+                          'Hazard': 'Banjir Jakarta seperti 2007',
+                          'Exposure': 'Penduduk Jakarta'}
         myMessage = 'Got: %s\nExpected: %s \n%s' % (
                         myDict, str(myExpectedDict), combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
@@ -698,8 +703,7 @@ class ISDockTest(unittest.TestCase):
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
-        #Perlu Evakuasi (x 1000):	894
-        assert '894' in myResult, myMessage
+        assert '2366' in myResult, myMessage
 
     def test_issue45(self):
         """Points near the edge of a raster hazard layer are interpolated OK"""
