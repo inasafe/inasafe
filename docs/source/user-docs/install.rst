@@ -35,7 +35,7 @@ appear in the list. Now tick the checkbox next to it to enable the plugin.
 Via QGIS Python Plugin Repository
 ---------------------------------
 
-.. note:: This installation method is not yet supported - watch this space it
+.. warning:: This installation method is not yet supported - watch this space it
    will be available in the near future.
 
 To install the |project_name|, use the plugin manager in QGIS::
