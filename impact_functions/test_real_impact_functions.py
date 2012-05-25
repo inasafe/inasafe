@@ -30,17 +30,17 @@ class Test_real_plugins(unittest.TestCase):
 
         # NOTE: These are hardwired tests that will need to change
         # when impact functions change.
-        assert 'Earthquake Guidelines Function' in P
-        assert 'Be damaged according to building type' in P
-        assert 'Be temporarily closed' in P
-        assert 'Tsunami Population Impact Function' in P
-        assert 'Need evacuation' in P
-        assert 'Be affected by tsunami' in P
-        assert 'Tephra Building Impact Function' in P
-        assert 'Earthquake Guidelines Function' in P
-        assert 'Tephra Population Impact Function' in P
-        assert 'Flood Road Impact Function' in P
-        assert 'I T B Earthquake Building Damage Function' in P
+        msg = 'Available impact functions are: %s' % str(P.keys())
+        assert 'Earthquake Guidelines Function' in P, msg
+        assert 'Be damaged according to building type' in P, msg
+        assert 'Be temporarily closed' in P, msg
+        assert 'Need evacuation' in P, msg
+        assert 'Tephra Building Impact Function' in P, msg
+        assert 'Earthquake Guidelines Function' in P, msg
+        assert 'Tephra Population Impact Function' in P, msg
+        assert 'Flood Road Impact Function' in P, msg
+        assert 'I T B Earthquake Building Damage Function' in P, msg
+        assert 'Categorised Hazard Building Impact Function' in P, msg
 
         # This one should get 2 earthquake building impact functions
         D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'MMI'}
