@@ -30,35 +30,37 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        # FIXME (Ole): How can we reconsile these?
         if H.is_raster:
             I = H.interpolate(E, attribute_name='depth')
+            hazard_type = 'depth'
         else:
             I = H.interpolate(E)
+            hazard_type = 'floodprone'
 
         # Extract relevant numerical data
         attributes = I.get_data()
         N = len(I)
-
-        # List attributes to carry forward to result layer
-        #attribute_names = I.get_attribute_names()
 
         # Calculate population impact
         count = 0
         buildings = {}
         affected_buildings = {}
         for i in range(N):
-            if H.is_raster:
+            if hazard_type == 'depth':
                 # Get the interpolated depth
                 x = float(attributes[i]['depth'])
                 x = x > threshold
-            elif H.is_vector:
+            elif hazard_type == 'floodprone':
                 # Use interpolated polygon attribute
                 res = attributes[i]['FLOODPRONE']
                 if res is None:
                     x = False
                 else:
-                    x = (res.lower() == 'yes')
+                    x = res.lower() == 'yes'
+            else:
+                msg = ('Unknown hazard type %s. '
+                       'Must be either "depth" or "floodprone"' % hazard_type)
+                raise Exception(msg)
 
             usage = attributes[i]['type']
             if usage is not None and usage != 0:
@@ -96,16 +98,12 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                 del buildings[usage]
                 del affected_buildings[usage]
 
-        #print 'Building usage types'
-        #for usage in buildings:
-        #    print usage, buildings[usage], affected_buildings[usage]
-
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
-        impact_summary = _('<b>In case of "%s" the estimated impact to "%s" '
-                           'the possibility of &#58;</b><br><br><p>' % (Hname,
-                                                                        Ename))
+        impact_summary = _('<b>In case of "%s" the estimated impact to '
+                           '"%s" is&#58;</b><br><br><p>' % (Hname,
+                                                            Ename))
         impact_summary += ('<table class="table table-striped condensed'
                            ' bordered-table">'
                            '   <tr><th><b>%s</b></th>'
@@ -122,14 +120,17 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
         impact_summary += '</table>'
 
         impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _('Buildings will need to be closed when flooding '
-                            ' levels exceed %.1f m' % threshold)
+        impact_summary += '<b>' + _('Assumptions') + '&#58;</b><br>'
+        impact_summary += _('Buildings are said to be flooded when ')
+        if hazard_type == 'depth':
+            impact_summary += _('flood levels exceed %.1f m' % threshold)
+        else:
+            impact_summary += _('in areas marked as flood prone')
 
         # Create style
-        style_classes = [dict(label=_('Opened'), min=0, max=0,
+        style_classes = [dict(label=_('Not Flooded'), min=0, max=0,
                               colour='#1EFC7C', transparency=0, size=1),
-                         dict(label=_('Closed'), min=1, max=1,
+                         dict(label=_('Flooded'), min=1, max=1,
                               colour='#F31A1C', transparency=0, size=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)

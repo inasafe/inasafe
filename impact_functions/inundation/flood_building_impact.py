@@ -36,9 +36,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
         attributes = I.get_data()
         N = len(I)
 
-        # List attributes to carry forward to result layer
-        #attribute_names = I.get_attribute_names()
-
         # Calculate population impact
         count = 0
         for i in range(N):
@@ -55,15 +52,14 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 count += 1
 
             # Add calculated impact to existing attributes
-            # FIXME (Ole): Do it like this in all impact functions
             attributes[i][self.target_field] = x
 
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
         impact_summary = _('<b>In case of "%s" the estimated impact to '
-                           '"%s" '
-                           'is&#58;</b><br><br><p>' % (Hname, Ename))
+                           '"%s" is&#58;</b><br><br><p>' % (Hname,
+                                                            Ename))
         impact_summary += ('<table border="0" width="320px">'
                    '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
                     '   <tr></tr>'
@@ -72,16 +68,16 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     '   <tr><td>%s &#58;</td><td>%i</td></tr>'
                     '</table>' % (_('Status'), _('Number of buildings'),
                                   _('Closed'), count,
-                                  _('Opened'), N - count,
+                                  _('Open'), N - count,
                                   _('All'), N))
 
         impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
+        impact_summary += '<b>' + _('Assumptions') + '&#58;</b><br>'
         impact_summary += _('Buildings will need to close if flood'
                             ' levels exceed %.1f m' % threshold)
 
         # Create style
-        style_classes = [dict(label=_('Opened'), min=0, max=0,
+        style_classes = [dict(label=_('Open'), min=0, max=0,
                               colour='#1EFC7C', transparency=0, size=1),
                          dict(label=_('Closed'), min=1, max=1,
                               colour='#F31A1C', transparency=0, size=1)]

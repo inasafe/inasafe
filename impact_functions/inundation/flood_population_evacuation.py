@@ -46,26 +46,12 @@ class FloodEvacuationFunction(FunctionProvider):
         D = inundation.get_data(nan=0.0)  # Depth
 
         # Calculate impact as population exposed to depths > threshold
-        if population.get_resolution(native=True, isotropic=True) < 0.0005:
-            # Keep this for backwards compatibility just a little while
-            # This uses the original custom population set and
-            # serves as a reference
+        P = population.get_data(nan=0.0, scaling=True)
+        I = numpy.where(D > threshold, P, 0)
 
-            P = population.get_data(nan=0.0)  # Population density
-            pixel_area = 2500
-            I = numpy.where(D > threshold, P, 0) / 100000.0 * pixel_area
-        else:
-            # This is the new generic way of scaling (issue #168 and #172)
-            P = population.get_data(nan=0.0, scaling=True)
-            I = numpy.where(D > threshold, P, 0)
-
-        # Generate text with result for this study
+        # Count totals
         total = int(numpy.sum(P))
         number_of_people_affected = int(numpy.sum(I))
-        total1000 = str(total / 1000)
-        count1000 = str(number_of_people_affected / 1000)
-
-        # Create report
 
         # Create impact_table based on BNPB Perka 7/2008 minimum bantuan
         # Weekly needs (see issue #82)
@@ -75,47 +61,74 @@ class FloodEvacuationFunction(FunctionProvider):
         family_kits = number_of_people_affected / 5
         toilets = number_of_people_affected / 20
 
-        table_header_row = TableRow(['Bantuan', 'Jumlah'], header=True)
+        #table_header_row = TableRow(['Bantuan', 'Jumlah'], header=True)
+        #table_body = [table_header_row,
+        #              [_('Beras [kg]'), rice],
+        #              [_('Air Minum [l]'), drinking_water],
+        #              [_('Air Bersih [l]'), water],
+        #              [_('Kit Keluarga'), family_kits],
+        #              [_('Jamban Keluarga'), toilets],
+        #              _('Sumber: BNPB Perka 7/2008')]
+        table_header_row = TableRow(['Needs', 'Total'], header=True)
         table_body = [table_header_row,
-                      [_('Beras [kg]'), rice],
-                      [_('Air Minum [l]'), drinking_water],
-                      [_('Air Bersih [l]'), water],
-                      [_('Kit Keluarga'), family_kits],
-                      [_('Jamban Keluarga'), toilets]]
-        #table_caption = 'Sumber: BNPB Perka 7/2008'
-        impact_table = Table(table_body).toNewlineFreeString()
+                      [_('Rice [kg]'), rice],
+                      [_('Drinking Water [l]'), drinking_water],
+                      [_('Clean Water [l]'), water],
+                      [_('Family Kits'), family_kits],
+                      [_('Toilets'), toilets],
+                      _('Source: BNPB Pachment 7/2008')]
+       impact_table = Table(table_body).toNewlineFreeString()
 
-        #Summary table
+
+        # Create summary table
+        total1000 = str(total / 1000)
+        count1000 = str(number_of_people_affected / 1000)
 
         iname = inundation.get_name()
         pname = population.get_name()
-        table_caption = _('Apabila terjadi "%s" perkiraan dampak '
-                         'terhadap "%s" kemungkinan yang terjadi&#58;'
+        #table_caption = _('Apabila terjadi "%s" perkiraan dampak '
+        #                 'terhadap "%s" kemungkinan yang terjadi&#58;'
+        #                  % (iname, pname))
+        #table_body.extend([[_('Perlu Evakuasi (x 1000)'), '%s' % count1000],
+        #              [TableCell(_('Catatan:'), header=True, col_span=2)],
+        #              [TableCell(_('Jumlah penduduk Jakarta %s'
+        #                                 % total1000), col_span=2)],
+        #              [TableCell(_('Jumlah dalam ribuan'), col_span=2)],
+        #              [TableCell(_('Penduduk perlu dievakuasi ketika'
+        #                                'banjir lebih dari %i m.'
+        #                                % threshold), col_span=2)],
+        #              [TableCell(_('Minimum Bantuan per minggu (BNPB perka'
+        #                         ' 7/2008)'), col_span=2)]
+        #              ])
+        table_caption = _('In case of "%s" the estimated impact to '
+                         '"%s" is:'
                           % (iname, pname))
-        table_body.extend([[_('Perlu Evakuasi (x 1000)'), '%s' % count1000],
-                      [TableCell(_('Catatan:'), header=True, col_span=2)],
-                      [TableCell(_('Jumlah penduduk Jakarta %s'
+        table_body.extend([[_('Need Evacuation (x 1000)'), '%s' % count1000],
+                      [TableCell(_('Notes:'), header=True, col_span=2)],
+                      [TableCell(_('Total population Jakarta %s'
                                          % total1000), col_span=2)],
-                      [TableCell(_('Jumlah dalam ribuan'), col_span=2)],
-                      [TableCell(_('Penduduk perlu dievakuasi ketika'
-                                        'banjir lebih dari %i m.'
-                                        % threshold), col_span=2)],
-                      [TableCell(_('Jumlah dalam ribuan'), col_span=2)],
-                      [TableCell(_('Minmum Bantuan per minggu (BNPB Perka'
-                                 ' 7/2008)'), col_span=2)]
+                      [TableCell(_('Totals are given in thousands'), col_span=2)],
+                      [TableCell(_('People need evacuation if flood levels '
+                                   'exceed %i m.' % threshold), col_span=2)],
+                      [TableCell(_('Minimum needs are per week as defined '
+                                   'in BNPB regulation 7/2008)'), col_span=2)]
                       ])
-        impact_summary = Table(table_body, caption=table_caption
-                               ).toNewlineFreeString()
 
-        map_title = _('Penduduk yang Mungkin dievakuasi')
+        impact_summary = Table(table_body,
+                               caption=table_caption).toNewlineFreeString()
 
-        style_info['legend_title'] = _('Kepadatan Penduduk')
+        #map_title = _('Penduduk yang Mungkin dievakuasi')
+        map_title = _('People in need of evacuation')
+
+        #style_info['legend_title'] = _('Kepadatan Penduduk')
+        style_info['legend_title'] = _('Population Density')
 
         # Create raster object and return
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
-                   name=_('Penduduk yang %s' % (self.plugin_name.lower())),
+                   #name=_('Penduduk yang %s' % (self.plugin_name.lower())),
+                   name=_('Population which %s' % (self.plugin_name.lower())),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},
