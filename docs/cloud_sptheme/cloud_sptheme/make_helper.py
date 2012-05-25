@@ -194,7 +194,8 @@ class SphinxMaker(object):
     ##        "run these through (pdf)latex."
     ##
     ##def target_pdf():
-    ##    assert os.name == "posix", "pdf build support not automated for your os"
+    ##    if not os.name == "posix":
+    ##        raise Exception("pdf build support not automated for your os")
     ##    build("latex")
     ##    target = BUILD / "latex"
     ##    target.chdir()
