@@ -1,43 +1,50 @@
-"""Impact function based on Padang 2009 post earthquake survey
+"""Impact function based on ITB vulnerability model
 
 This impact function estimates percentual damage to buildings as a
 function of ground shaking measured in MMI.
-Buildings are assumed to fall the 9 classes below as described in
-the Geoscience Australia/ITB 2009 Padang earthquake
-survey (http://trove.nla.gov.au/work/38470066).
+Buildings are assumed to fall the # classes below as described in
+the ITB report.
 
-Class Building Type                              Median (MMI)  Beta (MMI)
--------------------------------------------------------------------------
-1     URM with river rock walls                        7.5     0.11
-2     URM with Metal Roof                              8.3     0.1
-3     Timber frame with masonry in-fill                8.8     0.11
-4     RC medium rise Frame with Masonry in-fill walls  8.4     0.05
-5     Timber frame with stucco in-fill                 9.2     0.11
-6     Concrete Shear wall  high rise* Hazus C2H        9.7     0.15
-7     RC low rise Frame with Masonry in-fill walls     9       0.08
-8     Confined Masonry                                 8.9     0.07
-9     Timber frame residential                        10.5     0.15
+To be added 
+
 """
-
+#import os
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 from engine.numerics import lognormal_cdf;
-from impact_functions.mappings import osm2padang, sigab2padang
-
+#from impact_functions.mappings import osm2itb, sigab2itb 
 
 # Damage curves for each of the nine classes derived from the Padang survey
-damage_curves = {'1': dict(median=7.5, beta=0.11),
-                 '2': dict(median=8.3, beta=0.1),
-                 '3': dict(median=8.8, beta=0.11),
-                 '4': dict(median=8.4, beta=0.05),
-                 '5': dict(median=9.2, beta=0.11),
-                 '6': dict(median=9.7, beta=0.15),
-                 '7': dict(median=9.0, beta=0.08),
-                 '8': dict(median=8.9, beta=0.07),
-                 '9': dict(median=10.5, beta=0.15)}
+class AutoVivification(dict):
+    """Implementation of perl's autovivification feature."""
+    def __getitem__(self, item):
+        try:
+            return dict.__getitem__(self, item)
+        except KeyError:
+            value = self[item] = type(self)()
+            return value
 
+# read vulnerability information
+# Non-Engineered buildings
+path_csv = '/home/hryu/inasafe/impact_functions/earthquake'
+a = open(path_csv + '/itb_vulnerability_non-eng.csv').readlines()
+damage_curves = AutoVivification()
+for item in a[1:]:
+    tmp = item.strip('\n').split(',')
+    idx = tmp[0] # structural type index 
+    damage_curves[idx]['median'] = float(tmp[5]) 
+    damage_curves[idx]['beta'] = float(tmp[6])
+
+# Engineered buildings
+a = open(path_csv + '/itb_vulnerability_eng.csv').readlines()
+for item in a[1:]:
+    tmp = item.strip('\n').split(',')
+    idx = tmp[0] # structural type index 
+    damage_curves[idx]['median'] = float(tmp[6]) 
+    damage_curves[idx]['beta'] = float(tmp[7])
+# I would suggest chaning the name of variable 'damage_curves' to 'vulnerability' since we simply use vulnerability models.
 
 class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
     """Risk plugin for ITB earthquake damage to buildings in Padang
@@ -56,21 +63,23 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
     def run(self, layers):
         """Risk plugin for Padang building survey
         """
+#        fid = open('result_itb.csv','w')
+#        fid.write('MMI, ITB_Class, Comp_damage \n')
 
         # Extract data
         H = get_hazard_layer(layers)    # Ground shaking
         E = get_exposure_layer(layers)  # Building locations
 
         datatype = E.get_keywords()['datatype']
-        vclass_tag = 'VCLASS'
+        vclass_tag = 'ITB_Class'
         if datatype.lower() == 'osm':
-            # Map from OSM attributes to the padang building classes
-            Emap = osm2padang(E)
+            # Map from OSM attributes to the ITB building classes
+#            Emap = osm2itb(E)
+            print 'osm2itb has not been implemented' 
         elif datatype.lower() == 'sigab':
-            Emap = sigab2padang(E)
-        elif datatype.lower() == 'padang':
-            Emap = padang2itb(E)
-        else:
+#            Emap = sigabitb(E)
+            print 'sigab2itb has not been implemented'
+        elif datatype.lower() == 'itb':
             Emap = E
 
         # Interpolate hazard level to building locations
@@ -83,7 +92,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
         # List attributes to carry forward to result layer
         attributes = Emap.get_attribute_names()
-
+#        print attributes 
         # Calculate building damage
         count50 = 0
         count25 = 0
@@ -95,12 +104,16 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
             building_class = Emap.get_data(vclass_tag, i)
 
-            building_type = str(int(building_class))
+#            building_type = str(int(building_class))
+            building_type = str(building_class)
             damage_params = damage_curves[building_type]
             beta = damage_params['beta']
+#            print beta, type(beta)
             median = damage_params['median']
+            msg = 'Invalid parameter value for ' + building_type
+            assert beta + median > 0.0, msg
             percent_damage = lognormal_cdf(mmi, median=median, sigma=beta) * 100
-
+#            fid.write('%f, %s, %f \n' %(mmi, building_class, percent_damage))
             # Collect shake level and calculated damage
             result_dict = {self.target_field: percent_damage,
                            'MMI': mmi}
@@ -128,7 +141,8 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
             if 66 <= percent_damage:
                 count50 += 1
-
+        
+#        fid.close()
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
