@@ -69,15 +69,15 @@ class FloodEvacuationFunction(FunctionProvider):
         #              [_('Kit Keluarga'), family_kits],
         #              [_('Jamban Keluarga'), toilets],
         #              _('Sumber: BNPB Perka 7/2008')]
-        table_header_row = TableRow(['Needs', 'Total'], header=True)
+        table_header_row = TableRow(['Needs (per week)', 'Total'], header=True)
         table_body = [table_header_row,
                       [_('Rice [kg]'), rice],
                       [_('Drinking Water [l]'), drinking_water],
                       [_('Clean Water [l]'), water],
                       [_('Family Kits'), family_kits],
                       [_('Toilets'), toilets],
-                      _('Source: BNPB Pachment 7/2008')]
-       impact_table = Table(table_body).toNewlineFreeString()
+                      _('Source: BNPB Regulation 7/2008')]
+        impact_table = Table(table_body).toNewlineFreeString()
 
 
         # Create summary table
@@ -110,7 +110,7 @@ class FloodEvacuationFunction(FunctionProvider):
                       [TableCell(_('Totals are given in thousands'), col_span=2)],
                       [TableCell(_('People need evacuation if flood levels '
                                    'exceed %i m.' % threshold), col_span=2)],
-                      [TableCell(_('Minimum needs are per week as defined '
+                      [TableCell(_('Minimum needs are defined '
                                    'in BNPB regulation 7/2008)'), col_span=2)]
                       ])
 
