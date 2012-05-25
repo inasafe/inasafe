@@ -17,7 +17,10 @@ for f in os.listdir(dirname):
     if os.path.isdir(os.path.join(dirname, f)):
         cmd = 'from impact_functions.%s import *' % f
         #print cmd
-        exec(cmd, locals(), globals())
+        try:
+            exec(cmd, locals(), globals())
+        except ImportError:
+            print 'WARNING: module %s does not exist' % f
 
 
 from impact_functions.core import FunctionProvider

@@ -6,6 +6,7 @@
     <file alias="options.png">resources/img/options.png</file>
     <file alias="bnpb_logo.png">resources/img/bnpb_logo.png</file>
     <file alias="bnpb_logo_64.png">resources/img/bnpb_logo_64.png</file>
+    <file alias="bnpb_logo_32.png">resources/img/bnpb_logo_32.png</file>
     <file alias="wb-logo-small.png">resources/img/wblogo-small.png</file>
     <file alias="Australian-AID-Identifier_blue-red-small.png">resources/img/Australian-AID-Identifier_blue-red-small.png</file>
     <file alias="logo-flower.png">resources/img/logo-flower.png</file>
