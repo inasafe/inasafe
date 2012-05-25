@@ -64,16 +64,14 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         datatype = E.get_keywords()['datatype']
+        vclass_tag = 'VCLASS'
         if datatype.lower() == 'osm':
             # Map from OSM attributes to the padang building classes
             Emap = osm2padang(E)
-            vclass_tag = 'VCLASS'
         elif datatype.lower() == 'sigab':
             Emap = sigab2padang(E)
-            vclass_tag = 'VCLASS'
         else:
             Emap = E
-            vclass_tag = 'VCLASS'
 
         # Interpolate hazard level to building locations
         Hi = H.interpolate(Emap)
@@ -102,6 +100,8 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
             beta = damage_params['beta']
             median = damage_params['median']
             percent_damage = lognormal_cdf(mmi, median=median, sigma=beta) * 100
+
+#            print mmi, building_class, percent_damage
 
             # Collect shake level and calculated damage
             result_dict = {self.target_field: percent_damage,
