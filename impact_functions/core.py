@@ -6,15 +6,12 @@ To register the plugin, the module must be imported by the Python process
 using it.
 """
 
-from impact_functions.utilities import ColorMapEntry
-from engine.polygon import inside_polygon
 import numpy
 import types
 import keyword
-
-# FIXME (Ole): Bring logging back - and do it well!
-import logging
-logger = logging.getLogger('risiko')
+from impact_functions.utilities import ColorMapEntry
+from engine.polygon import inside_polygon
+from storage.utilities import ugettext as _
 
 
 class PluginMount(type):
@@ -314,6 +311,21 @@ def extract_layers(layers, keyword, value):
             extracted_layers.append(layer)
 
     return extracted_layers
+
+
+def get_question(hazard_title, exposure_title, function_title):
+    """Rephrase the question asked
+
+    Input
+        hazard_title
+        exposure_title
+        function_title
+    """
+
+    return _('In the event of <i>%s</i> how many '
+             '<i>%s</i> might <i>%s</i>') % (hazard_title.lower(),
+                                             exposure_title.lower(),
+                                             function_title.lower())
 
 
 def aggregate_point_data(data=None, boundaries=None,
