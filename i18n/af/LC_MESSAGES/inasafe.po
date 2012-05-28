@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-25 17:36+0700\n"
+"POT-Creation-Date: 2012-05-28 08:30+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,10 +33,13 @@ msgstr ""
 #: impact_functions/earthquake/padang_building_impact_model.py:150
 #: impact_functions/inundation/dki_flood_building_impact.py:115
 #: impact_functions/inundation/dki_flood_building_impact.py:113
+#: impact_functions/inundation/dki_flood_building_impact.py:109
+#: impact_functions/inundation/flood_population_evacuation.py:76
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:127
 #: impact_functions/earthquake/itb_building_impact_model.py:148
 #: impact_functions/earthquake/padang_building_impact_model.py:150
-#: impact_functions/inundation/dki_flood_building_impact.py:113
+#: impact_functions/inundation/dki_flood_building_impact.py:109
+#: impact_functions/inundation/flood_population_evacuation.py:76
 msgid "Total"
 msgstr ""
 
@@ -53,8 +56,8 @@ msgstr ""
 #: impact_functions/earthquake/BNPB_earthquake_guidelines.py:128
 #: impact_functions/earthquake/itb_building_impact_model.py:149
 #: impact_functions/earthquake/padang_building_impact_model.py:151
-#: impact_functions/inundation/BNPB_flood_building_impact.py:82
-#: impact_functions/inundation/flood_building_impact.py:72
+#: impact_functions/inundation/BNPB_flood_building_impact.py:83
+#: impact_functions/inundation/flood_building_impact.py:75
 msgid "All"
 msgstr ""
 
@@ -127,7 +130,7 @@ msgstr "Tydelik gesluit"
 #: impact_functions/flood/flood_building_impact.py:83
 #: impact_functions/inundation/BNPB_flood_building_impact.py:71
 #: impact_functions/inundation/dki_flood_building_impact.py:106
-#: impact_functions/inundation/BNPB_flood_building_impact.py:71
+#: impact_functions/inundation/BNPB_flood_building_impact.py:72
 #, python-format
 msgid ""
 "<b>In case of \"%s\" the estimated impact to \"%s\" the possibility of &#58;"
@@ -153,8 +156,8 @@ msgstr ""
 #: impact_functions/inundation/flood_building_impact.py:86
 #: impact_functions/inundation/flood_building_impact.py:70
 #: impact_functions/inundation/flood_building_impact.py:82
-#: impact_functions/inundation/flood_building_impact.py:70
-#: impact_functions/inundation/flood_building_impact.py:82
+#: impact_functions/inundation/flood_building_impact.py:73
+#: impact_functions/inundation/flood_building_impact.py:85
 msgid "Closed"
 msgstr ""
 
@@ -195,9 +198,9 @@ msgstr ""
 #: impact_functions/inundation/flood_building_impact.py:95
 #: impact_functions/inundation/dki_flood_building_impact.py:142
 #: impact_functions/inundation/flood_building_impact.py:91
-#: impact_functions/inundation/BNPB_flood_building_impact.py:108
-#: impact_functions/inundation/dki_flood_building_impact.py:142
-#: impact_functions/inundation/flood_building_impact.py:91
+#: impact_functions/inundation/BNPB_flood_building_impact.py:109
+#: impact_functions/inundation/dki_flood_building_impact.py:141
+#: impact_functions/inundation/flood_building_impact.py:94
 msgid "Estimated buildings affected"
 msgstr ""
 
@@ -253,8 +256,10 @@ msgstr ""
 #: impact_functions/inundation/dki_flood_building_impact.py:115
 #: impact_functions/inundation/dki_flood_building_impact.py:113
 #: impact_functions/inundation/dki_flood_building_impact.py:133
-#: impact_functions/inundation/dki_flood_building_impact.py:113
-#: impact_functions/inundation/dki_flood_building_impact.py:133
+#: impact_functions/inundation/dki_flood_building_impact.py:109
+#: impact_functions/inundation/dki_flood_building_impact.py:132
+#: impact_functions/inundation/dki_flood_building_impact.py:109
+#: impact_functions/inundation/dki_flood_building_impact.py:132
 msgid "Flooded"
 msgstr ""
 
@@ -270,19 +275,19 @@ msgstr ""
 
 #: impact_functions/flood/BNPB_flood_building_impact.py:20
 #: impact_functions/inundation/BNPB_flood_building_impact.py:20
-#: impact_functions/inundation/BNPB_flood_building_impact.py:20
+#: impact_functions/inundation/BNPB_flood_building_impact.py:21
 msgid "Rawan Banjir"
 msgstr ""
 
 #: impact_functions/flood/BNPB_flood_building_impact.py:81
 #: impact_functions/inundation/BNPB_flood_building_impact.py:81
-#: impact_functions/inundation/BNPB_flood_building_impact.py:81
+#: impact_functions/inundation/BNPB_flood_building_impact.py:82
 msgid "Ketinggian Banjir"
 msgstr ""
 
 #: impact_functions/flood/BNPB_flood_building_impact.py:81
 #: impact_functions/inundation/BNPB_flood_building_impact.py:81
-#: impact_functions/inundation/BNPB_flood_building_impact.py:81
+#: impact_functions/inundation/BNPB_flood_building_impact.py:82
 msgid "Jumlah gedung"
 msgstr ""
 
@@ -290,8 +295,8 @@ msgstr ""
 #: impact_functions/flood/BNPB_flood_building_impact.py:91
 #: impact_functions/inundation/BNPB_flood_building_impact.py:83
 #: impact_functions/inundation/BNPB_flood_building_impact.py:91
-#: impact_functions/inundation/BNPB_flood_building_impact.py:83
-#: impact_functions/inundation/BNPB_flood_building_impact.py:91
+#: impact_functions/inundation/BNPB_flood_building_impact.py:84
+#: impact_functions/inundation/BNPB_flood_building_impact.py:92
 msgid "< 1 m"
 msgstr ""
 
@@ -299,8 +304,8 @@ msgstr ""
 #: impact_functions/flood/BNPB_flood_building_impact.py:94
 #: impact_functions/inundation/BNPB_flood_building_impact.py:84
 #: impact_functions/inundation/BNPB_flood_building_impact.py:94
-#: impact_functions/inundation/BNPB_flood_building_impact.py:84
-#: impact_functions/inundation/BNPB_flood_building_impact.py:94
+#: impact_functions/inundation/BNPB_flood_building_impact.py:85
+#: impact_functions/inundation/BNPB_flood_building_impact.py:95
 msgid "1 - 3 m"
 msgstr ""
 
@@ -308,14 +313,14 @@ msgstr ""
 #: impact_functions/flood/BNPB_flood_building_impact.py:97
 #: impact_functions/inundation/BNPB_flood_building_impact.py:85
 #: impact_functions/inundation/BNPB_flood_building_impact.py:97
-#: impact_functions/inundation/BNPB_flood_building_impact.py:85
-#: impact_functions/inundation/BNPB_flood_building_impact.py:97
+#: impact_functions/inundation/BNPB_flood_building_impact.py:86
+#: impact_functions/inundation/BNPB_flood_building_impact.py:98
 msgid "> 3 m"
 msgstr ""
 
 #: impact_functions/flood/BNPB_flood_building_impact.py:88
 #: impact_functions/inundation/BNPB_flood_building_impact.py:88
-#: impact_functions/inundation/BNPB_flood_building_impact.py:88
+#: impact_functions/inundation/BNPB_flood_building_impact.py:89
 msgid "Based on BNPB Perka 2 - 2012"
 msgstr ""
 
@@ -328,8 +333,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_building_impact_model.py:137
 #: impact_functions/earthquake/padang_building_impact_model.py:139
 #: impact_functions/experimental/tsunami_building_impact.py:93
-#: impact_functions/inundation/dki_flood_building_impact.py:104
-#: impact_functions/inundation/flood_building_impact.py:60
+#: impact_functions/inundation/flood_building_impact.py:63
 #, python-format
 msgid ""
 "<b>In case of \"%s\" the estimated impact to \"%s\" is&#58;</b><br><br><p>"
@@ -381,7 +385,7 @@ msgstr ""
 #: impact_functions/inundation/flood_building_impact.py:73
 #: impact_functions/inundation/flood_building_impact.py:69
 #: impact_functions/experimental/tsunami_building_impact.py:102
-#: impact_functions/inundation/flood_building_impact.py:69
+#: impact_functions/inundation/flood_building_impact.py:72
 msgid "Number of buildings"
 msgstr ""
 
@@ -406,13 +410,15 @@ msgid ""
 msgstr ""
 
 #: impact_functions/inundation/dki_flood_building_impact.py:20
-#: impact_functions/inundation/dki_flood_building_impact.py:20
+#: impact_functions/inundation/dki_flood_building_impact.py:21
+#: impact_functions/inundation/dki_flood_building_impact.py:21
 msgid "Be inundated"
 msgstr ""
 
 #: impact_functions/inundation/dki_flood_building_impact.py:115
 #: impact_functions/inundation/dki_flood_building_impact.py:113
-#: impact_functions/inundation/dki_flood_building_impact.py:113
+#: impact_functions/inundation/dki_flood_building_impact.py:109
+#: impact_functions/inundation/dki_flood_building_impact.py:109
 msgid "Building type"
 msgstr ""
 
@@ -422,25 +428,26 @@ msgid "Buildings will need to be closed when flooding  levels exceed %.1f m"
 msgstr ""
 
 #: impact_functions/inundation/flood_building_impact.py:20
-#: impact_functions/inundation/flood_building_impact.py:20
+#: impact_functions/inundation/flood_building_impact.py:23
 msgid "Be temporarily closed"
 msgstr ""
 
 #: impact_functions/inundation/flood_building_impact.py:73
 #: impact_functions/inundation/flood_building_impact.py:69
-#: impact_functions/inundation/flood_building_impact.py:69
+#: impact_functions/inundation/flood_building_impact.py:72
 msgid "Status"
 msgstr ""
 
 #: impact_functions/inundation/flood_building_impact.py:80
 #: impact_functions/inundation/flood_building_impact.py:76
-#: impact_functions/inundation/flood_building_impact.py:76
+#: impact_functions/inundation/flood_building_impact.py:79
 #, python-format
 msgid "Buildings will need to close if flood levels exceed %.1f m"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:27
-#: impact_functions/inundation/flood_population_evacuation.py:27
+#: impact_functions/inundation/flood_population_evacuation.py:26
+#: impact_functions/inundation/flood_population_evacuation.py:26
 msgid "Need evacuation"
 msgstr ""
 
@@ -513,87 +520,100 @@ msgstr ""
 
 #: impact_functions/inundation/dki_flood_building_impact.py:123
 #: impact_functions/inundation/flood_building_impact.py:75
-#: impact_functions/inundation/dki_flood_building_impact.py:123
-#: impact_functions/inundation/flood_building_impact.py:75
+#: impact_functions/inundation/flood_building_impact.py:78
 msgid "Assumptions"
 msgstr ""
 
 #: impact_functions/inundation/dki_flood_building_impact.py:124
-#: impact_functions/inundation/dki_flood_building_impact.py:124
+#: impact_functions/inundation/dki_flood_building_impact.py:119
+#: impact_functions/inundation/dki_flood_building_impact.py:119
 msgid "Buildings are said to be flooded when "
 msgstr ""
 
 #: impact_functions/inundation/dki_flood_building_impact.py:126
-#: impact_functions/inundation/dki_flood_building_impact.py:126
+#: impact_functions/inundation/dki_flood_building_impact.py:121
+#: impact_functions/inundation/dki_flood_building_impact.py:121
 #, python-format
 msgid "flood levels exceed %.1f m"
 msgstr ""
 
 #: impact_functions/inundation/dki_flood_building_impact.py:128
-#: impact_functions/inundation/dki_flood_building_impact.py:128
+#: impact_functions/inundation/dki_flood_building_impact.py:123
+#: impact_functions/inundation/dki_flood_building_impact.py:123
 msgid "in areas marked as flood prone"
 msgstr ""
 
 #: impact_functions/inundation/dki_flood_building_impact.py:131
-#: impact_functions/inundation/dki_flood_building_impact.py:131
+#: impact_functions/inundation/dki_flood_building_impact.py:130
+#: impact_functions/inundation/dki_flood_building_impact.py:130
 msgid "Not Flooded"
 msgstr ""
 
 #: impact_functions/inundation/flood_building_impact.py:71
 #: impact_functions/inundation/flood_building_impact.py:80
-#: impact_functions/inundation/flood_building_impact.py:71
-#: impact_functions/inundation/flood_building_impact.py:80
+#: impact_functions/inundation/flood_building_impact.py:74
+#: impact_functions/inundation/flood_building_impact.py:83
 msgid "Open"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:78
-#: impact_functions/inundation/flood_population_evacuation.py:78
+#: impact_functions/inundation/dki_flood_building_impact.py:107
+#: impact_functions/inundation/flood_population_evacuation.py:71
+#: impact_functions/inundation/dki_flood_building_impact.py:107
+#: impact_functions/inundation/flood_population_evacuation.py:71
 #, python-format
 msgid "In case of \"%s\" the estimated impact to \"%s\" is:"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:80
-#: impact_functions/inundation/flood_population_evacuation.py:80
+#: impact_functions/inundation/flood_population_evacuation.py:73
+#: impact_functions/inundation/flood_population_evacuation.py:73
 msgid "People needing evacuation"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:82
-#: impact_functions/inundation/flood_population_evacuation.py:82
+#: impact_functions/inundation/flood_population_evacuation.py:78
+#: impact_functions/inundation/flood_population_evacuation.py:78
 msgid "Rice [kg]"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:83
-#: impact_functions/inundation/flood_population_evacuation.py:83
+#: impact_functions/inundation/flood_population_evacuation.py:79
+#: impact_functions/inundation/flood_population_evacuation.py:79
 msgid "Drinking Water [l]"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:84
-#: impact_functions/inundation/flood_population_evacuation.py:84
+#: impact_functions/inundation/flood_population_evacuation.py:80
+#: impact_functions/inundation/flood_population_evacuation.py:80
 msgid "Clean Water [l]"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:85
-#: impact_functions/inundation/flood_population_evacuation.py:85
+#: impact_functions/inundation/flood_population_evacuation.py:81
+#: impact_functions/inundation/flood_population_evacuation.py:81
 msgid "Family Kits"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:86
-#: impact_functions/inundation/flood_population_evacuation.py:86
+#: impact_functions/inundation/flood_population_evacuation.py:82
+#: impact_functions/inundation/flood_population_evacuation.py:82
 msgid "Toilets"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:106
-#: impact_functions/inundation/flood_population_evacuation.py:106
+#: impact_functions/inundation/dki_flood_building_impact.py:118
+#: impact_functions/inundation/flood_population_evacuation.py:86
+#: impact_functions/inundation/dki_flood_building_impact.py:118
+#: impact_functions/inundation/flood_population_evacuation.py:86
 msgid "Notes:"
 msgstr ""
 
-#: impact_functions/inundation/flood_population_evacuation.py:107
 #: impact_functions/inundation/flood_population_evacuation.py:107
 #, python-format
 msgid "Total population Jakarta: %s"
 msgstr ""
 
-#: impact_functions/inundation/flood_population_evacuation.py:108
 #: impact_functions/inundation/flood_population_evacuation.py:108
 msgid "* Counts are given in thousands"
 msgstr ""
@@ -604,22 +624,26 @@ msgid "People need evacuation if flood levels exceed %i m"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:110
-#: impact_functions/inundation/flood_population_evacuation.py:110
+#: impact_functions/inundation/flood_population_evacuation.py:90
+#: impact_functions/inundation/flood_population_evacuation.py:90
 msgid "Minimum needs are defined in BNPB regulation 7/2008"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:121
-#: impact_functions/inundation/flood_population_evacuation.py:121
+#: impact_functions/inundation/flood_population_evacuation.py:93
+#: impact_functions/inundation/flood_population_evacuation.py:93
 msgid "People in need of evacuation"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:124
-#: impact_functions/inundation/flood_population_evacuation.py:124
+#: impact_functions/inundation/flood_population_evacuation.py:94
+#: impact_functions/inundation/flood_population_evacuation.py:94
 msgid "Population Density"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:131
-#: impact_functions/inundation/flood_population_evacuation.py:131
+#: impact_functions/inundation/flood_population_evacuation.py:100
+#: impact_functions/inundation/flood_population_evacuation.py:100
 #, python-format
 msgid "Population which %s"
 msgstr ""
@@ -629,15 +653,29 @@ msgid "People need evacuation if flood levels exceed %(eps) m"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:109
-#: impact_functions/inundation/flood_population_evacuation.py:109
+#: impact_functions/inundation/flood_population_evacuation.py:88
+#: impact_functions/inundation/flood_population_evacuation.py:88
 #, python-format
 msgid "People need evacuation if flood levels exceed %(eps)i m"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:81
+#: impact_functions/inundation/flood_population_evacuation.py:76
+#: impact_functions/inundation/flood_population_evacuation.py:76
 msgid "Needs per week"
 msgstr ""
 
 #: impact_functions/inundation/flood_population_evacuation.py:81
 msgid "Total (*)"
+msgstr ""
+
+#: impact_functions/inundation/dki_flood_building_impact.py:128
+#: impact_functions/inundation/dki_flood_building_impact.py:128
+msgid "Buildings inundated"
+msgstr ""
+
+#: impact_functions/inundation/flood_population_evacuation.py:87
+#: impact_functions/inundation/flood_population_evacuation.py:87
+#, python-format
+msgid "Total population: %i"
 msgstr ""

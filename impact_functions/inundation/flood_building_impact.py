@@ -13,8 +13,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
     :param requires category=='exposure' and \
                     subcategory=='building' and \
-                    layertype=='vector'
+                    layertype=='vector' and \
+                    purpose != 'dki'  # *
     """
+
+  # FIXME (Ole): * Bring back when tabled and translated
 
     target_field = 'AFFECTED'
     plugin_name = _('Be temporarily closed')

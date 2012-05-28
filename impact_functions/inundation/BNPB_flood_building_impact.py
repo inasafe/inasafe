@@ -13,7 +13,8 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
 
     :param requires category == 'exposure' and \
                     subcategory == 'building' and \
-                    layertype == 'vector'
+                    layertype == 'vector' and \
+                    purpose == 'bnpb'
     """
 
     target_field = 'LEVEL'  # The levels are 1: < 1m, 2: 1-3m and 3: > 3m
