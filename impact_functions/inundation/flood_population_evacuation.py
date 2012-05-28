@@ -68,8 +68,8 @@ class FloodEvacuationFunction(FunctionProvider):
         toilets = evacuated / 20
 
         # Generate impact report for the pdf map
-        table_body = [_('In case of "%s" the estimated impact to '
-                        '"%s" is:') % (iname, pname),
+        table_body = [_('In the event of %s how many '
+                        '%s might %s') % (iname, pname, plugin_name),
                       TableRow([_('People needing evacuation'),
                                 '%i' % evacuated],
                                header=True),
