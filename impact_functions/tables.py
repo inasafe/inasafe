@@ -490,10 +490,9 @@ if __name__ == '__main__':
     print str(t)
     print '-' * 79
 
-    t2 = Table([
-        ('1', '2'),
-        ['3', '4']
-    ], width='100%', header_row=('col1', 'col2'),
+    t2 = Table([('1', '2'),
+                ['3', '4']],
+               width='100%', header_row=('col1', 'col2'),
     col_width=('', '75%'))
     f.write(str(t2) + '<p>\n')
     print t2

@@ -40,8 +40,7 @@ class TablesTest(unittest.TestCase):
         '   </style>\n'
         ' </head>\n'
         ' <body>\n'
-        '  <h2>Test Output</h2>\n'
-        )
+        '  <h2>Test Output</h2>\n')
 
     def writeHtml(self, name):
         self.html += ' </body>\n</html>\n'
@@ -54,8 +53,7 @@ class TablesTest(unittest.TestCase):
                    ['a', 'b', 'c', 'd'],
                    ['a', 'b', 'c', 'd'],
                    ['a', 'b', 'c', 'd'],
-                   ['a', 'b', 'c', 'd']
-                ]
+                   ['a', 'b', 'c', 'd']]
         self.table_row = TableRow(['a', 'b', 'c', 'd'])
         self.table_row_data = [self.table_row,
                                self.table_row,
@@ -68,8 +66,7 @@ class TablesTest(unittest.TestCase):
         self.table_row_cells = TableRow([self.table_cell_a,
                                          self.table_cell_b,
                                          self.table_cell_c,
-                                         self.table_cell_d
-                                         ])
+                                         self.table_cell_d])
         self.table_cell_data = [self.table_row_cells,
                                 self.table_row_cells,
                                 self.table_row_cells,
@@ -202,8 +199,7 @@ class TablesTest(unittest.TestCase):
         table_cell_ab = TableCell('ab spanned', col_span=2)
         table_row = TableRow([table_cell_ab,
                                          self.table_cell_c,
-                                         self.table_cell_d
-                                         ])
+                                         self.table_cell_d])
         self.html += '  <h2>Spanning Table Columns</h2>\n'
         body = (' <tbody>\n'
                 '  <tr>\n'
@@ -227,12 +223,10 @@ class TablesTest(unittest.TestCase):
         table_row1 = TableRow([table_cell_aa,
                               self.table_cell_b,
                               self.table_cell_c,
-                              self.table_cell_d
-                              ])
+                              self.table_cell_d])
         table_row2 = TableRow([self.table_cell_b,
                                self.table_cell_c,
-                               self.table_cell_d
-                              ])
+                               self.table_cell_d])
         self.html += '  <h2>Spanning Table Columns</h2>\n'
         body = (' <tbody>\n'
                 '  <tr>\n'
@@ -262,8 +256,7 @@ class TablesTest(unittest.TestCase):
         table_row = TableRow([TableCell(table_cell_link),
                               self.table_cell_b,
                               self.table_cell_c,
-                              self.table_cell_d
-                             ])
+                              self.table_cell_d])
         self.html += '  <h2>Link Cell Columns</h2>\n'
         body = (' <tbody>\n'
                 '  <tr>\n'
@@ -321,8 +314,7 @@ class TablesTest(unittest.TestCase):
         table_row1 = TableRow([self.table_cell_a,
                               self.table_cell_b,
                               self.table_cell_c,
-                              self.table_cell_d
-                             ])
+                              self.table_cell_d])
         self.html += '  <h2>Table row from string</h2>\n'
         body = (' <tbody>\n'
                 '  <tr>\n'
