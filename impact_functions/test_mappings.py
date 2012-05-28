@@ -13,10 +13,12 @@ from storage.core import read_layer
 from storage.utilities_test import TESTDATA
 from mappings import *
 
+
 class Test_mappings(unittest.TestCase):
 
     def test_osm2padang(self):
-
+        """OSM structure types maps to Padang vulnerability curves
+        """
 
         hazard_filename = '%s/Shakemap_Padang_2009.asc' % TESTDATA
         exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
@@ -81,11 +83,7 @@ class Test_mappings(unittest.TestCase):
                 assert vclass == 2, msg
 
 
-
-
-
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_mappings, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
-

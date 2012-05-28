@@ -38,6 +38,7 @@ from impact_functions_for_testing import BNPB_earthquake_guidelines
 from impact_functions_for_testing import general_ashload_impact
 from impact_functions_for_testing import flood_road_impact
 
+
 def linear_function(x, y):
     """Auxiliary function for use with interpolation test
     """
