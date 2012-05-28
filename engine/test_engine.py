@@ -27,12 +27,16 @@ from impact_functions import get_plugins
 from storage.utilities_test import TESTDATA
 
 # These imports are needed for impact function registration - dont remove
+# If any of these get reinstated as "official" public impact functions,
+# remove from here and update test to use the real one.
 from impact_functions_for_testing import empirical_fatality_model
 from impact_functions_for_testing import allen_fatality_model
 from impact_functions_for_testing import unspecific_building_impact_model
 from impact_functions_for_testing import NEXIS_building_impact_model
 from impact_functions_for_testing import HKV_flood_study
-
+from impact_functions_for_testing import BNPB_earthquake_guidelines
+from impact_functions_for_testing import general_ashload_impact
+from impact_functions_for_testing import flood_road_impact
 
 def linear_function(x, y):
     """Auxiliary function for use with interpolation test
