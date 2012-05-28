@@ -34,7 +34,8 @@ class FloodEvacuationFunction(FunctionProvider):
               H: Raster layer of flood depth
               P: Raster layer of population data on the same grid as H
 
-        Counts number of people exposed to flood levels exceeding specified threshold.
+        Counts number of people exposed to flood levels exceeding
+        specified threshold.
 
         Return
           Map of population exposed to flood levels exceeding the threshold
