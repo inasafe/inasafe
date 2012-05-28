@@ -1,5 +1,6 @@
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
+from impact_functions.core import get_question
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 from impact_functions.tables import (Table, TableRow)
@@ -29,6 +30,10 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
         # Extract data
         H = get_hazard_layer(layers)    # Depth
         E = get_exposure_layer(layers)  # Building locations
+
+        question = get_question(H.get_name(),
+                                E.get_name(),
+                                self.plugin_name.lower())
 
         # Interpolate hazard level to building locations
         if H.is_raster:
@@ -100,12 +105,7 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                 del affected_buildings[usage]
 
         # Generate impact report for the pdf map
-        Hname = H.get_name()
-        Ename = E.get_name()
-
-        # Generate impact report for the pdf map
-        table_body = [_('In case of "%s" the estimated impact to '
-                           '"%s" is:') % (Hname, Ename),
+        table_body = [question,
                       TableRow([_('Building type'), _('Flooded'), _('Total')],
                                header=True)]
 
