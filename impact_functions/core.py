@@ -178,7 +178,7 @@ def requirement_check(params, require_str, verbose=False):
             msg = ('Error in plugin requirements'
                    'Must not use Python keywords as params: %s' % (key))
             #print msg
-            logger.error(msg)
+            #logger.error(msg)
             return False
 
         if key in excluded_keywords:
@@ -205,7 +205,7 @@ def requirement_check(params, require_str, verbose=False):
         msg = ('Requirements header could not compiled: %s. '
                'Original message: %s' % (execstr, e))
         #print msg
-        logger.error(msg)
+        #logger.error(msg)
 
     return False
 
