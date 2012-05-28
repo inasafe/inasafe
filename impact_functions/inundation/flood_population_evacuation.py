@@ -10,8 +10,8 @@ from impact_functions.tables import Table, TableRow
 class FloodEvacuationFunction(FunctionProvider):
     """Risk plugin for flood evacuation
 
-    :author HKV
-    :rating 1
+    :author AIFDR
+    :rating 4
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami'] and \
                     layertype=='raster' and \
@@ -52,35 +52,39 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Count totals
         total = int(numpy.sum(P))
-        number_of_people_affected = int(numpy.sum(I))
-        total1000 = str(total / 1000)
-        count1000 = str(number_of_people_affected / 1000)
+        evacuated = int(numpy.sum(I))
+
+        # Don't show digits less than a 1000
+        if total > 1000:
+            total = total // 1000 * 1000
+        if evacuated > 1000:
+            evacuated = evacuated // 1000 * 1000
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
-        rice = number_of_people_affected * 2.8
-        drinking_water = number_of_people_affected * 17.5
-        water = number_of_people_affected * 67
-        family_kits = number_of_people_affected / 5
-        toilets = number_of_people_affected / 20
+        rice = int(evacuated * 2.8)
+        drinking_water = int(evacuated * 17.5)
+        water = evacuated * 67
+        family_kits = evacuated / 5
+        toilets = evacuated / 20
 
         # Generate impact report for the pdf map
         table_body = [_('In case of "%s" the estimated impact to '
                         '"%s" is:') % (iname, pname),
                       TableRow([_('People needing evacuation'),
-                                '%s (*)' % count1000], header=True),
-                      TableRow([_('Needs per week'), _('Total (*)')],
+                                '%i' % evacuated],
                                header=True),
-                      [_('Rice [kg]'), int(rice / 1000)],
-                      [_('Drinking Water [l]'), int(drinking_water / 1000)],
-                      [_('Clean Water [l]'), int(water / 1000)],
-                      [_('Family Kits'), int(family_kits / 1000)],
-                      [_('Toilets'), int(toilets / 1000)]]
+                      TableRow([_('Needs per week'), _('Total')],
+                               header=True),
+                      [_('Rice [kg]'), int(rice)],
+                      [_('Drinking Water [l]'), int(drinking_water)],
+                      [_('Clean Water [l]'), int(water)],
+                      [_('Family Kits'), int(family_kits)],
+                      [_('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(_('Notes:'), header=True),
-                           _('Total population Jakarta: %s') % total1000,
-                           _('* Counts are given in thousands'),
+                           _('Total population: %i') % total,
                            _('People need evacuation if flood levels '
                              'exceed %(eps)i m') % {'eps': threshold},
                            _('Minimum needs are defined in BNPB '
