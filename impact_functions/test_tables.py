@@ -18,7 +18,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import unittest
-from tables import (Table, TableRow, TableCell, Link)
+from tables import Table, TableRow, TableCell, Link
 
 
 class TablesTest(unittest.TestCase):
@@ -355,3 +355,38 @@ class TablesTest(unittest.TestCase):
         assert expected_result.strip() == str(actual_result).strip(), message
         self.html += str(actual_result)
         self.writeHtml('table_table_from_string')
+
+    def test_table_with_colalign(self):
+        """Table columns can be right justified"""
+
+        # First with default alignment
+        actual_result = Table(['12', '3000', '5'])
+
+        expected_strings = ['<td colspan="100%">12</td>',
+                            '<td colspan="100%">3000</td>',
+                            '<td colspan="100%">5</td>']
+        for s in expected_strings:
+            message = ('Did not find expected string "%s" in result: %s'
+                       % (s, actual_result))
+            assert s in str(actual_result).strip(), message
+
+        # Then using explicit alignment (all right justified)
+        actual_result = Table(['12', '3000', '5'],
+                              col_align=['right', 'right', 'right'])
+
+        expected_strings = ['<td colspan="100%" align="right">12</td>',
+                            '<td colspan="100%" align="right">3000</td>',
+                            '<td colspan="100%" align="right">5</td>']
+        for s in expected_strings:
+            message = ('Did not find expected string "%s" in result: %s'
+                       % (s, actual_result))
+            assert s in str(actual_result).strip(), message
+
+        # FIXME (Ole): This does not work if e.g. col_align has
+        # different strings: col_align = ['right', 'left', 'center']
+
+if __name__ == '__main__':
+    suite = unittest.makeSuite(TablesTest, 'test')
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)
+
