@@ -3,7 +3,7 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from storage.vector import Vector
 from storage.utilities import ugettext as _
-from impact_functions.tables import (Table, TableRow)
+from impact_functions.tables import Table, TableRow
 
 
 class DKIFloodBuildingImpactFunction(FunctionProvider):

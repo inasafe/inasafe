@@ -3,7 +3,7 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from storage.vector import Vector
 from storage.utilities import ugettext as _
-from impact_functions.tables import (Table, TableRow)
+from impact_functions.tables import Table, TableRow
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
@@ -45,7 +45,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         # Calculate building impact
         count = 0
         for i in range(N):
-            # Get the interpolated depth
+            # Determine if the interpolated depth is above threshold
             x = float(attributes[i]['depth']) > threshold
 
             # Tag and count
@@ -55,14 +55,13 @@ class FloodBuildingImpactFunction(FunctionProvider):
             # Add calculated impact to existing attributes
             attributes[i][self.target_field] = x
 
-        # Generate impact report for the pdf map
+        # Generate impact report
         table_body = [question,
                       TableRow([_('Status'), _('Number of buildings')],
                                header=True),
                       TableRow([_('Closed'), count]),
                       TableRow([_('Open'), N - count]),
                       TableRow([_('All'), N])]
-
 
         table_body.append(TableRow(_('Notes:'), header=True))
         table_body.append(_('Buildings will need to close if flood'
@@ -85,6 +84,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                    projection=I.get_projection(),
                    geometry=I.get_geometry(),
                    name=_('Estimated buildings affected'),
-                   keywords={'impact_summary': impact_summary},
+                   keywords={'impact_summary': impact_summary,
+                             'impact_table': impact_table,
+                             'map_title': map_title},
                    style_info=style_info)
         return V
