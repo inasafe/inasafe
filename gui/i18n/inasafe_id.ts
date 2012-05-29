@@ -39,9 +39,9 @@
     </message>
     <message>
         <location filename="is_keyword_io.py" line="349"/>
-        <source>Keywords file associated with dataset could not be found: 
+        <source>Keywords file associated with dataset could not be found:
 %s</source>
-        <translation type="obsolete">Arsip kata kunci yang berhubungan dengan dataset tidak dapat ditemukan&gt; 
+        <translation type="obsolete">Arsip kata kunci yang berhubungan dengan dataset tidak dapat ditemukan&gt;
 %s</translation>
     </message>
     <message>
@@ -93,9 +93,9 @@ ke %s: %s</translation>
     </message>
     <message>
         <location filename="is_impact_calculator.py" line="268"/>
-        <source>Keyword retrieval failed for %s (%s) 
+        <source>Keyword retrieval failed for %s (%s)
  %s</source>
-        <translation type="obsolete">gagal mengambil kata kunci untuk %s (%s) 
+        <translation type="obsolete">gagal mengambil kata kunci untuk %s (%s)
  %s</translation>
     </message>
     <message>
@@ -383,7 +383,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock_base.ui" line="55"/>
         <source>In the event of</source>
-        <translation>Jika terjadi</translation>
+        <translation>Apabila terjadi</translation>
     </message>
     <message>
         <location filename="is_dock_base.ui" line="65"/>
