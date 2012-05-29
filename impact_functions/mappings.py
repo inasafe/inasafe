@@ -231,30 +231,39 @@ def osm2bnpb(E, target_attribute='VCLASS'):
             vulnerability_class = 'URM'
             count += 1
         else:
-            if levels >= 4:
-                # High
-                vulnerability_class = 'RM'
-            elif 1 <= levels < 4:
-                # Low
-                if structure in ['reinforced masonry',
-                                 'reinforced_masonry']:
-                    vulnerability_class = 'RM'
-                elif structure == 'confined_masonry':
-                    vulnerability_class = 'RM'
-                elif 'kayu' in structure or 'wood' in structure:
-                    vulnerability_class = 'RM'
-                else:
-                    vulnerability_class = 'URM'
-            elif numpy.allclose(levels, 0):
-                # A few buildings exist with 0 levels.
+            # Map string variable levels to integer
+            if levels.endswith('+'):
+                levels = 100
 
-                # In general, we should be assigning here the most
-                # frequent building in the area which could be defined
-                # by admin boundaries.
+            try:
+                levels = int(levels)
+            except:
+                # E.g. 'ILP jalan'
                 vulnerability_class = 'URM'
+                count += 1
             else:
-                msg = 'Unknown number of levels: %s' % levels
-                raise Exception(msg)
+                # Start mapping depending on levels
+                if levels >= 4:
+                    # High
+                    vulnerability_class = 'RM'
+                elif 1 <= levels < 4:
+                    # Low
+                    if structure in ['reinforced_masonry', 'confined_masonry']:
+                        vulnerability_class = 'RM'
+                    elif 'kayu' in structure or 'wood' in structure:
+                        vulnerability_class = 'RM'
+                    else:
+                        vulnerability_class = 'URM'
+                elif numpy.allclose(levels, 0):
+                    # A few buildings exist with 0 levels.
+
+                    # In general, we should be assigning here the most
+                    # frequent building in the area which could be defined
+                    # by admin boundaries.
+                    vulnerability_class = 'URM'
+                else:
+                    msg = 'Unknown number of levels: %s' % levels
+                    raise Exception(msg)
 
         # Store new attribute value
         attributes[i][target_attribute] = vulnerability_class

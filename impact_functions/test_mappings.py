@@ -32,13 +32,8 @@ class Test_mappings(unittest.TestCase):
         Emap = osm2padang(E)
 
         for i, feature in enumerate(E.get_data()):
-            try:
-                vclass = int(Emap.get_data('VCLASS', i))
-            except KeyError:
-                print
-                print i, Emap.get_data()[i]
-                #import sys; sys.exit()
-                pass
+
+            vclass = int(Emap.get_data('VCLASS', i))
 
             levels = feature['levels']
             structure = feature['structure']
@@ -82,6 +77,66 @@ class Test_mappings(unittest.TestCase):
             else:
                 assert vclass == 2, msg
 
+
+    def test_osm2bnpb(self):
+        """OSM structure types maps to BNPB vulnerability curves
+        """
+
+        hazard_filename = '%s/Shakemap_Padang_2009.asc' % TESTDATA
+        exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
+                             % TESTDATA)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        # Map from OSM attributes to the padang building classes
+        Emap = osm2bnpb(E, target_attribute='VCLASS')
+
+        for i, feature in enumerate(E.get_data()):
+            try:
+                vclass = Emap.get_data('VCLASS', i)
+            except KeyError:
+                print
+                print i, Emap.get_data()[i]
+                #import sys; sys.exit()
+                pass
+
+            levels = feature['levels']
+            structure = feature['structure']
+            msg = ('Unexpected VCLASS %s. '
+                   'I have levels == %s and structure == %s.'
+                   % (vclass, levels, structure))
+
+            if levels is None or structure is None:
+                assert vclass == 'URM', msg
+                continue
+
+            # Map string variable levels to integer
+            if levels.endswith('+'):
+                levels = 100
+
+            try:
+                levels = int(levels)
+            except:
+                # E.g. 'ILP jalan'
+                assert vclass == 'URM', msg
+                continue
+
+            levels = int(levels)
+
+            # Check the main cases
+            if levels >= 4:
+                assert vclass == 'RM', msg
+            elif 1 <= levels < 4:
+                if structure in ['reinforced_masonry', 'confined_masonry']:
+                    assert vclass == 'RM', msg
+                elif 'kayu' in structure or 'wood' in structure:
+                    assert vclass == 'RM', msg
+                else:
+                    assert vclass == 'URM', msg
+            else:
+                assert vclass == 'URM', msg
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_mappings, 'test')
