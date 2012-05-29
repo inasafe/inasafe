@@ -1,6 +1,10 @@
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
+from impact_functions.core import get_question
+from impact_functions.styles import earthquake_fatality_style as style_info
 from storage.raster import Raster
+from storage.utilities import ugettext as _
+from impact_functions.tables import Table, TableRow
 from engine.numerics import normal_cdf
 
 import numpy
@@ -33,8 +37,9 @@ class ITBFatalityFunction(FunctionProvider):
 
     """
 
-    @staticmethod
-    def run(layers,
+    plugin_name = _('Be affected by ground shaking')
+
+    def run(self, layers,
             x=0.62275231, y=8.03314466, zeta=2.15):
         """Risk plugin for earthquake fatalities
 
@@ -52,9 +57,13 @@ class ITBFatalityFunction(FunctionProvider):
 
         """
 
-        # Identify input layers
+        # Extract input layers
         intensity = get_hazard_layer(layers)
         population = get_exposure_layer(layers)
+
+        question = get_question(intensity.get_name(),
+                                population.get_name(),
+                                self.plugin_name.lower())
 
         # Extract data grids
         H = intensity.get_data()   # Ground Shaking
@@ -63,18 +72,13 @@ class ITBFatalityFunction(FunctionProvider):
         # Calculate population affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
         mmi_range = range(2, 10)
-        number_of_people_affected = {}
+        number_exposed = {}
         number_of_fatalities = {}
 
         # Calculate fatality rates for observed Intensity values (H
         # based on ITB power model
         R = numpy.zeros(H.shape)
         for mmi in mmi_range:
-
-            # Select population exposed to this mmi level
-            #mask = numpy.logical_and(mmi - 0.5 < H,
-            #                         H <= mmi + 0.5)
-            #I = numpy.where(mask, P, 0)
 
             # Identify cells where MMI is in class i
             mask = (H > mmi - 0.5) * (H <= mmi + 0.5)
@@ -91,8 +95,12 @@ class ITBFatalityFunction(FunctionProvider):
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
-            number_of_people_affected[mmi] = numpy.nansum(I.flat)
+            number_exposed[mmi] = numpy.nansum(I.flat)
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
+
+        # Set resulting layer to zero when less than a threshold. This is to
+        # try to achieve transparency (see issue #126) - but doesn't seem to work.
+        R[R < 0.01] = 0
 
         # Total statistics
         total = numpy.nansum(P.flat)
@@ -100,16 +108,38 @@ class ITBFatalityFunction(FunctionProvider):
         # This might be reported in real time system as well
         fatalities = numpy.nansum(number_of_fatalities.values())
 
-        # Generate text with result for this study
-        impact_summary = generate_exposure_table(
-            mmi_range, number_of_people_affected,
-            header='Jumlah Orang yg terkena dampak (x1000)',
-            scale=1000)
-        impact_summary += generate_exposure_table(
-            mmi_range,
-            number_of_fatalities,
-            header='Jumlah Orang yg meninggal')
-        impact_summary += generate_fatality_table(fatalities)
+        # Generate impact report
+        table_body = [question,
+                      TableRow([_('Groundshaking (MMI)'),
+                                _('# people impacted')],
+                                header=True)]
+
+        # Table of people exposed to each shake level
+        for mmi in mmi_range:
+            s = str(int(number_exposed[mmi])).rjust(10)
+            #print s, len(s)
+            row = TableRow([mmi, s],
+                           col_align=['right', 'right'])
+
+            # FIXME (Ole): Weirdly enought, the row object
+            # has align="right" in it, but it doesn't work
+            #print row
+            table_body.append(row)
+
+
+        # Add total fatality estimate
+        s = str(int(fatalities)).rjust(10)
+        table_body.append(TableRow([_('Number of fatalities'), s],
+                                   header=True))
+        table_body.append(TableRow(_('Notes:'), header=True))
+
+        # FIXME (Ole): Need proper reference from Hadi
+        table_body.append(_('Fatality model is from '
+                            'Institute of Teknologi Bandung 2012.'))
+
+        impact_summary = Table(table_body).toNewlineFreeString()
+        impact_table = impact_summary
+        map_title = _('Earthquake impact to population')
 
         # Create new layer and return
         L = Raster(R,
@@ -117,41 +147,11 @@ class ITBFatalityFunction(FunctionProvider):
                    geotransform=population.get_geotransform(),
                    keywords={'impact_summary': impact_summary,
                              'total_population': total,
-                             'total_fatalities': fatalities},
-                   name='Estimated fatalities')
+                             'total_fatalities': fatalities,
+                             'impact_table': impact_table,
+                             'map_title': map_title},
+                   name='Estimated fatalities',
+                   style_info=style_info)
 
         # Maybe return a shape file with contours instead
         return L
-
-
-def generate_exposure_table(mmi_range,
-                            number_of_people,
-                            header='',
-                            scale=1):
-    """Helper to make html report
-    """
-
-    impact_summary = ('<font size="3"><table border="0" width="400px">'
-               '   <tr><td><b>MMI</b></td><td><b>%s</b></td></tr>'
-               % header)
-
-    for mmi in mmi_range:
-        impact_summary += ('   <tr><td>%i&#58;</td><td>%i</td></tr>'
-                    % (mmi,
-                       number_of_people[mmi] / scale))
-    impact_summary += '<tr></tr>'
-    impact_summary += '</table></font>'
-
-    return impact_summary
-
-
-def generate_fatality_table(fatalities):
-    """Helper to make html report
-    """
-
-    impact_summary = ('<br>'
-               '<font size="3"><table border="0" width="300px">'
-               '    <tr><td><b>Jumlah Perkiraan Kematian</b></td>'
-               '    <td><b>%i</b></td></tr>'
-               '</table></font>' % fatalities)
-    return impact_summary

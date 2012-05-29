@@ -104,7 +104,7 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                 del buildings[usage]
                 del affected_buildings[usage]
 
-        # Generate impact report for the pdf map
+        # Generate impact report
         table_body = [question,
                       TableRow([_('Building type'), _('Flooded'), _('Total')],
                                header=True)]

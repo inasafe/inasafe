@@ -108,10 +108,6 @@ class ISUtilitiesTest(unittest.TestCase):
         except Exception, e:
             raise Exception(myMessage + ': ' + str(e))
 
-
-
-
-
     def test_issue121(self):
         """Test that point symbol size can be set from style (issue 121).
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
@@ -158,6 +154,6 @@ class ISUtilitiesTest(unittest.TestCase):
         assert myVersion > 10700, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISUtilitiesTest, 'test_issue126')
+    suite = unittest.makeSuite(ISUtilitiesTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

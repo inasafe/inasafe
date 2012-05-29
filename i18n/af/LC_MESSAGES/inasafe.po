@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-29 13:14+0700\n"
+"POT-Creation-Date: 2012-05-29 14:25+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -702,6 +702,7 @@ msgstr ""
 #: impact_functions/inundation/flood_generic_building_impact.py:67
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
 #: impact_functions/inundation/flood_generic_building_impact.py:66
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:121
 #: impact_functions/earthquake/padang_building_impact_model.py:132
 #: impact_functions/inundation/flood_generic_building_impact.py:66
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
@@ -844,4 +845,28 @@ msgstr ""
 msgid ""
 "- Levels of impact are defined by post 2009 Padang earthquake survey "
 "conducted by Geoscience Australia and Institute of Teknologi Bandung.<br>"
+msgstr ""
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:39
+msgid "Be affected by ground shaking"
+msgstr ""
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:108
+msgid "Groundshaking (MMI)"
+msgstr ""
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:109
+msgid "# people impacted"
+msgstr ""
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:119
+msgid "Number of fatalities"
+msgstr ""
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:124
+msgid "Fatality model is from Institute of Teknologi Bandung 2012."
+msgstr ""
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:129
+msgid "Earthquake impact to population"
 msgstr ""

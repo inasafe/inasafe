@@ -312,9 +312,9 @@ class TablesTest(unittest.TestCase):
     def test_row_from_string(self):
         """Test row from string - it should span to the table width too"""
         table_row1 = TableRow([self.table_cell_a,
-                              self.table_cell_b,
-                              self.table_cell_c,
-                              self.table_cell_d])
+                               self.table_cell_b,
+                               self.table_cell_c,
+                               self.table_cell_d])
         self.html += '  <h2>Table row from string</h2>\n'
         body = (' <tbody>\n'
                 '  <tr>\n'
@@ -371,6 +371,8 @@ class TablesTest(unittest.TestCase):
             assert s in str(actual_result).strip(), message
 
         # Then using explicit alignment (all right justified)
+        # FIXME (Ole): This does not work if e.g. col_align has
+        # different strings: col_align = ['right', 'left', 'center']
         actual_result = Table(['12', '3000', '5'],
                               col_align=['right', 'right', 'right'])
 
@@ -382,8 +384,41 @@ class TablesTest(unittest.TestCase):
                        % (s, actual_result))
             assert s in str(actual_result).strip(), message
 
-        # FIXME (Ole): This does not work if e.g. col_align has
-        # different strings: col_align = ['right', 'left', 'center']
+        # Now try at the TableRow level
+        # FIXME (Ole): Breaks tables!
+        #row = TableRow(['12', '3000', '5'],
+        #               col_align=['right', 'right', 'right'])
+        #actual_result = Table(row)
+        #print actual_result
+
+        # This breaks too - what's going on?
+        #row = TableRow(['12', '3000', '5'])
+        #actual_result = Table(row)
+        #print actual_result
+
+        # Try at the cell level
+        cell_1 = TableCell('12')
+        cell_2 = TableCell('3000')
+        cell_3 = TableCell('5')
+        row = TableRow([cell_1, cell_2, cell_3])
+        #print row  # OK
+        table = Table(row)
+        #print table  # Broken
+
+        # Try at the cell level
+        cell_1 = TableCell('12', align='right')
+        cell_2 = TableCell('3000', align='right')
+        cell_3 = TableCell('5', align='right')
+        row = TableRow([cell_1, cell_2, cell_3])
+        #print row  # OK
+
+        # This is OK
+        for cell in [cell_1, cell_2, cell_3]:
+            msg = 'Wrong cell alignment %s' % cell
+            assert 'align="right"' in str(cell)
+
+        table = Table(row)
+        #print str(table)  # Broken
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TablesTest, 'test')

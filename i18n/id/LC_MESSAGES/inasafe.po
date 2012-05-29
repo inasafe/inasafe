@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-29 13:14+0700\n"
+"POT-Creation-Date: 2012-05-29 14:25+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -527,6 +527,7 @@ msgstr "Jamban Keluarga"
 #: impact_functions/inundation/flood_generic_building_impact.py:67
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
 #: impact_functions/inundation/flood_generic_building_impact.py:66
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:121
 #: impact_functions/earthquake/padang_building_impact_model.py:132
 #: impact_functions/inundation/flood_generic_building_impact.py:66
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
@@ -669,3 +670,27 @@ msgid ""
 msgstr ""
 "Batu pondasi tanpa perkuatan diasumsikan di mana tidak ada informasi "
 "struktural tersedia."
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:39
+msgid "Be affected by ground shaking"
+msgstr "Dipengaruhi oleh tanah bergetar"
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:108
+msgid "Groundshaking (MMI)"
+msgstr "Tanah bergetar (MMI)"
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:109
+msgid "# people impacted"
+msgstr "# orang terdampak"
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:119
+msgid "Number of fatalities"
+msgstr "Jumlah perkiraan kematian"
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:124
+msgid "Fatality model is from Institute of Teknologi Bandung 2012."
+msgstr "Model Fatality adalah dari Institut Teknologi Bandung 2012."
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:129
+msgid "Earthquake impact to population"
+msgstr "Gempa dampak terhadap populasi"
