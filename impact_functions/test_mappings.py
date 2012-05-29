@@ -77,7 +77,6 @@ class Test_mappings(unittest.TestCase):
             else:
                 assert vclass == 2, msg
 
-
     def test_osm2bnpb(self):
         """OSM structure types maps to BNPB vulnerability curves
         """
