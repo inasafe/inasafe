@@ -109,10 +109,16 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                       TableRow([_('Building type'), _('Flooded'), _('Total')],
                                header=True)]
 
+        building_list = []
         for usage in buildings:
-            s = TableRow([usage.replace('_', ' '),
-                          affected_buildings[usage],
-                          buildings[usage]])
+            building_list.append([usage.replace('_', ' ').capitalize(),
+                                  affected_buildings[usage],
+                                  buildings[usage]])
+
+        building_list.sort()
+
+        for row in building_list:
+            s = TableRow(row)
             table_body.append(s)
 
         table_body.append(TableRow(_('Notes:'), header=True))
