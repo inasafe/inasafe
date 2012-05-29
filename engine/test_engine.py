@@ -237,9 +237,27 @@ class Test_Engine(unittest.TestCase):
             assert str(int(population_count / 1000)) in \
                 keywords['impact_summary']
 
-        for fatality_count in [31.8937368131, 2539.26369372,
-                               1688.72362573, 17174.9261705, 19436.834531]:
-            assert str(int(fatality_count)) in keywords['impact_summary']
+        # Check that aggregated number of fatilites is as expected
+        all = int(numpy.sum([31.8937368131,
+                             2539.26369372,
+                             1688.72362573,
+                             17174.9261705,
+                             19436.834531]))
+        msg = 'Aggregated number of fatalities not as expected: %i' % all
+        assert all == 40871, msg
+
+        msg = 'Did not find expected value %i in summary' % all
+        assert str(all) in keywords['impact_summary'], msg
+
+        # Individual check does not work anymore, because the function now only returns
+        # the aggregate number of fatalities
+        #for fatality_count in [31.8937368131, 2539.26369372,
+        #                       1688.72362573, 17174.9261705, 19436.834531]:
+        #    x = str(int(fatality_count))
+        #    summary = keywords['impact_summary']
+        #    msg = 'Expected %s in impact_summary: %s' % (x, summary)
+        #    print x in summary #, msg
+        #    #assert x in summary, msg
 
     def test_earthquake_fatality_estimation_ghasemi(self):
         """Fatalities from ground shaking can be computed correctly 2
@@ -2247,7 +2265,6 @@ class Test_Engine(unittest.TestCase):
         r = normal_cdf(numpy.log(10))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Engine, 'test')
