@@ -22,7 +22,7 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
     plugin_name = _('Be inundated')
 
     def run(self, layers):
-        """Risk plugin for flood building impact
+        """Flood impact to OSM buildings
         """
 
         threshold = 1.0  # Flood threshold [m]
@@ -47,7 +47,7 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
         attributes = I.get_data()
         N = len(I)
 
-        # Calculate population impact
+        # Calculate building impact
         count = 0
         buildings = {}
         affected_buildings = {}
@@ -132,6 +132,7 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
         map_title = _('Buildings inundated')
+
         # Create style
         style_classes = [dict(label=_('Not Flooded'), min=0, max=0,
                               colour='#1EFC7C', transparency=0, size=1),
