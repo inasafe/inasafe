@@ -189,7 +189,8 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        plugin_name = 'I T B Fatality Function'
+        #plugin_name = 'I T B Fatality Function'
+        plugin_name = 'Be affected by ground shaking'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name
