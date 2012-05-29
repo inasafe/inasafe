@@ -18,7 +18,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'LEVEL'  # The levels are 1: < 1m, 2: 1-3m and 3: > 3m
-    plugin_name = _('Rawan Banjir')  # Name that will show up in GUI
+    plugin_name = ('Rawan Banjir')  # Name that will show up in GUI
 
     def run(self, layers):
         """Separate exposed elements by depth [m]:
@@ -69,7 +69,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
         # Create summary report
         Hname = H.get_name()
         Ename = E.get_name()
-        table = _('<b>In case of "%s" the estimated impact to "%s" '
+        table = ('<b>In case of "%s" the estimated impact to "%s" '
                   'the possibility of &#58;</b><br><br><p>' % (Hname,
                                                                Ename))
         table += ('<table border="0" width="320px">'
@@ -79,23 +79,23 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
                   '   <tr><td>%s &#58;</td><td>%i</td></tr>'
                   '   <tr><td>%s &#58;</td><td>%i</td></tr>'
                   '   <tr><td>%s &#58;</td><td>%i</td></tr>'
-                  '</table>' % (_('Ketinggian Banjir'), _('Jumlah gedung'),
-                                _('All'), N,
-                                _('< 1 m'), rendah,
-                                _('1 - 3 m'), sedang,
-                                _('> 3 m'), tinggi))
+                  '</table>' % (('Ketinggian Banjir'), ('Jumlah gedung'),
+                                ('All'), N,
+                                ('< 1 m'), rendah,
+                                ('1 - 3 m'), sedang,
+                                ('> 3 m'), tinggi))
 
         table += '<br>'  # Blank separation row
-        table += '<b>' + _('Based on BNPB Perka 2 - 2012') + '</b><br>'
+        table += '<b>' + ('Based on BNPB Perka 2 - 2012') + '</b><br>'
 
         # Create style
-        style_classes = [dict(label=_('< 1 m'), min=1, max=1,
+        style_classes = [dict(label=('< 1 m'), min=1, max=1,
                               colour='#00FF00',  # Green
                               transparency=0, size=1),
-                         dict(label=_('1 - 3 m'), min=2, max=2,
+                         dict(label=('1 - 3 m'), min=2, max=2,
                               colour='#FFFF00',  # Yellow
                               transparency=0, size=1),
-                         dict(label=_('> 3 m'), min=3, max=3,
+                         dict(label=('> 3 m'), min=3, max=3,
                               colour='#FF0000',  # Red
                               transparency=0, size=1)]
 
@@ -106,7 +106,7 @@ class BNPBFloodBuildingImpactFunction(FunctionProvider):
         V = Vector(data=building_impact,
                    projection=E.get_projection(),
                    geometry=E.get_geometry(),
-                   name=_('Estimated buildings affected'),
+                   name=('Estimated buildings affected'),
                    keywords={'impact_summary': table},
                    style_info=style_info)
         return V

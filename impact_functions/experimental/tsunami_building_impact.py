@@ -90,7 +90,7 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
         Hname = H.get_name()
         Ename = E.get_name()
         if H.is_raster:
-            impact_summary = _('<b>In case of "%s" the estimated impact to '
+            impact_summary = ('<b>In case of "%s" the estimated impact to '
                            '"%s" '
                            'is&#58;</b><br><br><p>' % (Hname, Ename))
             impact_summary += ('<table border="0" width="320px">'
@@ -118,9 +118,9 @@ class TsunamiBuildingImpactFunction(FunctionProvider):
 
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _('Levels of impact are defined by BNPB\'s '
+        impact_summary += ('Levels of impact are defined by BNPB\'s '
                             '<i>Pengkajian Risiko Bencana</i>')
-        impact_summary += _('<table border="0" width="320px">'
+        impact_summary += ('<table border="0" width="320px">'
                        '   <tr><th><b>%s</b></th><th><b>%s</b></th></tr>'
                        '   <tr></tr>'
                        '   <tr><td>%s&#58;</td><td>%s&#58;</td></tr>'

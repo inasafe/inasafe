@@ -134,7 +134,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
-        impact_summary = _('<b>In case of "%s" the estimated impact to '
+        impact_summary = ('<b>In case of "%s" the estimated impact to '
                            '"%s" '
                            'is&#58;</b><br><br><p>' % (Hname, Ename))
         impact_summary += ('<table border="0" width="320px">'
@@ -153,12 +153,16 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
                                   _('High damage'), count50))
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _('- Levels of impact are defined by post 2009'
-                            ' Padang earthquake survey conducted by Geoscience'
-                            ' Australia and Institut of Teknologi Bandung.'
-                            '<br>')
-        impact_summary += _('- Unreinforced masonry is assumed where no'
-                            ' structural information is available. <br>')
+        #table_body.append(_('Levels of impact are defined by post 2009 '
+        #                    'Padang earthquake survey conducted by Geoscience '
+        #                    'Australia and Institute of Teknologi Bandung.'))
+        #table_body.append(_('Unreinforced masonry is assumed where no '
+        #                    'structural information is available.'))
+        impact_summary += _('Levels of impact are defined by post 2009 '
+                            'Padang earthquake survey conducted by Geoscience '
+                            'Australia and Institute of Teknologi Bandung.')
+        impact_summary += _('Unreinforced masonry is assumed where no '
+                            'structural information is available.')
         # Create style
         style_classes = [dict(label=_('No damage'), min=0, max=10,
                               colour='#00ff00', transparency=1),

@@ -55,7 +55,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     datatype in ['osm', 'itb', 'sigab']
     """
 
-    plugin_name = 'Be damaged according to building type'
+    plugin_name = _('Be damaged depending on building type')
 
     def run(self, layers):
         """Risk plugin for Padang building survey
@@ -132,7 +132,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
         table_body.append(TableRow(_('Notes:'), header=True))
         table_body.append(_('Levels of impact are defined by post 2009 '
                             'Padang earthquake survey conducted by Geoscience '
-                            'Australia and Institut of Teknologi Bandung.'))
+                            'Australia and Institute of Teknologi Bandung.'))
         table_body.append(_('Unreinforced masonry is assumed where no '
                             'structural information is available.'))
 
