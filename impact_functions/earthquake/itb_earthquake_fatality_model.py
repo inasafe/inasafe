@@ -99,7 +99,8 @@ class ITBFatalityFunction(FunctionProvider):
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
 
         # Set resulting layer to zero when less than a threshold. This is to
-        # try to achieve transparency (see issue #126) - but doesn't seem to work.
+        # try to achieve transparency (see issue #126) - but doesn't
+        # seem to work.
         R[R < 0.01] = 0
 
         # Total statistics
@@ -125,7 +126,6 @@ class ITBFatalityFunction(FunctionProvider):
             # has align="right" in it, but it doesn't work
             #print row
             table_body.append(row)
-
 
         # Add total fatality estimate
         s = str(int(fatalities)).rjust(10)

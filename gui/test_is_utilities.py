@@ -95,13 +95,15 @@ class ISUtilitiesTest(unittest.TestCase):
         assert myValue1 == 0, myMessage1
         assert myValue2 == 255, myMessage2
 
-        # Verify that setRasterStyle doesn't break when floats coincide with integers
+        # Verify that setRasterStyle doesn't break when floats coincide with
+        # integers
         # See https://github.com/AIFDR/inasafe/issues/126#issuecomment-5978416
         myStyleInfo['style_classes'] = [
                         dict(colour='#38A800', quantity=2.0, transparency=100),
                         dict(colour='#38A800', quantity=4.0, transparency=0),
                         dict(colour='#79C900', quantity=10.0, transparency=0)]
-        myMessage = ('Broken: Setting style info with generate valid transparent '
+        myMessage = ('Broken: Setting style info with generate valid '
+                     'transparent '
                      'floating point pixel entries such as 2.0, 3.0')
         try:
             setRasterStyle(myLayer, myStyleInfo)

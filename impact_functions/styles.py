@@ -46,6 +46,7 @@ style_classes = [dict(colour='#FFFFFF', quantity=0.0, transparency=100),
                  dict(colour='#EE0000', quantity=61, transparency=0),
                  dict(colour='#AA0000', quantity=69, transparency=0),
                  dict(colour='#7A0000', quantity=78, transparency=0),
-                 dict(label=_('High'), colour='#500000', quantity=100, transparency=0)]
+                 dict(label=_('High'), colour='#500000', quantity=100,
+                      transparency=0)]
 earthquake_fatality_style = dict(target_field=None,
                                  style_classes=style_classes)

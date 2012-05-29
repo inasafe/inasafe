@@ -249,7 +249,8 @@ class Test_Engine(unittest.TestCase):
         msg = 'Did not find expected value %i in summary' % all
         assert str(all) in keywords['impact_summary'], msg
 
-        # Individual check does not work anymore, because the function now only returns
+        # Individual check does not work anymore, because the function
+        # now only returns
         # the aggregate number of fatalities
         #for fatality_count in [31.8937368131, 2539.26369372,
         #                       1688.72362573, 17174.9261705, 19436.834531]:

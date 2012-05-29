@@ -183,7 +183,8 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
             # Check if range extrema are integers so we know if we can
             # use them to calculate a value range
             if ((myLastValue == int(myLastValue)) and (myMax == int(myMax))):
-                # Ensure that they are integers (e.g 2.0 must become 2, see issue #126)
+                # Ensure that they are integers
+                # (e.g 2.0 must become 2, see issue #126)
                 myLastValue = int(myLastValue)
                 myMax = int(myMax)
 
