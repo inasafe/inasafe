@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="id_ID">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID" sourcelanguage="en_US">
 <context>
     <name>@default</name>
     <message>
@@ -185,12 +186,12 @@ ke %s: %s</translation>
     <message>
         <location filename="is_utilities.py" line="248"/>
         <source>Toggle traceback...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tombol untuk beralih kembali...</translation>
     </message>
     <message>
         <location filename="is_utilities.py" line="242"/>
         <source>Problem:</source>
-        <translation type="unfinished"></translation>
+        <translation>Permasalahan:</translation>
     </message>
 </context>
 <context>
@@ -255,12 +256,12 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="1201"/>
         <source>Pdf File (*.pdf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumen PDF (*.pdf)</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="91"/>
         <source>InaSAFE %s %s</source>
-        <translation type="unfinished"></translation>
+        <translation>InaSAFE %s %s</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="261"/>
@@ -285,7 +286,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="670"/>
         <source>Calculating impact...</source>
-        <translation type="unfinished"></translation>
+        <translation>Menghitung dampak...</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="671"/>
@@ -300,22 +301,22 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="723"/>
         <source>Loading results...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sedang memuat hasil-hasil...</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="724"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
-        <translation type="unfinished"></translation>
+        <translation>Analisa dampak telah selesai - sedang memuat hasil ke QGIS...</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="806"/>
         <source>Analyzing this question...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sedang menganalisa pertanyaan...</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="966"/>
         <source>Preparing hazard data...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sedang mempersiapkan data bahaya...</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="967"/>
@@ -325,7 +326,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="975"/>
         <source>Preparing exposure data...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sedang mempersiapkan data terpapar...</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="976"/>
@@ -335,17 +336,17 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="1201"/>
         <source>Write to PDF</source>
-        <translation type="unfinished"></translation>
+        <translation>menulis ke pdf</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="1220"/>
         <source>Map Creator</source>
-        <translation type="unfinished"></translation>
+        <translation>Pembuat Peta</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="1207"/>
         <source>Generating your map as a PDF document...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sedang menghasilkan peta anda sebagai dokumen PDF...</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="1212"/>
@@ -360,7 +361,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="1113"/>
         <source>No keywords</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada kata-kata kunci</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="1115"/>
@@ -454,12 +455,12 @@ ke %s: %s</translation>
     <message>
         <location filename="is_help_base.ui" line="14"/>
         <source>InaSAFE Help</source>
-        <translation type="unfinished"></translation>
+        <translation>InaSAFE Bantuan</translation>
     </message>
     <message>
         <location filename="is_help_base.ui" line="25"/>
         <source>about:blank</source>
-        <translation type="unfinished">Tentang:kosong</translation>
+        <translation>Tentang:kosong</translation>
     </message>
 </context>
 <context>
@@ -467,7 +468,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_impact_calculator.py" line="125"/>
         <source>Error: Hazard layer not set.</source>
-        <translation type="unfinished">Kesalahan: Lapisan ancamana tidak ditentukan.</translation>
+        <translation type="unfinished">Kesalahan: Lapisan ancaman tidak ditentukan.</translation>
     </message>
     <message>
         <location filename="is_impact_calculator.py" line="129"/>
@@ -624,23 +625,24 @@ ke %s: %s</translation>
     <message>
         <location filename="is_keywords_dialog.py" line="70"/>
         <source>InaSAFE %s Keywords Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>InaSAFE %s Editor kata kunci</translation>
     </message>
     <message>
         <location filename="is_keywords_dialog.py" line="89"/>
         <source>earthquake [MMI]</source>
-        <translation type="unfinished"></translation>
+        <translation>gempa bumi [MMI]</translation>
     </message>
     <message>
         <location filename="is_keywords_dialog.py" line="621"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Terjadi kesalahan saat menyimpan kata-kata kunci:
+%s</translation>
     </message>
     <message>
         <location filename="is_keywords_dialog.py" line="621"/>
         <source>InaSAFE</source>
-        <translation type="unfinished">InaSAFE</translation>
+        <translation>InaSAFE</translation>
     </message>
 </context>
 <context>
@@ -771,7 +773,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_options_dialog.py" line="59"/>
         <source>InaSAFE %s Options</source>
-        <translation type="unfinished"></translation>
+        <translation>InaSAFE %s Opsi-opsi</translation>
     </message>
     <message>
         <location filename="is_options_dialog.py" line="159"/>
@@ -789,7 +791,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_options_dialog_base.ui" line="14"/>
         <source>InaSAFE - Options</source>
-        <translation type="unfinished"></translation>
+        <translation>InaSAFE - Opsi-opsi</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="49"/>
@@ -799,7 +801,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_options_dialog_base.ui" line="59"/>
         <source>Set QGIS layer name from &apos;title&apos; in keywords</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengatur nama lapisan QGIS dari &apos;judul&apos; kata-kata kunci</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="89"/>
@@ -809,12 +811,12 @@ ke %s: %s</translation>
     <message>
         <location filename="is_options_dialog_base.ui" line="248"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="117"/>
         <source>Not yet implemented</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum diiplementasi</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="126"/>
@@ -824,42 +826,42 @@ ke %s: %s</translation>
     <message>
         <location filename="is_options_dialog_base.ui" line="136"/>
         <source>Location for results</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokasi untuk hasil-hasil</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="167"/>
         <source>Report template</source>
-        <translation type="unfinished"></translation>
+        <translation>Template laporan</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="198"/>
         <source>Logo for maps (must be x x y) </source>
-        <translation type="unfinished"></translation>
+        <translation>Logo untuk peta-peta (harus dalam x x y) </translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="229"/>
         <source>Organisation name (for maps, reports etc.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Organisasi nama (untuk peta, laporan-laporan dll.)</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="262"/>
         <source>DPI (Maps and reports)</source>
-        <translation type="unfinished"></translation>
+        <translation>DPI (Peta-peta dan laporan-laporan)</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="281"/>
         <source>Run analysis in a separate thread (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Jalankan analisis dalam thread terpisah (percobaan)</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="69"/>
         <source>Zoom to impact layer on scenario estimate completion</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom ke lapisan dampak pada penyelesaian skenario estimasi</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="79"/>
         <source>Hide exposure layer on scenario estimate completion</source>
-        <translation type="unfinished"></translation>
+        <translation>Sembunyikan lapisan paparan pada penyelesaian skenario estimasi</translation>
     </message>
 </context>
 <context>
@@ -912,12 +914,12 @@ ke %s: %s</translation>
     <message>
         <location filename="is_plugin.py" line="200"/>
         <source>InaSAFE Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsi-opsi InaSAFE</translation>
     </message>
     <message>
         <location filename="is_plugin.py" line="205"/>
         <source>Open InaSAFE options dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka  pilihan dialog InaSAFE</translation>
     </message>
 </context>
 </TS>
