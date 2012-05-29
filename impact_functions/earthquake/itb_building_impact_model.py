@@ -153,11 +153,12 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
                                   _('High damage'), count50))
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        #table_body.append(_('Levels of impact are defined by post 2009 '
-        #                    'Padang earthquake survey conducted by Geoscience '
-        #                    'Australia and Institute of Teknologi Bandung.'))
-        #table_body.append(_('Unreinforced masonry is assumed where no '
-        #                    'structural information is available.'))
+        # This is the proper text:
+        #_('Levels of impact are defined by post 2009 '
+        #  'Padang earthquake survey conducted by Geoscience '
+        #  'Australia and Institute of Teknologi Bandung.'))
+        #_('Unreinforced masonry is assumed where no '
+        #  'structural information is available.'))
         impact_summary += _('Levels of impact are defined by post 2009 '
                             'Padang earthquake survey conducted by Geoscience '
                             'Australia and Institute of Teknologi Bandung.')
