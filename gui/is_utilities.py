@@ -180,9 +180,14 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
         if 'transparency' in myClass:
             myTransparencyPercent = int(myClass['transparency'])
         if myTransparencyPercent > 0:
-            #check if range extrema are integers so we know if we can
-            #use them to calculate a value range
+            # Check if range extrema are integers so we know if we can
+            # use them to calculate a value range
             if ((myLastValue == int(myLastValue)) and (myMax == int(myMax))):
+                # Ensure that they are integers (e.g 2.0 must become 2, see issue #126)
+                myLastValue = int(myLastValue)
+                myMax = int(myMax)
+
+                # Set transparencies
                 myRange = range(myLastValue, myMax)
                 for myValue in myRange:
                     myPixel = \
