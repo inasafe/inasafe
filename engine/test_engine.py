@@ -1961,7 +1961,7 @@ class Test_Engine(unittest.TestCase):
         """
 
         #plugin_name = 'Padang Earthquake Building Damage Function'
-        plugin_name = 'Be damaged according to building type'
+        plugin_name = 'Be damaged depending on building type'
 
         # Test for a range of hazard layers
         for mmi_filename in ['Shakemap_Padang_2009.asc']:

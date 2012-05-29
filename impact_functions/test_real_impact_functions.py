@@ -32,7 +32,7 @@ class Test_real_plugins(unittest.TestCase):
         # when impact functions change.
         msg = 'Available impact functions are: %s' % str(P.keys())
         #assert 'Earthquake Guidelines Function' in P, msg
-        assert 'Be damaged according to building type' in P, msg
+        assert 'Be damaged depending on building type' in P, msg
         assert 'Be temporarily closed' in P, msg
         assert 'Need evacuation' in P, msg
         #assert 'Tephra Building Impact Function' in P, msg
@@ -52,7 +52,7 @@ class Test_real_plugins(unittest.TestCase):
         P = get_admissible_plugins([D1, D2])
         assert len(P) >= 2  # Depending on other tests there could be more
         #assert 'Earthquake Guidelines Function' in P
-        assert 'Be damaged according to building type' in P
+        assert 'Be damaged depending on building type' in P
 
         # This one should get 3 flood population impact functions
         D1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}
