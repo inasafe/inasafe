@@ -28,7 +28,11 @@ def assertHashesForFile(theHashes, theFilename):
     myHash = hashForFile(theFilename)
     myMessage = ('Unexpected hash'
                  '\nGot: %s'
-                 '\nExpected: %s' % (myHash, theHashes))
+                 '\nExpected: %s'
+                 '\nPlease check graphics %s visually '
+                 'and add to list of expected hashes '
+                 'if it is OK on this platform.'
+                  % (myHash, theHashes, theFilename))
     assert myHash in theHashes, myMessage
 
 
