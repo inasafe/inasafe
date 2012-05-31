@@ -7,6 +7,7 @@ from osgeo import gdal
 from projection import Projection
 from utilities import DRIVER_MAP
 from engine.interpolation import interpolate_raster_vector
+from titles import titles as internationalised_titles
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import nanallclose
@@ -216,7 +217,13 @@ class Raster:
 
         # Determine name
         if 'title' in self.keywords:
-            rastername = self.keywords['title']
+            title = self.keywords['title']
+
+            # Lookup internationalised title if available
+            if title in internationalised_titles:
+                title = internationalised_titles[title]
+
+            rastername = title
         else:
             # Use basename without leading directories as name
             rastername = os.path.split(basename)[-1]

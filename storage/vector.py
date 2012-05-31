@@ -15,6 +15,7 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
 from utilities import verify
+from titles import titles as internationalised_titles
 from engine.polygon import inside_polygon, clip_line_by_polygon
 from engine.numerics import ensure_numeric
 
@@ -338,8 +339,15 @@ class Vector:
 
         # Determine name
         if 'title' in self.keywords:
-            vectorname = self.keywords['title']
+            title = self.keywords['title']
+
+            # Lookup internationalised title if available
+            if title in internationalised_titles:
+                title = internationalised_titles[title]
+
+            vectorname = title
         else:
+
             # Use basename without leading directories as name
             vectorname = os.path.split(basename)[-1]
 
