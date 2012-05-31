@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-31 15:21+0700\n"
+"POT-Creation-Date: 2012-05-31 15:53+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,8 +135,9 @@ msgstr "Anggapan"
 #: impact_functions/inundation/flood_generic_building_impact.py:87
 #: impact_functions/inundation/flood_OSM_building_impact.py:148
 #: impact_functions/inundation/flood_generic_building_impact.py:86
+#: impact_functions/inundation/flood_OSM_building_impact.py:161
 #: impact_functions/inundation/flood_generic_building_impact.py:86
-#: impact_functions/inundation/flood_OSM_building_impact.py:148
+#: impact_functions/inundation/flood_OSM_building_impact.py:161
 msgid "Estimated buildings affected"
 msgstr "Bangunan yang diperkirakan terdampak"
 
@@ -166,10 +167,11 @@ msgstr "Bangunan-bangunan"
 #: impact_functions/inundation/flood_OSM_building_impact.py:109
 #: impact_functions/inundation/flood_population_evacuation.py:85
 #: impact_functions/earthquake/padang_building_impact_model.py:124
+#: impact_functions/inundation/flood_OSM_building_impact.py:112
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:127
 #: impact_functions/earthquake/itb_building_impact_model.py:148
 #: impact_functions/earthquake/padang_building_impact_model.py:124
-#: impact_functions/inundation/flood_OSM_building_impact.py:109
+#: impact_functions/inundation/flood_OSM_building_impact.py:112
 #: impact_functions/inundation/flood_population_evacuation.py:85
 msgid "Total"
 msgstr "Jumlah"
@@ -313,8 +315,10 @@ msgstr "OK"
 #: impact_functions/inundation/flood_OSM_building_impact.py:109
 #: impact_functions/inundation/flood_OSM_building_impact.py:132
 #: impact_functions/inundation/flood_OSM_building_impact.py:139
-#: impact_functions/inundation/flood_OSM_building_impact.py:109
-#: impact_functions/inundation/flood_OSM_building_impact.py:139
+#: impact_functions/inundation/flood_OSM_building_impact.py:112
+#: impact_functions/inundation/flood_OSM_building_impact.py:152
+#: impact_functions/inundation/flood_OSM_building_impact.py:112
+#: impact_functions/inundation/flood_OSM_building_impact.py:152
 msgid "Flooded"
 msgstr "Kebanjiran"
 
@@ -368,7 +372,8 @@ msgstr "Jumlah bangunan"
 #: impact_functions/inundation/dki_flood_building_impact.py:21
 #: impact_functions/inundation/dki_flood_building_impact.py:22
 #: impact_functions/inundation/flood_OSM_building_impact.py:22
-#: impact_functions/inundation/flood_OSM_building_impact.py:22
+#: impact_functions/inundation/flood_OSM_building_impact.py:25
+#: impact_functions/inundation/flood_OSM_building_impact.py:25
 msgid "Be inundated"
 msgstr "Kebanjiran"
 
@@ -376,7 +381,8 @@ msgstr "Kebanjiran"
 #: impact_functions/inundation/dki_flood_building_impact.py:113
 #: impact_functions/inundation/dki_flood_building_impact.py:109
 #: impact_functions/inundation/flood_OSM_building_impact.py:109
-#: impact_functions/inundation/flood_OSM_building_impact.py:109
+#: impact_functions/inundation/flood_OSM_building_impact.py:112
+#: impact_functions/inundation/flood_OSM_building_impact.py:112
 msgid "Building type"
 msgstr "Jenis bangunan"
 
@@ -431,7 +437,8 @@ msgstr "Anggapan"
 #: impact_functions/inundation/dki_flood_building_impact.py:119
 #: impact_functions/inundation/flood_OSM_building_impact.py:119
 #: impact_functions/inundation/flood_OSM_building_impact.py:125
-#: impact_functions/inundation/flood_OSM_building_impact.py:125
+#: impact_functions/inundation/flood_OSM_building_impact.py:138
+#: impact_functions/inundation/flood_OSM_building_impact.py:138
 msgid "Buildings are said to be flooded when "
 msgstr "Bangunan dikatakan banjir ketika "
 
@@ -439,7 +446,8 @@ msgstr "Bangunan dikatakan banjir ketika "
 #: impact_functions/inundation/dki_flood_building_impact.py:121
 #: impact_functions/inundation/flood_OSM_building_impact.py:121
 #: impact_functions/inundation/flood_OSM_building_impact.py:127
-#: impact_functions/inundation/flood_OSM_building_impact.py:127
+#: impact_functions/inundation/flood_OSM_building_impact.py:140
+#: impact_functions/inundation/flood_OSM_building_impact.py:140
 #, python-format
 msgid "flood levels exceed %.1f m"
 msgstr "tingkat banjir melebihi %.1f m"
@@ -448,7 +456,8 @@ msgstr "tingkat banjir melebihi %.1f m"
 #: impact_functions/inundation/dki_flood_building_impact.py:123
 #: impact_functions/inundation/flood_OSM_building_impact.py:123
 #: impact_functions/inundation/flood_OSM_building_impact.py:129
-#: impact_functions/inundation/flood_OSM_building_impact.py:129
+#: impact_functions/inundation/flood_OSM_building_impact.py:142
+#: impact_functions/inundation/flood_OSM_building_impact.py:142
 msgid "in areas marked as flood prone"
 msgstr "di daerah rawan banjir ditandai sebagai"
 
@@ -456,7 +465,8 @@ msgstr "di daerah rawan banjir ditandai sebagai"
 #: impact_functions/inundation/dki_flood_building_impact.py:130
 #: impact_functions/inundation/flood_OSM_building_impact.py:130
 #: impact_functions/inundation/flood_OSM_building_impact.py:137
-#: impact_functions/inundation/flood_OSM_building_impact.py:137
+#: impact_functions/inundation/flood_OSM_building_impact.py:150
+#: impact_functions/inundation/flood_OSM_building_impact.py:150
 msgid "Not Flooded"
 msgstr "Tidak di banjir"
 
@@ -534,10 +544,11 @@ msgstr "Jamban Keluarga"
 #: impact_functions/inundation/flood_generic_building_impact.py:66
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:121
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:134
+#: impact_functions/inundation/flood_OSM_building_impact.py:137
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:134
 #: impact_functions/earthquake/padang_building_impact_model.py:132
 #: impact_functions/inundation/flood_generic_building_impact.py:66
-#: impact_functions/inundation/flood_OSM_building_impact.py:124
+#: impact_functions/inundation/flood_OSM_building_impact.py:137
 #: impact_functions/inundation/flood_population_evacuation.py:95
 msgid "Notes:"
 msgstr "Catatan:"
@@ -604,7 +615,8 @@ msgstr "Bantuan per minggu"
 #: impact_functions/inundation/dki_flood_building_impact.py:128
 #: impact_functions/inundation/flood_OSM_building_impact.py:128
 #: impact_functions/inundation/flood_OSM_building_impact.py:134
-#: impact_functions/inundation/flood_OSM_building_impact.py:134
+#: impact_functions/inundation/flood_OSM_building_impact.py:147
+#: impact_functions/inundation/flood_OSM_building_impact.py:147
 msgid "Buildings inundated"
 msgstr "Bangunan terendam"
 
@@ -716,113 +728,219 @@ msgstr "Model Fatality adalah dari Institut Teknologi Bandung 2012."
 msgid "Earthquake impact to population"
 msgstr "Gempa dampak terhadap populasi"
 
-#: storage/titles.py:25 storage/titles.py:28 storage/titles.py:28
+#: storage/titles.py:25 storage/titles.py:28 storage/titles.py:31
+#: storage/titles.py:31
 msgid "DKI buildings"
 msgstr "Bangunan DKI"
 
-#: storage/titles.py:26 storage/titles.py:29 storage/titles.py:29
+#: storage/titles.py:26 storage/titles.py:29 storage/titles.py:32
+#: storage/titles.py:32
 msgid "Jakarta 2007 flood"
 msgstr "Banjir seperti 2007"
 
-#: storage/titles.py:27 storage/titles.py:30 storage/titles.py:30
+#: storage/titles.py:27 storage/titles.py:30 storage/titles.py:33
+#: storage/titles.py:33
 msgid "Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter"
 msgstr "Banjir 2007 tanpa pompa di Pluit, Ancol dan Sunter"
 
 #: storage/titles.py:30 storage/titles.py:33 storage/titles.py:36
-#: storage/titles.py:36
+#: storage/titles.py:39 storage/titles.py:39
 msgid "Sea wall collapse at Pluit"
 msgstr "Dam Pluit runtuh"
 
 #: storage/titles.py:31 storage/titles.py:34 storage/titles.py:37
-#: storage/titles.py:37
+#: storage/titles.py:40 storage/titles.py:40
 msgid "Jakarta flood prone areas"
 msgstr "Daerah Rawan Banjir"
 
 #: storage/titles.py:32 storage/titles.py:35 storage/titles.py:38
-#: storage/titles.py:38
+#: storage/titles.py:41 storage/titles.py:41
 msgid "Population Jakarta"
 msgstr "Penduduk Jakarta"
 
-#: storage/titles.py:36 storage/titles.py:39 storage/titles.py:39
+#: storage/titles.py:36 storage/titles.py:39 storage/titles.py:42
+#: storage/titles.py:42
 msgid "Flood Depth (design) Jakarta"
 msgstr "Banjir Jakart (disain)"
 
-#: storage/titles.py:37 storage/titles.py:40 storage/titles.py:40
+#: storage/titles.py:37 storage/titles.py:40 storage/titles.py:43
+#: storage/titles.py:43
 msgid "Flood Depth (current) Jakarta"
 msgstr "Banjir Jakarta (saat ini)"
 
-#: storage/titles.py:38 storage/titles.py:41 storage/titles.py:41
+#: storage/titles.py:38 storage/titles.py:41 storage/titles.py:44
+#: storage/titles.py:44
 msgid "Yogyakarta 2006 earthquake"
 msgstr "Gempa Yogyakarta 2006"
 
-#: storage/titles.py:39 storage/titles.py:42 storage/titles.py:42
+#: storage/titles.py:39 storage/titles.py:42 storage/titles.py:45
+#: storage/titles.py:45
 msgid "Indonesian Earthquake Hazard Map"
 msgstr "Peta Hazard Gempa Indonesia"
 
-#: storage/titles.py:41 storage/titles.py:44 storage/titles.py:44
+#: storage/titles.py:41 storage/titles.py:44 storage/titles.py:47
+#: storage/titles.py:47
 msgid "Maumere tsunami inundation"
 msgstr "Maumere tsunami genangan"
 
-#: storage/titles.py:42 storage/titles.py:45 storage/titles.py:45
+#: storage/titles.py:42 storage/titles.py:45 storage/titles.py:48
+#: storage/titles.py:48
 msgid "Sumatran fault Mw 7.8 scenario"
 msgstr "Skenario Gempabumi Sesar Sumatra Mw 7.8"
 
-#: storage/titles.py:44 storage/titles.py:49 storage/titles.py:49
+#: storage/titles.py:44 storage/titles.py:49 storage/titles.py:52
+#: storage/titles.py:52
 msgid "Mentawai fault Mw 9.0 scenario"
 msgstr "Skenario Gempabumi Sesar Mentawai Mw 9.0"
 
-#: storage/titles.py:45 storage/titles.py:53 storage/titles.py:53
+#: storage/titles.py:45 storage/titles.py:53 storage/titles.py:56
+#: storage/titles.py:56
 msgid "Shakemap Padang 2009"
 msgstr "Shakemap Padang 2009"
 
-#: storage/titles.py:46 storage/titles.py:54 storage/titles.py:54
+#: storage/titles.py:46 storage/titles.py:54 storage/titles.py:57
+#: storage/titles.py:57
 msgid "OSM building footprints"
 msgstr "Bangunan OSM"
 
 #: storage/titles.py:47 storage/titles.py:56 storage/titles.py:57
+#: storage/titles.py:60 storage/titles.py:60
 msgid "AIBEP schools"
 msgstr "Sekolah AIBEP"
 
 #: storage/titles.py:48 storage/titles.py:57 storage/titles.py:58
+#: storage/titles.py:61 storage/titles.py:61
 msgid "Population density (5kmx5km)"
 msgstr "Perkiraan penduduk (5kmx5km)"
 
-#: storage/titles.py:34 storage/titles.py:34
+#: storage/titles.py:34 storage/titles.py:37 storage/titles.py:37
 msgid "Jakarta flood like 2007 with pump failure at Pluit and Ancol"
 msgstr "Banjir 2007 tanpa pompa di Pluit dan Ancol"
 
-#: storage/titles.py:59 storage/titles.py:60
+#: storage/titles.py:59 storage/titles.py:60 storage/titles.py:63
+#: storage/titles.py:63
 msgid "Office buildings Jakarta"
 msgstr "Kantor Jakarta"
 
-#: storage/titles.py:60 storage/titles.py:61
+#: storage/titles.py:60 storage/titles.py:61 storage/titles.py:64
+#: storage/titles.py:64
 msgid "Hospitals and clinics Jakarta"
 msgstr "Puskesmas dan rumah sakit Jakarta"
 
-#: storage/titles.py:63 storage/titles.py:64
+#: storage/titles.py:63 storage/titles.py:64 storage/titles.py:67
+#: storage/titles.py:67
 msgid "Schools Jakarta"
 msgstr "Sekolah Jakarta"
 
 #: storage/titles.py:64 storage/titles.py:65 storage/titles.py:66
+#: storage/titles.py:69 storage/titles.py:69
 msgid "Industrial buildings Jakarta"
 msgstr "Bangunan industri Jakarta"
 
 #: storage/titles.py:65 storage/titles.py:66 storage/titles.py:67
+#: storage/titles.py:70 storage/titles.py:70
 msgid "Industrial areas Jakarta"
 msgstr "Daerah industri Jakarta"
 
 #: storage/titles.py:66 storage/titles.py:67 storage/titles.py:68
+#: storage/titles.py:71 storage/titles.py:71
 msgid "Commercial areas Jakarta"
 msgstr "Daerah komersial Jakarta"
 
 #: storage/titles.py:67 storage/titles.py:68 storage/titles.py:69
+#: storage/titles.py:72 storage/titles.py:72
 msgid "Hospitals Jakarta"
 msgstr "Rumah sakit Jakarta"
 
-#: storage/titles.py:64 storage/titles.py:65
+#: storage/titles.py:64 storage/titles.py:65 storage/titles.py:68
+#: storage/titles.py:68
 msgid "Schools"
 msgstr "Sekolah"
 
-#: storage/titles.py:56
+#: storage/titles.py:56 storage/titles.py:59 storage/titles.py:59
 msgid "OSM buildings"
 msgstr "Bangunan OSM"
+
+#: storage/titles.py:76 storage/titles.py:76
+msgid "office"
+msgstr "kantor"
+
+#: storage/titles.py:77 storage/titles.py:77
+msgid "clinic"
+msgstr "puskesmas"
+
+#: storage/titles.py:78 storage/titles.py:78
+msgid "terrace"
+msgstr "komplek"
+
+#: storage/titles.py:79 storage/titles.py:79
+msgid "police"
+msgstr "polisi"
+
+#: storage/titles.py:80 storage/titles.py:80
+msgid "residential"
+msgstr "residental"
+
+#: storage/titles.py:81 storage/titles.py:81
+msgid "kindergarten"
+msgstr "taman kanak-kanak"
+
+#: storage/titles.py:82 storage/titles.py:82
+msgid "bank"
+msgstr "banku"
+
+#: storage/titles.py:83 storage/titles.py:83
+msgid "place of worship"
+msgstr "tempat ibadah"
+
+#: storage/titles.py:84 storage/titles.py:84
+msgid "school"
+msgstr "sekolah"
+
+#: storage/titles.py:85 storage/titles.py:85
+msgid "university"
+msgstr "universitas"
+
+#: storage/titles.py:86 storage/titles.py:86
+msgid "apartments"
+msgstr "apartement"
+
+#: storage/titles.py:87 storage/titles.py:87
+msgid "college"
+msgstr "perguruan tinggi"
+
+#: storage/titles.py:88 storage/titles.py:88
+msgid "commercial"
+msgstr "komersial"
+
+#: storage/titles.py:89 storage/titles.py:89
+msgid "hospital"
+msgstr "rumah sakit"
+
+#: storage/titles.py:90 storage/titles.py:90
+msgid "industrial"
+msgstr "industri"
+
+#: storage/titles.py:91 storage/titles.py:91
+msgid "civic"
+msgstr "kantor pemerintah"
+
+#: storage/titles.py:92 storage/titles.py:92
+msgid "church"
+msgstr "Gereja"
+
+#: storage/titles.py:93 storage/titles.py:93
+msgid "hotel"
+msgstr "hotel"
+
+#: storage/titles.py:94 storage/titles.py:94
+msgid "public building"
+msgstr "bangunan publik"
+
+#: storage/titles.py:95 storage/titles.py:95
+msgid "other"
+msgstr "lain"
+
+#: storage/titles.py:96 storage/titles.py:96
+msgid "fire station"
+msgstr "pos kebakaran"
