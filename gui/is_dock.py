@@ -1104,6 +1104,14 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 else:
                     self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
+                        myValue = myKeywords[myKeyword]
+
+                        # Translate titles explicitly if possible
+                        if myKeyword == 'title' and \
+                                myValue in internationalisedTitles:
+                            myValue = internationalisedTitles[myValue]
+
+                        # Add this keyword to report
                         myReport += ('<tr>'
                                      # FIXME (Ole): Not sure if this will work
                                      # with translations
@@ -1111,7 +1119,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                        + '</th>'
                                      '</tr>'
                                      '<tr>'
-                                       '<td>' + myKeywords[myKeyword] + '</td>'
+                                       '<td>' + myValue + '</td>'
                                      '</tr>')
                     myReport += '</table>'
             except (KeywordNotFoundException, HashNotFoundException,
