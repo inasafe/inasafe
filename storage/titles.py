@@ -25,6 +25,11 @@ other strings in SAFE.
 
 # FIXME (Ole): This approach can be generalised to any strings that are not
 #              statically declared such as attribute values.
+#              So, we should merge the two dictionaries and just have one
+#              with strings that need to be recognised by the translation
+#              tools.
+#              Also rename this module to something more fitting, such as
+#              dynamic_translations.py
 
 from utilities import ugettext as _
 
