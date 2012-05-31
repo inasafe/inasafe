@@ -35,12 +35,13 @@ from qgis.core import (QgsMapLayer,
 from is_impact_calculator import ISImpactCalculator
 from is_safe_interface import (availableFunctions,
                                getOptimalExtent,
-                               getBufferedExtent)
+                               getBufferedExtent,
+                               internationalisedTitles)
 from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
 from is_exceptions import (KeywordNotFoundException,
-                            HashNotFoundException,
-                            InvalidParameterException)
+                           HashNotFoundException,
+                           InvalidParameterException)
 from is_map import ISMap
 from is_utilities import (getTempDir,
                           htmlHeader,
@@ -478,10 +479,15 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:
                 myTitle = myName
+            else:
+                # Lookup internationalised title if available
+                if myTitle in internationalisedTitles:
+                    myTitle = internationalisedTitles[myTitle]
+            # Register title with layer
             if myTitle and self.setLayerNameFromTitleFlag:
                 myLayer.setLayerName(myTitle)
 
-            # find out if the layer is a hazard or an exposure
+            # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
             try:

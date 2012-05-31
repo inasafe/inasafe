@@ -37,6 +37,7 @@ from storage.utilities import write_keywords as safe_write_keywords
 from impact_functions import get_plugins as safe_get_plugins
 from engine.core import calculate_impact as safe_calculate_impact
 from PyQt4.QtCore import QCoreApplication
+from storage.titles import titles as internationalisedTitles
 
 
 def tr(theText):
