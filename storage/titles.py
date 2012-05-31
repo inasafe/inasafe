@@ -53,6 +53,7 @@ titles = {'title1': _('DKI buildings'),       # Bangunan DKI
           'Shakemap Padang 2009': _('Shakemap Padang 2009'),
           'OSM building footprints': _('OSM building '
                                        'footprints'),  # Bangunan OSM
+          'OSM buildings': _('OSM buildings'),  # Bangunan OSM
           'AIBEP schools': _('AIBEP schools'),
           'Population density (5kmx5km)': _('Population density '
                                             '(5kmx5km)'),  # Perkiraan penduduk

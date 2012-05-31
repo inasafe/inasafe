@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-31 14:28+0700\n"
+"POT-Creation-Date: 2012-05-31 15:21+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -955,11 +955,11 @@ msgstr ""
 msgid "OSM building footprints"
 msgstr ""
 
-#: storage/titles.py:47 storage/titles.py:56 storage/titles.py:56
+#: storage/titles.py:47 storage/titles.py:56 storage/titles.py:57
 msgid "AIBEP schools"
 msgstr ""
 
-#: storage/titles.py:48 storage/titles.py:57 storage/titles.py:57
+#: storage/titles.py:48 storage/titles.py:57 storage/titles.py:58
 msgid "Population density (5kmx5km)"
 msgstr ""
 
@@ -971,34 +971,38 @@ msgstr ""
 msgid "Maumere tsunami inundation"
 msgstr ""
 
-#: storage/titles.py:59 storage/titles.py:59
+#: storage/titles.py:59 storage/titles.py:60
 msgid "Office buildings Jakarta"
 msgstr ""
 
-#: storage/titles.py:60 storage/titles.py:60
+#: storage/titles.py:60 storage/titles.py:61
 msgid "Hospitals and clinics Jakarta"
 msgstr ""
 
-#: storage/titles.py:63 storage/titles.py:63
+#: storage/titles.py:63 storage/titles.py:64
 msgid "Schools Jakarta"
 msgstr ""
 
-#: storage/titles.py:64 storage/titles.py:65 storage/titles.py:65
+#: storage/titles.py:64 storage/titles.py:65 storage/titles.py:66
 msgid "Industrial buildings Jakarta"
 msgstr ""
 
-#: storage/titles.py:65 storage/titles.py:66 storage/titles.py:66
+#: storage/titles.py:65 storage/titles.py:66 storage/titles.py:67
 msgid "Industrial areas Jakarta"
 msgstr ""
 
-#: storage/titles.py:66 storage/titles.py:67 storage/titles.py:67
+#: storage/titles.py:66 storage/titles.py:67 storage/titles.py:68
 msgid "Commercial areas Jakarta"
 msgstr ""
 
-#: storage/titles.py:67 storage/titles.py:68 storage/titles.py:68
+#: storage/titles.py:67 storage/titles.py:68 storage/titles.py:69
 msgid "Hospitals Jakarta"
 msgstr ""
 
-#: storage/titles.py:64 storage/titles.py:64
+#: storage/titles.py:64 storage/titles.py:65
 msgid "Schools"
+msgstr ""
+
+#: storage/titles.py:56
+msgid "OSM buildings"
 msgstr ""
