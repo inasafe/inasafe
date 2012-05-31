@@ -11,9 +11,12 @@ To achieve this for selected titles, we maintain a lookup table of the form
 where title comes from the keywords file and translatable_string is
 the string that will appear as the translated title
 
-e.g.
-
+e.g (using a neutral symbol)
 {'title1': _('Jakarta 2007 flood')}
+
+or (using existing title)
+{'Schools': _('Schools')}
+
 
 With the underscore function, the specified string will be seen by the
 translation system and can appear in the supported languages as with
@@ -67,4 +70,28 @@ titles = {'title1': _('DKI buildings'),       # Bangunan DKI
           'Industrial areas Jakarta': _('Industrial areas Jakarta'),
           'Commercial areas Jakarta': _('Commercial areas Jakarta'),
           'Hospitals Jakarta': _('Hospitals Jakarta'),
+          }
+
+
+values = {'office': _('office'),
+          'clinic': _('clinic'),
+          'terrace': _('terrace'),
+          'police': _('police'),
+          'residential': _('residential'),
+          'kindergarten': _('kindergarten'),
+          'bank': _('bank'),
+          'place of worship': _('place of worship'),
+          'school': _('school'),
+          'university': _('university'),
+          'apartments': _('apartments'),
+          'college': _('college'),
+          'commercial': _('commercial'),
+          'hospital': _('hospital'),
+          'industrial': _('industrial'),
+          'civic': _('civic'),
+          'church': _('church'),
+          'hotel': _('hotel'),
+          'public building': _('public building'),
+          'other': _('other'),
+          'fire station': _('fire station'),
           }
