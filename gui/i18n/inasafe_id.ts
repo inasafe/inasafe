@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="id_ID">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -180,7 +181,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_clipper.py" line="194"/>
         <source>No features fall within the clip extents. Try panning / zooming to an area containing data and then try to run your analysis again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada fitur termasuk dalam luasan klip. Cobalah panning / zoom ke area yang berisi data dan kemudian mencoba untuk menjalankan analisis Anda lagi.</translation>
     </message>
     <message>
         <location filename="is_utilities.py" line="248"/>
@@ -265,22 +266,22 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="261"/>
         <source>&lt;span class=&quot;label label-notice&quot;&gt;Getting started:&lt;/span&gt; To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span class=&quot;label notice&quot;&gt;Memulai:&lt;/span&gt; Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik &lt;em&gt; tombol&lt;/em&gt; jalankan di bawah ini.</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="277"/>
         <source>&lt;span class=&quot;label label-important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%s]: %s &lt;br&gt;Exposure keywords [%s]: %s</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span class=&quot;label important&quot;&gt;Tidak ada fungsi yang valid&lt;/span&gt; Tidak ada fungsi yang tersedia untuk input yang anda masukan. Coba untuk memilih kombinasi input yang berbeda. Silahkan mengacu pada panduan pengguna &lt;FIXME: add link&gt; untuk lebih jelasnya mengenai input yang benar untuk fungsi risiko yang diberikan. &lt;br&gt;Kata kunci ancaman [%s]: %s &lt;br&gt;Kata kunci terpapar [%s]: %s</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="291"/>
         <source>&lt;span class=&quot;label label-success&quot;&gt;Ready:&lt;/span&gt; You can now proceed to run your model by clicking the &lt;em&gt; Run&lt;/em&gt; button.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;span class=&quot;label success&quot;&gt;Siap:&lt;/span&gt; Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung.</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="651"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when setting up the impact calculator.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;kesalahan:&lt;/span&gt; Pengecualian terjadi pada penyetelan kalkulator dampak..</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="670"/>
@@ -290,12 +291,12 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="671"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ini mungkin memerlukan sedikit waktu - kita menghitung daerah yang akan terkena dampak bahaya dan menulis hasilnya ke layer baru.</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="686"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when starting the model.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Kesalahan:&lt;/span&gt; Pengecualian terjadi ketika memulai model.</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="723"/>
@@ -320,7 +321,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="967"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kita resampling dan menjepit hazardlayer untuk mencocokkan perpotongan dari exposurelayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="975"/>
@@ -330,7 +331,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="976"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="1201"/>
@@ -350,12 +351,12 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="1212"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF diciptakan .... membuka menggunakan peninjau standar PDF pada system.FIle pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="1220"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Proses selesai.File pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="1113"/>
@@ -365,7 +366,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="1115"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai dampak bahaya atau lapisan dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
     </message>
 </context>
 <context>
@@ -467,17 +468,17 @@ ke %s: %s</translation>
     <message>
         <location filename="is_impact_calculator.py" line="125"/>
         <source>Error: Hazard layer not set.</source>
-        <translation type="unfinished">Kesalahan: Lapisan ancaman tidak ditentukan.</translation>
+        <translation>Kesalahan: Lapisan ancaman tidak ditentukan.</translation>
     </message>
     <message>
         <location filename="is_impact_calculator.py" line="129"/>
         <source>Error: Exposure layer not set.</source>
-        <translation type="unfinished">Kesalahan: Lapisan terpapar tidak ditentukan.</translation>
+        <translation>Kesalahan: Lapisan terpapar tidak ditentukan.</translation>
     </message>
     <message>
         <location filename="is_impact_calculator.py" line="133"/>
         <source>Error: Function not set.</source>
-        <translation type="unfinished">Kesalahan: Fungsi tidak ditentukan.</translation>
+        <translation>Kesalahan: Fungsi tidak ditentukan.</translation>
     </message>
 </context>
 <context>
@@ -485,19 +486,19 @@ ke %s: %s</translation>
     <message>
         <location filename="is_impact_calculator_thread.py" line="139"/>
         <source>Ensure that hazard, exposure and function are all set before trying to run the analysis.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pastikan bahwa bahaya, paparan dan fungsi telah siap sebelum mencoba untuk menjalankan analisa.</translation>
     </message>
     <message>
         <location filename="is_impact_calculator_thread.py" line="148"/>
         <source>Calculation error encountered:
 </source>
-        <translation type="unfinished">Terjadi kesalahan perhitungan:
+        <translation>Terjadi kesalahan perhitungan:
 </translation>
     </message>
     <message>
         <location filename="is_impact_calculator_thread.py" line="153"/>
         <source>Calculation completed successfully.</source>
-        <translation type="unfinished">Perhitungan berhasil.</translation>
+        <translation>Perhitungan berhasil.</translation>
     </message>
 </context>
 <context>
@@ -505,14 +506,14 @@ ke %s: %s</translation>
     <message>
         <location filename="is_keyword_io.py" line="165"/>
         <source>Expected extraKeywords to be a dictionary. Got %s</source>
-        <translation type="unfinished">Kata kunci tambahan diharapkan untuk menjadi kamus. Mendapat %s</translation>
+        <translation>Diharapkan Kata kunci tambahan untuk menjadi kamus. Mendapat %s</translation>
     </message>
     <message>
         <location filename="is_keyword_io.py" line="177"/>
         <source>Failed to copy keywords file from :
 %s
 to%s: %s</source>
-        <translation type="unfinished">Gagal menyalin arsip kata kunci dari:
+        <translation>Gagal menyalin arsip kata kunci dari:
 %s
 ke %s: %s</translation>
     </message>
@@ -777,12 +778,12 @@ ke %s: %s</translation>
     <message>
         <location filename="is_options_dialog.py" line="159"/>
         <source>Set keyword cache file</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengatur file cache kata kunci</translation>
     </message>
     <message>
         <location filename="is_options_dialog.py" line="159"/>
         <source>Sqlite DB File (*.db)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sqlite DB File (*.db)</translation>
     </message>
 </context>
 <context>
@@ -795,7 +796,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_options_dialog_base.ui" line="49"/>
         <source>Only show visible layers in InaSAFE dock</source>
-        <translation type="unfinished"></translation>
+        <translation>Hanya tampilkan lapisan yang terlihat di InaSAFE</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="59"/>
@@ -805,7 +806,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_options_dialog_base.ui" line="89"/>
         <source>Keyword cache for remote datasources</source>
-        <translation type="unfinished"></translation>
+        <translation>Chace Kata Kunci untuk sumber data remote</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="248"/>
@@ -820,7 +821,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_options_dialog_base.ui" line="126"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Gelembung paparan dan lapisan bahaya ke atas saat dipilih</translation>
     </message>
     <message>
         <location filename="is_options_dialog_base.ui" line="136"/>
