@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-31 15:53+0700\n"
+"POT-Creation-Date: 2012-05-31 17:55+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -905,52 +905,52 @@ msgid "Earthquake impact to population"
 msgstr ""
 
 #: storage/titles.py:25 storage/titles.py:28 storage/titles.py:31
-#: storage/titles.py:31
+#: storage/titles.py:36
 msgid "DKI buildings"
 msgstr ""
 
 #: storage/titles.py:26 storage/titles.py:29 storage/titles.py:32
-#: storage/titles.py:32
+#: storage/titles.py:37
 msgid "Jakarta 2007 flood"
 msgstr ""
 
 #: storage/titles.py:27 storage/titles.py:30 storage/titles.py:33
-#: storage/titles.py:33
+#: storage/titles.py:38
 msgid "Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter"
 msgstr ""
 
 #: storage/titles.py:30 storage/titles.py:33 storage/titles.py:36
-#: storage/titles.py:39 storage/titles.py:39
+#: storage/titles.py:39 storage/titles.py:44
 msgid "Sea wall collapse at Pluit"
 msgstr ""
 
 #: storage/titles.py:31 storage/titles.py:34 storage/titles.py:37
-#: storage/titles.py:40 storage/titles.py:40
+#: storage/titles.py:40 storage/titles.py:45
 msgid "Jakarta flood prone areas"
 msgstr ""
 
 #: storage/titles.py:32 storage/titles.py:35 storage/titles.py:38
-#: storage/titles.py:41 storage/titles.py:41
+#: storage/titles.py:41 storage/titles.py:46
 msgid "Population Jakarta"
 msgstr ""
 
 #: storage/titles.py:36 storage/titles.py:39 storage/titles.py:42
-#: storage/titles.py:42
+#: storage/titles.py:47
 msgid "Flood Depth (design) Jakarta"
 msgstr ""
 
 #: storage/titles.py:37 storage/titles.py:40 storage/titles.py:43
-#: storage/titles.py:43
+#: storage/titles.py:48
 msgid "Flood Depth (current) Jakarta"
 msgstr ""
 
 #: storage/titles.py:38 storage/titles.py:41 storage/titles.py:44
-#: storage/titles.py:44
+#: storage/titles.py:49
 msgid "Yogyakarta 2006 earthquake"
 msgstr ""
 
 #: storage/titles.py:39 storage/titles.py:42 storage/titles.py:45
-#: storage/titles.py:45
+#: storage/titles.py:50
 msgid "Indonesian Earthquake Hazard Map"
 msgstr ""
 
@@ -959,167 +959,167 @@ msgid "Maumere Tsunami Inundation"
 msgstr ""
 
 #: storage/titles.py:42 storage/titles.py:45 storage/titles.py:48
-#: storage/titles.py:48
+#: storage/titles.py:53
 msgid "Sumatran fault Mw 7.8 scenario"
 msgstr ""
 
 #: storage/titles.py:44 storage/titles.py:49 storage/titles.py:52
-#: storage/titles.py:52
+#: storage/titles.py:57
 msgid "Mentawai fault Mw 9.0 scenario"
 msgstr ""
 
 #: storage/titles.py:45 storage/titles.py:53 storage/titles.py:56
-#: storage/titles.py:56
+#: storage/titles.py:61
 msgid "Shakemap Padang 2009"
 msgstr ""
 
 #: storage/titles.py:46 storage/titles.py:54 storage/titles.py:57
-#: storage/titles.py:57
+#: storage/titles.py:62
 msgid "OSM building footprints"
 msgstr ""
 
 #: storage/titles.py:47 storage/titles.py:56 storage/titles.py:57
-#: storage/titles.py:60 storage/titles.py:60
+#: storage/titles.py:60 storage/titles.py:65
 msgid "AIBEP schools"
 msgstr ""
 
 #: storage/titles.py:48 storage/titles.py:57 storage/titles.py:58
-#: storage/titles.py:61 storage/titles.py:61
+#: storage/titles.py:61 storage/titles.py:66
 msgid "Population density (5kmx5km)"
 msgstr ""
 
-#: storage/titles.py:34 storage/titles.py:37 storage/titles.py:37
+#: storage/titles.py:34 storage/titles.py:37 storage/titles.py:42
 msgid "Jakarta flood like 2007 with pump failure at Pluit and Ancol"
 msgstr ""
 
-#: storage/titles.py:44 storage/titles.py:47 storage/titles.py:47
+#: storage/titles.py:44 storage/titles.py:47 storage/titles.py:52
 msgid "Maumere tsunami inundation"
 msgstr ""
 
 #: storage/titles.py:59 storage/titles.py:60 storage/titles.py:63
-#: storage/titles.py:63
+#: storage/titles.py:68
 msgid "Office buildings Jakarta"
 msgstr ""
 
 #: storage/titles.py:60 storage/titles.py:61 storage/titles.py:64
-#: storage/titles.py:64
+#: storage/titles.py:69
 msgid "Hospitals and clinics Jakarta"
 msgstr ""
 
 #: storage/titles.py:63 storage/titles.py:64 storage/titles.py:67
-#: storage/titles.py:67
+#: storage/titles.py:72
 msgid "Schools Jakarta"
 msgstr ""
 
 #: storage/titles.py:64 storage/titles.py:65 storage/titles.py:66
-#: storage/titles.py:69 storage/titles.py:69
+#: storage/titles.py:69 storage/titles.py:74
 msgid "Industrial buildings Jakarta"
 msgstr ""
 
 #: storage/titles.py:65 storage/titles.py:66 storage/titles.py:67
-#: storage/titles.py:70 storage/titles.py:70
+#: storage/titles.py:70 storage/titles.py:75
 msgid "Industrial areas Jakarta"
 msgstr ""
 
 #: storage/titles.py:66 storage/titles.py:67 storage/titles.py:68
-#: storage/titles.py:71 storage/titles.py:71
+#: storage/titles.py:71 storage/titles.py:76
 msgid "Commercial areas Jakarta"
 msgstr ""
 
 #: storage/titles.py:67 storage/titles.py:68 storage/titles.py:69
-#: storage/titles.py:72 storage/titles.py:72
+#: storage/titles.py:72 storage/titles.py:77
 msgid "Hospitals Jakarta"
 msgstr ""
 
 #: storage/titles.py:64 storage/titles.py:65 storage/titles.py:68
-#: storage/titles.py:68
+#: storage/titles.py:73
 msgid "Schools"
 msgstr ""
 
-#: storage/titles.py:56 storage/titles.py:59 storage/titles.py:59
+#: storage/titles.py:56 storage/titles.py:59 storage/titles.py:64
 msgid "OSM buildings"
 msgstr ""
 
-#: storage/titles.py:76 storage/titles.py:76
+#: storage/titles.py:76 storage/titles.py:81
 msgid "office"
 msgstr ""
 
-#: storage/titles.py:77 storage/titles.py:77
+#: storage/titles.py:77 storage/titles.py:82
 msgid "clinic"
 msgstr ""
 
-#: storage/titles.py:78 storage/titles.py:78
+#: storage/titles.py:78 storage/titles.py:83
 msgid "terrace"
 msgstr ""
 
-#: storage/titles.py:79 storage/titles.py:79
+#: storage/titles.py:79 storage/titles.py:84
 msgid "police"
 msgstr ""
 
-#: storage/titles.py:80 storage/titles.py:80
+#: storage/titles.py:80 storage/titles.py:85
 msgid "residential"
 msgstr ""
 
-#: storage/titles.py:81 storage/titles.py:81
+#: storage/titles.py:81 storage/titles.py:86
 msgid "kindergarten"
 msgstr ""
 
-#: storage/titles.py:82 storage/titles.py:82
+#: storage/titles.py:82 storage/titles.py:87
 msgid "bank"
 msgstr ""
 
-#: storage/titles.py:83 storage/titles.py:83
+#: storage/titles.py:83 storage/titles.py:88
 msgid "place of worship"
 msgstr ""
 
-#: storage/titles.py:84 storage/titles.py:84
+#: storage/titles.py:84 storage/titles.py:89
 msgid "school"
 msgstr ""
 
-#: storage/titles.py:85 storage/titles.py:85
+#: storage/titles.py:85 storage/titles.py:90
 msgid "university"
 msgstr ""
 
-#: storage/titles.py:86 storage/titles.py:86
+#: storage/titles.py:86 storage/titles.py:91
 msgid "apartments"
 msgstr ""
 
-#: storage/titles.py:87 storage/titles.py:87
+#: storage/titles.py:87 storage/titles.py:92
 msgid "college"
 msgstr ""
 
-#: storage/titles.py:88 storage/titles.py:88
+#: storage/titles.py:88 storage/titles.py:93
 msgid "commercial"
 msgstr ""
 
-#: storage/titles.py:89 storage/titles.py:89
+#: storage/titles.py:89 storage/titles.py:94
 msgid "hospital"
 msgstr ""
 
-#: storage/titles.py:90 storage/titles.py:90
+#: storage/titles.py:90 storage/titles.py:95
 msgid "industrial"
 msgstr ""
 
-#: storage/titles.py:91 storage/titles.py:91
+#: storage/titles.py:91 storage/titles.py:96
 msgid "civic"
 msgstr ""
 
-#: storage/titles.py:92 storage/titles.py:92
+#: storage/titles.py:92 storage/titles.py:97
 msgid "church"
 msgstr ""
 
-#: storage/titles.py:93 storage/titles.py:93
+#: storage/titles.py:93 storage/titles.py:98
 msgid "hotel"
 msgstr ""
 
-#: storage/titles.py:94 storage/titles.py:94
+#: storage/titles.py:94 storage/titles.py:99
 msgid "public building"
 msgstr ""
 
-#: storage/titles.py:95 storage/titles.py:95
+#: storage/titles.py:95 storage/titles.py:100
 msgid "other"
 msgstr ""
 
-#: storage/titles.py:96 storage/titles.py:96
+#: storage/titles.py:96 storage/titles.py:101
 msgid "fire station"
 msgstr ""
