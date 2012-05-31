@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-31 11:10+0700\n"
+"POT-Creation-Date: 2012-05-31 13:29+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -716,26 +716,102 @@ msgstr "Model Fatality adalah dari Institut Teknologi Bandung 2012."
 msgid "Earthquake impact to population"
 msgstr "Gempa dampak terhadap populasi"
 
-#: storage/titles.py:25 storage/titles.py:25
+#: storage/titles.py:25 storage/titles.py:28 storage/titles.py:28
 msgid "DKI buildings"
 msgstr "Bangunan DKI"
 
-#: storage/titles.py:26
+#: storage/titles.py:26 storage/titles.py:29 storage/titles.py:29
 msgid "Jakarta 2007 flood"
 msgstr "Banjir seperti 2007"
 
-#: storage/titles.py:27
+#: storage/titles.py:27 storage/titles.py:30 storage/titles.py:30
 msgid "Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter"
 msgstr "Banjir 2007 tanpa pompa di Pluit, Ancol dan Sunter"
 
-#: storage/titles.py:30
+#: storage/titles.py:30 storage/titles.py:33 storage/titles.py:36
 msgid "Sea wall collapse at Pluit"
 msgstr "Dam Pluit runtuh"
 
-#: storage/titles.py:31
+#: storage/titles.py:31 storage/titles.py:34 storage/titles.py:37
 msgid "Jakarta flood prone areas"
 msgstr "Daerah Rawan Banjir"
 
-#: storage/titles.py:32
+#: storage/titles.py:32 storage/titles.py:35 storage/titles.py:38
 msgid "Population Jakarta"
 msgstr "Penduduk Jakarta"
+
+#: storage/titles.py:36 storage/titles.py:39
+msgid "Flood Depth (design) Jakarta"
+msgstr "Banjir Jakart (disain)"
+
+#: storage/titles.py:37 storage/titles.py:40
+msgid "Flood Depth (current) Jakarta"
+msgstr "Banjir Jakarta (saat ini)"
+
+#: storage/titles.py:38 storage/titles.py:41
+msgid "Yogyakarta 2006 earthquake"
+msgstr "Gempa Yogyakarta 2006"
+
+#: storage/titles.py:39 storage/titles.py:42
+msgid "Indonesian Earthquake Hazard Map"
+msgstr "Peta Hazard Gempa Indonesia"
+
+#: storage/titles.py:41 storage/titles.py:44
+msgid "Maumere tsunami inundation"
+msgstr "Maumere tsunami genangan"
+
+#: storage/titles.py:42 storage/titles.py:45
+msgid "Sumatran fault Mw 7.8 scenario"
+msgstr "Skenario Gempabumi Sesar Sumatra Mw 7.8"
+
+#: storage/titles.py:44 storage/titles.py:49
+msgid "Mentawai fault Mw 9.0 scenario"
+msgstr "Skenario Gempabumi Sesar Mentawai Mw 9.0"
+
+#: storage/titles.py:45 storage/titles.py:53
+msgid "Shakemap Padang 2009"
+msgstr "Shakemap Padang 2009"
+
+#: storage/titles.py:46 storage/titles.py:54
+msgid "OSM building footprints"
+msgstr "Bangunan OSM"
+
+#: storage/titles.py:47 storage/titles.py:56
+msgid "AIBEP schools"
+msgstr "Sekolah AIBEP"
+
+#: storage/titles.py:48 storage/titles.py:57
+msgid "Population density (5kmx5km)"
+msgstr "Perkiraan penduduk (5kmx5km)"
+
+#: storage/titles.py:34
+msgid "Jakarta flood like 2007 with pump failure at Pluit and Ancol"
+msgstr "Banjir 2007 tanpa pompa di Pluit dan Ancol"
+
+#: storage/titles.py:59
+msgid "Office buildings Jakarta"
+msgstr "Kantor Jakarta"
+
+#: storage/titles.py:60
+msgid "Hospitals and clinics Jakarta"
+msgstr "Puskesmas dan rumah sakit Jakarta"
+
+#: storage/titles.py:63
+msgid "Schools Jakarta"
+msgstr "Sekolah Jakarta"
+
+#: storage/titles.py:64
+msgid "Industrial buildings Jakarta"
+msgstr "Bangunan industri Jakarta"
+
+#: storage/titles.py:65
+msgid "Industrial areas Jakarta"
+msgstr "Daerah industri Jakarta"
+
+#: storage/titles.py:66
+msgid "Commercial areas Jakarta"
+msgstr "Daerah komersial Jakarta"
+
+#: storage/titles.py:67
+msgid "Hospitals Jakarta"
+msgstr "Rumah sakit Jakarta"
