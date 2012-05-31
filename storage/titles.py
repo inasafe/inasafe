@@ -30,6 +30,9 @@ titles = {'title1': _('DKI buildings'),       # Bangunan DKI
           'title3': _('Jakarta flood like 2007 with pump failure at Pluit, '
                       'Ancol and Sunter'),  # Banjir 2007 tanpa pompa di
                                             # Pluit, Ancol dan Sunter
+          'Jakarta flood like 2007 with pump failure at Pluit and Ancol':
+              _('Jakarta flood like 2007 with pump failure at '
+                'Pluit and Ancol'),
           'title4': _('Sea wall collapse at Pluit'),  # Dam Pluit Runtuh
           'title5': _('Jakarta flood prone areas'),  # Daerah Rawan Banjir
           'title6': _('Population Jakarta'),  # Penduduk Jakarta
@@ -38,18 +41,33 @@ titles = {'title1': _('DKI buildings'),       # Bangunan DKI
           'Yogyakarta 2006 earthquake': _('Yogyakarta 2006 earthquake'),
           'Indonesian Earthquake Hazard Map': _('Indonesian Earthquake '
                                                 'Hazard Map'),
-          'Maumere Tsunami Inundation': _('Maumere Tsunami Inundation'),
+          'Maumere tsunami inundation': _('Maumere tsunami inundation'),
           'Sumatran fault Mw 7.8 scenario': _('Sumatran fault Mw 7.8 '
-                                              'scenario'),
-          'Mentawai fault Mw 9.0 scenario': _('Mentawai fault Mw 9.0 scenario'),
+                                              'scenario'),  # Skenario
+                                                            # Gempabumi Sesar
+                                                            # Sumatra Mw 7.8
+          'Mentawai fault Mw 9.0 scenario': _('Mentawai fault Mw 9.0 '
+                                              'scenario'),  # Skenario
+                                                            # Gempabumi Sesar
+                                                            # Mentawai Mw 9.0
           'Shakemap Padang 2009': _('Shakemap Padang 2009'),
-          'OSM building footprints': _('OSM building footprints'),
+          'OSM building footprints': _('OSM building '
+                                       'footprints'),  # Bangunan OSM
           'AIBEP schools': _('AIBEP schools'),
-          'Population density (5kmx5km)': _('Population density (5kmx5km)'),
+          'Population density (5kmx5km)': _('Population density '
+                                            '(5kmx5km)'),  # Perkiraan penduduk
+          'Office buildings Jakarta': _('Office buildings Jakarta'),
+          'Hospitals and clinics Jakarta': _('Hospitals and '
+                                     'clinics Jakarta'),  # Puskesmas dan
+                                                          # rumah sakit
+          'Schools Jakarta': _('Schools Jakarta'),
+          'Industrial buildings Jakarta': _('Industrial buildings Jakarta'),
+          'Industrial areas Jakarta': _('Industrial areas Jakarta'),
+          'Commercial areas Jakarta': _('Commercial areas Jakarta'),
+          'Hospitals Jakarta': _('Hospitals Jakarta'),
           }
 
-#Skenario Gempabumi Sesar Sumatra Mw 7.8
-#Skenario Gempabumi Sesar Mentawai Mw 9.0
-#Gempabumi Padang 2009
-#Bangunan OSM
-#Perkiraan penduduk (5kmx5km)
+
+
+
+
