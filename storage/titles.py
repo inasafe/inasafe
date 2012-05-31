@@ -66,8 +66,3 @@ titles = {'title1': _('DKI buildings'),       # Bangunan DKI
           'Commercial areas Jakarta': _('Commercial areas Jakarta'),
           'Hospitals Jakarta': _('Hospitals Jakarta'),
           }
-
-
-
-
-
