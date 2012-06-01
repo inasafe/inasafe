@@ -110,7 +110,8 @@ def loadLayer(theLayerFile, DIR=TESTDATA):
     """
 
     # Extract basename and absolute path
-    myBaseName, myExt = os.path.splitext(theLayerFile)
+    myFileName = os.path.split(theLayerFile)[-1]  # In case path was absolute
+    myBaseName, myExt = os.path.splitext(myFileName)
     if DIR is None:
         myPath = theLayerFile
     else:
