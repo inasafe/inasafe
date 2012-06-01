@@ -13,13 +13,14 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                       '..'))  # Assuming test data two lvls up
 
 # Location of test data
-TESTDATANAME = 'inasafe_data'
-TESTREPO = 'http://www.aifdr.org/svn/%s' % TESTDATANAME
-TESTDATA = os.path.join(pardir, TESTDATANAME, 'test')
+DATANAME = 'inasafe_data'
+DATAREPO = 'http://www.aifdr.org/svn/%s' % DATANAME
+DATADIR = os.path.join(pardir, DATANAME)
 
-DEMODATANAME = 'riab_demo_data'
-DEMOREPO = 'http://www.aifdr.org/svn/%s' % DEMODATANAME
-DEMODATA = os.path.join(pardir, DEMODATANAME)
+# Bundled test data
+TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
+HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
+EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 
 # Known feature counts in test data
 FEATURE_COUNTS = {'test_buildings.shp': 144,
