@@ -129,8 +129,6 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                                   buildings[usage]])
 
         building_list.sort()
-        building_list = [[_('Total'), count, N]] + building_list
-         
 
         for row in building_list:
             s = TableRow(row)
