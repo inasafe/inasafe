@@ -99,12 +99,24 @@ def getQgisTestApp():
     return QGISAPP, CANVAS, IFACE, PARENT
 
 
-def loadLayer(theLayerFile):
-    """Helper to load and return a single QGIS layer"""
+def loadLayer(theLayerFile, DIR=TESTDATA):
+    """Helper to load and return a single QGIS layer
+
+    Input
+        theLayerFile: Pathname to raster or vector file
+        DIR: Optional parameter stating the parent dir. If None,
+             pathname is assumed to be absolute
+
+    """
+
     # Extract basename and absolute path
     myBaseName, myExt = os.path.splitext(theLayerFile)
-    myPath = os.path.join(TESTDATA, theLayerFile)
+    if DIR is None:
+        myPath = theLayerFile
+    else:
+        myPath = os.path.join(DIR, theLayerFile)
     myKeywordPath = myPath[:-4] + '.keywords'
+
     # Determine if layer is hazard or exposure
     myKeywords = read_keywords(myKeywordPath)
     myType = 'undefined'

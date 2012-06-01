@@ -17,7 +17,13 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import sys
 import os
+
+# Add PARENT directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
 import unittest
 from is_impact_calculator import ISImpactCalculator
 from is_exceptions import (InsufficientParametersException,
@@ -26,7 +32,11 @@ from is_exceptions import (InsufficientParametersException,
 
 from is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
 #TODO get rid of this....so we dont pull in stuff from storage...
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
+
+# Retired impact function for characterisation
+# (need import here if test is run independently)
+from engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -46,7 +56,7 @@ class ImpactCalculatorTest(unittest.TestCase):
                                                 'tsunami_building_'
                                                  'exposure.shp')
 
-        self.rasterPopulationPath = os.path.join(TESTDATA, 'glp10ag.asc')
+        self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
         self.calculator.setHazardLayer(self.rasterShakePath)
         self.calculator.setExposureLayer(self.vectorPath)
         self.calculator.setFunction('Earthquake Guidelines Function')

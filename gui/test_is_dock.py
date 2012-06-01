@@ -25,6 +25,7 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
+from os.path import join
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsVectorLayer,
@@ -46,7 +47,7 @@ from utilities_test import (getQgisTestApp,
 from gui.is_dock import ISDock
 from is_utilities import (setRasterStyle,
                           qgisVersion)
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, EXPDATA, HAZDATA
 from storage.utilities import read_keywords
 
 # Retired impact function for characterisation
@@ -159,21 +160,22 @@ def loadStandardLayers():
     # combos are populated alphabetically. Each test will
     # provide a detailed diagnostic if you break it so make sure
     # to consult that and clean up accordingly.
-    myFileList = ['Padang_WGS84.shp',
-                  'glp10ag.asc',
-                  'Shakemap_Padang_2009.asc',
-                  'tsunami_max_inundation_depth_utm56s.tif',
-                  'tsunami_building_exposure.shp',
-                  'Flood_Current_Depth_Jakarta_geographic.asc',
-                  'Population_Jakarta_geographic.asc',
-                  'eq_yogya_2006.asc',
-                  'OSM_building_polygons_20110905.shp']
-    myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+    myFileList = [join(TESTDATA, 'Padang_WGS84.shp'),
+                  join(EXPDATA, 'glp10ag.asc'),
+                  join(TESTDATA, 'Shakemap_Padang_2009.asc'),
+                  join(TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif'),
+                  join(TESTDATA, 'tsunami_building_exposure.shp'),
+                  join(TESTDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
+                  join(TESTDATA, 'Population_Jakarta_geographic.asc'),
+                  join(TESTDATA, 'eq_yogya_2006.asc'),
+                  join(TESTDATA, 'OSM_building_polygons_20110905.shp')]
+    myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
+                                                          DIR=None)
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList)
     return myHazardLayerCount, myExposureLayerCount
 
 
-def loadLayers(theLayerList, theClearFlag=True):
+def loadLayers(theLayerList, theClearFlag=True, DIR=TESTDATA):
     """Helper function to load layers as defined in a python list."""
     # First unload any layers that may already be loaded
     if theClearFlag:
@@ -188,7 +190,7 @@ def loadLayers(theLayerList, theClearFlag=True):
     # Now create our new layers
     for myFile in theLayerList:
 
-        myLayer, myType = loadLayer(myFile)
+        myLayer, myType = loadLayer(myFile, DIR)
         if myType == 'hazard':
             myHazardLayerCount += 1
         elif myType == 'exposure':
@@ -210,32 +212,32 @@ def loadLayers(theLayerList, theClearFlag=True):
     return myHazardLayerCount, myExposureLayerCount
 
 
-def loadLayer(theLayerFile):
-    """Helper to load and return a single QGIS layer"""
-    # Extract basename and absolute path
-    myBaseName, myExt = os.path.splitext(theLayerFile)
-    myPath = os.path.join(TESTDATA, theLayerFile)
-    myKeywordPath = myPath[:-4] + '.keywords'
-    # Determine if layer is hazard or exposure
-    myKeywords = read_keywords(myKeywordPath)
-    myType = 'undefined'
-    if 'category' in myKeywords:
-        myType = myKeywords['category']
-    msg = 'Could not read %s' % myKeywordPath
-    assert myKeywords is not None, msg
-
-    # Create QGis Layer Instance
-    if myExt in ['.asc', '.tif']:
-        myLayer = QgsRasterLayer(myPath, myBaseName)
-    elif myExt in ['.shp']:
-        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
-    else:
-        myMessage = 'File %s had illegal extension' % myPath
-        raise Exception(myMessage)
-
-    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
-    assert myLayer.isValid(), myMessage
-    return myLayer, myType
+#def loadLayer(theLayerFile):
+#    """Helper to load and return a single QGIS layer"""
+#    # Extract basename and absolute path
+#    myBaseName, myExt = os.path.splitext(theLayerFile)
+#    myPath = os.path.join(TESTDATA, theLayerFile)
+#    myKeywordPath = myPath[:-4] + '.keywords'
+#    # Determine if layer is hazard or exposure
+#    myKeywords = read_keywords(myKeywordPath)
+#    myType = 'undefined'
+#    if 'category' in myKeywords:
+#        myType = myKeywords['category']
+#    msg = 'Could not read %s' % myKeywordPath
+#    assert myKeywords is not None, msg#
+#
+#    # Create QGis Layer Instance
+#    if myExt in ['.asc', '.tif']:
+#        myLayer = QgsRasterLayer(myPath, myBaseName)
+#    elif myExt in ['.shp']:
+#        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+#    else:
+#        myMessage = 'File %s had illegal extension' % myPath
+#        raise Exception(myMessage)#
+#
+#    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
+#    assert myLayer.isValid(), myMessage
+#    return myLayer, myType
 
 
 class ISDockTest(unittest.TestCase):
