@@ -25,7 +25,7 @@ from is_safe_interface import (getOptimalExtent,
                                readKeywordsFromFile,
                                readSafeLayer)
 from is_exceptions import KeywordNotFoundException
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, EXPDATA, HAZDATA
 
 
 class ISSafeInterfaceTest(unittest.TestCase):
@@ -40,7 +40,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         self.rasterExposurePath = os.path.join(TESTDATA,
                                              'tsunami_building_exposure.shp')
 
-        self.rasterPopulationPath = os.path.join(TESTDATA, 'glp10ag.asc')
+        self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
 
     def test_getOptimalExtent(self):
         """Optimal extent is calculated correctly

@@ -35,7 +35,7 @@ from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
-from utilities_test import TESTREPO, TESTDATA
+from utilities_test import TESTDATA
 from utilities_test import FEATURE_COUNTS
 from utilities_test import GEOTRANSFORMS
 
