@@ -52,6 +52,7 @@ from storage.utilities import read_keywords
 # Retired impact function for characterisation
 from engine.impact_functions_for_testing import allen_fatality_model
 from engine.impact_functions_for_testing import HKV_flood_study
+from engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 
 try:
     from pydevd import *
@@ -310,11 +311,28 @@ class ISDockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        #QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        #QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        #
+        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
+        # Hazard layer
+        myIndex = DOCK.cboHazard.findText('Shakemap_Padang_2009')
+        assert myIndex != -1, 'Shakemap_Padang_2009 hazard layer not found'
+        DOCK.cboHazard.setCurrentIndex(myIndex)
+
+        # Exposure layer
+        myIndex = DOCK.cboExposure.findText('Padang_WGS84')
+        assert myIndex != -1, 'Padang_WGS84'
+        DOCK.cboExposure.setCurrentIndex(myIndex)
+
+        # Impact function
+        myIndex = DOCK.cboFunction.findText('Earthquake Guidelines Function')
+        msg = ('Earthquake Guidelines function not '
+               'found: ' + combosToString(DOCK))
+        assert myIndex != -1, msg
+        DOCK.cboFunction.setCurrentIndex(myIndex)
 
         myDict = getUiState(DOCK)
         myExpectedDict = {'Hazard': 'Shakemap_Padang_2009',
