@@ -3,6 +3,7 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from storage.vector import Vector
 from storage.utilities import ugettext as _
+from storage.titles import values as internationalised_values
 from impact_functions.tables import Table, TableRow
 
 
@@ -16,6 +17,8 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                     subcategory=='building' and \
                     layertype=='vector' and \
                     purpose=='dki'
+
+    # FIXME (Ole): Use datatype=='osm' instead of purpose.
     """
 
     target_field = 'INUNDATED'
@@ -109,9 +112,19 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                       TableRow([_('Building type'), _('Flooded'), _('Total')],
                                header=True)]
 
+        # Make list of building types
         building_list = []
         for usage in buildings:
-            building_list.append([usage.replace('_', ' ').capitalize(),
+
+            building_type = usage.replace('_', ' ')
+
+            # Lookup internationalised value if available
+            if building_type in internationalised_values:
+                building_type = internationalised_values[building_type]
+            else:
+                print building_type
+
+            building_list.append([building_type.capitalize(),
                                   affected_buildings[usage],
                                   buildings[usage]])
 
