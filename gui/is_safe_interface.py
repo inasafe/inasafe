@@ -1,5 +1,4 @@
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
+"""InaSAFE Disaster risk assessment tool developed by AusAid -
 **IS Safe Interface.**
 
 The purpose of the module is to centralise interactions between the gui
@@ -23,21 +22,25 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+# Standard modules
 import os
 import unicodedata
-from impact_functions import get_admissible_plugins
-from storage.utilities import read_keywords, bbox_intersection
-from storage.utilities import buffered_bounding_box, verify as verify_util
 
+# SAFE functionality
+from safe_api import get_admissible_plugins
+from safe_api import get_plugins as safe_get_plugins
+from safe_api import read_keywords, bbox_intersection
+from safe_api import write_keywords as safe_write_keywords
+from safe_api import read_layer as safe_read_layer
+from safe_api import buffered_bounding_box, verify as verify_util
+from safe_api import calculate_impact as safe_calculate_impact
+from safe_api import internationalisedTitles
+
+# InaSAFE GUI specific functionality
+from PyQt4.QtCore import QCoreApplication
 from is_exceptions import (KeywordNotFoundException,
                            StyleInfoNotFoundException,
                            InvalidParameterException)
-from storage.core import read_layer as safe_read_layer
-from storage.utilities import write_keywords as safe_write_keywords
-from impact_functions import get_plugins as safe_get_plugins
-from engine.core import calculate_impact as safe_calculate_impact
-from PyQt4.QtCore import QCoreApplication
-from storage.titles import titles as internationalisedTitles
 
 
 def tr(theText):
