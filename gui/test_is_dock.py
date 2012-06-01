@@ -326,7 +326,9 @@ class ISDockTest(unittest.TestCase):
 
         # Exposure layer
         myIndex = DOCK.cboExposure.findText('Padang_WGS84')
-        assert myIndex != -1, 'Padang_WGS84'
+        myMessage = ('Could not find layer Padang_WGS84:\n'
+                     '%s' % (combosToString(DOCK)))
+        assert myIndex != -1, myMessage
         DOCK.cboExposure.setCurrentIndex(myIndex)
 
         # Impact function
