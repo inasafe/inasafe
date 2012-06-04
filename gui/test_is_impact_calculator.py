@@ -155,7 +155,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test for issue 100: unhashable type dict"""
         exposure_path = os.path.join(TESTDATA,
                             'OSM_building_polygons_20110905.shp')
-        hazard_path = os.path.join(TESTDATA,
+        hazard_path = os.path.join(HAZDATA,
                             'Flood_Current_Depth_Jakarta_geographic.asc')
         # Verify relevant metada is ok
         #H = readSafeLayer(hazard_path)

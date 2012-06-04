@@ -165,7 +165,7 @@ def loadStandardLayers():
                   join(HAZDATA, 'Shakemap_Padang_2009.asc'),
                   join(TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif'),
                   join(TESTDATA, 'tsunami_building_exposure.shp'),
-                  join(TESTDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
+                  join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
                   join(TESTDATA, 'Population_Jakarta_geographic.asc'),
                   join(HAZDATA, 'eq_yogya_2006.asc'),
                   join(TESTDATA, 'OSM_building_polygons_20110905.shp')]
@@ -810,9 +810,12 @@ class ISDockTest(unittest.TestCase):
         self.tearDown()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
-        myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
-                      'Population_Jakarta_geographic.asc']
-        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+        myFileList = [join(HAZDATA,
+                           'Flood_Current_Depth_Jakarta_geographic.asc'),
+                      join(TESTDATA,
+                           'Population_Jakarta_geographic.asc')]
+        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
+                                                              DIR=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -862,9 +865,12 @@ class ISDockTest(unittest.TestCase):
         self.tearDown()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
-        myFileList = ['Flood_Current_Depth_Jakarta_geographic.asc',
-                      'Population_Jakarta_geographic.asc']
-        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+        myFileList = [join(HAZDATA,
+                           'Flood_Current_Depth_Jakarta_geographic.asc'),
+                      join(TESTDATA,
+                           'Population_Jakarta_geographic.asc')]
+        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
+                                                              DIR=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -932,10 +938,14 @@ class ISDockTest(unittest.TestCase):
         # same functions - when switching layers the selected function should
         # remain unchanged
         self.tearDown()
-        myFileList = ['Flood_Design_Depth_Jakarta_geographic.asc',
-                      'Flood_Current_Depth_Jakarta_geographic.asc',
-                      'Population_Jakarta_geographic.asc']
-        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList)
+        myFileList = [join(HAZDATA,
+                           'Flood_Design_Depth_Jakarta_geographic.asc'),
+                      join(HAZDATA,
+                           'Flood_Current_Depth_Jakarta_geographic.asc'),
+                      join(TESTDATA,
+                           'Population_Jakarta_geographic.asc')]
+        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
+                                                              DIR=None)
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
         DOCK.cboHazard.setCurrentIndex(0)

@@ -345,7 +345,7 @@ class Test_Engine(unittest.TestCase):
         for filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
                          'Flood_Design_Depth_Jakarta_geographic.asc']:
 
-            hazard_filename = join(TESTDATA, filename)
+            hazard_filename = join(HAZDATA, filename)
             exposure_filename = join(TESTDATA, population)
 
             # Get layers using API
@@ -433,7 +433,7 @@ class Test_Engine(unittest.TestCase):
                              'Flood_Design_Depth_Jakarta_geographic.asc']:
 
             # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (TESTDATA, haz_filename)
+            hazard_filename = '%s/%s' % (HAZDATA, haz_filename)
             exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
                                  % TESTDATA)
 
@@ -1930,7 +1930,7 @@ class Test_Engine(unittest.TestCase):
                          'Flood_Design_Depth_Jakarta_geographic.asc']
 
         for i, filename in enumerate(hazard_layers):
-            hazard_filename = join(TESTDATA, filename)
+            hazard_filename = join(HAZDATA, filename)
             exposure_filename = join(TESTDATA, population)
 
             # Get layers using API
@@ -2129,7 +2129,7 @@ class Test_Engine(unittest.TestCase):
         roads = 'indonesia_highway_sample.shp'
         plugin_name = 'Flood Road Impact Function'
 
-        hazard_filename = join(TESTDATA, floods)
+        hazard_filename = join(HAZDATA, floods)
         exposure_filename = join(TESTDATA, roads)
 
         # Get layers using API
