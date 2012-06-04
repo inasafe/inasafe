@@ -186,7 +186,7 @@ class ITBFatalityFunction(FunctionProvider):
                              'total_fatalities': fatalities,
                              'impact_table': impact_table,
                              'map_title': map_title},
-                   name='Estimated fatalities',
+                   name=_('Estimated fatalities'),
                    style_info=style_info)
 
         # Maybe return a shape file with contours instead

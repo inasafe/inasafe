@@ -896,6 +896,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                            myExposureGeoExtent,
                                            myViewportGeoExtent)
         except Exception, e:
+            # FIXME (Ole): This string does not translate (#171)
+            # FIXME (Ole): The message is a bit overwhelming - maybe
+            #              simplify or hide the details (as they repeat
+            #              the main message)
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
                    'and / or the layers and the viewport. Please select '

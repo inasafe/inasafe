@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="af_ZA">
+<!DOCTYPE TS><TS version="2.0" language="af_ZA" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -82,17 +82,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="899"/>
+        <location filename="is_dock.py" line="903"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %s&lt;/p&gt;&lt;p&gt;Exposure: %s&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %s&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %s&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="962"/>
+        <location filename="is_dock.py" line="966"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1215"/>
+        <location filename="is_dock.py" line="1219"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -152,57 +152,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="972"/>
+        <location filename="is_dock.py" line="976"/>
         <source>Preparing hazard data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="973"/>
+        <location filename="is_dock.py" line="977"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="981"/>
+        <location filename="is_dock.py" line="985"/>
         <source>Preparing exposure data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="982"/>
+        <location filename="is_dock.py" line="986"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1215"/>
+        <location filename="is_dock.py" line="1219"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1234"/>
+        <location filename="is_dock.py" line="1238"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1221"/>
+        <location filename="is_dock.py" line="1225"/>
         <source>Generating your map as a PDF document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1226"/>
+        <location filename="is_dock.py" line="1230"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1234"/>
+        <location filename="is_dock.py" line="1238"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1127"/>
+        <location filename="is_dock.py" line="1131"/>
         <source>No keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1129"/>
+        <location filename="is_dock.py" line="1133"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation type="unfinished"></translation>
     </message>
