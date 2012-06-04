@@ -42,7 +42,7 @@ class ITBFatalityFunction(FunctionProvider):
     701-718.
 
     Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake
-    fatality estimation, Earthq. Spectra 26, 1017–1037.
+    fatality estimation, Earthq. Spectra 26, 1017-1037.
 
 
     Caveats and limitations:
