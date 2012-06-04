@@ -43,12 +43,12 @@ class ISKeywordIOTest(unittest.TestCase):
                                        'datatype': 'OSM',
                                        'subcategory': 'building'}
         self.expectedVectorKeywords = {'category': 'exposure',
-                                        'datatype': 'itb',
-                                        'subcategory': 'building'}
+                                       'datatype': 'itb',
+                                       'subcategory': 'building'}
         self.expectedRasterKeywords = {'category': 'hazard',
-                                         'subcategory': 'earthquake',
-                                         'unit': 'MMI',
-                                         'title': 'Shakemap_Padang_2009'}
+                                       'subcategory': 'earthquake',
+                                       'unit': 'MMI',
+                                       'title': 'Padang 2009 scenario'}
 
     def tearDown(self):
         pass
