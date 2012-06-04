@@ -183,13 +183,13 @@ class ISSafeInterfaceTest(unittest.TestCase):
         assert myKeywords == {'category': 'hazard',
                               'subcategory': 'earthquake',
                               'unit': 'MMI',
-                              'title': 'Shakemap_Padang_2009'}
+                              'title': 'Padang 2009 scenario'}
 
         myKeywords = readKeywordsFromFile(self.rasterPopulationPath)
         assert myKeywords == {'category': 'exposure',
                               'subcategory': 'population',
                               'datatype': 'density',
-                              'title': 'Population Density Estimate (5kmx5km)'}
+                              'title': 'Population density (5kmx5km)'}
 
         myKeywords = readKeywordsFromFile(self.vectorPath)
         assert myKeywords == {'category': 'exposure',
