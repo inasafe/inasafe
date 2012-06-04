@@ -3,9 +3,10 @@ import cPickle
 import numpy
 import sys
 import os
+from os.path import join
 
 # Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 # Import InaSAFE modules
@@ -24,7 +25,7 @@ from storage.core import write_raster_data
 from storage.vector import Vector
 from impact_functions import get_plugins
 
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
@@ -344,8 +345,8 @@ class Test_Engine(unittest.TestCase):
         for filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
                          'Flood_Design_Depth_Jakarta_geographic.asc']:
 
-            hazard_filename = os.path.join(TESTDATA, filename)
-            exposure_filename = os.path.join(TESTDATA, population)
+            hazard_filename = join(TESTDATA, filename)
+            exposure_filename = join(TESTDATA, population)
 
             # Get layers using API
             H = read_layer(hazard_filename)
@@ -464,17 +465,16 @@ class Test_Engine(unittest.TestCase):
         building locations (vector data).
         """
 
-        for mmi_filename in ['lembang_mmi_hazmap.asc',
-                             'Earthquake_Ground_Shaking_clip.tif',  # NaN's
-                             'Lembang_Earthquake_Scenario.asc']:
-
-            # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (TESTDATA, mmi_filename)
-            exposure_filename = '%s/test_buildings.shp' % TESTDATA
+        # Name file names for hazard level and exposure
+        exp_filename = '%s/test_buildings.shp' % TESTDATA
+        for haz_filename in [join(TESTDATA, 'lembang_mmi_hazmap.asc'),
+                             join(TESTDATA,   # NaN's
+                                  'Earthquake_Ground_Shaking_clip.tif'),
+                             join(HAZDATA, 'Lembang_Earthquake_Scenario.asc')]:
 
             # Calculate impact using API
-            H = read_layer(hazard_filename)
-            E = read_layer(exposure_filename)
+            H = read_layer(haz_filename)
+            E = read_layer(exp_filename)
 
             plugin_name = 'Earthquake Building Damage Function'
             plugin_list = get_plugins(plugin_name)
@@ -488,11 +488,11 @@ class Test_Engine(unittest.TestCase):
             impact_filename = impact_vector.get_filename()
 
             # Read input data
-            hazard_raster = read_layer(hazard_filename)
+            hazard_raster = read_layer(haz_filename)
             A = hazard_raster.get_data()
             mmi_min, mmi_max = hazard_raster.get_extrema()
 
-            exposure_vector = read_layer(exposure_filename)
+            exposure_vector = read_layer(exp_filename)
             coordinates = exposure_vector.get_geometry()
             attributes = exposure_vector.get_data()
 
@@ -535,12 +535,12 @@ class Test_Engine(unittest.TestCase):
                 # Check that interpolated points are within range
                 msg = ('Interpolated mmi %f from file %s was outside '
                        'extrema: [%f, %f] at location '
-                       '[%f, %f].' % (calculated_mmi, hazard_filename,
+                       '[%f, %f].' % (calculated_mmi, haz_filename,
                                       mmi_min, mmi_max, lon, lat))
                 assert mmi_min <= calculated_mmi <= mmi_max, msg
 
                 # Set up some tolerances for comparison with test set.
-                if mmi_filename.startswith('Lembang_Earthquake'):
+                if 'Lembang_Earthquake' in haz_filename:
                     pct = 3
                 else:
                     pct = 2
@@ -606,7 +606,7 @@ class Test_Engine(unittest.TestCase):
                              'Lembang_Earthquake_Scenario.asc']:
 
             # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (TESTDATA, mmi_filename)
+            hazard_filename = '%s/%s' % (HAZDATA, mmi_filename)
             exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
                                  % TESTDATA)
 
@@ -779,9 +779,9 @@ class Test_Engine(unittest.TestCase):
 
         # FIXME - when we know how to reproject, replace hazard
         # file with UTM version (i.e. without _geographic).
-        hazard_filename = os.path.join(TESTDATA,
+        hazard_filename = join(TESTDATA,
                                        'Ashload_Gede_VEI4_geographic.asc')
-        exposure_filename = os.path.join(TESTDATA, 'test_buildings.shp')
+        exposure_filename = join(TESTDATA, 'test_buildings.shp')
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
@@ -1930,8 +1930,8 @@ class Test_Engine(unittest.TestCase):
                          'Flood_Design_Depth_Jakarta_geographic.asc']
 
         for i, filename in enumerate(hazard_layers):
-            hazard_filename = os.path.join(TESTDATA, filename)
-            exposure_filename = os.path.join(TESTDATA, population)
+            hazard_filename = join(TESTDATA, filename)
+            exposure_filename = join(TESTDATA, population)
 
             # Get layers using API
             H = read_layer(hazard_filename)
@@ -1988,8 +1988,8 @@ class Test_Engine(unittest.TestCase):
                              #'Lembang_Earthquake_Scenario.asc']:
 
             # Upload input data
-            hazard_filename = os.path.join(TESTDATA, mmi_filename)
-            exposure_filename = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+            hazard_filename = join(HAZDATA, mmi_filename)
+            exposure_filename = join(TESTDATA, 'Padang_WGS84.shp')
 
             # Call calculation routine
             bbox = '96.956, -5.51, 104.63933, 2.289497'
@@ -2073,8 +2073,8 @@ class Test_Engine(unittest.TestCase):
                              #'Lembang_Earthquake_Scenario.asc']:
 
             # Upload input data
-            hazard_filename = os.path.join(TESTDATA, mmi_filename)
-            exposure_filename = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+            hazard_filename = join(HAZDATA, mmi_filename)
+            exposure_filename = join(TESTDATA, 'Padang_WGS84.shp')
 
             # Call calculation routine
             bbox = '96.956, -5.51, 104.63933, 2.289497'
@@ -2129,8 +2129,8 @@ class Test_Engine(unittest.TestCase):
         roads = 'indonesia_highway_sample.shp'
         plugin_name = 'Flood Road Impact Function'
 
-        hazard_filename = os.path.join(TESTDATA, floods)
-        exposure_filename = os.path.join(TESTDATA, roads)
+        hazard_filename = join(TESTDATA, floods)
+        exposure_filename = join(TESTDATA, roads)
 
         # Get layers using API
         H = read_layer(hazard_filename)

@@ -35,7 +35,7 @@ from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
-from utilities_test import TESTDATA
+from utilities_test import TESTDATA, HAZDATA, EXPDATA
 from utilities_test import FEATURE_COUNTS
 from utilities_test import GEOTRANSFORMS
 
@@ -776,13 +776,13 @@ class Test_IO(unittest.TestCase):
         """
 
         # Read files with -9999 as nominated nodata value
-        for rastername in ['Population_2010_clip.tif',
-                           'Lembang_Earthquake_Scenario.asc',
-                           'Earthquake_Ground_Shaking.asc']:
+        for filename in [os.path.join(TESTDATA, 'Population_2010_clip.tif'),
+                         os.path.join(HAZDATA,
+                                      'Lembang_Earthquake_Scenario.asc'),
+                         os.path.join(TESTDATA,
+                                      'Earthquake_Ground_Shaking.asc')]:
 
-            filename = '%s/%s' % (TESTDATA, rastername)
             R = read_layer(filename)
-
             A = R.get_data(nan=False)
 
             # Verify nodata value
@@ -1039,10 +1039,11 @@ class Test_IO(unittest.TestCase):
 
         assert same_API(V, R, exclude=exclude)
 
-        for layername in ['test_buildings.shp',
-                          'Lembang_Earthquake_Scenario.asc']:
+        for filename in [os.path.join(TESTDATA,
+                                      'test_buildings.shp'),
+                         os.path.join(HAZDATA,
+                                      'Lembang_Earthquake_Scenario.asc')]:
 
-            filename = '%s/%s' % (TESTDATA, layername)
             L = read_layer(filename)
 
             assert same_API(L, V, exclude=exclude)

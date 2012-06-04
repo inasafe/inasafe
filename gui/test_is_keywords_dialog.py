@@ -32,7 +32,7 @@ from is_keywords_dialog import ISKeywordsDialog
 
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
 from odict import OrderedDict
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -41,7 +41,7 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 def makePadangLayer():
     """Helper function that returns a single predefined layer"""
     myFile = 'Shakemap_Padang_2009.asc'
-    myPath = os.path.join(TESTDATA, myFile)
+    myPath = os.path.join(HAZDATA, myFile)
     myBaseName = os.path.splitext(myFile)[0]
     myLayer = QgsRasterLayer(myPath, myBaseName)
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
@@ -59,6 +59,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def setUp(self):
         """Create fresh dialog for each test"""
+        pass
 
     def tearDown(self):
         """Destroy the dialog after each test"""
@@ -302,7 +303,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
         myKeywords = myDialog.getKeywords()
         myExpectedKeywords = {'title': 'Shakemap_Padang_2009',
                               'subcategory': 'earthquake',
-                             'unit': 'MMI'}
+                              'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
 
@@ -328,8 +329,8 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
         myExpectedKeywords = {'title': 'Shakemap_Padang_2009',
                               'category': 'hazard',
-                             'subcategory': 'earthquake',
-                             'unit': 'MMI'}
+                              'subcategory': 'earthquake',
+                              'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage

@@ -162,12 +162,12 @@ def loadStandardLayers():
     # to consult that and clean up accordingly.
     myFileList = [join(TESTDATA, 'Padang_WGS84.shp'),
                   join(EXPDATA, 'glp10ag.asc'),
-                  join(TESTDATA, 'Shakemap_Padang_2009.asc'),
+                  join(HAZDATA, 'Shakemap_Padang_2009.asc'),
                   join(TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif'),
                   join(TESTDATA, 'tsunami_building_exposure.shp'),
                   join(TESTDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
                   join(TESTDATA, 'Population_Jakarta_geographic.asc'),
-                  join(TESTDATA, 'eq_yogya_2006.asc'),
+                  join(HAZDATA, 'eq_yogya_2006.asc'),
                   join(TESTDATA, 'OSM_building_polygons_20110905.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                           DIR=None)

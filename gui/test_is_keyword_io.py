@@ -13,7 +13,7 @@ from is_keyword_io import ISKeywordIO
 from is_exceptions import HashNotFoundException
 from is_utilities import getTempDir
 
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
 from qgis.core import (QgsDataSourceURI,
                        QgsVectorLayer)
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -34,7 +34,8 @@ class ISKeywordIOTest(unittest.TestCase):
         myUri.setDataSource('', 'osm_buildings', 'Geometry')
         self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                        'spatialite')
-        self.fileRasterLayer, myType = loadLayer('Shakemap_Padang_2009.asc')
+        myHazardPath = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
+        self.fileRasterLayer, myType = loadLayer(myHazardPath, DIR=None)
         del myType
         self.fileVectorLayer, myType = loadLayer('Padang_WGS84.shp')
         del myType

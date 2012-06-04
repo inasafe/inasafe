@@ -33,7 +33,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
 
     def setUp(self):
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-        self.rasterShakePath = os.path.join(TESTDATA,
+        self.rasterShakePath = os.path.join(HAZDATA,
                                             'Shakemap_Padang_2009.asc')
         self.rasterTsunamiPath = os.path.join(TESTDATA,
                                 'tsunami_max_inundation_depth_utm56s.tif')
@@ -47,7 +47,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         """
 
         exposure_path = os.path.join(TESTDATA, 'Population_2010.asc')
-        hazard_path = os.path.join(TESTDATA,
+        hazard_path = os.path.join(HAZDATA,
                                    'Lembang_Earthquake_Scenario.asc')
 
         # Expected data

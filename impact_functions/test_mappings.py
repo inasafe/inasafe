@@ -10,7 +10,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from storage.core import read_layer
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
 from mappings import *
 
 
@@ -20,7 +20,7 @@ class Test_mappings(unittest.TestCase):
         """OSM structure types maps to Padang vulnerability curves
         """
 
-        hazard_filename = '%s/Shakemap_Padang_2009.asc' % TESTDATA
+        hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
         exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
                              % TESTDATA)
 
@@ -81,7 +81,7 @@ class Test_mappings(unittest.TestCase):
         """OSM structure types maps to BNPB vulnerability curves
         """
 
-        hazard_filename = '%s/Shakemap_Padang_2009.asc' % TESTDATA
+        hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
         exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
                              % TESTDATA)
 

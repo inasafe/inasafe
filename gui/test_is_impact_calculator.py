@@ -46,7 +46,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Create shared resources that all tests can use"""
         self.calculator = ISImpactCalculator()
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-        self.rasterShakePath = os.path.join(TESTDATA,
+        self.rasterShakePath = os.path.join(HAZDATA,
                                             'Shakemap_Padang_2009.asc')
         # UTM projected layer
 
