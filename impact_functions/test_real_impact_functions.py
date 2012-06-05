@@ -69,7 +69,7 @@ class Test_real_plugins(unittest.TestCase):
         # Try form where only one dictionary is passed
         # This one gets all the flood related impact functions
         P = get_admissible_plugins(D1)
-        assert len(P) >= 3
+        assert len(P) >= 2
         assert 'Need evacuation' in P
         assert 'Be temporarily closed' in P
         #assert 'Flood Road Impact Function' in P
@@ -81,7 +81,7 @@ class Test_real_plugins(unittest.TestCase):
         D2 = {'category': 'exposure', 'subcategory': 'building'}
 
         # Add layertype
-        D1['layertype'] = 'raster'
+        #D1['layertype'] = 'raster'  # Not required for flood building impact
         D2['layertype'] = 'vector'
         P = get_admissible_plugins([D1, D2])
 

@@ -233,10 +233,12 @@ class Test_Engine(unittest.TestCase):
                            rtol=1.0e-4), msg
 
         # Check for expected numbers (from Hadi Ghasemi) in keywords
-        for population_count in [2649040.0, 50273440.0, 7969610.0,
-                                 19320620.0, 5211940.0]:
-            assert str(int(population_count / 1000)) in \
-                keywords['impact_summary']
+        # NOTE: Commented out because function no longer needs to return
+        # individual exposure numbers.
+        #for population_count in [2649040.0, 50273440.0, 7969610.0,
+        #                         19320620.0, 5211940.0]:
+        #    assert str(int(population_count / 1000)) in \
+        #        keywords['impact_summary']
 
         # Check that aggregated number of fatilites is as expected
         all = int(numpy.sum([31.8937368131,

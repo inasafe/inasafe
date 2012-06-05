@@ -7,7 +7,7 @@ from storage.titles import values as internationalised_values
 from impact_functions.tables import Table, TableRow
 
 
-class DKIFloodBuildingImpactFunction(FunctionProvider):
+class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
 
     :param requires category=='hazard' and \
@@ -22,7 +22,7 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
     plugin_name = _('Be temporarily closed')
 
     def run(self, layers):
-        """Flood impact to OSM buildings
+        """Flood impact to buildings (e.g. from Open Street Map)
         """
 
         threshold = 1.0  # Flood threshold [m]

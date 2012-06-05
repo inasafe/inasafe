@@ -481,11 +481,11 @@ class ISDockTest(unittest.TestCase):
         myDict = getUiState(DOCK)
 
         myExpectedDict = {'Run Button Enabled': True,
-                        'Impact Function': 'Be temporarily closed',
-                        'Hazard': 'Tsunami Max Inundation',
-                        'Exposure': 'Tsunami Building Exposure'}
+                          'Impact Function': 'Be temporarily closed',
+                          'Hazard': 'Tsunami Max Inundation',
+                          'Exposure': 'Tsunami Building Exposure'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-                            myDict, myExpectedDict, combosToString(DOCK))
+            myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage
 
         setCanvasCrs(GEOCRS, True)
@@ -504,11 +504,14 @@ class ISDockTest(unittest.TestCase):
         #< 1 m:  10
         #1 - 3 m:    7
         #> 3 m:  0
+        # Post rewrite of impact function
+        #Building type	Temporarily closed	Total
+        #All	        7	                17
 
         myMessage = 'Result not as expected: %s' % myResult
-        assert '10' in myResult, myMessage
+        assert '17' in myResult, myMessage
         assert '7' in myResult, myMessage
-        assert '0' in myResult, myMessage
+
 
     def test_runFloodPopulationImpactFunction(self):
         """Flood function runs in GUI with Jakarta data
