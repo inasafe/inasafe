@@ -112,7 +112,7 @@ class ISClipper(unittest.TestCase):
                (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
         assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, msg
 
-    def Xtest_invalid_filenames_caught(self):
+    def test_invalid_filenames_caught(self):
         """Invalid filenames raise appropriate exceptions
 
         Wrote this test because test_clipBoth raised the wrong error
@@ -127,17 +127,17 @@ class ISClipper(unittest.TestCase):
         myPath = 'OEk_tnshoeu_439_kstnhoe'
 
         myVectorLayer = QgsVectorLayer(myPath, myName, 'ogr')
-        msg = ('QgsVectorLayer did not return None as expected for non '
-               'existent path "%s" and name "%s". Instead I got "%s"'
-               % (myPath, myName, myVectorLayer))
-        assert myVectorLayer is None, msg
+        msg = ('QgsVectorLayer reported "valid" for non '
+               'existent path "%s" and name "%s".'
+               % (myPath, myName))
+        assert not myVectorLayer.isValid(), msg
 
         # Create a raster layer
         myRasterLayer = QgsRasterLayer(myPath, myName)
-        msg = ('QgsRasterLayer did not return None as expected for non '
-               'existent path "%s" and name "%s". Instead I got "%s"'
-               % (myPath, myName, myRasterLayer))
-        assert myRasterLayer is None, msg
+        msg = ('QgsRasterLayer reported "valid" for non '
+               'existent path "%s" and name "%s".'
+               % (myPath, myName))
+        assert not myRasterLayer.isValid(), msg
 
     def test_clipBoth(self):
         """Raster and Vector layers can be clipped
@@ -148,16 +148,14 @@ class ISClipper(unittest.TestCase):
         myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         VECTOR_PATH)
-        # FIXME (Ole): This does not work when file doesn't exist (Issue #170)
-        assert myVectorLayer is not None, msg
+        assert myVectorLayer.isValid(), msg
 
         # Create a raster layer
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         RASTERPATH)
-        # FIXME (Ole): This does not work when file doesn't exist (Issue #170)
-        assert myRasterLayer is not None, msg
+        assert myRasterLayer.isValid(), msg
 
         # Create a bounding box
         myViewportGeoExtent = [99.53, -1.22, 101.20, -0.36]
