@@ -115,39 +115,33 @@ def requirements_collect(func):
       :param requires <valid python expression>
     The layer keywords are put into the local name space
     each requires should be on a new line
-    a '/' at the end of a line will be a continuation
+    a '\' at the end of a line will be a continuation
 
-    returns the strings for the python exec
+    returns a (possibly empty) list of Python expressions
 
-    Example of valid requires
-    :param requires category=="impact" and subcategory.startswith("population"
+    Example of valid requirements expression
+    :param requires category=='hazard' and \
+                    subcategory in ['flood', 'tsunami'] and \
+                    layertype=='raster' and \
+                    unit=='m'
     """
-    requireslines = None
+
+    requires_lines = []
     if hasattr(func, '__doc__') and func.__doc__:
-        docstr = func.__doc__
 
+        # Define tag that indentifies requirements expressions
         require_cmd = ':param requires'
+        indent = len(require_cmd) + 1  # Index where expression starts
 
-        lines = docstr.split('\n')
-        requires_lines = []
-
-        join_line = False
-
-        for cnt, line in enumerate(lines):
+        # Collect Python expressions from docstring
+        docstr = func.__doc__
+        for line in docstr.split('\n'):
             doc_line = line.strip()
-            if len(doc_line) == 0:
-                continue
 
-            #print
-            #print cnt, line, doc_line, join_line
-
-            if join_line and not doc_line.startswith(require_cmd):
-                requires_lines[-1] = requires_lines[-1][:-1] + doc_line
-
-            elif doc_line.startswith(require_cmd):
-                requires_lines.append(doc_line[len(require_cmd) + 1:])
-
-            #join_line = doc_line[-1] == '/'
+            if doc_line.startswith(require_cmd):
+                # Extract expression and remove excessive whitespace
+                expression = ' '.join(doc_line[indent:].split())
+                requires_lines.append(expression)
 
     # Return list with one item per requirement
     return requires_lines
