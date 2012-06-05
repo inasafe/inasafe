@@ -512,7 +512,6 @@ class ISDockTest(unittest.TestCase):
         assert '17' in myResult, myMessage
         assert '7' in myResult, myMessage
 
-
     def test_runFloodPopulationImpactFunction(self):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
