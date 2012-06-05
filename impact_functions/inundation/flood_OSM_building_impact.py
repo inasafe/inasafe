@@ -116,7 +116,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                 _('Temporarily closed'),
                                 _('Total')],
                                header=True),
-                      TableRow(['All', count, N])]
+                      TableRow([_('All'), count, N])]
 
         # Generate break down by building usage type is available
         if 'type' in attribute_names:
