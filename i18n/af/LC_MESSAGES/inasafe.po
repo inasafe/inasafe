@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-05 11:22+0700\n"
+"POT-Creation-Date: 2012-06-05 14:47+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,7 +51,7 @@ msgstr ""
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:127
 #: impact_functions/earthquake/itb_building_impact_model.py:148
 #: impact_functions/earthquake/padang_building_impact_model.py:124
-#: impact_functions/inundation/flood_OSM_building_impact.py:116
+#: impact_functions/inundation/flood_OSM_building_impact.py:117
 #: impact_functions/inundation/flood_population_evacuation.py:85
 msgid "Total"
 msgstr ""
@@ -76,7 +76,6 @@ msgstr ""
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:128
 #: impact_functions/earthquake/itb_building_impact_model.py:149
 #: impact_functions/earthquake/padang_building_impact_model.py:126
-#: impact_functions/inundation/flood_generic_building_impact.py:64
 msgid "All"
 msgstr ""
 
@@ -204,8 +203,6 @@ msgstr ""
 #: impact_functions/inundation/flood_generic_building_impact.py:62
 #: impact_functions/inundation/flood_generic_building_impact.py:78
 #: impact_functions/inundation/flood_generic_building_impact.py:77
-#: impact_functions/inundation/flood_generic_building_impact.py:62
-#: impact_functions/inundation/flood_generic_building_impact.py:77
 msgid "Closed"
 msgstr ""
 
@@ -257,8 +254,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:167
 #: impact_functions/inundation/flood_OSM_building_impact.py:170
 #: impact_functions/inundation/flood_OSM_building_impact.py:176
-#: impact_functions/inundation/flood_generic_building_impact.py:86
 #: impact_functions/inundation/flood_OSM_building_impact.py:178
+#: impact_functions/inundation/flood_OSM_building_impact.py:179
 msgid "Estimated buildings affected"
 msgstr ""
 
@@ -327,6 +324,7 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:161
 #: impact_functions/inundation/flood_OSM_building_impact.py:167
 #: impact_functions/inundation/flood_OSM_building_impact.py:169
+#: impact_functions/inundation/flood_OSM_building_impact.py:170
 msgid "Flooded"
 msgstr ""
 
@@ -459,7 +457,6 @@ msgstr ""
 #: impact_functions/inundation/flood_generic_building_impact.py:69
 #: impact_functions/inundation/flood_generic_building_impact.py:60
 #: impact_functions/experimental/tsunami_building_impact.py:102
-#: impact_functions/inundation/flood_generic_building_impact.py:60
 msgid "Number of buildings"
 msgstr ""
 
@@ -497,7 +494,7 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:114
 #: impact_functions/inundation/flood_OSM_building_impact.py:139
 #: impact_functions/inundation/flood_OSM_building_impact.py:142
-#: impact_functions/inundation/flood_OSM_building_impact.py:114
+#: impact_functions/inundation/flood_OSM_building_impact.py:115
 msgid "Building type"
 msgstr ""
 
@@ -520,7 +517,6 @@ msgstr ""
 #: impact_functions/inundation/flood_building_impact.py:72
 #: impact_functions/inundation/flood_generic_building_impact.py:69
 #: impact_functions/inundation/flood_generic_building_impact.py:60
-#: impact_functions/inundation/flood_generic_building_impact.py:60
 msgid "Status"
 msgstr ""
 
@@ -529,7 +525,6 @@ msgstr ""
 #: impact_functions/inundation/flood_building_impact.py:79
 #: impact_functions/inundation/flood_generic_building_impact.py:76
 #: impact_functions/inundation/flood_generic_building_impact.py:68
-#: impact_functions/inundation/flood_generic_building_impact.py:67
 #: impact_functions/inundation/flood_generic_building_impact.py:67
 #, python-format
 msgid "Buildings will need to close if flood levels exceed %.1f m"
@@ -624,6 +619,7 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:147
 #: impact_functions/inundation/flood_OSM_building_impact.py:153
 #: impact_functions/inundation/flood_OSM_building_impact.py:155
+#: impact_functions/inundation/flood_OSM_building_impact.py:156
 msgid "Buildings are said to be flooded when "
 msgstr ""
 
@@ -636,6 +632,7 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:149
 #: impact_functions/inundation/flood_OSM_building_impact.py:155
 #: impact_functions/inundation/flood_OSM_building_impact.py:157
+#: impact_functions/inundation/flood_OSM_building_impact.py:158
 #, python-format
 msgid "flood levels exceed %.1f m"
 msgstr ""
@@ -649,6 +646,7 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:151
 #: impact_functions/inundation/flood_OSM_building_impact.py:157
 #: impact_functions/inundation/flood_OSM_building_impact.py:159
+#: impact_functions/inundation/flood_OSM_building_impact.py:160
 msgid "in areas marked as flood prone"
 msgstr ""
 
@@ -661,6 +659,7 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:159
 #: impact_functions/inundation/flood_OSM_building_impact.py:165
 #: impact_functions/inundation/flood_OSM_building_impact.py:167
+#: impact_functions/inundation/flood_OSM_building_impact.py:168
 msgid "Not Flooded"
 msgstr ""
 
@@ -672,8 +671,6 @@ msgstr ""
 #: impact_functions/inundation/flood_generic_building_impact.py:80
 #: impact_functions/inundation/flood_generic_building_impact.py:63
 #: impact_functions/inundation/flood_generic_building_impact.py:76
-#: impact_functions/inundation/flood_generic_building_impact.py:75
-#: impact_functions/inundation/flood_generic_building_impact.py:63
 #: impact_functions/inundation/flood_generic_building_impact.py:75
 msgid "Open"
 msgstr ""
@@ -751,10 +748,11 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:143
 #: impact_functions/inundation/flood_OSM_building_impact.py:146
 #: impact_functions/inundation/flood_OSM_building_impact.py:152
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:190
-#: impact_functions/earthquake/padang_building_impact_model.py:132
-#: impact_functions/inundation/flood_generic_building_impact.py:66
 #: impact_functions/inundation/flood_OSM_building_impact.py:154
+#: impact_functions/earthquake/earthquake_impact_on_women.py:121
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
+#: impact_functions/earthquake/padang_building_impact_model.py:132
+#: impact_functions/inundation/flood_OSM_building_impact.py:155
 #: impact_functions/inundation/flood_population_evacuation.py:95
 msgid "Notes:"
 msgstr ""
@@ -839,6 +837,7 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:156
 #: impact_functions/inundation/flood_OSM_building_impact.py:162
 #: impact_functions/inundation/flood_OSM_building_impact.py:164
+#: impact_functions/inundation/flood_OSM_building_impact.py:165
 msgid "Buildings inundated"
 msgstr ""
 
@@ -876,7 +875,6 @@ msgid "Earthquake damage to buildings"
 msgstr ""
 
 #: impact_functions/inundation/flood_generic_building_impact.py:73
-#: impact_functions/inundation/flood_generic_building_impact.py:72
 #: impact_functions/inundation/flood_generic_building_impact.py:72
 msgid "Buildings that need to close due flooding"
 msgstr ""
@@ -925,6 +923,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:132
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:168
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:178
+#: impact_functions/earthquake/earthquake_impact_on_women.py:109
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:178
 msgid "Number of fatalities"
 msgstr ""
@@ -933,7 +932,8 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:137
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:173
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
+#: impact_functions/earthquake/earthquake_impact_on_women.py:123
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:194
 msgid "Fatality model is from Institute of Teknologi Bandung 2012."
 msgstr ""
 
@@ -941,7 +941,8 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:142
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:178
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:197
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:197
+#: impact_functions/earthquake/earthquake_impact_on_women.py:128
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:199
 msgid "Earthquake impact to population"
 msgstr ""
 
@@ -1252,7 +1253,8 @@ msgstr ""
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:208
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:208
+#: impact_functions/earthquake/earthquake_impact_on_women.py:139
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:210
 msgid "Estimated fatalities"
 msgstr ""
 
@@ -1266,12 +1268,15 @@ msgid "Jakarta flood like 2007 with structural improvements"
 msgstr ""
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:183
+#: impact_functions/earthquake/earthquake_impact_on_women.py:114
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:183
 msgid "Number of people displaced"
 msgstr ""
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:186
 #: impact_functions/inundation/flood_OSM_building_impact.py:149
+#: impact_functions/inundation/flood_OSM_building_impact.py:151
+#: impact_functions/earthquake/earthquake_impact_on_women.py:117
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:186
 #: impact_functions/inundation/flood_OSM_building_impact.py:151
 msgid "Action Checklist:"
@@ -1288,7 +1293,6 @@ msgid "Are suffient shelters available for %i people?"
 msgstr ""
 
 #: impact_functions/inundation/flood_generic_building_impact.py:22
-#: impact_functions/inundation/flood_generic_building_impact.py:22
 msgid "Be temporarily closed - OLD"
 msgstr ""
 
@@ -1299,13 +1303,15 @@ msgid "Unknown hazard type %s. Must be either \"depth\" or \"floodprone\""
 msgstr ""
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:187
+#: impact_functions/earthquake/earthquake_impact_on_women.py:118
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:187
 #, python-format
 msgid "Are enough victim identification units available for %i people?"
 msgstr ""
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:188
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:188
+#: impact_functions/earthquake/earthquake_impact_on_women.py:119
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #, python-format
 msgid "Are enough shelters available for %i people?"
 msgstr ""
@@ -1317,15 +1323,21 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:115
 #: impact_functions/inundation/flood_OSM_building_impact.py:140
 #: impact_functions/inundation/flood_OSM_building_impact.py:143
-#: impact_functions/inundation/flood_OSM_building_impact.py:115
+#: impact_functions/inundation/flood_OSM_building_impact.py:116
 msgid "Temporarily closed"
 msgstr ""
 
 #: impact_functions/inundation/flood_OSM_building_impact.py:150
 #: impact_functions/inundation/flood_OSM_building_impact.py:152
+#: impact_functions/inundation/flood_OSM_building_impact.py:152
 msgid "Are the critical facilities still open?"
 msgstr ""
 
 #: impact_functions/inundation/flood_OSM_building_impact.py:145
+#: impact_functions/inundation/flood_OSM_building_impact.py:145
 msgid "Breakdown by building type"
+msgstr ""
+
+#: impact_functions/earthquake/earthquake_impact_on_women.py:37
+msgid "Be affected by earthquake"
 msgstr ""
