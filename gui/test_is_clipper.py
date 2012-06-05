@@ -36,7 +36,9 @@ from is_safe_interface import getOptimalExtent
 from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
                             GEOCRS,
-                            setJakartaGeoExtent)
+                            setJakartaGeoExtent,
+                            RedirectStdStreams,
+                            DEVNULL)
 from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
 from storage.utilities import nanallclose
 
@@ -126,14 +128,17 @@ class ISClipper(unittest.TestCase):
         myName = 'stnhaoeu_78oeukqjkrcgA'
         myPath = 'OEk_tnshoeu_439_kstnhoe'
 
-        myVectorLayer = QgsVectorLayer(myPath, myName, 'ogr')
+        with RedirectStdStreams(stdout=DEVNULL, stderr=DEVNULL):
+            myVectorLayer = QgsVectorLayer(myPath, myName, 'ogr')
+
         msg = ('QgsVectorLayer reported "valid" for non '
                'existent path "%s" and name "%s".'
                % (myPath, myName))
         assert not myVectorLayer.isValid(), msg
 
         # Create a raster layer
-        myRasterLayer = QgsRasterLayer(myPath, myName)
+        with RedirectStdStreams(stdout=DEVNULL, stderr=DEVNULL):
+            myRasterLayer = QgsRasterLayer(myPath, myName)
         msg = ('QgsRasterLayer reported "valid" for non '
                'existent path "%s" and name "%s".'
                % (myPath, myName))
