@@ -32,11 +32,11 @@ flood_population_style = dict(target_field=None,
                               legend_title=None,
                               style_classes=style_classes)
 
-# Flood population impact raster style
+# Earthquake fatality raster style
 # FIXME (Ole): The styler cannot handle floats yet. Issue #126
 style_classes = [dict(colour='#FFFFFF', quantity=0.0, transparency=100),
-                 dict(colour='#FFFFFF', quantity=4, transparency=0),
-                 dict(colour='#FFFFFF', quantity=6, transparency=0),
+                 dict(colour='#0000FF', quantity=4, transparency=0),
+                 dict(colour='#0000EE', quantity=6, transparency=0),
                  dict(colour='#79C900', quantity=8, transparency=0),
                  dict(colour='#79C900', quantity=17, transparency=0),
                  dict(colour='#79C900', quantity=26, transparency=0),

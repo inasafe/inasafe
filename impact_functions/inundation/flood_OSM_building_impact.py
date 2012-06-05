@@ -66,7 +66,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     x = res.lower() == 'yes'
             else:
                 msg = (_('Unknown hazard type %s. '
-                         'Must be either "depth" or "floodprone"') % hazard_type)
+                         'Must be either "depth" or "floodprone"')
+                       % hazard_type)
                 raise Exception(msg)
 
             # Count affected buildings by usage type if available
@@ -117,7 +118,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                header=True),
                       TableRow(['All', count, N])]
 
-
         # Generate break down by building usage type is available
         if 'type' in attribute_names:
             # Make list of building types
@@ -149,7 +149,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 table_body.append(s)
 
         table_body.append(TableRow(_('Action Checklist:'), header=True))
-        table_body.append(TableRow(_('Are the critical facilities still open?')))
+        table_body.append(TableRow(_('Are the critical facilities still '
+                                     'open?')))
 
         table_body.append(TableRow(_('Notes:'), header=True))
         assumption = _('Buildings are said to be flooded when ')

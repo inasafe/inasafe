@@ -138,10 +138,9 @@ class ITBFatalityFunction(FunctionProvider):
             number_of_exposed[mmi] = numpy.nansum(I.flat)
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
 
-        # Set resulting layer to zero when less than a threshold. This is to
-        # try to achieve transparency (see issue #126) - but doesn't
-        # seem to work.
-        R[R < 0.01] = 0
+        # Set resulting layer to NaN when less than a threshold. This is to
+        # achieve transparency (see issue #126).
+        R[R < 1] = numpy.nan
 
         # Total statistics
         total = numpy.nansum(P.flat)
@@ -155,13 +154,14 @@ class ITBFatalityFunction(FunctionProvider):
             displaced += displacement_rate[mmi] * number_of_exposed[mmi]
 
         # Generate impact report
-        table_body = [question,]
+        table_body = [question]
                       #TableRow([_('Groundshaking (MMI)'),
                       #          _('# people impacted')],
                       #          header=True)]
 
         # Table of people exposed to each shake level
-        # NOTE: I have commented this out for the time being.
+        # NOTE (Ole): I have commented this out for the time being.
+        # as not needed. However, had to modify unit test.
         #for mmi in mmi_range:
         #    s = str(int(number_of_exposed[mmi])).rjust(10)
         #    #print s, len(s)
@@ -184,8 +184,10 @@ class ITBFatalityFunction(FunctionProvider):
                                    header=True))
 
         table_body.append(TableRow(_('Action Checklist:'), header=True))
-        table_body.append(_('Are enough victim identification units available for %i people?') % fatalities)
-        table_body.append(_('Are enough shelters available for %i people?') % displaced)
+        table_body.append(_('Are enough victim identification units '
+                            'available for %i people?') % fatalities)
+        table_body.append(_('Are enough shelters available for %i '
+                            'people?') % displaced)
 
         table_body.append(TableRow(_('Notes:'), header=True))
 
