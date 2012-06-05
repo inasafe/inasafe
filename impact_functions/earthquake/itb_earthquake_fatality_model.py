@@ -93,6 +93,10 @@ class ITBFatalityFunction(FunctionProvider):
 
         """
 
+        # Define percentages of people being displaced at each mmi level
+        displacement_rate = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0,
+                             7: 0.1, 8: 0.5, 9: 0.75, 10: 1.0}
+
         # Extract input layers
         intensity = get_hazard_layer(layers)
         population = get_exposure_layer(layers)
@@ -108,7 +112,7 @@ class ITBFatalityFunction(FunctionProvider):
         # Calculate population affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
         mmi_range = range(2, 10)
-        number_exposed = {}
+        number_of_exposed = {}
         number_of_fatalities = {}
 
         # Calculate fatality rates for observed Intensity values (H
@@ -131,7 +135,7 @@ class ITBFatalityFunction(FunctionProvider):
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
-            number_exposed[mmi] = numpy.nansum(I.flat)
+            number_of_exposed[mmi] = numpy.nansum(I.flat)
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
 
         # Set resulting layer to zero when less than a threshold. This is to
@@ -142,34 +146,49 @@ class ITBFatalityFunction(FunctionProvider):
         # Total statistics
         total = numpy.nansum(P.flat)
 
-        # This might be reported in real time system as well
+        # Compute number of fatalities
         fatalities = numpy.nansum(number_of_fatalities.values())
 
+        # Compute number of people displaced due to building collapse
+        displaced = 0
+        for mmi in mmi_range:
+            displaced += displacement_rate[mmi] * number_of_exposed[mmi]
+
         # Generate impact report
-        table_body = [question,
-                      TableRow([_('Groundshaking (MMI)'),
-                                _('# people impacted')],
-                                header=True)]
+        table_body = [question,]
+                      #TableRow([_('Groundshaking (MMI)'),
+                      #          _('# people impacted')],
+                      #          header=True)]
 
         # Table of people exposed to each shake level
-        for mmi in mmi_range:
-            s = str(int(number_exposed[mmi])).rjust(10)
-            #print s, len(s)
-            row = TableRow([mmi, s],
-                           col_align=['right', 'right'])
-
-            # FIXME (Ole): Weirdly enought, the row object
-            # has align="right" in it, but it doesn't work
-            #print row
-            table_body.append(row)
+        # NOTE: I have commented this out for the time being.
+        #for mmi in mmi_range:
+        #    s = str(int(number_of_exposed[mmi])).rjust(10)
+        #    #print s, len(s)
+        #    row = TableRow([mmi, s],
+        #                   col_align=['right', 'right'])
+        #
+        #    # FIXME (Ole): Weirdly enough, the row object
+        #    # has align="right" in it, but it doesn't work
+        #    #print row
+        #    table_body.append(row)
 
         # Add total fatality estimate
         s = str(int(fatalities)).rjust(10)
         table_body.append(TableRow([_('Number of fatalities'), s],
                                    header=True))
+
+        # Add total estimate of people displaced
+        s = str(int(displaced)).rjust(10)
+        table_body.append(TableRow([_('Number of people displaced'), s],
+                                   header=True))
+
+        table_body.append(TableRow(_('Action Checklist:'), header=True))
+        table_body.append(_('Are enough victim identification units available for %i people?') % fatalities)
+        table_body.append(_('Are enough shelters available for %i people?') % displaced)
+
         table_body.append(TableRow(_('Notes:'), header=True))
 
-        # FIXME (Ole): Need proper reference from Hadi
         table_body.append(_('Fatality model is from '
                             'Institute of Teknologi Bandung 2012.'))
 
