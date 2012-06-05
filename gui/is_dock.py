@@ -556,7 +556,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             for myFunction in myDict:  # Use only key
                 self.addComboItemInOrder(self.cboFunction, myFunction)
         except Exception, e:
-            raise e
+            msg = 'Unable to get impact functions: %s' % str(e)
+            raise Exception(msg)
 
         self.restoreFunctionState(myOriginalFunction)
 
