@@ -29,7 +29,7 @@ What license is |project_name| published under?
 -----------------------------------------------
 
 |project_name| is published under the GPL version 2 license, the full text of
-which is available at 
+which is available at
 `www.gnu.org/licenses/gpl-2.0.txt <http://www.gnu.org/licenses/gpl-2.0.txt>`_.
 
 
@@ -39,45 +39,63 @@ software, as long as you make it available under the same license.
 How is the project funded?
 --------------------------
 
-The project is being developed 'for the good of humanity' and has been 
-jointly developed by `BNPB <http://www.bnpb.go.id/>`_, 
-`AusAid <http://www.ausaid.gov.au/>`_ & 
+The project is being developed 'for the good of humanity' and has been
+jointly developed by `BNPB <http://www.bnpb.go.id/>`_,
+`AusAid <http://www.ausaid.gov.au/>`_ &
 `the World Bank <http://www.worldbank.org/>`_.
 
 Could we request a new feature?
 -------------------------------
 
-If you have a feature request, please use the 
-`issue tracker <https://github.com/AIFDR/inasafe/issues?direction=desc&sort=created&state=open>`_ 
+If you have a feature request, please use the
+`issue tracker <https://github.com/AIFDR/inasafe/issues?direction=desc&sort=created&state=open>`_
 to let us know about it, using the same procedure as for bug reporting.
 
-How did you embed the git version SHA1 into each .py file?
-----------------------------------------------------------
 
-The format was derived using the `git log format tag <http://schacon.github.com/git/git-log.html>`_.
-It is stored in the source of each python as::
-   
-   __revision__ = '$Format:%H$'
+How do I rename a shape file and all the helper files?
+::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-'%H' being the format tag for the SHA1. The __revision__ is **not** updated
-with each commit. Rather is is registered with git for replacement when using
-git-archive by doing this::
-   
-   echo "*.py export-subst" > .gitattributes
-   git add .gitattributes
+Use the rename command. rename [ -v ] [ -n ] [ -f ] perlexpr [ files ].
+For example::
 
-The above only needs to be done once and then all python files with format
-substitutions will be replaced when running git-archive. The actual substition
-takes place at the time that a git archive is generated (git archive creates a
-copy of the repo with all repository metadata stripped out). For example::
-  
-  git archive version-0_3 | tar -x -C /tmp/inasafe-0.3.0
+    rename -v "s/^building/OSM_building_polygons_20110905/" building.*
 
-You can verify SHA1 replacement has been made by doing::
-   
-   cat /tmp/inasafe/gui/is_plugin.py | grep revision
-   __revision__ = 'a515345e43b25d065e1ae0d73687c13531ea4c9c'
+How do I reproject a spatial data file to WGS84 geographic coordinates
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-The deployment of version tagged files is automated by using the 
-:file:`scripts\release.sh` script.
-   
+For raster data, use gdalwarp, for example::
+
+   gdalwarp -t_srs EPSG:4326 <source>.tif <target>.tif
+
+For vector data use ogr2ogr. For example from TM-3 zone 48.2::
+
+   ogr2ogr -s_srs EPSG:23834 -t_srs EPSG:4326 <target>.shp <source>.shp
+
+How do I get Open Street Map building data into |project_name|?
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+For Indonesia, you can download latest collections at
+`data.kompetisiosm.org <http://data.kompetisiosm.org>`_. or you can add our
+Open Street Map building PostGIS mirror to InaSAFE:
+
+ * Add PostGIS layer with host=203.77.224.77, database=osm,
+   username=aifdr, port 5432, SSL mode=disable
+ * Select view named vw_planet_osm_polygon
+
+# * Build query: upper(geometrytype("way")) IN ('POLYGON','MULTIPOLYGON') AND BUILDING != ''
+
+How do I take screen capture e.g. for use in a presentation?
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+On Ubuntu, get the packages gtk-recordmydesktop and mencoder
+Record using recordmydesktop (start and stop icon in the top bar)
+Convert to other formats using mencoder, e.g::
+
+   mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts \
+   vcodec=mpeg4:vpass=1 -of lavf -o yogya_analysis.avi
+
+or::
+
+   mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts \
+   vcodec=wmv2 -of lavf -o yogya_analysis.wmv
+

@@ -211,12 +211,12 @@ class Test_Engine(unittest.TestCase):
         fatalities = float(keywords['total_fatalities'])
 
         # Check aggregated values
-        expected_population = 85424650
+        expected_population = int(round(85424650. / 1000)) * 1000
         msg = ('Expected population was %f, I got %f'
                % (expected_population, population))
         assert population == expected_population, msg
 
-        expected_fatalities = 40871.3028
+        expected_fatalities = int(round(40871.3028 / 1000)) * 1000
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
         assert numpy.allclose(fatalities, expected_fatalities,
@@ -249,8 +249,9 @@ class Test_Engine(unittest.TestCase):
         msg = 'Aggregated number of fatalities not as expected: %i' % all
         assert all == 40871, msg
 
-        msg = 'Did not find expected value %i in summary' % all
-        assert str(all) in keywords['impact_summary'], msg
+        x = int(round(float(all) / 1000)) * 1000
+        msg = 'Did not find expected value %i in summary' % x
+        assert str(x) in keywords['impact_summary'], msg
 
         # Individual check does not work anymore, because the function
         # now only returns
