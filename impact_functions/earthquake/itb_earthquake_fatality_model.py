@@ -135,8 +135,8 @@ class ITBFatalityFunction(FunctionProvider):
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
-            number_of_exposed[mmi] = numpy.nansum(I.flat)
-            number_of_fatalities[mmi] = numpy.nansum(F.flat)
+            number_of_exposed[mmi] = (numpy.nansum(I.flat) // 1000) * 1000
+            number_of_fatalities[mmi] = (numpy.nansum(F.flat) // 1000) * 1000
 
         # Set resulting layer to NaN when less than a threshold. This is to
         # achieve transparency (see issue #126).
@@ -152,6 +152,8 @@ class ITBFatalityFunction(FunctionProvider):
         displaced = 0
         for mmi in mmi_range:
             displaced += displacement_rate[mmi] * number_of_exposed[mmi]
+
+        displaced = (displaced // 1000) * 1000
 
         # Generate impact report
         table_body = [question]

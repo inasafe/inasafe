@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-05 16:35+0700\n"
+"POT-Creation-Date: 2012-06-06 12:34+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,7 +276,7 @@ msgstr "Tidak ada kerusakan"
 #: impact_functions/experimental/tsunami_building_impact.py:130
 #: impact_functions/generic/categorised_hazard_building_impact.py:78
 #: impact_functions/generic/categorised_hazard_building_impact.py:83
-#: impact_functions/styles.py:21
+#: impact_functions/styles.py:21 impact_functions/styles.py:54
 msgid "Low"
 msgstr "Rendah"
 
@@ -307,7 +307,7 @@ msgstr "Sedang"
 #: impact_functions/experimental/tsunami_building_impact.py:132
 #: impact_functions/generic/categorised_hazard_building_impact.py:80
 #: impact_functions/generic/categorised_hazard_building_impact.py:87
-#: impact_functions/styles.py:29 impact_functions/styles.py:49
+#: impact_functions/styles.py:29 impact_functions/styles.py:66
 msgid "High"
 msgstr "Tinggi"
 
@@ -589,7 +589,8 @@ msgstr "Jamban Keluarga"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
 #: impact_functions/inundation/flood_OSM_building_impact.py:155
 #: impact_functions/earthquake/earthquake_impact_on_women.py:141
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
+#: impact_functions/earthquake/earthquake_impact_on_women.py:141
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:194
 #: impact_functions/earthquake/padang_building_impact_model.py:132
 #: impact_functions/inundation/flood_OSM_building_impact.py:155
 #: impact_functions/inundation/flood_population_evacuation.py:95
@@ -695,7 +696,7 @@ msgid "Buildings will need to close if flood levels exceed %.1f m"
 msgstr "Bangunan perlu ditutup kalau banjir lebih dari %.1f m"
 
 #: impact_functions/core.py:325 impact_functions/core.py:327
-#: impact_functions/core.py:321
+#: impact_functions/core.py:321 impact_functions/core.py:321
 #, python-format
 msgid "In the event of <i>%s</i> how many <i>%s</i> might <i>%s</i>"
 msgstr ""
@@ -764,7 +765,8 @@ msgstr "# orang terdampak"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:178
 #: impact_functions/earthquake/earthquake_impact_on_women.py:109
 #: impact_functions/earthquake/earthquake_impact_on_women.py:120
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:178
+#: impact_functions/earthquake/earthquake_impact_on_women.py:120
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:180
 msgid "Number of fatalities"
 msgstr "Jumlah perkiraan kematian"
 
@@ -775,7 +777,8 @@ msgstr "Jumlah perkiraan kematian"
 #: impact_functions/earthquake/earthquake_impact_on_women.py:123
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:194
 #: impact_functions/earthquake/earthquake_impact_on_women.py:143
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:194
+#: impact_functions/earthquake/earthquake_impact_on_women.py:143
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:196
 msgid "Fatality model is from Institute of Teknologi Bandung 2012."
 msgstr "Model Fatality adalah dari Institut Teknologi Bandung 2012."
 
@@ -786,7 +789,8 @@ msgstr "Model Fatality adalah dari Institut Teknologi Bandung 2012."
 #: impact_functions/earthquake/earthquake_impact_on_women.py:128
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:199
 #: impact_functions/earthquake/earthquake_impact_on_women.py:148
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:199
+#: impact_functions/earthquake/earthquake_impact_on_women.py:148
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:201
 msgid "Earthquake impact to population"
 msgstr "Gempa dampak terhadap populasi"
 
@@ -827,43 +831,43 @@ msgstr "Penduduk Jakarta"
 
 #: storage/titles.py:36 storage/titles.py:39 storage/titles.py:42
 #: storage/titles.py:47 storage/titles.py:48 storage/titles.py:50
-#: storage/titles.py:51 storage/titles.py:51
+#: storage/titles.py:51 storage/titles.py:53
 msgid "Flood Depth (design) Jakarta"
 msgstr "Banjir Jakart (disain)"
 
 #: storage/titles.py:37 storage/titles.py:40 storage/titles.py:43
 #: storage/titles.py:48 storage/titles.py:49 storage/titles.py:51
-#: storage/titles.py:52 storage/titles.py:52
+#: storage/titles.py:52 storage/titles.py:54
 msgid "Flood Depth (current) Jakarta"
 msgstr "Banjir Jakarta (saat ini)"
 
 #: storage/titles.py:38 storage/titles.py:41 storage/titles.py:44
 #: storage/titles.py:49 storage/titles.py:50 storage/titles.py:52
-#: storage/titles.py:53 storage/titles.py:53
+#: storage/titles.py:53 storage/titles.py:55
 msgid "Yogyakarta 2006 earthquake"
 msgstr "Gempa Yogyakarta 2006"
 
 #: storage/titles.py:39 storage/titles.py:42 storage/titles.py:45
 #: storage/titles.py:50 storage/titles.py:51 storage/titles.py:53
-#: storage/titles.py:54 storage/titles.py:54
+#: storage/titles.py:54 storage/titles.py:56
 msgid "Indonesian Earthquake Hazard Map"
 msgstr "Peta Hazard Gempa Indonesia"
 
 #: storage/titles.py:41 storage/titles.py:44 storage/titles.py:47
 #: storage/titles.py:52 storage/titles.py:53 storage/titles.py:55
-#: storage/titles.py:56 storage/titles.py:56
+#: storage/titles.py:56 storage/titles.py:58
 msgid "Maumere tsunami inundation"
 msgstr "Maumere tsunami genangan"
 
 #: storage/titles.py:42 storage/titles.py:45 storage/titles.py:48
 #: storage/titles.py:53 storage/titles.py:54 storage/titles.py:56
-#: storage/titles.py:57 storage/titles.py:57
+#: storage/titles.py:57 storage/titles.py:59
 msgid "Sumatran fault Mw 7.8 scenario"
 msgstr "Skenario gempabumi sesar Sumatra Mw 7.8"
 
 #: storage/titles.py:44 storage/titles.py:49 storage/titles.py:52
 #: storage/titles.py:57 storage/titles.py:58 storage/titles.py:60
-#: storage/titles.py:61 storage/titles.py:61
+#: storage/titles.py:61 storage/titles.py:63
 msgid "Mentawai fault Mw 9.0 scenario"
 msgstr "Skenario Gempabumi sesar Mentawai Mw 9.0"
 
@@ -874,21 +878,21 @@ msgstr "Shakemap Padang 2009"
 
 #: storage/titles.py:46 storage/titles.py:54 storage/titles.py:57
 #: storage/titles.py:62 storage/titles.py:63 storage/titles.py:65
-#: storage/titles.py:67 storage/titles.py:68 storage/titles.py:68
+#: storage/titles.py:67 storage/titles.py:68 storage/titles.py:70
 msgid "OSM building footprints"
 msgstr "Bangunan OSM"
 
 #: storage/titles.py:47 storage/titles.py:56 storage/titles.py:57
 #: storage/titles.py:60 storage/titles.py:65 storage/titles.py:66
 #: storage/titles.py:68 storage/titles.py:70 storage/titles.py:71
-#: storage/titles.py:71
+#: storage/titles.py:73
 msgid "AIBEP schools"
 msgstr "Sekolah AIBEP"
 
 #: storage/titles.py:48 storage/titles.py:57 storage/titles.py:58
 #: storage/titles.py:61 storage/titles.py:66 storage/titles.py:67
 #: storage/titles.py:69 storage/titles.py:71 storage/titles.py:72
-#: storage/titles.py:72
+#: storage/titles.py:74
 msgid "Population density (5kmx5km)"
 msgstr "Perkiraan penduduk (5kmx5km)"
 
@@ -899,195 +903,195 @@ msgstr "Banjir 2007 tanpa pompa di Pluit dan Ancol"
 
 #: storage/titles.py:59 storage/titles.py:60 storage/titles.py:63
 #: storage/titles.py:68 storage/titles.py:69 storage/titles.py:71
-#: storage/titles.py:73 storage/titles.py:74 storage/titles.py:74
+#: storage/titles.py:73 storage/titles.py:74 storage/titles.py:76
 msgid "Office buildings Jakarta"
 msgstr "Kantor Jakarta"
 
 #: storage/titles.py:60 storage/titles.py:61 storage/titles.py:64
 #: storage/titles.py:69 storage/titles.py:70 storage/titles.py:72
-#: storage/titles.py:74 storage/titles.py:75 storage/titles.py:75
+#: storage/titles.py:74 storage/titles.py:75 storage/titles.py:77
 msgid "Hospitals and clinics Jakarta"
 msgstr "Puskesmas dan rumah sakit Jakarta"
 
 #: storage/titles.py:63 storage/titles.py:64 storage/titles.py:67
 #: storage/titles.py:72 storage/titles.py:73 storage/titles.py:75
-#: storage/titles.py:77 storage/titles.py:78 storage/titles.py:78
+#: storage/titles.py:77 storage/titles.py:78 storage/titles.py:80
 msgid "Schools Jakarta"
 msgstr "Sekolah Jakarta"
 
 #: storage/titles.py:64 storage/titles.py:65 storage/titles.py:66
 #: storage/titles.py:69 storage/titles.py:74 storage/titles.py:75
 #: storage/titles.py:77 storage/titles.py:79 storage/titles.py:80
-#: storage/titles.py:80
+#: storage/titles.py:82
 msgid "Industrial buildings Jakarta"
 msgstr "Bangunan industri Jakarta"
 
 #: storage/titles.py:65 storage/titles.py:66 storage/titles.py:67
 #: storage/titles.py:70 storage/titles.py:75 storage/titles.py:76
 #: storage/titles.py:78 storage/titles.py:80 storage/titles.py:81
-#: storage/titles.py:81
+#: storage/titles.py:83
 msgid "Industrial areas Jakarta"
 msgstr "Daerah industri Jakarta"
 
 #: storage/titles.py:66 storage/titles.py:67 storage/titles.py:68
 #: storage/titles.py:71 storage/titles.py:76 storage/titles.py:77
 #: storage/titles.py:79 storage/titles.py:81 storage/titles.py:82
-#: storage/titles.py:82
+#: storage/titles.py:84
 msgid "Commercial areas Jakarta"
 msgstr "Daerah komersial Jakarta"
 
 #: storage/titles.py:67 storage/titles.py:68 storage/titles.py:69
 #: storage/titles.py:72 storage/titles.py:77 storage/titles.py:78
 #: storage/titles.py:80 storage/titles.py:82 storage/titles.py:83
-#: storage/titles.py:83
+#: storage/titles.py:85
 msgid "Hospitals Jakarta"
 msgstr "Rumah sakit Jakarta"
 
 #: storage/titles.py:64 storage/titles.py:65 storage/titles.py:68
 #: storage/titles.py:73 storage/titles.py:74 storage/titles.py:76
-#: storage/titles.py:78 storage/titles.py:79 storage/titles.py:79
+#: storage/titles.py:78 storage/titles.py:79 storage/titles.py:81
 msgid "Schools"
 msgstr "Sekolah"
 
 #: storage/titles.py:56 storage/titles.py:59 storage/titles.py:64
 #: storage/titles.py:65 storage/titles.py:67 storage/titles.py:69
-#: storage/titles.py:70 storage/titles.py:70
+#: storage/titles.py:70 storage/titles.py:72
 msgid "OSM buildings"
 msgstr "Bangunan OSM"
 
 #: storage/titles.py:76 storage/titles.py:81 storage/titles.py:82
 #: storage/titles.py:84 storage/titles.py:86 storage/titles.py:87
-#: storage/titles.py:87
+#: storage/titles.py:89
 msgid "office"
 msgstr "kantor"
 
 #: storage/titles.py:77 storage/titles.py:82 storage/titles.py:83
 #: storage/titles.py:85 storage/titles.py:87 storage/titles.py:88
-#: storage/titles.py:88
+#: storage/titles.py:90
 msgid "clinic"
 msgstr "puskesmas"
 
 #: storage/titles.py:78 storage/titles.py:83 storage/titles.py:84
 #: storage/titles.py:86 storage/titles.py:88 storage/titles.py:89
-#: storage/titles.py:89
+#: storage/titles.py:91
 msgid "terrace"
 msgstr "komplek perumahan"
 
 #: storage/titles.py:79 storage/titles.py:84 storage/titles.py:85
 #: storage/titles.py:87 storage/titles.py:89 storage/titles.py:90
-#: storage/titles.py:90
+#: storage/titles.py:92
 msgid "police"
 msgstr "polisi"
 
 #: storage/titles.py:80 storage/titles.py:85 storage/titles.py:86
 #: storage/titles.py:88 storage/titles.py:90 storage/titles.py:91
-#: storage/titles.py:91
+#: storage/titles.py:93
 msgid "residential"
 msgstr "residental"
 
 #: storage/titles.py:81 storage/titles.py:86 storage/titles.py:87
 #: storage/titles.py:89 storage/titles.py:91 storage/titles.py:92
-#: storage/titles.py:92
+#: storage/titles.py:94
 msgid "kindergarten"
 msgstr "taman kanak-kanak"
 
 #: storage/titles.py:82 storage/titles.py:87 storage/titles.py:88
 #: storage/titles.py:90 storage/titles.py:92 storage/titles.py:93
-#: storage/titles.py:93
+#: storage/titles.py:95
 msgid "bank"
 msgstr "bank"
 
 #: storage/titles.py:83 storage/titles.py:88 storage/titles.py:89
 #: storage/titles.py:91 storage/titles.py:93 storage/titles.py:94
-#: storage/titles.py:94
+#: storage/titles.py:96
 msgid "place of worship"
 msgstr "tempat ibadah"
 
 #: storage/titles.py:84 storage/titles.py:89 storage/titles.py:90
 #: storage/titles.py:92 storage/titles.py:94 storage/titles.py:95
-#: storage/titles.py:95
+#: storage/titles.py:97
 msgid "school"
 msgstr "sekolah"
 
 #: storage/titles.py:85 storage/titles.py:90 storage/titles.py:91
 #: storage/titles.py:93 storage/titles.py:95 storage/titles.py:96
-#: storage/titles.py:96
+#: storage/titles.py:98
 msgid "university"
 msgstr "universitas"
 
 #: storage/titles.py:86 storage/titles.py:91 storage/titles.py:92
 #: storage/titles.py:94 storage/titles.py:96 storage/titles.py:97
-#: storage/titles.py:97
+#: storage/titles.py:99
 msgid "apartments"
 msgstr "apartement"
 
 #: storage/titles.py:87 storage/titles.py:92 storage/titles.py:93
 #: storage/titles.py:95 storage/titles.py:97 storage/titles.py:98
-#: storage/titles.py:98
+#: storage/titles.py:100
 msgid "college"
 msgstr "perguruan tinggi"
 
 #: storage/titles.py:88 storage/titles.py:93 storage/titles.py:94
 #: storage/titles.py:96 storage/titles.py:98 storage/titles.py:99
-#: storage/titles.py:99
+#: storage/titles.py:101
 msgid "commercial"
 msgstr "komersial"
 
 #: storage/titles.py:89 storage/titles.py:94 storage/titles.py:95
 #: storage/titles.py:97 storage/titles.py:99 storage/titles.py:100
-#: storage/titles.py:100
+#: storage/titles.py:102
 msgid "hospital"
 msgstr "rumah sakit"
 
 #: storage/titles.py:90 storage/titles.py:95 storage/titles.py:96
 #: storage/titles.py:98 storage/titles.py:100 storage/titles.py:101
-#: storage/titles.py:101
+#: storage/titles.py:103
 msgid "industrial"
 msgstr "industri"
 
 #: storage/titles.py:91 storage/titles.py:96 storage/titles.py:97
 #: storage/titles.py:99 storage/titles.py:101 storage/titles.py:102
-#: storage/titles.py:102
+#: storage/titles.py:104
 msgid "civic"
 msgstr "kantor pemerintah"
 
 #: storage/titles.py:92 storage/titles.py:97 storage/titles.py:98
 #: storage/titles.py:100 storage/titles.py:102 storage/titles.py:103
-#: storage/titles.py:103
+#: storage/titles.py:105
 msgid "church"
 msgstr "Gereja"
 
 #: storage/titles.py:93 storage/titles.py:98 storage/titles.py:99
 #: storage/titles.py:101 storage/titles.py:103 storage/titles.py:104
-#: storage/titles.py:104
+#: storage/titles.py:106
 msgid "hotel"
 msgstr "hotel"
 
 #: storage/titles.py:94 storage/titles.py:99 storage/titles.py:100
 #: storage/titles.py:102 storage/titles.py:104 storage/titles.py:105
-#: storage/titles.py:105
+#: storage/titles.py:107
 msgid "public building"
 msgstr "bangunan publik"
 
 #: storage/titles.py:95 storage/titles.py:100 storage/titles.py:101
 #: storage/titles.py:103 storage/titles.py:105 storage/titles.py:106
-#: storage/titles.py:106
+#: storage/titles.py:108
 msgid "other"
 msgstr "lain"
 
 #: storage/titles.py:96 storage/titles.py:101 storage/titles.py:102
 #: storage/titles.py:104 storage/titles.py:106 storage/titles.py:107
-#: storage/titles.py:107
+#: storage/titles.py:109
 msgid "fire station"
 msgstr "pos kebakaran"
 
 #: storage/titles.py:61 storage/titles.py:62 storage/titles.py:64
-#: storage/titles.py:65 storage/titles.py:65
+#: storage/titles.py:65 storage/titles.py:67
 msgid "Padang 2009 scenario"
 msgstr "Skenario Padang 2009"
 
 #: storage/titles.py:62 storage/titles.py:63 storage/titles.py:65
-#: storage/titles.py:66 storage/titles.py:66
+#: storage/titles.py:66 storage/titles.py:68
 msgid "Yogya 2006 scenario"
 msgstr "Skenario Yogya 2006"
 
@@ -1096,12 +1100,13 @@ msgstr "Skenario Yogya 2006"
 #: impact_functions/earthquake/earthquake_impact_on_women.py:139
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:210
 #: impact_functions/earthquake/earthquake_impact_on_women.py:159
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:210
+#: impact_functions/earthquake/earthquake_impact_on_women.py:159
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:212
 msgid "Estimated fatalities"
 msgstr "Diperkirakan korban jiwa"
 
 #: storage/titles.py:64 storage/titles.py:66 storage/titles.py:67
-#: storage/titles.py:67
+#: storage/titles.py:69
 msgid "Lembang fault scenario"
 msgstr "Skenario sesar Lembang"
 
@@ -1112,7 +1117,8 @@ msgstr "Banjir 2007 dengan perbaikan struktural"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:183
 #: impact_functions/earthquake/earthquake_impact_on_women.py:114
 #: impact_functions/earthquake/earthquake_impact_on_women.py:125
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:183
+#: impact_functions/earthquake/earthquake_impact_on_women.py:125
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:185
 msgid "Number of people displaced"
 msgstr "Jumlah pengungsi"
 
@@ -1121,14 +1127,15 @@ msgstr "Jumlah pengungsi"
 #: impact_functions/inundation/flood_OSM_building_impact.py:151
 #: impact_functions/earthquake/earthquake_impact_on_women.py:117
 #: impact_functions/earthquake/earthquake_impact_on_women.py:135
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:186
+#: impact_functions/earthquake/earthquake_impact_on_women.py:135
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:188
 #: impact_functions/inundation/flood_OSM_building_impact.py:151
 msgid "Action Checklist:"
 msgstr "Ceklis Aksi:"
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:187
 #: impact_functions/earthquake/earthquake_impact_on_women.py:118
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:187
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #, python-format
 msgid "Are enough victim identification units available for %i people?"
 msgstr "Apakah cukup unit identifikasi korban tersedia untuk %i orang?"
@@ -1136,7 +1143,7 @@ msgstr "Apakah cukup unit identifikasi korban tersedia untuk %i orang?"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:188
 #: impact_functions/earthquake/earthquake_impact_on_women.py:119
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:191
 #, python-format
 msgid "Are enough shelters available for %i people?"
 msgstr "Apakah cucup tempat penampungan tersedia untuk %i orang?"
@@ -1177,23 +1184,40 @@ msgstr "Memecah menurut jenis bangunan"
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:37
 #: impact_functions/earthquake/earthquake_impact_on_women.py:40
+#: impact_functions/earthquake/earthquake_impact_on_women.py:40
 msgid "Be affected by earthquake"
 msgstr "Terkena dampak gempa"
 
+#: impact_functions/earthquake/earthquake_impact_on_women.py:128
 #: impact_functions/earthquake/earthquake_impact_on_women.py:128
 msgid "Number of women displaced"
 msgstr "Jumlah wanita pengungsi"
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:131
+#: impact_functions/earthquake/earthquake_impact_on_women.py:131
 msgid "Number of pregnant women displaced"
 msgstr "Jumlah wanita hamil pengungsi"
 
+#: impact_functions/earthquake/earthquake_impact_on_women.py:136
 #: impact_functions/earthquake/earthquake_impact_on_women.py:136
 #, python-format
 msgid "Are enough shelters available for %i women?"
 msgstr "Apakah ada cucup tempat penampungan tersedia untuk %i wanita?"
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:138
+#: impact_functions/earthquake/earthquake_impact_on_women.py:138
 #, python-format
 msgid "Are enough facilities available to assist %i pregnant women?"
 msgstr "Apakah ada cukup fasilitas tersedia untuk membantu %i ibu hamil?"
+
+#: impact_functions/styles.py:60
+msgid "Mid"
+msgstr "Sedang"
+
+#: storage/titles.py:51
+msgid "People"
+msgstr "Orang"
+
+#: storage/titles.py:52
+msgid "people"
+msgstr "orang"

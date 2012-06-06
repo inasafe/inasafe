@@ -48,6 +48,8 @@ titles = {'title1': _('DKI buildings'),       # Bangunan DKI
           'title4': _('Sea wall collapse at Pluit'),  # Dam Pluit Runtuh
           'title5': _('Jakarta flood prone areas'),  # Daerah Rawan Banjir
           'title6': _('Population Jakarta'),  # Penduduk Jakarta
+          'People': _('People'),
+          'people': _('people'),
           'Flood Depth (design) Jakarta': _('Flood Depth (design) Jakarta'),
           'Flood Depth (current) Jakarta': _('Flood Depth (current) Jakarta'),
           'Yogyakarta 2006 earthquake': _('Yogyakarta 2006 earthquake'),
