@@ -1113,7 +1113,7 @@ class Test_Engine(unittest.TestCase):
 
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = ('%s/maumere_aos_depth_20m_land_wgs84.asc'
-                           % TESTDATA)
+                           % HAZDATA)
         exposure_filename = ('%s/maumere_pop_prj.shp' % TESTDATA)
 
         # Read input data
