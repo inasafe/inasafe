@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="id_ID">
+<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -206,7 +206,7 @@ ke %s: %s</translation>
         <translation type="obsolete">&lt;span class=&quot;label success&quot;&gt;Siap:&lt;/span&gt; Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="598"/>
+        <location filename="is_dock.py" line="597"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation>Lapisan dampak &quot;%s&quot; yang dimuat tidak benar</translation>
     </message>
@@ -221,14 +221,14 @@ ke %s: %s</translation>
         <translation type="obsolete">Terjadi pengecualian ketika memulai model: %s</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="740"/>
+        <location filename="is_dock.py" line="739"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation>Tidak ada lapisan dampak yang dihitung. Pesan kesalahan: %s
 </translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="771"/>
+        <location filename="is_dock.py" line="770"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation>Lapisan dampak %s bukan lapisan vektor atau raster</translation>
     </message>
@@ -238,12 +238,12 @@ ke %s: %s</translation>
         <translation type="obsolete">&lt;div&gt;&lt;span class=&quot;label success&quot;&gt;Menganalisa pertanyaan...&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;img src=&quot;qrc:/plugins/inasafe/ajax-loader.gif&quot; /&gt;&lt;/div&gt;</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="904"/>
+        <location filename="is_dock.py" line="899"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %s&lt;/p&gt;&lt;p&gt;Exposure: %s&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %s&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %s&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</source>
         <translation>&lt;p&gt;Tidak cukup tumpang-tindih antara lapisan input dan atau lapisan dan tampilan peta yang aktif. Silahkan memilih dua lapisan yang saling tumpang-tindih dan perbesar atau geser ke detil penuh:&lt;/p&gt;&lt;p&gt;Gagal memberikan cakupan optimal:&lt;/p&gt;&lt;p&gt;Ancaman: %s&lt;/p&gt;&lt;p&gt;Terpapar: %s&lt;/p&gt;&lt;p&gt;Cakupan tampilan peta geografis yang aktif: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis ancaman: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis terpapar: %s&lt;/p&gt;&lt;p&gt;Detil: %s&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="967"/>
+        <location filename="is_dock.py" line="962"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation>Raster terpapar dengan vektor ancaman tidak diimplementasikan</translation>
     </message>
@@ -253,7 +253,7 @@ ke %s: %s</translation>
         <translation type="obsolete">&lt;span class=&quot;label notice&quot;&gt;Memulai:&lt;/span&gt; Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik &lt;em&gt; tombol&lt;/em&gt; jalankan di bawah ini.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1220"/>
+        <location filename="is_dock.py" line="1215"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Dokumen PDF (*.pdf)</translation>
     </message>
@@ -270,7 +270,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="278"/>
         <source>&lt;span class=&quot;label label-important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%s]: %s &lt;br&gt;Exposure keywords [%s]: %s</source>
-        <translation>&lt;span class=&quot;label important&quot;&gt;Tidak ada fungsi yang valid&lt;/span&gt; Tidak ada fungsi yang tersedia untuk input yang anda masukan. Coba untuk memilih kombinasi input yang berbeda. Silahkan mengacu pada panduan pengguna &lt;FIXME: add link&gt; untuk lebih jelasnya mengenai input yang benar untuk fungsi risiko yang diberikan. &lt;br&gt;Kata kunci ancaman [%s]: %s &lt;br&gt;Kata kunci terpapar [%s]: %s</translation>
+        <translation type="obsolete">&lt;span class=&quot;label important&quot;&gt;Tidak ada fungsi yang valid&lt;/span&gt; Tidak ada fungsi yang tersedia untuk input yang anda masukan. Coba untuk memilih kombinasi input yang berbeda. Silahkan mengacu pada panduan pengguna &lt;FIXME: add link&gt; untuk lebih jelasnya mengenai input yang benar untuk fungsi risiko yang diberikan. &lt;br&gt;Kata kunci ancaman [%s]: %s &lt;br&gt;Kata kunci terpapar [%s]: %s</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="292"/>
@@ -278,94 +278,99 @@ ke %s: %s</translation>
         <translation>&lt;span class=&quot;label success&quot;&gt;Siap:&lt;/span&gt; Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="658"/>
+        <location filename="is_dock.py" line="657"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when setting up the impact calculator.</source>
         <translation>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;kesalahan:&lt;/span&gt; Pengecualian terjadi pada penyetelan kalkulator dampak..</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="677"/>
+        <location filename="is_dock.py" line="676"/>
         <source>Calculating impact...</source>
         <translation>Menghitung dampak...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="678"/>
+        <location filename="is_dock.py" line="677"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation>Ini mungkin memerlukan sedikit waktu - kita menghitung daerah yang akan terkena dampak bahaya dan menulis hasilnya ke layer baru.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="693"/>
+        <location filename="is_dock.py" line="692"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when starting the model.</source>
         <translation>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Kesalahan:&lt;/span&gt; Pengecualian terjadi ketika memulai model.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="730"/>
+        <location filename="is_dock.py" line="729"/>
         <source>Loading results...</source>
         <translation>Sedang memuat hasil-hasil...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="731"/>
+        <location filename="is_dock.py" line="730"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
         <translation>Analisa dampak telah selesai - sedang memuat hasil ke QGIS...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="813"/>
+        <location filename="is_dock.py" line="812"/>
         <source>Analyzing this question...</source>
         <translation>Sedang menganalisa pertanyaan...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="977"/>
+        <location filename="is_dock.py" line="972"/>
         <source>Preparing hazard data...</source>
         <translation>Sedang mempersiapkan data bahaya...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="978"/>
+        <location filename="is_dock.py" line="973"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit hazardlayer untuk mencocokkan perpotongan dari exposurelayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="986"/>
+        <location filename="is_dock.py" line="981"/>
         <source>Preparing exposure data...</source>
         <translation>Sedang mempersiapkan data terpapar...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="987"/>
+        <location filename="is_dock.py" line="982"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1220"/>
+        <location filename="is_dock.py" line="1215"/>
         <source>Write to PDF</source>
         <translation>menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1239"/>
+        <location filename="is_dock.py" line="1234"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1226"/>
+        <location filename="is_dock.py" line="1221"/>
         <source>Generating your map as a PDF document...</source>
         <translation>Sedang menghasilkan peta anda sebagai dokumen PDF...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1231"/>
+        <location filename="is_dock.py" line="1226"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation>PDF diciptakan .... membuka menggunakan peninjau standar PDF pada system.FIle pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1239"/>
+        <location filename="is_dock.py" line="1234"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation>Proses selesai.File pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1132"/>
+        <location filename="is_dock.py" line="1127"/>
         <source>No keywords</source>
         <translation>Tidak ada kata-kata kunci</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1134"/>
+        <location filename="is_dock.py" line="1129"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai dampak bahaya atau lapisan dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
+    </message>
+    <message>
+        <location filename="is_dock.py" line="278"/>
+        <source>&lt;span class=&quot;label label-important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%1]: %2 &lt;br&gt;Exposure keywords [%3]: %4</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
