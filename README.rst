@@ -57,19 +57,54 @@ System Requirements
 Limitations
 ===========
 
-InaSAFE is a very new project. The current code development started
-in earnest in January 2012 and there is still much to be done.
-However, we work on the philosophy that stakeholders should have access
-to the development and source code from the very beginning and invite
-comments, suggestions and contributions.
-See https://github.com/AIFDR/inasafe/issues/milestones and https://github.com/AIFDR/inasafe/issues?page=1&state=open for known bugs and outstanding tasks.
+InaSAFE is a new project. The current code development started in
+earnest in January 2012 and there is still much to be done.  However,
+we work on the philosophy that stakeholders should have access to the
+development and source code from the very beginning and invite
+comments, suggestions and contributions.  See
+https://github.com/AIFDR/inasafe/issues/milestones and
+https://github.com/AIFDR/inasafe/issues?page=1&state=open for known
+bugs and outstanding tasks.
+
+
+License
+=======
+
+InaSAFE is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+The full GNU General Public License is available in LICENSE.TXT or
+http://www.gnu.org/licenses
 
 
 Disclaimer
 ==========
 
-In addition to the NO WARRANTY clauses listed in the GPL license (LICENSE.TXT),
-Neither AIFDR nor GFDRR take any responsibility for the correctness of
-outputs from InaSAFE or decisions derived as a consequence.
+This work was produced at Australia Indonesia Facility for Disaster
+Reduction (AIFDR) in partnership with Global Facility for Disaster
+Reduction and Recovery (GFDRR). Neither the Australian Government, the
+World Bank nor any of their employees make any warranty, express or
+implied, or assume any liability or responsibility for the accuracy,
+completeness, or usefulness of any information, product, or process
+disclosed, or represent that its use would not infringe
+privately-owned rights.  Reference herein to any specific commercial
+products, process, or service by trade name, trademark, manufacturer,
+or otherwise, does not necessarily constitute or imply its
+endorsement, recommendation, or favoring by the Australian Government,
+Geoscience Australia or the World Bank. The views and opinions of
+authors expressed herein do not necessarily state or reflect those of
+the Australian Government or the World Bank, and shall not be used for
+advertising or product endorsement purposes.
 
+This document does not convey a warranty, express or implied, of
+merchantability or fitness for a particular purpose.
 
+The full license and no-warranty clauses are as defined by the GNU
+General Public License version 3.
