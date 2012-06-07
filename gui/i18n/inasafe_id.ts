@@ -206,7 +206,7 @@ ke %s: %s</translation>
         <translation type="obsolete">&lt;span class=&quot;label success&quot;&gt;Siap:&lt;/span&gt; Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="597"/>
+        <location filename="is_dock.py" line="598"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation>Lapisan dampak &quot;%s&quot; yang dimuat tidak benar</translation>
     </message>
@@ -221,14 +221,14 @@ ke %s: %s</translation>
         <translation type="obsolete">Terjadi pengecualian ketika memulai model: %s</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="739"/>
+        <location filename="is_dock.py" line="740"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation>Tidak ada lapisan dampak yang dihitung. Pesan kesalahan: %s
 </translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="770"/>
+        <location filename="is_dock.py" line="771"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation>Lapisan dampak %s bukan lapisan vektor atau raster</translation>
     </message>
@@ -240,7 +240,7 @@ ke %s: %s</translation>
     <message>
         <location filename="is_dock.py" line="899"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %s&lt;/p&gt;&lt;p&gt;Exposure: %s&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %s&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %s&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Tidak cukup tumpang-tindih antara lapisan input dan atau lapisan dan tampilan peta yang aktif. Silahkan memilih dua lapisan yang saling tumpang-tindih dan perbesar atau geser ke detil penuh:&lt;/p&gt;&lt;p&gt;Gagal memberikan cakupan optimal:&lt;/p&gt;&lt;p&gt;Ancaman: %s&lt;/p&gt;&lt;p&gt;Terpapar: %s&lt;/p&gt;&lt;p&gt;Cakupan tampilan peta geografis yang aktif: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis ancaman: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis terpapar: %s&lt;/p&gt;&lt;p&gt;Detil: %s&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Tidak cukup tumpang-tindih antara lapisan input dan atau lapisan dan tampilan peta yang aktif. Silahkan memilih dua lapisan yang saling tumpang-tindih dan perbesar atau geser ke detil penuh:&lt;/p&gt;&lt;p&gt;Gagal memberikan cakupan optimal:&lt;/p&gt;&lt;p&gt;Ancaman: %s&lt;/p&gt;&lt;p&gt;Terpapar: %s&lt;/p&gt;&lt;p&gt;Cakupan tampilan peta geografis yang aktif: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis ancaman: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis terpapar: %s&lt;/p&gt;&lt;p&gt;Detil: %s&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="962"/>
@@ -273,42 +273,42 @@ ke %s: %s</translation>
         <translation type="obsolete">&lt;span class=&quot;label important&quot;&gt;Tidak ada fungsi yang valid&lt;/span&gt; Tidak ada fungsi yang tersedia untuk input yang anda masukan. Coba untuk memilih kombinasi input yang berbeda. Silahkan mengacu pada panduan pengguna &lt;FIXME: add link&gt; untuk lebih jelasnya mengenai input yang benar untuk fungsi risiko yang diberikan. &lt;br&gt;Kata kunci ancaman [%s]: %s &lt;br&gt;Kata kunci terpapar [%s]: %s</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="292"/>
+        <location filename="is_dock.py" line="293"/>
         <source>&lt;span class=&quot;label label-success&quot;&gt;Ready:&lt;/span&gt; You can now proceed to run your model by clicking the &lt;em&gt; Run&lt;/em&gt; button.</source>
         <translation>&lt;span class=&quot;label success&quot;&gt;Siap:&lt;/span&gt; Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="657"/>
+        <location filename="is_dock.py" line="658"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when setting up the impact calculator.</source>
         <translation>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;kesalahan:&lt;/span&gt; Pengecualian terjadi pada penyetelan kalkulator dampak..</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="676"/>
+        <location filename="is_dock.py" line="677"/>
         <source>Calculating impact...</source>
         <translation>Menghitung dampak...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="677"/>
+        <location filename="is_dock.py" line="678"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation>Ini mungkin memerlukan sedikit waktu - kita menghitung daerah yang akan terkena dampak bahaya dan menulis hasilnya ke layer baru.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="692"/>
+        <location filename="is_dock.py" line="693"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when starting the model.</source>
         <translation>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Kesalahan:&lt;/span&gt; Pengecualian terjadi ketika memulai model.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="729"/>
+        <location filename="is_dock.py" line="730"/>
         <source>Loading results...</source>
         <translation>Sedang memuat hasil-hasil...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="730"/>
+        <location filename="is_dock.py" line="731"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
         <translation>Analisa dampak telah selesai - sedang memuat hasil ke QGIS...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="812"/>
+        <location filename="is_dock.py" line="813"/>
         <source>Analyzing this question...</source>
         <translation>Sedang menganalisa pertanyaan...</translation>
     </message>
@@ -368,8 +368,13 @@ ke %s: %s</translation>
         <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai dampak bahaya atau lapisan dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="278"/>
+        <location filename="is_dock.py" line="279"/>
         <source>&lt;span class=&quot;label label-important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%1]: %2 &lt;br&gt;Exposure keywords [%3]: %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="is_dock.py" line="900"/>
+        <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

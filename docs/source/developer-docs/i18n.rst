@@ -19,6 +19,8 @@ Quick Reference
 * Classes and anonymous functions that do not inherit QObject should use 
   the format :samp:`QCoreApplication.translate('Riab', 'Translations loaded')`
 * Classes that inherit QObject should use the form :samp:`self.tr('foo')`
+* String replacement arguments should be provided using the QString
+  :samp:`arg` method. Example: :samp:`self.tr('Error: %1').arg(message)`
 
 *Only* for the modules under *not* under gui. 
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-07 23:09+0200\n"
+"POT-Creation-Date: 2012-06-07 23:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -272,7 +272,7 @@ msgstr "Tidak ada kerusakan"
 #: impact_functions/experimental/tsunami_building_impact.py:103
 #: impact_functions/experimental/tsunami_building_impact.py:130
 #: impact_functions/generic/categorised_hazard_building_impact.py:78
-#: impact_functions/styles.py:54
+#: impact_functions/styles.py:54 impact_functions/styles.py:68
 #: impact_functions/experimental/tsunami_building_impact.py:103
 #: impact_functions/experimental/tsunami_building_impact.py:130
 #: impact_functions/generic/categorised_hazard_building_impact.py:78
@@ -304,6 +304,7 @@ msgstr "Sedang"
 #: impact_functions/generic/categorised_hazard_building_impact.py:80
 #: impact_functions/generic/categorised_hazard_building_impact.py:87
 #: impact_functions/styles.py:49 impact_functions/styles.py:66
+#: impact_functions/styles.py:76
 #: impact_functions/experimental/tsunami_building_impact.py:105
 #: impact_functions/experimental/tsunami_building_impact.py:132
 #: impact_functions/generic/categorised_hazard_building_impact.py:80
@@ -591,6 +592,7 @@ msgstr "Jamban Keluarga"
 #: impact_functions/inundation/flood_OSM_building_impact.py:155
 #: impact_functions/earthquake/earthquake_impact_on_women.py:141
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:194
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:195
 #: impact_functions/earthquake/earthquake_impact_on_women.py:141
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:195
 #: impact_functions/earthquake/padang_building_impact_model.py:132
@@ -768,6 +770,7 @@ msgstr "# orang terdampak"
 #: impact_functions/earthquake/earthquake_impact_on_women.py:109
 #: impact_functions/earthquake/earthquake_impact_on_women.py:120
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:180
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:181
 #: impact_functions/earthquake/earthquake_impact_on_women.py:120
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:181
 msgid "Number of fatalities"
@@ -781,6 +784,7 @@ msgstr "Jumlah perkiraan kematian"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:194
 #: impact_functions/earthquake/earthquake_impact_on_women.py:143
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:196
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:197
 #: impact_functions/earthquake/earthquake_impact_on_women.py:143
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:197
 msgid "Fatality model is from Institute of Teknologi Bandung 2012."
@@ -794,6 +798,7 @@ msgstr "Model Fatality adalah dari Institut Teknologi Bandung 2012."
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:199
 #: impact_functions/earthquake/earthquake_impact_on_women.py:148
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:201
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:202
 #: impact_functions/earthquake/earthquake_impact_on_women.py:148
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:202
 msgid "Earthquake impact to population"
@@ -1111,6 +1116,7 @@ msgstr "Skenario Yogya 2006"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:210
 #: impact_functions/earthquake/earthquake_impact_on_women.py:159
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:212
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:213
 #: impact_functions/earthquake/earthquake_impact_on_women.py:159
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:213
 msgid "Estimated fatalities"
@@ -1129,6 +1135,7 @@ msgstr "Banjir 2007 dengan perbaikan struktural"
 #: impact_functions/earthquake/earthquake_impact_on_women.py:114
 #: impact_functions/earthquake/earthquake_impact_on_women.py:125
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:185
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:186
 #: impact_functions/earthquake/earthquake_impact_on_women.py:125
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:186
 msgid "Number of people displaced"
@@ -1140,6 +1147,7 @@ msgstr "Jumlah pengungsi"
 #: impact_functions/earthquake/earthquake_impact_on_women.py:117
 #: impact_functions/earthquake/earthquake_impact_on_women.py:135
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:188
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #: impact_functions/earthquake/earthquake_impact_on_women.py:135
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #: impact_functions/inundation/flood_OSM_building_impact.py:151
@@ -1150,6 +1158,7 @@ msgstr "Ceklis Aksi:"
 #: impact_functions/earthquake/earthquake_impact_on_women.py:118
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:190
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:190
 #, python-format
 msgid "Are enough victim identification units available for %i people?"
 msgstr "Apakah cukup unit identifikasi korban tersedia untuk %i orang?"
@@ -1158,6 +1167,7 @@ msgstr "Apakah cukup unit identifikasi korban tersedia untuk %i orang?"
 #: impact_functions/earthquake/earthquake_impact_on_women.py:119
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:191
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
 #, python-format
 msgid "Are enough shelters available for %i people?"
@@ -1226,6 +1236,7 @@ msgid "Are enough facilities available to assist %i pregnant women?"
 msgstr "Apakah ada cukup fasilitas tersedia untuk membantu %i ibu hamil?"
 
 #: impact_functions/styles.py:60 impact_functions/styles.py:72
+#: impact_functions/styles.py:72
 msgid "Mid"
 msgstr "Sedang"
 

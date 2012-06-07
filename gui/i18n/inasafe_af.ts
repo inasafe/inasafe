@@ -67,25 +67,25 @@
         <translation type="obsolete">&lt;span class=&quot;label notice&quot;&gt;Om te begin:&lt;/span&gt; Om hierdie funksie te gebruik, moet daar eears data laers in jou QGIS projek bestaan. Maak sekere dat tenminste een &lt;em&gt;gevaar&lt;/em&gt; laer (b.w. aardskutting MMI) en een &lt;em&gt;blootstelling&lt;/em&gt;(b.w. wonings) beskikbaar is. Wanneer jy reg is, klik die &lt;em&gt;Begin&lt;/em&gt; knoppie onder.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="597"/>
+        <location filename="is_dock.py" line="598"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="739"/>
+        <location filename="is_dock.py" line="740"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="770"/>
+        <location filename="is_dock.py" line="771"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="is_dock.py" line="899"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %s&lt;/p&gt;&lt;p&gt;Exposure: %s&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %s&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %s&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&lt;p&gt;Daar is nie genoeg oorvleuling tussen die &apos;gevaar&apos; en &apos;in gevaar&apos; laers. Kies asseblief twee laers wat mekaar oorvleul en gebruik &apos;pan&apos; en &apos;zoom&apos; om hulle sigbaar te maak. Volledige details volg:&lt;/p&gt;&lt;p&gt;Probleem om optimale area te bepaal met:&lt;/p&gt;&lt;p&gt;Gevaar: %s&lt;/p&gt;&lt;p&gt;In-gevaar: %s&lt;/p&gt;&lt;p&gt;Sigbare area: %s&lt;/p&gt;&lt;p&gt;Gevaar geografiese area: %s&lt;/p&gt;&lt;p&gt;In-gevaar geografiese area: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="is_dock.py" line="962"/>
@@ -108,42 +108,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="292"/>
+        <location filename="is_dock.py" line="293"/>
         <source>&lt;span class=&quot;label label-success&quot;&gt;Ready:&lt;/span&gt; You can now proceed to run your model by clicking the &lt;em&gt; Run&lt;/em&gt; button.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="657"/>
+        <location filename="is_dock.py" line="658"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when setting up the impact calculator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="676"/>
+        <location filename="is_dock.py" line="677"/>
         <source>Calculating impact...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="677"/>
+        <location filename="is_dock.py" line="678"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="692"/>
+        <location filename="is_dock.py" line="693"/>
         <source>&lt;p&gt;&lt;span class=&quot;label label-important&quot;&gt;Error:&lt;/span&gt; An exception occurred when starting the model.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="729"/>
+        <location filename="is_dock.py" line="730"/>
         <source>Loading results...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="730"/>
+        <location filename="is_dock.py" line="731"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="812"/>
+        <location filename="is_dock.py" line="813"/>
         <source>Analyzing this question...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -203,9 +203,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="278"/>
+        <location filename="is_dock.py" line="279"/>
         <source>&lt;span class=&quot;label label-important&quot;&gt;No valid functions:&lt;/span&gt; No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function. &lt;br&gt;Hazard keywords [%1]: %2 &lt;br&gt;Exposure keywords [%3]: %4</source>
-        <translation type="unfinished">&lt;span class=&quot;label label-important&quot;&gt;Geen bruikbare funksies:&lt;/span&gt; Daar is geen funksie beskikbaar vir die geselekteerde opsies nie. Probeer &apos;n verskillend kombinasie. Kyk asseblief in die hulp text vir verdere besonderhede &lt;FIXME: add link&gt; oor wat die regte data bronne is vir die verskillende gevaar funksies. &lt;br&gt;Gevaar sluitelwoorde [%1]: %2 &lt;br&gt;In Gevaar Sluitelwoorde[%3]: %4</translation>
+        <translation>&lt;span class=&quot;label label-important&quot;&gt;Geen bruikbare funksies:&lt;/span&gt; Daar is geen funksie beskikbaar vir die geselekteerde opsies nie. Probeer &apos;n verskillend kombinasie. Kyk asseblief in die hulp text vir verdere besonderhede &lt;FIXME: add link&gt; oor wat die regte data bronne is vir die verskillende gevaar funksies. &lt;br&gt;Gevaar sluitelwoorde [%1]: %2 &lt;br&gt;In Gevaar Sluitelwoorde[%3]: %4</translation>
+    </message>
+    <message>
+        <location filename="is_dock.py" line="900"/>
+        <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;Daar is nie genoeg oorvleuling tussen die &apos;gevaar&apos; en &apos;in gevaar&apos; laers. Kies asseblief twee laers wat mekaar oorvleul en gebruik &apos;pan&apos; en &apos;zoom&apos; om hulle sigbaar te maak. Volledige details volg:&lt;/p&gt;&lt;p&gt;Probleem om optimale area te bepaal met:&lt;/p&gt;&lt;p&gt;Gevaar: %1&lt;/p&gt;&lt;p&gt;In-gevaar: %2&lt;/p&gt;&lt;p&gt;Sigbare area: %3&lt;/p&gt;&lt;p&gt;Gevaar geografiese area: %4&lt;/p&gt;&lt;p&gt;In-gevaar geografiese area: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</translation>
     </message>
 </context>
 <context>

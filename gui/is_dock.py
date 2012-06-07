@@ -903,19 +903,18 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                    'two overlapping layers and zoom or pan to them. Full '
                    'details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
-                   '<p>Hazard: %s</p>'
-                   '<p>Exposure: %s</p>'
-                   '<p>Viewport Geo Extent: %s</p>'
-                   '<p>Hazard Geo Extent: %s</p>'
-                   '<p>Exposure Geo Extent: %s</p>'
-                   '<p>Details: %s</p>'
-                   %
-                   (myHazardLayer.source(),
-                    myExposureLayer.source(),
-                    myViewportGeoExtent,
-                    myHazardGeoExtent,
-                    myExposureGeoExtent,
-                    str(e)))
+                   '<p>Hazard: %1</p>'
+                   '<p>Exposure: %2</p>'
+                   '<p>Viewport Geo Extent: %3</p>'
+                   '<p>Hazard Geo Extent: %4</p>'
+                   '<p>Exposure Geo Extent: %5</p>'
+                   '<p>Details: %6</p>').arg(
+                        myHazardLayer.source()).arg(
+                        myExposureLayer.source()).arg(
+                        QtCore.QString(str(myViewportGeoExtent))).arg(
+                        QtCore.QString(str(myHazardGeoExtent))).arg(
+                        QtCore.QString(str(myExposureGeoExtent))).arg(
+                        str(e))
             raise Exception(myMessage)
 
         # Next work out the ideal spatial resolution for rasters
