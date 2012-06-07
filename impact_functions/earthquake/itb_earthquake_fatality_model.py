@@ -146,8 +146,8 @@ class ITBFatalityFunction(FunctionProvider):
         total = int(round(numpy.nansum(P.flat) / 1000) * 1000)
 
         # Compute number of fatalities
-        fatalities = int(round(numpy.nansum(number_of_fatalities.values()) / 1000)) * 1000
-
+        fatalities = int(round(numpy.nansum(number_of_fatalities.values())
+                               / 1000)) * 1000
 
         # Compute number of people displaced due to building collapse
         displaced = 0
