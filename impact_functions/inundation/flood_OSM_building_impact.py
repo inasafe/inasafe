@@ -7,25 +7,22 @@ from storage.titles import values as internationalised_values
 from impact_functions.tables import Table, TableRow
 
 
-class DKIFloodBuildingImpactFunction(FunctionProvider):
-    """Risk plugin for flood impact on building data
+class FloodBuildingImpactFunction(FunctionProvider):
+    """Inundation impact on building data
 
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami']
 
     :param requires category=='exposure' and \
                     subcategory=='building' and \
-                    layertype=='vector' and \
-                    purpose=='dki'
-
-    # FIXME (Ole): Use datatype=='osm' instead of purpose.
+                    layertype=='vector'
     """
 
     target_field = 'INUNDATED'
-    plugin_name = _('Be inundated')
+    plugin_name = _('Be temporarily closed')
 
     def run(self, layers):
-        """Flood impact to OSM buildings
+        """Flood impact to buildings (e.g. from Open Street Map)
         """
 
         threshold = 1.0  # Flood threshold [m]
@@ -46,7 +43,8 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
             I = H.interpolate(E)
             hazard_type = 'floodprone'
 
-        # Extract relevant numerical data
+        # Extract relevant exposure data
+        attribute_names = I.get_attribute_names()
         attributes = I.get_data()
         N = len(I)
 
@@ -67,11 +65,17 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                 else:
                     x = res.lower() == 'yes'
             else:
-                msg = ('Unknown hazard type %s. '
-                       'Must be either "depth" or "floodprone"' % hazard_type)
+                msg = (_('Unknown hazard type %s. '
+                         'Must be either "depth" or "floodprone"')
+                       % hazard_type)
                 raise Exception(msg)
 
-            usage = attributes[i]['type']
+            # Count affected buildings by usage type if available
+            if 'type' in attribute_names:
+                usage = attributes[i]['type']
+            else:
+                usage = None
+
             if usage is not None and usage != 0:
                 key = usage
             else:
@@ -87,8 +91,7 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                 # Count affected buildings by type
                 affected_buildings[key] += 1
 
-            # Count total
-            if x is True:
+                # Count total affected buildings
                 count += 1
 
             # Add calculated impact to existing attributes
@@ -107,32 +110,47 @@ class DKIFloodBuildingImpactFunction(FunctionProvider):
                 del buildings[usage]
                 del affected_buildings[usage]
 
-        # Generate impact report
+        # Generate simple impact report
         table_body = [question,
-                      TableRow([_('Building type'), _('Flooded'), _('Total')],
-                               header=True)]
+                      TableRow([_('Building type'),
+                                _('Temporarily closed'),
+                                _('Total')],
+                               header=True),
+                      TableRow([_('All'), count, N])]
 
-        # Make list of building types
-        building_list = []
-        for usage in buildings:
+        # Generate break down by building usage type is available
+        if 'type' in attribute_names:
+            # Make list of building types
+            building_list = []
+            for usage in buildings:
 
-            building_type = usage.replace('_', ' ')
+                building_type = usage.replace('_', ' ')
 
-            # Lookup internationalised value if available
-            if building_type in internationalised_values:
-                building_type = internationalised_values[building_type]
-            else:
-                print building_type
+                # Lookup internationalised value if available
+                if building_type in internationalised_values:
+                    building_type = internationalised_values[building_type]
+                else:
+                    print building_type
 
-            building_list.append([building_type.capitalize(),
-                                  affected_buildings[usage],
-                                  buildings[usage]])
+                building_list.append([building_type.capitalize(),
+                                      affected_buildings[usage],
+                                      buildings[usage]])
 
-        building_list.sort()
+            # Sort alphabetically
+            building_list.sort()
 
-        for row in building_list:
-            s = TableRow(row)
-            table_body.append(s)
+            #table_body.append(TableRow([_('Building type'),
+            #                            _('Temporarily closed'),
+            #                            _('Total')], header=True))
+            table_body.append(TableRow(_('Breakdown by building type'),
+                                       header=True))
+            for row in building_list:
+                s = TableRow(row)
+                table_body.append(s)
+
+        table_body.append(TableRow(_('Action Checklist:'), header=True))
+        table_body.append(TableRow(_('Are the critical facilities still '
+                                     'open?')))
 
         table_body.append(TableRow(_('Notes:'), header=True))
         assumption = _('Buildings are said to be flooded when ')

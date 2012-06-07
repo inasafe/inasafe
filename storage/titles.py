@@ -30,20 +30,26 @@ other strings in SAFE.
 #              tools.
 #              Also rename this module to something more fitting, such as
 #              dynamic_translations.py
+#              See issue #168
 
 from utilities import ugettext as _
 
 titles = {'title1': _('DKI buildings'),       # Bangunan DKI
           'title2': _('Jakarta 2007 flood'),  # Banjir seperti 2007
+          'Jakarta 2007 flood': _('Jakarta 2007 flood'),
           'title3': _('Jakarta flood like 2007 with pump failure at Pluit, '
                       'Ancol and Sunter'),  # Banjir 2007 tanpa pompa di
                                             # Pluit, Ancol dan Sunter
           'Jakarta flood like 2007 with pump failure at Pluit and Ancol':
               _('Jakarta flood like 2007 with pump failure at '
                 'Pluit and Ancol'),
+          'Jakarta flood like 2007 with structural improvements':
+              _('Jakarta flood like 2007 with structural improvements'),
           'title4': _('Sea wall collapse at Pluit'),  # Dam Pluit Runtuh
           'title5': _('Jakarta flood prone areas'),  # Daerah Rawan Banjir
           'title6': _('Population Jakarta'),  # Penduduk Jakarta
+          'People': _('People'),
+          'people': _('people'),
           'Flood Depth (design) Jakarta': _('Flood Depth (design) Jakarta'),
           'Flood Depth (current) Jakarta': _('Flood Depth (current) Jakarta'),
           'Yogyakarta 2006 earthquake': _('Yogyakarta 2006 earthquake'),
@@ -58,7 +64,9 @@ titles = {'title1': _('DKI buildings'),       # Bangunan DKI
                                               'scenario'),  # Skenario
                                                             # Gempabumi Sesar
                                                             # Mentawai Mw 9.0
-          'Shakemap Padang 2009': _('Shakemap Padang 2009'),
+          'Padang 2009 scenario': _('Padang 2009 scenario'),
+          'Yogya 2006 scenario': _('Yogya 2006 scenario'),
+          'Lembang fault scenario': _('Lembang fault scenario'),
           'OSM building footprints': _('OSM building '
                                        'footprints'),  # Bangunan OSM
           'OSM buildings': _('OSM buildings'),  # Bangunan OSM

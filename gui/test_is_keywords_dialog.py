@@ -42,8 +42,8 @@ def makePadangLayer():
     """Helper function that returns a single predefined layer"""
     myFile = 'Shakemap_Padang_2009.asc'
     myPath = os.path.join(HAZDATA, myFile)
-    myBaseName = os.path.splitext(myFile)[0]
-    myLayer = QgsRasterLayer(myPath, myBaseName)
+    myTitle = 'Padang 2009 scenario'  # FIXME: Get from keywords
+    myLayer = QgsRasterLayer(myPath, myTitle)
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
@@ -301,7 +301,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
         myDialog.removeItemByValue('hazard')
 
         myKeywords = myDialog.getKeywords()
-        myExpectedKeywords = {'title': 'Shakemap_Padang_2009',
+        myExpectedKeywords = {'title': 'Padang 2009 scenario',
                               'subcategory': 'earthquake',
                               'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
@@ -327,7 +327,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
         myDialog.loadStateFromKeywords()
         myKeywords = myDialog.getKeywords()
 
-        myExpectedKeywords = {'title': 'Shakemap_Padang_2009',
+        myExpectedKeywords = {'title': 'Padang 2009 scenario',
                               'category': 'hazard',
                               'subcategory': 'earthquake',
                               'unit': 'MMI'}
@@ -338,7 +338,8 @@ class ISKeywordsDialogTest(unittest.TestCase):
         #check that a default title is given (see
         #https://github.com/AIFDR/inasafe/issues/111)
         myMessage = ('Expected title to be defaulted from '
-            'filename but it was not.')
+                     'filename but it was not. I got %s.'
+                     % myDialog.layer.name())
         assert myDialog.leTitle.text() == myDialog.layer.name(), myMessage
 
 if __name__ == '__main__':

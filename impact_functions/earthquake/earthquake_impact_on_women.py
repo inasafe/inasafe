@@ -10,64 +10,21 @@ from engine.numerics import normal_cdf
 import numpy
 
 
-class ITBFatalityFunction(FunctionProvider):
-    """Indonesian Earthquake Fatality Model
+class EarthquakeWomenImpactFunction(FunctionProvider):
+    """Earthquake Impact on Women
 
-    This model was developed by Institut Tecknologi Bandung (ITB) and
-    implemented by Dr Hadi Ghasemi, Geoscience Australia
+    This model is proof of concept only and assumes an input dataset
+    with gridded counts of females.
 
+    It also assume the existence of the likely ration of pregnancies
+    in the female population.
 
-    Reference:
-
-    Indonesian Earthquake Building-Damage and Fatality Models and
-    Post Disaster Survey Guidelines Development,
-    Bali, 27-28 February 2012, 54pp.
-
-
-    Algorithm:
-
-    In this study, the same functional form as Allen (2009) is adopted
-    to express fatality rate as a function of intensity (see Eq. 10 in the
-    report). The Matlab built-in function (fminsearch) for  Nelder-Mead
-    algorithm is used to estimate the model parameters. The objective
-    function (L2G norm) that is minimised during the optimisation is the
-    same as the one used by Jaiswal et al. (2010).
-
-    The coefficients used in the indonesian model are
-    x=0.62275231, y=8.03314466, zeta=2.15
-
-    Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J.,
-    Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population
-    exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7,
-    701-718.
-
-    Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake
-    fatality estimation, Earthq. Spectra 26, 1017-1037.
+    Some stats are derived from SP2010_agregat_data_perProvinsin.dbf from
+    http://dds.bps.go.id/eng/
 
 
-    Caveats and limitations:
-
-    The current model is the result of the above mentioned workshop and
-    reflects the best available information. However, the current model
-    has a number of issues listed below and is expected to evolve further
-    over time.
-
-    1 - The model is based on limited number of observed fatality
-        rates during 4 past fatal events.
-    2 - The model clearly over-predicts the fatality rates at
-        intensities higher than VIII.
-    3 - The model only estimates the expected fatality rate for a given
-        intensity level; however the associated uncertainty for the proposed
-        model is not addressed.
-    4 - There are few known mistakes in developing the current model:
-        - rounding MMI values to the nearest 0.5,
-        - Implementing Finite-Fault models of candidate events, and
-        - consistency between selected GMPEs with those in use by BMKG.
-          These issues will be addressed by ITB team in the final report.
-
-
-    :author Hadi Ghasemi
-    :rating 3
+    :author Ole Nielsen
+    :rating 1
 
     :param requires category == 'hazard' and \
                     subcategory == 'earthquake' and \
@@ -80,11 +37,11 @@ class ITBFatalityFunction(FunctionProvider):
 
     """
 
-    plugin_name = _('Be affected by ground shaking')
+    plugin_name = _('Be affected by earthquake')
 
     def run(self, layers,
             x=0.62275231, y=8.03314466, zeta=2.15):
-        """Indonesian Earthquake Fatality Model
+        """Gender specific earthquake impact model
 
         Input
           layers: List of layers expected to contain
@@ -138,43 +95,25 @@ class ITBFatalityFunction(FunctionProvider):
             number_of_exposed[mmi] = numpy.nansum(I.flat)
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
 
-        # Set resulting layer to NaN when less than a threshold. This is to
+        # Set resulting layer to zero when less than a threshold. This is to
         # achieve transparency (see issue #126).
-        R[R < 0.01] = numpy.nan
+        R[R < 1] = numpy.nan
 
         # Total statistics
-        total = int(round(numpy.nansum(P.flat) / 1000) * 1000)
+        total = numpy.nansum(P.flat)
 
         # Compute number of fatalities
-        fatalities = int(round(numpy.nansum(number_of_fatalities.values())
-                               / 1000)) * 1000
+        fatalities = numpy.nansum(number_of_fatalities.values())
 
         # Compute number of people displaced due to building collapse
         displaced = 0
         for mmi in mmi_range:
             displaced += displacement_rate[mmi] * number_of_exposed[mmi]
-
-        displaced = int(round(displaced / 1000)) * 1000
+        displaced_women = displaced * 0.52  # Could be made province dependent
+        displaced_pregnant_women = displaced_women * 0.01387  # CHECK
 
         # Generate impact report
         table_body = [question]
-                      #TableRow([_('Groundshaking (MMI)'),
-                      #          _('# people impacted')],
-                      #          header=True)]
-
-        # Table of people exposed to each shake level
-        # NOTE (Ole): I have commented this out for the time being.
-        # as not needed. However, had to modify unit test.
-        #for mmi in mmi_range:
-        #    s = str(int(number_of_exposed[mmi])).rjust(10)
-        #    #print s, len(s)
-        #    row = TableRow([mmi, s],
-        #                   col_align=['right', 'right'])
-        #
-        #    # FIXME (Ole): Weirdly enough, the row object
-        #    # has align="right" in it, but it doesn't work
-        #    #print row
-        #    table_body.append(row)
 
         # Add total fatality estimate
         s = str(int(fatalities)).rjust(10)
@@ -185,12 +124,19 @@ class ITBFatalityFunction(FunctionProvider):
         s = str(int(displaced)).rjust(10)
         table_body.append(TableRow([_('Number of people displaced'), s],
                                    header=True))
+        s = str(int(displaced_women)).rjust(10)
+        table_body.append(TableRow([_('Number of women displaced'), s],
+                                   header=True))
+        s = str(int(displaced_pregnant_women)).rjust(10)
+        table_body.append(TableRow([_('Number of pregnant women displaced'),
+                                    s],
+                                   header=True))
 
         table_body.append(TableRow(_('Action Checklist:'), header=True))
-        table_body.append(_('Are enough victim identification units '
-                            'available for %i people?') % fatalities)
-        table_body.append(_('Are enough shelters available for %i '
-                            'people?') % displaced)
+        table_body.append(_('Are enough shelters available for %i women?')
+                          % displaced_women)
+        table_body.append(_('Are enough facilities available to assist %i '
+                            'pregnant women?') % displaced_pregnant_women)
 
         table_body.append(TableRow(_('Notes:'), header=True))
 
