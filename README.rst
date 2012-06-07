@@ -58,19 +58,18 @@ Limitations
 ===========
 
 InaSAFE is a very new project. The current code development started
-in earnest in March 2011 and there is still much to be done.
+in earnest in January 2012 and there is still much to be done.
 However, we work on the philosophy that stakeholders should have access
 to the development and source code from the very beginning and invite
 comments, suggestions and contributions.
+See https://github.com/AIFDR/inasafe/issues/milestones and https://github.com/AIFDR/inasafe/issues?page=1&state=open for known bugs and outstanding tasks.
 
 
-As such, InaSAFE currently has some major limitations, including
+Disclaimer
+==========
 
- * Hazard layers must be provided as raster or polygon data
- * Exposure data must be either raster data or vector data but only
-   point, line and polygon types are supported.
- * All data must be provided in WGS84 geographic coordinates
- * Neither AIFDR nor GFDRR take any responsibility for the correctness of
-   outputs from InaSAFE or decisions derived as a consequence
+In addition to the NO WARRANTY clauses listed in the GPL license (LICENSE.TXT),
+Neither AIFDR nor GFDRR take any responsibility for the correctness of
+outputs from InaSAFE or decisions derived as a consequence.
 
 
