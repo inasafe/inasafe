@@ -97,11 +97,11 @@ disclosed, or represent that its use would not infringe
 privately-owned rights.  Reference herein to any specific commercial
 products, process, or service by trade name, trademark, manufacturer,
 or otherwise, does not necessarily constitute or imply its
-endorsement, recommendation, or favoring by the Australian Government,
-Geoscience Australia or the World Bank. The views and opinions of
-authors expressed herein do not necessarily state or reflect those of
-the Australian Government or the World Bank, and shall not be used for
-advertising or product endorsement purposes.
+endorsement, recommendation, or favoring by the Australian Government
+or the World Bank. The views and opinions of authors expressed herein
+do not necessarily state or reflect those of the Australian Government
+or the World Bank, and shall not be used for advertising or product
+endorsement purposes.
 
 This document does not convey a warranty, express or implied, of
 merchantability or fitness for a particular purpose.
