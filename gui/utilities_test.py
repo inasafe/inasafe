@@ -28,7 +28,11 @@ def assertHashesForFile(theHashes, theFilename):
     myHash = hashForFile(theFilename)
     myMessage = ('Unexpected hash'
                  '\nGot: %s'
-                 '\nExpected: %s' % (myHash, theHashes))
+                 '\nExpected: %s'
+                 '\nPlease check graphics %s visually '
+                 'and add to list of expected hashes '
+                 'if it is OK on this platform.'
+                  % (myHash, theHashes, theFilename))
     assert myHash in theHashes, myMessage
 
 
@@ -95,12 +99,25 @@ def getQgisTestApp():
     return QGISAPP, CANVAS, IFACE, PARENT
 
 
-def loadLayer(theLayerFile):
-    """Helper to load and return a single QGIS layer"""
+def loadLayer(theLayerFile, DIR=TESTDATA):
+    """Helper to load and return a single QGIS layer
+
+    Input
+        theLayerFile: Pathname to raster or vector file
+        DIR: Optional parameter stating the parent dir. If None,
+             pathname is assumed to be absolute
+
+    """
+
     # Extract basename and absolute path
-    myBaseName, myExt = os.path.splitext(theLayerFile)
-    myPath = os.path.join(TESTDATA, theLayerFile)
+    myFileName = os.path.split(theLayerFile)[-1]  # In case path was absolute
+    myBaseName, myExt = os.path.splitext(myFileName)
+    if DIR is None:
+        myPath = theLayerFile
+    else:
+        myPath = os.path.join(DIR, theLayerFile)
     myKeywordPath = myPath[:-4] + '.keywords'
+
     # Determine if layer is hazard or exposure
     myKeywords = read_keywords(myKeywordPath)
     myType = 'undefined'
@@ -165,7 +182,7 @@ def setJakartaGoogleExtent():
 def setBatemansBayGeoExtent():
     """Zoom to an area occupied by both Batemans Bay
      layers in geo crs"""
-    myRect = QgsRectangle(150.162, -35.741, 150.207, -35.719)
+    myRect = QgsRectangle(150.152, -35.710, 150.187, -35.7013)
     CANVAS.setExtent(myRect)
 
 
@@ -179,3 +196,45 @@ def setGeoExtent(theBoundingBox):
     """Zoom to an area specified given bounding box (list)"""
     myRect = QgsRectangle(*theBoundingBox)
     CANVAS.setExtent(myRect)
+
+
+DEVNULL = open(os.devnull, 'w')
+
+
+class RedirectStdStreams(object):
+    """Context manager for redirection of stdout and stderr
+
+    This is from
+    http://stackoverflow.com/questions/6796492/
+    python-temporarily-redirect-stdout-stderr
+
+    In this context, the class is used to get rid of QGIS
+    output in the test suite - BUT IT DOESN'T WORK (Maybe
+    because QGIS starts its providers in a different process?)
+
+    Usage:
+
+    devnull = open(os.devnull, 'w')
+    print('Fubar')
+
+    with RedirectStdStreams(stdout=devnull, stderr=devnull):
+        print("You'll never see me")
+
+    print("I'm back!")
+    """
+
+    def __init__(self, stdout=None, stderr=None):
+        self._stdout = stdout or sys.stdout
+        self._stderr = stderr or sys.stderr
+
+    def __enter__(self):
+        self.old_stdout, self.old_stderr = sys.stdout, sys.stderr
+        self.old_stdout.flush()
+        self.old_stderr.flush()
+        sys.stdout, sys.stderr = self._stdout, self._stderr
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self._stdout.flush()
+        self._stderr.flush()
+        sys.stdout = self.old_stdout
+        sys.stderr = self.old_stderr

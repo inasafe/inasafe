@@ -8,9 +8,9 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from is_utilities import (getExceptionWithStacktrace,
-                         setRasterStyle,
-                         setVectorStyle,
-                         qgisVersion)
+                          setRasterStyle,
+                          setVectorStyle,
+                          qgisVersion)
 from storage.utilities import bbox_intersection
 from utilities_test import loadLayer, getQgisTestApp
 
@@ -76,7 +76,6 @@ class ISUtilitiesTest(unittest.TestCase):
         assert myValue1 == myValue2 == 255, myMessage
 
         # Now run the same test again
-
         myStyleInfo['style_classes'] = [
                         dict(colour='#38A800', quantity=2, transparency=100),
                         dict(colour='#38A800', quantity=4, transparency=0),
@@ -96,22 +95,37 @@ class ISUtilitiesTest(unittest.TestCase):
         assert myValue1 == 0, myMessage1
         assert myValue2 == 255, myMessage2
 
+        # Verify that setRasterStyle doesn't break when floats coincide with
+        # integers
+        # See https://github.com/AIFDR/inasafe/issues/126#issuecomment-5978416
+        myStyleInfo['style_classes'] = [
+                        dict(colour='#38A800', quantity=2.0, transparency=100),
+                        dict(colour='#38A800', quantity=4.0, transparency=0),
+                        dict(colour='#79C900', quantity=10.0, transparency=0)]
+        myMessage = ('Broken: Setting style info with generate valid '
+                     'transparent '
+                     'floating point pixel entries such as 2.0, 3.0')
+        try:
+            setRasterStyle(myLayer, myStyleInfo)
+        except Exception, e:
+            raise Exception(myMessage + ': ' + str(e))
+
     def test_issue121(self):
         """Test that point symbol size can be set from style (issue 121).
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
         # This dataset has all cells with value 1.3
-        myLayer, myType = loadLayer('kecamatan_geo_centroids.shp')
+        myLayer, myType = loadLayer('kecamatan_jakarta_osm_centroids.shp')
         del myType
         # Note the float quantity values below
         myStyleInfo = {'target_field': 'KEPADATAN',
-                     'style_classes':
-                     [{'opacity': 1, 'max': 200, 'colour': '#fecc5c',
-                       'min': 45, 'label': 'Low', 'size': 1},
-                      {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
-                       'min': 201, 'label': 'Medium', 'size': 2},
-                      {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
-                       'min': 351, 'label': 'High', 'size': 3}]}
+                       'style_classes':
+                           [{'opacity': 1, 'max': 200, 'colour': '#fecc5c',
+                             'min': 45, 'label': 'Low', 'size': 1},
+                            {'opacity': 1, 'max': 350, 'colour': '#fd8d3c',
+                             'min': 201, 'label': 'Medium', 'size': 2},
+                            {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
+                             'min': 351, 'label': 'High', 'size': 3}]}
         myMessage = ('Setting style with point sizes should work.')
         try:
             setVectorStyle(myLayer, myStyleInfo)

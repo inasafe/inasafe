@@ -54,6 +54,7 @@ on your machine in order to work effectively with the code base:
 * python-numpy (for numerical computations)
 * python-gdal (python bindings to underlying gis functionality)
 * python-sphinx (compilation of documents)
+* cloud-sptheme (sphinx theme)
 * pyqt4-dev-tools (compiling ui and resources)
 * qt4-doc (qt4 API documentation)
 
@@ -62,7 +63,7 @@ On an ubuntu system you can install these requirements using apt::
 
    sudo apt-get install git subversion pep8 python-nose python-coverage \
    python-gdal python-numpy python-sphinx pyqt4-dev-tools
-
+   sudo pip install cloud-sptheme
 
 In some cases these dependencies may already be on your system via installation
 process you followed for QGIS.
@@ -95,7 +96,7 @@ option disabled), you could run these commands (or add them to your ~/.bashrc)::
 
 
 Adding inasafe to your python path:
-.........................................
+...................................
 
 Lastly, you should add the inasafe plugin folder to your PYTHONPATH so that
 package and module paths can be resolved correctly. E.g::

@@ -12,7 +12,7 @@
 name=InaSAFE-dev
 qgisMinimumVersion=1.7
 description=InaSAFE Disaster risk assessment tool developed by AusAid
-version=0.3.0-alpha
+version=0.4.0-alpha
 
 # end of mandatory metadata
 
@@ -27,7 +27,7 @@ tags=risk disaster flood
 homepage=http://www.inasafe.org/
 tracker=https://github.com/AIFDR/inasafe/issues
 repository=https://github.com/AIFDR/inasafe
-icon=icon.png
+icon=gui/resources/img/icon.png
 # experimental flag
 experimental=True
 

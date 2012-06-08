@@ -19,7 +19,7 @@ class HKVFloodImpactFunctionTEST(FunctionProvider):
     :param requires category=='exposure' and \
                     subcategory=='population' and \
                     layertype=='raster' and \
-                    datatype=='population'
+                    datatype=='density'
     """
 
     plugin_name = 'HKVtest'

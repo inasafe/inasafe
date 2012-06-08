@@ -142,10 +142,10 @@ class Test_plugins(unittest.TestCase):
         """
 
         # Name file names for hazard level and exposure
-        boundary_filename = ('%s/kecamatan_geo.shp' % TESTDATA)
+        boundary_filename = ('%s/kecamatan_jakarta_osm.shp' % TESTDATA)
         #data_filename = ('%s/Population_Jakarta_geographic.asc' % TESTDATA)
 
-        # Get building impact data (BNPB perga 2)
+        # Get reference building impact data
         building_filename = ('%s/building_impact_scenario.shp' % TESTDATA)
 
         boundary_layer = read_layer(boundary_filename)
@@ -156,8 +156,8 @@ class Test_plugins(unittest.TestCase):
                         attribute_name='AFFECTED',
                         aggregation_function='count')
 
-        print res, len(res)
-        print boundary_layer, len(boundary_layer)
+        #print res, len(res)
+        #print boundary_layer, len(boundary_layer)
         msg = ('Number of aggregations %i should be the same as the '
                'number of specified boundaries %i' % (len(res),
                                                       len(boundary_layer)))

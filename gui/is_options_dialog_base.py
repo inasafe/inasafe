@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'is_options_dialog_base.ui'
 #
-# Created: Mon Apr 23 22:33:47 2012
+# Created: Wed May  2 12:13:59 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_ISOptionsDialogBase(object):
     def setupUi(self, ISOptionsDialogBase):
         ISOptionsDialogBase.setObjectName(_fromUtf8("ISOptionsDialogBase"))
-        ISOptionsDialogBase.resize(501, 227)
+        ISOptionsDialogBase.resize(501, 257)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         ISOptionsDialogBase.setWindowIcon(icon)
@@ -32,7 +32,7 @@ class Ui_ISOptionsDialogBase(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 463, 491))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 465, 547))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.gridLayout_2 = QtGui.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
@@ -43,10 +43,18 @@ class Ui_ISOptionsDialogBase(object):
         self.cbxSetLayerNameFromTitle.setEnabled(True)
         self.cbxSetLayerNameFromTitle.setObjectName(_fromUtf8("cbxSetLayerNameFromTitle"))
         self.gridLayout_2.addWidget(self.cbxSetLayerNameFromTitle, 1, 0, 1, 1)
+        self.cbxZoomToImpact = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.cbxZoomToImpact.setEnabled(True)
+        self.cbxZoomToImpact.setObjectName(_fromUtf8("cbxZoomToImpact"))
+        self.gridLayout_2.addWidget(self.cbxZoomToImpact, 2, 0, 1, 1)
+        self.cbxHideExposure = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.cbxHideExposure.setEnabled(True)
+        self.cbxHideExposure.setObjectName(_fromUtf8("cbxHideExposure"))
+        self.gridLayout_2.addWidget(self.cbxHideExposure, 3, 0, 1, 1)
         self.lblKeywordCache = QtGui.QLabel(self.scrollAreaWidgetContents)
         self.lblKeywordCache.setEnabled(True)
         self.lblKeywordCache.setObjectName(_fromUtf8("lblKeywordCache"))
-        self.gridLayout_2.addWidget(self.lblKeywordCache, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.lblKeywordCache, 4, 0, 1, 1)
         self.horizontalLayout_6 = QtGui.QHBoxLayout()
         self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
         self.leKeywordCachePath = QtGui.QLineEdit(self.scrollAreaWidgetContents)
@@ -57,7 +65,7 @@ class Ui_ISOptionsDialogBase(object):
         self.toolKeywordCachePath.setEnabled(True)
         self.toolKeywordCachePath.setObjectName(_fromUtf8("toolKeywordCachePath"))
         self.horizontalLayout_6.addWidget(self.toolKeywordCachePath)
-        self.gridLayout_2.addLayout(self.horizontalLayout_6, 3, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_6, 5, 0, 1, 1)
         self.grpNotImplemented = QtGui.QGroupBox(self.scrollAreaWidgetContents)
         self.grpNotImplemented.setObjectName(_fromUtf8("grpNotImplemented"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpNotImplemented)
@@ -137,12 +145,12 @@ class Ui_ISOptionsDialogBase(object):
         self.spinBox.setObjectName(_fromUtf8("spinBox"))
         self.horizontalLayout_5.addWidget(self.spinBox)
         self.gridLayout_3.addLayout(self.horizontalLayout_5, 9, 0, 1, 1)
-        self.gridLayout_2.addWidget(self.grpNotImplemented, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.grpNotImplemented, 6, 0, 1, 1)
         self.cbxUseThread = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxUseThread.setObjectName(_fromUtf8("cbxUseThread"))
-        self.gridLayout_2.addWidget(self.cbxUseThread, 5, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.cbxUseThread, 7, 0, 1, 1)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem, 6, 0, 1, 1)
+        self.gridLayout_2.addItem(spacerItem, 8, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
 
@@ -168,6 +176,8 @@ class Ui_ISOptionsDialogBase(object):
         ISOptionsDialogBase.setWindowTitle(QtGui.QApplication.translate("ISOptionsDialogBase", "InaSAFE - Options", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxVisibleLayersOnly.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Only show visible layers in InaSAFE dock", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxSetLayerNameFromTitle.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxZoomToImpact.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Zoom to impact layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxHideExposure.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Hide exposure layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
         self.lblKeywordCache.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Keyword cache for remote datasources", None, QtGui.QApplication.UnicodeUTF8))
         self.toolKeywordCachePath.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.grpNotImplemented.setTitle(QtGui.QApplication.translate("ISOptionsDialogBase", "Not yet implemented", None, QtGui.QApplication.UnicodeUTF8))

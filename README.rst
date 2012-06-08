@@ -4,17 +4,6 @@ InaSAFE - Indonesian Scenario Assessment for Emergencies
 
 This is the project: InaSAFE a Quantum GIS plugin
 
-.. figure::  docs/screenshot.jpg
-   :align:   center
-
-A completed assement using the QGIS InaSAFE plugin, with an example of
-the print ready pdf output the plugin produces.
-
-.. figure::  docs/screenshot2.jpg
-   :align:   center
-
-Vulnerable building footprints shown in red.
-
 For more information about InaSAFE please visit
 `www.inasafe.org <http://www.inasafe.org>`_ and look at the documentation at
 `inasafe.readthedocs.org <http://inasafe.readthedocs.org>`_
@@ -28,21 +17,36 @@ for impact modelling.
 Quick Installation Guide
 ========================
 
-.. note::
+From Zip Archive
+----------------
 
-  InaSAFE is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS), so
-  QGIS must be installed first.
+We make regular releases of the InaSAFE plugin and they are available at
+https://github.com/AIFDR/inasafe/downloads. Simply choose the most recent (i.e.
+the one with the largest version number) and save it to your hard disk.
 
+Now extract the zip file into the QGIS plugins directory. Under windows the
+plugins directory is under :file:`c:\\Users\\<your username>\\.qgis\\python\\plugins`.
 
-To install the InaSAFE, use the plugin manager in QGIS::
+After extracting the plugin, it should be available as
+:file:`c:\\Users\\<your username>\\.qgis\\python\\plugins\\inasafe\\`.
 
-  Plugins -> Fetch Python Plugins
+Mac and Linux users need to follow the same procedure but instead the plugin
+directory will be under your $HOME directory.
 
-Then search for 'Risk In A Box', select it and click the install button.
-The plugin will now be added to your plugins menu.
+Once the plugin is extracted, start QGIS and enable it from the plugin manager.
+To do this open the plugin manager (:menuselection:`Plugins --> Manage plugins...`)
+and type :samp:`insafe` into the filter box. You should see the InaSAFE plugin
+appear in the list. Now tick the checkbox next to it to enable the plugin.
 
+.. figure:: ../../plugin-manager.png
+   :align: center
 
--------------------
+Via QGIS Plugin Manager
+-----------------------
+
+.. note:: This installation method is not yet supported - watch this space it
+   will be available in the near future.
+
 System Requirements
 -------------------
 
@@ -50,26 +54,55 @@ System Requirements
  - The Open Source Geographic Information System QGIS (http://www.qgis.org).
    InaSAFE requires QGIS version 1.7 or newer.
 
-
-
-===========
 Limitations
 ===========
 
-InaSAFE is a very new project. The current code development started
-in earnest in March 2011 and there is still much to be done.
-However, we work on the philosophy that stakeholders should have access
-to the development and source code from the very beginning and invite
-comments, suggestions and contributions.
+InaSAFE is a new project. The current code development started in
+earnest in January 2012 and there is still much to be done.  However,
+we work on the philosophy that stakeholders should have access to the
+development and source code from the very beginning and invite
+comments, suggestions and contributions.  See
+https://github.com/AIFDR/inasafe/issues/milestones and
+https://github.com/AIFDR/inasafe/issues?page=1&state=open for known
+bugs and outstanding tasks.
 
 
-As such, InaSAFE currently has some major limitations, including
+License
+=======
 
- * Hazard layers must be provided as raster or polygon data
- * Exposure data must be either raster data or vector data but only
-   point, line and polygon types are supported.
- * All data must be provided in WGS84 geographic coordinates
- * Neither AIFDR nor GFDRR take any responsibility for the correctness of
-   outputs from InaSAFE or decisions derived as a consequence
+InaSAFE is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 3 (GPLv3) as
+published by the Free Software Foundation.
+
+The full GNU General Public License is available in LICENSE.TXT or
+http://www.gnu.org/licenses/gpl.html
+
+
+Disclaimer of Warranty (GPLv3)
+==============================
+
+There is no warranty for the program, to the extent permitted by
+applicable law. Except when otherwise stated in writing the copyright
+holders and/or other parties provide the program "as is" without warranty
+of any kind, either expressed or implied, including, but not limited to,
+the implied warranties of merchantability and fitness for a particular
+purpose. The entire risk as to the quality and performance of the program
+is with you. Sshould the program prove defective, you assume the cost of
+all necessary servicing, repair or correction.
+
+
+Limitation of Liability (GPLv3)
+===============================
+
+In no event unless required by applicable law or agreed to in writing
+will any copyright holder, or any other party who modifies and/or conveys
+the program as permitted above, be liable to you for damages, including any
+general, special, incidental or consequential damages arising out of the
+use or inability to use the program (including but not limited to loss of
+data or data being rendered inaccurate or losses sustained by you or third
+parties or a failure of the program to operate with any other programs),
+even if such holder or other party has been advised of the possibility of
+such damages.
+
 
 

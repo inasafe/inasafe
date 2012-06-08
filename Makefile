@@ -54,7 +54,7 @@ compile-translation-strings: compile
 	@#Compile qt messages binary
 	cd gui; lrelease inasafe.pro; cd ..
 	@#compile gettext messages binary
-	$(foreach LOCALE,$(LOCALES), msgfmt -o i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
@@ -68,7 +68,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
-test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings
+test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
@@ -79,7 +79,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203 --exclude odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py . || true
+	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
 
 # Run entire test suite
 test_suite: compile testdata
@@ -113,7 +113,7 @@ testdata:
 	@echo "-----------------------------------------------------------"
 	@echo "Updating test data - please hit Enter if asked for password"
 	@echo "-----------------------------------------------------------"
-	@svn co http://www.aifdr.org/svn/riab_test_data ../riab_test_data
+	@svn co http://www.aifdr.org/svn/inasafe_data ../inasafe_data
 
 disabled_tests:
 	@echo
@@ -159,6 +159,13 @@ list_gis_packages:
 	@dpkg -l | grep qgis || true
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
+
+data_audit:
+	@echo
+	@echo "---------------------------------------"
+	@echo "Audit of IP status for bundled data    "
+	@echo "---------------------------------------"
+	@python scripts/data_IP_audit.py
 
 pylint:
 	@echo

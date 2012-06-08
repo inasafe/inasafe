@@ -6,15 +6,12 @@ To register the plugin, the module must be imported by the Python process
 using it.
 """
 
-from impact_functions.utilities import ColorMapEntry
-from engine.polygon import inside_polygon
 import numpy
 import types
 import keyword
-
-# FIXME (Ole): Bring logging back - and do it well!
-import logging
-logger = logging.getLogger('risiko')
+from impact_functions.utilities import ColorMapEntry
+from engine.polygon import inside_polygon
+from storage.utilities import ugettext as _
 
 
 class PluginMount(type):
@@ -118,37 +115,33 @@ def requirements_collect(func):
       :param requires <valid python expression>
     The layer keywords are put into the local name space
     each requires should be on a new line
-    a '/' at the end of a line will be a continuation
+    a '\' at the end of a line will be a continuation
 
-    returns the strings for the python exec
+    returns a (possibly empty) list of Python expressions
 
-    Example of valid requires
-    :param requires category=="impact" and subcategory.startswith("population"
+    Example of valid requirements expression
+    :param requires category=='hazard' and \
+                    subcategory in ['flood', 'tsunami'] and \
+                    layertype=='raster' and \
+                    unit=='m'
     """
-    requireslines = None
+
+    requires_lines = []
     if hasattr(func, '__doc__') and func.__doc__:
-        docstr = func.__doc__
 
+        # Define tag that indentifies requirements expressions
         require_cmd = ':param requires'
+        indent = len(require_cmd) + 1  # Index where expression starts
 
-        lines = docstr.split('\n')
-        requires_lines = []
-
-        join_line = False
-
-        for cnt, line in enumerate(lines):
-            #print cnt, line
+        # Collect Python expressions from docstring
+        docstr = func.__doc__
+        for line in docstr.split('\n'):
             doc_line = line.strip()
-            if len(doc_line) == 0:
-                continue
 
-            if join_line and not doc_line.startswith(require_cmd):
-                requires_lines[-1] = requires_lines[-1][:-1] + doc_line
-
-            elif doc_line.startswith(require_cmd):
-                requires_lines.append(doc_line[len(require_cmd) + 1:])
-
-            join_line = doc_line[-1] == '/'
+            if doc_line.startswith(require_cmd):
+                # Extract expression and remove excessive whitespace
+                expression = ' '.join(doc_line[indent:].split())
+                requires_lines.append(expression)
 
     # Return list with one item per requirement
     return requires_lines
@@ -181,7 +174,7 @@ def requirement_check(params, require_str, verbose=False):
             msg = ('Error in plugin requirements'
                    'Must not use Python keywords as params: %s' % (key))
             #print msg
-            logger.error(msg)
+            #logger.error(msg)
             return False
 
         if key in excluded_keywords:
@@ -208,7 +201,7 @@ def requirement_check(params, require_str, verbose=False):
         msg = ('Requirements header could not compiled: %s. '
                'Original message: %s' % (execstr, e))
         #print msg
-        logger.error(msg)
+        #logger.error(msg)
 
     return False
 
@@ -314,6 +307,21 @@ def extract_layers(layers, keyword, value):
             extracted_layers.append(layer)
 
     return extracted_layers
+
+
+def get_question(hazard_title, exposure_title, function_title):
+    """Rephrase the question asked
+
+    Input
+        hazard_title
+        exposure_title
+        function_title
+    """
+
+    return _('In the event of <i>%s</i> how many '
+             '<i>%s</i> might <i>%s</i>') % (hazard_title.lower(),
+                                             exposure_title.lower(),
+                                             function_title.lower())
 
 
 def aggregate_point_data(data=None, boundaries=None,

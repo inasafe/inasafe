@@ -9,7 +9,8 @@ from tempfile import mkstemp
 import math
 from engine.numerics import ensure_numeric
 import gettext
-
+import getpass
+from datetime import date
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'Affected'
@@ -46,6 +47,11 @@ def unique_filename(**kwargs):
 
     Use mkstemp to create the file, then remove it and return the name
 
+    If dir is specified, the tempfile will be created in the path specified
+    otherwise the file will be created in a directory following this scheme:
+
+    :file:`/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'
+
     See http://docs.python.org/library/tempfile.html for details.
     """
 
@@ -58,6 +64,30 @@ def unique_filename(**kwargs):
     except:
         pass
 
+    path = None
+    if 'dir' not in kwargs:
+        user = getpass.getuser().replace(' ', '_')
+        current_date = date.today()
+        date_string = current_date.strftime("%d-%m-%Y")
+        path = os.path.dirname(filename)
+        path = os.path.join(path, 'inasafe', date_string, user, 'impacts')
+        kwargs['dir'] = path
+    if not os.path.exists(kwargs['dir']):
+        # Ensure that the dir mask won't conflict with the mode
+        # Umask sets the new mask and returns the old
+        umask = os.umask(0000)
+        # Ensure that the dir is world writable by explictly setting mode
+        os.makedirs(kwargs['dir'], 0777)
+        # Reinstate the old mask for tmp dir
+        os.umask(umask)
+    # Now we have the working dir set up go on and return the filename
+    handle, filename = mkstemp(**kwargs)
+    try:
+        # Need to close it using the filehandle first for windows!
+        os.close(handle)
+        os.remove(filename)
+    except:
+        pass
     return filename
 
 
@@ -326,6 +356,50 @@ def geotransform2resolution(geotransform, isotropic=False,
         return resx
     else:
         return resx, resy
+
+
+def raster_geometry2geotransform(longitudes, latitudes):
+    """Convert vectors of longitudes and latitudes to geotransform
+
+    This is the inverse operation of Raster.get_geometry().
+
+    Input
+       longitudes, latitudes: Vectors of geographic coordinates
+
+    Output
+       geotransform: 6-tuple (top left x, w-e pixel resolution, rotation,
+                              top left y, rotation, n-s pixel resolution)
+
+    """
+
+    nx = len(longitudes)
+    ny = len(latitudes)
+
+    msg = ('You must specify more than 1 longitude to make geotransform: '
+           'I got %s' % str(longitudes))
+    verify(nx > 1, msg)
+
+    msg = ('You must specify more than 1 latitude to make geotransform: '
+           'I got %s' % str(latitudes))
+    verify(ny > 1, msg)
+
+    dx = float(longitudes[1] - longitudes[0])  # Longitudinal resolution
+    dy = float(latitudes[0] - latitudes[1])  # Latitudinal resolution (neg)
+
+    # Define pixel centers along each directions
+    # This is to achieve pixel registration rather
+    # than gridline registration
+    dx2 = dx / 2
+    dy2 = dy / 2
+
+    geotransform = (longitudes[0] - dx2,  # Longitude of upper left corner
+                    dx,                   # w-e pixel resolution
+                    0,                    # rotation
+                    latitudes[-1] - dy2,  # Latitude of upper left corner
+                    0,                    # rotation
+                    dy)                   # n-s pixel resolution
+
+    return geotransform
 
 
 def bbox_intersection(*args):

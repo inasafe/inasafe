@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -37,13 +37,13 @@ from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
                             GEOCRS,
                             setJakartaGeoExtent)
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
 from storage.utilities import nanallclose
 
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
 VECTOR_PATH2 = os.path.join(TESTDATA, 'OSM_subset_google_mercator.shp')
-RASTERPATH = os.path.join(TESTDATA, 'Shakemap_Padang_2009.asc')
+RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 
 # Handle to common QGis test app
@@ -112,6 +112,36 @@ class ISClipper(unittest.TestCase):
                (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
         assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, msg
 
+    def test_invalidFilenamesCaught(self):
+        """Invalid filenames raise appropriate exceptions
+
+        Wrote this test because test_clipBoth raised the wrong error
+        when file was missing. Instead of reporting that, it gave
+        Western boundary must be less than eastern. I got [0.0, 0.0, 0.0, 0.0]
+
+        See issue #170
+        """
+
+        # Try to create a vector layer from non-existing filename
+        myName = 'stnhaoeu_78oeukqjkrcgA'
+        myPath = 'OEk_tnshoeu_439_kstnhoe'
+
+        with RedirectStdStreams(stdout=DEVNULL, stderr=DEVNULL):
+            myVectorLayer = QgsVectorLayer(myPath, myName, 'ogr')
+
+        myMessage = ('QgsVectorLayer reported "valid" for non '
+               'existent path "%s" and name "%s".'
+               % (myPath, myName))
+        assert not myVectorLayer.isValid(), myMessage
+
+        # Create a raster layer
+        with RedirectStdStreams(stdout=DEVNULL, stderr=DEVNULL):
+            myRasterLayer = QgsRasterLayer(myPath, myName)
+        myMessage = ('QgsRasterLayer reported "valid" for non '
+               'existent path "%s" and name "%s".'
+               % (myPath, myName))
+        assert not myRasterLayer.isValid(), myMessage
+
     def test_clipBoth(self):
         """Raster and Vector layers can be clipped
         """
@@ -121,15 +151,16 @@ class ISClipper(unittest.TestCase):
         myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         VECTOR_PATH)
+        # FIXME (Ole): This does not work when file doesn't exist (Issue #170)
         assert myVectorLayer is not None, msg
 
         # Create a raster layer
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
-
-        msg = 'Did not find layer "%s" in path "%s"' % (myName,
+        myMessage = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         RASTERPATH)
-        assert myRasterLayer is not None, msg
+        # FIXME (Ole): This does not work when file doesn't exist (Issue #170)
+        assert myRasterLayer is not None, myMessage
 
         # Create a bounding box
         myViewportGeoExtent = [99.53, -1.22, 101.20, -0.36]

@@ -31,11 +31,12 @@ from utilities import geotransform2resolution
 from utilities import nanallclose
 from utilities import ugettext as _
 from utilities import VerificationError
+from utilities import raster_geometry2geotransform
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
-from utilities_test import TESTREPO, TESTDATA
+from utilities_test import TESTDATA, HAZDATA, EXPDATA
 from utilities_test import FEATURE_COUNTS
 from utilities_test import GEOTRANSFORMS
 
@@ -76,7 +77,7 @@ class Test_IO(unittest.TestCase):
 
         # Read and verify test data
         for vectorname in ['test_buildings.shp',
-                           'tsunami_exposure_BB.shp',
+                           'tsunami_building_exposure.shp',
                            'Padang_WGS84.shp',
                            'OSM_building_polygons_20110905.shp',
                            'OSM_subset.shp']:
@@ -117,7 +118,7 @@ class Test_IO(unittest.TestCase):
 
         # Read and verify test data
         for vectorname in ['test_buildings.shp',
-                           'tsunami_exposure_BB.shp',
+                           'tsunami_building_exposure.shp',
                            'Padang_WGS84.shp']:
 
             filename = '%s/%s' % (TESTDATA, vectorname)
@@ -218,7 +219,7 @@ class Test_IO(unittest.TestCase):
         """
 
         for vectorname in ['test_buildings.shp',
-                           'tsunami_exposure_BB.shp']:
+                           'tsunami_building_exposure.shp']:
 
             filename = '%s/%s' % (TESTDATA, vectorname)
             layer = read_layer(filename)
@@ -241,7 +242,7 @@ class Test_IO(unittest.TestCase):
                     assert len(L) == N
                     assert L.get_projection() == layer.get_projection()
                     #print [a['FLOOR_AREA'] for a in L.attributes]
-                elif vectorname == 'tsunami_exposure_BB.shp':
+                elif vectorname == 'tsunami_building_exposure.shp':
                     L = layer.get_topN(attribute='STR_VALUE', N=N)
                     assert len(L) == N
                     assert L.get_projection() == layer.get_projection()
@@ -417,19 +418,21 @@ class Test_IO(unittest.TestCase):
         """
 
         # Read and verify test data
-        vectorname = 'kecamatan_geo.shp'
+        vectorname = 'kecamatan_jakarta_osm.shp'
 
         filename = '%s/%s' % (TESTDATA, vectorname)
         layer = read_layer(filename)
         geometry = layer.get_geometry()
         attributes = layer.get_data()
 
+        assert layer.is_polygon_data
+
         # Check basic data integrity
         N = len(layer)
 
         assert len(geometry) == N
         assert len(attributes) == N
-        assert len(attributes[0]) == 8
+        assert len(attributes[0]) == 2
 
         assert FEATURE_COUNTS[vectorname] == N
         assert isinstance(layer.get_name(), basestring)
@@ -444,7 +447,7 @@ class Test_IO(unittest.TestCase):
         for i in range(N):
             geom = geometry[i]
             n = geom.shape[0]
-            assert n > 2
+            assert n >= 2
             assert geom.shape[1] == 2
 
             # Check that polygon is closed
@@ -459,21 +462,10 @@ class Test_IO(unittest.TestCase):
             assert max_dist > 0
 
         # Check integrity of each feature
-        expected_features = {13: {'AREA': 28760732,
-                                  'POP_2007': 255383,
-                                  'KECAMATAN': 'kali deres',
-                                  'KEPADATAN': 60,
-                                  'PROPINSI': 'DKI JAKARTA'},
-                             21: {'AREA': 13155073,
-                                  'POP_2007': 247747,
-                                  'KECAMATAN': 'kramat jati',
-                                  'KEPADATAN': 150,
-                                  'PROPINSI': 'DKI JAKARTA'},
-                             35: {'AREA': 4346540,
-                                  'POP_2007': 108274,
-                                  'KECAMATAN': 'senen',
-                                  'KEPADATAN': 246,
-                                  'PROPINSI': 'DKI JAKARTA'}}
+        expected_features = {13: {'KAB_NAME': 'JAKARTA PUSAT',
+                                  'KEC_NAME': 'SAWAH BESAR'},
+                             20: {'KAB_NAME': 'JAKARTA SELATAN',
+                                  'KEC_NAME': 'MAMPANG PRAPATAN'}}
 
         field_names = None
         for i in range(N):
@@ -515,7 +507,7 @@ class Test_IO(unittest.TestCase):
                                   geometry_new[i],
                                   rtol=1.0e-6)  # OGR works in single precision
 
-            assert len(attributes_new[i]) == 8
+            assert len(attributes_new[i]) == 2
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
@@ -525,7 +517,7 @@ class Test_IO(unittest.TestCase):
         Test againts centroid data generated by qgis: named *_centroids.shp
         """
 
-        for vectorname in ['kecamatan_geo.shp',
+        for vectorname in ['kecamatan_jakarta_osm.shp',
                            'OSM_subset.shp']:
 
             # Read and verify test data
@@ -567,7 +559,7 @@ class Test_IO(unittest.TestCase):
                 r_geom = r_geometry[i]
 
                 assert numpy.allclose(c_geom, r_geom,
-                                      rtol=0.0, atol=1.0e-9)
+                                      rtol=1.0e-8, atol=1.0e-12)
 
             # Write to file (for e.g. visual inspection)
             out_filename = unique_filename(prefix='centroid', suffix='.shp')
@@ -631,6 +623,22 @@ class Test_IO(unittest.TestCase):
         geotransform = (lon_ul, dlon, 0, lat_ul, 0, dlat)
         R1 = Raster(A1, projection, geotransform,
                     keywords={'testkwd': 'testval', 'size': 'small'})
+
+        # Test conversion between geotransform and
+        # geometry (longitudes and latitudes)
+        longitudes, latitudes = R1.get_geometry()
+        msg = 'Longitudes not as expected: %s' % str(longitudes)
+        assert numpy.allclose(longitudes, [100.5, 101.5, 102.5, 103.5, 104.5,
+                                           105.5, 106.5, 107.5]), msg
+
+        msg = 'Latitudes not as expected: %s' % str(latitudes)
+        assert numpy.allclose(latitudes, [5.5, 6.5, 7.5, 8.5, 9.5]), msg
+
+        gt = raster_geometry2geotransform(longitudes, latitudes)
+        msg = ('Conversion from coordinates to geotransform failed: %s'
+               % str(gt))
+        assert numpy.allclose(gt, geotransform,
+                              rtol=1.0e-12, atol=1.0e-12), msg
 
         msg = ('Dimensions of raster array do not match those of '
                'raster object')
@@ -710,6 +718,15 @@ class Test_IO(unittest.TestCase):
             assert M == R1.rows, msg
             assert N == R1.columns, msg
 
+            # Test conversion between geotransform and
+            # geometry (longitudes and latitudes)
+            longitudes, latitudes = R1.get_geometry()
+            gt = raster_geometry2geotransform(longitudes, latitudes)
+            msg = ('Conversion from coordinates to geotransform failed: %s'
+                   % str(gt))
+            assert numpy.allclose(gt, R1.get_geotransform(),
+                                  rtol=1.0e-12, atol=1.0e-12), msg
+
             # Write back to new file
             for ext in ['.tif']:  # Would like to also have , '.asc']:
                 out_filename = unique_filename(suffix=ext)
@@ -785,13 +802,13 @@ class Test_IO(unittest.TestCase):
         """
 
         # Read files with -9999 as nominated nodata value
-        for rastername in ['Population_2010_clip.tif',
-                           'Lembang_Earthquake_Scenario.asc',
-                           'Earthquake_Ground_Shaking.asc']:
+        for filename in [os.path.join(TESTDATA, 'Population_2010_clip.tif'),
+                         os.path.join(HAZDATA,
+                                      'Lembang_Earthquake_Scenario.asc'),
+                         os.path.join(TESTDATA,
+                                      'Earthquake_Ground_Shaking.asc')]:
 
-            filename = '%s/%s' % (TESTDATA, rastername)
             R = read_layer(filename)
-
             A = R.get_data(nan=False)
 
             # Verify nodata value
@@ -811,12 +828,12 @@ class Test_IO(unittest.TestCase):
         """
 
         for layername in ['test_buildings.shp',
-                          'tsunami_exposure_BB.shp']:
+                          'tsunami_building_exposure.shp']:
 
             filename = '%s/%s' % (TESTDATA, layername)
             L = read_layer(filename)
 
-            if layername == 'tsunami_exposure_BB.shp':
+            if layername == 'tsunami_building_exposure.shp':
                 attributes = L.get_data()
 
                 for name in ['STR_VALUE', 'CONT_VALUE']:
@@ -1001,10 +1018,10 @@ class Test_IO(unittest.TestCase):
             z = z[:-1]  # Remove trailing comma
 
         # Reference bbox for vector data
-        ref_bbox = {'tsunami_exposure_BB.shp': [150.124,
-                                                -35.7856,
-                                                150.295,
-                                                -35.6546]}
+        ref_bbox = {'tsunami_building_exposure.shp': [150.15238387897742,
+                                                      -35.71084183517241,
+                                                      150.18779267086208,
+                                                      -35.70131768155173]}
 
         # Select correct reference bbox for rasters
         if float(z) < 17:
@@ -1019,7 +1036,7 @@ class Test_IO(unittest.TestCase):
                                                               0.0]
 
         for filename in ['Earthquake_Ground_Shaking_clip.tif',
-                         'tsunami_exposure_BB.shp']:
+                         'tsunami_building_exposure.shp']:
             bbox = get_bounding_box(os.path.join(TESTDATA, filename))
             msg = ('Got bbox %s from filename %s, but expected %s '
                    % (str(bbox), filename, str(ref_bbox[filename])))
@@ -1048,10 +1065,11 @@ class Test_IO(unittest.TestCase):
 
         assert same_API(V, R, exclude=exclude)
 
-        for layername in ['test_buildings.shp',
-                          'Lembang_Earthquake_Scenario.asc']:
+        for filename in [os.path.join(TESTDATA,
+                                      'test_buildings.shp'),
+                         os.path.join(HAZDATA,
+                                      'Lembang_Earthquake_Scenario.asc')]:
 
-            filename = '%s/%s' % (TESTDATA, layername)
             L = read_layer(filename)
 
             assert same_API(L, V, exclude=exclude)

@@ -5,7 +5,7 @@ function of ground shaking measured in MMI.
 Buildings are assumed to fall the # classes below as described in
 the ITB report.
 
-To be added 
+To be added
 
 """
 #import os
@@ -14,7 +14,7 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
 from engine.numerics import lognormal_cdf;
-#from impact_functions.mappings import osm2itb, sigab2itb 
+#from impact_functions.mappings import osm2itb, sigab2itb
 
 # Damage curves for each of the nine classes derived from the Padang survey
 class AutoVivification(dict):
@@ -33,16 +33,16 @@ a = open(path_csv + '/itb_vulnerability_non-eng.csv').readlines()
 damage_curves = AutoVivification()
 for item in a[1:]:
     tmp = item.strip('\n').split(',')
-    idx = tmp[0] # structural type index 
-    damage_curves[idx]['median'] = float(tmp[5]) 
+    idx = tmp[0] # structural type index
+    damage_curves[idx]['median'] = float(tmp[5])
     damage_curves[idx]['beta'] = float(tmp[6])
 
 # Engineered buildings
 a = open(path_csv + '/itb_vulnerability_eng.csv').readlines()
 for item in a[1:]:
     tmp = item.strip('\n').split(',')
-    idx = tmp[0] # structural type index 
-    damage_curves[idx]['median'] = float(tmp[6]) 
+    idx = tmp[0] # structural type index
+    damage_curves[idx]['median'] = float(tmp[6])
     damage_curves[idx]['beta'] = float(tmp[7])
 # I would suggest chaning the name of variable 'damage_curves' to 'vulnerability' since we simply use vulnerability models.
 
@@ -75,7 +75,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         if datatype.lower() == 'osm':
             # Map from OSM attributes to the ITB building classes
 #            Emap = osm2itb(E)
-            print 'osm2itb has not been implemented' 
+            print 'osm2itb has not been implemented'
         elif datatype.lower() == 'sigab':
 #            Emap = sigabitb(E)
             print 'sigab2itb has not been implemented'
@@ -83,7 +83,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
             Emap = E
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(Emap)
+        Hi = H.interpolate(Emap, attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = Emap.get_geometry()
@@ -92,7 +92,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
         # List attributes to carry forward to result layer
         attributes = Emap.get_attribute_names()
-#        print attributes 
+#        print attributes
         # Calculate building damage
         count50 = 0
         count25 = 0
@@ -100,7 +100,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
         count0 = 0
         building_damage = []
         for i in range(N):
-            mmi = float(shaking[i].values()[0])
+            mmi = float(shaking[i]['MMI'])
 
             building_class = Emap.get_data(vclass_tag, i)
 
@@ -110,10 +110,13 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
             beta = damage_params['beta']
 #            print beta, type(beta)
             median = damage_params['median']
+
             msg = 'Invalid parameter value for ' + building_type
             assert beta + median > 0.0, msg
-            percent_damage = lognormal_cdf(mmi, median=median, sigma=beta) * 100
-#            fid.write('%f, %s, %f \n' %(mmi, building_class, percent_damage))
+            percent_damage = lognormal_cdf(mmi,
+                                           median=median,
+                                           sigma=beta) * 100
+
             # Collect shake level and calculated damage
             result_dict = {self.target_field: percent_damage,
                            'MMI': mmi}
@@ -141,12 +144,12 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
             if 66 <= percent_damage:
                 count50 += 1
-        
+
 #        fid.close()
         # Create report
         Hname = H.get_name()
         Ename = E.get_name()
-        impact_summary = _('<b>In case of "%s" the estimated impact to '
+        impact_summary = ('<b>In case of "%s" the estimated impact to '
                            '"%s" '
                            'is&#58;</b><br><br><p>' % (Hname, Ename))
         impact_summary += ('<table border="0" width="320px">'
@@ -165,12 +168,17 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
                                   _('High damage'), count50))
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _('- Levels of impact are defined by post 2009'
-                            ' Padang earthquake survey conducted by Geoscience'
-                            ' Australia and Institut of Teknologi Bandung.'
-                            '<br>')
-        impact_summary += _('- Unreinforced masonry is assumed where no'
-                            ' structural information is available. <br>')
+        # This is the proper text:
+        #_('Levels of impact are defined by post 2009 '
+        #  'Padang earthquake survey conducted by Geoscience '
+        #  'Australia and Institute of Teknologi Bandung.'))
+        #_('Unreinforced masonry is assumed where no '
+        #  'structural information is available.'))
+        impact_summary += _('Levels of impact are defined by post 2009 '
+                            'Padang earthquake survey conducted by Geoscience '
+                            'Australia and Institute of Teknologi Bandung.')
+        impact_summary += _('Unreinforced masonry is assumed where no '
+                            'structural information is available.')
         # Create style
         style_classes = [dict(label=_('No damage'), min=0, max=10,
                               colour='#00ff00', transparency=1),

@@ -14,7 +14,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -38,6 +39,18 @@ class ISImpactCalculator(QObject):
         self._function = None
         self._filename = None
         self._result = None
+
+    def exposureLayer(self):
+        """Accessor for the exposure layer.
+
+        Args:
+            None
+        Returns:
+            A QgsMapLayer or None depending on if the layer is set
+        Raises:
+            None
+        """
+        return self._exposureLayer
 
     def setExposureLayer(self, theLayerPath):
         """Mutator for Exposure layer property (e.g. buildings or

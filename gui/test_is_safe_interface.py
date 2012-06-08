@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 __date__ = '04/04/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -25,7 +25,7 @@ from is_safe_interface import (getOptimalExtent,
                                readKeywordsFromFile,
                                readSafeLayer)
 from is_exceptions import KeywordNotFoundException
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, EXPDATA, HAZDATA
 
 
 class ISSafeInterfaceTest(unittest.TestCase):
@@ -33,21 +33,21 @@ class ISSafeInterfaceTest(unittest.TestCase):
 
     def setUp(self):
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-        self.rasterShakePath = os.path.join(TESTDATA,
+        self.rasterShakePath = os.path.join(HAZDATA,
                                             'Shakemap_Padang_2009.asc')
-        self.rasterTsunamiBBPath = os.path.join(TESTDATA,
-                                'tsunami_max_inundation_depth_BB_utm.asc')
-        self.rasterExposureBBPath = os.path.join(TESTDATA,
-                                                'tsunami_exposure_BB.shp')
+        self.rasterTsunamiPath = os.path.join(TESTDATA,
+                                'tsunami_max_inundation_depth_utm56s.tif')
+        self.rasterExposurePath = os.path.join(TESTDATA,
+                                             'tsunami_building_exposure.shp')
 
-        self.rasterPopulationPath = os.path.join(TESTDATA, 'glp10ag.asc')
+        self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
 
     def test_getOptimalExtent(self):
         """Optimal extent is calculated correctly
         """
 
         exposure_path = os.path.join(TESTDATA, 'Population_2010.asc')
-        hazard_path = os.path.join(TESTDATA,
+        hazard_path = os.path.join(HAZDATA,
                                    'Lembang_Earthquake_Scenario.asc')
 
         # Expected data
@@ -183,24 +183,26 @@ class ISSafeInterfaceTest(unittest.TestCase):
         assert myKeywords == {'category': 'hazard',
                               'subcategory': 'earthquake',
                               'unit': 'MMI',
-                              'title': 'Shakemap_Padang_2009'}
+                              'title': 'Padang 2009 scenario'}
 
         myKeywords = readKeywordsFromFile(self.rasterPopulationPath)
         assert myKeywords == {'category': 'exposure',
                               'subcategory': 'population',
                               'datatype': 'density',
-                              'title': 'Population Density Estimate (5kmx5km)'}
+                              'title': 'Population density (5kmx5km)'}
 
         myKeywords = readKeywordsFromFile(self.vectorPath)
         assert myKeywords == {'category': 'exposure',
                               'datatype': 'itb',
                               'subcategory': 'building'}
 
-        # BB tsunami example (one layer is UTM)
-        myKeywords = readKeywordsFromFile(self.rasterTsunamiBBPath)
-        assert myKeywords == {'category': 'hazard',
-                              'subcategory': 'tsunami', 'unit': 'm'}
-        myKeywords = readKeywordsFromFile(self.rasterExposureBBPath)
+        #  tsunami example (one layer is UTM)
+        myKeywords = readKeywordsFromFile(self.rasterTsunamiPath)
+        assert myKeywords == {'title': 'Tsunami Max Inundation',
+                               'category': 'hazard',
+                              'subcategory': 'tsunami',
+                              'unit': 'm'}
+        myKeywords = readKeywordsFromFile(self.rasterExposurePath)
         print myKeywords == {'category': 'exposure',
                              'subcategory': 'building'}
 

@@ -13,7 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -34,11 +35,13 @@ from qgis.core import (QgsMapLayer,
 from is_impact_calculator import ISImpactCalculator
 from is_safe_interface import (availableFunctions,
                                getOptimalExtent,
-                               getBufferedExtent)
+                               getBufferedExtent,
+                               internationalisedTitles)
 from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
 from is_exceptions import (KeywordNotFoundException,
-                            HashNotFoundException)
+                           HashNotFoundException,
+                           InvalidParameterException)
 from is_map import ISMap
 from is_utilities import (getTempDir,
                           htmlHeader,
@@ -100,6 +103,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
         self.setLayerNameFromTitleFlag = True
+        self.zoomToImpactFlag = True
+        self.hideExposureFlag = True
         self.hazardLayers = None  # array of all hazard layers
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()  # getLayers called by this
@@ -143,6 +148,14 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myFlag = mySettings.value(
                         'inasafe/setLayerNameFromTitleFlag', True).toBool()
         self.setLayerNameFromTitleFlag = myFlag
+
+        myFlag = mySettings.value(
+                            'inasafe/setZoomToImpactFlag', True).toBool()
+        self.zoomToImpactFlag = myFlag
+        # whether exposure layer should be hidden after model completes
+        myFlag = mySettings.value(
+                            'inasafe/setHideExposureFlag', False).toBool()
+        self.hideExposureFlag = myFlag
 
         self.getLayers()
 
@@ -256,12 +269,13 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             return (False, myMessage)
 
         if self.cboFunction.currentIndex() == -1:
-            myHazardFilename = str(self.getHazardLayer().source())
-            myHazardKeywords = self.keywordIO.readKeywords(
-                                                    self.getHazardLayer())
-            myExposureFilename = str(self.getExposureLayer().source())
-            myExposureKeywords = self.keywordIO.readKeywords(
-                                                    self.getExposureLayer())
+            myHazardFilename = self.getHazardLayer().source()
+            myHazardKeywords = QtCore.QString(str(self.keywordIO.readKeywords(
+                                                    self.getHazardLayer())))
+            myExposureFilename = self.getExposureLayer().source()
+            myExposureKeywords = QtCore.QString(
+                                            str(self.keywordIO.readKeywords(
+                                                self.getExposureLayer())))
             myMessage = self.tr('<span class="label label-important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
@@ -270,10 +284,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                          'Please consult the user manual <FIXME: add link> '
                          'for details on what constitute valid inputs for '
                          'a given risk function. <br>'
-                         'Hazard keywords [%s]: %s <br>'
-                         'Exposure keywords [%s]: %s' % (
-                                myHazardFilename, myHazardKeywords,
-                                myExposureFilename, myExposureKeywords))
+                         'Hazard keywords [%1]: %2 <br>'
+                         'Exposure keywords [%3]: %4').arg(
+                                myHazardFilename).arg(myHazardKeywords).arg(
+                                myExposureFilename).arg(myExposureKeywords)
             return (False, myMessage)
         else:
             myMessage = self.tr('<span class="label label-success">Ready:'
@@ -386,7 +400,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.getLayers()
 
     @pyqtSlot()
-    def layersAdded(self, theLayers):
+    def layersAdded(self, theLayers=None):
         """Slot for the new (QGIS 1.8 and beyond api) to notify us when
         a group of layers is are added. This is optimal since if many layers
         are added this slot gets called only once. This slot simply
@@ -466,10 +480,15 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:
                 myTitle = myName
+            else:
+                # Lookup internationalised title if available
+                if myTitle in internationalisedTitles:
+                    myTitle = internationalisedTitles[myTitle]
+            # Register title with layer
             if myTitle and self.setLayerNameFromTitleFlag:
                 myLayer.setLayerName(myTitle)
 
-            # find out if the layer is a hazard or an exposure
+            # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
             try:
@@ -752,8 +771,15 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myMessage = self.tr('Impact layer %s was neither a raster or a '
                    'vector layer' % myQgisImpactLayer.source())
             raise Exception(myMessage)
-        # Finally, add layer to QGIS
+        # Add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
+        # then zoom to it
+        if self.zoomToImpactFlag:
+            self.iface.zoomToActiveLayer()
+        if self.hideExposureFlag:
+            myExposureLayer = self.getExposureLayer()
+            myLegend = self.iface.legendInterface()
+            myLegend.setLayerVisible(myExposureLayer, False)
         self.restoreState()
         # Return text to display in report pane
         return myReport
@@ -877,19 +903,18 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                    'two overlapping layers and zoom or pan to them. Full '
                    'details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
-                   '<p>Hazard: %s</p>'
-                   '<p>Exposure: %s</p>'
-                   '<p>Viewport Geo Extent: %s</p>'
-                   '<p>Hazard Geo Extent: %s</p>'
-                   '<p>Exposure Geo Extent: %s</p>'
-                   '<p>Details: %s</p>'
-                   %
-                   (myHazardLayer.source(),
-                    myExposureLayer.source(),
-                    myViewportGeoExtent,
-                    myHazardGeoExtent,
-                    myExposureGeoExtent,
-                    str(e)))
+                   '<p>Hazard: %1</p>'
+                   '<p>Exposure: %2</p>'
+                   '<p>Viewport Geo Extent: %3</p>'
+                   '<p>Hazard Geo Extent: %4</p>'
+                   '<p>Exposure Geo Extent: %5</p>'
+                   '<p>Details: %6</p>').arg(
+                        myHazardLayer.source()).arg(
+                        myExposureLayer.source()).arg(
+                        QtCore.QString(str(myViewportGeoExtent))).arg(
+                        QtCore.QString(str(myHazardGeoExtent))).arg(
+                        QtCore.QString(str(myExposureGeoExtent))).arg(
+                        str(e))
             raise Exception(myMessage)
 
         # Next work out the ideal spatial resolution for rasters
@@ -1075,8 +1100,18 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myKeywords = self.keywordIO.readKeywords(theLayer)
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
+                    self.pbnPrint.setEnabled(True)
                 else:
+                    self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
+                        myValue = myKeywords[myKeyword]
+
+                        # Translate titles explicitly if possible
+                        if myKeyword == 'title' and \
+                                myValue in internationalisedTitles:
+                            myValue = internationalisedTitles[myValue]
+
+                        # Add this keyword to report
                         myReport += ('<tr>'
                                      # FIXME (Ole): Not sure if this will work
                                      # with translations
@@ -1084,10 +1119,11 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                        + '</th>'
                                      '</tr>'
                                      '<tr>'
-                                       '<td>' + myKeywords[myKeyword] + '</td>'
+                                       '<td>' + myValue + '</td>'
                                      '</tr>')
                     myReport += '</table>'
-            except (KeywordNotFoundException, HashNotFoundException), e:
+            except (KeywordNotFoundException, HashNotFoundException,
+                    InvalidParameterException), e:
                 myReport = ('<span class="label label-important">' +
                            self.tr('No keywords') + '</span><div>')
                 myReport += self.tr('No keywords have been defined'
@@ -1105,9 +1141,6 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myReport += getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
-                self.pbnPrint.setEnabled(True)
-            else:
-                self.pbnPrint.setEnabled(False)
 
     def saveState(self):
         """Save the current state of the ui to an internal class member
@@ -1191,20 +1224,18 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         try:
             myMap.makePdf(myFilename)
             self.showBusy(self.tr('Map Creator'),
-                             self.tr('Your PDF was created....opening using '
-                                     'the default PDF viewer on your system.'
-                                     'The generated pdf is saved as: %s' %
-                                     myFilename),
-                             theProgress=80
-                             )
+                          self.tr('Your PDF was created....opening using '
+                                  'the default PDF viewer on your system.'
+                                  'The generated pdf is saved as: %s' %
+                                  myFilename),
+                          theProgress=80)
             QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
                                  QtCore.QUrl.TolerantMode))
             self.showBusy(self.tr('Map Creator'),
-                             self.tr('Processing complete.'
-                                     'The generated pdf is saved as: %s' %
-                                     myFilename),
-                             theProgress=100
-                             )
+                          self.tr('Processing complete.'
+                                  'The generated pdf is saved as: %s' %
+                                  myFilename),
+                          theProgress=100)
         except Exception, e:
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:

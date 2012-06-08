@@ -15,6 +15,7 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
 from utilities import verify
+from titles import titles as internationalised_titles
 from engine.polygon import inside_polygon, clip_line_by_polygon
 from engine.numerics import ensure_numeric
 
@@ -338,8 +339,15 @@ class Vector:
 
         # Determine name
         if 'title' in self.keywords:
-            vectorname = self.keywords['title']
+            title = self.keywords['title']
+
+            # Lookup internationalised title if available
+            if title in internationalised_titles:
+                title = internationalised_titles[title]
+
+            vectorname = title
         else:
+
             # Use basename without leading directories as name
             vectorname = os.path.split(basename)[-1]
 
@@ -411,7 +419,21 @@ class Vector:
                     geometry.append(numpy.array(coordinates,
                                                 dtype='d',
                                                 copy=False))
-                #elif self.geometry_type == ogr.wkbMultiPolygon:
+                elif self.geometry_type == ogr.wkbMultiPolygon:
+                    msg = ('Got geometry type Multipolygon (%s) for '
+                           'filename %s '
+                           'which is not yet supported.'
+                           'Only point, line and polygon geometries are '
+                           'supported. '
+                           'However, you can use QGIS functionality to '
+                           'convert multipart vector '
+                           'data to singlepart (Vector -> Geometry Tools '
+                           '-> Multipart to Singleparts'
+                           'and use the resulting dataset.'
+                           % (ogr.wkbMultiPolygon,
+                              filename))
+                    raise Exception(msg)
+
                 #    # FIXME: Unpact multiple polygons to simple polygons
                 #    # For hints on how to unpack see
 #http://osgeo-org.1803224.n2.nabble.com/
@@ -764,16 +786,18 @@ class Vector:
                       projection=self.get_projection(),
                       geometry=geometry)
 
-    def interpolate(self, X, name=None, attribute=None):
+    # FIXME (Ole): Name should be layer_name
+    def interpolate(self, X, name=None, attribute_name=None):
         """Interpolate values of this vector layer to other layer
 
         Input
             X: Layer object defining target
-            name: Optional name of interpolated layer
-            attribute: Optional attribute name to use.
-                       If None, all attributes are used.
-                       FIXME (Ole): Single attribute not tested well yet and
-                                    not implemented for lines
+            name: Optional name of returned interpolated layer
+            attribute_name: Optional attribute name to use.
+                            If None, all attributes are used.
+
+                            FIXME (Ole): Single attribute not tested well yet
+                            and not implemented for lines
 
         Output
             Y: Layer object with values of this vector layer interpolated to
@@ -795,8 +819,8 @@ class Vector:
                % geometrytype2string(self.geometry_type))
         verify(self.is_polygon_data, msg)
 
-        # FIXME (Ole): Maybe organise this the same way it is done with rasters
-        # FIXME (Ole): Retain original geometry to use with returned data here
+        # FIXME (Ole): Organise this the same way it is done with rasters
+        original_geometry = X.get_geometry()  # Geometry for returned data
         if X.is_polygon_data:
             # Use centroids, in case of polygons
             X = convert_polygons_to_centroids(X)
@@ -879,13 +903,14 @@ class Vector:
 
         msg = ('Attribute must be either a string or None. I got %s'
                % (str(type(X)))[1:-1])
-        verify(attribute is None or isinstance(attribute, basestring), msg)
+        verify(attribute_name is None or
+               isinstance(attribute_name, basestring), msg)
 
         attribute_names = self.get_attribute_names()
-        if attribute is not None:
+        if attribute_name is not None:
             msg = ('Requested attribute "%s" did not exist in %s'
-                   % (attribute, attribute_names))
-            verify(attribute in attribute_names, msg)
+                   % (attribute_name, attribute_names))
+            verify(attribute_name in attribute_names, msg)
 
         #----------------
         # Start algorithm
@@ -903,14 +928,14 @@ class Vector:
 
         # Augment point features with empty attributes from polygon
         for a in attributes:
-            if attribute is None:
+            if attribute_name is None:
                 # Use all attributes
                 for key in attribute_names:
                     a[key] = None
             else:
                 # Use only requested attribute
                 # FIXME (Ole): Test for this is not finished
-                a[attribute] = None
+                a[attribute_name] = None
 
             # Always create default attribute flagging if point was
             # inside any of the polygons
@@ -918,12 +943,12 @@ class Vector:
 
         # Traverse polygons and assign attributes to points that fall inside
         for i, polygon in enumerate(geom):
-            if attribute is None:
+            if attribute_name is None:
                 # Use all attributes
                 poly_attr = data[i]
             else:
                 # Use only requested attribute
-                poly_attr = {attribute: data[i][attribute]}
+                poly_attr = {attribute_name: data[i][attribute_name]}
 
             # Assign default attribute to indicate points inside
             poly_attr[DEFAULT_ATTRIBUTE] = True
@@ -938,7 +963,8 @@ class Vector:
         # Create new Vector instance and return
         V = Vector(data=attributes,
                    projection=X.get_projection(),
-                   geometry=X.get_geometry())
+                   geometry=original_geometry,
+                   name=X.get_name())
         return V
 
     @property

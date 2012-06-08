@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -32,7 +32,7 @@ from is_keywords_dialog import ISKeywordsDialog
 
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
 from odict import OrderedDict
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -41,9 +41,9 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 def makePadangLayer():
     """Helper function that returns a single predefined layer"""
     myFile = 'Shakemap_Padang_2009.asc'
-    myPath = os.path.join(TESTDATA, myFile)
-    myBaseName = os.path.splitext(myFile)[0]
-    myLayer = QgsRasterLayer(myPath, myBaseName)
+    myPath = os.path.join(HAZDATA, myFile)
+    myTitle = 'Padang 2009 scenario'  # FIXME: Get from keywords
+    myLayer = QgsRasterLayer(myPath, myTitle)
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
@@ -59,6 +59,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def setUp(self):
         """Create fresh dialog for each test"""
+        pass
 
     def tearDown(self):
         """Destroy the dialog after each test"""
@@ -300,9 +301,9 @@ class ISKeywordsDialogTest(unittest.TestCase):
         myDialog.removeItemByValue('hazard')
 
         myKeywords = myDialog.getKeywords()
-        myExpectedKeywords = {'title': 'Shakemap_Padang_2009',
+        myExpectedKeywords = {'title': 'Padang 2009 scenario',
                               'subcategory': 'earthquake',
-                             'unit': 'MMI'}
+                              'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
 
@@ -326,10 +327,10 @@ class ISKeywordsDialogTest(unittest.TestCase):
         myDialog.loadStateFromKeywords()
         myKeywords = myDialog.getKeywords()
 
-        myExpectedKeywords = {'title': 'Shakemap_Padang_2009',
+        myExpectedKeywords = {'title': 'Padang 2009 scenario',
                               'category': 'hazard',
-                             'subcategory': 'earthquake',
-                             'unit': 'MMI'}
+                              'subcategory': 'earthquake',
+                              'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage
@@ -337,7 +338,8 @@ class ISKeywordsDialogTest(unittest.TestCase):
         #check that a default title is given (see
         #https://github.com/AIFDR/inasafe/issues/111)
         myMessage = ('Expected title to be defaulted from '
-            'filename but it was not.')
+                     'filename but it was not. I got %s.'
+                     % myDialog.layer.name())
         assert myDialog.leTitle.text() == myDialog.layer.name(), myMessage
 
 if __name__ == '__main__':

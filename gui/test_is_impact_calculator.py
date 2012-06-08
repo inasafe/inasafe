@@ -12,12 +12,18 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import sys
 import os
+
+# Add PARENT directory to path to make test aware of other modules
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
 import unittest
 from is_impact_calculator import ISImpactCalculator
 from is_exceptions import (InsufficientParametersException,
@@ -26,7 +32,11 @@ from is_exceptions import (InsufficientParametersException,
 
 from is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
 #TODO get rid of this....so we dont pull in stuff from storage...
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
+
+# Retired impact function for characterisation
+# (need import here if test is run independently)
+from engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -36,16 +46,17 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Create shared resources that all tests can use"""
         self.calculator = ISImpactCalculator()
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
-        self.rasterShakePath = os.path.join(TESTDATA,
+        self.rasterShakePath = os.path.join(HAZDATA,
                                             'Shakemap_Padang_2009.asc')
         # UTM projected layer
 
         fn = 'tsunami_max_inundation_depth_BB_utm.asc'
         self.rasterTsunamiBBPath = os.path.join(TESTDATA, fn)
         self.rasterExposureBBPath = os.path.join(TESTDATA,
-                                                'tsunami_exposure_BB.shp')
+                                                'tsunami_building_'
+                                                 'exposure.shp')
 
-        self.rasterPopulationPath = os.path.join(TESTDATA, 'glp10ag.asc')
+        self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
         self.calculator.setHazardLayer(self.rasterShakePath)
         self.calculator.setExposureLayer(self.vectorPath)
         self.calculator.setFunction('Earthquake Guidelines Function')
@@ -125,8 +136,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         myRunner = self.calculator.getRunner()
         myRunner.run()
         myImpactLayer = myRunner.impactLayer()
-        myKeyword = readKeywordsFromLayer(
-                                        myImpactLayer, 'impact_summary')
+        myKeyword = readKeywordsFromLayer(myImpactLayer,
+                                          'impact_summary')
         myMessage = 'Keyword request returned an empty string'
         assert(myKeyword is not ''), myMessage
         # Test we get an exception if keyword is not found
@@ -144,14 +155,14 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test for issue 100: unhashable type dict"""
         exposure_path = os.path.join(TESTDATA,
                             'OSM_building_polygons_20110905.shp')
-        hazard_path = os.path.join(TESTDATA,
+        hazard_path = os.path.join(HAZDATA,
                             'Flood_Current_Depth_Jakarta_geographic.asc')
         # Verify relevant metada is ok
         #H = readSafeLayer(hazard_path)
         #E = readSafeLayer(exposure_path)
         self.calculator.setHazardLayer(hazard_path)
         self.calculator.setExposureLayer(exposure_path)
-        self.calculator.setFunction('Temporarily Closed')
+        self.calculator.setFunction('Be temporarily closed')
         try:
             myRunner = self.calculator.getRunner()
             # run non threaded

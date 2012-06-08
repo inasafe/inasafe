@@ -12,7 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
@@ -876,35 +877,6 @@ class ISMap():
                          theTopOffset / myScaleFactor)
         return myItem
 
-    def drawImpactSummary(self, theTopOffset):
-        """Render the impact summary
-
-        Args:
-            theTopOffset - vertical offset at which to begin drawing
-        Returns:
-            None
-        Raises:
-            None
-        """
-        # Draw the table
-        myTable = QgsComposerPicture(self.composition)
-        myImage = self.renderImpactSummary()
-        if myImage is not None:
-            myTableFile = os.path.join(getTempDir(), 'table.png')
-            myImage.save(myTableFile, 'PNG')
-            myTable.setPictureFile(myTableFile)
-            myScaleFactor = 1
-            myTableHeight = self.pointsToMM(myImage.height()) * myScaleFactor
-            myTableWidth = self.pointsToMM(myImage.width()) * myScaleFactor
-            myLeftOffset = self.pageMargin + 30
-            myTable.setItemPosition(myLeftOffset,
-                                    theTopOffset,
-                                    myTableWidth,
-                                    myTableHeight)
-            myTable.setFrame(False)
-            self.composition.addItem(myTable)
-            #os.remove(myTableFile)
-
     def drawImpactTable(self, theTopOffset):
         """Render the impact table.
 
@@ -995,7 +967,6 @@ class ISMap():
         if myImpactTitleHeight:
             myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
         self.drawLegend(myTopOffset)
-        self.drawImpactSummary(myTopOffset)
         self.drawImpactTable(myTopOffset)
         self.drawDisclaimer()
         self.renderPrintout()
@@ -1019,25 +990,6 @@ class ISMap():
             # TODO maybe we want to handle other types of exceptions?
             return None
 
-    def renderImpactSummary(self):
-        """Render the impact summary in the keywords if present. The table is
-        an html table with a summary for the impact layer.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        try:
-            myHtml = self.keywordIO.readKeywords(self.layer, 'impact_summary')
-            return self.renderHtml(myHtml, 58)
-        except KeywordNotFoundException:
-            return None
-        except Exception:
-            raise
-
     def renderImpactTable(self):
         """Render the table in the keywords if present. The table is an
         html table with statistics for the impact layer.
@@ -1051,7 +1003,7 @@ class ISMap():
         """
         try:
             myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
-            return self.renderHtml(myHtml, 98)
+            return self.renderHtml(myHtml, 156)
         except KeywordNotFoundException:
             return None
         except Exception:

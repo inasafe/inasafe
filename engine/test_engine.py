@@ -3,9 +3,10 @@ import cPickle
 import numpy
 import sys
 import os
+from os.path import join
 
 # Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 # Import InaSAFE modules
@@ -18,16 +19,25 @@ from storage.core import read_layer
 
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
 from storage.utilities import VerificationError
+from storage.utilities import nanallclose
 from storage.core import write_vector_data
 from storage.core import write_raster_data
 from storage.vector import Vector
 from impact_functions import get_plugins
 
-from storage.utilities_test import TESTDATA
+from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
+
+# These imports are needed for impact function registration - dont remove
+# If any of these get reinstated as "official" public impact functions,
+# remove from here and update test to use the real one.
 from impact_functions_for_testing import empirical_fatality_model
+from impact_functions_for_testing import allen_fatality_model
 from impact_functions_for_testing import unspecific_building_impact_model
 from impact_functions_for_testing import NEXIS_building_impact_model
 from impact_functions_for_testing import HKV_flood_study
+from impact_functions_for_testing import BNPB_earthquake_guidelines
+from impact_functions_for_testing import general_ashload_impact
+from impact_functions_for_testing import flood_road_impact
 
 
 def linear_function(x, y):
@@ -166,10 +176,100 @@ class Test_Engine(unittest.TestCase):
         assert numpy.alltrue(C <= xmax)
         assert numpy.alltrue(C >= 0)
 
+    def test_ITB_earthquake_fatality_estimation(self):
+        """Fatalities from ground shaking can be computed correctly
+           using the ITB fatality model (Test data from Hadi Ghasemi).
+        """
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
+        exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
+        fatality_filename = '%s/itb_test_fat.asc' % TESTDATA
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        #plugin_name = 'I T B Fatality Function'
+        plugin_name = 'Be affected by ground shaking'
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+        I = read_layer(impact_filename)
+        calculated_result = I.get_data()
+
+        keywords = I.get_keywords()
+        population = float(keywords['total_population'])
+        fatalities = float(keywords['total_fatalities'])
+
+        # Check aggregated values
+        expected_population = int(round(85424650. / 1000)) * 1000
+        msg = ('Expected population was %f, I got %f'
+               % (expected_population, population))
+        assert population == expected_population, msg
+
+        expected_fatalities = int(round(40871.3028 / 1000)) * 1000
+        msg = ('Expected fatalities was %f, I got %f'
+               % (expected_fatalities, fatalities))
+        assert numpy.allclose(fatalities, expected_fatalities,
+        rtol=1.0e-5), msg
+
+        # Compare with reference data
+        F = read_layer(fatality_filename)
+        fatality_result = F.get_data()
+
+        msg = ('Calculated fatality map did not match expected result: '
+               'I got %s\n'
+               'Expected %s' % (calculated_result, fatality_result))
+        assert nanallclose(calculated_result, fatality_result,
+                           rtol=1.0e-4), msg
+
+        # Check for expected numbers (from Hadi Ghasemi) in keywords
+        # NOTE: Commented out because function no longer needs to return
+        # individual exposure numbers.
+        #for population_count in [2649040.0, 50273440.0, 7969610.0,
+        #                         19320620.0, 5211940.0]:
+        #    assert str(int(population_count / 1000)) in \
+        #        keywords['impact_summary']
+
+        # Check that aggregated number of fatilites is as expected
+        all = int(numpy.sum([31.8937368131,
+                             2539.26369372,
+                             1688.72362573,
+                             17174.9261705,
+                             19436.834531]))
+        msg = 'Aggregated number of fatalities not as expected: %i' % all
+        assert all == 40871, msg
+
+        x = int(round(float(all) / 1000)) * 1000
+        msg = 'Did not find expected value %i in summary' % x
+        assert str(x) in keywords['impact_summary'], msg
+
+        # Individual check does not work anymore, because the function
+        # now only returns
+        # the aggregate number of fatalities
+        #for fatality_count in [31.8937368131, 2539.26369372,
+        #                       1688.72362573, 17174.9261705, 19436.834531]:
+        #    x = str(int(fatality_count))
+        #    summary = keywords['impact_summary']
+        #    msg = 'Expected %s in impact_summary: %s' % (x, summary)
+        #    print x in summary #, msg
+        #    #assert x in summary, msg
+
     def test_earthquake_fatality_estimation_ghasemi(self):
         """Fatalities from ground shaking can be computed correctly 2
            using the Hadi Ghasemi function.
         """
+
+        # FIXME (Ole): Maybe this is no longer relevant (20120501)
 
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/Earthquake_Ground_Shaking_clip.tif' % TESTDATA
@@ -248,8 +348,8 @@ class Test_Engine(unittest.TestCase):
         for filename in ['Flood_Current_Depth_Jakarta_geographic.asc',
                          'Flood_Design_Depth_Jakarta_geographic.asc']:
 
-            hazard_filename = os.path.join(TESTDATA, filename)
-            exposure_filename = os.path.join(TESTDATA, population)
+            hazard_filename = join(HAZDATA, filename)
+            exposure_filename = join(TESTDATA, population)
 
             # Get layers using API
             H = read_layer(hazard_filename)
@@ -336,7 +436,7 @@ class Test_Engine(unittest.TestCase):
                              'Flood_Design_Depth_Jakarta_geographic.asc']:
 
             # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (TESTDATA, haz_filename)
+            hazard_filename = '%s/%s' % (HAZDATA, haz_filename)
             exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
                                  % TESTDATA)
 
@@ -368,17 +468,16 @@ class Test_Engine(unittest.TestCase):
         building locations (vector data).
         """
 
-        for mmi_filename in ['lembang_mmi_hazmap.asc',
-                             'Earthquake_Ground_Shaking_clip.tif',  # NaN's
-                             'Lembang_Earthquake_Scenario.asc']:
-
-            # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (TESTDATA, mmi_filename)
-            exposure_filename = '%s/test_buildings.shp' % TESTDATA
+        # Name file names for hazard level and exposure
+        exp_filename = '%s/test_buildings.shp' % TESTDATA
+        for haz_filename in [join(TESTDATA, 'lembang_mmi_hazmap.asc'),
+                             join(TESTDATA,   # NaN's
+                                  'Earthquake_Ground_Shaking_clip.tif'),
+                             join(HAZDATA, 'Lembang_Earthquake_Scenario.asc')]:
 
             # Calculate impact using API
-            H = read_layer(hazard_filename)
-            E = read_layer(exposure_filename)
+            H = read_layer(haz_filename)
+            E = read_layer(exp_filename)
 
             plugin_name = 'Earthquake Building Damage Function'
             plugin_list = get_plugins(plugin_name)
@@ -392,11 +491,11 @@ class Test_Engine(unittest.TestCase):
             impact_filename = impact_vector.get_filename()
 
             # Read input data
-            hazard_raster = read_layer(hazard_filename)
+            hazard_raster = read_layer(haz_filename)
             A = hazard_raster.get_data()
             mmi_min, mmi_max = hazard_raster.get_extrema()
 
-            exposure_vector = read_layer(exposure_filename)
+            exposure_vector = read_layer(exp_filename)
             coordinates = exposure_vector.get_geometry()
             attributes = exposure_vector.get_data()
 
@@ -439,12 +538,12 @@ class Test_Engine(unittest.TestCase):
                 # Check that interpolated points are within range
                 msg = ('Interpolated mmi %f from file %s was outside '
                        'extrema: [%f, %f] at location '
-                       '[%f, %f].' % (calculated_mmi, hazard_filename,
+                       '[%f, %f].' % (calculated_mmi, haz_filename,
                                       mmi_min, mmi_max, lon, lat))
                 assert mmi_min <= calculated_mmi <= mmi_max, msg
 
                 # Set up some tolerances for comparison with test set.
-                if mmi_filename.startswith('Lembang_Earthquake'):
+                if 'Lembang_Earthquake' in haz_filename:
                     pct = 3
                 else:
                     pct = 2
@@ -510,7 +609,7 @@ class Test_Engine(unittest.TestCase):
                              'Lembang_Earthquake_Scenario.asc']:
 
             # Name file names for hazard level and exposure
-            hazard_filename = '%s/%s' % (TESTDATA, mmi_filename)
+            hazard_filename = '%s/%s' % (HAZDATA, mmi_filename)
             exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
                                  % TESTDATA)
 
@@ -566,13 +665,13 @@ class Test_Engine(unittest.TestCase):
         # no reference data. It does check the sanity of values as
         # far as possible.
 
-        hazard_filename = ('%s/tsunami_max_inundation_depth_BB_'
-                           'geographic.asc' % TESTDATA)
-        exposure_filename = ('%s/tsunami_exposure_BB.shp' % TESTDATA)
-        exposure_with_depth_filename = ('%s/tsunami_exposure_BB_'
-                                        'with_depth.shp' % TESTDATA)
-        reference_impact_filename = ('%s/tsunami_impact_assessment_'
-                                     'BB.shp' % TESTDATA)
+        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
+                            % TESTDATA)
+        exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
+        exposure_with_depth_filename = ('%s/tsunami_building_exposure'
+                                        '.shp' % TESTDATA)
+        reference_impact_filename = ('%s/tsunami_building_assessment'
+                                     '.shp' % TESTDATA)
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
@@ -587,7 +686,6 @@ class Test_Engine(unittest.TestCase):
         impact_vector = calculate_impact(layers=[H, E],
                                          impact_fcn=IF)
         impact_filename = impact_vector.get_filename()
-
         # Read calculated result
         impact_vector = read_layer(impact_filename)  # Read to have truncation
         icoordinates = impact_vector.get_geometry()
@@ -608,19 +706,19 @@ class Test_Engine(unittest.TestCase):
         # original exposure point (with depth) locations
         ref_depth = read_layer(exposure_with_depth_filename)
         refdepth_coordinates = ref_depth.get_geometry()
-        refdepth_attributes = ref_depth.get_data()
+        #refdepth_attributes = ref_depth.get_data()
         assert N == len(refdepth_coordinates)
         msg = ('Coordinates of impact results do not match those of '
                'exposure data (with depth)')
         assert numpy.allclose(icoordinates, refdepth_coordinates), msg
 
         # Read reference results
-        hazard_raster = read_layer(hazard_filename)
-        A = hazard_raster.get_data()
-        depth_min, depth_max = hazard_raster.get_extrema()
+        #hazard_raster = read_layer(hazard_filename)
+        #A = hazard_raster.get_data()
+        #depth_min, depth_max = hazard_raster.get_extrema()
 
         ref_impact = read_layer(reference_impact_filename)
-        refimpact_coordinates = ref_impact.get_geometry()
+        #refimpact_coordinates = ref_impact.get_geometry()
         refimpact_attributes = ref_impact.get_data()
 
         # Check for None
@@ -631,7 +729,7 @@ class Test_Engine(unittest.TestCase):
 
         # Check sanity of calculated attributes
         for i in range(N):
-            lon, lat = icoordinates[i]
+            #lon, lat = icoordinates[i]
 
             depth = iattributes[i]['DEPTH']
 
@@ -684,15 +782,15 @@ class Test_Engine(unittest.TestCase):
 
         # FIXME - when we know how to reproject, replace hazard
         # file with UTM version (i.e. without _geographic).
-        hazard_filename = os.path.join(TESTDATA,
+        hazard_filename = join(TESTDATA,
                                        'Ashload_Gede_VEI4_geographic.asc')
-        exposure_filename = os.path.join(TESTDATA, 'test_buildings.shp')
+        exposure_filename = join(TESTDATA, 'test_buildings.shp')
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        plugin_name = 'Tephra Impact Function'
+        plugin_name = 'Tephra Building Impact Function'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name
@@ -880,7 +978,7 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(AA, A), msg
 
         # Test riab's interpolation function
-        I = R.interpolate(V, name='value')
+        I = R.interpolate(V, attribute_name='value')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
 
@@ -920,7 +1018,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = hazard_raster.interpolate(exposure_vector,
-                                      name='MMI')
+                                      attribute_name='MMI')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -957,6 +1055,18 @@ class Test_Engine(unittest.TestCase):
             # as this was calculated using EQRM and thus different.
             assert numpy.allclose(calculated_mmi, MMI[i], rtol=0.02)
 
+            # Check that all original attributes were carried through
+            # according to issue #101
+            for key in attributes[i]:
+                msg = 'Expected key %s in interpolated attributes' % key
+                assert key in Iattributes[i], msg
+
+                Ival = Iattributes[i][key]
+                val = attributes[i][key]
+                msg = ('Interpolated attribute %s did not have the '
+                       'expected value %s. I got %s' % (key, val, Ival))
+                assert Ival == val, msg
+
     def test_interpolation_tsunami(self):
         """Interpolation using tsunami data set works
 
@@ -964,9 +1074,9 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = ('%s/tsunami_max_inundation_depth_BB_'
-                           'geographic.asc' % TESTDATA)
-        exposure_filename = ('%s/tsunami_exposure_BB.shp' % TESTDATA)
+        hazard_filename = ('%s/tsunami_max_inundation_depth_utm56s.tif'
+                            % TESTDATA)
+        exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
 
         # Read input data
         hazard_raster = read_layer(hazard_filename)
@@ -979,7 +1089,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = hazard_raster.interpolate(exposure_vector,
-                                      name='depth')
+                                      attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1004,7 +1114,7 @@ class Test_Engine(unittest.TestCase):
 
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = ('%s/maumere_aos_depth_20m_land_wgs84.asc'
-                           % TESTDATA)
+                           % HAZDATA)
         exposure_filename = ('%s/maumere_pop_prj.shp' % TESTDATA)
 
         # Read input data
@@ -1020,8 +1130,8 @@ class Test_Engine(unittest.TestCase):
         coordinates = E.get_geometry()
         attributes = E.get_data()
 
-        # Test riab's interpolation function
-        I = H.interpolate(E, name='depth')
+        # Test the interpolation function
+        I = H.interpolate(E, attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1146,7 +1256,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -1206,7 +1316,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
         #I.write_to_file('MM_res.shp')
 
         I_geometry = I.get_geometry()
@@ -1541,7 +1651,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test riab's interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
@@ -1823,8 +1933,8 @@ class Test_Engine(unittest.TestCase):
                          'Flood_Design_Depth_Jakarta_geographic.asc']
 
         for i, filename in enumerate(hazard_layers):
-            hazard_filename = os.path.join(TESTDATA, filename)
-            exposure_filename = os.path.join(TESTDATA, population)
+            hazard_filename = join(HAZDATA, filename)
+            exposure_filename = join(TESTDATA, population)
 
             # Get layers using API
             H = read_layer(hazard_filename)
@@ -1874,15 +1984,15 @@ class Test_Engine(unittest.TestCase):
         """
 
         #plugin_name = 'Padang Earthquake Building Damage Function'
-        plugin_name = 'Be damaged according to building type'
+        plugin_name = 'Be damaged depending on building type'
 
         # Test for a range of hazard layers
         for mmi_filename in ['Shakemap_Padang_2009.asc']:
                              #'Lembang_Earthquake_Scenario.asc']:
 
             # Upload input data
-            hazard_filename = os.path.join(TESTDATA, mmi_filename)
-            exposure_filename = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+            hazard_filename = join(HAZDATA, mmi_filename)
+            exposure_filename = join(TESTDATA, 'Padang_WGS84.shp')
 
             # Call calculation routine
             bbox = '96.956, -5.51, 104.63933, 2.289497'
@@ -1978,8 +2088,8 @@ class Test_Engine(unittest.TestCase):
                              #'Lembang_Earthquake_Scenario.asc']:
 
             # Upload input data
-            hazard_filename = os.path.join(TESTDATA, mmi_filename)
-            exposure_filename = os.path.join(TESTDATA, 'Padang_WGS84.shp')
+            hazard_filename = join(HAZDATA, mmi_filename)
+            exposure_filename = join(TESTDATA, 'Padang_WGS84.shp')
 
             # Call calculation routine
             bbox = '96.956, -5.51, 104.63933, 2.289497'
@@ -2032,8 +2142,8 @@ class Test_Engine(unittest.TestCase):
         roads = 'indonesia_highway_sample.shp'
         plugin_name = 'Flood Road Impact Function'
 
-        hazard_filename = os.path.join(TESTDATA, floods)
-        exposure_filename = os.path.join(TESTDATA, roads)
+        hazard_filename = join(HAZDATA, floods)
+        exposure_filename = join(TESTDATA, roads)
 
         # Get layers using API
         H = read_layer(hazard_filename)
@@ -2170,8 +2280,7 @@ class Test_Engine(unittest.TestCase):
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
-
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_itb')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

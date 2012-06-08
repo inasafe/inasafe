@@ -11,13 +11,14 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import (QtGui, QtCore, QtWebKit)
 from is_help_base import Ui_ISHelpBase
 import os
 
@@ -66,4 +67,10 @@ class ISHelp(QtGui.QDialog):
                                             self.context + '.html'))
             if os.path.isfile(myContextPath):
                 myPath = myContextPath
+        if not os.path.isfile(myPath):
+            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
+            (self.tr('Documentation could not be found at:\n'
+                      '%s' % myPath)))
+        self.ui.webView.settings().setAttribute(
+            QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
         self.ui.webView.setUrl(QtCore.QUrl('file:///' + myPath))

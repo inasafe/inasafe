@@ -13,22 +13,24 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                       '..'))  # Assuming test data two lvls up
 
 # Location of test data
-TESTDATANAME = 'riab_test_data'
-TESTREPO = 'http://www.aifdr.org/svn/%s' % TESTDATANAME
-TESTDATA = os.path.join(pardir, TESTDATANAME)
+DATANAME = 'inasafe_data'
+DATAREPO = 'http://www.aifdr.org/svn/%s' % DATANAME
+DATADIR = os.path.join(pardir, DATANAME)
 
-DEMODATANAME = 'riab_demo_data'
-DEMOREPO = 'http://www.aifdr.org/svn/%s' % DEMODATANAME
-DEMODATA = os.path.join(pardir, DEMODATANAME)
+# Bundled test data
+TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
+HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
+EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 
 # Known feature counts in test data
 FEATURE_COUNTS = {'test_buildings.shp': 144,
-                  'tsunami_exposure_BB.shp': 7529,
+                  'tsunami_building_exposure.shp': 19,
                   'kecamatan_geo.shp': 42,
                   'Padang_WGS84.shp': 3896,
                   'OSM_building_polygons_20110905.shp': 34960,
                   'indonesia_highway_sample.shp': 2,
-                  'OSM_subset.shp': 79}
+                  'OSM_subset.shp': 79,
+                  'kecamatan_jakarta_osm.shp': 47}
 
 # For testing
 GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),

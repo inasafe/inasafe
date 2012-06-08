@@ -1,5 +1,4 @@
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
+"""InaSAFE Disaster risk assessment tool developed by AusAid -
 **IS Safe Interface.**
 
 The purpose of the module is to centralise interactions between the gui
@@ -16,26 +15,32 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '04/04/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+# Standard modules
 import os
 import unicodedata
-from impact_functions import get_admissible_plugins
-from storage.utilities import read_keywords, bbox_intersection
-from storage.utilities import buffered_bounding_box, verify as verify_util
 
+# SAFE functionality
+from safe_api import get_admissible_plugins
+from safe_api import get_plugins as safe_get_plugins
+from safe_api import read_keywords, bbox_intersection
+from safe_api import write_keywords as safe_write_keywords
+from safe_api import read_layer as safe_read_layer
+from safe_api import buffered_bounding_box, verify as verify_util
+from safe_api import calculate_impact as safe_calculate_impact
+from safe_api import internationalisedTitles
+
+# InaSAFE GUI specific functionality
+from PyQt4.QtCore import QCoreApplication
 from is_exceptions import (KeywordNotFoundException,
                            StyleInfoNotFoundException,
                            InvalidParameterException)
-from storage.core import read_layer as safe_read_layer
-from storage.utilities import write_keywords as safe_write_keywords
-from impact_functions import get_plugins as safe_get_plugins
-from engine.core import calculate_impact as safe_calculate_impact
-from PyQt4.QtCore import QCoreApplication
 
 
 def tr(theText):
@@ -148,20 +153,26 @@ def getOptimalExtent(theHazardGeoExtent,
 def getBufferedExtent(theGeoExtent, theCellSize):
     """Grow bounding box with one unit of resolution in each direction.
 
-    Input
-        theGeoExtent - Bounding box with format [W, S, E, N]
-        theCellSize - (resx, resy) Raster resolution in each direction.
+    Args:
+
+        * theGeoExtent - Bounding box with format [W, S, E, N]
+        * theCellSize - (resx, resy) Raster resolution in each direction.
 
         If resolution is None bbox is returned unchanged.
 
-    Ouput
+    Returns:
         Adjusted bounding box
 
+    Raises:
+
+        Any exceptions are propogated
     Note: See docstring for underlying function buffered_bounding_box
           for more details.
     """
-
-    return buffered_bounding_box(theGeoExtent, theCellSize)
+    try:
+        return buffered_bounding_box(theGeoExtent, theCellSize)
+    except:
+        raise
 
 
 def availableFunctions(theKeywordList=None):
@@ -190,11 +201,14 @@ def availableFunctions(theKeywordList=None):
     Raises:
        NoFunctionsFoundException if no functions are found.
     """
-    myDict = get_admissible_plugins(theKeywordList)
-    #if len(myDict) < 1:
-    #    myMessage = 'No InaSAFE impact functions could be found'
-    #    raise NoFunctionsFoundException(myMessage)
-    return myDict
+    try:
+        myDict = get_admissible_plugins(theKeywordList)
+        #if len(myDict) < 1:
+        #    myMessage = 'No InaSAFE impact functions could be found'
+        #    raise NoFunctionsFoundException(myMessage)
+        return myDict
+    except:
+        raise
 
 
 def readKeywordsFromLayer(theLayer, keyword):
@@ -302,12 +316,15 @@ def writeKeywordsToFile(theFilename, theKeywords):
     Returns:
         A safe readSafeLayer object is returned.
     Raises:
-        None
+        Any exceptions are propogated
     """
     myBasename, myExtension = os.path.splitext(theFilename)
     if 'keywords' not in myExtension:
         theFilename = myBasename + '.keywords'
-    safe_write_keywords(theKeywords, theFilename)
+    try:
+        safe_write_keywords(theKeywords, theFilename)
+    except:
+        raise
 
 
 def getStyleInfo(theLayer):
@@ -363,9 +380,12 @@ def readSafeLayer(thePath):
     Returns:
         A safe readSafeLayer object is returned.
     Raises:
-        None
+        Any exceptions are propogated
     """
-    return safe_read_layer(makeAscii(thePath))
+    try:
+        return safe_read_layer(makeAscii(thePath))
+    except:
+        raise
 
 
 def getSafeImpactFunctions(theFunction=None):
@@ -377,9 +397,12 @@ def getSafeImpactFunctions(theFunction=None):
     Returns:
         A safe impact function is returned
     Raises:
-        None
+        Any exceptions are propogated
     """
-    return safe_get_plugins(makeAscii(theFunction))
+    try:
+        return safe_get_plugins(makeAscii(theFunction))
+    except:
+        raise
 
 
 def calculateSafeImpact(theLayers, theFunction):
@@ -392,6 +415,9 @@ def calculateSafeImpact(theLayers, theFunction):
     Returns:
         A safe impact function is returned
     Raises:
-        None
+        Any exceptions are propogated
     """
-    return safe_calculate_impact(theLayers, theFunction)
+    try:
+        return safe_calculate_impact(theLayers, theFunction)
+    except:
+        raise

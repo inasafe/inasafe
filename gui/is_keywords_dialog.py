@@ -14,7 +14,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.3.0'
+__version__ = '0.4.0'
+__revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -503,7 +504,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
            no exceptions explicitly raised."""
         try:
             myKeywords = self.keywordIO.readKeywords(self.layer)
-        except HashNotFoundException:
+        except:
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume
             # exposure to start with
@@ -617,7 +618,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         try:
             self.keywordIO.writeKeywords(self.layer, myKeywords)
         except Exception, e:
-            QtGui.QMessageBox.warning(self, self.tr('Risk in a box'),
+            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
             ((self.tr('An error was encountered when saving the keywords:\n'
                       '%s' % str(getExceptionWithStacktrace(e))))))
         if self.dock is not None:

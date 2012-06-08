@@ -7,6 +7,7 @@ from osgeo import gdal
 from projection import Projection
 from utilities import DRIVER_MAP
 from engine.interpolation import interpolate_raster_vector
+from titles import titles as internationalised_titles
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import nanallclose
@@ -216,7 +217,13 @@ class Raster:
 
         # Determine name
         if 'title' in self.keywords:
-            rastername = self.keywords['title']
+            title = self.keywords['title']
+
+            # Lookup internationalised title if available
+            if title in internationalised_titles:
+                title = internationalised_titles[title]
+
+            rastername = title
         else:
             # Use basename without leading directories as name
             rastername = os.path.split(basename)[-1]
@@ -287,13 +294,14 @@ class Raster:
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
 
-    def interpolate(self, X, name=None):
+    def interpolate(self, X, attribute_name=None):
         """Interpolate values of this raster layer to other layer
 
         Input
             X: Layer object defining target
-            name: Optional name of interpolated layer.
-                  If name is None, the name of self is used.
+            attribute_name: Optional name of interpolated layer.
+                            If attribute_name is None,
+                            the name of self is used.
 
         Output
             Y: Layer object with values of this raster layer interpolated to
@@ -315,9 +323,11 @@ class Raster:
             # Interpolate this raster layer to geometry of X
             msg = ('Name must be either a string or None. I got %s'
                    % (str(type(X)))[1:-1])
-            verify(name is None or isinstance(name, basestring), msg)
+            verify(attribute_name is None
+                   or isinstance(attribute_name, basestring), msg)
 
-            return interpolate_raster_vector(self, X, name)
+            return interpolate_raster_vector(self, X,
+                                             attribute_name=attribute_name)
 
     def get_data(self, nan=True, scaling=None):
         """Get raster data as numeric array
@@ -448,10 +458,10 @@ class Raster:
         # Get parameters for axes
         g = self.get_geotransform()
 
-        lon_ul = g[0]  # Longitude of upper left corner
-        lat_ul = g[3]  # Latitude of upper left corner
-        dx = g[1]      # Longitudinal resolution
-        dy = - g[5]    # Latitudinal resolution (always(?) negative)
+        lon_ul = float(g[0])  # Longitude of upper left corner
+        lat_ul = float(g[3])  # Latitude of upper left corner
+        dx = float(g[1])      # Longitudinal resolution
+        dy = - float(g[5])    # Latitudinal resolution (always(?) negative)
         nx = self.columns
         ny = self.rows
 
@@ -466,8 +476,10 @@ class Raster:
         lon_ur = lon_ul + nx * dx
 
         # Define pixel centers along each directions
-        dy2 = dy / 2
+        # This is to achieve pixel registration rather
+        # than gridline registration
         dx2 = dx / 2
+        dy2 = dy / 2
 
         # Define longitudes and latitudes for each axes
         x = numpy.linspace(lon_ll + dx2,

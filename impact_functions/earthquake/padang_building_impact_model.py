@@ -21,22 +21,24 @@ Class Building Type                              Median (MMI)  Beta (MMI)
 
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
+from impact_functions.core import get_question
 from storage.vector import Vector
 from storage.utilities import ugettext as _
-from engine.numerics import lognormal_cdf;
+from engine.numerics import lognormal_cdf
 from impact_functions.mappings import osm2padang, sigab2padang
+from impact_functions.tables import Table, TableRow
 
 
 # Damage curves for each of the nine classes derived from the Padang survey
-damage_curves = {'1': dict(median=7.5, beta=0.11),
-                 '2': dict(median=8.3, beta=0.1),
-                 '3': dict(median=8.8, beta=0.11),
-                 '4': dict(median=8.4, beta=0.05),
-                 '5': dict(median=9.2, beta=0.11),
-                 '6': dict(median=9.7, beta=0.15),
-                 '7': dict(median=9.0, beta=0.08),
-                 '8': dict(median=8.9, beta=0.07),
-                 '9': dict(median=10.5, beta=0.15)}
+damage_curves = {1: dict(median=7.5, beta=0.11),
+                 2: dict(median=8.3, beta=0.1),
+                 3: dict(median=8.8, beta=0.11),
+                 4: dict(median=8.4, beta=0.05),
+                 5: dict(median=9.2, beta=0.11),
+                 6: dict(median=9.7, beta=0.15),
+                 7: dict(median=9.0, beta=0.08),
+                 8: dict(median=8.9, beta=0.07),
+                 9: dict(median=10.5, beta=0.15)}
 
 
 class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
@@ -53,7 +55,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     datatype in ['osm', 'itb', 'sigab']
     """
 
-    plugin_name = 'Be damaged according to building type'
+    plugin_name = _('Be damaged depending on building type')
 
     def run(self, layers):
         """Risk plugin for Padang building survey
@@ -63,102 +65,79 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
         H = get_hazard_layer(layers)    # Ground shaking
         E = get_exposure_layer(layers)  # Building locations
 
+        question = get_question(H.get_name(),
+                                E.get_name(),
+                                self.plugin_name.lower())
+
+        # Map from different kinds of datasets to Padang vulnerability classes
         datatype = E.get_keywords()['datatype']
         vclass_tag = 'VCLASS'
         if datatype.lower() == 'osm':
-            # Map from OSM attributes to the padang building classes
+            # Map from OSM attributes
             Emap = osm2padang(E)
         elif datatype.lower() == 'sigab':
+            # Map from SIGAB attributes
             Emap = sigab2padang(E)
         else:
             Emap = E
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(Emap)
+        I = H.interpolate(Emap, attribute_name='MMI')
 
         # Extract relevant numerical data
-        coordinates = Emap.get_geometry()
-        shaking = Hi.get_data()
-        N = len(shaking)
-
-        # List attributes to carry forward to result layer
-        attributes = Emap.get_attribute_names()
+        attributes = I.get_data()
+        N = len(I)
 
         # Calculate building damage
-        count50 = 0
-        count25 = 0
-        count10 = 0
-        count0 = 0
-        building_damage = []
+        count_high = count_medium = count_low = count_none = 0
         for i in range(N):
-            mmi = float(shaking[i].values()[0])
+            mmi = float(attributes[i]['MMI'])
 
-            building_class = Emap.get_data(vclass_tag, i)
-
-            building_type = str(int(building_class))
+            building_type = Emap.get_data(vclass_tag, i)
             damage_params = damage_curves[building_type]
             beta = damage_params['beta']
             median = damage_params['median']
-            percent_damage = lognormal_cdf(mmi, median=median, sigma=beta) * 100
+            percent_damage = lognormal_cdf(mmi,
+                                           median=median,
+                                           sigma=beta) * 100
 
-#            print mmi, building_class, percent_damage
-
-            # Collect shake level and calculated damage
-            result_dict = {self.target_field: percent_damage,
-                           'MMI': mmi}
-
-            # Carry all orginal attributes forward
-            for key in attributes:
-                result_dict[key] = Emap.get_data(key, i)
-
-            # Record result for this feature
-            building_damage.append(result_dict)
-
-            # Debugging
-            #if percent_damage > 0.01:
-            #    print mmi, percent_damage
+            # Add calculated impact to existing attributes
+            attributes[i][self.target_field] = percent_damage
 
             # Calculate statistics
             if percent_damage < 10:
-                count0 += 1
+                count_none += 1
 
             if 10 <= percent_damage < 33:
-                count10 += 1
+                count_low += 1
 
             if 33 <= percent_damage < 66:
-                count25 += 1
+                count_medium += 1
 
             if 66 <= percent_damage:
-                count50 += 1
+                count_high += 1
 
-        # Create report
-        Hname = H.get_name()
-        Ename = E.get_name()
-        impact_summary = _('<b>In case of "%s" the estimated impact to '
-                           '"%s" '
-                           'is&#58;</b><br><br><p>' % (Hname, Ename))
-        impact_summary += ('<table border="0" width="320px">'
-                   '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
-                    '   <tr></tr>'
-                    '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (<10%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (10-33%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (33-66%%)&#58;</td><td>%i</td></tr>'
-                    '   <tr><td>%s (66-100%%)&#58;</td><td>%i</td></tr>'
-                    '</table></font>' % (_('Buildings'), _('Total'),
-                                  _('All'), N,
-                                  _('No damage'), count0,
-                                  _('Low damage'), count10,
-                                  _('Medium damage'), count25,
-                                  _('High damage'), count50))
-        impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
-        impact_summary += _('- Levels of impact are defined by post 2009'
-                            ' Padang earthquake survey conducted by Geoscience'
-                            ' Australia and Institut of Teknologi Bandung.'
-                            '<br>')
-        impact_summary += _('- Unreinforced masonry is assumed where no'
-                            ' structural information is available. <br>')
+        # Generate impact report
+        table_body = [question,
+                      TableRow([_('Buildings'), _('Total')],
+                               header=True),
+                      TableRow([_('All'), N]),
+                      TableRow([_('No damage'), count_none]),
+                      TableRow([_('Low damage'), count_low]),
+                      TableRow([_('Medium damage'), count_medium]),
+                      TableRow([_('High damage'), count_high])]
+
+        table_body.append(TableRow(_('Notes:'), header=True))
+        table_body.append(_('Levels of impact are defined by post 2009 '
+                            'Padang earthquake survey conducted by Geoscience '
+                            'Australia and Institute of Teknologi Bandung.'))
+        table_body.append(_('Unreinforced masonry is assumed where no '
+                            'structural information is available.'))
+
+        impact_summary = Table(table_body).toNewlineFreeString()
+        impact_table = impact_summary
+        map_title = _('Earthquake damage to buildings')
+
         # Create style
         style_classes = [dict(label=_('No damage'), min=0, max=10,
                               colour='#00ff00', transparency=1),
@@ -172,10 +151,12 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                           style_classes=style_classes)
 
         # Create vector layer and return
-        V = Vector(data=building_damage,
+        V = Vector(data=attributes,
                    projection=E.get_projection(),
-                   geometry=coordinates,
+                   geometry=E.get_geometry(),
                    name='Estimated pct damage',
-                   keywords={'impact_summary': impact_summary},
+                   keywords={'impact_summary': impact_summary,
+                             'impact_table': impact_table,
+                             'map_title': map_title},
                    style_info=style_info)
         return V
