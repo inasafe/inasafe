@@ -357,6 +357,7 @@ def geotransform2resolution(geotransform, isotropic=False,
     else:
         return resx, resy
 
+
 def raster_geometry2geotransform(longitudes, latitudes):
     """Convert vectors of longitudes and latitudes to geotransform
 
@@ -383,7 +384,7 @@ def raster_geometry2geotransform(longitudes, latitudes):
     verify(ny > 1, msg)
 
     dx = float(longitudes[1] - longitudes[0])  # Longitudinal resolution
-    dy = float(latitudes[0] - latitudes[1])  # Latitudinal resolution (negative)
+    dy = float(latitudes[0] - latitudes[1])  # Latitudinal resolution (neg)
 
     # Define pixel centers along each directions
     # This is to achieve pixel registration rather
