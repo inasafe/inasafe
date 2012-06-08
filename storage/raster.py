@@ -458,10 +458,10 @@ class Raster:
         # Get parameters for axes
         g = self.get_geotransform()
 
-        lon_ul = g[0]  # Longitude of upper left corner
-        lat_ul = g[3]  # Latitude of upper left corner
-        dx = g[1]      # Longitudinal resolution
-        dy = - g[5]    # Latitudinal resolution (always(?) negative)
+        lon_ul = float(g[0])  # Longitude of upper left corner
+        lat_ul = float(g[3])  # Latitude of upper left corner
+        dx = float(g[1])      # Longitudinal resolution
+        dy = - float(g[5])    # Latitudinal resolution (always(?) negative)
         nx = self.columns
         ny = self.rows
 
@@ -480,6 +480,10 @@ class Raster:
         dx2 = dx / 2
 
         # Define longitudes and latitudes for each axes
+        print
+        print lon_ll, dx2, lon_ur
+        print lat_ll, dy2, lat_ul
+
         x = numpy.linspace(lon_ll + dx2,
                            lon_ur - dx2, nx)
         y = numpy.linspace(lat_ll + dy2,

@@ -31,6 +31,7 @@ from utilities import geotransform2resolution
 from utilities import nanallclose
 from utilities import ugettext as _
 from utilities import VerificationError
+from utilities import raster_geometry2geotransform
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
@@ -622,6 +623,25 @@ class Test_IO(unittest.TestCase):
         geotransform = (lon_ul, dlon, 0, lat_ul, 0, dlat)
         R1 = Raster(A1, projection, geotransform,
                     keywords={'testkwd': 'testval', 'size': 'small'})
+
+        # Test conversion between geotransform and
+        # geometry (longitudes and latitudes)
+        longitudes, latitudes = R1.get_geometry()
+        msg = 'Longitudes not as expected: %s' % str(longitudes)
+        assert numpy.allclose(longitudes, [100.5, 101.5, 102.5, 103.5, 104.5,
+                                           105.5, 106.5, 107.5]), msg
+
+        msg = 'Latitudes not as expected: %s' % str(latitudes)
+        assert numpy.allclose(latitudes, [5.5, 6.5, 7.5, 8.5, 9.5]), msg
+
+        print geotransform, type(geotransform)
+        print longitudes, latitudes
+
+        #gt = raster_geometry2geotransform(longitudes, latitudes)
+        #msg = ('Conversion from coordinates to geotransform failed: %s'
+        #       % str(gt))
+        #assert numpy.allclose(gt, geotransform,
+        #                      rtol=1.0e-12, atol=1.0e-12), msg
 
         msg = ('Dimensions of raster array do not match those of '
                'raster object')
@@ -1716,6 +1736,6 @@ class Test_IO(unittest.TestCase):
         assert string2 == 'Hi2'
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test')
+    suite = unittest.makeSuite(Test_IO, 'test_rasters_and_arrays')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
