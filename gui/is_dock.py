@@ -269,12 +269,13 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             return (False, myMessage)
 
         if self.cboFunction.currentIndex() == -1:
-            myHazardFilename = str(self.getHazardLayer().source())
-            myHazardKeywords = self.keywordIO.readKeywords(
-                                                    self.getHazardLayer())
-            myExposureFilename = str(self.getExposureLayer().source())
-            myExposureKeywords = self.keywordIO.readKeywords(
-                                                    self.getExposureLayer())
+            myHazardFilename = self.getHazardLayer().source()
+            myHazardKeywords = QtCore.QString(str(self.keywordIO.readKeywords(
+                                                    self.getHazardLayer())))
+            myExposureFilename = self.getExposureLayer().source()
+            myExposureKeywords = QtCore.QString(
+                                            str(self.keywordIO.readKeywords(
+                                                self.getExposureLayer())))
             myMessage = self.tr('<span class="label label-important">No valid '
                          'functions:'
                          '</span> No functions are available for the inputs '
@@ -283,10 +284,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                          'Please consult the user manual <FIXME: add link> '
                          'for details on what constitute valid inputs for '
                          'a given risk function. <br>'
-                         'Hazard keywords [%s]: %s <br>'
-                         'Exposure keywords [%s]: %s' % (
-                                myHazardFilename, myHazardKeywords,
-                                myExposureFilename, myExposureKeywords))
+                         'Hazard keywords [%1]: %2 <br>'
+                         'Exposure keywords [%3]: %4').arg(
+                                myHazardFilename).arg(myHazardKeywords).arg(
+                                myExposureFilename).arg(myExposureKeywords)
             return (False, myMessage)
         else:
             myMessage = self.tr('<span class="label label-success">Ready:'
@@ -556,8 +557,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             for myFunction in myDict:  # Use only key
                 self.addComboItemInOrder(self.cboFunction, myFunction)
         except Exception, e:
-            msg = 'Unable to get impact functions: %s' % str(e)
-            raise Exception(msg)
+            raise e
 
         self.restoreFunctionState(myOriginalFunction)
 
@@ -897,29 +897,24 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                            myExposureGeoExtent,
                                            myViewportGeoExtent)
         except Exception, e:
-            # FIXME (Ole): This string does not translate (#171)
-            # FIXME (Ole): The message is a bit overwhelming - maybe
-            #              simplify or hide the details (as they repeat
-            #              the main message)
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
                    'and / or the layers and the viewport. Please select '
                    'two overlapping layers and zoom or pan to them. Full '
                    'details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
-                   '<p>Hazard: %s</p>'
-                   '<p>Exposure: %s</p>'
-                   '<p>Viewport Geo Extent: %s</p>'
-                   '<p>Hazard Geo Extent: %s</p>'
-                   '<p>Exposure Geo Extent: %s</p>'
-                   '<p>Details: %s</p>'
-                   %
-                   (myHazardLayer.source(),
-                    myExposureLayer.source(),
-                    myViewportGeoExtent,
-                    myHazardGeoExtent,
-                    myExposureGeoExtent,
-                    str(e)))
+                   '<p>Hazard: %1</p>'
+                   '<p>Exposure: %2</p>'
+                   '<p>Viewport Geo Extent: %3</p>'
+                   '<p>Hazard Geo Extent: %4</p>'
+                   '<p>Exposure Geo Extent: %5</p>'
+                   '<p>Details: %6</p>').arg(
+                        myHazardLayer.source()).arg(
+                        myExposureLayer.source()).arg(
+                        QtCore.QString(str(myViewportGeoExtent))).arg(
+                        QtCore.QString(str(myHazardGeoExtent))).arg(
+                        QtCore.QString(str(myExposureGeoExtent))).arg(
+                        str(e))
             raise Exception(myMessage)
 
         # Next work out the ideal spatial resolution for rasters
