@@ -31,7 +31,7 @@ from utilities import geotransform2resolution
 from utilities import nanallclose
 from utilities import ugettext as _
 from utilities import VerificationError
-#from utilities import raster_geometry2geotransform
+from utilities import raster_geometry2geotransform
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string

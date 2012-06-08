@@ -382,8 +382,8 @@ def raster_geometry2geotransform(longitudes, latitudes):
            'I got %s' % str(latitudes))
     verify(ny > 1, msg)
 
-    dx = longitudes[1] - longitudes[0]  # Longitudinal resolution
-    dy = latitudes[0] - latitudes[1]  # Latitudinal resolution (negative)
+    dx = float(longitudes[1] - longitudes[0])  # Longitudinal resolution
+    dy = float(latitudes[0] - latitudes[1])  # Latitudinal resolution (negative)
 
     # Define pixel centers along each directions
     # This is to achieve pixel registration rather
