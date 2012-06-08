@@ -634,14 +634,11 @@ class Test_IO(unittest.TestCase):
         msg = 'Latitudes not as expected: %s' % str(latitudes)
         assert numpy.allclose(latitudes, [5.5, 6.5, 7.5, 8.5, 9.5]), msg
 
-        print geotransform, type(geotransform)
-        print longitudes, latitudes
-
-        #gt = raster_geometry2geotransform(longitudes, latitudes)
-        #msg = ('Conversion from coordinates to geotransform failed: %s'
-        #       % str(gt))
-        #assert numpy.allclose(gt, geotransform,
-        #                      rtol=1.0e-12, atol=1.0e-12), msg
+        gt = raster_geometry2geotransform(longitudes, latitudes)
+        msg = ('Conversion from coordinates to geotransform failed: %s'
+               % str(gt))
+        assert numpy.allclose(gt, geotransform,
+                              rtol=1.0e-12, atol=1.0e-12), msg
 
         msg = ('Dimensions of raster array do not match those of '
                'raster object')
@@ -720,6 +717,15 @@ class Test_IO(unittest.TestCase):
                    'raster file %s' % R1.filename)
             assert M == R1.rows, msg
             assert N == R1.columns, msg
+
+            # Test conversion between geotransform and
+            # geometry (longitudes and latitudes)
+            longitudes, latitudes = R1.get_geometry()
+            gt = raster_geometry2geotransform(longitudes, latitudes)
+            msg = ('Conversion from coordinates to geotransform failed: %s'
+                   % str(gt))
+            assert numpy.allclose(gt, R1.get_geotransform(),
+                                  rtol=1.0e-12, atol=1.0e-12), msg
 
             # Write back to new file
             for ext in ['.tif']:  # Would like to also have , '.asc']:
@@ -1736,6 +1742,6 @@ class Test_IO(unittest.TestCase):
         assert string2 == 'Hi2'
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test_rasters_and_arrays')
+    suite = unittest.makeSuite(Test_IO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

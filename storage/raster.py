@@ -476,14 +476,12 @@ class Raster:
         lon_ur = lon_ul + nx * dx
 
         # Define pixel centers along each directions
-        dy2 = dy / 2
+        # This is to achieve pixel registration rather
+        # than gridline registration
         dx2 = dx / 2
+        dy2 = dy / 2
 
         # Define longitudes and latitudes for each axes
-        print
-        print lon_ll, dx2, lon_ur
-        print lat_ll, dy2, lat_ul
-
         x = numpy.linspace(lon_ll + dx2,
                            lon_ur - dx2, nx)
         y = numpy.linspace(lat_ll + dy2,

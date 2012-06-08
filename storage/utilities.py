@@ -357,6 +357,49 @@ def geotransform2resolution(geotransform, isotropic=False,
     else:
         return resx, resy
 
+def raster_geometry2geotransform(longitudes, latitudes):
+    """Convert vectors of longitudes and latitudes to geotransform
+
+    This is the inverse operation of Raster.get_geometry().
+
+    Input
+       longitudes, latitudes: Vectors of geographic coordinates
+
+    Output
+       geotransform: 6-tuple (top left x, w-e pixel resolution, rotation,
+                              top left y, rotation, n-s pixel resolution)
+
+    """
+
+    nx = len(longitudes)
+    ny = len(latitudes)
+
+    msg = ('You must specify more than 1 longitude to make geotransform: '
+           'I got %s' % str(longitudes))
+    verify(nx > 1, msg)
+
+    msg = ('You must specify more than 1 latitude to make geotransform: '
+           'I got %s' % str(latitudes))
+    verify(ny > 1, msg)
+
+    dx = longitudes[1] - longitudes[0]  # Longitudinal resolution
+    dy = latitudes[0] - latitudes[1]  # Latitudinal resolution (negative)
+
+    # Define pixel centers along each directions
+    # This is to achieve pixel registration rather
+    # than gridline registration
+    dx2 = dx / 2
+    dy2 = dy / 2
+
+    geotransform = (longitudes[0] - dx2,  # Longitude of upper left corner
+                    dx,                   # w-e pixel resolution
+                    0,                    # rotation
+                    latitudes[-1] - dy2,  # Latitude of upper left corner
+                    0,                    # rotation
+                    dy)                   # n-s pixel resolution
+
+    return geotransform
+
 
 def bbox_intersection(*args):
     """Compute intersection between two or more bounding boxes
