@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Kristy Van Putten, AIFDR</author>
+  </metadata>
+
+  <datafile>
+    <filename>buildings_osm_4326.shp</filename>
+    <checksum>281692441</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>buildings_osm_4326.shx</filename>
+    <checksum>146966760</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>buildings_osm_4326.dbf</filename>
+    <checksum>4182211596</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+</ga_license_file>
