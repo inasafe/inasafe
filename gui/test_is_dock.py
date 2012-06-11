@@ -30,7 +30,8 @@ from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer,
-                       QgsMapLayerRegistry)
+                       QgsMapLayerRegistry,
+                       QgsRectangle)
 from qgis.gui import QgsMapCanvasLayer
 from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
@@ -933,10 +934,10 @@ class ISDockTest(unittest.TestCase):
     def test_issue_160(self):
         """Test that multipart features can be used in a scenario - issue #160
         """
-        myTestDataDir = os.path.join(os.path.dirname(__file__),
+        myTestDataDir = os.path.join(os.path.dirname(__file__), '..',
                                      'unit_test_data')
-        myExposure = 'buildings_osm_4326.shp'
-        myHazard = 'multipart_polygons_4326.shp'
+        myExposure = os.path.join('exposure', 'buildings_osm_4326.shp')
+        myHazard = os.path.join('hazard', 'multipart_polygons_osm_4326.shp')
                 # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         print 'Using QGIS: %s' % qgisVersion()
@@ -965,7 +966,7 @@ class ISDockTest(unittest.TestCase):
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
         # Hazard layers  -multipart_polygons_4326
-        myIndex = DOCK.cboHazard.findText('multipart_polygons_4326')
+        myIndex = DOCK.cboHazard.findText('multipart_polygons_osm_4326')
         assert myIndex != -1, 'multipart_polygons_4326 hazard layer not found'
         DOCK.cboHazard.setCurrentIndex(myIndex)
         # Exposure layers - buildings_osm_4326
@@ -973,9 +974,9 @@ class ISDockTest(unittest.TestCase):
         assert myIndex != -1, 'buildings_osm_4326 exposure layer not found'
         DOCK.cboExposure.setCurrentIndex(myIndex)
         myDict = getUiState(DOCK)
-        myExpectedDict = {'Run Button Enabled': False,
-                          'Impact Function': '',
-                          'Hazard': 'multipart_polygons_4326',
+        myExpectedDict = {'Run Button Enabled': True,
+                          'Impact Function': 'Be temporarily closed',
+                          'Hazard': 'multipart_polygons_osm_4326',
                           'Exposure': 'buildings_osm_4326'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'
                      '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
