@@ -45,8 +45,10 @@ from storage.utilities import nanallclose
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
 VECTOR_PATH2 = os.path.join(TESTDATA, 'OSM_subset_google_mercator.shp')
+
 RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
+
 
 # Handle to common QGis test app
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

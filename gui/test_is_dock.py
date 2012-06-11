@@ -930,6 +930,75 @@ class ISDockTest(unittest.TestCase):
             DOCK.cboExposure.currentText()
         assert myButton.isEnabled(), myMessage
 
+    def test_issue_160(self):
+        """Test that multipart features can be used in a scenario - issue #160
+        """
+        myTestDataDir = os.path.join(os.path.dirname(__file__),
+                                     'unit_test_data')
+        myExposure = 'buildings_osm_4326.shp'
+        myHazard = 'multipart_polygons_4326.shp'
+                # See https://github.com/AIFDR/inasafe/issues/71
+        # Push OK with the left mouse button
+        print 'Using QGIS: %s' % qgisVersion()
+        self.tearDown()
+        myButton = DOCK.pbnRunStop
+        # First part of scenario should have enabled run
+        myFileList = [myHazard, myExposure]
+        myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
+                                                            DIR=myTestDataDir)
+
+        myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
+                     % myHazardLayerCount)
+        assert myHazardLayerCount == 1, myMessage
+
+        myMessage = ('Incorrect number of Exposure layers: expected 1 got %s'
+                     % myExposureLayerCount)
+        assert myExposureLayerCount == 1, myMessage
+
+        myMessage = 'Run button was not enabled'
+        assert myButton.isEnabled(), myMessage
+
+        # Second part of scenario - run disabled when adding invalid layer
+        # and select it - run should be disabled
+        myFileList = ['issue71.tif']  # This layer has incorrect keywords
+        myClearFlag = False
+        myHazardLayerCount, myExposureLayerCount = (
+            loadLayers(myFileList, myClearFlag))
+        # Hazard layers  -multipart_polygons_4326
+        myIndex = DOCK.cboHazard.findText('multipart_polygons_4326')
+        assert myIndex != -1, 'multipart_polygons_4326 hazard layer not found'
+        DOCK.cboHazard.setCurrentIndex(myIndex)
+        # Exposure layers - buildings_osm_4326
+        myIndex = DOCK.cboExposure.findText('buildings_osm_4326')
+        assert myIndex != -1, 'buildings_osm_4326 exposure layer not found'
+        DOCK.cboExposure.setCurrentIndex(myIndex)
+        myDict = getUiState(DOCK)
+        myExpectedDict = {'Run Button Enabled': False,
+                          'Impact Function': '',
+                          'Hazard': 'multipart_polygons_4326',
+                          'Exposure': 'buildings_osm_4326'}
+        myMessage = ('Run button was not disabled when exposure set to \n%s'
+                     '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
+            DOCK.cboExposure.currentText(),
+            myDict,
+            myExpectedDict,
+            combosToString(DOCK))
+
+        assert myExpectedDict == myDict, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        IFACE.mapCanvas().setExtent(
+                                QgsRectangle(106.788,-6.193, 106.853,-6.167))
+
+        # Press RUN
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+
+        myMessage = 'Result not as expected: %s' % myResult
+        assert '2366' in myResult, myMessage
+
+
     def test_state(self):
         """Check if the save/restore state methods work. See also
         https://github.com/AIFDR/inasafe/issues/58

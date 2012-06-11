@@ -23,7 +23,7 @@ There is no need to get the 'full install' - just fetching the latest 'preview'
 is good enough. For example at the time of writing I downloaded
 :samp:`Git-1.7.9-preview20120201.exe`. The download is around 14mb in size.
 
-Once the file is downloaded, run it and respnd to the installer prompts as
+Once the file is downloaded, run it and respond to the installer prompts as
 illustrated below:
 
 .. figure::  ../../msysgit-step1.jpg
@@ -103,7 +103,7 @@ The repository can now be closed by issuing the commands listed below.::
 
    cd .qgis/python/plugins/
 
-   git clone https://<your username>@github.com/AIFDR/inasafe.git
+   git clone https://<your username>@github.com/AIFDR/inasafe.git inasafe-dev
 
 .. note:: The items in angle brackets above should be replaced with your 
    personal details as required.
@@ -111,7 +111,7 @@ The repository can now be closed by issuing the commands listed below.::
 When the final command above runs, you should see something like this in the
 console when the clone process is completed::
 
-   $ git clone https://timlinux@github.com/AIFDR/inasafe.git
+   $ git clone https://timlinux@github.com/AIFDR/inasafe.git inasafe-dev
    Cloning into 'inasafe'...
    remote: Counting objects: 5002, done.
    remote: Compressing objects: 100% (1526/1526), done.
@@ -129,10 +129,11 @@ enter). Now navigate to the plugins directory and check out the
 svn repository by typing the commands as listed below::
 
    cd "c:\Documents and Settings\user\.qgis\python\plugins\"
-   svn co http://www.aifdr.org/svn/riab_test_data ../riab_test_data
+   svn co http://www.aifdr.org/svn/inasafe_data
 
-You will be prompted for a username and password for svn - please
-contect Ole Nielson for a log in account.
+You will be prompted for a username and password for svn - press enter
+(so that it reprompts for the username) and set the username to
+``anonymous`` and just ``press enter`` for the password.
 
 Install QGIS
 ............
@@ -183,10 +184,13 @@ following listing in <QGIS Install Dir>/bin/python-shell.bat::
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
    set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
-   cd "%HOMEPATH%\.qgis\python\plugins\inasafe"
+   cd "%HOMEPATH%\.qgis\python\plugins\inasafe-dev"
    start "Quantum GIS Shell" /B "cmd.exe" %*
 
 .. note:: The QGISPATH environment variable should be unquoted!.
+
+.. note:: You may need to replace PROGRA~2 above with PROGRA~1 if you are
+   on 32bit windows.
 
 For easy access to this shell launcher, right click on the qgis-shell.bat script
 and (without releasing your initial right click) drag with the file onto your
