@@ -988,15 +988,14 @@ class ISDockTest(unittest.TestCase):
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
         IFACE.mapCanvas().setExtent(
-                                QgsRectangle(106.788,-6.193, 106.853,-6.167))
+                                QgsRectangle(106.788, -6.193, 106.853, -6.167))
 
         # Press RUN
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
         myMessage = 'Result not as expected: %s' % myResult
-        assert '2366' in myResult, myMessage
-
+        assert '68' in myResult, myMessage
 
     def test_state(self):
         """Check if the save/restore state methods work. See also

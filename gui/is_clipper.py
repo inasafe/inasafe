@@ -208,7 +208,7 @@ def _clipVectorLayer(theLayer, theExtent,
     return myFilename  # Filename of created file
 
 
-def explodeMultiPartGeometry(self, theGeom):
+def explodeMultiPartGeometry(theGeom):
     """Convert a multipart geometry to a list of single parts. This method was
     adapted from Carson Farmer's fTools doGeometry implementation in QGIS.
 
