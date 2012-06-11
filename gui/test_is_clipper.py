@@ -35,6 +35,8 @@ from is_clipper import clipLayer, extentToKml
 from is_safe_interface import getOptimalExtent
 from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
+                            RedirectStdStreams,
+                            DEVNULL,
                             GEOCRS,
                             setJakartaGeoExtent)
 from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
