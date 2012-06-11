@@ -142,7 +142,7 @@ class TableCell (object):
         """return the HTML code for the table cell as a string
         .. note:: Since we are using the bootstrap framework we set
            alignment using inlined css as bootstrap will override the
-           alignment given by align and valign html attributes."""
+           alignment given by align and valign html attributes.
         """
         attribs_str = ''
         if self.bgcolor:
