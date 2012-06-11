@@ -134,8 +134,12 @@ class ISImpactCalculator(QObject):
             raise InsufficientParametersException(myMessage)
 
         # Call impact calculation engine
-        myHazardLayer = readSafeLayer(self._hazardLayer)
-        myExposureLayer = readSafeLayer(self._exposureLayer)
+        try:
+            myHazardLayer = readSafeLayer(self._hazardLayer)
+            myExposureLayer = readSafeLayer(self._exposureLayer)
+        except:
+            raise
+
         myFunctions = getSafeImpactFunctions(self._function)
         myFunction = myFunctions[0][self._function]
         return ISImpactCalculatorThread(myHazardLayer,
