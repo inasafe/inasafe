@@ -159,13 +159,15 @@ class ITBFatalityFunction(FunctionProvider):
                               / 1000)) * 1000
 
         # Compute test number of people displaced
+        # FIXME (Ole): Just a temporary measure to check...
         displaced_test = 0
         for mmi in mmi_range:
             displaced_test += displacement_rate[mmi] * number_of_exposed[mmi]
         displaced_test = int(round(displaced_test / 1000)) * 1000
 
         msg = 'Displaced = %i, test = %i' % (displaced, displaced_test)
-        assert displaced == displaced_test, msg
+        if displaced != displaced_test:
+            raise Exception(msg)
 
         # Generate impact report
         table_body = [question]
