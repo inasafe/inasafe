@@ -119,7 +119,7 @@ class TableCell (object):
     """
 
     def __init__(self, text="", bgcolor=None, header=False, width=None,
-            align=None, char=None, charoff=None, valign=None, style=None,
+            align=None, char=None, charoff=None, valign=None, style='',
             attribs=None, cell_class=None, row_span=None, col_span=None):
         """TableCell constructor"""
         self.text = text
@@ -139,20 +139,26 @@ class TableCell (object):
             self.attribs = {}
 
     def __str__(self):
-        """return the HTML code for the table cell as a string"""
-        attribs_str = ""
+        """return the HTML code for the table cell as a string
+        .. note:: Since we are using the bootstrap framework we set
+           alignment using inlined css as bootstrap will override the
+           alignment given by align and valign html attributes."""
+        """
+        attribs_str = ''
         if self.bgcolor:
             self.attribs['bgcolor'] = self.bgcolor
         if self.width:
             self.attribs['width'] = self.width
         if self.align:
             self.attribs['align'] = self.align
+            self.style += 'text-align: ' + self.align + ';'
         if self.char:
             self.attribs['char'] = self.char
         if self.charoff:
             self.attribs['charoff'] = self.charoff
         if self.valign:
             self.attribs['valign'] = self.valign
+            self.style += 'text-align: ' + self.valign + ';'
         if self.style:
             self.attribs['style'] = self.style
         if self.cell_class:
@@ -289,6 +295,9 @@ class Table(object):
             col_char=None, col_charoff=None, col_styles=None,
             caption=None, caption_at_bottom=False):
         """TableCell constructor"""
+        # Ensure Rows is an array of rows
+        if isinstance(rows, TableRow):
+            rows = [rows]
         self.border = border
         self.style = style
         # style for thin borders by default
@@ -314,19 +323,6 @@ class Table(object):
         self.col_charoff = col_charoff
         self.col_valign = col_valign
         self.col_styles = col_styles
-
-    def max_column_count(self):
-        """Get the maximum number of cells in any one row"""
-        if isinstance(self.rows, basestring):
-            return 1
-        else:
-            max_column_count = 0
-            for row in self.rows:
-                if not isinstance(row, TableRow):
-                    row = TableRow(row)
-                if row.column_count() > max_column_count:
-                    max_column_count = row.column_count()
-            return max_column_count
 
     def mozilla_row_fix(self, row):
     # apply column alignments  and styles to each row if specified:
@@ -388,7 +384,6 @@ class Table(object):
             result += ' </thead>\n'
         # then all data rows:
         result += ' <tbody>\n'
-        max_column_count = self.max_column_count()
         if isinstance(self.rows, basestring):
             #user instantiated the table with only a string for content
             row = TableRow(self.rows)
