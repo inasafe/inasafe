@@ -394,8 +394,6 @@ class ISDockTest(unittest.TestCase):
         assert myIndex != -1, msg
         DOCK.cboFunction.setCurrentIndex(myIndex)
 
-
-
         myDict = getUiState(DOCK)
         myExpectedDict = {'Hazard': 'Padang 2009 scenario',
                           'Exposure': 'Population density (5kmx5km)',

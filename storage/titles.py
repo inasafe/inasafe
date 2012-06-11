@@ -8,8 +8,9 @@ To achieve this for selected titles, we maintain a lookup table of the form
 
 {string: translatable_string}
 
-where string e.g. comes from the keywords file or attribute names/values in datasets and
-translatable_string is the string that will appear as the translated at runtime.
+where string e.g. comes from the keywords file or attribute names/values
+in datasets and translatable_string is the string that will appear as the
+translated at runtime.
 
 e.g (using a neutral symbol)
 {'title1': _('Jakarta 2007 flood')}
@@ -24,8 +25,9 @@ With the underscore function, the specified string will be seen by the
 translation system and can appear in the supported languages as with
 other strings in SAFE.
 
-Note, this module does *not* provide translations! Rather it provides mappings between
-strings expected at runtime to strings seen by the existing translation systems.
+Note, this module does *not* provide translations! Rather it provides
+mappings between strings expected at runtime to strings seen by the
+existing translation systems.
 """
 
 # FIXME (Ole): This approach can be generalised to any strings that are not

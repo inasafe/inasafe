@@ -205,7 +205,6 @@ class ITBFatalityFunction(FunctionProvider):
         table_body.append(TableRow([_('Total number of people'), s],
                                    header=True))
 
-
         table_body.append(TableRow(_('Action Checklist:'), header=True))
         if fatalities > 0:
             table_body.append(_('Are enough victim identification units '
