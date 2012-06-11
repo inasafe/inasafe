@@ -27,7 +27,8 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsRectangle,
                        QgsMapLayer,
                        QgsFeature,
-                       QgsVectorFileWriter)
+                       QgsVectorFileWriter,
+                       QgsGeometry)
 
 from is_safe_interface import verify
 from is_keyword_io import ISKeywordIO
@@ -184,9 +185,13 @@ def _clipVectorLayer(theLayer, theExtent,
     myCount = 0
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
-        myGeometry.transform(myXForm)
-        myFeature.setGeometry(myGeometry)
-        myWriter.addFeature(myFeature)
+        # Loop through the parts adding them to the output file
+        # we ALWAYS write out single part features
+        myGeometryList = explodeMultiPartGeometry(myGeometry)
+        for myPart in myGeometryList:
+            myPart.transform(myXForm)
+            myFeature.setGeometry(myPart)
+            myWriter.addFeature(myFeature)
         myCount += 1
     del myWriter  # Flush to disk
 
@@ -201,6 +206,46 @@ def _clipVectorLayer(theLayer, theExtent,
                   theExtraKeywords=theExtraKeywords)
 
     return myFilename  # Filename of created file
+
+
+def explodeMultiPartGeometry(self, theGeom):
+    """Convert a multipart geometry to a list of single parts. This method was
+    adapted from Carson Farmer's fTools doGeometry implementation in QGIS.
+
+    Args:
+       theGeom - A geometry - if it is multipart it will be exploded.
+
+    Returns:
+        A list of single part geometries
+
+    Raises:
+       None
+
+    """
+    myMultiGeometry = QgsGeometry()
+    myParts = []
+    if theGeom.type() == 0:
+        if theGeom.isMultipart():
+            myMultiGeometry = theGeom.asMultiPoint()
+            for i in myMultiGeometry:
+                myParts.append(QgsGeometry().fromPoint(i))
+        else:
+            myParts.append(theGeom)
+    elif theGeom.type() == 1:
+        if theGeom.isMultipart():
+            myMultiGeometry = theGeom.asMultiPolyline()
+            for i in myMultiGeometry:
+                myParts.append(QgsGeometry().fromPolyline(i))
+        else:
+            myParts.append(theGeom)
+    elif theGeom.type() == 2:
+        if theGeom.isMultipart():
+            myMultiGeometry = theGeom.asMultiPolygon()
+            for i in myMultiGeometry:
+                myParts.append(QgsGeometry().fromPolygon(i))
+        else:
+            myParts.append(theGeom)
+    return myParts
 
 
 def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
