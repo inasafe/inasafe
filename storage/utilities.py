@@ -778,9 +778,7 @@ def calculate_polygon_centroid(polygon):
     y = P[:, 1]
 
     # Calculate
-    #Cx = sum_{i=0}^{N-1} (x_i + x_{i+1})(x_i y_{i+1} - x_{i+1} y_i)/(6A)
-
-    # Calculate
+    # Cx = sum_{i=0}^{N-1} (x_i + x_{i+1})(x_i y_{i+1} - x_{i+1} y_i)/(6A)
     # Cy = sum_{i=0}^{N-1} (y_i + y_{i+1})(x_i y_{i+1} - x_{i+1} y_i)/(6A)
     a = x[:-1] * y[1:]
     b = y[:-1] * x[1:]
