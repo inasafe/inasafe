@@ -387,6 +387,15 @@ class ISDockTest(unittest.TestCase):
         assert myIndex != -1, 'Population density (5kmx5km) not found'
         DOCK.cboExposure.setCurrentIndex(myIndex)
 
+        # Choose impact function
+        myIndex = DOCK.cboFunction.findText('Earthquake Fatality Function')
+        msg = ('Earthquake Fatality Function not '
+               'found: ' + combosToString(DOCK))
+        assert myIndex != -1, msg
+        DOCK.cboFunction.setCurrentIndex(myIndex)
+
+
+
         myDict = getUiState(DOCK)
         myExpectedDict = {'Hazard': 'Padang 2009 scenario',
                           'Exposure': 'Population density (5kmx5km)',
@@ -431,6 +440,13 @@ class ISDockTest(unittest.TestCase):
         myIndex = DOCK.cboExposure.findText('Population density (5kmx5km)')
         assert myIndex != -1, 'Population density (5kmx5km) not found'
         DOCK.cboExposure.setCurrentIndex(myIndex)
+
+        # Choose impact function
+        myIndex = DOCK.cboFunction.findText('Earthquake Fatality Function')
+        msg = ('Earthquake Fatality Function not '
+               'found: ' + combosToString(DOCK))
+        assert myIndex != -1, msg
+        DOCK.cboFunction.setCurrentIndex(myIndex)
 
         myDict = getUiState(DOCK)
         myExpectedDict = {'Hazard': 'Padang 2009 scenario',
