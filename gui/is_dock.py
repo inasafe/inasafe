@@ -662,13 +662,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myMessage += getExceptionWithStacktrace(e, html=True)
             self.displayHtml(myMessage)
             return
+        try:
+            self.runner = self.calculator.getRunner()
 
-        self.runner = self.calculator.getRunner()
-        QtCore.QObject.connect(self.runner,
+            QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
                                self.completed)
-
-        try:
             QtGui.qApp.setOverrideCursor(
                     QtGui.QCursor(QtCore.Qt.WaitCursor))
             self.repaint()
