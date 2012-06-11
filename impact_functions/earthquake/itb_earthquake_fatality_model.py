@@ -80,7 +80,7 @@ class ITBFatalityFunction(FunctionProvider):
 
     """
 
-    plugin_name = _('Be affected by ground shaking')
+    plugin_name = _('Die')
 
     def run(self, layers,
             x=0.62275231, y=8.03314466, zeta=2.15):
@@ -134,8 +134,9 @@ class ITBFatalityFunction(FunctionProvider):
             # Calculate expected number of displaced people per level
             D = displacement_rate[mmi] * I
 
-            # Sum up number of displaced to create map
-            R += D
+            # Sum up numbers for map
+            R += F   # Fatalities
+            #R += D   # Displaced
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
