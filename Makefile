@@ -70,6 +70,9 @@ clean:
 # Run the test suite followed by pep8 style checking
 test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit
 
+# Run the test suite followed by pep8 style checking - dont update from svn for test data
+test_no_svn: docs test_suite_no_svn pep8 disabled_tests dependency_test unwanted_strings data_audit
+
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 
@@ -80,6 +83,22 @@ pep8:
 	@echo "PEP8 issues"
 	@echo "-----------"
 	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
+
+# Run entire test suite
+test_suite_no_svn: compile
+	@echo
+	@echo "----------------------"
+	@echo "Regresssion Test Suite"
+	@echo "----------------------"
+	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+
+	@# FIXME (Ole) - to get of the remaining junk I tried to use
+	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
+	@# This does clip the line, but does not flush and puts an extra
+	@# newline in.
+
+	@# Report expected failures if any!
+	@#echo Expecting 1 test to fail in support of issue #3
 
 # Run entire test suite
 test_suite: compile testdata

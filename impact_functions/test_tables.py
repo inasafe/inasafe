@@ -376,9 +376,10 @@ class TablesTest(unittest.TestCase):
         actual_result = Table(['12', '3000', '5'],
                               col_align=['right', 'right', 'right'])
 
-        expected_strings = ['<td colspan="100%" align="right">12</td>',
-                            '<td colspan="100%" align="right">3000</td>',
-                            '<td colspan="100%" align="right">5</td>']
+        expected_strings = [
+        '<td colspan="100%" align="right" style="text-align: right;">12</td>',
+        '<td colspan="100%" align="right" style="text-align: right;">3000</td>',
+        '<td colspan="100%" align="right" style="text-align: right;">5</td>']
         for s in expected_strings:
             message = ('Did not find expected string "%s" in result: %s'
                        % (s, actual_result))
@@ -418,7 +419,10 @@ class TablesTest(unittest.TestCase):
             assert 'align="right"' in str(cell)
 
         table = Table(row)
-        #print str(table)  # Broken
+        self.html += str(table)
+        self.writeHtml('table_column_alignment')
+
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TablesTest, 'test')
