@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-07 23:46+0200\n"
+"POT-Creation-Date: 2012-06-11 11:55+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -274,7 +274,7 @@ msgstr ""
 #: impact_functions/experimental/tsunami_building_impact.py:130
 #: impact_functions/generic/categorised_hazard_building_impact.py:78
 #: impact_functions/generic/categorised_hazard_building_impact.py:83
-#: impact_functions/styles.py:21 impact_functions/styles.py:68
+#: impact_functions/styles.py:21 impact_functions/styles.py:55
 msgid "Low"
 msgstr ""
 
@@ -306,7 +306,7 @@ msgstr ""
 #: impact_functions/experimental/tsunami_building_impact.py:132
 #: impact_functions/generic/categorised_hazard_building_impact.py:80
 #: impact_functions/generic/categorised_hazard_building_impact.py:87
-#: impact_functions/styles.py:29 impact_functions/styles.py:76
+#: impact_functions/styles.py:29 impact_functions/styles.py:65
 msgid "High"
 msgstr ""
 
@@ -336,12 +336,12 @@ msgid "Flooded"
 msgstr ""
 
 #: storage/test_io.py:1719 storage/test_io.py:1721 storage/test_io.py:1712
-#: storage/test_io.py:1713 storage/test_io.py:1713
+#: storage/test_io.py:1713 storage/test_io.py:1739
 msgid "Hello!"
 msgstr ""
 
 #: storage/test_io.py:1720 storage/test_io.py:1722 storage/test_io.py:1713
-#: storage/test_io.py:1714 storage/test_io.py:1714
+#: storage/test_io.py:1714 storage/test_io.py:1740
 msgid "Hello2!"
 msgstr ""
 
@@ -768,7 +768,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:194
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:195
 #: impact_functions/earthquake/earthquake_impact_on_women.py:141
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:195
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:214
 #: impact_functions/earthquake/padang_building_impact_model.py:132
 #: impact_functions/inundation/flood_OSM_building_impact.py:155
 #: impact_functions/inundation/flood_population_evacuation.py:95
@@ -948,7 +948,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:180
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:181
 #: impact_functions/earthquake/earthquake_impact_on_women.py:120
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:181
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
 msgid "Number of fatalities"
 msgstr ""
 
@@ -962,7 +962,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:196
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:197
 #: impact_functions/earthquake/earthquake_impact_on_women.py:143
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:197
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:215
 msgid "Fatality model is from Institute of Teknologi Bandung 2012."
 msgstr ""
 
@@ -976,7 +976,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:201
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:202
 #: impact_functions/earthquake/earthquake_impact_on_women.py:148
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:202
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:221
 msgid "Earthquake impact to population"
 msgstr ""
 
@@ -1298,7 +1298,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:212
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:213
 #: impact_functions/earthquake/earthquake_impact_on_women.py:159
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:213
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:232
 msgid "Estimated fatalities"
 msgstr ""
 
@@ -1317,7 +1317,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:185
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:186
 #: impact_functions/earthquake/earthquake_impact_on_women.py:125
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:186
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:197
 msgid "Number of people displaced"
 msgstr ""
 
@@ -1329,7 +1329,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:188
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #: impact_functions/earthquake/earthquake_impact_on_women.py:135
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:206
 #: impact_functions/inundation/flood_OSM_building_impact.py:151
 msgid "Action Checklist:"
 msgstr ""
@@ -1358,7 +1358,7 @@ msgstr ""
 #: impact_functions/earthquake/earthquake_impact_on_women.py:118
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:190
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:190
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:208
 #, python-format
 msgid "Are enough victim identification units available for %i people?"
 msgstr ""
@@ -1368,7 +1368,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:191
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:211
 #, python-format
 msgid "Are enough shelters available for %i people?"
 msgstr ""
@@ -1425,7 +1425,7 @@ msgid "Are enough facilities available to assist %i pregnant women?"
 msgstr ""
 
 #: impact_functions/styles.py:60 impact_functions/styles.py:72
-#: impact_functions/styles.py:72
+#: impact_functions/styles.py:60
 msgid "Mid"
 msgstr ""
 
@@ -1435,4 +1435,12 @@ msgstr ""
 
 #: storage/titles.py:52 storage/titles.py:52
 msgid "people"
+msgstr ""
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:202
+msgid "Total number of people"
+msgstr ""
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:217
+msgid "Population numbers rounded to nearest 1000."
 msgstr ""
