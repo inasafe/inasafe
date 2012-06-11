@@ -99,6 +99,7 @@ test_suite_no_svn: compile
 
 	@# Report expected failures if any!
 	@#echo Expecting 1 test to fail in support of issue #3
+	@#echo Expecting 1 test to fail in support of issue #160
 
 # Run entire test suite
 test_suite: compile testdata
@@ -115,6 +116,7 @@ test_suite: compile testdata
 
 	@# Report expected failures if any!
 	@#echo Expecting 1 test to fail in support of issue #3
+	@#echo Expecting 1 test to fail in support of issue #160
 
 # Run gui test suite only and without svn updating test data
 gui_test_suite_no_svn: compile
