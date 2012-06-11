@@ -30,6 +30,7 @@ class Raster:
                 * None (FIXME (Ole): Remove this option)
             projection: Geospatial reference in WKT format.
                         Only used if data is provide as a numeric array,
+                        if None, WGS84 geographic is assumed
             geotransform: GDAL geotransform (6-tuple).
                           (top left x, w-e pixel resolution, rotation,
                            top left y, rotation, n-s pixel resolution).
