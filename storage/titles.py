@@ -6,10 +6,10 @@ can therefore not be translated.
 
 To achieve this for selected titles, we maintain a lookup table of the form
 
-{title: translatable_string}
+{string: translatable_string}
 
-where title comes from the keywords file and translatable_string is
-the string that will appear as the translated title
+where string e.g. comes from the keywords file or attribute names/values in datasets and
+translatable_string is the string that will appear as the translated at runtime.
 
 e.g (using a neutral symbol)
 {'title1': _('Jakarta 2007 flood')}
@@ -17,10 +17,15 @@ e.g (using a neutral symbol)
 or (using existing title)
 {'Schools': _('Schools')}
 
+or (attribute value)
+{'school': _('school')}
 
 With the underscore function, the specified string will be seen by the
 translation system and can appear in the supported languages as with
 other strings in SAFE.
+
+Note, this module does *not* provide translations! Rather it provides mappings between
+strings expected at runtime to strings seen by the existing translation systems.
 """
 
 # FIXME (Ole): This approach can be generalised to any strings that are not
