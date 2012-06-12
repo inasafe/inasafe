@@ -251,15 +251,15 @@ def getExceptionWithStacktrace(e, html=False, context=None):
         # Wrap string in html
         s = '<table class="condensed">'
         if context is not None and context != '':
-            s += ('<tr><th class="warning error-report">'
+            s += ('<tr><th class="warning button-cell">'
                   + tr('Error:') + '</th></tr>\n'
                   '<tr><td>' + context + '</td></tr>\n')
         # now the string from the error itself
-        s += ('<tr><th class="problem error-report">'
+        s += ('<tr><th class="problem button-cell">'
               + tr('Problem:') + '</th></tr>\n'
             '<tr><td>' + myErrorMessage + '</td></tr>\n')
             # now the traceback heading
-        s += ('<tr><th class="info error-report" style="cursor:pointer;"'
+        s += ('<tr><th class="info button-cell" style="cursor:pointer;"'
               ' onclick="$(\'#traceback\').toggle();">'
               + tr('Click for Diagnostic Information:') + '</th></tr>\n'
               '<tr><td>' + myTraceback + '</td></tr>\n')

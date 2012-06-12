@@ -259,13 +259,17 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myHazardIndex = self.cboHazard.currentIndex()
         myExposureIndex = self.cboExposure.currentIndex()
         if myHazardIndex == -1 or myExposureIndex == -1:
-            myMessage = self.tr(
-            '<span class="label label-notice">Getting started:'
-            '</span> To use this tool you need to add some layers to your '
+            myMessage = '<table class="condensed">'
+            myNotes = self.tr(
+            'To use this tool you need to add some layers to your '
             'QGIS project. Ensure that at least one <em>hazard</em> layer '
             '(e.g. earthquake MMI) and one <em>exposure</em> layer (e.g. '
             'dwellings) re available. When you are ready, click the <em>'
             'run</em> button below.')
+            myMessage += ('<tr><th class="info button-cell">'
+                  + self.tr('Getting started:') + '</th></tr>\n'
+                  '<tr><td>' + myNotes + '</td></tr>\n')
+            myMessage += '</table>'
             return (False, myMessage)
 
         if self.cboFunction.currentIndex() == -1:
@@ -276,23 +280,34 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myExposureKeywords = QtCore.QString(
                                             str(self.keywordIO.readKeywords(
                                                 self.getExposureLayer())))
-            myMessage = self.tr('<span class="label label-important">No valid '
-                         'functions:'
-                         '</span> No functions are available for the inputs '
+            # TODO refactor impact_functions so it is accessible and user here
+            myMessage = '<table class="condensed">'
+            myNotes = self.tr('No functions are available for the inputs '
                          'you have specified. '
                          'Try selecting a different combination of inputs. '
                          'Please consult the user manual <FIXME: add link> '
                          'for details on what constitute valid inputs for '
-                         'a given risk function. <br>'
-                         'Hazard keywords [%1]: %2 <br>'
-                         'Exposure keywords [%3]: %4').arg(
-                                myHazardFilename).arg(myHazardKeywords).arg(
-                                myExposureFilename).arg(myExposureKeywords)
+                         'a given risk function.')
+            myMessage += ('<tr><th class="warning button-cell">'
+                  + self.tr('No valid functions:') + '</th></tr>\n'
+                  '<tr><td>' + myNotes + '</td></tr>\n')
+            myMessage += ('<tr><th class="info button-cell">'
+                  + self.tr('Hazard keywords:') + '</th></tr>\n'
+                  '<tr><td>' + myHazardKeywords + '</td></tr>\n')
+            myMessage += ('<tr><th class="info button-cell">'
+                  + self.tr('Exposure keywords:') + '</th></tr>\n'
+                  '<tr><td>' + myExposureKeywords + '</td></tr>\n')
+            myMessage += '</table>'
             return (False, myMessage)
         else:
-            myMessage = self.tr('<span class="label label-success">Ready:'
-            '</span> You can now proceed to run your model by clicking '
-            'the <em> Run</em> button.')
+            # TODO refactor impact_functions so it is accessible and user here
+            myMessage = '<table class="condensed">'
+            myNotes = self.tr('You can now proceed to run your model by'
+                                ' clicking the <em>Run</em> button.')
+            myMessage += ('<tr><th class="info button-cell">'
+                  + self.tr('Ready') + '</th></tr>\n'
+                  '<tr><td>' + myNotes + '</td></tr>\n')
+            myMessage += '</table>'
             return (True, myMessage)
 
     def on_cboHazard_currentIndexChanged(self, theIndex):
