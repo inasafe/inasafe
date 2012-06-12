@@ -28,12 +28,13 @@ sys.path.append(pardir)
 import numpy
 
 from qgis.core import (QgsVectorLayer,
-                       QgsRasterLayer)
+                       QgsRasterLayer,
+                       QgsGeometry)
 
 from is_safe_interface import readSafeLayer
 from is_safe_interface import getOptimalExtent
 from is_exceptions import InvalidProjectionException
-from is_clipper import clipLayer, extentToKml
+from is_clipper import clipLayer, extentToKml, explodeMultiPartGeometry
 
 from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
@@ -434,6 +435,33 @@ class ISClipper(unittest.TestCase):
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myClipRect)
         assert(os.path.exists(myResult))
+
+    def test_explodeMultiPolygonGeometry(self):
+        """Test exploding POLY multipart to single part geometries works"""
+        myGeometry = QgsGeometry.fromWkt('MULTIPOLYGON(((-0.966314 0.445890,'
+           '-0.281133 0.555729,-0.092839 0.218369,-0.908780 0.035305,-0.966314'
+           ' 0.445890)),((-0.906164 0.003923,-0.077148 0.197447,0.043151'
+           ' -0.074533,-0.882628 -0.296824,-0.906164 0.003923)))')
+        myCollection = explodeMultiPartGeometry(myGeometry)
+        myMessage = 'Expected 2 parts from multipart polygon geometry'
+        assert len(myCollection) == 2, myMessage
+
+    def test_explodeMultiLineGeometry(self):
+        """Test exploding LINES multipart to single part geometries works"""
+        myGeometry = QgsGeometry.fromWkt('MULTILINESTRING((-0.974159 0.526961,'
+                ' -0.291594 0.644645), (-0.411893 0.728331,'
+                ' -0.160834 0.568804))')
+        myCollection = explodeMultiPartGeometry(myGeometry)
+        myMessage = 'Expected 2 parts from multipart line geometry'
+        assert len(myCollection) == 2, myMessage
+
+    def test_explodeMultiPointGeometry(self):
+        """Test exploding POINT multipart to single part geometries works"""
+        myGeometry = QgsGeometry.fromWkt('MULTIPOINT((-0.966314 0.445890),'
+           '(-0.281133 0.555729))')
+        myCollection = explodeMultiPartGeometry(myGeometry)
+        myMessage = 'Expected 2 parts from multipart point geometry'
+        assert len(myCollection) == 2, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISClipper, 'test')
