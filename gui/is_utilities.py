@@ -239,7 +239,7 @@ def getExceptionWithStacktrace(e, html=False):
     """
 
     info = ''.join(traceback.format_tb(sys.exc_info()[2]))
-    errmsg = str(e)
+    errmsg = e.__class__.__name__ + ' : ' + str(e)
 
     if not html:
         return errmsg + "\n" + info

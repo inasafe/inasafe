@@ -36,17 +36,17 @@ class ISUtilitiesTest(unittest.TestCase):
         except Exception, e:
             # Display message and traceback
 
-            msg = getExceptionWithStacktrace(e, html=False)
-            #print msg
-            assert str(e) in msg
-            assert 'line' in msg
-            assert 'File' in msg
+            myMessage = getExceptionWithStacktrace(e, html=False)
+            #print myMessage
+            assert str(e) in myMessage
+            assert 'line' in myMessage
+            assert 'File' in myMessage
 
-            msg = getExceptionWithStacktrace(e, html=True)
-            assert str(e) in msg
-            assert '<pre id="traceback"' in msg
-            assert 'line' in msg
-            assert 'File' in msg
+            myMessage = getExceptionWithStacktrace(e, html=True)
+            assert str(e) in myMessage
+            assert '<pre id="traceback"' in myMessage
+            assert 'line' in myMessage
+            assert 'File' in myMessage
 
     def test_issue126(self):
         """Test that non integer transparency ranges fail gracefully.
@@ -148,6 +148,16 @@ class ISUtilitiesTest(unittest.TestCase):
                              (mySize, mySize, myActualSize))
                 assert mySize == myActualSize, myMessage
                 mySize += 1
+
+    def test_issue157(self):
+        """Verify that we get the error class name back - issue #157
+           .. seealso:: https://github.com/AIFDR/inasafe/issues/121
+        """
+        try:
+            bbox_intersection('aoeu', 'oaeu', [])
+        except Exception, e:
+            myMessage = getExceptionWithStacktrace(e, html=False)
+            assert 'VerificationError : Western' in myMessage, myMessage
 
     def test_getQgisVersion(self):
         """Test we can get the version of QGIS"""
