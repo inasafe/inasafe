@@ -31,8 +31,10 @@ from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer)
 
 from is_safe_interface import readSafeLayer
-from is_clipper import clipLayer, extentToKml
 from is_safe_interface import getOptimalExtent
+from is_exceptions import InvalidProjectionException
+from is_clipper import clipLayer, extentToKml
+
 from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
                             RedirectStdStreams,
@@ -358,6 +360,47 @@ class ISClipper(unittest.TestCase):
                 msg = 'Data should not have changed'
                 assert nanallclose(A_native, A_none,
                                    rtol=1.0e-12, atol=1.0e-12), msg
+
+    def testRasterScaling_projected(self):
+        """Attempt to scale projected density raster layers raise exception
+
+        Automatic scaling when resampling density data
+        does not currently work for projected layers. See issue #123.
+
+        For the time being this test checks that an exception is raised
+        when scaling is attempted on projected layers.
+        When we resolve issue #123, this test should be rewritten.
+        """
+
+        test_filename = 'Population_Jakarta_UTM48N.tif'
+        myRasterPath = ('%s/%s' % (TESTDATA, test_filename))
+
+        # Get reference values
+        R = readSafeLayer(myRasterPath)
+        R_min, R_max = R.get_extrema()
+        native_resolution = R.get_resolution()
+
+        print
+        print R_min, R_max
+        print native_resolution
+
+        # Define bounding box in EPSG:4326
+        bounding_box = [106.61, -6.38, 107.05, -6.07]
+
+        # Test for a range of resolutions
+        for res in [0.02, 0.01, 0.005, 0.002, 0.001]:
+
+            # Clip the raster to the bbox
+            extraKeywords = {'resolution': native_resolution}
+            myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
+            try:
+                myResult = clipLayer(myRasterLayer, bounding_box, res,
+                                     theExtraKeywords=extraKeywords)
+            except InvalidProjectionException:
+                pass
+            else:
+                msg = 'Should have raised InvalidProjectionException'
+                raise Exception(msg)
 
     def test_extentToKml(self):
         """Test if extent to KML is working."""

@@ -354,6 +354,8 @@ class Raster:
                      scalar value: If scaling takes a numerical scalar value,
                                    that will be use to scale the data
 
+        NOTE: Scaling does not currently work with projected layers.
+        See issue #123
         """
 
         if hasattr(self, 'data'):

@@ -21,7 +21,7 @@ import os
 import sys
 import tempfile
 
-from PyQt4.QtCore import QCoreApplication
+from PyQt4.QtCore import QCoreApplication, QString
 from qgis.core import (QgsCoordinateTransform,
                        QgsCoordinateReferenceSystem,
                        QgsRectangle,
@@ -30,10 +30,11 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsVectorFileWriter,
                        QgsGeometry)
 
-from is_safe_interface import verify
+from is_safe_interface import verify, readKeywordsFromFile
 from is_keyword_io import ISKeywordIO
 from is_exceptions import (InvalidParameterException,
-                            NoFeaturesInExtentException)
+                           NoFeaturesInExtentException,
+                           InvalidProjectionException)
 from is_utilities import getTempDir
 from subprocess import call
 
@@ -265,15 +266,16 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
         * theCellSize - cell size (in GeoCRS) which the layer should
-            be resampled to. If not provided for a raster layer,
-            the native raster cell size will be used.
+            be resampled to. If not provided for a raster layer (i.e.
+            theCellSize=None), the native raster cell size will be used.
 
     Returns:
         Path to the output clipped layer (placed in the
         system temp dir).
 
     Raises:
-       None
+       Exception if input layer is a density layer in projected coordinates -
+       see issue #123
 
     """
     if not theLayer or not theExtent:
@@ -293,6 +295,23 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
            'expected keywords file %s' % (myWorkingLayer,
                                           myKeywordsPath))
     verify(os.path.isfile(myKeywordsPath), myMessage)
+
+    # Raise exception if layer is projected and refers to density (issue #123)
+    # FIXME (Ole): Need to deal with it - e.g. by automatically reprojecting
+    # the layer at this point and setting the native resolution accordingly
+    # in its keywords.
+    myKeywords = readKeywordsFromFile(myKeywordsPath)
+    if 'datatype' in myKeywords and myKeywords['datatype'] == 'density':
+        if theLayer.srs().epsg() != 4326:
+
+            # This layer is not WGS84 geographic
+            myMessage = ('Layer %s represents density but has spatial '
+                         'reference "%s". Density layers must be given in '
+                         'WGS84 geographic coordinates, so please reproject '
+                         'and try again. For more information, see issue '
+                         'https://github.com/AIFDR/inasafe/issues/123'
+                         % (myWorkingLayer, theLayer.srs().toProj4()))
+            raise InvalidProjectionException(myMessage)
 
     # We need to provide gdalwarp with a dataset for the clip
     # because unline gdal_translate, it does not take projwin.
