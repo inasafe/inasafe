@@ -227,36 +227,43 @@ def tr(theText):
     return QCoreApplication.translate(myContext, theText)
 
 
-def getExceptionWithStacktrace(e, html=False):
+def getExceptionWithStacktrace(e, html=False, context=None):
     """Convert exception into a string and and stack trace
 
     Input
         e: Exception object
         html: Optional flat if output is to wrapped as html
+        context: Optional context message
 
     Output
         Exception with stack trace info suitable for display
     """
 
-    info = ''.join(traceback.format_tb(sys.exc_info()[2]))
-    errmsg = e.__class__.__name__ + ' : ' + str(e)
+    myTraceback = ''.join(traceback.format_tb(sys.exc_info()[2]))
+    myErrorMessage = e.__class__.__name__ + ' : ' + str(e)
 
     if not html:
-        return errmsg + "\n" + info
+        return myErrorMessage + "\n" + myTraceback
     else:
+        myTraceback = ('<pre id="traceback" class="prettyprint"'
+              ' style="display: none;">\n' + myTraceback + '</pre>')
+
         # Wrap string in html
-        s = '<span class="label label-warning">' + tr('Problem:') + '</span> '
-        s += '<div>'
-        s += errmsg
-        s += ('</div><br/>'
-        '<span class="label label-info" style="cursor:pointer;"'
-        ' onclick="$(\'#traceback\').toggle();">')
-        s += tr('Toggle traceback...')
-        s += '</span><br />'
-        s += ('<pre id="traceback" class="prettyprint"'
-              ' style="display: none;">\n')
-        s += info
-        s += '</pre>'
+        s = '<table class="condensed">'
+        if context is not None and context != '':
+            s += ('<tr><th class="warning error-report">'
+                  + tr('Error:') + '</th></tr>\n'
+                  '<tr><td>' + context + '</td></tr>\n')
+        # now the string from the error itself
+        s += ('<tr><th class="problem error-report">'
+              + tr('Problem:') + '</th></tr>\n'
+            '<tr><td>' + myErrorMessage + '</td></tr>\n')
+            # now the traceback heading
+        s += ('<tr><th class="info error-report" style="cursor:pointer;"'
+              ' onclick="$(\'#traceback\').toggle();">'
+              + tr('Click for Diagnostic Information:') + '</th></tr>\n'
+              '<tr><td>' + myTraceback + '</td></tr>\n')
+        s += '</table>'
         return s
 
 

@@ -655,11 +655,11 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('<p><span class="label label-important">'
-                                'Error:</span> '
-                                'An exception occurred when setting up the '
+            myMessage = self.tr('An exception occurred when setting up the '
                                 'impact calculator.')
-            myMessage += getExceptionWithStacktrace(e, html=True)
+            myMessage = getExceptionWithStacktrace(e,
+                                                    html=True,
+                                                    context=myMessage)
             self.displayHtml(myMessage)
             return
         try:
@@ -689,11 +689,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
-            myMessage = self.tr('<p><span class="label label-important">'
-                                'Error:</span> '
-                                'An exception occurred when starting'
+            myContext = self.tr('An exception occurred when starting'
                                 ' the model.')
-            myMessage += getExceptionWithStacktrace(e, html=True)
+            myMessage = getExceptionWithStacktrace(e, html=True,
+                                                   context=myContext)
             self.displayHtml(myMessage)
 
     def completed(self):
@@ -1123,9 +1122,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                     myReport += '</table>'
             except (KeywordNotFoundException, HashNotFoundException,
                     InvalidParameterException), e:
-                myReport = ('<span class="label label-important">' +
-                           self.tr('No keywords') + '</span><div>')
-                myReport += self.tr('No keywords have been defined'
+                myContext = self.tr('No keywords have been defined'
                         ' for this layer yet. If you wish to use it as'
                         ' an impact or hazard layer in a scenario, please'
                         ' use the keyword editor. You can open the keyword'
@@ -1134,8 +1131,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                         ' width="16" height="16"> icon'
                         ' in the toolbar, or choosing Plugins -> InaSAFE'
                         ' -> Keyword Editor from the menus.')
-                myReport += '</div><br />'
-                myReport += getExceptionWithStacktrace(e, html=True)
+                myReport += getExceptionWithStacktrace(e, html=True,
+                                                       context=myContext)
             except Exception, e:
                 myReport += getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
