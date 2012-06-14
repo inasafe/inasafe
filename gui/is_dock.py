@@ -1084,9 +1084,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def displayHtml(self, theMessage):
         """Given an html snippet, wrap it in a page header and footer
         and display it in the wvResults widget."""
-        myHtml = '<div style="padding: 2px">'
-        myHtml += self.htmlHeader() + theMessage + self.htmlFooter()
-        myHtml += '</div>'
+        myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
         #f = file('/tmp/h.thml', 'wa')  # for debugging
         #f.write(myHtml)
         #f.close()
