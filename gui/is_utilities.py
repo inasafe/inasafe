@@ -240,11 +240,21 @@ def getExceptionWithStacktrace(e, html=False, context=None):
     """
 
     myTraceback = ''.join(traceback.format_tb(sys.exc_info()[2]))
-    myErrorMessage = e.__class__.__name__ + ' : ' + str(e)
 
     if not html:
+        if str(e) is None or str(e) == '':
+            myErrorMessage = (e.__class__.__name__ + ' : ' +
+                              tr('No details provided'))
+        else:
+            myErrorMessage = e.__class__.__name__ + ' : ' + str(e)
         return myErrorMessage + "\n" + myTraceback
     else:
+        if str(e) is None or str(e) == '':
+            myErrorMessage = ('<b>' + e.__class__.__name__ + '</b> : ' +
+                              tr('No details provided'))
+        else:
+            myErrorMessage = '<b>' + e.__class__.__name__ + '</b> : ' + str(e)
+
         myTraceback = ('<pre id="traceback" class="prettyprint"'
               ' style="display: none;">\n' + myTraceback + '</pre>')
 

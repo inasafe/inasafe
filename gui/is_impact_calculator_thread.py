@@ -90,6 +90,7 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
         self._function = theFunction
         self._impactLayer = None
         self._result = None
+        self._exception = None
 
     def impactLayer(self):
         """Return the InaSAFE layer instance which is the output from the
@@ -99,6 +100,10 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
     def result(self):
         """Return the result of the last run."""
         return self._result
+
+    def lastException(self):
+        """Return any exception that may have been raised while running"""
+        return self._exception
 
     def run(self):
         """ Main function for hazard impact calculation thread.
@@ -146,7 +151,8 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
                                         theFunction=self._function)
         except Exception, e:
             myMessage = self.tr('Calculation error encountered:\n')
-            myMessage += getExceptionWithStacktrace(e, html=True)
+            #store the exception so that controller class can get it later
+            self._exception = e
             print myMessage
             self._result = myMessage
         else:
