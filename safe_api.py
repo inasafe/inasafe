@@ -25,7 +25,7 @@ from storage.utilities import read_keywords, bbox_intersection
 from storage.utilities import buffered_bounding_box, verify
 from storage.utilities import write_keywords
 from storage.core import read_layer
-from storage.titles import titles as internationalisedTitles
+from storage.dynamic_translations import names as internationalisedTitles
 
 from impact_functions import get_plugins
 from impact_functions import get_admissible_plugins
