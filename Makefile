@@ -66,7 +66,7 @@ test-translations:
 	@$(foreach LOCALE,$(LOCALES), msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@echo
 	@echo "qt translations (*.ts)"
-	@echo FIXME: How do we get statistics for the ts files?
+	@cd gui; lrelease inasafe.pro | grep -o '[0-9]* finished and [0-9]* unfinished'; cd ..
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
