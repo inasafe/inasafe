@@ -7,7 +7,7 @@ from osgeo import gdal
 from projection import Projection
 from utilities import DRIVER_MAP
 from engine.interpolation import interpolate_raster_vector
-from titles import titles as internationalised_titles
+from dynamic_translations import titles as internationalised_titles
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import nanallclose

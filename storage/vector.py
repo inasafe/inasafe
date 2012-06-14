@@ -15,7 +15,7 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
 from utilities import verify
-from titles import titles as internationalised_titles
+from dynamic_translations import titles as internationalised_titles
 from engine.polygon import inside_polygon, clip_line_by_polygon
 from engine.numerics import ensure_numeric
 
