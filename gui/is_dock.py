@@ -756,7 +756,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myMessage += '<br/><ul>'
                 for myItem in self.runner.lastTraceback():
                     # replace is to tidy up windows paths a little
-                    myMessage += ('<li>' + str(myItem.replace('\\\\\\', ''))
+                    myMessage += ('<li>' + str(myItem.replace('\\\\\\\\', ''))
                                   + '</li>')
                 myMessage += '</ul>'
             raise Exception(myMessage, self.runner.lastException())
