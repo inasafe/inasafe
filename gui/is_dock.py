@@ -752,7 +752,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         if myEngineImpactLayer is None:
             myMessage = str(self.tr('No impact layer was calculated. '
                    'Error message: %s\n' % str(myMessage)))
-            myMessage += '<br/>' + self.runner.lastTraceback()
+            myMessage += '<br/>' + str(self.runner.lastTraceback())
             raise Exception(myMessage, self.runner.lastException())
 
         # Load impact layer into QGIS
