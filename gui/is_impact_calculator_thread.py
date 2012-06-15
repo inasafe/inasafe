@@ -24,6 +24,7 @@ from PyQt4.QtCore import (QObject,
                           pyqtSignal)
 from is_exceptions import InsufficientParametersException
 import traceback
+import sys
 
 
 class ISImpactCalculatorThread(threading.Thread, QObject):
