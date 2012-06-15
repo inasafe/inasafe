@@ -752,7 +752,13 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         if myEngineImpactLayer is None:
             myMessage = str(self.tr('No impact layer was calculated. '
                    'Error message: %s\n' % str(myMessage)))
-            myMessage += '<br/>' + str(self.runner.lastTraceback())
+            if self.runner.lastTraceback() is not None:
+                myMessage += '<br/><ul>'
+                for myItem in self.runner.lastTraceback():
+                    # replace is to tidy up windows paths a little
+                    myMessage += ('<li>' + str(myItem.replace('\\\\\\', ''))
+                                  + '</li>')
+                myMessage += '</ul>'
             raise Exception(myMessage, self.runner.lastException())
 
         # Load impact layer into QGIS
