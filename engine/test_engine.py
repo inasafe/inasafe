@@ -18,12 +18,12 @@ from common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from storage.core import read_layer
 
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
-from storage.utilities import VerificationError
 from storage.utilities import nanallclose
 from storage.core import write_vector_data
 from storage.core import write_raster_data
 from storage.vector import Vector
 from impact_functions import get_plugins
+from common.utilities import VerificationError
 
 from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
 

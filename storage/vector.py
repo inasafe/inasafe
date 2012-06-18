@@ -4,6 +4,10 @@
 import os
 import numpy
 from osgeo import ogr, gdal
+from engine.polygon import inside_polygon, clip_line_by_polygon
+from common.numerics import ensure_numeric
+from common.utilities import verify
+
 from projection import Projection
 from utilities import DRIVER_MAP, TYPE_MAP, DEFAULT_ATTRIBUTE
 from utilities import read_keywords
@@ -14,10 +18,7 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
-from utilities import verify
 from dynamic_translations import names as internationalised_titles
-from engine.polygon import inside_polygon, clip_line_by_polygon
-from common.numerics import ensure_numeric
 
 
 class Vector:
