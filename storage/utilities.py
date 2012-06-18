@@ -7,7 +7,7 @@ import numpy
 from osgeo import ogr
 from tempfile import mkstemp
 import math
-from engine.numerics import ensure_numeric
+from common.numerics import ensure_numeric
 import gettext
 import getpass
 from datetime import date

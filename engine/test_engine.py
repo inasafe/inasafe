@@ -14,7 +14,7 @@ from engine.core import calculate_impact
 from engine.interpolation2d import interpolate_raster
 from engine.polygon import separate_points_by_polygon, clip_lines_by_polygon
 from engine.polygon import is_inside_polygon
-from engine.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
+from common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from storage.core import read_layer
 
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE

@@ -23,7 +23,7 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from storage.utilities import ugettext as _
-from engine.numerics import lognormal_cdf
+from common.numerics import lognormal_cdf
 from impact_functions.mappings import osm2padang, sigab2padang
 
 
