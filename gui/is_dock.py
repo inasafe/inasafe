@@ -36,7 +36,7 @@ from is_impact_calculator import ISImpactCalculator
 from is_safe_interface import (availableFunctions,
                                getOptimalExtent,
                                getBufferedExtent,
-                               internationalisedTitles)
+                               internationalisedNames)
 from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
 from is_exceptions import (KeywordNotFoundException,
@@ -497,8 +497,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
-                if myTitle in internationalisedTitles:
-                    myTitle = internationalisedTitles[myTitle]
+                if myTitle in internationalisedNames:
+                    myTitle = internationalisedNames[myTitle]
             # Register title with layer
             if myTitle and self.setLayerNameFromTitleFlag:
                 myLayer.setLayerName(myTitle)
@@ -1126,8 +1126,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
                         # Translate titles explicitly if possible
                         if myKeyword == 'title' and \
-                                myValue in internationalisedTitles:
-                            myValue = internationalisedTitles[myValue]
+                                myValue in internationalisedNames:
+                            myValue = internationalisedNames[myValue]
 
                         # Add this keyword to report
                         myReport += ('<tr>'
