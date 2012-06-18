@@ -50,9 +50,6 @@ The translation system works by scanning the Python code for strings marked as d
 
       if building_type in internationalised_values:
           building_type = internationalised_values[building_type]
-      else:
-          print 'WARNING: %s could not be translated' % building_type
-
 
 
 Update translations
