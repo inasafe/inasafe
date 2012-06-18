@@ -1,11 +1,14 @@
+import sys
 import numpy
 
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 
-from engine.utilities import MAXFLOAT
 from impact_functions.utilities import Damage_curve
 from storage.vector import Vector
+
+# A maximum floating point number for this package
+MAXFLOAT = float(sys.maxint)
 
 #------------------------------------------------------------
 # Define damage curves for tsunami structural building damage
