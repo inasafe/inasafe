@@ -62,11 +62,13 @@ test-translations:
 	@echo "Translation statistics"
 	@echo "----------------------"
 	@echo
-	@echo "gettext translations (*.po):"
-	@$(foreach LOCALE,$(LOCALES), msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+	@echo "Gettext translations (*.po):"
+	@echo "----------------------------"
+	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@echo
-	@echo "qt translations (*.ts):"
-	@cd gui; lrelease inasafe.pro 2>/dev/null | grep -o '[0-9]* finished and [0-9]* unfinished'; cd ..
+	@echo "Qt translations (*.ts):"
+	@echo "----------------------------"
+	@scripts/string-stats.sh
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead

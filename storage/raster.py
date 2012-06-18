@@ -386,8 +386,10 @@ class Raster:
 
             # Replace NODATA_VALUE with NaN
             nodata = self.get_nodata_value()
-
-            NaN = numpy.ones(A.shape, A.dtype) * NAN
+            try:  # see issue #174
+                NaN = numpy.ones(A.shape, A.dtype) * NAN
+            except:
+                pass
             A = numpy.where(A == nodata, NaN, A)
 
         # Take care of possible scaling
