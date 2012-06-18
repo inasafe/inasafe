@@ -173,7 +173,7 @@ ke %s: %s</translation>
         <translation type="obsolete">&lt;span class=&quot;label warning&quot;&gt;Mengusut kembali:&lt;/span&gt; </translation>
     </message>
     <message>
-        <location filename="is_utilities.py" line="323"/>
+        <location filename="is_utilities.py" line="333"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation>Lapisan input untuk mendapatkan resolusi WGS84 harus merupakan lapisan raster. Saya mendapatkan: %s</translation>
     </message>
@@ -188,19 +188,24 @@ ke %s: %s</translation>
         <translation type="obsolete">Tombol untuk beralih kembali...</translation>
     </message>
     <message>
-        <location filename="is_utilities.py" line="258"/>
+        <location filename="is_utilities.py" line="268"/>
         <source>Problem:</source>
         <translation>Permasalahan:</translation>
     </message>
     <message>
-        <location filename="is_utilities.py" line="254"/>
+        <location filename="is_utilities.py" line="264"/>
         <source>Error:</source>
         <translation>Keselahan:</translation>
     </message>
     <message>
-        <location filename="is_utilities.py" line="262"/>
+        <location filename="is_utilities.py" line="272"/>
         <source>Click for Diagnostic Information:</source>
         <translation>Tombol untuk informasi diagnostik</translation>
+    </message>
+    <message>
+        <location filename="is_utilities.py" line="253"/>
+        <source>No details provided</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -238,7 +243,7 @@ ke %s: %s</translation>
 </translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="784"/>
+        <location filename="is_dock.py" line="791"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation>Lapisan dampak %s bukan lapisan vektor atau raster</translation>
     </message>
@@ -253,7 +258,7 @@ ke %s: %s</translation>
         <translation type="obsolete">&lt;p&gt;Tidak cukup tumpang-tindih antara lapisan input dan atau lapisan dan tampilan peta yang aktif. Silahkan memilih dua lapisan yang saling tumpang-tindih dan perbesar atau geser ke detil penuh:&lt;/p&gt;&lt;p&gt;Gagal memberikan cakupan optimal:&lt;/p&gt;&lt;p&gt;Ancaman: %s&lt;/p&gt;&lt;p&gt;Terpapar: %s&lt;/p&gt;&lt;p&gt;Cakupan tampilan peta geografis yang aktif: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis ancaman: %s&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis terpapar: %s&lt;/p&gt;&lt;p&gt;Detil: %s&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="975"/>
+        <location filename="is_dock.py" line="982"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation>Raster terpapar dengan vektor ancaman tidak diimplementasikan</translation>
     </message>
@@ -263,7 +268,7 @@ ke %s: %s</translation>
         <translation type="obsolete">&lt;span class=&quot;label notice&quot;&gt;Memulai:&lt;/span&gt; Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik &lt;em&gt; tombol&lt;/em&gt; jalankan di bawah ini.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1226"/>
+        <location filename="is_dock.py" line="1231"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Dokumen PDF (*.pdf)</translation>
     </message>
@@ -318,52 +323,52 @@ ke %s: %s</translation>
         <translation>Analisa dampak telah selesai - sedang memuat hasil ke QGIS...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="826"/>
+        <location filename="is_dock.py" line="833"/>
         <source>Analyzing this question...</source>
         <translation>Sedang menganalisa pertanyaan...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="985"/>
+        <location filename="is_dock.py" line="992"/>
         <source>Preparing hazard data...</source>
         <translation>Sedang mempersiapkan data bahaya...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="986"/>
+        <location filename="is_dock.py" line="993"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit hazardlayer untuk mencocokkan perpotongan dari exposurelayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="994"/>
+        <location filename="is_dock.py" line="1001"/>
         <source>Preparing exposure data...</source>
         <translation>Sedang mempersiapkan data terpapar...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="995"/>
+        <location filename="is_dock.py" line="1002"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1226"/>
+        <location filename="is_dock.py" line="1231"/>
         <source>Write to PDF</source>
         <translation>menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1245"/>
+        <location filename="is_dock.py" line="1250"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1232"/>
+        <location filename="is_dock.py" line="1237"/>
         <source>Generating your map as a PDF document...</source>
         <translation>Sedang menghasilkan peta anda sebagai dokumen PDF...</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1237"/>
+        <location filename="is_dock.py" line="1242"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation>PDF diciptakan .... membuka menggunakan peninjau standar PDF pada system.FIle pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1245"/>
+        <location filename="is_dock.py" line="1250"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation>Proses selesai.File pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
@@ -373,12 +378,12 @@ ke %s: %s</translation>
         <translation type="obsolete">Tidak ada kata-kata kunci</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1140"/>
+        <location filename="is_dock.py" line="1145"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai dampak bahaya atau lapisan dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="913"/>
+        <location filename="is_dock.py" line="920"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</source>
         <translation>Tidak cukup tumpang-tindih antara lapisan input dan atau lapisan dan tampilan peta yang aktif. Silahkan memilih dua lapisan yang saling tumpang-tindih dan perbesar atau geser ke detil penuh:&lt;/p&gt;&lt;p&gt;Gagal memberikan cakupan optimal:&lt;/p&gt;&lt;p&gt;Ancaman: %1&lt;/p&gt;&lt;p&gt;Terpapar: %2&lt;/p&gt;&lt;p&gt;Cakupan tampilan peta geografis yang aktif: %3&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis ancaman: %4&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis terpapar: %5&lt;/p&gt;&lt;p&gt;Detil: %6&lt;/p&gt;</translation>
     </message>
@@ -548,19 +553,19 @@ ke %s: %s</translation>
 <context>
     <name>ISImpactCalculatorThread</name>
     <message>
-        <location filename="is_impact_calculator_thread.py" line="139"/>
+        <location filename="is_impact_calculator_thread.py" line="151"/>
         <source>Ensure that hazard, exposure and function are all set before trying to run the analysis.</source>
         <translation>Pastikan bahwa bahaya, paparan dan fungsi telah siap sebelum mencoba untuk menjalankan analisa.</translation>
     </message>
     <message>
-        <location filename="is_impact_calculator_thread.py" line="148"/>
+        <location filename="is_impact_calculator_thread.py" line="160"/>
         <source>Calculation error encountered:
 </source>
         <translation>Terjadi kesalahan perhitungan:
 </translation>
     </message>
     <message>
-        <location filename="is_impact_calculator_thread.py" line="153"/>
+        <location filename="is_impact_calculator_thread.py" line="167"/>
         <source>Calculation completed successfully.</source>
         <translation>Perhitungan berhasil.</translation>
     </message>

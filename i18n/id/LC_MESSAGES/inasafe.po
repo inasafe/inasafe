@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-14 16:23+0700\n"
+"POT-Creation-Date: 2012-06-18 11:19+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1299,7 +1299,6 @@ msgstr "Memecah menurut jenis bangunan"
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:37
 #: impact_functions/earthquake/earthquake_impact_on_women.py:40
-#: impact_functions/earthquake/earthquake_impact_on_women.py:40
 msgid "Be affected by earthquake"
 msgstr "Terkena dampak gempa"
 
@@ -1357,3 +1356,7 @@ msgstr "Jumlah penduduk dibulatkan menjadi terdekat 1000."
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:83
 msgid "Die"
 msgstr "Meninggal"
+
+#: impact_functions/earthquake/earthquake_impact_on_women.py:40
+msgid "Suffer because of gender"
+msgstr "Menderita karena gender"
