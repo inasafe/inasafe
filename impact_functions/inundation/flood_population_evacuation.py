@@ -5,7 +5,7 @@ from impact_functions.core import get_question
 from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
 from common.utilities import ugettext as _
-from impact_functions.tables import Table, TableRow
+from common.tables import Table, TableRow
 
 
 class FloodEvacuationFunction(FunctionProvider):
