@@ -4,7 +4,7 @@
 import os
 import numpy
 from osgeo import ogr, gdal
-from engine.polygon import inside_polygon, clip_line_by_polygon
+from common.polygon import inside_polygon, clip_line_by_polygon
 from common.numerics import ensure_numeric
 from common.utilities import verify
 from common.dynamic_translations import names as internationalised_titles

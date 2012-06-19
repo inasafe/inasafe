@@ -10,7 +10,7 @@ import numpy
 import types
 import keyword
 from impact_functions.utilities import ColorMapEntry
-from engine.polygon import inside_polygon
+from common.polygon import inside_polygon
 from common.utilities import ugettext as _
 
 
