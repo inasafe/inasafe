@@ -9,8 +9,9 @@ from common.numerics import nanallclose
 from common.dynamic_translations import names as internationalised_titles
 
 from projection import Projection
+from interpolation import interpolate_raster_vector
+
 from utilities import DRIVER_MAP
-from engine.interpolation import interpolate_raster_vector
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import geotransform2bbox, geotransform2resolution
