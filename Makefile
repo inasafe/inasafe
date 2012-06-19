@@ -77,6 +77,13 @@ translation-stats:
 	@echo "----------------------------"
 	@scripts/string-stats.sh
 
+lines-of-code:
+	@echo "----------------------"
+	@echo " Lines of code analysis"
+	@echo " Generated using David A. Wheeler's 'SLOCCount'"
+	@echo "----------------------"
+	@sloccount . | grep '^[0-9]'
+
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors

@@ -25,6 +25,8 @@ sudo apt-get install -y git subversion pep8 python-nose python-coverage python-n
 echo "Installing sphinx from pip because at least 1.1 is needed for i18n support"
 echo "And installing sphinx cloud_sptheme which degrades well on small devices/windows"
 sudo pip install sphinx cloud_sptheme
+# For code metrics / line counts
+sudo apt-get install sloccount
 
 # To get the gui test suite to pass.
 # FIXME (Ole): gdal version is currently hardwired
