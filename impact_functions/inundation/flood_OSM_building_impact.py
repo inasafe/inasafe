@@ -4,7 +4,7 @@ from impact_functions.core import get_question
 from storage.vector import Vector
 from common.utilities import ugettext as _
 from common.tables import Table, TableRow
-from storage.dynamic_translations import names as internationalised_values
+from common.dynamic_translations import names as internationalised_values
 
 
 class FloodBuildingImpactFunction(FunctionProvider):

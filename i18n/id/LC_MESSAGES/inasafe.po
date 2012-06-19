@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-19 11:56+0700\n"
+"POT-Creation-Date: 2012-06-19 16:53+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -276,7 +276,8 @@ msgstr "Tidak ada kerusakan"
 #: impact_functions/experimental/tsunami_building_impact.py:130
 #: impact_functions/generic/categorised_hazard_building_impact.py:78
 #: impact_functions/styles.py:54 impact_functions/styles.py:68
-#: impact_functions/styles.py:55
+#: impact_functions/styles.py:55 impact_functions/styles.py:22
+#: impact_functions/styles.py:56
 #: impact_functions/experimental/tsunami_building_impact.py:103
 #: impact_functions/experimental/tsunami_building_impact.py:130
 #: impact_functions/generic/categorised_hazard_building_impact.py:78
@@ -292,6 +293,7 @@ msgstr "Rendah"
 #: impact_functions/experimental/tsunami_building_impact.py:131
 #: impact_functions/generic/categorised_hazard_building_impact.py:79
 #: impact_functions/generic/categorised_hazard_building_impact.py:85
+#: impact_functions/styles.py:26
 #: impact_functions/experimental/tsunami_building_impact.py:104
 #: impact_functions/experimental/tsunami_building_impact.py:131
 #: impact_functions/generic/categorised_hazard_building_impact.py:79
@@ -309,6 +311,7 @@ msgstr "Sedang"
 #: impact_functions/generic/categorised_hazard_building_impact.py:87
 #: impact_functions/styles.py:49 impact_functions/styles.py:66
 #: impact_functions/styles.py:76 impact_functions/styles.py:65
+#: impact_functions/styles.py:30
 #: impact_functions/experimental/tsunami_building_impact.py:105
 #: impact_functions/experimental/tsunami_building_impact.py:132
 #: impact_functions/generic/categorised_hazard_building_impact.py:80
@@ -827,7 +830,7 @@ msgstr "Gempa dampak terhadap populasi"
 
 #: storage/titles.py:25 storage/titles.py:28 storage/titles.py:31
 #: storage/titles.py:36 storage/titles.py:37 storage/titles.py:42
-#: storage/dynamic_translations.py:51 storage/dynamic_translations.py:51
+#: storage/dynamic_translations.py:51 common/dynamic_translations.py:51
 msgid "DKI buildings"
 msgstr "Bangunan DKI"
 
@@ -835,84 +838,84 @@ msgstr "Bangunan DKI"
 #: storage/titles.py:37 storage/titles.py:38 storage/titles.py:39
 #: storage/titles.py:43 storage/titles.py:44
 #: storage/dynamic_translations.py:52 storage/dynamic_translations.py:53
-#: storage/dynamic_translations.py:52 storage/dynamic_translations.py:53
+#: common/dynamic_translations.py:52 common/dynamic_translations.py:53
 msgid "Jakarta 2007 flood"
 msgstr "Banjir seperti 2007"
 
 #: storage/titles.py:27 storage/titles.py:30 storage/titles.py:33
 #: storage/titles.py:38 storage/titles.py:39 storage/titles.py:40
 #: storage/titles.py:45 storage/dynamic_translations.py:54
-#: storage/dynamic_translations.py:54
+#: common/dynamic_translations.py:54
 msgid "Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter"
 msgstr "Banjir 2007 tanpa pompa di Pluit, Ancol dan Sunter"
 
 #: storage/titles.py:30 storage/titles.py:33 storage/titles.py:36
 #: storage/titles.py:39 storage/titles.py:44 storage/titles.py:45
 #: storage/titles.py:47 storage/titles.py:48 storage/titles.py:53
-#: storage/dynamic_translations.py:62 storage/dynamic_translations.py:62
+#: storage/dynamic_translations.py:62 common/dynamic_translations.py:62
 msgid "Sea wall collapse at Pluit"
 msgstr "Dam Pluit runtuh"
 
 #: storage/titles.py:31 storage/titles.py:34 storage/titles.py:37
 #: storage/titles.py:40 storage/titles.py:45 storage/titles.py:46
 #: storage/titles.py:48 storage/titles.py:49 storage/titles.py:54
-#: storage/dynamic_translations.py:63 storage/dynamic_translations.py:63
+#: storage/dynamic_translations.py:63 common/dynamic_translations.py:63
 msgid "Jakarta flood prone areas"
 msgstr "Daerah Rawan Banjir"
 
 #: storage/titles.py:32 storage/titles.py:35 storage/titles.py:38
 #: storage/titles.py:41 storage/titles.py:46 storage/titles.py:47
 #: storage/titles.py:49 storage/titles.py:50 storage/titles.py:55
-#: storage/dynamic_translations.py:64 storage/dynamic_translations.py:64
+#: storage/dynamic_translations.py:64 common/dynamic_translations.py:64
 msgid "Population Jakarta"
 msgstr "Penduduk Jakarta"
 
 #: storage/titles.py:36 storage/titles.py:39 storage/titles.py:42
 #: storage/titles.py:47 storage/titles.py:48 storage/titles.py:50
 #: storage/titles.py:51 storage/titles.py:53 storage/titles.py:58
-#: storage/dynamic_translations.py:67 storage/dynamic_translations.py:67
+#: storage/dynamic_translations.py:67 common/dynamic_translations.py:67
 msgid "Flood Depth (design) Jakarta"
 msgstr "Banjir Jakart (disain)"
 
 #: storage/titles.py:37 storage/titles.py:40 storage/titles.py:43
 #: storage/titles.py:48 storage/titles.py:49 storage/titles.py:51
 #: storage/titles.py:52 storage/titles.py:54 storage/titles.py:59
-#: storage/dynamic_translations.py:68 storage/dynamic_translations.py:68
+#: storage/dynamic_translations.py:68 common/dynamic_translations.py:68
 msgid "Flood Depth (current) Jakarta"
 msgstr "Banjir Jakarta (saat ini)"
 
 #: storage/titles.py:38 storage/titles.py:41 storage/titles.py:44
 #: storage/titles.py:49 storage/titles.py:50 storage/titles.py:52
 #: storage/titles.py:53 storage/titles.py:55 storage/titles.py:60
-#: storage/dynamic_translations.py:69 storage/dynamic_translations.py:69
+#: storage/dynamic_translations.py:69 common/dynamic_translations.py:69
 msgid "Yogyakarta 2006 earthquake"
 msgstr "Gempa Yogyakarta 2006"
 
 #: storage/titles.py:39 storage/titles.py:42 storage/titles.py:45
 #: storage/titles.py:50 storage/titles.py:51 storage/titles.py:53
 #: storage/titles.py:54 storage/titles.py:56 storage/titles.py:61
-#: storage/dynamic_translations.py:70 storage/dynamic_translations.py:70
+#: storage/dynamic_translations.py:70 common/dynamic_translations.py:70
 msgid "Indonesian Earthquake Hazard Map"
 msgstr "Peta Hazard Gempa Indonesia"
 
 #: storage/titles.py:41 storage/titles.py:44 storage/titles.py:47
 #: storage/titles.py:52 storage/titles.py:53 storage/titles.py:55
 #: storage/titles.py:56 storage/titles.py:58 storage/titles.py:63
-#: storage/dynamic_translations.py:72 storage/dynamic_translations.py:72
+#: storage/dynamic_translations.py:72 common/dynamic_translations.py:72
 msgid "Maumere tsunami inundation"
 msgstr "Maumere tsunami genangan"
 
 #: storage/titles.py:42 storage/titles.py:45 storage/titles.py:48
 #: storage/titles.py:53 storage/titles.py:54 storage/titles.py:56
 #: storage/titles.py:57 storage/titles.py:59 storage/titles.py:64
-#: storage/dynamic_translations.py:73 storage/dynamic_translations.py:73
+#: storage/dynamic_translations.py:73 common/dynamic_translations.py:73
 msgid "Sumatran fault Mw 7.8 scenario"
 msgstr "Skenario gempabumi sesar Sumatra Mw 7.8"
 
 #: storage/titles.py:44 storage/titles.py:49 storage/titles.py:52
 #: storage/titles.py:57 storage/titles.py:58 storage/titles.py:60
 #: storage/titles.py:61 storage/titles.py:63 storage/titles.py:68
-#: storage/dynamic_translations.py:77 storage/dynamic_translations.py:77
+#: storage/dynamic_translations.py:77 common/dynamic_translations.py:77
 msgid "Mentawai fault Mw 9.0 scenario"
 msgstr "Skenario Gempabumi sesar Mentawai Mw 9.0"
 
@@ -925,7 +928,7 @@ msgstr "Shakemap Padang 2009"
 #: storage/titles.py:62 storage/titles.py:63 storage/titles.py:65
 #: storage/titles.py:67 storage/titles.py:68 storage/titles.py:70
 #: storage/titles.py:75 storage/dynamic_translations.py:84
-#: storage/dynamic_translations.py:84
+#: common/dynamic_translations.py:84
 msgid "OSM building footprints"
 msgstr "Bangunan OSM"
 
@@ -933,7 +936,7 @@ msgstr "Bangunan OSM"
 #: storage/titles.py:60 storage/titles.py:65 storage/titles.py:66
 #: storage/titles.py:68 storage/titles.py:70 storage/titles.py:71
 #: storage/titles.py:73 storage/titles.py:78
-#: storage/dynamic_translations.py:87 storage/dynamic_translations.py:87
+#: storage/dynamic_translations.py:87 common/dynamic_translations.py:87
 msgid "AIBEP schools"
 msgstr "Sekolah AIBEP"
 
@@ -941,13 +944,13 @@ msgstr "Sekolah AIBEP"
 #: storage/titles.py:61 storage/titles.py:66 storage/titles.py:67
 #: storage/titles.py:69 storage/titles.py:71 storage/titles.py:72
 #: storage/titles.py:74 storage/titles.py:79
-#: storage/dynamic_translations.py:88 storage/dynamic_translations.py:88
+#: storage/dynamic_translations.py:88 common/dynamic_translations.py:88
 msgid "Population density (5kmx5km)"
 msgstr "Perkiraan penduduk (5kmx5km)"
 
 #: storage/titles.py:34 storage/titles.py:37 storage/titles.py:42
 #: storage/titles.py:43 storage/titles.py:44 storage/titles.py:49
-#: storage/dynamic_translations.py:58 storage/dynamic_translations.py:58
+#: storage/dynamic_translations.py:58 common/dynamic_translations.py:58
 msgid "Jakarta flood like 2007 with pump failure at Pluit and Ancol"
 msgstr "Banjir 2007 tanpa pompa di Pluit dan Ancol"
 
@@ -955,7 +958,7 @@ msgstr "Banjir 2007 tanpa pompa di Pluit dan Ancol"
 #: storage/titles.py:68 storage/titles.py:69 storage/titles.py:71
 #: storage/titles.py:73 storage/titles.py:74 storage/titles.py:76
 #: storage/titles.py:81 storage/dynamic_translations.py:90
-#: storage/dynamic_translations.py:90
+#: common/dynamic_translations.py:90
 msgid "Office buildings Jakarta"
 msgstr "Kantor Jakarta"
 
@@ -963,7 +966,7 @@ msgstr "Kantor Jakarta"
 #: storage/titles.py:69 storage/titles.py:70 storage/titles.py:72
 #: storage/titles.py:74 storage/titles.py:75 storage/titles.py:77
 #: storage/titles.py:82 storage/dynamic_translations.py:91
-#: storage/dynamic_translations.py:91
+#: common/dynamic_translations.py:91
 msgid "Hospitals and clinics Jakarta"
 msgstr "Puskesmas dan rumah sakit Jakarta"
 
@@ -971,7 +974,7 @@ msgstr "Puskesmas dan rumah sakit Jakarta"
 #: storage/titles.py:72 storage/titles.py:73 storage/titles.py:75
 #: storage/titles.py:77 storage/titles.py:78 storage/titles.py:80
 #: storage/titles.py:85 storage/dynamic_translations.py:95
-#: storage/dynamic_translations.py:95
+#: common/dynamic_translations.py:95
 msgid "Schools Jakarta"
 msgstr "Sekolah Jakarta"
 
@@ -979,7 +982,7 @@ msgstr "Sekolah Jakarta"
 #: storage/titles.py:69 storage/titles.py:74 storage/titles.py:75
 #: storage/titles.py:77 storage/titles.py:79 storage/titles.py:80
 #: storage/titles.py:82 storage/titles.py:87
-#: storage/dynamic_translations.py:97 storage/dynamic_translations.py:97
+#: storage/dynamic_translations.py:97 common/dynamic_translations.py:97
 msgid "Industrial buildings Jakarta"
 msgstr "Bangunan industri Jakarta"
 
@@ -987,7 +990,7 @@ msgstr "Bangunan industri Jakarta"
 #: storage/titles.py:70 storage/titles.py:75 storage/titles.py:76
 #: storage/titles.py:78 storage/titles.py:80 storage/titles.py:81
 #: storage/titles.py:83 storage/titles.py:88
-#: storage/dynamic_translations.py:98 storage/dynamic_translations.py:98
+#: storage/dynamic_translations.py:98 common/dynamic_translations.py:98
 msgid "Industrial areas Jakarta"
 msgstr "Daerah industri Jakarta"
 
@@ -995,7 +998,7 @@ msgstr "Daerah industri Jakarta"
 #: storage/titles.py:71 storage/titles.py:76 storage/titles.py:77
 #: storage/titles.py:79 storage/titles.py:81 storage/titles.py:82
 #: storage/titles.py:84 storage/titles.py:89
-#: storage/dynamic_translations.py:99 storage/dynamic_translations.py:99
+#: storage/dynamic_translations.py:99 common/dynamic_translations.py:99
 msgid "Commercial areas Jakarta"
 msgstr "Daerah komersial Jakarta"
 
@@ -1003,7 +1006,7 @@ msgstr "Daerah komersial Jakarta"
 #: storage/titles.py:72 storage/titles.py:77 storage/titles.py:78
 #: storage/titles.py:80 storage/titles.py:82 storage/titles.py:83
 #: storage/titles.py:85 storage/titles.py:90
-#: storage/dynamic_translations.py:100 storage/dynamic_translations.py:100
+#: storage/dynamic_translations.py:100 common/dynamic_translations.py:100
 msgid "Hospitals Jakarta"
 msgstr "Rumah sakit Jakarta"
 
@@ -1011,173 +1014,173 @@ msgstr "Rumah sakit Jakarta"
 #: storage/titles.py:73 storage/titles.py:74 storage/titles.py:76
 #: storage/titles.py:78 storage/titles.py:79 storage/titles.py:81
 #: storage/titles.py:86 storage/dynamic_translations.py:96
-#: storage/dynamic_translations.py:96
+#: common/dynamic_translations.py:96
 msgid "Schools"
 msgstr "Sekolah"
 
 #: storage/titles.py:56 storage/titles.py:59 storage/titles.py:64
 #: storage/titles.py:65 storage/titles.py:67 storage/titles.py:69
 #: storage/titles.py:70 storage/titles.py:72 storage/titles.py:77
-#: storage/dynamic_translations.py:86 storage/dynamic_translations.py:86
+#: storage/dynamic_translations.py:86 common/dynamic_translations.py:86
 msgid "OSM buildings"
 msgstr "Bangunan OSM"
 
 #: storage/titles.py:76 storage/titles.py:81 storage/titles.py:82
 #: storage/titles.py:84 storage/titles.py:86 storage/titles.py:87
 #: storage/titles.py:89 storage/titles.py:94
-#: storage/dynamic_translations.py:103 storage/dynamic_translations.py:103
+#: storage/dynamic_translations.py:103 common/dynamic_translations.py:103
 msgid "office"
 msgstr "kantor"
 
 #: storage/titles.py:77 storage/titles.py:82 storage/titles.py:83
 #: storage/titles.py:85 storage/titles.py:87 storage/titles.py:88
 #: storage/titles.py:90 storage/titles.py:95
-#: storage/dynamic_translations.py:104 storage/dynamic_translations.py:104
+#: storage/dynamic_translations.py:104 common/dynamic_translations.py:104
 msgid "clinic"
 msgstr "puskesmas"
 
 #: storage/titles.py:78 storage/titles.py:83 storage/titles.py:84
 #: storage/titles.py:86 storage/titles.py:88 storage/titles.py:89
 #: storage/titles.py:91 storage/titles.py:96
-#: storage/dynamic_translations.py:105 storage/dynamic_translations.py:105
+#: storage/dynamic_translations.py:105 common/dynamic_translations.py:105
 msgid "terrace"
 msgstr "komplek perumahan"
 
 #: storage/titles.py:79 storage/titles.py:84 storage/titles.py:85
 #: storage/titles.py:87 storage/titles.py:89 storage/titles.py:90
 #: storage/titles.py:92 storage/titles.py:97
-#: storage/dynamic_translations.py:106 storage/dynamic_translations.py:106
+#: storage/dynamic_translations.py:106 common/dynamic_translations.py:106
 msgid "police"
 msgstr "polisi"
 
 #: storage/titles.py:80 storage/titles.py:85 storage/titles.py:86
 #: storage/titles.py:88 storage/titles.py:90 storage/titles.py:91
 #: storage/titles.py:93 storage/titles.py:98
-#: storage/dynamic_translations.py:107 storage/dynamic_translations.py:107
+#: storage/dynamic_translations.py:107 common/dynamic_translations.py:107
 msgid "residential"
 msgstr "residental"
 
 #: storage/titles.py:81 storage/titles.py:86 storage/titles.py:87
 #: storage/titles.py:89 storage/titles.py:91 storage/titles.py:92
 #: storage/titles.py:94 storage/titles.py:99
-#: storage/dynamic_translations.py:108 storage/dynamic_translations.py:108
+#: storage/dynamic_translations.py:108 common/dynamic_translations.py:108
 msgid "kindergarten"
 msgstr "taman kanak-kanak"
 
 #: storage/titles.py:82 storage/titles.py:87 storage/titles.py:88
 #: storage/titles.py:90 storage/titles.py:92 storage/titles.py:93
 #: storage/titles.py:95 storage/titles.py:100
-#: storage/dynamic_translations.py:109 storage/dynamic_translations.py:109
+#: storage/dynamic_translations.py:109 common/dynamic_translations.py:109
 msgid "bank"
 msgstr "bank"
 
 #: storage/titles.py:83 storage/titles.py:88 storage/titles.py:89
 #: storage/titles.py:91 storage/titles.py:93 storage/titles.py:94
 #: storage/titles.py:96 storage/titles.py:101
-#: storage/dynamic_translations.py:110 storage/dynamic_translations.py:110
+#: storage/dynamic_translations.py:110 common/dynamic_translations.py:110
 msgid "place of worship"
 msgstr "tempat ibadah"
 
 #: storage/titles.py:84 storage/titles.py:89 storage/titles.py:90
 #: storage/titles.py:92 storage/titles.py:94 storage/titles.py:95
 #: storage/titles.py:97 storage/titles.py:102
-#: storage/dynamic_translations.py:111 storage/dynamic_translations.py:111
+#: storage/dynamic_translations.py:111 common/dynamic_translations.py:111
 msgid "school"
 msgstr "sekolah"
 
 #: storage/titles.py:85 storage/titles.py:90 storage/titles.py:91
 #: storage/titles.py:93 storage/titles.py:95 storage/titles.py:96
 #: storage/titles.py:98 storage/titles.py:103
-#: storage/dynamic_translations.py:112 storage/dynamic_translations.py:112
+#: storage/dynamic_translations.py:112 common/dynamic_translations.py:112
 msgid "university"
 msgstr "universitas"
 
 #: storage/titles.py:86 storage/titles.py:91 storage/titles.py:92
 #: storage/titles.py:94 storage/titles.py:96 storage/titles.py:97
 #: storage/titles.py:99 storage/titles.py:104
-#: storage/dynamic_translations.py:113 storage/dynamic_translations.py:113
+#: storage/dynamic_translations.py:113 common/dynamic_translations.py:113
 msgid "apartments"
 msgstr "apartement"
 
 #: storage/titles.py:87 storage/titles.py:92 storage/titles.py:93
 #: storage/titles.py:95 storage/titles.py:97 storage/titles.py:98
 #: storage/titles.py:100 storage/titles.py:105
-#: storage/dynamic_translations.py:114 storage/dynamic_translations.py:114
+#: storage/dynamic_translations.py:114 common/dynamic_translations.py:114
 msgid "college"
 msgstr "perguruan tinggi"
 
 #: storage/titles.py:88 storage/titles.py:93 storage/titles.py:94
 #: storage/titles.py:96 storage/titles.py:98 storage/titles.py:99
 #: storage/titles.py:101 storage/titles.py:106
-#: storage/dynamic_translations.py:115 storage/dynamic_translations.py:115
+#: storage/dynamic_translations.py:115 common/dynamic_translations.py:115
 msgid "commercial"
 msgstr "komersial"
 
 #: storage/titles.py:89 storage/titles.py:94 storage/titles.py:95
 #: storage/titles.py:97 storage/titles.py:99 storage/titles.py:100
 #: storage/titles.py:102 storage/titles.py:107
-#: storage/dynamic_translations.py:116 storage/dynamic_translations.py:116
+#: storage/dynamic_translations.py:116 common/dynamic_translations.py:116
 msgid "hospital"
 msgstr "rumah sakit"
 
 #: storage/titles.py:90 storage/titles.py:95 storage/titles.py:96
 #: storage/titles.py:98 storage/titles.py:100 storage/titles.py:101
 #: storage/titles.py:103 storage/titles.py:108
-#: storage/dynamic_translations.py:117 storage/dynamic_translations.py:117
+#: storage/dynamic_translations.py:117 common/dynamic_translations.py:117
 msgid "industrial"
 msgstr "industri"
 
 #: storage/titles.py:91 storage/titles.py:96 storage/titles.py:97
 #: storage/titles.py:99 storage/titles.py:101 storage/titles.py:102
 #: storage/titles.py:104 storage/titles.py:109
-#: storage/dynamic_translations.py:118 storage/dynamic_translations.py:118
+#: storage/dynamic_translations.py:118 common/dynamic_translations.py:118
 msgid "civic"
 msgstr "kantor pemerintah"
 
 #: storage/titles.py:92 storage/titles.py:97 storage/titles.py:98
 #: storage/titles.py:100 storage/titles.py:102 storage/titles.py:103
 #: storage/titles.py:105 storage/titles.py:110
-#: storage/dynamic_translations.py:119 storage/dynamic_translations.py:119
+#: storage/dynamic_translations.py:119 common/dynamic_translations.py:119
 msgid "church"
 msgstr "Gereja"
 
 #: storage/titles.py:93 storage/titles.py:98 storage/titles.py:99
 #: storage/titles.py:101 storage/titles.py:103 storage/titles.py:104
 #: storage/titles.py:106 storage/titles.py:111
-#: storage/dynamic_translations.py:120 storage/dynamic_translations.py:120
+#: storage/dynamic_translations.py:120 common/dynamic_translations.py:120
 msgid "hotel"
 msgstr "hotel"
 
 #: storage/titles.py:94 storage/titles.py:99 storage/titles.py:100
 #: storage/titles.py:102 storage/titles.py:104 storage/titles.py:105
 #: storage/titles.py:107 storage/titles.py:112
-#: storage/dynamic_translations.py:121 storage/dynamic_translations.py:121
+#: storage/dynamic_translations.py:121 common/dynamic_translations.py:121
 msgid "public building"
 msgstr "bangunan publik"
 
 #: storage/titles.py:95 storage/titles.py:100 storage/titles.py:101
 #: storage/titles.py:103 storage/titles.py:105 storage/titles.py:106
 #: storage/titles.py:108 storage/titles.py:113
-#: storage/dynamic_translations.py:122 storage/dynamic_translations.py:122
+#: storage/dynamic_translations.py:122 common/dynamic_translations.py:122
 msgid "other"
 msgstr "lain"
 
 #: storage/titles.py:96 storage/titles.py:101 storage/titles.py:102
 #: storage/titles.py:104 storage/titles.py:106 storage/titles.py:107
 #: storage/titles.py:109 storage/titles.py:114
-#: storage/dynamic_translations.py:123 storage/dynamic_translations.py:123
+#: storage/dynamic_translations.py:123 common/dynamic_translations.py:123
 msgid "fire station"
 msgstr "pos kebakaran"
 
 #: storage/titles.py:61 storage/titles.py:62 storage/titles.py:64
 #: storage/titles.py:65 storage/titles.py:67 storage/titles.py:72
-#: storage/dynamic_translations.py:81 storage/dynamic_translations.py:81
+#: storage/dynamic_translations.py:81 common/dynamic_translations.py:81
 msgid "Padang 2009 scenario"
 msgstr "Skenario Padang 2009"
 
 #: storage/titles.py:62 storage/titles.py:63 storage/titles.py:65
 #: storage/titles.py:66 storage/titles.py:68 storage/titles.py:73
-#: storage/dynamic_translations.py:82 storage/dynamic_translations.py:82
+#: storage/dynamic_translations.py:82 common/dynamic_translations.py:82
 msgid "Yogya 2006 scenario"
 msgstr "Skenario Yogya 2006"
 
@@ -1198,12 +1201,12 @@ msgstr "Diperkirakan korban jiwa"
 
 #: storage/titles.py:64 storage/titles.py:66 storage/titles.py:67
 #: storage/titles.py:69 storage/titles.py:74
-#: storage/dynamic_translations.py:83 storage/dynamic_translations.py:83
+#: storage/dynamic_translations.py:83 common/dynamic_translations.py:83
 msgid "Lembang fault scenario"
 msgstr "Skenario sesar Lembang"
 
 #: storage/titles.py:46 storage/titles.py:47 storage/titles.py:52
-#: storage/dynamic_translations.py:61 storage/dynamic_translations.py:61
+#: storage/dynamic_translations.py:61 common/dynamic_translations.py:61
 msgid "Jakarta flood like 2007 with structural improvements"
 msgstr "Banjir 2007 dengan perbaikan struktural"
 
@@ -1321,17 +1324,17 @@ msgid "Are enough facilities available to assist %i pregnant women?"
 msgstr "Apakah ada cukup fasilitas tersedia untuk membantu %i ibu hamil?"
 
 #: impact_functions/styles.py:60 impact_functions/styles.py:72
-#: impact_functions/styles.py:61
+#: impact_functions/styles.py:61 impact_functions/styles.py:61
 msgid "Mid"
 msgstr "Sedang"
 
 #: storage/titles.py:51 storage/titles.py:56
-#: storage/dynamic_translations.py:65 storage/dynamic_translations.py:65
+#: storage/dynamic_translations.py:65 common/dynamic_translations.py:65
 msgid "People"
 msgstr "Orang"
 
 #: storage/titles.py:52 storage/titles.py:57
-#: storage/dynamic_translations.py:66 storage/dynamic_translations.py:66
+#: storage/dynamic_translations.py:66 common/dynamic_translations.py:66
 msgid "people"
 msgstr "orang"
 

@@ -7,6 +7,7 @@ from osgeo import ogr, gdal
 from engine.polygon import inside_polygon, clip_line_by_polygon
 from common.numerics import ensure_numeric
 from common.utilities import verify
+from common.dynamic_translations import names as internationalised_titles
 
 from projection import Projection
 from utilities import DRIVER_MAP, TYPE_MAP, DEFAULT_ATTRIBUTE
@@ -18,7 +19,6 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
-from dynamic_translations import names as internationalised_titles
 
 
 class Vector:
