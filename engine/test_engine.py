@@ -905,7 +905,7 @@ class Test_Engine(unittest.TestCase):
                                       linear_function(xi, eta),
                                       rtol=1e-12, atol=1e-12)
 
-    def test_riab_interpolation(self):
+    def test_interpolation_functions(self):
         """Interpolation using Raster and Vector objects
         """
 
@@ -979,7 +979,7 @@ class Test_Engine(unittest.TestCase):
         msg = 'Raster data was %s, should have been %s' % (AA, A)
         assert numpy.allclose(AA, A), msg
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = R.interpolate(V, attribute_name='value')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
@@ -1018,7 +1018,7 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
         attributes = exposure_vector.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = hazard_raster.interpolate(exposure_vector,
                                       attribute_name='MMI')
         Icoordinates = I.get_geometry()
@@ -1089,7 +1089,7 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
         attributes = exposure_vector.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = hazard_raster.interpolate(exposure_vector,
                                       attribute_name='depth')
         Icoordinates = I.get_geometry()
@@ -1256,7 +1256,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute_name=None)  # Take all attributes across
 
@@ -1316,7 +1316,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute_name=None)  # Take all attributes across
         #I.write_to_file('MM_res.shp')
@@ -1442,7 +1442,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute='Catergory')  # Spelling is as in test data
         #I.write_to_file('MM_res.shp')
@@ -1651,7 +1651,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
@@ -1763,7 +1763,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute='Catergory')  # Spelling is as in test data
         I_geometry = I.get_geometry()
@@ -1837,7 +1837,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute=None)  # Take all attributes across
         I_geometry = I.get_geometry()
