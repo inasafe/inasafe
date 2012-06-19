@@ -8,11 +8,12 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from math import sqrt, pi
-from common.numerics import ensure_numeric
+
+from storage.vector import Vector
 
 from polygon import *
-from utilities import test_polygon, test_lines
-from storage.vector import Vector
+from testing import test_polygon, test_lines
+from numerics import ensure_numeric
 
 
 def linear_function(x, y):
