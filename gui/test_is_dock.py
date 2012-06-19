@@ -48,8 +48,8 @@ from utilities_test import (getQgisTestApp,
 from gui.is_dock import ISDock
 from is_utilities import (setRasterStyle,
                           qgisVersion)
-from storage.utilities_test import TESTDATA, EXPDATA, HAZDATA
-from storage.utilities import read_keywords
+from safe_api import TESTDATA, HAZDATA, EXPDATA
+from safe_api import read_keywords
 
 # Retired impact function for characterisation
 from engine.impact_functions_for_testing import allen_fatality_model

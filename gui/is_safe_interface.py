@@ -60,7 +60,7 @@ def tr(theText):
 
 
 def verify(theStatement, theMessage=None):
-    """This is just a thin wrapper around storage.utilities.verify.
+    """This is just a thin wrapper around safe_api.verify.
 
     Args:
         * theStatement - expression to verify
@@ -85,7 +85,7 @@ def getOptimalExtent(theHazardGeoExtent,
     to ensure that the extent is tenable, includes data from both
     etc.
 
-    This is just a thin wrapper around storage.utilities.bbox_intersection.
+    This is just a thin wrapper around safe_api.bbox_intersection.
 
     Typically the result of this function will be used to clip
     input layers to a commone extent before processing.

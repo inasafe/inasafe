@@ -20,7 +20,7 @@ from core import compatible_layers
 from core import aggregate
 
 from storage.core import read_layer
-from storage.utilities_test import TESTDATA
+from common.testing import TESTDATA
 
 DEFAULT_PLUGINS = ('Earthquake Fatality Function',)
 

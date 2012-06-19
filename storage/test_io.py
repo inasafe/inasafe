@@ -34,9 +34,9 @@ from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
-from utilities_test import TESTDATA, HAZDATA, EXPDATA
-from utilities_test import FEATURE_COUNTS
-from utilities_test import GEOTRANSFORMS
+from common.testing import TESTDATA, HAZDATA, EXPDATA
+from common.testing import FEATURE_COUNTS
+from common.testing import GEOTRANSFORMS
 from common.utilities import ugettext as _
 from common.utilities import VerificationError
 

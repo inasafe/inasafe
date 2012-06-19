@@ -13,7 +13,7 @@ from is_keyword_io import ISKeywordIO
 from is_exceptions import HashNotFoundException
 from is_utilities import getTempDir
 
-from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
+from safe_api import TESTDATA, HAZDATA, EXPDATA
 from qgis.core import (QgsDataSourceURI,
                        QgsVectorLayer)
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

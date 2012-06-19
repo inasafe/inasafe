@@ -25,7 +25,7 @@ from storage.vector import Vector
 from impact_functions import get_plugins
 from common.utilities import VerificationError
 
-from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
+from common.testing import TESTDATA, HAZDATA, EXPDATA
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
