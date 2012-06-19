@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-18 11:19+0700\n"
+"POT-Creation-Date: 2012-06-19 11:56+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -281,7 +281,7 @@ msgstr "Tidak ada kerusakan"
 #: impact_functions/experimental/tsunami_building_impact.py:130
 #: impact_functions/generic/categorised_hazard_building_impact.py:78
 #: impact_functions/generic/categorised_hazard_building_impact.py:83
-#: impact_functions/styles.py:21 impact_functions/styles.py:55
+#: impact_functions/styles.py:22 impact_functions/styles.py:56
 msgid "Low"
 msgstr "Rendah"
 
@@ -296,7 +296,7 @@ msgstr "Rendah"
 #: impact_functions/experimental/tsunami_building_impact.py:131
 #: impact_functions/generic/categorised_hazard_building_impact.py:79
 #: impact_functions/generic/categorised_hazard_building_impact.py:85
-#: impact_functions/styles.py:25
+#: impact_functions/styles.py:26
 msgid "Medium"
 msgstr "Sedang"
 
@@ -313,7 +313,7 @@ msgstr "Sedang"
 #: impact_functions/experimental/tsunami_building_impact.py:132
 #: impact_functions/generic/categorised_hazard_building_impact.py:80
 #: impact_functions/generic/categorised_hazard_building_impact.py:87
-#: impact_functions/styles.py:29 impact_functions/styles.py:65
+#: impact_functions/styles.py:30 impact_functions/styles.py:66
 msgid "High"
 msgstr "Tinggi"
 
@@ -1261,10 +1261,6 @@ msgstr "Apakah cukup unit identifikasi korban tersedia untuk %i orang?"
 msgid "Are enough shelters available for %i people?"
 msgstr "Apakah cucup tempat penampungan tersedia untuk %i orang?"
 
-#: impact_functions/inundation/flood_generic_building_impact.py:22
-msgid "Be temporarily closed - OLD"
-msgstr ""
-
 #: impact_functions/inundation/flood_OSM_building_impact.py:68
 #: impact_functions/inundation/flood_OSM_building_impact.py:68
 #, python-format
@@ -1325,7 +1321,7 @@ msgid "Are enough facilities available to assist %i pregnant women?"
 msgstr "Apakah ada cukup fasilitas tersedia untuk membantu %i ibu hamil?"
 
 #: impact_functions/styles.py:60 impact_functions/styles.py:72
-#: impact_functions/styles.py:60
+#: impact_functions/styles.py:61
 msgid "Mid"
 msgstr "Sedang"
 
@@ -1357,6 +1353,7 @@ msgstr "Jumlah penduduk dibulatkan menjadi terdekat 1000."
 msgid "Die"
 msgstr "Meninggal"
 
+#: impact_functions/earthquake/earthquake_impact_on_women.py:40
 #: impact_functions/earthquake/earthquake_impact_on_women.py:40
 msgid "Suffer because of gender"
 msgstr "Menderita karena gender"
