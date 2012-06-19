@@ -5,9 +5,9 @@ using the underlying interpolation algorithm in interpolate2d.py
 """
 
 import numpy
-from engine.interpolation2d import interpolate_raster
 from storage.vector import Vector
 from storage.vector import convert_polygons_to_centroids
+from common.interpolation2d import interpolate_raster
 from common.utilities import verify
 
 

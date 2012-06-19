@@ -10,7 +10,7 @@ sys.path.append(pardir)
 # Import InaSAFE modules
 from interpolation2d import interpolate2d, interpolate_raster
 from interpolation1d import interpolate1d
-from storage.utilities_test import combine_coordinates
+from common.testing import combine_coordinates
 from common.numerics import nanallclose
 
 

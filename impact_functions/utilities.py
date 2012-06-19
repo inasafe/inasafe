@@ -2,7 +2,7 @@
 """
 
 import numpy
-from engine.interpolation1d import interpolate1d
+from common.interpolation1d import interpolate1d
 
 
 class Damage_curve:

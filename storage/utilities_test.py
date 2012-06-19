@@ -44,16 +44,3 @@ def same_API(X, Y, exclude=None):
     _same_API(Y, X, exclude=exclude)
 
     return True
-
-
-def combine_coordinates(x, y):
-    """Make list of all combinations of points for x and y coordinates
-    """
-
-    points = []
-    for px in x:
-        for py in y:
-            points.append((px, py))
-    points = numpy.array(points)
-
-    return points

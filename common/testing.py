@@ -37,6 +37,18 @@ GEOTRANSFORMS = [(105.3000035, 0.008333, 0.0, -5.5667785, 0.0, -0.008333),
                  (105.29857, 0.0112, 0.0, -5.565233000000001, 0.0, -0.0112),
                  (96.956, 0.03074106, 0.0, 2.2894972560001, 0.0, -0.03074106)]
 
+def combine_coordinates(x, y):
+    """Make list of all combinations of points for x and y coordinates
+    """
+
+    points = []
+    for px in x:
+        for py in y:
+            points.append((px, py))
+    points = numpy.array(points)
+
+    return points
+
 # For polygon testing
 test_lines = [numpy.array([[122.231021, -8.626557],
                            [122.230563, -8.626194],
@@ -624,4 +636,3 @@ test_polygon = numpy.array([[122.229086, -8.624406],
                             [122.228947, -8.624550],
                             [122.229167, -8.624583],
                             [122.229086, -8.624406]])
-
