@@ -1,14 +1,15 @@
-"""Utilities for impact.storage
+"""Utilities for storage module
 """
 
 import os
 import copy
 import numpy
-from osgeo import ogr
-from tempfile import mkstemp
 import math
 import getpass
+from osgeo import ogr
+from tempfile import mkstemp
 from datetime import date
+
 from common.numerics import ensure_numeric
 from common.utilities import verify, VerificationError
 
@@ -602,7 +603,6 @@ def get_geometry_type(geometry, geometry_type):
     return geometry_type
 
 
-# FIXME: Move to common utilities
 def is_sequence(x):
     """Determine if x behaves like a true sequence but not a string
 
@@ -707,7 +707,7 @@ def geometrytype2string(g_type):
         return 'Unknown geometry type: %s' % str(g_type)
 
 
-# FIXME: Move to common numerics area
+# FIXME: Move to common numerics area along with polygon.py
 def calculate_polygon_area(polygon, signed=False):
     """Calculate the signed area of non-self-intersecting polygon
 
