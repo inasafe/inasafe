@@ -56,6 +56,27 @@ compile-translation-strings: compile
 	@#compile gettext messages binary
 	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 
+test-translations:
+	@echo
+	@echo "----------------------------------------------------------------"
+	@echo "Missing translations - for more info run: make translation-stats"
+	@echo "----------------------------------------------------------------"
+	@python scripts/missing_translations.py `pwd` id
+
+translation-stats:
+	@echo
+	@echo "----------------------"
+	@echo "Translation statistics - for more info see http://inasafe.readthedocs.org/en/latest/developer-docs/i18n.html"
+	@echo "----------------------"
+	@echo
+	@echo "Gettext translations (*.po):"
+	@echo "----------------------------"
+	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+	@echo
+	@echo "Qt translations (*.ts):"
+	@echo "----------------------------"
+	@scripts/string-stats.sh
+
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
@@ -68,7 +89,10 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
-test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit
+test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit test-translations
+
+# Run the test suite followed by pep8 style checking - dont update from svn for test data
+test_no_svn: docs test_suite_no_svn pep8 disabled_tests dependency_test unwanted_strings data_audit
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
@@ -82,12 +106,12 @@ pep8:
 	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
 
 # Run entire test suite
-test_suite: compile testdata
+test_suite_no_svn: compile
 	@echo
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -96,6 +120,34 @@ test_suite: compile testdata
 
 	@# Report expected failures if any!
 	@#echo Expecting 1 test to fail in support of issue #3
+	@#echo Expecting 1 test to fail in support of issue #160
+
+# Run entire test suite
+test_suite: compile testdata
+	@echo
+	@echo "----------------------"
+	@echo "Regresssion Test Suite"
+	@echo "----------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+
+	@# FIXME (Ole) - to get of the remaining junk I tried to use
+	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
+	@# This does clip the line, but does not flush and puts an extra
+	@# newline in.
+
+	@# Report expected failures if any!
+	@#echo Expecting 1 test to fail in support of issue #3
+	@#echo Expecting 1 test to fail in support of issue #160
+
+# Run gui test suite only and without svn updating test data
+gui_test_suite_no_svn: compile
+	@echo
+	@echo "----------------------"
+	@echo "Regresssion Test Suite"
+	@echo "----------------------"
+
+	@# Preceding dash means that make will continue in case of errors
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Run gui test suite only
 gui_test_suite: compile testdata
@@ -105,7 +157,7 @@ gui_test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`; nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Get test data
 testdata:
@@ -132,9 +184,9 @@ unwanted_strings:
 
 dependency_test:
 	@echo
-	@echo "---------------------------------------------"
+	@echo "------------------------------------------------"
 	@echo "List of unwanted dependencies in InaSAFE library"
-	@echo "---------------------------------------------"
+	@echo "------------------------------------------------"
 
 	@# Need disjunction with "true" because grep returns non-zero error code if no matches were found
 	@# nielso@shakti:~/sandpit/inasafe$ grep PyQt4 engine
@@ -180,3 +232,4 @@ profile:
 	@echo "Profiling engine                       "
 	@echo "---------------------------------------"
 	python -m cProfile engine/test_engine.py -s cumulative
+

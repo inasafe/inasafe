@@ -12,9 +12,10 @@ To be added
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
-from storage.utilities import ugettext as _
-from engine.numerics import lognormal_cdf;
+from common.numerics import lognormal_cdf
+from common.utilities import ugettext as _
 #from impact_functions.mappings import osm2itb, sigab2itb
+
 
 # Damage curves for each of the nine classes derived from the Padang survey
 class AutoVivification(dict):

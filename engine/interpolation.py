@@ -8,7 +8,7 @@ import numpy
 from engine.interpolation2d import interpolate_raster
 from storage.vector import Vector
 from storage.vector import convert_polygons_to_centroids
-from storage.utilities import verify
+from common.utilities import verify
 
 
 def interpolate_raster_vector_points(R, V, attribute_name=None):

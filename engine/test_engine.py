@@ -14,16 +14,16 @@ from engine.core import calculate_impact
 from engine.interpolation2d import interpolate_raster
 from engine.polygon import separate_points_by_polygon, clip_lines_by_polygon
 from engine.polygon import is_inside_polygon
-from engine.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
+from common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from storage.core import read_layer
 
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
-from storage.utilities import VerificationError
 from storage.utilities import nanallclose
 from storage.core import write_vector_data
 from storage.core import write_raster_data
 from storage.vector import Vector
 from impact_functions import get_plugins
+from common.utilities import VerificationError
 
 from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
 
@@ -191,7 +191,8 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         #plugin_name = 'I T B Fatality Function'
-        plugin_name = 'Be affected by ground shaking'
+        #plugin_name = 'Be affected by ground shaking'
+        plugin_name = 'Die'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name

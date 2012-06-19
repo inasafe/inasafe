@@ -28,13 +28,18 @@ sys.path.append(pardir)
 import numpy
 
 from qgis.core import (QgsVectorLayer,
-                       QgsRasterLayer)
+                       QgsRasterLayer,
+                       QgsGeometry)
 
 from is_safe_interface import readSafeLayer
-from is_clipper import clipLayer, extentToKml
 from is_safe_interface import getOptimalExtent
+from is_exceptions import InvalidProjectionException
+from is_clipper import clipLayer, extentToKml, explodeMultiPartGeometry
+
 from utilities_test import (getQgisTestApp,
                             setCanvasCrs,
+                            RedirectStdStreams,
+                            DEVNULL,
                             GEOCRS,
                             setJakartaGeoExtent)
 from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
@@ -43,8 +48,10 @@ from storage.utilities import nanallclose
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
 VECTOR_PATH2 = os.path.join(TESTDATA, 'OSM_subset_google_mercator.shp')
+
 RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
+
 
 # Handle to common QGis test app
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -355,6 +362,47 @@ class ISClipper(unittest.TestCase):
                 assert nanallclose(A_native, A_none,
                                    rtol=1.0e-12, atol=1.0e-12), msg
 
+    def testRasterScaling_projected(self):
+        """Attempt to scale projected density raster layers raise exception
+
+        Automatic scaling when resampling density data
+        does not currently work for projected layers. See issue #123.
+
+        For the time being this test checks that an exception is raised
+        when scaling is attempted on projected layers.
+        When we resolve issue #123, this test should be rewritten.
+        """
+
+        test_filename = 'Population_Jakarta_UTM48N.tif'
+        myRasterPath = ('%s/%s' % (TESTDATA, test_filename))
+
+        # Get reference values
+        R = readSafeLayer(myRasterPath)
+        R_min, R_max = R.get_extrema()
+        native_resolution = R.get_resolution()
+
+        print
+        print R_min, R_max
+        print native_resolution
+
+        # Define bounding box in EPSG:4326
+        bounding_box = [106.61, -6.38, 107.05, -6.07]
+
+        # Test for a range of resolutions
+        for res in [0.02, 0.01, 0.005, 0.002, 0.001]:
+
+            # Clip the raster to the bbox
+            extraKeywords = {'resolution': native_resolution}
+            myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
+            try:
+                myResult = clipLayer(myRasterLayer, bounding_box, res,
+                                     theExtraKeywords=extraKeywords)
+            except InvalidProjectionException:
+                pass
+            else:
+                msg = 'Should have raised InvalidProjectionException'
+                raise Exception(msg)
+
     def test_extentToKml(self):
         """Test if extent to KML is working."""
         myExtent = [100.03, -1.14, 100.81, -0.73]
@@ -387,6 +435,33 @@ class ISClipper(unittest.TestCase):
         # Clip the vector to the bbox
         myResult = clipLayer(myVectorLayer, myClipRect)
         assert(os.path.exists(myResult))
+
+    def test_explodeMultiPolygonGeometry(self):
+        """Test exploding POLY multipart to single part geometries works"""
+        myGeometry = QgsGeometry.fromWkt('MULTIPOLYGON(((-0.966314 0.445890,'
+           '-0.281133 0.555729,-0.092839 0.218369,-0.908780 0.035305,-0.966314'
+           ' 0.445890)),((-0.906164 0.003923,-0.077148 0.197447,0.043151'
+           ' -0.074533,-0.882628 -0.296824,-0.906164 0.003923)))')
+        myCollection = explodeMultiPartGeometry(myGeometry)
+        myMessage = 'Expected 2 parts from multipart polygon geometry'
+        assert len(myCollection) == 2, myMessage
+
+    def test_explodeMultiLineGeometry(self):
+        """Test exploding LINES multipart to single part geometries works"""
+        myGeometry = QgsGeometry.fromWkt('MULTILINESTRING((-0.974159 0.526961,'
+                ' -0.291594 0.644645), (-0.411893 0.728331,'
+                ' -0.160834 0.568804))')
+        myCollection = explodeMultiPartGeometry(myGeometry)
+        myMessage = 'Expected 2 parts from multipart line geometry'
+        assert len(myCollection) == 2, myMessage
+
+    def test_explodeMultiPointGeometry(self):
+        """Test exploding POINT multipart to single part geometries works"""
+        myGeometry = QgsGeometry.fromWkt('MULTIPOINT((-0.966314 0.445890),'
+           '(-0.281133 0.555729))')
+        myCollection = explodeMultiPartGeometry(myGeometry)
+        myMessage = 'Expected 2 parts from multipart point geometry'
+        assert len(myCollection) == 2, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISClipper, 'test')

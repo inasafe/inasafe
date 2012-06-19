@@ -3,9 +3,9 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from impact_functions.styles import earthquake_fatality_style as style_info
 from storage.raster import Raster
-from storage.utilities import ugettext as _
+from common.utilities import ugettext as _
 from impact_functions.tables import Table, TableRow
-from engine.numerics import normal_cdf
+from common.numerics import normal_cdf
 
 import numpy
 
@@ -80,7 +80,7 @@ class ITBFatalityFunction(FunctionProvider):
 
     """
 
-    plugin_name = _('Be affected by ground shaking')
+    plugin_name = _('Die')
 
     def run(self, layers,
             x=0.62275231, y=8.03314466, zeta=2.15):
@@ -113,6 +113,7 @@ class ITBFatalityFunction(FunctionProvider):
         # FIXME (Ole): this range is 2-9. Should 10 be included?
         mmi_range = range(2, 10)
         number_of_exposed = {}
+        number_of_displaced = {}
         number_of_fatalities = {}
 
         # Calculate fatality rates for observed Intensity values (H
@@ -130,12 +131,17 @@ class ITBFatalityFunction(FunctionProvider):
             fatality_rate = numpy.power(10.0, x * mmi - y)
             F = fatality_rate * I
 
-            # Sum up fatalities to create map
-            R += F
+            # Calculate expected number of displaced people per level
+            D = displacement_rate[mmi] * I
+
+            # Sum up numbers for map
+            R += F   # Fatalities
+            #R += D   # Displaced
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
             number_of_exposed[mmi] = numpy.nansum(I.flat)
+            number_of_displaced[mmi] = numpy.nansum(D.flat)
             number_of_fatalities[mmi] = numpy.nansum(F.flat)
 
         # Set resulting layer to NaN when less than a threshold. This is to
@@ -150,11 +156,19 @@ class ITBFatalityFunction(FunctionProvider):
                                / 1000)) * 1000
 
         # Compute number of people displaced due to building collapse
-        displaced = 0
-        for mmi in mmi_range:
-            displaced += displacement_rate[mmi] * number_of_exposed[mmi]
+        displaced = int(round(numpy.nansum(number_of_displaced.values())
+                              / 1000)) * 1000
 
-        displaced = int(round(displaced / 1000)) * 1000
+        # Compute test number of people displaced
+        # FIXME (Ole): Just a temporary measure to check...
+        displaced_test = 0
+        for mmi in mmi_range:
+            displaced_test += displacement_rate[mmi] * number_of_exposed[mmi]
+        displaced_test = int(round(displaced_test / 1000)) * 1000
+
+        msg = 'Displaced = %i, test = %i' % (displaced, displaced_test)
+        if displaced != displaced_test:
+            raise Exception(msg)
 
         # Generate impact report
         table_body = [question]
@@ -186,16 +200,23 @@ class ITBFatalityFunction(FunctionProvider):
         table_body.append(TableRow([_('Number of people displaced'), s],
                                    header=True))
 
+        # Add estimate of total population in area
+        s = str(int(total)).rjust(10)
+        table_body.append(TableRow([_('Total number of people'), s],
+                                   header=True))
+
         table_body.append(TableRow(_('Action Checklist:'), header=True))
-        table_body.append(_('Are enough victim identification units '
-                            'available for %i people?') % fatalities)
-        table_body.append(_('Are enough shelters available for %i '
-                            'people?') % displaced)
+        if fatalities > 0:
+            table_body.append(_('Are enough victim identification units '
+                                'available for %i people?') % fatalities)
+        if displaced > 0:
+            table_body.append(_('Are enough shelters available for %i '
+                                'people?') % displaced)
 
         table_body.append(TableRow(_('Notes:'), header=True))
-
         table_body.append(_('Fatality model is from '
                             'Institute of Teknologi Bandung 2012.'))
+        table_body.append(_('Population numbers rounded to nearest 1000.'))
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary

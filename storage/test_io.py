@@ -29,8 +29,6 @@ from utilities import points_along_line
 from utilities import geotransform2bbox
 from utilities import geotransform2resolution
 from utilities import nanallclose
-from utilities import ugettext as _
-from utilities import VerificationError
 from utilities import raster_geometry2geotransform
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
@@ -39,6 +37,8 @@ from utilities_test import same_API
 from utilities_test import TESTDATA, HAZDATA, EXPDATA
 from utilities_test import FEATURE_COUNTS
 from utilities_test import GEOTRANSFORMS
+from common.utilities import ugettext as _
+from common.utilities import VerificationError
 
 
 # Auxiliary function for raster test

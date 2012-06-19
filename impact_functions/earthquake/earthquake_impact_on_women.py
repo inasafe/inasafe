@@ -3,9 +3,9 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from impact_functions.styles import earthquake_fatality_style as style_info
 from storage.raster import Raster
-from storage.utilities import ugettext as _
 from impact_functions.tables import Table, TableRow
-from engine.numerics import normal_cdf
+from common.utilities import ugettext as _
+from common.numerics import normal_cdf
 
 import numpy
 
@@ -37,7 +37,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
 
     """
 
-    plugin_name = _('Be affected by earthquake')
+    plugin_name = _('Suffer because of gender')
 
     def run(self, layers,
             x=0.62275231, y=8.03314466, zeta=2.15):

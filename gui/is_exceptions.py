@@ -86,3 +86,8 @@ class NoFeaturesInExtentException(Exception):
     """An exception that gets thrown when no features are within
     the extent being clipped."""
     pass
+
+
+class InvalidProjectionException(Exception):
+    """An exception raised if a layer needs to be reprojected."""
+    pass

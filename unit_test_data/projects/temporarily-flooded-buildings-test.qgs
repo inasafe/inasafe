@@ -1,0 +1,228 @@
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis projectname="" version="1.9.0-Lisboa">
+    <title></title>
+    <mapcanvas>
+        <units>degrees</units>
+        <extent>
+            <xmin>106.774228</xmin>
+            <ymin>-6.192673</ymin>
+            <xmax>106.866863</xmax>
+            <ymax>-6.167155</ymax>
+        </extent>
+        <projections>0</projections>
+        <destinationsrs>
+            <spatialrefsys>
+                <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+                <srsid>3452</srsid>
+                <srid>4326</srid>
+                <authid>EPSG:4326</authid>
+                <description>WGS 84</description>
+                <projectionacronym>longlat</projectionacronym>
+                <ellipsoidacronym>WGS84</ellipsoidacronym>
+                <geographicflag>true</geographicflag>
+            </spatialrefsys>
+        </destinationsrs>
+    </mapcanvas>
+    <legend updateDrawingOrder="false">
+        <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Buildings_osm_4326" showFeatureCount="0">
+            <filegroup open="true" hidden="false">
+                <legendlayerfile isInOverview="0" layerid="buildings_osm_432620120614154719177" visible="1"/>
+            </filegroup>
+        </legendlayer>
+        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Jakarta_flood_design_x10" showFeatureCount="0">
+            <filegroup open="false" hidden="false">
+                <legendlayerfile isInOverview="0" layerid="jakarta_flood_design_x1020120614154034736" visible="1"/>
+            </filegroup>
+        </legendlayer>
+        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Jakarta flood like 2007 with structural improvements" showFeatureCount="0">
+            <filegroup open="false" hidden="false">
+                <legendlayerfile isInOverview="0" layerid="jakarta_flood_design20120614144951292" visible="1"/>
+            </filegroup>
+        </legendlayer>
+    </legend>
+    <projectlayers layercount="3">
+        <maplayer minimumScale="0" maximumScale="1e+08" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="0">
+            <id>buildings_osm_432620120614154719177</id>
+            <datasource>../exposure/buildings_osm_4326.shp</datasource>
+            <title></title>
+            <abstract></abstract>
+            <layername>Buildings_osm_4326</layername>
+            <srs>
+                <spatialrefsys>
+                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+                    <srsid>3452</srsid>
+                    <srid>4326</srid>
+                    <authid>EPSG:4326</authid>
+                    <description>WGS 84</description>
+                    <projectionacronym>longlat</projectionacronym>
+                    <ellipsoidacronym>WGS84</ellipsoidacronym>
+                    <geographicflag>true</geographicflag>
+                </spatialrefsys>
+            </srs>
+            <transparencyLevelInt>255</transparencyLevelInt>
+            <provider encoding="UTF-8">ogr</provider>
+            <vectorjoins/>
+            <renderer-v2 symbollevels="0" type="singleSymbol">
+                <symbols>
+                    <symbol outputUnit="MM" alpha="1" type="fill" name="0">
+                        <layer pass="0" class="SimpleFill" locked="0">
+                            <prop k="color" v="98,154,68,255"/>
+                            <prop k="color_border" v="0,0,0,255"/>
+                            <prop k="offset" v="0,0"/>
+                            <prop k="style" v="solid"/>
+                            <prop k="style_border" v="solid"/>
+                            <prop k="width_border" v="0.26"/>
+                        </layer>
+                    </symbol>
+                </symbols>
+                <rotation field=""/>
+                <sizescale field=""/>
+            </renderer-v2>
+            <customproperties/>
+            <displayfield></displayfield>
+            <label>0</label>
+            <labelattributes>
+                <label fieldname="" text="Label"/>
+                <family fieldname="" name="Ubuntu"/>
+                <size fieldname="" units="pt" value="12"/>
+                <bold fieldname="" on="0"/>
+                <italic fieldname="" on="0"/>
+                <underline fieldname="" on="0"/>
+                <strikeout fieldname="" on="0"/>
+                <color fieldname="" red="0" blue="0" green="0"/>
+                <x fieldname=""/>
+                <y fieldname=""/>
+                <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
+                <angle fieldname="" value="0" auto="0"/>
+                <alignment fieldname="" value="center"/>
+                <buffercolor fieldname="" red="255" blue="255" green="255"/>
+                <buffersize fieldname="" units="pt" value="1"/>
+                <bufferenabled fieldname="" on=""/>
+                <multilineenabled fieldname="" on=""/>
+                <selectedonly on=""/>
+            </labelattributes>
+            <editform></editform>
+            <editforminit></editforminit>
+            <annotationform></annotationform>
+            <attributeactions/>
+        </maplayer>
+        <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+            <id>jakarta_flood_design20120614144951292</id>
+            <datasource>../hazard/jakarta_flood_design.tif</datasource>
+            <title></title>
+            <abstract></abstract>
+            <layername>Jakarta flood like 2007 with structural improvements</layername>
+            <srs>
+                <spatialrefsys>
+                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+                    <srsid>3452</srsid>
+                    <srid>4326</srid>
+                    <authid>EPSG:4326</authid>
+                    <description>WGS 84</description>
+                    <projectionacronym>longlat</projectionacronym>
+                    <ellipsoidacronym>WGS84</ellipsoidacronym>
+                    <geographicflag>true</geographicflag>
+                </spatialrefsys>
+            </srs>
+            <transparencyLevelInt>255</transparencyLevelInt>
+            <customproperties/>
+            <provider>gdal</provider>
+            <rasterrenderer opacity="1" alphaBand="-1" maxOversampling="2" band="1" type="singlebandpseudocolor" invertColor="0">
+                <rasterTransparency>
+                    <singleValuePixelList>
+                        <pixelListEntry pixelValue="-9999.000000" percentTransparent="100"/>
+                    </singleValuePixelList>
+                </rasterTransparency>
+                <rastershader>
+                    <colorrampshader colorRampType="DISCRETE">
+                        <item value="0" label="0.000000" color="#0000ff"/>
+                        <item value="0.088868" label="0.088868" color="#0c00f3"/>
+                        <item value="0.177737" label="0.177737" color="#1800e7"/>
+                        <item value="0.266605" label="0.266605" color="#2400db"/>
+                        <item value="0.355474" label="0.355474" color="#3000cf"/>
+                        <item value="0.444342" label="0.444342" color="#3c00c3"/>
+                        <item value="0.533211" label="0.533211" color="#4800b7"/>
+                        <item value="0.622079" label="0.622079" color="#5400ab"/>
+                        <item value="0.710947" label="0.710947" color="#60009f"/>
+                        <item value="0.799816" label="0.799816" color="#6c0093"/>
+                        <item value="0.888684" label="0.888684" color="#780087"/>
+                        <item value="0.977553" label="0.977553" color="#84007b"/>
+                        <item value="1.06642" label="1.066421" color="#90006f"/>
+                        <item value="1.15529" label="1.155290" color="#9c0063"/>
+                        <item value="1.24416" label="1.244158" color="#a80057"/>
+                        <item value="1.33303" label="1.333026" color="#b4004b"/>
+                        <item value="1.42189" label="1.421895" color="#c0003f"/>
+                        <item value="1.51076" label="1.510763" color="#cc0033"/>
+                        <item value="1.59963" label="1.599632" color="#d80027"/>
+                        <item value="1.6885" label="1.688500" color="#e4001b"/>
+                    </colorrampshader>
+                </rastershader>
+            </rasterrenderer>
+        </maplayer>
+        <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
+            <id>jakarta_flood_design_x1020120614154034736</id>
+            <datasource>../hazard/jakarta_flood_design_x10.tif</datasource>
+            <title></title>
+            <abstract></abstract>
+            <layername>Jakarta_flood_design_x10</layername>
+            <srs>
+                <spatialrefsys>
+                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+                    <srsid>3452</srsid>
+                    <srid>4326</srid>
+                    <authid>EPSG:4326</authid>
+                    <description>WGS 84</description>
+                    <projectionacronym>longlat</projectionacronym>
+                    <ellipsoidacronym>WGS84</ellipsoidacronym>
+                    <geographicflag>true</geographicflag>
+                </spatialrefsys>
+            </srs>
+            <transparencyLevelInt>255</transparencyLevelInt>
+            <customproperties/>
+            <provider>gdal</provider>
+            <rasterrenderer opacity="1" alphaBand="-1" maxOversampling="2" band="1" type="singlebandpseudocolor" invertColor="0">
+                <rasterTransparency>
+                    <singleValuePixelList>
+                        <pixelListEntry pixelValue="-340282000000000014192072600942972764160.000000" percentTransparent="100"/>
+                    </singleValuePixelList>
+                </rasterTransparency>
+                <rastershader>
+                    <colorrampshader colorRampType="DISCRETE">
+                        <item value="0" label="0.000000" color="#0000ff"/>
+                        <item value="1.87611" label="1.876111" color="#1900e6"/>
+                        <item value="3.75222" label="3.752222" color="#3200cd"/>
+                        <item value="5.62833" label="5.628333" color="#4b00b4"/>
+                        <item value="7.50444" label="7.504445" color="#64009b"/>
+                        <item value="9.38056" label="9.380556" color="#7d0082"/>
+                        <item value="11.2567" label="11.256667" color="#960069"/>
+                        <item value="13.1328" label="13.132778" color="#af0050"/>
+                        <item value="15.0089" label="15.008889" color="#c80037"/>
+                        <item value="16.885" label="16.885000" color="#e1001e"/>
+                    </colorrampshader>
+                </rastershader>
+            </rasterrenderer>
+        </maplayer>
+    </projectlayers>
+    <properties>
+        <SpatialRefSys>
+            <ProjectCrs type="QString">EPSG:4326</ProjectCrs>
+            <ProjectionsEnabled type="int">0</ProjectionsEnabled>
+        </SpatialRefSys>
+        <Paths>
+            <Absolute type="bool">false</Absolute>
+        </Paths>
+        <Gui>
+            <SelectionColorBluePart type="int">0</SelectionColorBluePart>
+            <CanvasColorGreenPart type="int">255</CanvasColorGreenPart>
+            <CanvasColorRedPart type="int">255</CanvasColorRedPart>
+            <SelectionColorRedPart type="int">255</SelectionColorRedPart>
+            <SelectionColorAlphaPart type="int">255</SelectionColorAlphaPart>
+            <SelectionColorGreenPart type="int">255</SelectionColorGreenPart>
+            <CanvasColorBluePart type="int">255</CanvasColorBluePart>
+        </Gui>
+        <PositionPrecision>
+            <DecimalPlaces type="int">2</DecimalPlaces>
+            <Automatic type="bool">true</Automatic>
+        </PositionPrecision>
+    </properties>
+</qgis>

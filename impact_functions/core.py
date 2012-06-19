@@ -11,7 +11,7 @@ import types
 import keyword
 from impact_functions.utilities import ColorMapEntry
 from engine.polygon import inside_polygon
-from storage.utilities import ugettext as _
+from common.utilities import ugettext as _
 
 
 class PluginMount(type):

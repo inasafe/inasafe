@@ -4,15 +4,16 @@
 import os
 import numpy
 from osgeo import gdal
+from common.utilities import verify
+
 from projection import Projection
 from utilities import DRIVER_MAP
 from engine.interpolation import interpolate_raster_vector
-from titles import titles as internationalised_titles
+from dynamic_translations import names as internationalised_titles
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import nanallclose
 from utilities import geotransform2bbox, geotransform2resolution
-from utilities import verify
 
 
 class Raster:
@@ -30,6 +31,7 @@ class Raster:
                 * None (FIXME (Ole): Remove this option)
             projection: Geospatial reference in WKT format.
                         Only used if data is provide as a numeric array,
+                        if None, WGS84 geographic is assumed
             geotransform: GDAL geotransform (6-tuple).
                           (top left x, w-e pixel resolution, rotation,
                            top left y, rotation, n-s pixel resolution).
@@ -353,6 +355,8 @@ class Raster:
                      scalar value: If scaling takes a numerical scalar value,
                                    that will be use to scale the data
 
+        NOTE: Scaling does not currently work with projected layers.
+        See issue #123
         """
 
         if hasattr(self, 'data'):
@@ -383,8 +387,10 @@ class Raster:
 
             # Replace NODATA_VALUE with NaN
             nodata = self.get_nodata_value()
-
-            NaN = numpy.ones(A.shape, A.dtype) * NAN
+            try:  # see issue #174
+                NaN = numpy.ones(A.shape, A.dtype) * NAN
+            except:
+                pass
             A = numpy.where(A == nodata, NaN, A)
 
         # Take care of possible scaling

@@ -24,6 +24,13 @@ from storage.utilities_test import TESTDATA
 
 DEFAULT_PLUGINS = ('Earthquake Fatality Function',)
 
+# These imports are needed for impact function registration if this test
+# is to be run independently - dont remove
+# If any of these get reinstated as "official" public impact functions,
+# remove from here and update test to use the real one.
+from engine.impact_functions_for_testing import empirical_fatality_model
+from engine.impact_functions_for_testing import allen_fatality_model
+
 
 # FIXME (Ole): Change H, E to layers.
 class BasicFunction(FunctionProvider):
