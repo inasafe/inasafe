@@ -58,6 +58,13 @@ compile-translation-strings: compile
 
 test-translations:
 	@echo
+	@echo "-------------------------"
+	@echo "Missing translations (id)"
+	@echo "-------------------------"
+	@python scripts/missing_translations.py `pwd` id
+
+translation-stats:
+	@echo
 	@echo "----------------------"
 	@echo "Translation statistics"
 	@echo "----------------------"
