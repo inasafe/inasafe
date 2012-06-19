@@ -846,24 +846,3 @@ def points_along_line(line, delta):
         points.extend(pts)
     C = numpy.array(points)
     return C
-
-
-# FIXME: Move to common.utilities
-def titelize(s):
-    """Convert string into title
-
-    This is better than the built-in method title() because
-    it leaves all uppercase words like UK unchanged.
-
-    Source http://stackoverflow.com/questions/1549641/
-           how-to-capitalize-the-first-letter-of-each-word-in-a-string-python
-    """
-
-    # Replace underscores with spaces
-    s = s.replace('_', ' ')
-
-    # Capitalise
-    #s = s.title()  # This will capitalize first letter force the rest down
-    s = ' '.join([w[0].upper() + w[1:] for w in s.split(' ')])
-
-    return s
