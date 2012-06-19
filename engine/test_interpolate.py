@@ -11,7 +11,7 @@ sys.path.append(pardir)
 from interpolation2d import interpolate2d, interpolate_raster
 from interpolation1d import interpolate1d
 from storage.utilities_test import combine_coordinates
-from storage.utilities import nanallclose
+from common.numerics import nanallclose
 
 
 def linear_function(x, y):

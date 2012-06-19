@@ -32,5 +32,7 @@ from impact_functions import get_admissible_plugins
 
 from engine.core import calculate_impact
 
+from common.numerics import nanallclose
+
 # For testing and demoing
 from common.testing import TESTDATA, HAZDATA, EXPDATA

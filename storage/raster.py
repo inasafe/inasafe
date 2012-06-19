@@ -5,6 +5,7 @@ import os
 import numpy
 from osgeo import gdal
 from common.utilities import verify
+from common.numerics import nanallclose
 
 from projection import Projection
 from utilities import DRIVER_MAP
@@ -12,7 +13,6 @@ from engine.interpolation import interpolate_raster_vector
 from dynamic_translations import names as internationalised_titles
 from utilities import read_keywords
 from utilities import write_keywords
-from utilities import nanallclose
 from utilities import geotransform2bbox, geotransform2resolution
 
 

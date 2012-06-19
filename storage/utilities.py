@@ -602,6 +602,7 @@ def get_geometry_type(geometry, geometry_type):
     return geometry_type
 
 
+# FIXME: Move to common utilities
 def is_sequence(x):
     """Determine if x behaves like a true sequence but not a string
 
@@ -706,6 +707,7 @@ def geometrytype2string(g_type):
         return 'Unknown geometry type: %s' % str(g_type)
 
 
+# FIXME: Move to common numerics area
 def calculate_polygon_area(polygon, signed=False):
     """Calculate the signed area of non-self-intersecting polygon
 
@@ -846,6 +848,7 @@ def points_along_line(line, delta):
     return C
 
 
+# FIXME: Move to common.utilities
 def titelize(s):
     """Convert string into title
 
@@ -864,35 +867,3 @@ def titelize(s):
     s = ' '.join([w[0].upper() + w[1:] for w in s.split(' ')])
 
     return s
-
-
-def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
-    """Numpy allclose function which allows NaN
-
-    Input
-        x, y: Either scalars or numpy arrays
-
-    Output
-        True or False
-
-    Returns True if all non-nan elements pass.
-    """
-
-    xn = numpy.isnan(x)
-    yn = numpy.isnan(y)
-    if numpy.any(xn != yn):
-        # Presence of NaNs is not the same in x and y
-        return False
-
-    if numpy.all(xn):
-        # Everything is NaN.
-        # This will also take care of x and y being NaN scalars
-        return True
-
-    # Filter NaN's out
-    if numpy.any(xn):
-        x = x[-xn]
-        y = y[-yn]
-
-    # Compare non NaN's and return
-    return numpy.allclose(x, y, rtol=rtol, atol=atol)

@@ -28,12 +28,12 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geotransform2bbox
 from utilities import geotransform2resolution
-from utilities import nanallclose
 from utilities import raster_geometry2geotransform
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
+from common.numerics import nanallclose
 from common.testing import TESTDATA, HAZDATA, EXPDATA
 from common.testing import FEATURE_COUNTS
 from common.testing import GEOTRANSFORMS
