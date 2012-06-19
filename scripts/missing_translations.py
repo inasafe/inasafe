@@ -45,13 +45,18 @@ if __name__ == '__main__':
                     fields = line.split()
                     i = fields.index('untranslated')
                     untranslated = int(fields[i - 1])
+                    #print 'untranslated', untranslated
                     if untranslated == 0:
                         status = 'OK'
                     else:
                         status = '%i untranslated' % untranslated
+                    break
+                status = 'OK'
 
             if status != 'OK':
                 msg += status
                 print msg
+
+            #print msg
 
 
