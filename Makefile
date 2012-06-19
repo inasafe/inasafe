@@ -58,8 +58,15 @@ compile-translation-strings: compile
 
 test-translations:
 	@echo
+	@echo "----------------------------------------------------------------"
+	@echo "Missing translations - for more info run: make translation-stats"
+	@echo "----------------------------------------------------------------"
+	@python scripts/missing_translations.py `pwd` id
+
+translation-stats:
+	@echo
 	@echo "----------------------"
-	@echo "Translation statistics"
+	@echo "Translation statistics - for more info see http://inasafe.readthedocs.org/en/latest/developer-docs/i18n.html"
 	@echo "----------------------"
 	@echo
 	@echo "Gettext translations (*.po):"

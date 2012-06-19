@@ -2,7 +2,7 @@
 """
 import numpy
 from storage.vector import Vector
-from storage.utilities import verify
+from common.utilities import verify
 
 
 def osm2padang(E):

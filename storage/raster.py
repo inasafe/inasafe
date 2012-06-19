@@ -4,6 +4,8 @@
 import os
 import numpy
 from osgeo import gdal
+from common.utilities import verify
+
 from projection import Projection
 from utilities import DRIVER_MAP
 from engine.interpolation import interpolate_raster_vector
@@ -12,7 +14,6 @@ from utilities import read_keywords
 from utilities import write_keywords
 from utilities import nanallclose
 from utilities import geotransform2bbox, geotransform2resolution
-from utilities import verify
 
 
 class Raster:

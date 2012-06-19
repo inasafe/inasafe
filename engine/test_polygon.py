@@ -8,7 +8,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from math import sqrt, pi
-from numerics import ensure_numeric
+from common.numerics import ensure_numeric
 
 from polygon import *
 from utilities import test_polygon, test_lines

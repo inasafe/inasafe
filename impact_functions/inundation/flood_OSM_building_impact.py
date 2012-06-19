@@ -2,7 +2,7 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from storage.vector import Vector
-from storage.utilities import ugettext as _
+from common.utilities import ugettext as _
 from storage.dynamic_translations import names as internationalised_values
 from impact_functions.tables import Table, TableRow
 

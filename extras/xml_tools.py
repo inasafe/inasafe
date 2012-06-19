@@ -3,7 +3,7 @@
 
 import sys
 from xml.dom import minidom, Node
-from storage.utilities import verify
+from common.utilities import verify
 
 def print_tree(n, indent=0):
     while n:

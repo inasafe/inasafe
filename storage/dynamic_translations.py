@@ -46,7 +46,7 @@ from dynamic_translations import names
 #              dynamic_translations.py
 #              See issue #168
 
-from utilities import ugettext as _
+from common.utilities import ugettext as _
 
 names = {'title1': _('DKI buildings'),       # Bangunan DKI
          'title2': _('Jakarta 2007 flood'),  # Banjir seperti 2007

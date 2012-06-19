@@ -3,9 +3,9 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from impact_functions.styles import earthquake_fatality_style as style_info
 from storage.raster import Raster
-from storage.utilities import ugettext as _
+from common.utilities import ugettext as _
 from impact_functions.tables import Table, TableRow
-from engine.numerics import normal_cdf
+from common.numerics import normal_cdf
 
 import numpy
 
