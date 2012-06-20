@@ -2,7 +2,7 @@
 """
 import numpy
 from storage.vector import Vector
-from storage.utilities import verify
+from common.utilities import verify
 
 
 def osm2padang(E):
@@ -367,7 +367,7 @@ def sigab2bnpb(E, target_attribute='VCLASS'):
     return V
 
 
-# def XX_printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
+# def printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
 #     """Map SIGAB point data to BNPB vulnerability classes
 
 #     Input

@@ -57,7 +57,7 @@ class ISPluginTest(unittest.TestCase):
     def test_ImpactFunctionI18n(self):
         """Library translations are working."""
         # import this late so that i18n setup is already in place
-        from storage.utilities import ugettext as _
+        from common.utilities import ugettext as _
         myUntranslatedString = 'Temporarily Closed'
         # Test indonesian too
         myParent = QWidget()
@@ -89,7 +89,7 @@ class ISPluginTest(unittest.TestCase):
         # (see http://effbot.org/zone/metaclass-plugins.htm)
         # lang in the context of the ugettext function in inasafe libs
         # must be imported late so that i18n is set up already
-        from storage.utilities import ugettext as _
+        from common.utilities import ugettext as _
         myUntranslatedString = 'Temporarily Closed'
         myExpectedString = 'Tydelik gesluit'  # afrikaans
         myTranslation = _(myUntranslatedString)

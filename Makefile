@@ -56,6 +56,35 @@ compile-translation-strings: compile
 	@#compile gettext messages binary
 	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 
+test-translations:
+	@echo
+	@echo "----------------------------------------------------------------"
+	@echo "Missing translations - for more info run: make translation-stats"
+	@echo "----------------------------------------------------------------"
+	@python scripts/missing_translations.py `pwd` id
+
+translation-stats:
+	@echo
+	@echo "----------------------"
+	@echo "Translation statistics - for more info see http://inasafe.readthedocs.org/en/latest/developer-docs/i18n.html"
+	@echo "----------------------"
+	@echo
+	@echo "Gettext translations (*.po):"
+	@echo "----------------------------"
+	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+	@echo
+	@echo "Qt translations (*.ts):"
+	@echo "----------------------------"
+	@scripts/string-stats.sh
+
+lines-of-code:
+	@echo "----------------------"
+	@echo " Lines of code analysis"
+	@echo " Generated using David A. Wheeler's 'SLOCCount'"
+	@echo "----------------------"
+	@git log | head -3
+	@sloccount . | grep '^[0-9]'
+
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
@@ -68,7 +97,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
-test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit
+test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit test-translations
 
 # Run the test suite followed by pep8 style checking - dont update from svn for test data
 test_no_svn: docs test_suite_no_svn pep8 disabled_tests dependency_test unwanted_strings data_audit
@@ -163,9 +192,9 @@ unwanted_strings:
 
 dependency_test:
 	@echo
-	@echo "---------------------------------------------"
+	@echo "------------------------------------------------"
 	@echo "List of unwanted dependencies in InaSAFE library"
-	@echo "---------------------------------------------"
+	@echo "------------------------------------------------"
 
 	@# Need disjunction with "true" because grep returns non-zero error code if no matches were found
 	@# nielso@shakti:~/sandpit/inasafe$ grep PyQt4 engine
@@ -211,3 +240,4 @@ profile:
 	@echo "Profiling engine                       "
 	@echo "---------------------------------------"
 	python -m cProfile engine/test_engine.py -s cumulative
+

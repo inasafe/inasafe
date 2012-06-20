@@ -28,17 +28,17 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geotransform2bbox
 from utilities import geotransform2resolution
-from utilities import nanallclose
-from utilities import ugettext as _
-from utilities import VerificationError
 from utilities import raster_geometry2geotransform
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
-from utilities_test import TESTDATA, HAZDATA, EXPDATA
-from utilities_test import FEATURE_COUNTS
-from utilities_test import GEOTRANSFORMS
+from common.numerics import nanallclose
+from common.testing import TESTDATA, HAZDATA, EXPDATA
+from common.testing import FEATURE_COUNTS
+from common.testing import GEOTRANSFORMS
+from common.utilities import ugettext as _
+from common.utilities import VerificationError
 
 
 # Auxiliary function for raster test
@@ -66,10 +66,12 @@ class Test_IO(unittest.TestCase):
         v = Vector(None)
         assert v.get_name().startswith('')
         assert v.is_inasafe_spatial_object
+        assert str(v).startswith('Vector data')
 
         r = Raster(None)
         assert r.get_name().startswith('')
         assert r.is_inasafe_spatial_object
+        assert str(r).startswith('Raster data')
 
     def test_vector_feature_count(self):
         """Number of features read from vector data is as expected
@@ -265,6 +267,10 @@ class Test_IO(unittest.TestCase):
         filename = '%s/%s' % (TESTDATA, layername)
         V = read_layer(filename)
 
+        # Check string representation of vector class
+        assert str(V).startswith('Vector data')
+        assert str(len(V)) in str(V)
+
         # Make a smaller dataset
         V_ref = V.get_topN('FLOOR_AREA', 5)
 
@@ -275,9 +281,41 @@ class Test_IO(unittest.TestCase):
         # Create new object from test data
         V_new = Vector(data=data, projection=projection, geometry=geometry)
 
-        # Check
+        # Check equality operations
         assert V_new == V_ref
         assert not V_new != V_ref
+
+        V3 = V_new.copy()
+        assert V_new == V3  # Copy is OK
+
+        V3.data[0]['FLOOR_AREA'] += 1.0e-5
+        assert V_new == V3  # Copy is OK within tolerance
+
+        V3.data[0]['FLOOR_AREA'] += 1.0e-2
+        assert V_new != V3  # Copy is outside tolerance
+
+        V3 = V_new.copy()
+        V4 = V_new.copy()
+        V3.data[0]['BUILDING_C'] = True
+        assert V4 == V3  # Booleans work
+
+        V3.data[0]['BUILDING_C'] = False
+        assert V4 != V3  # Booleans work
+
+        V3.data[0]['BUILDING_C'] = None
+        assert V4 != V3  # None works
+
+        V3.data[0]['BUILDING_C'] = None
+        V4.data[0]['BUILDING_C'] = False
+        assert V4 == V3  # False matches None
+
+        V3.data[0]['BUILDING_C'] = 0
+        V4.data[0]['BUILDING_C'] = False
+        assert V4 == V3  # False matches 0
+
+        V3.data[0]['BUILDING_C'] = 1
+        V4.data[0]['BUILDING_C'] = True
+        assert V4 == V3  # True matches 1
 
         # Write this new object, read it again and check
         tmp_filename = unique_filename(suffix='.shp')
@@ -624,6 +662,11 @@ class Test_IO(unittest.TestCase):
         R1 = Raster(A1, projection, geotransform,
                     keywords={'testkwd': 'testval', 'size': 'small'})
 
+        # Check string representation of raster class
+        assert str(R1).startswith('Raster data')
+        assert str(R1.rows) in str(R1)
+        assert str(R1.columns) in str(R1)
+
         # Test conversion between geotransform and
         # geometry (longitudes and latitudes)
         longitudes, latitudes = R1.get_geometry()
@@ -773,6 +816,15 @@ class Test_IO(unittest.TestCase):
                 # Use overridden == and != to verify
                 assert R1 == R2
                 assert not R1 != R2
+
+                # Check equality within tolerance
+                R3 = R1.copy()
+
+                R3.data[-1, -1] += 1.0e-5  # This is within tolerance
+                assert R1 == R3
+
+                R3.data[-1, -1] += 1.0e-2  # This is outside tolerance
+                assert R1 != R3
 
                 # Check that equality raises exception when type is wrong
                 try:
@@ -1142,6 +1194,16 @@ class Test_IO(unittest.TestCase):
         else:
             msg = 'Should have raised assertion error for wrong extension'
             raise Exception(msg)
+
+        # Make a spatial layer with these keywords
+        V = read_layer('%s/test_buildings.shp' % TESTDATA)
+        V = Vector(data=V.get_data(),
+                   geometry=V.get_geometry(),
+                   projection=V.get_projection(),
+                   keywords=keywords)
+        assert keywords['impact_summary'] == V.get_impact_summary()
+        for key, val in V.get_keywords().items():
+            assert keywords[key] == val
 
     def test_empty_keywords_file(self):
         """Empty keywords can be handled

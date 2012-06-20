@@ -34,7 +34,7 @@ from safe_api import write_keywords as safe_write_keywords
 from safe_api import read_layer as safe_read_layer
 from safe_api import buffered_bounding_box, verify as verify_util
 from safe_api import calculate_impact as safe_calculate_impact
-from safe_api import internationalisedTitles
+from safe_api import internationalisedNames
 
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication
@@ -60,7 +60,7 @@ def tr(theText):
 
 
 def verify(theStatement, theMessage=None):
-    """This is just a thin wrapper around storage.utilities.verify.
+    """This is just a thin wrapper around safe_api.verify.
 
     Args:
         * theStatement - expression to verify
@@ -85,7 +85,7 @@ def getOptimalExtent(theHazardGeoExtent,
     to ensure that the extent is tenable, includes data from both
     etc.
 
-    This is just a thin wrapper around storage.utilities.bbox_intersection.
+    This is just a thin wrapper around safe_api.bbox_intersection.
 
     Typically the result of this function will be used to clip
     input layers to a commone extent before processing.

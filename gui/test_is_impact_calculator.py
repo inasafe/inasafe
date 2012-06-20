@@ -31,8 +31,7 @@ from is_exceptions import (InsufficientParametersException,
                            StyleInfoNotFoundException)
 
 from is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
-#TODO get rid of this....so we dont pull in stuff from storage...
-from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
+from safe_api import TESTDATA, HAZDATA, EXPDATA
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)

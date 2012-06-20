@@ -3,7 +3,15 @@
 
 import os
 import numpy
+
+import copy as copy_module
 from osgeo import ogr, gdal
+from common.polygon import inside_polygon, clip_line_by_polygon
+from common.numerics import ensure_numeric
+from common.utilities import verify
+from common.dynamic_translations import names as internationalised_titles
+
+from layer import Layer
 from projection import Projection
 from utilities import DRIVER_MAP, TYPE_MAP, DEFAULT_ATTRIBUTE
 from utilities import read_keywords
@@ -14,13 +22,9 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
-from utilities import verify
-from titles import titles as internationalised_titles
-from engine.polygon import inside_polygon, clip_line_by_polygon
-from engine.numerics import ensure_numeric
 
 
-class Vector:
+class Vector(Layer):
     """Class for abstraction of vector data
     """
 
@@ -53,6 +57,9 @@ class Vector:
 
                       Keywords can for example be used to display text
                       about the layer in a web application.
+            style_info: Dictionary with information about how this layer
+                        should be styled. See impact_functions/styles.py
+                        for examples.
 
         Notes
 
@@ -67,17 +74,18 @@ class Vector:
         vertices where line segments are joined
         """
 
-        if data is None and projection is None and geometry is None:
+        # Invoke common layer constructor
+        Layer.__init__(self,
+                       name=name,
+                       projection=projection,
+                       keywords=keywords,
+                       style_info=style_info)
+
+        # Input checks
+        if data is None and geometry is None:
             # Instantiate empty object
-            self.name = name
-            self.projection = None
-            self.geometry = None
             self.geometry_type = None
-            self.filename = None
-            self.data = None
-            self.extent = None
-            self.keywords = {}
-            self.style_info = {}
+            self.extent = [0, 0, 0, 0]
             return
 
         if isinstance(data, basestring):
@@ -87,25 +95,6 @@ class Vector:
             # arguments to the Vector constructor
             # with extra keyword arguments supplying metadata
 
-            self.name = name
-            self.filename = None
-
-            if keywords is None:
-                self.keywords = {}
-            else:
-                msg = ('Specified keywords must be either None or a '
-                       'dictionary. I got %s' % keywords)
-                verify(isinstance(keywords, dict), msg)
-                self.keywords = keywords
-
-            if style_info is None:
-                self.style_info = {}
-            else:
-                msg = ('Specified style_info must be either None or a '
-                       'dictionary. I got %s' % style_info)
-                verify(isinstance(style_info, dict), msg)
-                self.style_info = style_info
-
             msg = 'Geometry must be specified'
             verify(geometry is not None, msg)
 
@@ -114,10 +103,6 @@ class Vector:
             self.geometry = geometry
 
             self.geometry_type = get_geometry_type(geometry, geometry_type)
-
-            #msg = 'Projection must be specified'
-            #verify(projection is not None, msg)
-            self.projection = Projection(projection)
 
             if data is None:
                 # Generate default attribute as OGR will do that anyway
@@ -231,7 +216,7 @@ class Vector:
 
                         res = None
                         try:
-                            # try numerical comparison with tolerances
+                            # Try numerical comparison with tolerances
                             res = numpy.allclose(X, Y,
                                                  rtol=rtol, atol=atol)
                         except:
@@ -261,56 +246,8 @@ class Vector:
         # Vector layers are identical up to the specified tolerance
         return True
 
-    def __ne__(self, other):
-        """Override '!=' to allow comparison with other projection objecs
-        """
-        return not self == other
-
-    def get_name(self):
-        return self.name
-
-    def set_name(self, name):
-        self.name = name
-
-    def get_filename(self):
-        return self.filename
-
-    def get_keywords(self, key=None):
-        """Return keywords dictionary
-        """
-        if key is None:
-            return self.keywords
-        else:
-            if key in self.keywords:
-                return self.keywords[key]
-            else:
-                msg = ('Keyword %s does not exist in %s: Options are '
-                       '%s' % (key, self.get_name(), self.keywords.keys()))
-                raise Exception(msg)
-
-    def get_style_info(self):
-        """Return style_info dictionary
-        """
-        return self.style_info
-
-    def get_caption(self):
-        """Return 'impact_summary' keyword if present. Otherwise ''.
-        """
-        if 'impact_summary' in self.keywords:
-            return self.keywords['impact_summary']
-        else:
-            return ''
-
-    def get_impact_summary(self):
-        """Return 'impact_summary' keyword if present. Otherwise ''.
-        """
-        if 'impact_summary' in self.keywords:
-            return self.keywords['impact_summary']
-        else:
-            return ''
-
     def read_from_file(self, filename):
-        """ Read and unpack vector data.
+        """Read and unpack vector data.
 
         It is assumed that the file contains only one layer with the
         pertinent features. Further it is assumed for the moment that
@@ -397,9 +334,9 @@ class Vector:
                 raise Exception(msg)
             else:
                 self.geometry_type = G.GetGeometryType()
-                if self.geometry_type == ogr.wkbPoint:
+                if self.is_point_data:
                     geometry.append((G.GetX(), G.GetY()))
-                elif self.geometry_type == ogr.wkbLineString:
+                elif self.is_line_data:
                     M = G.GetPointCount()
                     coordinates = []
                     for j in range(M):
@@ -409,7 +346,7 @@ class Vector:
                     geometry.append(numpy.array(coordinates,
                                                 dtype='d',
                                                 copy=False))
-                elif self.geometry_type == ogr.wkbPolygon:
+                elif self.is_polygon_data:
                     ring = G.GetGeometryRef(0)
                     M = ring.GetPointCount()
                     coordinates = []
@@ -420,19 +357,15 @@ class Vector:
                     geometry.append(numpy.array(coordinates,
                                                 dtype='d',
                                                 copy=False))
-                elif self.geometry_type == ogr.wkbMultiPolygon:
-                    msg = ('Got geometry type Multipolygon (%s) for '
-                           'filename %s '
-                           'which is not yet supported.'
-                           'Only point, line and polygon geometries are '
-                           'supported. '
-                           'However, you can use QGIS functionality to '
-                           'convert multipart vector '
-                           'data to singlepart (Vector -> Geometry Tools '
-                           '-> Multipart to Singleparts'
-                           'and use the resulting dataset.'
-                           % (ogr.wkbMultiPolygon,
-                              filename))
+                elif self.is_multi_polygon_data:
+                    msg = ('Got geometry type Multipolygon (%s) for filename '
+                           '%s which is not yet supported. Only point, line '
+                           'and polygon geometries are supported. However, '
+                           'you can use QGIS functionality to convert '
+                           'multipart vector data to singlepart (Vector -> '
+                           'Geometry Tools -> Multipart to Singleparts and '
+                           'use the resulting dataset.'
+                           % (ogr.wkbMultiPolygon, filename))
                     raise Exception(msg)
 
                 #    # FIXME: Unpact multiple polygons to simple polygons
@@ -597,14 +530,14 @@ class Vector:
             feature = ogr.Feature(layer_def)
 
             # Store geometry and check
-            if self.geometry_type == ogr.wkbPoint:
+            if self.is_point_data:
                 x = float(geometry[i][0])
                 y = float(geometry[i][1])
                 geom.SetPoint_2D(0, x, y)
-            elif self.geometry_type == ogr.wkbPolygon:
+            elif self.is_polygon_data:
                 wkt = array2wkt(geometry[i], geom_type='POLYGON')
                 geom = ogr.CreateGeometryFromWkt(wkt)
-            elif self.geometry_type == ogr.wkbLineString:
+            elif self.is_line_data:
                 wkt = array2wkt(geometry[i], geom_type='LINESTRING')
                 geom = ogr.CreateGeometryFromWkt(wkt)
             else:
@@ -648,15 +581,26 @@ class Vector:
 
         # FIXME (Ole): Maybe store style_info
 
+    def copy(self):
+        """Return copy of vector layer
+
+        This copy will be equal to self in the sense defined by __eq__
+        """
+
+        return Vector(data=self.get_data(copy=True),
+                      geometry=self.get_geometry(copy=True),
+                      projection=self.get_projection(),
+                      keywords=self.get_keywords())
+
     def get_attribute_names(self):
-        """ Get available attribute names
+        """Get available attribute names
 
         These are the ones that can be used with get_data
         """
 
         return self.data[0].keys()
 
-    def get_data(self, attribute=None, index=None):
+    def get_data(self, attribute=None, index=None, copy=False):
         """Get vector attributes
 
         Data is returned as a list where each entry is a dictionary of
@@ -668,11 +612,17 @@ class Vector:
 
         If optional argument index is specified on the that value will
         be returned. Any value of index is ignored if attribute is None.
+
+        If optional argument copy is True and all attributes are requested,
+        a copy will be returned. Otherwise a pointer to the data is returned.
         """
 
         if hasattr(self, 'data'):
             if attribute is None:
-                return self.data
+                if copy:
+                    return copy_module.deepcopy(self.data)
+                else:
+                    return self.data
             else:
                 msg = ('Specified attribute %s does not exist in '
                        'vector layer %s. Valid names are %s'
@@ -703,7 +653,7 @@ class Vector:
         """
         return self.geometry_type
 
-    def get_geometry(self):
+    def get_geometry(self, copy=False):
         """Return geometry for vector layer.
 
         Depending on the feature type, geometry is
@@ -716,13 +666,10 @@ class Vector:
 
         """
 
-        # FIXME (Ole): Do some checking
-        return self.geometry
-
-    def get_projection(self, proj4=False):
-        """Return projection of this layer as a string
-        """
-        return self.projection.get_projection(proj4)
+        if copy:
+            return copy_module.deepcopy(self.geometry)
+        else:
+            return self.geometry
 
     def get_bounding_box(self):
         """Get bounding box coordinates for vector layer.
@@ -969,14 +916,6 @@ class Vector:
         return V
 
     @property
-    def is_raster(self):
-        return False
-
-    @property
-    def is_vector(self):
-        return True
-
-    @property
     def is_point_data(self):
         return self.is_vector and self.geometry_type == ogr.wkbPoint
 
@@ -989,8 +928,8 @@ class Vector:
         return self.is_vector and self.geometry_type == ogr.wkbPolygon
 
     @property
-    def is_inasafe_spatial_object(self):
-        return True
+    def is_multi_polygon_data(self):
+        return self.is_vector and self.geometry_type == ogr.wkbMultiPolygon
 
 
 #----------------------------------

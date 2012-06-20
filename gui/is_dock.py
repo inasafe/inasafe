@@ -36,7 +36,7 @@ from is_impact_calculator import ISImpactCalculator
 from is_safe_interface import (availableFunctions,
                                getOptimalExtent,
                                getBufferedExtent,
-                               internationalisedTitles)
+                               internationalisedNames)
 from is_keyword_io import ISKeywordIO
 from is_clipper import clipLayer
 from is_exceptions import (KeywordNotFoundException,
@@ -497,8 +497,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
-                if myTitle in internationalisedTitles:
-                    myTitle = internationalisedTitles[myTitle]
+                if myTitle in internationalisedNames:
+                    myTitle = internationalisedNames[myTitle]
             # Register title with layer
             if myTitle and self.setLayerNameFromTitleFlag:
                 myLayer.setLayerName(myTitle)
@@ -750,9 +750,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myEngineImpactLayer = self.runner.impactLayer()
 
         if myEngineImpactLayer is None:
-            myMessage = self.tr('No impact layer was calculated. '
-                   'Error message: %s\n' % str(myMessage))
-            raise Exception(myMessage)
+            myMessage = str(self.tr('No impact layer was calculated. '
+                   'Error message: %s\n' % str(myMessage)))
+            if self.runner.lastTraceback() is not None:
+                myMessage += '<br/><ul>'
+                for myItem in self.runner.lastTraceback():
+                    # replace is to tidy up windows paths a little
+                    myMessage += ('<li>' + str(myItem.replace('\\\\\\\\', ''))
+                                  + '</li>')
+                myMessage += '</ul>'
+            raise Exception(myMessage, self.runner.lastException())
 
         # Load impact layer into QGIS
         myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
@@ -1084,9 +1091,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def displayHtml(self, theMessage):
         """Given an html snippet, wrap it in a page header and footer
         and display it in the wvResults widget."""
-        myHtml = '<div style="padding: 2px">'
-        myHtml += self.htmlHeader() + theMessage + self.htmlFooter()
-        myHtml += '</div>'
+        myHtml = self.htmlHeader() + theMessage + self.htmlFooter()
         #f = file('/tmp/h.thml', 'wa')  # for debugging
         #f.write(myHtml)
         #f.close()
@@ -1121,8 +1126,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
                         # Translate titles explicitly if possible
                         if myKeyword == 'title' and \
-                                myValue in internationalisedTitles:
-                            myValue = internationalisedTitles[myValue]
+                                myValue in internationalisedNames:
+                            myValue = internationalisedNames[myValue]
 
                         # Add this keyword to report
                         myReport += ('<tr>'

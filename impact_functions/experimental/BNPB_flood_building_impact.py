@@ -1,7 +1,7 @@
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
-from storage.utilities import ugettext as _
+from common.utilities import ugettext as _
 
 
 class BNPBFloodBuildingImpactFunction(FunctionProvider):

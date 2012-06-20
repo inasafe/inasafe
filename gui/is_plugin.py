@@ -98,7 +98,7 @@ class ISPlugin:
             myLocaleName = QLocale.system().name()
         # Also set the system locale to the user overridden local
         # so that the inasafe library functions gettext will work
-        # .. see:: :py:func:`storage.utilities`
+        # .. see:: :py:func:`common.utilities`
         os.environ['LANG'] = str(myLocaleName)
 
         myRoot = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))

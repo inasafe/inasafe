@@ -25,7 +25,7 @@ from is_safe_interface import (getOptimalExtent,
                                readKeywordsFromFile,
                                readSafeLayer)
 from is_exceptions import KeywordNotFoundException
-from storage.utilities_test import TESTDATA, EXPDATA, HAZDATA
+from safe_api import TESTDATA, HAZDATA, EXPDATA
 
 
 class ISSafeInterfaceTest(unittest.TestCase):

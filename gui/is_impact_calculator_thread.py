@@ -19,11 +19,12 @@ __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 from is_safe_interface import calculateSafeImpact
-from is_utilities import getExceptionWithStacktrace
 import threading
 from PyQt4.QtCore import (QObject,
                           pyqtSignal)
 from is_exceptions import InsufficientParametersException
+import traceback
+import sys
 
 
 class ISImpactCalculatorThread(threading.Thread, QObject):
@@ -90,6 +91,8 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
         self._function = theFunction
         self._impactLayer = None
         self._result = None
+        self._exception = None
+        self._traceback = None
 
     def impactLayer(self):
         """Return the InaSAFE layer instance which is the output from the
@@ -99,6 +102,15 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
     def result(self):
         """Return the result of the last run."""
         return self._result
+
+    def lastException(self):
+        """Return any exception that may have been raised while running"""
+        return self._exception
+
+    def lastTraceback(self):
+        """Return the strack trace for any exception that may of occurred
+        while running."""
+        return self._traceback
 
     def run(self):
         """ Main function for hazard impact calculation thread.
@@ -146,7 +158,9 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
                                         theFunction=self._function)
         except Exception, e:
             myMessage = self.tr('Calculation error encountered:\n')
-            myMessage += getExceptionWithStacktrace(e, html=True)
+            #store the exception so that controller class can get it later
+            self._exception = e
+            self._traceback = traceback.format_tb(sys.exc_info()[2])
             print myMessage
             self._result = myMessage
         else:

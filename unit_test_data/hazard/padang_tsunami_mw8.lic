@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Jonathan Griffin, AIFDR</author>
+  </metadata>
+
+  <datafile>
+    <filename>padang_tsunami_mw8.tif</filename>
+    <checksum>205740580</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Jonathan Griffin</accountable>
+    <source>AIFDR</source>
+    <IP_owner>AIFDR</IP_owner>
+    <IP_info>Small clip of tsunami scenario created at AIFDR extracted from padang_tsunami_mw8.8_scenario.asc</IP_info>
+  </datafile>
+
+</ga_license_file>

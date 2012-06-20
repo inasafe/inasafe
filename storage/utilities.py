@@ -1,16 +1,17 @@
-"""Utilities for impact.storage
+"""Utilities for storage module
 """
 
 import os
 import copy
 import numpy
+import math
+import getpass
 from osgeo import ogr
 from tempfile import mkstemp
-import math
-from engine.numerics import ensure_numeric
-import gettext
-import getpass
 from datetime import date
+
+from common.numerics import ensure_numeric
+from common.utilities import verify, VerificationError
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'Affected'
@@ -89,88 +90,6 @@ def unique_filename(**kwargs):
     except:
         pass
     return filename
-
-
-# FIXME (Ole): Can we remove this now?
-def truncate_field_names(data, n=10):
-    """Truncate field names to fixed width
-
-    Input
-        data: List of dictionary with names as keys. Can also be None.
-        n: Max number of characters allowed
-
-    Output
-        dictionary with same values as data but with keys truncated
-
-    FIXME(Ole): THIS IS OBSOLETE AFTER OGR'S OWN FIELD NAME LAUNDERER IS USED
-    """
-
-    # FIXME: Put in deprecation exception on 31 January 2012
-    msg = ('Simple field name truncation has been deprecated. Please '
-           'upgrade gdal')
-    raise DeprecationWarning(msg)
-
-    if data is None:
-        return None
-
-    N = len(data)
-
-    # Check if truncation is needed
-    need_to_truncate = False
-    for key in data[0]:
-        if len(key) > n:
-            need_to_truncate = True
-    if not need_to_truncate:
-        return data
-
-    # Go ahead and truncate attribute table for every entry
-    new = []
-    for i in range(N):
-        D = {}  # New dictionary
-        for key in data[i]:
-            x = key[:n]
-            if x in D:
-                msg = ('Truncated attribute name %s is duplicated: %s ' %
-                       (key, str(D.keys())))
-                raise Exception(msg)
-
-            D[x] = data[i][key]
-
-        new.append(D)
-
-    return new
-
-""" FIXME: The truncation method can be replaced with something like this
-
->>> from osgeo import ogr
->>> from osgeo import osr
->>> drv = ogr.GetDriverByName('ESRI Shapefile')
->>> ds = drv.CreateDataSource('shptest.shp')
->>> lyr = ds.CreateLayer('mylyr', osr.SpatialReference(), ogr.wkbPolygon)
->>> fd = ogr.FieldDefn('A slightly long name', ogr.OFTString)
->>> lyr.CreateField(fd)
-Warning 6: Normalized/laundered field name: 'A slightly long name'
-to 'A slightly'
-0
->>> layer_defn = lyr.GetLayerDefn()
->>> last_field_idx = layer_defn.GetFieldCount() - 1
->>> real_field_name = layer_defn.GetFieldDefn(last_field_idx).GetNameRef()
->>> feature = ogr.Feature(layer_defn)
->>> feature.SetField('A slightly', 'value')
->>> real_field_name
-'A slightly'
-"""
-
-"""To suppress Warning 6:
-
-Yes, you can surround the CreateField() call with :
-
-gdal.PushErrorHandler('CPLQuietErrorHandler')
-...
-gdal.PopErrorHandler()
-
-
-"""
 
 
 def write_keywords(keywords, filename):
@@ -706,6 +625,7 @@ def geometrytype2string(g_type):
         return 'Unknown geometry type: %s' % str(g_type)
 
 
+# FIXME: Move to common numerics area along with polygon.py
 def calculate_polygon_area(polygon, signed=False):
     """Calculate the signed area of non-self-intersecting polygon
 
@@ -844,91 +764,3 @@ def points_along_line(line, delta):
         points.extend(pts)
     C = numpy.array(points)
     return C
-
-
-def titelize(s):
-    """Convert string into title
-
-    This is better than the built-in method title() because
-    it leaves all uppercase words like UK unchanged.
-
-    Source http://stackoverflow.com/questions/1549641/
-           how-to-capitalize-the-first-letter-of-each-word-in-a-string-python
-    """
-
-    # Replace underscores with spaces
-    s = s.replace('_', ' ')
-
-    # Capitalise
-    #s = s.title()  # This will capitalize first letter force the rest down
-    s = ' '.join([w[0].upper() + w[1:] for w in s.split(' ')])
-
-    return s
-
-
-def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
-    """Numpy allclose function which allows NaN
-
-    Input
-        x, y: Either scalars or numpy arrays
-
-    Output
-        True or False
-
-    Returns True if all non-nan elements pass.
-    """
-
-    xn = numpy.isnan(x)
-    yn = numpy.isnan(y)
-    if numpy.any(xn != yn):
-        # Presence of NaNs is not the same in x and y
-        return False
-
-    if numpy.all(xn):
-        # Everything is NaN.
-        # This will also take care of x and y being NaN scalars
-        return True
-
-    # Filter NaN's out
-    if numpy.any(xn):
-        x = x[-xn]
-        y = y[-yn]
-
-    # Compare non NaN's and return
-    return numpy.allclose(x, y, rtol=rtol, atol=atol)
-
-
-class VerificationError(RuntimeError):
-    """Exception thrown by verify()
-    """
-    pass
-
-
-def verify(statement, message=None):
-    """Verification of logical statement similar to assertions
-    Input
-        statement: expression
-        message: error message in case statement evaluates as False
-
-    Output
-        None
-    Raises
-        VerificationError in case statement evaluates to False
-    """
-
-    if bool(statement) is False:
-        raise VerificationError(message)
-
-
-def ugettext(s):
-    """Translation support
-    """
-    path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                        '..', 'i18n'))
-    if 'LANG' not in os.environ:
-        return s
-    lang = os.environ['LANG']
-    filename_prefix = 'inasafe'
-    t = gettext.translation(filename_prefix,
-                            path, languages=[lang], fallback=True)
-    return t.ugettext(s)

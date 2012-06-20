@@ -2,9 +2,9 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from storage.vector import Vector
-from storage.utilities import ugettext as _
-from storage.titles import values as internationalised_values
-from impact_functions.tables import Table, TableRow
+from common.utilities import ugettext as _
+from common.tables import Table, TableRow
+from common.dynamic_translations import names as internationalised_values
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
@@ -141,7 +141,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 if building_type in internationalised_values:
                     building_type = internationalised_values[building_type]
                 else:
-                    print building_type
+                    print ('WARNING: %s could not be translated'
+                           % building_type)
 
                 building_list.append([building_type.capitalize(),
                                       affected_buildings[usage],

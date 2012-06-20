@@ -3,19 +3,23 @@
 
 import os
 import numpy
+import copy as copy_module
 from osgeo import gdal
+from common.utilities import verify
+from common.numerics import nanallclose
+from common.dynamic_translations import names as internationalised_titles
+
+from layer import Layer
 from projection import Projection
+from interpolation import interpolate_raster_vector
+
 from utilities import DRIVER_MAP
-from engine.interpolation import interpolate_raster_vector
-from titles import titles as internationalised_titles
 from utilities import read_keywords
 from utilities import write_keywords
-from utilities import nanallclose
 from utilities import geotransform2bbox, geotransform2resolution
-from utilities import verify
 
 
-class Raster:
+class Raster(Layer):
     """Internal representation of raster data
     """
 
@@ -45,20 +49,26 @@ class Raster:
 
                       Keywords can for example be used to display text
                       about the layer in a web application.
+            style_info: Dictionary with information about how this layer
+                        should be styled. See impact_functions/styles.py
+                        for examples.
 
         Note that if data is a filename, all other arguments are ignored
         as they will be inferred from the file.
         """
 
+        # Invoke common layer constructor
+        Layer.__init__(self,
+                       name=name,
+                       projection=projection,
+                       keywords=keywords,
+                       style_info=style_info)
+
         # Input checks
         if data is None:
             # Instantiate empty object
-            self.name = name
-            self.data = None
-            self.projection = None
-            self.coordinates = None
-            self.filename = None
-            self.keywords = {}
+            self.geotransform = None
+            self.rows = self.columns = 0
             return
 
         # Initialisation
@@ -67,28 +77,8 @@ class Raster:
         else:
             # Assume that data is provided as an array
             # with extra keyword arguments supplying metadata
-            if keywords is None:
-                self.keywords = {}
-            else:
-                msg = ('Specified keywords must be either None or a '
-                       'dictionary. I got %s' % keywords)
-                verify(isinstance(keywords, dict), msg)
-                self.keywords = keywords
-
-            if style_info is None:
-                self.style_info = {}
-            else:
-                msg = ('Specified style_info must be either None or a '
-                       'dictionary. I got %s' % style_info)
-                verify(isinstance(style_info, dict), msg)
-                self.style_info = style_info
 
             self.data = numpy.array(data, dtype='d', copy=False)
-
-            self.filename = None
-            self.name = name
-
-            self.projection = Projection(projection)
             self.geotransform = geotransform
 
             self.rows = data.shape[0]
@@ -97,9 +87,10 @@ class Raster:
             self.number_of_bands = 1
 
     def __str__(self):
-        """Render as name
+        """Render as name and dimensions
         """
-        return self.name
+        return ('Raster data set: %s [%i x %i] '
+                % (self.name, self.rows, self.columns))
 
     def __len__(self):
         """Size of data set defined as total number of grid points
@@ -142,55 +133,9 @@ class Raster:
         # Raster layers are identical up to the specified tolerance
         return True
 
-    def __ne__(self, other):
-        """Override '!=' to allow comparison with other projection objecs
-        """
-        return not self == other
-
-    def get_name(self):
-        return self.name
-
-    def set_name(self, name):
-        self.name = name
-
-    def get_filename(self):
-        return self.filename
-
-    def get_keywords(self, key=None):
-        """Return keywords dictionary
-        """
-        if key is None:
-            return self.keywords
-        else:
-            if key in self.keywords:
-                return self.keywords[key]
-            else:
-                msg = ('Keyword "%s" does not exist in %s: Options are '
-                       '%s' % (key, self.get_name(), self.keywords.keys()))
-                raise Exception(msg)
-
-    def get_style_info(self):
-        """Return style_info dictionary
-        """
-        return self.style_info
-
-    def get_caption(self):
-        """Return 'impact_summary' keyword if present. Otherwise ''.
-        """
-        if 'impact_summary' in self.keywords:
-            return self.keywords['impact_summary']
-        else:
-            return ''
-
-    def get_impact_summary(self):
-        """Return 'impact_summary' keyword if present. Otherwise ''.
-        """
-        if 'impact_summary' in self.keywords:
-            return self.keywords['impact_summary']
-        else:
-            return ''
-
     def read_from_file(self, filename):
+        """Read and unpack raster data
+        """
 
         # Open data file for reading
         # File must be kept open, otherwise GDAL methods segfault.
@@ -330,7 +275,7 @@ class Raster:
             return interpolate_raster_vector(self, X,
                                              attribute_name=attribute_name)
 
-    def get_data(self, nan=True, scaling=None):
+    def get_data(self, nan=True, scaling=None, copy=False):
         """Get raster data as numeric array
 
         Input
@@ -353,13 +298,17 @@ class Raster:
                            otherwise not. This is the default.
                      scalar value: If scaling takes a numerical scalar value,
                                    that will be use to scale the data
+        copy (optional): If present and True return copy
 
         NOTE: Scaling does not currently work with projected layers.
         See issue #123
         """
 
-        if hasattr(self, 'data'):
-            A = self.data
+        if hasattr(self, 'data') and self.data is not None:
+            if copy:
+                A = copy_module.deepcopy(self.data)
+            else:
+                A = self.data
             verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
         else:
             # Read from raster file
@@ -386,7 +335,6 @@ class Raster:
 
             # Replace NODATA_VALUE with NaN
             nodata = self.get_nodata_value()
-
             NaN = numpy.ones(A.shape, A.dtype) * NAN
             A = numpy.where(A == nodata, NaN, A)
 
@@ -425,12 +373,7 @@ class Raster:
         # Return possibly scaled data
         return sigma * A
 
-    def get_projection(self, proj4=False):
-        """Return projection of this layer as a string.
-        """
-        return self.projection.get_projection(proj4)
-
-    def get_geotransform(self):
+    def get_geotransform(self, copy=False):
         """Return geotransform for this raster layer
 
         Output
@@ -439,9 +382,13 @@ class Raster:
                        top left y, rotation, n-s pixel resolution).
 
                        See e.g. http://www.gdal.org/gdal_tutorial.html
+        copy (optional): If present and True return copy
         """
 
-        return self.geotransform
+        if copy:
+            return copy_module.copy(self.geotransform)
+        else:
+            return self.geotransform
 
     def get_geometry(self):
         """Return longitudes and latitudes (the axes) for grid.
@@ -492,6 +439,17 @@ class Raster:
 
         # Return
         return x, y
+
+    def copy(self):
+        """Return copy of raster layer
+
+        This copy will be equal to self in the sense defined by __eq__
+        """
+
+        return Raster(data=self.get_data(copy=True),
+                      geotransform=self.get_geotransform(copy=True),
+                      projection=self.get_projection(),
+                      keywords=self.get_keywords())
 
     def __mul__(self, other):
         return self.get_data() * other.get_data()
@@ -627,15 +585,3 @@ class Raster:
 
         # Return either 2-tuple or scale depending on isotropic
         return res
-
-    @property
-    def is_raster(self):
-        return True
-
-    @property
-    def is_vector(self):
-        return False
-
-    @property
-    def is_inasafe_spatial_object(self):
-        return True

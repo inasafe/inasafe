@@ -3,7 +3,7 @@ import numpy
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.raster import Raster
-from engine.numerics import normal_cdf
+from common.numerics import normal_cdf
 
 
 class EmpiricalFatalityFunction(FunctionProvider):
