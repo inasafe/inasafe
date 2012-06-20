@@ -82,6 +82,7 @@ lines-of-code:
 	@echo " Lines of code analysis"
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
+	@git log | head -3
 	@sloccount . | grep '^[0-9]'
 
 clean:
