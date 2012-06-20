@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -195,17 +196,17 @@ ke %s: %s</translation>
     <message>
         <location filename="is_utilities.py" line="264"/>
         <source>Error:</source>
-        <translation>Keselahan:</translation>
+        <translation>Kesalahan:</translation>
     </message>
     <message>
         <location filename="is_utilities.py" line="272"/>
         <source>Click for Diagnostic Information:</source>
-        <translation>Tombol untuk informasi diagnostik</translation>
+        <translation>Tombol untuk informasi diagnostik:</translation>
     </message>
     <message>
         <location filename="is_utilities.py" line="253"/>
         <source>No details provided</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada detil</translation>
     </message>
 </context>
 <context>
