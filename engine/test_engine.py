@@ -364,9 +364,6 @@ class Test_Engine(unittest.TestCase):
         assert 'women displaced' in impact_layer.get_impact_summary()
         assert 'pregnant' in impact_layer.get_impact_summary()
 
-
-
-
     def test_jakarta_flood_study(self):
         """HKV Jakarta flood study calculated correctly using aligned rasters
         """

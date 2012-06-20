@@ -178,6 +178,14 @@ class Test_plugins(unittest.TestCase):
             raise Exception(msg)
 
         try:
+            Damage_curve({'foo': 'bar'})
+        except:
+            pass
+        else:
+            msg = 'Damage_curve should have raised exception for Dictionary'
+            raise Exception(msg)
+
+        try:
             Damage_curve(x)
         except:
             pass
@@ -234,6 +242,6 @@ class Test_plugins(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_plugins, 'test_damage')
+    suite = unittest.makeSuite(Test_plugins, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
