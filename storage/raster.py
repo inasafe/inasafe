@@ -48,6 +48,9 @@ class Raster(Layer):
 
                       Keywords can for example be used to display text
                       about the layer in a web application.
+            style_info: Dictionary with information about how this layer
+                        should be styled. See impact_functions/styles.py
+                        for examples.
 
         Note that if data is a filename, all other arguments are ignored
         as they will be inferred from the file.
@@ -63,6 +66,7 @@ class Raster(Layer):
         # Input checks
         if data is None:
             # Instantiate empty object
+            self.geotransform = None
             self.rows = self.columns = 0
             return
 
