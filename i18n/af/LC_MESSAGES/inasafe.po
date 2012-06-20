@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-20 17:45+0700\n"
+"POT-Creation-Date: 2012-06-20 17:50+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -807,9 +807,9 @@ msgstr ""
 #: impact_functions/earthquake/earthquake_impact_on_women.py:141
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:222
 #: impact_functions/earthquake/padang_building_impact_model.py:132
-#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:111
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:112
 #: impact_functions/inundation/flood_OSM_building_impact.py:171
-#: impact_functions/inundation/flood_population_evacuation.py:111
+#: impact_functions/inundation/flood_population_evacuation.py:112
 msgid "Notes:"
 msgstr ""
 
@@ -840,8 +840,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:102
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:120
 #: impact_functions/inundation/flood_population_evacuation.py:120
-#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:120
-#: impact_functions/inundation/flood_population_evacuation.py:120
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:121
+#: impact_functions/inundation/flood_population_evacuation.py:121
 msgid "People in need of evacuation"
 msgstr ""
 
@@ -851,8 +851,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:103
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:121
 #: impact_functions/inundation/flood_population_evacuation.py:121
-#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:121
-#: impact_functions/inundation/flood_population_evacuation.py:121
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:122
+#: impact_functions/inundation/flood_population_evacuation.py:122
 msgid "Population Density"
 msgstr ""
 
@@ -862,8 +862,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:109
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:127
 #: impact_functions/inundation/flood_population_evacuation.py:127
-#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:127
-#: impact_functions/inundation/flood_population_evacuation.py:127
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:128
+#: impact_functions/inundation/flood_population_evacuation.py:128
 #, python-format
 msgid "Population which %s"
 msgstr ""
@@ -878,8 +878,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:97
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:113
 #: impact_functions/inundation/flood_population_evacuation.py:113
-#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:113
-#: impact_functions/inundation/flood_population_evacuation.py:113
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:114
+#: impact_functions/inundation/flood_population_evacuation.py:114
 #, python-format
 msgid "People need evacuation if flood levels exceed %(eps)i m"
 msgstr ""
@@ -915,8 +915,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:96
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:112
 #: impact_functions/inundation/flood_population_evacuation.py:112
-#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:112
-#: impact_functions/inundation/flood_population_evacuation.py:112
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:113
+#: impact_functions/inundation/flood_population_evacuation.py:113
 #, python-format
 msgid "Total population: %i"
 msgstr ""
@@ -1459,7 +1459,7 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:234
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:258
 #: impact_functions/earthquake/earthquake_impact_on_women.py:159
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:258
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:260
 msgid "Estimated fatalities"
 msgstr ""
 
@@ -1664,8 +1664,8 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:241
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:245
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:237
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:241
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:245
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:242
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:247
 #, python-format
 msgid "%.2f people/cell"
 msgstr ""
@@ -1679,16 +1679,16 @@ msgstr ""
 
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:115
 #: impact_functions/inundation/flood_population_evacuation.py:115
-#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:115
-#: impact_functions/inundation/flood_population_evacuation.py:115
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:116
+#: impact_functions/inundation/flood_population_evacuation.py:116
 #, python-format
 msgid "People in 50cm to 1m of water: %i"
 msgstr ""
 
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:116
 #: impact_functions/inundation/flood_population_evacuation.py:116
-#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:116
-#: impact_functions/inundation/flood_population_evacuation.py:116
+#: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:117
+#: impact_functions/inundation/flood_population_evacuation.py:117
 #, python-format
 msgid "People in 30cm to 50cm of water: %i"
 msgstr ""
