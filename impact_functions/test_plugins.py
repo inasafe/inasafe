@@ -176,7 +176,7 @@ class Test_plugins(unittest.TestCase):
             raise Exception(msg)
 
         try:
-            Damage_curve([[1,2], [3,4,5]])
+            Damage_curve([[1, 2], [3, 4, 5]])
         except:
             pass
         else:
