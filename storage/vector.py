@@ -235,7 +235,6 @@ class Vector(Layer):
                             if not res:
                                 return False
 
-
                         if res is None:
                             # None of the comparisons could be done
                             return False

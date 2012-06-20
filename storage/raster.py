@@ -382,7 +382,7 @@ class Raster(Layer):
                        top left y, rotation, n-s pixel resolution).
 
                        See e.g. http://www.gdal.org/gdal_tutorial.html
-        copy (optional): If present and true return copy
+        copy (optional): If present and True return copy
         """
 
         if copy:
