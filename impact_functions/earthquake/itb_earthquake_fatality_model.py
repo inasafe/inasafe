@@ -222,6 +222,24 @@ class ITBFatalityFunction(FunctionProvider):
         impact_table = impact_summary
         map_title = _('Earthquake impact to population')
 
+        # Create style info dynamically
+        classes = numpy.linspace(numpy.nanmin(R.flat[:]),
+                                 numpy.nanmax(R.flat[:]), 5)
+        print classes
+
+        style_classes = [dict(colour='#EEFFEE', quantity=classes[0],
+                              transparency=100, label=_(str(classes[0]))),
+                         dict(colour='#CEED00', quantity=classes[1],
+                              transparency=0),
+                         dict(colour='#FFCC00', quantity=classes[2],
+                              transparency=0, label=_(str(classes[2]))),
+                         dict(colour='#FF0000', quantity=classes[3],
+                              transparency=0),
+                         dict(colour='#660000', quantity=classes[4],
+                              transparency=0, label=_(str(classes[4])))]
+        style_info = dict(target_field=None,
+                          style_classes=style_classes)
+
         # Create new layer and return
         L = Raster(R,
                    projection=population.get_projection(),
