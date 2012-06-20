@@ -192,7 +192,7 @@ class Test_plugins(unittest.TestCase):
             raise Exception(msg)
 
         try:
-            Damage_curve(numpy.zeros(3, 3))
+            Damage_curve(numpy.zeros((3, 3)))
         except:
             pass
         else:
