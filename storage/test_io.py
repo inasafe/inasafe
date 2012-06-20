@@ -1154,6 +1154,16 @@ class Test_IO(unittest.TestCase):
             msg = 'Should have raised assertion error for wrong extension'
             raise Exception(msg)
 
+        # Make a spatial layer with these keywords
+        V = read_layer('%s/test_buildings.shp' % TESTDATA)
+        V = Vector(data=V.get_data(),
+                   geometry=V.get_geometry(),
+                   projection=V.get_projection(),
+                   keywords=keywords)
+        assert keywords['impact_summary'] == V.get_impact_summary()
+        for key, val in V.get_keywords().items():
+            assert keywords[key] == val
+
     def test_empty_keywords_file(self):
         """Empty keywords can be handled
         """
