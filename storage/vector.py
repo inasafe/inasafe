@@ -55,6 +55,9 @@ class Vector(Layer):
 
                       Keywords can for example be used to display text
                       about the layer in a web application.
+            style_info: Dictionary with information about how this layer
+                        should be styled. See impact_functions/styles.py
+                        for examples.
 
         Notes
 
@@ -76,13 +79,11 @@ class Vector(Layer):
                        keywords=keywords,
                        style_info=style_info)
 
-        # FIXME (Ole): Need to rationalise this more and push up into superclass
+        # Input checks
         if data is None and geometry is None:
             # Instantiate empty object
-            self.data = None
-            self.geometry = None
             self.geometry_type = None
-            self.extent = None
+            self.extent = [0, 0, 0, 0]
             return
 
         if isinstance(data, basestring):

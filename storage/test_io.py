@@ -66,10 +66,12 @@ class Test_IO(unittest.TestCase):
         v = Vector(None)
         assert v.get_name().startswith('')
         assert v.is_inasafe_spatial_object
+        assert str(v).startswith('Vector data')
 
         r = Raster(None)
         assert r.get_name().startswith('')
         assert r.is_inasafe_spatial_object
+        assert str(r).startswith('Raster data')
 
     def test_vector_feature_count(self):
         """Number of features read from vector data is as expected
@@ -264,6 +266,10 @@ class Test_IO(unittest.TestCase):
         layername = 'test_buildings.shp'
         filename = '%s/%s' % (TESTDATA, layername)
         V = read_layer(filename)
+
+        # Check string representation of vector class
+        assert str(V).startswith('Vector data')
+        assert str(len(V)) in str(V)
 
         # Make a smaller dataset
         V_ref = V.get_topN('FLOOR_AREA', 5)
@@ -623,6 +629,11 @@ class Test_IO(unittest.TestCase):
         geotransform = (lon_ul, dlon, 0, lat_ul, 0, dlat)
         R1 = Raster(A1, projection, geotransform,
                     keywords={'testkwd': 'testval', 'size': 'small'})
+
+        # Check string representation of raster class
+        assert str(R1).startswith('Raster data')
+        assert str(R1.rows) in str(R1)
+        assert str(R1.columns) in str(R1)
 
         # Test conversion between geotransform and
         # geometry (longitudes and latitudes)

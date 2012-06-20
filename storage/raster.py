@@ -60,12 +60,10 @@ class Raster(Layer):
                        keywords=keywords,
                        style_info=style_info)
 
-        # FIXME (Ole): Need to rationalise this more and push up into superclass
         # Input checks
         if data is None:
             # Instantiate empty object
-            self.data = None
-            self.coordinates = None
+            self.rows = self.columns = 0
             return
 
         # Initialisation
@@ -84,9 +82,10 @@ class Raster(Layer):
             self.number_of_bands = 1
 
     def __str__(self):
-        """Render as name
+        """Render as name and dimensions
         """
-        return self.name
+        return ('Raster data set: %s [%i x %i] '
+                % (self.name, self.rows, self.columns))
 
     def __len__(self):
         """Size of data set defined as total number of grid points
@@ -299,7 +298,7 @@ class Raster(Layer):
         See issue #123
         """
 
-        if hasattr(self, 'data'):
+        if hasattr(self, 'data') and self.data is not None:
             A = self.data
             verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
         else:

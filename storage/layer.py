@@ -45,6 +45,7 @@ class Layer:
 
         # Defaults
         self.filename = None
+        self.data = None
 
     def __ne__(self, other):
         """Override '!=' to allow comparison with other projection objecs
