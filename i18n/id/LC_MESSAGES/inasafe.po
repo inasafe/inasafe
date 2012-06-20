@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-20 12:56+0700\n"
+"POT-Creation-Date: 2012-06-20 13:04+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,13 +19,13 @@ msgstr ""
 
 #: storage/test_io.py:1648 storage/test_io.py:1719 storage/test_io.py:1721
 #: storage/test_io.py:1712 storage/test_io.py:1713 storage/test_io.py:1739
-#: storage/test_io.py:1801
+#: storage/test_io.py:1801 storage/test_io.py:1801
 msgid "Hello!"
 msgstr "Hi"
 
 #: storage/test_io.py:1649 storage/test_io.py:1720 storage/test_io.py:1722
 #: storage/test_io.py:1713 storage/test_io.py:1714 storage/test_io.py:1740
-#: storage/test_io.py:1802
+#: storage/test_io.py:1802 storage/test_io.py:1802
 msgid "Hello2!"
 msgstr "Hi2"
 
@@ -54,6 +54,7 @@ msgstr "Jumlah"
 #: impact_functions/earthquake/padang_building_impact_model.py:126
 #: impact_functions/inundation/flood_generic_building_impact.py:64
 #: impact_functions/inundation/flood_OSM_building_impact.py:119
+#: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:125
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:125
 #: impact_functions/earthquake/itb_building_impact_model.py:149
 #: impact_functions/earthquake/padang_building_impact_model.py:126
@@ -154,9 +155,9 @@ msgstr "Bangunan yang diperkirakan terdampak"
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:127
 #: impact_functions/earthquake/padang_building_impact_model.py:124
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
+#: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
 #: impact_functions/earthquake/itb_building_impact_model.py:148
 #: impact_functions/earthquake/padang_building_impact_model.py:124
-#, fuzzy
 msgid "Buildings"
 msgstr "Bangunan-bangunan"
 
@@ -181,6 +182,7 @@ msgstr "Bangunan-bangunan"
 #: impact_functions/inundation/flood_OSM_building_impact.py:144
 #: impact_functions/inundation/flood_OSM_building_impact.py:117
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
+#: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
 #: impact_functions/earthquake/itb_building_impact_model.py:148
 #: impact_functions/earthquake/padang_building_impact_model.py:124
 #: impact_functions/inundation/flood_OSM_building_impact.py:117
@@ -201,6 +203,8 @@ msgstr "Jumlah"
 #: impact_functions/earthquake/padang_building_impact_model.py:146
 #: impact_functions/earthquake/itb_building_impact_model.py:169
 #: impact_functions/earthquake/itb_building_impact_model.py:170
+#: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:126
+#: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:134
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:126
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:134
 #: impact_functions/earthquake/itb_building_impact_model.py:151
@@ -224,6 +228,8 @@ msgstr "Rendah kerusakan"
 #: impact_functions/earthquake/itb_building_impact_model.py:172
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:127
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:136
+#: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:127
+#: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:136
 #: impact_functions/earthquake/itb_building_impact_model.py:152
 #: impact_functions/earthquake/itb_building_impact_model.py:172
 #: impact_functions/earthquake/padang_building_impact_model.py:129
@@ -244,6 +250,8 @@ msgstr "Sedang kerusakan"
 #: impact_functions/earthquake/padang_building_impact_model.py:150
 #: impact_functions/earthquake/itb_building_impact_model.py:173
 #: impact_functions/earthquake/itb_building_impact_model.py:174
+#: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:128
+#: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:138
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:128
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:138
 #: impact_functions/earthquake/itb_building_impact_model.py:153
@@ -718,6 +726,7 @@ msgstr "Bangunan perlu ditutup kalau banjir lebih dari %.1f m"
 
 #: impact_functions/core.py:325 impact_functions/core.py:327
 #: impact_functions/core.py:321 impact_functions/core.py:320
+#: impact_functions/core.py:320
 #, python-format
 msgid "In the event of <i>%s</i> how many <i>%s</i> might <i>%s</i>"
 msgstr ""
