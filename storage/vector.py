@@ -242,56 +242,8 @@ class Vector(Layer):
         # Vector layers are identical up to the specified tolerance
         return True
 
-    def __ne__(self, other):
-        """Override '!=' to allow comparison with other projection objecs
-        """
-        return not self == other
-
-    def get_name(self):
-        return self.name
-
-    def set_name(self, name):
-        self.name = name
-
-    def get_filename(self):
-        return self.filename
-
-    def get_keywords(self, key=None):
-        """Return keywords dictionary
-        """
-        if key is None:
-            return self.keywords
-        else:
-            if key in self.keywords:
-                return self.keywords[key]
-            else:
-                msg = ('Keyword %s does not exist in %s: Options are '
-                       '%s' % (key, self.get_name(), self.keywords.keys()))
-                raise Exception(msg)
-
-    def get_style_info(self):
-        """Return style_info dictionary
-        """
-        return self.style_info
-
-    def get_caption(self):
-        """Return 'impact_summary' keyword if present. Otherwise ''.
-        """
-        if 'impact_summary' in self.keywords:
-            return self.keywords['impact_summary']
-        else:
-            return ''
-
-    def get_impact_summary(self):
-        """Return 'impact_summary' keyword if present. Otherwise ''.
-        """
-        if 'impact_summary' in self.keywords:
-            return self.keywords['impact_summary']
-        else:
-            return ''
-
     def read_from_file(self, filename):
-        """ Read and unpack vector data.
+        """Read and unpack vector data.
 
         It is assumed that the file contains only one layer with the
         pertinent features. Further it is assumed for the moment that
@@ -700,11 +652,6 @@ class Vector(Layer):
         # FIXME (Ole): Do some checking
         return self.geometry
 
-    def get_projection(self, proj4=False):
-        """Return projection of this layer as a string
-        """
-        return self.projection.get_projection(proj4)
-
     def get_bounding_box(self):
         """Get bounding box coordinates for vector layer.
 
@@ -950,14 +897,6 @@ class Vector(Layer):
         return V
 
     @property
-    def is_raster(self):
-        return False
-
-    @property
-    def is_vector(self):
-        return True
-
-    @property
     def is_point_data(self):
         return self.is_vector and self.geometry_type == ogr.wkbPoint
 
@@ -968,10 +907,6 @@ class Vector(Layer):
     @property
     def is_polygon_data(self):
         return self.is_vector and self.geometry_type == ogr.wkbPolygon
-
-    @property
-    def is_inasafe_spatial_object(self):
-        return True
 
 
 #----------------------------------

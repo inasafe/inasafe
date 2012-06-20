@@ -128,55 +128,9 @@ class Raster(Layer):
         # Raster layers are identical up to the specified tolerance
         return True
 
-    def __ne__(self, other):
-        """Override '!=' to allow comparison with other projection objecs
-        """
-        return not self == other
-
-    def get_name(self):
-        return self.name
-
-    def set_name(self, name):
-        self.name = name
-
-    def get_filename(self):
-        return self.filename
-
-    def get_keywords(self, key=None):
-        """Return keywords dictionary
-        """
-        if key is None:
-            return self.keywords
-        else:
-            if key in self.keywords:
-                return self.keywords[key]
-            else:
-                msg = ('Keyword "%s" does not exist in %s: Options are '
-                       '%s' % (key, self.get_name(), self.keywords.keys()))
-                raise Exception(msg)
-
-    def get_style_info(self):
-        """Return style_info dictionary
-        """
-        return self.style_info
-
-    def get_caption(self):
-        """Return 'impact_summary' keyword if present. Otherwise ''.
-        """
-        if 'impact_summary' in self.keywords:
-            return self.keywords['impact_summary']
-        else:
-            return ''
-
-    def get_impact_summary(self):
-        """Return 'impact_summary' keyword if present. Otherwise ''.
-        """
-        if 'impact_summary' in self.keywords:
-            return self.keywords['impact_summary']
-        else:
-            return ''
-
     def read_from_file(self, filename):
+        """Read and unpack raster data
+        """
 
         # Open data file for reading
         # File must be kept open, otherwise GDAL methods segfault.
@@ -410,11 +364,6 @@ class Raster(Layer):
         # Return possibly scaled data
         return sigma * A
 
-    def get_projection(self, proj4=False):
-        """Return projection of this layer as a string.
-        """
-        return self.projection.get_projection(proj4)
-
     def get_geotransform(self):
         """Return geotransform for this raster layer
 
@@ -612,15 +561,3 @@ class Raster(Layer):
 
         # Return either 2-tuple or scale depending on isotropic
         return res
-
-    @property
-    def is_raster(self):
-        return True
-
-    @property
-    def is_vector(self):
-        return False
-
-    @property
-    def is_inasafe_spatial_object(self):
-        return True

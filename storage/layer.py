@@ -4,11 +4,13 @@
 from common.utilities import verify
 from projection import Projection
 
+
 class Layer:
     """Common class for geospatial layers
     """
 
-    def __init__(self, name='', projection=None, keywords=None, style_info=None):
+    def __init__(self, name='', projection=None,
+                 keywords=None, style_info=None):
         """Common constructor for all types of layers
 
         See docstrings for class Raster and class Vector for details.
@@ -43,3 +45,75 @@ class Layer:
 
         # Defaults
         self.filename = None
+
+    def __ne__(self, other):
+        """Override '!=' to allow comparison with other projection objecs
+        """
+        return not self == other
+
+    def get_name(self):
+        return self.name
+
+    def set_name(self, name):
+        self.name = name
+
+    def get_filename(self):
+        return self.filename
+
+    def get_projection(self, proj4=False):
+        """Return projection of this layer as a string
+        """
+        return self.projection.get_projection(proj4)
+
+    def get_keywords(self, key=None):
+        """Return keywords dictionary
+        """
+        if key is None:
+            return self.keywords
+        else:
+            if key in self.keywords:
+                return self.keywords[key]
+            else:
+                msg = ('Keyword %s does not exist in %s: Options are '
+                       '%s' % (key, self.get_name(), self.keywords.keys()))
+                raise Exception(msg)
+
+    def get_style_info(self):
+        """Return style_info dictionary
+        """
+        return self.style_info
+
+    def get_caption(self):
+        """Return 'impact_summary' keyword if present. Otherwise ''.
+        """
+        if 'impact_summary' in self.keywords:
+            return self.keywords['impact_summary']
+        else:
+            return ''
+
+    def get_impact_summary(self):
+        """Return 'impact_summary' keyword if present. Otherwise ''.
+        """
+        if 'impact_summary' in self.keywords:
+            return self.keywords['impact_summary']
+        else:
+            return ''
+
+    # Layer properties used to identify their types
+    @property
+    def is_inasafe_spatial_object(self):
+        return True
+
+    @property
+    def is_raster(self):
+        if 'Raster' in str(self.__class__):
+            return True
+        else:
+            return False
+
+    @property
+    def is_vector(self):
+        if 'Vector' in str(self.__class__):
+            return True
+        else:
+            return False
