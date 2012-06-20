@@ -154,8 +154,6 @@ class Test_plugins(unittest.TestCase):
         A = numpy.zeros((len(x), 2), dtype='f')
         A[:, 0] = x
 
-        print A.shape
-
         # Define values for each x
         for i in range(len(x)):
             A[i, 1] = 2 * A[i, 0] + 3
@@ -178,11 +176,11 @@ class Test_plugins(unittest.TestCase):
             raise Exception(msg)
 
         try:
-            Damage_curve({'foo': 'bar'})
+            Damage_curve([[1,2], [3,4,5]])
         except:
             pass
         else:
-            msg = 'Damage_curve should have raised exception for Dictionary'
+            msg = 'Damage_curve should have raised exception for invalid input'
             raise Exception(msg)
 
         try:
@@ -242,6 +240,6 @@ class Test_plugins(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_plugins, 'test')
+    suite = unittest.makeSuite(Test_plugins, 'test_damage')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
