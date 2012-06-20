@@ -192,21 +192,21 @@ class Test_plugins(unittest.TestCase):
             raise Exception(msg)
 
         try:
+            Damage_curve(numpy.zeros((3, 4, 5)))
+        except:
+            pass
+        else:
+            msg = ('Damage_curve should have raised exception for '
+                   'more than two dimensions')
+            raise Exception(msg)
+
+        try:
             Damage_curve(numpy.zeros((3, 3)))
         except:
             pass
         else:
             msg = ('Damage_curve should have raised exception for '
                    'more than two colums')
-            raise Exception(msg)
-
-        try:
-            Damage_curve(numpy.zeros(3, 4, 5))
-        except:
-            pass
-        else:
-            msg = ('Damage_curve should have raised exception for '
-                   'more than two dimensions')
             raise Exception(msg)
 
     def test_aggregate(self):
@@ -240,6 +240,6 @@ class Test_plugins(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_plugins, 'test_damage')
+    suite = unittest.makeSuite(Test_plugins, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
