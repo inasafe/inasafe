@@ -91,6 +91,7 @@ def unique_filename(**kwargs):
         pass
     return filename
 
+
 def write_keywords(keywords, filename):
     """Write keywords dictonary to file
 

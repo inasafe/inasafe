@@ -2,9 +2,6 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from common.utilities import ugettext as _
-from impact_functions.utilities import PointZoomSize
-from impact_functions.utilities import PointClassColor
-from impact_functions.utilities import PointSymbol
 from storage.vector import convert_line_to_points
 
 

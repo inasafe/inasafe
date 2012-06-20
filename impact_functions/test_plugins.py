@@ -1,5 +1,3 @@
-import unittest
-
 import numpy
 import sys
 import os
@@ -18,6 +16,7 @@ from core import requirements_collect
 from core import requirement_check
 from core import compatible_layers
 from core import aggregate
+from utilities import Damage_curve
 
 from storage.core import read_layer
 from common.testing import TESTDATA
@@ -144,6 +143,66 @@ class Test_plugins(unittest.TestCase):
         msg = 'No compatible layers returned'
         assert len(annotated_plugins) > 0, msg
 
+    def test_damage_curve(self):
+        """Damage curve class works
+        """
+
+        # Make data
+        x = [1.0, 2.0, 4.0]
+
+        # Define array with corresponding values
+        A = numpy.zeros((len(x), 2), dtype='f')
+        A[:, 0] = x
+
+        print A.shape
+
+        # Define values for each x
+        for i in range(len(x)):
+            A[i, 1] = 2 * A[i, 0] + 3
+
+        # Instantiate
+        D = Damage_curve(A)
+
+        # Check
+        assert D(1.0) == 5
+        assert D(1.5) == 6
+        assert D(3.0) == 9
+
+        # Check exceptions
+        try:
+            Damage_curve(None)
+        except:
+            pass
+        else:
+            msg = 'Damage_curve should have raised exception for None'
+            raise Exception(msg)
+
+        try:
+            Damage_curve(x)
+        except:
+            pass
+        else:
+            msg = 'Damage_curve should have raised exception for 1d array'
+            raise Exception(msg)
+
+        try:
+            Damage_curve(numpy.zeros(3, 3))
+        except:
+            pass
+        else:
+            msg = ('Damage_curve should have raised exception for '
+                   'more than two colums')
+            raise Exception(msg)
+
+        try:
+            Damage_curve(numpy.zeros(3, 4, 5))
+        except:
+            pass
+        else:
+            msg = ('Damage_curve should have raised exception for '
+                   'more than two dimensions')
+            raise Exception(msg)
+
     def test_aggregate(self):
         """Aggregation by boundaries works
         """
@@ -175,6 +234,6 @@ class Test_plugins(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_plugins, 'test')
+    suite = unittest.makeSuite(Test_plugins, 'test_damage')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

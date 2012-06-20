@@ -331,6 +331,42 @@ class Test_Engine(unittest.TestCase):
         assert numpy.alltrue(C <= xmax)
         assert numpy.alltrue(C >= 0)
 
+    def test_earthquake_impact_on_women_example(self):
+        """Earthquake impact on women example works
+        """
+
+        # This only tests that the function runs and has the right
+        # strings in the output. No test of quantitative numbers
+        # (because we can't).
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = '%s/Earthquake_Ground_Shaking_clip.tif' % TESTDATA
+        exposure_filename = '%s/Population_2010_clip.tif' % TESTDATA
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        plugin_name = 'Suffer because of gender'
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+        I = read_layer(impact_filename)  # Can read result
+
+        assert 'women displaced' in impact_layer.get_impact_summary()
+        assert 'pregnant' in impact_layer.get_impact_summary()
+
+
+
+
     def test_jakarta_flood_study(self):
         """HKV Jakarta flood study calculated correctly using aligned rasters
         """

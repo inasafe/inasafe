@@ -16,9 +16,6 @@ from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from common.utilities import ugettext as _
-from impact_functions.utilities import PointZoomSize
-from impact_functions.utilities import PointClassColor
-from impact_functions.utilities import PointSymbol
 from impact_functions.mappings import osm2bnpb, unspecific2bnpb, sigab2bnpb
 
 # Damage 'curves' for the two vulnerability classes
