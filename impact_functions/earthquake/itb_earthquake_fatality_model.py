@@ -231,18 +231,20 @@ class ITBFatalityFunction(FunctionProvider):
         # Create style info dynamically
         classes = numpy.linspace(numpy.nanmin(R.flat[:]),
                                  numpy.nanmax(R.flat[:]), 5)
-        print classes
 
         style_classes = [dict(colour='#EEFFEE', quantity=classes[0],
-                              transparency=100, label=_('%.2f people/cell' % classes[0])),
+                              transparency=100,
+                              label=_('%.2f people/cell' % classes[0])),
                          dict(colour='#FFFF7F', quantity=classes[1],
                               transparency=30),
                          dict(colour='#E15500', quantity=classes[2],
-                              transparency=30, label=_('%.2f people/cell' % classes[2])),
+                              transparency=30,
+                              label=_('%.2f people/cell' % classes[2])),
                          dict(colour='#E4001B', quantity=classes[3],
                               transparency=30),
                          dict(colour='#730000', quantity=classes[4],
-                              transparency=30, label=_('%.2f people/cell' % classes[4]))]
+                              transparency=30,
+                              label=_('%.2f people/cell' % classes[4]))]
         style_info = dict(target_field=None,
                           style_classes=style_classes)
 

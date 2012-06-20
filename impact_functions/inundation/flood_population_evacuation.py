@@ -65,7 +65,7 @@ class FloodEvacuationFunction(FunctionProvider):
         # Count totals
         total = int(numpy.sum(P))
         evacuated = int(numpy.sum(I))
-        medium = int(numpy.sum(M)) - int(numpy.sum(I)) 
+        medium = int(numpy.sum(M)) - int(numpy.sum(I))
         low = int(numpy.sum(L)) - int(numpy.sum(M))
 
         # Don't show digits less than a 1000
@@ -90,7 +90,8 @@ class FloodEvacuationFunction(FunctionProvider):
                       TableRow([_('People needing evacuation'),
                                 '%i' % evacuated],
                                header=True),
-                      TableRow(_('Map shows population density needing evacuation'))]
+                      TableRow(_('Map shows population density needing '
+                                 'evacuation'))]
                       #,
 ##                      TableRow([_('People in 50cm to 1m of water '),
 ##                                '%i' % medium],

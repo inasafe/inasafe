@@ -124,7 +124,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                 _('Total')],
                                header=True),
                       TableRow([_('All'), count, N])]
-     
+
 ##        fid.write('%s, %s, %s\n' % (_('Building type'),
 ##                                    _('Temporarily closed'),
 ##                                    _('Total')))
@@ -149,7 +149,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                       buildings[usage]])
 ##                fid.write('%s, %i, %i\n' % (building_type.capitalize(),
 ##                                            affected_buildings[usage],
-##                                            buildings[usage])) 
+##                                            buildings[usage]))
 
             # Sort alphabetically
             building_list.sort()
