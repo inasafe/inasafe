@@ -213,10 +213,10 @@ class ITBFatalityFunction(FunctionProvider):
 
         table_body.append(TableRow(_('Action Checklist:'), header=True))
         if fatalities > 0:
-            table_body.append(_('Are enough victim identification units '
+            table_body.append(_('Are there enough victim identification units '
                                 'available for %i people?') % fatalities)
         if displaced > 0:
-            table_body.append(_('Are enough shelters available for %i '
+            table_body.append(_('Are there enough shelters available for %i '
                                 'people?') % displaced)
 
         table_body.append(TableRow(_('Notes:'), header=True))
@@ -234,15 +234,15 @@ class ITBFatalityFunction(FunctionProvider):
         print classes
 
         style_classes = [dict(colour='#EEFFEE', quantity=classes[0],
-                              transparency=100, label=_(str(classes[0]))),
-                         dict(colour='#CEED00', quantity=classes[1],
-                              transparency=0),
-                         dict(colour='#FFCC00', quantity=classes[2],
-                              transparency=0, label=_(str(classes[2]))),
-                         dict(colour='#FF0000', quantity=classes[3],
-                              transparency=0),
-                         dict(colour='#660000', quantity=classes[4],
-                              transparency=0, label=_(str(classes[4])))]
+                              transparency=100, label=_('%.2f people/cell' % classes[0])),
+                         dict(colour='#FFFF7F', quantity=classes[1],
+                              transparency=30),
+                         dict(colour='#E15500', quantity=classes[2],
+                              transparency=30, label=_('%.2f people/cell' % classes[2])),
+                         dict(colour='#E4001B', quantity=classes[3],
+                              transparency=30),
+                         dict(colour='#730000', quantity=classes[4],
+                              transparency=30, label=_('%.2f people/cell' % classes[4]))]
         style_info = dict(target_field=None,
                           style_classes=style_classes)
 
