@@ -9,6 +9,7 @@ from common.numerics import ensure_numeric
 from common.utilities import verify
 from common.dynamic_translations import names as internationalised_titles
 
+from layer import Layer
 from projection import Projection
 from utilities import DRIVER_MAP, TYPE_MAP, DEFAULT_ATTRIBUTE
 from utilities import read_keywords
@@ -21,7 +22,7 @@ from utilities import points_along_line
 from utilities import geometrytype2string
 
 
-class Vector:
+class Vector(Layer):
     """Class for abstraction of vector data
     """
 
@@ -68,17 +69,19 @@ class Vector:
         vertices where line segments are joined
         """
 
-        if data is None and projection is None and geometry is None:
+        Layer.__init__(self,
+                       name=name,
+                       projection=projection,
+                       keywords=keywords,
+                       style_info=style_info)
+
+        # FIXME (Ole): Need to rationalise this and push up into superclass
+        if data is None and geometry is None:
             # Instantiate empty object
-            self.name = name
-            self.projection = None
+            self.data = None
             self.geometry = None
             self.geometry_type = None
-            self.filename = None
-            self.data = None
             self.extent = None
-            self.keywords = {}
-            self.style_info = {}
             return
 
         if isinstance(data, basestring):
@@ -88,25 +91,6 @@ class Vector:
             # arguments to the Vector constructor
             # with extra keyword arguments supplying metadata
 
-            self.name = name
-            self.filename = None
-
-            if keywords is None:
-                self.keywords = {}
-            else:
-                msg = ('Specified keywords must be either None or a '
-                       'dictionary. I got %s' % keywords)
-                verify(isinstance(keywords, dict), msg)
-                self.keywords = keywords
-
-            if style_info is None:
-                self.style_info = {}
-            else:
-                msg = ('Specified style_info must be either None or a '
-                       'dictionary. I got %s' % style_info)
-                verify(isinstance(style_info, dict), msg)
-                self.style_info = style_info
-
             msg = 'Geometry must be specified'
             verify(geometry is not None, msg)
 
@@ -115,10 +99,6 @@ class Vector:
             self.geometry = geometry
 
             self.geometry_type = get_geometry_type(geometry, geometry_type)
-
-            #msg = 'Projection must be specified'
-            #verify(projection is not None, msg)
-            self.projection = Projection(projection)
 
             if data is None:
                 # Generate default attribute as OGR will do that anyway

@@ -8,6 +8,7 @@ from common.utilities import verify
 from common.numerics import nanallclose
 from common.dynamic_translations import names as internationalised_titles
 
+from layer import Layer
 from projection import Projection
 from interpolation import interpolate_raster_vector
 
@@ -17,7 +18,7 @@ from utilities import write_keywords
 from utilities import geotransform2bbox, geotransform2resolution
 
 
-class Raster:
+class Raster(Layer):
     """Internal representation of raster data
     """
 
@@ -52,15 +53,18 @@ class Raster:
         as they will be inferred from the file.
         """
 
+        Layer.__init__(self,
+                       name=name,
+                       projection=projection,
+                       keywords=keywords,
+                       style_info=style_info)
+
+        # FIXME (Ole): Need to rationalise this and push up into superclass
         # Input checks
         if data is None:
             # Instantiate empty object
-            self.name = name
             self.data = None
-            self.projection = None
             self.coordinates = None
-            self.filename = None
-            self.keywords = {}
             return
 
         # Initialisation
@@ -69,28 +73,8 @@ class Raster:
         else:
             # Assume that data is provided as an array
             # with extra keyword arguments supplying metadata
-            if keywords is None:
-                self.keywords = {}
-            else:
-                msg = ('Specified keywords must be either None or a '
-                       'dictionary. I got %s' % keywords)
-                verify(isinstance(keywords, dict), msg)
-                self.keywords = keywords
-
-            if style_info is None:
-                self.style_info = {}
-            else:
-                msg = ('Specified style_info must be either None or a '
-                       'dictionary. I got %s' % style_info)
-                verify(isinstance(style_info, dict), msg)
-                self.style_info = style_info
 
             self.data = numpy.array(data, dtype='d', copy=False)
-
-            self.filename = None
-            self.name = name
-
-            self.projection = Projection(projection)
             self.geotransform = geotransform
 
             self.rows = data.shape[0]
