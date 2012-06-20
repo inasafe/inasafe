@@ -111,6 +111,12 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 del affected_buildings[usage]
 
         # Generate simple impact report
+        fid = open('C:\dki_table_%s.csv' % H.get_name(), 'wb')
+        fid.write('%s, %s, %s\n' % (_('Building type'),
+                                    _('Temporarily closed'),
+                                    _('Total')))
+        fid.write('%s, %i, %i\n' % (_('All'), count, N))
+        
         table_body = [question,
                       TableRow([_('Building type'),
                                 _('Temporarily closed'),
@@ -119,6 +125,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
                       TableRow([_('All'), count, N])]
 
         # Generate break down by building usage type is available
+       
+        fid.write('%s, %s, %s\n' % (_('Building type'),
+                                    _('Temporarily closed'),
+                                    _('Total')))
         if 'type' in attribute_names:
             # Make list of building types
             building_list = []
@@ -135,6 +145,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 building_list.append([building_type.capitalize(),
                                       affected_buildings[usage],
                                       buildings[usage]])
+                fid.write('%s, %i, %i\n' % (building_type.capitalize(),
+                                            affected_buildings[usage],
+                                            buildings[usage])) 
 
             # Sort alphabetically
             building_list.sort()
@@ -148,6 +161,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 s = TableRow(row)
                 table_body.append(s)
 
+        fid.close()
         table_body.append(TableRow(_('Action Checklist:'), header=True))
         table_body.append(TableRow(_('Are the critical facilities still '
                                      'open?')))

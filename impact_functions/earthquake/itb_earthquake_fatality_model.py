@@ -132,7 +132,13 @@ class ITBFatalityFunction(FunctionProvider):
             F = fatality_rate * I
 
             # Calculate expected number of displaced people per level
-            D = displacement_rate[mmi] * I
+            try:
+                D = displacement_rate[mmi] * I
+            except Exception, e:
+                msg = 'mmi = %i, I = %s, Error msg: %s' % (mmi, str(I), str(e))
+                fid = open('C:\\error_message.txt', 'wb')
+                fid.write(msg)
+                fid.close()
 
             # Sum up numbers for map
             R += F   # Fatalities
