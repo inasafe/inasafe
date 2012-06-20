@@ -69,13 +69,14 @@ class Vector(Layer):
         vertices where line segments are joined
         """
 
+        # Invoke common layer constructor
         Layer.__init__(self,
                        name=name,
                        projection=projection,
                        keywords=keywords,
                        style_info=style_info)
 
-        # FIXME (Ole): Need to rationalise this and push up into superclass
+        # FIXME (Ole): Need to rationalise this more and push up into superclass
         if data is None and geometry is None:
             # Instantiate empty object
             self.data = None
@@ -330,9 +331,9 @@ class Vector(Layer):
                 raise Exception(msg)
             else:
                 self.geometry_type = G.GetGeometryType()
-                if self.geometry_type == ogr.wkbPoint:
+                if self.is_point_data:
                     geometry.append((G.GetX(), G.GetY()))
-                elif self.geometry_type == ogr.wkbLineString:
+                elif self.is_line_data:
                     M = G.GetPointCount()
                     coordinates = []
                     for j in range(M):
@@ -342,7 +343,7 @@ class Vector(Layer):
                     geometry.append(numpy.array(coordinates,
                                                 dtype='d',
                                                 copy=False))
-                elif self.geometry_type == ogr.wkbPolygon:
+                elif self.is_polygon_data:
                     ring = G.GetGeometryRef(0)
                     M = ring.GetPointCount()
                     coordinates = []
@@ -353,7 +354,7 @@ class Vector(Layer):
                     geometry.append(numpy.array(coordinates,
                                                 dtype='d',
                                                 copy=False))
-                elif self.geometry_type == ogr.wkbMultiPolygon:
+                elif self.is_multi_polygon_data:
                     msg = ('Got geometry type Multipolygon (%s) for '
                            'filename %s '
                            'which is not yet supported.'
@@ -530,14 +531,14 @@ class Vector(Layer):
             feature = ogr.Feature(layer_def)
 
             # Store geometry and check
-            if self.geometry_type == ogr.wkbPoint:
+            if self.is_point_data:
                 x = float(geometry[i][0])
                 y = float(geometry[i][1])
                 geom.SetPoint_2D(0, x, y)
-            elif self.geometry_type == ogr.wkbPolygon:
+            elif self.is_polygon_data:
                 wkt = array2wkt(geometry[i], geom_type='POLYGON')
                 geom = ogr.CreateGeometryFromWkt(wkt)
-            elif self.geometry_type == ogr.wkbLineString:
+            elif self.is_line_data:
                 wkt = array2wkt(geometry[i], geom_type='LINESTRING')
                 geom = ogr.CreateGeometryFromWkt(wkt)
             else:
@@ -907,6 +908,10 @@ class Vector(Layer):
     @property
     def is_polygon_data(self):
         return self.is_vector and self.geometry_type == ogr.wkbPolygon
+
+    @property
+    def is_multi_polygon_data(self):
+        return self.is_vector and self.geometry_type == ogr.wkbMultiPolygon
 
 
 #----------------------------------

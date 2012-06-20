@@ -53,13 +53,14 @@ class Raster(Layer):
         as they will be inferred from the file.
         """
 
+        # Invoke common layer constructor
         Layer.__init__(self,
                        name=name,
                        projection=projection,
                        keywords=keywords,
                        style_info=style_info)
 
-        # FIXME (Ole): Need to rationalise this and push up into superclass
+        # FIXME (Ole): Need to rationalise this more and push up into superclass
         # Input checks
         if data is None:
             # Instantiate empty object
