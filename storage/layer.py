@@ -67,10 +67,13 @@ class Layer:
         return self.projection.get_projection(proj4)
 
     def get_keywords(self, key=None):
-        """Return keywords dictionary
+        """Return a copy of the keywords dictionary
+
+        Input
+            key (optional): If specified value will be returned for key only
         """
         if key is None:
-            return self.keywords
+            return self.keywords.copy()
         else:
             if key in self.keywords:
                 return self.keywords[key]

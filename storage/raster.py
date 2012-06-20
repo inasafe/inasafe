@@ -3,6 +3,7 @@
 
 import os
 import numpy
+import copy as copy_module
 from osgeo import gdal
 from common.utilities import verify
 from common.numerics import nanallclose
@@ -274,7 +275,7 @@ class Raster(Layer):
             return interpolate_raster_vector(self, X,
                                              attribute_name=attribute_name)
 
-    def get_data(self, nan=True, scaling=None):
+    def get_data(self, nan=True, scaling=None, copy=False):
         """Get raster data as numeric array
 
         Input
@@ -297,13 +298,17 @@ class Raster(Layer):
                            otherwise not. This is the default.
                      scalar value: If scaling takes a numerical scalar value,
                                    that will be use to scale the data
+        copy (optional): If present and True return copy
 
         NOTE: Scaling does not currently work with projected layers.
         See issue #123
         """
 
         if hasattr(self, 'data') and self.data is not None:
-            A = self.data
+            if copy:
+                A = copy_module.deepcopy(self.data)
+            else:
+                A = self.data
             verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
         else:
             # Read from raster file
@@ -368,7 +373,7 @@ class Raster(Layer):
         # Return possibly scaled data
         return sigma * A
 
-    def get_geotransform(self):
+    def get_geotransform(self, copy=False):
         """Return geotransform for this raster layer
 
         Output
@@ -377,9 +382,13 @@ class Raster(Layer):
                        top left y, rotation, n-s pixel resolution).
 
                        See e.g. http://www.gdal.org/gdal_tutorial.html
+        copy (optional): If present and true return copy
         """
 
-        return self.geotransform
+        if copy:
+            return copy_module.copy(self.geotransform)
+        else:
+            return self.geotransform
 
     def get_geometry(self):
         """Return longitudes and latitudes (the axes) for grid.
@@ -430,6 +439,17 @@ class Raster(Layer):
 
         # Return
         return x, y
+
+    def copy(self):
+        """Return copy of raster layer
+
+        This copy will be equal to self in the sense defined by __eq__
+        """
+
+        return Raster(data=self.get_data(copy=True),
+                      geotransform=self.get_geotransform(copy=True),
+                      projection=self.get_projection(),
+                      keywords=self.get_keywords())
 
     def __mul__(self, other):
         return self.get_data() * other.get_data()

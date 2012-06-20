@@ -3,6 +3,8 @@
 
 import os
 import numpy
+
+import copy as copy_module
 from osgeo import ogr, gdal
 from common.polygon import inside_polygon, clip_line_by_polygon
 from common.numerics import ensure_numeric
@@ -214,7 +216,7 @@ class Vector(Layer):
 
                         res = None
                         try:
-                            # try numerical comparison with tolerances
+                            # Try numerical comparison with tolerances
                             res = numpy.allclose(X, Y,
                                                  rtol=rtol, atol=atol)
                         except:
@@ -232,6 +234,7 @@ class Vector(Layer):
                         else:
                             if not res:
                                 return False
+
 
                         if res is None:
                             # None of the comparisons could be done
@@ -356,18 +359,14 @@ class Vector(Layer):
                                                 dtype='d',
                                                 copy=False))
                 elif self.is_multi_polygon_data:
-                    msg = ('Got geometry type Multipolygon (%s) for '
-                           'filename %s '
-                           'which is not yet supported.'
-                           'Only point, line and polygon geometries are '
-                           'supported. '
-                           'However, you can use QGIS functionality to '
-                           'convert multipart vector '
-                           'data to singlepart (Vector -> Geometry Tools '
-                           '-> Multipart to Singleparts'
-                           'and use the resulting dataset.'
-                           % (ogr.wkbMultiPolygon,
-                              filename))
+                    msg = ('Got geometry type Multipolygon (%s) for filename '
+                           '%s which is not yet supported. Only point, line '
+                           'and polygon geometries are supported. However, '
+                           'you can use QGIS functionality to convert '
+                           'multipart vector data to singlepart (Vector -> '
+                           'Geometry Tools -> Multipart to Singleparts and '
+                           'use the resulting dataset.'
+                           % (ogr.wkbMultiPolygon, filename))
                     raise Exception(msg)
 
                 #    # FIXME: Unpact multiple polygons to simple polygons
@@ -583,15 +582,26 @@ class Vector(Layer):
 
         # FIXME (Ole): Maybe store style_info
 
+    def copy(self):
+        """Return copy of vector layer
+
+        This copy will be equal to self in the sense defined by __eq__
+        """
+
+        return Vector(data=self.get_data(copy=True),
+                      geometry=self.get_geometry(copy=True),
+                      projection=self.get_projection(),
+                      keywords=self.get_keywords())
+
     def get_attribute_names(self):
-        """ Get available attribute names
+        """Get available attribute names
 
         These are the ones that can be used with get_data
         """
 
         return self.data[0].keys()
 
-    def get_data(self, attribute=None, index=None):
+    def get_data(self, attribute=None, index=None, copy=False):
         """Get vector attributes
 
         Data is returned as a list where each entry is a dictionary of
@@ -603,11 +613,17 @@ class Vector(Layer):
 
         If optional argument index is specified on the that value will
         be returned. Any value of index is ignored if attribute is None.
+
+        If optional argument copy is True and all attributes are requested,
+        a copy will be returned. Otherwise a pointer to the data is returned.
         """
 
         if hasattr(self, 'data'):
             if attribute is None:
-                return self.data
+                if copy:
+                    return copy_module.deepcopy(self.data)
+                else:
+                    return self.data
             else:
                 msg = ('Specified attribute %s does not exist in '
                        'vector layer %s. Valid names are %s'
@@ -638,7 +654,7 @@ class Vector(Layer):
         """
         return self.geometry_type
 
-    def get_geometry(self):
+    def get_geometry(self, copy=False):
         """Return geometry for vector layer.
 
         Depending on the feature type, geometry is
@@ -651,8 +667,10 @@ class Vector(Layer):
 
         """
 
-        # FIXME (Ole): Do some checking
-        return self.geometry
+        if copy:
+            return copy_module.deepcopy(self.geometry)
+        else:
+            return self.geometry
 
     def get_bounding_box(self):
         """Get bounding box coordinates for vector layer.

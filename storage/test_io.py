@@ -281,9 +281,41 @@ class Test_IO(unittest.TestCase):
         # Create new object from test data
         V_new = Vector(data=data, projection=projection, geometry=geometry)
 
-        # Check
+        # Check equality operations
         assert V_new == V_ref
         assert not V_new != V_ref
+
+        V3 = V_new.copy()
+        assert V_new == V3  # Copy is OK
+
+        V3.data[0]['FLOOR_AREA'] += 1.0e-5
+        assert V_new == V3  # Copy is OK within tolerance
+
+        V3.data[0]['FLOOR_AREA'] += 1.0e-2
+        assert V_new != V3  # Copy is outside tolerance
+
+        V3 = V_new.copy()
+        V4 = V_new.copy()
+        V3.data[0]['BUILDING_C'] = True
+        assert V4 == V3  # Booleans work
+
+        V3.data[0]['BUILDING_C'] = False
+        assert V4 != V3  # Booleans work
+
+        V3.data[0]['BUILDING_C'] = None
+        assert V4 != V3  # None works
+
+        V3.data[0]['BUILDING_C'] = None
+        V4.data[0]['BUILDING_C'] = False
+        assert V4 == V3  # False matches None
+
+        V3.data[0]['BUILDING_C'] = 0
+        V4.data[0]['BUILDING_C'] = False
+        assert V4 == V3  # False matches 0
+
+        V3.data[0]['BUILDING_C'] = 1
+        V4.data[0]['BUILDING_C'] = True
+        assert V4 == V3  # True matches 1
 
         # Write this new object, read it again and check
         tmp_filename = unique_filename(suffix='.shp')
@@ -784,6 +816,15 @@ class Test_IO(unittest.TestCase):
                 # Use overridden == and != to verify
                 assert R1 == R2
                 assert not R1 != R2
+
+                # Check equality within tolerance
+                R3 = R1.copy()
+
+                R3.data[-1, -1] += 1.0e-5  # This is within tolerance
+                assert R1 == R3
+
+                R3.data[-1, -1] += 1.0e-2  # This is outside tolerance
+                assert R1 != R3
 
                 # Check that equality raises exception when type is wrong
                 try:
