@@ -213,9 +213,11 @@ class ITBFatalityFunction(FunctionProvider):
 
         table_body.append(TableRow(_('Action Checklist:'), header=True))
         if fatalities > 0:
+            # FIXME: This one is not captured by the translation system
             table_body.append(_('Are there enough victim identification units '
                                 'available for %i people?') % fatalities)
         if displaced > 0:
+            # FIXME: This one is not captured by the translation system
             table_body.append(_('Are there enough shelters available for %i '
                                 'people?') % displaced)
 

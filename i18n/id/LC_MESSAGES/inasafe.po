@@ -1321,29 +1321,6 @@ msgstr "Jumlah pengungsi"
 msgid "Action Checklist:"
 msgstr "Ceklis Aksi:"
 
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:187
-#: impact_functions/earthquake/earthquake_impact_on_women.py:118
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:190
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:208
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:211
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:210
-#, python-format
-msgid "Are enough victim identification units available for %i people?"
-msgstr "Apakah cukup unit identifikasi korban tersedia untuk %i orang?"
-
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:188
-#: impact_functions/earthquake/earthquake_impact_on_women.py:119
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:189
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:191
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:192
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:211
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:214
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:213
-#, python-format
-msgid "Are enough shelters available for %i people?"
-msgstr "Apakah cucup tempat penampungan tersedia untuk %i orang?"
-
 #: impact_functions/inundation/flood_OSM_building_impact.py:68
 #: impact_functions/inundation/flood_OSM_building_impact.py:68
 #, python-format
