@@ -34,7 +34,7 @@ from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
 from common.numerics import nanallclose
-from common.testing import TESTDATA, HAZDATA, EXPDATA
+from common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from common.testing import FEATURE_COUNTS
 from common.testing import GEOTRANSFORMS
 from common.utilities import ugettext as _
@@ -1803,7 +1803,23 @@ class Test_IO(unittest.TestCase):
         assert string1 == 'Hi'
         assert string2 == 'Hi2'
 
+    def test_multipart_polygon_raises_exception(self):
+        """Multipart polygons raise exception
+        """
+
+        hazard_filename = ('%s/boundaries/rw_jakarta.shp' % DATADIR)
+
+        try:
+            H = read_layer(hazard_filename)
+        except Exception, e:
+            msg = 'Wrong error message: %s' % e
+            assert 'convert multipart' in str(e), msg
+        else:
+            msg = 'Multipart polygon should have raised exception'
+            raise Exception(msg)
+
+
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test')
+    suite = unittest.makeSuite(Test_IO, 'test_multi')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
