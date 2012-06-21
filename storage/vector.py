@@ -372,6 +372,7 @@ class Vector(Layer):
                 #    # For hints on how to unpack see
 #http://osgeo-org.1803224.n2.nabble.com/
 #gdal-dev-Shapefile-Multipolygon-with-interior-rings-td5391090.html
+#http://osdir.com/ml/gdal-development-gis-osgeo/2010-12/msg00107.html
 
                 #    ring = G.GetGeometryRef(0)
                 #    M = ring.GetPointCount()
@@ -755,12 +756,9 @@ class Vector(Layer):
         msg = 'Input to Vector.interpolate must be a vector layer instance'
         verify(X.is_vector, msg)
 
-        X_projection = X.get_projection()
-        S_projection = self.get_projection()
-
         msg = ('Projections must be the same: I got %s and %s'
-               % (S_projection, X_projection))
-        verify(S_projection == X_projection, msg)
+               % (self.projection, X.projection))
+        verify(self.projection == X.projection, msg)
 
         msg = ('Vector layer to interpolate from must be polygon geometry. '
                'I got OGR geometry type %s'
