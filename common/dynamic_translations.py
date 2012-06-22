@@ -121,5 +121,4 @@ names = {'title1': _('DKI buildings'),       # Bangunan DKI
          'public building': _('public building'),
          'other': _('other'),
          'fire station': _('fire station'),
-         'test': _('test'),
          }

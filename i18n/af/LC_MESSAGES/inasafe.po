@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-21 15:22+0700\n"
+"POT-Creation-Date: 2012-06-22 14:39+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,10 +52,12 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:117
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
+#: impact_functions/inundation/flood_population_evacuation.py:102
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
 #: impact_functions/earthquake/itb_building_impact_model.py:148
 #: impact_functions/earthquake/padang_building_impact_model.py:124
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
+#: impact_functions/inundation/flood_population_evacuation.py:102
 msgid "Total"
 msgstr ""
 
@@ -740,6 +742,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:78
 #: impact_functions/inundation/flood_population_evacuation.py:86
 #: impact_functions/inundation/flood_population_evacuation.py:87
+#: impact_functions/inundation/flood_population_evacuation.py:104
+#: impact_functions/inundation/flood_population_evacuation.py:104
 msgid "Rice [kg]"
 msgstr ""
 
@@ -747,6 +751,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:79
 #: impact_functions/inundation/flood_population_evacuation.py:87
 #: impact_functions/inundation/flood_population_evacuation.py:88
+#: impact_functions/inundation/flood_population_evacuation.py:105
+#: impact_functions/inundation/flood_population_evacuation.py:105
 msgid "Drinking Water [l]"
 msgstr ""
 
@@ -754,6 +760,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:80
 #: impact_functions/inundation/flood_population_evacuation.py:88
 #: impact_functions/inundation/flood_population_evacuation.py:89
+#: impact_functions/inundation/flood_population_evacuation.py:106
+#: impact_functions/inundation/flood_population_evacuation.py:106
 msgid "Clean Water [l]"
 msgstr ""
 
@@ -761,6 +769,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:81
 #: impact_functions/inundation/flood_population_evacuation.py:89
 #: impact_functions/inundation/flood_population_evacuation.py:90
+#: impact_functions/inundation/flood_population_evacuation.py:107
+#: impact_functions/inundation/flood_population_evacuation.py:107
 msgid "Family Kits"
 msgstr ""
 
@@ -768,6 +778,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:82
 #: impact_functions/inundation/flood_population_evacuation.py:90
 #: impact_functions/inundation/flood_population_evacuation.py:91
+#: impact_functions/inundation/flood_population_evacuation.py:108
+#: impact_functions/inundation/flood_population_evacuation.py:108
 msgid "Toilets"
 msgstr ""
 
@@ -898,6 +910,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:76
 #: impact_functions/inundation/flood_population_evacuation.py:84
 #: impact_functions/inundation/flood_population_evacuation.py:85
+#: impact_functions/inundation/flood_population_evacuation.py:102
+#: impact_functions/inundation/flood_population_evacuation.py:102
 msgid "Needs per week"
 msgstr ""
 
@@ -1721,6 +1735,6 @@ msgstr ""
 msgid "People in 30cm to 50cm of water: %i"
 msgstr ""
 
-#: common/dynamic_translations.py:124 common/dynamic_translations.py:124
+#: common/dynamic_translations.py:124
 msgid "test"
 msgstr ""
