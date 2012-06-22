@@ -1693,7 +1693,7 @@ class Test_Engine(unittest.TestCase):
         N = len(I_attributes)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if False:
+        if True:
             L = Vector(geometry=H_geometry, geometry_type='polygon',
                        data=H_attributes)
             L.write_to_file('test_polygon.shp')
@@ -2306,6 +2306,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_line_interpolation_from_polygons_one_poly')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
