@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -239,7 +238,6 @@ msgstr "Kerusakan rendah"
 #: impact_functions/earthquake/itb_building_impact_model.py:172
 #: impact_functions/earthquake/padang_building_impact_model.py:129
 #: impact_functions/earthquake/padang_building_impact_model.py:148
-#, fuzzy
 msgid "Medium damage"
 msgstr "Kerusakan sedang"
 
@@ -264,7 +262,6 @@ msgstr "Kerusakan sedang"
 #: impact_functions/earthquake/itb_building_impact_model.py:174
 #: impact_functions/earthquake/padang_building_impact_model.py:130
 #: impact_functions/earthquake/padang_building_impact_model.py:150
-#, fuzzy
 msgid "High damage"
 msgstr "Kerusakan tinggi"
 
@@ -363,7 +360,6 @@ msgid "Flooded"
 msgstr "Kebanjiran"
 
 #: impact_functions/flood/flood_building_impact.py:20
-#, fuzzy
 msgid "Temporarily Closed"
 msgstr "Ditutup sementara"
 
@@ -371,7 +367,6 @@ msgstr "Ditutup sementara"
 #: impact_functions/inundation/BNPB_flood_building_impact.py:88
 #: impact_functions/inundation/BNPB_flood_building_impact.py:89
 #: impact_functions/experimental/BNPB_flood_building_impact.py:89
-#, fuzzy
 msgid "Based on BNPB Perka 2 - 2012"
 msgstr "Berdasarkan Perka 2 BNPB - 2012"
 
@@ -384,7 +379,6 @@ msgstr "Kategori"
 #: impact_functions/generic/categorised_hazard_building_impact.py:82
 #: impact_functions/generic/categorised_hazard_building_impact.py:77
 #: impact_functions/generic/categorised_hazard_building_impact.py:77
-#, fuzzy
 msgid "Affected"
 msgstr "Terdampak"
 
@@ -415,7 +409,6 @@ msgstr "Jumlah bangunan"
 #: impact_functions/inundation/dki_flood_building_impact.py:22
 #: impact_functions/inundation/flood_OSM_building_impact.py:22
 #: impact_functions/inundation/flood_OSM_building_impact.py:25
-#, fuzzy
 msgid "Be inundated"
 msgstr "Tergenang"
 
@@ -669,7 +662,6 @@ msgstr "Penduduk perlu evakuasi kalau banjir lebih dari %i m"
 #: impact_functions/inundation/flood_population_evacuation.py:90
 #: impact_functions/inundation/flood_population_evacuation.py:98
 #: impact_functions/inundation/flood_population_evacuation.py:99
-#, fuzzy
 msgid "Minimum needs are defined in BNPB regulation 7/2008"
 msgstr "Minimum bantuan per minggu dari perka 7 BNPB/2008"
 
@@ -773,7 +765,6 @@ msgstr "Tingkat dampak ditentukan oleh BNPB <i>Pengkajian Risiko Bencana</i>"
 
 #: impact_functions/experimental/tsunami_building_impact.py:129
 #: impact_functions/experimental/tsunami_building_impact.py:129
-#, fuzzy
 msgid "Tsunami height"
 msgstr "Ketinggian Tsunami"
 
@@ -796,7 +787,6 @@ msgstr ""
 
 #: impact_functions/earthquake/padang_building_impact_model.py:141
 #: impact_functions/earthquake/padang_building_impact_model.py:141
-#, fuzzy
 msgid "Earthquake damage to buildings"
 msgstr "Kerusakan bangunan akibat gempa"
 
@@ -836,14 +826,12 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:39
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:40
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:83
-#, fuzzy
 msgid "Be affected by ground shaking"
 msgstr "Dipengaruhi oleh getaran tanah"
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:108
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:114
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:150
-#, fuzzy
 msgid "Groundshaking (MMI)"
 msgstr "Getaran tanah (MMI)"
 
@@ -914,7 +902,6 @@ msgstr "Bangunan DKI"
 
 #: common/dynamic_translations.py:52 common/dynamic_translations.py:53
 #: common/dynamic_translations.py:52 common/dynamic_translations.py:53
-#, fuzzy
 msgid "Jakarta 2007 flood"
 msgstr "Seperti banjir di Jakarta tahun 2007"
 
@@ -922,7 +909,6 @@ msgstr "Seperti banjir di Jakarta tahun 2007"
 #: storage/titles.py:38 storage/titles.py:39 storage/titles.py:40
 #: storage/titles.py:45 storage/dynamic_translations.py:54
 #: common/dynamic_translations.py:54 common/dynamic_translations.py:54
-#, fuzzy
 msgid "Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter"
 msgstr ""
 "Seperti banjir Jakarta tahun 2007 tanpa pompa di Pluit, Ancol dan Sunter"
@@ -956,7 +942,6 @@ msgstr "Penduduk Jakarta"
 #: storage/titles.py:51 storage/titles.py:53 storage/titles.py:58
 #: storage/dynamic_translations.py:67 common/dynamic_translations.py:67
 #: common/dynamic_translations.py:67
-#, fuzzy
 msgid "Flood Depth (design) Jakarta"
 msgstr "Kedalaman banjir (desain) Jakarta"
 
@@ -965,7 +950,6 @@ msgstr "Kedalaman banjir (desain) Jakarta"
 #: storage/titles.py:52 storage/titles.py:54 storage/titles.py:59
 #: storage/dynamic_translations.py:68 common/dynamic_translations.py:68
 #: common/dynamic_translations.py:68
-#, fuzzy
 msgid "Flood Depth (current) Jakarta"
 msgstr "Kedalaman banjir (saat ini)"
 
@@ -982,7 +966,6 @@ msgstr "Gempa Yogyakarta 2006"
 #: storage/titles.py:54 storage/titles.py:56 storage/titles.py:61
 #: storage/dynamic_translations.py:70 common/dynamic_translations.py:70
 #: common/dynamic_translations.py:70
-#, fuzzy
 msgid "Indonesian Earthquake Hazard Map"
 msgstr "Peta Rawan Gempa Indonesia"
 
@@ -991,7 +974,6 @@ msgstr "Peta Rawan Gempa Indonesia"
 #: storage/titles.py:56 storage/titles.py:58 storage/titles.py:63
 #: storage/dynamic_translations.py:72 common/dynamic_translations.py:72
 #: common/dynamic_translations.py:72
-#, fuzzy
 msgid "Maumere tsunami inundation"
 msgstr "Genangan tsunami Maumere"
 
@@ -1037,7 +1019,6 @@ msgstr "Sekolah AIBEP"
 #: storage/titles.py:69 storage/titles.py:71 storage/titles.py:72
 #: storage/titles.py:74 storage/titles.py:79 storage/dynamic_translations.py:88
 #: common/dynamic_translations.py:88 common/dynamic_translations.py:88
-#, fuzzy
 msgid "Population density (5kmx5km)"
 msgstr "Kepadatan penduduk (5kmx5km)"
 
@@ -1158,7 +1139,6 @@ msgstr "polisi"
 #: storage/titles.py:93 storage/titles.py:98
 #: storage/dynamic_translations.py:107 common/dynamic_translations.py:107
 #: common/dynamic_translations.py:107
-#, fuzzy
 msgid "residential"
 msgstr "pemukiman"
 
@@ -1207,7 +1187,6 @@ msgstr "universitas"
 #: storage/titles.py:99 storage/titles.py:104
 #: storage/dynamic_translations.py:113 common/dynamic_translations.py:113
 #: common/dynamic_translations.py:113
-#, fuzzy
 msgid "apartments"
 msgstr "apartemen"
 
@@ -1280,7 +1259,6 @@ msgstr "bangunan publik"
 #: storage/titles.py:108 storage/titles.py:113
 #: storage/dynamic_translations.py:122 common/dynamic_translations.py:122
 #: common/dynamic_translations.py:122
-#, fuzzy
 msgid "other"
 msgstr "lainnya"
 
@@ -1320,7 +1298,6 @@ msgstr "Skenario Yogya 2006"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:262
 #: impact_functions/earthquake/earthquake_impact_on_women.py:159
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:262
-#, fuzzy
 msgid "Estimated fatalities"
 msgstr "Perkiraan korban jiwa"
 
@@ -1365,13 +1342,12 @@ msgstr "Jumlah pengungsi"
 #: impact_functions/earthquake/earthquake_impact_on_women.py:135
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:214
 #: impact_functions/inundation/flood_OSM_building_impact.py:167
-#, fuzzy
 msgid "Action Checklist:"
 msgstr "Daftar aksi:"
 
 #: impact_functions/inundation/flood_OSM_building_impact.py:68
 #: impact_functions/inundation/flood_OSM_building_impact.py:68
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown hazard type %s. Must be either \"depth\" or \"floodprone\""
 msgstr ""
 "Jenis bahaya %s tidak diketahui. Harus berupa \"kedalaman banjir\" atau "
@@ -1402,7 +1378,6 @@ msgstr "Apakah fasilitas yang penting masih terbuka?"
 #: impact_functions/inundation/flood_OSM_building_impact.py:146
 #: impact_functions/inundation/flood_OSM_building_impact.py:160
 #: impact_functions/inundation/flood_OSM_building_impact.py:160
-#, fuzzy
 msgid "Breakdown by building type"
 msgstr "Merinci menurut jenis bangunan"
 
@@ -1413,25 +1388,23 @@ msgstr "Terkena dampak gempa"
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:128
 #: impact_functions/earthquake/earthquake_impact_on_women.py:128
-#, fuzzy
 msgid "Number of women displaced"
 msgstr "Jumlah pengungsi wanita"
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:131
 #: impact_functions/earthquake/earthquake_impact_on_women.py:131
-#, fuzzy
 msgid "Number of pregnant women displaced"
 msgstr "Jumlah pengungsi wanita hamil"
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:136
 #: impact_functions/earthquake/earthquake_impact_on_women.py:136
-#, fuzzy, python-format
+#, python-format
 msgid "Are enough shelters available for %i women?"
 msgstr "Apakah tempat penampungan yang tersedia cukup untuk %i wanita?"
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:138
 #: impact_functions/earthquake/earthquake_impact_on_women.py:138
-#, fuzzy, python-format
+#, python-format
 msgid "Are enough facilities available to assist %i pregnant women?"
 msgstr "Apakah fasilitas yang tersedia cukup untuk membantu %i ibu hamil?"
 
@@ -1473,21 +1446,20 @@ msgstr "Meninggal"
 
 #: impact_functions/earthquake/earthquake_impact_on_women.py:40
 #: impact_functions/earthquake/earthquake_impact_on_women.py:40
-#, fuzzy
 msgid "Suffer because of gender"
 msgstr "Menderita karena gender"
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:216
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:217
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:217
-#, fuzzy, python-format
+#, python-format
 msgid "Are there enough victim identification units available for %i people?"
 msgstr "Apakah unit identifikasi korban yang tersedia cukup untuk %i orang?"
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:219
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:221
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:221
-#, fuzzy, python-format
+#, python-format
 msgid "Are there enough shelters available for %i people?"
 msgstr "Apakah tempat penampungan yang tersedia cukup untuk %i orang?"
 
