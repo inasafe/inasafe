@@ -2306,6 +2306,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_line_interpolation_from_polygons_one_poly')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
