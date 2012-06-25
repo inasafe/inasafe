@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-22 14:39+0700\n"
+"POT-Creation-Date: 2012-06-25 10:47+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1737,4 +1737,11 @@ msgstr ""
 
 #: common/dynamic_translations.py:124
 msgid "test"
+msgstr ""
+
+#: storage/interpolation.py:60 storage/interpolation.py:60
+#, python-format
+msgid ""
+"Could not interpolate from raster layer %s to vector layer %s. Error "
+"message: %s"
 msgstr ""

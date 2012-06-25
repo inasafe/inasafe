@@ -3,11 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-22 14:39+0700\n"
+"POT-Creation-Date: 2012-06-25 10:47+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,7 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Language: id_ID\n"
 
 #: storage/test_io.py:1648 storage/test_io.py:1719 storage/test_io.py:1721
 #: storage/test_io.py:1712 storage/test_io.py:1713 storage/test_io.py:1739
@@ -1009,16 +1009,18 @@ msgstr "Bangunan OSM"
 #: storage/titles.py:47 storage/titles.py:56 storage/titles.py:57
 #: storage/titles.py:60 storage/titles.py:65 storage/titles.py:66
 #: storage/titles.py:68 storage/titles.py:70 storage/titles.py:71
-#: storage/titles.py:73 storage/titles.py:78 storage/dynamic_translations.py:87
-#: common/dynamic_translations.py:87 common/dynamic_translations.py:87
+#: storage/titles.py:73 storage/titles.py:78
+#: storage/dynamic_translations.py:87 common/dynamic_translations.py:87
+#: common/dynamic_translations.py:87
 msgid "AIBEP schools"
 msgstr "Sekolah AIBEP"
 
 #: storage/titles.py:48 storage/titles.py:57 storage/titles.py:58
 #: storage/titles.py:61 storage/titles.py:66 storage/titles.py:67
 #: storage/titles.py:69 storage/titles.py:71 storage/titles.py:72
-#: storage/titles.py:74 storage/titles.py:79 storage/dynamic_translations.py:88
-#: common/dynamic_translations.py:88 common/dynamic_translations.py:88
+#: storage/titles.py:74 storage/titles.py:79
+#: storage/dynamic_translations.py:88 common/dynamic_translations.py:88
+#: common/dynamic_translations.py:88
 msgid "Population density (5kmx5km)"
 msgstr "Kepadatan penduduk (5kmx5km)"
 
@@ -1056,24 +1058,27 @@ msgstr "Sekolah Jakarta"
 #: storage/titles.py:64 storage/titles.py:65 storage/titles.py:66
 #: storage/titles.py:69 storage/titles.py:74 storage/titles.py:75
 #: storage/titles.py:77 storage/titles.py:79 storage/titles.py:80
-#: storage/titles.py:82 storage/titles.py:87 storage/dynamic_translations.py:97
-#: common/dynamic_translations.py:97 common/dynamic_translations.py:97
+#: storage/titles.py:82 storage/titles.py:87
+#: storage/dynamic_translations.py:97 common/dynamic_translations.py:97
+#: common/dynamic_translations.py:97
 msgid "Industrial buildings Jakarta"
 msgstr "Bangunan industri Jakarta"
 
 #: storage/titles.py:65 storage/titles.py:66 storage/titles.py:67
 #: storage/titles.py:70 storage/titles.py:75 storage/titles.py:76
 #: storage/titles.py:78 storage/titles.py:80 storage/titles.py:81
-#: storage/titles.py:83 storage/titles.py:88 storage/dynamic_translations.py:98
-#: common/dynamic_translations.py:98 common/dynamic_translations.py:98
+#: storage/titles.py:83 storage/titles.py:88
+#: storage/dynamic_translations.py:98 common/dynamic_translations.py:98
+#: common/dynamic_translations.py:98
 msgid "Industrial areas Jakarta"
 msgstr "Daerah industri Jakarta"
 
 #: storage/titles.py:66 storage/titles.py:67 storage/titles.py:68
 #: storage/titles.py:71 storage/titles.py:76 storage/titles.py:77
 #: storage/titles.py:79 storage/titles.py:81 storage/titles.py:82
-#: storage/titles.py:84 storage/titles.py:89 storage/dynamic_translations.py:99
-#: common/dynamic_translations.py:99 common/dynamic_translations.py:99
+#: storage/titles.py:84 storage/titles.py:89
+#: storage/dynamic_translations.py:99 common/dynamic_translations.py:99
+#: common/dynamic_translations.py:99
 msgid "Commercial areas Jakarta"
 msgstr "Daerah komersial Jakarta"
 
@@ -1302,8 +1307,9 @@ msgid "Estimated fatalities"
 msgstr "Perkiraan korban jiwa"
 
 #: storage/titles.py:64 storage/titles.py:66 storage/titles.py:67
-#: storage/titles.py:69 storage/titles.py:74 storage/dynamic_translations.py:83
-#: common/dynamic_translations.py:83 common/dynamic_translations.py:83
+#: storage/titles.py:69 storage/titles.py:74
+#: storage/dynamic_translations.py:83 common/dynamic_translations.py:83
+#: common/dynamic_translations.py:83
 msgid "Lembang fault scenario"
 msgstr "Skenario sesar Lembang"
 
@@ -1413,13 +1419,15 @@ msgstr "Apakah fasilitas yang tersedia cukup untuk membantu %i ibu hamil?"
 msgid "Mid"
 msgstr "Sedang"
 
-#: storage/titles.py:51 storage/titles.py:56 storage/dynamic_translations.py:65
-#: common/dynamic_translations.py:65 common/dynamic_translations.py:65
+#: storage/titles.py:51 storage/titles.py:56
+#: storage/dynamic_translations.py:65 common/dynamic_translations.py:65
+#: common/dynamic_translations.py:65
 msgid "People"
 msgstr "Orang"
 
-#: storage/titles.py:52 storage/titles.py:57 storage/dynamic_translations.py:66
-#: common/dynamic_translations.py:66 common/dynamic_translations.py:66
+#: storage/titles.py:52 storage/titles.py:57
+#: storage/dynamic_translations.py:66 common/dynamic_translations.py:66
+#: common/dynamic_translations.py:66
 msgid "people"
 msgstr "orang"
 
@@ -1502,3 +1510,12 @@ msgstr "Orang-orang di 50cm ke 1m air: %i"
 #, python-format
 msgid "People in 30cm to 50cm of water: %i"
 msgstr "Orang-orang di 30cm ke 50cm air: %i"
+
+#: storage/interpolation.py:60 storage/interpolation.py:60
+#, python-format
+msgid ""
+"Could not interpolate from raster layer %s to vector layer %s. Error "
+"message: %s"
+msgstr ""
+"Tidak bisa interpolasi dari %s lapisan raster ke %s lapisan vektor. Erro "
+"pesan: %s"
