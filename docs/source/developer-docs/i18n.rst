@@ -14,21 +14,35 @@ This document is divided into three parts:
 Quick Reference
 ---------------
 
-*Only* for the modules under gui.
+The translation system works differently for different parts of the project:
 
-* Classes and anonymous functions that do not inherit QObject should use
-  the format :samp:`QCoreApplication.translate('Riab', 'Translations loaded')`
-* Classes that inherit QObject should use the form :samp:`self.tr('foo')`
+* Strings that appear in the InaSAFE user interface (buttons, help strings, menu items etc)
+* Strings that appear in the Python code that constitutes the rest of InaSAFE including the impact functions
+* Strings that appear in data and keywords used by InaSAFE
+
+
+Translation of strings in the gui module
+........................................
+
+* Classes and anonymous functions that do not inherit from the class QObject
+  should use the format
+  :samp:`QCoreApplication.translate('Riab', 'Translations loaded')`
+* Classes that inherit from QObject should use the form :samp:`self.tr('foo')`
 * String replacement arguments should be provided using the QString
   :samp:`arg` method. Example: :samp:`self.tr('Error: %1').arg(message)`
 
-*Only* for the modules under *not* under gui.
+
+Translation of strings *not* in the gui such as impact functions
+................................................................
 
 * Import the gettext helper e.g::
 
-   `from common.utilities import ugettext as _`
+   from common.utilities import ugettext as _
 
-* All strings should be wrapped using the _ helper e.g. :samp:`foo = _('bar')`
+* All strings should be wrapped using the _ helper e.g::
+
+    _('Are there enough shelters available for %i people?') % displaced
+
 * The library will use at run-time the :samp:`LANG` environment variable which
   should be set to the iso code e.g. 'id' for 'Indonesia' of the Locale
   you wish to use. This is done automatically for you by the QGIS Plugin, but
@@ -38,11 +52,19 @@ Quick Reference
       os.environ['LANG'] = 'id'
       # do stuff with riab lib
 
-*Only* for names that appear at runtime such as titles of layers or attribute names in data.
+
+Translation of strings that appear at runtime
+.............................................
+
+This applies e.g. to titles of layers or attribute names in data.
 
 The translation system works by scanning the Python code for strings marked as described above. However, it has know way of knowing about titles of layers or names that appear in datasets processed by InaSAFE. However, if such names are known a priori they can be made visible to the translation system as follows:
 
-* Edit the file :samp:`common/dynamic_translations.py` and add the name to the dictionary "names". E.g. :samp:`'college' = _('college')`
+* Edit the file::
+
+    common/dynamic_translations.py
+
+  and add the name to the dictionary "names". E.g. :samp:`'college' = _('college')`
 * Update the translation strings as described in the section below
 * Make impact functions refer to the dynamic translations e.g. as in this example::
 
