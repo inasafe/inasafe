@@ -57,9 +57,11 @@ def interpolate_raster_vector_points(R, V, attribute_name=None):
         values = interpolate_raster(longitudes, latitudes, A,
                                     coordinates, mode='linear')
     except Exception, e:
-        msg = (_('Could not interpolate from raster layer %s to '
-                 'vector layer %s. Error message: %s')
-               % (R.get_name(), V.get_name(), str(e)))
+        msg = (_('Could not interpolate from raster layer %(raster)s to '
+                 'vector layer %(vector)s. Error message: %(error)s')
+               % {'raster': R.get_name(),
+                  'vector': V.get_name(),
+                  'error': str(e)})
         raise Exception(msg)
 
     # Add interpolated attribute to existing attributes and return

@@ -317,10 +317,11 @@ def get_question(hazard_title, exposure_title, function_title):
         function_title
     """
 
-    return _('In the event of <i>%s</i> how many '
-             '<i>%s</i> might <i>%s</i>') % (hazard_title.lower(),
-                                             exposure_title.lower(),
-                                             function_title.lower())
+    return (_('In the event of <i>%(hazard)s</i> how many '
+              '<i>%(exposure)s</i> might <i>%(impact)s</i>')
+            % {'hazard': hazard_title.lower(),
+               'exposure': exposure_title.lower(),
+               'impact': function_title.lower()})
 
 
 def aggregate_point_data(data=None, boundaries=None,
