@@ -855,7 +855,7 @@ class ISDockTest(unittest.TestCase):
         myExpectedDict = {'Run Button Enabled': False,
                           'Impact Function': '',
                           'Hazard': 'Jakarta 2007 flood',
-                          'Exposure': 'People'}
+                          'Exposure': 'Population density (5kmx5km)'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'
                      '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
             DOCK.cboExposure.currentText(),
@@ -910,7 +910,7 @@ class ISDockTest(unittest.TestCase):
         myExpectedDict = {'Run Button Enabled': False,
                           'Impact Function': '',
                           'Hazard': 'Jakarta 2007 flood',
-                          'Exposure': 'People'}
+                          'Exposure': 'Population density (5kmx5km)'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'
                      '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
             DOCK.cboExposure.currentText(),

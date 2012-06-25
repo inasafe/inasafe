@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-25 10:47+0700\n"
+"POT-Creation-Date: 2012-06-25 14:33+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -645,7 +645,7 @@ msgstr "Jamban Keluarga"
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:112
 #: impact_functions/inundation/flood_population_evacuation.py:112
 #: impact_functions/earthquake/earthquake_impact_on_women.py:141
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:224
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:222
 #: impact_functions/earthquake/padang_building_impact_model.py:132
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:112
 #: impact_functions/inundation/flood_OSM_building_impact.py:171
@@ -779,7 +779,6 @@ msgstr "Bangunan perlu ditutup kalau banjir lebih dari %.1f m"
 
 #: impact_functions/core.py:325 impact_functions/core.py:327
 #: impact_functions/core.py:321 impact_functions/core.py:320
-#: impact_functions/core.py:320
 #, python-format
 msgid "In the event of <i>%s</i> how many <i>%s</i> might <i>%s</i>"
 msgstr ""
@@ -872,7 +871,7 @@ msgstr "Jumlah perkiraan kematian"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:223
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:225
 #: impact_functions/earthquake/earthquake_impact_on_women.py:143
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:225
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:223
 msgid "Fatality model is from Institute of Teknologi Bandung 2012."
 msgstr "Model Fatality adalah dari Institut Teknologi Bandung 2012."
 
@@ -891,7 +890,7 @@ msgstr "Model Fatality adalah dari Institut Teknologi Bandung 2012."
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:229
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:231
 #: impact_functions/earthquake/earthquake_impact_on_women.py:148
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:231
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:229
 msgid "Earthquake impact to population"
 msgstr "Gempa dampak terhadap populasi"
 
@@ -1301,8 +1300,9 @@ msgstr "Skenario Yogya 2006"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:234
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:258
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:262
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:260
 #: impact_functions/earthquake/earthquake_impact_on_women.py:159
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:262
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:260
 msgid "Estimated fatalities"
 msgstr "Perkiraan korban jiwa"
 
@@ -1443,7 +1443,7 @@ msgstr "Jumlah penduduk"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:219
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:225
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:227
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:227
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:225
 msgid "Population numbers rounded to nearest 1000."
 msgstr "Jumlah penduduk dibulatkan menjadi terdekat 1000."
 
@@ -1459,14 +1459,14 @@ msgstr "Menderita karena gender"
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:216
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:217
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:217
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:216
 #, python-format
 msgid "Are there enough victim identification units available for %i people?"
 msgstr "Apakah unit identifikasi korban yang tersedia cukup untuk %i orang?"
 
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:219
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:221
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:221
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:219
 #, python-format
 msgid "Are there enough shelters available for %i people?"
 msgstr "Apakah tempat penampungan yang tersedia cukup untuk %i orang?"
@@ -1477,9 +1477,11 @@ msgstr "Apakah tempat penampungan yang tersedia cukup untuk %i orang?"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:239
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:244
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:249
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:239
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:244
-#: impact_functions/earthquake/itb_earthquake_fatality_model.py:249
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:242
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:247
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:237
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:242
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:247
 #, python-format
 msgid "%.2f people/cell"
 msgstr "%.2f orang/sel"
@@ -1511,7 +1513,7 @@ msgstr "Orang-orang di 50cm ke 1m air: %i"
 msgid "People in 30cm to 50cm of water: %i"
 msgstr "Orang-orang di 30cm ke 50cm air: %i"
 
-#: storage/interpolation.py:60 storage/interpolation.py:60
+#: storage/interpolation.py:60
 #, python-format
 msgid ""
 "Could not interpolate from raster layer %s to vector layer %s. Error "
@@ -1519,3 +1521,17 @@ msgid ""
 msgstr ""
 "Tidak bisa interpolasi dari %s lapisan raster ke %s lapisan vektor. Erro "
 "pesan: %s"
+
+#: impact_functions/core.py:320 impact_functions/core.py:320
+#, python-format
+msgid ""
+"In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
+"%(impact)s</i>"
+msgstr ""
+
+#: storage/interpolation.py:60 storage/interpolation.py:60
+#, python-format
+msgid ""
+"Could not interpolate from raster layer %(raster)s to vector layer "
+"%(vector)s. Error message: %(error)s"
+msgstr ""
