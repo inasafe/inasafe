@@ -9,6 +9,7 @@ from storage.vector import Vector
 from storage.vector import convert_polygons_to_centroids
 from common.interpolation2d import interpolate_raster
 from common.utilities import verify
+from common.utilities import ugettext as _
 
 
 def interpolate_raster_vector_points(R, V, attribute_name=None):
@@ -59,6 +60,7 @@ def interpolate_raster_vector_points(R, V, attribute_name=None):
         msg = (_('Could not interpolate from raster layer %s to '
                  'vector layer %s. Error message: %s')
                % (R.get_name(), V.get_name(), str(e)))
+        raise Exception(msg)
 
     # Add interpolated attribute to existing attributes and return
     for i in range(N):
