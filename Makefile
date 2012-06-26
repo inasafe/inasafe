@@ -43,11 +43,13 @@ docs: compile
 
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
+	@echo "Collecting strings requiring translations. Please provide translations by editing the translation files below:"
 	@# Qt translation stuff first.
-	cd gui; pylupdate4 inasafe.pro; cd .
+	@cd gui; pylupdate4 inasafe.pro; cd .
+	@$(foreach LOCALE,$(LOCALES), echo "gui/i18n/inasafe_$(LOCALE).ts";)
 	@# Gettext translation stuff next.
 	@# apply same xgettext command for each supported locale. TS
-	$(foreach LOCALE,$(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
+	@$(foreach LOCALE,$(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in gui
 compile-translation-strings: compile
