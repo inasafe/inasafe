@@ -1527,11 +1527,11 @@ msgstr ""
 msgid ""
 "In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
 "%(impact)s</i>"
-msgstr ""
+msgstr "Apabila terjadi <i>%(hazard)s</i> berapa banyak <i>%(exposure)s</i> yang mungkin <i>%(impact)s</i>"
 
 #: storage/interpolation.py:60 storage/interpolation.py:60
 #, python-format
 msgid ""
 "Could not interpolate from raster layer %(raster)s to vector layer "
 "%(vector)s. Error message: %(error)s"
-msgstr ""
+msgstr "Tidak bisa interpolasi dari %(raster)s lapisan raster ke %(vector)s lapisan vektor. Error pesan: %(error)s"
