@@ -113,10 +113,10 @@ class FloodEvacuationFunction(FunctionProvider):
                            _('Total population: %i') % total,
                            _('People need evacuation if flood levels '
                              'exceed %(eps)i m') % {'eps': threshold},
-                           _('People in 50cm to 1m of water: %i') % medium,
-                           _('People in 30cm to 50cm of water: %i') % low])
-##                           _('Minimum needs are defined in BNPB '
-##                             'regulation 7/2008')])
+                           #_('People in 50cm to 1m of water: %i') % medium,
+                           #_('People in 30cm to 50cm of water: %i') % low])
+                           _('Minimum needs are defined in BNPB '
+                             'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('People in need of evacuation')
         style_info['legend_title'] = _('Population Density')
