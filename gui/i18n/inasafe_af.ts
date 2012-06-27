@@ -76,18 +76,18 @@
         <translation type="obsolete">&lt;span class=&quot;label notice&quot;&gt;Om te begin:&lt;/span&gt; Om hierdie funksie te gebruik, moet daar eears data laers in jou QGIS projek bestaan. Maak sekere dat tenminste een &lt;em&gt;gevaar&lt;/em&gt; laer (b.w. aardskutting MMI) en een &lt;em&gt;blootstelling&lt;/em&gt;(b.w. wonings) beskikbaar is. Wanneer jy reg is, klik die &lt;em&gt;Begin&lt;/em&gt; knoppie onder.</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="613"/>
+        <location filename="is_dock.py" line="625"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="753"/>
+        <location filename="is_dock.py" line="765"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="791"/>
+        <location filename="is_dock.py" line="803"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -97,92 +97,92 @@
         <translation type="obsolete">&lt;p&gt;Daar is nie genoeg oorvleuling tussen die &apos;gevaar&apos; en &apos;in gevaar&apos; laers. Kies asseblief twee laers wat mekaar oorvleul en gebruik &apos;pan&apos; en &apos;zoom&apos; om hulle sigbaar te maak. Volledige details volg:&lt;/p&gt;&lt;p&gt;Probleem om optimale area te bepaal met:&lt;/p&gt;&lt;p&gt;Gevaar: %s&lt;/p&gt;&lt;p&gt;In-gevaar: %s&lt;/p&gt;&lt;p&gt;Sigbare area: %s&lt;/p&gt;&lt;p&gt;Gevaar geografiese area: %s&lt;/p&gt;&lt;p&gt;In-gevaar geografiese area: %s&lt;/p&gt;&lt;p&gt;Details: %s&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="982"/>
+        <location filename="is_dock.py" line="994"/>
         <source>Raster exposure with vector hazard not implemented</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1231"/>
+        <location filename="is_dock.py" line="1243"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="92"/>
+        <location filename="is_dock.py" line="93"/>
         <source>InaSAFE %s %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="691"/>
+        <location filename="is_dock.py" line="703"/>
         <source>Calculating impact...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="692"/>
+        <location filename="is_dock.py" line="704"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="743"/>
+        <location filename="is_dock.py" line="755"/>
         <source>Loading results...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="744"/>
+        <location filename="is_dock.py" line="756"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="833"/>
+        <location filename="is_dock.py" line="845"/>
         <source>Analyzing this question...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="992"/>
+        <location filename="is_dock.py" line="1004"/>
         <source>Preparing hazard data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="993"/>
+        <location filename="is_dock.py" line="1005"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1001"/>
+        <location filename="is_dock.py" line="1013"/>
         <source>Preparing exposure data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1002"/>
+        <location filename="is_dock.py" line="1014"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1231"/>
+        <location filename="is_dock.py" line="1243"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1250"/>
+        <location filename="is_dock.py" line="1262"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1237"/>
+        <location filename="is_dock.py" line="1249"/>
         <source>Generating your map as a PDF document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1242"/>
+        <location filename="is_dock.py" line="1254"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1250"/>
+        <location filename="is_dock.py" line="1262"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="1145"/>
+        <location filename="is_dock.py" line="1157"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -192,57 +192,57 @@
         <translation type="obsolete">&lt;span class=&quot;label label-important&quot;&gt;Geen bruikbare funksies:&lt;/span&gt; Daar is geen funksie beskikbaar vir die geselekteerde opsies nie. Probeer &apos;n verskillend kombinasie. Kyk asseblief in die hulp text vir verdere besonderhede &lt;FIXME: add link&gt; oor wat die regte data bronne is vir die verskillende gevaar funksies. &lt;br&gt;Gevaar sluitelwoorde [%1]: %2 &lt;br&gt;In Gevaar Sluitelwoorde[%3]: %4</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="920"/>
+        <location filename="is_dock.py" line="932"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Daar is nie genoeg oorvleuling tussen die &apos;gevaar&apos; en &apos;in gevaar&apos; laers. Kies asseblief twee laers wat mekaar oorvleul en gebruik &apos;pan&apos; en &apos;zoom&apos; om hulle sigbaar te maak. Volledige details volg:&lt;/p&gt;&lt;p&gt;Probleem om optimale area te bepaal met:&lt;/p&gt;&lt;p&gt;Gevaar: %1&lt;/p&gt;&lt;p&gt;In-gevaar: %2&lt;/p&gt;&lt;p&gt;Sigbare area: %3&lt;/p&gt;&lt;p&gt;Gevaar geografiese area: %4&lt;/p&gt;&lt;p&gt;In-gevaar geografiese area: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="263"/>
+        <location filename="is_dock.py" line="264"/>
         <source>To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="269"/>
+        <location filename="is_dock.py" line="270"/>
         <source>Getting started:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="285"/>
+        <location filename="is_dock.py" line="286"/>
         <source>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="291"/>
+        <location filename="is_dock.py" line="292"/>
         <source>No valid functions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="294"/>
+        <location filename="is_dock.py" line="295"/>
         <source>Hazard keywords:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="297"/>
+        <location filename="is_dock.py" line="298"/>
         <source>Exposure keywords:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="305"/>
+        <location filename="is_dock.py" line="306"/>
         <source>You can now proceed to run your model by clicking the &lt;em&gt;Run&lt;/em&gt; button.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="307"/>
+        <location filename="is_dock.py" line="308"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="673"/>
+        <location filename="is_dock.py" line="685"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="is_dock.py" line="707"/>
+        <location filename="is_dock.py" line="719"/>
         <source>An exception occurred when starting the model.</source>
         <translation type="unfinished"></translation>
     </message>
