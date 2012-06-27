@@ -417,13 +417,16 @@ def getFunctionTitle(theFunction):
         Any exceptions are propogated
     """
 
-    # FIXME (Ole): I don't think we have to do try-except-raise. It would be the same just
-    #              to call the function and let Python's normal exception handling
-    #              propagate exceptions (just saving some lines and complexity)
+    # FIXME (Ole): I don't think we have to do try-except-raise.
+    #              It would be the same just to call the function
+    #              and let Python's normal exception handling
+    #              propagate exceptions (just saving some lines and
+    #              complexity)
     try:
         return get_function_title(theFunction)
     except:
         raise
+
 
 def calculateSafeImpact(theLayers, theFunction):
     """Thin wrapper around the safe calculate_impact function.
@@ -441,5 +444,3 @@ def calculateSafeImpact(theLayers, theFunction):
         return safe_calculate_impact(theLayers, theFunction)
     except:
         raise
-
-
