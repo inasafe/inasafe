@@ -27,6 +27,7 @@ from storage.utilities import write_keywords, read_keywords
 from storage.core import read_layer
 
 from impact_functions import get_plugins
+from impact_functions import get_function_title
 from impact_functions import get_admissible_plugins
 
 from engine.core import calculate_impact

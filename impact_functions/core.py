@@ -46,6 +46,23 @@ class FunctionProvider:
     symbol_field = 'USE_MAJOR'
 
 
+def get_function_title(func):
+    """Get title for impact function
+
+    Input
+        func: Impact function class
+
+    Output
+        it's title if available as an attribute in the class description,
+        otherwise what is returned by the function pretty_function_name.
+    """
+
+    if hasattr(func, 'title'):
+        return func.title
+    else:
+        return pretty_function_name(func)
+
+
 def get_plugins(name=None):
     """Retrieve a list of plugins that match the name you pass
 
