@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 15:01+0700\n"
+"POT-Creation-Date: 2012-06-27 15:15+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,6 +56,7 @@ msgstr "Jumlah"
 #: impact_functions/inundation/flood_OSM_building_impact.py:119
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:125
 #: impact_functions/inundation/flood_OSM_building_impact.py:126
+#: impact_functions/inundation/flood_OSM_building_impact.py:128
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:125
 #: impact_functions/earthquake/itb_building_impact_model.py:149
 #: impact_functions/earthquake/padang_building_impact_model.py:126
@@ -147,6 +148,7 @@ msgstr "Anggapan"
 #: impact_functions/inundation/flood_OSM_building_impact.py:180
 #: impact_functions/inundation/flood_OSM_building_impact.py:195
 #: impact_functions/inundation/flood_OSM_building_impact.py:197
+#: impact_functions/inundation/flood_OSM_building_impact.py:197
 msgid "Estimated buildings affected"
 msgstr "Bangunan yang diperkirakan terdampak"
 
@@ -186,6 +188,7 @@ msgstr "Bangunan-bangunan"
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
 #: impact_functions/inundation/flood_population_evacuation.py:102
+#: impact_functions/inundation/flood_OSM_building_impact.py:126
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
 #: impact_functions/earthquake/itb_building_impact_model.py:148
 #: impact_functions/earthquake/padang_building_impact_model.py:124
@@ -356,6 +359,7 @@ msgstr "OK"
 #: impact_functions/inundation/flood_OSM_building_impact.py:171
 #: impact_functions/inundation/flood_OSM_building_impact.py:186
 #: impact_functions/inundation/flood_OSM_building_impact.py:188
+#: impact_functions/inundation/flood_OSM_building_impact.py:188
 msgid "Flooded"
 msgstr "Kebanjiran"
 
@@ -423,6 +427,7 @@ msgstr "Tergenang"
 #: impact_functions/inundation/flood_OSM_building_impact.py:115
 #: impact_functions/inundation/flood_OSM_building_impact.py:122
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
+#: impact_functions/inundation/flood_OSM_building_impact.py:124
 msgid "Building type"
 msgstr "Jenis bangunan"
 
@@ -488,6 +493,7 @@ msgstr "Anggapan"
 #: impact_functions/inundation/flood_OSM_building_impact.py:157
 #: impact_functions/inundation/flood_OSM_building_impact.py:172
 #: impact_functions/inundation/flood_OSM_building_impact.py:174
+#: impact_functions/inundation/flood_OSM_building_impact.py:174
 msgid "Buildings are said to be flooded when "
 msgstr "Bangunan dikatakan banjir ketika "
 
@@ -503,6 +509,7 @@ msgstr "Bangunan dikatakan banjir ketika "
 #: impact_functions/inundation/flood_OSM_building_impact.py:158
 #: impact_functions/inundation/flood_OSM_building_impact.py:159
 #: impact_functions/inundation/flood_OSM_building_impact.py:174
+#: impact_functions/inundation/flood_OSM_building_impact.py:176
 #: impact_functions/inundation/flood_OSM_building_impact.py:176
 #, python-format
 msgid "flood levels exceed %.1f m"
@@ -521,6 +528,7 @@ msgstr "tingkat banjir melebihi %.1f m"
 #: impact_functions/inundation/flood_OSM_building_impact.py:161
 #: impact_functions/inundation/flood_OSM_building_impact.py:176
 #: impact_functions/inundation/flood_OSM_building_impact.py:178
+#: impact_functions/inundation/flood_OSM_building_impact.py:178
 msgid "in areas marked as flood prone"
 msgstr "di daerah rawan banjir ditandai sebagai"
 
@@ -536,6 +544,7 @@ msgstr "di daerah rawan banjir ditandai sebagai"
 #: impact_functions/inundation/flood_OSM_building_impact.py:168
 #: impact_functions/inundation/flood_OSM_building_impact.py:169
 #: impact_functions/inundation/flood_OSM_building_impact.py:184
+#: impact_functions/inundation/flood_OSM_building_impact.py:186
 #: impact_functions/inundation/flood_OSM_building_impact.py:186
 msgid "Not Flooded"
 msgstr "Tidak di banjir"
@@ -644,6 +653,7 @@ msgstr "Jamban Keluarga"
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:224
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:112
 #: impact_functions/inundation/flood_population_evacuation.py:112
+#: impact_functions/inundation/flood_OSM_building_impact.py:173
 #: impact_functions/earthquake/earthquake_impact_on_women.py:141
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:222
 #: impact_functions/earthquake/padang_building_impact_model.py:132
@@ -742,6 +752,7 @@ msgstr "Bantuan per minggu"
 #: impact_functions/inundation/flood_OSM_building_impact.py:165
 #: impact_functions/inundation/flood_OSM_building_impact.py:166
 #: impact_functions/inundation/flood_OSM_building_impact.py:181
+#: impact_functions/inundation/flood_OSM_building_impact.py:183
 #: impact_functions/inundation/flood_OSM_building_impact.py:183
 msgid "Buildings inundated"
 msgstr "Bangunan terendam"
@@ -910,7 +921,8 @@ msgstr "Banjir di Jakarta seperti tahun 2007"
 #: common/dynamic_translations.py:54 common/dynamic_translations.py:54
 msgid "Jakarta flood like 2007 with pump failure at Pluit, Ancol and Sunter"
 msgstr ""
-"Banjir Jakarta seperti tahun 2007 dengan pompa di Pluit, Ancol dan Sunter rusak"
+"Banjir Jakarta seperti tahun 2007 dengan pompa di Pluit, Ancol dan Sunter "
+"rusak"
 
 #: storage/titles.py:30 storage/titles.py:33 storage/titles.py:36
 #: storage/titles.py:39 storage/titles.py:44 storage/titles.py:45
@@ -1345,6 +1357,7 @@ msgstr "Jumlah pengungsi"
 #: impact_functions/inundation/flood_OSM_building_impact.py:152
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:214
 #: impact_functions/inundation/flood_OSM_building_impact.py:167
+#: impact_functions/inundation/flood_OSM_building_impact.py:169
 #: impact_functions/earthquake/earthquake_impact_on_women.py:135
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:214
 #: impact_functions/inundation/flood_OSM_building_impact.py:169
@@ -1352,6 +1365,7 @@ msgid "Action Checklist:"
 msgstr "Daftar aksi:"
 
 #: impact_functions/inundation/flood_OSM_building_impact.py:68
+#: impact_functions/inundation/flood_OSM_building_impact.py:70
 #: impact_functions/inundation/flood_OSM_building_impact.py:70
 #, python-format
 msgid "Unknown hazard type %s. Must be either \"depth\" or \"floodprone\""
@@ -1369,6 +1383,7 @@ msgstr "Semua bangunan"
 #: impact_functions/inundation/flood_OSM_building_impact.py:116
 #: impact_functions/inundation/flood_OSM_building_impact.py:123
 #: impact_functions/inundation/flood_OSM_building_impact.py:125
+#: impact_functions/inundation/flood_OSM_building_impact.py:125
 msgid "Temporarily closed"
 msgstr "Ditutup sementara"
 
@@ -1377,12 +1392,14 @@ msgstr "Ditutup sementara"
 #: impact_functions/inundation/flood_OSM_building_impact.py:153
 #: impact_functions/inundation/flood_OSM_building_impact.py:168
 #: impact_functions/inundation/flood_OSM_building_impact.py:170
+#: impact_functions/inundation/flood_OSM_building_impact.py:170
 msgid "Are the critical facilities still open?"
 msgstr "Apakah fasilitas yang penting masih terbuka?"
 
 #: impact_functions/inundation/flood_OSM_building_impact.py:145
 #: impact_functions/inundation/flood_OSM_building_impact.py:146
 #: impact_functions/inundation/flood_OSM_building_impact.py:160
+#: impact_functions/inundation/flood_OSM_building_impact.py:162
 #: impact_functions/inundation/flood_OSM_building_impact.py:162
 msgid "Breakdown by building type"
 msgstr "Merinci menurut jenis bangunan"
@@ -1523,6 +1540,7 @@ msgstr ""
 "pesan: %s"
 
 #: impact_functions/core.py:320 impact_functions/core.py:337
+#: impact_functions/core.py:337
 #, python-format
 msgid ""
 "In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
@@ -1541,5 +1559,6 @@ msgstr ""
 "vektor. Error pesan: %(error)s"
 
 #: impact_functions/inundation/flood_OSM_building_impact.py:24
+#: impact_functions/inundation/flood_OSM_building_impact.py:24
 msgid "THIS SHOULD SHOW UP IN THE GUI"
-msgstr ""
+msgstr "UNTUK MENCOBA SAJA"
