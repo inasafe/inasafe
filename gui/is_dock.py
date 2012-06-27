@@ -87,7 +87,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised
         """
-        #settrace()
+
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (
