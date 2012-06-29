@@ -3,10 +3,31 @@
 Whats new?
 ==========
 
-Changelog for version 0.3.0
+Changelog for version 0.4.0
 ...........................
+* Ability to automatically handle multipart vector data: https://github.com/AIFDR/inasafe/issues/160
+* Better error reporting:
+
+ * https://github.com/AIFDR/inasafe/issues/170
+ * https://github.com/AIFDR/inasafe/issues/161
+ * https://github.com/AIFDR/inasafe/issues/157
+
+* Bug fixing:
+
+ * https://github.com/AIFDR/inasafe/issues/159
+ * https://github.com/AIFDR/inasafe/issues/156
+ * https://github.com/AIFDR/inasafe/issues/173
+ * https://github.com/AIFDR/inasafe/issues/166
+ * https://github.com/AIFDR/inasafe/issues/162
+
+* InaSAFE APIs better defined: https://github.com/AIFDR/inasafe/issues/134
+* Release procedure developed: https://github.com/AIFDR/inasafe/issues/109
+* Added estimate of displaced people to earthquake fatality model: https://github.com/AIFDR/inasafe/commit/04f0e1d
+* Achieved 100% translation for Bahasa Indonesia
+* Made bundled test and demo data public with associated license information
 * Added AusAid and World Bank logos to dock
 * Fixed bug with flood population evacuation reporting units
+
 
 
 Changelog for version 0.3.0
