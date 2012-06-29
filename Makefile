@@ -99,12 +99,12 @@ clean:
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
 	@# Remove any generated spatial datasets from code modules:
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm $(MOD)/*.shp 2>/dev/null";)
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.shx 2>/dev/null";)
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.dbf 2>/dev/null";)
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.keywords 2>/dev/null";)
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.prj 2>/dev/null";)
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.asc 2>/dev/null";)
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm $(MOD)/*.shp 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.shx 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.dbf 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.keywords 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.prj 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.asc 2>/dev/null";) 2>/dev/null
 
 
 # Run the test suite followed by pep8 style checking
