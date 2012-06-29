@@ -21,6 +21,7 @@
 NONGUI := storage engine impact_functions common
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
+CODE := $(ALL) .
 
 # LOCALES = space delimited list of iso codes to generate po files for
 LOCALES = id af
@@ -97,6 +98,14 @@ clean:
 	@-find . -name '*.pyo' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
+	@# Remove any generated spatial datasets from code modules:
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm $(MOD)/*.shp 2>/dev/null";)
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.shx 2>/dev/null";)
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.dbf 2>/dev/null";)
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.keywords 2>/dev/null";)
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.prj 2>/dev/null";)
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.asc 2>/dev/null";)
+
 
 # Run the test suite followed by pep8 style checking
 test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit test-translations
