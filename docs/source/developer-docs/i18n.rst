@@ -16,9 +16,14 @@ Quick Reference
 
 The translation system works differently for different parts of the project:
 
-* Strings that appear in the InaSAFE user interface (buttons, help strings, menu items etc)
-* Strings that appear in the Python code that constitutes the rest of InaSAFE including the impact functions
+* Strings that appear in the InaSAFE graphical user interface (gui module). These include buttons, help strings, menu items etc
+* Strings that appear in the Python code which constitutes the rest of InaSAFE including the impact functions
 * Strings that appear in data and keywords used by InaSAFE
+
+Flagging strings for translation is done differently for these three cases
+and are treated separately in the next three sections. However, making and
+deploying the translations is unified and takes care of all three and
+described in section "Make translations" below.
 
 
 Translation of strings in the gui module
@@ -74,8 +79,8 @@ The translation system works by scanning the Python code for strings marked as d
           building_type = internationalised_values[building_type]
 
 
-Update translations
--------------------
+Make translations
+-----------------
 
 When new strings have been added as described above the procedure to translate them is (example is given for LANG=id):
 
