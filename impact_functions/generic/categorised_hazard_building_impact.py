@@ -8,13 +8,13 @@ from common.utilities import ugettext as _
 class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
 
-    :param requires category=='hazard' and \
-                    unit=='normalised' and \
-                    layertype=='raster'
+    :param requires category == 'hazard' and \
+                    unit == 'normalised' and \
+                    layertype == 'raster'
 
-    :param requires category=='exposure' and \
-                    subcategory=='building' and \
-                    layertype=='vector'
+    :param requires category == 'exposure' and \
+                    subcategory in ['building', 'structure'] and \
+                    layertype == 'vector'
     """
 
     target_field = 'ICLASS'

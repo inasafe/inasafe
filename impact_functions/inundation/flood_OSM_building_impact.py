@@ -10,18 +10,20 @@ from common.dynamic_translations import names as internationalised_values
 class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
 
-    :param requires category=='hazard' and \
+    :param requires category == 'hazard' and \
                     subcategory in ['flood', 'tsunami']
 
-    :param requires category=='exposure' and \
+    :param requires category == 'exposure' and \
                     subcategory in ['building', 'structure'] and \
-                    layertype=='vector'
+                    layertype == 'vector'
     """
 
     target_field = 'INUNDATED'
     plugin_name = _('Be temporarily closed')
-    #title = _('Be temporarily closed')
+
+    # FIXME (Ole): Working on issue #131
     title = _('THIS SHOULD SHOW UP IN THE GUI')
+    #title = _('Be temporarily closed')
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
