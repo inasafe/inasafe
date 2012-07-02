@@ -61,8 +61,8 @@ flood_population_style = dict(target_field=None,
     #            dict(colour='#79C900', quantity=, transparency=20),
     #            dict(colour='#79C900', quantity=, transparency=20),
 #            dict(colour='#CEED00', quantity=, transparency=20),
-                 
-                 
+
+
 style_classes = [dict(colour='#EEFFEE', quantity=0.01, transparency=100,
                       label=_('Low')),
                  dict(colour='#38A800', quantity=1.05, transparency=0),
