@@ -14,7 +14,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     subcategory in ['flood', 'tsunami']
 
     :param requires category=='exposure' and \
-                    subcategory=='building' and \
+                    subcategory in ['building', 'structure'] and \
                     layertype=='vector'
     """
 
@@ -61,11 +61,23 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 x = x > threshold
             elif hazard_type == 'floodprone':
                 # Use interpolated polygon attribute
-                res = attributes[i]['FLOODPRONE']
-                if res is None:
-                    x = False
+                atts = attributes[i]
+
+                if 'FLOODPRONE' in atts:
+                    res = atts['FLOODPRONE']
+                    if res is None:
+                        x = False
+                    else:
+                        x = res.lower() == 'yes'
                 else:
-                    x = res.lower() == 'yes'
+                    # If there isn't a flood prone attribute,
+                    # assume that building is wet if inside polygon
+                    # as flag by generic attribute AFFECTED
+                    res = atts['Affected']
+                    if res is None:
+                        x = False
+                    else:
+                        x = res
             else:
                 msg = (_('Unknown hazard type %s. '
                          'Must be either "depth" or "floodprone"')
