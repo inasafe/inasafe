@@ -52,6 +52,17 @@ flood_population_style = dict(target_field=None,
 #earthquake_fatality_style = dict(target_field=None,
 #                                 style_classes=style_classes)
 
+# Earthquake fatality raster style
+# Obtain the min and max fatalities and scale accordingly
+    #style_classes = [dict(colour='#FFFFFF', quantity=0.0, transparency=100),
+    #            dict(colour='#F713FF', quantity=, transparency=20),
+    #            dict(colour='#D50DC3', quantity=, transparency=20),
+    #            dict(colour='#79C900', quantity=, transparency=20),
+    #            dict(colour='#79C900', quantity=, transparency=20),
+    #            dict(colour='#79C900', quantity=, transparency=20),
+#            dict(colour='#CEED00', quantity=, transparency=20),
+                 
+                 
 style_classes = [dict(colour='#EEFFEE', quantity=0.01, transparency=100,
                       label=_('Low')),
                  dict(colour='#38A800', quantity=1.05, transparency=0),
