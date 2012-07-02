@@ -414,10 +414,14 @@ be appended respectively, along with the related number. For example version
 0.1.0 alpha 1 would be tagged as :samp:`version-0_1_0a1`. To tag the release
 simply do it in git as illustrated below.::
 
-   git tag release-0_1_0
+   git tag version-0_1_0
    git push --tags
 
-.. note:: Replace 'dot' separators with underscores for the version number.
+.. note:: 1) Replace 'dot' separators with underscores for the version number.
+   2) You can differentiate release **branches** from release **tags** by the
+   fact that branch names have only the minor version number (e.g.
+   :samp:`version-0_4`) whereas release tags are reserved for point releases
+   (e.g. :samp:`version-0_4_1).
 
 **Outcome:** The release is tagged in GIT and can be checked out at any point
 in the future.
