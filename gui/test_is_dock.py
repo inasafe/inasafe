@@ -383,9 +383,8 @@ class ISDockTest(unittest.TestCase):
         DOCK.cboHazard.setCurrentIndex(myIndex)
 
         # Exposure layers
-        myIndex = DOCK.cboExposure.findText(
-                                    'Population density (5kmx5km)')
-        assert myIndex != -1, 'Population density (5kmx5km) not found'
+        myIndex = DOCK.cboExposure.findText('People')
+        assert myIndex != -1, 'People'
         DOCK.cboExposure.setCurrentIndex(myIndex)
 
         # Choose impact function
@@ -397,7 +396,7 @@ class ISDockTest(unittest.TestCase):
 
         myDict = getUiState(DOCK)
         myExpectedDict = {'Hazard': 'Padang 2009 scenario',
-                          'Exposure': 'Population density (5kmx5km)',
+                          'Exposure': 'People',
                           'Impact Function': 'Earthquake Fatality Function',
                           'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -436,8 +435,8 @@ class ISDockTest(unittest.TestCase):
         DOCK.cboHazard.setCurrentIndex(myIndex)
 
         # Exposure layers
-        myIndex = DOCK.cboExposure.findText('Population density (5kmx5km)')
-        assert myIndex != -1, 'Population density (5kmx5km) not found'
+        myIndex = DOCK.cboExposure.findText('People')
+        assert myIndex != -1, 'People'
         DOCK.cboExposure.setCurrentIndex(myIndex)
 
         # Choose impact function
@@ -449,7 +448,7 @@ class ISDockTest(unittest.TestCase):
 
         myDict = getUiState(DOCK)
         myExpectedDict = {'Hazard': 'Padang 2009 scenario',
-                          'Exposure': 'Population density (5kmx5km)',
+                          'Exposure': 'People',
                           'Impact Function': 'Earthquake Fatality Function',
                           'Run Button Enabled': True}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -626,7 +625,7 @@ class ISDockTest(unittest.TestCase):
         myExpectedDict = {'Run Button Enabled': True,
                           'Impact Function': 'Need evacuation',
                           'Hazard': 'Jakarta 2007 flood',
-                          'Exposure': 'Population density (5kmx5km)'}
+                          'Exposure': 'People'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
                             myDict, myExpectedDict, combosToString(DOCK))
         assert myDict == myExpectedDict, myMessage

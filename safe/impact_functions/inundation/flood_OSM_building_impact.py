@@ -10,16 +10,20 @@ from common.dynamic_translations import names as internationalised_values
 class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
 
-    :param requires category=='hazard' and \
+    :param requires category == 'hazard' and \
                     subcategory in ['flood', 'tsunami']
 
-    :param requires category=='exposure' and \
-                    subcategory=='building' and \
-                    layertype=='vector'
+    :param requires category == 'exposure' and \
+                    subcategory in ['building', 'structure'] and \
+                    layertype == 'vector'
     """
 
     target_field = 'INUNDATED'
     plugin_name = _('Be temporarily closed')
+
+    # FIXME (Ole): Working on issue #131
+    title = _('THIS SHOULD SHOW UP IN THE GUI')
+    #title = _('Be temporarily closed')
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
@@ -59,11 +63,23 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 x = x > threshold
             elif hazard_type == 'floodprone':
                 # Use interpolated polygon attribute
-                res = attributes[i]['FLOODPRONE']
-                if res is None:
-                    x = False
+                atts = attributes[i]
+
+                if 'FLOODPRONE' in atts:
+                    res = atts['FLOODPRONE']
+                    if res is None:
+                        x = False
+                    else:
+                        x = res.lower() == 'yes'
                 else:
-                    x = res.lower() == 'yes'
+                    # If there isn't a flood prone attribute,
+                    # assume that building is wet if inside polygon
+                    # as flag by generic attribute AFFECTED
+                    res = atts['Affected']
+                    if res is None:
+                        x = False
+                    else:
+                        x = res
             else:
                 msg = (_('Unknown hazard type %s. '
                          'Must be either "depth" or "floodprone"')

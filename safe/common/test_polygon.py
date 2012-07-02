@@ -1888,8 +1888,8 @@ class Test_Polygon(unittest.TestCase):
             clip_lines_by_polygon(test_lines, test_polygon)
 
         # These lines have compontes both inside and outside
-        assert len(inside_line_segments) <= 33
-        assert len(outside_line_segments) <= 49
+        assert len(inside_line_segments) == 13
+        assert len(outside_line_segments) == 17
 
         # Store for visual inspection by e.g. QGis
         if False:

@@ -34,6 +34,7 @@ from qgis.core import (QgsMapLayer,
                        QgsCoordinateTransform)
 from is_impact_calculator import ISImpactCalculator
 from is_safe_interface import (availableFunctions,
+                               getFunctionTitle,
                                getOptimalExtent,
                                getBufferedExtent,
                                internationalisedNames)
@@ -86,7 +87,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         Raises:
            no exceptions explicitly raised
         """
-        #settrace()
+
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s %s' % (
@@ -569,8 +570,19 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         try:
             myDict = availableFunctions(myList)
             # Populate the hazard combo with the available functions
-            for myFunction in myDict:  # Use only key
-                self.addComboItemInOrder(self.cboFunction, myFunction)
+            for myFunctionID in myDict:
+                myFunction = myDict[myFunctionID]
+                myTitle = getFunctionTitle(myFunction)
+
+                # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
+                #print
+                #print 'myFunction (ID)', myFunctionID
+                #print 'myFunction', myFunction
+                #print 'Function title:', myTitle
+
+                # FIXME (Ole): How do we show the title and and the same
+                # time keep myFunction as the canonical function identifier
+                self.addComboItemInOrder(self.cboFunction, myFunctionID)
         except Exception, e:
             raise e
 

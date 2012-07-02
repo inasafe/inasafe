@@ -34,7 +34,7 @@ from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
 from safe.common.numerics import nanallclose
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _
@@ -1802,6 +1802,55 @@ class Test_IO(unittest.TestCase):
         string2 = _('Hello2!')  # translate as 'Hi2'
         assert string1 == 'Hi'
         assert string2 == 'Hi2'
+
+    def test_multipart_polygon_raises_exception(self):
+        """Multipart polygons raise exception
+        """
+
+        hazard_filename = ('%s/boundaries/rw_jakarta.shp' % DATADIR)
+
+        try:
+            H = read_layer(hazard_filename)
+        except Exception, e:
+            msg = 'Wrong error message: %s' % e
+            assert 'convert multipart' in str(e), msg
+        else:
+            msg = 'Multipart polygon should have raised exception'
+            raise Exception(msg)
+
+    def test_projection_comparisons(self):
+        """Projection information can be correctly compared
+        """
+
+        # Although the two test datasets have the same projection,
+        # this example failed with the message:
+        # The reason was that comparison was done with get_projection()
+        # rather than the projection objects themselves.
+
+        #Projections must be the same: I got
+        #GEOGCS["GCS_WGS_1984",DATUM["WGS_1984",
+        #       SPHEROID["WGS_1984",6378137,298.257223563]],
+        #       PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]] and
+        #GEOGCS["WGS 84",DATUM["WGS_1984",
+        #       SPHEROID["WGS 84",6378137,298.257223563,
+        #       AUTHORITY["EPSG","7030"]],TOWGS84[0,0,0,0,0,0,0],
+        #       AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,
+        #       AUTHORITY["EPSG","8901"]],UNIT["degree",0.01745329251994328,
+        #       AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/rw_jakarta_singlepart.shp' % TESTDATA)
+        exposure_filename = ('%s/indonesia_highway.shp' % EXPDATA)
+
+        # Read
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        Hp = H.projection
+        Ep = E.projection
+        msg = 'Projections did not match: %s != %s' % (Hp, Ep)
+        assert Hp == Ep, msg
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test')

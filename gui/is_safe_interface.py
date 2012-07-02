@@ -28,6 +28,7 @@ import unicodedata
 
 # SAFE functionality
 from safe_api import get_admissible_plugins
+from safe_api import get_function_title
 from safe_api import get_plugins as safe_get_plugins
 from safe_api import read_keywords, bbox_intersection
 from safe_api import write_keywords as safe_write_keywords
@@ -401,6 +402,28 @@ def getSafeImpactFunctions(theFunction=None):
     """
     try:
         return safe_get_plugins(makeAscii(theFunction))
+    except:
+        raise
+
+
+def getFunctionTitle(theFunction):
+    """Thin wrapper around the safe get_function_title.
+
+    Args:
+        * theFunction - SAFE impact function instance to be used
+    Returns:
+        The title of a safe impact function is returned
+    Raises:
+        Any exceptions are propogated
+    """
+
+    # FIXME (Ole): I don't think we have to do try-except-raise.
+    #              It would be the same just to call the function
+    #              and let Python's normal exception handling
+    #              propagate exceptions (just saving some lines and
+    #              complexity)
+    try:
+        return get_function_title(theFunction)
     except:
         raise
 

@@ -189,7 +189,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         assert myKeywords == {'category': 'exposure',
                               'subcategory': 'population',
                               'datatype': 'density',
-                              'title': 'Population density (5kmx5km)'}
+                              'title': 'People'}
 
         myKeywords = readKeywordsFromFile(self.vectorPath)
         assert myKeywords == {'category': 'exposure',

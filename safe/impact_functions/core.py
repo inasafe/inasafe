@@ -46,6 +46,23 @@ class FunctionProvider:
     symbol_field = 'USE_MAJOR'
 
 
+def get_function_title(func):
+    """Get title for impact function
+
+    Input
+        func: Impact function class
+
+    Output
+        it's title if available as an attribute in the class description,
+        otherwise what is returned by the function pretty_function_name.
+    """
+
+    if hasattr(func, 'title'):
+        return func.title
+    else:
+        return pretty_function_name(func)
+
+
 def get_plugins(name=None):
     """Retrieve a list of plugins that match the name you pass
 
@@ -317,10 +334,11 @@ def get_question(hazard_title, exposure_title, function_title):
         function_title
     """
 
-    return _('In the event of <i>%s</i> how many '
-             '<i>%s</i> might <i>%s</i>') % (hazard_title.lower(),
-                                             exposure_title.lower(),
-                                             function_title.lower())
+    return (_('In the event of <i>%(hazard)s</i> how many '
+              '<i>%(exposure)s</i> might <i>%(impact)s</i>')
+            % {'hazard': hazard_title.lower(),
+               'exposure': exposure_title.lower(),
+               'impact': function_title.lower()})
 
 
 def aggregate_point_data(data=None, boundaries=None,
