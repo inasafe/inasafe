@@ -6,27 +6,27 @@ import os
 from os.path import join
 
 # Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
+pardir = os.path.abspath(join(os.path.dirname(__file__), '..', '..'))
 sys.path.append(pardir)
 
 # Import InaSAFE modules
-from engine.core import calculate_impact
+from safe.engine.core import calculate_impact
 
-from storage.core import read_layer
-from storage.core import write_vector_data
-from storage.core import write_raster_data
-from storage.vector import Vector
-from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
+from safe.storage.core import read_layer
+from safe.storage.core import write_vector_data
+from safe.storage.core import write_raster_data
+from safe.storage.vector import Vector
+from safe.storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
 
-from common.polygon import separate_points_by_polygon, clip_lines_by_polygon
-from common.polygon import is_inside_polygon
-from common.interpolation2d import interpolate_raster
-from common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
-from common.numerics import nanallclose
-from common.utilities import VerificationError
-from common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.common.polygon import separate_points_by_polygon, clip_lines_by_polygon
+from safe.common.polygon import is_inside_polygon
+from safe.common.interpolation2d import interpolate_raster
+from safe.common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
+from safe.common.numerics import nanallclose
+from safe.common.utilities import VerificationError
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 
-from impact_functions import get_plugins
+from safe.impact_functions import get_plugins
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,

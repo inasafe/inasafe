@@ -9,8 +9,8 @@ using it.
 import numpy
 import types
 import keyword
-from common.polygon import inside_polygon
-from common.utilities import ugettext as _
+from safe.common.polygon import inside_polygon
+from safe.common.utilities import ugettext as _
 
 
 class PluginMount(type):

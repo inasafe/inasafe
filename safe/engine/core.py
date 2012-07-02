@@ -7,16 +7,16 @@ import os
 import sys
 import numpy
 
-from storage.projection import Projection
-from storage.projection import DEFAULT_PROJECTION
-from storage.utilities import unique_filename
-from storage.utilities import bbox_intersection
-from storage.utilities import buffered_bounding_box
-from storage.utilities import is_sequence
-from common.utilities import verify
-from storage.core import bboxlist2string, bboxstring2list
-from storage.core import check_bbox_string
-from storage.core import read_layer
+from safe.storage.projection import Projection
+from safe.storage.projection import DEFAULT_PROJECTION
+from safe.storage.utilities import unique_filename
+from safe.storage.utilities import bbox_intersection
+from safe.storage.utilities import buffered_bounding_box
+from safe.storage.utilities import is_sequence
+from safe.common.utilities import verify
+from safe.storage.core import bboxlist2string, bboxstring2list
+from safe.storage.core import check_bbox_string
+from safe.storage.core import read_layer
 from utilities import REQUIRED_KEYWORDS
 
 import logging

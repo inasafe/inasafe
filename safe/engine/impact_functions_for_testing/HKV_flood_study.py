@@ -1,9 +1,9 @@
 import numpy
 from numpy import nansum as sum
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layers
-from storage.raster import Raster
-from common.utilities import verify
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layers
+from safe.storage.raster import Raster
+from safe.common.utilities import verify
 
 
 class HKVFloodImpactFunctionTEST(FunctionProvider):

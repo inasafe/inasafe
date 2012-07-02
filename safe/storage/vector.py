@@ -6,10 +6,10 @@ import numpy
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from common.polygon import inside_polygon, clip_line_by_polygon
-from common.numerics import ensure_numeric
-from common.utilities import verify
-from common.dynamic_translations import names as internationalised_titles
+from safe.common.polygon import inside_polygon, clip_line_by_polygon
+from safe.common.numerics import ensure_numeric
+from safe.common.utilities import verify
+from safe.common.dynamic_translations import names as internationalised_titles
 
 from layer import Layer
 from projection import Projection

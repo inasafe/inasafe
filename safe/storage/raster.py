@@ -5,9 +5,9 @@ import os
 import numpy
 import copy as copy_module
 from osgeo import gdal
-from common.utilities import verify
-from common.numerics import nanallclose
-from common.dynamic_translations import names as internationalised_titles
+from safe.common.utilities import verify
+from safe.common.numerics import nanallclose
+from safe.common.dynamic_translations import names as internationalised_titles
 
 from layer import Layer
 from projection import Projection

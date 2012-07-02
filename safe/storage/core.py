@@ -8,7 +8,7 @@ import os
 
 from vector import Vector
 from raster import Raster
-from common.utilities import verify
+from safe.common.utilities import verify
 
 # FIXME (Ole): make logging work again
 import logging

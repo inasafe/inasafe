@@ -1,8 +1,8 @@
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from storage.vector import Vector
-from common.utilities import ugettext as _
-from storage.vector import convert_line_to_points
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.storage.vector import Vector
+from safe.common.utilities import ugettext as _
+from safe.storage.vector import convert_line_to_points
 
 
 class FloodRoadImpactFunction(FunctionProvider):

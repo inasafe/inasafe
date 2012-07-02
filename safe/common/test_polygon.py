@@ -9,7 +9,7 @@ sys.path.append(pardir)
 
 from math import sqrt, pi
 
-from storage.vector import Vector
+from safe.storage.vector import Vector
 
 from polygon import *
 from testing import test_polygon, test_lines

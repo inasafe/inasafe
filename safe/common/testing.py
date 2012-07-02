@@ -10,7 +10,8 @@ import types
 # FIXME (Ole): Use environment variable for this.
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                       '..',
-                                      '..'))  # Assuming test data two lvls up
+                                      '..',
+                                      '..'))  # Assuming test data three lvls up
 
 # Location of test data
 DATANAME = 'inasafe_data'

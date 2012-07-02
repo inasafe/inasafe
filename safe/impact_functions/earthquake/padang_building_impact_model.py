@@ -19,14 +19,14 @@ Class Building Type                              Median (MMI)  Beta (MMI)
 9     Timber frame residential                        10.5     0.15
 """
 
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from impact_functions.core import get_question
-from storage.vector import Vector
-from common.utilities import ugettext as _
-from common.numerics import lognormal_cdf
-from common.tables import Table, TableRow
-from impact_functions.mappings import osm2padang, sigab2padang
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.impact_functions.core import get_question
+from safe.storage.vector import Vector
+from safe.common.utilities import ugettext as _
+from safe.common.numerics import lognormal_cdf
+from safe.common.tables import Table, TableRow
+from safe.impact_functions.mappings import osm2padang, sigab2padang
 
 
 # Damage curves for each of the nine classes derived from the Padang survey

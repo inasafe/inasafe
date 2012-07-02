@@ -1,11 +1,11 @@
 import sys
 import numpy
 
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 
-from impact_functions.utilities import Damage_curve
-from storage.vector import Vector
+from safe.impact_functions.utilities import Damage_curve
+from safe.storage.vector import Vector
 
 # A maximum floating point number for this package
 MAXFLOAT = float(sys.maxint)

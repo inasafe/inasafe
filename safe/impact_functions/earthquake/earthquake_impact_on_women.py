@@ -1,11 +1,11 @@
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from impact_functions.core import get_question
-from impact_functions.styles import earthquake_fatality_style as style_info
-from storage.raster import Raster
-from common.tables import Table, TableRow
-from common.utilities import ugettext as _
-from common.numerics import normal_cdf
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.impact_functions.core import get_question
+from safe.impact_functions.styles import earthquake_fatality_style as style_info
+from safe.storage.raster import Raster
+from safe.common.tables import Table, TableRow
+from safe.common.utilities import ugettext as _
+from safe.common.numerics import normal_cdf
 
 import numpy
 

@@ -1,9 +1,9 @@
 import numpy
 
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from storage.raster import Raster
-from common.numerics import normal_cdf
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.storage.raster import Raster
+from safe.common.numerics import normal_cdf
 
 
 class EmpiricalFatalityFunction(FunctionProvider):

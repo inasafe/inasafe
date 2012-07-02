@@ -23,7 +23,7 @@ for f in os.listdir(dirname):
             print 'WARNING: module %s does not exist' % f
 
 
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_plugins  # FIXME: Deprecate
-from impact_functions.core import get_admissible_plugins
-from impact_functions.core import compatible_layers
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_plugins  # FIXME: Deprecate
+from safe.impact_functions.core import get_admissible_plugins
+from safe.impact_functions.core import compatible_layers

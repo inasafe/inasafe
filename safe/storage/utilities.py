@@ -10,8 +10,8 @@ from osgeo import ogr
 from tempfile import mkstemp
 from datetime import date
 
-from common.numerics import ensure_numeric
-from common.utilities import verify, VerificationError
+from safe.common.numerics import ensure_numeric
+from safe.common.utilities import verify, VerificationError
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'Affected'

@@ -6,7 +6,7 @@ import os
 from osgeo import gdal
 
 # Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.append(pardir)
 
 from raster import Raster
@@ -33,12 +33,12 @@ from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
-from common.numerics import nanallclose
-from common.testing import TESTDATA, HAZDATA, EXPDATA
-from common.testing import FEATURE_COUNTS
-from common.testing import GEOTRANSFORMS
-from common.utilities import ugettext as _
-from common.utilities import VerificationError
+from safe.common.numerics import nanallclose
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.common.testing import FEATURE_COUNTS
+from safe.common.testing import GEOTRANSFORMS
+from safe.common.utilities import ugettext as _
+from safe.common.utilities import VerificationError
 
 
 # Auxiliary function for raster test

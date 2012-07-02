@@ -16,7 +16,7 @@ import numpy
 from math import sqrt
 from random import uniform, seed as seed_function
 
-from common.numerics import ensure_numeric
+from safe.common.numerics import ensure_numeric
 
 
 def separate_points_by_polygon(points, polygon,

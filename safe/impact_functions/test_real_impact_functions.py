@@ -6,11 +6,11 @@ import os
 import unittest
 
 # Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.append(pardir)
 
-from impact_functions.core import get_admissible_plugins
-from impact_functions.core import requirements_collect
+from safe.impact_functions.core import get_admissible_plugins
+from safe.impact_functions.core import requirements_collect
 
 
 class Test_real_plugins(unittest.TestCase):

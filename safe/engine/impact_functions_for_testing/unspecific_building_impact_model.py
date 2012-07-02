@@ -1,6 +1,6 @@
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from storage.vector import Vector
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.storage.vector import Vector
 
 
 class EarthquakeBuildingDamageFunction(FunctionProvider):

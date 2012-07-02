@@ -1,7 +1,7 @@
 """Class Layer
 """
 
-from common.utilities import verify
+from safe.common.utilities import verify
 from projection import Projection
 
 

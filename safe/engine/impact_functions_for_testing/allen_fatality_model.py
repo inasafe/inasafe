@@ -1,7 +1,7 @@
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layers
-from impact_functions.styles import earthquake_fatality_style as style_info
-from storage.raster import Raster
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layers
+from safe.impact_functions.styles import earthquake_fatality_style as style_info
+from safe.storage.raster import Raster
 import numpy
 
 
