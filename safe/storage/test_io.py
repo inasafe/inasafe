@@ -1797,10 +1797,12 @@ class Test_IO(unittest.TestCase):
         # Make sure the lang environment is set before using
         # translation layer
         os.environ['LANG'] = 'id'
+        assert os.environ['LANG'] == 'id'
         #must be after above
         string1 = _('Hello!')  # translate as 'Hi'
         string2 = _('Hello2!')  # translate as 'Hi2'
-        assert string1 == 'Hi'
+        msg = 'Expected %s, got %s' % ('Hi', string1)
+        assert string1 == 'Hi', msg
         assert string2 == 'Hi2'
 
     def test_multipart_polygon_raises_exception(self):

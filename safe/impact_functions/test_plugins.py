@@ -9,17 +9,17 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 # FIXME (Ole): Must use fully qualified path for these
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_plugins
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_plugins
 
-from core import requirements_collect
-from core import requirement_check
-from core import compatible_layers
-from core import aggregate
-from utilities import Damage_curve
+from safe.impact_functions.core import requirements_collect
+from safe.impact_functions.core import requirement_check
+from safe.impact_functions.core import compatible_layers
+from safe.impact_functions.core import aggregate
+from safe.impact_functions.utilities import Damage_curve
 
-from storage.core import read_layer
-from common.testing import TESTDATA
+from safe.storage.core import read_layer
+from safe.common.testing import TESTDATA
 
 DEFAULT_PLUGINS = ('Earthquake Fatality Function',)
 
@@ -27,8 +27,8 @@ DEFAULT_PLUGINS = ('Earthquake Fatality Function',)
 # is to be run independently - dont remove
 # If any of these get reinstated as "official" public impact functions,
 # remove from here and update test to use the real one.
-from engine.impact_functions_for_testing import empirical_fatality_model
-from engine.impact_functions_for_testing import allen_fatality_model
+from safe.engine.impact_functions_for_testing import empirical_fatality_model
+from safe.engine.impact_functions_for_testing import allen_fatality_model
 
 
 # FIXME (Ole): Change H, E to layers.
