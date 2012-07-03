@@ -141,7 +141,14 @@ class Raster(Layer):
         # File must be kept open, otherwise GDAL methods segfault.
         fid = self.fid = gdal.Open(filename, gdal.GA_ReadOnly)
         if fid is None:
-            msg = 'Could not open file %s' % filename
+            # As gdal doesn't return to us what the problem is we have to
+            # figure it out ourselves. Maybe capture stderr?
+            if not os.path.exists(filename):
+                msg = 'Could not find file %s' % filename
+            else:
+                msg = ('File %s exists, but could not be read. '
+                       'Please check if the file can be opened with '
+                       'e.g. qgis or gdalinfo' % filename)
             raise Exception(msg)
 
         # Record raster metadata from file
