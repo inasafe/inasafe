@@ -131,7 +131,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         style_classes[1]['label'] = _('Low [%i people/cell]') % classes[1]
         style_classes[4]['label'] = _('Medium [%i people/cell]') % classes[4]
-        style_classes[7]['label'] = _('High [%i people/cell]')  % classes[7]
+        style_classes[7]['label'] = _('High [%i people/cell]') % classes[7]
 
         style_info['legend_title'] = _('Population Density')
 
