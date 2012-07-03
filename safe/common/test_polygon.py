@@ -4,16 +4,27 @@ import sys
 import os
 
 # Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.append(pardir)
 
 from math import sqrt, pi
 
 from safe.storage.vector import Vector
 
-from polygon import *
-from testing import test_polygon, test_lines
-from numerics import ensure_numeric
+from safe.common.polygon import (separate_points_by_polygon,
+                                 is_inside_polygon,
+                                 is_outside_polygon,
+                                 point_on_line,
+                                 outside_polygon,
+                                 inside_polygon,
+                                 clip_lines_by_polygon,
+                                 in_and_outside_polygon,
+                                 intersection,
+                                 join_line_segments,
+                                 clip_line_by_polygon,
+                                 populate_polygon)
+from safe.common.testing import test_polygon, test_lines
+from safe.common.numerics import ensure_numeric
 
 
 def linear_function(x, y):
