@@ -11,21 +11,22 @@ sys.path.append(pardir)
 
 # Import InaSAFE modules
 from engine.core import calculate_impact
-from engine.interpolation2d import interpolate_raster
-from engine.polygon import separate_points_by_polygon, clip_lines_by_polygon
-from engine.polygon import is_inside_polygon
-from common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
-from storage.core import read_layer
 
-from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
-from storage.utilities import nanallclose
+from storage.core import read_layer
 from storage.core import write_vector_data
 from storage.core import write_raster_data
 from storage.vector import Vector
-from impact_functions import get_plugins
-from common.utilities import VerificationError
+from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
 
-from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
+from common.polygon import separate_points_by_polygon, clip_lines_by_polygon
+from common.polygon import is_inside_polygon
+from common.interpolation2d import interpolate_raster
+from common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
+from common.numerics import nanallclose
+from common.utilities import VerificationError
+from common.testing import TESTDATA, HAZDATA, EXPDATA
+
+from impact_functions import get_plugins
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
@@ -332,6 +333,39 @@ class Test_Engine(unittest.TestCase):
         assert numpy.alltrue(C >= xmin)
         assert numpy.alltrue(C <= xmax)
         assert numpy.alltrue(C >= 0)
+
+    def test_earthquake_impact_on_women_example(self):
+        """Earthquake impact on women example works
+        """
+
+        # This only tests that the function runs and has the right
+        # strings in the output. No test of quantitative numbers
+        # (because we can't).
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = '%s/Earthquake_Ground_Shaking_clip.tif' % TESTDATA
+        exposure_filename = '%s/Population_2010_clip.tif' % TESTDATA
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        plugin_name = 'Suffer because of gender'
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+        I = read_layer(impact_filename)  # Can read result
+
+        assert 'women displaced' in impact_layer.get_impact_summary()
+        assert 'pregnant' in impact_layer.get_impact_summary()
 
     def test_jakarta_flood_study(self):
         """HKV Jakarta flood study calculated correctly using aligned rasters
@@ -907,7 +941,7 @@ class Test_Engine(unittest.TestCase):
                                       linear_function(xi, eta),
                                       rtol=1e-12, atol=1e-12)
 
-    def test_riab_interpolation(self):
+    def test_interpolation_functions(self):
         """Interpolation using Raster and Vector objects
         """
 
@@ -981,7 +1015,7 @@ class Test_Engine(unittest.TestCase):
         msg = 'Raster data was %s, should have been %s' % (AA, A)
         assert numpy.allclose(AA, A), msg
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = R.interpolate(V, attribute_name='value')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
@@ -1020,7 +1054,7 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
         attributes = exposure_vector.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = hazard_raster.interpolate(exposure_vector,
                                       attribute_name='MMI')
         Icoordinates = I.get_geometry()
@@ -1091,7 +1125,7 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
         attributes = exposure_vector.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = hazard_raster.interpolate(exposure_vector,
                                       attribute_name='depth')
         Icoordinates = I.get_geometry()
@@ -1258,7 +1292,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute_name=None)  # Take all attributes across
 
@@ -1318,7 +1352,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute_name=None)  # Take all attributes across
         #I.write_to_file('MM_res.shp')
@@ -1444,7 +1478,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute='Catergory')  # Spelling is as in test data
         #I.write_to_file('MM_res.shp')
@@ -1653,7 +1687,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
@@ -1662,7 +1696,7 @@ class Test_Engine(unittest.TestCase):
         N = len(I_attributes)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if False:
+        if False:  # True:
             L = Vector(geometry=H_geometry, geometry_type='polygon',
                        data=H_attributes)
             L.write_to_file('test_polygon.shp')
@@ -1765,7 +1799,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute='Catergory')  # Spelling is as in test data
         I_geometry = I.get_geometry()
@@ -1839,7 +1873,7 @@ class Test_Engine(unittest.TestCase):
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
-        # Test riab's interpolation function
+        # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute=None)  # Take all attributes across
         I_geometry = I.get_geometry()
@@ -1848,7 +1882,7 @@ class Test_Engine(unittest.TestCase):
         N = len(I_attributes)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if True:
+        if False:  # True:
             L = Vector(geometry=H_geometry, geometry_type='polygon',
                        data=H_attributes)
             L.write_to_file('test_polygon.shp')

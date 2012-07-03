@@ -13,7 +13,7 @@ These instructions are for setting up a development version on a Debian based
 linux system such as Ubuntu or Mint.
 
 1. Goto the area where you do development, e.g cd ~/sandbox
-2. wget https://raw.github.com/AIFDR/inasafe/master/scripts/inasafe-install
+2. wget bit.ly/inasafe-install
 3. source ./inasafe-install
 
 To verify that the installation works you can run the test suite from the

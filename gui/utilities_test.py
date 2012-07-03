@@ -11,8 +11,8 @@ from qgis.core import (QgsApplication,
                       QgsCoordinateReferenceSystem)
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
-from storage.utilities_test import TESTDATA
-from storage.utilities import read_keywords
+from safe_api import TESTDATA
+from safe_api import read_keywords
 import hashlib
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app

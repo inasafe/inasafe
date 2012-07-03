@@ -20,13 +20,17 @@ if __name__ == '__main__':
 
     locales = sys.argv[2:]
 
-    commands = {'QT': 'lrelease %s/gui/i18n/inasafe_%s.ts',
-                'GT': 'msgfmt --statistics %s/i18n/%s/LC_MESSAGES/inasafe.po'}
+    files = {'QT': '%s/gui/i18n/inasafe_%s.ts',
+             'GT': '%s/i18n/%s/LC_MESSAGES/inasafe.po'}
+
+    commands = {'QT': 'lrelease %s',
+                'GT': 'msgfmt --statistics %s'}
 
     for locale in locales:
 
-        for key in commands:
-            cmd = commands[key] % (root, locale)
+        for key in files:
+            filename = files[key] % (root, locale)
+            cmd = commands[key] % filename
             p = Popen(cmd, shell=True,
                       stdin=PIPE, stdout=PIPE, stderr=PIPE)
 
@@ -50,6 +54,7 @@ if __name__ == '__main__':
                         status = 'OK'
                     else:
                         status = '%i untranslated' % untranslated
+                        status += ' - please edit %s' % filename
                     break
                 status = 'OK'
 

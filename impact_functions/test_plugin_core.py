@@ -15,6 +15,7 @@ from core import requirements_collect
 from core import requirement_check
 from core import requirements_met
 from core import get_admissible_plugins
+from core import get_function_title
 
 
 class BasicFunction(FunctionProvider):
@@ -48,6 +49,8 @@ class F1(FunctionProvider):
 
     """
 
+    title = 'Title for F1'
+
     @staticmethod
     def run():
         return None
@@ -64,6 +67,8 @@ class F2(FunctionProvider):
     :param requires category=='exposure' and \
                     subcategory.startswith('building')
     """
+
+    title = 'Title for F2'
 
     @staticmethod
     def run():
@@ -147,7 +152,7 @@ class Test_plugin_core(unittest.TestCase):
 
         # Keywords matching F1 and F3
         haz_keywords1 = dict(category='hazard', subcategory='flood',
-                                layertype='raster', unit='m')
+                             layertype='raster', unit='m')
         exp_keywords1 = dict(category='exposure', subcategory='population',
                              layertype='raster', datatype='population')
 
@@ -156,14 +161,23 @@ class Test_plugin_core(unittest.TestCase):
                              layertype='raster', unit='m')
         exp_keywords2 = dict(category='exposure', subcategory='building')
 
-        # Check correct matching
+        # Check correct matching of keyword set 1
         P = get_admissible_plugins([haz_keywords1, exp_keywords1])
         msg = 'Expected impact functions F1 and F3 in %s' % str(P.keys())
         assert 'F1' in P and 'F3' in P, msg
 
+        # Check correctness of title attribute
+        assert get_function_title(P['F1']) == 'Title for F1'
+        assert get_function_title(P['F3']) == 'F3'
+
+        # Check correct matching of keyword set 2
         P = get_admissible_plugins([haz_keywords2, exp_keywords2])
         msg = 'Expected impact functions F2 and F3 in %s' % str(P.keys())
         assert 'F2' in P and 'F3' in P, msg
+
+        # Check correctness of title attribute
+        assert get_function_title(P['F2']) == 'Title for F2'
+        assert get_function_title(P['F3']) == 'F3'
 
         # Check empty call returns all
         P = get_admissible_plugins([])

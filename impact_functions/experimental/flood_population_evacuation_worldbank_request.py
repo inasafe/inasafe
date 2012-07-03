@@ -4,8 +4,8 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
-from common.utilities import ugettext as _
-from common.tables import Table, TableRow
+from storage.utilities import ugettext as _
+from impact_functions.tables import Table, TableRow
 
 
 class FloodEvacuationFunction(FunctionProvider):
@@ -91,7 +91,7 @@ class FloodEvacuationFunction(FunctionProvider):
                                 '%i' % evacuated],
                                header=True),
                       TableRow(_('Map shows population density needing '
-                                 'evacuation')),
+                                 'evacuation'))]
                       #,
 ##                      TableRow([_('People in 50cm to 1m of water '),
 ##                                '%i' % medium],
@@ -99,13 +99,13 @@ class FloodEvacuationFunction(FunctionProvider):
 ##                      TableRow([_('People in 30cm to 50cm of water'),
 ##                                '%i' % low],
 ##                               header=True)]
-                      TableRow([_('Needs per week'), _('Total')],
-                               header=True),
-                      [_('Rice [kg]'), int(rice)],
-                      [_('Drinking Water [l]'), int(drinking_water)],
-                      [_('Clean Water [l]'), int(water)],
-                      [_('Family Kits'), int(family_kits)],
-                      [_('Toilets'), int(toilets)]]
+##                      TableRow([_('Needs per week'), _('Total')],
+##                               header=True),
+##                      [_('Rice [kg]'), int(rice)],
+##                      [_('Drinking Water [l]'), int(drinking_water)],
+##                      [_('Clean Water [l]'), int(water)],
+##                      [_('Family Kits'), int(family_kits)],
+##                      [_('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
@@ -113,10 +113,10 @@ class FloodEvacuationFunction(FunctionProvider):
                            _('Total population: %i') % total,
                            _('People need evacuation if flood levels '
                              'exceed %(eps)i m') % {'eps': threshold},
-                           #_('People in 50cm to 1m of water: %i') % medium,
-                           #_('People in 30cm to 50cm of water: %i') % low])
-                           _('Minimum needs are defined in BNPB '
-                             'regulation 7/2008')])
+                           _('People in 50cm to 1m of water: %i') % medium,
+                           _('People in 30cm to 50cm of water: %i') % low])
+##                           _('Minimum needs are defined in BNPB '
+##                             'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('People in need of evacuation')
         style_info['legend_title'] = _('Population Density')

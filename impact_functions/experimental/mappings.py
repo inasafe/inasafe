@@ -5,13 +5,6 @@ from storage.vector import Vector
 from common.utilities import verify
 
 
-#def padang2itb(E):
-#    """
-#    To be updated
-#    """
-#    print E.get_attribute_names()
-
-
 def osm2padang(E):
     """Map OSM attributes to Padang vulnerability classes
 
@@ -374,7 +367,7 @@ def sigab2bnpb(E, target_attribute='VCLASS'):
     return V
 
 
-# def printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
+# def XX_printout_stats_only_sigab2bnpb(E, target_attribute='VCLASS'):
 #     """Map SIGAB point data to BNPB vulnerability classes
 
 #     Input

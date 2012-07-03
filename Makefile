@@ -18,9 +18,10 @@
 
 # Makefile for InaSAFE - QGIS
 
-NONGUI := storage engine impact_functions
+NONGUI := storage engine impact_functions common
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
+CODE := $(ALL) .
 
 # LOCALES = space delimited list of iso codes to generate po files for
 LOCALES = id af
@@ -43,11 +44,13 @@ docs: compile
 
 #Qt .ts file updates - run to register new strings for translation in gui
 update-translation-strings: compile
+	@echo "Collecting strings requiring translations. Please provide translations by editing the translation files below:"
 	@# Qt translation stuff first.
-	cd gui; pylupdate4 inasafe.pro; cd .
+	@cd gui; pylupdate4 inasafe.pro; cd .
+	@$(foreach LOCALE,$(LOCALES), echo "gui/i18n/inasafe_$(LOCALE).ts";)
 	@# Gettext translation stuff next.
 	@# apply same xgettext command for each supported locale. TS
-	$(foreach LOCALE,$(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
+	@$(foreach LOCALE,$(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in gui
 compile-translation-strings: compile
@@ -77,6 +80,14 @@ translation-stats:
 	@echo "----------------------------"
 	@scripts/string-stats.sh
 
+lines-of-code:
+	@echo "----------------------"
+	@echo " Lines of code analysis"
+	@echo " Generated using David A. Wheeler's 'SLOCCount'"
+	@echo "----------------------"
+	@git log | head -3
+	@sloccount . | grep '^[0-9]'
+
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
@@ -87,9 +98,17 @@ clean:
 	@-find . -name '*.pyo' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
+	@# Remove any generated spatial datasets from code modules:
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm $(MOD)/*.shp 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.shx 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.dbf 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.keywords 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.prj 2>/dev/null";) 2>/dev/null
+	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.asc 2>/dev/null";) 2>/dev/null
+
 
 # Run the test suite followed by pep8 style checking
-test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit test-translations
+test: docs test_suite pep8 dependency_test unwanted_strings data_audit test-translations
 
 # Run the test suite followed by pep8 style checking - dont update from svn for test data
 test_no_svn: docs test_suite_no_svn pep8 disabled_tests dependency_test unwanted_strings data_audit
