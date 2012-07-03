@@ -554,9 +554,31 @@ def clip_lines_by_polygon(lines, polygon,
     inside_line_segments = []
     outside_line_segments = []
 
+    # Get polygon extents to quickly rule out lines where all segments
+    # are outside and on the same side of its bounding box
+    minpx = min(polygon[:, 0])
+    maxpx = max(polygon[:, 0])
+    minpy = min(polygon[:, 1])
+    maxpy = max(polygon[:, 1])
+
     # Loop through lines
     for k in range(M):
-        inside, outside = clip_line_by_polygon(lines[k], polygon,
+        line = lines[k]
+
+        # Optimisation (will depend on how many lines are outside)
+        # In test_engine.py
+        # Multiple lines are clipped correctly by complex polygon ... ok
+        # Ran 1 test in 12.517s
+        # Ran 1 test in 11.474s
+        if (max(line[:, 0]) < minpx or  # Everything is to the left
+            min(line[:, 0]) > maxpx or  # Everything is to the right
+            max(line[:, 1]) < minpy or  # Everything is to the south
+            min(line[:, 1]) > maxpy):   # Everything is to the north
+
+            outside_line_segments.append(line)
+            continue
+
+        inside, outside = clip_line_by_polygon(line, polygon,
                                                closed=closed,
                                                check_input=check_input)
         inside_line_segments += inside
@@ -644,7 +666,7 @@ def clip_line_by_polygon(line, polygon,
         if not polygon.shape[1] == 2:
             raise RuntimeError(msg)
 
-    # Get polygon extents to quickly rule out points that
+    # Get polygon extents to quickly rule out segments that
     # are outside its bounding box
     minpx = min(polygon[:, 0])
     maxpx = max(polygon[:, 0])
@@ -682,9 +704,10 @@ def clip_line_by_polygon(line, polygon,
         # Skip segments where both end points are outside polygon bounding box
         # and which don't intersect the bounding box
 
-        #Multiple lines are clipped correctly by complex polygon ... ok
-        #Ran 1 test in 187.759s
-        #Ran 1 test in 12.517s
+        # In test_engine.py
+        # Multiple lines are clipped correctly by complex polygon ... ok
+        # Ran 1 test in 187.759s
+        # Ran 1 test in 12.517s
         segment_is_outside_bbox = True
         for p in [p0, p1]:
             x = p[0]

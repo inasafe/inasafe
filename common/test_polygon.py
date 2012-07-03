@@ -8,11 +8,12 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from math import sqrt, pi
-from common.numerics import ensure_numeric
+
+from storage.vector import Vector
 
 from polygon import *
-from utilities import test_polygon, test_lines
-from storage.vector import Vector
+from testing import test_polygon, test_lines
+from numerics import ensure_numeric
 
 
 def linear_function(x, y):
@@ -1887,8 +1888,8 @@ class Test_Polygon(unittest.TestCase):
             clip_lines_by_polygon(test_lines, test_polygon)
 
         # These lines have compontes both inside and outside
-        assert len(inside_line_segments) <= 33
-        assert len(outside_line_segments) <= 49
+        assert len(inside_line_segments) == 13
+        assert len(outside_line_segments) == 17
 
         # Store for visual inspection by e.g. QGis
         if False:

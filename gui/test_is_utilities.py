@@ -11,7 +11,7 @@ from is_utilities import (getExceptionWithStacktrace,
                           setRasterStyle,
                           setVectorStyle,
                           qgisVersion)
-from storage.utilities import bbox_intersection
+from safe_api import bbox_intersection
 from utilities_test import loadLayer, getQgisTestApp
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

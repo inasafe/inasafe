@@ -4,7 +4,7 @@ from impact_functions.core import get_question
 from impact_functions.styles import earthquake_fatality_style as style_info
 from storage.raster import Raster
 from common.utilities import ugettext as _
-from impact_functions.tables import Table, TableRow
+from common.tables import Table, TableRow
 from common.numerics import normal_cdf
 
 import numpy
@@ -132,7 +132,13 @@ class ITBFatalityFunction(FunctionProvider):
             F = fatality_rate * I
 
             # Calculate expected number of displaced people per level
-            D = displacement_rate[mmi] * I
+            try:
+                D = displacement_rate[mmi] * I
+            except Exception, e:
+                msg = 'mmi = %i, I = %s, Error msg: %s' % (mmi, str(I), str(e))
+                fid = open('C:\\error_message.txt', 'wb')
+                fid.write(msg)
+                fid.close()
 
             # Sum up numbers for map
             R += F   # Fatalities
@@ -207,10 +213,10 @@ class ITBFatalityFunction(FunctionProvider):
 
         table_body.append(TableRow(_('Action Checklist:'), header=True))
         if fatalities > 0:
-            table_body.append(_('Are enough victim identification units '
+            table_body.append(_('Are there enough victim identification units '
                                 'available for %i people?') % fatalities)
         if displaced > 0:
-            table_body.append(_('Are enough shelters available for %i '
+            table_body.append(_('Are there enough shelters available for %i '
                                 'people?') % displaced)
 
         table_body.append(TableRow(_('Notes:'), header=True))
@@ -221,6 +227,26 @@ class ITBFatalityFunction(FunctionProvider):
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
         map_title = _('Earthquake impact to population')
+
+        # Create style info dynamically
+        classes = numpy.linspace(numpy.nanmin(R.flat[:]),
+                                 numpy.nanmax(R.flat[:]), 5)
+
+        style_classes = [dict(colour='#EEFFEE', quantity=classes[0],
+                              transparency=100,
+                              label=_('%.2f people/cell' % classes[0])),
+                         dict(colour='#FFFF7F', quantity=classes[1],
+                              transparency=30),
+                         dict(colour='#E15500', quantity=classes[2],
+                              transparency=30,
+                              label=_('%.2f people/cell' % classes[2])),
+                         dict(colour='#E4001B', quantity=classes[3],
+                              transparency=30),
+                         dict(colour='#730000', quantity=classes[4],
+                              transparency=30,
+                              label=_('%.2f people/cell' % classes[4]))]
+        style_info = dict(target_field=None,
+                          style_classes=style_classes)
 
         # Create new layer and return
         L = Raster(R,

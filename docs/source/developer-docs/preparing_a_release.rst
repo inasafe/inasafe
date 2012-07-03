@@ -175,7 +175,7 @@ functions provided by Qt4 for this purpose:
 The compilation of these resources if the default make target in the root and
 *gui* python package. To compile them simply do::
 
-   cd <riab source>
+   cd <inasafe source>
    make
 
 
@@ -386,19 +386,19 @@ Branch the release
 ------------------
 
 This step is only done for minor and major releases, point releases are only
-tagged. The branch should be named after the major and minor version numbers 
+tagged. The branch should be named after the major and minor version numbers
 only - for example: :samp:`version-1_0`. The following console log illustrates
 how to create a local branch, push it to the origin repository, remove the local
 branch and then track the repository version of the branch localy::
 
    git branch version-0_1
    git push origin version-0_1
-   git branch -D version-0_1 
+   git branch -D version-0_1
    git fetch origin
    git branch --track version-0_1 origin/version-0_1
    git checkout version-0_1
 
- 
+
 **Outcome:** A branch on the remote repository named after the majon and minor
 version numbers.
 
@@ -408,16 +408,20 @@ Tag the release
 Tagging the release provides a 'known good' state for the software which
 represents a point in time where all of the above items in this list have
 been checked. The tag should be named after the major, minor and point release
-for example :samp:`version-0_1_0`. If the release is a releas candidate or 
+for example :samp:`version-0_1_0`. If the release is a releas candidate or
 and alpha release the letters :samp:`rc` or :samp:`a` resepectively should
-be appended respectively, along with the related number. For example version 
+be appended respectively, along with the related number. For example version
 0.1.0 alpha 1 would be tagged as :samp:`version-0_1_0a1`. To tag the release
 simply do it in git as illustrated below.::
 
-   git tag release-0_1_0
+   git tag version-0_1_0
    git push --tags
 
-.. note:: Replace 'dot' separators with underscores for the version number.
+.. note:: 1) Replace 'dot' separators with underscores for the version number.
+   2) You can differentiate release **branches** from release **tags** by the
+   fact that branch names have only the minor version number (e.g.
+   :samp:`version-0_4`) whereas release tags are reserved for point releases
+   (e.g. :samp:`version-0_4_1).
 
 **Outcome:** The release is tagged in GIT and can be checked out at any point
 in the future.

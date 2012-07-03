@@ -32,8 +32,9 @@ from is_keywords_dialog import ISKeywordsDialog
 
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
-from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
+from safe_api import TESTDATA, HAZDATA, EXPDATA
 from odict import OrderedDict
+
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 

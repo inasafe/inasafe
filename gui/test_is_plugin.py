@@ -65,7 +65,7 @@ class ISPluginTest(unittest.TestCase):
         myIface = QgisInterface(myCanvas)
         myPlugin = ISPlugin(myIface)
         myPlugin.setupI18n('id')  # indonesian
-        myExpectedString = 'Sementara Ditutup'
+        myExpectedString = 'Ditutup sementara'
         myTranslation = _(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
                             myUntranslatedString,

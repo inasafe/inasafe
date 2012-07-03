@@ -64,11 +64,12 @@ class Projection:
         """Return projection
 
         Input
-            proj4: If True, projection will be returned in format suitable
-                   for comparison.
+            proj4: If True, projection will be returned in proj4 format.
                    If False (default) projection will be returned in WKT format
 
-            # FIXME: Maybe add all formats somehow
+        Note: To compare projections, use the __eq__ method directly on the
+        projection objects: E.g.
+        self.projection == other.projection
         """
 
         if proj4:

@@ -12,7 +12,7 @@ from common.utilities import verify
 
 # FIXME (Ole): make logging work again
 import logging
-logger = logging.getLogger('risiko')
+logger = logging.getLogger('inasafe')
 
 
 def read_layer(filename):

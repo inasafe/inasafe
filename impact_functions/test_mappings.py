@@ -10,7 +10,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from storage.core import read_layer
-from storage.utilities_test import TESTDATA, HAZDATA, EXPDATA
+from common.testing import TESTDATA, HAZDATA, EXPDATA
 from mappings import *
 
 

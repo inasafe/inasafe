@@ -3,23 +3,27 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from impact_functions.core import get_question
 from storage.vector import Vector
 from common.utilities import ugettext as _
-from storage.dynamic_translations import names as internationalised_values
-from impact_functions.tables import Table, TableRow
+from common.tables import Table, TableRow
+from common.dynamic_translations import names as internationalised_values
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
 
-    :param requires category=='hazard' and \
+    :param requires category == 'hazard' and \
                     subcategory in ['flood', 'tsunami']
 
-    :param requires category=='exposure' and \
-                    subcategory=='building' and \
-                    layertype=='vector'
+    :param requires category == 'exposure' and \
+                    subcategory in ['building', 'structure'] and \
+                    layertype == 'vector'
     """
 
     target_field = 'INUNDATED'
     plugin_name = _('Be temporarily closed')
+
+    # FIXME (Ole): Working on issue #131
+    title = _('THIS SHOULD SHOW UP IN THE GUI')
+    #title = _('Be temporarily closed')
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
@@ -59,11 +63,23 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 x = x > threshold
             elif hazard_type == 'floodprone':
                 # Use interpolated polygon attribute
-                res = attributes[i]['FLOODPRONE']
-                if res is None:
-                    x = False
+                atts = attributes[i]
+
+                if 'FLOODPRONE' in atts:
+                    res = atts['FLOODPRONE']
+                    if res is None:
+                        x = False
+                    else:
+                        x = res.lower() == 'yes'
                 else:
-                    x = res.lower() == 'yes'
+                    # If there isn't a flood prone attribute,
+                    # assume that building is wet if inside polygon
+                    # as flag by generic attribute AFFECTED
+                    res = atts['Affected']
+                    if res is None:
+                        x = False
+                    else:
+                        x = res
             else:
                 msg = (_('Unknown hazard type %s. '
                          'Must be either "depth" or "floodprone"')
@@ -110,6 +126,13 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 del buildings[usage]
                 del affected_buildings[usage]
 
+        # Generate csv file of results
+##        fid = open('C:\dki_table_%s.csv' % H.get_name(), 'wb')
+##        fid.write('%s, %s, %s\n' % (_('Building type'),
+##                                    _('Temporarily closed'),
+##                                    _('Total')))
+##        fid.write('%s, %i, %i\n' % (_('All'), count, N))
+
         # Generate simple impact report
         table_body = [question,
                       TableRow([_('Building type'),
@@ -117,6 +140,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                 _('Total')],
                                header=True),
                       TableRow([_('All'), count, N])]
+
+##        fid.write('%s, %s, %s\n' % (_('Building type'),
+##                                    _('Temporarily closed'),
+##                                    _('Total')))
 
         # Generate break down by building usage type is available
         if 'type' in attribute_names:
@@ -136,6 +163,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 building_list.append([building_type.capitalize(),
                                       affected_buildings[usage],
                                       buildings[usage]])
+##                fid.write('%s, %i, %i\n' % (building_type.capitalize(),
+##                                            affected_buildings[usage],
+##                                            buildings[usage]))
 
             # Sort alphabetically
             building_list.sort()
@@ -149,6 +179,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 s = TableRow(row)
                 table_body.append(s)
 
+##        fid.close()
         table_body.append(TableRow(_('Action Checklist:'), header=True))
         table_body.append(TableRow(_('Are the critical facilities still '
                                      'open?')))

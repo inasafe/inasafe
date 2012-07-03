@@ -28,15 +28,15 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geotransform2bbox
 from utilities import geotransform2resolution
-from utilities import nanallclose
 from utilities import raster_geometry2geotransform
 from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
-from utilities_test import TESTDATA, HAZDATA, EXPDATA
-from utilities_test import FEATURE_COUNTS
-from utilities_test import GEOTRANSFORMS
+from common.numerics import nanallclose
+from common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
+from common.testing import FEATURE_COUNTS
+from common.testing import GEOTRANSFORMS
 from common.utilities import ugettext as _
 from common.utilities import VerificationError
 
@@ -66,10 +66,12 @@ class Test_IO(unittest.TestCase):
         v = Vector(None)
         assert v.get_name().startswith('')
         assert v.is_inasafe_spatial_object
+        assert str(v).startswith('Vector data')
 
         r = Raster(None)
         assert r.get_name().startswith('')
         assert r.is_inasafe_spatial_object
+        assert str(r).startswith('Raster data')
 
     def test_vector_feature_count(self):
         """Number of features read from vector data is as expected
@@ -265,6 +267,10 @@ class Test_IO(unittest.TestCase):
         filename = '%s/%s' % (TESTDATA, layername)
         V = read_layer(filename)
 
+        # Check string representation of vector class
+        assert str(V).startswith('Vector data')
+        assert str(len(V)) in str(V)
+
         # Make a smaller dataset
         V_ref = V.get_topN('FLOOR_AREA', 5)
 
@@ -275,9 +281,41 @@ class Test_IO(unittest.TestCase):
         # Create new object from test data
         V_new = Vector(data=data, projection=projection, geometry=geometry)
 
-        # Check
+        # Check equality operations
         assert V_new == V_ref
         assert not V_new != V_ref
+
+        V3 = V_new.copy()
+        assert V_new == V3  # Copy is OK
+
+        V3.data[0]['FLOOR_AREA'] += 1.0e-5
+        assert V_new == V3  # Copy is OK within tolerance
+
+        V3.data[0]['FLOOR_AREA'] += 1.0e-2
+        assert V_new != V3  # Copy is outside tolerance
+
+        V3 = V_new.copy()
+        V4 = V_new.copy()
+        V3.data[0]['BUILDING_C'] = True
+        assert V4 == V3  # Booleans work
+
+        V3.data[0]['BUILDING_C'] = False
+        assert V4 != V3  # Booleans work
+
+        V3.data[0]['BUILDING_C'] = None
+        assert V4 != V3  # None works
+
+        V3.data[0]['BUILDING_C'] = None
+        V4.data[0]['BUILDING_C'] = False
+        assert V4 == V3  # False matches None
+
+        V3.data[0]['BUILDING_C'] = 0
+        V4.data[0]['BUILDING_C'] = False
+        assert V4 == V3  # False matches 0
+
+        V3.data[0]['BUILDING_C'] = 1
+        V4.data[0]['BUILDING_C'] = True
+        assert V4 == V3  # True matches 1
 
         # Write this new object, read it again and check
         tmp_filename = unique_filename(suffix='.shp')
@@ -624,6 +662,11 @@ class Test_IO(unittest.TestCase):
         R1 = Raster(A1, projection, geotransform,
                     keywords={'testkwd': 'testval', 'size': 'small'})
 
+        # Check string representation of raster class
+        assert str(R1).startswith('Raster data')
+        assert str(R1.rows) in str(R1)
+        assert str(R1.columns) in str(R1)
+
         # Test conversion between geotransform and
         # geometry (longitudes and latitudes)
         longitudes, latitudes = R1.get_geometry()
@@ -774,6 +817,15 @@ class Test_IO(unittest.TestCase):
                 assert R1 == R2
                 assert not R1 != R2
 
+                # Check equality within tolerance
+                R3 = R1.copy()
+
+                R3.data[-1, -1] += 1.0e-5  # This is within tolerance
+                assert R1 == R3
+
+                R3.data[-1, -1] += 1.0e-2  # This is outside tolerance
+                assert R1 != R3
+
                 # Check that equality raises exception when type is wrong
                 try:
                     R1 == Vector()
@@ -796,6 +848,37 @@ class Test_IO(unittest.TestCase):
         else:
             msg = 'Should have raised RuntimeError'
             raise Exception(msg)
+
+    def test_bad_ascii_data(self):
+        """ASC raster files with bad data causes good error message
+
+        This example is courtesy of Hyeuk Ryu
+        """
+
+        # Bad file
+        asc_filename = os.path.join(TESTDATA, 'bad_ascii_format.asc')
+        try:
+            read_layer(asc_filename)
+        except Exception, e:
+            # Check that error message is reasonable, e.g.
+            # File /home/nielso/sandpit/inasafe_data/test/bad_ascii_format.asc
+            # exists, but could not be read. Please check if the file can
+            # be opened with e.g. qgis or gdalinfo
+
+            msg = 'Unexpected error message for corrupt asc file: %s' % e
+            assert 'exists' in str(e), msg
+            assert 'gdalinfo' in str(e), msg
+            assert 'qgis' in str(e), msg
+            assert 'Please' in str(e), msg
+
+        # No file
+        asc_filename = 'nonexisting_ascii_file_234xxxlcrhgqjk.asc'
+        try:
+            read_layer(asc_filename)
+        except Exception, e:
+            # Check that this error message reflects that file did not exist
+            msg = 'Unexpected error message for non existing asc file: %s' % e
+            assert 'Could not find file' in str(e), msg
 
     def test_nodata_value(self):
         """NODATA value is correctly recorded in GDAL
@@ -1142,6 +1225,16 @@ class Test_IO(unittest.TestCase):
         else:
             msg = 'Should have raised assertion error for wrong extension'
             raise Exception(msg)
+
+        # Make a spatial layer with these keywords
+        V = read_layer('%s/test_buildings.shp' % TESTDATA)
+        V = Vector(data=V.get_data(),
+                   geometry=V.get_geometry(),
+                   projection=V.get_projection(),
+                   keywords=keywords)
+        assert keywords['impact_summary'] == V.get_impact_summary()
+        for key, val in V.get_keywords().items():
+            assert keywords[key] == val
 
     def test_empty_keywords_file(self):
         """Empty keywords can be handled
@@ -1740,6 +1833,55 @@ class Test_IO(unittest.TestCase):
         string2 = _('Hello2!')  # translate as 'Hi2'
         assert string1 == 'Hi'
         assert string2 == 'Hi2'
+
+    def test_multipart_polygon_raises_exception(self):
+        """Multipart polygons raise exception
+        """
+
+        hazard_filename = ('%s/boundaries/rw_jakarta.shp' % DATADIR)
+
+        try:
+            H = read_layer(hazard_filename)
+        except Exception, e:
+            msg = 'Wrong error message: %s' % e
+            assert 'convert multipart' in str(e), msg
+        else:
+            msg = 'Multipart polygon should have raised exception'
+            raise Exception(msg)
+
+    def test_projection_comparisons(self):
+        """Projection information can be correctly compared
+        """
+
+        # Although the two test datasets have the same projection,
+        # this example failed with the message:
+        # The reason was that comparison was done with get_projection()
+        # rather than the projection objects themselves.
+
+        #Projections must be the same: I got
+        #GEOGCS["GCS_WGS_1984",DATUM["WGS_1984",
+        #       SPHEROID["WGS_1984",6378137,298.257223563]],
+        #       PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]] and
+        #GEOGCS["WGS 84",DATUM["WGS_1984",
+        #       SPHEROID["WGS 84",6378137,298.257223563,
+        #       AUTHORITY["EPSG","7030"]],TOWGS84[0,0,0,0,0,0,0],
+        #       AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,
+        #       AUTHORITY["EPSG","8901"]],UNIT["degree",0.01745329251994328,
+        #       AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/rw_jakarta_singlepart.shp' % TESTDATA)
+        exposure_filename = ('%s/indonesia_highway.shp' % EXPDATA)
+
+        # Read
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        Hp = H.projection
+        Ep = E.projection
+        msg = 'Projections did not match: %s != %s' % (Hp, Ep)
+        assert Hp == Ep, msg
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test')

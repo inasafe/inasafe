@@ -25,7 +25,7 @@ from is_safe_interface import (getOptimalExtent,
                                readKeywordsFromFile,
                                readSafeLayer)
 from is_exceptions import KeywordNotFoundException
-from storage.utilities_test import TESTDATA, EXPDATA, HAZDATA
+from safe_api import TESTDATA, HAZDATA, EXPDATA
 
 
 class ISSafeInterfaceTest(unittest.TestCase):
@@ -189,7 +189,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         assert myKeywords == {'category': 'exposure',
                               'subcategory': 'population',
                               'datatype': 'density',
-                              'title': 'Population density (5kmx5km)'}
+                              'title': 'People'}
 
         myKeywords = readKeywordsFromFile(self.vectorPath)
         assert myKeywords == {'category': 'exposure',

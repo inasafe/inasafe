@@ -33,8 +33,8 @@ echo
 echo "Success, You have removed InaSAFE!"
 echo
 echo "If you want to reinstall "
-echo "1) Make an area (say ~/work) and cd to it"
-#echo "2) wget http://bit.ly/riab-install"
-echo "2) wget https://raw.github.com/AIFDR/inasafe/master/scripts/riab-install"
-echo "3) ./riab-install"
+echo "1) Make a new empty area (say ~/work) and cd to it"
+echo "2) wget bit.ly/inasafe-install"
+#echo "2) wget https://raw.github.com/AIFDR/inasafe/master/scripts/inasafe-install"
+echo "3) ./inasafe-install"
 echo
