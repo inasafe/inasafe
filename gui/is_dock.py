@@ -843,14 +843,27 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.pbnRunStop.setEnabled(False)
         if theTitle is None:
             theTitle = self.tr('Analyzing this question...')
-        myHtml = ('<div><span class="label label-success">'
-                  + str(theTitle) + '</span></div>'
-                  '<div>' + str(theMessage) + '</div>'
-                  '<div class="progress">'
-                  '  <div class="bar" '
-                  '       style="width: ' + str(theProgress) + '%;">'
-                  '  </div>'
-                  '</div>')
+        myHtml = ('<table class="condensed">'
+                  '  <tr>'
+                  '    <th class="info button-cell">'
+                  + str(theTitle) +
+                  '    </th>'
+                  '  </tr>'
+                  '  <tr>'
+                  '    <td>'
+                  + str(theMessage) +
+                  '    </td>'
+                  '  </tr>'
+                  '  <tr>'
+                  '    <td>'
+                  '      <div class="progress">'
+                  '          <div class="bar" '
+                  '               style="width: ' + str(theProgress) + '%;">'
+                  '          </div>'
+                  '      </div>'
+                  '    </td>'
+                  '  </tr>'
+                  '</table>')
         self.displayHtml(myHtml)
         self.repaint()
         QtGui.qApp.processEvents()
