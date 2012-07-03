@@ -1,8 +1,8 @@
 """Collection of mappings for standard vulnerability classes
 """
 import numpy
-from storage.vector import Vector
-from common.utilities import verify
+from safe.storage.vector import Vector
+from safe.common.utilities import verify
 
 
 def osm2padang(E):

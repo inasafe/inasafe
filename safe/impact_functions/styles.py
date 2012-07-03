@@ -15,7 +15,7 @@ return R
 
 """
 
-from common.utilities import ugettext as _
+from safe.common.utilities import ugettext as _
 
 # Flood population impact raster style
 style_classes = [dict(colour='#FFFFFF', quantity=2, transparency=100),

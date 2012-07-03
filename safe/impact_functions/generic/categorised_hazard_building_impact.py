@@ -1,7 +1,7 @@
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from storage.vector import Vector
-from common.utilities import ugettext as _
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.storage.vector import Vector
+from safe.common.utilities import ugettext as _
 
 
 #FIXME: need to normalise all raster data Ole/Kristy

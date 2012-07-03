@@ -1,10 +1,10 @@
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from impact_functions.core import get_question
-from storage.vector import Vector
-from common.utilities import ugettext as _
-from common.tables import Table, TableRow
-from common.dynamic_translations import names as internationalised_values
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.impact_functions.core import get_question
+from safe.storage.vector import Vector
+from safe.common.utilities import ugettext as _
+from safe.common.tables import Table, TableRow
+from safe.common.dynamic_translations import names as internationalised_values
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
