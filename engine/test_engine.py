@@ -206,7 +206,7 @@ class Test_Engine(unittest.TestCase):
 
         I = read_layer(impact_filename)
         calculated_result = I.get_data()
-
+#        print calculated_result.shape
         keywords = I.get_keywords()
 #        print "keywords", keywords
         population = float(keywords['total_population'])
@@ -2074,9 +2074,17 @@ class Test_Engine(unittest.TestCase):
         """ITB building impact function works
         """
 	 # Name file names for hazard level, exposure and expected impact
-        hazard_filename = '%s/itb_test_bldg_mmi.asc' % TESTDATA
-        exposure_filename = '%s/itb_test_bldg_class.asc' % TESTDATA
-        impact_filename = '%s/itb_test_bldg_impact.asc' % TESTDATA
+        hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
+        exposure_filename = '%s/Padang_WGS84.shp' % TESTDATA
+        damage_filename = '%s/reference_result_itb.csv' % TESTDATA
+
+        a = open(damage_filename).readlines()[1:]
+        ref_damage = []
+        for item in a:
+            b = item.strip('\n').split(',')
+            ref_damage.append(float(b[2]))
+        ref_damage = numpy.array(ref_damage)
+#        print ref_impact.shape
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
@@ -2091,14 +2099,28 @@ class Test_Engine(unittest.TestCase):
         # Call impact calculation engine
         impact_vector = calculate_impact(layers=[H, E],
                                              impact_fcn=IF)
-        impact_filename = impact_vector.get_filename()
+        attributes = impact_vector.get_data()
 
-        I = read_layer(impact_filename)
-        calculated_result = I.get_data()
+#        calculated_damage = []
+        for i in range(len(attributes)):
+            calculated_damage = attributes[i]['DAMAGE']
+            bldg_class = attributes[i]['ITB_Class']
+            msg = ('Calculated damage did not match expected result: \n'
+               'I got %s\n'
+               'Expected %s for bldg type: %s' % (calculated_damage, ref_damage[i],bldg_class))
+            assert nanallclose(calculated_damage, ref_damage[i],
+                           rtol=1.0e-4), msg
 
-        keywords = I.get_keywords()
+#        print calculated_damage.shape
+#        bldg_class = attributes[:]['VCLASS']
+#        impact_filename = impact_vector.get_filename()
+#        I = read_layer(impact_filename)
+#        calculated_result = I.get_data()
 
-        print keywords
+#        keywords = I.get_keywords()
+
+#        print keywords
+#        print calculated_damage
  
     def test_flood_on_roads(self):
         """Jakarta flood impact on roads calculated correctly
@@ -2246,6 +2268,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_itb_building')
+    suite = unittest.makeSuite(Test_Engine, 'test_itb')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
