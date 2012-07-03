@@ -2,10 +2,7 @@
 Basic plugin framework based on::
 http://martyalchin.com/2008/jan/10/simple-plugin-framework/
 """
-
 import os
-import os.path
-import glob
 
 dirname = os.path.dirname(__file__)
 
@@ -15,12 +12,7 @@ for f in os.listdir(dirname):
         continue
 
     if os.path.isdir(os.path.join(dirname, f)):
-        cmd = 'from impact_functions.%s import *' % f
-        #print cmd
-        try:
-            exec(cmd, locals(), globals())
-        except ImportError:
-            print 'WARNING: module %s does not exist' % f
+        __import__('safe.impact_functions.%s' % f)
 
 
 from safe.impact_functions.core import FunctionProvider
