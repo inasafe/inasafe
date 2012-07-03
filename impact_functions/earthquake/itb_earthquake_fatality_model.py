@@ -234,7 +234,7 @@ class ITBFatalityFunction(FunctionProvider):
 
         style_classes = [dict(colour='#EEFFEE', quantity=classes[0],
                               transparency=100,
-                              label=_('%.2f people/cell)' % classes[0]),
+                              label=_('%.2f people/cell') % classes[0]),
                          dict(colour='#FFFF7F', quantity=classes[1],
                               transparency=30),
                          dict(colour='#E15500', quantity=classes[2],

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 15:15+0700\n"
+"POT-Creation-Date: 2012-07-03 16:44+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,10 +54,11 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
 #: impact_functions/inundation/flood_population_evacuation.py:102
 #: impact_functions/inundation/flood_OSM_building_impact.py:126
+#: impact_functions/inundation/flood_OSM_building_impact.py:140
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:124
 #: impact_functions/earthquake/itb_building_impact_model.py:148
 #: impact_functions/earthquake/padang_building_impact_model.py:124
-#: impact_functions/inundation/flood_OSM_building_impact.py:126
+#: impact_functions/inundation/flood_OSM_building_impact.py:140
 #: impact_functions/inundation/flood_population_evacuation.py:102
 msgid "Total"
 msgstr ""
@@ -83,10 +84,11 @@ msgstr ""
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:125
 #: impact_functions/inundation/flood_OSM_building_impact.py:126
 #: impact_functions/inundation/flood_OSM_building_impact.py:128
+#: impact_functions/inundation/flood_OSM_building_impact.py:142
 #: engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:125
 #: impact_functions/earthquake/itb_building_impact_model.py:149
 #: impact_functions/earthquake/padang_building_impact_model.py:126
-#: impact_functions/inundation/flood_OSM_building_impact.py:128
+#: impact_functions/inundation/flood_OSM_building_impact.py:142
 msgid "All"
 msgstr ""
 
@@ -276,7 +278,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:180
 #: impact_functions/inundation/flood_OSM_building_impact.py:195
 #: impact_functions/inundation/flood_OSM_building_impact.py:197
-#: impact_functions/inundation/flood_OSM_building_impact.py:197
+#: impact_functions/inundation/flood_OSM_building_impact.py:211
+#: impact_functions/inundation/flood_OSM_building_impact.py:211
 msgid "Estimated buildings affected"
 msgstr ""
 
@@ -288,12 +291,12 @@ msgstr ""
 #: impact_functions/generic/categorised_hazard_building_impact.py:78
 #: impact_functions/styles.py:54 impact_functions/styles.py:68
 #: impact_functions/styles.py:55 impact_functions/styles.py:22
-#: impact_functions/styles.py:56
+#: impact_functions/styles.py:56 impact_functions/styles.py:67
 #: impact_functions/experimental/tsunami_building_impact.py:103
 #: impact_functions/experimental/tsunami_building_impact.py:130
 #: impact_functions/generic/categorised_hazard_building_impact.py:78
 #: impact_functions/generic/categorised_hazard_building_impact.py:83
-#: impact_functions/styles.py:22 impact_functions/styles.py:56
+#: impact_functions/styles.py:22 impact_functions/styles.py:67
 msgid "Low"
 msgstr ""
 
@@ -322,12 +325,12 @@ msgstr ""
 #: impact_functions/generic/categorised_hazard_building_impact.py:87
 #: impact_functions/styles.py:49 impact_functions/styles.py:66
 #: impact_functions/styles.py:76 impact_functions/styles.py:65
-#: impact_functions/styles.py:30
+#: impact_functions/styles.py:30 impact_functions/styles.py:77
 #: impact_functions/experimental/tsunami_building_impact.py:105
 #: impact_functions/experimental/tsunami_building_impact.py:132
 #: impact_functions/generic/categorised_hazard_building_impact.py:80
 #: impact_functions/generic/categorised_hazard_building_impact.py:87
-#: impact_functions/styles.py:30 impact_functions/styles.py:66
+#: impact_functions/styles.py:30 impact_functions/styles.py:77
 msgid "High"
 msgstr ""
 
@@ -355,19 +358,20 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:171
 #: impact_functions/inundation/flood_OSM_building_impact.py:186
 #: impact_functions/inundation/flood_OSM_building_impact.py:188
-#: impact_functions/inundation/flood_OSM_building_impact.py:188
+#: impact_functions/inundation/flood_OSM_building_impact.py:202
+#: impact_functions/inundation/flood_OSM_building_impact.py:202
 msgid "Flooded"
 msgstr ""
 
 #: storage/test_io.py:1719 storage/test_io.py:1721 storage/test_io.py:1712
 #: storage/test_io.py:1713 storage/test_io.py:1739 storage/test_io.py:1801
-#: storage/test_io.py:1801
+#: storage/test_io.py:1832 storage/test_io.py:1832
 msgid "Hello!"
 msgstr ""
 
 #: storage/test_io.py:1720 storage/test_io.py:1722 storage/test_io.py:1713
 #: storage/test_io.py:1714 storage/test_io.py:1740 storage/test_io.py:1802
-#: storage/test_io.py:1802
+#: storage/test_io.py:1833 storage/test_io.py:1833
 msgid "Hello2!"
 msgstr ""
 
@@ -530,7 +534,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:115
 #: impact_functions/inundation/flood_OSM_building_impact.py:122
 #: impact_functions/inundation/flood_OSM_building_impact.py:124
-#: impact_functions/inundation/flood_OSM_building_impact.py:124
+#: impact_functions/inundation/flood_OSM_building_impact.py:138
+#: impact_functions/inundation/flood_OSM_building_impact.py:138
 msgid "Building type"
 msgstr ""
 
@@ -661,7 +666,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:157
 #: impact_functions/inundation/flood_OSM_building_impact.py:172
 #: impact_functions/inundation/flood_OSM_building_impact.py:174
-#: impact_functions/inundation/flood_OSM_building_impact.py:174
+#: impact_functions/inundation/flood_OSM_building_impact.py:188
+#: impact_functions/inundation/flood_OSM_building_impact.py:188
 msgid "Buildings are said to be flooded when "
 msgstr ""
 
@@ -678,7 +684,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:159
 #: impact_functions/inundation/flood_OSM_building_impact.py:174
 #: impact_functions/inundation/flood_OSM_building_impact.py:176
-#: impact_functions/inundation/flood_OSM_building_impact.py:176
+#: impact_functions/inundation/flood_OSM_building_impact.py:190
+#: impact_functions/inundation/flood_OSM_building_impact.py:190
 #, python-format
 msgid "flood levels exceed %.1f m"
 msgstr ""
@@ -696,7 +703,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:161
 #: impact_functions/inundation/flood_OSM_building_impact.py:176
 #: impact_functions/inundation/flood_OSM_building_impact.py:178
-#: impact_functions/inundation/flood_OSM_building_impact.py:178
+#: impact_functions/inundation/flood_OSM_building_impact.py:192
+#: impact_functions/inundation/flood_OSM_building_impact.py:192
 msgid "in areas marked as flood prone"
 msgstr ""
 
@@ -713,7 +721,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:169
 #: impact_functions/inundation/flood_OSM_building_impact.py:184
 #: impact_functions/inundation/flood_OSM_building_impact.py:186
-#: impact_functions/inundation/flood_OSM_building_impact.py:186
+#: impact_functions/inundation/flood_OSM_building_impact.py:200
+#: impact_functions/inundation/flood_OSM_building_impact.py:200
 msgid "Not Flooded"
 msgstr ""
 
@@ -829,11 +838,12 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:112
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:224
 #: impact_functions/inundation/flood_OSM_building_impact.py:173
+#: impact_functions/inundation/flood_OSM_building_impact.py:187
 #: impact_functions/earthquake/earthquake_impact_on_women.py:141
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:222
 #: impact_functions/earthquake/padang_building_impact_model.py:132
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:112
-#: impact_functions/inundation/flood_OSM_building_impact.py:173
+#: impact_functions/inundation/flood_OSM_building_impact.py:187
 #: impact_functions/inundation/flood_population_evacuation.py:112
 msgid "Notes:"
 msgstr ""
@@ -856,6 +866,8 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:90
 #: impact_functions/inundation/flood_population_evacuation.py:98
 #: impact_functions/inundation/flood_population_evacuation.py:99
+#: impact_functions/inundation/flood_population_evacuation.py:118
+#: impact_functions/inundation/flood_population_evacuation.py:118
 msgid "Minimum needs are defined in BNPB regulation 7/2008"
 msgstr ""
 
@@ -879,8 +891,9 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:121
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:122
 #: impact_functions/inundation/flood_population_evacuation.py:122
+#: impact_functions/inundation/flood_population_evacuation.py:136
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:122
-#: impact_functions/inundation/flood_population_evacuation.py:122
+#: impact_functions/inundation/flood_population_evacuation.py:136
 msgid "Population Density"
 msgstr ""
 
@@ -892,8 +905,9 @@ msgstr ""
 #: impact_functions/inundation/flood_population_evacuation.py:127
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:128
 #: impact_functions/inundation/flood_population_evacuation.py:128
+#: impact_functions/inundation/flood_population_evacuation.py:142
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:128
-#: impact_functions/inundation/flood_population_evacuation.py:128
+#: impact_functions/inundation/flood_population_evacuation.py:142
 #, python-format
 msgid "Population which %s"
 msgstr ""
@@ -941,7 +955,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:166
 #: impact_functions/inundation/flood_OSM_building_impact.py:181
 #: impact_functions/inundation/flood_OSM_building_impact.py:183
-#: impact_functions/inundation/flood_OSM_building_impact.py:183
+#: impact_functions/inundation/flood_OSM_building_impact.py:197
+#: impact_functions/inundation/flood_OSM_building_impact.py:197
 msgid "Buildings inundated"
 msgstr ""
 
@@ -1543,9 +1558,10 @@ msgstr ""
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:214
 #: impact_functions/inundation/flood_OSM_building_impact.py:167
 #: impact_functions/inundation/flood_OSM_building_impact.py:169
+#: impact_functions/inundation/flood_OSM_building_impact.py:183
 #: impact_functions/earthquake/earthquake_impact_on_women.py:135
 #: impact_functions/earthquake/itb_earthquake_fatality_model.py:214
-#: impact_functions/inundation/flood_OSM_building_impact.py:169
+#: impact_functions/inundation/flood_OSM_building_impact.py:183
 msgid "Action Checklist:"
 msgstr ""
 
@@ -1565,7 +1581,8 @@ msgstr ""
 
 #: impact_functions/inundation/flood_OSM_building_impact.py:68
 #: impact_functions/inundation/flood_OSM_building_impact.py:70
-#: impact_functions/inundation/flood_OSM_building_impact.py:70
+#: impact_functions/inundation/flood_OSM_building_impact.py:84
+#: impact_functions/inundation/flood_OSM_building_impact.py:84
 #, python-format
 msgid "Unknown hazard type %s. Must be either \"depth\" or \"floodprone\""
 msgstr ""
@@ -1603,7 +1620,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:116
 #: impact_functions/inundation/flood_OSM_building_impact.py:123
 #: impact_functions/inundation/flood_OSM_building_impact.py:125
-#: impact_functions/inundation/flood_OSM_building_impact.py:125
+#: impact_functions/inundation/flood_OSM_building_impact.py:139
+#: impact_functions/inundation/flood_OSM_building_impact.py:139
 msgid "Temporarily closed"
 msgstr ""
 
@@ -1612,7 +1630,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:153
 #: impact_functions/inundation/flood_OSM_building_impact.py:168
 #: impact_functions/inundation/flood_OSM_building_impact.py:170
-#: impact_functions/inundation/flood_OSM_building_impact.py:170
+#: impact_functions/inundation/flood_OSM_building_impact.py:184
+#: impact_functions/inundation/flood_OSM_building_impact.py:184
 msgid "Are the critical facilities still open?"
 msgstr ""
 
@@ -1620,7 +1639,8 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:146
 #: impact_functions/inundation/flood_OSM_building_impact.py:160
 #: impact_functions/inundation/flood_OSM_building_impact.py:162
-#: impact_functions/inundation/flood_OSM_building_impact.py:162
+#: impact_functions/inundation/flood_OSM_building_impact.py:176
+#: impact_functions/inundation/flood_OSM_building_impact.py:176
 msgid "Breakdown by building type"
 msgstr ""
 
@@ -1652,7 +1672,7 @@ msgid "Are enough facilities available to assist %i pregnant women?"
 msgstr ""
 
 #: impact_functions/styles.py:60 impact_functions/styles.py:72
-#: impact_functions/styles.py:61 impact_functions/styles.py:61
+#: impact_functions/styles.py:61 impact_functions/styles.py:72
 msgid "Mid"
 msgstr ""
 
@@ -1735,7 +1755,6 @@ msgstr ""
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:116
 #: impact_functions/inundation/flood_population_evacuation.py:116
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:116
-#: impact_functions/inundation/flood_population_evacuation.py:116
 #, python-format
 msgid "People in 50cm to 1m of water: %i"
 msgstr ""
@@ -1745,7 +1764,6 @@ msgstr ""
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:117
 #: impact_functions/inundation/flood_population_evacuation.py:117
 #: impact_functions/experimental/flood_population_evacuation_worldbank_request.py:117
-#: impact_functions/inundation/flood_population_evacuation.py:117
 #, python-format
 msgid "People in 30cm to 50cm of water: %i"
 msgstr ""
@@ -1777,6 +1795,30 @@ msgid ""
 msgstr ""
 
 #: impact_functions/inundation/flood_OSM_building_impact.py:24
-#: impact_functions/inundation/flood_OSM_building_impact.py:24
+#: impact_functions/inundation/flood_OSM_building_impact.py:25
+#: impact_functions/inundation/flood_OSM_building_impact.py:25
 msgid "THIS SHOULD SHOW UP IN THE GUI"
+msgstr ""
+
+#: impact_functions/earthquake/itb_earthquake_fatality_model.py:237
+#, python-format
+msgid "%.2f people/cell)"
+msgstr ""
+
+#: impact_functions/inundation/flood_population_evacuation.py:132
+#: impact_functions/inundation/flood_population_evacuation.py:132
+#, python-format
+msgid "Low [%i people/cell]"
+msgstr ""
+
+#: impact_functions/inundation/flood_population_evacuation.py:133
+#: impact_functions/inundation/flood_population_evacuation.py:133
+#, python-format
+msgid "Medium [%i people/cell]"
+msgstr ""
+
+#: impact_functions/inundation/flood_population_evacuation.py:134
+#: impact_functions/inundation/flood_population_evacuation.py:134
+#, python-format
+msgid "High [%i people/cell]"
 msgstr ""
