@@ -669,7 +669,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.calculator.setExposureLayer(myExposureFilename)
 
         # Use canonical function name to identify selected function
-        myFunctionID = getFunctionID()
+        myFunctionID = self.getFunctionID()
         self.calculator.setFunction(myFunctionID)
 
     def accept(self):
@@ -1322,18 +1322,17 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         #otherwise just add it to the end
         theCombo.insertItem(mySize, theItemText, theItemData)
 
-
-def getFunctionID(self):
-    """Get the canonical impact function ID for the currently selected function
-    Args:
-        None
-    Returns:
-        FunctionID: String that identifies the function
-    Raises:
-       None
-    """
-
-    myIndex = self.cboFunction.currentIndex()
-    myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
-    myFunctionID = str(myItemData.toString())
-    return myFunctionID
+    def getFunctionID(self):
+        """Get the canonical impact function ID for the currently selected
+           function
+        Args:
+            None
+        Returns:
+            FunctionID: String that identifies the function
+        Raises:
+           None
+        """
+        myIndex = self.cboFunction.currentIndex()
+        myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
+        myFunctionID = str(myItemData.toString())
+        return myFunctionID
