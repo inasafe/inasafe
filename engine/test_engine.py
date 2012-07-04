@@ -2105,7 +2105,11 @@ class Test_Engine(unittest.TestCase):
             assert count == 3896, msg
 
     def test_itb_building_function(self):
-        """ITB building impact function works
+        """Damage ratio (estimated repair cost relative to replacement cost)
+           can be computed using the ITB building vulnerability model. 
+           (Test data from Hyeuk Ryu).
+           As of July 4, 2012, the vulnerability model used to generate the reference 
+           values is dummy one, and it will be updated with the ITB's model later.
         """
 	 # Name file names for hazard level, exposure and expected impact
         hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
@@ -2118,7 +2122,6 @@ class Test_Engine(unittest.TestCase):
             b = item.strip('\n').split(',')
             ref_damage.append(float(b[2]))
         ref_damage = numpy.array(ref_damage)
-#        print ref_impact.shape
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
