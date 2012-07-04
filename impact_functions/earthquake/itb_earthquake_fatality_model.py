@@ -80,7 +80,7 @@ class ITBFatalityFunction(FunctionProvider):
 
     """
 
-    plugin_name = _('Die')
+    title = _('Die')
 
     def run(self, layers,
             x=0.62275231, y=8.03314466, zeta=2.15):

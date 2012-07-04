@@ -37,7 +37,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
 
     """
 
-    plugin_name = _('Suffer because of gender')
+    title = _('Suffer because of gender')
 
     def run(self, layers,
             x=0.62275231, y=8.03314466, zeta=2.15):

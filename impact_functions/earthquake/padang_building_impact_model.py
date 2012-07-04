@@ -55,7 +55,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     datatype in ['osm', 'itb', 'sigab']
     """
 
-    plugin_name = _('Be damaged depending on building type')
+    title = _('Be damaged depending on building type')
 
     def run(self, layers):
         """Risk plugin for Padang building survey
