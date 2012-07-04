@@ -60,7 +60,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
 
         question = get_question(intensity.get_name(),
                                 population.get_name(),
-                                self.plugin_name.lower())
+                                self)
 
         # Extract data grids
         H = intensity.get_data()   # Ground Shaking

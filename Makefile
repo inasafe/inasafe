@@ -127,9 +127,9 @@ pep8:
 # Run entire test suite
 test_suite_no_svn: compile
 	@echo
-	@echo "----------------------"
-	@echo "Regresssion Test Suite"
-	@echo "----------------------"
+	@echo "---------------------"
+	@echo "Regression Test Suite"
+	@echo "---------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use

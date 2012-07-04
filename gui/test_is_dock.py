@@ -497,7 +497,7 @@ class ISDockTest(unittest.TestCase):
         myDict = getUiState(DOCK)
 
         myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function': 'Be temporarily closed',
+                          'Impact Function': 'Flood Building Impact Function',
                           'Hazard': 'Tsunami Max Inundation',
                           'Exposure': 'Tsunami Building Exposure'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -974,7 +974,7 @@ class ISDockTest(unittest.TestCase):
         DOCK.cboExposure.setCurrentIndex(myIndex)
         myDict = getUiState(DOCK)
         myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function': 'Be temporarily closed',
+                          'Impact Function': 'Flood Building Impact Function',
                           'Hazard': 'multipart_polygons_osm_4326',
                           'Exposure': 'buildings_osm_4326'}
         myMessage = ('Run button was not disabled when exposure set to \n%s'

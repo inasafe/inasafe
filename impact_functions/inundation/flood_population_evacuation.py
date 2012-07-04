@@ -1,7 +1,7 @@
 import numpy
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
-from impact_functions.core import get_question
+from impact_functions.core import get_question, get_function_title
 from impact_functions.styles import flood_population_style as style_info
 from storage.raster import Raster
 from common.utilities import ugettext as _
@@ -51,7 +51,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         question = get_question(inundation.get_name(),
                                 population.get_name(),
-                                self.plugin_name)
+                                self)
 
         # Extract data as numeric arrays
         D = inundation.get_data(nan=0.0)  # Depth
@@ -139,7 +139,7 @@ class FloodEvacuationFunction(FunctionProvider):
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
-                   name=_('Population which %s') % self.plugin_name.lower(),
+                   name=_('Population which %s') % get_function_title(self),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},
