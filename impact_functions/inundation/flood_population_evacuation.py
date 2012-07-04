@@ -119,6 +119,20 @@ class FloodEvacuationFunction(FunctionProvider):
                              'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('People in need of evacuation')
+
+        # Generare 8 equidistant classes across the range of flooded population
+        # 8 is the number of classes in the predefined flood population style
+        # as imported
+        classes = numpy.linspace(numpy.nanmin(I.flat[:]),
+                                 numpy.nanmax(I.flat[:]), 8)
+
+        # Modify labels in existing flood style to show quantities
+        style_classes = style_info['style_classes']
+
+        style_classes[1]['label'] = _('Low [%i people/cell]') % classes[1]
+        style_classes[4]['label'] = _('Medium [%i people/cell]') % classes[4]
+        style_classes[7]['label'] = _('High [%i people/cell]') % classes[7]
+
         style_info['legend_title'] = _('Population Density')
 
         # Create raster object and return
