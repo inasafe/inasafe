@@ -14,7 +14,7 @@ Branching guide
    :align:   center
 
 
-*New development* takes place in *master*. Master should always be maintained 
+*New development* takes place in *master*. Master should always be maintained
 in a usable state with tests passing and the code functional as far as possible
 such that we can create a new release from master at short notice.
 
@@ -55,6 +55,7 @@ Write new code and tests
     ...
 
 Publish (if unfinished)
+    * git commit -a -m "I did something wonderful"
     * git push origin <featurebranch>
 
 To keep branch up to date:

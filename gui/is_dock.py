@@ -26,6 +26,7 @@ from PyQt4.QtCore import pyqtSlot
 from is_dock_base import Ui_ISDockBase
 from is_help import ISHelp
 from is_utilities import getExceptionWithStacktrace, getWGS84resolution
+from is_utilities import getFunctionID
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
@@ -572,17 +573,20 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             # Populate the hazard combo with the available functions
             for myFunctionID in myDict:
                 myFunction = myDict[myFunctionID]
-                myTitle = getFunctionTitle(myFunction)
+                myFunctionTitle = getFunctionTitle(myFunction)
 
                 # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
                 #print
                 #print 'myFunction (ID)', myFunctionID
                 #print 'myFunction', myFunction
-                #print 'Function title:', myTitle
+                #print 'Function title:', myFunctionTitle
 
-                # FIXME (Ole): How do we show the title and and the same
-                # time keep myFunction as the canonical function identifier
-                self.addComboItemInOrder(self.cboFunction, myFunctionID)
+                # Provide function title and ID to function combo:
+                # myFunctionTitle is the text displayed in the combo
+                # myFunctionID is the canonical identifier
+                self.addComboItemInOrder(self.cboFunction,
+                                         myFunctionTitle,
+                                         theItemData=myFunctionID)
         except Exception, e:
             raise e
 
@@ -660,9 +664,14 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             raise
+
+        # Identify input layers
         self.calculator.setHazardLayer(myHazardFilename)
         self.calculator.setExposureLayer(myExposureFilename)
-        self.calculator.setFunction(self.cboFunction.currentText())
+
+        # Use canonical function name to identify selected function
+        myFunctionID = getFunctionID(self.cboFunction)
+        self.calculator.setFunction(myFunctionID)
 
     def accept(self):
         """Execute analysis when ok button is clicked."""

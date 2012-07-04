@@ -55,7 +55,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     datatype in ['osm', 'itb', 'sigab']
     """
 
-    plugin_name = _('Be damaged depending on building type')
+    title = _('Be damaged depending on building type')
 
     def run(self, layers):
         """Risk plugin for Padang building survey
@@ -67,7 +67,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
 
         question = get_question(H.get_name(),
                                 E.get_name(),
-                                self.plugin_name.lower())
+                                self)
 
         # Map from different kinds of datasets to Padang vulnerability classes
         datatype = E.get_keywords()['datatype']
