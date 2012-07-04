@@ -28,8 +28,8 @@ def name():
 
 def description():
     """A one line description for the plugin."""
-    return ('InaSAFE Disaster risk assessment tool developed by'
-           ' AusAid and World Bank')
+    return ('InaSAFE Disaster Scenario Assessment for Emergencies'
+            ' tool developed by BNPB, AusAID, World Bank')
 
 
 def version():
