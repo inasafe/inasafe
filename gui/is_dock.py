@@ -26,7 +26,6 @@ from PyQt4.QtCore import pyqtSlot
 from is_dock_base import Ui_ISDockBase
 from is_help import ISHelp
 from is_utilities import getExceptionWithStacktrace, getWGS84resolution
-from is_utilities import getFunctionID
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
@@ -670,7 +669,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.calculator.setExposureLayer(myExposureFilename)
 
         # Use canonical function name to identify selected function
-        myFunctionID = getFunctionID(self.cboFunction)
+        myFunctionID = getFunctionID()
         self.calculator.setFunction(myFunctionID)
 
     def accept(self):
@@ -1322,3 +1321,19 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 return
         #otherwise just add it to the end
         theCombo.insertItem(mySize, theItemText, theItemData)
+
+
+def getFunctionID(self):
+    """Get the canonical impact function ID for the currently selected function
+    Args:
+        None
+    Returns:
+        FunctionID: String that identifies the function
+    Raises:
+       None
+    """
+
+    myIndex = self.cboFunction.currentIndex()
+    myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
+    myFunctionID = str(myItemData.toString())
+    return myFunctionID

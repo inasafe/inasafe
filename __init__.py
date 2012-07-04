@@ -37,16 +37,15 @@ def version():
     return 'Version 0.5.0'
 
 
-def icon():
-    """Icon path for the plugin - metadata.txt it will override this"""
-    myPath = os.path.join(os.path.dirname(__file__), 'gui', 'resources',
-                        'img', 'icon.png')
-    return myPath
-
-
 def qgisMinimumVersion():
     """Minimum version of QGIS needed to run this plugin - currently set to 1.7."""
     return '1.7'
+
+
+def icon():
+    """Icon path for the plugin - metadata.txt it will override this"""
+    return = os.path.join(os.path.dirname(__file__), 'gui', 'resources',
+                        'img', 'icon.png')
 
 
 def classFactory(iface):
