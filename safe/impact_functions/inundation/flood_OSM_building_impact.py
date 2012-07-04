@@ -19,11 +19,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'INUNDATED'
-    plugin_name = _('Be temporarily closed')
-
-    # FIXME (Ole): Working on issue #131
-    title = _('THIS SHOULD SHOW UP IN THE GUI')
-    #title = _('Be temporarily closed')
+    title = _('Be temporarily closed')
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
@@ -37,7 +33,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         question = get_question(H.get_name(),
                                 E.get_name(),
-                                self.plugin_name.lower())
+                                self)
 
         # Interpolate hazard level to building locations
         if H.is_raster:

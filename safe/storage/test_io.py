@@ -849,6 +849,37 @@ class Test_IO(unittest.TestCase):
             msg = 'Should have raised RuntimeError'
             raise Exception(msg)
 
+    def test_bad_ascii_data(self):
+        """ASC raster files with bad data causes good error message
+
+        This example is courtesy of Hyeuk Ryu
+        """
+
+        # Bad file
+        asc_filename = os.path.join(TESTDATA, 'bad_ascii_format.asc')
+        try:
+            read_layer(asc_filename)
+        except Exception, e:
+            # Check that error message is reasonable, e.g.
+            # File /home/nielso/sandpit/inasafe_data/test/bad_ascii_format.asc
+            # exists, but could not be read. Please check if the file can
+            # be opened with e.g. qgis or gdalinfo
+
+            msg = 'Unexpected error message for corrupt asc file: %s' % e
+            assert 'exists' in str(e), msg
+            assert 'gdalinfo' in str(e), msg
+            assert 'qgis' in str(e), msg
+            assert 'Please' in str(e), msg
+
+        # No file
+        asc_filename = 'nonexisting_ascii_file_234xxxlcrhgqjk.asc'
+        try:
+            read_layer(asc_filename)
+        except Exception, e:
+            # Check that this error message reflects that file did not exist
+            msg = 'Unexpected error message for non existing asc file: %s' % e
+            assert 'Could not find file' in str(e), msg
+
     def test_nodata_value(self):
         """NODATA value is correctly recorded in GDAL
         """

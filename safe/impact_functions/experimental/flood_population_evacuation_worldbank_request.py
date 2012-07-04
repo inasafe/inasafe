@@ -1,14 +1,14 @@
 import numpy
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from impact_functions.core import get_question
-from impact_functions.styles import flood_population_style as style_info
-from storage.raster import Raster
-from storage.utilities import ugettext as _
-from impact_functions.tables import Table, TableRow
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.impact_functions.core import get_question
+from safe.impact_functions.styles import flood_population_style as style_info
+from safe.storage.raster import Raster
+from safe.common.utilities import ugettext as _
+from safe.common.tables import Table, TableRow
 
 
-class FloodEvacuationFunction(FunctionProvider):
+class WBFloodEvacuationFunction(FunctionProvider):
     """Risk plugin for flood evacuation
 
     :author AIFDR
@@ -24,7 +24,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     datatype=='density'
     """
 
-    plugin_name = _('Need evacuation')
+    title = _('Need evacuation')
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -51,7 +51,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         question = get_question(inundation.get_name(),
                                 population.get_name(),
-                                self.plugin_name)
+                                self)
 
         # Extract data as numeric arrays
         D = inundation.get_data(nan=0.0)  # Depth
@@ -125,7 +125,7 @@ class FloodEvacuationFunction(FunctionProvider):
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
-                   name=_('Population which %s') % self.plugin_name.lower(),
+                   name=_('Population which %s') % get_function_title(self),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},

@@ -28,13 +28,13 @@ class Test_real_plugins(unittest.TestCase):
         #for p in P:
         #    print p, P[p]
 
-        # NOTE: These are hardwired tests that will need to change
-        # when impact functions change.
+        # List the known impact function names
+        # based on their class names - not their titles
         msg = 'Available impact functions are: %s' % str(P.keys())
         #assert 'Earthquake Guidelines Function' in P, msg
-        assert 'Be damaged depending on building type' in P, msg
-        assert 'Be temporarily closed' in P, msg
-        assert 'Need evacuation' in P, msg
+        assert 'Padang Earthquake Building Damage Function' in P, msg
+        assert 'Flood Building Impact Function' in P, msg
+        assert 'Flood Evacuation Function' in P, msg
         #assert 'Tephra Building Impact Function' in P, msg
         #assert 'Tephra Population Impact Function' in P, msg
         #assert 'Flood Road Impact Function' in P, msg
@@ -52,7 +52,7 @@ class Test_real_plugins(unittest.TestCase):
         P = get_admissible_plugins([D1, D2])
         assert len(P) >= 2  # Depending on other tests there could be more
         #assert 'Earthquake Guidelines Function' in P
-        assert 'Be damaged depending on building type' in P
+        assert 'Padang Earthquake Building Damage Function' in P
 
         # This one should get 3 flood population impact functions
         D1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}
@@ -64,18 +64,19 @@ class Test_real_plugins(unittest.TestCase):
         D2['layertype'] = 'raster'
         P = get_admissible_plugins([D1, D2])
         assert len(P) >= 1  # Depending on other tests there could be more
-        assert 'Need evacuation' in P
+        assert 'Flood Evacuation Function' in P
 
         # Try form where only one dictionary is passed
         # This one gets all the flood related impact functions
-        P = get_admissible_plugins(D1)
-        assert len(P) >= 2
-        assert 'Need evacuation' in P
-        assert 'Be temporarily closed' in P
-        #assert 'Flood Road Impact Function' in P
 
         # Try to get general inundation building impact function
-        f_name = 'Be temporarily closed'
+        f_name = 'Flood Building Impact Function'
+
+        P = get_admissible_plugins(D1)
+        assert len(P) >= 2
+        assert 'Flood Evacuation Function' in P
+        assert f_name in P
+        #assert 'Flood Road Impact Function' in P
 
         D1 = {'category': 'hazard', 'subcategory': 'tsunami'}
         D2 = {'category': 'exposure', 'subcategory': 'building'}

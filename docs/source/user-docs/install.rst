@@ -6,8 +6,22 @@ Installing InaSAFE
    |project_name| is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS), so
    QGIS must be installed first.
 
+Via QGIS Python Plugin Repository
+---------------------------------
+
+To install the |project_name|, use the plugin manager in QGIS::
+
+  Plugins -> Fetch Python Plugins
+
+Then search for '|project_name|', select it and click the install button.
+The plugin will now be added to your plugins menu.
+
 From Zip Archive
 ----------------
+
+.. warning:: This installation method is not recommended unless you have no
+   internet access or wish to use a specific version of InaSAFE. Please
+   install using the plugin repository described above rather.
 
 We make regular releases of the InaSAFE plugin and they are available at
 https://github.com/AIFDR/inasafe/downloads. Simply choose the most recent (i.e.
@@ -32,18 +46,6 @@ appear in the list. Now tick the checkbox next to it to enable the plugin.
    :align: center
 
 
-Via QGIS Python Plugin Repository
----------------------------------
-
-.. warning:: This installation method is not yet supported - watch this space it
-   will be available in the near future.
-
-To install the |project_name|, use the plugin manager in QGIS::
-
-  Plugins -> Fetch Python Plugins
-
-Then search for '|project_name|', select it and click the install button.
-The plugin will now be added to your plugins menu.
 
 System Requirements
 -------------------

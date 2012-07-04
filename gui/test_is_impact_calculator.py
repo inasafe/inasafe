@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.4.0'
+__version__ = '0.5.0'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -161,7 +161,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         #E = readSafeLayer(exposure_path)
         self.calculator.setHazardLayer(hazard_path)
         self.calculator.setExposureLayer(exposure_path)
-        self.calculator.setFunction('Be temporarily closed')
+        self.calculator.setFunction('Flood Building Impact Function')
         try:
             myRunner = self.calculator.getRunner()
             # run non threaded
