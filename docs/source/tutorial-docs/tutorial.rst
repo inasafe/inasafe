@@ -1,5 +1,5 @@
 =================================================================
-Ina-SAFE (Indonesian Scenario Assessment For Emergencies) V 0.4.0
+InaSAFE Tutorial
 =================================================================
 
 Overview
@@ -19,8 +19,8 @@ you the ability to learn how to manipulate data in InaSAFE, what the
 requirements of the data are and what kind of results you can expect out of the
 data.
 
-Who Should Attend
-.................
+Prerequisites
+.............
 
 This training is designed for those with a basic or intermediate knowledge of
 GIS, who wants to integrate scientific-based risk impact scenario in their
@@ -54,7 +54,7 @@ Reference
 .........
 
 “InaSAFE Documentation, Release 0.4.0-alpha”, Ole Moeller Nielsen & Tim Sutton,
-June 2012.  For more information, please visit www.inasafe.org.
+June 2012.  For more information, please visit `www.inasafe.org <http://inasafe.org>`_.
 
 Installation
 ------------
@@ -64,11 +64,22 @@ Install QGIS
 
 You need QGIS version 1.7 or newer.
 
-You can download the software from
-http://hub.qgis.org/projects/quantum-gis/wiki/Download.
+You can download the software from http://download.qgis.org.
 
 Install InaSAFE Plugin
 ......................
+
+Option 1: From QGIS Repository:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To install the InaSAFE, use the plugin manager in QGIS:
+
+:menuselection:`Plugins --> Fetch Python Plugins`
+Then search for ‘InaSAFE‘, select it and click the install button. The plugin
+will now be added to your plugins menu.
+
+Option 2: Manual Installation:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To install the InaSAFE plugin, go to
 https://github.com/AIFDR/inasafe/downloads.
