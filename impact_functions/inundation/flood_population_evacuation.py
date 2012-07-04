@@ -24,7 +24,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     datatype=='density'
     """
 
-    plugin_name = _('Need evacuation')
+    title = _('Need evacuation')
 
     def run(self, layers):
         """Risk plugin for flood population evacuation

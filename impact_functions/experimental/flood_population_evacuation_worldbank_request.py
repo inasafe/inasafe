@@ -8,7 +8,7 @@ from storage.utilities import ugettext as _
 from impact_functions.tables import Table, TableRow
 
 
-class FloodEvacuationFunction(FunctionProvider):
+class WBFloodEvacuationFunction(FunctionProvider):
     """Risk plugin for flood evacuation
 
     :author AIFDR
@@ -24,7 +24,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     datatype=='density'
     """
 
-    plugin_name = _('Need evacuation')
+    title = _('Need evacuation')
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
