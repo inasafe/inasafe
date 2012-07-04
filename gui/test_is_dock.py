@@ -47,8 +47,7 @@ from utilities_test import (getQgisTestApp,
 
 from gui.is_dock import ISDock
 from is_utilities import (setRasterStyle,
-                          qgisVersion,
-                          getFunctionID)
+                          qgisVersion)
 
 from safe_api import TESTDATA, HAZDATA, EXPDATA
 from safe_api import read_keywords
@@ -77,7 +76,7 @@ def getUiState(ui):
 
     myHazard = str(ui.cboHazard.currentText())
     myExposure = str(ui.cboExposure.currentText())
-    myImpactFunction = getFunctionID(ui.cboFunction)
+    myImpactFunction = str(ui.cboFunction.getFunctionID())
 
     myRunButton = ui.pbnRunStop.isEnabled()
 
