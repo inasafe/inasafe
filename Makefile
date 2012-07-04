@@ -233,9 +233,9 @@ list_gis_packages:
 
 data_audit:
 	@echo
-	@echo "---------------------------------------"
-	@echo "Audit of IP status for bundled data    "
-	@echo "---------------------------------------"
+	@echo "---------------------------"
+	@echo "IP issues with bundled data"
+	@echo "---------------------------"
 	@python scripts/data_IP_audit.py
 
 pylint:

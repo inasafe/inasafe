@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.4.0'
+__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -843,14 +843,27 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.pbnRunStop.setEnabled(False)
         if theTitle is None:
             theTitle = self.tr('Analyzing this question...')
-        myHtml = ('<div><span class="label label-success">'
-                  + str(theTitle) + '</span></div>'
-                  '<div>' + str(theMessage) + '</div>'
-                  '<div class="progress">'
-                  '  <div class="bar" '
-                  '       style="width: ' + str(theProgress) + '%;">'
-                  '  </div>'
-                  '</div>')
+        myHtml = ('<table class="condensed">'
+                  '  <tr>'
+                  '    <th class="info button-cell">'
+                  + str(theTitle) +
+                  '    </th>'
+                  '  </tr>'
+                  '  <tr>'
+                  '    <td>'
+                  + str(theMessage) +
+                  '    </td>'
+                  '  </tr>'
+                  '  <tr>'
+                  '    <td>'
+                  '      <div class="progress">'
+                  '          <div class="bar" '
+                  '               style="width: ' + str(theProgress) + '%;">'
+                  '          </div>'
+                  '      </div>'
+                  '    </td>'
+                  '  </tr>'
+                  '</table>')
         self.displayHtml(myHtml)
         self.repaint()
         QtGui.qApp.processEvents()
