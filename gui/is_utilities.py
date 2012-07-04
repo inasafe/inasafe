@@ -393,3 +393,19 @@ def qgisVersion():
         myVersion = unicode(QGis.qgisVersion)[0]
     myVersion = int(myVersion)
     return myVersion
+
+
+def getFunctionID(cboFunction):
+    """Get the canonical impact function ID
+    Args:
+        cboFunction: Function combo
+    Returns:
+        FunctionID: String that identifies the function
+    Raises:
+       None
+    """
+
+    myIndex = cboFunction.currentIndex()
+    myItemData = cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
+    myFunctionID = str(myItemData.toString())
+    return myFunctionID

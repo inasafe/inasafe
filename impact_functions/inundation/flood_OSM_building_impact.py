@@ -22,8 +22,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
     plugin_name = _('Be temporarily closed')
 
     # FIXME (Ole): Working on issue #131
-    title = _('THIS SHOULD SHOW UP IN THE GUI')
-    #title = _('Be temporarily closed')
+    #title = _('THIS SHOULD SHOW UP IN THE GUI')
+    title = _('Be temporarily closed')
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
