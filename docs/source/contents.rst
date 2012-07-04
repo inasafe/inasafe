@@ -6,10 +6,10 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   tutorial-docs/tutorial
    user-docs/index
    developer-docs/index
    api-docs/index
-   tutorial-docs/tutorial
    authors
 
 
