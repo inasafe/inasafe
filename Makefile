@@ -128,7 +128,7 @@ pep8:
 test_suite_no_svn: compile
 	@echo
 	@echo "----------------------"
-	@echo "Regresssion Test Suite"
+	@echo "Regression Test Suite"
 	@echo "----------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
