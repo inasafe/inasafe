@@ -33,7 +33,7 @@ class Test_real_plugins(unittest.TestCase):
         msg = 'Available impact functions are: %s' % str(P.keys())
         #assert 'Earthquake Guidelines Function' in P, msg
         assert 'Be damaged depending on building type' in P, msg
-        assert 'Be temporarily closed' in P, msg
+        assert 'Flood Building Impact Function' in P, msg
         assert 'Need evacuation' in P, msg
         #assert 'Tephra Building Impact Function' in P, msg
         #assert 'Tephra Population Impact Function' in P, msg
@@ -68,14 +68,15 @@ class Test_real_plugins(unittest.TestCase):
 
         # Try form where only one dictionary is passed
         # This one gets all the flood related impact functions
+
+        # Try to get general inundation building impact function
+        f_name = 'Flood Building Impact Function'
+
         P = get_admissible_plugins(D1)
         assert len(P) >= 2
         assert 'Need evacuation' in P
-        assert 'Be temporarily closed' in P
+        assert f_name in P
         #assert 'Flood Road Impact Function' in P
-
-        # Try to get general inundation building impact function
-        f_name = 'Be temporarily closed'
 
         D1 = {'category': 'hazard', 'subcategory': 'tsunami'}
         D2 = {'category': 'exposure', 'subcategory': 'building'}
