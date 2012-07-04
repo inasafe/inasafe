@@ -230,7 +230,7 @@ class Test_Engine(unittest.TestCase):
         fatality_result = F.get_data()
 
 #        print fatality_result
-  
+
         msg = ('Calculated fatality map did not match expected result: '
                'I got %s\n'
                'Expected %s' % (calculated_result, fatality_result))
@@ -2141,9 +2141,11 @@ class Test_Engine(unittest.TestCase):
             bldg_class = attributes[i]['ITB_Class']
             msg = ('Calculated damage did not match expected result: \n'
                'I got %s\n'
-               'Expected %s for bldg type: %s' % (calculated_damage, ref_damage[i],bldg_class))
+               'Expected %s for bldg type: %s' % (calculated_damage,
+                                                  ref_damage[i],bldg_class))
             assert nanallclose(calculated_damage, ref_damage[i],
-                           rtol=1.0e-4), msg
+                               # Reference data is single precision
+                               atol=1.0e-6), msg
 
 #        print calculated_damage.shape
 #        bldg_class = attributes[:]['VCLASS']
@@ -2155,7 +2157,7 @@ class Test_Engine(unittest.TestCase):
 
 #        print keywords
 #        print calculated_damage
- 
+
     def test_flood_on_roads(self):
         """Jakarta flood impact on roads calculated correctly
         """
