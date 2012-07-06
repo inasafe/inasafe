@@ -8,10 +8,10 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 # Import InaSAFE modules
-from interpolation2d import interpolate2d, interpolate_raster
-from interpolation1d import interpolate1d
-from common.testing import combine_coordinates
-from common.numerics import nanallclose
+from safe.common.interpolation2d import interpolate2d, interpolate_raster
+from safe.common.interpolation1d import interpolate1d
+from safe.common.testing import combine_coordinates
+from safe.common.numerics import nanallclose
 
 
 def linear_function(x, y):
