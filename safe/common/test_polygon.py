@@ -634,6 +634,8 @@ class Test_Polygon(unittest.TestCase):
             assert is_inside_polygon(point, polygon)
             assert not is_inside_polygon(point, ex_poly), '%s' % str(point)
 
+    test_populate_polygon_with_exclude2.slow = 1
+
     def test_large_example(self):
         """Large polygon clipping example works
         """
@@ -683,6 +685,8 @@ class Test_Polygon(unittest.TestCase):
 
         for point in all_points[indices[count:]]:
             assert not is_inside_polygon(point, main_polygon)
+
+    test_large_example.slow = 1
 
     def test_large_convoluted_example(self):
         """Large convoluted polygon clipping example works
@@ -736,6 +740,8 @@ class Test_Polygon(unittest.TestCase):
         for point in all_points[indices[count:]]:
             assert not is_inside_polygon(point, main_polygon)
 
+    test_large_convoluted_example.slow = 1
+
     def test_large_convoluted_example_random(self):
         """Large convoluted polygon clipping example works (random points)
         """
@@ -776,6 +782,8 @@ class Test_Polygon(unittest.TestCase):
 
         for point in all_points[indices[count:]]:
             assert not is_inside_polygon(point, main_polygon)
+
+    test_large_convoluted_example_random.slow = 1
 
     def test_in_and_outside_polygon_main(self):
         """Set of points is correctly separated according to polygon (2)
@@ -1953,6 +1961,7 @@ class Test_Polygon(unittest.TestCase):
         # Not joined are (but that's OK)
         #[[122.231108, -8.626598], [122.231021, -8.626557]]
         #[[122.231021, -8.626557], [122.230284, -8.625983]]
+    test_clip_lines_by_polygon_real_data.slow =1
 
     def test_join_segments(self):
         """Consecutive line segments can be joined into continuous line
