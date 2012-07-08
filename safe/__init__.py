@@ -9,7 +9,7 @@ def get_version():
 
 class SafeTester(Tester):
     def _show_system_info(self):
-        print "safe version %s" % __version__
+        print "safe version %s" % get_version()
         super(SafeTester, self)._show_system_info()
 
 test = SafeTester().test
