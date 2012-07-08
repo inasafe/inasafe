@@ -2,6 +2,7 @@ import unittest
 import numpy
 import sys
 import os
+import locale
 
 from osgeo import gdal
 
@@ -1831,16 +1832,30 @@ class Test_IO(unittest.TestCase):
         translatable strings.
         .. see:: :doc:`i18n`
         """
-        # Make sure the lang environment is set before using
-        # translation layer
-        os.environ['LANG'] = 'id'
-        assert os.environ['LANG'] == 'id'
+        # If you want to modify this code, please get aqcuainted with
+        # Python's locale module. In particular:
+        # http://docs.python.org/library/locale.html#locale.getdefaultlocale
+
+        # Set the standard C locale.
+        os.environ['LANG'] = 'C'
+        os.environ['LC_ALL'] = 'C.UTF-8'
+        
         #must be after above
-        string1 = _('Hello!')  # translate as 'Hi'
-        string2 = _('Hello2!')  # translate as 'Hi2'
-        msg = 'Expected %s, got %s' % ('Hi', string1)
-        assert string1 == 'Hi', msg
-        assert string2 == 'Hi2'
+        string1 = 'Hello!'
+        out1 = _(string1)
+        expected1 = 'Hello!'
+        msg = 'Expected %s, got %s' % (expected1, out1)
+        assert string1 == expected1, msg
+
+        # Set the Indonesian locale to test translations.
+        os.environ['LANG'] = 'id'
+        os.environ['LC_ALL'] = 'id_ID.UTF-8'
+
+        #must be after above
+        indoout1 = _(string1)  # translate as 'Hi'
+        indoexpected1 = 'Hi'
+        msg = 'Expected %s, got %s' % (indoexpected1, indoout1)
+        assert indoout1 == indoexpected1, msg
 
     def test_multipart_polygon_raises_exception(self):
         """Multipart polygons raise exception
