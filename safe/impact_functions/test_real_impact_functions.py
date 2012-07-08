@@ -34,7 +34,7 @@ class Test_real_plugins(unittest.TestCase):
         #assert 'Earthquake Guidelines Function' in P, msg
         assert 'Padang Earthquake Building Damage Function' in P, msg
         assert 'Flood Building Impact Function' in P, msg
-        assert 'Flood Evacuation Function' in P, msg
+        assert 'W B Flood Evacuation Function' in P, msg
         #assert 'Tephra Building Impact Function' in P, msg
         #assert 'Tephra Population Impact Function' in P, msg
         #assert 'Flood Road Impact Function' in P, msg
@@ -64,7 +64,7 @@ class Test_real_plugins(unittest.TestCase):
         D2['layertype'] = 'raster'
         P = get_admissible_plugins([D1, D2])
         assert len(P) >= 1  # Depending on other tests there could be more
-        assert 'Flood Evacuation Function' in P
+        assert 'W B Flood Evacuation Function' in P
 
         # Try form where only one dictionary is passed
         # This one gets all the flood related impact functions
@@ -74,7 +74,7 @@ class Test_real_plugins(unittest.TestCase):
 
         P = get_admissible_plugins(D1)
         assert len(P) >= 2
-        assert 'Flood Evacuation Function' in P
+        assert 'W B Flood Evacuation Function' in P
         assert f_name in P
         #assert 'Flood Road Impact Function' in P
 

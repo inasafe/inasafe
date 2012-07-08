@@ -32,6 +32,7 @@ def ugettext(s):
     """
     path = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                         '..', 'i18n'))
+    import pdb;pdb.set_trace()
     if 'LANG' not in os.environ:
         return s
     lang = os.environ['LANG']
