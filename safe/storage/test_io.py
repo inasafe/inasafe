@@ -95,6 +95,8 @@ class Test_IO(unittest.TestCase):
             assert len(attributes) == N
             assert FEATURE_COUNTS[vectorname] == N
 
+    test_vector_feature_count.slow = 1
+
     def test_reading_and_writing_of_vector_point_data(self):
         """Vector point data can be read and written correctly
         """
@@ -215,6 +217,8 @@ class Test_IO(unittest.TestCase):
             # Test individual extraction
             lon = layer.get_data(attribute='LONGITUDE')
             assert numpy.allclose(lon, coords[:, 0])
+
+    test_reading_and_writing_of_vector_point_data.slow = 1
 
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
@@ -905,6 +909,8 @@ class Test_IO(unittest.TestCase):
             msg = ('File %s should have registered nodata '
                    'value %i but it was %s' % (filename, Amin, nodata))
             assert nodata == Amin, msg
+
+    test_nodata_value.slow =1
 
     def test_vector_extrema(self):
         """Vector extremum calculation works
@@ -1884,6 +1890,7 @@ class Test_IO(unittest.TestCase):
         msg = 'Projections did not match: %s != %s' % (Hp, Ep)
         assert Hp == Ep, msg
 
+    test_projection_comparisons.slow =1
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test')

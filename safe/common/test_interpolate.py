@@ -284,6 +284,8 @@ class Test_interpolate(unittest.TestCase):
                     #print i, j, xi, eta, alpha, beta, vals[k], ref
                     assert nanallclose(vals[k], ref, rtol=1e-12, atol=1e-12)
 
+    test_interpolation_random_array_and_nan.slow = 1
+
     def test_linear_interpolation_outside_domain(self):
         """Interpolation library sensibly handles values outside the domain
         """
