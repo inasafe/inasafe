@@ -4,12 +4,13 @@ import os
 import subprocess
 
 from distutils.core import setup
+safe = __import__('safe')
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name          = 'python-safe',
-      version       = '0.5.0',
+      version       = safe.get_version(),
       description   = 'Spatial Analysis Functional Engine',
       license       = 'GPL',
       keywords      = 'gis vector feature raster data',
@@ -23,7 +24,7 @@ setup(name          = 'python-safe',
                   'safe.engine.impact_functions_for_testing',
                   'safe.impact_functions'],
       package_dir = {'safe': 'safe'},
-      package_data = {'safe': ['test/data/*']},
+      package_data = {'safe': ['test/data/*', 'i18n']},
       classifiers   = [
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
