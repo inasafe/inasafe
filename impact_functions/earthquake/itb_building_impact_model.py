@@ -1,11 +1,25 @@
 """Impact function based on ITB vulnerability model
 
-This impact function estimates percentual damage to buildings as a
-function of ground shaking measured in MMI.
-Buildings are assumed to fall the # classes below as described in
-the ITB report.
+    This model was developed by Institut Tecknologi Bandung (ITB) and
+    implemented by Dr Hyeuk Ryu, Geoscience Australia
 
-To be added
+    Reference:
+
+    Indonesian Earthquake Building-Damage and Fatality Models and
+    Post Disaster Survey Guidelines Development,
+    Bali, 27-28 February 2012, 54pp.
+
+    Methodology: 
+    The ITB vulnerabilty model was heuristically developed (i.e. based on expert
+    opinion) through the Bali workshop. The model is defined with two parameters 
+    (median, and lognormal standard deviation) of cumulative 
+    lognormal distribution. The building type classification used in the model was 
+    endorsed by expert group in thel Bali workshop.
+
+    Limitations: 
+    The currnet model contains some dummy numbers. 
+    It should be updated once ITB publishes the final report on 
+    earthquake building damage model development.
 
 """
 #import os
@@ -14,10 +28,9 @@ from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
 from common.numerics import lognormal_cdf
 from common.utilities import ugettext as _
+from common.testing import TESTDATA, HAZDATA, EXPDATA
 #from impact_functions.mappings import osm2itb, sigab2itb
 
-
-# Damage curves for each of the nine classes derived from the Padang survey
 class AutoVivification(dict):
     """Implementation of perl's autovivification feature."""
     def __getitem__(self, item):
@@ -28,24 +41,25 @@ class AutoVivification(dict):
             return value
 
 # read vulnerability information
-# Non-Engineered buildings
-path_csv = '/home/hryu/inasafe/impact_functions/earthquake'
-a = open(path_csv + '/itb_vulnerability_non-eng.csv').readlines()
-damage_curves = AutoVivification()
+eng_filename = '%s/itb_vulnerability_eng.csv' % TESTDATA
+non_eng_filename = '%s/itb_vulnerability_non_eng.csv' % TESTDATA
+
+vul_curves = AutoVivification()
+# Non-Engineere dbuildings
+a = open(non_eng_filename).readlines()
 for item in a[1:]:
     tmp = item.strip('\n').split(',')
     idx = tmp[0] # structural type index
-    damage_curves[idx]['median'] = float(tmp[5])
-    damage_curves[idx]['beta'] = float(tmp[6])
+    vul_curves[idx]['median'] = float(tmp[5])
+    vul_curves[idx]['beta'] = float(tmp[6])
 
 # Engineered buildings
-a = open(path_csv + '/itb_vulnerability_eng.csv').readlines()
+a = open(eng_filename).readlines()
 for item in a[1:]:
     tmp = item.strip('\n').split(',')
     idx = tmp[0] # structural type index
-    damage_curves[idx]['median'] = float(tmp[6])
-    damage_curves[idx]['beta'] = float(tmp[7])
-# I would suggest chaning the name of variable 'damage_curves' to 'vulnerability' since we simply use vulnerability models.
+    vul_curves[idx]['median'] = float(tmp[6])
+    vul_curves[idx]['beta'] = float(tmp[7])
 
 class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
     """Risk plugin for ITB earthquake damage to buildings in Padang
@@ -64,8 +78,6 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
     def run(self, layers):
         """Risk plugin for Padang building survey
         """
-#        fid = open('result_itb.csv','w')
-#        fid.write('MMI, ITB_Class, Comp_damage \n')
 
         # Extract data
         H = get_hazard_layer(layers)    # Ground shaking
@@ -93,7 +105,6 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
         # List attributes to carry forward to result layer
         attributes = Emap.get_attribute_names()
-#        print attributes
         # Calculate building damage
         count50 = 0
         count25 = 0
@@ -105,11 +116,9 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
 
             building_class = Emap.get_data(vclass_tag, i)
 
-#            building_type = str(int(building_class))
             building_type = str(building_class)
-            damage_params = damage_curves[building_type]
+            damage_params = vul_curves[building_type]
             beta = damage_params['beta']
-#            print beta, type(beta)
             median = damage_params['median']
 
             msg = 'Invalid parameter value for ' + building_type
