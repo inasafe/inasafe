@@ -86,6 +86,24 @@ lines-of-code:
 	@echo "----------------------"
 	@git log | head -3
 	@sloccount . | grep '^[0-9]'
+	# This line is for machine readble output for use by Jenkins
+	@sloccount --duplicates --wide --details . | fgrep -v .svn > sloccount.sc || :
+
+jenkins-test:
+	@echo
+	@echo "----------------------------------"
+	@echo "Regresssion Test Suite for Jenkins"
+	@echo "----------------------------------"
+	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --with-xunit --verbose --cover-package=storage,engine,impact_functions,gui || :
+
+jenkins-pyflakes:
+	@echo
+	@echo "----------------------------------"
+	@echo "PyFlakes check for Jenkins"
+	@echo "----------------------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes storage engine impact_functions gui > pyflakes.log || :
+
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
