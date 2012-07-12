@@ -16,3 +16,9 @@ riab_demo_data
 .pydevproject
 .settings
 docs/build
+nosetests.xml
+pep8.log
+pyflakes.log
+result.txt
+keywords.db
+
