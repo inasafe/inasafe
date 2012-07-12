@@ -58,12 +58,13 @@ on your machine in order to work effectively with the code base:
 * pyqt4-dev-tools (compiling ui and resources)
 * qt4-doc (qt4 API documentation)
 * pyflakes (test for bad coding style like unused imports / vars)
+* python-nosexcover and python-coverage (code coverage reporting)
 
 On an ubuntu system you can install these requirements using apt::
 
    sudo apt-get install git subversion pep8 python-nose python-coverage \
-   python-gdal python-numpy python-sphinx pyqt4-dev-tools pyflakes
-   sudo pip install cloud-sptheme
+   python-gdal python-numpy python-sphinx pyqt4-dev-tools pyflakes \
+   sudo pip install cloud-sptheme python-nosexcover
 
 In some cases these dependencies may already be on your system via installation
 process you followed for QGIS.
