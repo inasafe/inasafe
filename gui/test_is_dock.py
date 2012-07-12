@@ -76,7 +76,7 @@ def getUiState(ui):
 
     myHazard = str(ui.cboHazard.currentText())
     myExposure = str(ui.cboExposure.currentText())
-    myImpactFunction = str(ui.cboFunction.getFunctionID())
+    myImpactFunction = DOCK.getFunctionID()
 
     myRunButton = ui.pbnRunStop.isEnabled()
 
