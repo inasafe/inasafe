@@ -21,4 +21,4 @@ pep8.log
 pyflakes.log
 result.txt
 keywords.db
-
+coverage.xml
