@@ -117,7 +117,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by pep8 style checking
-test: docs test_suite pep8 disabled_tests dependency_test unwanted_strings data_audit test-translations
+test: docs test_suite pep8 dependency_test unwanted_strings data_audit test-translations
 
 # Run the test suite followed by pep8 style checking - dont update from svn for test data
 test_no_svn: docs test_suite_no_svn pep8 disabled_tests dependency_test unwanted_strings data_audit
