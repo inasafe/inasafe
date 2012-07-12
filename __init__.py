@@ -38,7 +38,10 @@ def version():
 
 
 def qgisMinimumVersion():
-    """Minimum version of QGIS needed to run this plugin - currently set to 1.7."""
+    """Minimum version of QGIS needed to run this plugin
+
+       This is currently set to 1.7
+    """
     return '1.7'
 
 
