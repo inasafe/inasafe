@@ -545,7 +545,7 @@ class ISDockTest(unittest.TestCase):
         assert myButton.isEnabled(), myMessage
 
         # Hazard layers - default is already Banjir Jakarta seperti 2007
-        myIndex = DOCK.cboHazard.findText('Jakarta 2007 flood')
+        myIndex = DOCK.cboHazard.findText('A flood in Jakarta like in 2007')
         msg = 'Jakarta 2007 flood hazard layer not found'
         assert myIndex != -1, msg
         DOCK.cboHazard.setCurrentIndex(myIndex)
@@ -625,7 +625,7 @@ class ISDockTest(unittest.TestCase):
 
         myExpectedDict = {'Run Button Enabled': True,
                           'Impact Function': 'Flood Evacuation Function',
-                          'Hazard': 'Jakarta 2007 flood',
+                          'Hazard': 'A flood in Jakarta like in 2007',
                           'Exposure': 'People'}
         myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
                             myDict, myExpectedDict, combosToString(DOCK))

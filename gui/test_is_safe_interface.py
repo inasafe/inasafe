@@ -183,7 +183,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         assert myKeywords == {'category': 'hazard',
                               'subcategory': 'earthquake',
                               'unit': 'MMI',
-                              'title': 'Padang 2009 scenario'}
+                              'title': 'An earthquake in Padang like in 2009'}
 
         myKeywords = readKeywordsFromFile(self.rasterPopulationPath)
         assert myKeywords == {'category': 'exposure',

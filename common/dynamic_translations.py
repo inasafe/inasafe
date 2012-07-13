@@ -51,36 +51,53 @@ from common.utilities import ugettext as _
 names = {'title1': _('DKI buildings'),       # Bangunan DKI
          'title2': _('Jakarta 2007 flood'),  # Banjir seperti 2007
          'Jakarta 2007 flood': _('Jakarta 2007 flood'),
+         'A flood in Jakarta like in 2007': _('A flood in Jakarta like '
+                                              'in 2007'),
          'title3': _('Jakarta flood like 2007 with pump failure at Pluit, '
                      'Ancol and Sunter'),  # Banjir 2007 tanpa pompa di
                                            # Pluit, Ancol dan Sunter
          'Jakarta flood like 2007 with pump failure at Pluit and Ancol':
              _('Jakarta flood like 2007 with pump failure at '
                'Pluit and Ancol'),
-         'Jakarta flood like 2007 with structural improvements':
-             _('Jakarta flood like 2007 with structural improvements'),
+         'A flood in Jakarta like in 2007 but with structural improvements':
+             _('A flood in Jakarta like in 2007 but with structural '
+               'improvements'),
          'title4': _('Sea wall collapse at Pluit'),  # Dam Pluit Runtuh
          'title5': _('Jakarta flood prone areas'),  # Daerah Rawan Banjir
+         ('A flood in Jakarta in RW areas '
+          'identified as flood prone'): _('A flood in Jakarta in RW areas '
+                                          'identified as flood prone'),
+                                          # Daerah Rawan Banjir
          'title6': _('Population Jakarta'),  # Penduduk Jakarta
          'People': _('People'),
          'people': _('people'),
          'Flood Depth (design) Jakarta': _('Flood Depth (design) Jakarta'),
          'Flood Depth (current) Jakarta': _('Flood Depth (current) Jakarta'),
-         'Yogyakarta 2006 earthquake': _('Yogyakarta 2006 earthquake'),
+         'An earthquake in Yogyakarta like in 2006': _('An earthquake in '
+                                                       'Yogyakarta like in '
+                                                       '2006'),
          'Indonesian Earthquake Hazard Map': _('Indonesian Earthquake '
                                                'Hazard Map'),
-         'Maumere tsunami inundation': _('Maumere tsunami inundation'),
-         'Sumatran fault Mw 7.8 scenario': _('Sumatran fault Mw 7.8 '
-                                             'scenario'),  # Skenario
+         'A tsunami in Maumere (Mw 8.1)': _('A tsunami in Maumere (Mw 8.1)'),
+         'An earthquake at the Sumatran fault (Mw 7.8)': _('An earthquake at '
+                                                           'the Sumatran '
+                                                           'fault (Mw 7.8)'),
+                                                           # Skenario
                                                            # Gempabumi Sesar
                                                            # Sumatra Mw 7.8
-         'Mentawai fault Mw 9.0 scenario': _('Mentawai fault Mw 9.0 '
-                                             'scenario'),  # Skenario
+         'An earthquake at the Mentawai fault (Mw 9.0)': _('An earthquake at '
+                                                           'the Mentawai fault'
+                                                           ' (Mw 9.0)'),
+                                                           # Skenario
                                                            # Gempabumi Sesar
                                                            # Mentawai Mw 9.0
-         'Padang 2009 scenario': _('Padang 2009 scenario'),
-         'Yogya 2006 scenario': _('Yogya 2006 scenario'),
-         'Lembang fault scenario': _('Lembang fault scenario'),
+         'An earthquake in Padang like in 2009': _('An earthquake in Padang '
+                                                   'like in 2009'),
+         'An earthquake in Yogyakarta  like in 2006': _('An earthquake in '
+                                                        'Yogyakarta like in '
+                                                        '2006'),
+         'An earthquake a the Lembang fault': _('An earthquake at the Lembang '
+                                                'fault'),
          'OSM building footprints': _('OSM building '
                                       'footprints'),  # Bangunan OSM
          'OSM buildings': _('OSM buildings'),  # Bangunan OSM
