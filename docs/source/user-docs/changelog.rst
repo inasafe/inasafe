@@ -3,6 +3,13 @@
 Whats new?
 ==========
 
+Changelog for version 0.4.1
+...........................
+
+* This is a minor bugfix release with packaging and documentation related
+  changes only so that InaSAFE can be deployed via the official QGIS repository.
+* Added InaSAFE tutorial to sphinx documentation
+
 Changelog for version 0.4.0
 ...........................
 * Ability to automatically handle multipart vector data: https://github.com/AIFDR/inasafe/issues/160

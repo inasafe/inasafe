@@ -2,15 +2,14 @@
 |project_name| developer documentation
 ======================================
 
-|project_name| is a Quantum GIS plugin that enables you to perform risk scenario
-analysis of natural disaster events such as a flood, tsunami, earthquake
-etc.
+Additional useful links for developers:
 
-It is developed jointly by AusAID (AIFDR) and World Bank (GFDRR) as an Open Source project
+* GitHub site for InaSAFE : https://github.com/AIFDR/inasafe/
+* Continuous Integration testbed for InaSAFE : http://jenkins.linfiniti.com/job/InaSAFE/
+* QGIS Plugin Home Page : http://plugins.qgis.org/plugins/inasafe/
+* InaSAFE Ohloh Project Stats : https://www.ohloh.net/p/inasafe
 
-You can find out more about the |PROJECT_NAME| project by visiting
-`riskinabox.org <http://riskinabox.org/>`_.
-
+Developer Documentation Contents:
 
 .. toctree::
    :maxdepth: 3
@@ -25,6 +24,4 @@ You can find out more about the |PROJECT_NAME| project by visiting
    preparing_a_release
    faq
    todo
-
-
 
