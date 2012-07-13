@@ -2103,12 +2103,14 @@ class Test_Engine(unittest.TestCase):
 
     def test_itb_building_function(self):
         """Damage ratio (estimated repair cost relative to replacement cost)
-           can be computed using the ITB building vulnerability model. 
+           can be computed using the ITB building vulnerability model.
            (Test data from Hyeuk Ryu).
-           As of July 4, 2012, the vulnerability model used to generate the reference 
-           values is dummy one, and it will be updated with the ITB's model later.
+           As of July 4, 2012, the vulnerability model used to generate
+           the reference values is dummy one, and it will be updated with
+           the ITB's model later.
         """
-	 # Name file names for hazard level, exposure and expected impact
+
+        # Name file names for hazard level, exposure and expected impact
         hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
         exposure_filename = '%s/Padang_WGS84.shp' % TESTDATA
         damage_filename = '%s/reference_result_itb.csv' % TESTDATA
@@ -2142,7 +2144,7 @@ class Test_Engine(unittest.TestCase):
             msg = ('Calculated damage did not match expected result: \n'
                'I got %s\n'
                'Expected %s for bldg type: %s' % (calculated_damage,
-                                                  ref_damage[i],bldg_class))
+                                                  ref_damage[i], bldg_class))
             assert nanallclose(calculated_damage, ref_damage[i],
                                # Reference data is single precision
                                atol=1.0e-6), msg

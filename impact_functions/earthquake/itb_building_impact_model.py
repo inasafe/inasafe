@@ -1,28 +1,28 @@
 """Impact function based on ITB vulnerability model
 
-    This model was developed by Institut Tecknologi Bandung (ITB) and
-    implemented by Dr Hyeuk Ryu, Geoscience Australia
+   This model was developed by Institut Tecknologi Bandung (ITB) and
+   implemented by Dr Hyeuk Ryu, Geoscience Australia
 
-    Reference:
+   Reference:
 
-    Indonesian Earthquake Building-Damage and Fatality Models and
-    Post Disaster Survey Guidelines Development,
-    Bali, 27-28 February 2012, 54pp.
+   Indonesian Earthquake Building-Damage and Fatality Models and
+   Post Disaster Survey Guidelines Development,
+   Bali, 27-28 February 2012, 54pp.
 
-    Methodology: 
-    The ITB vulnerabilty model was heuristically developed (i.e. based on expert
-    opinion) through the Bali workshop. The model is defined with two parameters 
-    (median, and lognormal standard deviation) of cumulative 
-    lognormal distribution. The building type classification used in the model was 
-    endorsed by expert group in thel Bali workshop.
+   Methodology:
+   The ITB vulnerabilty model was heuristically developed (i.e. based on
+   expert opinion) through the Bali workshop. The model is defined with
+   two parameters (median, and lognormal standard deviation) of cumulative
+   lognormal distribution. The building type classification used in the
+   model was endorsed by expert group in thel Bali workshop.
 
-    Limitations: 
-    The currnet model contains some dummy numbers. 
-    It should be updated once ITB publishes the final report on 
-    earthquake building damage model development.
+   Limitations:
+   The currnet model contains some dummy numbers.
+   It should be updated once ITB publishes the final report on
+   earthquake building damage model development.
 
 """
-#import os
+
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
@@ -30,6 +30,7 @@ from common.numerics import lognormal_cdf
 from common.utilities import ugettext as _
 from common.testing import TESTDATA, HAZDATA, EXPDATA
 #from impact_functions.mappings import osm2itb, sigab2itb
+
 
 class AutoVivification(dict):
     """Implementation of perl's autovivification feature."""
@@ -49,7 +50,7 @@ vul_curves = AutoVivification()
 a = open(non_eng_filename).readlines()
 for item in a[1:]:
     tmp = item.strip('\n').split(',')
-    idx = tmp[0] # structural type index
+    idx = tmp[0]  # structural type index
     vul_curves[idx]['median'] = float(tmp[5])
     vul_curves[idx]['beta'] = float(tmp[6])
 
@@ -57,9 +58,10 @@ for item in a[1:]:
 a = open(eng_filename).readlines()
 for item in a[1:]:
     tmp = item.strip('\n').split(',')
-    idx = tmp[0] # structural type index
+    idx = tmp[0]  # structural type index
     vul_curves[idx]['median'] = float(tmp[6])
     vul_curves[idx]['beta'] = float(tmp[7])
+
 
 class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
     """Risk plugin for ITB earthquake damage to buildings in Padang
