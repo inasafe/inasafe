@@ -17,7 +17,7 @@
    model was endorsed by expert group in thel Bali workshop.
 
    Limitations:
-   The currnet model contains some dummy numbers.
+   The current model contains some dummy numbers.
    It should be updated once ITB publishes the final report on
    earthquake building damage model development.
 
