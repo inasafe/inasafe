@@ -161,7 +161,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         #E = readSafeLayer(exposure_path)
         self.calculator.setHazardLayer(hazard_path)
         self.calculator.setExposureLayer(exposure_path)
-        self.calculator.setFunction('Be temporarily closed')
+        self.calculator.setFunction('Flood Building Impact Function')
         try:
             myRunner = self.calculator.getRunner()
             # run non threaded

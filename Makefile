@@ -18,10 +18,9 @@
 
 # Makefile for InaSAFE - QGIS
 
-NONGUI := storage engine impact_functions common
+NONGUI := storage engine impact_functions
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
-CODE := $(ALL) .
 
 # LOCALES = space delimited list of iso codes to generate po files for
 LOCALES = id af
@@ -88,6 +87,7 @@ lines-of-code:
 	@git log | head -3
 	@sloccount . | grep '^[0-9]'
 
+
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
@@ -98,14 +98,6 @@ clean:
 	@-find . -name '*.pyo' -exec rm {} \;
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
-	@# Remove any generated spatial datasets from code modules:
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm $(MOD)/*.shp 2>/dev/null";) 2>/dev/null
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.shx 2>/dev/null";) 2>/dev/null
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.dbf 2>/dev/null";) 2>/dev/null
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.keywords 2>/dev/null";) 2>/dev/null
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.prj 2>/dev/null";) 2>/dev/null
-	@-$(foreach MOD,$(CODE), bash -c "/bin/rm ls $(MOD)/*.asc 2>/dev/null";) 2>/dev/null
-
 
 # Run the test suite followed by pep8 style checking
 test: docs test_suite pep8 dependency_test unwanted_strings data_audit test-translations
@@ -128,7 +120,7 @@ pep8:
 test_suite_no_svn: compile
 	@echo
 	@echo "----------------------"
-	@echo "Regresssion Test Suite"
+	@echo "Regression Test Suite"
 	@echo "----------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
@@ -233,9 +225,9 @@ list_gis_packages:
 
 data_audit:
 	@echo
-	@echo "---------------------------"
-	@echo "IP issues with bundled data"
-	@echo "---------------------------"
+	@echo "---------------------------------------"
+	@echo "Audit of IP status for bundled data    "
+	@echo "---------------------------------------"
 	@python scripts/data_IP_audit.py
 
 pylint:
@@ -252,3 +244,47 @@ profile:
 	@echo "---------------------------------------"
 	python -m cProfile engine/test_engine.py -s cumulative
 
+##########################################################
+#
+# Make targets specific to Jenkins go below this point
+#
+##########################################################
+
+jenkins-test:
+	@echo
+	@echo "----------------------------------"
+	@echo "Regresssion Test Suite for Jenkins"
+	@echo "----------------------------------"
+	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
+		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=storage,engine,impact_functions,gui || :
+
+jenkins-pyflakes:
+	@echo
+	@echo "----------------------------------"
+	@echo "PyFlakes check for Jenkins"
+	@echo "----------------------------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes storage engine impact_functions gui > pyflakes.log || :
+
+jenkins-sloccount:
+	@echo "----------------------"
+	@echo " Lines of code analysis for Jenkins"
+	@echo " Generated using David A. Wheeler's 'SLOCCount'"
+	@echo "----------------------"
+	# This line is for machine readble output for use by Jenkins
+	@sloccount --duplicates --wide --details . | fgrep -v .svn > sloccount.sc || :
+
+jenkins-pylint:
+	@echo
+	@echo "----------------------------------"
+	@echo "PyLint check for Jenkins"
+	@echo "----------------------------------"
+	rm -f pylint.log
+	pylint --output-format=parseable --reports=y --disable=C,R storage engine gui > pylint.log || :
+
+jenkins-pep8:
+	@echo
+	@echo "-----------------------------"
+	@echo "PEP8 issue check for Jenkins"
+	@echo "-----------------------------"
+	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . > pep8.log || :

@@ -9,9 +9,9 @@
 
 
 [general]
-name=InaSAFE-dev
+name=InaSAFE
 qgisMinimumVersion=1.7
-description=InaSAFE Disaster risk assessment tool developed by AusAid
+description=InaSAFE Disaster Scenario Assessment for Emergencies tool developed by BNPB, AusAID, World Bank
 version=0.5.0
 
 # end of mandatory metadata

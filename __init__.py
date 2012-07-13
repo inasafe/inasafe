@@ -28,8 +28,8 @@ def name():
 
 def description():
     """A one line description for the plugin."""
-    return ('InaSAFE Disaster risk assessment tool developed by'
-           ' AusAid and World Bank')
+    return ('InaSAFE Disaster Scenario Assessment for Emergencies'
+            ' tool developed by BNPB, AusAID, World Bank')
 
 
 def version():
@@ -37,17 +37,18 @@ def version():
     return 'Version 0.5.0'
 
 
+def qgisMinimumVersion():
+    """Minimum version of QGIS needed to run this plugin
+
+       This is currently set to 1.7
+    """
+    return '1.7'
+
+
 def icon():
     """Icon path for the plugin - metadata.txt it will override this"""
-    myPath = os.path.join(os.path.dirname(__file__), 'gui', 'resources',
+    return os.path.join(os.path.dirname(__file__), 'gui', 'resources',
                         'img', 'icon.png')
-    return myPath
-
-
-def qgisMinimumVersion():
-    """Minimum version of QGIS needed to run this plugin -
-    currently set to 1.7."""
-    return '1.7'
 
 
 def classFactory(iface):

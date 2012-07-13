@@ -37,7 +37,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
 
     """
 
-    plugin_name = _('Suffer because of gender')
+    title = _('Suffer because of gender')
 
     def run(self, layers,
             x=0.62275231, y=8.03314466, zeta=2.15):
@@ -60,7 +60,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
 
         question = get_question(intensity.get_name(),
                                 population.get_name(),
-                                self.plugin_name.lower())
+                                self)
 
         # Extract data grids
         H = intensity.get_data()   # Ground Shaking

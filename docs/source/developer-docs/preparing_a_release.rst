@@ -415,16 +415,17 @@ be appended respectively, along with the related number. For example version
 simply do it in git as illustrated below.::
 
    git tag version-0_1_0
-   git push --tags
+   git push --tags origin version-0_1_0
 
 .. note:: 1) Replace 'dot' separators with underscores for the version number.
    2) You can differentiate release **branches** from release **tags** by the
    fact that branch names have only the minor version number (e.g.
    :samp:`version-0_4`) whereas release tags are reserved for point releases
-   (e.g. :samp:`version-0_4_1).
+   (e.g. :samp:`version-0_4_1`).
 
 **Outcome:** The release is tagged in GIT and can be checked out at any point
-in the future.
+in the future. The tagged source tree can easily be downloaded at any point by
+visiting https://github.com/AIFDR/inasafe/tags
 
 Upload the package
 ------------------

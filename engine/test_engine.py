@@ -191,9 +191,7 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        #plugin_name = 'I T B Fatality Function'
-        #plugin_name = 'Be affected by ground shaking'
-        plugin_name = 'Die'
+        plugin_name = 'I T B Fatality Function'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name
@@ -350,7 +348,7 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        plugin_name = 'Suffer because of gender'
+        plugin_name = 'Earthquake Women Impact Function'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name
@@ -2021,8 +2019,7 @@ class Test_Engine(unittest.TestCase):
         """Padang building impact calculation works through the API
         """
 
-        #plugin_name = 'Padang Earthquake Building Damage Function'
-        plugin_name = 'Be damaged depending on building type'
+        plugin_name = 'Padang Earthquake Building Damage Function'
 
         # Test for a range of hazard layers
         for mmi_filename in ['Shakemap_Padang_2009.asc']:

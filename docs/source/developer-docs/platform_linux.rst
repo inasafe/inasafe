@@ -57,13 +57,14 @@ on your machine in order to work effectively with the code base:
 * cloud-sptheme (sphinx theme)
 * pyqt4-dev-tools (compiling ui and resources)
 * qt4-doc (qt4 API documentation)
-
+* pyflakes (test for bad coding style like unused imports / vars)
+* python-nosexcover and python-coverage (code coverage reporting)
 
 On an ubuntu system you can install these requirements using apt::
 
    sudo apt-get install git subversion pep8 python-nose python-coverage \
-   python-gdal python-numpy python-sphinx pyqt4-dev-tools
-   sudo pip install cloud-sptheme
+   python-gdal python-numpy python-sphinx pyqt4-dev-tools pyflakes \
+   sudo pip install cloud-sptheme python-nosexcover
 
 In some cases these dependencies may already be on your system via installation
 process you followed for QGIS.
@@ -120,6 +121,28 @@ You can also run individual tests using nose. For example to run the
 riabclipper test you would do::
 
    nosetests -v gui.test_riabclipper
+
+Achievements
+............
+
+.. note:: This is optional and thus not hard coded into the 
+   makefile.
+
+Optionally you can enable nose achievments which is a motivational
+tool that gives you little achievement awards based on your test
+results::
+
+sudo pip install git+git://github.com/exogen/nose-achievements.git
+
+Now create this file in the root of your inasafe git checkout 
+:file:`setup.cfg`::
+   
+   [nosetests]
+   with-achievements=1
+
+When you run tests occasionally achievements will be displayed
+to you at the end of the test run. See the achievements home page
+at http://exogen.github.com/nose-achievements/.
 
 Developing using Eclipse (Linux)
 --------------------------------
