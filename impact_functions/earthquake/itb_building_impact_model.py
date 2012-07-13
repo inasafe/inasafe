@@ -29,7 +29,7 @@ from storage.vector import Vector
 from common.numerics import lognormal_cdf
 from common.utilities import ugettext as _
 from common.testing import TESTDATA, HAZDATA, EXPDATA
-#from impact_functions.mappings import osm2itb, sigab2itb
+from common.utilities import verify
 
 
 class AutoVivification(dict):
@@ -124,7 +124,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
             median = damage_params['median']
 
             msg = 'Invalid parameter value for ' + building_type
-            assert beta + median > 0.0, msg
+            verify(beta + median > 0.0, msg)
             percent_damage = lognormal_cdf(mmi,
                                            median=median,
                                            sigma=beta) * 100
