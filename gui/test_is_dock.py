@@ -67,8 +67,8 @@ except Exception, e:
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = ISDock(IFACE)
 
-YOGYA2006_title = 'Earthquake in Yogyakarta like in 2006'
-PADANG2009_title = 'Earthquake in Padang like in 2009'
+YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
+PADANG2009_title = 'An earthquake in Padang like in 2009'
 
 def getUiState(ui):
     """Get state of the 3 combos on the DOCK ui. This method is purely for
