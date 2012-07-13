@@ -42,8 +42,8 @@ class AutoVivification(dict):
             return value
 
 # read vulnerability information
-eng_filename = '%s/itb_vulnerability_eng.csv' % TESTDATA
-non_eng_filename = '%s/itb_vulnerability_non_eng.csv' % TESTDATA
+eng_filename = 'itb_vulnerability_eng.csv'
+non_eng_filename = 'itb_vulnerability_non_eng.csv'
 
 vul_curves = AutoVivification()
 # Non-Engineere dbuildings
