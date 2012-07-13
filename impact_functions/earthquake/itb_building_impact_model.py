@@ -23,6 +23,7 @@
 
 """
 
+import os
 from impact_functions.core import FunctionProvider
 from impact_functions.core import get_hazard_layer, get_exposure_layer
 from storage.vector import Vector
@@ -31,6 +32,7 @@ from common.utilities import ugettext as _
 from common.testing import TESTDATA, HAZDATA, EXPDATA
 from common.utilities import verify
 
+path = os.path.dirname(__file__)
 
 class AutoVivification(dict):
     """Implementation of perl's autovivification feature."""
@@ -42,8 +44,8 @@ class AutoVivification(dict):
             return value
 
 # read vulnerability information
-eng_filename = 'itb_vulnerability_eng.csv'
-non_eng_filename = 'itb_vulnerability_non_eng.csv'
+eng_filename = os.path.join(path, 'itb_vulnerability_eng.csv')
+non_eng_filename = os.path.join(path, 'itb_vulnerability_non_eng.csv')
 
 vul_curves = AutoVivification()
 # Non-Engineere dbuildings
