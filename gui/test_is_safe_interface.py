@@ -184,7 +184,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         myExpectedKeywords = {'category': 'hazard',
                               'subcategory': 'earthquake',
                               'unit': 'MMI',
-                              'title': 'Padang 2009 scenario'}
+                              'title': 'An earthquake in Padang like in 2009'}
         myMessage = 'Expected:\n%s\nGot:\n%s' % (myKeywords, myExpectedKeywords)
         assert myKeywords == myExpectedKeywords, myMessage
 

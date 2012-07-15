@@ -302,7 +302,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
         myDialog.removeItemByValue('hazard')
 
         myKeywords = myDialog.getKeywords()
-        myExpectedKeywords = {'title': 'Padang 2009 scenario',
+        myExpectedKeywords = {'title': 'An earthquake in Padang like in 2009',
                               'subcategory': 'earthquake',
                               'unit': 'MMI'}
         myMessage = ('\nGot: %s\nExpected: %s\n' %
@@ -328,7 +328,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
         myDialog.loadStateFromKeywords()
         myKeywords = myDialog.getKeywords()
 
-        myExpectedKeywords = {'title': 'Padang 2009 scenario',
+        myExpectedKeywords = {'title': 'An earthquake in Padang like in 2009',
                               'category': 'hazard',
                               'subcategory': 'earthquake',
                               'unit': 'MMI'}

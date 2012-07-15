@@ -71,17 +71,15 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
 
         # Map from different kinds of datasets to Padang vulnerability classes
         datatype = E.get_keywords()['datatype']
+        vclass_tag = 'VCLASS'
         if datatype.lower() == 'osm':
             # Map from OSM attributes
             Emap = osm2padang(E)
-            vclass_tag = 'VCLASS'
         elif datatype.lower() == 'sigab':
             # Map from SIGAB attributes
             Emap = sigab2padang(E)
-            vclass_tag = 'VCLASS'
         else:
             Emap = E
-            vclass_tag = 'VCLASS'
 
         # Interpolate hazard level to building locations
         I = H.interpolate(Emap, attribute_name='MMI')

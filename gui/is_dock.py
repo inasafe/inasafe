@@ -23,28 +23,28 @@ __type__ = 'alpha'  # beta, final etc will be shown in dock title
 import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
-from is_dock_base import Ui_ISDockBase
-from is_help import ISHelp
-from is_utilities import getExceptionWithStacktrace, getWGS84resolution
+from gui.is_dock_base import Ui_ISDockBase
+from gui.is_help import ISHelp
+from gui.is_utilities import getExceptionWithStacktrace, getWGS84resolution
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
-from is_impact_calculator import ISImpactCalculator
-from is_safe_interface import (availableFunctions,
+from gui.is_impact_calculator import ISImpactCalculator
+from gui.is_safe_interface import (availableFunctions,
                                getFunctionTitle,
                                getOptimalExtent,
                                getBufferedExtent,
                                internationalisedNames)
-from is_keyword_io import ISKeywordIO
-from is_clipper import clipLayer
-from is_exceptions import (KeywordNotFoundException,
+from gui.is_keyword_io import ISKeywordIO
+from gui.is_clipper import clipLayer
+from gui.is_exceptions import (KeywordNotFoundException,
                            HashNotFoundException,
                            InvalidParameterException)
-from is_map import ISMap
-from is_utilities import (getTempDir,
+from gui.is_map import ISMap
+from gui.is_utilities import (getTempDir,
                           htmlHeader,
                           htmlFooter,
                           setVectorStyle,
@@ -59,7 +59,7 @@ try:
     from pydevd import *
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except:
     print 'Debugging was disabled'
 
 
@@ -274,10 +274,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             return (False, myMessage)
 
         if self.cboFunction.currentIndex() == -1:
-            myHazardFilename = self.getHazardLayer().source()
+            #myHazardFilename = self.getHazardLayer().source()
             myHazardKeywords = QtCore.QString(str(self.keywordIO.readKeywords(
                                                     self.getHazardLayer())))
-            myExposureFilename = self.getExposureLayer().source()
+            #myExposureFilename = self.getExposureLayer().source()
             myExposureKeywords = QtCore.QString(
                                             str(self.keywordIO.readKeywords(
                                                 self.getExposureLayer())))
@@ -328,6 +328,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         """
         # Add any other logic you might like here...
+        del theIndex
         self.getFunctions()
         self.setOkButtonStatus()
 
@@ -348,6 +349,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         """
         # Add any other logic you mught like here...
+        del theIndex
         self.getFunctions()
         self.setOkButtonStatus()
 
@@ -368,6 +370,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     """
         # Add any other logic you mught like here...
+        del theIndex
         self.setOkButtonStatus()
 
     def setOkButtonStatus(self):
@@ -423,6 +426,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         delegates to getLayers and is only implemented here to make the
         connections between the different signals and slots clearer and
         better documented."""
+        del theLayers
         self.getLayers()
 
     @pyqtSlot()

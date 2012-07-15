@@ -92,6 +92,7 @@ class ISMapTest(unittest.TestCase):
         myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
                             'f2169dd3146aca6b30a10cddfb5ebf68',  # ub11.10
                             'de6cbd59899d0077b11dd09c00a343e8',  # ub12.04
+                            'ab3c70aabd757c20b994444a13bfdbca',  # ub12.04 xvfb
                             # ub11.04-64 laptop
                             '6f9a68611cad040d0a524f929361bb64',
                             ]
@@ -113,6 +114,7 @@ class ISMapTest(unittest.TestCase):
         myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
                             'f2169dd3146aca6b30a10cddfb5ebf68',  # ub11.10
                             'de6cbd59899d0077b11dd09c00a343e8',  # ub12.04
+                            'ab3c70aabd757c20b994444a13bfdbca',  # ub12.04 xvfb
                             # ub11.04-64 laptop
                             '6f9a68611cad040d0a524f929361bb64',
                             ]
@@ -133,6 +135,7 @@ class ISMapTest(unittest.TestCase):
         myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
                             '1fc706f7c08e7d3057a685f9e6c4df3f',  # ub11.10
                             '2845879db127ce81d85baaac0b2c11b7',  # ub12.04
+                            '59e5db64b385d64c7230147958c52c28',  # ub12.04 xvfb
                             # ub11.04-64 laptop
                             '6ab9f8cc2445d1e672fd5013ac76cce7',
                             ]
@@ -183,6 +186,7 @@ class ISMapTest(unittest.TestCase):
         myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
                             'ea0702782c2ed5d950c427fbe1743858',  # ub11.10
                             '944cee3eb9d916816b60ef41e8069683',  # ub12.04
+                            '0681c3587305074bc9272f456fb4dd09',  # ub12.04 xvfb
                             # ub11.04-64 laptop
                             '4f98b1ddef2d72bd38b2f220ec7e01cc',
                             ]
