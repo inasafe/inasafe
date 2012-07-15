@@ -32,6 +32,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
     """Test the SAFE API Wrapper"""
 
     def setUp(self):
+        """Setup test before each unit"""
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
         self.rasterShakePath = os.path.join(HAZDATA,
                                             'Shakemap_Padang_2009.asc')
@@ -184,7 +185,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         myExpectedKeywords = {'category': 'hazard',
                               'subcategory': 'earthquake',
                               'unit': 'MMI',
-                              'title': 'An earthquake in Padang like in 2009'}
+                              'title': 'Padang 2009 scenario'}
         myMessage = 'Expected:\n%s\nGot:\n%s' % (myKeywords, myExpectedKeywords)
         assert myKeywords == myExpectedKeywords, myMessage
 
