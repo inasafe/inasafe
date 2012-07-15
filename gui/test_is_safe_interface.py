@@ -180,10 +180,13 @@ class ISSafeInterfaceTest(unittest.TestCase):
             assert(), myMessage
 
         myKeywords = readKeywordsFromFile(self.rasterShakePath)
-        assert myKeywords == {'category': 'hazard',
+
+        myExpectedKeywords = {'category': 'hazard',
                               'subcategory': 'earthquake',
                               'unit': 'MMI',
                               'title': 'Padang 2009 scenario'}
+        myMessage = 'Expected:\n%s\nGot:\n%s' % (myKeywords, myExpectedKeywords)
+        assert myKeywords == myExpectedKeywords, myMessage
 
         myKeywords = readKeywordsFromFile(self.rasterPopulationPath)
         assert myKeywords == {'category': 'exposure',

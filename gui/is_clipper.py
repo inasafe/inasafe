@@ -21,7 +21,7 @@ import os
 import sys
 import tempfile
 
-from PyQt4.QtCore import QCoreApplication, QString
+from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QgsCoordinateTransform,
                        QgsCoordinateReferenceSystem,
                        QgsRectangle,
