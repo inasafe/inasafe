@@ -99,6 +99,27 @@ def getQgisTestApp():
     return QGISAPP, CANVAS, IFACE, PARENT
 
 
+def unitTestDataPath(theSubdir=None):
+    """Return the absolute path to the InaSAFE unit test data dir.
+
+    .. note:: This is not the same thing as the SVN inasafe_data dir. Rather
+       this is a new dataset where the test datasets are all tiny for fast
+       testing and the datasets live in the same repo as the code.
+
+    Args:
+       * theSubdir: (Optional) Additional subdir to add to the path - typically
+         'hazard' or 'exposure'.
+    """
+    myPath = __file__
+    if theSubdir is not None:
+        myPath = os.path.abspath(os.path.join(myPath,
+                                              'unit_test_data',
+                                              theSubdir))
+    else:
+        myPath = os.path.abspath(os.path.join(myPath, 'unit_test_data'))
+    return myPath
+
+
 def loadLayer(theLayerFile, DIR=TESTDATA):
     """Helper to load and return a single QGIS layer
 

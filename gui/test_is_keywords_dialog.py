@@ -27,7 +27,7 @@ sys.path.append(pardir)
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
-from utilities_test import getQgisTestApp
+from utilities_test import (getQgisTestApp, unitTestDataPath)
 from is_keywords_dialog import ISKeywordsDialog
 
 from qgis.core import (QgsRasterLayer,
@@ -43,11 +43,21 @@ def makePadangLayer():
     """Helper function that returns a single predefined layer"""
     myFile = 'Shakemap_Padang_2009.asc'
     myPath = os.path.join(HAZDATA, myFile)
-    myTitle = 'Padang 2009 scenario'  # FIXME: Get from keywords
+    myTitle = 'An earthquake in Padang like in 2009'  # FIXME: Get from keywords
     myLayer = QgsRasterLayer(myPath, myTitle)
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
 
+
+def makeKeywordlessLayer():
+    """Helper function that returns a single predefined keywordless layer"""
+    myFile = 'keywordless_layer.tif'
+    myBasePath = unitTestDataPath('hazard')
+    myPath = os.path.abspath(os.path.join(myBasePath, myFile))
+    myTitle = 'Keywordless Layer'
+    myLayer = QgsRasterLayer(myPath, myTitle)
+    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    return myLayer
 
 def clearLayers():
     """Clear all the loaded layers"""
@@ -336,12 +346,20 @@ class ISKeywordsDialogTest(unittest.TestCase):
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage
 
+    def test_checkStateWhenKeywordsAbsent(self):
+        """Test load state from keywords works"""
+        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myLayer = makeKeywordlessLayer()
+        myDialog.layer = myLayer
+        myDialog.loadStateFromKeywords()
+        myKeywords = myDialog.getKeywords()
         #check that a default title is given (see
         #https://github.com/AIFDR/inasafe/issues/111)
-        myMessage = ('Expected title to be defaulted from '
-                     'filename but it was not. I got %s.'
-                     % myDialog.layer.name())
-        assert myDialog.leTitle.text() == myDialog.layer.name(), myMessage
+        myExpectedKeywords = {'category': 'exposure',
+                              'title': 'Keywordless Layer'}
+        myMessage = ('\nGot: %s\nExpected: %s\n' %
+                     (myKeywords, myExpectedKeywords))
+        assert myKeywords == myExpectedKeywords, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ISKeywordsDialogTest, 'test')
