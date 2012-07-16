@@ -20,7 +20,7 @@ __copyright__ += 'Disaster Reduction'
 import os
 import sys
 import tempfile
-from subprocess import call
+from subprocess import (call, CalledProcessError)
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QgsCoordinateTransform,
@@ -351,7 +351,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     try:
         myResult = call(myCommand, shell=True)
         del myResult
-    except Exception, e:
+    except CalledProcessError, e:
         myMessage = tr('<p>Error while executing the following shell command:'
                      '</p><pre>%s</pre><p>Error message: %s'
                      % (myCommand, str(e)))

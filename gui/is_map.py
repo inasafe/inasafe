@@ -37,7 +37,7 @@ from gui.is_keyword_io import ISKeywordIO
 from gui.is_utilities import getTempDir, htmlHeader, htmlFooter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import resources
+import gui.resources  #@UnusedImport
 
 try:
     from pydevd import *

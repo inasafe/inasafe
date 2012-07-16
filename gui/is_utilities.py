@@ -38,7 +38,7 @@ from qgis.core import (QGis,
                        QgsRasterTransparency)
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header
-import resources
+import gui.resources
 
 
 def setVectorStyle(theQgisVectorLayer, style):
@@ -389,7 +389,7 @@ def qgisVersion():
     myVersion = None
     try:
         myVersion = unicode(QGis.QGIS_VERSION_INT)
-    except:
+    except AttributeError:
         myVersion = unicode(QGis.qgisVersion)[0]
     myVersion = int(myVersion)
     return myVersion
