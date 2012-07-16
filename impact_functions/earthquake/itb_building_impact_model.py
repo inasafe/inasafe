@@ -72,13 +72,16 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
     :param requires category == 'hazard' and \
                     subcategory == 'earthquake' and \
                     layertype == 'raster' and \
-                    unit == 'MMI'
+                    unit == 'MMI' and \
+                    disabled == True
 
     :param requires category == 'exposure' and \
                     subcategory in ['building', 'structure'] and \
                     layertype == 'vector' and \
                     datatype in ['osm', 'itb', 'sigab']
     """
+
+    title = _('Be damaged depending on building type')
 
     def run(self, layers):
         """Risk plugin for Padang building survey
