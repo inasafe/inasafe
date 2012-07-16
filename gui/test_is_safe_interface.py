@@ -186,7 +186,8 @@ class ISSafeInterfaceTest(unittest.TestCase):
                               'subcategory': 'earthquake',
                               'unit': 'MMI',
                               'title': 'An earthquake in Padang like in 2009'}
-        myMessage = 'Expected:\n%s\nGot:\n%s' % (myKeywords, myExpectedKeywords)
+        myMessage = 'Expected:\n%s\nGot:\n%s' % (myKeywords,
+                                                 myExpectedKeywords)
         assert myKeywords == myExpectedKeywords, myMessage
 
         myKeywords = readKeywordsFromFile(self.rasterPopulationPath)

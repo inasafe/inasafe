@@ -43,7 +43,8 @@ def makePadangLayer():
     """Helper function that returns a single predefined layer"""
     myFile = 'Shakemap_Padang_2009.asc'
     myPath = os.path.join(HAZDATA, myFile)
-    myTitle = 'An earthquake in Padang like in 2009'  # FIXME: Get from keywords
+    # FIXME: Get title from keywords in case it changes
+    myTitle = 'An earthquake in Padang like in 2009'
     myLayer = QgsRasterLayer(myPath, myTitle)
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
@@ -58,6 +59,7 @@ def makeKeywordlessLayer():
     myLayer = QgsRasterLayer(myPath, myTitle)
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
+
 
 def clearLayers():
     """Clear all the loaded layers"""
