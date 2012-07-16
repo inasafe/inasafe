@@ -79,6 +79,7 @@ names = {'title1': _('DKI buildings'),       # Bangunan DKI
          'Indonesian Earthquake Hazard Map': _('Indonesian Earthquake '
                                                'Hazard Map'),
          'A tsunami in Maumere (Mw 8.1)': _('A tsunami in Maumere (Mw 8.1)'),
+         'A tsunami in Padang (Mw 8.8)': _('A tsunami in Padang (Mw 8.8)'),
          'An earthquake at the Sumatran fault (Mw 7.8)': _('An earthquake at '
                                                            'the Sumatran '
                                                            'fault (Mw 7.8)'),
@@ -96,7 +97,7 @@ names = {'title1': _('DKI buildings'),       # Bangunan DKI
          'An earthquake in Yogyakarta  like in 2006': _('An earthquake in '
                                                         'Yogyakarta like in '
                                                         '2006'),
-         'An earthquake a the Lembang fault': _('An earthquake at the Lembang '
+         'An earthquake at the Lembang fault': _('An earthquake at the Lembang '
                                                 'fault'),
          'OSM building footprints': _('OSM building '
                                       'footprints'),  # Bangunan OSM
