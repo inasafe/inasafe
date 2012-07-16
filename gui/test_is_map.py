@@ -92,7 +92,7 @@ class ISMapTest(unittest.TestCase):
         myExpectedHashes = ['',  # win
                             '',  # ub11.10
                             '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
-                            '',  # ub12.04 xvfb
+                            'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
                             # ub11.04-64 laptop
                             '',
                             ]
@@ -114,7 +114,7 @@ class ISMapTest(unittest.TestCase):
         myExpectedHashes = ['',  # win
                             '',  # ub11.10
                             '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
-                            '',  # ub12.04 xvfb
+                            'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
                             # ub11.04-64 laptop
                             '',
                             ]
@@ -135,7 +135,7 @@ class ISMapTest(unittest.TestCase):
         myExpectedHashes = ['',  # win
                             '',  # ub11.10
                             'b68ccc328de852f0c66b8abe43eab3da',  # ub12.04
-                            '',  # ub12.04 xvfb
+                            'cd5fb96f6c5926085d251400dd3b4928',  # ub12.04 xvfb
                             # ub11.04-64 laptop
                             '',
                             ]
@@ -186,7 +186,7 @@ class ISMapTest(unittest.TestCase):
         myExpectedHashes = ['',  # win
                             '',  # ub11.10
                             '53e0ba1144e071ad41756595d29bf444',  # ub12.04
-                            '',  # ub12.04 xvfb
+                            '0681c3587305074bc9272f456fb4dd09',  # ub12.04 xvfb
                             # ub11.04-64 laptop
                             '',
                             ]
