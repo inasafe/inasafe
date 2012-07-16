@@ -30,19 +30,20 @@ from qgis.core import (QgsComposition,
                        QgsPoint,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
-from is_exceptions import (LegendLayerException,
+from PyQt4 import (QtCore, QtGui, QtWebKit, QtXml)
+from gui.is_exceptions import (LegendLayerException,
                            KeywordNotFoundException)
-from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
-from is_keyword_io import ISKeywordIO
-from is_utilities import getTempDir, htmlHeader, htmlFooter
+from gui.is_keyword_io import ISKeywordIO
+from gui.is_utilities import getTempDir, htmlHeader, htmlFooter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
+
 try:
     from pydevd import *
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except:
     print 'Debugging was disabled'
 
 
