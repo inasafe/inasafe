@@ -987,14 +987,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         if myHazardLayer.type() == QgsMapLayer.RasterLayer:
 
             # Hazard layer is raster
-            myHazardGeoCellSize = getWGS84resolution(myHazardLayer,
-                                                     myHazardGeoExtent)
+            myHazardGeoCellSize = getWGS84resolution(myHazardLayer)
 
             if myExposureLayer.type() == QgsMapLayer.RasterLayer:
 
                 # In case of two raster layers establish common resolution
-                myExposureGeoCellSize = getWGS84resolution(myExposureLayer,
-                                                           myExposureGeoExtent)
+                myExposureGeoCellSize = getWGS84resolution(myExposureLayer)
 
                 if myHazardGeoCellSize < myExposureGeoCellSize:
                     myCellSize = myHazardGeoCellSize

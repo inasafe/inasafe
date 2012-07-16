@@ -25,10 +25,12 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from qgis.gui import QgsMapCanvas
-from qgis_interface import QgisInterface
+
 from PyQt4.QtGui import QWidget
-from utilities_test import getQgisTestApp
+
+from qgis.gui import QgsMapCanvas
+from gui.qgis_interface import QgisInterface
+from gui.utilities_test import getQgisTestApp
 from gui.is_plugin import ISPlugin
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

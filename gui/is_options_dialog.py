@@ -21,20 +21,20 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
-from is_options_dialog_base import Ui_ISOptionsDialogBase
-from is_help import ISHelp
-from is_keyword_io import ISKeywordIO
+from gui.is_options_dialog_base import Ui_ISOptionsDialogBase
+from gui.is_help import ISHelp
+from gui.is_keyword_io import ISKeywordIO
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import resources
+import gui.resources  #@UnusedImport
 
 #see if we can import pydev - see development docs for details
 try:
     from pydevd import *
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except ImportError:
     print 'Debugging was disabled'
 
 

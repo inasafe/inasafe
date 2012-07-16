@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 from qgis.core import QgsProviderRegistry
-from utilities_test import getQgisTestApp
+from gui.utilities_test import getQgisTestApp
 
 QGISAPP = getQgisTestApp()
 
@@ -37,9 +37,8 @@ class ISTest(unittest.TestCase):
         #print 'Provider count: %s' % len(r.providerList())
         assert 'gdal' in r.providerList()
         assert 'ogr' in r.providerList()
-
-        # FIXME (Ole): When we start using PostGIS and WFS we
-        #              can add more tests
+        assert 'postgres' in r.providerList()
+        #assert 'wfs' in r.providerList()
 
 if __name__ == '__main__':
     unittest.main()

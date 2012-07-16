@@ -33,26 +33,27 @@ from qgis.core import (QgsVectorLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
 from qgis.gui import QgsMapCanvasLayer
-from utilities_test import (getQgisTestApp,
-                            setCanvasCrs,
-                            setPadangGeoExtent,
-                            setBatemansBayGeoExtent,
-                            setJakartaGeoExtent,
-                            setYogyaGeoExtent,
-                            setJakartaGoogleExtent,
-                            setGeoExtent,
-                            GEOCRS,
-                            GOOGLECRS,
-                            loadLayer)
+from gui.utilities_test import (getQgisTestApp,
+                                setCanvasCrs,
+                                setPadangGeoExtent,
+                                setBatemansBayGeoExtent,
+                                setJakartaGeoExtent,
+                                setYogyaGeoExtent,
+                                setJakartaGoogleExtent,
+                                setGeoExtent,
+                                GEOCRS,
+                                GOOGLECRS,
+                                loadLayer)
 
 from gui.is_dock import ISDock
-from is_utilities import (setRasterStyle,
+from gui.is_utilities import (setRasterStyle,
                           qgisVersion)
 
 from safe_api import TESTDATA, HAZDATA, EXPDATA
 from safe_api import read_keywords
 
-# Retired impact function for characterisation
+# Retired impact function for characterisation (Ole)
+# So ignore unused import errors for these? (Tim)
 from engine.impact_functions_for_testing import allen_fatality_model
 from engine.impact_functions_for_testing import HKV_flood_study
 from engine.impact_functions_for_testing import BNPB_earthquake_guidelines

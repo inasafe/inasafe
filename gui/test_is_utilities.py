@@ -7,12 +7,12 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from is_utilities import (getExceptionWithStacktrace,
-                          setRasterStyle,
-                          setVectorStyle,
-                          qgisVersion)
 from safe_api import bbox_intersection
-from utilities_test import loadLayer, getQgisTestApp
+from gui.is_utilities import (getExceptionWithStacktrace,
+                              setVectorStyle,
+                              setRasterStyle,
+                              qgisVersion)
+from gui.utilities_test import (loadLayer, getQgisTestApp)
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
