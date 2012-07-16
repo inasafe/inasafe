@@ -280,7 +280,7 @@ jenkins-pylint:
 	@echo "PyLint check for Jenkins"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable --reports=y --disable=C,R storage engine gui > pylint.log || :
+	pylint --output-format=parseable --reports=y --disable=C,R --rcfile=pylintrc storage engine gui > pylint.log || :
 
 jenkins-pep8:
 	@echo

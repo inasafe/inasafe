@@ -31,18 +31,18 @@ from qgis.core import (QgsVectorLayer,
                        QgsRasterLayer,
                        QgsGeometry)
 
-from is_safe_interface import readSafeLayer
-from is_safe_interface import getOptimalExtent
-from is_exceptions import InvalidProjectionException
-from is_clipper import clipLayer, extentToKml, explodeMultiPartGeometry
+from gui.is_safe_interface import readSafeLayer
+from gui.is_safe_interface import getOptimalExtent
+from gui.is_exceptions import InvalidProjectionException
+from gui.is_clipper import clipLayer, extentToKml, explodeMultiPartGeometry
 
-from utilities_test import (getQgisTestApp,
+from gui.utilities_test import (getQgisTestApp,
                             setCanvasCrs,
                             RedirectStdStreams,
                             DEVNULL,
                             GEOCRS,
                             setJakartaGeoExtent)
-from safe_api import TESTDATA, HAZDATA, EXPDATA
+from safe_api import TESTDATA, HAZDATA
 from safe_api import nanallclose
 
 # Setup pathnames for test data sets
@@ -158,16 +158,14 @@ class ISClipper(unittest.TestCase):
         myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
         msg = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         VECTOR_PATH)
-        # FIXME (Ole): This does not work when file doesn't exist (Issue #170)
-        assert myVectorLayer is not None, msg
+        assert myVectorLayer.isValid(), msg
 
         # Create a raster layer
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
         myMessage = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         RASTERPATH)
-        # FIXME (Ole): This does not work when file doesn't exist (Issue #170)
-        assert myRasterLayer is not None, myMessage
+        assert myRasterLayer.isValid(), myMessage
 
         # Create a bounding box
         myViewportGeoExtent = [99.53, -1.22, 101.20, -0.36]
