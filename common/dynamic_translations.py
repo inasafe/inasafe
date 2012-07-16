@@ -97,8 +97,8 @@ names = {'title1': _('DKI buildings'),       # Bangunan DKI
          'An earthquake in Yogyakarta  like in 2006': _('An earthquake in '
                                                         'Yogyakarta like in '
                                                         '2006'),
-         'An earthquake at the Lembang fault': _('An earthquake at the Lembang '
-                                                'fault'),
+         'An earthquake at the Lembang fault': _('An earthquake at the '
+                                                 'Lembang fault'),
          'OSM building footprints': _('OSM building '
                                       'footprints'),  # Bangunan OSM
          'OSM buildings': _('OSM buildings'),  # Bangunan OSM
