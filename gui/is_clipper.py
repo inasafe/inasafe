@@ -20,6 +20,7 @@ __copyright__ += 'Disaster Reduction'
 import os
 import sys
 import tempfile
+from subprocess import call
 
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QgsCoordinateTransform,
@@ -30,13 +31,12 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsVectorFileWriter,
                        QgsGeometry)
 
-from is_safe_interface import verify, readKeywordsFromFile
-from is_keyword_io import ISKeywordIO
-from is_exceptions import (InvalidParameterException,
+from gui.is_safe_interface import verify, readKeywordsFromFile
+from gui.is_keyword_io import ISKeywordIO
+from gui.is_exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
                            InvalidProjectionException)
-from is_utilities import getTempDir
-from subprocess import call
+from gui.is_utilities import getTempDir
 
 
 def tr(theText):
@@ -154,8 +154,8 @@ def _clipVectorLayer(theLayer, theExtent,
 
     # get the layer field list, select by our extent then write to disk
     # .. todo:: FIXME - for different geometry types we should implement
-    #           different clipping behaviour e.g. reject polygons that
-    #           intersect the edge of the bbox. Tim
+    #    different clipping behaviour e.g. reject polygons that
+    #    intersect the edge of the bbox. Tim
     myAttributes = myProvider.attributeIndexes()
     myFetchGeometryFlag = True
     myUseIntersectFlag = True
