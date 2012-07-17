@@ -2009,13 +2009,18 @@ class Test_Polygon(unittest.TestCase):
              [9, 10, 11, 12]]
         A = numpy.array(A, dtype='f')
 
+        M, N = A.shape
+        print M, N
 
-        # Geotransform
-        G = (100, 0.03, 0.0, -5, 0.0, -0.03)
+        # Axis
+        longitudes = numpy.linspace(100, 110, N, endpoint=False)
+        latitudes = numpy.linspace(0, -6, M, endpoint=False)
+        print longitudes
+        print latitudes
 
-        P = grid2points(A, G)
+        P = grid2points(A, longitudes, latitudes)
 
-        #assert P
+        assert len(P) == M * N
         print P
         return
 
@@ -2028,7 +2033,7 @@ class Test_Polygon(unittest.TestCase):
 #(96.956, 0.030741064, 0.0, -5.3035455519999, 0.0, -0.030741064)
 
 
-
+        # FIXME (Ole): Move this to test_io.py
 
         import os
         from storage.core import read_layer

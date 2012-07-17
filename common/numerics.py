@@ -166,14 +166,48 @@ def erf(z):
     else:
         return ans
 
-def grid2points(A, G):
+def axes2points(x, y):
+    """Generate all combinations of grid point coordinates from x and y axes
+
+    Input
+        x: x coordinates (array)
+        y: y coordinates (array)
+
+    Output
+        P: Nx2 array consisting of coordinates for all
+           grid points defined by x and y axes
+
+    Example
+
+    x = [1, 2, 3]
+    y = [10, 20]
+    P = [[1, 10],
+         [1, 20],
+         [2, 10],
+         [2, 20],
+         [3, 10],
+         [3, 20]]
+    """
+
+    X = numpy.kron(x, numpy.ones(len(y)))
+    Y = numpy.kron(numpy.ones(len(x)), y)
+
+    N = len(X)
+    verify(len(Y) == N)
+
+    X = numpy.reshape(X, (N, 1))
+    Y = numpy.reshape(Y, (N, 1))
+    P = numpy.concatenate((X, Y), axis=1)
+
+    return P
+
+def grid2points(A, x, y):
     """Convert grid data to point data
 
     Input
         A: Array of pixel values
-        G: 6-tuple used to locate A geographically
-           (top left x, w-e pixel resolution, rotation,
-            top left y, rotation, n-s pixel resolution)
+        x: Longitudes corresponding to columns in A (left->right)
+        y: Latitudes corresponding to rows in A (top->bottom)
 
     Output
         P: Nx2 array of point coordinates
@@ -184,29 +218,14 @@ def grid2points(A, G):
     # offsetting by half a cellsize. Test this with test_grid.asc
 
     print A
-    print G
+    print x
+    print y
 
     M, N = A.shape
 
-    dx = G[1]
-    xmin = G[0]
-    xmax = xmin + dx * N
-
-    x = numpy.linspace(start=xmin,
-                       stop=xmax,
-                       num=N,
-                       endpoint=False)
     print x, len(x)
+    print y, len(y)
 
-    dy = G[5]
-    ymax = G[3]
-    ymin = 0
-
-    y = numpy.linspace(start=xmin,
-                       stop=xmax,
-                       num=N,
-                       endpoint=False)
-    print x, len(x)
 
 def geotransform2axes(G, nx, ny):
     """Convert geotransform to coordinate axes
