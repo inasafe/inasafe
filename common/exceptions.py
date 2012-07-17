@@ -29,4 +29,3 @@ class ReadLayerError(Exception):
 class BoundingBoxError(Exception):
     """For errors relating to bboxes"""
     pass
-
