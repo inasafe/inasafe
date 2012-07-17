@@ -69,6 +69,18 @@ class ISImpactCalculator(QObject):
         else:
             self._exposureLayer = str(theLayerPath)
 
+    def hazardLayer(self):
+        """Accessor for the hazard layer.
+
+        Args:
+            None
+        Returns:
+            A QgsMapLayer or None depending on if the layer is set
+        Raises:
+            None
+        """
+        return self._hazardLayer
+
     def setHazardLayer(self, theLayerPath):
         """Mutator: hazard layer. Hazard layer property  (e.g. a flood depth
         raster). This should be a SAFE readlayer instance.
@@ -85,6 +97,18 @@ class ISImpactCalculator(QObject):
             self._hazardLayer = None
         else:
             self._hazardLayer = str(theLayerPath)
+
+    def function(self):
+        """Accessor for the function layer.
+
+        Args:
+            None
+        Returns:
+            An inasafe function or None depending on if the layer is set
+        Raises:
+            None
+        """
+        return self._function
 
     def setFunction(self, theFunctionName):
         """Mutator: function layer. Function property (specifies which
