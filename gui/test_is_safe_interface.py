@@ -20,11 +20,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import numpy
 import unittest
-from is_safe_interface import (getOptimalExtent,
-                               availableFunctions,
-                               readKeywordsFromFile,
-                               readSafeLayer)
-from is_exceptions import KeywordNotFoundException
+from gui.is_safe_interface import (getOptimalExtent,
+                                   availableFunctions,
+                                   readKeywordsFromFile,
+                                   readSafeLayer)
+from gui.is_exceptions import (KeywordNotFoundException,
+                               InsufficientOverlapException,
+                               InvalidBoundingBoxException)
 from safe_api import TESTDATA, HAZDATA, EXPDATA
 
 
@@ -108,7 +110,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
         view_port = [105.3, -4.3, 110.29, -2.5]
         try:
             getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        except Exception, e:
+        except InsufficientOverlapException, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'did not overlap' in str(e), myMessage
         else:
@@ -119,7 +121,10 @@ class ISSafeInterfaceTest(unittest.TestCase):
         # Try with wrong input data
         try:
             getOptimalExtent(haz_metadata, exp_metadata, view_port)
-        except Exception, e:
+        except InvalidBoundingBoxException:
+            #good this was expected
+            pass
+        except InsufficientOverlapException, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'Invalid' in str(e), myMessage
         else:
@@ -128,7 +133,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
 
         try:
             getOptimalExtent(None, None, view_port)
-        except Exception, e:
+        except InvalidBoundingBoxException, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'Invalid' in str(e), myMessage
         else:
@@ -137,7 +142,7 @@ class ISSafeInterfaceTest(unittest.TestCase):
 
         try:
             getOptimalExtent('aoeush', 'oeuuoe', view_port)
-        except Exception, e:
+        except InvalidBoundingBoxException, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'Invalid' in str(e), myMessage
         else:

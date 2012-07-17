@@ -34,22 +34,22 @@ from qgis.core import (QgsMapLayer,
                        QgsCoordinateTransform)
 from gui.is_impact_calculator import ISImpactCalculator
 from gui.is_safe_interface import (availableFunctions,
-                               getFunctionTitle,
-                               getOptimalExtent,
-                               getBufferedExtent,
-                               internationalisedNames)
+                                   getFunctionTitle,
+                                   getOptimalExtent,
+                                   getBufferedExtent,
+                                   internationalisedNames)
 from gui.is_keyword_io import ISKeywordIO
 from gui.is_clipper import clipLayer
 from gui.is_exceptions import (KeywordNotFoundException,
-                           HashNotFoundException,
-                           InvalidParameterException)
+                               InsufficientOverlapException,
+                               InvalidParameterException)
 from gui.is_map import ISMap
 from gui.is_utilities import (getTempDir,
-                          htmlHeader,
-                          htmlFooter,
-                          setVectorStyle,
-                          setRasterStyle,
-                          qgisVersion)
+                              htmlHeader,
+                              htmlFooter,
+                              setVectorStyle,
+                              setRasterStyle,
+                              qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import resources
@@ -953,7 +953,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myGeoExtent = getOptimalExtent(myHazardGeoExtent,
                                            myExposureGeoExtent,
                                            myViewportGeoExtent)
-        except Exception, e:
+        except InsufficientOverlapException, e:
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
                    'and / or the layers and the viewport. Please select '
