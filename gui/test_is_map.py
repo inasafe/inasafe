@@ -53,8 +53,9 @@ class ISMapTest(unittest.TestCase):
     """Test the InaSAFE Map generator"""
     def setUp(self):
         """Setup fixture run before each tests"""
-        for myLayer in QgsMapLayerRegistry.instance().mapLayers():
-            QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
+        myRegistry = QgsMapLayerRegistry.instance()
+        for myLayer in myRegistry.mapLayers():
+            myRegistry.removeMapLayer(myLayer)
 
     def test_inasafeMap(self):
         """Test making a pdf using the ISMap class."""
@@ -90,6 +91,7 @@ class ISMapTest(unittest.TestCase):
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
         myExpectedHashes = ['',  # win
+                            'd0c3071c4babe7db4f9762b311d61184',  # ub12.04xiner
                             'b94cfd8a10d709ff28466ada425f24c8',  # ub11.10-64
                             '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
@@ -112,6 +114,7 @@ class ISMapTest(unittest.TestCase):
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
         myExpectedHashes = ['',  # win
+                            'd0c3071c4babe7db4f9762b311d61184',  # ub12.04 xiner
                             'b94cfd8a10d709ff28466ada425f24c8',  # ub11.10-64
                             '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
@@ -133,6 +136,7 @@ class ISMapTest(unittest.TestCase):
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
         myExpectedHashes = ['',  # win
+                            '9ead6ce0ac789adc65a6f00bd2d1f709',  # ub12.04xiner
                             '84bc3d518e3a0504f8dc36dfd620394e',  # ub11.10-64
                             'b68ccc328de852f0c66b8abe43eab3da',  # ub12.04
                             'cd5fb96f6c5926085d251400dd3b4928',  # ub12.04 xvfb
@@ -184,6 +188,7 @@ class ISMapTest(unittest.TestCase):
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
         myExpectedHashes = ['',  # win
+                            '67c0f45792318298664dd02cc0ac94c3',  # ub12.04xiner
                             'ea0702782c2ed5d950c427fbe1743858',  # ub11.10-64
                             '53e0ba1144e071ad41756595d29bf444',  # ub12.04
                             '0681c3587305074bc9272f456fb4dd09',  # ub12.04 xvfb
