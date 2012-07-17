@@ -2,6 +2,7 @@
 """
 
 import numpy
+from utilities import verify
 
 
 def ensure_numeric(A, typecode=None):
@@ -165,7 +166,6 @@ def erf(z):
     else:
         return ans
 
-
 def grid2points(A, G):
     """Convert grid data to point data
 
@@ -208,3 +208,58 @@ def grid2points(A, G):
                        endpoint=False)
     print x, len(x)
 
+def geotransform2axes(G, nx, ny):
+    """Convert geotransform to coordinate axes
+
+    Input
+        G: GDAL geotransform (6-tuple).
+           (top left x, w-e pixel resolution, rotation,
+            top left y, rotation, n-s pixel resolution).
+        nx: Number of cells in the w-e direction
+        ny: Number of cells in the n-s direction
+
+
+    Output
+        Return two vectors (longitudes and latitudes) representing the grid
+        defined by the geotransform.
+
+        The values are offset by half a pixel size to correspond to
+        pixel registration.
+
+        I.e. If the grid origin (top left corner) is (105, 10) and the
+        resolution is 1 degrees in each direction, then the vectors will
+        take the form
+
+        longitudes = [100.5, 101.5, ..., 109.5]
+        latitudes = [0.5, 1.5, ..., 9.5]
+    """
+
+    lon_ul = float(G[0])  # Longitude of upper left corner
+    lat_ul = float(G[3])  # Latitude of upper left corner
+    dx = float(G[1])      # Longitudinal resolution
+    dy = - float(G[5])    # Latitudinal resolution (always(?) negative)
+
+    verify(dx > 0)
+    verify(dy > 0)
+
+    # Coordinates of lower left corner
+    lon_ll = lon_ul
+    lat_ll = lat_ul - ny * dy
+
+    # Coordinates of upper right corner
+    lon_ur = lon_ul + nx * dx
+
+    # Define pixel centers along each directions
+    # This is to achieve pixel registration rather
+    # than gridline registration
+    dx2 = dx / 2
+    dy2 = dy / 2
+
+    # Define longitudes and latitudes for each axes
+    x = numpy.linspace(lon_ll + dx2,
+                       lon_ur - dx2, nx)
+    y = numpy.linspace(lat_ll + dy2,
+                       lat_ul - dy2, ny)
+
+    # Return
+    return x, y
