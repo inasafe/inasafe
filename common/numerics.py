@@ -164,3 +164,47 @@ def erf(z):
         return ans[0]
     else:
         return ans
+
+
+def grid2points(A, G):
+    """Convert grid data to point data
+
+    Input
+        A: Array of pixel values
+        G: 6-tuple used to locate A geographically
+           (top left x, w-e pixel resolution, rotation,
+            top left y, rotation, n-s pixel resolution)
+
+    Output
+        P: Nx2 array of point coordinates
+        V: N array of point values
+    """
+
+    # FIXME (Ole): Remember to account for pixel registration by
+    # offsetting by half a cellsize. Test this with test_grid.asc
+
+    print A
+    print G
+
+    M, N = A.shape
+
+    dx = G[1]
+    xmin = G[0]
+    xmax = xmin + dx * N
+
+    x = numpy.linspace(start=xmin,
+                       stop=xmax,
+                       num=N,
+                       endpoint=False)
+    print x, len(x)
+
+    dy = G[5]
+    ymax = G[3]
+    ymin = 0
+
+    y = numpy.linspace(start=xmin,
+                       stop=xmax,
+                       num=N,
+                       endpoint=False)
+    print x, len(x)
+

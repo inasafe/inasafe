@@ -18,8 +18,9 @@ from storage.core import write_raster_data
 from storage.vector import Vector
 from storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
 
-from common.polygon import separate_points_by_polygon, clip_lines_by_polygon
+from common.polygon import separate_points_by_polygon
 from common.polygon import is_inside_polygon
+from common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 from common.interpolation2d import interpolate_raster
 from common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from common.numerics import nanallclose
@@ -460,6 +461,27 @@ class Test_Engine(unittest.TestCase):
             assert numpy.alltrue(C >= 0)
 
             i += 1
+
+    def test_polygon_hazard_and_raster_exposure(self):
+        """Exposure rasters can be clipped by polygon exposure
+
+        This is a test for the basic machinery needed for issue #91
+        """
+
+        # Name input files
+        polyhazard = join(TESTDATA, 'rw_jakarta_singlepart.shp')
+        population = join(TESTDATA, 'Population_Jakarta_geographic.asc')
+
+        # Get layers using API
+        H = read_layer(polyhazard)
+        E = read_layer(population)
+
+        assert len(H) == 2704
+        res = clip_grid_by_polygons(E.get_data(),
+                                    E.get_geotransform(),
+                                    H.get_geometry())
+        # FIXME (Ole): Not done yet
+
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works
@@ -2306,6 +2328,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_itb')
+    suite = unittest.makeSuite(Test_Engine, 'test_polygon')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

@@ -17,7 +17,7 @@ from math import sqrt
 from random import uniform, seed as seed_function
 
 from common.numerics import ensure_numeric
-
+from common.numerics import grid2points
 
 def separate_points_by_polygon(points, polygon,
                                closed=True,
@@ -27,7 +27,7 @@ def separate_points_by_polygon(points, polygon,
 
     Input:
        points - Tuple of (x, y) coordinates, or list of tuples
-       polygon - list of vertices of polygon
+       polygon - list or Nx2 array of polygon vertices
        closed - (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False)
@@ -133,7 +133,7 @@ def _separate_points_by_polygon(points, polygon,
 
     Input:
        points - Tuple of (x, y) coordinates, or list of tuples
-       polygon - list of vertices of polygon
+       polygon - Nx2 array of polygon vertices
        closed - (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False)
@@ -247,7 +247,7 @@ def _separate_points_by_polygon_python(points, polygon,
 
     Input:
        points - Tuple of (x, y) coordinates, or list of tuples
-       polygon - list of vertices of polygon
+       polygon - Nx2 array of polygon vertices
        closed - (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False)
@@ -499,7 +499,7 @@ def in_and_outside_polygon(points, polygon, closed=True):
 
     Input
         points: (tuple, list or array) of coordinates
-        polygon: Set of points defining the polygon
+        polygon: list or Nx2 array of polygon vertices
         closed: Set to True if points on boundary are considered
                 to be 'inside' polygon
 
@@ -528,17 +528,15 @@ def clip_lines_by_polygon(lines, polygon,
     """Clip multiple lines by polygon
 
     Input
-        line: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
+       lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
               where pi and qi are point coordinates (x, y).
-
-    Output
-       polygon: list of vertices of polygon or the corresponding numpy array
+       polygon: list or Nx2 array of polygon vertices
        closed: (optional) determine whether points on boundary should be
-       regarded as belonging to the polygon (closed = True)
-       or not (closed = False) - False is not recommended here
+               regarded as belonging to the polygon (closed = True)
+               or not (closed = False) - False is not recommended here
        check_input: Allows faster execution if set to False
 
-    Outputs
+    Output
        inside_line_segments: Clipped line segments that are inside polygon
        outside_line_segments: Clipped line segments that are outside polygon
 
@@ -627,7 +625,7 @@ def clip_line_by_polygon(line, polygon,
     Input
        line: Sequence of line nodes: [[x0, y0], [x1, y1], ...] or
              the equivalent Nx2 numpy array
-       polygon: list of vertices of polygon or the corresponding numpy array
+       polygon: list or Nx2 array of polygon vertices
        closed: (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False) - False is not recommended here
@@ -1095,3 +1093,35 @@ collinearmap = {(False, False, False, False): lines_dont_coincide,
                 (True, True, False, True): lines_0_fully_included_in_1,
                 (True, True, True, False): lines_0_fully_included_in_1,
                 (True, True, True, True): lines_0_fully_included_in_1}
+
+
+# Functions for clipping of rasters by polygons
+def clip_grid_by_polygons(A, geotransform, polygons,
+                         closed=True, check_input=True):
+    """Clip raster grid by polygon
+
+    Input
+        A: MxN array of grid points
+        geotransform: 6-tuple used to locate A geographically
+                      (top left x, w-e pixel resolution, rotation,
+                       top left y, rotation, n-s pixel resolution)
+        polygons: list of polygons, each an array of vertices
+
+    Output
+        List of rasters - one per input polygon.
+
+    Implementing algorithm suggested in
+    https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
+    """
+
+    # Convert raster grid to Nx2 array of points and an N array of pixel values
+    P = grid2points(A, geotransform)
+
+    # For each polygon
+    # * select the points that fall inside its bounding box
+    # * separate points that fall inside from those that fall outside.
+    # * Assign NaN to pixel values outside and original pixel values to
+    #   those that fall inside (using numpy masks)
+    # * Generate output raster for this polygon and add to list
+
+    pass

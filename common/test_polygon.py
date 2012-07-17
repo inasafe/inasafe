@@ -1997,8 +1997,54 @@ class Test_Polygon(unittest.TestCase):
         for i in range(len(lines)):
             assert numpy.allclose(lines[i], segments[i])
 
+    def test_grid2points(self):
+        """Raster grids can be converted to point data
+        """
+
+        # Really simple first test
+
+        # Pixel values
+        A = [[1, 2, 3, 4],
+             [5, 6, 7, 8],
+             [9, 10, 11, 12]]
+        A = numpy.array(A, dtype='f')
+
+
+        # Geotransform
+        G = (100, 0.03, 0.0, -5, 0.0, -0.03)
+
+        P = grid2points(A, G)
+
+        #assert P
+        print P
+        return
+
+# [  3.                  nan          nan          nan  50.9573822 ]
+# [ 50.12698746 -50.60135651  50.54471588  50.90513611  50.26532364]
+# [ 50.91337585 -15.          50.64731216  50.53377151  50.92457962]
+# [ 50.63235855  50.36743546  50.54388428          nan  50.22377014]
+# [         nan  50.9879837   50.72104645  50.82580948  50.37356567]
+# [ 50.2784996   50.0377388   50.52249527  50.33809662  50.08750153]]
+#(96.956, 0.030741064, 0.0, -5.3035455519999, 0.0, -0.030741064)
+
+
+
+
+        import os
+        from storage.core import read_layer
+        from common.testing import TESTDATA
+
+        filename = os.path.join(TESTDATA, 'test_grid.asc')
+        L = read_layer(filename)
+        print L.get_data()
+        print L.get_geotransform()
+
+        P = grid2points(L.get_data(),
+                        L.get_geotransform())
+
+
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Polygon, 'test')
+    suite = unittest.makeSuite(Test_Polygon, 'test_grid2points')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
