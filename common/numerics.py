@@ -189,16 +189,22 @@ def axes2points(x, y):
          [3, 20]]
     """
 
+    # Repeat x coordinates for each y
     X = numpy.kron(x, numpy.ones(len(y)))
+
+    # Repeat y coordinates for each x
     Y = numpy.kron(numpy.ones(len(x)), y)
 
+    # Check
     N = len(X)
     verify(len(Y) == N)
 
+    # Create Nx2 array of x and y coordinates
     X = numpy.reshape(X, (N, 1))
     Y = numpy.reshape(Y, (N, 1))
     P = numpy.concatenate((X, Y), axis=1)
 
+    # Return
     return P
 
 def grid2points(A, x, y):
