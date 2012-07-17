@@ -28,8 +28,7 @@ sys.path.append(pardir)
 from os.path import join
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
-from qgis.core import (QgsVectorLayer,
-                       QgsRasterLayer,
+from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
 from qgis.gui import QgsMapCanvasLayer
@@ -50,16 +49,17 @@ from gui.is_utilities import (setRasterStyle,
                           qgisVersion)
 
 from safe_api import TESTDATA, HAZDATA, EXPDATA
-from safe_api import read_keywords
 
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)
+# pylint: disable=W0611
 from engine.impact_functions_for_testing import allen_fatality_model
 from engine.impact_functions_for_testing import HKV_flood_study
 from engine.impact_functions_for_testing import BNPB_earthquake_guidelines
+# pylint: enable=W0611
 
 try:
-    from pydevd import *
+    from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
 except Exception, e:
@@ -814,13 +814,14 @@ class ISDockTest(unittest.TestCase):
         myHazardLayerCount, myExposureLayerCount = loadStandardLayers()
         myMessage = 'Expect %s layer(s) in hazard list widget but got %s' \
                      % (myHazardLayerCount, DOCK.cboHazard.count())
+        # pylint: disable=W0106
         self.assertEqual(DOCK.cboHazard.count(),
                          myHazardLayerCount), myMessage
-
         myMessage = 'Expect %s layer(s) in exposure list widget but got %s' \
               % (myExposureLayerCount, DOCK.cboExposure.count())
         self.assertEqual(DOCK.cboExposure.count(),
                          myExposureLayerCount), myMessage
+        # pylint: disable=W0106
 
     def test_Issue71(self):
         """Test issue #71 in github - cbo changes should update ok button."""

@@ -40,7 +40,7 @@ from qgis.gui import QgsMapCanvasLayer
 from utilities_test import (loadLayer, setJakartaGeoExtent)
 from is_utilities import getTempDir
 try:
-    from pydevd import *
+    from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
 except Exception, e:

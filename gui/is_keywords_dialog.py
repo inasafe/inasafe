@@ -37,7 +37,7 @@ import resources
 
 #see if we can import pydev - see development docs for details
 try:
-    from pydevd import *
+    from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
 except Exception, e:
