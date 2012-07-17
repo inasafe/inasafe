@@ -220,9 +220,7 @@ def grid2points(A, x, y):
         V: N array of point values
     """
 
-    # FIXME (Ole): Remember to account for pixel registration by
-    # offsetting by half a cellsize. Test this with test_grid.asc
-
+    # FIXME (Ole): Maybe not needed given the above function
     print A
     print x
     print y
@@ -231,7 +229,6 @@ def grid2points(A, x, y):
 
     print x, len(x)
     print y, len(y)
-
 
 def geotransform2axes(G, nx, ny):
     """Convert geotransform to coordinate axes
