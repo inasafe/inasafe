@@ -111,13 +111,13 @@ class ISPluginTest(unittest.TestCase):
                    'impact' in str(myMod)):
                     print 'Reloading:', str(myMod)
                     reload(myMod)
-            except:
+            except NameError:
                 pass
         myPlugin = ISPlugin(myIface)
         myPlugin.setupI18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
-        from impact_functions import getSafeImpactFunctions
+        from gui.is_safe_interface import getSafeImpactFunctions
         #myFunctions = getSafeImpactFunctions()
         #print myFunctions
         myFunctions = getSafeImpactFunctions('Tydelik gesluit')

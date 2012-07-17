@@ -27,13 +27,14 @@ sys.path.append(pardir)
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtTest import QTest
-from utilities_test import (getQgisTestApp, unitTestDataPath)
-from is_keywords_dialog import ISKeywordsDialog
 
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
-from safe_api import TESTDATA, HAZDATA, EXPDATA
-from odict import OrderedDict
+from safe_api import HAZDATA
+from gui.odict import OrderedDict
+from gui.utilities_test import (getQgisTestApp, unitTestDataPath)
+from gui.is_safe_interface import readKeywordsFromFile
+from gui.is_keywords_dialog import ISKeywordsDialog
 
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -43,8 +44,8 @@ def makePadangLayer():
     """Helper function that returns a single predefined layer"""
     myFile = 'Shakemap_Padang_2009.asc'
     myPath = os.path.join(HAZDATA, myFile)
-    # FIXME: Get title from keywords in case it changes
-    myTitle = 'An earthquake in Padang like in 2009'
+    myTitle = readKeywordsFromFile(myPath, 'title')
+    # myTitle = 'An earthquake in Padang like in 2009'
     myLayer = QgsRasterLayer(myPath, myTitle)
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
@@ -283,7 +284,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
         #print 'Dict', myDialog.getKeywords()
         assert myResult == myExpectedResult, myMessage
 
-    def test_reset(self, thePrimaryKeywordsOnlyFlag=True):
+    def test_reset(self):
         """Test form reset works"""
         myDialog = ISKeywordsDialog(PARENT, IFACE)
         myDialog.leTitle.setText('Foo')
