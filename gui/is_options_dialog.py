@@ -27,7 +27,7 @@ from gui.is_keyword_io import ISKeywordIO
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import gui.resources  #@UnusedImport
+import gui.resources  # @UnusedImport
 
 #see if we can import pydev - see development docs for details
 try:

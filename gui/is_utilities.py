@@ -40,7 +40,7 @@ from qgis.core import (QGis,
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
-import gui.resources  #@UnusedImport
+import gui.resources  # @UnusedImport
 
 
 def setVectorStyle(theQgisVectorLayer, style):
