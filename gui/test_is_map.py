@@ -114,7 +114,7 @@ class ISMapTest(unittest.TestCase):
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
         myExpectedHashes = ['',  # win
-                            'd0c3071c4babe7db4f9762b311d61184',  # ub12.04 xiner
+                            'd0c3071c4babe7db4f9762b311d61184',  # ub12.04 xinr
                             'b94cfd8a10d709ff28466ada425f24c8',  # ub11.10-64
                             '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
