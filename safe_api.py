@@ -22,7 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from storage.utilities import read_keywords, bbox_intersection
-from storage.utilities import buffered_bounding_box, verify
+from storage.utilities import buffered_bounding_box, verify, VerificationError
 from storage.utilities import write_keywords, read_keywords
 from storage.core import read_layer
 
