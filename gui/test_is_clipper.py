@@ -74,9 +74,9 @@ class ISClipper(unittest.TestCase):
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
 
-        msg = 'Did not find layer "%s" in path "%s"' % (myName,
+        myMessage = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         VECTOR_PATH)
-        assert myVectorLayer is not None, msg
+        assert myVectorLayer is not None, myMessage
         assert myVectorLayer.isValid()
         # Create a bounding box
         myRect = [100.03, -1.14, 100.81, -0.73]
@@ -95,9 +95,9 @@ class ISClipper(unittest.TestCase):
         myName = 'shake'
         myRasterLayer = QgsRasterLayer(RASTERPATH, myName)
 
-        msg = 'Did not find layer "%s" in path "%s"' % (myName,
+        myMessage = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         RASTERPATH)
-        assert myRasterLayer is not None, msg
+        assert myRasterLayer is not None, myMessage
 
         # Create a bounding box
         myRect = [97, -3, 104, 1]
@@ -114,10 +114,10 @@ class ISClipper(unittest.TestCase):
         myNewRasterLayer = QgsRasterLayer(myResult, myName)
         assert myNewRasterLayer.isValid(), 'Resampled raster is not valid'
 
-        msg = ('Resampled raster has incorrect pixel size.'
+        myMessage = ('Resampled raster has incorrect pixel size.'
                'Expected: %f, Actual: %f' %
                (mySize, myNewRasterLayer.rasterUnitsPerPixel()))
-        assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, msg
+        assert myNewRasterLayer.rasterUnitsPerPixel() == mySize, myMessage
 
     def test_invalidFilenamesCaught(self):
         """Invalid filenames raise appropriate exceptions
@@ -156,9 +156,9 @@ class ISClipper(unittest.TestCase):
         # Create a vector layer
         myName = 'padang'
         myVectorLayer = QgsVectorLayer(VECTOR_PATH, myName, 'ogr')
-        msg = 'Did not find layer "%s" in path "%s"' % (myName,
+        myMessage = 'Did not find layer "%s" in path "%s"' % (myName,
                                                         VECTOR_PATH)
-        assert myVectorLayer.isValid(), msg
+        assert myVectorLayer.isValid(), myMessage
 
         # Create a raster layer
         myName = 'shake'
@@ -215,7 +215,7 @@ class ISClipper(unittest.TestCase):
         assert os.path.exists(myResult)
         L = readSafeLayer(myResult)
         kwds = L.get_keywords()
-        msg = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
+        myMessage = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
         assert kwds['kermit'] == 'piggy'
 
         # Clip the raster to the bbox
@@ -227,8 +227,8 @@ class ISClipper(unittest.TestCase):
         L = readSafeLayer(myResult)
         kwds = L.get_keywords()
 
-        msg = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
-        assert kwds['zoot'] == 'animal', msg
+        myMessage = 'Extra keyword was not found in %s: %s' % (myResult, kwds)
+        assert kwds['zoot'] == 'animal', myMessage
 
     def testRasterScaling(self):
         """Raster layers can be scaled when resampled
@@ -257,14 +257,14 @@ class ISClipper(unittest.TestCase):
             myRasterPath = ('%s/%s' % (TESTDATA, test_filename))
 
             # Get reference values
-            R = readSafeLayer(myRasterPath)
-            R_min_ref, R_max_ref = R.get_extrema()
+            mySafeLayer = readSafeLayer(myRasterPath)
+            R_min_ref, R_max_ref = mySafeLayer.get_extrema()
             del R_max_ref
             del R_min_ref
-            native_resolution = R.get_resolution()
+            native_resolution = mySafeLayer.get_resolution()
 
             # Get the Hazard extents as an array in EPSG:4326
-            bounding_box = R.get_bounding_box()
+            bounding_box = mySafeLayer.get_bounding_box()
 
             # Test for a range of resolutions
             for res in [0.02, 0.01, 0.005, 0.002, 0.001, 0.0005,  # Coarser
@@ -277,88 +277,89 @@ class ISClipper(unittest.TestCase):
                         break
 
                 # Clip the raster to the bbox
-                extraKeywords = {'resolution': native_resolution}
+                myExtraKeywords = {'resolution': native_resolution}
                 myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
                 myResult = clipLayer(myRasterLayer, bounding_box, res,
-                                     theExtraKeywords=extraKeywords)
+                                     theExtraKeywords=myExtraKeywords)
 
-                R = readSafeLayer(myResult)
-                A_native = R.get_data(scaling=False)
-                A_scaled = R.get_data(scaling=True)
+                mySafeLayer = readSafeLayer(myResult)
+                myNativeData = mySafeLayer.get_data(scaling=False)
+                myScaledData = mySafeLayer.get_data(scaling=True)
 
-                sigma = (R.get_resolution()[0] / native_resolution[0]) ** 2
+                mySigma = (mySafeLayer.get_resolution()[0] /
+                           native_resolution[0]) ** 2
 
                 # Compare extrema
-                expected_scaled_max = sigma * numpy.nanmax(A_native)
-                msg = ('Resampled raster was not rescaled correctly: '
-                       'max(A_scaled) was %f but expected %f'
-                       % (numpy.nanmax(A_scaled), expected_scaled_max))
+                myExpectedScaledMax = mySigma * numpy.nanmax(myNativeData)
+                myMessage = ('Resampled raster was not rescaled correctly: '
+                       'max(myScaledData) was %f but expected %f'
+                       % (numpy.nanmax(myScaledData), myExpectedScaledMax))
 
                 # FIXME (Ole): The rtol used to be 1.0e-8 -
                 #              now it has to be 1.0e-6, otherwise we get
-                #              max(A_scaled) was 12083021.000000 but
+                #              max(myScaledData) was 12083021.000000 but
                 #              expected 12083020.414316
                 #              Is something being rounded to the nearest
                 #              integer?
-                assert numpy.allclose(expected_scaled_max,
-                                      numpy.nanmax(A_scaled),
-                                      rtol=1.0e-6, atol=1.0e-8), msg
+                assert numpy.allclose(myExpectedScaledMax,
+                                      numpy.nanmax(myScaledData),
+                                      rtol=1.0e-6, atol=1.0e-8), myMessage
 
-                expected_scaled_min = sigma * numpy.nanmin(A_native)
-                msg = ('Resampled raster was not rescaled correctly: '
-                       'min(A_scaled) was %f but expected %f'
-                       % (numpy.nanmin(A_scaled), expected_scaled_min))
-                assert numpy.allclose(expected_scaled_min,
-                                      numpy.nanmin(A_scaled),
-                                      rtol=1.0e-8, atol=1.0e-12), msg
+                myExpectedScaledMin = mySigma * numpy.nanmin(myNativeData)
+                myMessage = ('Resampled raster was not rescaled correctly: '
+                       'min(myScaledData) was %f but expected %f'
+                       % (numpy.nanmin(myScaledData), myExpectedScaledMin))
+                assert numpy.allclose(myExpectedScaledMin,
+                                      numpy.nanmin(myScaledData),
+                                      rtol=1.0e-8, atol=1.0e-12), myMessage
 
                 # Compare elementwise
-                msg = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(A_native * sigma, A_scaled,
-                                   rtol=1.0e-8, atol=1.0e-8), msg
+                myMessage = 'Resampled raster was not rescaled correctly'
+                assert nanallclose(myNativeData * mySigma, myScaledData,
+                                   rtol=1.0e-8, atol=1.0e-8), myMessage
 
                 # Check that it also works with manual scaling
-                A_manual = R.get_data(scaling=sigma)
-                msg = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(A_manual, A_scaled,
-                                   rtol=1.0e-8, atol=1.0e-8), msg
+                test_filename = mySafeLayer.get_data(scaling=mySigma)
+                myMessage = 'Resampled raster was not rescaled correctly'
+                assert nanallclose(test_filename, myScaledData,
+                                   rtol=1.0e-8, atol=1.0e-8), myMessage
 
                 # Check that an exception is raised for bad arguments
                 try:
-                    R.get_data(scaling='bad')
+                    mySafeLayer.get_data(scaling='bad')
                 except:
                     pass
                 else:
-                    msg = 'String argument should have raised exception'
-                    raise Exception(msg)
+                    myMessage = 'String argument should have raised exception'
+                    raise Exception(myMessage)
 
                 try:
-                    R.get_data(scaling='(1, 3)')
+                    mySafeLayer.get_data(scaling='(1, 3)')
                 except:
                     pass
                 else:
-                    msg = 'Tuple argument should have raised exception'
-                    raise Exception(msg)
+                    myMessage = 'Tuple argument should have raised exception'
+                    raise Exception(myMessage)
 
                 # Check None option without keyword datatype == 'density'
-                R.keywords['datatype'] = 'undefined'
-                A_none = R.get_data(scaling=None)
-                msg = 'Data should not have changed'
-                assert nanallclose(A_native, A_none,
-                                   rtol=1.0e-12, atol=1.0e-12), msg
+                mySafeLayer.keywords['datatype'] = 'undefined'
+                test_filename = mySafeLayer.get_data(scaling=None)
+                myMessage = 'Data should not have changed'
+                assert nanallclose(myNativeData, test_filename,
+                                   rtol=1.0e-12, atol=1.0e-12), myMessage
 
                 # Try with None and density keyword
-                R.keywords['datatype'] = 'density'
-                A_none = R.get_data(scaling=None)
-                msg = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(A_scaled, A_none,
-                                   rtol=1.0e-12, atol=1.0e-12), msg
+                mySafeLayer.keywords['datatype'] = 'density'
+                test_filename = mySafeLayer.get_data(scaling=None)
+                myMessage = 'Resampled raster was not rescaled correctly'
+                assert nanallclose(myScaledData, test_filename,
+                                   rtol=1.0e-12, atol=1.0e-12), myMessage
 
-                R.keywords['datatype'] = 'counts'
-                A_none = R.get_data(scaling=None)
-                msg = 'Data should not have changed'
-                assert nanallclose(A_native, A_none,
-                                   rtol=1.0e-12, atol=1.0e-12), msg
+                mySafeLayer.keywords['datatype'] = 'counts'
+                test_filename = mySafeLayer.get_data(scaling=None)
+                myMessage = 'Data should not have changed'
+                assert nanallclose(myNativeData, test_filename,
+                                   rtol=1.0e-12, atol=1.0e-12), myMessage
 
     def testRasterScaling_projected(self):
         """Attempt to scale projected density raster layers raise exception
@@ -371,49 +372,50 @@ class ISClipper(unittest.TestCase):
         When we resolve issue #123, this test should be rewritten.
         """
 
-        test_filename = 'Population_Jakarta_UTM48N.tif'
-        myRasterPath = ('%s/%s' % (TESTDATA, test_filename))
+        myTestFilename = 'Population_Jakarta_UTM48N.tif'
+        myRasterPath = ('%s/%s' % (TESTDATA, myTestFilename))
 
         # Get reference values
-        R = readSafeLayer(myRasterPath)
-        R_min, R_max = R.get_extrema()
-        native_resolution = R.get_resolution()
+        mySafeLayer = readSafeLayer(myRasterPath)
+        myMinimum, myMaximum = mySafeLayer.get_extrema()
+        myNativeResolution = mySafeLayer.get_resolution()
 
         print
-        print R_min, R_max
-        print native_resolution
+        print myMinimum, myMaximum
+        print myNativeResolution
 
         # Define bounding box in EPSG:4326
-        bounding_box = [106.61, -6.38, 107.05, -6.07]
+        myBoundingBox = [106.61, -6.38, 107.05, -6.07]
 
         # Test for a range of resolutions
-        for res in [0.02, 0.01, 0.005, 0.002, 0.001]:
+        for myResolution in [0.02, 0.01, 0.005, 0.002, 0.001]:
 
             # Clip the raster to the bbox
-            extraKeywords = {'resolution': native_resolution}
+            myExtraKeywords = {'resolution': myNativeResolution}
             myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
             try:
-                myResult = clipLayer(myRasterLayer, bounding_box, res,
-                                     theExtraKeywords=extraKeywords)
+                myResult = clipLayer(myRasterLayer, myBoundingBox, myResolution,
+                                     theExtraKeywords=myExtraKeywords)
+                del myResult
             except InvalidProjectionException:
                 pass
             else:
-                msg = 'Should have raised InvalidProjectionException'
-                raise Exception(msg)
+                myMessage = 'Should have raised InvalidProjectionException'
+                raise Exception(myMessage)
 
     def test_extentToKml(self):
         """Test if extent to KML is working."""
         myExtent = [100.03, -1.14, 100.81, -0.73]
-        kmlFilename = extentToKml(myExtent)
-        assert os.path.exists(kmlFilename)
-        f = open(kmlFilename)
-        kml = f.read()
-        f.close()
+        myKmlFilename = extentToKml(myExtent)
+        assert os.path.exists(myKmlFilename)
+        myFile = open(myKmlFilename)
+        myKml = myFile.read()
+        myFile.close()
 
-        msg = 'Generated KML was not as expected: %s' % kml
-        assert '<?xml version' in kml, msg
-        for x in myExtent:
-            assert str(x) in kml, msg
+        myMessage = 'Generated KML was not as expected: %s' % myKml
+        assert '<?xml version' in myKml, myMessage
+        for myValue in myExtent:
+            assert str(myValue) in myKml, myMessage
 
     def test_vectorProjections(self):
         """Test that vector input data is reprojected properly during clip"""
