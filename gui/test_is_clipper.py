@@ -272,8 +272,8 @@ class ISClipper(unittest.TestCase):
                                  0.005,
                                  0.002,
                                  0.001,
-                                 0.0005, # Coarser
-                                 0.0002]: # Finer
+                                 0.0005,   # Coarser
+                                 0.0002]:  # Finer
 
                 # To save time only do two resolutions for the
                 # large population set
@@ -284,7 +284,9 @@ class ISClipper(unittest.TestCase):
                 # Clip the raster to the bbox
                 myExtraKeywords = {'resolution': myNativeResolution}
                 myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
-                myResult = clipLayer(myRasterLayer, myBoundingBox, myResolution,
+                myResult = clipLayer(myRasterLayer,
+                                     myBoundingBox,
+                                     myResolution,
                                      theExtraKeywords=myExtraKeywords)
 
                 mySafeLayer = readSafeLayer(myResult)
@@ -399,7 +401,9 @@ class ISClipper(unittest.TestCase):
             myExtraKeywords = {'resolution': myNativeResolution}
             myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
             try:
-                myResult = clipLayer(myRasterLayer, myBoundingBox, myResolution,
+                myResult = clipLayer(myRasterLayer,
+                                     myBoundingBox,
+                                     myResolution,
                                      theExtraKeywords=myExtraKeywords)
                 del myResult
             except InvalidProjectionException:
