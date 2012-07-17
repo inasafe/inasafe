@@ -9,7 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-import is_safe_interface
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -19,17 +18,19 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-from PyQt4.QtCore import QSettings
 import sqlite3 as sqlite
 import cPickle as pickle
-from is_exceptions import HashNotFoundException
-from is_exceptions import KeywordNotFoundException
-from is_safe_interface import (verify,
+
+from PyQt4.QtCore import QObject
+from PyQt4.QtCore import QSettings
+from qgis.core import QgsMapLayer
+
+from gui.is_exceptions import HashNotFoundException
+from gui.is_exceptions import KeywordNotFoundException
+from gui.is_safe_interface import (verify,
                                readKeywordsFromFile,
                                writeKeywordsToFile)
-from is_utilities import qgisVersion
-from PyQt4.QtCore import QObject
-from qgis.core import QgsMapLayer
+from gui.is_utilities import qgisVersion
 
 
 class ISKeywordIO(QObject):
@@ -116,14 +117,12 @@ class ISKeywordIO(QObject):
         """
         mySource = str(theLayer.source())
         myFlag = self.areKeywordsFileBased(theLayer)
-        myKeywords = None
         try:
             if myFlag:
-                myKeywords = is_safe_interface.writeKeywordsToFile(
-                                            mySource, theKeywords)
+                writeKeywordsToFile(mySource, theKeywords)
             else:
-                myKeywords = self.writeKeywordsForUri(mySource, theKeywords)
-            return myKeywords
+                self.writeKeywordsForUri(mySource, theKeywords)
+            return
         except:
             raise
 
