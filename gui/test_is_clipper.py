@@ -251,35 +251,42 @@ class ISClipper(unittest.TestCase):
         such as population per km^2
         """
 
-        for test_filename in ['Population_Jakarta_geographic.asc',
-                              'Population_2010.asc']:
+        for myFilename in ['Population_Jakarta_geographic.asc',
+                           'Population_2010.asc']:
 
-            myRasterPath = ('%s/%s' % (TESTDATA, test_filename))
+            myRasterPath = ('%s/%s' % (TESTDATA, myFilename))
 
             # Get reference values
             mySafeLayer = readSafeLayer(myRasterPath)
-            R_min_ref, R_max_ref = mySafeLayer.get_extrema()
-            del R_max_ref
-            del R_min_ref
-            native_resolution = mySafeLayer.get_resolution()
+            myMinimum, myMaximum = mySafeLayer.get_extrema()
+            del myMaximum
+            del myMinimum
+            myNativeResolution = mySafeLayer.get_resolution()
 
             # Get the Hazard extents as an array in EPSG:4326
-            bounding_box = mySafeLayer.get_bounding_box()
+            myBoundingBox = mySafeLayer.get_bounding_box()
 
             # Test for a range of resolutions
-            for res in [0.02, 0.01, 0.005, 0.002, 0.001, 0.0005,  # Coarser
-                        0.0002]:                                  # Finer
+            for myResolution in [0.02,
+                                 0.01,
+                                 0.005,
+                                 0.002,
+                                 0.001,
+                                 0.0005,   # Coarser
+                                 0.0002]:  # Finer
 
                 # To save time only do two resolutions for the
                 # large population set
-                if test_filename.startswith('Population_2010'):
-                    if res > 0.01 or res < 0.005:
+                if myFilename.startswith('Population_2010'):
+                    if myResolution > 0.01 or myResolution < 0.005:
                         break
 
                 # Clip the raster to the bbox
-                myExtraKeywords = {'resolution': native_resolution}
+                myExtraKeywords = {'resolution': myNativeResolution}
                 myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
-                myResult = clipLayer(myRasterLayer, bounding_box, res,
+                myResult = clipLayer(myRasterLayer,
+                                     myBoundingBox,
+                                     myResolution,
                                      theExtraKeywords=myExtraKeywords)
 
                 mySafeLayer = readSafeLayer(myResult)
@@ -287,7 +294,7 @@ class ISClipper(unittest.TestCase):
                 myScaledData = mySafeLayer.get_data(scaling=True)
 
                 mySigma = (mySafeLayer.get_resolution()[0] /
-                           native_resolution[0]) ** 2
+                           myNativeResolution[0]) ** 2
 
                 # Compare extrema
                 myExpectedScaledMax = mySigma * numpy.nanmax(myNativeData)
@@ -319,9 +326,9 @@ class ISClipper(unittest.TestCase):
                                    rtol=1.0e-8, atol=1.0e-8), myMessage
 
                 # Check that it also works with manual scaling
-                test_filename = mySafeLayer.get_data(scaling=mySigma)
+                myManualData = mySafeLayer.get_data(scaling=mySigma)
                 myMessage = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(test_filename, myScaledData,
+                assert nanallclose(myManualData, myScaledData,
                                    rtol=1.0e-8, atol=1.0e-8), myMessage
 
                 # Check that an exception is raised for bad arguments
@@ -343,22 +350,22 @@ class ISClipper(unittest.TestCase):
 
                 # Check None option without keyword datatype == 'density'
                 mySafeLayer.keywords['datatype'] = 'undefined'
-                test_filename = mySafeLayer.get_data(scaling=None)
+                myUnscaledData = mySafeLayer.get_data(scaling=None)
                 myMessage = 'Data should not have changed'
-                assert nanallclose(myNativeData, test_filename,
+                assert nanallclose(myNativeData, myUnscaledData,
                                    rtol=1.0e-12, atol=1.0e-12), myMessage
 
                 # Try with None and density keyword
                 mySafeLayer.keywords['datatype'] = 'density'
-                test_filename = mySafeLayer.get_data(scaling=None)
+                myUnscaledData = mySafeLayer.get_data(scaling=None)
                 myMessage = 'Resampled raster was not rescaled correctly'
-                assert nanallclose(myScaledData, test_filename,
+                assert nanallclose(myScaledData, myUnscaledData,
                                    rtol=1.0e-12, atol=1.0e-12), myMessage
 
                 mySafeLayer.keywords['datatype'] = 'counts'
-                test_filename = mySafeLayer.get_data(scaling=None)
+                myUnscaledData = mySafeLayer.get_data(scaling=None)
                 myMessage = 'Data should not have changed'
-                assert nanallclose(myNativeData, test_filename,
+                assert nanallclose(myNativeData, myUnscaledData,
                                    rtol=1.0e-12, atol=1.0e-12), myMessage
 
     def testRasterScaling_projected(self):
@@ -394,7 +401,9 @@ class ISClipper(unittest.TestCase):
             myExtraKeywords = {'resolution': myNativeResolution}
             myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
             try:
-                myResult = clipLayer(myRasterLayer, myBoundingBox, myResolution,
+                myResult = clipLayer(myRasterLayer,
+                                     myBoundingBox,
+                                     myResolution,
                                      theExtraKeywords=myExtraKeywords)
                 del myResult
             except InvalidProjectionException:

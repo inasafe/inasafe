@@ -322,7 +322,7 @@ def writeKeywordsToFile(theFilename, theKeywords):
           stripped off and the basename + .keywords will be used as the file.
         * theKeywords - a dictionary of keywords to be written
     Returns:
-        A safe readSafeLayer object is returned.
+        None
     Raises:
         Any exceptions are propogated
     """

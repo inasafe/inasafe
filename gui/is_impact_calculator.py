@@ -167,5 +167,5 @@ class ISImpactCalculator(QObject):
         myFunctions = getSafeImpactFunctions(self._function)
         myFunction = myFunctions[0][self._function]
         return ISImpactCalculatorThread(myHazardLayer,
-                                      myExposureLayer,
-                                      myFunction)
+                                        myExposureLayer,
+                                        myFunction)

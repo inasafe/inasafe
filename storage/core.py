@@ -9,6 +9,7 @@ import os
 from vector import Vector
 from raster import Raster
 from common.utilities import verify
+from common.exceptions import ReadLayerError, BoundingBoxError
 
 # FIXME (Ole): make logging work again
 import logging
@@ -28,7 +29,7 @@ def read_layer(filename):
     else:
         msg = ('Could not read %s. '
                'Extension "%s" has not been implemented' % (filename, ext))
-        raise Exception(msg)
+        raise ReadLayerError(msg)
 
 
 def write_raster_data(data, projection, geotransform, filename, keywords=None):
@@ -109,7 +110,7 @@ def bboxlist2string(bbox, decimals=6):
         bbox = list(bbox)
     except:
         msg = 'Could not coerce bbox %s into a list' % str(bbox)
-        raise Exception(msg)
+        raise BoundingBoxError(msg)
 
     msg = ('Bounding box must have 4 coordinates [W, S, E, N]. '
            'I got %s' % str(bbox))
