@@ -1117,7 +1117,7 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     # FIXME: Maybe start with more high level function in storage module
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
-    x, y = geotransform2axes(geontransform, nx, ny):
+    x, y = geotransform2axes(geontransform, nx, ny)
     P = grid2points(A, x, y)
 
     # For each polygon
