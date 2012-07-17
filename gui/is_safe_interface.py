@@ -37,7 +37,6 @@ from safe_api import (buffered_bounding_box,
                       verify as verify_util,
                       VerificationError)
 from safe_api import calculate_impact as safe_calculate_impact
-from safe_api import internationalisedNames
 
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication

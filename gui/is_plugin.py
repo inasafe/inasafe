@@ -30,13 +30,13 @@ from PyQt4.QtCore import (QObject,
                           QSettings,
                           QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication
-from is_exceptions import TranslationLoadException
+from gui.is_exceptions import TranslationLoadException
 #see if we can import pydev - see development docs for details
 try:
     from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except:
     print 'Debugging was disabled'
 
 
@@ -140,11 +140,12 @@ class ISPlugin:
            no exceptions explicitly raised.
         """
         # Import dock here as it needs to be imported AFTER i18n is set up
-        from is_dock import ISDock
+        from gui.is_dock import ISDock
         self.dockWidget = None
         #--------------------------------------
         # Create action for plugin dockable window (show/hide)
         #--------------------------------------
+        # pylint: disable=W0201
         self.actionDock = QAction(QIcon(':/plugins/inasafe/icon.png'),
                     self.tr('Toggle InaSAFE Dock'), self.iface.mainWindow())
         self.actionDock.setStatusTip(self.tr(
@@ -228,6 +229,7 @@ class ISPlugin:
         QObject.connect(self.iface,
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),
             self.layerChanged)
+        # pylint: disable=W0201
 
     def unload(self):
         """Gui breakdown procedure (for QGIS plugin api).
@@ -301,7 +303,7 @@ class ISPlugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from is_options_dialog import ISOptionsDialog
+        from gui.is_options_dialog import ISOptionsDialog
 
         myDialog = ISOptionsDialog(self.iface.mainWindow(),
                                       self.iface,
@@ -324,7 +326,7 @@ class ISPlugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from is_keywords_dialog import ISKeywordsDialog
+        from gui.is_keywords_dialog import ISKeywordsDialog
 
         if self.iface.activeLayer() is None:
             return
