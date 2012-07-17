@@ -37,9 +37,10 @@ try:
 except ImportError:
     print 'Debugging was disabled'
 
-# pylint: disable=W0231
+
 class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
     """Options dialog for the InaSAFE plugin."""
+# pylint: disable=W0231
     def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
 

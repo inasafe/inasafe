@@ -25,25 +25,25 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-
-from utilities_test import (getQgisTestApp,
-                            assertHashForFile,
-                            hashForFile,
-                            assertHashesForFile)
-from gui.is_map import ISMap
 from PyQt4 import QtGui
 from qgis.core import (QgsSymbol,
                        QgsMapLayerRegistry,
                        QgsRectangle,
                        QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
-from utilities_test import (loadLayer, setJakartaGeoExtent)
-from is_utilities import getTempDir
+
+from gui.utilities_test import (getQgisTestApp,
+                                assertHashForFile,
+                                hashForFile,
+                                assertHashesForFile)
+from gui.is_map import ISMap
+from gui.utilities_test import (loadLayer, setJakartaGeoExtent)
+from gui.is_utilities import getTempDir
 try:
     from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except ImportError:
     print 'Debugging was disabled'
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -109,7 +109,6 @@ class ISMapTest(unittest.TestCase):
         myMap.getVectorLegend()
         myPath = os.path.join(getTempDir(), 'getVectorLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = None
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.

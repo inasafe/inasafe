@@ -42,7 +42,8 @@ from gui.is_keyword_io import ISKeywordIO
 from gui.is_clipper import clipLayer
 from gui.is_exceptions import (KeywordNotFoundException,
                                InsufficientOverlapException,
-                               InvalidParameterException)
+                               InvalidParameterException,
+                               HashNotFoundException)
 from gui.is_map import ISMap
 from gui.is_utilities import (getTempDir,
                               htmlHeader,
@@ -52,14 +53,14 @@ from gui.is_utilities import (getTempDir,
                               qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import resources  # pylint: disable=W0611
+import gui.resources  # pylint: disable=W0611
 
 #see if we can import pydev - see development docs for details
 try:
     from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
-except:
+except ImportError:
     print 'Debugging was disabled'
 
 
@@ -486,10 +487,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myLayer not in myCanvasLayers):
                 continue
 
-            """
-            .. todo:: check raster is single band
-            store uuid in user property of list widget for layers
-            """
+         # .. todo:: check raster is single band
+         #    store uuid in user property of list widget for layers
 
             myName = myLayer.name()
             mySource = str(myLayer.id())
@@ -663,7 +662,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myExposureFilename = None
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
-        except Exception, e:
+        except:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             raise

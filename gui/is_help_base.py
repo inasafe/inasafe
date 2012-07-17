@@ -42,4 +42,4 @@ class Ui_ISHelpBase(object):
         pass
 
 from PyQt4 import QtWebKit
-import resources_rc
+import gui.resources_rc
