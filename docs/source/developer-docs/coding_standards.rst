@@ -22,6 +22,23 @@ Please observe the following coding standards when working on the codebase:
   be assumed to represent a working demo with all tests passing.
 * All strings should be internationalisation enabled. Please see :doc:`i18n`
   for details.
+* All code should pass lint validation. You can test this using the make target
+  ``make jenkins-lint``. In some cases you may wish to override a line or
+  group of lines so that they are not validated by lint. You can do this by
+  adding either::
+
+     import foo  # pylint: diable=W1203
+
+  or::
+
+     # pylint: disable=W1234
+     print 'hello'
+     print 'goodbye'
+     # pylint: enable=W1234
+
+  The relevant id (W1234) is provided on the output of the above mentioned lint
+  command's output.
+
 * Each source file should include a standard header containing copyright,
   authorship and version metadata as shown in the exampled below.
 
