@@ -193,4 +193,4 @@ class Ui_ISOptionsDialogBase(object):
         self.label_5.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "DPI (Maps and reports)", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxUseThread.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Run analysis in a separate thread (experimental)", None, QtGui.QApplication.UnicodeUTF8))
 
-import resources_rc
+import gui.resources_rc

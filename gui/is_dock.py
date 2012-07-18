@@ -23,43 +23,44 @@ __type__ = 'alpha'  # beta, final etc will be shown in dock title
 import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
-from is_dock_base import Ui_ISDockBase
-from is_help import ISHelp
-from is_utilities import getExceptionWithStacktrace, getWGS84resolution
+from gui.is_dock_base import Ui_ISDockBase
+from gui.is_help import ISHelp
+from gui.is_utilities import getExceptionWithStacktrace, getWGS84resolution
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
-from is_impact_calculator import ISImpactCalculator
-from is_safe_interface import (availableFunctions,
-                               getFunctionTitle,
-                               getOptimalExtent,
-                               getBufferedExtent,
-                               internationalisedNames)
-from is_keyword_io import ISKeywordIO
-from is_clipper import clipLayer
-from is_exceptions import (KeywordNotFoundException,
-                           HashNotFoundException,
-                           InvalidParameterException)
-from is_map import ISMap
-from is_utilities import (getTempDir,
-                          htmlHeader,
-                          htmlFooter,
-                          setVectorStyle,
-                          setRasterStyle,
-                          qgisVersion)
+from gui.is_impact_calculator import ISImpactCalculator
+from gui.is_safe_interface import (availableFunctions,
+                                   getFunctionTitle,
+                                   getOptimalExtent,
+                                   getBufferedExtent,
+                                   internationalisedNames)
+from gui.is_keyword_io import ISKeywordIO
+from gui.is_clipper import clipLayer
+from gui.is_exceptions import (KeywordNotFoundException,
+                               InsufficientOverlapException,
+                               InvalidParameterException,
+                               HashNotFoundException)
+from gui.is_map import ISMap
+from gui.is_utilities import (getTempDir,
+                              htmlHeader,
+                              htmlFooter,
+                              setVectorStyle,
+                              setRasterStyle,
+                              qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import resources
+import gui.resources  # pylint: disable=W0611
 
 #see if we can import pydev - see development docs for details
 try:
-    from pydevd import *
+    from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except ImportError:
     print 'Debugging was disabled'
 
 
@@ -274,10 +275,10 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             return (False, myMessage)
 
         if self.cboFunction.currentIndex() == -1:
-            myHazardFilename = self.getHazardLayer().source()
+            #myHazardFilename = self.getHazardLayer().source()
             myHazardKeywords = QtCore.QString(str(self.keywordIO.readKeywords(
                                                     self.getHazardLayer())))
-            myExposureFilename = self.getExposureLayer().source()
+            #myExposureFilename = self.getExposureLayer().source()
             myExposureKeywords = QtCore.QString(
                                             str(self.keywordIO.readKeywords(
                                                 self.getExposureLayer())))
@@ -328,6 +329,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         """
         # Add any other logic you might like here...
+        del theIndex
         self.getFunctions()
         self.setOkButtonStatus()
 
@@ -348,6 +350,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         """
         # Add any other logic you mught like here...
+        del theIndex
         self.getFunctions()
         self.setOkButtonStatus()
 
@@ -368,6 +371,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
     """
         # Add any other logic you mught like here...
+        del theIndex
         self.setOkButtonStatus()
 
     def setOkButtonStatus(self):
@@ -423,6 +427,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         delegates to getLayers and is only implemented here to make the
         connections between the different signals and slots clearer and
         better documented."""
+        del theLayers
         self.getLayers()
 
     @pyqtSlot()
@@ -482,10 +487,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                 myLayer not in myCanvasLayers):
                 continue
 
-            """
-            .. todo:: check raster is single band
-            store uuid in user property of list widget for layers
-            """
+         # .. todo:: check raster is single band
+         #    store uuid in user property of list widget for layers
 
             myName = myLayer.name()
             mySource = str(myLayer.id())
@@ -659,7 +662,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         myExposureFilename = None
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
-        except Exception, e:
+        except:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             raise
@@ -949,7 +952,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
             myGeoExtent = getOptimalExtent(myHazardGeoExtent,
                                            myExposureGeoExtent,
                                            myViewportGeoExtent)
-        except Exception, e:
+        except InsufficientOverlapException, e:
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
                    'and / or the layers and the viewport. Please select '
@@ -983,14 +986,12 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         if myHazardLayer.type() == QgsMapLayer.RasterLayer:
 
             # Hazard layer is raster
-            myHazardGeoCellSize = getWGS84resolution(myHazardLayer,
-                                                     myHazardGeoExtent)
+            myHazardGeoCellSize = getWGS84resolution(myHazardLayer)
 
             if myExposureLayer.type() == QgsMapLayer.RasterLayer:
 
                 # In case of two raster layers establish common resolution
-                myExposureGeoCellSize = getWGS84resolution(myExposureLayer,
-                                                           myExposureGeoExtent)
+                myExposureGeoCellSize = getWGS84resolution(myExposureLayer)
 
                 if myHazardGeoCellSize < myExposureGeoCellSize:
                     myCellSize = myHazardGeoCellSize

@@ -8,14 +8,15 @@ import shutil
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from utilities_test import (getQgisTestApp, loadLayer)
-from is_keyword_io import ISKeywordIO
-from is_exceptions import HashNotFoundException
-from is_utilities import getTempDir
+from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 
-from safe_api import TESTDATA, HAZDATA, EXPDATA
-from qgis.core import (QgsDataSourceURI,
-                       QgsVectorLayer)
+from gui.utilities_test import (getQgisTestApp, loadLayer)
+from gui.is_keyword_io import ISKeywordIO
+from gui.is_exceptions import HashNotFoundException
+from gui.is_utilities import getTempDir
+
+from safe_api import TESTDATA, HAZDATA
+
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 #Dont change this, not even formatting, you will break tests!
 PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
@@ -48,7 +49,8 @@ class ISKeywordIOTest(unittest.TestCase):
         self.expectedRasterKeywords = {'category': 'hazard',
                                        'subcategory': 'earthquake',
                                        'unit': 'MMI',
-                                       'title': 'Padang 2009 scenario'}
+                                       'title': ('An earthquake in Padang '
+                                                 'like in 2009')}
 
     def tearDown(self):
         pass

@@ -30,19 +30,20 @@ from qgis.core import (QgsComposition,
                        QgsPoint,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
-from is_exceptions import (LegendLayerException,
+from PyQt4 import (QtCore, QtGui, QtWebKit, QtXml)
+from gui.is_exceptions import (LegendLayerException,
                            KeywordNotFoundException)
-from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
-from is_keyword_io import ISKeywordIO
-from is_utilities import getTempDir, htmlHeader, htmlFooter
+from gui.is_keyword_io import ISKeywordIO
+from gui.is_utilities import getTempDir, htmlHeader, htmlFooter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import resources
+import gui.resources     # pylint: disable=W0611
+
 try:
-    from pydevd import *
+    from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except ImportError:
     print 'Debugging was disabled'
 
 
@@ -66,6 +67,8 @@ class ISMap():
         self.footer = None
         # how high each row of the legend should be
         self.legendIncrement = 30
+        self.printer = None
+        self.composition = None
         self.pageWidth = 210  # width in mm
         self.pageHeight = 297  # height in mm
         self.pageDpi = 300.0
@@ -203,7 +206,7 @@ class ISMap():
             for myCategory in myRenderer.categories():
                 mySymbol = myCategory.symbol()
                 self.addSymbolToLegend(
-                                myCategory=myCategory.value().toString(),
+                                theCategory=myCategory.value().toString(),
                                 theLabel=myCategory.label(),
                                 theSymbol=mySymbol)
         elif myType == "graduatedSymbol":
@@ -282,6 +285,7 @@ class ISMap():
         self.addClassToLegend(myColour,
                               theMin=theMin,
                               theMax=theMax,
+                              theCategory=theCategory,
                               theLabel=theLabel)
 
     def addClassToLegend(self,
@@ -331,7 +335,14 @@ class ISMap():
                          myFontWeight,
                          myItalicsFlag)
         myPainter.setFont(myFont)
-        myPainter.drawText(myLabelX, myOffset + 25, theLabel)
+        myLabel = ''
+        if theLabel:
+            myLabel = theLabel
+        if theMin is not None and theMax is not None:
+            myLabel += ' [' + str(theMin) + ', ' + str(theMax) + ']'
+        if theCategory is not None:
+            myLabel = ' (' + theCategory + ')'
+        myPainter.drawText(myLabelX, myOffset + 25, myLabel)
 
     def extendLegend(self):
         """Grow the legend pixmap enough to accommodate one more legend entry.
@@ -984,10 +995,9 @@ class ISMap():
         try:
             myTitle = self.keywordIO.readKeywords(self.layer, 'map_title')
             return myTitle
-        except KeywordNotFoundException, e:
+        except KeywordNotFoundException:
             return None
         except Exception:
-            # TODO maybe we want to handle other types of exceptions?
             return None
 
     def renderImpactTable(self):
@@ -1007,7 +1017,6 @@ class ISMap():
         except KeywordNotFoundException:
             return None
         except Exception:
-            # TODO maybe add some better handling here
             return None
 
     def renderHtml(self, theHtml, theWidthMM):

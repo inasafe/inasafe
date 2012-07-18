@@ -19,14 +19,17 @@ __revision__ = '$Format:%H$'
 __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-#Do not import any QGIS or SAFE modules in this module!
-from is_impact_calculator_thread import ISImpactCalculatorThread
-from is_exceptions import InsufficientParametersException
-from is_safe_interface import (readSafeLayer,
-                               getSafeImpactFunctions)
+
 from PyQt4.QtCore import QObject
 
+#Do not import any QGIS or SAFE modules in this module!
+from gui.is_impact_calculator_thread import ISImpactCalculatorThread
+from gui.is_exceptions import InsufficientParametersException
+from gui.is_safe_interface import (readSafeLayer,
+                                   getSafeImpactFunctions)
 
+
+from PyQt4.QtCore import QObject
 class ISImpactCalculator(QObject):
     """A class to compute an impact scenario. We inherit from QObject
     so that we can use Qt translation self.tr calls."""
@@ -69,6 +72,18 @@ class ISImpactCalculator(QObject):
         else:
             self._exposureLayer = str(theLayerPath)
 
+    def hazardLayer(self):
+        """Accessor for the hazard layer.
+
+        Args:
+            None
+        Returns:
+            A QgsMapLayer or None depending on if the layer is set
+        Raises:
+            None
+        """
+        return self._hazardLayer
+
     def setHazardLayer(self, theLayerPath):
         """Mutator: hazard layer. Hazard layer property  (e.g. a flood depth
         raster). This should be a SAFE readlayer instance.
@@ -85,6 +100,18 @@ class ISImpactCalculator(QObject):
             self._hazardLayer = None
         else:
             self._hazardLayer = str(theLayerPath)
+
+    def function(self):
+        """Accessor for the function layer.
+
+        Args:
+            None
+        Returns:
+            An inasafe function or None depending on if the layer is set
+        Raises:
+            None
+        """
+        return self._function
 
     def setFunction(self, theFunctionName):
         """Mutator: function layer. Function property (specifies which
@@ -143,5 +170,5 @@ class ISImpactCalculator(QObject):
         myFunctions = getSafeImpactFunctions(self._function)
         myFunction = myFunctions[0][self._function]
         return ISImpactCalculatorThread(myHazardLayer,
-                                      myExposureLayer,
-                                      myFunction)
+                                        myExposureLayer,
+                                        myFunction)

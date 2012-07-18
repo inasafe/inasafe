@@ -21,32 +21,32 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from PyQt4 import QtGui, QtCore
-#from PyQt4.QtCore import pyqtSignature
-#from ui_inasafedock import Ui_ISDock
-#from utilities import getExceptionWithStacktrace
-from is_keywords_dialog_base import Ui_ISKeywordsDialogBase
-from is_keyword_io import ISKeywordIO
-from is_help import ISHelp
-from is_utilities import getExceptionWithStacktrace
 from PyQt4.QtCore import pyqtSignature
-from is_exceptions import HashNotFoundException
+
 from odict import OrderedDict
+
+from gui.is_keywords_dialog_base import Ui_ISKeywordsDialogBase
+from gui.is_keyword_io import ISKeywordIO
+from gui.is_help import ISHelp
+from gui.is_utilities import getExceptionWithStacktrace
+
+
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import resources
+import gui.resources  # pylint: disable=W0611
 
 #see if we can import pydev - see development docs for details
 try:
-    from pydevd import *
+    from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except ImportError:
     print 'Debugging was disabled'
 
 
 class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
-
+# pylint: disable=W0231
     def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
         .. note:: In QtDesigner the advanced editor's predefined keywords
@@ -65,6 +65,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         Raises:
            no exceptions explicitly raised
         """
+# pylint: enable=W0231
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
@@ -127,7 +128,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
             self.helpDialog = ISHelp(self.iface.mainWindow(), 'keywords')
         self.helpDialog.show()
 
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    # prevents actions being handled twice
+    @pyqtSignature('bool')
     def on_pbnAdvanced_toggled(self, theFlag):
         """Automatic slot executed when the advanced button is toggled.
 
@@ -147,7 +149,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
             self.pbnAdvanced.setText(self.tr('Show advanced editor'))
         self.adjustSize()
 
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    # prevents actions being handled twice
+    @pyqtSignature('bool')
     def on_radHazard_toggled(self, theFlag):
         """Automatic slot executed when the hazard radio is toggled.
 
@@ -162,7 +165,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         self.setCategory('hazard')
         self.updateControlsFromList()
 
-    @pyqtSignature('bool')  # prevents actions being handled twice
+    # prevents actions being handled twice
+    @pyqtSignature('bool')
     def on_radExposure_toggled(self, theFlag):
         """Automatic slot executed when the hazard radio is toggled on.
 
@@ -177,7 +181,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         self.setCategory('exposure')
         self.updateControlsFromList()
 
-    @pyqtSignature('int')  # prevents actions being handled twice
+    # prevents actions being handled twice
+    @pyqtSignature('int')
     def on_cboSubcategory_currentIndexChanged(self, theIndex=None):
         """Automatic slot executed when the subcategory is changed.
 
@@ -191,6 +196,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
+        del theIndex
         myItem = self.cboSubcategory.itemData(
                             self.cboSubcategory.currentIndex()).toString()
         myText = str(myItem)
@@ -215,6 +221,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
             myDataType = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('datatype', myDataType)
 
+    # prevents actions being handled twice
     def setSubcategoryList(self, theEntries, theSelectedItem=None):
         """Helper to populate the subcategory list based on category context.
 
@@ -253,7 +260,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         self.cboSubcategory.setCurrentIndex(mySelectedIndex)
         self.cboSubcategory.blockSignals(False)
 
-    @pyqtSignature('')  # prevents actions being handled twice
+    # prevents actions being handled twice
+    @pyqtSignature('')
     def on_pbnAddToList1_clicked(self):
         """Automatic slot executed when the pbnAddToList1 button is pressed.
 
@@ -269,7 +277,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         self.addListEntry(myCurrentKey, myCurrentValue)
         self.updateControlsFromList()
 
-    @pyqtSignature('')  # prevents actions being handled twice
+    # prevents actions being handled twice
+    @pyqtSignature('')
     def on_pbnAddToList2_clicked(self):
         """Automatic slot executed when the pbnAddToList2 button is pressed.
 
@@ -298,7 +307,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         self.addListEntry(myCurrentKey, myCurrentValue)
         self.updateControlsFromList()
 
-    @pyqtSignature('')  # prevents actions being handled twice
+    # prevents actions being handled twice
+    @pyqtSignature('')
     def on_pbnRemove_clicked(self):
         """Automatic slot executed when the pbnRemove button is pressed.
 
@@ -567,7 +577,8 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
                 self.setSubcategoryList(self.standardHazardList,
                                         self.tr('Not Set'))
 
-    @pyqtSignature('QString')  # prevents actions being handled twice
+    # prevents actions being handled twice
+    @pyqtSignature('QString')
     def on_leTitle_textEdited(self, theText):
         """Update the keywords list whenver the user changes the title.
         This slot is not called is the title is changed programmatically.

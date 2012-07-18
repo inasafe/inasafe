@@ -7,12 +7,12 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from is_utilities import (getExceptionWithStacktrace,
-                          setRasterStyle,
-                          setVectorStyle,
-                          qgisVersion)
 from safe_api import bbox_intersection
-from utilities_test import loadLayer, getQgisTestApp
+from gui.is_utilities import (getExceptionWithStacktrace,
+                              setVectorStyle,
+                              setRasterStyle,
+                              qgisVersion)
+from gui.utilities_test import (loadLayer, getQgisTestApp)
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -114,7 +114,6 @@ class ISUtilitiesTest(unittest.TestCase):
         """Test that point symbol size can be set from style (issue 121).
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
-        # This dataset has all cells with value 1.3
         myLayer, myType = loadLayer('kecamatan_jakarta_osm_centroids.shp')
         del myType
         # Note the float quantity values below

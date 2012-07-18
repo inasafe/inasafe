@@ -25,10 +25,12 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from qgis.gui import QgsMapCanvas
-from qgis_interface import QgisInterface
+
 from PyQt4.QtGui import QWidget
-from utilities_test import getQgisTestApp
+
+from qgis.gui import QgsMapCanvas
+from gui.qgis_interface import QgisInterface
+from gui.utilities_test import getQgisTestApp
 from gui.is_plugin import ISPlugin
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -109,13 +111,13 @@ class ISPluginTest(unittest.TestCase):
                    'impact' in str(myMod)):
                     print 'Reloading:', str(myMod)
                     reload(myMod)
-            except:
+            except NameError:
                 pass
         myPlugin = ISPlugin(myIface)
         myPlugin.setupI18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'
-        from impact_functions import getSafeImpactFunctions
+        from gui.is_safe_interface import getSafeImpactFunctions
         #myFunctions = getSafeImpactFunctions()
         #print myFunctions
         myFunctions = getSafeImpactFunctions('Tydelik gesluit')
