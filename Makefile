@@ -270,10 +270,13 @@ profile:
 
 jenkins-test:
 	@echo
-	@echo "----------------------------------"
+	@echo "---------------------------------------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"
-	@echo "----------------------------------"
-	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
+	@echo "if you are going to run more than "
+	@echo "one InaSAFE Jenkins job, you should run each on a different"
+	@echo "display by changing the :100 option below to a different number"
+	@echo "---------------------------------------------------------------"
+	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
 		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=storage,engine,impact_functions,gui || :
 
