@@ -326,9 +326,9 @@ Further Reading
 
 Here are some useful resources we found while getting things set up.
 
+* http://www.wallix.org/2011/06/29/how-to-use-jenkins-for-python-development/
 * http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html
 * http://www.alexconrad.org/2011/10/jenkins-and-python.html
-* http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html
 * http://blog.jvc26.org/2011/06/13/jenkins-ci-and-django-howto
 * https://sites.google.com/site/kmmbvnr/home/django-jenkins-tutorial (probably
   the most usful article I found)
