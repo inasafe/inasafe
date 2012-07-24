@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, BNPB/AIFDR/GFDRR
+# This file is distributed under the same license as the InaSAFE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE 0.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-24 12:03\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 4ab51c1259164ec9a8b95c9bcace9051
+#: ../../contents.rst:4
+msgid "Contents"
+msgstr ""
+
+# 6850f8e64bef438390965801a21b42be
+#: ../../contents.rst:17
+msgid "Indices and tables"
+msgstr ""
+
+# c33cd6b4eb0c4f2397db709aeb1351e2
+#: ../../contents.rst:19
+msgid ":ref:`genindex`"
+msgstr ""
+
+# 020723d92cb2479da348f9f067a6b698
+#: ../../contents.rst:20
+msgid ":ref:`modindex`"
+msgstr ""
+
+# c21fea65eed24325b0c183356cf28d96
+#: ../../contents.rst:21
+msgid ":ref:`search`"
+msgstr ""

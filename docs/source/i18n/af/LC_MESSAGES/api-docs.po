@@ -1,0 +1,1390 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, BNPB/AIFDR/GFDRR
+# This file is distributed under the same license as the InaSAFE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE 0.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-24 12:03\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# 288c7ba99ca94590aebfdc9cdfbfdfbb
+#: ../../api-docs/gui/init.rst:2
+msgid "Module: insafe.gui"
+msgstr ""
+
+# 28fd2f2ee9c14b63b45797384e7dbb6b
+#: ../../api-docs/gui/init.rst:4
+msgid ""
+"This page contains the documentation for the  InaSAFE code **gui** module."
+msgstr ""
+
+# 5c34950f5b01438986f03aae707d3d1d
+#: ../../api-docs/gui/is_clipper.rst:2
+msgid "Module:  is_clipper"
+msgstr ""
+
+# ea64fe4188d94cbebb72eacf49612b8b
+#: ../../api-docs/gui/is_clipper.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE **is_clipper** module."
+msgstr ""
+
+# abe2f8768dd345689d5e572a2a8145f7
+#: ../../api-docs/gui/is_dock.rst:2
+msgid "Module:  is_dock"
+msgstr ""
+
+# 4735e7d3b49544fd84eaf5c92985bd96
+#: ../../api-docs/gui/is_dock.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE **is_dock** module."
+msgstr ""
+
+# 25070ff6087b43d78588432fd62317ae
+#: ../../api-docs/gui/is_exceptions.rst:2
+msgid "Module: is_exceptions"
+msgstr ""
+
+# 41367acfa00c436fb035fa5a891d2c5c
+#: ../../api-docs/gui/is_exceptions.rst:4
+msgid ""
+"This page contains the documentation for the  InaSAFE code **is_exceptions** "
+"module."
+msgstr ""
+
+# 984e84f2683841aaac82834ad397f941
+#: ../../../../gui/is_exceptions.py:docstring of gui.is_exceptions:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Exception "
+"Classes.**"
+msgstr ""
+
+# 7c6813a3344c4b37b23fe01263743db4
+#: ../../../../gui/is_exceptions.py:docstring of gui.is_exceptions:4
+msgid "Custom exception classes for the IS application."
+msgstr ""
+
+# 52ab054bf46c42b4ab85b780a19c3c6a
+# c9f125b2a32e48c3b00d1e892d1650bb
+# f5ae7ecbf6f34965b5a0d45a5af5f704
+# dae45a93df294bb1b8c2bccce21ef95c
+# 4de6a350a20f47beabf75344598b60bc
+# a008e3266fee4b5aada5ded4ac6445ef
+# a0041667e219423c9f704ea4acb34e27
+#: ../../../../gui/is_exceptions.py:docstring of gui.is_exceptions:6
+#: ../../../../gui/is_help.py:docstring gui.is_help:3
+#: ../../../../gui/is_impact_calculator.py:docstring
+#: gui.is_impact_calculator:6 ../../../../gui/is_plugin.py:docstring
+#: gui.is_plugin:4 ../../../../gui/is_safe_interface.py:docstring
+#: gui.is_safe_interface:8
+#: ../../../../gui/test_is_impact_calculator.py:docstring
+#: gui.test_is_impact_calculator:4
+#: ../../../../gui/test_is_safe_interface.py:docstring
+#: gui.test_is_safe_interface:4
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# bee298ced3634c7c9c25a780f2f07543
+# 01d544e8a18e4399984103fe59a4260e
+# 6b9545daf95c4f9b9a0db7df990e7648
+# f4fd746dce5b4ba5b4fdf2a3c1941066
+# ece8f59a2fb44f63a7d1c1cf87319561
+# 45370fda7be142c1bd606ef1bb48da09
+# c53de33a13724d189577d061c68c9374
+#: ../../../../gui/is_exceptions.py:docstring of gui.is_exceptions:8
+#: ../../../../gui/is_help.py:docstring gui.is_help:5
+#: ../../../../gui/is_impact_calculator.py:docstring
+#: gui.is_impact_calculator:8 ../../../../gui/is_plugin.py:docstring
+#: gui.is_plugin:6 ../../../../gui/is_safe_interface.py:docstring
+#: gui.is_safe_interface:10
+#: ../../../../gui/test_is_impact_calculator.py:docstring
+#: gui.test_is_impact_calculator:6
+#: ../../../../gui/test_is_safe_interface.py:docstring
+#: gui.test_is_safe_interface:6
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# 2f8be2d0103d40c58a7627aca446c4d1
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.HashNotFoundException:1
+msgid "Custom exception for when a no keyword hash can be found."
+msgstr ""
+
+# 4ab4d22232f748e9b4d242ae74dac75e
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.InsufficientOverlapException:1
+msgid ""
+"An exception raised if an error occurs during extent calculation because the "
+"bounding boxes do not overlap."
+msgstr ""
+
+# 5812341a3f5c4de8a01921ddeeefbf4f
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.InsufficientParametersException:1
+msgid "Custom exception for when insufficient parameters have been set."
+msgstr ""
+
+# a25cad235cbe4fcf9ef17e424cf029da
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.InvalidBoundingBoxException:1
+msgid ""
+"An exception raised if an error occurs during extent calculation because one "
+"of the extents is invalid."
+msgstr ""
+
+# 4a8cde0724464fea8209b9d7672d10f2
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.InvalidKVPException:1
+msgid ""
+"An exception raised when a key value pair is invalid - for example if the "
+"key of value is None or an empty string."
+msgstr ""
+
+# b0adafa984ca4781a39aacda35651ac2
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.InvalidParameterException:1
+msgid "Custom exception for when an invalid parameter is passed to a function."
+msgstr ""
+
+# 562cea01ea5040dfbee7a86c7d4269f4
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.InvalidProjectionException:1
+msgid "An exception raised if a layer needs to be reprojected."
+msgstr ""
+
+# 5d37cbddf44740e0bb77e9502527bc2d
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.KeywordNotFoundException:1
+msgid "Custom exception for when a no keyword can be found."
+msgstr ""
+
+# 471307c4672f400290c866f3a5e2933e
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.LegendLayerException:1
+msgid ""
+"An exception raised when trying to create a legend from a QgsMapLayer that "
+"does not have suitable characteristics to allow a legend to be created from "
+"it."
+msgstr ""
+
+# d8b4a331db1f4974bec0bf458953bd62
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.NoFeaturesInExtentException:1
+msgid ""
+"An exception that gets thrown when no features are within the extent being "
+"clipped."
+msgstr ""
+
+# 71594cabcd994057bb0a14be84ec7095
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.NoFunctionsFoundException:1
+msgid ""
+"Custom exception for when a no impact calculation functions can be found."
+msgstr ""
+
+# 97163f23023a4e39a9080c73af418c7b
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.QgisPathException:1
+msgid "Custom exception for when qgispath.txt could not be read."
+msgstr ""
+
+# 825ebdc6b08148a5941af97e53c7214c
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.StyleInfoNotFoundException:1
+msgid "Custom exception for when a no styleInfo can be found."
+msgstr ""
+
+# 5d2d6c2db98e40c5a2c54b478ab87d12
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.TestNotImplementedException:1
+msgid "Custom exception for when a test exists only as a stub."
+msgstr ""
+
+# 39995bc376b546a1bbb9f46c682b5d36
+#: ../../../../gui/is_exceptions.py:docstring of
+#: gui.is_exceptions.TranslationLoadException:1
+msgid "Custom exception handler for whe translation file fails to load."
+msgstr ""
+
+# 9a02c2f25dc24348bba62a87fbde6e8e
+#: ../../api-docs/gui/is_help.rst:2
+msgid "Module:  is_help"
+msgstr ""
+
+# 270db6cb32944b7fa56454bc73a44428
+#: ../../api-docs/gui/is_help.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE **is_help** module."
+msgstr ""
+
+# 85def9239d0146389476331219464b6e
+#: ../../../../gui/is_help.py:docstring of gui.is_help:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Help Dialog.**"
+msgstr ""
+
+# 7b6dfd6aadf24de1900e97a4eb0652bb
+#: ../../../../gui/is_help.py:docstring of gui.is_help.ISHelp:1
+msgid "Help dialog class for the Risk In A Box plugin."
+msgstr ""
+
+# ae58eeb0d75d4d4d97684336f8c1837c
+#: ../../../../gui/is_help.py:docstring of gui.is_help.ISHelp:3
+msgid ""
+"Add navigation buttons. See url for example of how to do so. http://www."
+"rkblog.rk.edu.pl/w/p/webkit-pyqt-rendering-web-pages/"
+msgstr ""
+
+# 6263a716a0aa456999525fe24cae8300
+#: ../../../../gui/is_help.py:docstring of
+#: gui.is_help.ISHelp.showContexthelp:1
+msgid "Load the help text into the wvResults widget"
+msgstr ""
+
+# 9f0fda82a5814d92a0368a218b550051
+#: ../../api-docs/gui/is_impact_calculator.rst:2
+msgid "Module: is_impact_calculator"
+msgstr ""
+
+# 23826155142c4310adfe194b33af7fad
+#: ../../api-docs/gui/is_impact_calculator.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE "
+"**is_impact_calculator** module."
+msgstr ""
+
+# 1e268c1285e24806b9897ea31d336529
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - "
+"**ISImpactCalculator.**"
+msgstr ""
+
+# feca1661a46248058e75da34e87b55c5
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator:4
+msgid "The module provides a high level interface for running SAFE scenarios."
+msgstr ""
+
+# 5cd1b4e416f54129ad32d2fde8511d5e
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator:1
+msgid ""
+"A class to compute an impact scenario. We inherit from QObject so that we "
+"can use Qt translation self.tr calls."
+msgstr ""
+
+# 043f6606fa2343478c8f4f4d22ad8317
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.exposureLayer:1
+msgid "Accessor for the exposure layer."
+msgstr ""
+
+# f03867af19f34b36b67c46b12dace068
+# c0a1f72fd1e743bbbe0c0d2a1cffd8b5
+# 7e336ab3dc0b420a8e544768428c99af
+# 7a81c687d0644db7bfa049d51ca85554
+# 86889a53cd48438294e6bd6046531bdd
+# 3d42bb33aed14327b3e6ff4cb1f7505d
+# f795a591614246f0b1c794830d63b4b8
+# 5c221a63f30748fb9afeb0a1ce273e12
+# f4a887ca026844f293d866622d979878
+# f552f0dd012949a1bf026e4195b31d06
+# 03eae080b81048e880ba153252c97770
+# 2efad12189f748d68704b5dc3e92cf12
+# 05ed5d7aa72c4b129e215cc9e90e315c
+# ef8b646eb8f04438832be405de19e9ef
+# 5852cd21e7f94a938b0c9dc9ec03bff0
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.exposureLayer:4
+#: gui.is_impact_calculator.ISImpactCalculator.exposureLayer:8
+#: gui.is_impact_calculator.ISImpactCalculator.function:4
+#: gui.is_impact_calculator.ISImpactCalculator.function:8
+#: gui.is_impact_calculator.ISImpactCalculator.getRunner:13
+#: gui.is_impact_calculator.ISImpactCalculator.hazardLayer:4
+#: gui.is_impact_calculator.ISImpactCalculator.hazardLayer:8
+#: gui.is_impact_calculator.ISImpactCalculator.setExposureLayer:8
+#: gui.is_impact_calculator.ISImpactCalculator.setExposureLayer:10
+#: gui.is_impact_calculator.ISImpactCalculator.setFunction:9
+#: gui.is_impact_calculator.ISImpactCalculator.setFunction:11
+#: gui.is_impact_calculator.ISImpactCalculator.setHazardLayer:8
+#: gui.is_impact_calculator.ISImpactCalculator.setHazardLayer:10
+#: ../../../../gui/is_safe_interface.py:docstring
+#: gui.is_safe_interface.verify:7 gui.is_safe_interface.writeKeywordsToFile:9
+msgid "None"
+msgstr ""
+
+# 7bd67f162c1d47ce90f814a668638a0f
+# 60a4bb795d9b4ed3a6e9f2377e1fb77b
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.exposureLayer:6
+#: gui.is_impact_calculator.ISImpactCalculator.hazardLayer:6
+msgid "A QgsMapLayer or None depending on if the layer is set"
+msgstr ""
+
+# 32266af37daf414fab96f1f652ee8926
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.function:1
+msgid "Accessor for the function layer."
+msgstr ""
+
+# fa1f0b913b284755b8f61487c8094cf7
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.function:6
+msgid "An inasafe function or None depending on if the layer is set"
+msgstr ""
+
+# 7c5722baa5a54d2da2879767a5fa5e77
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.getRunner:1
+msgid ""
+"Factory to create a new runner thread. Requires three parameters to be set "
+"before execution can take place:"
+msgstr ""
+
+# 39e38cfc6efa45029482eeb948030006
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.getRunner:5
+msgid "Hazard layer - a path to a raster (string)"
+msgstr ""
+
+# 526dd65cbebb434ca9e3d29797f0b611
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.getRunner:6
+msgid "Exposure layer - a path to a vector hazard layer (string)."
+msgstr ""
+
+# 69ca383deef84f7f81770cb5bbb40e81
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.getRunner:7
+msgid ""
+"Function - a function name that defines how the Hazard assessment will be "
+"computed (string)."
+msgstr ""
+
+# 8452c0c960ea43f5af42f5c81ac6d3a9
+# ceb3dec47b9e4f06a0796664cb8910ee
+# 05be3b31b7f449ef9400a5b833e25b26
+# 620069e69c8247fcac8f8490b0fd1d6b
+# 9cb9f0bcd4284e99935aeb4dcdb3f35e
+# 45348711439d45dcaede266649c2c3bf
+# 4a2ad6282601463e8fb3c40581bf1850
+# 2a6c27b75ca7483aa9f00dddf851ed52
+# 65fae61aa8324141b4ec734befdc7fa2
+# 29bfa79a340f4ad8a8b4db96312af939
+# 431697e5aa9b43358e053a5e4902ce14
+# 6f50b3d07e2949a6a237042c15e93e2d
+# 893601497c0b46988737778a01e59de9
+# 6a7dcdfe1f4a47d886a8f92d733bf67f
+# 277ec204ae4f4fe790f2d12a4228b924
+# 15a9a6f7c49743dd9d0029c87b6137e4
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.getRunner:11
+#: ../../../../gui/is_plugin.py:docstring gui.is_plugin.ISPlugin.initGui:9
+#: gui.is_plugin.ISPlugin.initGui:11 gui.is_plugin.ISPlugin.layerChanged:9
+#: gui.is_plugin.ISPlugin.layerChanged:11 gui.is_plugin.ISPlugin.resetDock:9
+#: gui.is_plugin.ISPlugin.resetDock:11 gui.is_plugin.ISPlugin.setupI18n:11
+#: gui.is_plugin.ISPlugin.showHideDockWidget:10
+#: gui.is_plugin.ISPlugin.showHideDockWidget:12
+#: gui.is_plugin.ISPlugin.showKeywordsEditor:9
+#: gui.is_plugin.ISPlugin.showKeywordsEditor:11
+#: gui.is_plugin.ISPlugin.showOptions:9 gui.is_plugin.ISPlugin.showOptions:11
+#: gui.is_plugin.ISPlugin.unload:7 gui.is_plugin.ISPlugin.unload:9
+msgid "None."
+msgstr ""
+
+# 906912304ee54a518923ccb7c15350b6
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.getRunner:15
+msgid "InsufficientParametersException if not all parameters are set."
+msgstr ""
+
+# 7e5fb9adc9804a809a37ef3cb776fc6b
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.hazardLayer:1
+msgid "Accessor for the hazard layer."
+msgstr ""
+
+# f9963254193f45bda8849220d84b7765
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.setExposureLayer:1
+msgid ""
+"Mutator for Exposure layer property (e.g. buildings or features that will be "
+"affected)."
+msgstr ""
+
+# bd858911bd804c05a7bd9a86339026b7
+# a73c091477bd497bbc9c205e4c92f73b
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.setExposureLayer:5
+#: gui.is_impact_calculator.ISImpactCalculator.setHazardLayer:5
+msgid ""
+"theLayerPath - This should be a string representing a path to a file which "
+"can be loaded as a SAFE readlayer instance."
+msgstr ""
+
+# c20e20f87ad5409cb540fe5364fed6cf
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.setFunction:1
+msgid ""
+"Mutator: function layer. Function property (specifies which inasafe function "
+"to use to process the hazard and exposure layers with."
+msgstr ""
+
+# 698a9199808a480d91becf0a75280750
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.setFunction:6
+msgid ""
+"theFunctionName - This should be a string containing the name of a valid "
+"SAFE impact_function."
+msgstr ""
+
+# d6a7dc669f05482abb3584f09f65e3e9
+#: ../../../../gui/is_impact_calculator.py:docstring of
+#: gui.is_impact_calculator.ISImpactCalculator.setHazardLayer:1
+msgid ""
+"Mutator: hazard layer. Hazard layer property  (e.g. a flood depth raster). "
+"This should be a SAFE readlayer instance."
+msgstr ""
+
+# 50d366661a754a97866c13d05e01d771
+#: ../../api-docs/gui/is_keyword_io.rst:2
+msgid "Module: is_keyword_io"
+msgstr ""
+
+# c2bd1dc97ad040bb8ac5d7edbe2815fa
+#: ../../api-docs/gui/is_keyword_io.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE **is_keyword_io** "
+"module."
+msgstr ""
+
+# 0af64bbe155e4c05a86d5b7d9f4123d1
+#: ../../api-docs/gui/is_keywords_dialog.rst:2
+msgid "Module:  is_keywords_dialog"
+msgstr ""
+
+# 939296ca78a44610855e9d0fd9e32fb7
+#: ../../api-docs/gui/is_keywords_dialog.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE **is_keywords_dialog** "
+"module."
+msgstr ""
+
+# c55006ba34cd422793289415b416cf6f
+#: ../../api-docs/gui/is_map.rst:2
+msgid "Module:  is_map"
+msgstr ""
+
+# f8bc4583bb43440d9037b0cad744381c
+#: ../../api-docs/gui/is_map.rst:4
+msgid "This page contains the documentation for the InaSAFE **is_map** module."
+msgstr ""
+
+# 5ec13e76664a4d5cb07074ef3af0ed6b
+#: ../../api-docs/gui/is_plugin.rst:2
+msgid "Module: is_plugin"
+msgstr ""
+
+# 0179d2e42b3e4dc4a6ef98733492087e
+#: ../../api-docs/gui/is_plugin.rst:4
+msgid ""
+"This page contains the documentation for the  InaSAFE code **is_plugin** "
+"module."
+msgstr ""
+
+# 7ea9dc722aeb48eb8b14ab6450f11fa5
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin:2
+msgid "**QGIS plugin implementation.**"
+msgstr ""
+
+# dd7b7341ddd94e93aa2d49baf85420af
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin:1
+msgid "The QGIS interface implementation for the Risk in a box plugin."
+msgstr ""
+
+# fdd250c3d544487599ad58fb06b84838
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin:3
+msgid ""
+"This class acts as the 'glue' between QGIS and our custom logic. It creates "
+"a toolbar and menubar entry and launches the InaSAFE user interface if these "
+"are activated."
+msgstr ""
+
+# 275630ce8b144a98a21e70e7b2ddd3a2
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin.initGui:1
+msgid "Gui initialisation procedure (for QGIS plugin api)."
+msgstr ""
+
+# ff814fe6ff414035b2dc36dbd5451f15
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin.initGui:3
+msgid ""
+"This method is called by QGIS and should be used to set up any graphical "
+"user interface elements that should appear in QGIS by default (i.e. before "
+"the user performs any explicit action with the plugin)."
+msgstr ""
+
+# 9d65ce89922141e99affd4a55646dbf5
+# 90d61ba14cc14c1c802fb706283eb1cb
+# 4e331c9045df461e835a7619abde3431
+# 354375c8195e4ae69664775a24699c71
+# 1a577a6b112243e890a0c11268b10f15
+# ea540e71be9049deab6d1dc33e260545
+# ce76afeb2abb42ceac5e9d5d608d28e9
+# 0386c601b40349e8bc4e1467fcc014c2
+# f2d1448422b849a288bb2ba69f428dfc
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin.initGui:13
+#: gui.is_plugin.ISPlugin.layerChanged:13 gui.is_plugin.ISPlugin.resetDock:13
+#: gui.is_plugin.ISPlugin.setupI18n:13
+#: gui.is_plugin.ISPlugin.showHideDockWidget:14
+#: gui.is_plugin.ISPlugin.showKeywordsEditor:13
+#: gui.is_plugin.ISPlugin.showOptions:13 gui.is_plugin.ISPlugin.tr:8
+#: gui.is_plugin.ISPlugin.unload:11
+msgid "no exceptions explicitly raised."
+msgstr ""
+
+# 31a6fbc7817544e68448515130fa33d6
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.layerChanged:1
+msgid "Enable or disable the keywords editor icon."
+msgstr ""
+
+# 9b15ad0343a0440297dafd29ea11bbb9
+# d3d0462a787b4bbfb7066e22229500ad
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.layerChanged:3
+#: gui.is_plugin.ISPlugin.showKeywordsEditor:3
+msgid ""
+"This slot is called when the user clicks the keyword editor toolbar icon or "
+"menu item associated with this plugin"
+msgstr ""
+
+# cb8297e223b74f70b2079c1efa4b6841
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.resetDock:1
+msgid "Reset the dock to its default state."
+msgstr ""
+
+# 63f74dee5ba144b59bca73d1ee73e24f
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.resetDock:3
+msgid ""
+"This slot is called when the user clicks the reset icon in the toolbar or "
+"the reset menu item associated with this plugin"
+msgstr ""
+
+# 29086c8cd67d4cb598562563df98a42c
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.setupI18n:1
+msgid "Setup internationalisation for the plugin."
+msgstr ""
+
+# 0db74ff085f043719d484d23eadf7ae8
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.setupI18n:3
+msgid ""
+"See if QGIS wants to override the system locale and then see if we can get a "
+"valid translation file for whatever locale is effectively being used."
+msgstr ""
+
+# 442ce6a79ab94505941b90dcfacfb6c1
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.setupI18n:8
+msgid ""
+"thePreferredLocale - optional parameter which if set will override any other "
+"way of determining locale.."
+msgstr ""
+
+# 7926032421044e13bef1222d96d990b8
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.showHideDockWidget:1
+msgid "Show or hide the dock widget."
+msgstr ""
+
+# 421fb18167d741f8a43388c60e0a99cf
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.showHideDockWidget:3
+msgid ""
+"This slot is called when the user clicks the toolbar icon or menu item "
+"associated with this plugin. It will hide or show the dock depending on its "
+"current state."
+msgstr ""
+
+# 696f5f4ab8c74d6aaf3021713ec94e4f
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.showKeywordsEditor:1
+msgid "Show the keywords editor."
+msgstr ""
+
+# 204864d1b32e4236bd9f9a23a09c8752
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.showOptions:1
+msgid "Show the options dialog."
+msgstr ""
+
+# 1889300c53c74ab990ca03159a102316
+#: ../../../../gui/is_plugin.py:docstring of
+#: gui.is_plugin.ISPlugin.showOptions:3
+msgid ""
+"This slot is called when the user clicks the options toolbar icon or menu "
+"item associated with this plugin"
+msgstr ""
+
+# 4927df817df243c6a31c8a8a3bede061
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin.tr:1
+msgid "We implement this ourself since we do not inherit QObject."
+msgstr ""
+
+# eb726cd82e8f4ca4a7d0113fbb3640bd
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin.tr:4
+msgid "theString - string for translation."
+msgstr ""
+
+# bc5d762cf69640ecafda45bc74280c52
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin.tr:6
+msgid "Translated version of theString."
+msgstr ""
+
+# d60dbdf67e1d4a2f939de7b6056a0669
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin.unload:1
+msgid "Gui breakdown procedure (for QGIS plugin api)."
+msgstr ""
+
+# 2e8a3840d11f4c89b65a2ad289890c9f
+#: ../../../../gui/is_plugin.py:docstring of gui.is_plugin.ISPlugin.unload:3
+msgid ""
+"This method is called by QGIS and should be used to *remove* any graphical "
+"user interface elements that should appear in QGIS."
+msgstr ""
+
+# 84d067691ed844adbcef3ce608517139
+#: ../../api-docs/gui/is_safe_interface.rst:2
+msgid "Module: is_safe_interface"
+msgstr ""
+
+# f4e89a09e4484ff99f1ee4e043f2ae07
+#: ../../api-docs/gui/is_safe_interface.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE **is_safe_interface** "
+"module."
+msgstr ""
+
+# 62e967127dbc421cbef5c7bf92cbe83c
+#: ../../../../gui/is_safe_interface.py:docstring of gui.is_safe_interface:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **IS Safe "
+"Interface.**"
+msgstr ""
+
+# fdda06a98734487fbb84b08a4de394d3
+#: ../../../../gui/is_safe_interface.py:docstring of gui.is_safe_interface:4
+msgid ""
+"The purpose of the module is to centralise interactions between the gui "
+"package and the underlying InaSAFE packages. This should be the only place "
+"where SAFE modules are imported directly."
+msgstr ""
+
+# 3286bfd02f2f4ed8919a617e5fbb8d36
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.availableFunctions:1
+msgid "Query the inasafe engine to see what plugins are available."
+msgstr ""
+
+# 54613a33df3c403090024da210cd11a3
+# a974b3a6dd1b4de38d4848efe7a20ce5
+# c19f543b85884e1b9fc10e5cec9bc052
+# a0af6a80bef2445f8fbbcd5adb084d3f
+# f86cc2df7e914f8b8f9ebfe5d712bd96
+# 23f66820b3ec47e0ac187a4f845f57d6
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.availableFunctions:3
+#: gui.is_safe_interface.getBufferedExtent:3
+#: gui.is_safe_interface.getOptimalExtent:12
+#: gui.is_safe_interface.getStyleInfo:3
+#: gui.is_safe_interface.readKeywordsFromFile:10
+#: gui.is_safe_interface.readKeywordsFromLayer:6
+msgid "Args:"
+msgstr ""
+
+# d710f035d39540bc8a6a60df5fed21dc
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.availableFunctions:5
+msgid ""
+"theKeywordList - an optional parameter which should contain a list of 2 "
+"dictionaries (the number of items in the list is not enforced). The "
+"dictionaries should be obtained by using readKeywordsFromFile e.g.::"
+msgstr ""
+
+# 5933147f57a04e1bb08e7401a3bddba2
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.availableFunctions:18
+msgid "A dictionary of strings where each is a plugin name."
+msgstr ""
+
+# abaf72a395004b27baa53166525dcf5f
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.availableFunctions:20
+msgid ""
+"If theKeywordList is not provided, all available plugins will be returned in "
+"the list."
+msgstr ""
+
+# 5fd0a73b1ffb4448b971f03249590847
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.availableFunctions:24
+msgid "NoFunctionsFoundException if no functions are found."
+msgstr ""
+
+# 7b4d5ecf2e6840ae9742ac825da899ce
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.calculateSafeImpact:1
+msgid "Thin wrapper around the safe calculate_impact function."
+msgstr ""
+
+# 514250a60de844efadfbcbab25c5d999
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.calculateSafeImpact:4
+msgid ""
+"theLayers - a list of layers to be used. They should be ordered with hazard "
+"layer first and exposure layer second."
+msgstr ""
+
+# 04f0ad249f364166a9caa7b42e61ad50
+# 1041cc82dce44cefb94ece10624e66b1
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.calculateSafeImpact:6
+#: gui.is_safe_interface.getFunctionTitle:4
+msgid "theFunction - SAFE impact function instance to be used"
+msgstr ""
+
+# 41285a5a3f304397a70f4b760898371e
+# dfa703d428b847a28e31f123ca8920bd
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.calculateSafeImpact:8
+#: gui.is_safe_interface.getSafeImpactFunctions:7
+msgid "A safe impact function is returned"
+msgstr ""
+
+# 9c7a034e89ca43bdaaf8c0706137bdfd
+# 9af018bd767b4d79974e98a7c1c15d63
+# 8bc030e3688943fab26b58159b1134dc
+# 2580143a51824059a497beceb8bb553b
+# f82672860dde4c06be980089e9d1eb90
+# 3ba69210d5f6413aa50b5cd6b10e4a4b
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.calculateSafeImpact:10
+#: gui.is_safe_interface.getBufferedExtent:15
+#: gui.is_safe_interface.getFunctionTitle:8
+#: gui.is_safe_interface.getSafeImpactFunctions:9
+#: gui.is_safe_interface.readSafeLayer:8
+#: gui.is_safe_interface.writeKeywordsToFile:11
+msgid "Any exceptions are propogated"
+msgstr ""
+
+# 15073ce333bd48fd92d3f955c69c5a6c
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getBufferedExtent:1
+msgid "Grow bounding box with one unit of resolution in each direction."
+msgstr ""
+
+# 917c7900ee5446fe99673ea3ff38c36d
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getBufferedExtent:5
+msgid "theGeoExtent - Bounding box with format [W, S, E, N]"
+msgstr ""
+
+# 226773bb233a49b79afc9cf31d17b6bc
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getBufferedExtent:6
+msgid "theCellSize - (resx, resy) Raster resolution in each direction."
+msgstr ""
+
+# 8e9a6770c248454a9fcc10612a568ff8
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getBufferedExtent:8
+msgid "If resolution is None bbox is returned unchanged."
+msgstr ""
+
+# 06ff3e48ca144d3a8508c99cbdf6faab
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getBufferedExtent:11
+msgid "Adjusted bounding box"
+msgstr ""
+
+# b25d2f9f77d44973896449eb49bbd5c4
+# 79086ba73ccd44588716a01a1fb25776
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getBufferedExtent:13
+#: gui.is_safe_interface.getStyleInfo:10
+msgid "Raises:"
+msgstr ""
+
+# 3264166e49eb4d0dad5a503338e8aeac
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getBufferedExtent:17
+msgid "for more details."
+msgstr ""
+
+# ada0d9ac9dfb4757b1d5d33bb7ade307
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getFunctionTitle:1
+msgid "Thin wrapper around the safe get_function_title."
+msgstr ""
+
+# 3bdec9744d094c11bcb800f30abdb203
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getFunctionTitle:6
+msgid "The title of a safe impact function is returned"
+msgstr ""
+
+# db50eec1987a4b75a94ad0eb20dccd45
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getOptimalExtent:1
+msgid ""
+"A helper function to determine what the optimal extent is. Optimal extent "
+"should be considered as the intersection between the three inputs. The "
+"inasafe library will perform various checks to ensure that the extent is "
+"tenable, includes data from both etc."
+msgstr ""
+
+# f743564e006d46d0a633d0208608ce8e
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getOptimalExtent:7
+msgid "This is just a thin wrapper around safe_api.bbox_intersection."
+msgstr ""
+
+# c74b8eb19a6943f09e7a6cf5c9884788
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getOptimalExtent:9
+msgid ""
+"Typically the result of this function will be used to clip input layers to a "
+"commone extent before processing."
+msgstr ""
+
+# a652f62928324f12b4459b5ce3e73063
+# 000b5ec6fcd34228b9ef12cb32fd3307
+# d07e94c3093648b1a6b675d8e6b8b03b
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getOptimalExtent:15
+#: gui.is_safe_interface.getOptimalExtent:19
+#: gui.is_safe_interface.getOptimalExtent:23
+msgid ""
+"extents in the form [xmin, ymin, xmax, ymax]. It is assumed that the "
+"coordinates are in EPSG:4326 although currently no checks are made to "
+"enforce this."
+msgstr ""
+
+# 09a8b76db666425cad21bd470d8046c4
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getOptimalExtent:28
+msgid "care of it for us."
+msgstr ""
+
+# 1af3e3f0c91942fa80faceefc6c9e7fd
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getOptimalExtent:31
+msgid ""
+"An array containing an extent in the form [xmin, ymin, xmax, ymax] e.g.::"
+msgstr ""
+
+# e80519e23c7a463d8a45a24d157bc336
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getOptimalExtent:37
+msgid "Any exceptions raised by the InaSAFE library will be propogated."
+msgstr ""
+
+# dc76786def41496aaecff9e1c438cfc8
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getSafeImpactFunctions:1
+msgid "Thin wrapper around the safe impact_functions function."
+msgstr ""
+
+# bf3816f2a425465fa49f2737829854b1
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getSafeImpactFunctions:4
+msgid ""
+"theFunction - optional str giving a specific plugins name that should be "
+"fetched."
+msgstr ""
+
+# 22855c7c98bc4101b411cdea5754f263
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getStyleInfo:1
+msgid "Get styleinfo associated with a layer."
+msgstr ""
+
+# 07128fb58a384708a4d0e091eb9e7c8b
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getStyleInfo:5
+msgid "theLayer - InaSAFE layer (raster or vector)"
+msgstr ""
+
+# 603725d27b92498abcce3ea3c832b463
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getStyleInfo:8
+msgid "A list of dictionaries containing styleinfo info for a layer."
+msgstr ""
+
+# 3be50b01f77b4afaaaf920eb672d369b
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getStyleInfo:12
+msgid "StyleInfoNotFoundException if the style is not found."
+msgstr ""
+
+# 6387324beca44b6b9a4290f55084298a
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.getStyleInfo:13
+msgid "InvalidParameterException if the paramers are not correct."
+msgstr ""
+
+# 654e764c11874b70b515ed1e284e0126
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.makeAscii:1
+msgid "Convert QgsString to ASCII"
+msgstr ""
+
+# 71848b934ac043c486fac15dcb67173c
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromFile:1
+msgid ""
+"Get metadata from the keywords file associated with a local file in the file "
+"system."
+msgstr ""
+
+# 07bd30a5391e417c94385353a34be1db
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromFile:4
+msgid ""
+"Requires a str representing a file path instance as parameter As opposed to "
+"readKeywordsFromLayer which takes a inasafe file object as parameter."
+msgstr ""
+
+# 1a693b7861544157a6ce5cc356ef3c47
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromFile:13
+msgid "(e.g. '/tmp/foo.shp', '/tmp/foo.tif')"
+msgstr ""
+
+# 698cf5b8d2b544659e43b26075403065
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromFile:14
+msgid "theKeyword - optional - the metadata keyword to retrieve e.g. 'title'"
+msgstr ""
+
+# 9e63fbb5d20a4f499589fa0c6e0837da
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromFile:17
+msgid ""
+"A string containing the retrieved value for the keyword if the keyword "
+"argument is specified, otherwise the complete keywords dictionary is "
+"returned."
+msgstr ""
+
+# a790a332971c40c5a048bbdab3ab8ecf
+# 26d8fff94ddb4c589c32b54d21fcab83
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromFile:22
+#: gui.is_safe_interface.readKeywordsFromLayer:15
+msgid "KeywordNotFoundException if the keyword is not recognised."
+msgstr ""
+
+# 9fb72b69d6e34aa7b820cb3fd1057e73
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromLayer:1
+msgid "Get metadata from the keywords file associated with a layer."
+msgstr ""
+
+# ac57333f41a34ac19938e79aa5c4e141
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromLayer:3
+msgid "Requires a inasafe layer instance as parameter."
+msgstr ""
+
+# df50f0e08f054690960c4e58f318889e
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromLayer:8
+msgid "theLayer - a InaSAFE layer (vector or raster)"
+msgstr ""
+
+# e656edfa26bc4a9f9561ca16a118ee66
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromLayer:9
+msgid "keyword - the metadata keyword to retrieve e.g. 'title'"
+msgstr ""
+
+# abd240fe6ce74eb48bcf1e5650befbc0
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readKeywordsFromLayer:12
+msgid "A string containing the retrieved value for the keyword."
+msgstr ""
+
+# f2da8853d68748a286cf9d8e5c35a7bf
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readSafeLayer:1
+msgid "Thin wrapper around the safe read_layer function."
+msgstr ""
+
+# c6693a75378644d9ae9c7a6c86c15432
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readSafeLayer:4
+msgid "thePath - str representing path to layer that must be opened."
+msgstr ""
+
+# 45fd511c90d24de38ca36475e65eae5a
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.readSafeLayer:6
+msgid "A safe readSafeLayer object is returned."
+msgstr ""
+
+# 8f0a35d94c994e5fbbb0c09aac6667b5
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.tr:1
+msgid ""
+"We define a tr() alias here since the is_safe_interface implementation below "
+"is not a class and does not inherit from QObject."
+msgstr ""
+
+# 96d9cf0cbeb84c71be1c7081c5685bf8
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.tr:4
+msgid "see http://tinyurl.com/pyqt-differences"
+msgstr ""
+
+# 779c55ee99a442d288f3d7724f20bc3b
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.tr:7
+msgid "theText - string to be translated"
+msgstr ""
+
+# ada149a9974f46de92365ab76d96ba73
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.tr:9
+msgid ""
+"Translated version of the given string if available, otherwise the original "
+"string."
+msgstr ""
+
+# 29a27ff6d3694d0a8c561a472307ddeb
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.verify:1
+msgid "This is just a thin wrapper around safe_api.verify."
+msgstr ""
+
+# e77fe9ecbe48493cb01700f679793425
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.verify:4
+msgid "theStatement - expression to verify"
+msgstr ""
+
+# 5e8ad38a279f480488ba67804456f268
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.verify:5
+msgid "theMessage - message to display on failure"
+msgstr ""
+
+# 4234bf383db74b6b97267689abd4173e
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.verify:9
+msgid "VerificationError"
+msgstr ""
+
+# 012d12ff1661428aafdebbbef8e63c53
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.writeKeywordsToFile:1
+msgid "Thin wrapper around the safe write_keywords function."
+msgstr ""
+
+# 3c0228c028314f74a2bbde5b55f7748b
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.writeKeywordsToFile:4
+msgid ""
+"thePath - str representing path to layer that must be written. If the file "
+"does not end in .keywords, its extension will be stripped off and the "
+"basename + .keywords will be used as the file."
+msgstr ""
+
+# edf20389761a421495a1d7cbdd03e114
+#: ../../../../gui/is_safe_interface.py:docstring of
+#: gui.is_safe_interface.writeKeywordsToFile:7
+msgid "theKeywords - a dictionary of keywords to be written"
+msgstr ""
+
+# 73bfd1799e914ead9d34bfb04bc36c98
+#: ../../api-docs/gui/qgis_interface.rst:2
+msgid "Module: qgis_interface"
+msgstr ""
+
+# 9019bad34e8044ed8e00122b91debc23
+#: ../../api-docs/gui/qgis_interface.rst:4
+msgid ""
+"This page contains the documentation for the  InaSAFE code "
+"**qgis_interface** module."
+msgstr ""
+
+# ed15c6d37a404e30a4532aff9c084c63
+#: ../../api-docs/gui/test_is_dock.rst:2
+msgid "Module: test_is_dock"
+msgstr ""
+
+# 2daa7f2702604310b8dd158ed11c6e25
+#: ../../api-docs/gui/test_is_dock.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE **test_is_dock** unit "
+"tests."
+msgstr ""
+
+# e9c2c74d7d294e5588f6d698cb305f87
+#: ../../api-docs/gui/test_is_impact_calculator.rst:2
+msgid "Module: test_is_impact_calculator"
+msgstr ""
+
+# 8c7cc819b72a432599d3356c51034ca5
+#: ../../api-docs/gui/test_is_impact_calculator.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE "
+"**test_is_impact_calculator** module."
+msgstr ""
+
+# 595f5161dd0c4c18bbb2c44ea4844cee
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Impact "
+"calculator test suite.**"
+msgstr ""
+
+# df0db50eb6f345479ae05ede9bd0b5ed
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest:1
+msgid "Test the InaSAFE plugin stub"
+msgstr ""
+
+# 3e33a1ad78304fb0af6619d729b0d2e6
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest.setUp:1
+msgid "Create shared resources that all tests can use"
+msgstr ""
+
+# 40edba2d0ee1444eba473ca42c731608
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest.tearDown:1
+msgid "Tear down - destroy the QGIS app"
+msgstr ""
+
+# 1f4490350f874bcca47c2fbd6d578150
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest.test_getKeywordFromImpactLayer:1
+msgid "Check that we can get keywords from a created impact layer."
+msgstr ""
+
+# 9061be91832e4d13b7decde924a85766
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest.test_getStyleInfo:1
+msgid "Test that we can get styleInfo data from a vector's keyword file"
+msgstr ""
+
+# 63ce3f4e5f8c4c4c8119c6f273f72b26
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest.test_issue100:1
+msgid "Test for issue 100: unhashable type dict"
+msgstr ""
+
+# d03f7a4ab02b4ce9a42d31c721d3be85
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest.test_properties:1
+msgid "Test if the properties work as expected."
+msgstr ""
+
+# 56bee2f1af8848bf8729e8bad3a0b1ac
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest.test_run:1
+msgid "Test that run works as expected in non threading mode"
+msgstr ""
+
+# e1a44aa77bf04327889c78a41f50ed38
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest.test_startWithNoParameters:1
+msgid "Test that run raises an error properly when no parameters defined."
+msgstr ""
+
+# bc98ea4e90764d869b15d0855256b704
+#: ../../../../gui/test_is_impact_calculator.py:docstring of
+#: gui.test_is_impact_calculator.ImpactCalculatorTest.test_thread:1
+msgid "Test that starting it in a thread works as expected."
+msgstr ""
+
+# e5000052ecd248a086335da53fd5b8a3
+#: ../../api-docs/gui/test_is_keyword_io.rst:2
+msgid "Module: test_is_keyword_io"
+msgstr ""
+
+# 2f4e213b5b3b4009946b1da9973f0e96
+#: ../../api-docs/gui/test_is_keyword_io.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE **test_is_keyword_io** "
+"module."
+msgstr ""
+
+# ca0518f8dfe347d997c7e78dd6f22262
+#: ../../api-docs/gui/test_is_keywords_dialog.rst:2
+msgid "Module: test_is_keywords_dialog"
+msgstr ""
+
+# 1f46eca873cc43d09338edb3e2d4b7e5
+#: ../../api-docs/gui/test_is_keywords_dialog.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE "
+"**test_is_keywords_dialog** unit tests."
+msgstr ""
+
+# 89c4972240e74701ad3a51609c55112f
+#: ../../api-docs/gui/test_is_map.rst:2
+msgid "Module: test_is_map"
+msgstr ""
+
+# 02edc02dd99244f7a1f0e774d746777e
+#: ../../api-docs/gui/test_is_map.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE **test_is_map** unit "
+"tests."
+msgstr ""
+
+# 4e6d263332fb49d8b0e919f199c34ee0
+#: ../../api-docs/gui/test_is_plugin.rst:2
+msgid "Module: test_is_plugin"
+msgstr ""
+
+# c315f3d018fa48ebbc62c82a0194b4cb
+#: ../../api-docs/gui/test_is_plugin.rst:4
+msgid ""
+"This page contains the documentation for the  InaSAFE code "
+"**test_is_plugin** module."
+msgstr ""
+
+# 85c7f8ffbfad40dd8ba321e0058c6328
+#: ../../api-docs/gui/test_is_safe_interface.rst:2
+msgid "Module: test_is_safe_interface"
+msgstr ""
+
+# 8acfa6f3cd074d85be3697c48cf90668
+#: ../../api-docs/gui/test_is_safe_interface.rst:4
+msgid ""
+"This page contains the documentation for the InaSAFE "
+"**test_is_safe_interface** module."
+msgstr ""
+
+# ab538a8bcf7145afb570e72fd5f77936
+#: ../../../../gui/test_is_safe_interface.py:docstring of
+#: gui.test_is_safe_interface:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **SAFE Interface "
+"test suite.**"
+msgstr ""
+
+# 3c740dd3121b4884bc19c7ce13b60326
+#: ../../../../gui/test_is_safe_interface.py:docstring of
+#: gui.test_is_safe_interface.ISSafeInterfaceTest:1
+msgid "Test the SAFE API Wrapper"
+msgstr ""
+
+# f467a2e600a34e5ab19e61e689ed87ad
+#: ../../../../gui/test_is_safe_interface.py:docstring of
+#: gui.test_is_safe_interface.ISSafeInterfaceTest.setUp:1
+msgid "Setup test before each unit"
+msgstr ""
+
+# c08c2155cb734f909dab26f0bba73641
+#: ../../../../gui/test_is_safe_interface.py:docstring of
+#: gui.test_is_safe_interface.ISSafeInterfaceTest.test_availableFunctions:1
+msgid "Check we can get the available functions from the impact calculator."
+msgstr ""
+
+# b37c985a138d42728c2c0d4d47b7a0a2
+#: ../../../../gui/test_is_safe_interface.py:docstring of
+#: gui.test_is_safe_interface.ISSafeInterfaceTest.test_getKeywordFromFile:1
+msgid "Get keyword from a filesystem file's .keyword file."
+msgstr ""
+
+# ebf4dee1a4c34b78b8214934ceb455c8
+#: ../../../../gui/test_is_safe_interface.py:docstring of
+#: gui.test_is_safe_interface.ISSafeInterfaceTest.test_getOptimalExtent:1
+msgid "Optimal extent is calculated correctly"
+msgstr ""
+
+# a321350c01824f6a9e4911c9d84fb4c1
+#: ../../api-docs/index.rst:2
+msgid "InaSAFE's API documentation"
+msgstr ""
+
+# 2d95222653224ef69d7c7d421f75e403
+#: ../../api-docs/index.rst:4
+msgid ""
+"This is the API documentation for the InaSAFE project. You can find out more "
+"about the InaSAFE project by visiting `riskinabox.org <http://www.inasafe."
+"org/>`_."
+msgstr ""
+
+# 8f89a168703e446492d6e721640925df
+#: ../../api-docs/index.rst:9
+msgid "Packages"
+msgstr ""
+
+# 564cdd8775724e419be5f2e51aab9a88
+#: ../../api-docs/index.rst:12
+msgid "Package::gui"
+msgstr ""
+
+# ee2b2dafd24a4c079f1e74daf39be0ad
+#: ../../api-docs/index.rst:29
+msgid "Package::impact_functions"
+msgstr ""
+
+# b79fd66e62084f1aadf9d400bb9b2ee0
+#: ../../api-docs/index.rst:33
+msgid "Documentation for impact functions not implemented yet."
+msgstr ""
+
+# 32b5fff65b0f4ef19fa00117c40cd536
+#: ../../api-docs/index.rst:36
+msgid "Package::engine"
+msgstr ""
+
+# f9780960b49d498292cc75e2b66be137
+#: ../../api-docs/index.rst:40
+msgid "Documentation for engine functions not implemented yet."
+msgstr ""
+
+# 2aa0369380c240ef9c31110aa4024471
+#: ../../api-docs/index.rst:43
+msgid "Unit Tests"
+msgstr ""
+
+# d2a319935304426484689e47d4f5542d
+#: ../../api-docs/index.rst:46
+msgid "Gui Unit Tests"
+msgstr ""
+
+# 1222c5428d38438abd97649f436aa203
+#: ../../api-docs/index.rst:61
+msgid "Impact Function Unit Tests"
+msgstr ""
+
+# c284a8f9e02e4b26a78743c42d46aa80
+#: ../../api-docs/index.rst:66
+msgid "Documentation for impact functions tests not implemented yet."
+msgstr ""

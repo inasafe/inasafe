@@ -22,3 +22,4 @@ pyflakes.log
 result.txt
 keywords.db
 coverage.xml
+_build
