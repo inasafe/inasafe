@@ -83,4 +83,44 @@ even if such holder or other party has been advised of the possibility of
 such damages.
 
 
+=============
+Documentation
+=============
+
+To generate the current documentation in English, run the command
+:kbd:`make html` in the :file:`docs` directory. You will need to use Linux,
+and might need to install some dependencies. The standard documentation is
+available under :kbd:`docs/build/html`.
+
+Internationalization
+====================
+
+Adding a language
+-----------------
+
+- Edit the file :file:`docs/source/pre_translate.sh` and add
+  the two-letter code for your chosen language to the :kbd:`LOCALES` list.
+- Also add it to both occurrences of the :kbd:`LOCALES` list in
+  :file:`post_translate.sh`.
+- Run :file:`pre_translate.sh`.
+- Translation files for the documentation are now available as
+  :kbd:`docs/source/i18n/[language code]/LC_MESSAGES/*.po`.
+
+Updating translation strings
+----------------------------
+
+Whenever you have changed the source documentation, or want to begin
+translating, it's a good idea to update the translation strings first:
+
+- Run :file:`pre_translate.sh`.
+
+This will ensure that the sentences you are translating actually reflect the
+latest content.
+
+Building translated documentation
+---------------------------------
+
+- Run :file:`post_translate.sh`.
+- The output directory is :file:`docs/source/_build/html/` and contains
+  directories corresponding to the languages in :file:`post_translate.sh`.
 
