@@ -2,7 +2,6 @@
 InaSAFE - Indonesian Scenario Assessment for Emergencies
 ========================================================
 
-
 This is the project: InaSAFE a Quantum GIS plugin
 
 For more information about InaSAFE please visit
