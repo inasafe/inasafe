@@ -16,6 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Language: af\n"
 
 # ff56cf911e5c422b9b58d555c6c5f8a1
 #: ../../tutorial-docs/tutorial.rst:3
@@ -46,6 +47,16 @@ msgid ""
 "InaSAFE, what the requirements of the data are and what kind of results you "
 "can expect out of the data."
 msgstr ""
+"InaSAFE is 'n plugin vir QGIS sagteware. Dit beoog om realistiese natuurramp "
+"impak gevallestudies vir beter beplanning, voorbereidheid en reaksie "
+"aktiwiteite te produseer deur van geografiese gevaar- en blootstellingsdata "
+"gebruik te maak. 'n Gebruikersgids wat deur Ole Möller Nielsen en Tim Sutton "
+"ontwikkel is, vul hierdie kort handleiding aan. Gedurende hierdie opleiding "
+"dek ons die verskillende komponente van InaSAFE en hul gebruik vir maklik "
+"bruikbare risiko- en impak gevallestudie assessering. Saam met die huidige "
+"materiale, sal voorbeeld data verskaf word om u die geleentheid te gee om te "
+"leer hoe om data in InaSAFE te manipuleer, wat die voorvereistes van die "
+"data is, en hoe die resultate lyk wat u van die data kan verwag."
 
 # 04c0c651b047434b855530acecada019
 #: ../../tutorial-docs/tutorial.rst:23
@@ -190,8 +201,8 @@ msgstr ""
 # b54ce61ea146450d87a6eb47997d4276
 #: ../../tutorial-docs/tutorial.rst:84
 msgid ""
-"To install the InaSAFE plugin, go to https://github.com/AIFDR/inasafe/"
-"downloads."
+"To install the InaSAFE plugin, go to "
+"https://github.com/AIFDR/inasafe/downloads."
 msgstr ""
 
 # c011835143d54cc1adfc4e7d6daa2e0d
@@ -211,8 +222,8 @@ msgstr ""
 # f929dc2c72ea498aa9cf5670fd8d4f80
 #: ../../tutorial-docs/tutorial.rst:93
 msgid ""
-"After extracting the plugin, it should be available as :file:`C:\\Users"
-"\\<yourusername>\\.qgis\\python\\plugins\\inasafe`"
+"After extracting the plugin, it should be available as "
+":file:`C:\\Users\\<yourusername>\\.qgis\\python\\plugins\\inasafe`"
 msgstr ""
 
 # b2ea4e1da2464bb28e7aa5a1e914c774
@@ -459,8 +470,8 @@ msgstr ""
 # 1c1bafa241734f47b30ab87ff7f3d7d3
 #: ../../tutorial-docs/tutorial.rst:238
 msgid ""
-"The INASAFE panel contains 3 sections: **Questions, Results** and **Buttons."
-"** We will explore those sections one by one."
+"The INASAFE panel contains 3 sections: **Questions, Results** and "
+"**Buttons.** We will explore those sections one by one."
 msgstr ""
 
 # e84b8247c2b5465285e1e2032def67c1
@@ -480,8 +491,8 @@ msgstr ""
 # c8567df8f12b4ee2834d114a5f0f2a70
 #: ../../tutorial-docs/tutorial.rst:248
 msgid ""
-"*In the event of* **[hazard]** *how many* **[exposure]** *might* **[impact]."
-"**"
+"*In the event of* **[hazard]** *how many* **[exposure]** *might* "
+"**[impact].**"
 msgstr ""
 
 # f01a2df3f06745a0ba8cb932904d7564
@@ -548,9 +559,9 @@ msgstr ""
 #: ../../tutorial-docs/tutorial.rst:276
 msgid ""
 "For our exercise, we will use an example from Jakarta, Indonesia. Those data "
-"are already installed on your computer at :file:`C:\\Users\\<your username>"
-"\\desktop\\inasafe_data`. If they are not, you can load the data on your "
-"desktop using the thumb drive distributed with this material."
+"are already installed on your computer at :file:`C:\\Users\\<your "
+"username>\\desktop\\inasafe_data`. If they are not, you can load the data on "
+"your desktop using the thumb drive distributed with this material."
 msgstr ""
 
 # 9946c3564d7e4feb874fd874c70fdb0d
@@ -576,8 +587,8 @@ msgid ""
 "fetch your flood data.  Please select the "
 "**“Flood_Design_Depth_Jakarta_geographic.asc”** file from the hazard folder. "
 "This is a raster data (in ASCII format) that represents flooding depth in "
-"the Jakarta province. The display name is **Jakarta 2007 flood with dredging."
-"**"
+"the Jakarta province. The display name is **Jakarta 2007 flood with "
+"dredging.**"
 msgstr ""
 
 # be5d81d7b6bf46a7ac401b2d88cc939a
@@ -837,9 +848,9 @@ msgstr ""
 # aa8d806f397d4468b4f683ff96b4d77e
 #: ../../tutorial-docs/tutorial.rst:452
 msgid ""
-"You can download the plugin from the website http://build.sourcepole.ch/qgis/"
-"plugins.xml, and put it in the QGIS plugin directory :file:`C:\\Users\\<your "
-"username>\\.qgis\\python\\plugins`."
+"You can download the plugin from the website "
+"http://build.sourcepole.ch/qgis/plugins.xml, and put it in the QGIS plugin "
+"directory :file:`C:\\Users\\<your username>\\.qgis\\python\\plugins`."
 msgstr ""
 
 # 403c6a8f353d408e9edb0fd90ccabd10
