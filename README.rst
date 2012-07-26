@@ -32,6 +32,7 @@ System Requirements
  - The Open Source Geographic Information System QGIS (http://www.qgis.org).
    InaSAFE requires QGIS version 1.7 or newer.
 
+===========
 Limitations
 ===========
 
@@ -45,6 +46,7 @@ https://github.com/AIFDR/inasafe/issues?page=1&state=open for known
 bugs and outstanding tasks.
 
 
+=======
 License
 =======
 
@@ -56,6 +58,7 @@ The full GNU General Public License is available in LICENSE.TXT or
 http://www.gnu.org/licenses/gpl.html
 
 
+==============================
 Disclaimer of Warranty (GPLv3)
 ==============================
 
@@ -69,6 +72,7 @@ is with you. Should the program prove defective, you assume the cost of
 all necessary servicing, repair or correction.
 
 
+===============================
 Limitation of Liability (GPLv3)
 ===============================
 
@@ -84,6 +88,7 @@ such damages.
 
 
 
+=============
 Documentation
 =============
 
@@ -92,6 +97,7 @@ html` in the :file:`docs` directory. You will need to use Linux, and might need
 to install some dependencies. The standard documentation is available under
 :kbd:`docs/build/html`.
 
+====================
 Internationalization
 ====================
 
