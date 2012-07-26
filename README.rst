@@ -83,14 +83,14 @@ even if such holder or other party has been advised of the possibility of
 such damages.
 
 
-=============
+
 Documentation
 =============
 
-To generate the current documentation in English, run the command
-:kbd:`make html` in the :file:`docs` directory. You will need to use Linux,
-and might need to install some dependencies. The standard documentation is
-available under :kbd:`docs/build/html`.
+To generate the current documentation in English, run the command :kbd:`make
+html` in the :file:`docs` directory. You will need to use Linux, and might need
+to install some dependencies. The standard documentation is available under
+:kbd:`docs/build/html`.
 
 Internationalization
 ====================
@@ -98,8 +98,8 @@ Internationalization
 Adding a language
 -----------------
 
-- Edit the file :file:`docs/source/pre_translate.sh` and add
-  the two-letter code for your chosen language to the :kbd:`LOCALES` list.
+- Edit the file :file:`docs/source/pre_translate.sh` and add the two-letter
+  code for your chosen language to the :kbd:`LOCALES` list.
 - Also add it to both occurrences of the :kbd:`LOCALES` list in
   :file:`post_translate.sh`.
 - Run :file:`pre_translate.sh`.
@@ -112,15 +112,19 @@ Updating translation strings
 Whenever you have changed the source documentation, or want to begin
 translating, it's a good idea to update the translation strings first:
 
-- Run :file:`pre_translate.sh`.
+- Run :file:`pre_translate.sh`. This will ensure that the sentences you are
+  translating actually reflect the latest content.
 
-This will ensure that the sentences you are translating actually reflect the
-latest content.
+Translating documents
+---------------------
+
+- Open the :kbd:`.po` files for your chosen language in a translator tool such
+  as Qt Linguist.
+- Edit and save the :kbd:`.po` files.
 
 Building translated documentation
 ---------------------------------
 
 - Run :file:`post_translate.sh`.
 - The output directory is :file:`docs/source/_build/html/` and contains
-  directories corresponding to the languages in :file:`post_translate.sh`.
-
+  directories corresponding to the languages in :file:`post_translate.sh`. 
