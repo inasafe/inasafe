@@ -1,6 +1,6 @@
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Ftp Client for Retrieving shake data.**
+- **Ftp Client for Retrieving ftp data.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -18,9 +18,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from ftplib import FTP
 import urllib2
+from utils import shakemapDataDir
 
 class FtpClient:
-    """A utility class that contains methods to fetch a listing of shakemaps
+    """A utility class that contains methods to fetch a listings and files
         from an FTP server"""
     def __init__(self,
                  theBaseUrl = '118.97.83.243',
@@ -48,7 +49,7 @@ class FtpClient:
         self.backend = theBackend
 
     def availableBackends(self):
-        """Return a tuplle of the available ftp backends that can be used.
+        """Return a tuple of the available ftp backends that can be used.
 
         Args: None
 
@@ -78,8 +79,20 @@ class FtpClient:
         else:
             return self._getListingUsingUrlLib2()
 
-    def _getListingUsingUrlLib2(self):
-        """Get a listing of the available files using the urllib2 library."""
+    def _getListingUsingUrlLib2(self, theExtension='zip'):
+        """Get a listing of the available files using the urllib2 library.
+
+        Args:
+          theExtension - (Optional) Filename suffix to filter the listing by.
+            Defaults to zip.
+
+        Returns:
+          A list containing the unique filenames (if any) that match the
+          supplied extension suffix.
+
+        Raises:
+          None
+        """
         myUrl = 'ftp://%s' % self.baseUrl
         myRequest = urllib2.Request(myUrl)
         try:
@@ -91,16 +104,95 @@ class FtpClient:
         myList = []
         for myLine in myFileId.readlines():
             myFields = myLine.strip().split()
-            if myFields[-1].endswith('.zip'):
+            if myFields[-1].endswith('.%s' % theExtension):
                 myList.append(myUrl + '/' + myFields[-1])
 
         return myList
 
     def _getListingUsingFtpLib(self):
-        """get a listing of the available files using the ftp library."""
+        """Get a listing of the available files using the ftp library.
+
+        Args: None
+
+        Returns: A string containing the list of files available in the
+        root directory of the baseUrl.
+
+        Raises: None
+        """
 
         ftp = FTP(self.baseUrl)
         ftp.set_pasv(self.pasv)
         ftp.login()
         ftp.retrlines('LIST')
         ftp.quit()
+
+    def getFile(self, theUrlPath, theFilePath):
+        """
+        Get a file from the ftp server using the active backend.
+
+        Args:
+            * theUrlPath - (Mandatory) The path (relative to the ftp root)
+              from which the file should be retrieved.
+            * theFilePath - (Mandatory). The path on the filesystem to which
+              the file should be saved.
+
+        Returns:
+            The path to the downloaded file.
+
+        Raises:
+            None
+        """
+        if 'ftplib' in self.backend:
+            return self._getFileUsingFtpLib(theUrlPath, theFilePath)
+        else:
+            return self._getFileUsingUrlLib2(theUrlPath, theFilePath)
+
+    def _getFileUsingUrlLib2(self, theUrlPath, theFilePath):
+        """Get a file from the ftp server using the urllib2 backend.
+
+         Args:
+            * theUrlPath - (Mandatory) The path (relative to the ftp root)
+              from which the file should be retrieved.
+            * theFilePath - (Mandatory). The path on the filesystem to which
+              the file should be saved.
+         Returns:
+             The path to the downloaded file.
+
+         Raises:
+             None
+        """
+        myUrl = 'ftp://%s/%s' % (self.baseUrl, theUrlPath)
+        myRequest = urllib2.Request(myUrl)
+        try:
+            myUrlHandle = urllib2.urlopen(myRequest, timeout=60)
+            myFile = file(theFilePath, 'wb')
+            myFile.write(myUrlHandle.read())
+            myFile.close()
+        except Exception, e:
+            print e.reason
+            raise
+
+
+    def _getFileUsingFtpLib(self, theUrlPath, theFilePath):
+        """Get a file from the ftp server using the ftplib backend.
+
+         Args:
+            * theUrlPath - (Mandatory) The path (relative to the ftp root)
+              from which the file should be retrieved.
+            * theFilePath - (Mandatory). The path on the filesystem to which
+              the file should be saved.
+
+         Returns:
+             The path to the downloaded file.
+
+         Raises:
+             None
+        """
+        myUrl = 'ftp://%s/%s' % (self.baseUrl, theUrlPath)
+        myFtp = FTP(myUrl)
+        myFtp.set_pasv(self.pasv)
+        myFtp.login()
+        myFtp.retrbinary('RETR %s' % theUrlPath, open(theFilePath, 'wb').write)
+        myFtp.quit()
+
+
