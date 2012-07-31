@@ -18,21 +18,36 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import shutil
 import unittest
 from shake_data import ShakeData
 from realtime.utils import shakemapDataDir
 
 class TestShakeMap(unittest.TestCase):
     """Testing for the shakemap class"""
+
+    def setUp(self):
+        """Copy our cached dataset from the fixture dir to the cache dir"""
+        myOutFile = '20120726022003.out.zip'
+        myInpFile = '20120726022003.inp.zip'
+        myOutPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                              'fixtures',
+                                              myOutFile))
+        myInpPath =  os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                  'fixtures',
+                                                  myInpFile))
+        shutil.copyfile(myOutPath, os.path.join(shakemapDataDir(), myOutFile))
+        shutil.copyfile(myInpPath, os.path.join(shakemapDataDir(), myInpFile))
+
     def test_getShakeMapInput(self):
         """Check that we can retrieve a shakemap 'inp' input file"""
         myShakeEvent = '20110413170148'
         myShakeData = ShakeData(myShakeEvent)
         myShakemapFile =  myShakeData.fetchInput()
         myExpectedFile = os.path.join(shakemapDataDir(),
-                                      myShakeEvent + 'inp.zip')
-        myMessage = 'Expected path for downloaded shakemap not received'
-        self.assertEqual(myShakemapFile, myExpectedFile, myMessage)
+                                      myShakeEvent + '.inp.zip')
+        myMessage = 'Expected path for downloaded shakemap INP not received'
+        self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
 
     def test_getShakeMapOutput(self):
         """Check that we can retrieve a shakemap 'out' input file"""
@@ -40,9 +55,9 @@ class TestShakeMap(unittest.TestCase):
         myShakeData = ShakeData(myShakeEvent)
         myShakemapFile =  myShakeData.fetchOutput()
         myExpectedFile = os.path.join(shakemapDataDir(),
-                                      myShakeEvent + 'out.zip')
-        myMessage = 'Expected path for downloaded shakemap not received'
-        self.assertEqual(myShakemapFile, myExpectedFile, myMessage)
+                                      myShakeEvent + '.out.zip')
+        myMessage = 'Expected path for downloaded shakemap OUT not received'
+        self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
 
     def test_getRemoteShakeMap(self):
         """Check that we can retrieve both input and output from ftp at once"""
@@ -50,9 +65,9 @@ class TestShakeMap(unittest.TestCase):
         myShakeData = ShakeData(myShakeEvent)
 
         myExpectedInpFile = os.path.join(shakemapDataDir(),
-                                         myShakeEvent + 'inp.zip')
+                                         myShakeEvent + '.inp.zip')
         myExpectedOutFile = os.path.join(shakemapDataDir(),
-                                         myShakeEvent + 'out.zip')
+                                         myShakeEvent + '.out.zip')
 
         if os.path.exists(myExpectedInpFile):
             os.remove(myExpectedInpFile)
@@ -60,9 +75,13 @@ class TestShakeMap(unittest.TestCase):
             os.remove(myExpectedOutFile)
 
         myInpFile, myOutFile =  myShakeData.fetchEvent()
-        myMessage = 'Expected path for downloaded shakemap INP not received'
+        myMessage = ('Expected path for downloaded shakemap INP not received'
+             '\nExpected: %s\nGot: %s' %
+             (myExpectedOutFile, myOutFile))
         self.assertEqual(myInpFile, myExpectedInpFile, myMessage)
-        myMessage = 'Expected path for downloaded shakemap OUT not received'
+        myMessage = ('Expected path for downloaded shakemap OUT not received'
+             '\nExpected: %s\nGot: %s' %
+             (myExpectedOutFile, myOutFile))
         self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
 
         assert os.path.exists(myExpectedInpFile)
@@ -70,17 +89,21 @@ class TestShakeMap(unittest.TestCase):
 
     def test_getCachedShakeMap(self):
         """Check that we can retrieve both input and output from ftp at once"""
-        myShakeEvent = '20110413170148'
+        myShakeEvent = '20120726022003'
 
         myExpectedInpFile = os.path.join(shakemapDataDir(),
-                                         myShakeEvent + 'inp.zip')
+                                         myShakeEvent + '.inp.zip')
         myExpectedOutFile = os.path.join(shakemapDataDir(),
-                                         myShakeEvent + 'out.zip')
+                                         myShakeEvent + '.out.zip')
         myShakeData = ShakeData(myShakeEvent)
         myInpFile, myOutFile =  myShakeData.fetchEvent()
-        myMessage = 'Expected path for downloaded shakemap INP not received'
+        myMessage = ('Expected path for downloaded shakemap INP not received'
+             '\nExpected: %s\nGot: %s' %
+             (myExpectedOutFile, myOutFile))
         self.assertEqual(myInpFile, myExpectedInpFile, myMessage)
-        myMessage = 'Expected path for downloaded shakemap OUT not received'
+        myMessage = ('Expected path for downloaded shakemap OUT not received'
+             '\nExpected: %s\nGot: %s' %
+             (myExpectedOutFile, myOutFile))
         self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
 
     def test_getLatestShakeMap(self):
@@ -89,12 +112,16 @@ class TestShakeMap(unittest.TestCase):
         myShakeData = ShakeData()
         myInpFile, myOutFile =  myShakeData.fetchEvent()
         myExpectedInpFile = os.path.join(shakemapDataDir(),
-                                         myShakeEvent + 'inp.zip')
+                                         myShakeEvent + '.inp.zip')
         myExpectedOutFile = os.path.join(shakemapDataDir(),
-                                         myShakeEvent + 'out.zip')
-        myMessage = 'Expected path for downloaded shakemap INP not received'
+                                         myShakeEvent + '.out.zip')
+        myMessage = ('Expected path for downloaded shakemap INP not received'
+             '\nExpected: %s\nGot: %s' %
+             (myExpectedOutFile, myOutFile))
         self.assertEqual(myInpFile, myExpectedInpFile, myMessage)
-        myMessage = 'Expected path for downloaded shakemap OUT not received'
+        myMessage = ('Expected path for downloaded shakemap OUT not received'
+             '\nExpected: %s\nGot: %s' %
+             (myExpectedOutFile, myOutFile))
         self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
 
 if __name__ == '__main__':

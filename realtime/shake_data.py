@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import os
+from realtime import LOGGER
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -110,17 +111,19 @@ class ShakeData:
         Raises: NetworkError
         """
         # First check local cache
-        myInpFileName = self.eventId + 'inp.zip'
-        myOutFileName = self.eventId + 'out.zip'
+        myInpFileName = self.eventId + '.inp.zip'
+        myOutFileName = self.eventId + '.out.zip'
         myInpFilePath = os.path.join(shakemapDataDir(),
                                      myInpFileName)
-        myOutFileName = os.path.join(shakemapDataDir(),
+        myOutFilePath = os.path.join(shakemapDataDir(),
                                      myOutFileName)
         if (os.path.exists(myInpFilePath) and
             os.path.exists(myOutFilePath)):
             # TODO: we should actually try to unpack them for deeper validation
             return True
-
+        else:
+            LOGGER.debug('%s is not cached' % myInpFileName)
+            LOGGER.debug('%s is not cached' % myOutFileName)
         myFtpClient = FtpClient()
         myList = myFtpClient.getListing()
         if (myInpFileName in myList and myOutFileName in myList):
@@ -137,6 +140,9 @@ class ShakeData:
 
               /tmp/realtime/20110413170148.inp.zip
 
+        .. note:: If a cached copy of the file exits, the path to the cache
+           copy will simply be returned without invoking any network requests.
+
         Args: None
 
         Returns: A string for the dataset path on the local storage system.
@@ -145,9 +151,14 @@ class ShakeData:
         """
         if self.eventId is None:
             raise EventUndefinedError('Event is none')
+
+        # Return the cache copy if it exists
+        myLocalPath = os.path.join(shakemapDataDir(), theEventFile)
+        if os.path.exists(myLocalPath):
+            return myLocalPath
+        #Otherwise try to fetch it using ftp
         try:
             myClient = FtpClient()
-            myLocalPath = os.path.join(shakemapDataDir, theEventFile)
             myClient.getFile(theEventFile, myLocalPath)
         except:
             # TODO: differentiate between file not found and networ errors.
@@ -174,10 +185,9 @@ class ShakeData:
         """
         myEventFile = self.eventId + '.inp.zip'
         try:
-            self._fetchFile(myEventFile)
+            return self._fetchFile(myEventFile)
         except (EventUndefinedError, NetworkError):
             raise
-        return myEventFile
 
     def fetchOutput(self):
         """Fetch the output file for the event id associated with this class.
@@ -198,11 +208,9 @@ class ShakeData:
         """
         myEventFile = self.eventId + '.out.zip'
         try:
-            self._fetchFile(myEventFile)
+            return self._fetchFile(myEventFile)
         except (EventUndefinedError, NetworkError):
             raise
-        return myEventFile
-
 
     def fetchEvent(self):
         """Fetch both the input and output shake data from the server for

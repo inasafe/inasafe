@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import os
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -18,10 +19,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+from datetime import date
+from realtime import LOGGER
 from realtime.utils import (baseDataDir,
                             gisDataDir,
                             shakemapDataDir,
-                            reportDataDir)
+                            reportDataDir,
+                            logDir)
 
 
 class Test(unittest.TestCase):
@@ -49,6 +53,18 @@ class Test(unittest.TestCase):
         myDir = reportDataDir()
         myExpectedDir = '/tmp/inasafe/realtime/reports'
         self.assertEqual(myDir, myExpectedDir)
+
+    def test_Logging(self):
+        myPath = os.path.join(logDir(), 'realtime.log')
+        myCurrentDate = date.today()
+        myDateString = myCurrentDate.strftime('%d-%m-%Y-%s')
+        myMessage = 'Testing logger %s' % myDateString
+        LOGGER.info(myMessage)
+        myFile = open(myPath,'rt')
+        myLines = myFile.readlines()
+        if myMessage not in myLines:
+            assert 'Error, expected log message not shown in logs'
+        myFile.close()
 
 if __name__ == '__main__':
     unittest.main()

@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import logging
 
 def baseDataDir():
     """Create (if needed) and return the path to the base realtime data dir"""
@@ -44,6 +45,12 @@ def reportDataDir():
     mkDir(myDir)
     return myDir
 
+def logDir():
+    """Create (if needed) and return the path to the log directory"""
+    myDir = os.path.join(baseDataDir(), 'logs')
+    mkDir(myDir)
+    return myDir
+
 def mkDir(thePath):
     """Make a directory, making sure it is world writable"""
     if not os.path.exists(thePath):
@@ -53,3 +60,25 @@ def mkDir(thePath):
         os.makedirs(thePath, 0777)
         # Resinstate the old mask for tmp
         os.umask(myOldMask)
+
+def setupLogger(theLogger):
+    """Run once when the module is loaded and enable logging
+    Borrowed heavily from this:
+    http://docs.python.org/howto/logging-cookbook.html
+    """
+    theLogger.setLevel(logging.DEBUG)
+    # create file handler which logs even debug messages
+    myLogFile = os.path.join(logDir(), 'realtime.log')
+    myFileHandler = logging.FileHandler(myLogFile)
+    myFileHandler.setLevel(logging.DEBUG)
+    # create console handler with a higher log level
+    myConsoleHandler = logging.StreamHandler()
+    myConsoleHandler.setLevel(logging.ERROR)
+    # create formatter and add it to the handlers
+    myFormatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    myFileHandler.setFormatter(myFormatter)
+    myConsoleHandler.setFormatter(myFormatter)
+    # add the handlers to the logger
+    theLogger.addHandler(myFileHandler)
+    theLogger.addHandler(myConsoleHandler)
