@@ -19,7 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from realtime.exceptions import (EventUndefinedError,
-                                 NetworkError)
+                                 NetworkError,
+                                 EventValidationError)
 from realtime.ftp_client import FtpClient
 from realtime.utils import shakemapDataDir
 

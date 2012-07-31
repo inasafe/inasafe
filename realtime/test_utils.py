@@ -29,25 +29,25 @@ class Test(unittest.TestCase):
     def test_baseDataDir(self):
         """Test we can get the realtime data dir"""
         myDir = baseDataDir()
-        myExpectedDir = '/tmp/realtime/'
+        myExpectedDir = '/tmp/inasafe/realtime'
         self.assertEqual(myDir, myExpectedDir)
 
     def test_gisDataDir(self):
         """Test web can get the gis data dir"""
         myDir = gisDataDir()
-        myExpectedDir = '/tmp/realtime/gis'
+        myExpectedDir = '/tmp/inasafe/realtime/gis'
         self.assertEqual(myDir, myExpectedDir)
 
     def test_shakemapDataDir(self):
         """Test we can get the shakemap data dir"""
         myDir = shakemapDataDir()
-        myExpectedDir = '/tmp/realtime/shakemaps'
+        myExpectedDir = '/tmp/inasafe/realtime/shakemaps'
         self.assertEqual(myDir, myExpectedDir)
 
     def test_reportDataDir(self):
         """Test we can get the report data dir"""
         myDir = reportDataDir()
-        myExpectedDir = '/tmp/realtime/reports'
+        myExpectedDir = '/tmp/inasafe/realtime/reports'
         self.assertEqual(myDir, myExpectedDir)
 
 if __name__ == '__main__':

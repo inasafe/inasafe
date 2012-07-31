@@ -22,25 +22,25 @@ import os
 def baseDataDir():
     """Create (if needed) and return the path to the base realtime data dir"""
     # TODO: support env var setting here too
-    myBaseDataDir='/tmp/realtime'
+    myBaseDataDir='/tmp/inasafe/realtime'
     mkDir(myBaseDataDir)
     return myBaseDataDir
 
 def gisDataDir():
     """Create (if needed) and return the path to the base GIS data dir"""
-    myDir = os.path.join(REALTIME_DATA_DIR, 'gis')
+    myDir = os.path.join(baseDataDir(), 'gis')
     mkDir(myDir)
     return myDir
 
 def shakemapDataDir():
     """Create (if needed) and return the path to the base shakemap data dir"""
-    myDir = os.path.join(REALTIME_DATA_DIR, 'shakemaps')
+    myDir = os.path.join(baseDataDir(), 'shakemaps')
     mkDir(myDir)
     return myDir
 
 def reportDataDir():
     """Create (if needed) and return the path to the base report data dir"""
-    myDir = os.path.join(REALTIME_DATA_DIR, 'reports')
+    myDir = os.path.join(baseDataDir(), 'reports')
     mkDir(myDir)
     return myDir
 
@@ -50,6 +50,6 @@ def mkDir(thePath):
         # Ensure that the dir is world writable
         # Umask sets the new mask and returns the old
         myOldMask = os.umask(0000)
-        os.makedirs(myPath, 0777)
+        os.makedirs(thePath, 0777)
         # Resinstate the old mask for tmp
         os.umask(myOldMask)
