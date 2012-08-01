@@ -24,16 +24,21 @@ from realtime.ftp_client import FtpClient
 class FtpClientTest(unittest.TestCase):
     """Test the ftp client used to fetch shake listings"""
     # TODO update tests so url host is not hard coded
-    _expectedFiles = ('ftp://118.97.83.243/20110413170148.inp.zip',
-                      'ftp://118.97.83.243/20110413170148.out.zip')
-
+    _expectedUrlLib2Files = ('ftp://118.97.83.243/20110413170148.inp.zip',
+                             'ftp://118.97.83.243/20110413170148.out.zip')
+    _expectedFtpLibFiles = (
+        ('-rw-r--r--    1 1007     100          1379 Aug 25  2011 '
+        '20110430030901.inp.zip'),
+        ('-rw-r--r--    1 1007     100        268477 Aug 25  2011 '
+        '20110430030901.out.zip')
+        )
     def test_getDirectoryListingUsingUrlLib2(self):
         """Check if we can get a nice directory listing using urllib2"""
         myClient = FtpClient()
         myListing = myClient.getListing()
         myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      (myListing, self._expectedFiles))
-        for myExpectedFile in self._expectedFiles:
+                      (myListing, self._expectedUrlLib2Files))
+        for myExpectedFile in self._expectedFtpLibFiles:
             assert myExpectedFile in myListing, myMessage
 
     def test_getDirectoryListingUsingFtpLib(self):
@@ -41,8 +46,8 @@ class FtpClientTest(unittest.TestCase):
         myClient = FtpClient(theBackend='ftplib')
         myListing = myClient.getListing()
         myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      (myListing, self._expectedFiles))
-        for myExpectedFile in self._expectedFiles:
+                      (myListing, self._expectedUrlLib2Files))
+        for myExpectedFile in self._expectedUrlLib2Files:
             assert myExpectedFile in myListing, myMessage
 
     def test_getFile(self):
@@ -50,8 +55,8 @@ class FtpClientTest(unittest.TestCase):
         myClient = FtpClient()
         myListing = myClient.getListing()
         myMessage = ('Expected outcome:\n%s\nActual outcome:\n%s' %
-                      (myListing, self._expectedFiles))
-        for myExpectedFile in self._expectedFiles:
+                      (myListing, self._expectedUrlLib2Files))
+        for myExpectedFile in self._expectedUrlLib2Files:
             assert myExpectedFile in myListing, myMessage
 
 
