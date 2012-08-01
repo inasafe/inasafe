@@ -23,8 +23,8 @@ from realtime.ftp_client import FtpClient
 
 class FtpClientTest(unittest.TestCase):
     """Test the ftp client used to fetch shake listings"""
-    _expectedFiles = ('20110413170148.inp.zip'
-                   '20110413170148.out.zip')
+    _expectedFiles = ('20110413170148.inp.zip',
+                      '20110413170148.out.zip')
 
     def test_getDirectoryListingUsingUrlLib2(self):
         """Check if we can get a nice directory listing using urllib2"""
