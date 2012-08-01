@@ -168,13 +168,15 @@ class TestShakeMap(unittest.TestCase):
     def test_extractContours(self):
         """Test that we can extract contours from the tif file"""
         myShakeEvent = '20120726022003'
+        myTable = myShakeEvent + '_contours'
         myShakeData = ShakeData(myShakeEvent)
         # Force re-extraction in case it is cached
         myContourPath = myShakeData.extractContours(True)
         myDataSource = ogr.Open(myContourPath)
         # do a little query to make sure we got some results...
-        myLayer = myDataSource.ExecuteSQL('select * from contour order '
-                                          'by MMI asc')
+        mySQL = 'select * from %s order by elev asc' % myTable
+        #print mySQL
+        myLayer = myDataSource.ExecuteSQL(mySQL)
         myExpectedFeatureCount = 3
         self.assertEqual(myLayer.GetFeatureCount() != myExpectedFeatureCount)
         myOgrDataset.ReleaseResultSet(myLayer)
