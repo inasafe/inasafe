@@ -84,7 +84,7 @@ def purgeWorkingData():
     shutil.rmtree(shakemapExtractDir())
     shutil.rmtree(shakemapDataDir())
     shutil.rmtree(shakemapZipDir())
-    #shutil.rmtree()
+    shutil.rmtree(gisDataDir())
 
 def setupLogger(theLogger):
     """Run once when the module is loaded and enable logging

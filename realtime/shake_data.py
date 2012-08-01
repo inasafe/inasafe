@@ -21,6 +21,7 @@ import os
 import shutil
 from zipfile import ZipFile
 import gdal
+import ogr
 from gdalconst import GA_ReadOnly
 
 from realtime import LOGGER
@@ -32,12 +33,14 @@ from realtime.exceptions import (EventIdError,
                                  InvalidOutputZipError,
                                  ExtractionError,
                                  GridConversionError,
-                                 EventParseError
+                                 EventParseError,
+                                 ContourCreationError
                                  )
 from realtime.ftp_client import FtpClient
 from realtime.utils import (shakemapZipDir,
                             shakemapExtractDir,
-                            shakemapDataDir)
+                            shakemapDataDir,
+                            gisDataDir)
 
 
 class ShakeData:
@@ -401,8 +404,8 @@ class ShakeData:
 
         Raises: EventParseError, GridConversionError
         """
-        myTifPath = self.convertGrid()
-        myShakeEvent = self.shakeEvent()
+        myTifPath = self.convertGrid(theForceFlag)
+        myShakeEvent = self.shakeEvent(theForceFlag)
         return myShakeEvent, myTifPath
 
 
@@ -451,10 +454,10 @@ class ShakeData:
                                       myGridPath)
         return myTifPath
 
-    def shakeEvent(self):
+    def shakeEvent(self, theForceFlag=True):
         """Parse the event.xml and return it as a ShakeEvent object.
 
-        In the simples use case you can simply do::
+        In the simplest use case you can simply do::
 
            myShakeData = ShakeData('20120726022003')
            myShakeEvent = myShakeData.shakeEvent()
@@ -468,3 +471,74 @@ class ShakeData:
         """
         return None
 
+    def extractContours(self, theForceFlag=True):
+        """Extract contours from the event's tif file.
+
+        Contours are extracted at a 1MMI interval. The resulting file will
+        be saved in gisDataDir(). In the easiest use case you can simlpy to::
+
+           myShakeEvent = myShakeData.shakeEvent()
+           myContourPath = myShakeData.extractContours()
+
+        which will return the contour dataset for the latest event on the
+        ftp server.
+
+        Args: theForceFlag - (Optional). Whether to force the regeneration
+            of contour product. Defaults to False.
+
+        Returns: An absolute filesystem path pointing to the generated
+            contour dataset.
+
+        Raises: ContourCreationError
+
+        """
+        # TODO: Use sqlite rather?
+        myOutputFileBase = os.path.join(gisDataDir(),
+                                        self.eventId + '_contours.')
+        myOutputFile = myOutputFileBase +  'shp'
+        if os.path.exists(myOutputFile) and theForceFlag is not True:
+            return myOutputFile
+        elif os.path.exists(myOutputFile):
+            os.remove(myOutputFileBase + 'shp')
+            os.remove(myOutputFileBase + 'shx')
+            os.remove(myOutputFileBase + 'dbf')
+            os.remove(myOutputFileBase + 'prj')
+
+        myTifPath = self.convertGrid(theForceFlag)
+        # Based largely on
+        # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
+        myDriver = ogr.GetDriverByName('ESRI Shapefile')
+        myOgrDataset = myDriver.CreateDataSource(myOutputFile)
+        if myOgrDataset is None:
+            # Probably the file existed and could not be overriden
+            raise ContourCreationError('Could not create datasource for:\n%s'
+                'Check that the file does not already exist and that you '
+                'do not have file system permissions issues')
+        myLayer = myOgrDataset.CreateLayer('contour')
+        myFieldDefinition = ogr.FieldDefn('ID', ogr.OFTInteger)
+        myLayer.CreateField(myFieldDefinition)
+        myFieldDefinition = ogr.FieldDefn('MMI', ogr.OFTReal)
+        myLayer.CreateField(myFieldDefinition)
+        myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
+        # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
+        myBand = 1
+        myContourInterval = 1  # MMI not M!
+        myContourBase = 0
+        myFixedLevelList = []
+        myUseNoDataFlag = 0
+        myNoDataValue = -9999
+        myIdField = 0  # first field defined above
+        myElevationField = 1 # second (MMI) field defined above
+
+        gdal.ContourGenerate(myTifDataset.GetRasterBand(myBand),
+                             myContourInterval,
+                             myContourBase,
+                             myFixedLevelList,
+                             myUseNoDataFlag,
+                             myNoDataValue,
+                             myLayer,
+                             myIdField,
+                             myElevationField)
+        del myTifDataset
+        myOgrDataset.Release()
+        return myOutputFile

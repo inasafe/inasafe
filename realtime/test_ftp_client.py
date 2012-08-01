@@ -31,24 +31,27 @@ class FtpClientTest(unittest.TestCase):
         myClient = FtpClient()
         myListing = myClient.getListing()
         myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      (myListing, _expectedFiles))
-        assert _expectedFiles in myListing, myMessage
+                      (myListing, self._expectedFiles))
+        for myExpectedFile in self._expectedFiles:
+            assert myExpectedFile in myListing, myMessage
 
     def test_getDirectoryListingUsingFtpLib(self):
         """Check if we can get a nice directory listing using ftplib"""
         myClient = FtpClient(theBackend='ftplib')
         myListing = myClient.getListing()
         myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      (myListing, _expectedFiles))
-        assert _expectedFiles in myListing, myMessage
+                      (myListing, self._expectedFiles))
+        for myExpectedFile in self._expectedFiles:
+            assert myExpectedFile in myListing, myMessage
 
     def test_getFile(self):
         """Test that the ftp client can fetch a file ok"""
         myClient = FtpClient()
         myListing = myClient.getListing()
         myMessage = ('Expected outcome:\n%s\nActual outcome:\n%s' %
-                      (myListing, _expectedFiles))
-        assert _expectedFiles in myListing, myMessage
+                      (myListing, self._expectedFiles))
+        for myExpectedFile in self._expectedFiles:
+            assert myExpectedFile in myListing, myMessage
 
 
 if __name__ == '__main__':

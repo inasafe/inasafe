@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import unittest
+import ogr
 
 from shake_data import ShakeData
 from realtime.utils import (shakemapZipDir,
@@ -163,6 +164,21 @@ class TestShakeMap(unittest.TestCase):
         # and a .tif file respectively.
         myEvent, myGrd = myShakeData.postProcess(theForceFlag=True)
         assert os.path.exists(myGrd)
+
+    def test_extractContours(self):
+        """Test that we can extract contours from the tif file"""
+        myShakeEvent = '20120726022003'
+        myShakeData = ShakeData(myShakeEvent)
+        # Force re-extraction in case it is cached
+        myContourPath = myShakeData.extractContours(True)
+        myDataSource = ogr.Open(myContourPath)
+        # do a little query to make sure we got some results...
+        myLayer = myDataSource.ExecuteSQL('select * from contour order '
+                                          'by MMI asc')
+        myExpectedFeatureCount = 3
+        self.assertEqual(myLayer.GetFeatureCount() != myExpectedFeatureCount)
+        myOgrDataset.ReleaseResultSet(myLayer)
+        myOgrDataset.Destroy()
 
 
 if __name__ == '__main__':
