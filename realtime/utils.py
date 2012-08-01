@@ -33,9 +33,16 @@ def gisDataDir():
     mkDir(myDir)
     return myDir
 
+def shakemapZipDir():
+    """Create (if needed) and return the path to the base shakemap zip dir"""
+    myDir = os.path.join(baseDataDir(), 'shakemaps-zipped')
+    mkDir(myDir)
+    return myDir
+
 def shakemapDataDir():
-    """Create (if needed) and return the path to the base shakemap data dir"""
-    myDir = os.path.join(baseDataDir(), 'shakemaps')
+    """Create (if needed) and return the path to the base shakemap extract dir
+    """
+    myDir = os.path.join(baseDataDir(), 'shakemaps-extracted')
     mkDir(myDir)
     return myDir
 

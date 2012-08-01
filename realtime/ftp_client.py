@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from ftplib import FTP
 import urllib2
-from utils import shakemapDataDir
+from utils import shakemapZipDir
 
 class FtpClient:
     """A utility class that contains methods to fetch a listings and files

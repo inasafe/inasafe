@@ -24,12 +24,29 @@ class EventUndefinedError(Exception):
     """Exception for when trying to work with an event that is not defined."""
     pass
 
+
 class NetworkError(Exception):
     """Exception for when trying to fetch a remote resource and failing."""
     pass
+
 
 class EventValidationError(Exception):
     """Exception for when an event is deemed to be invalid - typically for
     when no matching event can be located on the server or local filesystem
     cache."""
+    pass
+
+
+class InvalidInputZipError(Exception):
+    """A exception for when the inp zip is invalid."""
+    pass
+
+
+class InvalidOutputZipError(Exception):
+    """An exception for then the out zip is invalid."""
+    pass
+
+class ExtractionError(Exception):
+    """An exception for when something went wrong extracting the event and mi
+        datasets"""
     pass

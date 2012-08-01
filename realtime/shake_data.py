@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import os
+import shutil
+from zipfile import ZipFile
+
 from realtime import LOGGER
 
 __author__ = 'tim@linfiniti.com'
@@ -21,9 +24,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from realtime.exceptions import (EventUndefinedError,
                                  NetworkError,
-                                 EventValidationError)
+                                 EventValidationError,
+                                 InvalidInputZipError,
+                                 InvalidOutputZipError,
+                                ExtractionError)
 from realtime.ftp_client import FtpClient
-from realtime.utils import shakemapDataDir
+from realtime.utils import shakemapZipDir, shakemapDataDir
 
 
 class ShakeData:
@@ -113,9 +119,9 @@ class ShakeData:
         # First check local cache
         myInpFileName = self.eventId + '.inp.zip'
         myOutFileName = self.eventId + '.out.zip'
-        myInpFilePath = os.path.join(shakemapDataDir(),
+        myInpFilePath = os.path.join(shakemapZipDir(),
                                      myInpFileName)
-        myOutFilePath = os.path.join(shakemapDataDir(),
+        myOutFilePath = os.path.join(shakemapZipDir(),
                                      myOutFileName)
         if (os.path.exists(myInpFilePath) and
             os.path.exists(myOutFilePath)):
@@ -153,7 +159,7 @@ class ShakeData:
             raise EventUndefinedError('Event is none')
 
         # Return the cache copy if it exists
-        myLocalPath = os.path.join(shakemapDataDir(), theEventFile)
+        myLocalPath = os.path.join(shakemapZipDir(), theEventFile)
         if os.path.exists(myLocalPath):
             return myLocalPath
         #Otherwise try to fetch it using ftp
@@ -230,3 +236,124 @@ class ShakeData:
             raise
         return (myInpFile, myOutFile)
 
+    def extract(self, theForceFlag=False):
+        """Extract the zipped resources. The two zips associated with this
+        shakemap will be extracted to e.g.
+
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/20120726022003`
+
+        After extraction the complete path will appear something like this:
+
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
+               20120726022003/usr/local/smap/data/20120726022003`
+
+        with input and output directories appearing beneath that.
+
+        This method will then move the event.xml and mi.grd files up to the
+        root of the extract dir and recursively remove the extracted dirs.
+
+        After this final step, the following files will be present:
+
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
+               20120726022003/event.xml`
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
+               20120726022003/mi.grd`
+
+        If the zips have not already been retrieved from the ftp server,
+        they will be fetched first automatically.
+
+        If the zips have previously been extracted, the extract dir will
+        be completely removed and the dataset re-extracted.
+
+        .. note:: You should not store any of your own working data in the
+           extract dir - it should be treated as transient.
+
+        Args:
+            theForceFlag - (Optional) Whether to force re-extraction. If the
+                files were previously extracted, you can force them to be
+                extracted again. If False, the event.xml and mi.grd files are
+                cached. Default False.
+
+        Returns: a two-tuple containing the event.xml and mi.grd paths e.g.::
+            myEventXml, myGrd = myShakeData.extract()
+            print myEventXml, myGrd
+            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/event.xml
+            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/mi.grd
+
+        Raises: InvalidInputZipError, InvalidOutputZipError
+        """
+
+        myFinalEventFile = os.path.join(self.extractDir(), 'event.xml')
+        myFinalGridFile = os.path.join(self.extractDir(), 'mi.grd')
+
+        if theForceFlag:
+            self.removeExtractedFiles()
+        elif (os.path.exists(myFinalEventFile) and
+              os.path.exists(myFinalGridFile)):
+            return myFinalEventFile, myFinalGridFile
+
+        myInput, myOutput = self.fetchEvent()
+        myInputZip = ZipFile(myInput)
+        myOutputZip = ZipFile(myOutput)
+
+        myExpectedEventFile = ('usr/local/smap/data/%s/input/event.xml' %
+                  self.eventId)
+        myExpectedGridFile = ('usr/local/smap/data/%s/output/mi.grd' %
+                  self.eventId)
+
+        myList = myInputZip.namelist()
+        if myExpectedEventFile not in myList:
+            raise InvalidInputZipError('The input zip does not contain an '
+                '%s file.' % myExpectedEventFile)
+
+        myList = myOutputZip.namelist()
+        if myExpectedGridFile not in myList:
+            raise InvalidOutputZipError('The output zip does not contain an '
+                '%s file.' % myExpectedGridFile)
+
+        myExtractDir = self.extractDir()
+        myInputZip.extractall(myExtractDir)
+        myOutputZip.extractall(myExtractDir)
+
+        # move the two files we care about to the top of the event extract dir
+        shutil.copyfile(os.path.join(self.extractDir(), myExpectedEventFile),
+                        myFinalEventFile)
+        shutil.copyfile(os.path.join(self.extractDir(), myExpectedGridFile),
+                        myFinalGridFile)
+        # Get rid of all the other extracted stuff
+        myUserDir = os.path.join(self.extractDir(), 'usr')
+        if os.path.isdir(myUserDir):
+            shutil.rmtree(myUserDir)
+
+        if (not os.path.exists(myFinalEventFile) or
+            not os.path.exists(myFinalGridFile)):
+            raise ExtractionError('Error copying event.xml or mi.grd')
+        return myFinalEventFile, myFinalGridFile
+
+
+    def extractDir(self):
+        """A helper method to get the path to the extracted datasets.
+
+        Args: None
+
+        Returns: A string representing the absolute local filesystem path to
+            the unzipped shake event dir. e.g.
+            :file:`/tmp/inasafe/realtime/shakemaps-extracted/20120726022003`
+
+        Raises: Any exceptions will be propogated
+        """
+        return os.path.join(shakemapDataDir(), self.eventId)
+
+    def removeExtractedFiles(self):
+        """Tidy up the filesystem by removing all extracted files
+        for the given event instance.
+
+        Args: None
+
+        Returns: None
+
+        Raises: Any error e.g. file permission error will be raised.
+        """
+        myExtractedDir = self.extractDir()
+        if os.path.isdir(myExtractedDir):
+            shutil.rmtree(myExtractedDir)

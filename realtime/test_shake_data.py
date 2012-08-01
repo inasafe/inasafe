@@ -20,8 +20,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import unittest
+
 from shake_data import ShakeData
-from realtime.utils import shakemapDataDir
+from realtime.utils import (shakemapZipDir,
+                            shakemapDataDir)
 
 class TestShakeMap(unittest.TestCase):
     """Testing for the shakemap class"""
@@ -36,15 +38,15 @@ class TestShakeMap(unittest.TestCase):
         myInpPath =  os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                   'fixtures',
                                                   myInpFile))
-        shutil.copyfile(myOutPath, os.path.join(shakemapDataDir(), myOutFile))
-        shutil.copyfile(myInpPath, os.path.join(shakemapDataDir(), myInpFile))
+        shutil.copyfile(myOutPath, os.path.join(shakemapZipDir(), myOutFile))
+        shutil.copyfile(myInpPath, os.path.join(shakemapZipDir(), myInpFile))
 
     def test_getShakeMapInput(self):
         """Check that we can retrieve a shakemap 'inp' input file"""
         myShakeEvent = '20110413170148'
         myShakeData = ShakeData(myShakeEvent)
         myShakemapFile =  myShakeData.fetchInput()
-        myExpectedFile = os.path.join(shakemapDataDir(),
+        myExpectedFile = os.path.join(shakemapZipDir(),
                                       myShakeEvent + '.inp.zip')
         myMessage = 'Expected path for downloaded shakemap INP not received'
         self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
@@ -54,7 +56,7 @@ class TestShakeMap(unittest.TestCase):
         myShakeEvent = '20110413170148'
         myShakeData = ShakeData(myShakeEvent)
         myShakemapFile =  myShakeData.fetchOutput()
-        myExpectedFile = os.path.join(shakemapDataDir(),
+        myExpectedFile = os.path.join(shakemapZipDir(),
                                       myShakeEvent + '.out.zip')
         myMessage = 'Expected path for downloaded shakemap OUT not received'
         self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
@@ -64,9 +66,9 @@ class TestShakeMap(unittest.TestCase):
         myShakeEvent = '20110413170148'
         myShakeData = ShakeData(myShakeEvent)
 
-        myExpectedInpFile = os.path.join(shakemapDataDir(),
+        myExpectedInpFile = os.path.join(shakemapZipDir(),
                                          myShakeEvent + '.inp.zip')
-        myExpectedOutFile = os.path.join(shakemapDataDir(),
+        myExpectedOutFile = os.path.join(shakemapZipDir(),
                                          myShakeEvent + '.out.zip')
 
         if os.path.exists(myExpectedInpFile):
@@ -91,9 +93,9 @@ class TestShakeMap(unittest.TestCase):
         """Check that we can retrieve both input and output from ftp at once"""
         myShakeEvent = '20120726022003'
 
-        myExpectedInpFile = os.path.join(shakemapDataDir(),
+        myExpectedInpFile = os.path.join(shakemapZipDir(),
                                          myShakeEvent + '.inp.zip')
-        myExpectedOutFile = os.path.join(shakemapDataDir(),
+        myExpectedOutFile = os.path.join(shakemapZipDir(),
                                          myShakeEvent + '.out.zip')
         myShakeData = ShakeData(myShakeEvent)
         myInpFile, myOutFile =  myShakeData.fetchEvent()
@@ -111,9 +113,9 @@ class TestShakeMap(unittest.TestCase):
         # Simply dont set the event id in the ctor to get the latest
         myShakeData = ShakeData()
         myInpFile, myOutFile =  myShakeData.fetchEvent()
-        myExpectedInpFile = os.path.join(shakemapDataDir(),
+        myExpectedInpFile = os.path.join(shakemapZipDir(),
                                          myShakeEvent + '.inp.zip')
-        myExpectedOutFile = os.path.join(shakemapDataDir(),
+        myExpectedOutFile = os.path.join(shakemapZipDir(),
                                          myShakeEvent + '.out.zip')
         myMessage = ('Expected path for downloaded shakemap INP not received'
              '\nExpected: %s\nGot: %s' %
@@ -123,6 +125,24 @@ class TestShakeMap(unittest.TestCase):
              '\nExpected: %s\nGot: %s' %
              (myExpectedOutFile, myOutFile))
         self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
+
+    def test_ExtractShakeMap(self):
+        """Test that we can extract the shakemap inp and out files"""
+        myShakeEvent = '20120726022003'
+        myShakeData = ShakeData(myShakeEvent)
+        myEvent, myGrd = myShakeData.extract(theForceFlag=True)
+        print myEvent, myGrd
+        myExpectedEvent = ('/tmp/inasafe/realtime/shakemaps-extracted'
+                           '/20120726022003/event.xml')
+        myExpectedGrid = ('/tmp/inasafe/realtime/shakemaps-extracted'
+                          '/20120726022003/mi.grd')
+        myMessage = 'Expected: %s\nGot: %s\n' % (myEvent, myEvent)
+        assert myEvent in myExpectedEvent, myMessage
+        assert os.path.exists(myEvent)
+
+        myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedGrid, myGrd)
+        assert myExpectedGrid in myExpectedGrid, myMessage
+        assert os.path.exists(myGrd)
 
 if __name__ == '__main__':
     unittest.main()

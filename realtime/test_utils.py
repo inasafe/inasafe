@@ -23,6 +23,7 @@ from datetime import date
 from realtime import LOGGER
 from realtime.utils import (baseDataDir,
                             gisDataDir,
+                            shakemapZipDir,
                             shakemapDataDir,
                             reportDataDir,
                             logDir)
@@ -34,24 +35,35 @@ class Test(unittest.TestCase):
         """Test we can get the realtime data dir"""
         myDir = baseDataDir()
         myExpectedDir = '/tmp/inasafe/realtime'
+        assert os.path.exists(myExpectedDir)
         self.assertEqual(myDir, myExpectedDir)
 
     def test_gisDataDir(self):
         """Test web can get the gis data dir"""
         myDir = gisDataDir()
         myExpectedDir = '/tmp/inasafe/realtime/gis'
+        assert os.path.exists(myExpectedDir)
+        self.assertEqual(myDir, myExpectedDir)
+
+    def test_shakemapZipDir(self):
+        """Test we can get the shakemap zip dir"""
+        myDir = shakemapZipDir()
+        myExpectedDir = '/tmp/inasafe/realtime/shakemaps-zipped'
+        assert os.path.exists(myExpectedDir)
         self.assertEqual(myDir, myExpectedDir)
 
     def test_shakemapDataDir(self):
-        """Test we can get the shakemap data dir"""
+        """Test we can get the shakemap extracted data dir"""
         myDir = shakemapDataDir()
-        myExpectedDir = '/tmp/inasafe/realtime/shakemaps'
+        myExpectedDir = '/tmp/inasafe/realtime/shakemaps-extracted'
+        assert os.path.exists(myExpectedDir)
         self.assertEqual(myDir, myExpectedDir)
 
     def test_reportDataDir(self):
         """Test we can get the report data dir"""
         myDir = reportDataDir()
         myExpectedDir = '/tmp/inasafe/realtime/reports'
+        assert os.path.exists(myExpectedDir)
         self.assertEqual(myDir, myExpectedDir)
 
     def test_Logging(self):
