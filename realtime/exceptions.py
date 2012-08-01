@@ -20,6 +20,10 @@ __date__ = '31/07/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+class EventIdError(Exception):
+    """Exceptions relating to null or incorrect event id's"""
+    pass
+
 class EventUndefinedError(Exception):
     """Exception for when trying to work with an event that is not defined."""
     pass
@@ -49,4 +53,12 @@ class InvalidOutputZipError(Exception):
 class ExtractionError(Exception):
     """An exception for when something went wrong extracting the event and mi
         datasets"""
+    pass
+
+class EventParseError(Exception):
+    """An exception for when something went wrong parsing the event.xml """
+    pass
+
+class GridConversionError(Exception):
+    """An exception for when something went wrong converting mi.grd to a tif"""
     pass

@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import shutil
 import logging
 
 def baseDataDir():
@@ -39,10 +40,18 @@ def shakemapZipDir():
     mkDir(myDir)
     return myDir
 
-def shakemapDataDir():
+def shakemapExtractDir():
     """Create (if needed) and return the path to the base shakemap extract dir
     """
     myDir = os.path.join(baseDataDir(), 'shakemaps-extracted')
+    mkDir(myDir)
+    return myDir
+
+def shakemapDataDir():
+    """Create (if needed) and return the path to the base shakemap post
+    procesed (tifs and pickled events) data dir.
+    """
+    myDir = os.path.join(baseDataDir(), 'shakemaps-processed')
     mkDir(myDir)
     return myDir
 
@@ -67,6 +76,15 @@ def mkDir(thePath):
         os.makedirs(thePath, 0777)
         # Resinstate the old mask for tmp
         os.umask(myOldMask)
+
+def purgeWorkingData():
+    """Get rid of the shakemaps-* directories - mainly intended for
+    invocation from unit tests to ensure there is a clean slate before
+    testing."""
+    shutil.rmtree(shakemapExtractDir())
+    shutil.rmtree(shakemapDataDir())
+    shutil.rmtree(shakemapZipDir())
+    #shutil.rmtree()
 
 def setupLogger(theLogger):
     """Run once when the module is loaded and enable logging

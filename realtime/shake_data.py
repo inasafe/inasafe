@@ -10,26 +10,34 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import os
-import shutil
-from zipfile import ZipFile
-
-from realtime import LOGGER
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from realtime.exceptions import (EventUndefinedError,
+
+import os
+import shutil
+from zipfile import ZipFile
+import gdal
+from gdalconst import GA_ReadOnly
+
+from realtime import LOGGER
+from realtime.exceptions import (EventIdError,
+                                 EventUndefinedError,
                                  NetworkError,
                                  EventValidationError,
                                  InvalidInputZipError,
                                  InvalidOutputZipError,
-                                ExtractionError)
+                                 ExtractionError,
+                                 GridConversionError,
+                                 EventParseError
+                                 )
 from realtime.ftp_client import FtpClient
-from realtime.utils import shakemapZipDir, shakemapDataDir
+from realtime.utils import (shakemapZipDir,
+                            shakemapExtractDir,
+                            shakemapDataDir)
 
 
 class ShakeData:
@@ -79,7 +87,7 @@ class ShakeData:
         self.host = theHost
         if self.eventId is None:
             try:
-                self.eventId = self.getLatestEventId()
+                self.getLatestEventId()
             except NetworkError:
                 raise
         else:
@@ -89,6 +97,11 @@ class ShakeData:
                 self.validateEvent()
             except EventValidationError:
                 raise
+        # If eventId is still None after all the above, moan....
+        if self.eventId is None:
+            raise EventIdError('No id was passed to the constructor and the '
+                               'latest id could not be retrieved from the'
+                               'server.')
 
     def getLatestEventId(self):
         """Query the ftp server and determine the latest event id.
@@ -104,7 +117,10 @@ class ShakeData:
             myList = myFtpClient.getListing()
         except NetworkError:
             raise
-        self.eventId = myList[-1].split('.')[0]
+        myEventId = myList[-1].split('/')[-1].split('.')[0]
+        if myEventId is None:
+            raise EventIdError('Latest Event Id could not be obtained')
+        self.eventId = myEventId
 
     def validateEvent(self):
         """Check that the event associated with this instance exists either
@@ -155,9 +171,6 @@ class ShakeData:
 
         Raises: EventUndefinedError, NetworkError
         """
-        if self.eventId is None:
-            raise EventUndefinedError('Event is none')
-
         # Return the cache copy if it exists
         myLocalPath = os.path.join(shakemapZipDir(), theEventFile)
         if os.path.exists(myLocalPath):
@@ -189,6 +202,9 @@ class ShakeData:
 
         Raises: EventUndefinedError, NetworkError
         """
+        if self.eventId is None:
+            raise EventUndefinedError('Event is none')
+
         myEventFile = self.eventId + '.inp.zip'
         try:
             return self._fetchFile(myEventFile)
@@ -212,6 +228,9 @@ class ShakeData:
 
         Raises: EventUndefinedError, NetworkError
         """
+        if self.eventId is None:
+            raise EventUndefinedError('Event is none')
+
         myEventFile = self.eventId + '.out.zip'
         try:
             return self._fetchFile(myEventFile)
@@ -229,6 +248,9 @@ class ShakeData:
 
         Raises: EventUndefinedError, NetworkError
         """
+        if self.eventId is None:
+            raise EventUndefinedError('Event is none')
+
         try:
             myInpFile = self.fetchInput()
             myOutFile = self.fetchOutput()
@@ -342,7 +364,7 @@ class ShakeData:
 
         Raises: Any exceptions will be propogated
         """
-        return os.path.join(shakemapDataDir(), self.eventId)
+        return os.path.join(shakemapExtractDir(), self.eventId)
 
     def removeExtractedFiles(self):
         """Tidy up the filesystem by removing all extracted files
@@ -357,3 +379,92 @@ class ShakeData:
         myExtractedDir = self.extractDir()
         if os.path.isdir(myExtractedDir):
             shutil.rmtree(myExtractedDir)
+
+    def postProcess(self, theForceFlag=True):
+        """Process the event.xml and mi.grd files so that they can be used
+        in our workflow. This entails deserialising the event.xml into
+        a ShakeEvent object, and converting the mi.grd to a tif file.
+
+        The ShakeEvent object will be pickled to the disk for persistent
+        storage.
+
+        .. note:: Delegates to convertGrid() and shakeEvent() methods.
+
+        Args: theForceFlag - (Optional). Whether to force the regeneration
+            of post processed products. Defaults to False.
+
+        Returns: myShakeEvent, myGridPath
+            * ShakeEvent - an instance of ShakeEvent populated with whatever
+              data could be gleaned from the event.xml file.
+            * myGridPath - a string representing the absolute path to the
+              generated grid file.
+
+        Raises: EventParseError, GridConversionError
+        """
+        myTifPath = self.convertGrid()
+        myShakeEvent = self.shakeEvent()
+        return myShakeEvent, myTifPath
+
+
+    def convertGrid(self, theForceFlag=True):
+        """Convert the grid for this shakemap to a tif.
+
+        In the simplest use case you should be able to simply do::
+
+           myShakeData = ShakeData('20120726022003')
+           myTifPath = myShakeData.convertGrid()
+
+        and the ShakeData class will take care of fetching (if not already
+        cached), extracting a converting the file for you, returning a usable
+        tif.
+
+        .. seealso:: postProcess() which will perform both convertGrid and
+           event deserialisation in one call.
+
+        Args: theForceFlag - (Optional). Whether to force the regeneration
+            of post processed tif product. Defaults to False.
+
+        Returns: An absolute file system path pointing to the coverted tif file.
+
+        Raises: GridConversionError
+        """
+
+        myTifPath = os.path.join(shakemapDataDir(), self.eventId + '.tif')
+        #short circuit if the tif is already created.
+        if os.path.exists(myTifPath) and theForceFlag is not True:
+            return myTifPath
+
+        #otherwise get the grid if needed
+        myEventXml, myGridPath = self.extract()
+        del myEventXml
+        #now save it to Tif
+        myFormat = 'GTiff'
+        myDriver = gdal.GetDriverByName( myFormat )
+        myGridDataset = gdal.Open(myGridPath, GA_ReadOnly)
+        if myGridDataset is not None:
+            myTifDataset = myDriver.CreateCopy(myTifPath, myGridDataset, 0)
+            # Once we're done, close properly the dataset
+            del myGridDataset
+            del myTifDataset
+        else:
+            raise GridConversionError('Could not open source grid: %s',
+                                      myGridPath)
+        return myTifPath
+
+    def shakeEvent(self):
+        """Parse the event.xml and return it as a ShakeEvent object.
+
+        In the simples use case you can simply do::
+
+           myShakeData = ShakeData('20120726022003')
+           myShakeEvent = myShakeData.shakeEvent()
+
+        Args: theForceFlag - (Optional). Whether to force the regeneration
+            of post processed ShakeEvent. Defaults to False.
+
+        Returns: A ShakeEvent object.
+
+        Raises: EventParseError
+        """
+        return None
+

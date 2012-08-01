@@ -10,23 +10,30 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import os
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
+import os
+import shutil
 import unittest
 from datetime import date
+
 from realtime import LOGGER
 from realtime.utils import (baseDataDir,
                             gisDataDir,
                             shakemapZipDir,
+                            shakemapExtractDir,
                             shakemapDataDir,
                             reportDataDir,
-                            logDir)
+                            logDir,
+                            purgeWorkingData)
+
+# Clear away working dirs so we can be sure they
+# are actually created
+purgeWorkingData()
 
 
 class Test(unittest.TestCase):
@@ -52,10 +59,17 @@ class Test(unittest.TestCase):
         assert os.path.exists(myExpectedDir)
         self.assertEqual(myDir, myExpectedDir)
 
-    def test_shakemapDataDir(self):
+    def test_shakemapExtractDir(self):
         """Test we can get the shakemap extracted data dir"""
-        myDir = shakemapDataDir()
+        myDir = shakemapExtractDir()
         myExpectedDir = '/tmp/inasafe/realtime/shakemaps-extracted'
+        assert os.path.exists(myExpectedDir)
+        self.assertEqual(myDir, myExpectedDir)
+
+    def test_shakemapDataDir(self):
+        """Test we can get the shakemap post processed data dir"""
+        myDir = shakemapDataDir()
+        myExpectedDir = '/tmp/inasafe/realtime/shakemaps-processed'
         assert os.path.exists(myExpectedDir)
         self.assertEqual(myDir, myExpectedDir)
 

@@ -23,7 +23,14 @@ import unittest
 
 from shake_data import ShakeData
 from realtime.utils import (shakemapZipDir,
-                            shakemapDataDir)
+                            shakemapDataDir,
+                            shakemapExtractDir,
+                            purgeWorkingData)
+
+# Clear away working dirs so we can be sure they are
+# actually created
+purgeWorkingData()
+
 
 class TestShakeMap(unittest.TestCase):
     """Testing for the shakemap class"""
@@ -41,6 +48,8 @@ class TestShakeMap(unittest.TestCase):
         shutil.copyfile(myOutPath, os.path.join(shakemapZipDir(), myOutFile))
         shutil.copyfile(myInpPath, os.path.join(shakemapZipDir(), myInpFile))
 
+        #TODO Downloaded data should be removed before each test
+
     def test_getShakeMapInput(self):
         """Check that we can retrieve a shakemap 'inp' input file"""
         myShakeEvent = '20110413170148'
@@ -49,17 +58,17 @@ class TestShakeMap(unittest.TestCase):
         myExpectedFile = os.path.join(shakemapZipDir(),
                                       myShakeEvent + '.inp.zip')
         myMessage = 'Expected path for downloaded shakemap INP not received'
-        self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
+        self.assertEqual(myShakemapFile, myExpectedFile, myMessage)
 
     def test_getShakeMapOutput(self):
         """Check that we can retrieve a shakemap 'out' input file"""
-        myShakeEvent = '20110413170148'
-        myShakeData = ShakeData(myShakeEvent)
+        myEventId = '20110413170148'
+        myShakeData = ShakeData(myEventId)
         myShakemapFile =  myShakeData.fetchOutput()
         myExpectedFile = os.path.join(shakemapZipDir(),
-                                      myShakeEvent + '.out.zip')
+                                      myEventId + '.out.zip')
         myMessage = 'Expected path for downloaded shakemap OUT not received'
-        self.assertEqual(myOutFile, myExpectedOutFile, myMessage)
+        self.assertEqual(myShakemapFile, myExpectedFile, myMessage)
 
     def test_getRemoteShakeMap(self):
         """Check that we can retrieve both input and output from ftp at once"""
@@ -113,10 +122,11 @@ class TestShakeMap(unittest.TestCase):
         # Simply dont set the event id in the ctor to get the latest
         myShakeData = ShakeData()
         myInpFile, myOutFile =  myShakeData.fetchEvent()
+        myEventId = myShakeData.eventId
         myExpectedInpFile = os.path.join(shakemapZipDir(),
-                                         myShakeEvent + '.inp.zip')
+                                         myEventId + '.inp.zip')
         myExpectedOutFile = os.path.join(shakemapZipDir(),
-                                         myShakeEvent + '.out.zip')
+                                         myEventId + '.out.zip')
         myMessage = ('Expected path for downloaded shakemap INP not received'
              '\nExpected: %s\nGot: %s' %
              (myExpectedOutFile, myOutFile))
@@ -131,18 +141,29 @@ class TestShakeMap(unittest.TestCase):
         myShakeEvent = '20120726022003'
         myShakeData = ShakeData(myShakeEvent)
         myEvent, myGrd = myShakeData.extract(theForceFlag=True)
-        print myEvent, myGrd
-        myExpectedEvent = ('/tmp/inasafe/realtime/shakemaps-extracted'
-                           '/20120726022003/event.xml')
-        myExpectedGrid = ('/tmp/inasafe/realtime/shakemaps-extracted'
-                          '/20120726022003/mi.grd')
-        myMessage = 'Expected: %s\nGot: %s\n' % (myEvent, myEvent)
+
+        myExtractDir = shakemapExtractDir()
+        myExpectedEvent = (os.path.join(myExtractDir,
+                           '20120726022003/event.xml'))
+        myExpectedGrid = (os.path.join(myExtractDir,
+                           '20120726022003/mi.grd'))
+        myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedEvent, myEvent)
         assert myEvent in myExpectedEvent, myMessage
         assert os.path.exists(myEvent)
 
         myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedGrid, myGrd)
         assert myExpectedGrid in myExpectedGrid, myMessage
         assert os.path.exists(myGrd)
+
+    def test_convertGrdToTif(self):
+        """Test that we can convert the grid file to a tif file"""
+        myShakeEvent = '20120726022003'
+        myShakeData = ShakeData(myShakeEvent)
+        # Postprocess the event.xml and the mi.grd into a ShakeEvent object
+        # and a .tif file respectively.
+        myEvent, myGrd = myShakeData.postProcess(theForceFlag=True)
+        assert os.path.exists(myGrd)
+
 
 if __name__ == '__main__':
     unittest.main()

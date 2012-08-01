@@ -31,7 +31,7 @@ class FtpClientTest(unittest.TestCase):
         myClient = FtpClient()
         myListing = myClient.getListing()
         myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      myListing, _expectedFiles)
+                      (myListing, _expectedFiles))
         assert _expectedFiles in myListing, myMessage
 
     def test_getDirectoryListingUsingFtpLib(self):
@@ -39,7 +39,7 @@ class FtpClientTest(unittest.TestCase):
         myClient = FtpClient(theBackend='ftplib')
         myListing = myClient.getListing()
         myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      myListing, _expectedFiles)
+                      (myListing, _expectedFiles))
         assert _expectedFiles in myListing, myMessage
 
     def test_getFile(self):
@@ -47,7 +47,7 @@ class FtpClientTest(unittest.TestCase):
         myClient = FtpClient()
         myListing = myClient.getListing()
         myMessage = ('Expected outcome:\n%s\nActual outcome:\n%s' %
-                      myListing, _expectedFiles)
+                      (myListing, _expectedFiles))
         assert _expectedFiles in myListing, myMessage
 
 
