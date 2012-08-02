@@ -10,15 +10,63 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import os
+
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '1/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from realtime.utils import shakemapExtractDir
+from realtime.exceptions import EventFileNotFoundError
+
+
 class ShakeEvent:
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magniture etc."""
 
-    def __init__(self):
-        """Constructur for the
+    def __init__(self, theEventId):
+        """Constructor for the shake event class.
+
+        Args:
+            theEventId - (Mandatory) Id of the event. Will be used to
+                determine the path to an event.xml file that
+                will be used to intialise the state of the ShakeEvent instance.
+
+            e.g.
+
+            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/event.xml
+
+        Returns: Instance
+
+        Raises: EventParseError
+        """
+        self.latitude = None
+        self.longitude = None
+        self.eventId = theEventId
+        self.magnitude = None
+        self.depth = None
+        self.description = None
+        self.location = None
+        self.day = None
+        self.month = None
+        self.year = None
+        self.time = None
+        self.timeZone = None
+
+    def eventFilePath(self):
+        """A helper to retrieve the path to the event.xml file
+
+        Args: None
+
+        Returns: An absolute filesystem path to the event.xml file.
+
+        Raises: EventFileNotFoundError
+        """
+        myEventPath = os.path.join(shakemapExtractDir(), self.eventId + '.tif')
+        #short circuit if the tif is already created.
+        if os.path.exists(myEventPath):
+            return myEventPath
+        else:
+            raise EventFileNotFoundError('%s not found' % myEventPath)
