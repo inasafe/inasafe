@@ -174,13 +174,13 @@ class TestShakeMap(unittest.TestCase):
         myContourPath = myShakeData.extractContours(True)
         myDataSource = ogr.Open(myContourPath)
         # do a little query to make sure we got some results...
-        mySQL = 'select * from %s order by elev asc' % myTable
+        mySQL = 'select * from \'%s\' order by MMI asc' % myTable
         #print mySQL
         myLayer = myDataSource.ExecuteSQL(mySQL)
-        myExpectedFeatureCount = 3
-        self.assertEqual(myLayer.GetFeatureCount() != myExpectedFeatureCount)
-        myOgrDataset.ReleaseResultSet(myLayer)
-        myOgrDataset.Destroy()
+        myExpectedFeatureCount = 136
+        self.assertEquals(myLayer.GetFeatureCount(), myExpectedFeatureCount)
+        myDataSource.ReleaseResultSet(myLayer)
+        myDataSource.Destroy()
 
 
 if __name__ == '__main__':
