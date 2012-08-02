@@ -25,35 +25,41 @@ from realtime.ftp_client import FtpClient
 class FtpClientTest(unittest.TestCase):
     """Test the ftp client used to fetch shake listings"""
     # TODO update tests so url host is not hard coded
-    _expectedUrlLib2Files = ('20110413170148.inp.zip',
+    _expectedMatches = ('20110413170148.inp.zip',
                              '20110413170148.out.zip')
 
     def test_getDirectoryListingUsingUrlLib2(self):
         """Check if we can get a nice directory listing using urllib2"""
         myClient = FtpClient()
         myListing = myClient.getListing()
+        #Make it a single string
+        myListing = '\n'.join(myListing)
         myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      (myListing, self._expectedUrlLib2Files))
-        for myExpectedFile in self._expectedFtpLibFiles:
-            assert re.search(myExpectedFile,myListing), myMessage
+                      (myListing, self._expectedMatches))
+        for myExpectedFile in self._expectedMatches:
+            assert re.search(myExpectedFile, myListing), myMessage
 
     def test_getDirectoryListingUsingFtpLib(self):
         """Check if we can get a nice directory listing using ftplib"""
         myClient = FtpClient(theBackend='ftplib')
         myListing = myClient.getListing()
+        #Make it a single string
+        myListing = '\n'.join(myListing)
         myMessage = ('Expected this list:\n%s\nTo contain these items:\n%s' %
-                      (myListing, self._expectedUrlLib2Files))
-        for myExpectedFile in self._expectedUrlLib2Files:
-            assert re.search(myExpectedFile,myListing), myMessage
+                      (myListing, self._expectedMatches))
+        for myExpectedFile in self._expectedMatches:
+            assert re.search(myExpectedFile, myListing), myMessage
 
     def test_getFile(self):
         """Test that the ftp client can fetch a file ok"""
         myClient = FtpClient()
         myListing = myClient.getListing()
+        #Make it a single string
+        myListing = '\n'.join(myListing)
         myMessage = ('Expected outcome:\n%s\nActual outcome:\n%s' %
-                      (myListing, self._expectedUrlLib2Files))
-        for myExpectedFile in self._expectedUrlLib2Files:
-            assert re.search(myExpectedFile,myListing), myMessage
+                      (myListing, self._expectedMatches))
+        for myExpectedFile in self._expectedMatches:
+            assert re.search(myExpectedFile, myListing), myMessage
 
 
 if __name__ == '__main__':

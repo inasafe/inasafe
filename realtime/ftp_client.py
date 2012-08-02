@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from ftplib import FTP
 import urllib2
-from utils import shakemapZipDir
 
 class FtpClient:
     """A utility class that contains methods to fetch a listings and files
@@ -58,7 +57,7 @@ class FtpClient:
 
         Raises: None
         """
-        return ('urllib2', 'ftplib')
+        return 'urllib2', 'ftplib'
 
     def getListing(self):
         """
@@ -119,12 +118,21 @@ class FtpClient:
 
         Raises: None
         """
+        myUrl = 'ftp://%s' % self.baseUrl
+        myFtp = FTP(self.baseUrl)
+        myFtp.set_pasv(self.pasv)
+        myFtp.login()
+        myLines = []
+        myFtp.retrlines('LIST', myLines.append)
+        myFtp.quit()
+        myFinalList = []
+        for myLine in myLines:
+            myTidiedEntry = myLine.strip().split()[-1]
+            myTidiedEntry = myUrl + '/' + myTidiedEntry
+            if 'zip' in myTidiedEntry:
+                myFinalList.append(myTidiedEntry)
+        return myFinalList
 
-        ftp = FTP(self.baseUrl)
-        ftp.set_pasv(self.pasv)
-        ftp.login()
-        ftp.retrlines('LIST')
-        ftp.quit()
 
     def getFile(self, theUrlPath, theFilePath):
         """
