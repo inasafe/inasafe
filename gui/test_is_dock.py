@@ -46,7 +46,7 @@ from gui.utilities_test import (getQgisTestApp,
 
 from gui.is_dock import ISDock
 from gui.is_utilities import (setRasterStyle,
-                          qgisVersion)
+                              qgisVersion)
 
 from safe_api import TESTDATA, HAZDATA, EXPDATA
 
