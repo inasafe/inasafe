@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-
+from xml.dom import minidom
 from utils import shakemapExtractDir
 from rt_exceptions import EventFileNotFoundError
 # The logger is intiailsed in utils.py by init
@@ -56,6 +56,7 @@ class ShakeEvent:
         self.year = None
         self.time = None
         self.timeZone = None
+        self.parseEvent()
 
     def eventFilePath(self):
         """A helper to retrieve the path to the event.xml file
@@ -66,6 +67,7 @@ class ShakeEvent:
 
         Raises: EventFileNotFoundError
         """
+        LOGGER.debug('Event path requested.')
         myEventPath = os.path.join(shakemapExtractDir(),
                                    self.eventId,
                                    'event.xml')
@@ -75,3 +77,42 @@ class ShakeEvent:
         else:
             LOGGER.error('Event file not found. %s' % myEventPath)
             raise EventFileNotFoundError('%s not found' % myEventPath)
+
+
+    def parseEvent(self):
+        """Parse the event.xml and extract whatever info we can from it.
+
+        The event is parsed and class members are populated with whatever
+        data could be obtained from the event.
+
+        Args: None
+
+        Returns : None
+
+        Raises: EventParseError
+        """
+        LOGGER.debug('ParseEvent requested.')
+        myPath = self.eventFilePath()
+        try:
+            myDocument = minidom.parse(myPath)
+            myEventElement = myDocument.getElementsByTagName('earthquake')
+            myEventElement = myEventElement[0]
+            self.magnitude = float(myEventElement.attributes['mag'].nodeValue)
+            self.longitude = float(myEventElement.attributes['lon'].nodeValue)
+            self.latitude = float(myEventElement.attributes['lat'].nodeValue)
+            self.location = myEventElement.attributes[
+                            'locstring'].nodeValue.strip()
+            self.depth = float(myEventElement.attributes['depth'].nodeValue)
+            self.year = int(myEventElement.attributes['year'].nodeValue)
+            self.month = int(myEventElement.attributes['month'].nodeValue)
+            self.day = int(myEventElement.attributes['day'].nodeValue)
+            self.hour = int(myEventElement.attributes['hour'].nodeValue)
+            self.minute = int(myEventElement.attributes['minute'].nodeValue)
+            self.second = int(myEventElement.attributes['second'].nodeValue)
+            self.timeZone = myEventElement.attributes['timezone'].nodeValue
+
+        except Exception, e:
+            LOGGER.exception('Event parse failed')
+            raise EventFileNotFoundError('Failed to parse event file.\n%s\n%s'
+                % (e.__class__, str(e)))
+

@@ -18,7 +18,6 @@ __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import logging
 import utils
 utils.setupLogger()
 

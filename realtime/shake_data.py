@@ -43,6 +43,7 @@ from utils import (shakemapZipDir,
                             shakemapExtractDir,
                             shakemapDataDir,
                             gisDataDir)
+from shake_event import ShakeEvent
 
 
 class ShakeData:
@@ -90,6 +91,8 @@ class ShakeData:
             """
         self.eventId = theEvent
         self.host = theHost
+        # private Shake event instance associated with this shake dataset
+        self._shakeEvent = None
         if self.eventId is None:
             try:
                 self.getLatestEventId()
@@ -473,7 +476,10 @@ class ShakeData:
 
         Raises: EventParseError
         """
-        return None
+        if self._shakeEvent is None or theForceFlag is True:
+            self.extract(theForceFlag)
+            self._shakeEvent = ShakeEvent(self.eventId)
+        return self._shakeEvent
 
     def extractContours(self, theForceFlag=True):
         """Extract contours from the event's tif file.

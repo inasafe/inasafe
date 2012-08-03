@@ -37,6 +37,34 @@ class TestShakeEvent(unittest.TestCase):
         myPath = myShakeEvent.eventFilePath()
         self.assertEquals(myExpectedPath, myPath)
 
+    def test_eventFilePath(self):
+        """Test eventFilePath works"""
+        myShakeId = '20120726022003'
+        myExpectedPath = os.path.join(shakemapExtractDir(),
+                                      myShakeId,
+                                      'event.xml')
+        myShakeData = ShakeData(myShakeId)
+        myShakeData.extract()
+        myShakeEvent = ShakeEvent(myShakeId)
+        myPath = myShakeEvent.eventFilePath()
+        self.assertEquals(myExpectedPath, myPath)
+
+    def test_eventParser(self):
+        """Test eventFilePath works"""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        self.assertEquals(26, myShakeEvent.day)
+        self.assertEquals(7, myShakeEvent.month)
+        self.assertEquals(2012, myShakeEvent.year)
+        self.assertEquals(2, myShakeEvent.hour)
+        self.assertEquals(15, myShakeEvent.minute)
+        self.assertEquals(35, myShakeEvent.second)
+        self.assertEquals('WIB', myShakeEvent.timeZone)
+        self.assertEquals(124.45, myShakeEvent.longitude)
+        self.assertEquals(-0.21, myShakeEvent.latitude)
+        self.assertEquals(11.0, myShakeEvent.depth)
+        self.assertEquals('Southern Molucca Sea', myShakeEvent.location)
 
 if __name__ == '__main__':
     unittest.main()
