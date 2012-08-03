@@ -32,6 +32,7 @@ System Requirements
  - The Open Source Geographic Information System QGIS (http://www.qgis.org).
    InaSAFE requires QGIS version 1.7 or newer.
 
+===========
 Limitations
 ===========
 
@@ -45,6 +46,7 @@ https://github.com/AIFDR/inasafe/issues?page=1&state=open for known
 bugs and outstanding tasks.
 
 
+=======
 License
 =======
 
@@ -56,6 +58,7 @@ The full GNU General Public License is available in LICENSE.TXT or
 http://www.gnu.org/licenses/gpl.html
 
 
+==============================
 Disclaimer of Warranty (GPLv3)
 ==============================
 
@@ -69,6 +72,7 @@ is with you. Should the program prove defective, you assume the cost of
 all necessary servicing, repair or correction.
 
 
+===============================
 Limitation of Liability (GPLv3)
 ===============================
 
@@ -84,3 +88,49 @@ such damages.
 
 
 
+=============
+Documentation
+=============
+
+To generate the current documentation in English, run the command :kbd:`make
+html` in the :file:`docs` directory. You will need to use Linux, and might need
+to install some dependencies. The standard documentation is available under
+:kbd:`docs/build/html`.
+
+====================
+Internationalization
+====================
+
+Adding a language
+-----------------
+
+- Edit the file :file:`docs/source/pre_translate.sh` and add the two-letter
+  code for your chosen language to the :kbd:`LOCALES` list.
+- Also add it to both occurrences of the :kbd:`LOCALES` list in
+  :file:`post_translate.sh`.
+- Run :file:`pre_translate.sh`.
+- Translation files for the documentation are now available as
+  :kbd:`docs/source/i18n/[language code]/LC_MESSAGES/*.po`.
+
+Updating translation strings
+----------------------------
+
+Whenever you have changed the source documentation, or want to begin
+translating, it's a good idea to update the translation strings first:
+
+- Run :file:`pre_translate.sh`. This will ensure that the sentences you are
+  translating actually reflect the latest content.
+
+Translating documents
+---------------------
+
+- Open the :kbd:`.po` files for your chosen language in a translator tool such
+  as Qt Linguist.
+- Edit and save the :kbd:`.po` files.
+
+Building translated documentation
+---------------------------------
+
+- Run :file:`post_translate.sh`.
+- The output directory is :file:`docs/source/_build/html/` and contains
+  directories corresponding to the languages in :file:`post_translate.sh`. 

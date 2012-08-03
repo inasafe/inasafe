@@ -950,6 +950,7 @@ msgstr ""
 
 # 113638dde9684b7f8c6eaef0e0a2814d
 #: ..\..\tutorial-docs\tutorial.rst:472
+#, fuzzy
 msgid ""
 "The data shown on the screen can be saved into a **PDF file** by clicking on "
 "**Print** at the bottom of the InaSAFE panel. The PDF file contains then the "
@@ -1044,21 +1045,25 @@ msgstr ""
 
 # eab6f347735e4ced9b7ec8a964c92ab2
 #: ..\..\tutorial-docs\tutorial.rst:542
+#, fuzzy
 msgid "International Language"
 msgstr ""
 
 # 9a813eb58e594d8ca4667d616eb1d89d
 #: ..\..\tutorial-docs\tutorial.rst:544
+#, fuzzy
 msgid "Both QGIS and InaSAFE come with multi-lingual support."
 msgstr ""
 
 # bc6ffad970cd4dbbac1c6527264ea6dd
 #: ..\..\tutorial-docs\tutorial.rst:546
+#, fuzzy
 msgid "Go to QGIS Settings/options."
 msgstr ""
 
 # ba78b8bc33a845db9996ec4d28d5c8c9
 #: ..\..\tutorial-docs\tutorial.rst:551
+#, fuzzy
 msgid ""
 "Go to the Locale tab, and click to **Override system locale.** You must "
 "close the QGIS project and reopen for the language to take hold."
@@ -1066,6 +1071,7 @@ msgstr ""
 
 # fdd817abbd3f43af96ae8f4faceada6b
 #: ..\..\tutorial-docs\tutorial.rst:557
+#, fuzzy
 msgid ""
 "At this point InaSAFE has only been translated into Indonesian, however "
 "there is a framework that can support all languages outlined in QGIS."
@@ -1073,36 +1079,43 @@ msgstr ""
 
 # 6c6954c34003464889c81c628a78b98a
 #: ..\..\tutorial-docs\tutorial.rst:562
+#, fuzzy
 msgid "Thank You"
 msgstr ""
 
 # 789f6ad0771849d8a8ac3d09a3fae9bf
 #: ..\..\tutorial-docs\tutorial.rst:564
+#, fuzzy
 msgid "THANK YOU FOR YOUR PARTICIPATION! :)"
 msgstr ""
 
 # d5ed04bbe0234ba484a6c3ce83733b05
 #: ..\..\tutorial-docs\tutorial.rst:566
+#, fuzzy
 msgid ""
 "Let us know how you enjoyed the training and what you think about the tool."
 msgstr ""
 
 # c86991e2294645ad8efe63783c404c2f
 #: ..\..\tutorial-docs\tutorial.rst:568
+#, fuzzy
 msgid "THE INASAFE TEAM"
 msgstr ""
 
 # a069f2fdf40f4863812ae1b2a580dad7
 #: ..\..\tutorial-docs\tutorial.rst:570
+#, fuzzy
 msgid "Indonesian Disaster Management Agency (BNPB)"
 msgstr ""
 
 # a31b3a0855e84905a8be1ed49ff45fb3
 #: ..\..\tutorial-docs\tutorial.rst:571
+#, fuzzy
 msgid "AusAID - Australia-Indonesia Facility for Disaster Reduction"
 msgstr ""
 
 # 6afcbe56cdc64497a7be7185fec0c7cf
 #: ..\..\tutorial-docs\tutorial.rst:572
+#, fuzzy
 msgid "World Bank - Global Facility for Disaster Reduction and Recovery"
 msgstr ""
