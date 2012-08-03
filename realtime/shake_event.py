@@ -24,6 +24,7 @@ from rt_exceptions import EventFileNotFoundError
 import logging
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
+
 class ShakeEvent:
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magniture etc."""
@@ -78,7 +79,6 @@ class ShakeEvent:
             LOGGER.error('Event file not found. %s' % myEventPath)
             raise EventFileNotFoundError('%s not found' % myEventPath)
 
-
     def parseEvent(self):
         """Parse the event.xml and extract whatever info we can from it.
 
@@ -115,4 +115,3 @@ class ShakeEvent:
             LOGGER.exception('Event parse failed')
             raise EventFileNotFoundError('Failed to parse event file.\n%s\n%s'
                 % (e.__class__, str(e)))
-

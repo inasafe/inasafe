@@ -16,7 +16,6 @@ __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 import os
 import shutil
 from zipfile import ZipFile
@@ -40,9 +39,9 @@ from rt_exceptions import (EventUndefinedError,
                         )
 from ftp_client import FtpClient
 from utils import (shakemapZipDir,
-                            shakemapExtractDir,
-                            shakemapDataDir,
-                            gisDataDir)
+                   shakemapExtractDir,
+                   shakemapDataDir,
+                   gisDataDir)
 from shake_event import ShakeEvent
 
 
@@ -362,7 +361,6 @@ class ShakeData:
             raise ExtractionError('Error copying event.xml or mi.grd')
         return myFinalEventFile, myFinalGridFile
 
-
     def extractDir(self):
         """A helper method to get the path to the extracted datasets.
 
@@ -415,7 +413,6 @@ class ShakeData:
         myShakeEvent = self.shakeEvent(theForceFlag)
         return myShakeEvent, myTifPath
 
-
     def convertGrid(self, theForceFlag=True):
         """Convert the grid for this shakemap to a tif.
 
@@ -428,13 +425,17 @@ class ShakeData:
         cached), extracting a converting the file for you, returning a usable
         tif.
 
+        .. warning:: In Ole's original code he had to flip the grid as latitude
+           was reversed. Check if this is still needed with current gdal and
+           implement if needed!
+
         .. seealso:: postProcess() which will perform both convertGrid and
            event deserialisation in one call.
 
         Args: theForceFlag - (Optional). Whether to force the regeneration
             of post processed tif product. Defaults to False.
 
-        Returns: An absolute file system path pointing to the coverted tif file.
+        Returns: An absolute file system path pointing to the coverted tif file
 
         Raises: GridConversionError
         """
@@ -449,7 +450,7 @@ class ShakeData:
         del myEventXml
         #now save it to Tif
         myFormat = 'GTiff'
-        myDriver = gdal.GetDriverByName( myFormat )
+        myDriver = gdal.GetDriverByName(myFormat)
         myGridDataset = gdal.Open(myGridPath, GA_ReadOnly)
         if myGridDataset is not None:
             myTifDataset = myDriver.CreateCopy(myTifPath, myGridDataset, 0)
@@ -459,6 +460,8 @@ class ShakeData:
         else:
             raise GridConversionError('Could not open source grid: %s',
                                       myGridPath)
+            # TODO: Investigate need for grid flip and remove if poss
+            LOGGER.warn('CHECK IF GRID NEEDS TO BE FLIPPED ON LAT - ask Ole!')
         return myTifPath
 
     def shakeEvent(self, theForceFlag=True):
@@ -478,7 +481,10 @@ class ShakeData:
         """
         if self._shakeEvent is None or theForceFlag is True:
             self.extract(theForceFlag)
-            self._shakeEvent = ShakeEvent(self.eventId)
+            try:
+                self._shakeEvent = ShakeEvent(self.eventId)
+            except EventParseError:
+                raise
         return self._shakeEvent
 
     def extractContours(self, theForceFlag=True):
@@ -505,7 +511,7 @@ class ShakeData:
         # TODO: Use sqlite rather?
         myOutputFileBase = os.path.join(gisDataDir(),
                                         self.eventId + '_contours.')
-        myOutputFile = myOutputFileBase +  'shp'
+        myOutputFile = myOutputFileBase + 'shp'
         if os.path.exists(myOutputFile) and theForceFlag is not True:
             return myOutputFile
         elif os.path.exists(myOutputFile):
@@ -538,7 +544,7 @@ class ShakeData:
         myUseNoDataFlag = 0
         myNoDataValue = -9999
         myIdField = 0  # first field defined above
-        myElevationField = 1 # second (MMI) field defined above
+        myElevationField = 1  # second (MMI) field defined above
 
         gdal.ContourGenerate(myTifDataset.GetRasterBand(myBand),
                              myContourInterval,

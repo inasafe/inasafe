@@ -82,4 +82,3 @@ class EventIdError(Exception):
 class EventParseError(Exception):
     """An exception for when something went wrong parsing the event.xml """
     pass
-

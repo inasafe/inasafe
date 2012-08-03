@@ -22,12 +22,14 @@ import shutil
 import logging
 import logging.handlers
 
+
 def baseDataDir():
     """Create (if needed) and return the path to the base realtime data dir"""
     # TODO: support env var setting here too
-    myBaseDataDir='/tmp/inasafe/realtime'
+    myBaseDataDir = '/tmp/inasafe/realtime'
     mkDir(myBaseDataDir)
     return myBaseDataDir
+
 
 def gisDataDir():
     """Create (if needed) and return the path to the base GIS data dir"""
@@ -35,11 +37,13 @@ def gisDataDir():
     mkDir(myDir)
     return myDir
 
+
 def shakemapZipDir():
     """Create (if needed) and return the path to the base shakemap zip dir"""
     myDir = os.path.join(baseDataDir(), 'shakemaps-zipped')
     mkDir(myDir)
     return myDir
+
 
 def shakemapExtractDir():
     """Create (if needed) and return the path to the base shakemap extract dir
@@ -47,6 +51,7 @@ def shakemapExtractDir():
     myDir = os.path.join(baseDataDir(), 'shakemaps-extracted')
     mkDir(myDir)
     return myDir
+
 
 def shakemapDataDir():
     """Create (if needed) and return the path to the base shakemap post
@@ -56,17 +61,20 @@ def shakemapDataDir():
     mkDir(myDir)
     return myDir
 
+
 def reportDataDir():
     """Create (if needed) and return the path to the base report data dir"""
     myDir = os.path.join(baseDataDir(), 'reports')
     mkDir(myDir)
     return myDir
 
+
 def logDir():
     """Create (if needed) and return the path to the log directory"""
     myDir = os.path.join(baseDataDir(), 'logs')
     mkDir(myDir)
     return myDir
+
 
 def mkDir(thePath):
     """Make a directory, making sure it is world writable"""
@@ -78,6 +86,7 @@ def mkDir(thePath):
         # Resinstate the old mask for tmp
         os.umask(myOldMask)
 
+
 def purgeWorkingData():
     """Get rid of the shakemaps-* directories - mainly intended for
     invocation from unit tests to ensure there is a clean slate before
@@ -86,6 +95,7 @@ def purgeWorkingData():
     shutil.rmtree(shakemapDataDir())
     shutil.rmtree(shakemapZipDir())
     shutil.rmtree(gisDataDir())
+
 
 def setupLogger():
     """Run once when the module is loaded and enable logging

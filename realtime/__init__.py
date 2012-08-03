@@ -20,5 +20,3 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import utils
 utils.setupLogger()
-
-

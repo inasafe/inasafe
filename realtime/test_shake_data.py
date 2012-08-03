@@ -41,11 +41,11 @@ class TestShakeMap(unittest.TestCase):
         myOutFile = '20120726022003.out.zip'
         myInpFile = '20120726022003.inp.zip'
         myOutPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                              'fixtures',
-                                              myOutFile))
-        myInpPath =  os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                  'fixtures',
-                                                  myInpFile))
+                                                 'fixtures',
+                                                 myOutFile))
+        myInpPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                 'fixtures',
+                                                 myInpFile))
         shutil.copyfile(myOutPath, os.path.join(shakemapZipDir(), myOutFile))
         shutil.copyfile(myInpPath, os.path.join(shakemapZipDir(), myInpFile))
 
@@ -55,7 +55,7 @@ class TestShakeMap(unittest.TestCase):
         """Check that we can retrieve a shakemap 'inp' input file"""
         myShakeEvent = '20110413170148'
         myShakeData = ShakeData(myShakeEvent)
-        myShakemapFile =  myShakeData.fetchInput()
+        myShakemapFile = myShakeData.fetchInput()
         myExpectedFile = os.path.join(shakemapZipDir(),
                                       myShakeEvent + '.inp.zip')
         myMessage = 'Expected path for downloaded shakemap INP not received'
@@ -65,7 +65,7 @@ class TestShakeMap(unittest.TestCase):
         """Check that we can retrieve a shakemap 'out' input file"""
         myEventId = '20110413170148'
         myShakeData = ShakeData(myEventId)
-        myShakemapFile =  myShakeData.fetchOutput()
+        myShakemapFile = myShakeData.fetchOutput()
         myExpectedFile = os.path.join(shakemapZipDir(),
                                       myEventId + '.out.zip')
         myMessage = 'Expected path for downloaded shakemap OUT not received'
@@ -86,7 +86,7 @@ class TestShakeMap(unittest.TestCase):
         if os.path.exists(myExpectedOutFile):
             os.remove(myExpectedOutFile)
 
-        myInpFile, myOutFile =  myShakeData.fetchEvent()
+        myInpFile, myOutFile = myShakeData.fetchEvent()
         myMessage = ('Expected path for downloaded shakemap INP not received'
              '\nExpected: %s\nGot: %s' %
              (myExpectedOutFile, myOutFile))
@@ -108,7 +108,7 @@ class TestShakeMap(unittest.TestCase):
         myExpectedOutFile = os.path.join(shakemapZipDir(),
                                          myShakeEvent + '.out.zip')
         myShakeData = ShakeData(myShakeEvent)
-        myInpFile, myOutFile =  myShakeData.fetchEvent()
+        myInpFile, myOutFile = myShakeData.fetchEvent()
         myMessage = ('Expected path for downloaded shakemap INP not received'
              '\nExpected: %s\nGot: %s' %
              (myExpectedOutFile, myOutFile))
@@ -122,7 +122,7 @@ class TestShakeMap(unittest.TestCase):
         """Check that we can retrieve the latest shake event"""
         # Simply dont set the event id in the ctor to get the latest
         myShakeData = ShakeData()
-        myInpFile, myOutFile =  myShakeData.fetchEvent()
+        myInpFile, myOutFile = myShakeData.fetchEvent()
         myEventId = myShakeData.eventId
         myExpectedInpFile = os.path.join(shakemapZipDir(),
                                          myEventId + '.inp.zip')

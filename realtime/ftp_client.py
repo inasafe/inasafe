@@ -19,13 +19,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from ftplib import FTP
 import urllib2
 
+
 class FtpClient:
     """A utility class that contains methods to fetch a listings and files
         from an FTP server"""
     def __init__(self,
-                 theBaseUrl = '118.97.83.243',
-                 thePasvMode = True,
-                 theBackend = 'urllib2'):
+                 theBaseUrl='118.97.83.243',
+                 thePasvMode=True,
+                 theBackend='urllib2'):
         """Constructor for the FtpClient class
 
         Args:
@@ -133,7 +134,6 @@ class FtpClient:
                 myFinalList.append(myTidiedEntry)
         return myFinalList
 
-
     def getFile(self, theUrlPath, theFilePath):
         """
         Get a file from the ftp server using the active backend.
@@ -180,7 +180,6 @@ class FtpClient:
             print e.reason
             raise
 
-
     def _getFileUsingFtpLib(self, theUrlPath, theFilePath):
         """Get a file from the ftp server using the ftplib backend.
 
@@ -202,5 +201,3 @@ class FtpClient:
         myFtp.login()
         myFtp.retrbinary('RETR %s' % theUrlPath, open(theFilePath, 'wb').write)
         myFtp.quit()
-
-

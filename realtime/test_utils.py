@@ -36,6 +36,7 @@ purgeWorkingData()
 import logging
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
+
 class Test(unittest.TestCase):
 
     def test_baseDataDir(self):
@@ -86,7 +87,7 @@ class Test(unittest.TestCase):
         myDateString = myCurrentDate.strftime('%d-%m-%Y-%s')
         myMessage = 'Testing logger %s' % myDateString
         LOGGER.info(myMessage)
-        myFile = open(myPath,'rt')
+        myFile = open(myPath, 'rt')
         myLines = myFile.readlines()
         if myMessage not in myLines:
             assert 'Error, expected log message not shown in logs'
