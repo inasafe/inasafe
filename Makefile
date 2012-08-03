@@ -280,6 +280,19 @@ jenkins-test:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
 		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=storage,engine,impact_functions,gui || :
 
+jenkins-realtime-test:
+	@echo
+	@echo "---------------------------------------------------------------"
+	@echo "Regresssion Test Suite for Jenkins (Realtime module only)"
+	@echo "if you are going to run more than "
+	@echo "one InaSAFE Jenkins job, you should run each on a different"
+	@echo "display by changing the :100 option below to a different number"
+	@echo "---------------------------------------------------------------"
+	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
+		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime|| :
+
+
 jenkins-pyflakes:
 	@echo
 	@echo "----------------------------------"
