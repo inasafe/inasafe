@@ -28,7 +28,9 @@ class TestShakeEvent(unittest.TestCase):
     def test_eventFilePath(self):
         """Test eventFilePath works"""
         myShakeId = '20120726022003'
-        myExpectedPath = os.path.join(shakemapExtractDir(), 'event.xml')
+        myExpectedPath = os.path.join(shakemapExtractDir(),
+                                      myShakeId,
+                                      'event.xml')
         myShakeData = ShakeData(myShakeId)
         myShakeData.extract()
         myShakeEvent = ShakeEvent(myShakeId)

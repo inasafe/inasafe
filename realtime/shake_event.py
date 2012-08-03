@@ -66,7 +66,9 @@ class ShakeEvent:
 
         Raises: EventFileNotFoundError
         """
-        myEventPath = os.path.join(shakemapExtractDir(), 'event.xml')
+        myEventPath = os.path.join(shakemapExtractDir(),
+                                   self.eventId,
+                                   'event.xml')
         #short circuit if the tif is already created.
         if os.path.exists(myEventPath):
             return myEventPath
