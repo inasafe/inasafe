@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-24 13:14\n"
+"POT-Creation-Date: 2012-08-03 11:12\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,933 +16,933 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../user-docs/changelog.rst:4
+#: ..\..\user-docs\changelog.rst:4
 # 30470fde968b4c8694a0e07855d62990
 msgid "Whats new?"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:7
+#: ..\..\user-docs\changelog.rst:7
 # 88a9ec070ee74557ae9d549c30189a89
 msgid "Changelog for version 0.4.1"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:9
+#: ..\..\user-docs\changelog.rst:9
 # 6f514959a14d4de49dd02ce050226583
 msgid "This is a minor bugfix release with packaging and documentation related changes only so that InaSAFE can be deployed via the official QGIS repository."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:11
+#: ..\..\user-docs\changelog.rst:11
 # ff071cfc9acc480bb15dfa3ad7b16cb7
 msgid "Added InaSAFE tutorial to sphinx documentation"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:14
+#: ..\..\user-docs\changelog.rst:14
 # 3c408db05a694de086974353b959c15a
 msgid "Changelog for version 0.4.0"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:15
+#: ..\..\user-docs\changelog.rst:15
 # 98347f8f766e4daf8111c9692d4bf3eb
 msgid "Ability to automatically handle multipart vector data: https://github.com/AIFDR/inasafe/issues/160"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:16
+#: ..\..\user-docs\changelog.rst:16
 # e40b906e04114c008e719fd6b7cf1024
 msgid "Better error reporting:"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:18
+#: ..\..\user-docs\changelog.rst:18
 # 86a8874cf93341f0974f7b6081448172
 msgid "https://github.com/AIFDR/inasafe/issues/170"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:19
+#: ..\..\user-docs\changelog.rst:19
 # 9d69f467591249a5bc3888fafed112c0
 msgid "https://github.com/AIFDR/inasafe/issues/161"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:20
+#: ..\..\user-docs\changelog.rst:20
 # 8422fa29211e40d3a6f86d13ede784cf
 msgid "https://github.com/AIFDR/inasafe/issues/157"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:22
+#: ..\..\user-docs\changelog.rst:22
 # b7919b87d7a148698275b71f28d6f09f
 msgid "Bug fixing:"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:24
+#: ..\..\user-docs\changelog.rst:24
 # 233a35c6cdf64bcb9ebf004a6c76b769
 msgid "https://github.com/AIFDR/inasafe/issues/159"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:25
+#: ..\..\user-docs\changelog.rst:25
 # 0c56fb17be9b4065a3d21faaba5f0e29
 msgid "https://github.com/AIFDR/inasafe/issues/156"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:26
+#: ..\..\user-docs\changelog.rst:26
 # e7416947d04c43deafa8671e8d24b619
 msgid "https://github.com/AIFDR/inasafe/issues/173"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:27
+#: ..\..\user-docs\changelog.rst:27
 # 7fd4ad3ee78e48bf9da35963e961a644
 msgid "https://github.com/AIFDR/inasafe/issues/166"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:28
+#: ..\..\user-docs\changelog.rst:28
 # f2dfe3c878f04a5394085190738ab1e6
 msgid "https://github.com/AIFDR/inasafe/issues/162"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:30
+#: ..\..\user-docs\changelog.rst:30
 # d903ab3d59b645cf8f794460f4f45771
 msgid "InaSAFE APIs better defined: https://github.com/AIFDR/inasafe/issues/134"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:31
+#: ..\..\user-docs\changelog.rst:31
 # 843d2ab223654c6594b702dc5ef05d2b
 msgid "Release procedure developed: https://github.com/AIFDR/inasafe/issues/109"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:32
+#: ..\..\user-docs\changelog.rst:32
 # 483168dd98764d37b0dd1e11a9bab49f
 msgid "Added estimate of displaced people to earthquake fatality model: https://github.com/AIFDR/inasafe/commit/04f0e1d"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:33
+#: ..\..\user-docs\changelog.rst:33
 # f16ecc39468544deac6878f447055fcb
 msgid "Achieved 100% translation for Bahasa Indonesia"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:34
+#: ..\..\user-docs\changelog.rst:34
 # ae6a3f365620452f94897e35c6c5b2e0
 msgid "Made bundled test and demo data public with associated license information"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:35
+#: ..\..\user-docs\changelog.rst:35
 # f3c900a6a73c4d43a9fa415c876ad9b3
 msgid "Added AusAid and World Bank logos to dock"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:36
+#: ..\..\user-docs\changelog.rst:36
 # 076a0ded55ed4a03820e17bb1ef2ba55
 msgid "Fixed bug with flood population evacuation reporting units"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:41
+#: ..\..\user-docs\changelog.rst:41
 # 5a7cd525bcf745f9958e655a89ca24d9
 msgid "Changelog for version 0.3.0"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:42
+#: ..\..\user-docs\changelog.rst:42
 # 37e240aac7ef425ba03ddda19c14b696
 msgid "Documentation updates - extended guides for using the |project_name| dock and keyword editors."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:44
+#: ..\..\user-docs\changelog.rst:44
 # dcc5f191cedf4f3c9a54f3d9fbd828f5
 msgid "Support for remote layers in keywords editor and scenario modelling"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:45
+#: ..\..\user-docs\changelog.rst:45
 # 7ebbd09e229b4f8f9e7a69a00e91845d
 msgid "Added options dialog"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:46
+#: ..\..\user-docs\changelog.rst:46
 # 4370794d11a044e4a805d5b09831c809
 msgid "Support for using all layers in hazard and exposure combos, not just visible ones (configurable in options dialog)"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:48
+#: ..\..\user-docs\changelog.rst:48
 # bbe438fcda8c4c4e8c458443d7e93570
 msgid "Support for displaying keywords title in QGIS layer list (configurable in options dialog)"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:50
+#: ..\..\user-docs\changelog.rst:50
 # 17465508c65f443f9329eff33c7b7e83
 msgid "When selecting a hazard or exposure layer, its keywords are now displayed in the results area."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:52
+#: ..\..\user-docs\changelog.rst:52
 # 664ea03dd6794e4aaba70513c8a2913f
 msgid "Performance improvements when toggling layer visibility and adding and removing layers."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:54
+#: ..\..\user-docs\changelog.rst:54
 # 99911e352e34477aaa3ed5c3d45bd90a
 msgid "Support for QGIS 1.8 when it is released"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:55
+#: ..\..\user-docs\changelog.rst:55
 # 703181fbdda645db9ff5065cd9934c41
 msgid "Numerous other 'under the hood' bug fixes and improvements"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:56
+#: ..\..\user-docs\changelog.rst:56
 # eacbce45ba8344709c9ab46a6638fdc3
 msgid "Migrated code base from RIAB to InaSAFE and restructured the code base"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:57
+#: ..\..\user-docs\changelog.rst:57
 # e5885c5c8425489392b139ee309a6536
 msgid "Added additional tests"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:60
-#: ../../user-docs/changelog.rst:75
+#: ..\..\user-docs\changelog.rst:60
+#: ..\..\user-docs\changelog.rst:75
 # 6dba3e843c274cff8247b94d9ed55dc2
 # c0db325ffe2c4fae99614450e52f635a
 msgid "Changelog for version 0.2.1:"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:61
+#: ..\..\user-docs\changelog.rst:61
 # bf96f50400e14023b97d57a7eaeb9030
 msgid "Correct translation of 'run' in indonesian. Closes #128"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:62
+#: ..\..\user-docs\changelog.rst:62
 # 0939116b57784c9c8562a729904dd59a
 msgid "Updated so that version number is shown in dock"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:63
+#: ..\..\user-docs\changelog.rst:63
 # ea29a213fd854fcdbbcf093642ded574
 msgid "Removed generated file from polygon test"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:64
+#: ..\..\user-docs\changelog.rst:64
 # 749b2f9d3e314cbb94c62e6db1c6be94
 msgid "Removed the -dev designation from branch releases"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:65
+#: ..\..\user-docs\changelog.rst:65
 # 823512c508684e50906974fb1e600825
 msgid "Fix indent error causing noise to show in qgis plugin manager"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:66
+#: ..\..\user-docs\changelog.rst:66
 # 5424f520239d4bb78bfb8dd8d6ec9566
 msgid "Fixed typo - BNPD to BNPB"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:67
+#: ..\..\user-docs\changelog.rst:67
 # bb488b460cc443eab9b2a13de4956755
 msgid "Fixed bug where close button does not dispose of the help dialog"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:68
+#: ..\..\user-docs\changelog.rst:68
 # ca2b39bfbe7c4ea59a56acec44f2f0bd
 msgid "Fixed an issue that prevented the use of earthquake functions when using keywords with lowercase mmi. Closes #142"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:70
+#: ..\..\user-docs\changelog.rst:70
 # baccd926ffe0403198ea134c38843045
 msgid "Fix for mac clipping issues - the plugin should work on OSX now. Closes #141. Note that OSX users should upgrade to GDAL 1.9 available here: http://www.kyngchaos.com/software/qgis"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:77
+#: ..\..\user-docs\changelog.rst:77
 # d0d7043a2a65441f8db062b19a675be6
 msgid "Map printing support"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:78
+#: ..\..\user-docs\changelog.rst:78
 # e3f8cf191617484ba90ecc1c9df0b9d1
 msgid "Improved translation support and Indonesian translation updates"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:79
+#: ..\..\user-docs\changelog.rst:79
 # 2be955087f2e4b239b020fa402ecfd7a
 msgid "Rebranded from Risk in a Box to InaSAFE"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:80
+#: ..\..\user-docs\changelog.rst:80
 # 0ca9cb97aeb04c38a90c9345541aeb72
 msgid "Documentation updates and documented windows developer procedures"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:81
+#: ..\..\user-docs\changelog.rst:81
 # aeda5f419bdf434f9f7e10f26ac3db08
 msgid "Support for generating documentation and running tests under Windows"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:82
+#: ..\..\user-docs\changelog.rst:82
 # 2a7af28a34494f71908345b37a085044
 msgid "Scripts for semi-automatic packaging of a release"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:83
+#: ..\..\user-docs\changelog.rst:83
 # 68d6d05076da42a192426366ca052d1c
 msgid "Improvements to Impact calculator algorithms"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:86
+#: ..\..\user-docs\changelog.rst:86
 # ccec51883f7e48bcbc566d989acfeedf
 msgid "Changelog for version 0.1.0:"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:88
+#: ..\..\user-docs\changelog.rst:88
 # 213cd874987644a48586eeb9151cd352
 msgid "First QGIS plugin implementation of |project_name|."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:89
+#: ..\..\user-docs\changelog.rst:89
 # 3c4371ea045747b0a24ca89ac2290cf6
 msgid "Migrated calculation engine from Risiko project."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:90
+#: ..\..\user-docs\changelog.rst:90
 # 2e2edf034854419d8dc70c3c9347391c
 msgid "Implemented support for polygon hazard layers."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:91
+#: ..\..\user-docs\changelog.rst:91
 # ac1c777b11a641b084484a3a2be796a1
 msgid "Added dock widget for designing and executing a scenario model."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:92
+#: ..\..\user-docs\changelog.rst:92
 # 2d7949ebca034d66af75995d32ba4dba
 msgid "Added the keyword editor for assigning metadata to input files."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:93
+#: ..\..\user-docs\changelog.rst:93
 # 50b96109105947afa76d26783cddd096
 msgid "Added integrated context help tool."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:94
+#: ..\..\user-docs\changelog.rst:94
 # cdd35d5db8054e309f08cc5ba4a72525
 msgid "Removed django specific dependencies from the InaSAFE libs."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:95
+#: ..\..\user-docs\changelog.rst:95
 # 3c3189fda546476bb77eef258cb8f307
 msgid "removed dependency on SciPy"
 msgstr ""
 
-#: ../../user-docs/changelog.rst:96
+#: ..\..\user-docs\changelog.rst:96
 # d57f0197382e41569a56a5ab99bc2134
 msgid "Support for internationalisation."
 msgstr ""
 
-#: ../../user-docs/changelog.rst:97
+#: ..\..\user-docs\changelog.rst:97
 # d50ad41c3ec441e68a7a2b4f111eb264
 msgid "Comprehensive documentation system."
 msgstr ""
 
-#: ../../user-docs/data_types.rst:4
+#: ..\..\user-docs\data_types.rst:4
 # 62d06fd12916440584080291d2789622
 msgid "Data Types"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:6
+#: ..\..\user-docs\data_types.rst:6
 # 536199c64b094ef28333817f80fc08ba
 msgid "The impact functions essentially combine spatial data in different formats through a common interpolation library. This essentially allows values from one data set to be assigned to another independent of their types. Given two layers H and E, say, the call::"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:13
+#: ..\..\user-docs\data_types.rst:13
 # aa41d7164be04a9c8ccd975d1396f5d4
 msgid "will produce a new layer with all values from H transferred to E in a manner appropriate for the data types of H and E. Generally, existing values in E will be also be carried over to I. Conceptually, the new layer I represents the values of H interpolated to E."
 msgstr ""
 
-#: ../../user-docs/data_types.rst:18
+#: ..\..\user-docs\data_types.rst:18
 # 575699544f6149f6aa555ec26b73641a
 msgid "The following table shows allowed combinations and what interpolation means in each case."
 msgstr ""
 
-#: ../../user-docs/data_types.rst:24
+#: ..\..\user-docs\data_types.rst:24
 # 5e1cfac6a18948e3ac73cefa4b206761
 msgid "H"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:24
+#: ..\..\user-docs\data_types.rst:24
 # c90aaa0c585946d6b0e18e5ead634427
 msgid "E"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:26
-#: ../../user-docs/data_types.rst:28
+#: ..\..\user-docs\data_types.rst:26
+#: ..\..\user-docs\data_types.rst:28
 # 7f57f613cbff4e6c8433d2b356554310
 # 1fb9e340d41649d0bb6fafbffa6b740b
 msgid "Raster"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:26
-#: ../../user-docs/data_types.rst:30
+#: ..\..\user-docs\data_types.rst:26
+#: ..\..\user-docs\data_types.rst:30
 # 41573c90e3be427ea78a573b15df09bb
 # c1ad581b95b2457bba5fcf00432de504
 msgid "Polygon"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:26
-#: ../../user-docs/data_types.rst:32
+#: ..\..\user-docs\data_types.rst:26
+#: ..\..\user-docs\data_types.rst:32
 # 40d26c03403a42d381e51691574e907d
 # 7366d80b58c7452aa9686dda7c31747b
 msgid "Line"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:26
-#: ../../user-docs/data_types.rst:34
+#: ..\..\user-docs\data_types.rst:26
+#: ..\..\user-docs\data_types.rst:34
 # a21a61fdaf4247c5aaf119a7774c9c02
 # 399b3776f9b04954ad7567700cfa9eaf
 msgid "Point"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:28
+#: ..\..\user-docs\data_types.rst:28
 # 3e20923c892a42d7a0f84e2bc40fd800
 msgid "Resampled"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:28
+#: ..\..\user-docs\data_types.rst:28
 # 406e4c615e7a4d93907e0ca5007cda02
 msgid "Centroid"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:28
-#: ../../user-docs/data_types.rst:30
+#: ..\..\user-docs\data_types.rst:28
+#: ..\..\user-docs\data_types.rst:30
 # 2092cbc759364e02abcec616cfc623a3
 # 56cb26d840d147669395d291122d36da
 msgid "Belum"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:28
+#: ..\..\user-docs\data_types.rst:28
 # 2934df16d3df40f9b261c6f4b5f0849a
 msgid "Bilinear Interpolation"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:30
-#: ../../user-docs/data_types.rst:30
+#: ..\..\user-docs\data_types.rst:30
+#: ..\..\user-docs\data_types.rst:30
 # e4c6a77eccb744b7bf0e034500eacda4
 # e3ea24579cd64b29bf8e48f4f99f321d
 msgid "No"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:30
+#: ..\..\user-docs\data_types.rst:30
 # a95c8baebd1c473ba50fcf3d60cea485
 msgid "Clip and tag"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:32
-#: ../../user-docs/data_types.rst:34
+#: ..\..\user-docs\data_types.rst:32
+#: ..\..\user-docs\data_types.rst:34
 # eb30bc7c3a15410da88d969298aa2001
 # 5415eb23de7544679eb6c9fe8c842fd3
 msgid "Not applicable"
 msgstr ""
 
-#: ../../user-docs/dock.rst:3
+#: ..\..\user-docs\dock.rst:3
 # 9c68309799c14a228633791f99a68202
 msgid "Using the |project_name| Plugin"
 msgstr ""
 
-#: ../../user-docs/dock.rst:5
+#: ..\..\user-docs\dock.rst:5
 # 1c564be5a7654bb78a2799d3761702a8
 msgid "This document describes the useage of the |project_name| 'dock panel' - which is the main interface for running risk scenarios within the Quantum GIS environment."
 msgstr ""
 
-#: ../../user-docs/dock.rst:9
+#: ..\..\user-docs\dock.rst:9
 # 8f64cea1e620439dbcf5fcd2636cfa4e
 msgid "In order to use the |project_name| tool effectively, you should probably also read the :doc:`keywords` and :doc:`impact_functions` documentation before you get started."
 msgstr ""
 
-#: ../../user-docs/dock.rst:13
+#: ..\..\user-docs\dock.rst:13
 # 934833c1e4474827834844488feb7d21
 msgid "The |project_name| Dock panel is the main way to interact with the tools that are provided in |project_name|. After you have installed the |project_name| plugin, the dock panel will automatically load in QGIS, appearing on the left hand side of the screen."
 msgstr ""
 
-#: ../../user-docs/dock.rst:21
+#: ..\..\user-docs\dock.rst:21
 # 0ac6f9e84bb341ff8d7c97f13fef78ee
 msgid "You can drag and drop the dock panel to reposition it in the user interface. For example, dragging the panel towards the right margin of the QGIS application will dock it to the right side of the screen."
 msgstr ""
 
-#: ../../user-docs/dock.rst:28
+#: ..\..\user-docs\dock.rst:28
 # 3118cd8c3e5645248a870ddc5ba91839
 msgid "There are 3 main areas to the panel:"
 msgstr ""
 
-#: ../../user-docs/dock.rst:30
+#: ..\..\user-docs\dock.rst:30
 # 29752e0b13a64b80a9a7dc7c2ec7ddf9
 msgid "the :guilabel:`Questions` area"
 msgstr ""
 
-#: ../../user-docs/dock.rst:31
+#: ..\..\user-docs\dock.rst:31
 # 45885b67ad34441a888869834cbe6a24
 msgid "the :guilabel:`Results` area"
 msgstr ""
 
-#: ../../user-docs/dock.rst:32
+#: ..\..\user-docs\dock.rst:32
 # b2528e2c4e244906ac278f8bf1cd8ea5
 msgid "the buttons area"
 msgstr ""
 
-#: ../../user-docs/dock.rst:34
+#: ..\..\user-docs\dock.rst:34
 # dfea09064b0f48af9f61a57193019638
 msgid "At any time you can obtain help in |project_name| by clicking on the :guilabel:`help` buttons provided on each dock and dialog."
 msgstr ""
 
-#: ../../user-docs/dock.rst:39
+#: ..\..\user-docs\dock.rst:39
 # ed3572d082d5439fbf93cd155d914ee9
 msgid "The Questions Area"
 msgstr ""
 
-#: ../../user-docs/dock.rst:41
+#: ..\..\user-docs\dock.rst:41
 # f5242899a01748acb2f1e9544485b820
 msgid "The intention of InaSAFE is to make it really simple and easy to perform your impact analysis. The question area provides a simple way for you to formulate what it is you want to find out? All questions are formulated in the form:"
 msgstr ""
 
-#: ../../user-docs/dock.rst:46
+#: ..\..\user-docs\dock.rst:46
 # 1351b6e791694b4589f270cedb3e296b
 msgid "If [**hazard**] how many [**exposure**] might [**impact**]."
 msgstr ""
 
-#: ../../user-docs/dock.rst:48
+#: ..\..\user-docs\dock.rst:48
 # 4f8a2259105647fda048cec55dfeb61e
 msgid "For example:"
 msgstr ""
 
-#: ../../user-docs/dock.rst:50
+#: ..\..\user-docs\dock.rst:50
 # 08638520ed1740d195091767c24b7557
 msgid "If **there is a flood** how many **schools** might **be closed**."
 msgstr ""
 
-#: ../../user-docs/dock.rst:52
+#: ..\..\user-docs\dock.rst:52
 # d8aaf1077ebe49238eddcf3ae0da4887
 msgid "In order to answer such questions, the |project_name| developers have built a number of **impact functions** that cover scenarios such as flood, tsunami, volcanic ash fall, earthquake and so on. You can read our impact function documentation to find out more information about the various :doc:`impact_functions` implemented."
 msgstr ""
 
-#: ../../user-docs/dock.rst:58
+#: ..\..\user-docs\dock.rst:58
 # eaf3549eaad94695bac0b0030cdf894f
 msgid "The formulation of these questions if carried out by loading layers into QGIS that represent either **hazard** or **exposure** scenarious."
 msgstr ""
 
-#: ../../user-docs/dock.rst:61
+#: ..\..\user-docs\dock.rst:61
 # e025478105534be9ae31ab45f8e4de87
 msgid "A **hazard** (:guilabel:`In the event of`) may be represented as, for example, a raster layer in QGIS where each pixel in the raster represents the current flood depth following an inundation event."
 msgstr ""
 
-#: ../../user-docs/dock.rst:64
+#: ..\..\user-docs\dock.rst:64
 # 913ec36ff10c487cb43b7477d31c752e
 msgid "An **exposure** (:guilabel:`How many`) layer could be represented, for example, as vector polygon data representing building outlines, or a raster outline where each pixel represents the number of people resident in that cell."
 msgstr ""
 
-#: ../../user-docs/dock.rst:69
+#: ..\..\user-docs\dock.rst:69
 # 9ffb1b8b0e044b7ab51fea0f8ebf76b9
 msgid "The **impact function** (:guilabel:`Might`) will combine these two input layers in a mathematical model in order to postulate what the impacts of the hazard will be on the exposure infrastructure or people."
 msgstr ""
 
-#: ../../user-docs/dock.rst:73
+#: ..\..\user-docs\dock.rst:73
 # 3cdda8e3958145d9a5f87d4971d12a48
 msgid "By selecting a combination from the :guilabel:`In the event of` and :guilabel:`How many` combo boxes, an appropriate set of impact functions will be listed in the :guilabel:`Might` combo box."
 msgstr ""
 
-#: ../../user-docs/dock.rst:77
+#: ..\..\user-docs\dock.rst:77
 # 758cf679d51046c4bdef740ca7332d68
 msgid "You may be wondering how the |project_name| plugin determines whether a layer should be listed in the :guilabel:`In the event of` or :guilabel:`How many` combo boxes? The plugin relies on simple keyword metadata to be associated with each layer. The keyword system is described in detail in :doc:`keywords`. Each layer that has a keyword allocating it's **category** to **hazard** will be listed in the :guilabel:`In the event of` combo. Similarly, a **category** of **exposure** in the keywords for a layer will result in it being listed under the :guilabel:`How many` combo."
 msgstr ""
 
-#: ../../user-docs/dock.rst:86
+#: ..\..\user-docs\dock.rst:86
 # c3403d4b6243418c86cbb218c8c8a165
 msgid "|project_name| uses the combination of **category**, **subcategory**, **units** and **datatype** keywords to determine which **impact functions** will be listed in the :guilabel:`Might` combo."
 msgstr ""
 
-#: ../../user-docs/dock.rst:92
+#: ..\..\user-docs\dock.rst:92
 # 263ec448fbf24cd2bdbd4edfc23bee1f
 msgid "The results area"
 msgstr ""
 
-#: ../../user-docs/dock.rst:94
+#: ..\..\user-docs\dock.rst:94
 # a9a7a750e593440eae22a0320deb36af
 msgid "The :guilabel:`Results` area is used to display various useful feedback items to the user. Once an impact scenario has been run (see next section below), a summary table will be shown."
 msgstr ""
 
-#: ../../user-docs/dock.rst:101
+#: ..\..\user-docs\dock.rst:101
 # 8d7d6964bdc1444c8fb647de8803a366
 msgid "If you select an **impact layer** (i.e. a layer that was produced using an |project_name| impact function), in the QGIS layers list, this summary will also be displayed in the results area."
 msgstr ""
 
-#: ../../user-docs/dock.rst:105
+#: ..\..\user-docs\dock.rst:105
 # c7430b485cd9475e881806ba60358743
 msgid "When you select a **hazard** or **exposure** layer in the QGIS layers list, the keywords for that layer will be shown in the :guilabel:`Results` area, making it easy to understand what metadata exists for that layer."
 msgstr ""
 
-#: ../../user-docs/dock.rst:112
+#: ..\..\user-docs\dock.rst:112
 # be81b2b28ba0491498484070f214b307
 msgid "The :guilabel:`Results` area is also used to display status information. For example, when a suitable combination of **hazard** (:guilabel:`In the event of`), **exposure** (:guilabel:`How many`) and **impact function** (:guilabel:`In the event of`) are selected, the results area will be updated to indicate that you can proceed to run the impact scenario calculation."
 msgstr ""
 
-#: ../../user-docs/dock.rst:122
+#: ..\..\user-docs\dock.rst:122
 # a96daa75fd91454da272e89ca1f1e73d
 msgid "While a scenario is being computed, the :guilabel:`Results` area displays the current progress of the analysis."
 msgstr ""
 
-#: ../../user-docs/dock.rst:128
+#: ..\..\user-docs\dock.rst:128
 # 16341f312f2146349a5e6491d44211c8
 msgid "Finally, the :guilabel:`Results` area is also used to display any error messages so that the user is informed as to what went wrong and why."
 msgstr ""
 
-#: ../../user-docs/dock.rst:134
+#: ..\..\user-docs\dock.rst:134
 # 69d77fd9b96f470d89f7b76e1cfece57
 msgid "At the bottom of error display you may see button like this: .. image:: ../../toggle-traceback.png If you click on this button, it will display a box which will contain useful diagnostic information which can be submitted as part of a bug report if you think the error was incorrect."
 msgstr ""
 
-#: ../../user-docs/dock.rst:141
+#: ..\..\user-docs\dock.rst:141
 # 789be7872d974b168f4cf7f6351bd4b9
 msgid "The buttons area"
 msgstr ""
 
-#: ../../user-docs/dock.rst:143
+#: ..\..\user-docs\dock.rst:143
 # 91fb5b5dca7841eda7ca1d68edc72fc4
 msgid "The buttons area contains three buttons:"
 msgstr ""
 
-#: ../../user-docs/dock.rst:145
+#: ..\..\user-docs\dock.rst:145
 # 1dd1ac23845d4b22b63ba5fa31ae1609
 msgid ":guilabel:`Help` - click on this if you need context help, such as the document you are reading right now!"
 msgstr ""
 
-#: ../../user-docs/dock.rst:147
+#: ..\..\user-docs\dock.rst:147
 # 384d0b9725ff4659b82f4963a0b82abb
 msgid ":guilabel:`Print...` - click on this if you wish to create a pdf of your impact scenarion project. An **impact layer** must be active before the :guilabel:`Print...` button will be enabled."
 msgstr ""
 
-#: ../../user-docs/dock.rst:150
+#: ..\..\user-docs\dock.rst:150
 # 6aba59456c734ccaa8bfb65f40525c69
 msgid ":guilabel:`Run` - if the combination of options in the :guilabel:`Questions` area's combo boxes will allow you to run a scenario, this button is enabled."
 msgstr ""
 
-#: ../../user-docs/dock.rst:154
+#: ..\..\user-docs\dock.rst:154
 # c52c370f5bdc474c873ad520a0b63644
 msgid "Data conversions when running a scenario"
 msgstr ""
 
-#: ../../user-docs/dock.rst:156
+#: ..\..\user-docs\dock.rst:156
 # 58099fc9518b44dd85262209f48b11ee
 msgid "When running a scenario, the data being used needs to be processed into a state where it is acceptible for use by the impact function. In particular it should be noted that:"
 msgstr ""
 
-#: ../../user-docs/dock.rst:160
+#: ..\..\user-docs\dock.rst:160
 # 513aaa77f1ba4a979d7435e552af9aab
 msgid "Remote datasets will be copied locally before processing."
 msgstr ""
 
-#: ../../user-docs/dock.rst:161
+#: ..\..\user-docs\dock.rst:161
 # 2b94befcdb2244e1b3af2cd9ac6ec293
 msgid "All datasets will be clipped to the intersection of the **hazard** layer, the **exposure** layer and the current view extents."
 msgstr ""
 
-#: ../../user-docs/dock.rst:163
+#: ..\..\user-docs\dock.rst:163
 # 3d5220826eda4735b704e166647f3331
 msgid "All clipped datasets will be converted (reprojected) to Geographic (EPSG:4326) coordinate reference system before analysis."
 msgstr ""
 
-#: ../../user-docs/faq.rst:2
+#: ..\..\user-docs\faq.rst:2
 # d65ba32a45554987afc0369c7682e328
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: ../../user-docs/faq.rst:7
+#: ..\..\user-docs\faq.rst:7
 # 33b8e4cea1854c06aed710f89c7bcfd1
 msgid "I found a bug, how should I report it?"
 msgstr ""
 
-#: ../../user-docs/faq.rst:9
+#: ..\..\user-docs\faq.rst:9
 # 8515a66c7afd481db8e247cb0c1929c0
 msgid "We manage the project issues using a GitHub issue tracker. The `InaSAFE <https://github.com/AIFDR/inasafe/issues?direction=desc&sort=created&state=open>`_ issue tracker is open to everyone, though you will first need to register a (free) account on GitHub to use it. You can find the GitHub self-registration page `here <https://github.com/signup/free>`_."
 msgstr ""
 
-#: ../../user-docs/faq.rst:16
+#: ..\..\user-docs\faq.rst:16
 # f1951f80c7f84d7aaf737d4dfae02987
 msgid "Why can't I find the plugin in the QGIS repositories?"
 msgstr ""
 
-#: ../../user-docs/faq.rst:18
+#: ..\..\user-docs\faq.rst:18
 # 93ac743340f641a28c8bba72c0024bcb
 msgid "We do plan to publish the plugin at `plugins.qgis.org <http://plugins.qgis.org/>`_ so that it can be effortlessly installed from within QGIS, we are just no ready to do that yet. In the mean time please use the manual installation procedure to install InaSAFE in QGIS."
 msgstr ""
 
-#: ../../user-docs/faq.rst:24
+#: ..\..\user-docs\faq.rst:24
 # 50e2ca6189c44058bebf00e382bfe35b
 msgid "Do I need to pay to use |project_name|?"
 msgstr ""
 
-#: ../../user-docs/faq.rst:26
+#: ..\..\user-docs\faq.rst:26
 # f87d332c30a442ce92a1e2d95fbacccc
 msgid "No, the software is completely Free and Open Source."
 msgstr ""
 
-#: ../../user-docs/faq.rst:29
+#: ..\..\user-docs\faq.rst:29
 # 86b5e2dde69d4004a0c518aeb49419e5
 msgid "What license is |project_name| published under?"
 msgstr ""
 
-#: ../../user-docs/faq.rst:31
+#: ..\..\user-docs\faq.rst:31
 # b40f5161370e48bf94239aaa291e17a6
 msgid "|project_name| is published under the GPL version 2 license, the full text of which is available at `www.gnu.org/licenses/gpl-2.0.txt <http://www.gnu.org/licenses/gpl-2.0.txt>`_."
 msgstr ""
 
-#: ../../user-docs/faq.rst:36
+#: ..\..\user-docs\faq.rst:36
 # 59ac0304c76a4aed972f6aed8696b749
 msgid "Under the terms of the license of you may freely copy, share and modify the software, as long as you make it available under the same license."
 msgstr ""
 
-#: ../../user-docs/faq.rst:40
+#: ..\..\user-docs\faq.rst:40
 # 0b6230eef764414799bef6b032c22d48
 msgid "How is the project funded?"
 msgstr ""
 
-#: ../../user-docs/faq.rst:42
+#: ..\..\user-docs\faq.rst:42
 # 60914db879064d63a8c21e9992d35aa8
 msgid "The project is being developed 'for the good of humanity' and has been jointly developed by `BNPB <http://www.bnpb.go.id/>`_, `AusAid <http://www.ausaid.gov.au/>`_ & `the World Bank <http://www.worldbank.org/>`_."
 msgstr ""
 
-#: ../../user-docs/faq.rst:48
+#: ..\..\user-docs\faq.rst:48
 # 50879009bd7e4fc7b1657ab7dd312a94
 msgid "Could we request a new feature?"
 msgstr ""
 
-#: ../../user-docs/faq.rst:50
+#: ..\..\user-docs\faq.rst:50
 # 56cb9eab285b426e820ec9cc0af387e9
 msgid "If you have a feature request, please use the `issue tracker <https://github.com/AIFDR/inasafe/issues?direction=desc&sort=created&state=open>`_ to let us know about it, using the same procedure as for bug reporting."
 msgstr ""
 
-#: ../../user-docs/faq.rst:56
+#: ..\..\user-docs\faq.rst:56
 # 18c09fdf12bf4afc8e28cc48608da895
 msgid "How do I rename a shape file and all the helper files?"
 msgstr ""
 
-#: ../../user-docs/faq.rst:58
+#: ..\..\user-docs\faq.rst:58
 # e3f44f613b0240b49ebc1caaf6d97fa9
 msgid "Use the rename command. rename [ -v ] [ -n ] [ -f ] perlexpr [ files ]. For example::"
 msgstr ""
 
-#: ../../user-docs/faq.rst:64
+#: ..\..\user-docs\faq.rst:64
 # 842769938a734124aa7cc54dfcb71b93
 msgid "How do I reproject a spatial data file to WGS84 geographic coordinates"
 msgstr ""
 
-#: ../../user-docs/faq.rst:66
+#: ..\..\user-docs\faq.rst:66
 # 42a09d38901347aaa8574580c46e9193
 msgid "For raster data, use gdalwarp, for example::"
 msgstr ""
 
-#: ../../user-docs/faq.rst:70
+#: ..\..\user-docs\faq.rst:70
 # 6c69770993924716b942ff65274ee7dd
 msgid "For vector data use ogr2ogr. For example from TM-3 zone 48.2::"
 msgstr ""
 
-#: ../../user-docs/faq.rst:75
+#: ..\..\user-docs\faq.rst:75
 # a38d5674adcf4716b045cef09e3d26df
 msgid "How do I get Open Street Map building data into |project_name|?"
 msgstr ""
 
-#: ../../user-docs/faq.rst:77
+#: ..\..\user-docs\faq.rst:77
 # f1cd146151194b1ca136c74a7746ebf4
 msgid "For Indonesia, you can download latest collections at `data.kompetisiosm.org <http://data.kompetisiosm.org>`_. or you can add our Open Street Map building PostGIS mirror to InaSAFE:"
 msgstr ""
 
-#: ../../user-docs/faq.rst:81
+#: ..\..\user-docs\faq.rst:81
 # 900f9c7123e34864b66964ca515f2eb2
 msgid "Add PostGIS layer with host=203.77.224.77, database=osm, username=aifdr, port 5432, SSL mode=disable"
 msgstr ""
 
-#: ../../user-docs/faq.rst:83
+#: ..\..\user-docs\faq.rst:83
 # 74c5d468662946cba666a7e257a00462
 msgid "Select view named vw_planet_osm_polygon"
 msgstr ""
 
-#: ../../user-docs/faq.rst:85
+#: ..\..\user-docs\faq.rst:85
 # 2246744d330748e79a5049a6ad043f07
 msgid "# * Build query: upper(geometrytype(\"way\")) IN ('POLYGON','MULTIPOLYGON') AND BUILDING != ''"
 msgstr ""
 
-#: ../../user-docs/faq.rst:88
+#: ..\..\user-docs\faq.rst:88
 # 276c4629ad9c4f56b59f3ae7c4fecbbc
 msgid "How do I take screen capture e.g. for use in a presentation?"
 msgstr ""
 
-#: ../../user-docs/faq.rst:90
+#: ..\..\user-docs\faq.rst:90
 # 814a1719222b4a44ba88aa7559d69429
 msgid "On Ubuntu, get the packages gtk-recordmydesktop and mencoder Record using recordmydesktop (start and stop icon in the top bar) Convert to other formats using mencoder, e.g::"
 msgstr ""
 
-#: ../../user-docs/faq.rst:97
+#: ..\..\user-docs\faq.rst:97
 # f86e058581ae401597f20274f47b7fbb
 msgid "or::"
 msgstr ""
 
-#: ../../user-docs/impact_functions.rst:4
+#: ..\..\user-docs\impact_functions.rst:4
 # 8867ed6ff293413197afa495f2efcf03
 msgid "Impact Functions"
 msgstr ""
 
-#: ../../user-docs/impact_functions.rst:6
+#: ..\..\user-docs\impact_functions.rst:6
 # bdb219c5265d4a5780f4a487014e1d18
 msgid "This document explains the purpose of impact functions and lists the different available impact function and the requirements each has to be used effectively."
 msgstr ""
 
-#: ../../user-docs/index.rst:2
+#: ..\..\user-docs\index.rst:2
 # 8e645883cda84030af85a1f68a82ac65
 msgid "|project_name| user documentation"
 msgstr ""
 
-#: ../../user-docs/index.rst:4
+#: ..\..\user-docs\index.rst:4
 # 6672778d8910421e8cfa75f5f198a457
 msgid "This section of the documention describes how to use the |project_name| system."
 msgstr ""
 
-#: ../../user-docs/install.rst:3
+#: ..\..\user-docs\install.rst:3
 # 716facc438ef4eaca9a846e6bb847c94
 msgid "Installing InaSAFE"
 msgstr ""
 
-#: ../../user-docs/install.rst:6
+#: ..\..\user-docs\install.rst:6
 # 313f3dcbf14f4f4bb52ebd87f0a25262
 msgid "|project_name| is a plugin for `Quantum GIS <http://qgis.org>`_ (QGIS), so QGIS must be installed first."
 msgstr ""
 
-#: ../../user-docs/install.rst:10
+#: ..\..\user-docs\install.rst:10
 # 9c7ae37864814d8187e203fa791f47f2
 msgid "Via QGIS Python Plugin Repository"
 msgstr ""
 
-#: ../../user-docs/install.rst:12
+#: ..\..\user-docs\install.rst:12
 # 10ae93a299454ae7800fb726feb47288
 msgid "To install the |project_name|, use the plugin manager in QGIS::"
 msgstr ""
 
-#: ../../user-docs/install.rst:16
+#: ..\..\user-docs\install.rst:16
 # c13e4ef4f60442d59803f50c1e7c7797
 msgid "Then search for '|project_name|', select it and click the install button. The plugin will now be added to your plugins menu."
 msgstr ""
 
-#: ../../user-docs/install.rst:20
+#: ..\..\user-docs\install.rst:20
 # 091a29a2eb504c718587241323f28be4
 msgid "From Zip Archive"
 msgstr ""
 
-#: ../../user-docs/install.rst:22
+#: ..\..\user-docs\install.rst:22
 # 6ab87bac3cff4789b54bf3731be8e57e
 msgid "This installation method is not recommended unless you have no internet access or wish to use a specific version of InaSAFE. Please install using the plugin repository described above rather."
 msgstr ""
 
-#: ../../user-docs/install.rst:26
+#: ..\..\user-docs\install.rst:26
 # d8dffc39b4e7483a87b511b386f20ba6
 msgid "We make regular releases of the InaSAFE plugin and they are available at https://github.com/AIFDR/inasafe/downloads. Simply choose the most recent (i.e. the one with the largest version number) and save it to your hard disk."
 msgstr ""
 
-#: ../../user-docs/install.rst:30
+#: ..\..\user-docs\install.rst:30
 # 1880b6542d8e4d47a2ad6fb465ecfe27
 msgid "Now extract the zip file into the QGIS plugins directory. Under windows the plugins directory is under :file:`c:\\\\Users\\\\<your username>\\\\.qgis\\\\python\\\\plugins`."
 msgstr ""
 
-#: ../../user-docs/install.rst:34
+#: ..\..\user-docs\install.rst:34
 # 6672e80fdd84417ea0d3e395716bcf69
 msgid "After extracting the plugin, it should be available as :file:`c:\\\\Users\\\\<your username>\\\\.qgis\\\\python\\\\plugins\\\\inasafe\\\\`."
 msgstr ""
 
-#: ../../user-docs/install.rst:37
+#: ..\..\user-docs\install.rst:37
 # c9fbbeee5eee456ebb50a7a34674ee35
 msgid "Mac and Linux users need to follow the same procedure but instead the plugin directory will be under your $HOME directory."
 msgstr ""
 
-#: ../../user-docs/install.rst:40
+#: ..\..\user-docs\install.rst:40
 # 81b2bc6a0f594cb2949b9f75913825fb
 msgid "Once the plugin is extracted, start QGIS and enable it from the plugin manager. To do this open the plugin manager (:menuselection:`Plugins --> Manage plugins...`) and type :samp:`insafe` into the filter box. You should see the InaSAFE plugin appear in the list. Now tick the checkbox next to it to enable the plugin."
 msgstr ""
 
-#: ../../user-docs/install.rst:51
+#: ..\..\user-docs\install.rst:51
 # 4672d883001243c5b27cb010f6f15b7f
 msgid "System Requirements"
 msgstr ""
 
-#: ../../user-docs/install.rst:53
+#: ..\..\user-docs\install.rst:53
 # 87b4acd4952e4e069a05f7d1d38ba9cb
 msgid "A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X"
 msgstr ""
 
-#: ../../user-docs/install.rst:54
+#: ..\..\user-docs\install.rst:54
 # ee6b01b678154df28d9b771c56b37490
 msgid "The Open Source Geographic Information System QGIS (http://www.qgis.org). InaSAFE requires QGIS version 1.7 or newer."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:4
+#: ..\..\user-docs\keywords.rst:4
 # 39c5e15148d842009d7c6a0635c02bab
 msgid "Keywords System"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:6
+#: ..\..\user-docs\keywords.rst:6
 # beb53bb0dd394c04bb7048421433ee48
 msgid "This document describes the purpose and usage of the |project_name| *keywords* system."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:10
+#: ..\..\user-docs\keywords.rst:10
 # 5e350097594d49eba7fbb283da44e19d
 msgid "Purpose"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:12
+#: ..\..\user-docs\keywords.rst:12
 # 7595bbdf5abc4895994e9cf2caa19ba1
 msgid "The keywords system is used by the :doc:`impact_functions` to determine the nature of the input layers that have been passed to them."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:15
+#: ..\..\user-docs\keywords.rst:15
 # 76f02b36398e45789fd847856ceb455c
 msgid "Each input GIS dataset used by |project_name| needs to have an accompanying keywords file. The purpose of the keywords file is to provide additional metadata needed by the impact functions. For example, the keywords file will indicate whether a given dataset should be treated as a *hazard* or an *impact* layer. It is also used to indicate the context of the layer (e.g. \"it's a *flood* layer, it's an *earthquake* layer)."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:22
+#: ..\..\user-docs\keywords.rst:22
 # 489fa5bddc424eb4baaf4fb154558068
 msgid "By convention and expectation, the keywords file should be named with the same base name of the GIS datasource it accompanies. For example a flood dataset saved as::"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:28
+#: ..\..\user-docs\keywords.rst:28
 # 010b002ee4e8453abfebb168ba62c98d
 msgid "Would need to have an accompanying keywords file saved as::"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:32
+#: ..\..\user-docs\keywords.rst:32
 # 0c2b6e2fbf2e4015a21fea38a38bd702
 msgid "We recommend to **avoid using spaces** in your file names and file paths!"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:35
+#: ..\..\user-docs\keywords.rst:35
 # 5d2eb76df9dc44189d3055b0c5e69141
 msgid "The |project_name| QGIS plugin provides an editor for these keywords. The purpose of this document is to describe the keywords editor and to provide guidelines as to the use of keywords."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:39
+#: ..\..\user-docs\keywords.rst:39
 # 66b69ae9cf864af68e73127925025fa6
 msgid "Currently keywords are not validated by the library. This means if you for example misspell a keyword, use the wrong letter case (e.g. upper case instead of lower case) or provide the wrong keyword for the context (e.g. provide a subcategory of flood to an exposure category), the system will not be able to determine what to do with the file. For that reason you should follow the guidelines below carefully to ensure you have entered your keywords correctly."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:49
+#: ..\..\user-docs\keywords.rst:49
 # 386c05376e95462fb1b9e6f2fa2fa779
 msgid "Guidelines"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:51
+#: ..\..\user-docs\keywords.rst:51
 # 39f57cc0ffe54e2ea48983bd6fbafb66
 msgid "In this section we lay out the guidelines for keyword usage."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:54
+#: ..\..\user-docs\keywords.rst:54
 # f2c274ae2398496fae2d345fba71bbb2
 msgid "Category"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:56
+#: ..\..\user-docs\keywords.rst:56
 # 23d3b201f2784f59a677b8d3766712eb
 msgid "Every dataset should have a category assigned to it. Category should be written in lower case."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:62
-#: ../../user-docs/keywords.rst:82
-#: ../../user-docs/keywords.rst:96
-#: ../../user-docs/keywords.rst:130
-#: ../../user-docs/keywords.rst:150
-#: ../../user-docs/keywords.rst:173
+#: ..\..\user-docs\keywords.rst:62
+#: ..\..\user-docs\keywords.rst:82
+#: ..\..\user-docs\keywords.rst:96
+#: ..\..\user-docs\keywords.rst:130
+#: ..\..\user-docs\keywords.rst:150
+#: ..\..\user-docs\keywords.rst:173
 # b4e01b494b7e4b0891c08be72c5c2ab8
 # 8552eabf79e54620b3d66c4d3c88734d
 # 999fab3bef9b4d588b34a853a1567b09
@@ -952,12 +952,12 @@ msgstr ""
 msgid "Key"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:62
-#: ../../user-docs/keywords.rst:82
-#: ../../user-docs/keywords.rst:96
-#: ../../user-docs/keywords.rst:130
-#: ../../user-docs/keywords.rst:150
-#: ../../user-docs/keywords.rst:173
+#: ..\..\user-docs\keywords.rst:62
+#: ..\..\user-docs\keywords.rst:82
+#: ..\..\user-docs\keywords.rst:96
+#: ..\..\user-docs\keywords.rst:130
+#: ..\..\user-docs\keywords.rst:150
+#: ..\..\user-docs\keywords.rst:173
 # fd9efdca24ac4b96a1354770d105a949
 # 959cf8c18d0d41d1b31188037ea70df1
 # 80e0a62343074bc2ac533e27f123b094
@@ -967,22 +967,22 @@ msgstr ""
 msgid "Allowed Values"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:64
-#: ../../user-docs/keywords.rst:65
+#: ..\..\user-docs\keywords.rst:64
+#: ..\..\user-docs\keywords.rst:65
 # c408b076f9db4353bb11a34667d1bc5d
 # a1ede12fd2524ef889f233b0353589bb
 msgid "category"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:64
+#: ..\..\user-docs\keywords.rst:64
 # 31d6f38aeb7a46c5adfee732148ae3f1
 msgid "hazard"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:65
-#: ../../user-docs/keywords.rst:98
-#: ../../user-docs/keywords.rst:99
-#: ../../user-docs/keywords.rst:100
+#: ..\..\user-docs\keywords.rst:65
+#: ..\..\user-docs\keywords.rst:98
+#: ..\..\user-docs\keywords.rst:99
+#: ..\..\user-docs\keywords.rst:100
 # bd725adf93be4f00941acb260170253e
 # ee884a33e82341b78a53bcd80f1e2e0e
 # d8e490d9fb3a400c88b6fcbd6c844d9d
@@ -990,77 +990,77 @@ msgstr ""
 msgid "exposure"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:68
-#: ../../user-docs/keywords.rst:103
+#: ..\..\user-docs\keywords.rst:68
+#: ..\..\user-docs\keywords.rst:103
 # 8adee7aa6132463ebaa7c73fbd84f065
 # f826b918cac14a0094e2857a0777ed40
 msgid "Example keywords file entry::"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:73
-#: ../../user-docs/keywords.rst:173
+#: ..\..\user-docs\keywords.rst:73
+#: ..\..\user-docs\keywords.rst:173
 # 0ad7bc310e0143b49bee26932c45bc3b
 # bf2716696f304b0f82362fc7d41460f8
 msgid "Subcategory"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:75
+#: ..\..\user-docs\keywords.rst:75
 # def5c96dd4f147e084a5012db9ae0f9d
 msgid "The selection of a subcategory value is dependent on the category:"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:77
+#: ..\..\user-docs\keywords.rst:77
 # aed8c5e561484c2395155a9397f50a11
 msgid "Valid subcategories for category 'hazard':"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:84
-#: ../../user-docs/keywords.rst:85
-#: ../../user-docs/keywords.rst:86
+#: ..\..\user-docs\keywords.rst:84
+#: ..\..\user-docs\keywords.rst:85
+#: ..\..\user-docs\keywords.rst:86
 # 3d82169085fa48f9837c208a6b394d64
 # f050da8b51e04ee89bf451d9444dbba6
 # 7105a4f456744564be1a577508cce551
 msgid "subcategory"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:84
+#: ..\..\user-docs\keywords.rst:84
 # 7ae8b7a84e5e4ac89b6a68119c95a45f
 msgid "tsunami"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:85
+#: ..\..\user-docs\keywords.rst:85
 # 8e94405cf96e4e0fa2b18c7b6bb603ef
 msgid "flood"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:86
+#: ..\..\user-docs\keywords.rst:86
 # 2527bf4e294c47e88677c062cf1bf231
 msgid "tephra"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:89
+#: ..\..\user-docs\keywords.rst:89
 # 1680ed778c754697b9731d0a7ed84987
 msgid "Where tephra is volcanic ashfall."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:91
+#: ..\..\user-docs\keywords.rst:91
 # e6bced7ca318486293a509b553b69752
 msgid "Valid subcategories for category 'exposure':"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:98
-#: ../../user-docs/keywords.rst:175
-#: ../../user-docs/keywords.rst:176
+#: ..\..\user-docs\keywords.rst:98
+#: ..\..\user-docs\keywords.rst:175
+#: ..\..\user-docs\keywords.rst:176
 # 9b579b6a18c64d2a868d8cc4df1b54ef
 # 3b1d82a7c9444a038338b56d693e48e2
 # 2772653fcb194fcea8beba59ed2673e9
 msgid "population"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:99
-#: ../../user-docs/keywords.rst:177
-#: ../../user-docs/keywords.rst:178
-#: ../../user-docs/keywords.rst:179
+#: ..\..\user-docs\keywords.rst:99
+#: ..\..\user-docs\keywords.rst:177
+#: ..\..\user-docs\keywords.rst:178
+#: ..\..\user-docs\keywords.rst:179
 # 827153f6f6e148d59264ee830a29f8df
 # df385d75df3e4b5aa0d8e8a9db858cb2
 # db11560c1a714586a331954fedffa273
@@ -1068,42 +1068,42 @@ msgstr ""
 msgid "building"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:100
-#: ../../user-docs/keywords.rst:180
+#: ..\..\user-docs\keywords.rst:100
+#: ..\..\user-docs\keywords.rst:180
 # 5e490862a4fa47c191997d750a0dbc2b
 # 46300e848f424c17a961891e3c5ef91f
 msgid "roads"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:109
+#: ..\..\user-docs\keywords.rst:109
 # 81fa0ec5567b49dd8c160ea01a19771e
 msgid "Units"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:111
+#: ..\..\user-docs\keywords.rst:111
 # c45ac3d6f272462d8af1d092e3bbe5f4
 msgid "The units keyword is only valid in the context of 'hazard' layers, and is used to indicate the metric or imperial units represented by each data entity (a grid cell or a vector feature) in the hazard layer. Example keywords file entry:"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:116
+#: ..\..\user-docs\keywords.rst:116
 # ccbc2ffee3da45f7966969093f3ae27d
 msgid "category: hazard subcategory: flood units: m"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:120
+#: ..\..\user-docs\keywords.rst:120
 # c58b2ae6d3b34470935a31b4eafe9e87
 msgid "In the above case there is a soft constraint to use a value for units of m, feet or wet/dry as defined by the table below because the subcategory is 'flood' . The following are the allowed units which are dependent on the subcategory defined."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:125
+#: ..\..\user-docs\keywords.rst:125
 # 2ddc6b1443554e5385f8844d296b5002
 msgid "Valid subcategories for subcategory 'tsunami' or subcategory 'flood':"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:132
-#: ../../user-docs/keywords.rst:133
-#: ../../user-docs/keywords.rst:134
-#: ../../user-docs/keywords.rst:152
+#: ..\..\user-docs\keywords.rst:132
+#: ..\..\user-docs\keywords.rst:133
+#: ..\..\user-docs\keywords.rst:134
+#: ..\..\user-docs\keywords.rst:152
 # 3d4cbebb6f7f483984b594af54dffd34
 # d28431774b1e45d3ad3ba2b245afbc6c
 # f0b2fa489d4f432693c371688a3e2246
@@ -1111,72 +1111,72 @@ msgstr ""
 msgid "units"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:132
+#: ..\..\user-docs\keywords.rst:132
 # 581d98ec36cf4abea6f990376f85a285
 msgid "m"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:133
+#: ..\..\user-docs\keywords.rst:133
 # 718c38d265e14506b8f5f2ef63a42f9b
 msgid "wet/dry"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:134
+#: ..\..\user-docs\keywords.rst:134
 # 296f2d9d9e9d48aa8b19b583665b8cba
 msgid "feet"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:137
+#: ..\..\user-docs\keywords.rst:137
 # 15d5b73fa2d64125a0ed5f10d295993b
 msgid "In the case where the units are m (meters) or feet, the input dataset should be a raster layer where each cell in the raster represents a depth in the units specified."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:141
+#: ..\..\user-docs\keywords.rst:141
 # 6c763e133f6e4fcb97067e13aaf87ffd
 msgid "In the case of wet/dry, the input dataset needs to be a vector polygon layer. Any area that is inside a polygon is considered 'wet' and any area outside of a polygon is considered to be 'dry'."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:145
+#: ..\..\user-docs\keywords.rst:145
 # 72cef2d93896488296eb5acb1ae1f2c8
 msgid "Valid subcategories for subcategory 'volcano'"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:152
+#: ..\..\user-docs\keywords.rst:152
 # e93032a34f5a42f49e87119936e89732
 msgid "kg2/m2"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:155
+#: ..\..\user-docs\keywords.rst:155
 # ce25df10a81e41ddb1b55ce5f30c5265
 msgid "In this case the dataset should be a raster layer where each cell represents the kilograms per meters squared of ash fall on that cell."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:158
+#: ..\..\user-docs\keywords.rst:158
 # 6b3dfc5efd7542c5a314b29fc3c7c336
 msgid "'units' and 'datatype' (described below) should be considered to be mutually exclusive - i.e. they should not both be present in any given keywords file."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:163
+#: ..\..\user-docs\keywords.rst:163
 # 501463aefa794a649acabaab8ba83f7c
 msgid "Datatype"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:165
+#: ..\..\user-docs\keywords.rst:165
 # c1fdaad0a29a4c14b9f74513363da75a
 msgid "The datatype keyword is specific to exposure layers and represents the datatype of people, infrastructure etc. within a given area."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:168
+#: ..\..\user-docs\keywords.rst:168
 # 417f4aa54c694e0aafb240746fd1a9aa
 msgid "Valid densities for different subcategories"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:175
-#: ../../user-docs/keywords.rst:176
-#: ../../user-docs/keywords.rst:177
-#: ../../user-docs/keywords.rst:178
-#: ../../user-docs/keywords.rst:179
-#: ../../user-docs/keywords.rst:180
+#: ..\..\user-docs\keywords.rst:175
+#: ..\..\user-docs\keywords.rst:176
+#: ..\..\user-docs\keywords.rst:177
+#: ..\..\user-docs\keywords.rst:178
+#: ..\..\user-docs\keywords.rst:179
+#: ..\..\user-docs\keywords.rst:180
 # a6d9868ba2bd43f8b03340b4710d0e43
 # 90d160a14b29459593cb46331fee982c
 # 92e011a3f4d84310820ee279d1ee4d30
@@ -1186,397 +1186,397 @@ msgstr ""
 msgid "datatype"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:175
+#: ..\..\user-docs\keywords.rst:175
 # db01e6955c9a4662bc6a0b29eced7890
 msgid "count"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:176
+#: ..\..\user-docs\keywords.rst:176
 # 1d48fa37fe6444b4a757b9e2d03107df
 msgid "density"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:177
+#: ..\..\user-docs\keywords.rst:177
 # 6e1c131b28be409995a586eee6793eda
 msgid "osm"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:178
+#: ..\..\user-docs\keywords.rst:178
 # e80d88fc213c4c5b8746d37e308d7ab0
 msgid "sigab"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:179
+#: ..\..\user-docs\keywords.rst:179
 # c045566ab2254b6fbe91065eea8985c5
 msgid "other"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:180
+#: ..\..\user-docs\keywords.rst:180
 # 76fddefc33b547369336e0a36f90b5a0
 msgid "not used for roads"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:184
+#: ..\..\user-docs\keywords.rst:184
 # 41a8857ebd3a4793a15e8db7d0d3f287
 msgid "Assumptions"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:186
+#: ..\..\user-docs\keywords.rst:186
 # 5f63c67b0df34034a73b7c172ae8f24d
 msgid "The following assumptions are made about keywords, which may or may not be programmatically enforced by the InaSAFE library and GUI:"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:189
+#: ..\..\user-docs\keywords.rst:189
 # b7b2a7d2b6c4437ba1b74834bd2af94e
 msgid "There should only be **one keyword for a given key** in the keywords file"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:190
+#: ..\..\user-docs\keywords.rst:190
 # 079321b5794f475ba002f3869f1632a6
 msgid "Switching from hazard to exposure will clear parts of the GUI since in general most keywords are category dependent. In particular, selecting **'hazard'** will remove the **'datatype'** key/value pair, and selecting **'exposure'** will remove the **'units'** key value pair."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:194
+#: ..\..\user-docs\keywords.rst:194
 # 053b9c8be9b94d5bb6d75092fc6ff631
 msgid "Keywords for **category** are **enforced** to be one of 'hazard' or 'exposure' by the GUI."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:196
+#: ..\..\user-docs\keywords.rst:196
 # a84439bd2ea3483a8ab9eb09b7dcd9e1
 msgid "All keywords should be in **lower case**, **without spaces** with the exception of 'Title' whose value may contain both spaces and mixed case letters."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:199
+#: ..\..\user-docs\keywords.rst:199
 # d21aaa026a594b12b0a00b90c878c3b6
 msgid "Values for keywords should generally be lower case, with the exception of **datatype values may be in upper case** (e.g. MMI)"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:201
+#: ..\..\user-docs\keywords.rst:201
 # ba562a8928f842abb2f5703d0df3498e
 msgid "Keys and values should **not contain colons**. In the keyword editor, any colons will be replaced with a full stop character."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:203
+#: ..\..\user-docs\keywords.rst:203
 # f59a7bbb4ddf42cb9b8e5b074c4d2e9e
 msgid "All other Keywords and values that do not fit the above domain lists may be used but they may produce undesired results."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:207
+#: ..\..\user-docs\keywords.rst:207
 # d3064e63a9d74e7fa55fb7fdfff80130
 msgid "The keywords editor graphical user interface"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:209
+#: ..\..\user-docs\keywords.rst:209
 # eaa7f71c21e145d4bbefac853ca90f1d
 msgid "The graphical user interface for keyword editing is divided into two parts:"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:211
+#: ..\..\user-docs\keywords.rst:211
 # 68587ac35cf848b69bb6bfa1f8468bb2
 msgid "1.) **Minimal mode**: In this mode, only following options are provided:"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:213
+#: ..\..\user-docs\keywords.rst:213
 # 44e427107ba14d6f9a146240d5cd79f0
 msgid "**Title** - a 'friendly' name for the dataset which will be displayed in reports, the user interface and so on."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:215
+#: ..\..\user-docs\keywords.rst:215
 # 564e7297c4394765ada8b732f3c09809
 msgid "**Category** - A mandatory choice between 'hazard' and 'exposure'."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:216
+#: ..\..\user-docs\keywords.rst:216
 # c90106d3576c4a118822aae51ffd3f18
 msgid "**Subcategory** - An amalgamated subcategory/units picklist (in the case of hazard) or amalgamated subcategory/datatype ( in the case of exposure). In this case, the secondary characteristic ( units or datatype) are shown in square brackets after the subcategory name e.g. :samp:`flood [m]` is used for subcategory 'flood', units 'm'."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:222
+#: ..\..\user-docs\keywords.rst:222
 # 90726486b6eb4d1b9ec9cdc44344850f
 msgid "An example of the keywords editor in minimal mode is shown below."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:227
+#: ..\..\user-docs\keywords.rst:227
 # 6d2dfa35e6664046b770ee0df17cb5c8
 msgid "**Advanced mode**: In this mode several extra options are provided in addition to the minimal mode options. Unlike minimal mode, in advanced mode only basic validation is performed and the user is given more flexibility to manually define and remove key/value pairs. Three sections are provided for this:"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:233
+#: ..\..\user-docs\keywords.rst:233
 # ef9d9cb9a8c94c4186935a40d182bd99
 msgid "**Predefined** - In this section, the user selects from a constrained list of keywords, enters a free-form value and then adds the key/value pair to the keywords list (see below)."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:236
+#: ..\..\user-docs\keywords.rst:236
 # 08661ee7c20945f18d6b35aeb7072f82
 msgid "**User defined** - In this section, there is no constraint on the keywords entered - any single lower case word will be accepted for both the key and the value components."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:239
+#: ..\..\user-docs\keywords.rst:239
 # 9fa3c09150324a4ab9cae85422814ae7
 msgid "**Current keywords** - In this area a complete list of all the keywords for the dataset are displayed. The keywords list here is updated when any changes are made in both the simple and advanced mode editors. It is also possible in this area to manually remove unwanted keywords using the 'remove selected' button. Multiple keywords can be removed in a single operation by :kbd:`Control-clicking` on multiple keyword entries in the current keyword list and then clicking :guilabel:`Remove selected`"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:247
+#: ..\..\user-docs\keywords.rst:247
 # 22cb9ab0935749ad9fa55debe8111f7d
 msgid "An example of the keywords editor in advanced mode is shown below."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:253
+#: ..\..\user-docs\keywords.rst:253
 # 199272bf63e74f0e96559732836d65a1
 msgid "Invoking the keywords editor"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:255
+#: ..\..\user-docs\keywords.rst:255
 # 9992e21c7bf04f01adc25a58dd9a5c2f
 msgid "The keyword editor can easily be invoked by selecting any layer in the QGIS layers list, and then using the plugin menu to start the editor (:menuselection:`Plugins --> InaSAFE --> Keyword Editor`). Alternatively, you may use the keywords editor icon on the plugins toolbar as illustrated below."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:265
+#: ..\..\user-docs\keywords.rst:265
 # 436c6f7fdf7d448bb1c58f8adde55093
 msgid "Saving your edits"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:267
+#: ..\..\user-docs\keywords.rst:267
 # 111d38baa7f741d397ef3a4be3c1ea4e
 msgid "To save your keyword edits, simply press the :guilabel:`OK` button and the .keywords file will be written to disk."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:271
+#: ..\..\user-docs\keywords.rst:271
 # 91198bb532da4f00973b1fe9f5fb0466
 msgid "Cancelling your edits"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:273
+#: ..\..\user-docs\keywords.rst:273
 # 77c788b032674513b32b6b05efd19623
 msgid "You can cancel your changes at any time by pressing the :guilabel:`Cancel` button. No changes will be written to disk and your .keywords file will remain in its original state."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:278
+#: ..\..\user-docs\keywords.rst:278
 # ea5e3f3a1adf4fa99686b388a49155df
 msgid "Keywords for remote and non-file based layers"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:280
+#: ..\..\user-docs\keywords.rst:280
 # 3d856e35f6d342de8039d5cfd111fd7f
 msgid "If you are using a PostgreSQL, WFS, Spatialite or other non-file based resources, you can still create keywords. In these circumstances the keywords will be written to a sqlite database - by default this database is stored as :file:`keywords.db` within the InaSAFE plugin directory root."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:285
+#: ..\..\user-docs\keywords.rst:285
 # 558ee4a9b3ac4651b13f827ab0fb22a0
 msgid "You may wish to use a different location for the :file:`keywords.db` keywords database - you can configure this by using the InaSAFE options dialog. The options dialog can be launched by clicking on the InaSAFE plugin toolbar's options icon (as shown below) or by doing :menuselection:`Plugins --> InaSAFE --> InaSAFE Options`."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:294
+#: ..\..\user-docs\keywords.rst:294
 # 7d1975625e3a434892f547dd43f4acfe
 msgid "When the options dialog is opened, the keywords database path can be specified using the :guilabel:`keyword cache for remote datasources` option as shown below."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:301
+#: ..\..\user-docs\keywords.rst:301
 # e3dadde9a283471b8dc17a1ba8cd6712
 msgid "(1) Support for remote and non-file based layers was added in InaSAFE version 0.3. (2) The database can be opened using a sqlite editor such as sqliteman, but the data in the keywords table is not intended to be human readable or edited. The table columns consist of an MD5 hash based on the URI for the datasource (typically the database connection details) and a blob which contains the keywords as a pickled python dictionary."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:309
+#: ..\..\user-docs\keywords.rst:309
 # 3675a4cd5ba54b29856793d79e483e06
 msgid "See the :doc:`options` document for more information about the InaSAFE options dialog."
 msgstr ""
 
-#: ../../user-docs/keywords.rst:313
+#: ..\..\user-docs\keywords.rst:313
 # 6bedaaac76564f398688d220ba287915
 msgid "Sharing your keywords cache"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:315
+#: ..\..\user-docs\keywords.rst:315
 # 03039b1bc3414b43b32e08c8e03df472
 msgid "In theory you can place the keywords file on a network share and create a shared keyword repository in a multi-user environment, but you should note that the layer URI hashes need to be identical in order for a layer's keyword to be found. This means that, for (contrived), example::"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:322
+#: ..\..\user-docs\keywords.rst:322
 # 3df998c45bd3420ea7a0635451f20cb7
 msgid "would not be considered the same as::"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:326
+#: ..\..\user-docs\keywords.rst:326
 # 39361aba289f4893a7cc458c58dacb62
 msgid "since the user credentials differ, resulting in a different URI. To work around this you could create a common account so that every user will effectively use the same URI to load that layer e.g.::"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:332
+#: ..\..\user-docs\keywords.rst:332
 # 0a175e75095c4bdd866cdefa10aa0f30
 msgid "For certain resources (e.g. ArcInfo coverages, Spatialite databases) where the keywords cache is also used, you should take care to use a common mount point or network share to access the data if you wish to successfull hit the cache with the layer's URI. For example you could have all users mount your data to the same place. Under Unix like operating systems this could look something like this::"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:341
+#: ..\..\user-docs\keywords.rst:341
 # 698917b6bc2f40b39e080480efc4567d
 msgid "Under Windows you could always the same drive letter and path the to share e.g.::"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:348
+#: ..\..\user-docs\keywords.rst:348
 # e0348da4d51249b8b31b86fe72ac69c0
 msgid "Getting help"
 msgstr ""
 
-#: ../../user-docs/keywords.rst:350
+#: ..\..\user-docs\keywords.rst:350
 # 8232a6a6235840b482c31b1c552057d1
 msgid "If you need help using the keywords editor, you can click on the :guilabel:`Help` button at the bottom of the dialog and this page will be displayed."
 msgstr ""
 
-#: ../../user-docs/known_issues.rst:2
+#: ..\..\user-docs\known_issues.rst:2
 # 6922666ad5db422b8ff4e8edb35bcd9f
 msgid "Known Issues"
 msgstr ""
 
-#: ../../user-docs/known_issues.rst:7
+#: ..\..\user-docs\known_issues.rst:7
 # aac7847fe68c47c19b596dad249e21fc
 msgid "Population density grids must be in geographic coordinates"
 msgstr ""
 
-#: ../../user-docs/known_issues.rst:9
+#: ..\..\user-docs\known_issues.rst:9
 # 2dedcfcbf3c048f9ac4d108be70ad7aa
 msgid "Currently, if population density grids are projected they won't be scaled correctly if resampled. See also ticket `#123 <https://github.com/AIFDR/inasafe/issues/123>`_"
 msgstr ""
 
-#: ../../user-docs/known_issues.rst:14
+#: ..\..\user-docs\known_issues.rst:14
 # c707d3c2d6a2401f952759397c36d465
 msgid "Help documentation has no style under windows"
 msgstr ""
 
-#: ../../user-docs/known_issues.rst:16
+#: ..\..\user-docs\known_issues.rst:16
 # 321f01a1baed4336897ea9bdf157f395
 msgid "Currently if you open the help documentation for InaSAFE, not styling is applied and images may not show, so it looks rather plain. We are working to fix this in a future release. See also ticket `#123 <https://github.com/AIFDR/inasafe/issues/163>`_"
 msgstr ""
 
-#: ../../user-docs/options.rst:3
+#: ..\..\user-docs\options.rst:3
 # cc49d0fb8e51440c8ea3a0953d4b8b8d
 msgid "InaSAFE Options"
 msgstr ""
 
-#: ../../user-docs/options.rst:5
+#: ..\..\user-docs\options.rst:5
 # 85ebd522f90249ae9e0c19ed3a54886d
 msgid "The |project_name| plugin provides an options dialog which allows you to define various options relating to how InaSAFE will behave. The options dialog can be launched by clicking on the InaSAFE plugin toolbar's options icon (as shown below) or by doing :menuselection:`Plugins --> InaSAFE --> InaSAFE Options`."
 msgstr ""
 
-#: ../../user-docs/options.rst:14
+#: ..\..\user-docs\options.rst:14
 # a2a7332ae61f40fca30c757423ddfb69
 msgid "Then the dialog will appear, looking something like this:"
 msgstr ""
 
-#: ../../user-docs/options.rst:19
+#: ..\..\user-docs\options.rst:19
 # a0d9aa4cfcfd4f30be88a525b456cda2
 msgid "You can click on the :guilabel:`Help` button at any time and it will open the help documentation browser to this page."
 msgstr ""
 
-#: ../../user-docs/options.rst:22
+#: ..\..\user-docs\options.rst:22
 # 98eced6f68f74f7990f06eefb055082a
 msgid "The following options are available on the :guilabel:`Options Dialog`:"
 msgstr ""
 
-#: ../../user-docs/options.rst:24
+#: ..\..\user-docs\options.rst:24
 # 3206dc66d14e4a6abe4ba1f20665472f
 msgid ":guilabel:`Only show visible layers in the InaSAFE dock` : This option will determine whether **all** (when unchecked) hazard and impact layers should be listed in the InaSAFE dock's combo boxes. or (when checked) only visible layers."
 msgstr ""
 
-#: ../../user-docs/options.rst:28
+#: ..\..\user-docs\options.rst:28
 # 203141098277466b9d1494f26d2dea0f
 msgid ":guilabel:`Set QGIS layer name from 'title' in keywords` : This option will (when enabled) cause QGIS to name layers in the :guilabel:`Layers tree` using the `title` keyword in the layer's keywords file. If the layer has no 'title' in its keywords, or it has no keywords at all, the normal QGIS behaviour for naming layers will apply."
 msgstr ""
 
-#: ../../user-docs/options.rst:33
+#: ..\..\user-docs\options.rst:33
 # d49ef26df7054b15bcf6de7bc3b3f564
 msgid ":guilabel:`Zoom to impact layer on scenario estimate completion` : This option will cause the map view to zoom in/out in order to completely contain the InaSAFE impact scenario map output when an analysis completes."
 msgstr ""
 
-#: ../../user-docs/options.rst:36
+#: ..\..\user-docs\options.rst:36
 # aa582767804d42bdae45341779809b1d
 msgid ":guilabel:`Hide exposure layer on scenario estimate completion` : This option will cause QGIS to turn off the exposure layer used when InaSAFE completes the current analysis. You can re-enable the layer visibility again by checking its checkbox in the legend."
 msgstr ""
 
-#: ../../user-docs/options.rst:40
+#: ..\..\user-docs\options.rst:40
 # 8d2f3296482d4b32ad554a6ae731a01d
 msgid ":guilabel:`Keyword cache for remote datasources` : This option is used to determine where keywords are stored for datasets where it is not possible to write them into a .keywords file. See :doc:`keywords` for more information on the keywords system."
 msgstr ""
 
-#: ../../user-docs/options.rst:44
+#: ..\..\user-docs\options.rst:44
 # 888ea1ffd99e4cffb4bc525aacf11585
 msgid ":guilabel:`Run analysis in separate thread (experimental)` : This option cause the analysis to be run in its own thread."
 msgstr ""
 
-#: ../../user-docs/options.rst:47
+#: ..\..\user-docs\options.rst:47
 # 33b1e2a0eb15425f8524280f8685e013
 msgid "It is not recommended to use the threaded implementation at this time. For this reason it is disabled by default."
 msgstr ""
 
-#: ../../user-docs/options.rst:50
+#: ..\..\user-docs\options.rst:50
 # 1329d6c6516440f48cf03afae27290dc
 msgid "Pressing :guilabel:`Cancel` at any time will close the options dialog and any changes made will **not** be applied."
 msgstr ""
 
-#: ../../user-docs/options.rst:53
+#: ..\..\user-docs\options.rst:53
 # 9ef8683d961a41c29a082fc2c0e24070
 msgid "Pressing :guilabel:`Ok` at any time will close the options dialog and any changes made **will** be applied immediately."
 msgstr ""
 
-#: ../../user-docs/options.rst:56
+#: ..\..\user-docs\options.rst:56
 # e1bf4b71f55843129f6fe795629d988a
 msgid "The exact button order shown on this dialog may differ depending on your operating system or desktop environment."
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:3
+#: ..\..\user-docs\using-qgis.rst:3
 # 2be2a6a7bc594d6ba8f6e4a17cea4c16
 msgid "Using QGIS"
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:5
+#: ..\..\user-docs\using-qgis.rst:5
 # 5c6965567d1f4cc7a2f698f4ce72c8b4
 msgid "|project_name| uses `Quantum GIS (QGIS) <http://qgis.org>`_ - as the platform on which to provide its functionality. QGIS itself has good documentation and a very helpful user community. In this section we focus on those aspects of QGIS functionality that will be helpful to someone wanting to carry out impact scenario assessments using |project_name|."
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:11
+#: ..\..\user-docs\using-qgis.rst:11
 # f75ff0d9e064456ba63eb382fdbe45bb
 msgid "There are three good resources to get you up to speed with using GIS in general and QGIS in particular:"
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:14
+#: ..\..\user-docs\using-qgis.rst:14
 # 732ae355d7654d0fb4b4dea3ed44f35f
 msgid "The `Gentle Introduction to GIS <http://linfiniti.com/dla>`_ by Linfiniti Consulting - it is a free electronic book that introduces the concepts of GIS in a very easy to read manner."
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:17
+#: ..\..\user-docs\using-qgis.rst:17
 # 6dc6b1c2ad4546fc908bc445b3481c78
 msgid "The `QGIS User Manual <http://qgis.org/en/documentation/manuals.html>`_ - also an electronic book that serves as a reference guide to the QGIS Desktop Application."
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:20
+#: ..\..\user-docs\using-qgis.rst:20
 # 53ec24ca8f0a42e9ac125208ea8661aa
 msgid "The `QGIS Training Manual <http://manual.linfiniti.com>`_ by Linfiniti Consulting that provides a detailed training guide on QGIS and PostGIS."
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:24
+#: ..\..\user-docs\using-qgis.rst:24
 # 92878268724f464abe32c9791cf60031
 msgid "Things to cover (suggested by Trias Aditya)"
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:26
+#: ..\..\user-docs\using-qgis.rst:26
 # 6069c0d0fa6342d391f71a7ad41ba2a5
 msgid "access to statistics data"
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:27
+#: ..\..\user-docs\using-qgis.rst:27
 # 79a2e875b0554d31b2d8e4b28d0ea421
 msgid "access to WFS (for exposure data)"
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:28
+#: ..\..\user-docs\using-qgis.rst:28
 # 576a52b7463246279e52e7d3e95fb8f0
 msgid "access to WMS (for background data)"
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:29
+#: ..\..\user-docs\using-qgis.rst:29
 # f32e5f5f758744d698cdda606a22d7a9
 msgid "you have got an idea to access WCS (e.g. hazard, elevation data etc)"
 msgstr ""
 
-#: ../../user-docs/using-qgis.rst:30
+#: ..\..\user-docs\using-qgis.rst:30
 # 747513d455be4b21b5c49dcf13733e80
 msgid "map the projected impact into graphical charts (this will be my favourites then...)"
 msgstr ""
