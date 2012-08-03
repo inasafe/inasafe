@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import logging
+import logging.handlers
 
 def baseDataDir():
     """Create (if needed) and return the path to the base realtime data dir"""
@@ -86,12 +87,13 @@ def purgeWorkingData():
     shutil.rmtree(shakemapZipDir())
     shutil.rmtree(gisDataDir())
 
-def setupLogger(theLogger):
+def setupLogger():
     """Run once when the module is loaded and enable logging
     Borrowed heavily from this:
     http://docs.python.org/howto/logging-cookbook.html
     """
-    theLogger.setLevel(logging.DEBUG)
+    myLogger = logging.getLogger('InaSAFE-Realtime')
+    myLogger.setLevel(logging.DEBUG)
     # create file handler which logs even debug messages
     myLogFile = os.path.join(logDir(), 'realtime.log')
     myFileHandler = logging.FileHandler(myLogFile)
@@ -99,11 +101,27 @@ def setupLogger(theLogger):
     # create console handler with a higher log level
     myConsoleHandler = logging.StreamHandler()
     myConsoleHandler.setLevel(logging.ERROR)
+    # Email handler for errors
+    myEmailServer = 'localhost'
+    myEmailServerPort = 25
+    mySenderAddress = 'realtime@inasafe.org'
+    myRecipientAddresses = ['tim@linfiniti.com']
+    mySubject = 'Error'
+    myEmailHandler = logging.handlers.SMTPHandler(
+        (myEmailServer, myEmailServerPort),
+        mySenderAddress,
+        myRecipientAddresses,
+        mySubject)
+    myEmailHandler.setLevel(logging.ERROR)
     # create formatter and add it to the handlers
     myFormatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
+    myEmailHandler.setFormatter(myFormatter)
     # add the handlers to the logger
-    theLogger.addHandler(myFileHandler)
-    theLogger.addHandler(myConsoleHandler)
+    myLogger.addHandler(myFileHandler)
+    myLogger.addHandler(myConsoleHandler)
+    myLogger.info('Realtime Module Loaded')
+    myLogger.info('----------------------')
+    myLogger.info('CWD: %s' % os.path.abspath(os.path.curdir))

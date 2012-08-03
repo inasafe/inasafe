@@ -10,17 +10,19 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import os
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '1/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from realtime.utils import shakemapExtractDir
-from realtime.exceptions import EventFileNotFoundError
+import os
 
+from utils import shakemapExtractDir
+from rt_exceptions import EventFileNotFoundError
+# The logger is intiailsed in utils.py by init
+import logging
+LOGGER = logging.getLogger('InaSAFE-Realtime')
 
 class ShakeEvent:
     """The ShakeEvent class encapsulates behaviour and data relating to an
@@ -64,9 +66,10 @@ class ShakeEvent:
 
         Raises: EventFileNotFoundError
         """
-        myEventPath = os.path.join(shakemapExtractDir(), self.eventId + '.tif')
+        myEventPath = os.path.join(shakemapExtractDir(), 'event.xml')
         #short circuit if the tif is already created.
         if os.path.exists(myEventPath):
             return myEventPath
         else:
+            LOGGER.error('Event file not found. %s' % myEventPath)
             raise EventFileNotFoundError('%s not found' % myEventPath)

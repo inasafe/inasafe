@@ -17,20 +17,23 @@ __date__ = '2/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
 import unittest
-from realtime.utils import shakemapExtractDir
-from realtime.shake_data import ShakeData
-from realtime.shake_event import (eventFilePath)
+from utils import shakemapExtractDir
+from shake_data import ShakeData
+from shake_event import ShakeEvent
+
 
 class TestShakeEvent(unittest.TestCase):
     def test_eventFilePath(self):
         """Test eventFilePath works"""
-        myShakeEvent = '20120726022003'
-
+        myShakeId = '20120726022003'
         myExpectedPath = os.path.join(shakemapExtractDir(), 'event.xml')
-        myShakeData = ShakeData(myShakeEvent)
+        myShakeData = ShakeData(myShakeId)
         myShakeData.extract()
-        self.assertEqual(True, False)
+        myShakeEvent = ShakeEvent(myShakeId)
+        myPath = myShakeEvent.eventFilePath()
+        self.assertEquals(myExpectedPath, myPath)
 
 
 if __name__ == '__main__':

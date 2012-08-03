@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 import re
-from realtime.ftp_client import FtpClient
+from ftp_client import FtpClient
 
 
 class FtpClientTest(unittest.TestCase):

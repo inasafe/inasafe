@@ -59,11 +59,6 @@ class ExtractionError(Exception):
     pass
 
 
-class EventParseError(Exception):
-    """An exception for when something went wrong parsing the event.xml """
-    pass
-
-
 class GridConversionError(Exception):
     """An exception for when something went wrong converting mi.grd to a tif"""
     pass
@@ -72,3 +67,19 @@ class GridConversionError(Exception):
 class ContourCreationError(Exception):
     """An exception for when creating contours from shakemaps goes wrong"""
     pass
+
+
+class EventFileNotFoundError(Exception):
+    """An exception for when an event.xml could not be found"""
+    pass
+
+
+class EventIdError(Exception):
+    """An exception for when an event id is invalid"""
+    pass
+
+
+class EventParseError(Exception):
+    """An exception for when something went wrong parsing the event.xml """
+    pass
+

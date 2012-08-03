@@ -23,21 +23,23 @@ from zipfile import ZipFile
 import gdal
 import ogr
 from gdalconst import GA_ReadOnly
+# The logger is intiailsed in utils.py by init
+import logging
+LOGGER = logging.getLogger('InaSAFE-Realtime')
 
-from realtime import LOGGER
-from realtime.exceptions import (EventIdError,
-                                 EventUndefinedError,
-                                 NetworkError,
-                                 EventValidationError,
-                                 InvalidInputZipError,
-                                 InvalidOutputZipError,
-                                 ExtractionError,
-                                 GridConversionError,
-                                 EventParseError,
-                                 ContourCreationError
-                                 )
-from realtime.ftp_client import FtpClient
-from realtime.utils import (shakemapZipDir,
+from rt_exceptions import (EventUndefinedError,
+                        EventIdError,
+                        NetworkError,
+                        EventValidationError,
+                        InvalidInputZipError,
+                        InvalidOutputZipError,
+                        ExtractionError,
+                        GridConversionError,
+                        EventParseError,
+                        ContourCreationError
+                        )
+from ftp_client import FtpClient
+from utils import (shakemapZipDir,
                             shakemapExtractDir,
                             shakemapDataDir,
                             gisDataDir)
@@ -102,9 +104,11 @@ class ShakeData:
                 raise
         # If eventId is still None after all the above, moan....
         if self.eventId is None:
-            raise EventIdError('No id was passed to the constructor and the '
+            myMessage = ('No id was passed to the constructor and the '
                                'latest id could not be retrieved from the'
                                'server.')
+            LOGGER.exception('ShakeData initialisation failed')
+            raise EventIdError(myMessage)
 
     def getLatestEventId(self):
         """Query the ftp server and determine the latest event id.

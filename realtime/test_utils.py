@@ -20,20 +20,21 @@ import os
 import unittest
 from datetime import date
 
-from realtime import LOGGER
-from realtime.utils import (baseDataDir,
-                            gisDataDir,
-                            shakemapZipDir,
-                            shakemapExtractDir,
-                            shakemapDataDir,
-                            reportDataDir,
-                            logDir,
-                            purgeWorkingData)
+from utils import (baseDataDir,
+                   gisDataDir,
+                   shakemapZipDir,
+                   shakemapExtractDir,
+                   shakemapDataDir,
+                   reportDataDir,
+                   logDir,
+                   purgeWorkingData)
 
 # Clear away working dirs so we can be sure they
 # are actually created
 purgeWorkingData()
-
+# The logger is intiailsed in utils.py by init
+import logging
+LOGGER = logging.getLogger('InaSAFE-Realtime')
 
 class Test(unittest.TestCase):
 

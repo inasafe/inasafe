@@ -20,7 +20,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 import utils
-LOGGER = logging.getLogger('InaSAFE-Realtime')
-utils.setupLogger(LOGGER)
+utils.setupLogger()
 
 

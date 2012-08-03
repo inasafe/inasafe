@@ -23,7 +23,7 @@ import unittest
 import ogr
 
 from shake_data import ShakeData
-from realtime.utils import (shakemapZipDir,
+from utils import (shakemapZipDir,
                             shakemapDataDir,
                             shakemapExtractDir,
                             purgeWorkingData)
