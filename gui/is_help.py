@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from PyQt4 import (QtGui, QtCore, QtWebKit)
-from is_help_base import Ui_ISHelpBase
+from gui.is_help_base import Ui_ISHelpBase
 import os
 
 
