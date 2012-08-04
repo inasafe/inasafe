@@ -1,11 +1,11 @@
 import numpy
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from impact_functions.core import get_question, get_function_title
-from impact_functions.styles import flood_population_style as style_info
-from storage.raster import Raster
-from common.utilities import ugettext as _
-from common.tables import Table, TableRow
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.impact_functions.core import get_question, get_function_title
+from safe.impact_functions.styles import flood_population_style as style_info
+from safe.storage.raster import Raster
+from safe.common.utilities import ugettext as _
+from safe.common.tables import Table, TableRow
 
 
 class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
