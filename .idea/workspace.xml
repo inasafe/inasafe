@@ -2,17 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/realtime/exceptions.py" afterPath="$PROJECT_DIR$/realtime/rt_exceptions.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Sphinx_HTML.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/developer-docs/jenkins_ci.rst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/is_help.py" afterPath="$PROJECT_DIR$/gui/is_help.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/__init__.py" afterPath="$PROJECT_DIR$/realtime/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_data.py" afterPath="$PROJECT_DIR$/realtime/shake_data.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_ftp_client.py" afterPath="$PROJECT_DIR$/realtime/test_ftp_client.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_data.py" afterPath="$PROJECT_DIR$/realtime/test_shake_data.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_event.py" afterPath="$PROJECT_DIR$/realtime/test_shake_event.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_utils.py" afterPath="$PROJECT_DIR$/realtime/test_utils.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/utils.py" afterPath="$PROJECT_DIR$/realtime/utils.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/index.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/index.rst" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -23,9 +17,6 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
-  <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/inasafe-dev$test_ftp_client.coverage" NAME="test_ftp_client Coverage Results" MODIFIED="1342712083406" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/realtime" />
-  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -37,88 +28,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="test_ftp_client.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/test_ftp_client.py">
+      <file leaf-file-name="index.rst" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/index.rst">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="5" selection-start="637" selection-end="637" vertical-scroll-proportion="0.0">
+            <state line="24" column="11" selection-start="634" selection-end="634" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utils.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/utils.py">
+      <file leaf-file-name="jenkins_ci.rst" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/jenkins_ci.rst">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="94" column="4" selection-start="2992" selection-end="3040" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="12" selection-start="656" selection-end="656" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="33" selection-start="1069" selection-end="1069" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#606#615#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_utils.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/test_utils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="0" selection-start="1041" selection-end="1149" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#625#634#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="shake_data.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/shake_data.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="0" selection-start="735" selection-end="843" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="shake_event.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="68" column="67" selection-start="2098" selection-end="2098" vertical-scroll-proportion="0.59859157">
-              <folding>
-                <element signature="e#620#629#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="rt_exceptions.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/rt_exceptions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="84" column="0" selection-start="2183" selection-end="2183" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_shake_data.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/test_shake_data.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="5" selection-start="726" selection-end="726" vertical-scroll-proportion="0.0">
+            <state line="224" column="0" selection-start="7425" selection-end="7425" vertical-scroll-proportion="0.6666667">
               <folding />
             </state>
           </provider>
@@ -137,29 +59,29 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/Makefile" />
-        <option value="$PROJECT_DIR$/realtime/shake_io.py" />
-        <option value="$PROJECT_DIR$/realtime/test_shake_io.py" />
-        <option value="$PROJECT_DIR$/realtime/shake_raster.py" />
-        <option value="$PROJECT_DIR$/realtime/realtime.py" />
-        <option value="$PROJECT_DIR$/realtime/ftp_client.py" />
-        <option value="$PROJECT_DIR$/gui/is_help.py" />
-        <option value="$PROJECT_DIR$/realtime/test_ftp_client.py" />
-        <option value="$PROJECT_DIR$/realtime/__init__.py" />
-        <option value="$PROJECT_DIR$/realtime/utils.py" />
-        <option value="$PROJECT_DIR$/realtime/exceptions.py" />
-        <option value="$PROJECT_DIR$/realtime/shake_data.py" />
-        <option value="$PROJECT_DIR$/realtime/test_shake_data.py" />
-        <option value="$PROJECT_DIR$/realtime/test_utils.py" />
-        <option value="$PROJECT_DIR$/realtime/test_shake_event.py" />
-        <option value="$PROJECT_DIR$/realtime/shake_event.py" />
+        <option value="$PROJECT_DIR$/gui/is_options_dialog.py" />
+        <option value="$PROJECT_DIR$/gui/is_keywords_dialog.py" />
+        <option value="$PROJECT_DIR$/gui/is_safe_interface.py" />
+        <option value="$PROJECT_DIR$/gui/test_is_map.py" />
+        <option value="$PROJECT_DIR$/gui/is_dock.py" />
+        <option value="$PROJECT_DIR$/gui/test_is_help.py" />
+        <option value="$PROJECT_DIR$/gui/is_impact_calculator.py" />
+        <option value="$PROJECT_DIR$/gui/is_impact_calculator_thread.py" />
+        <option value="$PROJECT_DIR$/gui/test_is_utilities.py" />
+        <option value="$PROJECT_DIR$/gui/utilities_test.py" />
+        <option value="$PROJECT_DIR$/pylint.log" />
+        <option value="$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst" />
+        <option value="$PROJECT_DIR$/../../../../../web/sac/sac_catalogue/docs/sphinx/coding_standards.rst" />
+        <option value="$PROJECT_DIR$/../../../../../web/farminfo/farminfo/docs/source/jenkins-setup.rst" />
+        <option value="$PROJECT_DIR$/docs/source/developer-docs/index.rst" />
+        <option value="$PROJECT_DIR$/docs/source/developer-docs/jenkins_ci.rst" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1920" />
     <option name="width" value="1920" />
-    <option name="height" value="1045" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -168,7 +90,7 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="2" id="Add" />
+    <ConfirmationsSetting value="0" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
@@ -194,6 +116,14 @@
               <option name="myItemId" value="inasafe-dev" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="&lt; Python 2.7.3 (/usr/bin/python2.7) &gt;" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -202,6 +132,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gui" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -215,7 +159,47 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="realtime" />
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="docs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="developer-docs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -236,11 +220,11 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PythonSdkConfigurable" />
     <property name="recentsLimit" value="5" />
-    <property name="last_opened_file_path" value="$USER_HOME$/dev/python/impact_map/modules" />
-    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.lastSelected" value="preferences.externalTools" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../web/farminfo/farminfo/docs/source" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -252,14 +236,34 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/realtime" />
       <recent name="$PROJECT_DIR$/common" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/realtime/fixtures" />
-    </key>
   </component>
-  <component name="RunManager" selected="Python's test.Nosetests in TestShakeEvent.test_eventFilePath">
+  <component name="RunManager" selected="Python docs.Sphinx HTML">
+    <configuration default="false" name="Nosetests in test_is_impact_calculator" type="tests" factoryName="Nosetests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="QGISPATH" value="/usr/local/qgis1.8" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gui" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui/test_is_impact_calculator.py" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
     <configuration default="false" name="Nosetests in test_is_safe_interface" type="tests" factoryName="Nosetests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -360,28 +364,6 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="Nosetests in TestShakeEvent.test_eventFilePath" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
-      <option name="CLASS_NAME" value="TestShakeEvent" />
-      <option name="METHOD_NAME" value="test_eventFilePath" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
     <configuration default="true" type="tests" factoryName="Nosetests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -402,22 +384,6 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="MULTIPROCESS" value="false" />
-      <method />
-    </configuration>
     <configuration default="true" type="docs" factoryName="Docutils task">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -434,6 +400,22 @@
       <option name="docutils_open_in_browser" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="MULTIPROCESS" value="false" />
+      <method />
+    </configuration>
     <configuration default="true" type="docs" factoryName="Sphinx task">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -448,25 +430,6 @@
       <option name="docutils_params" value="" />
       <option name="docutils_task" value="" />
       <option name="docutils_open_in_browser" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Unittests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -487,61 +450,15 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="test_ftp_client" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_ftp_client.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="MULTIPROCESS" value="false" />
-      <RunnerSettings RunnerId="PyDebugRunner" />
-      <RunnerSettings RunnerId="PythonCover" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PyDebugRunner" />
-      <ConfigurationWrapper RunnerId="PythonCover" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Realtime Tests" type="tests" factoryName="Unittests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="/usr/bin/python2.7" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="$PROJECT_DIR$/realtime" />
-      <option name="TEST_TYPE" value="TEST_FOLDER" />
-      <option name="PATTERN" value="test*.py" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <list size="11">
-      <item index="0" class="java.lang.String" itemvalue="Python.test_ftp_client" />
-      <item index="1" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
-      <item index="2" class="java.lang.String" itemvalue="Python docs.InaSAFE Docs" />
-      <item index="3" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_safe_interface" />
-      <item index="4" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_keyword_io" />
-      <item index="5" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_clipper" />
-      <item index="6" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_utilities" />
-      <item index="7" class="java.lang.String" itemvalue="Python's test.NoseTests" />
-      <item index="8" class="java.lang.String" itemvalue="Python's test.NoseTests Gui Only" />
-      <item index="9" class="java.lang.String" itemvalue="Python's test.Realtime Tests" />
-      <item index="10" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.test_eventFilePath" />
+    <list size="8">
+      <item index="0" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
+      <item index="1" class="java.lang.String" itemvalue="Python's test.NoseTests" />
+      <item index="2" class="java.lang.String" itemvalue="Python's test.NoseTests Gui Only" />
+      <item index="3" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_impact_calculator" />
+      <item index="4" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_safe_interface" />
+      <item index="5" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_keyword_io" />
+      <item index="6" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_clipper" />
+      <item index="7" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_utilities" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -593,38 +510,29 @@
       <created>1342512383828</created>
       <updated>1342512383828</updated>
     </task>
-    <task id="LOCAL-00007" summary="Added reference to wallix article and removed duplicated ref.">
-      <created>1342703110580</created>
-      <updated>1342703110581</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Run realtime branch on a different display under Jenkins">
-      <created>1342703383064</created>
-      <updated>1342703383064</updated>
-    </task>
-    <option name="localTasksCounter" value="9" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1920" height="1045" extended-state="2" />
+    <frame x="1920" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17449306" sideWeight="0.16936354" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18094218" sideWeight="0.6659193" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.399137" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17449306" sideWeight="0.21898597" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.51121795" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33408073" sideWeight="0.4722222" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3279396" sideWeight="0.48504272" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.36933047" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16773504" sideWeight="0.66233766" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39935064" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.51121795" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33766234" sideWeight="0.4722222" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.48504272" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3279396" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.49358973" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32959402" sideWeight="0.6634304" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.49358973" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -667,7 +575,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Run realtime branch on a different display under Jenkins" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pep8 fixes" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -686,8 +594,6 @@
     <MESSAGE value="Added accessors to expose private members" />
     <MESSAGE value="Python lint fixes. On advice from lint implemented much nicer exception handling for bbox calculator." />
     <MESSAGE value="Pep8 fixes" />
-    <MESSAGE value="Added reference to wallix article and removed duplicated ref." />
-    <MESSAGE value="Run realtime branch on a different display under Jenkins" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -696,107 +602,107 @@
           <url>file://$PROJECT_DIR$/gui/utilities_test.py</url>
           <line>142</line>
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/gui/is_clipper.py</url>
-          <line>19</line>
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$USER_HOME$/dev/python/impact_map/get_shakemap_data.py</url>
-          <line>3</line>
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/lib/python2.7/unittest/case.py">
+    <entry file="file://$PROJECT_DIR$/gui/is_safe_interface.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="390" column="0" selection-start="13378" selection-end="13378" vertical-scroll-proportion="0.0" />
+        <state line="39" column="65" selection-start="1468" selection-end="1468" vertical-scroll-proportion="0.16722408" />
       </provider>
     </entry>
-    <entry file="file:///usr/lib/python2.7/unittest/suite.py">
+    <entry file="file://$PROJECT_DIR$/gui/test_is_help.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="0" selection-start="1868" selection-end="1868" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/unittest/runner.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="150" column="0" selection-start="4789" selection-end="4789" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/is_utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="309" column="0" selection-start="12472" selection-end="12747" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/ftp_client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="0" selection-start="2890" selection-end="2890" vertical-scroll-proportion="0.0" />
+        <state line="24" column="0" selection-start="785" selection-end="785" vertical-scroll-proportion="0.35117057" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gui/is_dock.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="714" selection-end="714" vertical-scroll-proportion="0.0" />
+        <state line="48" column="41" selection-start="1952" selection-end="1952" vertical-scroll-proportion="0.8026756" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gui/is_help.py">
+    <entry file="file://$PROJECT_DIR$/gui/is_impact_calculator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="26" selection-start="596" selection-end="596" vertical-scroll-proportion="0.5483871" />
+        <state line="30" column="0" selection-start="1050" selection-end="1050" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/test_ftp_client.py">
+    <entry file="file:///usr/lib/python2.7/unittest/case.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="5" selection-start="637" selection-end="637" vertical-scroll-proportion="0.0" />
+        <state line="327" column="0" selection-start="10816" selection-end="10816" vertical-scroll-proportion="0.3326572" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/__init__.py">
+    <entry file="file://$PROJECT_DIR$/pylint.log">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="12" selection-start="656" selection-end="656" vertical-scroll-proportion="0.0" />
+        <state line="341" column="1" selection-start="33401" selection-end="33472" vertical-scroll-proportion="0.8812217">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/shake_data.py">
+    <entry file="file://$PROJECT_DIR$/gui/is_plugin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="0" selection-start="735" selection-end="843" vertical-scroll-proportion="0.0" />
+        <state line="18" column="28" selection-start="614" selection-end="614" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/rt_exceptions.py">
+    <entry file="file://$PROJECT_DIR$/gui/is_impact_calculator_thread.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="84" column="0" selection-start="2183" selection-end="2183" vertical-scroll-proportion="0.0" />
+        <state line="49" column="38" selection-start="1819" selection-end="1819" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
+    <entry file="file://$PROJECT_DIR$/gui/utilities_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="33" selection-start="1069" selection-end="1069" vertical-scroll-proportion="0.0">
+        <state line="142" column="0" selection-start="4371" selection-end="4371" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gui/test_is_utilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="0" selection-start="1720" selection-end="1720" vertical-scroll-proportion="0.016722407">
           <folding>
-            <element signature="e#606#615#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/test_utils.py">
+    <entry file="file://$PROJECT_DIR$/../../../../../web/sac/sac_catalogue/docs/sphinx/coding_standards.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="0" selection-start="1041" selection-end="1149" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#625#634#0" expanded="true" />
-          </folding>
+        <state line="150" column="11" selection-start="4994" selection-end="4994" vertical-scroll-proportion="0.69899666">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/utils.py">
+    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/faq.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="4" selection-start="2992" selection-end="3040" vertical-scroll-proportion="0.0" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/test_shake_data.py">
+    <entry file="file://$PROJECT_DIR$/../../../../../web/farminfo/farminfo/docs/source/jenkins-setup.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="5" selection-start="726" selection-end="726" vertical-scroll-proportion="0.0" />
+        <state line="217" column="0" selection-start="7065" selection-end="8489" vertical-scroll-proportion="-3.3333333">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
+    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="68" column="67" selection-start="2098" selection-end="2098" vertical-scroll-proportion="0.59859157">
-          <folding>
-            <element signature="e#620#629#0" expanded="true" />
-          </folding>
+        <state line="28" column="0" selection-start="1336" selection-end="1336" vertical-scroll-proportion="0.46837607">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/index.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="11" selection-start="634" selection-end="634" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/jenkins_ci.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="224" column="0" selection-start="7425" selection-end="7425" vertical-scroll-proportion="0.6666667">
+          <folding />
         </state>
       </provider>
     </entry>

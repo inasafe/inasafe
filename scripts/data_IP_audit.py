@@ -6,7 +6,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from extras.data_audit_wrapper import IP_verified
-from common.testing import DATADIR
+from safe.common.testing import DATADIR
 
 if __name__ == '__main__':
     # Verify external data provided with InaSAFE

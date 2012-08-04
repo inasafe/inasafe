@@ -27,7 +27,7 @@ from gui.is_safe_interface import (getOptimalExtent,
 from gui.is_exceptions import (KeywordNotFoundException,
                                InsufficientOverlapException,
                                InvalidBoundingBoxException)
-from safe_api import TESTDATA, HAZDATA, EXPDATA
+from safe.api import TESTDATA, HAZDATA, EXPDATA
 
 
 class ISSafeInterfaceTest(unittest.TestCase):
@@ -153,7 +153,8 @@ class ISSafeInterfaceTest(unittest.TestCase):
         """Check we can get the available functions from the impact calculator.
         """
         myList = availableFunctions()
-        assert myList > 1
+        myMessage = 'No functions available (len=%ss)' % len(myList)
+        assert len(myList) > 0, myMessage
 
         # Also test if it works when we give it two layers
         # to see if we can determine which functions will
@@ -162,7 +163,8 @@ class ISSafeInterfaceTest(unittest.TestCase):
         myKeywords2 = readKeywordsFromFile(self.vectorPath)
         myList = [myKeywords1, myKeywords2]
         myList = availableFunctions(myList)
-        assert myList > 1
+        myMessage = 'No functions available (len=%ss)' % len(myList)
+        assert len(myList) > 1, myMessage
 
     def test_getKeywordFromFile(self):
         """Get keyword from a filesystem file's .keyword file."""
