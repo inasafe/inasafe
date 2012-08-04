@@ -42,8 +42,8 @@ from gui.utilities_test import (getQgisTestApp,
                             DEVNULL,
                             GEOCRS,
                             setJakartaGeoExtent)
-from safe_api import TESTDATA, HAZDATA
-from safe_api import nanallclose
+from safe.api import TESTDATA, HAZDATA
+from safe.api import nanallclose
 
 # Setup pathnames for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
