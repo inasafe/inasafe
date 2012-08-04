@@ -35,7 +35,7 @@ from safe.api import TESTDATA, HAZDATA, EXPDATA
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)
-from engine.impact_functions_for_testing import BNPB_earthquake_guidelines
+from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 
 
 class ImpactCalculatorTest(unittest.TestCase):
