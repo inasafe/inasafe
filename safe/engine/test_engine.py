@@ -1458,7 +1458,8 @@ class Test_Engine(unittest.TestCase):
 
     test_interpolation_from_polygons_multiple.slow = 1
 
-    def Xtest_point_interpolation_from_polygons_one_attribute(self):
+    @numpy.testing.dec.skipif(True, 'Re-enable after fixing issue #48')
+    def test_point_interpolation_from_polygons_one_attribute(self):
         """Point interpolation from multiple polygons works with attribute
 
         This is a test for interpolation (issue #48)
@@ -1784,7 +1785,8 @@ class Test_Engine(unittest.TestCase):
 
     test_line_interpolation_from_polygons_one_poly.slow = 1
 
-    def Xtest_line_interpolation_from_polygons_one_attribute(self):
+    @numpy.testing.dec.skipif(True, 'Re-enable after fixing issue #55')
+    def test_line_interpolation_from_polygons_one_attribute(self):
         """Line interpolation using one polygon works with attribute
 
         This is a test for road interpolation (issue #55)
@@ -1859,7 +1861,8 @@ class Test_Engine(unittest.TestCase):
                'but got only %i' % counts['Very High'])
         assert counts['Very High'] == 14, msg
 
-    def Xtest_line_interpolation_from_polygons(self):
+    @numpy.testing.dec.skipif(True, 'Re-enable after fixing issue #55')
+    def test_line_interpolation_from_polygons(self):
         """Line clipping and interpolation using multiple polygons works
 
         This is a test for road interpolation (issue #55)
