@@ -33,15 +33,19 @@ from safe_api import get_plugins as safe_get_plugins
 from safe_api import read_keywords, bbox_intersection
 from safe_api import write_keywords as safe_write_keywords
 from safe_api import read_layer as safe_read_layer
-from safe_api import buffered_bounding_box, verify as verify_util
-from safe_api import calculate_impact as safe_calculate_impact
-from safe_api import internationalisedNames
+from safe_api import (buffered_bounding_box,
+                      verify as verify_util,
+                      VerificationError)
+from safe_api import (calculate_impact as safe_calculate_impact,
+                      internationalisedNames)  # pylint: disable=
 
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication
-from is_exceptions import (KeywordNotFoundException,
-                           StyleInfoNotFoundException,
-                           InvalidParameterException)
+from gui.is_exceptions import (KeywordNotFoundException,
+                               StyleInfoNotFoundException,
+                               InvalidParameterException,
+                               InsufficientOverlapException,
+                               InvalidBoundingBoxException)
 
 
 def tr(theText):
@@ -132,8 +136,11 @@ def getOptimalExtent(theHazardGeoExtent,
         try:
             list(x)
         except:
-            raise Exception(myMessage)
-        verify(len(x) == 4, myMessage)
+            raise InvalidBoundingBoxException(myMessage)
+        try:
+            verify(len(x) == 4, myMessage)
+        except VerificationError, e:
+            raise InvalidBoundingBoxException(str(e))
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
@@ -146,7 +153,7 @@ def getOptimalExtent(theHazardGeoExtent,
                'and viewport did not overlap, so no computation was '
                'done. Please make sure you pan to where the data is and '
                'that hazard and exposure data overlaps.')
-        raise Exception(myMessage)
+        raise InsufficientOverlapException(myMessage)
 
     return myOptimalExtent
 
@@ -315,7 +322,7 @@ def writeKeywordsToFile(theFilename, theKeywords):
           stripped off and the basename + .keywords will be used as the file.
         * theKeywords - a dictionary of keywords to be written
     Returns:
-        A safe readSafeLayer object is returned.
+        None
     Raises:
         Any exceptions are propogated
     """

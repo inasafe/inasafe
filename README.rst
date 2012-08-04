@@ -17,35 +17,13 @@ for impact modelling.
 Quick Installation Guide
 ========================
 
-From Zip Archive
-----------------
+To install the |project_name|, use the plugin manager in QGIS::
 
-We make regular releases of the InaSAFE plugin and they are available at
-https://github.com/AIFDR/inasafe/downloads. Simply choose the most recent (i.e.
-the one with the largest version number) and save it to your hard disk.
+  Plugins -> Fetch Python Plugins
 
-Now extract the zip file into the QGIS plugins directory. Under windows the
-plugins directory is under :file:`c:\\Users\\<your username>\\.qgis\\python\\plugins`.
+Then search for '|project_name|', select it and click the install button.
+The plugin will now be added to your plugins menu.
 
-After extracting the plugin, it should be available as
-:file:`c:\\Users\\<your username>\\.qgis\\python\\plugins\\inasafe\\`.
-
-Mac and Linux users need to follow the same procedure but instead the plugin
-directory will be under your $HOME directory.
-
-Once the plugin is extracted, start QGIS and enable it from the plugin manager.
-To do this open the plugin manager (:menuselection:`Plugins --> Manage plugins...`)
-and type :samp:`insafe` into the filter box. You should see the InaSAFE plugin
-appear in the list. Now tick the checkbox next to it to enable the plugin.
-
-.. figure:: ../../plugin-manager.png
-   :align: center
-
-Via QGIS Plugin Manager
------------------------
-
-.. note:: This installation method is not yet supported - watch this space it
-   will be available in the near future.
 
 System Requirements
 -------------------
@@ -87,7 +65,7 @@ holders and/or other parties provide the program "as is" without warranty
 of any kind, either expressed or implied, including, but not limited to,
 the implied warranties of merchantability and fitness for a particular
 purpose. The entire risk as to the quality and performance of the program
-is with you. Sshould the program prove defective, you assume the cost of
+is with you. Should the program prove defective, you assume the cost of
 all necessary servicing, repair or correction.
 
 

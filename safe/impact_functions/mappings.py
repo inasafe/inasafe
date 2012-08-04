@@ -5,6 +5,13 @@ from safe.storage.vector import Vector
 from safe.common.utilities import verify
 
 
+#def padang2itb(E):
+#    """
+#    To be updated
+#    """
+#    print E.get_attribute_names()
+
+
 def osm2padang(E):
     """Map OSM attributes to Padang vulnerability classes
 

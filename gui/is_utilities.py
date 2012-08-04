@@ -30,6 +30,7 @@ from qgis.core import (QGis,
                        QgsRasterLayer,
                        QgsMapLayer,
                        QgsCoordinateReferenceSystem,
+                       QgsCoordinateTransform,
                        QgsGraduatedSymbolRendererV2,
                        QgsSymbolV2,
                        QgsRendererRangeV2,
@@ -37,8 +38,9 @@ from qgis.core import (QGis,
                        QgsColorRampShader,
                        QgsRasterTransparency)
 #do not remove this even if it is marked as unused by your IDE
-#resources are used by htmlfooter and header
-import resources
+#resources are used by htmlfooter and header the comment will mark it unused
+#for pylint
+import gui.resources  # pylint: disable=W0611
 
 
 def setVectorStyle(theQgisVectorLayer, style):
@@ -315,14 +317,11 @@ def getTempDir(theSubDirectory=None):
     return myPath
 
 
-def getWGS84resolution(theLayer, theGeoExtent=None):
+def getWGS84resolution(theLayer):
     """Return resolution of raster layer in EPSG:4326
 
     Input
         theLayer: Raster layer
-        theGeoExtent: Bounding box in EPSG:4326
-        # FIXME (Ole), the second argumunt should be obtained within
-                       this function to make it independent
     Output
         resolution.
 
@@ -344,12 +343,15 @@ def getWGS84resolution(theLayer, theGeoExtent=None):
 
         # Reproject extent to EPSG:4326
         myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromEpsg(4326)
+        myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+        myXForm = QgsCoordinateTransform(myGeoCrs, theLayer.crs())
+        myExtent = theLayer.extent()
+        myProjectedExtent = myXForm.transformBoundingBox(myExtent)
 
         # Estimate cellsize
-        # FIXME (Ole): Get geoextent from layer
         myColumns = theLayer.width()
-        myGeoWidth = abs(theGeoExtent[3] - theGeoExtent[0])
+        myGeoWidth = abs(myProjectedExtent.xMaximum() -
+                         myProjectedExtent.xMinimum())
         myCellSize = myGeoWidth / myColumns
 
     return myCellSize
@@ -388,8 +390,8 @@ def qgisVersion():
     """
     myVersion = None
     try:
-        myVersion = unicode(QGis.QGIS_VERSION_INT)
-    except:
-        myVersion = unicode(QGis.qgisVersion)[0]
+        myVersion = unicode(QGis.QGIS_VERSION_INT)  # pylint: disable=E1101
+    except AttributeError:
+        myVersion = unicode(QGis.qgisVersion)[0]  # pylint: disable=E1101
     myVersion = int(myVersion)
     return myVersion

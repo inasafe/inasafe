@@ -25,25 +25,25 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-
-from utilities_test import (getQgisTestApp,
-                            assertHashForFile,
-                            hashForFile,
-                            assertHashesForFile)
-from gui.is_map import ISMap
 from PyQt4 import QtGui
 from qgis.core import (QgsSymbol,
                        QgsMapLayerRegistry,
                        QgsRectangle,
                        QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
-from utilities_test import (loadLayer, setJakartaGeoExtent)
-from is_utilities import getTempDir
+
+from gui.utilities_test import (getQgisTestApp,
+                                assertHashForFile,
+                                hashForFile,
+                                assertHashesForFile)
+from gui.is_map import ISMap
+from gui.utilities_test import (loadLayer, setJakartaGeoExtent)
+from gui.is_utilities import getTempDir
 try:
-    from pydevd import *
+    from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except ImportError:
     print 'Debugging was disabled'
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -53,8 +53,9 @@ class ISMapTest(unittest.TestCase):
     """Test the InaSAFE Map generator"""
     def setUp(self):
         """Setup fixture run before each tests"""
-        for myLayer in QgsMapLayerRegistry.instance().mapLayers():
-            QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
+        myRegistry = QgsMapLayerRegistry.instance()
+        for myLayer in myRegistry.mapLayers():
+            myRegistry.removeMapLayer(myLayer)
 
     def test_inasafeMap(self):
         """Test making a pdf using the ISMap class."""
@@ -89,11 +90,13 @@ class ISMapTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
-        myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
-                            'f2169dd3146aca6b30a10cddfb5ebf68',  # ub11.10
-                            'de6cbd59899d0077b11dd09c00a343e8',  # ub12.04
+        myExpectedHashes = ['',  # win
+                            'd0c3071c4babe7db4f9762b311d61184',  # ub12.04xiner
+                            'b94cfd8a10d709ff28466ada425f24c8',  # ub11.10-64
+                            '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
+                            'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
                             # ub11.04-64 laptop
-                            '6f9a68611cad040d0a524f929361bb64',
+                            '',
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
 
@@ -106,15 +109,16 @@ class ISMapTest(unittest.TestCase):
         myMap.getVectorLegend()
         myPath = os.path.join(getTempDir(), 'getVectorLegend.png')
         myMap.legend.save(myPath, 'PNG')
-        myExpectedHash = None
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
-        myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
-                            'f2169dd3146aca6b30a10cddfb5ebf68',  # ub11.10
-                            'de6cbd59899d0077b11dd09c00a343e8',  # ub12.04
+        myExpectedHashes = ['',  # win
+                            'd0c3071c4babe7db4f9762b311d61184',  # ub12.04 xinr
+                            'b94cfd8a10d709ff28466ada425f24c8',  # ub11.10-64
+                            '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
+                            'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
                             # ub11.04-64 laptop
-                            '6f9a68611cad040d0a524f929361bb64',
+                            '',
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
 
@@ -130,11 +134,13 @@ class ISMapTest(unittest.TestCase):
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
-        myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
-                            '1fc706f7c08e7d3057a685f9e6c4df3f',  # ub11.10
-                            '2845879db127ce81d85baaac0b2c11b7',  # ub12.04
+        myExpectedHashes = ['',  # win
+                            '9ead6ce0ac789adc65a6f00bd2d1f709',  # ub12.04xiner
+                            '84bc3d518e3a0504f8dc36dfd620394e',  # ub11.10-64
+                            'b68ccc328de852f0c66b8abe43eab3da',  # ub12.04
+                            'cd5fb96f6c5926085d251400dd3b4928',  # ub12.04 xvfb
                             # ub11.04-64 laptop
-                            '6ab9f8cc2445d1e672fd5013ac76cce7',
+                            '',
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
 
@@ -168,23 +174,25 @@ class ISMapTest(unittest.TestCase):
         myMap.addClassToLegend(myColour,
                                theMin=None,
                                theMax=None,
-                               theCategory='foo',
+                               theCategory=None,
                                theLabel='bar')
         myMap.addClassToLegend(myColour,
                                theMin=None,
                                theMax=None,
-                               theCategory='foo',
+                               theCategory=None,
                                theLabel='foo')
         myPath = os.path.join(getTempDir(), 'addClassToLegend.png')
         myMap.legend.save(myPath, 'PNG')
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
-        myExpectedHashes = ['658e8dc0bf8b9a09b36994abf9242099',  # win
-                            'ea0702782c2ed5d950c427fbe1743858',  # ub11.10
-                            '944cee3eb9d916816b60ef41e8069683',  # ub12.04
+        myExpectedHashes = ['',  # win
+                            '67c0f45792318298664dd02cc0ac94c3',  # ub12.04xiner
+                            'ea0702782c2ed5d950c427fbe1743858',  # ub11.10-64
+                            '53e0ba1144e071ad41756595d29bf444',  # ub12.04
+                            '0681c3587305074bc9272f456fb4dd09',  # ub12.04 xvfb
                             # ub11.04-64 laptop
-                            '4f98b1ddef2d72bd38b2f220ec7e01cc',
+                            '',
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
 

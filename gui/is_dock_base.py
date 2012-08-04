@@ -146,4 +146,4 @@ class Ui_ISDockBase(object):
         self.pbnRunStop.setText(QtGui.QApplication.translate("ISDockBase", "Run", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
-import resources_rc
+import gui.resources_rc

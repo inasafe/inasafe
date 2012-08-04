@@ -6,7 +6,7 @@ import numpy
 import copy as copy_module
 from osgeo import gdal
 from safe.common.utilities import verify
-from safe.common.numerics import nanallclose
+from safe.common.numerics import nanallclose, geotransform2axes
 from safe.common.dynamic_translations import names as internationalised_titles
 
 from layer import Layer
@@ -414,37 +414,13 @@ class Raster(Layer):
 
         # Get parameters for axes
         g = self.get_geotransform()
-
-        lon_ul = float(g[0])  # Longitude of upper left corner
-        lat_ul = float(g[3])  # Latitude of upper left corner
-        dx = float(g[1])      # Longitudinal resolution
-        dy = - float(g[5])    # Latitudinal resolution (always(?) negative)
         nx = self.columns
         ny = self.rows
 
-        verify(dx > 0)
-        verify(dy > 0)
+        # Compute x and y axes
+        x, y = geotransform2axes(g, nx, ny)
 
-        # Coordinates of lower left corner
-        lon_ll = lon_ul
-        lat_ll = lat_ul - ny * dy
-
-        # Coordinates of upper right corner
-        lon_ur = lon_ul + nx * dx
-
-        # Define pixel centers along each directions
-        # This is to achieve pixel registration rather
-        # than gridline registration
-        dx2 = dx / 2
-        dy2 = dy / 2
-
-        # Define longitudes and latitudes for each axes
-        x = numpy.linspace(lon_ll + dx2,
-                           lon_ur - dx2, nx)
-        y = numpy.linspace(lat_ll + dy2,
-                           lat_ul - dy2, ny)
-
-        # Return
+        # Return them
         return x, y
 
     def copy(self):

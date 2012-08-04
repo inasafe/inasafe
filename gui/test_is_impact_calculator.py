@@ -25,12 +25,12 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 import unittest
-from is_impact_calculator import ISImpactCalculator
-from is_exceptions import (InsufficientParametersException,
+from gui.is_impact_calculator import ISImpactCalculator
+from gui.is_exceptions import (InsufficientParametersException,
                            KeywordNotFoundException,
                            StyleInfoNotFoundException)
 
-from is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
+from gui.is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
 from safe_api import TESTDATA, HAZDATA, EXPDATA
 
 # Retired impact function for characterisation
@@ -68,15 +68,15 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test if the properties work as expected."""
 
         myMessage = 'Vector property incorrect.'
-        assert (self.calculator._exposureLayer ==
+        assert (self.calculator.exposureLayer() ==
                 self.vectorPath), myMessage
 
         myMessage = 'Raster property incorrect.'
-        assert (self.calculator._hazardLayer ==
+        assert (self.calculator.hazardLayer() ==
                 self.rasterShakePath), myMessage
 
         myMessage = 'Function property incorrect.'
-        assert (self.calculator._function ==
+        assert (self.calculator.function() ==
                 'Earthquake Guidelines Function'), myMessage
 
     def test_run(self):

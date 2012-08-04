@@ -22,7 +22,7 @@ from safe.common.numerics import ensure_numeric
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
-                               numpy_version=True):
+                               use_numpy=True):
     """Determine whether points are inside or outside a polygon
 
     Input:
@@ -32,8 +32,9 @@ def separate_points_by_polygon(points, polygon,
        regarded as belonging to the polygon (closed = True)
        or not (closed = False)
        check_input: Allows faster execution if set to False
+       use_numpy: Use the fast numpy implementation
 
-    Outputs:
+    Output:
        indices: array of same length as points with indices of points falling
        inside the polygon listed from the beginning and indices of points
        falling outside listed from the end.
@@ -116,30 +117,42 @@ def separate_points_by_polygon(points, polygon,
     N = polygon.shape[0]  # Number of vertices in polygon
     M = points.shape[0]  # Number of points
 
-    #indices = numpy.zeros(M, numpy.int)
-    if numpy_version:
+    if use_numpy:
         indices, count = _separate_points_by_polygon(points, polygon,
                                                      closed=closed)
     else:
         indices, count = _separate_points_by_polygon_python(points, polygon,
                                                             closed=closed)
 
-    # log.critical('Found %d points (out of %d) inside polygon' % (count, M))
-
     return indices, count
 
 
 def _separate_points_by_polygon(points, polygon,
-                                closed):
+                                closed, rtol=0.0, atol=0.0):
     """Underlying algorithm to partition point according to polygon
-    """
+
+    Input:
+       points - Tuple of (x, y) coordinates, or list of tuples
+       polygon - list of vertices of polygon
+       closed - (optional) determine whether points on boundary should be
+       regarded as belonging to the polygon (closed = True)
+       or not (closed = False)
+       rtol, atol: Tolerances for when a point is considered to coincide with
+                   a line. Default 0.0.
+
+    Output:
+       indices: array of same length as points with indices of points falling
+       inside the polygon listed from the beginning and indices of points
+       falling outside listed from the end.
+
+       count: count of points falling inside the polygon
+
+       The indices of points inside are obtained as indices[:count]
+       The indices of points outside are obtained as indices[count:]
+     """
 
     # Suppress numpy warnings (as we'll be dividing by zero)
     original_numpy_settings = numpy.seterr(invalid='ignore', divide='ignore')
-
-    # FIXME: Pass these in
-    rtol = 0.0
-    atol = 0.0
 
     # Get polygon extents to quickly rule out points that
     # are outside its bounding box
@@ -224,16 +237,35 @@ def _separate_points_by_polygon(points, polygon,
 
 
 def _separate_points_by_polygon_python(points, polygon,
-                                       closed):
+                                       closed, rtol=0.0, atol=0.0):
     """Underlying algorithm to partition point according to polygon
 
-    Old C-code converted to Python
-    This is not using numpy code - available for testing only
-    """
+    Note:
+       This is not using numpy code so very slow - available for testing only
+       Use _separate_points_by_polygon which uses numpy for real work.
 
-    # FIXME: Pass these in
-    rtol = 0.0
-    atol = 0.0
+
+    Input:
+       points - Tuple of (x, y) coordinates, or list of tuples
+       polygon - list of vertices of polygon
+       closed - (optional) determine whether points on boundary should be
+       regarded as belonging to the polygon (closed = True)
+       or not (closed = False)
+       rtol, atol: Tolerances for when a point is considered to coincide with
+                   a line. Default 0.0.
+
+    Output:
+       indices: array of same length as points with indices of points falling
+       inside the polygon listed from the beginning and indices of points
+       falling outside listed from the end.
+
+       count: count of points falling inside the polygon
+
+       The indices of points inside are obtained as indices[:count]
+       The indices of points outside are obtained as indices[count:]
+
+
+    """
 
     # Get polygon extents to quickly rule out points that
     # are outside its bounding box

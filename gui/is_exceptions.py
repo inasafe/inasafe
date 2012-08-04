@@ -91,3 +91,15 @@ class NoFeaturesInExtentException(Exception):
 class InvalidProjectionException(Exception):
     """An exception raised if a layer needs to be reprojected."""
     pass
+
+
+class InsufficientOverlapException(Exception):
+    """An exception raised if an error occurs during extent calculation
+    because the bounding boxes do not overlap."""
+    pass
+
+
+class InvalidBoundingBoxException(Exception):
+    """An exception raised if an error occurs during extent calculation
+    because one of the extents is invalid."""
+    pass

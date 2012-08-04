@@ -12,7 +12,7 @@ from qgis.core import (QgsApplication,
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 from safe_api import TESTDATA
-from safe_api import read_keywords
+from gui.is_safe_interface import readKeywordsFromFile
 import hashlib
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
@@ -68,7 +68,7 @@ def getQgisTestApp():
     If QGis is already running the handle to that app will be returned
     """
 
-    global QGISAPP
+    global QGISAPP  # pylint: disable=W0603
 
     if QGISAPP is None:
         myGuiFlag = True  # All test will run qgis in gui mode
@@ -82,21 +82,42 @@ def getQgisTestApp():
         s = QGISAPP.showSettings()
         print s
 
-    global PARENT
+    global PARENT  # pylint: disable=W0603
     if PARENT is None:
         PARENT = QtGui.QWidget()
 
-    global CANVAS
+    global CANVAS  # pylint: disable=W0603
     if CANVAS is None:
         CANVAS = QgsMapCanvas(PARENT)
         CANVAS.resize(QtCore.QSize(400, 400))
 
-    global IFACE
+    global IFACE  # pylint: disable=W0603
     if IFACE is None:
         # QgisInterface is a stub implementation of the QGIS plugin interface
         IFACE = QgisInterface(CANVAS)
 
     return QGISAPP, CANVAS, IFACE, PARENT
+
+
+def unitTestDataPath(theSubdir=None):
+    """Return the absolute path to the InaSAFE unit test data dir.
+
+    .. note:: This is not the same thing as the SVN inasafe_data dir. Rather
+       this is a new dataset where the test datasets are all tiny for fast
+       testing and the datasets live in the same repo as the code.
+
+    Args:
+       * theSubdir: (Optional) Additional subdir to add to the path - typically
+         'hazard' or 'exposure'.
+    """
+    myPath = __file__
+    if theSubdir is not None:
+        myPath = os.path.abspath(os.path.join(myPath,
+                                              'unit_test_data',
+                                              theSubdir))
+    else:
+        myPath = os.path.abspath(os.path.join(myPath, 'unit_test_data'))
+    return myPath
 
 
 def loadLayer(theLayerFile, DIR=TESTDATA):
@@ -110,8 +131,8 @@ def loadLayer(theLayerFile, DIR=TESTDATA):
     """
 
     # Extract basename and absolute path
-    myFileName = os.path.split(theLayerFile)[-1]  # In case path was absolute
-    myBaseName, myExt = os.path.splitext(myFileName)
+    myFilename = os.path.split(theLayerFile)[-1]  # In case path was absolute
+    myBaseName, myExt = os.path.splitext(myFilename)
     if DIR is None:
         myPath = theLayerFile
     else:
@@ -119,12 +140,12 @@ def loadLayer(theLayerFile, DIR=TESTDATA):
     myKeywordPath = myPath[:-4] + '.keywords'
 
     # Determine if layer is hazard or exposure
-    myKeywords = read_keywords(myKeywordPath)
+    myKeywords = readKeywordsFromFile(myKeywordPath)
     myType = 'undefined'
     if 'category' in myKeywords:
         myType = myKeywords['category']
-    msg = 'Could not read %s' % myKeywordPath
-    assert myKeywords is not None, msg
+    myMessage = 'Could not read %s' % myKeywordPath
+    assert myKeywords is not None, myMessage
 
     # Create QGis Layer Instance
     if myExt in ['.asc', '.tif']:

@@ -205,8 +205,9 @@ class Test_Engine(unittest.TestCase):
 
         I = read_layer(impact_filename)
         calculated_result = I.get_data()
-
+#        print calculated_result.shape
         keywords = I.get_keywords()
+#        print "keywords", keywords
         population = float(keywords['total_population'])
         fatalities = float(keywords['total_fatalities'])
 
@@ -225,6 +226,8 @@ class Test_Engine(unittest.TestCase):
         # Compare with reference data
         F = read_layer(fatality_filename)
         fatality_result = F.get_data()
+
+#        print fatality_result
 
         msg = ('Calculated fatality map did not match expected result: '
                'I got %s\n'
@@ -2092,6 +2095,7 @@ class Test_Engine(unittest.TestCase):
 
                 # Check calculated damage
                 calculated_dam = attributes[i]['DAMAGE']
+                print calculated_mmi
                 verified_dam = padang_check_results(calculated_mmi,
                                                     building_class)
                 #print calculated_mmi, building_class, calculated_dam
@@ -2116,64 +2120,63 @@ class Test_Engine(unittest.TestCase):
     test_padang_building_examples.slow = 1
 
     def test_itb_building_function(self):
-        """ITB building impact function works
+        """Damage ratio (estimated repair cost relative to replacement cost)
+           can be computed using the ITB building vulnerability model.
+           (Test data from Hyeuk Ryu).
+           As of July 4, 2012, the vulnerability model used to generate
+           the reference values is dummy one, and it will be updated with
+           the ITB's model later.
         """
 
+        # Name file names for hazard level, exposure and expected impact
+        hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
+        exposure_filename = '%s/Padang_WGS84.shp' % TESTDATA
+        damage_filename = '%s/reference_result_itb.csv' % TESTDATA
+
+        a = open(damage_filename).readlines()[1:]
+        ref_damage = []
+        for item in a:
+            b = item.strip('\n').split(',')
+            ref_damage.append(float(b[2]))
+        ref_damage = numpy.array(ref_damage)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
         plugin_name = 'I T B Earthquake Building Damage Function'
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+        IF = plugin_list[0][plugin_name]
 
-        # Test for a range of hazard layers
-        for mmi_filename in ['Shakemap_Padang_2009.asc']:
-                             #'Lembang_Earthquake_Scenario.asc']:
-
-            # Upload input data
-            hazard_filename = join(HAZDATA, mmi_filename)
-            exposure_filename = join(TESTDATA, 'Padang_WGS84.shp')
-
-            # Call calculation routine
-            bbox = '96.956, -5.51, 104.63933, 2.289497'
-
-            # Get layers using API
-            H = read_layer(hazard_filename)
-            E = read_layer(exposure_filename)
-
-            # Get impact function (FIXME: should be nicer)
-            plugin_list = get_plugins(plugin_name)
-            assert len(plugin_list) == 1
-            assert plugin_list[0].keys()[0] == plugin_name
-            IF = plugin_list[0][plugin_name]
-
-            # Call impact calculation engine
-            impact_vector = calculate_impact(layers=[H, E],
+        # Call impact calculation engine
+        impact_vector = calculate_impact(layers=[H, E],
                                              impact_fcn=IF)
-            impact_filename = impact_vector.get_filename()
+        attributes = impact_vector.get_data()
 
-            # Extract calculated result
-            coordinates = impact_vector.get_geometry()
-            attributes = impact_vector.get_data()
+#        calculated_damage = []
+        for i in range(len(attributes)):
+            calculated_damage = attributes[i]['DAMAGE']
+            bldg_class = attributes[i]['ITB_Class']
+            msg = ('Calculated damage did not match expected result: \n'
+               'I got %s\n'
+               'Expected %s for bldg type: %s' % (calculated_damage,
+                                                  ref_damage[i], bldg_class))
+            assert nanallclose(calculated_damage, ref_damage[i],
+                               # Reference data is single precision
+                               atol=1.0e-6), msg
 
-            # Verify calculated result
-            for i in range(len(attributes)):
-                building_class = attributes[i]['VCLASS']
+#        print calculated_damage.shape
+#        bldg_class = attributes[:]['VCLASS']
+#        impact_filename = impact_vector.get_filename()
+#        I = read_layer(impact_filename)
+#        calculated_result = I.get_data()
 
-                # Check calculated damage
-                mmi = attributes[i]['MMI']
-                calculated_damage = attributes[i]['DAMAGE']
+#        keywords = I.get_keywords()
 
-                #print
-                #print i
-                #print 'MMI', mmi
-                #print 'DAM', calculated_damage
-
-                if i == 3895:
-                    expected_damage = 1.28296234734
-                    msg = ('Damage for MMI = %f was not as expected. '
-                           'I got %f, expected %f ' % (mmi,
-                                                       calculated_damage,
-                                                       expected_damage))
-                    assert numpy.allclose(calculated_damage,
-                                          expected_damage), msg
-
-                # FIXME(Ole): Hyeuk to put tests in here
+#        print keywords
+#        print calculated_damage
     test_itb_building_function.slow = 1
 
     def test_flood_on_roads(self):
@@ -2322,6 +2325,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_itb')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

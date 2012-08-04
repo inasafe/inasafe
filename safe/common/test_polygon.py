@@ -459,11 +459,11 @@ class Test_Polygon(unittest.TestCase):
         indices_r, count_r = separate_points_by_polygon([[0.5, 0.5],
                                                          [0.3, 0.2]],
                                                         U,
-                                                        numpy_version=True)
+                                                        use_numpy=True)
         indices_p, count_p = separate_points_by_polygon([[0.5, 0.5],
                                                          [0.3, 0.2]],
                                                         U,
-                                                        numpy_version=False)
+                                                        use_numpy=False)
 
         assert count_r == count_p
         assert numpy.allclose(indices_r, indices_p)
@@ -472,12 +472,12 @@ class Test_Polygon(unittest.TestCase):
                                                          [0.3, 0.2],
                                                          [0.6, 0.7]],
                                                         U,
-                                                        numpy_version=True)
+                                                        use_numpy=True)
         indices_p, count_p = separate_points_by_polygon([[0.5, 0.5],
                                                          [0.3, 0.2],
                                                          [0.6, 0.7]],
                                                         U,
-                                                        numpy_version=False)
+                                                        use_numpy=False)
         assert count_r == count_p
         assert numpy.allclose(indices_r, indices_p)
 
@@ -485,9 +485,9 @@ class Test_Polygon(unittest.TestCase):
         points = [[0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0],
                   [0.5, 1.5], [0.5, -0.5]]
         res_r, count_r = separate_points_by_polygon(points, polygon,
-                                                    numpy_version=True)
+                                                    use_numpy=True)
         res_p, count_p = separate_points_by_polygon(points, polygon,
-                                                    numpy_version=False)
+                                                    use_numpy=False)
         assert count_r == 3
         assert count_p == 3
         assert numpy.allclose(res_p, [1, 2, 3, 5, 4, 0])
