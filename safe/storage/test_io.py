@@ -1826,6 +1826,9 @@ class Test_IO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
+
+    @numpy.testing.dec.skipif(sys.platform == 'darwin',
+                         'Known to fail in OSX because of issue #198')
     def test_i18n(self):
         """Test to see if internationalisation is working correctly.
         Make sure to include this file when using xgettext to scan for
