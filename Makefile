@@ -120,8 +120,8 @@ clean:
 # Run the test suite followed by pep8 style checking
 test: docs test_suite pep8 dependency_test unwanted_strings data_audit test-translations
 
-# Run the test suite followed by pep8 style checking - dont update from svn for test data
-test_no_svn: docs test_suite_no_svn pep8 disabled_tests dependency_test unwanted_strings data_audit
+# Run the test suite followed by pep8 style checking - dont update from git for test data
+test_no_git: docs test_suite_no_git pep8 disabled_tests dependency_test unwanted_strings data_audit
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
@@ -135,7 +135,7 @@ pep8:
 	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
 
 # Run entire test suite
-test_suite_no_svn: compile
+test_suite_no_git: compile
 	@echo
 	@echo "----------------------"
 	@echo "Regression Test Suite"
@@ -168,8 +168,8 @@ test_suite: compile testdata
 	@#echo Expecting 1 test to fail in support of issue #3
 	@#echo Expecting 1 test to fail in support of issue #160
 
-# Run gui test suite only and without svn updating test data
-gui_test_suite_no_svn: compile
+# Run gui test suite only and without git updating test data
+gui_test_suite_no_git: compile
 	@echo
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
@@ -193,8 +193,9 @@ testdata:
 	@echo
 	@echo "-----------------------------------------------------------"
 	@echo "Updating test data - please hit Enter if asked for password"
+	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@svn co http://www.aifdr.org/svn/inasafe_data ../inasafe_data
+	@scripts/update-test-data.sh 7851101865a2
 
 disabled_tests:
 	@echo
