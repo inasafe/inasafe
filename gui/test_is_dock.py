@@ -937,10 +937,10 @@ class ISDockTest(unittest.TestCase):
     def test_issue_160(self):
         """Test that multipart features can be used in a scenario - issue #160
         """
-        myTestDataDir = os.path.join(os.path.dirname(__file__), '..',
-                                     'unit_test_data')
-        myExposure = os.path.join('exposure', 'buildings_osm_4326.shp')
-        myHazard = os.path.join('hazard', 'multipart_polygons_osm_4326.shp')
+        from safe.common.testing import UNITDATA
+
+        myExposure = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
+        myHazard = os.path.join(UNITDATA, 'hazard', 'multipart_polygons_osm_4326.shp')
                 # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         print 'Using QGIS: %s' % qgisVersion()

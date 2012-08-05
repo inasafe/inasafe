@@ -110,13 +110,13 @@ def unitTestDataPath(theSubdir=None):
        * theSubdir: (Optional) Additional subdir to add to the path - typically
          'hazard' or 'exposure'.
     """
-    myPath = __file__
+    from safe.common.testing import UNITDATA
+
+    myPath = UNITDATA
+
     if theSubdir is not None:
-        myPath = os.path.abspath(os.path.join(myPath,
-                                              'unit_test_data',
-                                              theSubdir))
-    else:
-        myPath = os.path.abspath(os.path.join(myPath, 'unit_test_data'))
+        myPath = os.path.join(myPath, theSubdir)
+
     return myPath
 
 
