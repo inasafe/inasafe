@@ -4,10 +4,6 @@ import os
 import unittest
 import warnings
 
-# Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
-
 # FIXME (Ole): Must use fully qualified path for these
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_plugins

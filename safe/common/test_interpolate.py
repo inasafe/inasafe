@@ -3,10 +3,6 @@ import sys
 import numpy
 import unittest
 
-# Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
-
 # Import InaSAFE modules
 from safe.common.interpolation2d import interpolate2d, interpolate_raster
 from safe.common.interpolation1d import interpolate1d

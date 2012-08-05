@@ -6,10 +6,6 @@ import os
 import unittest
 import warnings
 
-# Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
-
 from core import FunctionProvider
 from core import requirements_collect
 from core import requirement_check
