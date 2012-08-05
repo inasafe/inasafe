@@ -12,13 +12,6 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
-import os
-sys.path.append(os.path.abspath('../../'))
-sys.path.append(os.path.abspath('../../../'))
-sys.path.append(os.path.abspath('../cloud_sptheme/'))
-#print sys.path
-
 # import Cloud - the sphinx theme we are using - pip install cloud-sptheme
 # see http://packages.python.org/cloud_sptheme/cloud_theme.html
 import cloud_sptheme as csp
