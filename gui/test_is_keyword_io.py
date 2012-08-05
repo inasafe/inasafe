@@ -15,7 +15,7 @@ from gui.is_keyword_io import ISKeywordIO
 from gui.is_exceptions import HashNotFoundException
 from gui.is_utilities import getTempDir
 
-from safe_api import TESTDATA, HAZDATA
+from safe.api import TESTDATA, HAZDATA
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 #Dont change this, not even formatting, you will break tests!

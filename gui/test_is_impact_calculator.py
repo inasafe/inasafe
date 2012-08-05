@@ -31,11 +31,11 @@ from gui.is_exceptions import (InsufficientParametersException,
                            StyleInfoNotFoundException)
 
 from gui.is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
-from safe_api import TESTDATA, HAZDATA, EXPDATA
+from safe.api import TESTDATA, HAZDATA, EXPDATA
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)
-from engine.impact_functions_for_testing import BNPB_earthquake_guidelines
+from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 
 
 class ImpactCalculatorTest(unittest.TestCase):

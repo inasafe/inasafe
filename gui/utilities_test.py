@@ -11,7 +11,7 @@ from qgis.core import (QgsApplication,
                       QgsCoordinateReferenceSystem)
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
-from safe_api import TESTDATA
+from safe.api import TESTDATA
 from gui.is_safe_interface import readKeywordsFromFile
 import hashlib
 

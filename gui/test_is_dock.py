@@ -48,14 +48,14 @@ from gui.is_dock import ISDock
 from gui.is_utilities import (setRasterStyle,
                           qgisVersion)
 
-from safe_api import TESTDATA, HAZDATA, EXPDATA
+from safe.api import TESTDATA, HAZDATA, EXPDATA
 
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)
 # pylint: disable=W0611
-from engine.impact_functions_for_testing import allen_fatality_model
-from engine.impact_functions_for_testing import HKV_flood_study
-from engine.impact_functions_for_testing import BNPB_earthquake_guidelines
+from safe.engine.impact_functions_for_testing import allen_fatality_model
+from safe.engine.impact_functions_for_testing import HKV_flood_study
+from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # pylint: enable=W0611
 
 try:

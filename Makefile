@@ -18,7 +18,7 @@
 
 # Makefile for InaSAFE - QGIS
 
-NONGUI := storage engine impact_functions
+NONGUI := safe
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
 
