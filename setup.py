@@ -25,8 +25,11 @@ setup(name          = 'python-safe',
                   'safe.engine.impact_functions_for_testing',
                   'safe.impact_functions'],
       package_dir = {'safe': 'safe'},
-      package_data = {'safe': ['test/data/*', 'i18n']},
-      install_requires = ['Numpy',],
+      package_data = {'safe': ['safe/test/data/*', 'safe/i18n']},
+      install_requires = ['Numpy',
+                          #documentation
+                          'Sphinx',
+                          'cloud-sptheme'],
       classifiers   = [
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
