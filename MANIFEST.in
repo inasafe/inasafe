@@ -1,3 +1,0 @@
-graft safe/test/data
-graft safe/i18n
-include README.rst

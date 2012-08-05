@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import subprocess
 
 from distutils.core import setup
 safe = __import__('safe')
@@ -24,7 +23,6 @@ setup(name          = 'python-safe',
                   'safe.engine',
                   'safe.engine.impact_functions_for_testing',
                   'safe.impact_functions'],
-      package_dir = {'safe': 'safe'},
       package_data = {'safe': ['safe/test/data/*', 'safe/i18n']},
       install_requires = ['Numpy',
                           #documentation
@@ -39,4 +37,5 @@ setup(name          = 'python-safe',
         'Programming Language :: Python',
         'Topic :: Scientific/Engineering :: GIS',
         ],
+      zip_safe=False,
 )
