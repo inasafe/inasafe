@@ -5,10 +5,6 @@ import sys
 import os
 from os.path import join
 
-# Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(join(os.path.dirname(__file__), '..', '..'))
-sys.path.append(pardir)
-
 # Import InaSAFE modules
 from safe.engine.core import calculate_impact
 
