@@ -23,11 +23,11 @@ TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
 HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 
-UNITDATA = os.path.join(__file__, #testing.py
-                        '..', #common/
-                        '..', #safe/
-                        'test',
-                        'data')
+UNITDATA = os.path.abspath(
+               os.path.join(os.path.dirname(__file__), #common/
+               '..', #safe/
+               'test',
+               'data'))
 
 # Known feature counts in test data
 FEATURE_COUNTS = {'test_buildings.shp': 144,
