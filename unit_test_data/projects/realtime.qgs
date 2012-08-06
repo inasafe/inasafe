@@ -4,10 +4,10 @@
     <mapcanvas>
         <units>degrees</units>
         <extent>
-            <xmin>98.334097</xmin>
-            <ymin>-7.005637</ymin>
-            <xmax>106.960117</xmax>
-            <ymax>-2.356229</ymax>
+            <xmin>100.490602</xmin>
+            <ymin>-5.880048</ymin>
+            <xmax>104.803612</xmax>
+            <ymax>-3.481818</ymax>
         </extent>
         <projections>1</projections>
         <destinationsrs>
@@ -51,10 +51,10 @@
         </legendlayer>
     </legend>
     <Composer title="Realtime" visible="0">
-        <ComposerLabel valign="32" labelText="Perkiraan dampak ini secara otomatis dihasilkan dan hanya mempertimbangkan penduduki dan kota yang terpengaruh oleh berbagai macam tingkat getaran tanahyang berbeda-beda. Perkiraan ini berdasarkan pada prediksi getaran tanah dari BMKG, data kepadatan penduduk dari BPS, informasi kota dari Geonamesdan perangkat lunak yang dikembangkan oleh BNPB. Keterbatasan pada perkiraan getaran tanah, data penduduk dan informasi kota akan menambah tingkatketidakpastian yang signifikan pada angka-angka yang ditampilkan di sini. Konsekuensinya, keputusan seharusnya tidak hanya berdasarkan pada informasi ini sajadan harus selalu diverifikasi dengan informasi lainnya." halign="1" margin="2">
+        <ComposerLabel valign="32" labelText="Perkiraan dampak ini secara otomatis dihasilkan dan hanya mempertimbangkan penduduk dan kota yang terpengaruh oleh berbagai macam tingkat getaran tanahyang berbeda-beda. Perkiraan ini berdasarkan pada prediksi getaran tanah dari BMKG, data kepadatan penduduk dari BPS, informasi kota dari Geonamesdan perangkat lunak yang dikembangkan oleh BNPB. Keterbatasan pada perkiraan getaran tanah, data penduduk dan informasi kota akan menambah tingkatketidakpastian yang signifikan pada angka-angka yang ditampilkan di sini. Konsekuensinya, keputusan seharusnya tidak hanya berdasarkan pada informasi ini sajadan harus selalu diverifikasi dengan informasi lainnya." halign="1" margin="2">
             <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0"/>
             <FontColor red="0" blue="0" green="0"/>
-            <ComposerItem width="192.925" x="7.13319" y="255.291" rotation="0" height="28.2586" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="3.11409" id="" positionLock="false">
+            <ComposerItem width="192.925" x="7.13319" y="255.291" rotation="0" height="28.2586" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="1.36242" id="" positionLock="false">
                 <FrameColor alpha="255" red="0" blue="0" green="0"/>
                 <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
             </ComposerItem>
@@ -103,7 +103,7 @@
             <Grid gridStyle="1" crossLength="0" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1" penWidth="0" penColorGreen="0">
                 <Annotation rightDirection="0" bottomDirection="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
             </Grid>
-            <ComposerItem width="67" x="134.301" y="220.12" rotation="0" height="27" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="3.07383" id="" positionLock="false">
+            <ComposerItem width="67" x="134.301" y="220.12" rotation="0" height="27" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="1.36242" id="" positionLock="false">
                 <FrameColor alpha="255" red="0" blue="0" green="0"/>
                 <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
             </ComposerItem>
@@ -131,7 +131,7 @@
             <Grid gridStyle="1" crossLength="2" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="0">
                 <Annotation rightDirection="0" bottomDirection="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
             </Grid>
-            <ComposerItem width="192.734" x="8.31804" y="61" rotation="0" height="149.148" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="3.07383" id="" positionLock="false">
+            <ComposerItem width="192.734" x="8.31804" y="61" rotation="0" height="149.148" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="1.36242" id="" positionLock="false">
                 <FrameColor alpha="255" red="0" blue="0" green="0"/>
                 <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
             </ComposerItem>
@@ -157,7 +157,7 @@
                     <RasterClassificationItem layerId="landscan200820120718231434191" color="#4a4a4a" text="1000-10000"/>
                 </LayerItem>
             </Model>
-            <ComposerItem width="32" x="7.06466" y="217.72" rotation="0" height="31.5" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="3.07383" id="" positionLock="false">
+            <ComposerItem width="32" x="7.06466" y="217.72" rotation="0" height="31.5" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="1.36242" id="" positionLock="false">
                 <FrameColor alpha="255" red="0" blue="0" green="0"/>
                 <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
             </ComposerItem>
@@ -186,9 +186,10 @@
             <transparencyLevelInt>255</transparencyLevelInt>
             <customproperties/>
             <provider>gdal</provider>
-            <rasterrenderer opacity="1" alphaBand="0" maxOversampling="2" blueBand="3" greenBand="2" type="multibandcolor" invertColor="0" redBand="1">
+            <rasterrenderer opacity="1" alphaBand="0" blueBand="3" greenBand="2" type="multibandcolor" invertColor="0" redBand="1">
                 <rasterTransparency/>
             </rasterrenderer>
+            <rasterresampler maxOversampling="2"/>
         </maplayer>
         <maplayer minimumScale="0" maximumScale="1e+08" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="0">
             <id>gadm20120718235630148</id>
@@ -586,7 +587,7 @@
             <transparencyLevelInt>255</transparencyLevelInt>
             <customproperties/>
             <provider>gdal</provider>
-            <rasterrenderer opacity="1" alphaBand="0" maxOversampling="2" band="1" type="singlebandpseudocolor" invertColor="0">
+            <rasterrenderer opacity="1" alphaBand="0" band="1" type="singlebandpseudocolor" invertColor="0">
                 <rasterTransparency>
                     <singleValuePixelList>
                         <pixelListEntry pixelValue="-9999.000000" percentTransparent="100"/>
@@ -601,6 +602,7 @@
                     </colorrampshader>
                 </rastershader>
             </rasterrenderer>
+            <rasterresampler maxOversampling="2"/>
         </maplayer>
         <maplayer minimumScale="0" maximumScale="1e+08" geometry="Line" type="vector" hasScaleBasedVisibilityFlag="0">
             <id>mi20120718230110900</id>
