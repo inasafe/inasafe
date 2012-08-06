@@ -1,6 +1,7 @@
 """Raster clipping by polygons
 """
 
+
 def clip_raster_by_polygons(R, P):
     """
 
@@ -32,13 +33,10 @@ def clip_raster_by_polygons(R, P):
 
     dy = G[5]
     ymax = G[3]
-    ymin =
-
-
+    #ymin =
 
     y = numpy.linspace(start=xmin,
                        stop=xmax,
                        num=N,
                        endpoint=False)
     print x, len(x)
-

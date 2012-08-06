@@ -482,7 +482,6 @@ class Test_Engine(unittest.TestCase):
                                     H.get_geometry())
         # FIXME (Ole): Not done yet
 
-
     def test_flood_building_impact_function(self):
         """Flood building impact function works
 

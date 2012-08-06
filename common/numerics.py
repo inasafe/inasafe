@@ -166,6 +166,7 @@ def erf(z):
     else:
         return ans
 
+
 def axes2points(x, y):
     """Generate all combinations of grid point coordinates from x and y axes
 
@@ -207,6 +208,7 @@ def axes2points(x, y):
     # Return
     return P
 
+
 def grid2points(A, x, y):
     """Convert grid data to point data
 
@@ -229,6 +231,7 @@ def grid2points(A, x, y):
 
     print x, len(x)
     print y, len(y)
+
 
 def geotransform2axes(G, nx, ny):
     """Convert geotransform to coordinate axes

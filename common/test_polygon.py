@@ -2032,9 +2032,7 @@ class Test_Polygon(unittest.TestCase):
 # [ 50.2784996   50.0377388   50.52249527  50.33809662  50.08750153]]
 #(96.956, 0.030741064, 0.0, -5.3035455519999, 0.0, -0.030741064)
 
-
         # FIXME (Ole): Move this to test_io.py
-
         import os
         from storage.core import read_layer
         from common.testing import TESTDATA
@@ -2046,8 +2044,6 @@ class Test_Polygon(unittest.TestCase):
 
         P = grid2points(L.get_data(),
                         L.get_geotransform())
-
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Polygon, 'test_grid2points')

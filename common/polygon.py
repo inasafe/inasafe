@@ -19,6 +19,7 @@ from random import uniform, seed as seed_function
 from common.numerics import ensure_numeric
 from common.numerics import grid2points
 
+
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
