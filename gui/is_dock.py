@@ -319,7 +319,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         .. note:: Don't use the @pyqtSlot() decorator for autoslots!
 
         Args:
-            None.
+            theIndex (Ignored) This parameters is passed by the Qt Signal and
+               needs to be here even though it is unused.
 
         Returns:
             None.
@@ -340,7 +341,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         .. note:: Don't use the @pyqtSlot() decorator for autoslots!
 
         Args:
-           None.
+            theIndex (Ignored) This parameters is passed by the Qt Signal and
+               needs to be here even though it is unused.
 
         Returns:
            None.
@@ -360,8 +362,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         .. note:: Don't use the @pyqtSlot() decorator for autoslots!
 
-        Args:
-           None.
+        Args: theIndex (Ignored) This parameters is passed by the Qt Signal and
+               needs to be here even though it is unused.
 
         Returns:
            None.
@@ -426,7 +428,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         are added this slot gets called only once. This slot simply
         delegates to getLayers and is only implemented here to make the
         connections between the different signals and slots clearer and
-        better documented."""
+        better documented.
+
+        Args: theLayers (Ignored) - Passed by QGIS,signal, needs to be here
+           even though it is unused.
+
+        Returns: None
+
+        Raises: None
+
+        """
         del theLayers
         self.getLayers()
 
@@ -594,34 +605,34 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
 
         self.restoreFunctionState(myOriginalFunction)
 
-    def readImpactLayer(self, myEngineImpactLayer):
+    def readImpactLayer(self, theEngineImpactLayer):
         """Helper function to read and validate layer.
 
-        Args
-            myEngineImpactLayer: Layer object as provided by the inasafe engine
+        Args:
+            theEngineImpactLayer: Layer object as provided by the inasafe engine
 
-        Returns
+        Returns:
             validated qgis layer or None
 
-        Raises
+        Raises:
             Exception if layer is not valid
         """
 
         myMessage = ('Input argument must be a InaSAFE spatial object. '
-               'I got %s' % type(myEngineImpactLayer))
-        if not hasattr(myEngineImpactLayer, 'is_inasafe_spatial_object'):
+               'I got %s' % type(theEngineImpactLayer))
+        if not hasattr(theEngineImpactLayer, 'is_inasafe_spatial_object'):
             raise Exception(myMessage)
-        if not myEngineImpactLayer.is_inasafe_spatial_object:
+        if not theEngineImpactLayer.is_inasafe_spatial_object:
             raise Exception(myMessage)
 
         # Get associated filename and symbolic name
-        myFilename = myEngineImpactLayer.get_filename()
-        myName = myEngineImpactLayer.get_name()
+        myFilename = theEngineImpactLayer.get_filename()
+        myName = theEngineImpactLayer.get_name()
 
         # Read layer
-        if myEngineImpactLayer.is_vector:
+        if theEngineImpactLayer.is_vector:
             myQgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
-        elif myEngineImpactLayer.is_raster:
+        elif theEngineImpactLayer.is_raster:
             myQgisLayer = QgsRasterLayer(myFilename, myName)
 
         # Verify that new qgis layer is valid
@@ -837,14 +848,16 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         """A helper function to indicate the plugin is processing.
 
         Args:
-            * theTitle - an optional title for the status update. Should be
-              plain text only
-            * theMessage - an optional message to pass to the busy indicator.
-              Can be an html snippet.
-            * theProgress - a number between 0 and 100 indicating % complete
+            theTitle (str) Optional title for the status update.
+               Should be plain text only
+            theMessage (str) Optional message to pass to the busy indicator.
+               Can be an html snippet.
+            theProgress (int) Required number between 0 and 100 indicating %
+               complete
 
         Returns:
             None
+
         Raises:
             Any exceptions raised by the RIAB library will be propagated.
 
@@ -1324,8 +1337,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         theCombo.insertItem(mySize, theItemText, theItemData)
 
     def getFunctionID(self):
-        """Get the canonical impact function ID for the currently selected
-           function
+        """Get the canonical impact function ID for currently selected function
         Args:
             None
         Returns:
