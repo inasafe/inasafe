@@ -25,6 +25,8 @@ from shake_event import ShakeEvent
 
 
 class TestShakeEvent(unittest.TestCase):
+    """Tests relating to shake events"""
+
     def test_eventFilePath(self):
         """Test eventFilePath works"""
         myShakeId = '20120726022003'

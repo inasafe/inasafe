@@ -280,13 +280,16 @@ class ShakeData:
 
         with input and output directories appearing beneath that.
 
-        This method will then move the event.xml and mi.grd files up to the
-        root of the extract dir and recursively remove the extracted dirs.
+        This method will then move the event.xml, event.xyz and mi.grd files
+        up to the root of the extract dir and recursively remove the extracted
+        dirs.
 
         After this final step, the following files will be present:
 
         :file:`/tmp/inasafe/realtime/shakemaps-extracted/
                20120726022003/event.xml`
+        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
+               20120726022003/event.xyz`
         :file:`/tmp/inasafe/realtime/shakemaps-extracted/
                20120726022003/mi.grd`
 
@@ -299,16 +302,20 @@ class ShakeData:
         .. note:: You should not store any of your own working data in the
            extract dir - it should be treated as transient.
 
+        .. note:: the grid.xyz file contains simlar metadata to grid.xml but
+           misses the depth.
         Args:
             theForceFlag - (Optional) Whether to force re-extraction. If the
                 files were previously extracted, you can force them to be
                 extracted again. If False, the event.xml and mi.grd files are
                 cached. Default False.
 
-        Returns: a two-tuple containing the event.xml and mi.grd paths e.g.::
-            myEventXml, myGrd = myShakeData.extract()
-            print myEventXml, myGrd
+        Returns: a three-tuple containing the event.xml, event.xyz and mi.grd
+            paths e.g.::
+            myEventXml, myEventXyz, myGrd = myShakeData.extract()
+            print myEventXml, myEventXyz, myGrd
             /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/event.xml
+            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/event.xyz
             /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/mi.grd
 
         Raises: InvalidInputZipError, InvalidOutputZipError
@@ -327,15 +334,17 @@ class ShakeData:
         myInputZip = ZipFile(myInput)
         myOutputZip = ZipFile(myOutput)
 
-        myExpectedEventFile = ('usr/local/smap/data/%s/input/event.xml' %
+        myExpectedEventXmlFile = ('usr/local/smap/data/%s/input/event.xml' %
                   self.eventId)
+        myExpectedEventXyzFile = ('usr/local/smap/data/%s/input/event.xml' %
+                                  self.eventId)
         myExpectedGridFile = ('usr/local/smap/data/%s/output/mi.grd' %
                   self.eventId)
 
         myList = myInputZip.namelist()
-        if myExpectedEventFile not in myList:
+        if myExpectedEventXmlFile not in myList:
             raise InvalidInputZipError('The input zip does not contain an '
-                '%s file.' % myExpectedEventFile)
+                '%s file.' % myExpectedEventXmlFile)
 
         myList = myOutputZip.namelist()
         if myExpectedGridFile not in myList:
@@ -347,7 +356,7 @@ class ShakeData:
         myOutputZip.extractall(myExtractDir)
 
         # move the two files we care about to the top of the event extract dir
-        shutil.copyfile(os.path.join(self.extractDir(), myExpectedEventFile),
+        shutil.copyfile(os.path.join(self.extractDir(), myExpectedEventXmlFile),
                         myFinalEventFile)
         shutil.copyfile(os.path.join(self.extractDir(), myExpectedGridFile),
                         myFinalGridFile)
