@@ -149,7 +149,7 @@ On some platforms the use of python optimised code is mandated and we are
 likely to get hard to investigate bug reports from end users at some
 unspecified point in the future.
 
-.. note:: This is a 'soft' requirement - since the python code for the plugin
+..  note:: This is a 'soft' requirement - since the python code for the plugin
    will be executed by the QGIS python internals, we can be fairly certain that
    python code will be executed with out the -O optimisation option for the
    short term.
@@ -417,11 +417,11 @@ simply do it in git as illustrated below.::
    git tag version-0_1_0
    git push --tags origin version-0_1_0
 
-.. note:: 1) Replace 'dot' separators with underscores for the version number.
-   2) You can differentiate release **branches** from release **tags** by the
+.. note:: Replace 'dot' separators with underscores for the version number.
+.. note:: You can differentiate release **branches** from release **tags** by the
    fact that branch names have only the minor version number (e.g.
-   :samp:`version-0_4`) whereas release tags are reserved for point releases
-   (e.g. :samp:`version-0_4_1`).
+   version-0_4) whereas release tags are reserved for point releases
+   (e.g. version-0_4_1).
 
 **Outcome:** The release is tagged in GIT and can be checked out at any point
 in the future. The tagged source tree can easily be downloaded at any point by

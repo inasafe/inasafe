@@ -144,7 +144,7 @@ Create a new Job (project):
 :menuselection:`Jenkins --> New Job` or go to
 http://jenkins.linfiniti.com/view/All/newJob.
 
-Here is a log of the options we set for the Jenkins job::
+Here is a log of the options we set for the Jenkins job:
 
 * :guilabel:`Project Name` set to :kbd:`InaSAFE` (don't use spaces for the
   project name!).
@@ -291,8 +291,7 @@ Also you should set the Jenkins git user and email::
    jenkins@maps:~$ git config --global user.email "jenkins@linfiniti.com"
    jenkins@maps:~$ git config --global user.name "Jenkins Build Server @Linfiniti2"
 
-.. note:: The source tree will be in
-   :file:`~/jobs/InaSAFE/workspace/`.
+.. note:: The source tree will be in :file:`~/jobs/InaSAFE/workspace/`.
 
 Project setup
 ^^^^^^^^^^^^^

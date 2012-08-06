@@ -125,18 +125,18 @@ riabclipper test you would do::
 Achievements
 ............
 
-.. note:: This is optional and thus not hard coded into the 
+.. note:: This is optional and thus not hard coded into the
    makefile.
 
 Optionally you can enable nose achievments which is a motivational
 tool that gives you little achievement awards based on your test
 results::
 
-sudo pip install git+git://github.com/exogen/nose-achievements.git
+   sudo pip install git+git://github.com/exogen/nose-achievements.git
 
-Now create this file in the root of your inasafe git checkout 
+Now create this file in the root of your inasafe git checkout
 :file:`setup.cfg`::
-   
+
    [nosetests]
    with-achievements=1
 
