@@ -172,12 +172,7 @@ def check_inputs(x, y, Z, points, mode, bounds_error):
     if mode not in ['linear', 'constant']:
         raise RuntimeError(msg)
 
-    try:
-        x = numpy.array(x)
-    except Exception, e:
-        msg = ('Input vector x could not be converted to numpy array: '
-               '%s' % str(e))
-        raise Exception(msg)
+    x = numpy.array(x)
 
     try:
         y = numpy.array(y)
