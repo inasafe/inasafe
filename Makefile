@@ -122,7 +122,7 @@ test_suite_no_git: compile
 	@echo "----------------------"
 	@echo "Regression Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=common,storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -139,7 +139,7 @@ test_suite: compile testdata
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=common,storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -236,7 +236,7 @@ pylint:
 	@echo "---------------------------------------"
 	@echo "Pylint report                          "
 	@echo "---------------------------------------"
-	pylint --disable=C,R storage engine gui
+	pylint --disable=C,R common storage engine gui
 
 profile:
 	@echo
@@ -258,14 +258,14 @@ jenkins-test:
 	@echo "----------------------------------"
 	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
-		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=storage,engine,impact_functions,gui || :
+		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=common,storage,engine,impact_functions,gui || :
 
 jenkins-pyflakes:
 	@echo
 	@echo "----------------------------------"
 	@echo "PyFlakes check for Jenkins"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes storage engine impact_functions gui > pyflakes.log || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes common storage engine impact_functions gui > pyflakes.log || :
 
 jenkins-sloccount:
 	@echo "----------------------"
@@ -287,7 +287,7 @@ jenkins-pylint:
 	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,is_help_base.py,is_keywords_dialog_base.py,is_options_dialog_base.py,is_dock_base.py storage engine gui | grep -v 'I0011' > pylint.log || :
+	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,is_help_base.py,is_keywords_dialog_base.py,is_options_dialog_base.py,is_dock_base.py common storage engine gui | grep -v 'I0011' > pylint.log || :
 
 jenkins-pep8:
 	@echo
