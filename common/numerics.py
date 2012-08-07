@@ -176,25 +176,30 @@ def axes2points(x, y):
 
     Output
         P: Nx2 array consisting of coordinates for all
-           grid points defined by x and y axes
+           grid points defined by x and y axes. The x coordinate
+           will vary the fastest to match the way 2D numpy
+           arrays are laid out by default ('C' order). That way,
+           the x and y coordinates will match a corresponding
+           2D array A when flattened (A.flat[:] or A.reshape(-1))
 
     Example
 
     x = [1, 2, 3]
     y = [10, 20]
+
     P = [[1, 10],
-         [1, 20],
          [2, 10],
-         [2, 20],
          [3, 10],
+         [1, 20],
+         [2, 20],
          [3, 20]]
     """
 
-    # Repeat x coordinates for each y
-    X = numpy.kron(x, numpy.ones(len(y)))
+    # Repeat x coordinates for each y (fastest varying)
+    X = numpy.kron(numpy.ones(len(y)), x)
 
-    # Repeat y coordinates for each x
-    Y = numpy.kron(numpy.ones(len(x)), y)
+    # Repeat y coordinates for each x (slowest varying)
+    Y = numpy.kron(y, numpy.ones(len(x)))
 
     # Check
     N = len(X)
@@ -222,16 +227,11 @@ def grid2points(A, x, y):
         V: N array of point values
     """
 
-    # FIXME (Ole): Maybe not needed given the above function
-    print A
-    print x
-    print y
 
     M, N = A.shape
+    P = axes2points(x, y)
 
-    print x, len(x)
-    print y, len(y)
-
+    return P
 
 def geotransform2axes(G, nx, ny):
     """Convert geotransform to coordinate axes

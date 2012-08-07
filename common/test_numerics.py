@@ -26,10 +26,10 @@ class Test_Numerics(unittest.TestCase):
         y = numpy.linspace(10, 20, 2)
         P = axes2points(x, y)
         assert numpy.allclose(P, [[1., 10.],
-                                  [1., 20.],
                                   [2., 10.],
-                                  [2., 20.],
                                   [3., 10.],
+                                  [1., 20.],
+                                  [2., 20.],
                                   [3., 20.]],
                               rtol=0.0, atol=0.0)
 
@@ -37,7 +37,7 @@ class Test_Numerics(unittest.TestCase):
         x = numpy.linspace(1, 5, 11)
         y = numpy.linspace(10, 20, 5)
         P = axes2points(x, y)
-        assert numpy.allclose(P[6, :], [1.4, 12.5])
+        assert numpy.allclose(P[12, :], [1.4, 12.5])
 
 
 if __name__ == '__main__':
