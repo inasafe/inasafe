@@ -227,15 +227,12 @@ def grid2points(A, x, y):
         V: N array of point values
     """
 
-
-    M, N = A.shape
-
     # Create Nx2 array of x, y points corresponding to each
     # element in A.
     points = axes2points(x, y)
 
     # Create flat 1D row-major view of A cast as
-    # one column vector
+    # one column vector of length MxN where M, N = A.shape
     values = A.reshape((-1, 1))
 
     # Concatenate coordinates with their values from the grid
@@ -243,6 +240,7 @@ def grid2points(A, x, y):
 
     # Return Nx3 array with rows: x, y, value
     return P
+
 
 def geotransform2axes(G, nx, ny):
     """Convert geotransform to coordinate axes

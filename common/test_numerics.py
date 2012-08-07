@@ -49,6 +49,7 @@ class Test_Numerics(unittest.TestCase):
              [9, 10, 11, 12]]
         A = numpy.array(A, dtype='f')
         M, N = A.shape
+        L = M * N
 
         # Axis
         longitudes = numpy.linspace(100, 110, N, endpoint=False)
@@ -58,11 +59,11 @@ class Test_Numerics(unittest.TestCase):
         P = grid2points(A, longitudes, latitudes)
 
         # Assert correctness
-        assert P.shape[0] == M * N
+        assert P.shape[0] == L
         assert P.shape[1] == 3
 
         assert numpy.allclose(P[:N, 0], longitudes)
-        assert numpy.allclose(P[:M*N:N, 1], latitudes)
+        assert numpy.allclose(P[:L:N, 1], latitudes)
         assert numpy.allclose(P[:, 2], A.flat)
 
 
