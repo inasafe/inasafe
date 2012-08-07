@@ -17,7 +17,7 @@ from math import sqrt
 from random import uniform, seed as seed_function
 
 from common.numerics import ensure_numeric
-from common.numerics import grid2points
+from common.numerics import grid2points, geotransform2axes
 
 
 def separate_points_by_polygon(points, polygon,
@@ -1118,7 +1118,8 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     # FIXME: Maybe start with more high level function in storage module
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
-    x, y = geotransform2axes(geontransform, nx, ny)
+    ny, nx = A.shape
+    x, y = geotransform2axes(geotransform, nx, ny)
     P = grid2points(A, x, y)
 
     # For each polygon
