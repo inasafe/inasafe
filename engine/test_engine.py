@@ -477,9 +477,9 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(population)
 
         assert len(H) == 2704
-        res = clip_grid_by_polygons(E.get_data(),
-                                    E.get_geotransform(),
-                                    H.get_geometry())
+        #res = clip_grid_by_polygons(E.get_data(),
+        #                            E.get_geotransform(),
+        #                            H.get_geometry())
         # FIXME (Ole): Not done yet
 
     def test_flood_building_impact_function(self):
