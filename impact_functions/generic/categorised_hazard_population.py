@@ -30,7 +30,7 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         Input
           layers: List of layers expected to contain
               H: Raster layer of catergorised hazard
-              P: Raster layer of population data 
+              P: Raster layer of population data
 
         Counts number of people exposed to each caterogry of the hazard
 
@@ -45,8 +45,8 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
         low_t = 0.34
 
         # Identify hazard and exposure layers
-        inundation = get_hazard_layer(layers)   # Catergorised Hazard
-        population = get_exposure_layer(layers) # Population Raster
+        inundation = get_hazard_layer(layers)    # Categorised Hazard
+        population = get_exposure_layer(layers)  # Population Raster
 
         question = get_question(inundation.get_name(),
                                 population.get_name(),

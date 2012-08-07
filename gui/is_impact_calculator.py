@@ -30,6 +30,8 @@ from gui.is_safe_interface import (readSafeLayer,
 
 
 from PyQt4.QtCore import QObject
+
+
 class ISImpactCalculator(QObject):
     """A class to compute an impact scenario. We inherit from QObject
     so that we can use Qt translation self.tr calls."""
