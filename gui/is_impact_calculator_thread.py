@@ -18,13 +18,16 @@ __version__ = '0.5.0'
 __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-from is_safe_interface import calculateSafeImpact
+
 import threading
-from PyQt4.QtCore import (QObject,
-                          pyqtSignal)
-from is_exceptions import InsufficientParametersException
 import traceback
 import sys
+
+from PyQt4.QtCore import (QObject,
+                          pyqtSignal)
+
+from gui.is_safe_interface import calculateSafeImpact
+from gui.is_exceptions import InsufficientParametersException
 
 
 class ISImpactCalculatorThread(threading.Thread, QObject):
@@ -40,12 +43,11 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
           threads using Qt.QueuedConnection.
           http://techbase.kde.org/Development/Tutorials/
           Python_introduction_to_signals_and_slots
-    """
-    done = pyqtSignal()
-    """Users of this of this class can listen for signals indicating
+
+       Users of this of this class can listen for signals indicating
        when processing is done. For example::
 
-         from is_impact_calculator_trhead import ISImpactCalculatorThread
+         from is_impact_calculator_thread import ISImpactCalculatorThread
          n = ISImpactCalculatorThread()
          n.done.connect(n.showMessage)
          n.done.emit()
@@ -57,7 +59,8 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
           Python_introduction_to_signals_and_slots
 
           for an alternative (maybe nicer?) approach.
-       """
+    """
+    done = pyqtSignal()
 
     def showMessage(self):
         """For testing only"""

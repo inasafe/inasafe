@@ -40,7 +40,7 @@ from qgis.core import (QGis,
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
-import gui.resources  # @UnusedImport
+import gui.resources  # pylint: disable=W0611
 
 
 def setVectorStyle(theQgisVectorLayer, style):
@@ -390,8 +390,8 @@ def qgisVersion():
     """
     myVersion = None
     try:
-        myVersion = unicode(QGis.QGIS_VERSION_INT)
+        myVersion = unicode(QGis.QGIS_VERSION_INT)  # pylint: disable=E1101
     except AttributeError:
-        myVersion = unicode(QGis.qgisVersion)[0]
+        myVersion = unicode(QGis.qgisVersion)[0]  # pylint: disable=E1101
     myVersion = int(myVersion)
     return myVersion

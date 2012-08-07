@@ -27,11 +27,11 @@ from gui.is_keyword_io import ISKeywordIO
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import gui.resources  # @UnusedImport
+import gui.resources  # pylint: disable=W0611
 
 #see if we can import pydev - see development docs for details
 try:
-    from pydevd import *
+    from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
 except ImportError:
@@ -40,6 +40,7 @@ except ImportError:
 
 class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
     """Options dialog for the InaSAFE plugin."""
+# pylint: disable=W0231
     def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
 
@@ -54,6 +55,7 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         Raises:
            no exceptions explicitly raised
         """
+# pylint: enable=W0231
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s Options' % __version__))

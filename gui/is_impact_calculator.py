@@ -19,11 +19,16 @@ __revision__ = '$Format:%H$'
 __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+from PyQt4.QtCore import QObject
+
 #Do not import any QGIS or SAFE modules in this module!
 from gui.is_impact_calculator_thread import ISImpactCalculatorThread
 from gui.is_exceptions import InsufficientParametersException
 from gui.is_safe_interface import (readSafeLayer,
                                    getSafeImpactFunctions)
+
+
 from PyQt4.QtCore import QObject
 
 

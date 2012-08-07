@@ -201,4 +201,4 @@ class Ui_ISKeywordsDialogBase(object):
     def retranslateUi(self, ISKeywordsDialogBase):
         pass
 
-import resources_rc
+import gui.resources_rc

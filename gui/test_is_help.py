@@ -19,11 +19,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 # Needed though not used below
-from PyQt4.QtGui import QApplication
-from utilities_test import getQgisTestApp
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+from PyQt4.QtGui import QApplication  # pylint: disable=W0611
+from gui.utilities_test import getQgisTestApp
+from gui.is_help import ISHelp
 
-from is_help import ISHelp
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
 class ISHelpTest(unittest.TestCase):

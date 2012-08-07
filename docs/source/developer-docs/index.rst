@@ -22,6 +22,7 @@ Developer Documentation Contents:
    maintaining_documentation
    bug_reporting
    preparing_a_release
+   jenkins_ci
    faq
    todo
 
