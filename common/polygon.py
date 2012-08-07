@@ -115,14 +115,13 @@ def separate_points_by_polygon(points, polygon,
         if points.shape[1] != 2:
             raise Exception(msg)
 
-    N = polygon.shape[0]  # Number of vertices in polygon
-    M = points.shape[0]  # Number of points
-
     if use_numpy:
-        indices, count = _separate_points_by_polygon(points, polygon,
+        indices, count = _separate_points_by_polygon(points,
+                                                     polygon,
                                                      closed=closed)
     else:
-        indices, count = _separate_points_by_polygon_python(points, polygon,
+        indices, count = _separate_points_by_polygon_python(points,
+                                                            polygon,
                                                             closed=closed)
 
     return indices, count
@@ -1098,7 +1097,7 @@ collinearmap = {(False, False, False, False): lines_dont_coincide,
 
 # Functions for clipping of rasters by polygons
 def clip_grid_by_polygons(A, geotransform, polygons,
-                         closed=True, check_input=True):
+                          check_input=True):
     """Clip raster grid by polygon
 
     Input
@@ -1109,7 +1108,8 @@ def clip_grid_by_polygons(A, geotransform, polygons,
         polygons: list of polygons, each an array of vertices
 
     Output
-        List of rasters - one per input polygon.
+        #List of rasters - one per input polygon.
+        List of points, values - one per input polygon.
 
     Implementing algorithm suggested in
     https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
@@ -1120,7 +1120,8 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     # Convert raster grid to Nx2 array of points and an N array of pixel values
     ny, nx = A.shape
     x, y = geotransform2axes(geotransform, nx, ny)
-    P, V = grid2points(A, x, y)
+    points, values = grid2points(A, x, y)
+
 
     # For each polygon
     # * select the points that fall inside its bounding box
@@ -1129,4 +1130,45 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     #   those that fall inside (using numpy masks)
     # * Generate output raster for this polygon and add to list
 
-    pass
+    result = []
+    unallocated_points = points
+    for polygon in polygons:
+
+        ##########################################################################################
+        # FIXME (Ole): This is a huge optimisation that must go into separate_points_by_polygon!!!
+        ##########################################################################################
+
+        # Get polygon extents to quickly rule out points that
+        # are outside its bounding box
+        #minpx = min(polygon[:, 0])
+        #maxpx = max(polygon[:, 0])
+        #minpy = min(polygon[:, 1])
+        #maxpy = max(polygon[:, 1])
+        #
+        #M = points.shape[0]
+        #N = polygon.shape[0]
+        #
+        #x = points[:, 0]
+        #y = points[:, 1]
+
+        # Only work on those that are inside polygon bounding box
+        #outside_box = (x > maxpx) + (x < minpx) + (y > maxpy) + (y < minpy)
+        #inside_box = -outside_box
+
+        indices, count = separate_points_by_polygon(unallocated_points,
+                                                    polygon,
+                                                    closed=True,
+                                                    check_input=False)
+        inside = indices[:count]
+        outside = indices[count:]
+
+        result.append(points[inside])
+        unallocated_points = points[outside]
+        print len(result), len(polygons), len(polygon), 'inside', len(inside),
+        print 'remain', len(outside)
+
+
+
+
+
+
