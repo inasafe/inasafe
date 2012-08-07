@@ -1122,7 +1122,6 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     x, y = geotransform2axes(geotransform, nx, ny)
     points, values = grid2points(A, x, y)
 
-
     # For each polygon
     # * select the points that fall inside its bounding box
     # * separate points that fall inside from those that fall outside.
@@ -1134,9 +1133,10 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     unallocated_points = points
     for polygon in polygons:
 
-        ##########################################################################################
-        # FIXME (Ole): This is a huge optimisation that must go into separate_points_by_polygon!!!
-        ##########################################################################################
+        ####################################################################
+        # FIXME (Ole): This is a huge optimisation that must go into
+        # separate_points_by_polygon!!!
+        ####################################################################
 
         # Get polygon extents to quickly rule out points that
         # are outside its bounding box
@@ -1166,9 +1166,3 @@ def clip_grid_by_polygons(A, geotransform, polygons,
         unallocated_points = points[outside]
         print len(result), len(polygons), len(polygon), 'inside', len(inside),
         print 'remain', len(outside)
-
-
-
-
-
-
