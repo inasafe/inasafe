@@ -2010,18 +2010,25 @@ class Test_Polygon(unittest.TestCase):
         A = numpy.array(A, dtype='f')
 
         M, N = A.shape
+        print
         print M, N
+        print A
 
         # Axis
         longitudes = numpy.linspace(100, 110, N, endpoint=False)
         latitudes = numpy.linspace(0, -6, M, endpoint=False)
-        print longitudes
-        print latitudes
+        print 'Lon', longitudes
+        print 'Lat', latitudes
+
 
         P = grid2points(A, longitudes, latitudes)
 
-        assert len(P) == M * N
         print P
+        print A.flat[:]
+        assert P.shape[0] == M * N
+        assert P.shape[1] == 3
+
+        assert numpy.allclose(P[:, 2], A.flat)
         return
 
 # [  3.                  nan          nan          nan  50.9573822 ]
