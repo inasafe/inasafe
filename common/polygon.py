@@ -115,6 +115,9 @@ def separate_points_by_polygon(points, polygon,
         if points.shape[1] != 2:
             raise Exception(msg)
 
+    #N = polygon.shape[0]  # Number of vertices in polygon
+    #M = points.shape[0]  # Number of points
+
     if use_numpy:
         indices, count = _separate_points_by_polygon(points,
                                                      polygon,
@@ -225,13 +228,13 @@ def _separate_points_by_polygon(points, polygon,
     inside_index = numpy.sum(inside)  # How many points are inside
     if inside_index == 0:
         # Return all indices as points outside
-        # FIXME (Ole): Don't need the reversal anymore, but must update tests
-        # and code that depends on this order.
-        return numpy.arange(M)[::-1], 0
+        return numpy.arange(M), 0
 
-    indices[:inside_index] = numpy.where(inside)[0]  # Indices of inside points
-    # Indices of outside points (reversed...)
-    indices[inside_index:] = numpy.where(1 - inside)[0][::-1]
+    # Indices of inside points
+    indices[:inside_index] = numpy.where(inside)[0]
+
+    # Indices of outside points
+    indices[inside_index:] = numpy.where(1 - inside)[0]
 
     return indices, inside_index
 
@@ -328,6 +331,11 @@ def _separate_points_by_polygon_python(points, polygon,
             indices[outside_index] = k
             outside_index -= 1
 
+    # Change reversed indices back to normal order
+    tmp = indices[inside_index:].copy()
+    indices[inside_index:] = tmp[::-1]
+
+    # Return reference result
     return indices, inside_index
 
 
@@ -490,8 +498,8 @@ def outside_polygon(points, polygon, closed=True):
         # No points are outside
         return numpy.array([])
     else:
-        # Return indices for points outside (reversed)
-        return indices[count:][::-1]
+        # Return indices for points outside
+        return indices[count:]
 
 
 def in_and_outside_polygon(points, polygon, closed=True):
@@ -518,8 +526,8 @@ def in_and_outside_polygon(points, polygon, closed=True):
         # No points are outside
         return indices[:count], []
     else:
-        # Return indices for points inside and outside (reversed)
-        return  indices[:count], indices[count:][::-1]
+        # Return indices for points inside and outside
+        return  indices[:count], indices[count:]
 
 
 def clip_lines_by_polygon(lines, polygon,

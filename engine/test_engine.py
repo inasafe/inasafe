@@ -1275,8 +1275,8 @@ class Test_Engine(unittest.TestCase):
                                               2313, 2316, 2319, 2321, 2322])
 
         # Last 10 outside
-        assert numpy.alltrue(indices[-10:] == [9, 8, 7, 6, 5, 4, 3, 2, 1, 0])
-
+        assert numpy.alltrue(indices[-10:] == [3519, 3520, 3521, 3522, 3523,
+                                               3524, 3525, 3526, 3527, 3528])
         # Store for viewing in e.g. QGis
         if False:  # True:
             Vector(geometry=[polygon]).write_to_file('test_poly.shp')
@@ -2100,7 +2100,7 @@ class Test_Engine(unittest.TestCase):
 
                 # Check calculated damage
                 calculated_dam = attributes[i]['DAMAGE']
-                print calculated_mmi
+                #print calculated_mmi
                 verified_dam = padang_check_results(calculated_mmi,
                                                     building_class)
                 #print calculated_mmi, building_class, calculated_dam
@@ -2327,6 +2327,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_polygon')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
