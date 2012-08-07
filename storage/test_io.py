@@ -1063,12 +1063,17 @@ class Test_IO(unittest.TestCase):
         assert numpy.allclose(coordinates[:L:N, 1], latitudes[::-1])
         assert nanallclose(A.flat[:], values)
 
-        # Check generated vector layer
+        # Generate vector layer
         V = R.to_vector_layer()
         geometry = V.get_geometry()
         attributes = V.get_data()
 
-        # These were verified manually using QGIS
+        # Store it for visual inspection e.g. with QGIS
+        out_filename = unique_filename(suffix='.shp')
+        V.write_to_file(out_filename)
+        #print 'Written to ', out_filename
+
+        # Check against cells that were verified manually using QGIS
         assert numpy.allclose(geometry[5, :], [96.97137053, -5.34965715])
         assert numpy.allclose(attributes[5]['value'], 3)
         assert numpy.allclose(attributes[5]['value'], A[1, 0])
@@ -1077,14 +1082,13 @@ class Test_IO(unittest.TestCase):
         assert numpy.allclose(attributes[11]['value'], -50.6014, rtol=1.0e-6)
         assert numpy.allclose(attributes[11]['value'], A[2, 1], rtol=1.0e-6)
 
+        assert numpy.allclose(geometry[16, :], [97.0021116, -5.411139276])
+        assert numpy.allclose(attributes[16]['value'], -15, rtol=1.0e-6)
+        assert numpy.allclose(attributes[16]['value'], A[3, 1], rtol=1.0e-6)
+
         assert numpy.allclose(geometry[23, :], [97.06359372, -5.44188034])
         assert numpy.isnan(attributes[23]['value'])
         assert numpy.isnan(A[4, 3])
-
-        # For visual inspection e.g. with QGIS
-        out_filename = unique_filename(suffix='.shp')
-        #V.write_to_file(out_filename)
-        #print 'Written to ', out_filename
 
     def test_get_bounding_box(self):
         """Bounding box is correctly extracted from file.
