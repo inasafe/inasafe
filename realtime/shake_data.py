@@ -33,8 +33,8 @@ from rt_exceptions import (EventUndefinedError,
                         InvalidInputZipError,
                         InvalidOutputZipError,
                         ExtractionError,
-                        GridConversionError,
-                        EventParseError,
+                        MiGrdConversionError,
+                        EventXmlParseError,
                         ContourCreationError
                         )
 from ftp_client import FtpClient
@@ -61,7 +61,7 @@ class ShakeData:
     There are numerous files provided within these two zip files, but there
     are only really two that we are interested in:
 
-        * grid.xyz - which contains all the metadata pertaining to the event
+        * grid.xml - which contains all the metadata pertaining to the event
         * mi.grd - which contains the GMT formatted raster shake MMI data.
 
     This class provides a high level interface for retrieving this data and
@@ -289,7 +289,7 @@ class ShakeData:
         :file:`/tmp/inasafe/realtime/shakemaps-extracted/
                20120726022003/event.xml`
         :file:`/tmp/inasafe/realtime/shakemaps-extracted/
-               20120726022003/event.xyz`
+               20120726022003/grid.xml`
         :file:`/tmp/inasafe/realtime/shakemaps-extracted/
                20120726022003/mi.grd`
 
@@ -302,33 +302,40 @@ class ShakeData:
         .. note:: You should not store any of your own working data in the
            extract dir - it should be treated as transient.
 
-        .. note:: the grid.xyz file contains simlar metadata to grid.xml but
-           misses the depth.
+        .. note:: the grid.xml file contains simlar metadata to event.xml but
+           misses the depth. Grid.xyz also contains additional point data that
+           we care about and will extract as a matrix (MMI in the 5th column).
+
+        .. warning:: See if depth is really needed and if not refactor to
+           discontinue use of event.xml
+
         Args:
             theForceFlag - (Optional) Whether to force re-extraction. If the
                 files were previously extracted, you can force them to be
-                extracted again. If False, the event.xml and mi.grd files are
-                cached. Default False.
+                extracted again. If False, the event.xml, grid.xml and mi.grd
+                files are cached. Default False.
 
         Returns: a three-tuple containing the event.xml, event.xyz and mi.grd
             paths e.g.::
-            myEventXml, myEventXyz, myGrd = myShakeData.extract()
-            print myEventXml, myEventXyz, myGrd
+            myEventXml, myGridXml, myMiGrd = myShakeData.extract()
+            print myEventXml, myGridXuz, myMiGrd
             /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/event.xml
-            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/event.xyz
+            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/grid.xml
             /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/mi.grd
 
         Raises: InvalidInputZipError, InvalidOutputZipError
         """
 
-        myFinalEventFile = os.path.join(self.extractDir(), 'event.xml')
-        myFinalGridFile = os.path.join(self.extractDir(), 'mi.grd')
+        myFinalEventXmlFile = os.path.join(self.extractDir(), 'event.xml')
+        myFinalGridXmlFile = os.path.join(self.extractDir(), 'grid.xml')
+        myFinalMiGrdFile = os.path.join(self.extractDir(), 'mi.grd')
 
         if theForceFlag:
             self.removeExtractedFiles()
-        elif (os.path.exists(myFinalEventFile) and
-              os.path.exists(myFinalGridFile)):
-            return myFinalEventFile, myFinalGridFile
+        elif (os.path.exists(myFinalEventXmlFile) and
+              os.path.exists(myFinalGridXmlFile) and
+              os.path.exists(myFinalMiGrdFile)):
+            return myFinalEventXmlFile, myFinalGridXmlFile, myFinalMiGrdFile
 
         myInput, myOutput = self.fetchEvent()
         myInputZip = ZipFile(myInput)
@@ -336,9 +343,9 @@ class ShakeData:
 
         myExpectedEventXmlFile = ('usr/local/smap/data/%s/input/event.xml' %
                   self.eventId)
-        myExpectedEventXyzFile = ('usr/local/smap/data/%s/input/event.xml' %
-                                  self.eventId)
-        myExpectedGridFile = ('usr/local/smap/data/%s/output/mi.grd' %
+        myExpectedGridXmlFile = ('usr/local/smap/data/%s/output/grid.xml' %
+                  self.eventId)
+        myExpectedMiGrdFile = ('usr/local/smap/data/%s/output/mi.grd' %
                   self.eventId)
 
         myList = myInputZip.namelist()
@@ -347,28 +354,31 @@ class ShakeData:
                 '%s file.' % myExpectedEventXmlFile)
 
         myList = myOutputZip.namelist()
-        if myExpectedGridFile not in myList:
+        if myExpectedMiGrdFile not in myList:
             raise InvalidOutputZipError('The output zip does not contain an '
-                '%s file.' % myExpectedGridFile)
+                '%s file.' % myExpectedMiGrdFile)
 
         myExtractDir = self.extractDir()
         myInputZip.extractall(myExtractDir)
         myOutputZip.extractall(myExtractDir)
 
-        # move the two files we care about to the top of the event extract dir
+        # move the three files we care about to the top of the extract dir
         shutil.copyfile(os.path.join(self.extractDir(), myExpectedEventXmlFile),
-                        myFinalEventFile)
-        shutil.copyfile(os.path.join(self.extractDir(), myExpectedGridFile),
-                        myFinalGridFile)
+                        myFinalEventXmlFile)
+        shutil.copyfile(os.path.join(self.extractDir(), myExpectedGridXmlFile),
+                        myFinalGridXmlFile)
+        shutil.copyfile(os.path.join(self.extractDir(), myExpectedMiGrdFile),
+                        myFinalMiGrdFile)
         # Get rid of all the other extracted stuff
         myUserDir = os.path.join(self.extractDir(), 'usr')
         if os.path.isdir(myUserDir):
             shutil.rmtree(myUserDir)
 
-        if (not os.path.exists(myFinalEventFile) or
-            not os.path.exists(myFinalGridFile)):
+        if (not os.path.exists(myFinalEventXmlFile) or
+            not os.path.exists(myFinalGridXmlFile) or
+            not os.path.exists(myFinalMiGrdFile)):
             raise ExtractionError('Error copying event.xml or mi.grd')
-        return myFinalEventFile, myFinalGridFile
+        return myFinalEventXmlFile, myFinalGridXmlFile, myFinalMiGrdFile
 
     def extractDir(self):
         """A helper method to get the path to the extracted datasets.
@@ -398,14 +408,14 @@ class ShakeData:
             shutil.rmtree(myExtractedDir)
 
     def postProcess(self, theForceFlag=True):
-        """Process the event.xml and mi.grd files so that they can be used
-        in our workflow. This entails deserialising the event.xml into
+        """Process the event.xml, grid.xml and mi.grd files so that they can
+        be used in our workflow. This entails deserialising the event.xml into
         a ShakeEvent object, and converting the mi.grd to a tif file.
 
-        The ShakeEvent object will be pickled to the disk for persistent
+        TODO: The ShakeEvent object will be pickled to the disk for persistent
         storage.
 
-        .. note:: Delegates to convertGrid() and shakeEvent() methods.
+        .. note:: Delegates to convertMiGrd() and shakeEvent() methods.
 
         Args: theForceFlag - (Optional). Whether to force the regeneration
             of post processed products. Defaults to False.
@@ -416,19 +426,19 @@ class ShakeData:
             * myGridPath - a string representing the absolute path to the
               generated grid file.
 
-        Raises: EventParseError, GridConversionError
+        Raises: EventXmlParseError, MiGrdConversionError
         """
-        myTifPath = self.convertGrid(theForceFlag)
+        myTifPath = self.convertMiGrd(theForceFlag)
         myShakeEvent = self.shakeEvent(theForceFlag)
         return myShakeEvent, myTifPath
 
-    def convertGrid(self, theForceFlag=True):
+    def convertMiGrd(self, theForceFlag=True):
         """Convert the grid for this shakemap to a tif.
 
         In the simplest use case you should be able to simply do::
 
            myShakeData = ShakeData('20120726022003')
-           myTifPath = myShakeData.convertGrid()
+           myTifPath = myShakeData.convertMiGrd()
 
         and the ShakeData class will take care of fetching (if not already
         cached), extracting a converting the file for you, returning a usable
@@ -438,7 +448,7 @@ class ShakeData:
            was reversed. Check if this is still needed with current gdal and
            implement if needed!
 
-        .. seealso:: postProcess() which will perform both convertGrid and
+        .. seealso:: postProcess() which will perform both convertMiGrd and
            event deserialisation in one call.
 
         Args: theForceFlag - (Optional). Whether to force the regeneration
@@ -446,7 +456,7 @@ class ShakeData:
 
         Returns: An absolute file system path pointing to the coverted tif file
 
-        Raises: GridConversionError
+        Raises: MiGrdConversionError
         """
 
         myTifPath = os.path.join(shakemapDataDir(), self.eventId + '.tif')
@@ -455,20 +465,21 @@ class ShakeData:
             return myTifPath
 
         #otherwise get the grid if needed
-        myEventXml, myGridPath = self.extract()
+        myEventXml, myGridXmlPath, myMiGrdPath = self.extract()
+        del myGridXmlPath
         del myEventXml
         #now save it to Tif
         myFormat = 'GTiff'
         myDriver = gdal.GetDriverByName(myFormat)
-        myGridDataset = gdal.Open(myGridPath, GA_ReadOnly)
+        myGridDataset = gdal.Open(myMiGrdPath, GA_ReadOnly)
         if myGridDataset is not None:
             myTifDataset = myDriver.CreateCopy(myTifPath, myGridDataset, 0)
             # Once we're done, close properly the dataset
             del myGridDataset
             del myTifDataset
         else:
-            raise GridConversionError('Could not open source grid: %s',
-                                      myGridPath)
+            raise MiGrdConversionError('Could not open source grid: %s',
+                                      myMiGrdPath)
             # TODO: Investigate need for grid flip and remove if poss
             LOGGER.warn('CHECK IF GRID NEEDS TO BE FLIPPED ON LAT - ask Ole!')
         return myTifPath
@@ -486,13 +497,13 @@ class ShakeData:
 
         Returns: A ShakeEvent object.
 
-        Raises: EventParseError
+        Raises: EventXmlParseError
         """
         if self._shakeEvent is None or theForceFlag is True:
             self.extract(theForceFlag)
             try:
                 self._shakeEvent = ShakeEvent(self.eventId)
-            except EventParseError:
+            except EventXmlParseError:
                 raise
         return self._shakeEvent
 
@@ -529,7 +540,7 @@ class ShakeData:
             os.remove(myOutputFileBase + 'dbf')
             os.remove(myOutputFileBase + 'prj')
 
-        myTifPath = self.convertGrid(theForceFlag)
+        myTifPath = self.convertMiGrd(theForceFlag)
         # Based largely on
         # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
         myDriver = ogr.GetDriverByName('ESRI Shapefile')

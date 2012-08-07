@@ -51,11 +51,24 @@ class TestShakeEvent(unittest.TestCase):
         myPath = myShakeEvent.eventFilePath()
         self.assertEquals(myExpectedPath, myPath)
 
+    def test_gridXmlFilePath(self):
+        """Test eventFilePath works"""
+        myShakeId = '20120726022003'
+        myExpectedPath = os.path.join(shakemapExtractDir(),
+                                      myShakeId,
+                                      'grid.xml')
+        myShakeData = ShakeData(myShakeId)
+        myShakeData.extract()
+        myShakeEvent = ShakeEvent(myShakeId)
+        myPath = myShakeEvent.gridFilePath()
+        self.assertEquals(myExpectedPath, myPath)
+
     def test_eventParser(self):
         """Test eventFilePath works"""
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
+        # These are retrieved from event.xml
         self.assertEquals(26, myShakeEvent.day)
         self.assertEquals(7, myShakeEvent.month)
         self.assertEquals(2012, myShakeEvent.year)
@@ -67,6 +80,14 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(-0.21, myShakeEvent.latitude)
         self.assertEquals(11.0, myShakeEvent.depth)
         self.assertEquals('Southern Molucca Sea', myShakeEvent.location)
+        # And these from grid.xml
+        self.assertEquals(0, myShakeEvent.xMinimum)
+        self.assertEquals(0, myShakeEvent.xMaximum)
+        self.assertEquals(0, myShakeEvent.yMinimum)
+        self.assertEquals(0, myShakeEvent.yMaximum)
+
+        myGridXmlData = myShakeEvent.mmiData
+        print myGridXmlData
 
 if __name__ == '__main__':
     unittest.main()

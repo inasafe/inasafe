@@ -141,29 +141,39 @@ class TestShakeMap(unittest.TestCase):
         """Test that we can extract the shakemap inp and out files"""
         myShakeEvent = '20120726022003'
         myShakeData = ShakeData(myShakeEvent)
-        myEvent, myGrd = myShakeData.extract(theForceFlag=True)
+        myEventXml, myGridXml, myMiGrd = myShakeData.extract(theForceFlag=True)
 
         myExtractDir = shakemapExtractDir()
         myExpectedEvent = (os.path.join(myExtractDir,
-                           '20120726022003/event.xml'))
-        myExpectedGrid = (os.path.join(myExtractDir,
-                           '20120726022003/mi.grd'))
-        myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedEvent, myEvent)
-        assert myEvent in myExpectedEvent, myMessage
-        assert os.path.exists(myEvent)
+                   '20120726022003/event.xml'))
+        myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedEvent, myEventXml)
+        assert myEventXml in myExpectedEvent, myMessage
+        assert os.path.exists(myEventXml)
 
-        myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedGrid, myGrd)
-        assert myExpectedGrid in myExpectedGrid, myMessage
-        assert os.path.exists(myGrd)
+        myExpectedGridXml = (os.path.join(myExtractDir,
+                           '20120726022003/grid.xml'))
+        myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedGridXml, myGridXml)
+        assert myExpectedGridXml in myExpectedGridXml, myMessage
+        assert os.path.exists(myGridXml)
+
+
+        myExpectedMiGrd = (os.path.join(myExtractDir,
+                           '20120726022003/mi.grd'))
+        myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedMiGrd, myMiGrd)
+        assert myExpectedMiGrd in myExpectedMiGrd, myMessage
+        assert os.path.exists(myMiGrd)
 
     def test_convertGrdToTif(self):
         """Test that we can convert the grid file to a tif file"""
         myShakeEvent = '20120726022003'
         myShakeData = ShakeData(myShakeEvent)
-        # Postprocess the event.xml and the mi.grd into a ShakeEvent object
-        # and a .tif file respectively.
-        myEvent, myGrd = myShakeData.postProcess(theForceFlag=True)
-        assert os.path.exists(myGrd)
+        # Postprocess the event.xml, grid.xml and the mi.grd into a
+        # ShakeEvent object and a .tif file.
+        myEventXml, myGridXml, myMiGrd = myShakeData.postProcess(
+            theForceFlag=True)
+        del myEventXml
+        del myGridXml
+        assert os.path.exists(myMiGrd)
 
     def test_extractContours(self):
         """Test that we can extract contours from the tif file"""

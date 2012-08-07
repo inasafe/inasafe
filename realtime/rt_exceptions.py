@@ -59,7 +59,7 @@ class ExtractionError(Exception):
     pass
 
 
-class GridConversionError(Exception):
+class MiGrdConversionError(Exception):
     """An exception for when something went wrong converting mi.grd to a tif"""
     pass
 
@@ -79,6 +79,16 @@ class EventIdError(Exception):
     pass
 
 
-class EventParseError(Exception):
+class EventXmlParseError(Exception):
     """An exception for when something went wrong parsing the event.xml """
+    pass
+
+
+class GridXmlParseError(Exception):
+    """An exception for when something went wrong parsing the grid.xml """
+    pass
+
+
+class GridXmlFileNotFoundError(Exception):
+    """An exception for when an grid.xml could not be found"""
     pass
