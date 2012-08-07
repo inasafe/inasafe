@@ -17,7 +17,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import sys
 from xml.dom import minidom
+from subprocess import (call, CalledProcessError)
 from utils import shakemapExtractDir
 from rt_exceptions import (EventFileNotFoundError,
                            EventXmlParseError,
@@ -64,6 +66,8 @@ class ShakeEvent:
         self.xMaximum = None
         self.yMinimum = None
         self.yMaximum = None
+        self.rows = None
+        self.columns = None
         self.mmiData = None
         self.parseEvent()
         self.parseGridXml()
@@ -216,15 +220,19 @@ class ShakeEvent:
                                   'lat_min'].nodeValue)
             self.yMaximum = float(mySpecificationElement.attributes[
                                   'lat_max'].nodeValue)
+            self.rows = float(mySpecificationElement.attributes[
+                                  'nlat'].nodeValue)
+            self.columns = float(mySpecificationElement.attributes[
+                                  'nlon'].nodeValue)
             myDataElement = myDocument.getElementsByTagName(
                 'grid_data')
             myDataElement = myDataElement[0]
             myData = myDataElement.firstChild.nodeValue
 
             # Extract the 1,2 and 5th (MMI) columns and populate mmiData
-            myLonColumn = 1
-            myLatColumn = 2
-            myMMIColumn = 5
+            myLonColumn = 0
+            myLatColumn = 1
+            myMMIColumn = 4
             self.mmiData = []
             for myLine in myData.split('\n'):
                 if not myLine:
@@ -240,3 +248,152 @@ class ShakeEvent:
             LOGGER.exception('Event parse failed')
             raise GridXmlParseError('Failed to parse grid file.\n%s\n%s'
                 % (e.__class__, str(e)))
+
+    def mmiDataToDelimitedText(self):
+        """Return the mmi data as a delimited test string.
+
+        The returned string will look like this::
+
+           123.0750,01.7900,1
+           123.1000,01.7900,1.14
+           123.1250,01.7900,1.15
+           123.1500,01.7900,1.16
+           etc...
+
+        Args: None
+
+        Returns: str - a delimited text string that can easily be written to
+            disk for e.g. use by gdal_grid.
+
+        Raises: None
+
+        """
+        myString = 'lon,lat,mmi\n'
+        for myRow in self.mmiData:
+            myString += '%s,%s,%s\n' % (myRow[0], myRow[1], myRow[2])
+        return myString
+
+    def mmiDataToDelimitedFile(self, theForceFlag=True):
+        """Save the mmiData to a delimited text file suitable for processing
+        with gdal_grid.
+
+        The output file will be of the same format as strings returned from
+        :func:`mmiDataToDelimitedText`.
+
+        Args: theForceFlag bool (Optional). Whether to force the regeneration
+            of the output file. Defaults to False.
+
+        Returns: str The absolute file system path to the delimited text
+            file.
+
+        Raises: None
+        """
+        LOGGER.debug('mmiDataToDelimitedText requested.')
+
+        myPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              'mmi.csv')
+        #short circuit if the csv is already created.
+        if os.path.exists(myPath) and theForceFlag is not True:
+            return myPath
+        myFile = file(myPath,'wt')
+        myFile.write(self.mmiDataToDelimitedText())
+        myFile.close()
+        return myPath
+
+    def mmiDataToRaster(self, theForceFlag=False):
+        """Convert the grid.xml's mmi column to a raster using gdal_grid.
+
+        A geotiff file will be created.
+
+        Unfortunately no python bindings exist for doing this so we are
+        going to do it using a shell call.
+
+        .. seealso:: http://www.gdal.org/gdal_grid.html
+
+        Example of the gdal_grid call we generate::
+
+           gdal_grid -zfield "mmi" -a invdist:power=2.0:smoothing=1.0 \
+           -txe 126.29 130.29 -tye 0.802 4.798 -outsize 400 400 -of GTiff \
+           -ot Float16 -l mmi mmi.vrt mmi.tif
+
+        .. note:: It is assumed that gdal_grid is in your path.
+
+        Args: theForceFlag bool (Optional). Whether to force the regeneration
+            of the output file. Defaults to False.
+
+        Return: str Path to the resulting tif file.
+
+        Raises: None
+        """
+        LOGGER.debug('mmiDataToRaster requested.')
+
+        myTifPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              'mmi.tif')
+        #short circuit if the tif is already created.
+        if os.path.exists(myTifPath) and theForceFlag is not True:
+            return myTifPath
+
+        # Ensure the delimited mmi file exists
+        myCsvPath = self.mmiDataToDelimitedFile(theForceFlag)
+
+        # Create a vrt (gdal virtal ogr dataset) so the delimited file can
+        # be used directly by gdal_grid
+        myVrtPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              'mmi.vrt')
+        myVrtString = ('<OGRVRTDataSource>'
+                       '  <OGRVRTLayer name="mmi">'
+                       '    <SrcDataSource>%s</SrcDataSource>'
+                       '    <GeometryType>wkbPoint</GeometryType>'
+                       '    <GeometryField encoding="PointFromColumns"'
+                       '                      x="lon" y="lat" z="mmi"/>'
+                       '  </OGRVRTLayer>'
+                       '</OGRVRTDataSource>' % myCsvPath)
+        myFile = file(myVrtPath, 'wt')
+        myFile.write(myVrtString)
+        myFile.close()
+
+        #now generate the tif using default interpoation options
+
+        myCommand = (('gdal_grid -zfield "mmi" -txe %(xMin)s %(yMax)s -tye '
+                     '%(yMin)s %(yMax)s -outsize %(dimX)i %(dimX)i -of GTiff '
+                     '-ot Float16 -a_srs EPSG:4326 -l mmi %(vrt)s %(tif)s') % {
+                        'xMin': self.xMinimum,
+                        'xMax': self.xMaximum,
+                        'yMin': self.yMinimum,
+                        'yMax': self.yMaximum,
+                        'dimX': self.columns,
+                        'dimY': self.rows,
+                        'vrt': myVrtPath,
+                        'tif': myTifPath
+                     })
+
+        myExecutablePrefix = ''
+        if sys.platform == 'darwin':  # Mac OS X
+            # .. todo:: FIXME - softcode gdal version in this path
+            myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
+                                  'Versions/1.9/Programs/')
+        myCommand = myExecutablePrefix + myCommand
+
+        LOGGER.info('Created this gdal command:\n%s' % myCommand)
+        # Now run GDAL warp scottie...
+        try:
+            myResult = call(myCommand, shell=True)
+            del myResult
+        except CalledProcessError, e:
+            myMessage = ('Error while executing the following shell '
+                           'command: %\nError message: %s'
+                         % (myCommand, str(e)))
+            # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
+            if sys.platform == 'darwin':  # Mac OS X
+                if 'Errno 4' in str(e):
+                    # continue as the error seems to be non critical
+                    pass
+                else:
+                    raise Exception(myMessage)
+            else:
+                raise Exception(myMessage)
+
+        return myTifPath

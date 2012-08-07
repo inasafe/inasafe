@@ -28,7 +28,7 @@ class TestShakeEvent(unittest.TestCase):
     """Tests relating to shake events"""
 
     def test_eventFilePath(self):
-        """Test eventFilePath works"""
+        """Test eventFilePath works(using cached data)"""
         myShakeId = '20120726022003'
         myExpectedPath = os.path.join(shakemapExtractDir(),
                                       myShakeId,
@@ -40,7 +40,7 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(myExpectedPath, myPath)
 
     def test_eventFilePath(self):
-        """Test eventFilePath works"""
+        """Test eventFilePath works(using cached data)"""
         myShakeId = '20120726022003'
         myExpectedPath = os.path.join(shakemapExtractDir(),
                                       myShakeId,
@@ -52,7 +52,7 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(myExpectedPath, myPath)
 
     def test_gridXmlFilePath(self):
-        """Test eventFilePath works"""
+        """Test eventFilePath works(using cached data)"""
         myShakeId = '20120726022003'
         myExpectedPath = os.path.join(shakemapExtractDir(),
                                       myShakeId,
@@ -64,7 +64,7 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(myExpectedPath, myPath)
 
     def test_eventParser(self):
-        """Test eventFilePath works"""
+        """Test eventFilePath works (using cached data)"""
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
@@ -75,6 +75,7 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(2, myShakeEvent.hour)
         self.assertEquals(15, myShakeEvent.minute)
         self.assertEquals(35, myShakeEvent.second)
+        # We really want GMT time here...
         self.assertEquals('WIB', myShakeEvent.timeZone)
         self.assertEquals(124.45, myShakeEvent.longitude)
         self.assertEquals(-0.21, myShakeEvent.latitude)
@@ -87,7 +88,29 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(1.79, myShakeEvent.yMaximum)
 
         myGridXmlData = myShakeEvent.mmiData
-        print myGridXmlData
+        self.assertEquals(25921, len(myGridXmlData))
+
+        myDelimitedString = myShakeEvent.mmiDataToDelimitedText()
+        self.assertEqual(578234, len(myDelimitedString))
+
+    def test_eventGridToCsv(self):
+        """Test grid data can be written to csv"""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myPath = myShakeEvent.mmiDataToDelimitedFile(theForceFlag=True)
+        myFile = file(myPath,'rt')
+        myString = myFile.readlines()
+        myFile.close()
+        self.assertEqual(25922, len(myString))
+
+    def testEventToRaster(self):
+        """Check we can convert the shake event to a raster"""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myPath = myShakeEvent.mmiDataToRaster(theForceFlag=True)
+        os.path.exists(myPath)
 
 if __name__ == '__main__':
     unittest.main()
