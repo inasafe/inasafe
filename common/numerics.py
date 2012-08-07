@@ -236,13 +236,14 @@ def grid2points(A, x, y):
 
     # Create flat 1D row-major view of A cast as
     # one column vector of length MxN where M, N = A.shape
-    values = A.reshape((-1, 1))
+    #values = A.reshape((-1, 1))
+    values = A.reshape(-1)
 
     # Concatenate coordinates with their values from the grid
-    P = numpy.concatenate((points, values), axis=1)
+    #P = numpy.concatenate((points, values), axis=1)
 
     # Return Nx3 array with rows: x, y, value
-    return P
+    return points, values
 
 
 def geotransform2axes(G, nx, ny):

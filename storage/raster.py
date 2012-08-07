@@ -581,9 +581,9 @@ class Raster(Layer):
         # Convert grid data to point data
         A = self.get_data()
         x, y = self.get_geometry()
-        P = grid2points(A, x, y)
+        P, V = grid2points(A, x, y)
 
-        return P[:, :2], P[:, 2]
+        return P, V
 
     def to_vector_layer(self):
         """Convert raster grid to vector point data

@@ -1120,7 +1120,7 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     # Convert raster grid to Nx2 array of points and an N array of pixel values
     ny, nx = A.shape
     x, y = geotransform2axes(geotransform, nx, ny)
-    P = grid2points(A, x, y)
+    P, V = grid2points(A, x, y)
 
     # For each polygon
     # * select the points that fall inside its bounding box

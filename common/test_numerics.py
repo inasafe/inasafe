@@ -56,11 +56,12 @@ class Test_Numerics(unittest.TestCase):
         latitudes = numpy.linspace(-4, 0, M, endpoint=True)
 
         # Call function to be tested
-        P = grid2points(A, longitudes, latitudes)
+        P, V = grid2points(A, longitudes, latitudes)
 
         # Assert correctness
         assert P.shape[0] == L
-        assert P.shape[1] == 3
+        assert P.shape[1] == 2
+        assert len(V) == L
 
         #print
         #print longitudes
@@ -69,7 +70,7 @@ class Test_Numerics(unittest.TestCase):
         #print P
         assert numpy.allclose(P[:N, 0], longitudes)
         assert numpy.allclose(P[:L:N, 1], latitudes[::-1])
-        assert numpy.allclose(P[:, 2], A.flat)
+        assert numpy.allclose(V, A.flat[:])
 
 
 if __name__ == '__main__':
