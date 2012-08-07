@@ -481,8 +481,8 @@ class Vector(Layer):
                     fields = data[0].keys()
                 except:
                     msg = ('Input parameter "attributes" was specified '
-                           'but it does not contain dictionaries with '
-                           'field information as expected. The first'
+                           'but it does not contain list of dictionaries '
+                           'with field information as expected. The first '
                            'element is %s' % data[0])
                     raise Exception(msg)
                 else:

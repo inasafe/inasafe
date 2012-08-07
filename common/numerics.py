@@ -195,6 +195,9 @@ def axes2points(x, y):
          [3, 20]]
     """
 
+    # Reverse y coordinates to have them start at bottom of array
+    y = numpy.flipud(y)
+
     # Repeat x coordinates for each y (fastest varying)
     X = numpy.kron(numpy.ones(len(y)), x)
 

@@ -6,10 +6,11 @@ import numpy
 import copy as copy_module
 from osgeo import gdal
 from common.utilities import verify
-from common.numerics import nanallclose, geotransform2axes
+from common.numerics import nanallclose, geotransform2axes, grid2points
 from common.dynamic_translations import names as internationalised_titles
 
 from layer import Layer
+from vector import Vector
 from projection import Projection
 from interpolation import interpolate_raster_vector
 
@@ -568,3 +569,38 @@ class Raster(Layer):
 
         # Return either 2-tuple or scale depending on isotropic
         return res
+
+    def to_vector_points(self):
+        """Convert raster grid to vector point data
+
+        Output
+           coordinates: Nx2 array of x, y (lon, lat) coordinates
+           values: N array of corresponding grid values
+        """
+
+        # Convert grid data to point data
+        A = self.get_data()
+        x, y = self.get_geometry()
+        P = grid2points(A, x, y)
+
+        return P[:, :2], P[:, 2]
+
+    def to_vector_layer(self):
+        """Convert raster grid to vector point data
+
+        Return a vector layer object with data points corresponding to
+        grid points. The order is row-major which means that the
+        x (longitude) direction is varying the fastest.
+        """
+
+        # Get vector data
+        coordinates, values = self.to_vector_points()
+
+        # Create corresponding vector layer
+        attributes = [{'value': x} for x in values]
+        V = Vector(geometry=coordinates,
+                   data=attributes,
+                   projection=self.get_projection(),
+                   geometry_type='point')
+
+        return V

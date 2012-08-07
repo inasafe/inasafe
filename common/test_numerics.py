@@ -25,19 +25,19 @@ class Test_Numerics(unittest.TestCase):
         x = numpy.linspace(1, 3, 3)
         y = numpy.linspace(10, 20, 2)
         P = axes2points(x, y)
-        assert numpy.allclose(P, [[1., 10.],
-                                  [2., 10.],
-                                  [3., 10.],
-                                  [1., 20.],
+        assert numpy.allclose(P, [[1., 20.],
                                   [2., 20.],
-                                  [3., 20.]],
+                                  [3., 20.],
+                                  [1., 10.],
+                                  [2., 10.],
+                                  [3., 10.]],
                               rtol=0.0, atol=0.0)
 
         # Test 2
         x = numpy.linspace(1, 5, 11)
         y = numpy.linspace(10, 20, 5)
         P = axes2points(x, y)
-        assert numpy.allclose(P[12, :], [1.4, 12.5])
+        assert numpy.allclose(P[12, :], [1.4, 17.5])
 
     def test_grid2points(self):
         """Raster grids can be converted to point data
@@ -53,7 +53,7 @@ class Test_Numerics(unittest.TestCase):
 
         # Axis
         longitudes = numpy.linspace(100, 110, N, endpoint=False)
-        latitudes = numpy.linspace(0, -6, M, endpoint=False)
+        latitudes = numpy.linspace(-4, 0, M, endpoint=True)
 
         # Call function to be tested
         P = grid2points(A, longitudes, latitudes)
@@ -62,8 +62,13 @@ class Test_Numerics(unittest.TestCase):
         assert P.shape[0] == L
         assert P.shape[1] == 3
 
+        #print
+        #print longitudes
+        #print latitudes
+        #print A
+        #print P
         assert numpy.allclose(P[:N, 0], longitudes)
-        assert numpy.allclose(P[:L:N, 1], latitudes)
+        assert numpy.allclose(P[:L:N, 1], latitudes[::-1])
         assert numpy.allclose(P[:, 2], A.flat)
 
 

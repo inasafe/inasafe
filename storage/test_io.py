@@ -1045,6 +1045,47 @@ class Test_IO(unittest.TestCase):
 
                     i0 = i1
 
+    def test_raster_to_vector_points(self):
+        """Raster layers can be converted to vector point layers
+        """
+
+        filename = '%s/test_grid.asc' % TESTDATA
+        R = read_layer(filename)
+
+        # Check data directly
+        coordinates, values = R.to_vector_points()
+        longitudes, latitudes = R.get_geometry()
+        A = R.get_data()
+        M, N = A.shape
+        L = M * N
+
+        assert numpy.allclose(coordinates[:N, 0], longitudes)
+        assert numpy.allclose(coordinates[:L:N, 1], latitudes[::-1])
+        assert nanallclose(A.flat[:], values)
+
+        # Check generated vector layer
+        V = R.to_vector_layer()
+        geometry = V.get_geometry()
+        attributes = V.get_data()
+
+        # These were verified manually using QGIS
+        assert numpy.allclose(geometry[5, :], [96.97137053, -5.34965715])
+        assert numpy.allclose(attributes[5]['value'], 3)
+        assert numpy.allclose(attributes[5]['value'], A[1, 0])
+
+        assert numpy.allclose(geometry[11, :], [97.0021116, -5.38039821])
+        assert numpy.allclose(attributes[11]['value'], -50.6014, rtol=1.0e-6)
+        assert numpy.allclose(attributes[11]['value'], A[2, 1], rtol=1.0e-6)
+
+        assert numpy.allclose(geometry[23, :], [97.06359372, -5.44188034])
+        assert numpy.isnan(attributes[23]['value'])
+        assert numpy.isnan(A[4, 3])
+
+        # For visual inspection e.g. with QGIS
+        out_filename = unique_filename(suffix='.shp')
+        #V.write_to_file(out_filename)
+        #print 'Written to ', out_filename
+
     def test_get_bounding_box(self):
         """Bounding box is correctly extracted from file.
 
@@ -1141,7 +1182,9 @@ class Test_IO(unittest.TestCase):
                    'get_nodata_value',
                    'get_attribute_names',
                    'get_resolution',
-                   'get_geometry_type']
+                   'get_geometry_type',
+                   'to_vector_points',
+                   'to_vector_layer']
 
         V = Vector()  # Empty vector instance
         R = Raster()  # Empty raster instance
