@@ -81,10 +81,10 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(11.0, myShakeEvent.depth)
         self.assertEquals('Southern Molucca Sea', myShakeEvent.location)
         # And these from grid.xml
-        self.assertEquals(0, myShakeEvent.xMinimum)
-        self.assertEquals(0, myShakeEvent.xMaximum)
-        self.assertEquals(0, myShakeEvent.yMinimum)
-        self.assertEquals(0, myShakeEvent.yMaximum)
+        self.assertEquals(122.45, myShakeEvent.xMinimum)
+        self.assertEquals(126.45, myShakeEvent.xMaximum)
+        self.assertEquals(-2.21, myShakeEvent.yMinimum)
+        self.assertEquals(1.79, myShakeEvent.yMaximum)
 
         myGridXmlData = myShakeEvent.mmiData
         print myGridXmlData

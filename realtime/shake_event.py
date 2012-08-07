@@ -227,8 +227,9 @@ class ShakeEvent:
             myMMIColumn = 5
             self.mmiData = []
             for myLine in myData.split('\n'):
+                if not myLine:
+                    continue
                 myTokens = myLine.split(' ')
-                print myTokens
                 myLon = myTokens[myLonColumn]
                 myLat = myTokens[myLatColumn]
                 myMMI = myTokens[myMMIColumn]

@@ -169,10 +169,9 @@ class TestShakeMap(unittest.TestCase):
         myShakeData = ShakeData(myShakeEvent)
         # Postprocess the event.xml, grid.xml and the mi.grd into a
         # ShakeEvent object and a .tif file.
-        myEventXml, myGridXml, myMiGrd = myShakeData.postProcess(
+        myEventXml, myMiGrd = myShakeData.postProcess(
             theForceFlag=True)
         del myEventXml
-        del myGridXml
         assert os.path.exists(myMiGrd)
 
     def test_extractContours(self):
