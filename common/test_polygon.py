@@ -302,7 +302,7 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(indices, [3, 2, 1, 0])
 
         indices = outside_polygon(points, U, closed=True)
-        assert numpy.allclose(indices, [0, 1, 2, 3])
+        assert numpy.allclose(indices, [3, 2, 1, 0])
 
         indices = inside_polygon(points, U, closed=True)
         assert numpy.allclose(indices, [])
@@ -428,14 +428,14 @@ class Test_Polygon(unittest.TestCase):
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
         res, count = separate_points_by_polygon(points, polygon)
         assert count == 3
-        assert numpy.allclose(res, [0, 1, 2, 4, 3])
+        assert numpy.allclose(res, [0, 1, 2, 3, 4])
 
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0],
                   [0.5, 1.5], [0.5, -0.5]]
         res, count = separate_points_by_polygon(points, polygon)
 
-        assert numpy.allclose(res, [1, 2, 3, 5, 4, 0])
+        assert numpy.allclose(res, [1, 2, 3, 0, 4, 5])
         assert count == 3
 
     def test_separate_points_by_polygon_characterisation(self):
@@ -479,8 +479,8 @@ class Test_Polygon(unittest.TestCase):
                                                     use_numpy=False)
         assert count_r == 3
         assert count_p == 3
-        assert numpy.allclose(res_p, [1, 2, 3, 5, 4, 0])
-        assert numpy.allclose(res_r, [1, 2, 3, 5, 4, 0])
+        assert numpy.allclose(res_p, [1, 2, 3, 0, 4, 5])
+        assert numpy.allclose(res_r, [1, 2, 3, 0, 4, 5])
 
     def test_polygon_clipping_error_handling(self):
         """Polygon clipping checks input as expected"""
