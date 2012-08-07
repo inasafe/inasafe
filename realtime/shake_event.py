@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import sys
+import shutil
 from xml.dom import minidom
 from subprocess import (call, CalledProcessError)
 from utils import shakemapExtractDir
@@ -396,4 +397,13 @@ class ShakeEvent:
             else:
                 raise Exception(myMessage)
 
+        # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
+        myQmlPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              'mmi.qml')
+        mySourceQml = os.path.abspath(
+            os.path.join(os.path.dirname(__file__),
+            'fixtures',
+            'mmi.qml'))
+        shutil.copyfile(mySourceQml, myQmlPath)
         return myTifPath

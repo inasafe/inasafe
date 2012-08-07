@@ -110,7 +110,9 @@ class TestShakeEvent(unittest.TestCase):
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
         myPath = myShakeEvent.mmiDataToRaster(theForceFlag=True)
-        os.path.exists(myPath)
+        assert os.path.exists(myPath)
+        myExpectedQml = myPath.replace('tif','qml')
+        assert os.path.exists(myExpectedQml)
 
 if __name__ == '__main__':
     unittest.main()
