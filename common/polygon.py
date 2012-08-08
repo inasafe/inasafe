@@ -24,7 +24,7 @@ def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
                                use_numpy=True,
-                               optimise=False):
+                               optimise=True):
     """Determine whether points are inside or outside a polygon
 
     Input:
@@ -1189,28 +1189,6 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     unallocated_points = points
     for polygon in polygons:
 
-        ####################################################################
-        # FIXME (Ole): This is a huge optimisation that must go into
-        # separate_points_by_polygon!!!
-        ####################################################################
-
-        # Get polygon extents to quickly rule out points that
-        # are outside its bounding box
-        #minpx = min(polygon[:, 0])
-        #maxpx = max(polygon[:, 0])
-        #minpy = min(polygon[:, 1])
-        #maxpy = max(polygon[:, 1])
-        #
-        #M = points.shape[0]
-        #N = polygon.shape[0]
-        #
-        #x = points[:, 0]
-        #y = points[:, 1]
-
-        # Only work on those that are inside polygon bounding box
-        #outside_box = (x > maxpx) + (x < minpx) + (y > maxpy) + (y < minpy)
-        #inside_box = -outside_box
-
         indices, count = separate_points_by_polygon(unallocated_points,
                                                     polygon,
                                                     closed=True,
@@ -1218,7 +1196,7 @@ def clip_grid_by_polygons(A, geotransform, polygons,
         inside = indices[:count]
         outside = indices[count:]
 
-        result.append(points[inside])
+        result.append((points[inside], values[inside]))
         unallocated_points = points[outside]
         print len(result), len(polygons), len(polygon), 'inside', len(inside),
         print 'remain', len(outside)

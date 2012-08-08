@@ -462,6 +462,30 @@ class Test_Engine(unittest.TestCase):
 
             i += 1
 
+    def test_clip_grid_by_polygons(self):
+        """Rasters can be converted to points and clipped by polygons
+
+        This is a test for the basic machinery needed for issue #91
+
+        It uses over 400,000 gridpoints and 2704 complex polygons, each with 10-200 vertices
+        and serves a test for optimising the polygon clipping algorithm.
+        With the optimisations requested in https://github.com/AIFDR/inasafe/issues/222 it
+        takes about 100 seconds on a good workstation while it takes over 2000 seconds without it.
+        """
+
+        # Name input files
+        polyhazard = join(TESTDATA, 'rw_jakarta_singlepart.shp')
+        population = join(TESTDATA, 'Population_Jakarta_geographic.asc')
+
+        # Get layers using API
+        H = read_layer(polyhazard)
+        E = read_layer(population)
+
+        assert len(H) == 2704
+        res = clip_grid_by_polygons(E.get_data(),
+                                    E.get_geotransform(),
+                                    H.get_geometry())
+
     def test_polygon_hazard_and_raster_exposure(self):
         """Exposure rasters can be clipped by polygon exposure
 
@@ -477,9 +501,9 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(population)
 
         assert len(H) == 2704
-        #res = clip_grid_by_polygons(E.get_data(),
-        #                            E.get_geotransform(),
-        #                            H.get_geometry())
+        res = clip_grid_by_polygons(E.get_data(),
+                                    E.get_geotransform(),
+                                    H.get_geometry())
         # FIXME (Ole): Not done yet
 
     def test_flood_building_impact_function(self):
@@ -2327,6 +2351,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_polygon_hazard_and_raster_exposure')
+    suite = unittest.makeSuite(Test_Engine, 'test_clip')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
