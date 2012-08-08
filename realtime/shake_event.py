@@ -124,6 +124,9 @@ class ShakeEvent:
         The event is parsed and class members are populated with whatever
         data could be obtained from the event.
 
+        TODO: Refactor this to get the data from grid.xml then we only need
+        to deal with one input file!!!
+
         Args: None
 
         Returns : None
