@@ -59,11 +59,6 @@ class ExtractionError(Exception):
     pass
 
 
-class MiGrdConversionError(Exception):
-    """An exception for when something went wrong converting mi.grd to a tif"""
-    pass
-
-
 class ContourCreationError(Exception):
     """An exception for when creating contours from shakemaps goes wrong"""
     pass

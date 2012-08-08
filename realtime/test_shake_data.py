@@ -20,7 +20,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import unittest
-import ogr
 
 from shake_data import ShakeData
 from utils import (shakemapZipDir,
@@ -141,7 +140,7 @@ class TestShakeMap(unittest.TestCase):
         """Test that we can extract the shakemap inp and out files"""
         myShakeEvent = '20120726022003'
         myShakeData = ShakeData(myShakeEvent)
-        myEventXml, myGridXml, myMiGrd = myShakeData.extract(theForceFlag=True)
+        myEventXml, myGridXml = myShakeData.extract(theForceFlag=True)
 
         myExtractDir = shakemapExtractDir()
         myExpectedEvent = (os.path.join(myExtractDir,
@@ -156,41 +155,13 @@ class TestShakeMap(unittest.TestCase):
         assert myExpectedGridXml in myExpectedGridXml, myMessage
         assert os.path.exists(myGridXml)
 
-
-        myExpectedMiGrd = (os.path.join(myExtractDir,
-                           '20120726022003/mi.grd'))
-        myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedMiGrd, myMiGrd)
-        assert myExpectedMiGrd in myExpectedMiGrd, myMessage
-        assert os.path.exists(myMiGrd)
-
     def test_convertGrdToTif(self):
         """Test that we can convert the grid file to a tif file"""
         myShakeEvent = '20120726022003'
         myShakeData = ShakeData(myShakeEvent)
-        # Postprocess the event.xml, grid.xml and the mi.grd into a
-        # ShakeEvent object and a .tif file.
-        myEventXml, myMiGrd = myShakeData.postProcess(
-            theForceFlag=True)
-        del myEventXml
-        assert os.path.exists(myMiGrd)
-
-    def test_extractContours(self):
-        """Test that we can extract contours from the tif file"""
-        myShakeEvent = '20120726022003'
-        myTable = myShakeEvent + '_contours'
-        myShakeData = ShakeData(myShakeEvent)
-        # Force re-extraction in case it is cached
-        myContourPath = myShakeData.extractContours(True)
-        myDataSource = ogr.Open(myContourPath)
-        # do a little query to make sure we got some results...
-        mySQL = 'select * from \'%s\' order by MMI asc' % myTable
-        #print mySQL
-        myLayer = myDataSource.ExecuteSQL(mySQL)
-        myExpectedFeatureCount = 136
-        self.assertEquals(myLayer.GetFeatureCount(), myExpectedFeatureCount)
-        myDataSource.ReleaseResultSet(myLayer)
-        myDataSource.Destroy()
-
+        # Postprocess the event.xml, grid.xml nto a ShakeEvent object
+        myEvent = myShakeData.shakeEvent(theForceFlag=True)
+        del myEvent
 
 if __name__ == '__main__':
     unittest.main()

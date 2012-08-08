@@ -17,6 +17,7 @@ __date__ = '2/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import ogr
 import os
 import unittest
 from utils import shakemapExtractDir
@@ -159,6 +160,16 @@ mmiData: Populated"""
         myExpectedQml = myPath.replace('shp','qml')
         myMessage = '%s not found' % myExpectedQml
         assert os.path.exists(myExpectedQml), myMessage
+
+        myDataSource = ogr.Open(myPath)
+        # do a little query to make sure we got some results...
+        mySQL = 'select * from \'mmi-contours\' order by MMI asc'
+        #print mySQL
+        myLayer = myDataSource.ExecuteSQL(mySQL)
+        myExpectedFeatureCount = 132
+        self.assertEquals(myLayer.GetFeatureCount(), myExpectedFeatureCount)
+        myDataSource.ReleaseResultSet(myLayer)
+        myDataSource.Destroy()
 
 if __name__ == '__main__':
     unittest.main()

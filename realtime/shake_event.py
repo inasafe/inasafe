@@ -29,7 +29,8 @@ from utils import shakemapExtractDir
 from rt_exceptions import (EventFileNotFoundError,
                            EventXmlParseError,
                            GridXmlFileNotFoundError,
-                           GridXmlParseError)
+                           GridXmlParseError,
+                           ContourCreationError)
 # The logger is intialised in utils.py by init
 import logging
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -560,7 +561,7 @@ class ShakeEvent:
         # TODO: Use sqlite rather?
         myOutputFileBase = os.path.join(shakemapExtractDir(),
                                         self.eventId,
-                                        'mmi_contours.')
+                                        'mmi-contours.')
         myOutputFile = myOutputFileBase + 'shp'
         if os.path.exists(myOutputFile) and theForceFlag is not True:
             return myOutputFile
@@ -595,8 +596,8 @@ class ShakeEvent:
         myNoDataValue = -9999
         myIdField = 0  # first field defined above
         myElevationField = 1  # second (MMI) field defined above
-
-        gdal.ContourGenerate(myTifDataset.GetRasterBand(myBand),
+        try:
+            gdal.ContourGenerate(myTifDataset.GetRasterBand(myBand),
                              myContourInterval,
                              myContourBase,
                              myFixedLevelList,
@@ -605,8 +606,20 @@ class ShakeEvent:
                              myLayer,
                              myIdField,
                              myElevationField)
-        del myTifDataset
-        myOgrDataset.Release()
+        except Exception, e:
+            raise ContourCreationError(str(e))
+        finally:
+            del myTifDataset
+            myOgrDataset.Release()
+        # Lastly copy over the standard qml (QGIS Style file)
+        myQmlPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              'mmi-contours.qml')
+        mySourceQml = os.path.abspath(
+            os.path.join(os.path.dirname(__file__),
+            'fixtures',
+            'mmi-contours.qml'))
+        shutil.copyfile(mySourceQml, myQmlPath)
         return myOutputFile
 
     def __str__(self):

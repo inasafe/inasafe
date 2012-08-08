@@ -31,17 +31,12 @@ from rt_exceptions import (EventUndefinedError,
                         NetworkError,
                         EventValidationError,
                         InvalidInputZipError,
-                        InvalidOutputZipError,
                         ExtractionError,
-                        MiGrdConversionError,
                         EventXmlParseError,
-                        ContourCreationError
                         )
 from ftp_client import FtpClient
 from utils import (shakemapZipDir,
-                   shakemapExtractDir,
-                   shakemapDataDir,
-                   gisDataDir)
+                   shakemapExtractDir)
 from shake_event import ShakeEvent
 
 
@@ -59,10 +54,12 @@ class ShakeData:
         * `ftp://118.97.83.243/20110413170148.out.zip`_
 
     There are numerous files provided within these two zip files, but there
-    are only really two that we are interested in:
+    is only really one that we are interested in:
 
         * grid.xml - which contains all the metadata pertaining to the event
-        * mi.grd - which contains the GMT formatted raster shake MMI data.
+
+    The remaining files are fetched for completeness and possibly use in the
+    future.
 
     This class provides a high level interface for retrieving this data and
     then extracting various by products from it.
@@ -189,7 +186,7 @@ class ShakeData:
             myClient = FtpClient()
             myClient.getFile(theEventFile, myLocalPath)
         except:
-            # TODO: differentiate between file not found and networ errors.
+            # TODO: differentiate between file not found and network errors.
             raise NetworkError('Message failed to retrieve '
                                'file. %s' % theEventFile)
         return myLocalPath
@@ -280,7 +277,7 @@ class ShakeData:
 
         with input and output directories appearing beneath that.
 
-        This method will then move the event.xml, event.xyz and mi.grd files
+        This method will then move the event.xml, grid.xml files
         up to the root of the extract dir and recursively remove the extracted
         dirs.
 
@@ -290,8 +287,6 @@ class ShakeData:
                20120726022003/event.xml`
         :file:`/tmp/inasafe/realtime/shakemaps-extracted/
                20120726022003/grid.xml`
-        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
-               20120726022003/mi.grd`
 
         If the zips have not already been retrieved from the ftp server,
         they will be fetched first automatically.
@@ -302,12 +297,9 @@ class ShakeData:
         .. note:: You should not store any of your own working data in the
            extract dir - it should be treated as transient.
 
-        .. note:: the grid.xml file contains simlar metadata to event.xml but
-           misses the depth. Grid.xyz also contains additional point data that
+        .. note:: the grid.xml contains additional point data that
            we care about and will extract as a matrix (MMI in the 5th column).
 
-        .. warning:: See if depth is really needed and if not refactor to
-           discontinue use of event.xml
 
         Args:
             theForceFlag - (Optional) Whether to force re-extraction. If the
@@ -321,21 +313,18 @@ class ShakeData:
             print myEventXml, myGridXuz, myMiGrd
             /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/event.xml
             /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/grid.xml
-            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/mi.grd
 
         Raises: InvalidInputZipError, InvalidOutputZipError
         """
 
         myFinalEventXmlFile = os.path.join(self.extractDir(), 'event.xml')
         myFinalGridXmlFile = os.path.join(self.extractDir(), 'grid.xml')
-        myFinalMiGrdFile = os.path.join(self.extractDir(), 'mi.grd')
 
         if theForceFlag:
             self.removeExtractedFiles()
         elif (os.path.exists(myFinalEventXmlFile) and
-              os.path.exists(myFinalGridXmlFile) and
-              os.path.exists(myFinalMiGrdFile)):
-            return myFinalEventXmlFile, myFinalGridXmlFile, myFinalMiGrdFile
+              os.path.exists(myFinalGridXmlFile)):
+            return myFinalEventXmlFile, myFinalGridXmlFile
 
         myInput, myOutput = self.fetchEvent()
         myInputZip = ZipFile(myInput)
@@ -345,18 +334,11 @@ class ShakeData:
                   self.eventId)
         myExpectedGridXmlFile = ('usr/local/smap/data/%s/output/grid.xml' %
                   self.eventId)
-        myExpectedMiGrdFile = ('usr/local/smap/data/%s/output/mi.grd' %
-                  self.eventId)
 
         myList = myInputZip.namelist()
         if myExpectedEventXmlFile not in myList:
             raise InvalidInputZipError('The input zip does not contain an '
                 '%s file.' % myExpectedEventXmlFile)
-
-        myList = myOutputZip.namelist()
-        if myExpectedMiGrdFile not in myList:
-            raise InvalidOutputZipError('The output zip does not contain an '
-                '%s file.' % myExpectedMiGrdFile)
 
         myExtractDir = self.extractDir()
         myInputZip.extractall(myExtractDir)
@@ -367,18 +349,15 @@ class ShakeData:
                         myFinalEventXmlFile)
         shutil.copyfile(os.path.join(self.extractDir(), myExpectedGridXmlFile),
                         myFinalGridXmlFile)
-        shutil.copyfile(os.path.join(self.extractDir(), myExpectedMiGrdFile),
-                        myFinalMiGrdFile)
         # Get rid of all the other extracted stuff
         myUserDir = os.path.join(self.extractDir(), 'usr')
         if os.path.isdir(myUserDir):
             shutil.rmtree(myUserDir)
 
         if (not os.path.exists(myFinalEventXmlFile) or
-            not os.path.exists(myFinalGridXmlFile) or
-            not os.path.exists(myFinalMiGrdFile)):
-            raise ExtractionError('Error copying event.xml or mi.grd')
-        return myFinalEventXmlFile, myFinalGridXmlFile, myFinalMiGrdFile
+            not os.path.exists(myFinalGridXmlFile)):
+            raise ExtractionError('Error copying event.xml or grid.xml')
+        return myFinalEventXmlFile, myFinalGridXmlFile
 
     def extractDir(self):
         """A helper method to get the path to the extracted datasets.
@@ -407,83 +386,6 @@ class ShakeData:
         if os.path.isdir(myExtractedDir):
             shutil.rmtree(myExtractedDir)
 
-    def postProcess(self, theForceFlag=True):
-        """Process the event.xml, grid.xml and mi.grd files so that they can
-        be used in our workflow. This entails deserialising the event.xml into
-        a ShakeEvent object, and converting the mi.grd to a tif file.
-
-        TODO: The ShakeEvent object will be pickled to the disk for persistent
-        storage.
-
-        .. note:: Delegates to convertMiGrd() and shakeEvent() methods.
-
-        Args: theForceFlag - (Optional). Whether to force the regeneration
-            of post processed products. Defaults to False.
-
-        Returns: myShakeEvent, myGridPath
-            * ShakeEvent - an instance of ShakeEvent populated with whatever
-              data could be gleaned from the event.xml file.
-            * myGridPath - a string representing the absolute path to the
-              generated grid file.
-
-        Raises: EventXmlParseError, MiGrdConversionError
-        """
-        myTifPath = self.convertMiGrd(theForceFlag)
-        myShakeEvent = self.shakeEvent(theForceFlag)
-        return myShakeEvent, myTifPath
-
-    def convertMiGrd(self, theForceFlag=True):
-        """Convert the grid for this shakemap to a tif.
-
-        In the simplest use case you should be able to simply do::
-
-           myShakeData = ShakeData('20120726022003')
-           myTifPath = myShakeData.convertMiGrd()
-
-        and the ShakeData class will take care of fetching (if not already
-        cached), extracting a converting the file for you, returning a usable
-        tif.
-
-        .. warning:: In Ole's original code he had to flip the grid as latitude
-           was reversed. Check if this is still needed with current gdal and
-           implement if needed!
-
-        .. seealso:: postProcess() which will perform both convertMiGrd and
-           event deserialisation in one call.
-
-        Args: theForceFlag - (Optional). Whether to force the regeneration
-            of post processed tif product. Defaults to False.
-
-        Returns: An absolute file system path pointing to the coverted tif file
-
-        Raises: MiGrdConversionError
-        """
-
-        myTifPath = os.path.join(shakemapDataDir(), self.eventId + '.tif')
-        #short circuit if the tif is already created.
-        if os.path.exists(myTifPath) and theForceFlag is not True:
-            return myTifPath
-
-        #otherwise get the grid if needed
-        myEventXml, myGridXmlPath, myMiGrdPath = self.extract()
-        del myGridXmlPath
-        del myEventXml
-        #now save it to Tif
-        myFormat = 'GTiff'
-        myDriver = gdal.GetDriverByName(myFormat)
-        myGridDataset = gdal.Open(myMiGrdPath, GA_ReadOnly)
-        if myGridDataset is not None:
-            myTifDataset = myDriver.CreateCopy(myTifPath, myGridDataset, 0)
-            # Once we're done, close properly the dataset
-            del myGridDataset
-            del myTifDataset
-        else:
-            raise MiGrdConversionError('Could not open source grid: %s',
-                                      myMiGrdPath)
-            # TODO: Investigate need for grid flip and remove if poss
-            LOGGER.warn('CHECK IF GRID NEEDS TO BE FLIPPED ON LAT - ask Ole!')
-        return myTifPath
-
     def shakeEvent(self, theForceFlag=True):
         """Parse the event.xml and return it as a ShakeEvent object.
 
@@ -506,85 +408,3 @@ class ShakeData:
             except EventXmlParseError:
                 raise
         return self._shakeEvent
-
-    def extractContours(self, theForceFlag=True):
-        """Extract contours from the event's tif file.
-
-        ###
-        ###
-        ###
-
-        DEPRECATE THIS - SEE ShakeEvent.extractContours rather!!!
-
-        ###
-        ###
-        ###
-
-        Contours are extracted at a 1MMI interval. The resulting file will
-        be saved in gisDataDir(). In the easiest use case you can simlpy to::
-
-           myShakeEvent = myShakeData.shakeEvent()
-           myContourPath = myShakeData.extractContours()
-
-        which will return the contour dataset for the latest event on the
-        ftp server.
-
-        Args: theForceFlag - (Optional). Whether to force the regeneration
-            of contour product. Defaults to False.
-
-        Returns: An absolute filesystem path pointing to the generated
-            contour dataset.
-
-        Raises: ContourCreationError
-
-        """
-        # TODO: Use sqlite rather?
-        myOutputFileBase = os.path.join(gisDataDir(),
-                                        self.eventId + '_contours.')
-        myOutputFile = myOutputFileBase + 'shp'
-        if os.path.exists(myOutputFile) and theForceFlag is not True:
-            return myOutputFile
-        elif os.path.exists(myOutputFile):
-            os.remove(myOutputFileBase + 'shp')
-            os.remove(myOutputFileBase + 'shx')
-            os.remove(myOutputFileBase + 'dbf')
-            os.remove(myOutputFileBase + 'prj')
-
-        myTifPath = self.convertMiGrd(theForceFlag)
-        # Based largely on
-        # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
-        myDriver = ogr.GetDriverByName('ESRI Shapefile')
-        myOgrDataset = myDriver.CreateDataSource(myOutputFile)
-        if myOgrDataset is None:
-            # Probably the file existed and could not be overriden
-            raise ContourCreationError('Could not create datasource for:\n%s'
-                'Check that the file does not already exist and that you '
-                'do not have file system permissions issues')
-        myLayer = myOgrDataset.CreateLayer('contour')
-        myFieldDefinition = ogr.FieldDefn('ID', ogr.OFTInteger)
-        myLayer.CreateField(myFieldDefinition)
-        myFieldDefinition = ogr.FieldDefn('MMI', ogr.OFTReal)
-        myLayer.CreateField(myFieldDefinition)
-        myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
-        # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
-        myBand = 1
-        myContourInterval = 1  # MMI not M!
-        myContourBase = 0
-        myFixedLevelList = []
-        myUseNoDataFlag = 0
-        myNoDataValue = -9999
-        myIdField = 0  # first field defined above
-        myElevationField = 1  # second (MMI) field defined above
-
-        gdal.ContourGenerate(myTifDataset.GetRasterBand(myBand),
-                             myContourInterval,
-                             myContourBase,
-                             myFixedLevelList,
-                             myUseNoDataFlag,
-                             myNoDataValue,
-                             myLayer,
-                             myIdField,
-                             myElevationField)
-        del myTifDataset
-        myOgrDataset.Release()
-        return myOutputFile
