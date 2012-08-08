@@ -21,7 +21,11 @@ import sys
 import shutil
 from xml.dom import minidom
 from subprocess import (call, CalledProcessError)
+import ogr
+import gdal
+from gdalconst import GA_ReadOnly
 from utils import shakemapExtractDir
+
 from rt_exceptions import (EventFileNotFoundError,
                            EventXmlParseError,
                            GridXmlFileNotFoundError,
@@ -281,6 +285,13 @@ class ShakeEvent:
         The output file will be of the same format as strings returned from
         :func:`mmiDataToDelimitedText`.
 
+        .. note:: An accompanying .csvt will be created which gdal uses to
+           determine field types. The csvt will contain the following string:
+           "Real","Real","Real". These types will be used in other conversion
+           operations. For example to convert the csv to a shp you would do::
+
+              ogr2ogr -select mmi -a_srs EPSG:4326 mmi.shp mmi.vrt mmi
+
         Args: theForceFlag bool (Optional). Whether to force the regeneration
             of the output file. Defaults to False.
 
@@ -300,7 +311,158 @@ class ShakeEvent:
         myFile = file(myPath,'wt')
         myFile.write(self.mmiDataToDelimitedText())
         myFile.close()
+
+        # Also write the .csvt which contains metadata about field types
+        myCsvtPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              'mmi.csvt')
+        myFile = file(myCsvtPath,'wt')
+        myFile.write('"Real","Real","Real"')
+        myFile.close()
         return myPath
+
+    def mmiDataToVrt(self, theForceFlag=True):
+        """Save the mmiData to an ogr vrt text file.
+
+        Args: theForceFlag bool (Optional). Whether to force the regeneration
+            of the output file. Defaults to False.
+
+        Returns: str The absolute file system path to the .vrt text file.
+
+        Raises: None
+        """
+        # Ensure the delimited mmi file exists
+        LOGGER.debug('mmiDataToVrt requested.')
+
+        myVrtPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              'mmi.vrt')
+
+        #short circuit if the vrt is already created.
+        if os.path.exists(myVrtPath) and theForceFlag is not True:
+            return myVrtPath
+
+        myCsvPath = self.mmiDataToDelimitedFile(theForceFlag)
+
+        myVrtString = ('<OGRVRTDataSource>'
+                       '  <OGRVRTLayer name="mmi">'
+                       '    <SrcDataSource>%s</SrcDataSource>'
+                       '    <GeometryType>wkbPoint</GeometryType>'
+                       '    <GeometryField encoding="PointFromColumns"'
+                       '                      x="lon" y="lat" z="mmi"/>'
+                       '  </OGRVRTLayer>'
+                       '</OGRVRTDataSource>' % myCsvPath)
+        myFile = file(myVrtPath, 'wt')
+        myFile.write(myVrtString)
+        myFile.close()
+        return myVrtPath
+
+    def _addExecutablePrefix(self, theCommand):
+        """Add the executable prefix for gdal binaries.
+
+        This is primarily needed for OSX where gdal tools are tucked away in
+        the Library path.
+
+        Args: theCommand str - Required. A string containing the command to
+            which the prefix will be prepended.
+
+        Returns: str - A copy of the command with the prefix added.
+
+        Raises: None
+        """
+
+        myExecutablePrefix = ''
+        if sys.platform == 'darwin':  # Mac OS X
+            # .. todo:: FIXME - softcode gdal version in this path
+            myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
+                                  'Versions/1.9/Programs/')
+        theCommand = myExecutablePrefix + theCommand
+        return theCommand
+
+    def _runCommand(self, theCommand):
+        """Run a command and raise any error as needed.
+
+        This is a simple runner for executing gdal commands.
+
+        Args: theCommand str - Required. A command string to be run.
+
+        Returns: None
+
+        Raises: Any exceptions will be propogated.
+        """
+
+        myCommand = self._addExecutablePrefix(theCommand)
+
+        try:
+            myResult = call(theCommand, shell=True)
+            del myResult
+        except CalledProcessError, e:
+            myMessage = ('Error while executing the following shell '
+                           'command: %\nError message: %s'
+                         % (theCommand, str(e)))
+            # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
+            if sys.platform == 'darwin':  # Mac OS X
+                if 'Errno 4' in str(e):
+                    # continue as the error seems to be non critical
+                    pass
+                else:
+                    raise Exception(myMessage)
+            else:
+                raise Exception(myMessage)
+
+    def mmiDataToShapefile(self, theForceFlag=False):
+        """Convert the grid.xml's mmi column to a vector shp file using ogr2ogr.
+
+        An ESRI shape file will be created.
+
+        Example of the ogr2ogr call we generate::
+
+           ogr2ogr -select mmi -a_srs EPSG:4326 mmi.shp mmi.vrt mmi
+
+        .. note:: It is assumed that ogr2ogr is in your path.
+
+        Args: theForceFlag bool (Optional). Whether to force the regeneration
+            of the output file. Defaults to False.
+
+        Return: str Path to the resulting tif file.
+
+        Raises: None
+        """
+        LOGGER.debug('mmiDataToShapefile requested.')
+
+        myShpPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              'mmi-points.shp')
+        # Short circuit if the tif is already created.
+        if os.path.exists(myShpPath) and theForceFlag is not True:
+            return myShpPath
+
+        # Ensure the vrt mmi file exists (it will generate csv too if needed)
+        myVrtPath = self.mmiDataToVrt(theForceFlag)
+
+        #now generate the tif using default interpoation options
+
+        myCommand = (('ogr2ogr -overwrite -select mmi -a_srs EPSG:4326 '
+                      '%(shp)s %(vrt)s mmi') % {
+                        'shp': myShpPath,
+                        'vrt': myVrtPath
+                     })
+
+
+        LOGGER.info('Created this gdal command:\n%s' % myCommand)
+        # Now run GDAL warp scottie...
+        self._runCommand(myCommand)
+
+        # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
+        myQmlPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              'mmi-points.qml')
+        mySourceQml = os.path.abspath(
+            os.path.join(os.path.dirname(__file__),
+            'fixtures',
+            'mmi-shape.qml'))
+        shutil.copyfile(mySourceQml, myQmlPath)
+        return myShpPath
 
     def mmiDataToRaster(self, theForceFlag=False):
         """Convert the grid.xml's mmi column to a raster using gdal_grid.
@@ -336,31 +498,17 @@ class ShakeEvent:
         if os.path.exists(myTifPath) and theForceFlag is not True:
             return myTifPath
 
-        # Ensure the delimited mmi file exists
-        myCsvPath = self.mmiDataToDelimitedFile(theForceFlag)
+        # Ensure the vrt mmi file exists (it will generate csv too if needed)
+        myVrtPath = self.mmiDataToVrt(theForceFlag)
 
-        # Create a vrt (gdal virtal ogr dataset) so the delimited file can
-        # be used directly by gdal_grid
-        myVrtPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              'mmi.vrt')
-        myVrtString = ('<OGRVRTDataSource>'
-                       '  <OGRVRTLayer name="mmi">'
-                       '    <SrcDataSource>%s</SrcDataSource>'
-                       '    <GeometryType>wkbPoint</GeometryType>'
-                       '    <GeometryField encoding="PointFromColumns"'
-                       '                      x="lon" y="lat" z="mmi"/>'
-                       '  </OGRVRTLayer>'
-                       '</OGRVRTDataSource>' % myCsvPath)
-        myFile = file(myVrtPath, 'wt')
-        myFile.write(myVrtString)
-        myFile.close()
+        # now generate the tif using default nearest neighbour interpoation
+        # options. This gives us the same output as the mi.grd generated by
+        # the earthquake server.
 
-        #now generate the tif using default interpoation options
-
-        myCommand = (('gdal_grid -zfield "mmi" -txe %(xMin)s %(yMax)s -tye '
-                     '%(yMin)s %(yMax)s -outsize %(dimX)i %(dimX)i -of GTiff '
-                     '-ot Float16 -a_srs EPSG:4326 -l mmi %(vrt)s %(tif)s') % {
+        myCommand = (('gdal_grid -a nearest -zfield "mmi" -txe %(xMin)s '
+                      '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
+                      '%(dimX)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
+                      '%(vrt)s %(tif)s') % {
                         'xMin': self.xMinimum,
                         'xMax': self.xMaximum,
                         'yMin': self.yMinimum,
@@ -371,31 +519,9 @@ class ShakeEvent:
                         'tif': myTifPath
                      })
 
-        myExecutablePrefix = ''
-        if sys.platform == 'darwin':  # Mac OS X
-            # .. todo:: FIXME - softcode gdal version in this path
-            myExecutablePrefix = ('/Library/Frameworks/GDAL.framework/'
-                                  'Versions/1.9/Programs/')
-        myCommand = myExecutablePrefix + myCommand
-
         LOGGER.info('Created this gdal command:\n%s' % myCommand)
         # Now run GDAL warp scottie...
-        try:
-            myResult = call(myCommand, shell=True)
-            del myResult
-        except CalledProcessError, e:
-            myMessage = ('Error while executing the following shell '
-                           'command: %\nError message: %s'
-                         % (myCommand, str(e)))
-            # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
-            if sys.platform == 'darwin':  # Mac OS X
-                if 'Errno 4' in str(e):
-                    # continue as the error seems to be non critical
-                    pass
-                else:
-                    raise Exception(myMessage)
-            else:
-                raise Exception(myMessage)
+        self._runCommand(myCommand)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         myQmlPath = os.path.join(shakemapExtractDir(),
@@ -407,3 +533,135 @@ class ShakeEvent:
             'mmi.qml'))
         shutil.copyfile(mySourceQml, myQmlPath)
         return myTifPath
+
+
+    def mmiDataToContours(self, theForceFlag=True):
+        """Extract contours from the event's tif file.
+
+        Contours are extracted at a 1MMI interval. The resulting file will
+        be saved in gisDataDir(). In the easiest use case you can simply do::
+
+           myShakeEvent = myShakeData.shakeEvent()
+           myContourPath = myShakeEvent.mmiToContours()
+
+        which will return the contour dataset for the latest event on the
+        ftp server.
+
+        Args: theForceFlag - (Optional). Whether to force the regeneration
+            of contour product. Defaults to False.
+
+        Returns: An absolute filesystem path pointing to the generated
+            contour dataset.
+
+        Raises: ContourCreationError
+
+        """
+        LOGGER.debug('mmiDataToContours requested.')
+        # TODO: Use sqlite rather?
+        myOutputFileBase = os.path.join(shakemapExtractDir(),
+                                        self.eventId,
+                                        'mmi_contours.')
+        myOutputFile = myOutputFileBase + 'shp'
+        if os.path.exists(myOutputFile) and theForceFlag is not True:
+            return myOutputFile
+        elif os.path.exists(myOutputFile):
+            os.remove(myOutputFileBase + 'shp')
+            os.remove(myOutputFileBase + 'shx')
+            os.remove(myOutputFileBase + 'dbf')
+            os.remove(myOutputFileBase + 'prj')
+
+        myTifPath = self.mmiDataToRaster(theForceFlag)
+        # Based largely on
+        # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
+        myDriver = ogr.GetDriverByName('ESRI Shapefile')
+        myOgrDataset = myDriver.CreateDataSource(myOutputFile)
+        if myOgrDataset is None:
+            # Probably the file existed and could not be overriden
+            raise ContourCreationError('Could not create datasource for:\n%s'
+                'Check that the file does not already exist and that you '
+                'do not have file system permissions issues')
+        myLayer = myOgrDataset.CreateLayer('contour')
+        myFieldDefinition = ogr.FieldDefn('ID', ogr.OFTInteger)
+        myLayer.CreateField(myFieldDefinition)
+        myFieldDefinition = ogr.FieldDefn('MMI', ogr.OFTReal)
+        myLayer.CreateField(myFieldDefinition)
+        myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
+        # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
+        myBand = 1
+        myContourInterval = 1  # MMI not M!
+        myContourBase = 0
+        myFixedLevelList = []
+        myUseNoDataFlag = 0
+        myNoDataValue = -9999
+        myIdField = 0  # first field defined above
+        myElevationField = 1  # second (MMI) field defined above
+
+        gdal.ContourGenerate(myTifDataset.GetRasterBand(myBand),
+                             myContourInterval,
+                             myContourBase,
+                             myFixedLevelList,
+                             myUseNoDataFlag,
+                             myNoDataValue,
+                             myLayer,
+                             myIdField,
+                             myElevationField)
+        del myTifDataset
+        myOgrDataset.Release()
+        return myOutputFile
+
+    def __str__(self):
+        """The unicode representation for an event object's state.
+
+        Args: None
+
+        Returns: str A string describing the ShakeEvent instance
+
+        Raises: None
+        """
+        if self.mmiData:
+          mmiData = 'Populated'
+        else:
+          mmiData = 'Not populated'
+        myString = (('latitude: %(latitude)s\n'
+                     'longitude: %(longitude)s\n'
+                     'eventId: %(eventId)s\n'
+                     'magnitude: %(magnitude)s\n'
+                     'depth: %(depth)s\n'
+                     'description: %(description)s\n'
+                     'location: %(location)s\n'
+                     'day: %(day)s\n'
+                     'month: %(month)s\n'
+                     'year: %(year)s\n'
+                     'time: %(time)s\n'
+                     'timeZone: %(timeZone)s\n'
+                     'xMinimum: %(xMinimum)s\n'
+                     'xMaximum: %(xMaximum)s\n'
+                     'yMinimum: %(yMinimum)s\n'
+                     'yMaximum: %(yMaximum)s\n'
+                     'rows: %(rows)s\n'
+                     'columns: %(columns)s\n'
+                     'mmiData: %(mmiData)s') %
+                     {
+                       'latitude': self.latitude,
+                       'longitude': self.longitude,
+                       'eventId': self.eventId,
+                       'magnitude': self.magnitude,
+                       'depth': self.depth,
+                       'description': self.description,
+                       'location': self.location,
+                       'day': self.day,
+                       'month': self.month,
+                       'year': self.year,
+                       'time': self.time,
+                       'timeZone': self.timeZone,
+                       'xMinimum': self.xMinimum,
+                       'xMaximum': self.xMaximum,
+                       'yMinimum': self.yMinimum,
+                       'yMaximum': self.yMaximum,
+                       'rows': self.rows,
+                       'columns': self.columns,
+                       'mmiData': mmiData
+                     })
+        return myString
+
+

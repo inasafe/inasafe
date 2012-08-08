@@ -109,10 +109,56 @@ class TestShakeEvent(unittest.TestCase):
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
+        myExpectedState = """latitude: -0.21
+longitude: 124.45
+eventId: 20120726022003
+magnitude: 5.0
+depth: 11.0
+description: None
+location: Southern Molucca Sea
+day: 26
+month: 7
+year: 2012
+time: None
+timeZone: WIB
+xMinimum: 122.45
+xMaximum: 126.45
+yMinimum: -2.21
+yMaximum: 1.79
+rows: 161.0
+columns: 161.0
+mmiData: Populated"""
+        myState = str(myShakeEvent)
+        myMessage = (('Expected:\n----------------\n%s'
+                     '\n\nGot\n------------------\n%s\n') %
+                     (myExpectedState, myState))
+        assert myState == myExpectedState, myMessage
         myPath = myShakeEvent.mmiDataToRaster(theForceFlag=True)
         assert os.path.exists(myPath)
         myExpectedQml = myPath.replace('tif','qml')
         assert os.path.exists(myExpectedQml)
+
+    def testEventToShapefile(self):
+        """Check we can convert the shake event to a raster"""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myPath = myShakeEvent.mmiDataToShapefile(theForceFlag=True)
+        assert os.path.exists(myPath)
+        myExpectedQml = myPath.replace('shp','qml')
+        myMessage = '%s not found' % myExpectedQml
+        assert os.path.exists(myExpectedQml), myMessage
+
+    def testEventToContours(self):
+        """Check we can extract contours from the event"""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myPath = myShakeEvent.mmiDataToContours(theForceFlag=True)
+        assert os.path.exists(myPath)
+        myExpectedQml = myPath.replace('shp','qml')
+        myMessage = '%s not found' % myExpectedQml
+        assert os.path.exists(myExpectedQml), myMessage
 
 if __name__ == '__main__':
     unittest.main()

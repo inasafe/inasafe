@@ -510,6 +510,16 @@ class ShakeData:
     def extractContours(self, theForceFlag=True):
         """Extract contours from the event's tif file.
 
+        ###
+        ###
+        ###
+
+        DEPRECATE THIS - SEE ShakeEvent.extractContours rather!!!
+
+        ###
+        ###
+        ###
+
         Contours are extracted at a 1MMI interval. The resulting file will
         be saved in gisDataDir(). In the easiest use case you can simlpy to::
 
