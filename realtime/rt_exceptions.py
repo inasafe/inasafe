@@ -64,18 +64,8 @@ class ContourCreationError(Exception):
     pass
 
 
-class EventFileNotFoundError(Exception):
-    """An exception for when an event.xml could not be found"""
-    pass
-
-
 class EventIdError(Exception):
     """An exception for when an event id is invalid"""
-    pass
-
-
-class EventXmlParseError(Exception):
-    """An exception for when something went wrong parsing the event.xml """
     pass
 
 

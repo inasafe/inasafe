@@ -19,20 +19,16 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 from zipfile import ZipFile
-import gdal
-import ogr
-from gdalconst import GA_ReadOnly
 # The logger is intiailsed in utils.py by init
 import logging
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
-from rt_exceptions import (EventUndefinedError,
-                        EventIdError,
-                        NetworkError,
-                        EventValidationError,
-                        InvalidInputZipError,
-                        ExtractionError,
-                        EventXmlParseError,
+from rt_exceptions import ( EventUndefinedError,
+                            EventIdError,
+                            NetworkError,
+                            EventValidationError,
+                            InvalidInputZipError,
+                            ExtractionError
                         )
 from ftp_client import FtpClient
 from utils import (shakemapZipDir,
@@ -277,14 +273,11 @@ class ShakeData:
 
         with input and output directories appearing beneath that.
 
-        This method will then move the event.xml, grid.xml files
-        up to the root of the extract dir and recursively remove the extracted
-        dirs.
+        This method will then move the grid.xml file up to the root of
+        the extract dir and recursively remove the extracted dirs.
 
-        After this final step, the following files will be present:
+        After this final step, the following file will be present:
 
-        :file:`/tmp/inasafe/realtime/shakemaps-extracted/
-               20120726022003/event.xml`
         :file:`/tmp/inasafe/realtime/shakemaps-extracted/
                20120726022003/grid.xml`
 
@@ -297,56 +290,49 @@ class ShakeData:
         .. note:: You should not store any of your own working data in the
            extract dir - it should be treated as transient.
 
-        .. note:: the grid.xml contains additional point data that
+        .. note:: the grid.xml also contains MMI point data that
            we care about and will extract as a matrix (MMI in the 5th column).
 
 
         Args:
             theForceFlag - (Optional) Whether to force re-extraction. If the
                 files were previously extracted, you can force them to be
-                extracted again. If False, the event.xml, grid.xml and mi.grd
-                files are cached. Default False.
+                extracted again. If False, grid.xml local file is used if
+                it is cached. Default False.
 
-        Returns: a three-tuple containing the event.xml, event.xyz and mi.grd
-            paths e.g.::
-            myEventXml, myGridXml, myMiGrd = myShakeData.extract()
-            print myEventXml, myGridXuz, myMiGrd
-            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/event.xml
+        Returns: a string containing the grid.xml paths e.g.::
+            myGridXml = myShakeData.extract()
+            print myGridXml
             /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/grid.xml
+
 
         Raises: InvalidInputZipError, InvalidOutputZipError
         """
 
-        myFinalEventXmlFile = os.path.join(self.extractDir(), 'event.xml')
         myFinalGridXmlFile = os.path.join(self.extractDir(), 'grid.xml')
 
         if theForceFlag:
             self.removeExtractedFiles()
-        elif (os.path.exists(myFinalEventXmlFile) and
-              os.path.exists(myFinalGridXmlFile)):
-            return myFinalEventXmlFile, myFinalGridXmlFile
+        elif (os.path.exists(myFinalGridXmlFile)):
+            return myFinalGridXmlFile
 
         myInput, myOutput = self.fetchEvent()
         myInputZip = ZipFile(myInput)
         myOutputZip = ZipFile(myOutput)
 
-        myExpectedEventXmlFile = ('usr/local/smap/data/%s/input/event.xml' %
-                  self.eventId)
         myExpectedGridXmlFile = ('usr/local/smap/data/%s/output/grid.xml' %
                   self.eventId)
 
-        myList = myInputZip.namelist()
-        if myExpectedEventXmlFile not in myList:
-            raise InvalidInputZipError('The input zip does not contain an '
-                '%s file.' % myExpectedEventXmlFile)
+        myList = myOutputZip.namelist()
+        if myExpectedGridXmlFile not in myList:
+            raise InvalidInputZipError('The output zip does not contain an '
+                '%s file.' % myExpectedGridXmlFile)
 
         myExtractDir = self.extractDir()
         myInputZip.extractall(myExtractDir)
         myOutputZip.extractall(myExtractDir)
 
-        # move the three files we care about to the top of the extract dir
-        shutil.copyfile(os.path.join(self.extractDir(), myExpectedEventXmlFile),
-                        myFinalEventXmlFile)
+        # move the file we care about to the top of the extract dir
         shutil.copyfile(os.path.join(self.extractDir(), myExpectedGridXmlFile),
                         myFinalGridXmlFile)
         # Get rid of all the other extracted stuff
@@ -354,10 +340,9 @@ class ShakeData:
         if os.path.isdir(myUserDir):
             shutil.rmtree(myUserDir)
 
-        if (not os.path.exists(myFinalEventXmlFile) or
-            not os.path.exists(myFinalGridXmlFile)):
-            raise ExtractionError('Error copying event.xml or grid.xml')
-        return myFinalEventXmlFile, myFinalGridXmlFile
+        if (not os.path.exists(myFinalGridXmlFile)):
+            raise ExtractionError('Error copying grid.xml')
+        return myFinalGridXmlFile
 
     def extractDir(self):
         """A helper method to get the path to the extracted datasets.
@@ -387,7 +372,7 @@ class ShakeData:
             shutil.rmtree(myExtractedDir)
 
     def shakeEvent(self, theForceFlag=True):
-        """Parse the event.xml and return it as a ShakeEvent object.
+        """Parse the grid.xml and return it as a ShakeEvent object.
 
         In the simplest use case you can simply do::
 

@@ -28,30 +28,6 @@ from shake_event import ShakeEvent
 class TestShakeEvent(unittest.TestCase):
     """Tests relating to shake events"""
 
-    def test_eventFilePath(self):
-        """Test eventFilePath works(using cached data)"""
-        myShakeId = '20120726022003'
-        myExpectedPath = os.path.join(shakemapExtractDir(),
-                                      myShakeId,
-                                      'event.xml')
-        myShakeData = ShakeData(myShakeId)
-        myShakeData.extract()
-        myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.eventFilePath()
-        self.assertEquals(myExpectedPath, myPath)
-
-    def test_eventFilePath(self):
-        """Test eventFilePath works(using cached data)"""
-        myShakeId = '20120726022003'
-        myExpectedPath = os.path.join(shakemapExtractDir(),
-                                      myShakeId,
-                                      'event.xml')
-        myShakeData = ShakeData(myShakeId)
-        myShakeData.extract()
-        myShakeEvent = ShakeEvent(myShakeId)
-        myPath = myShakeEvent.eventFilePath()
-        self.assertEquals(myExpectedPath, myPath)
-
     def test_gridXmlFilePath(self):
         """Test eventFilePath works(using cached data)"""
         myShakeId = '20120726022003'
@@ -69,20 +45,17 @@ class TestShakeEvent(unittest.TestCase):
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
-        # These are retrieved from event.xml
         self.assertEquals(26, myShakeEvent.day)
         self.assertEquals(7, myShakeEvent.month)
         self.assertEquals(2012, myShakeEvent.year)
         self.assertEquals(2, myShakeEvent.hour)
         self.assertEquals(15, myShakeEvent.minute)
         self.assertEquals(35, myShakeEvent.second)
-        # We really want GMT time here...
         self.assertEquals('WIB', myShakeEvent.timeZone)
         self.assertEquals(124.45, myShakeEvent.longitude)
         self.assertEquals(-0.21, myShakeEvent.latitude)
         self.assertEquals(11.0, myShakeEvent.depth)
         self.assertEquals('Southern Molucca Sea', myShakeEvent.location)
-        # And these from grid.xml
         self.assertEquals(122.45, myShakeEvent.xMinimum)
         self.assertEquals(126.45, myShakeEvent.xMaximum)
         self.assertEquals(-2.21, myShakeEvent.yMinimum)

@@ -140,14 +140,9 @@ class TestShakeMap(unittest.TestCase):
         """Test that we can extract the shakemap inp and out files"""
         myShakeEvent = '20120726022003'
         myShakeData = ShakeData(myShakeEvent)
-        myEventXml, myGridXml = myShakeData.extract(theForceFlag=True)
+        myGridXml = myShakeData.extract(theForceFlag=True)
 
         myExtractDir = shakemapExtractDir()
-        myExpectedEvent = (os.path.join(myExtractDir,
-                   '20120726022003/event.xml'))
-        myMessage = 'Expected: %s\nGot: %s\n' % (myExpectedEvent, myEventXml)
-        assert myEventXml in myExpectedEvent, myMessage
-        assert os.path.exists(myEventXml)
 
         myExpectedGridXml = (os.path.join(myExtractDir,
                            '20120726022003/grid.xml'))

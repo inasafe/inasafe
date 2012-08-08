@@ -20,37 +20,35 @@ import os
 import sys
 import shutil
 from xml.dom import minidom
-from subprocess import (call, CalledProcessError)
+from subprocess import call, CalledProcessError
 import ogr
 import gdal
 from gdalconst import GA_ReadOnly
+import logging
 from utils import shakemapExtractDir
-
-from rt_exceptions import (EventFileNotFoundError,
-                           EventXmlParseError,
-                           GridXmlFileNotFoundError,
+from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
                            ContourCreationError)
+
 # The logger is intialised in utils.py by init
-import logging
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
 
 class ShakeEvent:
     """The ShakeEvent class encapsulates behaviour and data relating to an
-    earthquake, including epicenter, magniture etc."""
+    earthquake, including epicenter, magnitude etc."""
 
     def __init__(self, theEventId):
         """Constructor for the shake event class.
 
         Args:
             theEventId - (Mandatory) Id of the event. Will be used to
-                determine the path to an event.xml file that
+                determine the path to an grid.xml file that
                 will be used to intialise the state of the ShakeEvent instance.
 
             e.g.
 
-            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/event.xml
+            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/grid.xml
 
         Returns: Instance
 
@@ -75,28 +73,8 @@ class ShakeEvent:
         self.rows = None
         self.columns = None
         self.mmiData = None
-        self.parseEvent()
         self.parseGridXml()
 
-    def eventFilePath(self):
-        """A helper to retrieve the path to the event.xml file
-
-        Args: None
-
-        Returns: An absolute filesystem path to the event.xml file.
-
-        Raises: EventFileNotFoundError
-        """
-        LOGGER.debug('Event path requested.')
-        myEventPath = os.path.join(shakemapExtractDir(),
-                                   self.eventId,
-                                   'event.xml')
-        #short circuit if the tif is already created.
-        if os.path.exists(myEventPath):
-            return myEventPath
-        else:
-            LOGGER.error('Event file not found. %s' % myEventPath)
-            raise EventFileNotFoundError('%s not found' % myEventPath)
 
     def gridFilePath(self):
         """A helper to retrieve the path to the grid.xml file
@@ -118,47 +96,6 @@ class ShakeEvent:
             LOGGER.error('Event file not found. %s' % myGridXmlPath)
             raise GridXmlFileNotFoundError('%s not found' % myGridXmlPath)
 
-    def parseEvent(self):
-        """Parse the event.xml and extract whatever info we can from it.
-
-        The event is parsed and class members are populated with whatever
-        data could be obtained from the event.
-
-        TODO: Refactor this to get the data from grid.xml then we only need
-        to deal with one input file!!!
-
-        Args: None
-
-        Returns : None
-
-        Raises: EventXmlParseError
-        """
-        LOGGER.debug('ParseEvent requested.')
-        myPath = self.eventFilePath()
-        try:
-            myDocument = minidom.parse(myPath)
-            myEventElement = myDocument.getElementsByTagName('earthquake')
-            myEventElement = myEventElement[0]
-            self.magnitude = float(myEventElement.attributes['mag'].nodeValue)
-            self.longitude = float(myEventElement.attributes['lon'].nodeValue)
-            self.latitude = float(myEventElement.attributes['lat'].nodeValue)
-            self.location = myEventElement.attributes[
-                            'locstring'].nodeValue.strip()
-            self.depth = float(myEventElement.attributes['depth'].nodeValue)
-            self.year = int(myEventElement.attributes['year'].nodeValue)
-            self.month = int(myEventElement.attributes['month'].nodeValue)
-            self.day = int(myEventElement.attributes['day'].nodeValue)
-            self.hour = int(myEventElement.attributes['hour'].nodeValue)
-            self.minute = int(myEventElement.attributes['minute'].nodeValue)
-            self.second = int(myEventElement.attributes['second'].nodeValue)
-            # Note teh timezone here is inconsistent with YZ from grid.xml
-            # use the latter
-            self.timeZone = myEventElement.attributes['timezone'].nodeValue
-
-        except Exception, e:
-            LOGGER.exception('Event parse failed')
-            raise EventXmlParseError('Failed to parse event file.\n%s\n%s'
-                % (e.__class__, str(e)))
 
     def parseGridXml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
@@ -200,13 +137,12 @@ class ShakeEvent:
            ...
            ... etc
 
-        .. note:: We could have also obtained this data from the grid.xml
-           but the **grid.xml** is preferred because it contains clear and
-           unequivical metadata describing the various fields and attributes.
+        .. note:: We could have also obtained some of this data from the
+           grid.xyz and event.xml but the **grid.xml** is preferred because it
+           contains clear and unequivical metadata describing the various
+           fields and attributes. Also it provides all the data we need in a
+           single file.
 
-        We already have most of the event details from event.xml so we are
-        primarily interested in event_specification (in order to compute the
-        bounding box) and grid_data (in order to obtain an MMI raster).
 
         Args: None
 
@@ -218,8 +154,44 @@ class ShakeEvent:
         myPath = self.gridFilePath()
         try:
             myDocument = minidom.parse(myPath)
+            myEventElement = myDocument.getElementsByTagName('event')
+            myEventElement = myEventElement[0]
+            self.magnitude = float(myEventElement.attributes[
+                                   'magnitude'].nodeValue)
+            self.longitude = float(myEventElement.attributes[
+                                   'lon'].nodeValue)
+            self.latitude = float(myEventElement.attributes[
+                                  'lat'].nodeValue)
+            self.location = myEventElement.attributes[
+                            'event_description'].nodeValue.strip()
+            self.depth = float(myEventElement.attributes['depth'].nodeValue)
+            # Get the date - its going to look something like this:
+            # 2012-08-07T01:55:12WIB
+            myTimeStamp = myEventElement.attributes[
+                          'event_timestamp'].nodeValue
+            # now separate out its parts
+            # >>> e = "2012-08-07T01:55:12WIB"
+            #>>> e[0:10]
+            #'2012-08-07'
+            #>>> e[12:-3]
+            #'1:55:12'
+            #>>> e[-3:]
+            #'WIB'   (WIB = Western Indonesian Time)
+
+            myDateTokens = myTimeStamp[0:10].split('-')
+            self.year = int(myDateTokens[0])
+            self.month = int(myDateTokens[1])
+            self.day = int(myDateTokens[2])
+            myTimeTokens = myTimeStamp[12:-3].split(':')
+            self.hour = int(myTimeTokens[0])
+            self.minute = int(myTimeTokens[1])
+            self.second = int(myTimeTokens[2])
+            # Note teh timezone here is inconsistent with YZ from grid.xml
+            # use the latter
+            self.timeZone = myTimeStamp[-3:]
+
             mySpecificationElement = myDocument.getElementsByTagName(
-                'grid_specification')
+                                  'grid_specification')
             mySpecificationElement = mySpecificationElement[0]
             self.xMinimum = float(mySpecificationElement.attributes[
                                   'lon_min'].nodeValue)
@@ -398,12 +370,12 @@ class ShakeEvent:
         myCommand = self._addExecutablePrefix(theCommand)
 
         try:
-            myResult = call(theCommand, shell=True)
+            myResult = call(myCommand, shell=True)
             del myResult
         except CalledProcessError, e:
             myMessage = ('Error while executing the following shell '
-                           'command: %\nError message: %s'
-                         % (theCommand, str(e)))
+                           'command: %s\nError message: %s'
+                         % (myCommand, str(e)))
             # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
             if sys.platform == 'darwin':  # Mac OS X
                 if 'Errno 4' in str(e):
