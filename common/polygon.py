@@ -23,7 +23,8 @@ from common.numerics import grid2points, geotransform2axes
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
-                               use_numpy=True):
+                               use_numpy=True,
+                               optimise=False):
     """Determine whether points are inside or outside a polygon
 
     Input:
@@ -115,16 +116,67 @@ def separate_points_by_polygon(points, polygon,
         if points.shape[1] != 2:
             raise Exception(msg)
 
+    if optimise:
+        # Exclude points that outside polygon bounding box
+        minpx = min(polygon[:, 0])
+        maxpx = max(polygon[:, 0])
+        minpy = min(polygon[:, 1])
+        maxpy = max(polygon[:, 1])
+
+        M = points.shape[0]
+        N = polygon.shape[0]
+
+        x = points[:, 0]
+        y = points[:, 1]
+
+        # Vector to return sorted indices (inside first, then outside)
+        indices = numpy.zeros(M, numpy.int)
+
+        # Vector keeping track of which points are inside
+        inside = numpy.zeros(M, dtype=numpy.int)  # All assumed outside initially
+
+        # Only work on those that are inside polygon bounding box
+        outside_box = (x > maxpx) + (x < minpx) + (y > maxpy) + (y < minpy)
+        inside_box = -outside_box
+
+        #print
+        #print 'Points'
+        #print points
+        #print 'Inside', inside_box
+        #print points[inside_box]
+
+        candidate_points = points[inside_box]
+    else:
+        candidate_points = points
+
     if use_numpy:
-        indices, count = _separate_points_by_polygon(points,
+        indices, count = _separate_points_by_polygon(candidate_points,
                                                      polygon,
                                                      closed=closed)
     else:
-        indices, count = _separate_points_by_polygon_python(points,
+        indices, count = _separate_points_by_polygon_python(candidate_points,
                                                             polygon,
                                                             closed=closed)
+    if optimise:
+        #print 'Local indices', indices, count
 
-    return indices, count
+        # Map local indices from candidate points to global indices of all points
+        indices_inside_polygon = numpy.where(inside_box)[0][indices[:count]]
+        #print 'Global inside_indices', indices_inside_polygon
+
+        indices_outside_box = numpy.where(outside_box)[0]
+        indices_inside_box_outside_polygon = numpy.where(inside_box)[0][indices[count:]]
+        indices_outside_polygon = numpy.concatenate((indices_outside_box,
+                                                     indices_inside_box_outside_polygon))
+        indices_outside_polygon.sort()
+
+        #print 'Global outside_indices', indices_outside_polygon
+        #print
+        global_indices = numpy.concatenate((indices_inside_polygon, indices_outside_polygon))
+    else:
+        global_indices = indices
+
+    return global_indices, count
 
 
 def _separate_points_by_polygon(points, polygon,
@@ -185,7 +237,6 @@ def _separate_points_by_polygon(points, polygon,
     if not numpy.sometrue(candidates):
         return numpy.arange(M), 0
 
-    # FIXME (Ole): Restrict computations to candidates only
     # Find points on polygon boundary
     for i in range(N):
         # Loop through polygon edges
