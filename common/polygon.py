@@ -154,6 +154,8 @@ def separate_points_by_polygon(points, polygon,
     global_indices = numpy.concatenate((indices_inside_polygon,
                                         indices_outside_polygon))
 
+    # FIXME (Ole): I would like to return just indices_inside, indices_outside
+    # instead of the legacy of one array with a break point
     return global_indices, count
 
 
