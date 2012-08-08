@@ -299,10 +299,10 @@ class Test_Polygon(unittest.TestCase):
 
         indices, count = separate_points_by_polygon(points, U)
         assert count == 0                           # None inside
-        assert numpy.allclose(indices, [3, 2, 1, 0])
+        assert numpy.allclose(indices, [0, 1, 2, 3])
 
         indices = outside_polygon(points, U, closed=True)
-        assert numpy.allclose(indices, [3, 2, 1, 0])
+        assert numpy.allclose(indices, [0, 1, 2, 3])
 
         indices = inside_polygon(points, U, closed=True)
         assert numpy.allclose(indices, [])

@@ -115,9 +115,6 @@ def separate_points_by_polygon(points, polygon,
         if points.shape[1] != 2:
             raise Exception(msg)
 
-    #N = polygon.shape[0]  # Number of vertices in polygon
-    #M = points.shape[0]  # Number of points
-
     if use_numpy:
         indices, count = _separate_points_by_polygon(points,
                                                      polygon,
@@ -186,7 +183,7 @@ def _separate_points_by_polygon(points, polygon,
 
     # Don't continue if all points are outside bounding box
     if not numpy.sometrue(candidates):
-        return numpy.arange(M)[::-1], 0
+        return numpy.arange(M), 0
 
     # FIXME (Ole): Restrict computations to candidates only
     # Find points on polygon boundary
