@@ -462,7 +462,7 @@ class Test_Engine(unittest.TestCase):
 
             i += 1
 
-    def test_clip_grid_by_polygons(self):
+    def Xtest_clip_grid_by_polygons_optimisation(self):
         """Rasters can be converted to points and clipped by polygons
 
         This is a test for the basic machinery needed for issue #91
@@ -501,9 +501,9 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(population)
 
         assert len(H) == 2704
-        res = clip_grid_by_polygons(E.get_data(),
-                                    E.get_geotransform(),
-                                    H.get_geometry())
+        #res = clip_grid_by_polygons(E.get_data(),
+        #                            E.get_geotransform(),
+        #                            H.get_geometry())
         # FIXME (Ole): Not done yet
 
     def test_flood_building_impact_function(self):
@@ -2351,6 +2351,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_clip')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
