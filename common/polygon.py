@@ -145,13 +145,14 @@ def separate_points_by_polygon(points, polygon,
     indices_inside_polygon = numpy.where(inside_box)[0][indices[:count]]
 
     indices_outside_box = numpy.where(outside_box)[0]
-    indices_inside_box_outside_polygon = numpy.where(inside_box)[0][indices[count:]]
+    indices_in_box_outside_poly = numpy.where(inside_box)[0][indices[count:]]
     indices_outside_polygon = numpy.concatenate((indices_outside_box,
-                                                 indices_inside_box_outside_polygon))
+                                                 indices_in_box_outside_poly))
 
     indices_outside_polygon.sort()  # Ensure order is deterministic
 
-    global_indices = numpy.concatenate((indices_inside_polygon, indices_outside_polygon))
+    global_indices = numpy.concatenate((indices_inside_polygon,
+                                        indices_outside_polygon))
 
     return global_indices, count
 

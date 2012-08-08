@@ -467,10 +467,12 @@ class Test_Engine(unittest.TestCase):
 
         This is a test for the basic machinery needed for issue #91
 
-        It uses over 400,000 gridpoints and 2704 complex polygons, each with 10-200 vertices
-        and serves a test for optimising the polygon clipping algorithm.
-        With the optimisations requested in https://github.com/AIFDR/inasafe/issues/222 it
-        takes about 100 seconds on a good workstation while it takes over 2000 seconds without it.
+        It uses over 400,000 gridpoints and 2704 complex polygons,
+        each with 10-200 vertices, and serves a test for optimising
+        the polygon clipping algorithm. With the optimisations requested
+        in https://github.com/AIFDR/inasafe/issues/222 it takes about 100
+        seconds on a good workstation while it takes over 2000 seconds
+        without it.
         """
 
         # Name input files
