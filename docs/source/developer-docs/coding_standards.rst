@@ -68,6 +68,30 @@ Please observe the following coding standards when working on the codebase:
    tag is replaced with the SHA1 for the file when the release packages are
    made.
 
+**Example method docstring**::
+
+  def translate(self, message):
+      """
+      One line description.
+
+      Additional notes go here...
+
+      Args:
+          message str - Required. String for translation.
+      Returns:
+          str - Translated version of theString.
+      Raises:
+          no exceptions explicitly raised.
+      """
+
+  The arguments should be followed by their type and then an indication of
+  whether the argument is optional or required.
+
+* If you use a few lines of code in more than one place, refactor them into
+  their own function.
+* If you use a literal string or expression in more than one place, refactor
+  it into a function or variable.
+
 .. _hig-label:
 
 Human Interface Guidelines
