@@ -165,7 +165,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                               colour='#7A0000', min=cls[7], max=cls[8],
                               transparency=0, size=1)]
 
-
         #style_classes[1]['label'] = _('Low [%i people/area]') % classes[1]
         #style_classes[4]['label'] = _('Medium [%i people/area]') % classes[4]
         #style_classes[7]['label'] = _('High [%i people/area]') % classes[7]
