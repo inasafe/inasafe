@@ -1187,6 +1187,7 @@ class Test_IO(unittest.TestCase):
                    'get_attribute_names',
                    'get_resolution',
                    'get_geometry_type',
+                   'get_geometry_name',
                    'to_vector_points',
                    'to_vector_layer']
 

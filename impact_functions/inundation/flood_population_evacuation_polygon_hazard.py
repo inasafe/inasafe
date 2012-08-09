@@ -170,13 +170,10 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         #style_classes[4]['label'] = _('Medium [%i people/area]') % classes[4]
         #style_classes[7]['label'] = _('High [%i people/area]') % classes[7]
 
-
         # Override style info with new classes and name
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           legend_title=_('Population Count'))
-
-
 
         # Create vector layer and return
         V = Vector(data=attributes,
@@ -191,4 +188,3 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                              #,
                    #style_info=style_info)
         return V
-
