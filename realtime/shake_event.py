@@ -25,10 +25,15 @@ import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 import logging
-from utils import shakemapExtractDir
+from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
                            ContourCreationError)
+from qgis.core import (QgsPoint,
+                       QgsFeature,
+                       QgsVectorLayer,
+                       QgsRectangle,
+                       QgsDataSourceURI)
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -433,10 +438,7 @@ class ShakeEvent:
         myQmlPath = os.path.join(shakemapExtractDir(),
                               self.eventId,
                               'mmi-points.qml')
-        mySourceQml = os.path.abspath(
-            os.path.join(os.path.dirname(__file__),
-            'fixtures',
-            'mmi-shape.qml'))
+        mySourceQml = os.path.join(dataDir(), 'mmi-shape.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myShpPath
 
@@ -462,6 +464,14 @@ class ShakeEvent:
             of the output file. Defaults to False.
 
         Return: str Path to the resulting tif file.
+
+        .. note:: For interest you can also make quite beautiful smoothed
+          rasters using this:
+
+          gdal_grid -zfield "mmi" -a_srs EPSG:4326
+          -a invdist:power=2.0:smoothing=1.0 -txe 122.45 126.45
+          -tye -2.21 1.79 -outsize 400 400 -of GTiff
+          -ot Float16 -l mmi mmi.vrt mmi-trippy.tif
 
         Raises: None
         """
@@ -503,10 +513,7 @@ class ShakeEvent:
         myQmlPath = os.path.join(shakemapExtractDir(),
                               self.eventId,
                               'mmi.qml')
-        mySourceQml = os.path.abspath(
-            os.path.join(os.path.dirname(__file__),
-            'fixtures',
-            'mmi.qml'))
+        mySourceQml = os.path.join(dataDir(), 'mmi.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myTifPath
 
@@ -515,7 +522,8 @@ class ShakeEvent:
         """Extract contours from the event's tif file.
 
         Contours are extracted at a 1MMI interval. The resulting file will
-        be saved in gisDataDir(). In the easiest use case you can simply do::
+        be saved in the extract directory. In the easiest use case you can
+        simply do::
 
            myShakeEvent = myShakeData.shakeEvent()
            myContourPath = myShakeEvent.mmiToContours()
@@ -590,12 +598,81 @@ class ShakeEvent:
         myQmlPath = os.path.join(shakemapExtractDir(),
                               self.eventId,
                               'mmi-contours.qml')
-        mySourceQml = os.path.abspath(
-            os.path.join(os.path.dirname(__file__),
-            'fixtures',
-            'mmi-contours.qml'))
+        mySourceQml = os.path.join(dataDir(), 'mmi-contours.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myOutputFile
+
+    def boundsToRectangle(self):
+        """Convert the event bounding box to a QgsRectangle.
+
+        Args: None
+
+        Returns: QgsRectangle
+
+        Raises: None
+        """
+        myRectangle = QgsRectangle(self.xMinimum,
+                                   self.yMinimum,
+                                   self.xMaximum,
+                                   self.yMaximum)
+        return myRectangle
+
+    def localCities(self):
+        """Fetch a collection of the cities that are nearby.
+
+        Cities will be placed into a structure that looks like this:
+        """
+        myRectangle = self.boundsToRectangle()
+        # Path to sqlitedb containing geonames table
+        myDBPath = os.path.join(dataDir(),'indonesia.db')
+        myUri = QgsDataSourceURI()
+        myUri.setDatabase(myDBPath)
+        myUri.setDataSource('','geonames', 'POINT')
+        myLayer = QgsVectorLayer(myUri.uri(), 'Towns', 'spatialite')
+        myLayerProvider = myLayer.dataProvider()
+        myIndexes = myLayerProvider.attributeIndexes()
+        myFetchGeometryFlag = True
+        myUseIntersectionFlag = True
+        myLayer.select(myIndexes, myRectangle,
+                       myFetchGeometryFlag, myUseIntersectionFlag)
+
+        # TODO: Add logic if the selection is non then get the
+        # closest city ignoring bbox
+
+        # Now store the selection in a temporary memory layer
+        myMemoryLayer = QgsVectorLayer("Point", "affected_cities", "memory")
+        myMemoryProvider = myMemoryLayer.dataProvider()
+        # add field defs
+        myMemoryProvider.addAttributes( [
+            QgsField("name", QVariant.String),
+            QgsField("population",  QVariant.Int),
+            QgsField("mmi", QVariant.Double),
+            QgsField("distance_to", QVariant.Double),
+            QgsField("direction_to", QVariant.Double),
+            QgsField("direction_from", QVariant.Double)])
+
+        # Now loop through the db adding selected features to mem layer
+        myLayerPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
+        myLayerPopulationIndex = myLayerProvider.fieldNameIndex('population')
+        myMemoryLayerPlaceNameIndex = 0
+        myMemoryLayerPopulationIndex = 1
+        myFeature = QgsFeature()
+        while myLayerProvider.nextFeature(myFeature):
+            myMemoryFeature = QgsFeature()
+            myMemoryFeature.setGeometry(myFeature.geometry())
+            myAttributes = myFeature.attributeMap()
+
+            myMemoryFeature.setAttributeMap({
+                myMemoryLayerPlaceNameIndex:
+                    myAttributes[myLayerPlaceNameIndex],
+                myMemoryLayerPopulationIndex:
+                    myAttributes[myLayerPopulationIndex]
+            })
+            myMemoryLayer.addFeature(myMemoryFeature)
+        # Done now force refresh of extents calc
+        myMemoryLayer.updateExtents()
+
+        return myMemoryLayer
 
     def __str__(self):
         """The unicode representation for an event object's state.

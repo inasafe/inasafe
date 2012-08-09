@@ -6,11 +6,11 @@
       <symbol outputUnit="MM" alpha="1" type="marker" name="0">
         <layer pass="0" class="SimpleMarker" locked="0">
           <prop k="angle" v="0"/>
-          <prop k="color" v="255,0,0,255"/>
-          <prop k="color_border" v="0,0,0,255"/>
-          <prop k="name" v="equilateral_triangle"/>
+          <prop k="color" v="85,170,255,255"/>
+          <prop k="color_border" v="0,0,255,255"/>
+          <prop k="name" v="rectangle"/>
           <prop k="offset" v="0,0"/>
-          <prop k="size" v="2"/>
+          <prop k="size" v="4"/>
         </layer>
       </symbol>
     </symbols>
@@ -40,39 +40,39 @@
     <property key="labeling/dataDefinedProperty8" value=""/>
     <property key="labeling/dataDefinedProperty9" value=""/>
     <property key="labeling/decimals" value="0"/>
-    <property key="labeling/dist" value="1"/>
+    <property key="labeling/dist" value="0"/>
     <property key="labeling/distInMapUnits" value="false"/>
     <property key="labeling/enabled" value="true"/>
-    <property key="labeling/fieldName" value="name"/>
+    <property key="labeling/fieldName" value="name || '_(pop. ' ||  &quot;population&quot;  || ')'"/>
     <property key="labeling/fontFamily" value="Times New Roman"/>
     <property key="labeling/fontItalic" value="false"/>
-    <property key="labeling/fontSize" value="11"/>
+    <property key="labeling/fontSize" value="10"/>
     <property key="labeling/fontSizeInMapUnits" value="false"/>
     <property key="labeling/fontStrikeout" value="false"/>
     <property key="labeling/fontUnderline" value="false"/>
     <property key="labeling/fontWeight" value="75"/>
     <property key="labeling/formatNumbers" value="false"/>
-    <property key="labeling/isExpression" value="false"/>
+    <property key="labeling/isExpression" value="true"/>
     <property key="labeling/labelPerPart" value="false"/>
     <property key="labeling/mergeLines" value="false"/>
     <property key="labeling/minFeatureSize" value="0"/>
     <property key="labeling/obstacle" value="true"/>
-    <property key="labeling/placement" value="0"/>
+    <property key="labeling/placement" value="1"/>
     <property key="labeling/placementFlags" value="0"/>
     <property key="labeling/plussign" value="true"/>
     <property key="labeling/priority" value="5"/>
     <property key="labeling/scaleMax" value="0"/>
     <property key="labeling/scaleMin" value="0"/>
-    <property key="labeling/textColorB" value="0"/>
+    <property key="labeling/textColorB" value="255"/>
     <property key="labeling/textColorG" value="0"/>
-    <property key="labeling/textColorR" value="0"/>
-    <property key="labeling/wrapChar" value=" "/>
+    <property key="labeling/textColorR" value="85"/>
+    <property key="labeling/wrapChar" value="_"/>
   </customproperties>
-  <displayfield>name</displayfield>
+  <displayfield>geonameid</displayfield>
   <label>0</label>
   <labelattributes>
     <label fieldname="" text="Label"/>
-    <family fieldname="" name="Ubuntu"/>
+    <family fieldname="" name="Sans"/>
     <size fieldname="" units="pt" value="12"/>
     <bold fieldname="" on="0"/>
     <italic fieldname="" on="0"/>
@@ -95,21 +95,15 @@
     <edittype type="0" name="asciiname"/>
     <edittype type="0" name="elevation"/>
     <edittype type="0" name="geonameid"/>
-    <edittype type="0" name="label_x"/>
-    <edittype type="0" name="label_y"/>
-    <edittype type="0" name="lat"/>
     <edittype type="0" name="latitude"/>
-    <edittype type="0" name="lon"/>
     <edittype type="0" name="longitude"/>
     <edittype type="0" name="name"/>
-    <edittype type="0" name="pop"/>
     <edittype type="0" name="population"/>
-    <edittype type="0" name="rotation"/>
     <edittype type="0" name="scale_factor"/>
     <edittype type="0" name="scale_int"/>
   </edittypes>
   <editform></editform>
   <editforminit></editforminit>
-  <annotationform>.</annotationform>
+  <annotationform></annotationform>
   <attributeactions/>
 </qgis>

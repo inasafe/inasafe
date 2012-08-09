@@ -31,9 +31,10 @@ def baseDataDir():
     return myBaseDataDir
 
 
-def gisDataDir():
-    """Create (if needed) and return the path to the base GIS data dir"""
-    myDir = os.path.join(baseDataDir(), 'gis')
+def dataDir():
+    """Return the path to the standard data dir for e.g. geonames data"""
+    myDir = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                         'fixtures'))
     mkDir(myDir)
     return myDir
 

@@ -20,10 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import ogr
 import os
 import unittest
+from gui.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir
 from shake_data import ShakeData
 from shake_event import ShakeEvent
 
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 class TestShakeEvent(unittest.TestCase):
     """Tests relating to shake events"""
@@ -55,7 +57,7 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(124.45, myShakeEvent.longitude)
         self.assertEquals(-0.21, myShakeEvent.latitude)
         self.assertEquals(11.0, myShakeEvent.depth)
-        self.assertEquals('Southern Molucca Sea', myShakeEvent.location)
+        self.assertEquals(126.5, 'Southern Molucca Sea', myShakeEvent.location)
         self.assertEquals(122.45, myShakeEvent.xMinimum)
         self.assertEquals(126.45, myShakeEvent.xMaximum)
         self.assertEquals(-2.21, myShakeEvent.yMinimum)
@@ -143,6 +145,13 @@ mmiData: Populated"""
         self.assertEquals(myLayer.GetFeatureCount(), myExpectedFeatureCount)
         myDataSource.ReleaseResultSet(myLayer)
         myDataSource.Destroy()
+
+    def testLocalCities(self):
+        """Test that we can retrieve the cities local to the event"""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myCities = myShakeEvent.localCities()
 
 if __name__ == '__main__':
     unittest.main()
