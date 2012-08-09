@@ -86,7 +86,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 minpop = s
             if s > maxpop:
                 maxpop = s
-            attributes.append({self.target_field: s})
+            attributes.append({self.target_field: int(s)})
             evacuated += s
 
         print 'minpop', minpop
