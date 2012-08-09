@@ -260,8 +260,8 @@ def geotransform2resolution(geotransform, isotropic=False,
                     or resx (if isotropic is True)
     """
 
-    resx = geotransform[1]     # w-e pixel resolution
-    resy = -geotransform[5]   # n-s pixel resolution (always negative)
+    resx = geotransform[1]   # w-e pixel resolution
+    resy = -geotransform[5]  # n-s pixel resolution (always negative)
 
     if isotropic:
         msg = ('Resolution requested with '

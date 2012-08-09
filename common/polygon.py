@@ -1133,9 +1133,12 @@ def clip_grid_by_polygons(A, geotransform, polygons,
 
     Implementing algorithm suggested in
     https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
-    """
 
-    # FIXME: Maybe start with more high level function in storage module
+    Note: Grid points are considered to be pixel-registered which means
+          that each point represents the center of its grid cell.
+          The required half cell shifts are taken care of by the
+          function geotransform2axes
+    """
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
     ny, nx = A.shape
@@ -1162,5 +1165,7 @@ def clip_grid_by_polygons(A, geotransform, polygons,
 
         result.append((points[inside], values[inside]))
         unallocated_points = points[outside]
-        print len(result), len(polygons), len(polygon), 'inside', len(inside),
-        print 'remain', len(outside)
+        #print len(result), len(polygons), len(polygon), 'inside', len(inside),
+        #print 'remain', len(outside)
+
+    return result

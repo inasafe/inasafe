@@ -654,6 +654,11 @@ class Vector(Layer):
         """
         return self.geometry_type
 
+    def get_geometry_name(self):
+        """Return geometry name for vector layer
+        """
+        return geometrytype2string(self.geometry_type)
+
     def get_geometry(self, copy=False):
         """Return geometry for vector layer.
 
