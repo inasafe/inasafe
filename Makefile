@@ -171,13 +171,15 @@ gui_test_suite: compile testdata
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Get test data
+# FIXME (Ole): Need to attempt cloning this r/w for those with
+# commit rights. See issue https://github.com/AIFDR/inasafe/issues/232
 testdata:
 	@echo
 	@echo "-----------------------------------------------------------"
 	@echo "Updating test data - please hit Enter if asked for password"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 31bd5c1c65966529fc11cfb4843b522222a7a36b
+	@scripts/update-test-data.sh a7abfaec3832b7c922d2534a2ec5203c1c66f454
 
 disabled_tests:
 	@echo

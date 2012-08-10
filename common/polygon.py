@@ -132,6 +132,9 @@ def separate_points_by_polygon(points, polygon,
     inside_box = -outside_box
     candidate_points = points[inside_box]
 
+    # FIXME (Ole): I would like to return just indices_inside, indices_outside
+    # instead of the legacy of one array with a break point
+    # in the underlying _separate_by_points functions too
     if use_numpy:
         indices, count = _separate_points_by_polygon(candidate_points,
                                                      polygon,
@@ -151,12 +154,7 @@ def separate_points_by_polygon(points, polygon,
 
     indices_outside_polygon.sort()  # Ensure order is deterministic
 
-    global_indices = numpy.concatenate((indices_inside_polygon,
-                                        indices_outside_polygon))
-
-    # FIXME (Ole): I would like to return just indices_inside, indices_outside
-    # instead of the legacy of one array with a break point
-    return global_indices, count
+    return indices_inside_polygon, indices_outside_polygon
 
 
 def _separate_points_by_polygon(points, polygon,
@@ -469,12 +467,12 @@ def inside_polygon(points, polygon, closed=True):
        a list or a numeric array
     """
 
-    indices, count = separate_points_by_polygon(points, polygon,
+    indices, _ = separate_points_by_polygon(points, polygon,
                                                 closed=closed,
                                                 check_input=True)
 
     # Return indices of points inside polygon
-    return indices[:count]
+    return indices
 
 
 def is_outside_polygon(point, polygon, closed=True):
@@ -501,17 +499,12 @@ def outside_polygon(points, polygon, closed=True):
        See separate_points_by_polygon for documentation
     """
 
-    indices, count = separate_points_by_polygon(points, polygon,
-                                                closed=closed,
-                                                check_input=True)
+    _, indices = separate_points_by_polygon(points, polygon,
+                                            closed=closed,
+                                            check_input=True)
 
     # Return indices of points outside polygon
-    if count == len(indices):
-        # No points are outside
-        return numpy.array([])
-    else:
-        # Return indices for points outside
-        return indices[count:]
+    return indices
 
 
 def in_and_outside_polygon(points, polygon, closed=True):
@@ -530,16 +523,10 @@ def in_and_outside_polygon(points, polygon, closed=True):
     See separate_points_by_polygon for more documentation
     """
 
-    indices, count = separate_points_by_polygon(points, polygon,
-                                                closed=closed,
-                                                check_input=True)
-
-    if count == len(indices):
-        # No points are outside
-        return indices[:count], []
-    else:
-        # Return indices for points inside and outside
-        return  indices[:count], indices[count:]
+    inside, outside = separate_points_by_polygon(points, polygon,
+                                                 closed=closed,
+                                                 check_input=True)
+    return  inside, outside
 
 
 def clip_lines_by_polygon(lines, polygon,
@@ -1149,17 +1136,14 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     result = []
     remaining_points = points
     remaining_values = values
-    #print
+
     for polygon in polygons:
         #print 'Remaining points', len(remaining_points)
 
-        indices, count = separate_points_by_polygon(remaining_points,
-                                                    polygon,
-                                                    closed=True,
-                                                    check_input=False)
-        inside = indices[:count]
-        outside = indices[count:]
-
+        inside, outside = separate_points_by_polygon(remaining_points,
+                                                     polygon,
+                                                     closed=True,
+                                                     check_input=False)
         # Add features inside this polygon
         result.append((remaining_points[inside],
                        remaining_values[inside]))
