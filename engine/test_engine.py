@@ -1291,24 +1291,24 @@ class Test_Engine(unittest.TestCase):
         points = ensure_numeric(points)
 
         # Clip
-        indices, count = separate_points_by_polygon(points, polygon)
+        inside, outside = separate_points_by_polygon(points, polygon)
 
         # Expected number of points inside
-        assert count == 458
+        assert len(inside) == 458
 
         # First 10 inside
-        assert numpy.alltrue(indices[:10] == [2279, 2290, 2297, 2306, 2307,
-                                              2313, 2316, 2319, 2321, 2322])
+        assert numpy.alltrue(inside[:10] == [2279, 2290, 2297, 2306, 2307,
+                                             2313, 2316, 2319, 2321, 2322])
 
         # Last 10 outside
-        assert numpy.alltrue(indices[-10:] == [3519, 3520, 3521, 3522, 3523,
+        assert numpy.alltrue(outside[-10:] == [3519, 3520, 3521, 3522, 3523,
                                                3524, 3525, 3526, 3527, 3528])
         # Store for viewing in e.g. QGis
         if False:  # True:
             Vector(geometry=[polygon]).write_to_file('test_poly.shp')
-            pts_inside = points[indices[:count]]
+            pts_inside = points[inside]
             Vector(geometry=pts_inside).write_to_file('test_points_in.shp')
-            pts_outside = points[indices[count:]]
+            pts_outside = points[outside]
             Vector(geometry=pts_outside).write_to_file('test_points_out.shp')
 
     def test_interpolation_from_polygons_one_poly(self):
