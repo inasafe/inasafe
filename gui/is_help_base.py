@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'is_help_base.ui'
 #
-# Created: Wed Mar 28 11:30:12 2012
-#      by: PyQt4 UI code generator 4.8.5
+# Created: Fri Aug 10 14:36:00 2012
+#      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -18,7 +18,6 @@ class Ui_ISHelpBase(object):
     def setupUi(self, ISHelpBase):
         ISHelpBase.setObjectName(_fromUtf8("ISHelpBase"))
         ISHelpBase.resize(727, 403)
-        ISHelpBase.setWindowTitle(QtGui.QApplication.translate("ISHelpBase", "InaSAFE Help", None, QtGui.QApplication.UnicodeUTF8))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         ISHelpBase.setWindowIcon(icon)
@@ -39,7 +38,7 @@ class Ui_ISHelpBase(object):
         QtCore.QMetaObject.connectSlotsByName(ISHelpBase)
 
     def retranslateUi(self, ISHelpBase):
-        pass
+        ISHelpBase.setWindowTitle(QtGui.QApplication.translate("ISHelpBase", "InaSAFE Help", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
-import gui.resources_rc
+import resources_rc
