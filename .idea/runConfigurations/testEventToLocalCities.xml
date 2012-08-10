@@ -19,7 +19,9 @@
     <option name="USE_PATTERN" value="false" />
     <option name="PARAMS" value="" />
     <option name="USE_PARAM" value="false" />
+    <RunnerSettings RunnerId="PyDebugRunner" />
     <RunnerSettings RunnerId="PythonRunner" />
+    <ConfigurationWrapper RunnerId="PyDebugRunner" />
     <ConfigurationWrapper RunnerId="PythonRunner" />
     <method />
   </configuration>
