@@ -75,7 +75,6 @@ class Test_Clipping(unittest.TestCase):
             elif filename == 'polygon_6.shp':
                 assert len(indices) == 6
 
-
     def test_clip_raster_by_polygons(self):
         """Raster grids can be clipped by polygon layers
 
