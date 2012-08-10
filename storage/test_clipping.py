@@ -84,7 +84,7 @@ class Test_Clipping(unittest.TestCase):
 
         # Name input files
         poly = join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')
-        grid = join(TESTDATA,  'population_5x5_jakarta.asc')
+        grid = join(TESTDATA, 'population_5x5_jakarta.asc')
 
         # Get layers using API
         P = read_layer(poly)
@@ -104,16 +104,13 @@ class Test_Clipping(unittest.TestCase):
             values = C[i][1]
 
             # Sanity first
-            #for point in points:
-            #    print point
-            #    assert is_inside_polygon(point, polygon)
+            for point in points:
+                assert is_inside_polygon(point, polygon)
 
             if i == 0:
                 assert len(points) == 6
             elif i == 1:
-                print values
                 assert len(points) == 2
-                print
                 msg = ('Got wrong coordinates %s, expected %s'
                        % (str(points[0, :]), str([106.8125, -6.1875])))
                 assert numpy.allclose(points[0, :], [106.8125, -6.1875]), msg
@@ -131,53 +128,23 @@ class Test_Clipping(unittest.TestCase):
             elif i == 6:
                 assert len(points) == 6
 
-
-
-            # Generate spatial data for visualisation
+            # Generate layer objects
             values = [{'value': x} for x in C[i][1]]
-            print
-            print 'Feature', i
-            print points, values
             point_layer = Vector(data=values, geometry=points,
                                  projection=P.get_projection())
-            if i == 1:
-                print 'DEBUG F 1'
-                print point_layer.get_geometry()
-                print point_layer.get_data()
-                print len(point_layer)
-            point_layer.write_to_file('points_%i.shp' % i)
+            assert point_layer.is_point_data
 
-            print
-            print [polygon]
             polygon_layer = Vector(geometry=[polygon],
                                    projection=P.get_projection())
             assert polygon_layer.is_polygon_data
-            polygon_layer.write_to_file('polygon_%i.shp' % i)
 
-
-            #for point in points:
-            #    print
-            #    print i, point
-            #    print polygon
-
-            #    assert is_inside_polygon(point, polygon)
-
-            #print i, p
-
-        #for c in C:
-        #    print
-        #    print c[0]
-        #    values = c[1]
-
-        #    print values
-
-            #s = numpy.sum(values)
-            #attributes.append({'population': s})
-
-
+            # Generate spatial data for visualisation with e.g. QGIS
+            if True:
+                point_layer.write_to_file('points_%i.shp' % i)
+                polygon_layer.write_to_file('polygon_%i.shp' % i)
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Clipping, 'test_clip_raster')
+    suite = unittest.makeSuite(Test_Clipping, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

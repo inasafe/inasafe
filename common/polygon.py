@@ -1145,29 +1145,29 @@ def clip_grid_by_polygons(A, geotransform, polygons,
     x, y = geotransform2axes(geotransform, nx, ny)
     points, values = grid2points(A, x, y)
 
-    # For each polygon
-    # * select the points that fall inside its bounding box
-    # * separate points that fall inside from those that fall outside.
-    # * Assign NaN to pixel values outside and original pixel values to
-    #   those that fall inside (using numpy masks)
-    # * Generate output raster for this polygon and add to list
-
+    # Generate list of points and values that fall inside each polygon
     result = []
-    unallocated_points = points
-    print
-    print 'number of points', len(points)
+    remaining_points = points
+    remaining_values = values
+    #print
     for polygon in polygons:
+        #print 'Remaining points', len(remaining_points)
 
-        indices, count = separate_points_by_polygon(points,
+        indices, count = separate_points_by_polygon(remaining_points,
                                                     polygon,
                                                     closed=True,
                                                     check_input=False)
         inside = indices[:count]
         outside = indices[count:]
 
-        result.append((points[inside], values[inside]))
-        #unallocated_points = points[outside]
-        print len(result), len(polygons), len(polygon), 'inside', len(inside),
-        print 'remain', len(outside)
+        # Add features inside this polygon
+        result.append((remaining_points[inside],
+                       remaining_values[inside]))
+
+        # Select remaining points to clip
+        remaining_points = remaining_points[outside]
+        remaining_values = remaining_values[outside]
+
+        #print len(result), len(polygons), len(polygon), 'inside', len(inside),
 
     return result
