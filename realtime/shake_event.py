@@ -36,11 +36,12 @@ from qgis.core import (QgsPoint,
                        QgsField,
                        QgsFeature,
                        QgsVectorLayer,
+                       QgsRasterLayer,
                        QgsRectangle,
                        QgsDataSourceURI,
                        QgsVectorFileWriter,
-                       QgsCoordinateReferenceSystem)
-from PyQt4.QtCore import QVariant
+                       QgsCoordinateReferenceSystem, QgsRasterLayer)
+from PyQt4.QtCore import QVariant, QFileInfo
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -99,8 +100,8 @@ class ShakeEvent:
         """
         LOGGER.debug('Event path requested.')
         myGridXmlPath = os.path.join(shakemapExtractDir(),
-                                   self.eventId,
-                                   'grid.xml')
+                                     self.eventId,
+                                     'grid.xml')
         #short circuit if the tif is already created.
         if os.path.exists(myGridXmlPath):
             return myGridXmlPath
@@ -203,7 +204,7 @@ class ShakeEvent:
             self.timeZone = myTimeStamp[-3:]
 
             mySpecificationElement = myDocument.getElementsByTagName(
-                                  'grid_specification')
+                'grid_specification')
             mySpecificationElement = mySpecificationElement[0]
             self.xMinimum = float(mySpecificationElement.attributes[
                                   'lon_min'].nodeValue)
@@ -214,9 +215,9 @@ class ShakeEvent:
             self.yMaximum = float(mySpecificationElement.attributes[
                                   'lat_max'].nodeValue)
             self.rows = float(mySpecificationElement.attributes[
-                                  'nlat'].nodeValue)
+                              'nlat'].nodeValue)
             self.columns = float(mySpecificationElement.attributes[
-                                  'nlon'].nodeValue)
+                                 'nlon'].nodeValue)
             myDataElement = myDocument.getElementsByTagName(
                 'grid_data')
             myDataElement = myDataElement[0]
@@ -234,13 +235,13 @@ class ShakeEvent:
                 myLon = myTokens[myLonColumn]
                 myLat = myTokens[myLatColumn]
                 myMMI = myTokens[myMMIColumn]
-                myTuple= (myLon, myLat, myMMI)
+                myTuple = (myLon, myLat, myMMI)
                 self.mmiData.append(myTuple)
 
         except Exception, e:
             LOGGER.exception('Event parse failed')
             raise GridXmlParseError('Failed to parse grid file.\n%s\n%s'
-                % (e.__class__, str(e)))
+            % (e.__class__, str(e)))
 
     def mmiDataToDelimitedText(self):
         """Return the mmi data as a delimited test string.
@@ -296,15 +297,15 @@ class ShakeEvent:
         #short circuit if the csv is already created.
         if os.path.exists(myPath) and theForceFlag is not True:
             return myPath
-        myFile = file(myPath,'wt')
+        myFile = file(myPath, 'wt')
         myFile.write(self.mmiDataToDelimitedText())
         myFile.close()
 
         # Also write the .csvt which contains metadata about field types
         myCsvtPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              'mmi.csvt')
-        myFile = file(myCsvtPath,'wt')
+                                  self.eventId,
+                                  'mmi.csvt')
+        myFile = file(myCsvtPath, 'wt')
         myFile.write('"Real","Real","Real"')
         myFile.close()
         return myPath
@@ -323,8 +324,8 @@ class ShakeEvent:
         LOGGER.debug('mmiDataToVrt requested.')
 
         myVrtPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              'mmi.vrt')
+                                 self.eventId,
+                                 'mmi.vrt')
 
         #short circuit if the vrt is already created.
         if os.path.exists(myVrtPath) and theForceFlag is not True:
@@ -386,7 +387,7 @@ class ShakeEvent:
             del myResult
         except CalledProcessError, e:
             myMessage = ('Error while executing the following shell '
-                           'command: %s\nError message: %s'
+                         'command: %s\nError message: %s'
                          % (myCommand, str(e)))
             # shameless hack - see https://github.com/AIFDR/inasafe/issues/141
             if sys.platform == 'darwin':  # Mac OS X
@@ -419,8 +420,8 @@ class ShakeEvent:
         LOGGER.debug('mmiDataToShapefile requested.')
 
         myShpPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              'mmi-points.shp')
+                                 self.eventId,
+                                 'mmi-points.shp')
         # Short circuit if the tif is already created.
         if os.path.exists(myShpPath) and theForceFlag is not True:
             return myShpPath
@@ -432,10 +433,9 @@ class ShakeEvent:
 
         myCommand = (('ogr2ogr -overwrite -select mmi -a_srs EPSG:4326 '
                       '%(shp)s %(vrt)s mmi') % {
-                        'shp': myShpPath,
-                        'vrt': myVrtPath
-                     })
-
+            'shp': myShpPath,
+            'vrt': myVrtPath
+        })
 
         LOGGER.info('Created this gdal command:\n%s' % myCommand)
         # Now run GDAL warp scottie...
@@ -443,8 +443,8 @@ class ShakeEvent:
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         myQmlPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              'mmi-points.qml')
+                                 self.eventId,
+                                 'mmi-points.qml')
         mySourceQml = os.path.join(dataDir(), 'mmi-shape.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myShpPath
@@ -492,8 +492,8 @@ class ShakeEvent:
         LOGGER.debug('mmiDataToRaster requested.')
 
         myTifPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              'mmi.tif')
+                                 self.eventId,
+                                 'mmi.tif')
         #short circuit if the tif is already created.
         if os.path.exists(myTifPath) and theForceFlag is not True:
             return myTifPath
@@ -509,16 +509,16 @@ class ShakeEvent:
                       '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
                       '%(dimX)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
                       '%(vrt)s %(tif)s') % {
-                        'alg': theAlgorithm,
-                        'xMin': self.xMinimum,
-                        'xMax': self.xMaximum,
-                        'yMin': self.yMinimum,
-                        'yMax': self.yMaximum,
-                        'dimX': self.columns,
-                        'dimY': self.rows,
-                        'vrt': myVrtPath,
-                        'tif': myTifPath
-                     })
+            'alg': theAlgorithm,
+            'xMin': self.xMinimum,
+            'xMax': self.xMaximum,
+            'yMin': self.yMinimum,
+            'yMax': self.yMaximum,
+            'dimX': self.columns,
+            'dimY': self.rows,
+            'vrt': myVrtPath,
+            'tif': myTifPath
+        })
 
         LOGGER.info('Created this gdal command:\n%s' % myCommand)
         # Now run GDAL warp scottie...
@@ -526,8 +526,8 @@ class ShakeEvent:
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         myQmlPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              'mmi.qml')
+                                 self.eventId,
+                                 'mmi.qml')
         mySourceQml = os.path.join(dataDir(), 'mmi.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myTifPath
@@ -577,8 +577,10 @@ class ShakeEvent:
         if myOgrDataset is None:
             # Probably the file existed and could not be overriden
             raise ContourCreationError('Could not create datasource for:\n%s'
-                'Check that the file does not already exist and that you '
-                'do not have file system permissions issues')
+                                       'Check that the file does not already '
+                                       'exist and that you '
+                                       'do not have file system permissions '
+                                       'issues')
         myLayer = myOgrDataset.CreateLayer('contour')
         myFieldDefinition = ogr.FieldDefn('ID', ogr.OFTInteger)
         myLayer.CreateField(myFieldDefinition)
@@ -596,23 +598,23 @@ class ShakeEvent:
         myElevationField = 1  # second (MMI) field defined above
         try:
             gdal.ContourGenerate(myTifDataset.GetRasterBand(myBand),
-                             myContourInterval,
-                             myContourBase,
-                             myFixedLevelList,
-                             myUseNoDataFlag,
-                             myNoDataValue,
-                             myLayer,
-                             myIdField,
-                             myElevationField)
+                                 myContourInterval,
+                                 myContourBase,
+                                 myFixedLevelList,
+                                 myUseNoDataFlag,
+                                 myNoDataValue,
+                                 myLayer,
+                                 myIdField,
+                                 myElevationField)
         except Exception, e:
             raise ContourCreationError(str(e))
         finally:
             del myTifDataset
             myOgrDataset.Release()
-        # Lastly copy over the standard qml (QGIS Style file)
+            # Lastly copy over the standard qml (QGIS Style file)
         myQmlPath = os.path.join(shakemapExtractDir(),
-                              self.eventId,
-                              'mmi-contours.qml')
+                                 self.eventId,
+                                 'mmi-contours.qml')
         mySourceQml = os.path.join(dataDir(), 'mmi-contours.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myOutputFile
@@ -695,7 +697,7 @@ class ShakeEvent:
         LOGGER.debug('mmiDataToContours requested.')
         myRectangle = self.boundsToRectangle()
         # Path to sqlitedb containing geonames table
-        myDBPath = os.path.join(dataDir(),'indonesia.sqlite')
+        myDBPath = os.path.join(dataDir(), 'indonesia.sqlite')
         myUri = QgsDataSourceURI()
         myUri.setDatabase(myDBPath)
         myTable = 'geonames'
@@ -722,7 +724,7 @@ class ShakeEvent:
 
         myMemoryProvider.addAttributes([
             QgsField('name', QVariant.String),
-            QgsField('population',  QVariant.Int),
+            QgsField('population', QVariant.Int),
             QgsField('mmi', QVariant.Double),
             QgsField('distance_to', QVariant.Double),
             QgsField('direction_to', QVariant.Double),
@@ -738,15 +740,13 @@ class ShakeEvent:
         myMemoryLayerDirectionToIndex = 4
         myMemoryLayerDirectionFromIndex = 5
 
-        myUpdateExtentFlag = True
-
         myEpicenter = QgsPoint(self.longitude, self.latitude)
         myFeature = QgsFeature()
         while myLayerProvider.nextFeature(myFeature):
             if not myFeature.isValid():
                 LOGGER.debug('Skipping feature')
                 continue
-            #LOGGER.debug('Writing feature to mem layer')
+                #LOGGER.debug('Writing feature to mem layer')
             # calculate the distance and direction from this point
             # to and from the epicenter
             myAttributes = myFeature.attributeMap()
@@ -755,7 +755,7 @@ class ShakeEvent:
             myDirectionTo = myPoint.azimuth(myEpicenter)
             myDirectionFrom = myEpicenter.azimuth(myPoint)
             myPlaceName = str(myAttributes[myLayerPlaceNameIndex].toString())
-            myPopulation =  myAttributes[myLayerPopulationIndex]
+            myPopulation = myAttributes[myLayerPopulationIndex]
             myMemoryFeature = QgsFeature()
             myMemoryFeature.setGeometry(myFeature.geometry())
 
@@ -772,14 +772,69 @@ class ShakeEvent:
             myResult = myMemoryProvider.addFeatures([myMemoryFeature])
             if not myResult:
                 raise CityMemoryLayerCreationError('Add feature failed for:' %
-                        myAttributes[myLayerPopulationIndex].toString())
-            #LOGGER.debug('Features: %s' % myMemoryLayer.featureCount())
+                                                   myAttributes[
+                                                   myLayerPopulationIndex]
+                                                   .toString())
+                #LOGGER.debug('Features: %s' % myMemoryLayer.featureCount())
         myLayer.commitChanges()
         myLayer.updateExtents()
+
+        # we are assigning mmi values in a second pass as it involves loading
+        # a raster which we would rather just do once
+        self.setCityMmiValues(myMemoryLayer, myMemoryLayerMmiIndex)
+
         LOGGER.debug('Feature count of mem layer:  %s' %
                      myMemoryLayer.featureCount())
 
         return myMemoryLayer
+
+    def setCityMmiValues(self, theVectorLayer, theMmiIndex):
+        """Perform a query to determine the interpolated mmi for each city.
+
+        This will do a raster lookup for each city in the supplied dataset
+        and update the mmi field in the supplied layer with the value on that
+        raster. The raster should be one generated using :func:`mmiDatToRaster`.
+        The raster will be created first if needed.
+
+        Args:
+            theLayer QgsVectorLayer (Required) QGIS vector layer containing
+                city data.
+            theMmiIndex int theColumnIndex (Required) Index of the mmi column
+                in theLayer.
+
+        Returns: None
+
+        Raises: InvalidLayerError
+
+        .. note:: The original dataset will be modified in place.
+        """
+        LOGGER.debug('setCityMmiValues requested.')
+        myPath = self.mmiDataToRaster()
+        myFileInfo = QFileInfo(myPath)
+        myBaseName = myFileInfo.baseName()
+        myRasterLayer = QgsRasterLayer(myPath, myBaseName)
+        if not myRasterLayer.isValid():
+            raise InvalidLayerError('Layer failed to load!\n%s' % myPath)
+
+        myProvider = theVectorLayer.dataProvider()
+        myFeature = QgsFeature()
+        while myProvider.nextFeature(myFeature):
+            if not myFeature.isValid():
+                LOGGER.debug('Skipping feature')
+                continue
+            myAttributes = myFeature.attributeMap()
+            myMap = myAttributes[myLayerPopulationIndex]
+            myPoint = myFeature.geometry().asPoint()
+            myResult, myRasterValues = myRasterLayer.identify(myPoint)
+            if not myResult:
+                # position not found on raster
+                continue
+            myMmi = myRasterValues[0]
+            LOGGER.debug('Looked up mmi of %s on raster for %' %
+                         myMmi, myPoint.toString())
+
+
+
 
     def __str__(self):
         """The unicode representation for an event object's state.
@@ -791,9 +846,9 @@ class ShakeEvent:
         Raises: None
         """
         if self.mmiData:
-          mmiData = 'Populated'
+            mmiData = 'Populated'
         else:
-          mmiData = 'Not populated'
+            mmiData = 'Not populated'
         myString = (('latitude: %(latitude)s\n'
                      'longitude: %(longitude)s\n'
                      'eventId: %(eventId)s\n'
@@ -813,27 +868,27 @@ class ShakeEvent:
                      'rows: %(rows)s\n'
                      'columns: %(columns)s\n'
                      'mmiData: %(mmiData)s') %
-                     {
-                       'latitude': self.latitude,
-                       'longitude': self.longitude,
-                       'eventId': self.eventId,
-                       'magnitude': self.magnitude,
-                       'depth': self.depth,
-                       'description': self.description,
-                       'location': self.location,
-                       'day': self.day,
-                       'month': self.month,
-                       'year': self.year,
-                       'time': self.time,
-                       'timeZone': self.timeZone,
-                       'xMinimum': self.xMinimum,
-                       'xMaximum': self.xMaximum,
-                       'yMinimum': self.yMinimum,
-                       'yMaximum': self.yMaximum,
-                       'rows': self.rows,
-                       'columns': self.columns,
-                       'mmiData': mmiData
-                     })
+                    {
+                        'latitude': self.latitude,
+                        'longitude': self.longitude,
+                        'eventId': self.eventId,
+                        'magnitude': self.magnitude,
+                        'depth': self.depth,
+                        'description': self.description,
+                        'location': self.location,
+                        'day': self.day,
+                        'month': self.month,
+                        'year': self.year,
+                        'time': self.time,
+                        'timeZone': self.timeZone,
+                        'xMinimum': self.xMinimum,
+                        'xMaximum': self.xMaximum,
+                        'yMinimum': self.yMinimum,
+                        'yMaximum': self.yMaximum,
+                        'rows': self.rows,
+                        'columns': self.columns,
+                        'mmiData': mmiData
+                    })
         return myString
 
 
