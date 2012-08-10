@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from qgis.core import QgsFeature
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -20,12 +21,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import ogr
 import os
 import unittest
+import logging
 from gui.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir
 from shake_data import ShakeData
 from shake_event import ShakeEvent
-
+# The logger is intialised in utils.py by init
+LOGGER = logging.getLogger('InaSAFE-Realtime')
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+
 
 class TestShakeEvent(unittest.TestCase):
     """Tests relating to shake events"""
@@ -151,7 +155,34 @@ mmiData: Populated"""
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
-        myCities = myShakeEvent.localCities()
+        # Get teh mem layer
+        myCitiesLayer = myShakeEvent.localCities()
+        myProvider = myCitiesLayer.dataProvider()
+
+        myFeature = QgsFeature()
+        myAttributes = myProvider.attributeIndexes()
+        myProvider.select(myAttributes)
+        myExpectedFeatureCount = 7
+        self.assertEquals(myProvider.featureCount(), myExpectedFeatureCount)
+        myString = ''
+        while myProvider.nextFeature(myFeature):
+            # fetch map of attributes
+            myAttributes = myFeature.attributeMap()
+            for (myKey,myValue) in myAttributes.iteritems():
+                myString += ("%d: %s\n" % (myKey, myValue.toString()))
+            myString += '------------------\n'
+        LOGGER.debug('Mem table:\n %s' % myString)
+        self.assertEqual(len(myString), 730)
+
+    def testCitiesToShape(self):
+        """Test that we can retrieve the cities local to the event"""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        # Get teh mem layer
+        myPath = myShakeEvent.citiesToShape()
+        assert os.path.exists(myPath)
+
 
 if __name__ == '__main__':
     unittest.main()
