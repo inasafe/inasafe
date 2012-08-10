@@ -3,6 +3,7 @@
 
 from common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 
+
 def clip_raster_by_polygons(R, P):
     """Separate raster grid points by polygons
 
@@ -18,6 +19,4 @@ def clip_raster_by_polygons(R, P):
     res = clip_grid_by_polygons(R.get_data(),
                                 R.get_geotransform(),
                                 P.get_geometry())
-
-
     return res
