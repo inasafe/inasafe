@@ -1154,9 +1154,11 @@ def clip_grid_by_polygons(A, geotransform, polygons,
 
     result = []
     unallocated_points = points
+    print
+    print 'number of points', len(points)
     for polygon in polygons:
 
-        indices, count = separate_points_by_polygon(unallocated_points,
+        indices, count = separate_points_by_polygon(points,
                                                     polygon,
                                                     closed=True,
                                                     check_input=False)
@@ -1164,8 +1166,8 @@ def clip_grid_by_polygons(A, geotransform, polygons,
         outside = indices[count:]
 
         result.append((points[inside], values[inside]))
-        unallocated_points = points[outside]
-        #print len(result), len(polygons), len(polygon), 'inside', len(inside),
-        #print 'remain', len(outside)
+        #unallocated_points = points[outside]
+        print len(result), len(polygons), len(polygon), 'inside', len(inside),
+        print 'remain', len(outside)
 
     return result

@@ -9,6 +9,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
+from common.polygon import is_inside_polygon, inside_polygon
 from raster import Raster
 from vector import Vector
 from storage.core import read_layer
@@ -25,42 +26,158 @@ class Test_Clipping(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_clip_points_by_polygons(self):
+        """Points can be clipped by polygons (real data)
+        """
+
+        # Name input files
+        point_name = join(TESTDATA, 'population_5x5_jakarta_points.shp')
+        point_layer = read_layer(point_name)
+        points = numpy.array(point_layer.get_geometry())
+        attrs = point_layer.get_data()
+
+        # Loop through polygons
+        for filename in ['polygon_0.shp', 'polygon_1.shp', 'polygon_2.shp',
+                         'polygon_3.shp', 'polygon_4.shp',
+                         'polygon_5.shp', 'polygon_6.shp']:
+
+            polygon_layer = read_layer(join(TESTDATA, filename))
+            polygon = polygon_layer.get_geometry()[0]
+
+            # Clip
+            indices = inside_polygon(points, polygon)
+
+            # Sanity
+            for point in points[indices, :]:
+                assert is_inside_polygon(point, polygon)
+
+            # Explicit tests
+            if filename == 'polygon_0.shp':
+                assert len(indices) == 6
+            elif filename == 'polygon_1.shp':
+                assert len(indices) == 2
+                assert numpy.allclose(points[indices[0], :],
+                                      [106.8125, -6.1875])
+                assert numpy.allclose(points[indices[1], :],
+                                      [106.8541667, -6.1875])
+                assert numpy.allclose(attrs[indices[0]]['value'],
+                                      331941.6875)
+                assert numpy.allclose(attrs[indices[1]]['value'],
+                                      496445.8125)
+            elif filename == 'polygon_2.shp':
+                assert len(indices) == 7
+            elif filename == 'polygon_3.shp':
+                assert len(indices) == 0  # Degenerate
+            elif filename == 'polygon_4.shp':
+                assert len(indices) == 0  # Degenerate
+            elif filename == 'polygon_5.shp':
+                assert len(indices) == 8
+            elif filename == 'polygon_6.shp':
+                assert len(indices) == 6
+
+
     def test_clip_raster_by_polygons(self):
         """Raster grids can be clipped by polygon layers
+
+        # See qgis project in test data: raster_point_and_clipping_test.qgs
         """
 
         # Name input files
         poly = join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')
-        grid = join(EXPDATA, 'glp10ag.asc')
-        test = join(TESTDATA, 'population_kabupaten.shp')
+        grid = join(TESTDATA,  'population_5x5_jakarta.asc')
 
         # Get layers using API
         P = read_layer(poly)
         R = read_layer(grid)
-        T = read_layer(test)
 
-        print len(P)
-        print len(R)
+        M = len(P)
+        N = len(R)
 
         # Clip
         C = clip_raster_by_polygons(R, P)
+        assert len(C) == M
 
-        # Verify result
-        attributes = []
-        for c in C:
-            values = c[1]
-            s = numpy.sum(values)
-            attributes.append({'population': s})
+        # Check that points are inside the right polygon
+        for i, polygon in enumerate(P.get_geometry()):
 
-        print attributes, len(attributes)
-        ref = T.get_data()
-        print ref, len(ref)
+            points = C[i][0]
+            values = C[i][1]
 
-        for i, a in enumerate(attributes):
-            print attributes[i]
-            print ref[i]['SUM']
+            # Sanity first
+            #for point in points:
+            #    print point
+            #    assert is_inside_polygon(point, polygon)
+
+            if i == 0:
+                assert len(points) == 6
+            elif i == 1:
+                print values
+                assert len(points) == 2
+                print
+                msg = ('Got wrong coordinates %s, expected %s'
+                       % (str(points[0, :]), str([106.8125, -6.1875])))
+                assert numpy.allclose(points[0, :], [106.8125, -6.1875]), msg
+                assert numpy.allclose(points[1, :], [106.8541667, -6.1875])
+                assert numpy.allclose(values[0], 331941.6875)
+                assert numpy.allclose(values[1], 496445.8125)
+            elif i == 2:
+                assert len(points) == 7
+            elif i == 3:
+                assert len(points) == 0  # Degenerate
+            elif i == 4:
+                assert len(points) == 0  # Degenerate
+            elif i == 5:
+                assert len(points) == 8
+            elif i == 6:
+                assert len(points) == 6
+
+
+
+            # Generate spatial data for visualisation
+            values = [{'value': x} for x in C[i][1]]
+            print
+            print 'Feature', i
+            print points, values
+            point_layer = Vector(data=values, geometry=points,
+                                 projection=P.get_projection())
+            if i == 1:
+                print 'DEBUG F 1'
+                print point_layer.get_geometry()
+                print point_layer.get_data()
+                print len(point_layer)
+            point_layer.write_to_file('points_%i.shp' % i)
+
+            print
+            print [polygon]
+            polygon_layer = Vector(geometry=[polygon],
+                                   projection=P.get_projection())
+            assert polygon_layer.is_polygon_data
+            polygon_layer.write_to_file('polygon_%i.shp' % i)
+
+
+            #for point in points:
+            #    print
+            #    print i, point
+            #    print polygon
+
+            #    assert is_inside_polygon(point, polygon)
+
+            #print i, p
+
+        #for c in C:
+        #    print
+        #    print c[0]
+        #    values = c[1]
+
+        #    print values
+
+            #s = numpy.sum(values)
+            #attributes.append({'population': s})
+
+
+
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Clipping, 'test')
+    suite = unittest.makeSuite(Test_Clipping, 'test_clip_raster')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
