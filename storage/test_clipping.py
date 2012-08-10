@@ -139,7 +139,7 @@ class Test_Clipping(unittest.TestCase):
             assert polygon_layer.is_polygon_data
 
             # Generate spatial data for visualisation with e.g. QGIS
-            if True:
+            if False:
                 point_layer.write_to_file('points_%i.shp' % i)
                 polygon_layer.write_to_file('polygon_%i.shp' % i)
 
