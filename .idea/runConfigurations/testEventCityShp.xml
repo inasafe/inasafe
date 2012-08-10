@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="testEventToLocalCities" type="tests" factoryName="Nosetests">
+  <configuration default="false" name="testEventCityShp" type="tests" factoryName="Nosetests">
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
@@ -12,14 +12,16 @@
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
     <option name="CLASS_NAME" value="TestShakeEvent" />
-    <option name="METHOD_NAME" value="testLocalCities" />
+    <option name="METHOD_NAME" value="testCitiesToShape" />
     <option name="FOLDER_NAME" value="" />
     <option name="TEST_TYPE" value="TEST_METHOD" />
     <option name="PATTERN" value="" />
     <option name="USE_PATTERN" value="false" />
     <option name="PARAMS" value="" />
     <option name="USE_PARAM" value="false" />
+    <RunnerSettings RunnerId="PyDebugRunner" />
     <RunnerSettings RunnerId="PythonRunner" />
+    <ConfigurationWrapper RunnerId="PyDebugRunner" />
     <ConfigurationWrapper RunnerId="PythonRunner" />
     <method />
   </configuration>
