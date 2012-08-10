@@ -519,7 +519,8 @@ class Raster(Layer):
 
         return geotransform2bbox(self.geotransform, self.columns, self.rows)
 
-    def get_resolution(self, isotropic=False, native=False):
+    def get_resolution(self, isotropic=False, native=False,
+                       rtol=1.0e-4, atol=1.0e-8):
         """Get raster resolution as a 2-tuple (resx, resy)
 
         Input
@@ -527,12 +528,15 @@ class Raster(Layer):
                        If False return 2-tuple (dx, dy)
             native: Optional flag. If True, return native resolution if
                                    available. Otherwise return actual.
+            rtol, atol: Tolerances as to how much difference is accepted
+                        between dx and dy if isotropic is True.
         """
 
         # Get actual resolution first
         try:
             res = geotransform2resolution(self.geotransform,
-                                          isotropic=isotropic)
+                                          isotropic=isotropic,
+                                          rtol=rtol, atol=atol)
         except Exception, e:
             msg = ('Resolution for layer %s could not be obtained: %s '
                    % (self.get_name(), str(e)))

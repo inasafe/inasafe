@@ -260,8 +260,8 @@ def geotransform2resolution(geotransform, isotropic=False,
                     or resx (if isotropic is True)
     """
 
-    resx = geotransform[1]     # w-e pixel resolution
-    resy = -geotransform[5]   # n-s pixel resolution (always negative)
+    resx = geotransform[1]   # w-e pixel resolution
+    resy = -geotransform[5]  # n-s pixel resolution (always negative)
 
     if isotropic:
         msg = ('Resolution requested with '
@@ -489,6 +489,10 @@ def get_geometry_type(geometry, geometry_type):
 
     msg = 'Argument geometry must be a sequence. I got %s ' % type(geometry)
     verify(is_sequence(geometry), msg)
+
+    if len(geometry) == 0:
+        # Default to point if there is no data
+        return ogr.wkbPoint
 
     msg = ('The first element in geometry must be a sequence of length > 2. '
            'I got %s ' % str(geometry[0]))
