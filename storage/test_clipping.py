@@ -106,26 +106,56 @@ class Test_Clipping(unittest.TestCase):
             for point in points:
                 assert is_inside_polygon(point, polygon)
 
+            # Specific tests against raster pixel values inside polygons
+            # The values are read from qgis
             if i == 0:
                 assert len(points) == 6
+                assert numpy.allclose(values[0], 200951)
+                assert numpy.allclose(values[1], 283237)
+                assert numpy.allclose(values[2], 278385)
+                assert numpy.allclose(values[3], 516061)
+                assert numpy.allclose(values[4], 207414)
+                assert numpy.allclose(values[5], 344466)
+
             elif i == 1:
                 assert len(points) == 2
                 msg = ('Got wrong coordinates %s, expected %s'
                        % (str(points[0, :]), str([106.8125, -6.1875])))
                 assert numpy.allclose(points[0, :], [106.8125, -6.1875]), msg
                 assert numpy.allclose(points[1, :], [106.8541667, -6.1875])
-                assert numpy.allclose(values[0], 331941.6875)
-                assert numpy.allclose(values[1], 496445.8125)
+                assert numpy.allclose(values[0], 331942)
+                assert numpy.allclose(values[1], 496446)
             elif i == 2:
                 assert len(points) == 7
+                assert numpy.allclose(values[0], 268579)
+                assert numpy.allclose(values[1], 155795)
+                assert numpy.allclose(values[2], 403674)
+                assert numpy.allclose(values[3], 259280)
+                assert numpy.allclose(values[4], 284526)
+                assert numpy.allclose(values[5], 334370)
+                assert numpy.allclose(values[6], 143325)
             elif i == 3:
                 assert len(points) == 0  # Degenerate
             elif i == 4:
                 assert len(points) == 0  # Degenerate
             elif i == 5:
                 assert len(points) == 8
+                assert numpy.allclose(values[0], 279103)
+                assert numpy.allclose(values[1], 205762)
+                assert numpy.allclose(values[2], 428705)
+                assert numpy.allclose(values[3], 331093)
+                assert numpy.allclose(values[4], 227514)
+                assert numpy.allclose(values[5], 249308)
+                assert numpy.allclose(values[6], 215739)
+                assert numpy.allclose(values[7], 147447)
             elif i == 6:
                 assert len(points) == 6
+                assert numpy.allclose(values[0], 61836.4)
+                assert numpy.allclose(values[1], 165723)
+                assert numpy.allclose(values[2], 151307)
+                assert numpy.allclose(values[3], 343787)
+                assert numpy.allclose(values[4], 303627)
+                assert numpy.allclose(values[5], 225232)
 
             # Generate layer objects
             values = [{'value': x} for x in C[i][1]]
