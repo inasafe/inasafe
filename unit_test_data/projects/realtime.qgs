@@ -5,9 +5,9 @@
         <units>degrees</units>
         <extent>
             <xmin>100.398426</xmin>
-            <ymin>-5.880048</ymin>
+            <ymin>-5.929590</ymin>
             <xmax>104.895788</xmax>
-            <ymax>-3.481818</ymax>
+            <ymax>-3.432276</ymax>
         </extent>
         <projections>1</projections>
         <destinationsrs>
@@ -24,21 +24,6 @@
         </destinationsrs>
     </mapcanvas>
     <legend updateDrawingOrder="false">
-        <legendlayer drawingOrder="0" open="false" checked="Qt::Checked" name="MMI Contours" showFeatureCount="0">
-            <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="mi20120718230110900" visible="1"/>
-            </filegroup>
-        </legendlayer>
-        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Geonames" showFeatureCount="0">
-            <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="geonames20120718235458212" visible="1"/>
-            </filegroup>
-        </legendlayer>
-        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Gadm" showFeatureCount="0">
-            <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="gadm20120718235630148" visible="1"/>
-            </filegroup>
-        </legendlayer>
         <legendlayer drawingOrder="5" open="false" checked="Qt::Checked" name="Population 2008" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="landscan200820120718231434191" visible="1"/>
@@ -51,120 +36,129 @@
         </legendlayer>
     </legend>
     <Composer title="Realtime" visible="0">
-        <ComposerLabel valign="32" labelText="Didukung oleh Australia-Indonesia Facility for Disaster Reduction dan Geoscience Australia." halign="1" margin="1">
-            <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0"/>
-            <FontColor red="0" blue="0" green="0"/>
-            <ComposerItem width="143.22" x="34.0388" y="284.513" rotation="0" height="6.42241" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="3.11409" id="" positionLock="false">
-                <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-            </ComposerItem>
-        </ComposerLabel>
-        <ComposerMap keepLayerSet="true" overviewFrameMap="-1" id="0" previewMode="Cache" drawCanvasItems="true">
-            <overviewFrame overviewFrameMap="-1">
-                <symbol outputUnit="MM" alpha="0.3" type="fill" name="">
-                    <layer pass="0" class="SimpleFill" locked="0">
-                        <prop k="color" v="255,0,0,76"/>
-                        <prop k="color_border" v="0,0,0,76"/>
-                        <prop k="offset" v="0,0"/>
-                        <prop k="style" v="solid"/>
-                        <prop k="style_border" v="no"/>
-                        <prop k="width_border" v="0.26"/>
-                    </layer>
-                </symbol>
-            </overviewFrame>
-            <Extent ymin="-6.25926" xmin="100.609" ymax="-3.22498" xmax="104.53"/>
-            <LayerSet>
-                <Layer>geonames20120718235458212</Layer>
-                <Layer>gadm20120718235630148</Layer>
-                <Layer>mi20120718230110900</Layer>
-                <Layer>landscan200820120718231434191</Layer>
-            </LayerSet>
-            <Grid gridStyle="1" crossLength="2" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="0">
-                <Annotation rightDirection="0" bottomDirection="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
-            </Grid>
-            <ComposerItem width="192.734" x="8.31804" y="61" rotation="0" height="149.148" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="1.36242" id="" positionLock="false">
-                <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-            </ComposerItem>
-        </ComposerMap>
-        <ComposerLabel valign="32" labelText="Perkiraan dampak ini secara otomatis dihasilkan dan hanya mempertimbangkan penduduk dan kota yang terpengaruh oleh berbagai macam tingkat getaran tanahyang berbeda-beda. Perkiraan ini berdasarkan pada prediksi getaran tanah dari BMKG, data kepadatan penduduk dari BPS, informasi kota dari Geonamesdan perangkat lunak yang dikembangkan oleh BNPB. Keterbatasan pada perkiraan getaran tanah, data penduduk dan informasi kota akan menambah tingkatketidakpastian yang signifikan pada angka-angka yang ditampilkan di sini. Konsekuensinya, keputusan seharusnya tidak hanya berdasarkan pada informasi ini sajadan harus selalu diverifikasi dengan informasi lainnya." halign="1" margin="2">
-            <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0"/>
-            <FontColor red="0" blue="0" green="0"/>
-            <ComposerItem width="192.925" x="7.13319" y="255.291" rotation="0" height="28.2586" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="1.36242" id="" positionLock="false">
-                <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-            </ComposerItem>
-        </ComposerLabel>
-        <ComposerLabel valign="32" labelText="Penduduk Terpapar" halign="1" margin="1">
-            <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
-            <FontColor red="0" blue="0" green="0"/>
-            <ComposerItem width="48.7991" x="6.50655" y="49.4498" rotation="0" height="8.13319" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="3.11409" id="" positionLock="false">
-                <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-            </ComposerItem>
-        </ComposerLabel>
-        <ComposerLabel valign="32" labelText="Perkiraan Dampak Gempa" halign="1" margin="1">
-            <LabelFont description="Ubuntu,28,-1,5,75,0,0,0,0,0"/>
-            <FontColor red="0" blue="0" green="0"/>
-            <ComposerItem width="128.587" x="39.4618" y="15" rotation="0" height="14.2277" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="3.72512" id="" positionLock="false">
-                <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-            </ComposerItem>
-        </ComposerLabel>
-        <ComposerMap keepLayerSet="true" overviewFrameMap="0" id="1" previewMode="Cache" drawCanvasItems="true">
-            <overviewFrame overviewFrameMap="0">
-                <symbol outputUnit="MM" alpha="1" type="fill" name="">
-                    <layer pass="0" class="SimpleFill" locked="0">
-                        <prop k="color" v="255,0,0,255"/>
-                        <prop k="color_border" v="255,0,0,255"/>
-                        <prop k="offset" v="0,0"/>
-                        <prop k="style" v="no"/>
-                        <prop k="style_border" v="solid"/>
-                        <prop k="width_border" v="0.3"/>
-                    </layer>
-                </symbol>
-            </overviewFrame>
-            <Extent ymin="-12.0606" xmin="87.7793" ymax="0.949249" xmax="120.063"/>
-            <LayerSet>
-                <Layer>blue_marble_topo_jan20120718154124441</Layer>
-            </LayerSet>
-            <Grid gridStyle="1" crossLength="0" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1" penWidth="0" penColorGreen="0">
-                <Annotation rightDirection="0" bottomDirection="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
-            </Grid>
-            <ComposerItem width="67" x="134.301" y="220.12" rotation="0" height="27" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="1.36242" id="" positionLock="false">
-                <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-            </ComposerItem>
-        </ComposerMap>
-        <ComposerPicture pictureWidth="30" file="../../realtime/fixtures/bnpb_logo.png" pictureHeight="30" mapId="-1">
-            <ComposerItem width="30" x="6.97964" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.72512" id="" positionLock="false">
-                <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-            </ComposerItem>
-        </ComposerPicture>
-        <ComposerPicture pictureWidth="30" file="../../realtime/fixtures/bmkg_logo.png" pictureHeight="30" mapId="-1">
-            <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.11409" id="" positionLock="false">
-                <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-            </ComposerItem>
-        </ComposerPicture>
-        <ComposerLegend symbolWidth="7" title="" boxSpace="2" titleFont="Verdana,16,-1,5,50,0,0,0,0,0" map="1" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" groupSpace="2" symbolSpace="0" symbolHeight="4" layerSpace="2" iconLabelSpace="2" wrapChar="" itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0">
-            <Model autoUpdate="0">
-                <LayerItem layerId="landscan200820120718231434191" text="Penduk / km2">
-                    <RasterClassificationItem layerId="landscan200820120718231434191" color="#ffffff" text="0-10"/>
-                    <RasterClassificationItem layerId="landscan200820120718231434191" color="#d1d1d1" text="10-100"/>
-                    <RasterClassificationItem layerId="landscan200820120718231434191" color="#adadad" text="100-1000"/>
-                    <RasterClassificationItem layerId="landscan200820120718231434191" color="#4a4a4a" text="1000-10000"/>
-                </LayerItem>
-            </Model>
-            <ComposerItem width="32" x="7.06466" y="217.72" rotation="0" height="31.5" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="1.36242" id="" positionLock="false">
-                <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-            </ComposerItem>
-        </ComposerLegend>
-        <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="0"/>
+        <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="1">
+            <ComposerLabel valign="32" labelText="Epicenter coords with  N or S (LU = Lintang Utara or LS= Lintang Selatan). For longitude is only E (BT=Bujur Timur goo here." halign="1" margin="1">
+                <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
+                <FontColor red="0" blue="0" green="0"/>
+                <ComposerItem width="194.684" x="8.08255" y="40.4127" rotation="0" height="9.48821" frame="true" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.84564" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLabel>
+            <ComposerLegend symbolWidth="7" title="" boxSpace="2" titleFont="Verdana,16,-1,5,50,0,0,0,0,0" map="1" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" groupSpace="2" symbolSpace="0" symbolHeight="4" layerSpace="2" iconLabelSpace="2" wrapChar="" itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0">
+                <Model autoUpdate="0">
+                    <LayerItem layerId="landscan200820120718231434191" text="Penduk / km2">
+                        <RasterClassificationItem layerId="landscan200820120718231434191" color="#ffffff" text="0-10"/>
+                        <RasterClassificationItem layerId="landscan200820120718231434191" color="#d1d1d1" text="10-100"/>
+                        <RasterClassificationItem layerId="landscan200820120718231434191" color="#adadad" text="100-1000"/>
+                        <RasterClassificationItem layerId="landscan200820120718231434191" color="#4a4a4a" text="1000-10000"/>
+                    </LayerItem>
+                </Model>
+                <ComposerItem width="32" x="7.06466" y="217.72" rotation="0" height="31.5" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.84564" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLegend>
+            <ComposerLabel valign="32" labelText="Penduduk Terpapar" halign="1" margin="1">
+                <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
+                <FontColor red="0" blue="0" green="0"/>
+                <ComposerItem width="48.7991" x="6.50655" y="49.4498" rotation="0" height="8.13319" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="3.11409" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLabel>
+            <ComposerMap keepLayerSet="true" overviewFrameMap="0" id="1" previewMode="Cache" drawCanvasItems="true">
+                <overviewFrame overviewFrameMap="0">
+                    <symbol outputUnit="MM" alpha="1" type="fill" name="">
+                        <layer pass="0" class="SimpleFill" locked="0">
+                            <prop k="color" v="255,0,0,255"/>
+                            <prop k="color_border" v="255,0,0,255"/>
+                            <prop k="offset" v="0,0"/>
+                            <prop k="style" v="no"/>
+                            <prop k="style_border" v="solid"/>
+                            <prop k="width_border" v="0.3"/>
+                        </layer>
+                    </symbol>
+                </overviewFrame>
+                <Extent ymin="-12.0606" xmin="87.7793" ymax="0.949249" xmax="120.063"/>
+                <LayerSet>
+                    <Layer>blue_marble_topo_jan20120718154124441</Layer>
+                </LayerSet>
+                <Grid gridStyle="1" crossLength="0" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1" penWidth="0" penColorGreen="0">
+                    <Annotation rightDirection="0" bottomDirection="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
+                </Grid>
+                <ComposerItem width="67" x="134.301" y="220.12" rotation="0" height="27" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.84564" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerMap>
+            <ComposerLabel valign="32" labelText="Perkiraan dampak ini secara otomatis dihasilkan dan hanya mempertimbangkan penduduk dan kota yang terpengaruh oleh berbagai macam tingkat getaran tanahyang berbeda-beda. Perkiraan ini berdasarkan pada prediksi getaran tanah dari BMKG, data kepadatan penduduk dari BPS, informasi kota dari Geonamesdan perangkat lunak yang dikembangkan oleh BNPB. Keterbatasan pada perkiraan getaran tanah, data penduduk dan informasi kota akan menambah tingkatketidakpastian yang signifikan pada angka-angka yang ditampilkan di sini. Konsekuensinya, keputusan seharusnya tidak hanya berdasarkan pada informasi ini sajadan harus selalu diverifikasi dengan informasi lainnya." halign="1" margin="2">
+                <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0"/>
+                <FontColor red="0" blue="0" green="0"/>
+                <ComposerItem width="192.925" x="7.13319" y="255.291" rotation="0" height="28.2586" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="1.36242" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLabel>
+            <ComposerLabel valign="32" labelText="Didukung oleh Australia-Indonesia Facility for Disaster Reduction dan Geoscience Australia." halign="1" margin="1">
+                <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0"/>
+                <FontColor red="0" blue="0" green="0"/>
+                <ComposerItem width="143.22" x="34.0388" y="284.513" rotation="0" height="6.42241" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="3.11409" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLabel>
+            <ComposerMap keepLayerSet="true" overviewFrameMap="-1" id="0" previewMode="Cache" drawCanvasItems="true">
+                <overviewFrame overviewFrameMap="-1">
+                    <symbol outputUnit="MM" alpha="0.3" type="fill" name="">
+                        <layer pass="0" class="SimpleFill" locked="0">
+                            <prop k="color" v="255,0,0,76"/>
+                            <prop k="color_border" v="0,0,0,76"/>
+                            <prop k="offset" v="0,0"/>
+                            <prop k="style" v="solid"/>
+                            <prop k="style_border" v="no"/>
+                            <prop k="width_border" v="0.26"/>
+                        </layer>
+                    </symbol>
+                </overviewFrame>
+                <Extent ymin="-6.25926" xmin="100.609" ymax="-3.22498" xmax="104.53"/>
+                <LayerSet>
+                    <Layer>geonames20120718235458212</Layer>
+                    <Layer>gadm20120718235630148</Layer>
+                    <Layer>mi20120718230110900</Layer>
+                    <Layer>landscan200820120718231434191</Layer>
+                </LayerSet>
+                <Grid gridStyle="1" crossLength="2" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="0">
+                    <Annotation rightDirection="0" bottomDirection="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
+                </Grid>
+                <ComposerItem width="192.734" x="8.31804" y="61" rotation="0" height="149.148" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="2.84564" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerMap>
+            <ComposerLabel valign="32" labelText="Perkiraan Dampak Gempa" halign="1" margin="1">
+                <LabelFont description="Ubuntu,28,-1,5,75,0,0,0,0,0"/>
+                <FontColor red="0" blue="0" green="0"/>
+                <ComposerItem width="128.587" x="39.4618" y="15" rotation="0" height="14.2277" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="3.72512" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLabel>
+            <ComposerPicture pictureWidth="30" file="../../realtime/fixtures/bmkg_logo.png" pictureHeight="30" mapId="-1">
+                <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.11409" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerPicture>
+            <ComposerPicture pictureWidth="30" file="../../realtime/fixtures/bnpb_logo.png" pictureHeight="30" mapId="-1">
+                <ComposerItem width="30" x="6.97964" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="3.72512" id="" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerPicture>
+        </Composition>
     </Composer>
-    <projectlayers layercount="6">
+    <projectlayers layercount="2">
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>blue_marble_topo_jan20120718154124441</id>
             <datasource>../../../../../../gisdata/world/blue-marble-mbtiles/blue-marble-topo-jan.mbtiles</datasource>
@@ -190,381 +184,6 @@
                 <rasterTransparency/>
             </rasterrenderer>
             <rasterresampler maxOversampling="2"/>
-        </maplayer>
-        <maplayer minimumScale="0" maximumScale="1e+08" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="0">
-            <id>gadm20120718235630148</id>
-            <datasource>dbname='../../realtime/fixtures/indonesia.sqlite' table="gadm" (Geometry) sql=</datasource>
-            <title></title>
-            <abstract></abstract>
-            <layername>Gadm</layername>
-            <srs>
-                <spatialrefsys>
-                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
-                    <srsid>3452</srsid>
-                    <srid>4326</srid>
-                    <authid>EPSG:4326</authid>
-                    <description>WGS 84</description>
-                    <projectionacronym>longlat</projectionacronym>
-                    <ellipsoidacronym>WGS84</ellipsoidacronym>
-                    <geographicflag>true</geographicflag>
-                </spatialrefsys>
-            </srs>
-            <transparencyLevelInt>255</transparencyLevelInt>
-            <provider encoding="UTF-8">spatialite</provider>
-            <vectorjoins/>
-            <renderer-v2 symbollevels="0" type="singleSymbol">
-                <symbols>
-                    <symbol outputUnit="MM" alpha="1" type="fill" name="0">
-                        <layer pass="0" class="SimpleFill" locked="0">
-                            <prop k="color" v="134,134,91,255"/>
-                            <prop k="color_border" v="0,0,0,255"/>
-                            <prop k="offset" v="0,0"/>
-                            <prop k="style" v="no"/>
-                            <prop k="style_border" v="solid"/>
-                            <prop k="width_border" v="0.26"/>
-                        </layer>
-                    </symbol>
-                </symbols>
-                <rotation field=""/>
-                <sizescale field=""/>
-            </renderer-v2>
-            <customproperties/>
-            <displayfield>name_0</displayfield>
-            <label>0</label>
-            <labelattributes>
-                <label fieldname="" text="Label"/>
-                <family fieldname="" name="Verdana"/>
-                <size fieldname="" units="pt" value="12"/>
-                <bold fieldname="" on="0"/>
-                <italic fieldname="" on="0"/>
-                <underline fieldname="" on="0"/>
-                <strikeout fieldname="" on="0"/>
-                <color fieldname="" red="0" blue="0" green="0"/>
-                <x fieldname=""/>
-                <y fieldname=""/>
-                <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
-                <angle fieldname="" value="0" auto="0"/>
-                <alignment fieldname="" value="center"/>
-                <buffercolor fieldname="" red="255" blue="255" green="255"/>
-                <buffersize fieldname="" units="pt" value="1"/>
-                <bufferenabled fieldname="" on=""/>
-                <multilineenabled fieldname="" on=""/>
-                <selectedonly on=""/>
-            </labelattributes>
-            <edittypes>
-                <edittype type="0" name="PK_UID"/>
-                <edittype type="0" name="cc_1"/>
-                <edittype type="0" name="cc_2"/>
-                <edittype type="0" name="engtype4"/>
-                <edittype type="0" name="engtype_1"/>
-                <edittype type="0" name="engtype_2"/>
-                <edittype type="0" name="engtype_3"/>
-                <edittype type="0" name="engtype_4"/>
-                <edittype type="0" name="engtype_5"/>
-                <edittype type="0" name="gid"/>
-                <edittype type="0" name="hasc_1"/>
-                <edittype type="0" name="hasc_2"/>
-                <edittype type="0" name="hasc_3"/>
-                <edittype type="0" name="id_0"/>
-                <edittype type="0" name="id_1"/>
-                <edittype type="0" name="id_2"/>
-                <edittype type="0" name="id_3"/>
-                <edittype type="0" name="id_4"/>
-                <edittype type="0" name="id_5"/>
-                <edittype type="0" name="iso"/>
-                <edittype type="0" name="name_0"/>
-                <edittype type="0" name="name_1"/>
-                <edittype type="0" name="name_2"/>
-                <edittype type="0" name="name_3"/>
-                <edittype type="0" name="name_4"/>
-                <edittype type="0" name="name_5"/>
-                <edittype type="0" name="nl_name_1"/>
-                <edittype type="0" name="nl_name_2"/>
-                <edittype type="0" name="nl_name_3"/>
-                <edittype type="0" name="objectid"/>
-                <edittype type="0" name="remarks_1"/>
-                <edittype type="0" name="remarks_2"/>
-                <edittype type="0" name="remarks_3"/>
-                <edittype type="0" name="remarks_4"/>
-                <edittype type="0" name="shape_area"/>
-                <edittype type="0" name="shape_leng"/>
-                <edittype type="0" name="type4"/>
-                <edittype type="0" name="type_1"/>
-                <edittype type="0" name="type_2"/>
-                <edittype type="0" name="type_3"/>
-                <edittype type="0" name="type_4"/>
-                <edittype type="0" name="type_5"/>
-                <edittype type="0" name="validfr_1"/>
-                <edittype type="0" name="validfr_2"/>
-                <edittype type="0" name="validfr_3"/>
-                <edittype type="0" name="validfr_4"/>
-                <edittype type="0" name="validto_1"/>
-                <edittype type="0" name="validto_2"/>
-                <edittype type="0" name="validto_3"/>
-                <edittype type="0" name="validto_4"/>
-                <edittype type="0" name="varname_1"/>
-                <edittype type="0" name="varname_2"/>
-                <edittype type="0" name="varname_3"/>
-                <edittype type="0" name="varname_4"/>
-            </edittypes>
-            <editform>.</editform>
-            <editforminit></editforminit>
-            <annotationform>.</annotationform>
-            <attributeactions/>
-        </maplayer>
-        <maplayer minimumScale="0" maximumScale="1e+08" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="0">
-            <id>gadm20120719000602722</id>
-            <datasource>dbname='../../realtime/fixtures/indonesia.sqlite' table="gadm" (Geometry) sql=</datasource>
-            <title></title>
-            <abstract></abstract>
-            <layername>Gadm</layername>
-            <srs>
-                <spatialrefsys>
-                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
-                    <srsid>3452</srsid>
-                    <srid>4326</srid>
-                    <authid>EPSG:4326</authid>
-                    <description>WGS 84</description>
-                    <projectionacronym>longlat</projectionacronym>
-                    <ellipsoidacronym>WGS84</ellipsoidacronym>
-                    <geographicflag>true</geographicflag>
-                </spatialrefsys>
-            </srs>
-            <transparencyLevelInt>255</transparencyLevelInt>
-            <provider encoding="UTF-8">spatialite</provider>
-            <vectorjoins/>
-            <renderer-v2 symbollevels="0" type="singleSymbol">
-                <symbols>
-                    <symbol outputUnit="MM" alpha="1" type="fill" name="0">
-                        <layer pass="0" class="SimpleFill" locked="0">
-                            <prop k="color" v="134,134,91,255"/>
-                            <prop k="color_border" v="0,0,0,255"/>
-                            <prop k="offset" v="0,0"/>
-                            <prop k="style" v="no"/>
-                            <prop k="style_border" v="solid"/>
-                            <prop k="width_border" v="0.26"/>
-                        </layer>
-                    </symbol>
-                </symbols>
-                <rotation field=""/>
-                <sizescale field=""/>
-            </renderer-v2>
-            <customproperties/>
-            <displayfield>name_0</displayfield>
-            <label>0</label>
-            <labelattributes>
-                <label fieldname="" text="Label"/>
-                <family fieldname="" name="Verdana"/>
-                <size fieldname="" units="pt" value="12"/>
-                <bold fieldname="" on="0"/>
-                <italic fieldname="" on="0"/>
-                <underline fieldname="" on="0"/>
-                <strikeout fieldname="" on="0"/>
-                <color fieldname="" red="0" blue="0" green="0"/>
-                <x fieldname=""/>
-                <y fieldname=""/>
-                <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
-                <angle fieldname="" value="0" auto="0"/>
-                <alignment fieldname="" value="center"/>
-                <buffercolor fieldname="" red="255" blue="255" green="255"/>
-                <buffersize fieldname="" units="pt" value="1"/>
-                <bufferenabled fieldname="" on=""/>
-                <multilineenabled fieldname="" on=""/>
-                <selectedonly on=""/>
-            </labelattributes>
-            <edittypes>
-                <edittype type="0" name="PK_UID"/>
-                <edittype type="0" name="cc_1"/>
-                <edittype type="0" name="cc_2"/>
-                <edittype type="0" name="engtype4"/>
-                <edittype type="0" name="engtype_1"/>
-                <edittype type="0" name="engtype_2"/>
-                <edittype type="0" name="engtype_3"/>
-                <edittype type="0" name="engtype_4"/>
-                <edittype type="0" name="engtype_5"/>
-                <edittype type="0" name="gid"/>
-                <edittype type="0" name="hasc_1"/>
-                <edittype type="0" name="hasc_2"/>
-                <edittype type="0" name="hasc_3"/>
-                <edittype type="0" name="id_0"/>
-                <edittype type="0" name="id_1"/>
-                <edittype type="0" name="id_2"/>
-                <edittype type="0" name="id_3"/>
-                <edittype type="0" name="id_4"/>
-                <edittype type="0" name="id_5"/>
-                <edittype type="0" name="iso"/>
-                <edittype type="0" name="name_0"/>
-                <edittype type="0" name="name_1"/>
-                <edittype type="0" name="name_2"/>
-                <edittype type="0" name="name_3"/>
-                <edittype type="0" name="name_4"/>
-                <edittype type="0" name="name_5"/>
-                <edittype type="0" name="nl_name_1"/>
-                <edittype type="0" name="nl_name_2"/>
-                <edittype type="0" name="nl_name_3"/>
-                <edittype type="0" name="objectid"/>
-                <edittype type="0" name="remarks_1"/>
-                <edittype type="0" name="remarks_2"/>
-                <edittype type="0" name="remarks_3"/>
-                <edittype type="0" name="remarks_4"/>
-                <edittype type="0" name="shape_area"/>
-                <edittype type="0" name="shape_leng"/>
-                <edittype type="0" name="type4"/>
-                <edittype type="0" name="type_1"/>
-                <edittype type="0" name="type_2"/>
-                <edittype type="0" name="type_3"/>
-                <edittype type="0" name="type_4"/>
-                <edittype type="0" name="type_5"/>
-                <edittype type="0" name="validfr_1"/>
-                <edittype type="0" name="validfr_2"/>
-                <edittype type="0" name="validfr_3"/>
-                <edittype type="0" name="validfr_4"/>
-                <edittype type="0" name="validto_1"/>
-                <edittype type="0" name="validto_2"/>
-                <edittype type="0" name="validto_3"/>
-                <edittype type="0" name="validto_4"/>
-                <edittype type="0" name="varname_1"/>
-                <edittype type="0" name="varname_2"/>
-                <edittype type="0" name="varname_3"/>
-                <edittype type="0" name="varname_4"/>
-            </edittypes>
-            <editform>.</editform>
-            <editforminit></editforminit>
-            <annotationform>.</annotationform>
-            <attributeactions/>
-        </maplayer>
-        <maplayer minimumScale="0" maximumScale="1e+08" geometry="Point" type="vector" hasScaleBasedVisibilityFlag="0">
-            <id>geonames20120718235458212</id>
-            <datasource>dbname='../../realtime/fixtures/indonesia.sqlite' table="geonames" (Geometry) sql=</datasource>
-            <title></title>
-            <abstract></abstract>
-            <layername>Geonames</layername>
-            <srs>
-                <spatialrefsys>
-                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
-                    <srsid>3452</srsid>
-                    <srid>4326</srid>
-                    <authid>EPSG:4326</authid>
-                    <description>WGS 84</description>
-                    <projectionacronym>longlat</projectionacronym>
-                    <ellipsoidacronym>WGS84</ellipsoidacronym>
-                    <geographicflag>true</geographicflag>
-                </spatialrefsys>
-            </srs>
-            <transparencyLevelInt>255</transparencyLevelInt>
-            <provider encoding="UTF-8">spatialite</provider>
-            <vectorjoins/>
-            <renderer-v2 symbollevels="0" type="singleSymbol">
-                <symbols>
-                    <symbol outputUnit="MM" alpha="1" type="marker" name="0">
-                        <layer pass="0" class="SimpleMarker" locked="0">
-                            <prop k="angle" v="0"/>
-                            <prop k="color" v="255,0,0,255"/>
-                            <prop k="color_border" v="0,0,0,255"/>
-                            <prop k="name" v="equilateral_triangle"/>
-                            <prop k="offset" v="0,0"/>
-                            <prop k="size" v="2"/>
-                        </layer>
-                    </symbol>
-                </symbols>
-                <rotation field=""/>
-                <sizescale field=""/>
-            </renderer-v2>
-            <customproperties>
-                <property key="labeling" value="pal"/>
-                <property key="labeling/addDirectionSymbol" value="false"/>
-                <property key="labeling/bufferColorB" value="255"/>
-                <property key="labeling/bufferColorG" value="255"/>
-                <property key="labeling/bufferColorR" value="255"/>
-                <property key="labeling/bufferSize" value="1"/>
-                <property key="labeling/dataDefinedProperty0" value=""/>
-                <property key="labeling/dataDefinedProperty1" value=""/>
-                <property key="labeling/dataDefinedProperty10" value=""/>
-                <property key="labeling/dataDefinedProperty11" value=""/>
-                <property key="labeling/dataDefinedProperty12" value=""/>
-                <property key="labeling/dataDefinedProperty13" value=""/>
-                <property key="labeling/dataDefinedProperty14" value=""/>
-                <property key="labeling/dataDefinedProperty2" value=""/>
-                <property key="labeling/dataDefinedProperty3" value=""/>
-                <property key="labeling/dataDefinedProperty4" value=""/>
-                <property key="labeling/dataDefinedProperty5" value=""/>
-                <property key="labeling/dataDefinedProperty6" value=""/>
-                <property key="labeling/dataDefinedProperty7" value=""/>
-                <property key="labeling/dataDefinedProperty8" value=""/>
-                <property key="labeling/dataDefinedProperty9" value=""/>
-                <property key="labeling/decimals" value="0"/>
-                <property key="labeling/dist" value="1"/>
-                <property key="labeling/distInMapUnits" value="false"/>
-                <property key="labeling/enabled" value="true"/>
-                <property key="labeling/fieldName" value="name"/>
-                <property key="labeling/fontFamily" value="Times New Roman"/>
-                <property key="labeling/fontItalic" value="false"/>
-                <property key="labeling/fontSize" value="11"/>
-                <property key="labeling/fontSizeInMapUnits" value="false"/>
-                <property key="labeling/fontStrikeout" value="false"/>
-                <property key="labeling/fontUnderline" value="false"/>
-                <property key="labeling/fontWeight" value="75"/>
-                <property key="labeling/formatNumbers" value="false"/>
-                <property key="labeling/isExpression" value="false"/>
-                <property key="labeling/labelPerPart" value="false"/>
-                <property key="labeling/mergeLines" value="false"/>
-                <property key="labeling/minFeatureSize" value="0"/>
-                <property key="labeling/obstacle" value="true"/>
-                <property key="labeling/placement" value="0"/>
-                <property key="labeling/placementFlags" value="0"/>
-                <property key="labeling/plussign" value="true"/>
-                <property key="labeling/priority" value="5"/>
-                <property key="labeling/scaleMax" value="0"/>
-                <property key="labeling/scaleMin" value="0"/>
-                <property key="labeling/textColorB" value="0"/>
-                <property key="labeling/textColorG" value="0"/>
-                <property key="labeling/textColorR" value="0"/>
-                <property key="labeling/wrapChar" value=" "/>
-            </customproperties>
-            <displayfield>name</displayfield>
-            <label>0</label>
-            <labelattributes>
-                <label fieldname="" text="Label"/>
-                <family fieldname="" name="Ubuntu"/>
-                <size fieldname="" units="pt" value="12"/>
-                <bold fieldname="" on="0"/>
-                <italic fieldname="" on="0"/>
-                <underline fieldname="" on="0"/>
-                <strikeout fieldname="" on="0"/>
-                <color fieldname="" red="0" blue="0" green="0"/>
-                <x fieldname=""/>
-                <y fieldname=""/>
-                <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
-                <angle fieldname="" value="0" auto="0"/>
-                <alignment fieldname="" value="center"/>
-                <buffercolor fieldname="" red="255" blue="255" green="255"/>
-                <buffersize fieldname="" units="pt" value="1"/>
-                <bufferenabled fieldname="" on=""/>
-                <multilineenabled fieldname="" on=""/>
-                <selectedonly on=""/>
-            </labelattributes>
-            <edittypes>
-                <edittype type="0" name="PK_UID"/>
-                <edittype type="0" name="asciiname"/>
-                <edittype type="0" name="elevation"/>
-                <edittype type="0" name="geonameid"/>
-                <edittype type="0" name="label_x"/>
-                <edittype type="0" name="label_y"/>
-                <edittype type="0" name="lat"/>
-                <edittype type="0" name="latitude"/>
-                <edittype type="0" name="lon"/>
-                <edittype type="0" name="longitude"/>
-                <edittype type="0" name="name"/>
-                <edittype type="0" name="pop"/>
-                <edittype type="0" name="population"/>
-                <edittype type="0" name="rotation"/>
-                <edittype type="0" name="scale_factor"/>
-                <edittype type="0" name="scale_int"/>
-            </edittypes>
-            <editform>.</editform>
-            <editforminit></editforminit>
-            <annotationform>.</annotationform>
-            <attributeactions/>
         </maplayer>
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>landscan200820120718231434191</id>
@@ -603,127 +222,6 @@
                 </rastershader>
             </rasterrenderer>
             <rasterresampler maxOversampling="2"/>
-        </maplayer>
-        <maplayer minimumScale="0" maximumScale="1e+08" geometry="Line" type="vector" hasScaleBasedVisibilityFlag="0">
-            <id>mi20120718230110900</id>
-            <datasource>../realtime/extracted/output/mi.shp</datasource>
-            <title></title>
-            <abstract></abstract>
-            <layername>MMI Contours</layername>
-            <srs>
-                <spatialrefsys>
-                    <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
-                    <srsid>3452</srsid>
-                    <srid>4326</srid>
-                    <authid>EPSG:4326</authid>
-                    <description>WGS 84</description>
-                    <projectionacronym>longlat</projectionacronym>
-                    <ellipsoidacronym>WGS84</ellipsoidacronym>
-                    <geographicflag>true</geographicflag>
-                </spatialrefsys>
-            </srs>
-            <transparencyLevelInt>255</transparencyLevelInt>
-            <provider encoding="UTF-8">ogr</provider>
-            <vectorjoins/>
-            <renderer-v2 symbollevels="0" type="singleSymbol">
-                <symbols>
-                    <symbol outputUnit="MM" alpha="1" type="line" name="0">
-                        <layer pass="0" class="SimpleLine" locked="0">
-                            <prop k="capstyle" v="square"/>
-                            <prop k="color" v="239,0,0,255"/>
-                            <prop k="customdash" v="5;2"/>
-                            <prop k="joinstyle" v="bevel"/>
-                            <prop k="offset" v="0"/>
-                            <prop k="penstyle" v="solid"/>
-                            <prop k="use_custom_dash" v="0"/>
-                            <prop k="width" v="0.26"/>
-                        </layer>
-                    </symbol>
-                </symbols>
-                <rotation field=""/>
-                <sizescale field=""/>
-            </renderer-v2>
-            <customproperties>
-                <property key="labeling" value="pal"/>
-                <property key="labeling/addDirectionSymbol" value="false"/>
-                <property key="labeling/bufferColorB" value="255"/>
-                <property key="labeling/bufferColorG" value="255"/>
-                <property key="labeling/bufferColorR" value="255"/>
-                <property key="labeling/bufferSize" value="1"/>
-                <property key="labeling/dataDefinedProperty0" value=""/>
-                <property key="labeling/dataDefinedProperty1" value=""/>
-                <property key="labeling/dataDefinedProperty10" value=""/>
-                <property key="labeling/dataDefinedProperty11" value=""/>
-                <property key="labeling/dataDefinedProperty12" value=""/>
-                <property key="labeling/dataDefinedProperty13" value=""/>
-                <property key="labeling/dataDefinedProperty14" value=""/>
-                <property key="labeling/dataDefinedProperty2" value=""/>
-                <property key="labeling/dataDefinedProperty3" value=""/>
-                <property key="labeling/dataDefinedProperty4" value=""/>
-                <property key="labeling/dataDefinedProperty5" value=""/>
-                <property key="labeling/dataDefinedProperty6" value=""/>
-                <property key="labeling/dataDefinedProperty7" value=""/>
-                <property key="labeling/dataDefinedProperty8" value=""/>
-                <property key="labeling/dataDefinedProperty9" value=""/>
-                <property key="labeling/decimals" value="2"/>
-                <property key="labeling/dist" value="0"/>
-                <property key="labeling/distInMapUnits" value="false"/>
-                <property key="labeling/enabled" value="true"/>
-                <property key="labeling/fieldName" value="'MMI ' || ELEV"/>
-                <property key="labeling/fontFamily" value="Times New Roman"/>
-                <property key="labeling/fontItalic" value="false"/>
-                <property key="labeling/fontSize" value="10"/>
-                <property key="labeling/fontSizeInMapUnits" value="false"/>
-                <property key="labeling/fontStrikeout" value="false"/>
-                <property key="labeling/fontUnderline" value="false"/>
-                <property key="labeling/fontWeight" value="75"/>
-                <property key="labeling/formatNumbers" value="true"/>
-                <property key="labeling/isExpression" value="true"/>
-                <property key="labeling/labelPerPart" value="false"/>
-                <property key="labeling/mergeLines" value="true"/>
-                <property key="labeling/minFeatureSize" value="0"/>
-                <property key="labeling/obstacle" value="true"/>
-                <property key="labeling/placement" value="3"/>
-                <property key="labeling/placementFlags" value="1"/>
-                <property key="labeling/plussign" value="false"/>
-                <property key="labeling/priority" value="10"/>
-                <property key="labeling/scaleMax" value="0"/>
-                <property key="labeling/scaleMin" value="0"/>
-                <property key="labeling/textColorB" value="0"/>
-                <property key="labeling/textColorG" value="0"/>
-                <property key="labeling/textColorR" value="255"/>
-                <property key="labeling/wrapChar" value=""/>
-            </customproperties>
-            <displayfield>ID</displayfield>
-            <label>0</label>
-            <labelattributes>
-                <label fieldname="" text="Label"/>
-                <family fieldname="" name="Verdana"/>
-                <size fieldname="" units="pt" value="12"/>
-                <bold fieldname="" on="0"/>
-                <italic fieldname="" on="0"/>
-                <underline fieldname="" on="0"/>
-                <strikeout fieldname="" on="0"/>
-                <color fieldname="" red="0" blue="0" green="0"/>
-                <x fieldname=""/>
-                <y fieldname=""/>
-                <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
-                <angle fieldname="" value="0" auto="0"/>
-                <alignment fieldname="" value="center"/>
-                <buffercolor fieldname="" red="255" blue="255" green="255"/>
-                <buffersize fieldname="" units="pt" value="1"/>
-                <bufferenabled fieldname="" on=""/>
-                <multilineenabled fieldname="" on=""/>
-                <selectedonly on=""/>
-            </labelattributes>
-            <edittypes>
-                <edittype type="0" name="ELEV"/>
-                <edittype type="0" name="ID"/>
-            </edittypes>
-            <editform>.</editform>
-            <editforminit></editforminit>
-            <annotationform>.</annotationform>
-            <attributeactions/>
         </maplayer>
     </projectlayers>
     <properties>
