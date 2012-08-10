@@ -85,7 +85,7 @@ lines-of-code:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	@git log | head -3
-	@sloccount . | grep '^[0-9]'
+	@sloccount gui impact_functions storage safe_api.py common gui realtime | grep '^[0-9]'
 
 
 clean:
@@ -273,7 +273,7 @@ jenkins-sloccount:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	# This line is for machine readble output for use by Jenkins
-	@sloccount --duplicates --wide --details . | fgrep -v .svn > sloccount.sc || :
+	@sloccount --duplicates --wide --details  gui impact_functions storage safe_api.py common gui realtime | fgrep -v .svn > sloccount.sc || :
 
 jenkins-pylint:
 	@echo
