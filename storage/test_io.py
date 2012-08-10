@@ -361,6 +361,8 @@ class Test_IO(unittest.TestCase):
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_ref == v_file
+        assert v_file.is_point_data
+        assert v_file.geometry_type == 1
 
         v = Vector(geometry=test_data[0], geometry_type='point')
         assert v.is_point_data
@@ -379,6 +381,8 @@ class Test_IO(unittest.TestCase):
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_ref == v_file
+        assert v_file.is_polygon_data
+        assert v_file.geometry_type == 3
 
         v = Vector(geometry=test_data, geometry_type='polygon')
         assert v == v_ref
@@ -395,6 +399,8 @@ class Test_IO(unittest.TestCase):
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_ref == v_file
+        assert v_file.is_line_data
+        assert v_file.geometry_type == 2
 
         v = Vector(geometry=test_data, geometry_type=2)
         assert v == v_ref
