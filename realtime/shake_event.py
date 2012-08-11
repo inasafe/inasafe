@@ -676,10 +676,10 @@ class ShakeEvent:
 
         return myOutputFile
 
-    def localCities(self):
-        """Fetch a collection of the cities that are nearby.
+    def localCityFeatures(self):
+        """Create a list of features representing cities impacted.
 
-        Cities will be placed into a memory layer that has these fields:
+        The following fields will be created for each city feature:
 
             QgsField("name", QVariant.String),
             QgsField("population",  QVariant.Int),
@@ -687,6 +687,92 @@ class ShakeEvent:
             QgsField("distance_to", QVariant.Double),
             QgsField("direction_to", QVariant.Double),
             QgsField("direction_from", QVariant.Double)
+
+        The 'name' and 'population' fields will be obtained from our geonames
+        dataset.
+
+        A raster lookup for each city will be done to set the mmi field
+        in the city feature with the value on the raster. The raster should be
+        one generated using :func:`mmiDatToRaster`. The raster will be created
+        first if needed.
+
+        The distance to and direction to/from fields will be set using QGIS
+        geometry API.
+
+        Args: None
+
+        Returns: A list of QgsFeature instances, each representing a place/city.
+
+        Raises: InvalidLayerError
+
+        .. note:: The original dataset will be modified in place.
+        """
+        LOGGER.debug('setCityMmiValues requested.')
+        # Setup the raster layer for interpolated mmi lookups
+        myPath = self.mmiDataToRaster()
+        myFileInfo = QFileInfo(myPath)
+        myBaseName = myFileInfo.baseName()
+        myRasterLayer = QgsRasterLayer(myPath, myBaseName)
+        if not myRasterLayer.isValid():
+            raise InvalidLayerError('Layer failed to load!\n%s' % myPath)
+
+        # Setup field indexes of our input and out datasets
+        myCities = []
+        myLayerPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
+        myLayerPopulationIndex = myLayerProvider.fieldNameIndex('population')
+        myPlaceNameIndex = 0
+        myPopulationIndex = 1
+        myMmiIndex = 2
+        myDistanceIndex = 3
+        myDirectionToIndex = 4
+        myDirectionFromIndex = 5
+
+        # For measuring distance and direction from each city to epicenter
+        myEpicenter = QgsPoint(self.longitude, self.latitude)
+        myFeature = QgsFeature()
+
+        # Now loop through the db adding selected features to mem layer
+        while myLayerProvider.nextFeature(myFeature):
+            if not myFeature.isValid():
+                LOGGER.debug('Skipping feature')
+                continue
+                #LOGGER.debug('Writing feature to mem layer')
+            # calculate the distance and direction from this point
+            # to and from the epicenter
+            myAttributes = myFeature.attributeMap()
+            myPoint = myFeature.geometry().asPoint()
+            myDistance = myPoint.sqrDist(myEpicenter)
+            myDirectionTo = myPoint.azimuth(myEpicenter)
+            myDirectionFrom = myEpicenter.azimuth(myPoint)
+            myPlaceName = str(myAttributes[myLayerPlaceNameIndex].toString())
+            myPopulation = myAttributes[myLayerPopulationIndex]
+            myFeature = QgsFeature()
+            myFeature.setGeometry(myFeature.geometry())
+
+            # Populate the mmi field by raster lookup
+            myResult, myRasterValues = myRasterLayer.identify(myPoint)
+            if not myResult:
+                # position not found on raster
+                continue
+            myMmi = myRasterValues[0]
+            LOGGER.debug('Looked up mmi of %s on raster for %' %
+                         myMmi, myPoint.toString())
+
+            myAttributeMap = {
+                myPlaceNameIndex: myPlaceName,
+                myPopulationIndex: myPopulation,
+                myMmiIndex: QVariant(0.0), # TODO work it out
+                myDistanceIndex: QVariant(myDistance),
+                myDirectionToIndex: QVariant(myDirectionTo),
+                myDirectionFromIndex: QVariant(myDirectionFrom)
+            }
+            #LOGGER.debug('Attribute Map: %s' % str(myAttributeMap))
+            myFeature.setAttributeMap(myAttributeMap)
+        return myCities
+
+
+    def localCities(self):
+        """Fetch a collection of the cities that are nearby.
 
         Args: None
 
@@ -721,7 +807,6 @@ class ShakeEvent:
         myMemoryLayer = QgsVectorLayer('Point', 'affected_cities', 'memory')
         myMemoryProvider = myMemoryLayer.dataProvider()
         # add field defs
-
         myMemoryProvider.addAttributes([
             QgsField('name', QVariant.String),
             QgsField('population', QVariant.Int),
@@ -729,53 +814,12 @@ class ShakeEvent:
             QgsField('distance_to', QVariant.Double),
             QgsField('direction_to', QVariant.Double),
             QgsField('direction_from', QVariant.Double)])
-
-        # Now loop through the db adding selected features to mem layer
-        myLayerPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
-        myLayerPopulationIndex = myLayerProvider.fieldNameIndex('population')
-        myMemoryLayerPlaceNameIndex = 0
-        myMemoryLayerPopulationIndex = 1
-        myMemoryLayerMmiIndex = 2
-        myMemoryLayerDistanceIndex = 3
-        myMemoryLayerDirectionToIndex = 4
-        myMemoryLayerDirectionFromIndex = 5
-
-        myEpicenter = QgsPoint(self.longitude, self.latitude)
-        myFeature = QgsFeature()
-        while myLayerProvider.nextFeature(myFeature):
-            if not myFeature.isValid():
-                LOGGER.debug('Skipping feature')
-                continue
-                #LOGGER.debug('Writing feature to mem layer')
-            # calculate the distance and direction from this point
-            # to and from the epicenter
-            myAttributes = myFeature.attributeMap()
-            myPoint = myFeature.geometry().asPoint()
-            myDistance = myPoint.sqrDist(myEpicenter)
-            myDirectionTo = myPoint.azimuth(myEpicenter)
-            myDirectionFrom = myEpicenter.azimuth(myPoint)
-            myPlaceName = str(myAttributes[myLayerPlaceNameIndex].toString())
-            myPopulation = myAttributes[myLayerPopulationIndex]
-            myMemoryFeature = QgsFeature()
-            myMemoryFeature.setGeometry(myFeature.geometry())
-
-            myAttributeMap = {
-                myMemoryLayerPlaceNameIndex: myPlaceName,
-                myMemoryLayerPopulationIndex: myPopulation,
-                myMemoryLayerMmiIndex: QVariant(0.0), # TODO work it out
-                myMemoryLayerDistanceIndex: QVariant(myDistance),
-                myMemoryLayerDirectionToIndex: QVariant(myDirectionTo),
-                myMemoryLayerDirectionFromIndex: QVariant(myDirectionFrom)
-            }
-            #LOGGER.debug('Attribute Map: %s' % str(myAttributeMap))
-            myMemoryFeature.setAttributeMap(myAttributeMap)
-            myResult = myMemoryProvider.addFeatures([myMemoryFeature])
-            if not myResult:
-                raise CityMemoryLayerCreationError('Add feature failed for:' %
-                                                   myAttributes[
-                                                   myLayerPopulationIndex]
-                                                   .toString())
-                #LOGGER.debug('Features: %s' % myMemoryLayer.featureCount())
+        myCities = self.localCityFeatures()
+        myResult = myMemoryProvider.addFeatures(myCities)
+        if not myResult:
+            raise CityMemoryLayerCreationError('Add feature failed for:' %
+                myAttributes[myLayerPopulationIndex].toString())
+            #LOGGER.debug('Features: %s' % myMemoryLayer.featureCount())
         myLayer.commitChanges()
         myLayer.updateExtents()
 
@@ -787,54 +831,6 @@ class ShakeEvent:
                      myMemoryLayer.featureCount())
 
         return myMemoryLayer
-
-    def setCityMmiValues(self, theVectorLayer, theMmiIndex):
-        """Perform a query to determine the interpolated mmi for each city.
-
-        This will do a raster lookup for each city in the supplied dataset
-        and update the mmi field in the supplied layer with the value on that
-        raster. The raster should be one generated using :func:`mmiDatToRaster`.
-        The raster will be created first if needed.
-
-        Args:
-            theLayer QgsVectorLayer (Required) QGIS vector layer containing
-                city data.
-            theMmiIndex int theColumnIndex (Required) Index of the mmi column
-                in theLayer.
-
-        Returns: None
-
-        Raises: InvalidLayerError
-
-        .. note:: The original dataset will be modified in place.
-        """
-        LOGGER.debug('setCityMmiValues requested.')
-        myPath = self.mmiDataToRaster()
-        myFileInfo = QFileInfo(myPath)
-        myBaseName = myFileInfo.baseName()
-        myRasterLayer = QgsRasterLayer(myPath, myBaseName)
-        if not myRasterLayer.isValid():
-            raise InvalidLayerError('Layer failed to load!\n%s' % myPath)
-
-        myProvider = theVectorLayer.dataProvider()
-        myFeature = QgsFeature()
-        while myProvider.nextFeature(myFeature):
-            if not myFeature.isValid():
-                LOGGER.debug('Skipping feature')
-                continue
-            myAttributes = myFeature.attributeMap()
-            myMap = myAttributes[myLayerPopulationIndex]
-            myPoint = myFeature.geometry().asPoint()
-            myResult, myRasterValues = myRasterLayer.identify(myPoint)
-            if not myResult:
-                # position not found on raster
-                continue
-            myMmi = myRasterValues[0]
-            LOGGER.debug('Looked up mmi of %s on raster for %' %
-                         myMmi, myPoint.toString())
-
-
-
 
     def __str__(self):
         """The unicode representation for an event object's state.
