@@ -19,9 +19,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import ogr
 import os
+import shutil
 import unittest
 from gui.utilities_test import getQgisTestApp
-from utils import shakemapExtractDir
+from utils import shakemapExtractDir, shakemapZipDir
 from shake_data import ShakeData
 from shake_event import ShakeEvent
 
@@ -29,6 +30,21 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 class TestShakeEvent(unittest.TestCase):
     """Tests relating to shake events"""
+
+    def setUp(self):
+        """Copy our cached dataset from the fixture dir to the cache dir"""
+        myOutFile = '20120726022003.out.zip'
+        myInpFile = '20120726022003.inp.zip'
+        myOutPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                 'fixtures',
+                                                 myOutFile))
+        myInpPath = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                 'fixtures',
+                                                 myInpFile))
+        shutil.copyfile(myOutPath, os.path.join(shakemapZipDir(), myOutFile))
+        shutil.copyfile(myInpPath, os.path.join(shakemapZipDir(), myInpFile))
+
+        #TODO Downloaded data should be removed before each test
 
     def test_gridXmlFilePath(self):
         """Test eventFilePath works(using cached data)"""
