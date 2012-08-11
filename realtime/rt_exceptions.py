@@ -77,3 +77,15 @@ class GridXmlParseError(Exception):
 class GridXmlFileNotFoundError(Exception):
     """An exception for when an grid.xml could not be found"""
     pass
+
+class InvalidLayerError(Exception):
+    """Raised when a gis layer is invalid"""
+    pass
+
+class CityShapefileCreationError(Exception):
+    """Raised if an error occurs creating the cities file"""
+    pass
+
+class CityMemoryLayerCreationError(Exception):
+    """Raised if an error occurs creating the cities memory layer"""
+    pass

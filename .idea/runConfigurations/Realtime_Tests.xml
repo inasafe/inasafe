@@ -6,7 +6,7 @@
     <option name="SDK_HOME" value="/usr/bin/python2.7" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="IS_MODULE_SDK" value="false" />
-    <module name="inasafe-dev" />
+    <module name="inasafe-realtime" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="" />
     <option name="CLASS_NAME" value="" />
