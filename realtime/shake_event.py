@@ -699,6 +699,10 @@ class ShakeEvent:
         The distance to and direction to/from fields will be set using QGIS
         geometry API.
 
+        .. note:: We separate the logic of creating features from writing a
+          layer so that we can write to any format we like whilst reusing the
+          core logic.
+
         Args: None
 
         Returns: A list of QgsFeature instances, each representing a place/city.
@@ -707,7 +711,7 @@ class ShakeEvent:
 
         .. note:: The original dataset will be modified in place.
         """
-        LOGGER.debug('setCityMmiValues requested.')
+        LOGGER.debug('localCityValues requested.')
         # Setup the raster layer for interpolated mmi lookups
         myPath = self.mmiDataToRaster()
         myFileInfo = QFileInfo(myPath)
@@ -791,6 +795,7 @@ class ShakeEvent:
             }
             #LOGGER.debug('Attribute Map: %s' % str(myAttributeMap))
             myFeature.setAttributeMap(myAttributeMap)
+            myCities.append(myFeature)
         return myCities
 
 
