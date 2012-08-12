@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inasafe-realtime.iml" afterPath="$PROJECT_DIR$/.idea/inasafe-realtime.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_event.py" afterPath="$PROJECT_DIR$/realtime/test_shake_event.py" />
     </list>
     <ignored path="inasafe-realtime.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,7 +30,7 @@
       <file leaf-file-name="shake_event.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="790" column="44" selection-start="31391" selection-end="31391" vertical-scroll-proportion="0.58157897">
+            <state line="648" column="0" selection-start="25261" selection-end="25261" vertical-scroll-proportion="-1.75">
               <folding>
                 <element signature="e#620#629#0" expanded="true" />
               </folding>
@@ -39,7 +41,7 @@
       <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="181" column="0" selection-start="7051" selection-end="7051" vertical-scroll-proportion="0.0">
+            <state line="201" column="0" selection-start="7981" selection-end="7981" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -118,16 +120,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -176,6 +168,16 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -200,7 +202,7 @@
       <recent name="$PROJECT_DIR$/common" />
     </key>
   </component>
-  <component name="RunManager" selected="Python's test.testEventToLocalCities">
+  <component name="RunManager" selected="Python's test.testEventCityShp">
     <configuration default="false" name="Nosetests in TestShakeMap.test_convertGrdToTif" type="tests" factoryName="Nosetests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -532,7 +534,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="26" width="1368" height="743" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -542,7 +544,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3971061" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34405145" sideWeight="0.53147876" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34405145" sideWeight="0.4633968" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34405145" sideWeight="0.4633968" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.48504272" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -617,11 +619,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/realtime/shake_event.py</url>
-          <line>713</line>
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/realtime/shake_event.py</url>
-          <line>798</line>
+          <line>650</line>
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -694,21 +692,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/gui/test_is_map.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="320" column="26" selection-start="13485" selection-end="13585" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="320" column="26" selection-start="13485" selection-end="13585" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="181" column="0" selection-start="7051" selection-end="7051" vertical-scroll-proportion="0.0">
+        <state line="201" column="0" selection-start="7981" selection-end="7981" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="790" column="44" selection-start="31391" selection-end="31391" vertical-scroll-proportion="0.58157897">
+        <state line="648" column="0" selection-start="25261" selection-end="25261" vertical-scroll-proportion="-1.75">
           <folding>
             <element signature="e#620#629#0" expanded="true" />
           </folding>
