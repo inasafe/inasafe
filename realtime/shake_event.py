@@ -41,7 +41,7 @@ from qgis.core import (QgsPoint,
                        QgsDataSourceURI,
                        QgsVectorFileWriter,
                        QgsCoordinateReferenceSystem)
-from PyQt4.QtCore import QVariant, QFileInfo, QString
+from PyQt4.QtCore import QVariant, QFileInfo, QString, QStringList
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -646,6 +646,8 @@ class ShakeEvent:
         """
         LOGGER.debug('citiesToShape requested.')
         myMemoryLayer = self.localCities()
+
+
         LOGGER.debug(str(myMemoryLayer.dataProvider().attributeIndexes()))
         if myMemoryLayer.featureCount() < 1:
             raise CityShapefileCreationError('Memory layer has no features')
@@ -665,9 +667,30 @@ class ShakeEvent:
             os.remove(myOutputFileBase + 'dbf')
             os.remove(myOutputFileBase + 'prj')
 
+
+        # Next two lines a workaround for a QGIS bug (lte 1.8)
+        # preventing mem layer attributes being saved to shp.
+        myMemoryLayer.startEditing()
+        myMemoryLayer.commitChanges()
+
         LOGGER.debug('Writing mem layer to shp: %s' % myOutputFile)
+        # Explicitly giving all options, not really needed but nice for clarity
+        myErrorMessage = QString()
+        myOptions = QStringList()
+        myLayerOptions = QStringList()
+        mySelectedOnlyFlag = False
+        mySkipAttributesFlag = False
         myResult = QgsVectorFileWriter.writeAsVectorFormat(
-            myMemoryLayer, myOutputFile, 'utf-8', myGeoCrs, "ESRI Shapefile")
+            myMemoryLayer,
+            myOutputFile,
+            'utf-8',
+            myGeoCrs,
+            "ESRI Shapefile",
+            mySelectedOnlyFlag,
+            myErrorMessage,
+            myOptions,
+            myLayerOptions,
+            mySkipAttributesFlag)
 
         if myResult == QgsVectorFileWriter.NoError:
             LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)

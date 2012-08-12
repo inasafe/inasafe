@@ -198,7 +198,7 @@ mmiData: Populated"""
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
-        # Get teh mem layer
+        # Get the mem layer
         myPath = myShakeEvent.citiesToShape()
         assert os.path.exists(myPath)
 
