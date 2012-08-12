@@ -77,7 +77,7 @@ class TestShakeEvent(unittest.TestCase):
         self.assertEquals(124.45, myShakeEvent.longitude)
         self.assertEquals(-0.21, myShakeEvent.latitude)
         self.assertEquals(11.0, myShakeEvent.depth)
-        self.assertEquals(126.5, 'Southern Molucca Sea', myShakeEvent.location)
+        self.assertEquals('Southern Molucca Sea', myShakeEvent.location)
         self.assertEquals(122.45, myShakeEvent.xMinimum)
         self.assertEquals(126.45, myShakeEvent.xMaximum)
         self.assertEquals(-2.21, myShakeEvent.yMinimum)
