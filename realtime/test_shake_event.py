@@ -201,4 +201,6 @@ mmiData: Populated"""
 
 
 if __name__ == '__main__':
+    suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
+    runner = unittest.TextTestRunner(verbosity=2)
     unittest.main()

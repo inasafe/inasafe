@@ -40,7 +40,7 @@ from qgis.core import (QgsPoint,
                        QgsRectangle,
                        QgsDataSourceURI,
                        QgsVectorFileWriter,
-                       QgsCoordinateReferenceSystem, QgsRasterLayer)
+                       QgsCoordinateReferenceSystem)
 from PyQt4.QtCore import QVariant, QFileInfo
 
 # The logger is intialised in utils.py by init
@@ -716,6 +716,29 @@ class ShakeEvent:
         if not myRasterLayer.isValid():
             raise InvalidLayerError('Layer failed to load!\n%s' % myPath)
 
+        # Setup the cities table, querying on event bbox
+        # Path to sqlitedb containing geonames table
+        myDBPath = os.path.join(dataDir(), 'indonesia.sqlite')
+        myUri = QgsDataSourceURI()
+        myUri.setDatabase(myDBPath)
+        myTable = 'geonames'
+        myGeometryColumn = 'Geometry'
+        mySchema = ''
+        myUri.setDataSource(mySchema, myTable, myGeometryColumn)
+        myLayer = QgsVectorLayer(myUri.uri(), 'Towns', 'spatialite')
+        if not myLayer.isValid():
+            raise InvalidLayerError(myDBPath)
+        myLayerProvider = myLayer.dataProvider()
+        myIndexes = myLayerProvider.attributeIndexes()
+        myFetchGeometryFlag = True
+        myUseIntersectionFlag = True
+        myRectangle = self.boundsToRectangle()
+        myLayer.select(myIndexes, myRectangle,
+                       myFetchGeometryFlag, myUseIntersectionFlag)
+
+        # TODO: Add logic if the selection is None then get the
+        # closest city ignoring bbox
+
         # Setup field indexes of our input and out datasets
         myCities = []
         myLayerPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
@@ -781,28 +804,6 @@ class ShakeEvent:
         Raises: an exceptions will be propogated
         """
         LOGGER.debug('mmiDataToContours requested.')
-        myRectangle = self.boundsToRectangle()
-        # Path to sqlitedb containing geonames table
-        myDBPath = os.path.join(dataDir(), 'indonesia.sqlite')
-        myUri = QgsDataSourceURI()
-        myUri.setDatabase(myDBPath)
-        myTable = 'geonames'
-        myGeometryColumn = 'Geometry'
-        mySchema = ''
-        myUri.setDataSource(mySchema, myTable, myGeometryColumn)
-        myLayer = QgsVectorLayer(myUri.uri(), 'Towns', 'spatialite')
-        if not myLayer.isValid():
-            raise InvalidLayerError(myDBPath)
-        myLayerProvider = myLayer.dataProvider()
-        myIndexes = myLayerProvider.attributeIndexes()
-        myFetchGeometryFlag = True
-        myUseIntersectionFlag = True
-        myLayer.select(myIndexes, myRectangle,
-                       myFetchGeometryFlag, myUseIntersectionFlag)
-
-        # TODO: Add logic if the selection is non then get the
-        # closest city ignoring bbox
-
         # Now store the selection in a temporary memory layer
         myMemoryLayer = QgsVectorLayer('Point', 'affected_cities', 'memory')
         myMemoryProvider = myMemoryLayer.dataProvider()
@@ -820,12 +821,8 @@ class ShakeEvent:
             raise CityMemoryLayerCreationError('Add feature failed for:' %
                 myAttributes[myLayerPopulationIndex].toString())
             #LOGGER.debug('Features: %s' % myMemoryLayer.featureCount())
-        myLayer.commitChanges()
-        myLayer.updateExtents()
-
-        # we are assigning mmi values in a second pass as it involves loading
-        # a raster which we would rather just do once
-        self.setCityMmiValues(myMemoryLayer, myMemoryLayerMmiIndex)
+        myMemoryLayer.commitChanges()
+        myMemoryLayer.updateExtents()
 
         LOGGER.debug('Feature count of mem layer:  %s' %
                      myMemoryLayer.featureCount())
