@@ -638,6 +638,9 @@ class ShakeEvent:
     def citiesToShape(self):
         """Write the local cities to a shapefile.
 
+        .. note:: Delegates to localCitiesMemoryLayer then uses
+           QgsVectorFileWriter to write it to a shp.
+
         Args: None
 
         Returns: str Path to the created shapefile
@@ -645,7 +648,7 @@ class ShakeEvent:
         Raises: CityShapefileCreationError
         """
         LOGGER.debug('citiesToShape requested.')
-        myMemoryLayer = self.localCities()
+        myMemoryLayer = self.localCitiesMemoryLayer()
 
 
         LOGGER.debug(str(myMemoryLayer.dataProvider().attributeIndexes()))
@@ -822,7 +825,7 @@ class ShakeEvent:
         return myCities
 
 
-    def localCities(self):
+    def localCitiesMemoryLayer(self):
         """Fetch a collection of the cities that are nearby.
 
         Args: None

@@ -172,7 +172,7 @@ mmiData: Populated"""
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
         # Get teh mem layer
-        myCitiesLayer = myShakeEvent.localCities()
+        myCitiesLayer = myShakeEvent.localCitiesMemoryLayer()
         myProvider = myCitiesLayer.dataProvider()
 
         myFeature = QgsFeature()
