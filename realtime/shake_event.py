@@ -41,7 +41,7 @@ from qgis.core import (QgsPoint,
                        QgsDataSourceURI,
                        QgsVectorFileWriter,
                        QgsCoordinateReferenceSystem)
-from PyQt4.QtCore import QVariant, QFileInfo
+from PyQt4.QtCore import QVariant, QFileInfo, QString
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -773,29 +773,29 @@ class ShakeEvent:
             myDirectionFrom = myEpicenter.azimuth(myPoint)
             myPlaceName = str(myAttributes[myLayerPlaceNameIndex].toString())
             myPopulation = myAttributes[myLayerPopulationIndex]
-            myFeature = QgsFeature()
-            myFeature.setGeometry(myFeature.geometry())
+            myNewFeature = QgsFeature()
+            myNewFeature.setGeometry(myFeature.geometry())
 
             # Populate the mmi field by raster lookup
             myResult, myRasterValues = myRasterLayer.identify(myPoint)
             if not myResult:
                 # position not found on raster
                 continue
-            myMmi = myRasterValues[0]
-            LOGGER.debug('Looked up mmi of %s on raster for %' %
-                         myMmi, myPoint.toString())
+            myMmi = float(myRasterValues[QString('Band 1')])
+            LOGGER.debug('Looked up mmi of %s on raster for %ss' %
+                         (myMmi, myPoint.toString()))
 
             myAttributeMap = {
                 myPlaceNameIndex: myPlaceName,
                 myPopulationIndex: myPopulation,
-                myMmiIndex: QVariant(0.0), # TODO work it out
+                myMmiIndex: QVariabt(myMmi),
                 myDistanceIndex: QVariant(myDistance),
                 myDirectionToIndex: QVariant(myDirectionTo),
                 myDirectionFromIndex: QVariant(myDirectionFrom)
             }
             #LOGGER.debug('Attribute Map: %s' % str(myAttributeMap))
-            myFeature.setAttributeMap(myAttributeMap)
-            myCities.append(myFeature)
+            myNewFeature.setAttributeMap(myAttributeMap)
+            myCities.append(myNewFeature)
         return myCities
 
 
