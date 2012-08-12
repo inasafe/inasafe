@@ -788,7 +788,7 @@ class ShakeEvent:
             myAttributeMap = {
                 myPlaceNameIndex: myPlaceName,
                 myPopulationIndex: myPopulation,
-                myMmiIndex: QVariabt(myMmi),
+                myMmiIndex: QVariant(myMmi),
                 myDistanceIndex: QVariant(myDistance),
                 myDirectionToIndex: QVariant(myDirectionTo),
                 myDirectionFromIndex: QVariant(myDirectionFrom)

@@ -188,7 +188,10 @@ mmiData: Populated"""
                 myString += ("%d: %s\n" % (myKey, myValue.toString()))
             myString += '------------------\n'
         LOGGER.debug('Mem table:\n %s' % myString)
-        self.assertEqual(len(myString), 730)
+        myExpectedLength = 751
+        myLength = len(myString)
+        myMessage = 'Expected: %s Got %s' % (myExpectedLength, myLength)
+        self.assertEquals(myExpectedLength, myLength, myMessage)
 
     def testCitiesToShape(self):
         """Test that we can retrieve the cities local to the event"""
