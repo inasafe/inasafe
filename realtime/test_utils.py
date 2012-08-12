@@ -21,7 +21,6 @@ import unittest
 from datetime import date
 
 from utils import (baseDataDir,
-                   gisDataDir,
                    shakemapZipDir,
                    shakemapExtractDir,
                    shakemapDataDir,
@@ -43,13 +42,6 @@ class Test(unittest.TestCase):
         """Test we can get the realtime data dir"""
         myDir = baseDataDir()
         myExpectedDir = '/tmp/inasafe/realtime'
-        assert os.path.exists(myExpectedDir)
-        self.assertEqual(myDir, myExpectedDir)
-
-    def test_gisDataDir(self):
-        """Test web can get the gis data dir"""
-        myDir = gisDataDir()
-        myExpectedDir = '/tmp/inasafe/realtime/gis'
         assert os.path.exists(myExpectedDir)
         self.assertEqual(myDir, myExpectedDir)
 
