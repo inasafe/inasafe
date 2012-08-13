@@ -95,7 +95,6 @@ def purgeWorkingData():
     shutil.rmtree(shakemapExtractDir())
     shutil.rmtree(shakemapDataDir())
     shutil.rmtree(shakemapZipDir())
-    shutil.rmtree(gisDataDir())
 
 
 def setupLogger():
