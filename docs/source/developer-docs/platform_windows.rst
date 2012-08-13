@@ -146,7 +146,7 @@ Download the latest QGIS 'standalone' installer from http://download.qgis.org
 and install it by running the installation wizard and accepting the defaults
 throughout.
 
-After opening QGIS (:menuselection:`Start --> All Programs --> Quantum GIS Wroclaw --> Quantum GIS`)
+After opening QGIS (:menuselection:`Start --> All Programs --> Quantum GIS Lisboa --> Quantum GIS Desktop (1.8.0)`)
 you need to enable the plugin from the plugin menu by doing :menuselection:`Plugins --> Manage Plugins`
 and then search for the |project_name| plugin in the list and enable it.
 
@@ -176,25 +176,27 @@ various paths and evironment variables so everything works as expected. Save the
 following listing in <QGIS Install Dir>/bin/python-shell.bat::
 
    @echo off
-   SET OSGEO4W_ROOT=C:\PROGRA~2\QUANTU~1
+   SET OSGEO4W_ROOT=C:\PROGRA~1\QUANTU~1
    call "%OSGEO4W_ROOT%"\bin\o4w_env.bat
-   call "%OSGEO4W_ROOT%"\apps\grass\grass-6.4.2RC2\etc\env.bat
+   call "%OSGEO4W_ROOT%"\apps\grass\grass-6.4.2\etc\env.bat
    @echo off
-   SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.8
+   SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.9
    path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin
-   path %PATH%;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2RC2\lib
-   path %PATH%;"%OSGEO4W_ROOT%\apps\Python25\Scripts\"
+   path %PATH%;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2\lib
+   path %PATH%;"%OSGEO4W_ROOT%\apps\Python27\Scripts\"
    
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;
-   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python27\\Lib\\site-packages
    set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
    cd "%HOMEPATH%\.qgis\python\plugins\inasafe-dev"
    start "Quantum GIS Shell" /B "cmd.exe" %*
 
 .. note:: The QGISPATH environment variable should be unquoted!.
 
-.. note:: You may need to replace PROGRA~2 above with PROGRA~1 if you are
-   on 32bit windows.
+.. note:: You may need to replace PROGRA~1 above with PROGRA~2 if you are
+   on 64bit windows.
+
+.. note:: This script is for QGIS 1.8. You may need to do some adjustment if you are using another version of QGIS
 
 For easy access to this shell launcher, right click on the qgis-shell.bat script
 and (without releasing your initial right click) drag with the file onto your
@@ -212,19 +214,21 @@ and then start a python shell. Now enter the follow simple script::
 
 Which should produce output like this::
 
-   C:\Program Files (x86)\Quantum GIS Wroclaw\bin
-   C:\PROGRA~2\QUANTU~1\apps\qgis\python
-   C:\PROGRA~2\QUANTU~1\apps\Python25\Lib\site-packages
-   C:\Program Files (x86)\Quantum GIS Wroclaw\bin\python25.zip
-   C:\PROGRA~2\QUANTU~1\apps\Python25\DLLs
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\plat-win
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\lib-tk
-   C:\PROGRA~2\QUANTU~1\apps\Python25
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\win32
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\win32\lib
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\Pythonwin
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\wx-2.8-msw-unicode
+   C:\Users\inasafe\.qgis\python\plugins\inasafe-dev
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\qgis\python
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\Lib\site-packages
+   C:\PROGRA~1\Quantum GIS Lisboa\bin\python27.zip
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\DLLs
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\plat-win
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\lib-tk
+   C:\PROGRA~1\Quantum GIS Lisboa\bin
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\PIL
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\win32
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\win32\lib
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\Pythonwin
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\wx-2.8-msw-unicode
 
 It is particularly the second and third lines that you need to have in place
 so that the QGIS libs can found. Now dow a simple test to see if you can import
@@ -250,6 +254,9 @@ script to install easy_install and then use easy_install to install pypi.
 Download the script on 
 `this page <http://pypi.python.org/pypi/setuptools#windows>`_ called ez_setup.py
 and save it somewhere familiar e.g. :samp:`c:\temp`.
+
+.. note:: If you use windows 32bit, do not download the .exe file as said on 
+   `the page <http://pypi.python.org/pypi/setuptools#windows>`_, but just download the ez_setup.py
 
 Next launch the shell (python-shell.bat as described in
 :ref:`windows-commandline_setup`) **as administrator** (by right clicking the
@@ -303,16 +310,15 @@ reports which will indicate how many lines of your code actually have been
 tested. 
 
 
-To install these tools, launch your python prompt as administrator and then do:
+To install these tools, launch your python prompt as administrator and then do::
 
    pip install nose nose-cov
-   
 
 Running tests using nose
 ........................
 
 Once they are installed, you can run the nose tests from windows by going to
-the plugin directory (in your python-shell.bat shell session) and running::
+the plugin directory/inasafe-dev folder (in your python-shell.bat shell session) and running::
 
    runtests.bat
 
@@ -332,7 +338,7 @@ Installing sphinx
 Launch your QGIS python shell environment (see :ref:`windows-pip-setup`) as 
 administrator and then run the following command::
 
-   pip install sphinx cloud-sptheme
+   pip install sphinx
 
 The cloud-sptheme package installs the sphinx theme we are using.
 
@@ -341,7 +347,7 @@ Building the documentation
 ..........................
 
 To build the documentation, open a QGIS python shell (no need to be admin) and
-go into your inasafe\docs directory. Now run the following command::
+go into your inasafe-dev/docs directory. Now run the following command::
 
    make.bat html
 
