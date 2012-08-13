@@ -42,7 +42,8 @@ from gui.utilities_test import (getQgisTestApp,
                             DEVNULL,
                             GEOCRS,
                             setJakartaGeoExtent)
-from safe_api import TESTDATA, HAZDATA
+
+from common.testing import  HAZDATA, TESTDATA
 from safe_api import nanallclose
 
 # Setup pathnames for test data sets
