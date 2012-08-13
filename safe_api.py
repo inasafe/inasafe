@@ -35,5 +35,3 @@ from engine.core import calculate_impact
 from common.dynamic_translations import names as internationalisedNames
 from common.numerics import nanallclose
 from common.exceptions import BoundingBoxError, ReadLayerError
-# For testing and demoing
-from common.testing import TESTDATA, HAZDATA, EXPDATA
