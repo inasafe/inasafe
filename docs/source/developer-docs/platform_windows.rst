@@ -70,16 +70,6 @@ illustrated below:
    :align:   center
 
 
-Install an SVN client
-.....................
-
-The test data for |project_name| is hosted on an svn server, so to obtain it
-you first need to install an SVN client. Start by downloading `this installer
-<http://sourceforge.net/projects/win32svn/files/latest/download>`_ (it is
-about 4.8mb to download).
-
-Now run the installer, accepting the defaults options throughout.
-
 Check out the code and the test data
 ------------------------------------
 
@@ -95,7 +85,7 @@ First open a GIT bash prompt as illustrated below:
    :align:   center
 
 
-The repository can now be closed by issuing the commands listed below.::
+The repository can now be cloned by issuing the commands listed below.::
 
    cd  /c/Documents\ and\ Settings/<your username>/
 
@@ -123,17 +113,31 @@ console when the clone process is completed::
 Checkout the test data
 ......................
 
-To check out the test data from svn, first open a command prompt (
-:menuselection:`Start --> Run...` then type :kbd:`cmd.exe` and press
-enter). Now navigate to the plugins directory and check out the
-svn repository by typing the commands as listed below::
+To check out the test data from git, first open a GIT bash prompt as illustrated below:
 
-   cd "c:\Documents and Settings\user\.qgis\python\plugins\"
-   svn co http://www.aifdr.org/svn/inasafe_data
+.. figure::  ../../msysgit-step10.jpg
+   :align:   center
 
-You will be prompted for a username and password for svn - press enter
-(so that it reprompts for the username) and set the username to
-``anonymous`` and just ``press enter`` for the password.
+
+The repository can now be cloned by issuing the commands listed below. (Already completed in previous step)::
+
+   cd  /c/Documents\ and\ Settings/<your username>/.qgis/python/plugins/
+
+   git clone https://<your username>@github.com/AIFDR/inasafe-data.git inasafe_data
+
+.. note:: The items in angle brackets above should be replaced with your 
+   personal details as required.
+
+When the final command above runs, you should see something like this in the
+console when the clone process is completed::
+
+   $ git clone https://timlinux@github.com/AIFDR/inasafe-data.git inasafe_data
+   Cloning into 'inasafe_data'...
+   remote: Counting objects: 5002, done.
+   remote: Compressing objects: 100% (1526/1526), done.
+   remote: Total 5002 (delta 3505), reused 4835 (delta 3338)
+   Receiving objects: 100% (5002/5002), 2.38 MiB | 7 KiB/s, done.
+   Resolving deltas: 100% (3505/3505), done.
 
 Install QGIS
 ............

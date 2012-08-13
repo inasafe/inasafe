@@ -144,7 +144,7 @@ Create a new Job (project):
 :menuselection:`Jenkins --> New Job` or go to
 http://jenkins.linfiniti.com/view/All/newJob.
 
-Here is a log of the options we set for the Jenkins job::
+Here is a log of the options we set for the Jenkins job:
 
 * :guilabel:`Project Name` set to :kbd:`InaSAFE` (don't use spaces for the
   project name!).
