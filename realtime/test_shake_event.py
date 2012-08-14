@@ -23,7 +23,7 @@ import os
 import shutil
 import unittest
 import logging
-from gui.utilities_test import getQgisTestApp
+from safe_qgis.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir, shakemapZipDir
 from shake_data import ShakeData
 from shake_event import ShakeEvent
