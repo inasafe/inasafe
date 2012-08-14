@@ -363,6 +363,7 @@ class Test_Engine(unittest.TestCase):
 
         I = read_layer(impact_filename)  # Can read result
 
+        print impact_layer.get_impact_summary()
         assert 'women displaced' in impact_layer.get_impact_summary()
         assert 'pregnant' in impact_layer.get_impact_summary()
 
