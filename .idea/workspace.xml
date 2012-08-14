@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/testEvent_All_Tests.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/GUI_I18n_Test.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/NoseTests_GUI.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/NoseTests_IS_Dock.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/NoseTests_IS_Map.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/Nosetests_in__home_timlinux_dev_python_inasafe_dev_safe_qgis.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/is_dock_base.py" afterPath="$PROJECT_DIR$/gui/is_dock_base.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/is_keywords_dialog_base.py" afterPath="$PROJECT_DIR$/gui/is_keywords_dialog_base.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/resources.py" afterPath="$PROJECT_DIR$/gui/resources.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui/resources_rc.py" afterPath="$PROJECT_DIR$/gui/resources_rc.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_event.py" afterPath="$PROJECT_DIR$/realtime/test_shake_event.py" />
     </list>
     <ignored path="inasafe-realtime.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,7 +33,7 @@
       <file leaf-file-name="shake_event.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="495" column="40" selection-start="19140" selection-end="19140" vertical-scroll-proportion="0.41066283">
+            <state line="495" column="40" selection-start="19140" selection-end="19140" vertical-scroll-proportion="0.033391915">
               <folding />
             </state>
           </provider>
@@ -43,7 +42,7 @@
       <file leaf-file-name="test_engine.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe/engine/test_engine.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1457" column="8" selection-start="57496" selection-end="57496" vertical-scroll-proportion="0.0">
+            <state line="1457" column="0" selection-start="57492" selection-end="57492" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -93,8 +92,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-1" />
     <option name="y" value="26" />
-    <option name="width" value="1922" />
-    <option name="height" value="1055" />
+    <option name="width" value="1368" />
+    <option name="height" value="743" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -126,32 +125,8 @@
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-realtime" />
+              <option name="myItemId" value="inasafe-dev" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-realtime" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-realtime" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-realtime" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-realtime" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="realtime" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -171,11 +146,11 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../impact_map/modules" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -321,22 +296,6 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="docs" factoryName="Docutils task">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <module name="inasafe-realtime" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="docutils_input_file" value="" />
-      <option name="docutils_output_file" value="" />
-      <option name="docutils_params" value="" />
-      <option name="docutils_task" value="" />
-      <option name="docutils_open_in_browser" value="false" />
-      <method />
-    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -351,6 +310,22 @@
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
       <option name="MULTIPROCESS" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Docutils task">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <module name="inasafe-realtime" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="docs" factoryName="Sphinx task">
@@ -522,14 +497,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="26" width="1922" height="1055" extended-state="6" />
-    <editor active="false" />
+    <frame x="-1" y="26" width="1368" height="743" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21504803" sideWeight="0.22308546" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15260416" sideWeight="0.77301925" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15477997" sideWeight="0.77301925" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3971061" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34405145" sideWeight="0.53147876" order="11" side_tool="true" content_ui="tabs" />
@@ -614,34 +589,14 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/gui/is_plugin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="13" selection-start="5029" selection-end="5029" vertical-scroll-proportion="0.4792408" />
-      </provider>
-    </entry>
     <entry file="file:///usr/lib/python2.7/dist-packages/nose/importer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="85" column="0" selection-start="3355" selection-end="3355" vertical-scroll-proportion="0.33270678" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gui/utilities_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/test_is_dock.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="0" selection-start="1041" selection-end="1575" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/realtime/place.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="24" selection-start="926" selection-end="926" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/is_clipper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="54" selection-start="2009" selection-end="2009" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/rt_exceptions.py">
@@ -657,11 +612,6 @@
     <entry file="file://$PROJECT_DIR$/../impact_map/modules/city_info.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="103" column="25" selection-start="3661" selection-end="3666" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/test_is_map.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="320" column="26" selection-start="13485" selection-end="13585" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/utils.py">
@@ -681,7 +631,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/safe/engine/test_engine.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1457" column="8" selection-start="57496" selection-end="57496" vertical-scroll-proportion="0.0" />
+        <state line="1457" column="0" selection-start="57492" selection-end="57492" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
@@ -693,7 +645,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="495" column="40" selection-start="19140" selection-end="19140" vertical-scroll-proportion="0.41066283">
+        <state line="495" column="40" selection-start="19140" selection-end="19140" vertical-scroll-proportion="0.033391915">
           <folding />
         </state>
       </provider>
