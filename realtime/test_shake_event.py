@@ -145,26 +145,44 @@ mmiData: Populated"""
         myMessage = '%s not found' % myExpectedQml
         assert os.path.exists(myExpectedQml), myMessage
 
+    def checkFeatureCount(self, thePath, theCount):
+        myDataSource = ogr.Open(thePath)
+        myBasename = os.path.splitext(os.path.basename(thePath))[0]
+        # do a little query to make sure we got some results...
+        mySQL = 'select * from \'%s\' order by MMI asc' % myBasename
+        #print mySQL
+        myLayer = myDataSource.ExecuteSQL(mySQL)
+        myCount = myLayer.GetFeatureCount()
+        myFlag = myCount == theCount
+        myMessage = ''
+        if not myFlag:
+            myMessage = 'Expected %s features, got %s' % (theCount, myCount)
+        myDataSource.ReleaseResultSet(myLayer)
+        myDataSource.Destroy()
+        return myFlag, myMessage
+
     def testEventToContours(self):
         """Check we can extract contours from the event"""
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
-        myPath = myShakeEvent.mmiDataToContours(theForceFlag=True)
+        myPath = myShakeEvent.mmiDataToContours(theForceFlag=True,
+                                                theAlgorithm='invdist')
+        assert self.checkFeatureCount(myPath, 16)
         assert os.path.exists(myPath)
         myExpectedQml = myPath.replace('shp','qml')
         myMessage = '%s not found' % myExpectedQml
         assert os.path.exists(myExpectedQml), myMessage
 
-        myDataSource = ogr.Open(myPath)
-        # do a little query to make sure we got some results...
-        mySQL = 'select * from \'mmi-contours\' order by MMI asc'
-        #print mySQL
-        myLayer = myDataSource.ExecuteSQL(mySQL)
-        myExpectedFeatureCount = 132
-        self.assertEquals(myLayer.GetFeatureCount(), myExpectedFeatureCount)
-        myDataSource.ReleaseResultSet(myLayer)
-        myDataSource.Destroy()
+        myPath = myShakeEvent.mmiDataToContours(theForceFlag=True,
+                                                theAlgorithm='nearest')
+        assert self.checkFeatureCount(myPath, 132)
+        myPath = myShakeEvent.mmiDataToContours(theForceFlag=True,
+                                                theAlgorithm='average')
+        assert self.checkFeatureCount(myPath, 132)
+
+
+
 
     def testLocalCities(self):
         """Test that we can retrieve the cities local to the event"""

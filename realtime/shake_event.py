@@ -493,7 +493,7 @@ class ShakeEvent:
 
         myTifPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
-                                 'mmi.tif')
+                                 'mmi-%s.tif' % theAlgorithm)
         #short circuit if the tif is already created.
         if os.path.exists(myTifPath) and theForceFlag is not True:
             return myTifPath
@@ -533,7 +533,7 @@ class ShakeEvent:
         return myTifPath
 
 
-    def mmiDataToContours(self, theForceFlag=True):
+    def mmiDataToContours(self, theForceFlag=True, theAlgorithm='nearest'):
         """Extract contours from the event's tif file.
 
         Contours are extracted at a 1MMI interval. The resulting file will
@@ -546,8 +546,11 @@ class ShakeEvent:
         which will return the contour dataset for the latest event on the
         ftp server.
 
-        Args: theForceFlag - (Optional). Whether to force the regeneration
+        Args: theForceFlag bool - (Optional). Whether to force the regeneration
             of contour product. Defaults to False.
+              theAlgorithm str - (Optional) Which interpolation algorithm to
+              use to create the underlying raster. Defaults to 'nearest'.
+              **Only enforced if theForceFlag is true!**
 
         Returns: An absolute filesystem path pointing to the generated
             contour dataset.
@@ -559,7 +562,7 @@ class ShakeEvent:
         # TODO: Use sqlite rather?
         myOutputFileBase = os.path.join(shakemapExtractDir(),
                                         self.eventId,
-                                        'mmi-contours.')
+                                        'mmi-contours-%s.' % theAlgorithm)
         myOutputFile = myOutputFileBase + 'shp'
         if os.path.exists(myOutputFile) and theForceFlag is not True:
             return myOutputFile
@@ -569,7 +572,7 @@ class ShakeEvent:
             os.remove(myOutputFileBase + 'dbf')
             os.remove(myOutputFileBase + 'prj')
 
-        myTifPath = self.mmiDataToRaster(theForceFlag)
+        myTifPath = self.mmiDataToRaster(theForceFlag, theAlgorithm)
         # Based largely on
         # http://svn.osgeo.org/gdal/trunk/autotest/alg/contour.py
         myDriver = ogr.GetDriverByName('ESRI Shapefile')
@@ -614,7 +617,7 @@ class ShakeEvent:
             # Lastly copy over the standard qml (QGIS Style file)
         myQmlPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
-                                 'mmi-contours.qml')
+                                 'mmi-contours-%s.qml' % theAlgorithm)
         mySourceQml = os.path.join(dataDir(), 'mmi-contours.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myOutputFile
