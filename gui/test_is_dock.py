@@ -48,7 +48,7 @@ from gui.is_dock import ISDock
 from gui.is_utilities import (setRasterStyle,
                           qgisVersion)
 
-from common.testing import  HAZDATA, EXPDATA, TESTDATA
+from safe.common.testing import  HAZDATA, EXPDATA, TESTDATA
 
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)

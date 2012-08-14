@@ -32,7 +32,7 @@ from gui.is_exceptions import (InsufficientParametersException,
 
 from gui.is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
 
-from common.testing import  HAZDATA, EXPDATA, TESTDATA
+from safe.common.testing import  HAZDATA, EXPDATA, TESTDATA
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)

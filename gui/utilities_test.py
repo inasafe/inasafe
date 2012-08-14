@@ -13,7 +13,7 @@ from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 
 # For testing and demoing
-from common.testing import TESTDATA
+from safe.common.testing import TESTDATA
 from gui.is_safe_interface import readKeywordsFromFile
 import hashlib
 

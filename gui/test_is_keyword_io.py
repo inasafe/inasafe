@@ -16,9 +16,10 @@ from gui.is_exceptions import HashNotFoundException
 from gui.is_utilities import getTempDir
 
 # For testing and demoing
-from common.testing import HAZDATA, TESTDATA
+from safe.common.testing import HAZDATA, TESTDATA
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
-#Dont change this, not even formatting, you will break tests!
+
+# Don't change this, not even formatting, you will break tests!
 PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
          password=\'bar\' sslmode=disable key=\'id\' srid=4326
          type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='"""

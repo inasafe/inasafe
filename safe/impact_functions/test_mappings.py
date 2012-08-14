@@ -9,9 +9,9 @@ import unittest
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from storage.core import read_layer
-from common.testing import TESTDATA, HAZDATA, EXPDATA
-from mappings import *
+from safe.storage.core import read_layer
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.impact_functions.mappings import *
 
 
 class Test_mappings(unittest.TestCase):
@@ -77,7 +77,7 @@ class Test_mappings(unittest.TestCase):
             else:
                 assert vclass == 2, msg
 
-    test_osm2padang.slow =1 
+    test_osm2padang.slow =1
 
     def test_osm2bnpb(self):
         """OSM structure types maps to BNPB vulnerability curves
