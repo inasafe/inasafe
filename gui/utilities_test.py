@@ -50,7 +50,7 @@ def assertHashForFile(theHash, theFilename):
 def hashForFile(theFilename):
     """Return an md5 checksum for a file"""
     myPath = theFilename
-    myData = file(myPath).read()
+    myData = file(myPath, 'rb').read()
     myHash = hashlib.md5()
     myHash.update(myData)
     myHash = myHash.hexdigest()
