@@ -32,7 +32,7 @@ compile:
 	@echo "-----------------"
 	@echo "Compile GUI forms"
 	@echo "-----------------"
-	make -C gui
+	make -C safe_qgis
 
 docs: compile
 	@echo
@@ -86,24 +86,6 @@ lines-of-code:
 	@echo "----------------------"
 	@git log | head -3
 	@sloccount . | grep '^[0-9]'
-	# This line is for machine readble output for use by Jenkins
-	@sloccount --duplicates --wide --details . | fgrep -v .svn > sloccount.sc || :
-
-jenkins-test:
-	@echo
-	@echo "----------------------------------"
-	@echo "Regresssion Test Suite for Jenkins"
-	@echo "----------------------------------"
-	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --with-xunit --verbose --cover-package=storage,engine,impact_functions,gui || :
-
-jenkins-pyflakes:
-	@echo
-	@echo "----------------------------------"
-	@echo "PyFlakes check for Jenkins"
-	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes storage engine impact_functions gui > pyflakes.log || :
-
 
 
 clean:
@@ -271,34 +253,19 @@ profile:
 
 jenkins-test:
 	@echo
-	@echo "---------------------------------------------------------------"
+	@echo "----------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"
-	@echo "if you are going to run more than "
-	@echo "one InaSAFE Jenkins job, you should run each on a different"
-	@echo "display by changing the :100 option below to a different number"
-	@echo "---------------------------------------------------------------"
-	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
+	@echo "----------------------------------"
+	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
 		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=storage,engine,impact_functions,gui || :
-
-jenkins-realtime-test:
-	@echo
-	@echo "---------------------------------------------------------------"
-	@echo "Regresssion Test Suite for Jenkins (Realtime module only)"
-	@echo "if you are going to run more than "
-	@echo "one InaSAFE Jenkins job, you should run each on a different"
-	@echo "display by changing the :100 option below to a different number"
-	@echo "---------------------------------------------------------------"
-	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
-		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime|| :
 
 jenkins-pyflakes:
 	@echo
 	@echo "----------------------------------"
 	@echo "PyFlakes check for Jenkins"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes storage engine impact_functions gui realtime > pyflakes.log || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes common storage engine impact_functions safe_qgis > pyflakes.log || :
 
 jenkins-sloccount:
 	@echo "----------------------"
@@ -320,7 +287,7 @@ jenkins-pylint:
 	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,is_help_base.py,is_keywords_dialog_base.py,is_options_dialog_base.py,is_dock_base.py storage engine gui realtime | grep -v 'I0011' > pylint.log || :
+	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,is_help_base.py,is_keywords_dialog_base.py,is_options_dialog_base.py,is_dock_base.py common storage engine safe_qgis | grep -v 'I0011' > pylint.log || :
 
 jenkins-pep8:
 	@echo

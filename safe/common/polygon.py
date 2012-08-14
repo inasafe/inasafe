@@ -17,6 +17,7 @@ from math import sqrt
 from random import uniform, seed as seed_function
 
 from safe.common.numerics import ensure_numeric
+from safe.common.numerics import grid2points, geotransform2axes
 
 
 def separate_points_by_polygon(points, polygon,
@@ -27,7 +28,7 @@ def separate_points_by_polygon(points, polygon,
 
     Input:
        points - Tuple of (x, y) coordinates, or list of tuples
-       polygon - list of vertices of polygon
+       polygon - list or Nx2 array of polygon vertices
        closed - (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False)
@@ -114,17 +115,46 @@ def separate_points_by_polygon(points, polygon,
         if points.shape[1] != 2:
             raise Exception(msg)
 
-    N = polygon.shape[0]  # Number of vertices in polygon
-    M = points.shape[0]  # Number of points
+    # Exclude points that outside polygon bounding box
+    minpx = min(polygon[:, 0])
+    maxpx = max(polygon[:, 0])
+    minpy = min(polygon[:, 1])
+    maxpy = max(polygon[:, 1])
 
+    M = points.shape[0]
+    N = polygon.shape[0]
+
+    x = points[:, 0]
+    y = points[:, 1]
+
+    # Only work on those that are inside polygon bounding box
+    outside_box = (x > maxpx) + (x < minpx) + (y > maxpy) + (y < minpy)
+    inside_box = -outside_box
+    candidate_points = points[inside_box]
+
+    # FIXME (Ole): I would like to return just indices_inside, indices_outside
+    # instead of the legacy of one array with a break point
+    # in the underlying _separate_by_points functions too
     if use_numpy:
-        indices, count = _separate_points_by_polygon(points, polygon,
+        indices, count = _separate_points_by_polygon(candidate_points,
+                                                     polygon,
                                                      closed=closed)
     else:
-        indices, count = _separate_points_by_polygon_python(points, polygon,
+        indices, count = _separate_points_by_polygon_python(candidate_points,
+                                                            polygon,
                                                             closed=closed)
 
-    return indices, count
+    # Map local indices from candidate points to global indices of all points
+    indices_inside_polygon = numpy.where(inside_box)[0][indices[:count]]
+
+    indices_outside_box = numpy.where(outside_box)[0]
+    indices_in_box_outside_poly = numpy.where(inside_box)[0][indices[count:]]
+    indices_outside_polygon = numpy.concatenate((indices_outside_box,
+                                                 indices_in_box_outside_poly))
+
+    indices_outside_polygon.sort()  # Ensure order is deterministic
+
+    return indices_inside_polygon, indices_outside_polygon
 
 
 def _separate_points_by_polygon(points, polygon,
@@ -133,7 +163,7 @@ def _separate_points_by_polygon(points, polygon,
 
     Input:
        points - Tuple of (x, y) coordinates, or list of tuples
-       polygon - list of vertices of polygon
+       polygon - Nx2 array of polygon vertices
        closed - (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False)
@@ -154,15 +184,11 @@ def _separate_points_by_polygon(points, polygon,
     # Suppress numpy warnings (as we'll be dividing by zero)
     original_numpy_settings = numpy.seterr(invalid='ignore', divide='ignore')
 
-    # Get polygon extents to quickly rule out points that
-    # are outside its bounding box
-    minpx = min(polygon[:, 0])
-    maxpx = max(polygon[:, 0])
-    minpy = min(polygon[:, 1])
-    maxpy = max(polygon[:, 1])
-
-    M = points.shape[0]
     N = polygon.shape[0]
+    M = points.shape[0]
+    if M == 0:
+        # If no points return 0-vector
+        return numpy.arange(0), 0
 
     x = points[:, 0]
     y = points[:, 1]
@@ -176,16 +202,6 @@ def _separate_points_by_polygon(points, polygon,
     # Mask for points can be considered for inclusion
     candidates = numpy.ones(M, dtype=numpy.bool)  # All True initially
 
-    # Only work on those that are inside polygon bounding box
-    outside_box = (x > maxpx) + (x < minpx) + (y > maxpy) + (y < minpy)
-    inside_box = -outside_box
-    candidates *= inside_box
-
-    # Don't continue if all points are outside bounding box
-    if not numpy.sometrue(candidates):
-        return numpy.arange(M)[::-1], 0
-
-    # FIXME (Ole): Restrict computations to candidates only
     # Find points on polygon boundary
     for i in range(N):
         # Loop through polygon edges
@@ -223,15 +239,12 @@ def _separate_points_by_polygon(points, polygon,
 
     # Record point as either inside or outside
     inside_index = numpy.sum(inside)  # How many points are inside
-    if inside_index == 0:
-        # Return all indices as points outside
-        # FIXME (Ole): Don't need the reversal anymore, but must update tests
-        # and code that depends on this order.
-        return numpy.arange(M)[::-1], 0
 
-    indices[:inside_index] = numpy.where(inside)[0]  # Indices of inside points
-    # Indices of outside points (reversed...)
-    indices[inside_index:] = numpy.where(1 - inside)[0][::-1]
+    # Indices of inside points
+    indices[:inside_index] = numpy.where(inside)[0]
+
+    # Indices of outside points
+    indices[inside_index:] = numpy.where(1 - inside)[0]
 
     return indices, inside_index
 
@@ -247,7 +260,7 @@ def _separate_points_by_polygon_python(points, polygon,
 
     Input:
        points - Tuple of (x, y) coordinates, or list of tuples
-       polygon - list of vertices of polygon
+       polygon - Nx2 array of polygon vertices
        closed - (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False)
@@ -328,6 +341,11 @@ def _separate_points_by_polygon_python(points, polygon,
             indices[outside_index] = k
             outside_index -= 1
 
+    # Change reversed indices back to normal order
+    tmp = indices[inside_index:].copy()
+    indices[inside_index:] = tmp[::-1]
+
+    # Return reference result
     return indices, inside_index
 
 
@@ -449,12 +467,12 @@ def inside_polygon(points, polygon, closed=True):
        a list or a numeric array
     """
 
-    indices, count = separate_points_by_polygon(points, polygon,
+    indices, _ = separate_points_by_polygon(points, polygon,
                                                 closed=closed,
                                                 check_input=True)
 
     # Return indices of points inside polygon
-    return indices[:count]
+    return indices
 
 
 def is_outside_polygon(point, polygon, closed=True):
@@ -481,17 +499,12 @@ def outside_polygon(points, polygon, closed=True):
        See separate_points_by_polygon for documentation
     """
 
-    indices, count = separate_points_by_polygon(points, polygon,
-                                                closed=closed,
-                                                check_input=True)
+    _, indices = separate_points_by_polygon(points, polygon,
+                                            closed=closed,
+                                            check_input=True)
 
     # Return indices of points outside polygon
-    if count == len(indices):
-        # No points are outside
-        return numpy.array([])
-    else:
-        # Return indices for points outside (reversed)
-        return indices[count:][::-1]
+    return indices
 
 
 def in_and_outside_polygon(points, polygon, closed=True):
@@ -499,7 +512,7 @@ def in_and_outside_polygon(points, polygon, closed=True):
 
     Input
         points: (tuple, list or array) of coordinates
-        polygon: Set of points defining the polygon
+        polygon: list or Nx2 array of polygon vertices
         closed: Set to True if points on boundary are considered
                 to be 'inside' polygon
 
@@ -510,16 +523,10 @@ def in_and_outside_polygon(points, polygon, closed=True):
     See separate_points_by_polygon for more documentation
     """
 
-    indices, count = separate_points_by_polygon(points, polygon,
-                                                closed=closed,
-                                                check_input=True)
-
-    if count == len(indices):
-        # No points are outside
-        return indices[:count], []
-    else:
-        # Return indices for points inside and outside (reversed)
-        return  indices[:count], indices[count:][::-1]
+    inside, outside = separate_points_by_polygon(points, polygon,
+                                                 closed=closed,
+                                                 check_input=True)
+    return  inside, outside
 
 
 def clip_lines_by_polygon(lines, polygon,
@@ -528,17 +535,15 @@ def clip_lines_by_polygon(lines, polygon,
     """Clip multiple lines by polygon
 
     Input
-        line: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
+       lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
               where pi and qi are point coordinates (x, y).
-
-    Output
-       polygon: list of vertices of polygon or the corresponding numpy array
+       polygon: list or Nx2 array of polygon vertices
        closed: (optional) determine whether points on boundary should be
-       regarded as belonging to the polygon (closed = True)
-       or not (closed = False) - False is not recommended here
+               regarded as belonging to the polygon (closed = True)
+               or not (closed = False) - False is not recommended here
        check_input: Allows faster execution if set to False
 
-    Outputs
+    Output
        inside_line_segments: Clipped line segments that are inside polygon
        outside_line_segments: Clipped line segments that are outside polygon
 
@@ -627,7 +632,7 @@ def clip_line_by_polygon(line, polygon,
     Input
        line: Sequence of line nodes: [[x0, y0], [x1, y1], ...] or
              the equivalent Nx2 numpy array
-       polygon: list of vertices of polygon or the corresponding numpy array
+       polygon: list or Nx2 array of polygon vertices
        closed: (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False) - False is not recommended here
@@ -1095,3 +1100,58 @@ collinearmap = {(False, False, False, False): lines_dont_coincide,
                 (True, True, False, True): lines_0_fully_included_in_1,
                 (True, True, True, False): lines_0_fully_included_in_1,
                 (True, True, True, True): lines_0_fully_included_in_1}
+
+
+# Functions for clipping of rasters by polygons
+def clip_grid_by_polygons(A, geotransform, polygons,
+                          check_input=True):
+    """Clip raster grid by polygon
+
+    Input
+        A: MxN array of grid points
+        geotransform: 6-tuple used to locate A geographically
+                      (top left x, w-e pixel resolution, rotation,
+                       top left y, rotation, n-s pixel resolution)
+        polygons: list of polygons, each an array of vertices
+
+    Output
+        #List of rasters - one per input polygon.
+        List of points, values - one per input polygon.
+
+    Implementing algorithm suggested in
+    https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
+
+    Note: Grid points are considered to be pixel-registered which means
+          that each point represents the center of its grid cell.
+          The required half cell shifts are taken care of by the
+          function geotransform2axes
+    """
+
+    # Convert raster grid to Nx2 array of points and an N array of pixel values
+    ny, nx = A.shape
+    x, y = geotransform2axes(geotransform, nx, ny)
+    points, values = grid2points(A, x, y)
+
+    # Generate list of points and values that fall inside each polygon
+    result = []
+    remaining_points = points
+    remaining_values = values
+
+    for polygon in polygons:
+        #print 'Remaining points', len(remaining_points)
+
+        inside, outside = separate_points_by_polygon(remaining_points,
+                                                     polygon,
+                                                     closed=True,
+                                                     check_input=False)
+        # Add features inside this polygon
+        result.append((remaining_points[inside],
+                       remaining_values[inside]))
+
+        # Select remaining points to clip
+        remaining_points = remaining_points[outside]
+        remaining_values = remaining_values[outside]
+
+        #print len(result), len(polygons), len(polygon), 'inside', len(inside),
+
+    return result

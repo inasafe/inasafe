@@ -70,6 +70,9 @@ class Vector(Layer):
         If each entry is one set of coordinates the type will be ogr.wkbPoint,
         if it is an array of coordinates the type will be ogr.wkbPolygon.
 
+        To cast array entries as lines set geometry_type explicity to 'line' in
+        the call to Vector. Otherwise, they will default to polygons.
+
         Each polygon or line feature take the form of an Nx2 array representing
         vertices where line segments are joined
         """
@@ -475,14 +478,15 @@ class Vector(Layer):
 
         # Define attributes if any
         store_attributes = False
+        fields = []
         if data is not None:
             if len(data) > 0:
                 try:
                     fields = data[0].keys()
                 except:
                     msg = ('Input parameter "attributes" was specified '
-                           'but it does not contain dictionaries with '
-                           'field information as expected. The first'
+                           'but it does not contain list of dictionaries '
+                           'with field information as expected. The first '
                            'element is %s' % data[0])
                     raise Exception(msg)
                 else:
@@ -497,9 +501,10 @@ class Vector(Layer):
                         ogrtypes[name] = TYPE_MAP[py_type]
 
             else:
-                msg = ('Input parameter "data" was specified '
-                       'but appears to be empty')
-                raise Exception(msg)
+                #msg = ('Input parameter "data" was specified '
+                #       'but appears to be empty')
+                #raise Exception(msg)
+                pass
 
             # Create attribute fields in layer
             store_attributes = True
@@ -653,6 +658,11 @@ class Vector(Layer):
         """Return geometry type for vector layer
         """
         return self.geometry_type
+
+    def get_geometry_name(self):
+        """Return geometry name for vector layer
+        """
+        return geometrytype2string(self.geometry_type)
 
     def get_geometry(self, copy=False):
         """Return geometry for vector layer.

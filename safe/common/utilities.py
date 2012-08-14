@@ -3,7 +3,6 @@
 
 import os
 import gettext
-import locale
 
 class VerificationError(RuntimeError):
     """Exception thrown by verify()
@@ -31,8 +30,10 @@ def ugettext(s):
     """Translation support
     """
     path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                         'i18n'))
-    lang, encoding = locale.getdefaultlocale()
+                                        '..', 'i18n'))
+    if 'LANG' not in os.environ:
+        return s
+    lang = os.environ['LANG']
     filename_prefix = 'inasafe'
     t = gettext.translation(filename_prefix,
                             path, languages=[lang], fallback=True)

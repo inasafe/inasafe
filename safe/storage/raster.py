@@ -5,11 +5,13 @@ import os
 import numpy
 import copy as copy_module
 from osgeo import gdal
+
 from safe.common.utilities import verify
-from safe.common.numerics import nanallclose, geotransform2axes
+from safe.common.numerics import nanallclose, geotransform2axes, grid2points
 from safe.common.dynamic_translations import names as internationalised_titles
 
 from layer import Layer
+from vector import Vector
 from projection import Projection
 from interpolation import interpolate_raster_vector
 
@@ -518,7 +520,8 @@ class Raster(Layer):
 
         return geotransform2bbox(self.geotransform, self.columns, self.rows)
 
-    def get_resolution(self, isotropic=False, native=False):
+    def get_resolution(self, isotropic=False, native=False,
+                       rtol=1.0e-4, atol=1.0e-8):
         """Get raster resolution as a 2-tuple (resx, resy)
 
         Input
@@ -526,12 +529,15 @@ class Raster(Layer):
                        If False return 2-tuple (dx, dy)
             native: Optional flag. If True, return native resolution if
                                    available. Otherwise return actual.
+            rtol, atol: Tolerances as to how much difference is accepted
+                        between dx and dy if isotropic is True.
         """
 
         # Get actual resolution first
         try:
             res = geotransform2resolution(self.geotransform,
-                                          isotropic=isotropic)
+                                          isotropic=isotropic,
+                                          rtol=rtol, atol=atol)
         except Exception, e:
             msg = ('Resolution for layer %s could not be obtained: %s '
                    % (self.get_name(), str(e)))
@@ -568,3 +574,38 @@ class Raster(Layer):
 
         # Return either 2-tuple or scale depending on isotropic
         return res
+
+    def to_vector_points(self):
+        """Convert raster grid to vector point data
+
+        Output
+           coordinates: Nx2 array of x, y (lon, lat) coordinates
+           values: N array of corresponding grid values
+        """
+
+        # Convert grid data to point data
+        A = self.get_data()
+        x, y = self.get_geometry()
+        P, V = grid2points(A, x, y)
+
+        return P, V
+
+    def to_vector_layer(self):
+        """Convert raster grid to vector point data
+
+        Return a vector layer object with data points corresponding to
+        grid points. The order is row-major which means that the
+        x (longitude) direction is varying the fastest.
+        """
+
+        # Get vector data
+        coordinates, values = self.to_vector_points()
+
+        # Create corresponding vector layer
+        attributes = [{'value': x} for x in values]
+        V = Vector(geometry=coordinates,
+                   data=attributes,
+                   projection=self.get_projection(),
+                   geometry_type='point')
+
+        return V

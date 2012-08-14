@@ -17,6 +17,8 @@ __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import os
+import tempfile
 import unittest
 from tables import Table, TableRow, TableCell, Link
 
@@ -41,10 +43,33 @@ class TablesTest(unittest.TestCase):
         ' </head>\n'
         ' <body>\n'
         '  <h2>Test Output</h2>\n')
+    tmp_dir = None
+
+    def tmpDir(self):
+        """Helper to get os temp dir.
+
+        Args: None
+
+        Returns: str Absolute filesystem path to temp dir.
+
+        Raises: None
+        """
+        if self.tmp_dir is not None:
+            return self.tmp_dir
+
+        # Following 4 lines are workaround for tempfile.tempdir() unreliabilty
+        myHandle, myFilename = tempfile.mkstemp()
+        os.close(myHandle)
+        myDir = os.path.dirname(myFilename)
+        os.remove(myFilename)
+
+        self.tmp_dir = myDir
+        return myDir
 
     def writeHtml(self, name):
         self.html += ' </body>\n</html>\n'
-        file('/tmp/%s.html' % name, 'wt').write(self.html)
+        file(os.path.join(self.tmpDir(), '%s.html' % name),
+             'wt').write(self.html)
 
     def setUp(self):
         """Fixture run before all tests"""

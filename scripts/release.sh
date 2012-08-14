@@ -23,6 +23,15 @@ rm -rf /tmp/${DIR}
 mkdir /tmp/${DIR}
 git archive `git branch | grep '\*'| sed 's/^\* //g'` | tar -x -C /tmp/${DIR}
 rm -rf /tmp/${DIR}/docs/
+rm -rf /tmp/${DIR}/unit_test_data
+rm -rf /tmp/${DIR}/.idea
+rm -rf /tmp/${DIR}/Makefile
+rm -rf /tmp/${DIR}/.git*
+rm -rf /tmp/${DIR}/scripts
+rm -rf /tmp/${DIR}/pylintrc
+find /tmp/${DIR} -name test*.py -delete
+find /tmp/${DIR} -name *_test.py -delete
+rm -rf /tmp/${DIR}/*.bat
 mkdir -p /tmp/${DIR}/docs/build
 cp -r docs/build/html /tmp/${DIR}/docs/build/html
 pushd .
@@ -30,34 +39,34 @@ cd /tmp/
 # The \* tells zip to ignore recursively
 rm ${OUT}
 zip -r ${OUT} ${DIR} --exclude \*.pyc \
-                                  ${DIR}/docs/source\* \
-                                  ${DIR}/docs/*.jpeg\
-                                  ${DIR}/docs/*.jpg\
-                                  ${DIR}/docs/*.odf\
-                                  ${DIR}/docs/*.png\
-                                  ${DIR}/docs/build/doctrees\* \
-                                  ${DIR}/docs/build/html\.buildinfo\* \
-                                  ${DIR}/docs/cloud_sptheme\* \
-                                  ${DIR}/docs/Flyer_InaSafe_FINAL.pdf \
-                                  ${DIR}/.git\* \
-                                  ${DIR}/.gitattributes \
-                                  ${DIR}/.settings\* \
-                                  ${DIR}/.pydev\* \
-                                  ${DIR}/.coverage\* \
-                                  ${DIR}/.project\* \
-                                  ${DIR}/.achievements\* \
-                                  \*.noseids \
-                                  ${DIR}/scripts\* \
-                                  ${DIR}/impossible_state.* \
-                                  ${DIR}/riab_demo_data\* \
-                                  \*.*~ \
-                                  \*test_*.py \
-                                  \*.*.orig \
-                                  \*.bat \
-                                  \*.xcf \
-                                  \Makefile~ \
-                                  \Makefile
-                                  
+              ${DIR}/docs/source\* \
+              ${DIR}/docs/*.jpeg\
+              ${DIR}/docs/*.jpg\
+              ${DIR}/docs/*.odf\
+              ${DIR}/docs/*.png\
+              ${DIR}/docs/build/doctrees\* \
+              ${DIR}/docs/build/html\.buildinfo\* \
+              ${DIR}/docs/cloud_sptheme\* \
+              ${DIR}/docs/Flyer_InaSafe_FINAL.pdf \
+              ${DIR}/.git\* \
+              ${DIR}/*.bat \
+              ${DIR}/.gitattributes \
+              ${DIR}/.settings\* \
+              ${DIR}/.pydev\* \
+              ${DIR}/.coverage\* \
+              ${DIR}/.project\* \
+              ${DIR}/.achievements\* \
+              ${DIR}/Makefile \
+              ${DIR}/scripts\* \
+              ${DIR}/impossible_state.* \
+              ${DIR}/riab_demo_data\* \
+              ${DIR}/\*.*~ \
+              ${DIR}/\*test_*.py \
+              ${DIR}/\*.*.orig \
+              ${DIR}/\*.bat \
+              ${DIR}/\*.xcf \
+              ${DIR}/~ 
+              
 popd
 
 

@@ -13,12 +13,12 @@ VERSION=$1
 
 echo "Updating and setting test data to revision: $VERSION"
 
-if [ ! -d ../inasafe-data ]
+if [ ! -d ../inasafe_data ]
 then
   # check the repo out since it does not exist
   pushd .
   cd ..
-  git clone --depth 1 git://github.com/AIFDR/inasafe-data.git inasafe_data
+  git clone --depth 1 git://github.com/AIFDR/inasafe_data.git inasafe_data
   popd
 fi
 

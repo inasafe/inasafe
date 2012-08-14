@@ -167,6 +167,85 @@ def erf(z):
         return ans
 
 
+def axes2points(x, y):
+    """Generate all combinations of grid point coordinates from x and y axes
+
+    Input
+        x: x coordinates (array)
+        y: y coordinates (array)
+
+    Output
+        P: Nx2 array consisting of coordinates for all
+           grid points defined by x and y axes. The x coordinate
+           will vary the fastest to match the way 2D numpy
+           arrays are laid out by default ('C' order). That way,
+           the x and y coordinates will match a corresponding
+           2D array A when flattened (A.flat[:] or A.reshape(-1))
+
+    Example
+
+    x = [1, 2, 3]
+    y = [10, 20]
+
+    P = [[1, 10],
+         [2, 10],
+         [3, 10],
+         [1, 20],
+         [2, 20],
+         [3, 20]]
+    """
+
+    # Reverse y coordinates to have them start at bottom of array
+    y = numpy.flipud(y)
+
+    # Repeat x coordinates for each y (fastest varying)
+    X = numpy.kron(numpy.ones(len(y)), x)
+
+    # Repeat y coordinates for each x (slowest varying)
+    Y = numpy.kron(y, numpy.ones(len(x)))
+
+    # Check
+    N = len(X)
+    verify(len(Y) == N)
+
+    # Create Nx2 array of x and y coordinates
+    X = numpy.reshape(X, (N, 1))
+    Y = numpy.reshape(Y, (N, 1))
+    P = numpy.concatenate((X, Y), axis=1)
+
+    # Return
+    return P
+
+
+def grid2points(A, x, y):
+    """Convert grid data to point data
+
+    Input
+        A: Array of pixel values
+        x: Longitudes corresponding to columns in A (left->right)
+        y: Latitudes corresponding to rows in A (top->bottom)
+
+    Output
+        P: Nx2 array of point coordinates
+        V: N array of point values
+    """
+
+    # Create Nx2 array of x, y points corresponding to each
+    # element in A.
+    points = axes2points(x, y)
+
+    # Create flat 1D row-major view of A cast as
+    # one column vector of length MxN where M, N = A.shape
+    #values = A.reshape((-1, 1))
+    values = A.reshape(-1)
+
+    # Concatenate coordinates with their values from the grid
+    #P = numpy.concatenate((points, values), axis=1)
+
+    # Return Nx3 array with rows: x, y, value
+    return points, values
+
+
 def geotransform2axes(G, nx, ny):
     """Convert geotransform to coordinate axes
 

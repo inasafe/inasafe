@@ -5,9 +5,9 @@ import sys
 import os
 import unittest
 
-from storage.core import read_layer
-from common.testing import TESTDATA, HAZDATA, EXPDATA
-from mappings import *
+from safe.storage.core import read_layer
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.impact_functions.mappings import *
 
 
 class Test_mappings(unittest.TestCase):

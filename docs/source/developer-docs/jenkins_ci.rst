@@ -171,7 +171,7 @@ Here is a log of the options we set for the Jenkins job:
        export QGISPATH=/usr/local/qgis1.8/
 
        # Make sure data dir is current and synced it its git clone
-       #scripts/sync-git-data-mirror.sh
+       scripts/update-test-data.sh
 
        #Go on with metrics and tests
        make jenkins-pyflakes
