@@ -33,14 +33,14 @@ from safe_qgis.safe_interface import (verify,
 from safe_qgis.utilities import qgisVersion
 
 
-class ISKeywordIO(QObject):
+class KeywordIO(QObject):
     """Class for doing keyword read/write operations. It abstracts away
     differences between using SAFE to get keywords from a .keywords file
     and this plugins implemenation of keyword caching in a local sqlite db
     used for supporting keywords for remote datasources."""
 
     def __init__(self):
-        """Constructor for the ISKeywordIO object.
+        """Constructor for the KeywordIO object.
 
         Args:
             None

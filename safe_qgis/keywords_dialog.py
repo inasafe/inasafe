@@ -26,8 +26,8 @@ from PyQt4.QtCore import pyqtSignature
 from odict import OrderedDict
 
 from safe_qgis.keywords_dialog_base import Ui_ISKeywordsDialogBase
-from safe_qgis.keyword_io import ISKeywordIO
-from safe_qgis.help import ISHelp
+from safe_qgis.keyword_io import KeywordIO
+from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace
 
 
@@ -44,7 +44,7 @@ except ImportError:
     print 'Debugging was disabled'
 
 
-class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
+class KeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
 # pylint: disable=W0231
     def __init__(self, parent, iface, theDock=None):
@@ -70,7 +70,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
                             'InaSAFE %s Keywords Editor' % __version__))
-        self.keywordIO = ISKeywordIO()
+        self.keywordIO = KeywordIO()
         # note the keys should remain untranslated as we need to write
         # english to the keywords file. The keys will be written as user data
         # in the combo entries.
@@ -125,7 +125,7 @@ class ISKeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
         if not self.helpDialog:
-            self.helpDialog = ISHelp(self.iface.mainWindow(), 'keywords')
+            self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
         self.helpDialog.show()
 
     # prevents actions being handled twice

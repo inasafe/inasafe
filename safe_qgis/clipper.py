@@ -32,7 +32,7 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsGeometry)
 
 from safe_qgis.safe_interface import verify, readKeywordsFromFile
-from safe_qgis.keyword_io import ISKeywordIO
+from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
                            InvalidProjectionException)
@@ -40,7 +40,7 @@ from safe_qgis.utilities import getTempDir
 
 
 def tr(theText):
-    """We define a tr() alias here since the ISClipper implementation below
+    """We define a tr() alias here since the ClipperTest implementation below
     is not a class and does not inherit from QObject.
 
     .. note:: see http://tinyurl.com/pyqt-differences
@@ -52,7 +52,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "ISClipper"
+    myContext = "ClipperTest"
     return QCoreApplication.translate(myContext, theText)
 
 
@@ -202,7 +202,7 @@ def _clipVectorLayer(theLayer, theExtent,
                        'and then try to run your analysis again.')
         raise NoFeaturesInExtentException(myMessage)
 
-    myKeywordIO = ISKeywordIO()
+    myKeywordIO = KeywordIO()
     myKeywordIO.copyKeywords(theLayer, myFilename,
                   theExtraKeywords=theExtraKeywords)
 
@@ -366,7 +366,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
             raise Exception(myMessage)
 
     # .. todo:: Check the result of the shell call is ok
-    myKeywordIO = ISKeywordIO()
+    myKeywordIO = KeywordIO()
     myKeywordIO.copyKeywords(theLayer, myFilename,
                              theExtraKeywords=theExtraKeywords)
     return myFilename  # Filename of created file

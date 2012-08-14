@@ -34,7 +34,7 @@ from qgis.core import (QgsRasterLayer,
 from safe_qgis.odict import OrderedDict
 from safe_qgis.utilities_test import (getQgisTestApp, unitTestDataPath)
 from safe_qgis.safe_interface import readKeywordsFromFile
-from safe_qgis.keywords_dialog import ISKeywordsDialog
+from safe_qgis.keywords_dialog import KeywordsDialog
 
 
 # For testing and demoing
@@ -71,7 +71,7 @@ def clearLayers():
         QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
 
 
-class ISKeywordsDialogTest(unittest.TestCase):
+class KeywordsDialogTest(unittest.TestCase):
     """Test the InaSAFE keywords GUI"""
 
     def setUp(self):
@@ -84,7 +84,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_showHelp(self):
         """Test that help button works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
@@ -93,7 +93,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
     def test_on_pbnAdvanced_toggled(self):
         """Test advanced button toggle behaviour works"""
         makePadangLayer()
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.pbnAdvanced
         myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -116,7 +116,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_on_radHazard_toggled(self):
         """Test hazard radio button toggle behaviour works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radHazard
         myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -128,7 +128,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
         """Test exposure radio button toggle behaviour works"""
 
         # Cannot get this test to work, but it works fine in the safe_qgis
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radExposure
         myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -138,7 +138,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_on_cboSubcategory_currentIndexChanged(self):
         """Test subcategory combo change event works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myButton = myDialog.radHazard
         myButton.setChecked(True)
         myButton = myDialog.radExposure
@@ -156,7 +156,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_setSubcategoryList(self):
         """Test set subcategory list works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myList = OrderedDict([('population [density]',
                                       'population [density]'),
                                      ('population [count]',
@@ -179,7 +179,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_on_pbnAddToList1_clicked(self):
         """Test adding an item to the list using predefined form works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.radPredefined.setChecked(True)
         myDialog.cboKeyword.setCurrentIndex(2)
@@ -196,7 +196,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_on_pbnAddToList2_clicked(self):
         """Test adding an item to the list using user defened form works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.radUserDefined.setChecked(True)
         myDialog.leKey.setText('foo')
@@ -214,7 +214,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_on_pbnRemove_clicked(self):
         """Test pressing remove works on key list"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
 
         myResult = myDialog.lstKeywords.count()
@@ -234,7 +234,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_addListEntry(self):
         """Test add entry to list works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.addListEntry('bar', 'foo')
         myResult = myDialog.getValueForKey('bar')
@@ -246,7 +246,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_addWarningsForColons(self):
         """Test add entry to list works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.addListEntry('bar', 'fo:o')
         myResult = myDialog.getValueForKey('bar')
@@ -277,7 +277,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_setCategory(self):
         """Test set category works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.setCategory('hazard')
         myExpectedResult = 'hazard'
@@ -289,7 +289,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_reset(self):
         """Test form reset works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.leTitle.setText('Foo')
         myDialog.reset(False)
         myExpectedResult = ''
@@ -300,7 +300,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_removeItemByKey(self):
         """Test remove item by its key works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.reset(False)
         myDialog.addListEntry('bar', 'foo')
         myDialog.removeItemByKey('bar')
@@ -314,7 +314,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
     def test_removeItemByValue(self):
         """Test remove item by its value works"""
         makePadangLayer()
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myDialog.removeItemByValue('hazard')
 
         myKeywords = myDialog.getKeywords()
@@ -329,7 +329,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
     def test_getValueForKey(self):
         """Test get value for key works"""
         makePadangLayer()
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myExpectedValue = 'hazard'
         myValue = myDialog.getValueForKey('category')
         myMessage = ('\nExpected key value of %s\nGot %s' %
@@ -338,7 +338,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_loadStateFromKeywords(self):
         """Test load state from keywords works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myLayer = makePadangLayer()
         myDialog.layer = myLayer
         myDialog.loadStateFromKeywords()
@@ -354,7 +354,7 @@ class ISKeywordsDialogTest(unittest.TestCase):
 
     def test_checkStateWhenKeywordsAbsent(self):
         """Test load state from keywords works"""
-        myDialog = ISKeywordsDialog(PARENT, IFACE)
+        myDialog = KeywordsDialog(PARENT, IFACE)
         myLayer = makeKeywordlessLayer()
         myDialog.layer = myLayer
         myDialog.loadStateFromKeywords()
@@ -368,6 +368,6 @@ class ISKeywordsDialogTest(unittest.TestCase):
         assert myKeywords == myExpectedKeywords, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISKeywordsDialogTest, 'test')
+    suite = unittest.makeSuite(KeywordsDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

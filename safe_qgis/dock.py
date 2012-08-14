@@ -24,7 +24,7 @@ import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 from safe_qgis.dock_base import Ui_ISDockBase
-from safe_qgis.help import ISHelp
+from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace, getWGS84resolution
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
@@ -32,19 +32,19 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
-from safe_qgis.impact_calculator import ISImpactCalculator
+from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                    getFunctionTitle,
                                    getOptimalExtent,
                                    getBufferedExtent,
                                    internationalisedNames)
-from safe_qgis.keyword_io import ISKeywordIO
+from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
                                InsufficientOverlapException,
                                InvalidParameterException,
                                HashNotFoundException)
-from safe_qgis.map import ISMap
+from safe_qgis.map import Map
 from safe_qgis.utilities import (getTempDir,
                               htmlHeader,
                               htmlFooter,
@@ -64,7 +64,7 @@ except ImportError:
     print 'Debugging was disabled'
 
 
-class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
+class Dock(QtGui.QDockWidget, Ui_ISDockBase):
     """Dock implementation class for the Risk In A Box plugin."""
 
     def __init__(self, iface):
@@ -97,8 +97,8 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         self.iface = iface
         self.header = None  # for storing html header template
         self.footer = None  # for storing html footer template
-        self.calculator = ISImpactCalculator()
-        self.keywordIO = ISKeywordIO()
+        self.calculator = ImpactCalculator()
+        self.keywordIO = KeywordIO()
         self.runner = None
         self.helpDialog = None
         self.state = None
@@ -656,7 +656,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
         return myLayer
 
     def setupCalculator(self):
-        """Initialise the ISImpactCalculator based on the current
+        """Initialise the ImpactCalculator based on the current
         state of the ui."""
         myHazardFilename = None
         myExposureFilename = None
@@ -830,7 +830,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
     def showHelp(self):
         """Load the help text into the wvResults widget"""
         if not self.helpDialog:
-            self.helpDialog = ISHelp(self.iface.mainWindow(), 'dock')
+            self.helpDialog = Help(self.iface.mainWindow(), 'dock')
         self.helpDialog.show()
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
@@ -1262,7 +1262,7 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                             self.tr('Write to PDF'),
                             getTempDir(),
                             self.tr('Pdf File (*.pdf)'))
-        myMap = ISMap(self.iface)
+        myMap = Map(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())
         self.showBusy(self.tr('Map Creator'),
                       self.tr('Generating your map as a PDF document...'),

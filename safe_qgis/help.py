@@ -23,7 +23,7 @@ from help_base import Ui_ISHelpBase
 import os
 
 
-class ISHelp(QtGui.QDialog):
+class Help(QtGui.QDialog):
     """Help dialog class for the Risk In A Box plugin.
 
     .. todo:: Add navigation buttons. See url for example of how to do so.

@@ -25,7 +25,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 import unittest
-from safe_qgis.impact_calculator import ISImpactCalculator
+from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.exceptions import (InsufficientParametersException,
                            KeywordNotFoundException,
                            StyleInfoNotFoundException)
@@ -44,7 +44,7 @@ class ImpactCalculatorTest(unittest.TestCase):
 
     def setUp(self):
         """Create shared resources that all tests can use"""
-        self.calculator = ISImpactCalculator()
+        self.calculator = ImpactCalculator()
         self.vectorPath = os.path.join(TESTDATA, 'Padang_WGS84.shp')
         self.rasterShakePath = os.path.join(HAZDATA,
                                             'Shakemap_Padang_2009.asc')

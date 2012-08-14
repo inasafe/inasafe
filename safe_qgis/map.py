@@ -33,7 +33,7 @@ from qgis.gui import QgsComposerView
 from PyQt4 import (QtCore, QtGui, QtWebKit, QtXml)
 from safe_qgis.exceptions import (LegendLayerException,
                            KeywordNotFoundException)
-from safe_qgis.keyword_io import ISKeywordIO
+from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.utilities import getTempDir, htmlHeader, htmlFooter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -47,10 +47,10 @@ except ImportError:
     print 'Debugging was disabled'
 
 
-class ISMap():
+class Map():
     """A class for creating a map."""
     def __init__(self, theIface):
-        """Constructor for the ISMap class.
+        """Constructor for the Map class.
 
         Args:
             theIface - reference to the QGIS iface object
@@ -61,7 +61,7 @@ class ISMap():
         """
         self.iface = theIface
         self.layer = theIface.activeLayer()
-        self.keywordIO = ISKeywordIO()
+        self.keywordIO = KeywordIO()
         self.legend = None
         self.header = None
         self.footer = None
@@ -91,7 +91,7 @@ class ISMap():
         Raises:
            no exceptions explicitly raised.
         """
-        return QtCore.QCoreApplication.translate('ISMap', theString)
+        return QtCore.QCoreApplication.translate('Map', theString)
 
     def setImpactLayer(self, theLayer):
         """Mutator for the impact layer that will be used for stats,

@@ -58,7 +58,7 @@ RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
-class ISClipper(unittest.TestCase):
+class ClipperTest(unittest.TestCase):
     """Test the InaSAFE clipper"""
 
     def setUp(self):
@@ -474,6 +474,6 @@ class ISClipper(unittest.TestCase):
         assert len(myCollection) == 2, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISClipper, 'test')
+    suite = unittest.makeSuite(ClipperTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

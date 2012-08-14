@@ -21,12 +21,12 @@ import unittest
 # Needed though not used below
 from PyQt4.QtGui import QApplication  # pylint: disable=W0611
 from safe_qgis.utilities_test import getQgisTestApp
-from safe_qgis.help import ISHelp
+from safe_qgis.help import Help
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
-class ISHelpTest(unittest.TestCase):
+class HelpTest(unittest.TestCase):
     """Test the InaSAFE help GUI
     .. note:: Currently these tests will all fail unless you comment out the
     APP.exec_() lines because the web view does not load content without
@@ -35,7 +35,7 @@ class ISHelpTest(unittest.TestCase):
     def XtestDialogLoads(self):
         """Basic test to ensure the keyword dialog has loaded"""
 
-        myHelp = ISHelp(PARENT)
+        myHelp = Help(PARENT)
         #myHelp.show()
         #QGISAPP.exec_()
 
@@ -48,7 +48,7 @@ class ISHelpTest(unittest.TestCase):
 
     def XtestDockHelp(self):
         """Test help dialog works with context set to 'dock'"""
-        myHelp = ISHelp(PARENT, theContext='dock')
+        myHelp = Help(PARENT, theContext='dock')
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'Using the InaSAFE Plugin'
         myMessage = ('Expected to find "%s" in \n\n"%s"'
@@ -57,7 +57,7 @@ class ISHelpTest(unittest.TestCase):
 
     def XtestKeywordsHelp(self):
         """Test help dialog works with context set to 'keywords'"""
-        myHelp = ISHelp(PARENT, theContext='keywords')
+        myHelp = Help(PARENT, theContext='keywords')
         myText = myHelp.ui.webView.page().currentFrame().toPlainText()
         myExpectedText = 'avoid using spaces'
         myMessage = ('Expected to find "%s" in \n\n"%s"'
@@ -65,6 +65,6 @@ class ISHelpTest(unittest.TestCase):
         assert myText.contains(myExpectedText), myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISHelpTest, 'test')
+    suite = unittest.makeSuite(HelpTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

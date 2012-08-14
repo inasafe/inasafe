@@ -23,7 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4.QtCore import QObject
 
 #Do not import any QGIS or SAFE modules in this module!
-from safe_qgis.impact_calculator_thread import ISImpactCalculatorThread
+from safe_qgis.impact_calculator_thread import ImpactCalculatorThread
 from safe_qgis.exceptions import InsufficientParametersException
 from safe_qgis.safe_interface import (readSafeLayer,
                                    getSafeImpactFunctions)
@@ -32,7 +32,7 @@ from safe_qgis.safe_interface import (readSafeLayer,
 from PyQt4.QtCore import QObject
 
 
-class ISImpactCalculator(QObject):
+class ImpactCalculator(QObject):
     """A class to compute an impact scenario. We inherit from QObject
     so that we can use Qt translation self.tr calls."""
 
@@ -171,6 +171,6 @@ class ISImpactCalculator(QObject):
 
         myFunctions = getSafeImpactFunctions(self._function)
         myFunction = myFunctions[0][self._function]
-        return ISImpactCalculatorThread(myHazardLayer,
+        return ImpactCalculatorThread(myHazardLayer,
                                         myExposureLayer,
                                         myFunction)

@@ -30,7 +30,7 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
 from common.testing import TESTDATA, HAZDATA, EXPDATA
 
 
-class ISSafeInterfaceTest(unittest.TestCase):
+class SafeInterfaceTest(unittest.TestCase):
     """Test the SAFE API Wrapper"""
 
     def setUp(self):
@@ -218,6 +218,6 @@ class ISSafeInterfaceTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISSafeInterfaceTest, 'test')
+    suite = unittest.makeSuite(SafeInterfaceTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

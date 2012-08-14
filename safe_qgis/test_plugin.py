@@ -31,12 +31,12 @@ from PyQt4.QtGui import QWidget
 from qgis.gui import QgsMapCanvas
 from safe_qgis.qgis_interface import QgisInterface
 from safe_qgis.utilities_test import getQgisTestApp
-from safe_qgis.plugin import ISPlugin
+from safe_qgis.plugin import Plugin
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
-class ISPluginTest(unittest.TestCase):
+class PluginTest(unittest.TestCase):
     """Test suite for InaSAFE QGis plugin"""
 
     def test_setupI18n(self):
@@ -47,7 +47,7 @@ class ISPluginTest(unittest.TestCase):
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
-        myPlugin = ISPlugin(myIface)
+        myPlugin = Plugin(myIface)
         myPlugin.setupI18n('id')
         myTranslation = myPlugin.tr(myUntranslatedString)
         myMessage = '\nTranslated: %s\nGot: %s\nExpected: %s' % (
@@ -65,7 +65,7 @@ class ISPluginTest(unittest.TestCase):
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)
         myIface = QgisInterface(myCanvas)
-        myPlugin = ISPlugin(myIface)
+        myPlugin = Plugin(myIface)
         myPlugin.setupI18n('id')  # indonesian
         myExpectedString = 'Ditutup sementara'
         myTranslation = _(myUntranslatedString)
@@ -113,7 +113,7 @@ class ISPluginTest(unittest.TestCase):
                     reload(myMod)
             except NameError:
                 pass
-        myPlugin = ISPlugin(myIface)
+        myPlugin = Plugin(myIface)
         myPlugin.setupI18n('af')  # afrikaans
         myLang = os.environ['LANG']
         assert myLang == 'af'

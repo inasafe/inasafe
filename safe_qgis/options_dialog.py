@@ -22,8 +22,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 from safe_qgis.options_dialog_base import Ui_ISOptionsDialogBase
-from safe_qgis.help import ISHelp
-from safe_qgis.keyword_io import ISKeywordIO
+from safe_qgis.help import Help
+from safe_qgis.keyword_io import KeywordIO
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -38,7 +38,7 @@ except ImportError:
     print 'Debugging was disabled'
 
 
-class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
+class OptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
     """Options dialog for the InaSAFE plugin."""
 # pylint: disable=W0231
     def __init__(self, parent, iface, theDock=None):
@@ -64,7 +64,7 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
         self.parent = parent
         self.dock = theDock
         self.helpDialog = None
-        self.keywordIO = ISKeywordIO()
+        self.keywordIO = KeywordIO()
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -132,7 +132,7 @@ class ISOptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
     def showHelp(self):
         """Load the help text for the options safe_qgis"""
         if not self.helpDialog:
-            self.helpDialog = ISHelp(self.iface.mainWindow(), 'options')
+            self.helpDialog = Help(self.iface.mainWindow(), 'options')
         self.helpDialog.show()
 
     def accept(self):

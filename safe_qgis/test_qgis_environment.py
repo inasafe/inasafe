@@ -24,7 +24,7 @@ from safe_qgis.utilities_test import getQgisTestApp
 QGISAPP = getQgisTestApp()
 
 
-class ISTest(unittest.TestCase):
+class QGISTest(unittest.TestCase):
     """Test the QGIS Environment"""
 
     def test_QGISEnvironment(self):

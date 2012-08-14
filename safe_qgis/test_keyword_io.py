@@ -11,7 +11,7 @@ sys.path.append(pardir)
 from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
-from safe_qgis.keyword_io import ISKeywordIO
+from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundException
 from safe_qgis.utilities import getTempDir
 
@@ -24,12 +24,12 @@ PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
          type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='"""
 
 
-class ISKeywordIOTest(unittest.TestCase):
+class KeywordIOTest(unittest.TestCase):
     """Tests for reading and writing of raster and vector data
     """
 
     def setUp(self):
-        self.keywordIO = ISKeywordIO()
+        self.keywordIO = KeywordIO()
         myUri = QgsDataSourceURI()
         myUri.setDatabase(os.path.join(TESTDATA, 'jk.sqlite'))
         myUri.setDataSource('', 'osm_buildings', 'Geometry')
@@ -169,6 +169,6 @@ class ISKeywordIOTest(unittest.TestCase):
         assert myKeywords == myExpectedKeywords, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISKeywordIOTest, 'test')
+    suite = unittest.makeSuite(KeywordIOTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

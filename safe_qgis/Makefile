@@ -21,7 +21,7 @@
 
 PLUGINNAME = inasafe
 
-PY_FILES = is_plugin.py is_dock.py is_help.py is_options_dialog_base.py __init__.py
+PY_FILES = plugin.py dock.py help.py options_dialog_base.py __init__.py
 
 EXTRAS = icon.png
 
@@ -57,7 +57,7 @@ pep8: compile
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	pep8 --repeat --ignore=E203 --exclude is_help_base.py,is_dock_base.py,resources.py,resources_rc.py .
+	pep8 --repeat --ignore=E203 --exclude help_base.py,dock_base.py,resources.py,resources_rc.py .
 
 # Run test suite only
 test_suite: compile

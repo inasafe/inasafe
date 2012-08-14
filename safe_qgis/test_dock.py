@@ -44,7 +44,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                 GOOGLECRS,
                                 loadLayer)
 
-from safe_qgis.dock import ISDock
+from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion)
 
@@ -66,7 +66,7 @@ except Exception, e:
     print 'Debugging was disabled'
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
-DOCK = ISDock(IFACE)
+DOCK = Dock(IFACE)
 
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'

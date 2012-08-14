@@ -40,7 +40,7 @@ except:
     print 'Debugging was disabled'
 
 
-class ISPlugin:
+class Plugin:
     """The QGIS interface implementation for the Risk in a box plugin.
 
     This class acts as the 'glue' between QGIS and our custom logic.
@@ -122,7 +122,7 @@ class ISPlugin:
         Raises:
            no exceptions explicitly raised.
         """
-        return QCoreApplication.translate('ISPlugin', theString)
+        return QCoreApplication.translate('Plugin', theString)
 
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
@@ -140,7 +140,7 @@ class ISPlugin:
            no exceptions explicitly raised.
         """
         # Import dock here as it needs to be imported AFTER i18n is set up
-        from safe_qgis.dock import ISDock
+        from safe_qgis.dock import Dock
         self.dockWidget = None
         #--------------------------------------
         # Create action for plugin dockable window (show/hide)
@@ -215,7 +215,7 @@ class ISPlugin:
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
-        self.dockWidget = ISDock(self.iface)
+        self.dockWidget = Dock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
         if myLegendTab:
@@ -272,7 +272,7 @@ class ISPlugin:
         menu item associated with this plugin. It will hide or show
         the dock depending on its current state.
 
-        .. see also:: :func:`ISPlugin.initGui`.
+        .. see also:: :func:`Plugin.initGui`.
 
         Args:
            None.
@@ -293,7 +293,7 @@ class ISPlugin:
         This slot is called when the user clicks the options toolbar
         icon or menu item associated with this plugin
 
-        .. see also:: :func:`ISPlugin.initGui`.
+        .. see also:: :func:`Plugin.initGui`.
 
         Args:
            None.
@@ -303,9 +303,9 @@ class ISPlugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.options_dialog import ISOptionsDialog
+        from safe_qgis.options_dialog import OptionsDialog
 
-        myDialog = ISOptionsDialog(self.iface.mainWindow(),
+        myDialog = OptionsDialog(self.iface.mainWindow(),
                                       self.iface,
                                       self.dockWidget)
         myDialog.show()
@@ -316,7 +316,7 @@ class ISPlugin:
         This slot is called when the user clicks the keyword editor toolbar
         icon or menu item associated with this plugin
 
-        .. see also:: :func:`ISPlugin.initGui`.
+        .. see also:: :func:`Plugin.initGui`.
 
         Args:
            None.
@@ -326,11 +326,11 @@ class ISPlugin:
            no exceptions explicitly raised.
         """
         # import here only so that it is AFTER i18n set up
-        from safe_qgis.keywords_dialog import ISKeywordsDialog
+        from safe_qgis.keywords_dialog import KeywordsDialog
 
         if self.iface.activeLayer() is None:
             return
-        myDialog = ISKeywordsDialog(self.iface.mainWindow(),
+        myDialog = KeywordsDialog(self.iface.mainWindow(),
                                       self.iface,
                                       self.dockWidget)
         myDialog.show()
@@ -341,7 +341,7 @@ class ISPlugin:
         This slot is called when the user clicks the reset icon in the toolbar
         or the reset menu item associated with this plugin
 
-        .. see also:: :func:`ISPlugin.initGui`.
+        .. see also:: :func:`Plugin.initGui`.
 
         Args:
            None.
@@ -358,7 +358,7 @@ class ISPlugin:
         This slot is called when the user clicks the keyword editor toolbar
         icon or menu item associated with this plugin
 
-        .. see also:: :func:`ISPlugin.initGui`.
+        .. see also:: :func:`Plugin.initGui`.
 
         Args:
            None.

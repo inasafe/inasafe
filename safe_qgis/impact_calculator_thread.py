@@ -30,7 +30,7 @@ from safe_qgis.safe_interface import calculateSafeImpact
 from safe_qgis.exceptions import InsufficientParametersException
 
 
-class ISImpactCalculatorThread(threading.Thread, QObject):
+class ImpactCalculatorThread(threading.Thread, QObject):
     """A threaded class to compute an impact scenario. Under
        python a thread can only be run once, so the instances
        based on this class are designed to be short lived.
@@ -47,8 +47,8 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
        Users of this of this class can listen for signals indicating
        when processing is done. For example::
 
-         from is_impact_calculator_thread import ISImpactCalculatorThread
-         n = ISImpactCalculatorThread()
+         from is_impact_calculator_thread import ImpactCalculatorThread
+         n = ImpactCalculatorThread()
          n.done.connect(n.showMessage)
          n.done.emit()
 
@@ -128,7 +128,7 @@ class ISImpactCalculatorThread(threading.Thread, QObject):
         After the thread is complete, you can use the filename and
         result accessors to determine what the result of the analysis was::
 
-          calculator = ISImpactCalculator()
+          calculator = ImpactCalculator()
           rasterPath = os.path.join(TESTDATA, 'xxx.asc')
           vectorPath = os.path.join(TESTDATA, 'xxx.shp')
           calculator.setHazardLayer(self.rasterPath)
