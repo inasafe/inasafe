@@ -144,7 +144,7 @@ Create a new Job (project):
 :menuselection:`Jenkins --> New Job` or go to
 http://jenkins.linfiniti.com/view/All/newJob.
 
-Here is a log of the options we set for the Jenkins job::
+Here is a log of the options we set for the Jenkins job:
 
 * :guilabel:`Project Name` set to :kbd:`InaSAFE` (don't use spaces for the
   project name!).
@@ -171,7 +171,7 @@ Here is a log of the options we set for the Jenkins job::
        export QGISPATH=/usr/local/qgis1.8/
 
        # Make sure data dir is current and synced it its git clone
-       #scripts/sync-git-data-mirror.sh
+       scripts/update-test-data.sh
 
        #Go on with metrics and tests
        make jenkins-pyflakes

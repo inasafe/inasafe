@@ -49,6 +49,9 @@ def combine_coordinates(x, y):
     """Make list of all combinations of points for x and y coordinates
     """
 
+    # FIXME (Ole): Write this using numpy for issue #91 and use that routine
+    # instead of the below. We need something like the Kronecker product
+    # numpy.kron
     points = []
     for px in x:
         for py in y:

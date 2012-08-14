@@ -1,9 +1,9 @@
 import numpy
 
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from storage.raster import Raster
-from common.utilities import ugettext as _
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.storage.raster import Raster
+from safe.common.utilities import ugettext as _
 
 # Largely superseded by flood impact functions, but keep as it
 # shows a different way of breaking down the impact using
