@@ -47,12 +47,12 @@ def qgisMinimumVersion():
 
 def icon():
     """Icon path for the plugin - metadata.txt it will override this"""
-    return os.path.join(os.path.dirname(__file__), 'gui', 'resources',
+    return os.path.join(os.path.dirname(__file__), 'safe_qgis', 'resources',
                         'img', 'icon.png')
 
 
 def classFactory(iface):
-    """Load ISPlugin class from file ISPlugin"""
+    """Load Plugin class from file Plugin"""
 
     # setup the logging
     #import logging
@@ -74,5 +74,5 @@ def classFactory(iface):
     # FIXME (TD): reload doesn't seem to reload the plugins anything
 
     #logger.debug("reload core 3")
-    from gui.is_plugin import ISPlugin
-    return ISPlugin(iface)
+    from safe_qgis.plugin import Plugin
+    return Plugin(iface)

@@ -402,14 +402,17 @@ environment has been imported. Here are the typical contexts of the file::
 
    SET OSGEO4W_ROOT=C:\PROGRA~2\QUANTU~1
    call "%OSGEO4W_ROOT%"\bin\o4w_env.bat
-   call "%OSGEO4W_ROOT%"\apps\grass\grass-6.4.2RC2\etc\env.bat
+   call "%OSGEO4W_ROOT%"\apps\grass\grass-6.4.2\etc\env.bat
    @echo off
    SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.8
-   path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2RC2\lib
+   path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2\lib
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;
-   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python25\\Lib\\site-packages
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python27\\Lib\\site-packages
    set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
-   start "Quantum GIS" /B ""C:\Progra~1\eclipse\eclipse.exe" %*
+   "C:\Progra~2\eclipse\eclipse.exe"
+
+.. note:: Use the path where your eclipse was extracted. Also note that PROGRA~2 may 
+   be PROGRA~1 in 32bit windows.
 
 Save this file under <QGIS Install Dir>/bin/python-shell.bat and then right-drag
 it from explorer to your Windows start button to create an easily accessible 
@@ -429,10 +432,10 @@ In the resulting project dialog, set the following details:
 * :guilabel (windows):`Directory` : 
   :kbd:`C:\\Users\\<user>\\.qgis\\python\\plugins\\inasafe\\`
 * :guilabel:`Choose project type` : :kbd:`Python`
-* :guilabel:`Grammar Version` : :kbd:`2.5`
+* :guilabel:`Grammar Version` : :kbd:`2.7`
 * :guilabel:`Add project directory to PYTHONPATH?` : :kbd:`check`
 
-.. note:: The python shipped with QGIS for windows is version 2.5 so you should
+.. note:: The python shipped with QGIS for windows is version 2.7 so you should
    avoid using any additions to the python spec introduced in later versions.
 
 At this point you should should click the link entitled 'Please configure an interpreter
@@ -442,48 +445,60 @@ in related preferences before continuing.' And on the resulting dialog do:
 
 In the dialog that appears do:
 
-* :guilabel:`Interpreter Name` : :kbd:`QGIS Python 2.5`
+* :guilabel:`Interpreter Name` : :kbd:`QGIS Python 2.7`
 * :guilabel:`Interpreter Executable` : 
-  :kbd:`C:\Program Files (x86)\Quantum GIS Wroclaw\bin\python.exe`
+  :kbd:`C:\\Program Files (x86)\\Quantum GIS Lisboa\\bin\\python.exe`
 * :guilabel:`OK Button` : :kbd:`click this button`
 
 
 Another dialog will appear. Tick the first entry in the list that points to
 your::
 
-      eclipse/org.eclipse.platform_3.7.0_155965261/plugins/org.python.pydev_2.3.0.2011121518/
+      C:\\users\\inasafe\\Downloads\\eclipse\\plugins\\org.python.pydev
+      _2.6.0.2012062818\\pysrc
 
 The resulting list of python paths should look something like this::
    
-   C:\Program Files\eclipse\plugins\org.python.pydev.debug_2.3.0.2011121518\pysrc
-   C:\PROGRA~2\QUANTU~1\apps\Python25\DLLs
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\plat-win
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\lib-tk
-   C:\PROGRA~2\QUANTU~1\apps\Python25
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\win32
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\win32\lib
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\Pythonwin
-   C:\PROGRA~2\QUANTU~1\apps\Python25\lib\site-packages\wx-2.8-msw-unicode
+   C:\Program Files\eclipse\plugins\org.python.pydev_2.6.0.2012062818\pysrc
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\Lib\site-packages\
+   setuptools-0.6c11-py2.7.egg
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\
+   setuptools-0.6c11-py2.7.egg
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\pip-1.1-py2.7.egg
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\Lib\site-packages
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\DLLs
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\plat-win
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\lib-tk
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\PIL
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\win32
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\win32\lib
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\Pythonwin
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\wx-2.8-msw-unicode
+   C:\Program Files\Quantum GIS Lisboa\apps\qgis\python
 
 Click on the :guilabel:`New folder` button and add the QGIS python dir::
 
-   C:\Program Files (x86)\Quantum GIS Wroclaw\apps\qgis\python
+   C:\Program Files (x86)\Quantum GIS Lisboa\apps\qgis\python
 
 * :guilabel:`OK Button` : :kbd:`click this button`
 
 You will be returned to the Python Interpreters list and should see an entry for
-**QGIS Python 2.5** listed there. Now do in the **Environment** tab:
+**QGIS Python 2.7** listed there. Now do in the **Environment** tab:
 
 :guilabel:`New`
 
 In the dialog that appears 
 
 :guilabel:`Name` : :kbd:`QGISPATH`
-:guilabel:`Value` : :kbd:`C:\PROGRA~2\QUANTU~1\apps\qgis`
+:guilabel:`Value` : :kbd:`C:\\PROGRA~1\\QUANTU~1\\apps\\qgis`
 
 Then click ok to close the environment variable editor.
+
+* :guilabel:`Ok` : :kbd:`click this button`
+
+Then click finsih to finish the new project dialog.
 
 * :guilabel:`Finish` : :kbd:`click this button`
 

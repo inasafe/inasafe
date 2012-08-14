@@ -32,7 +32,7 @@ compile:
 	@echo "-----------------"
 	@echo "Compile GUI forms"
 	@echo "-----------------"
-	make -C gui
+	make -C safe_qgis
 
 docs: compile
 	@echo
@@ -41,20 +41,20 @@ docs: compile
 	@echo "-------------------------------"
 	cd docs; make html >/dev/null; cd ..
 
-#Qt .ts file updates - run to register new strings for translation in gui
+#Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile
 	@echo "Collecting strings requiring translations. Please provide translations by editing the translation files below:"
 	@# Qt translation stuff first.
-	@cd gui; pylupdate4 inasafe.pro; cd .
-	@$(foreach LOCALE,$(LOCALES), echo "gui/i18n/inasafe_$(LOCALE).ts";)
+	@cd safe_qgis; pylupdate4 inasafe.pro; cd .
+	@$(foreach LOCALE,$(LOCALES), echo "safe_qgis/i18n/inasafe_$(LOCALE).ts";)
 	@# Gettext translation stuff next.
 	@# apply same xgettext command for each supported locale. TS
 	@$(foreach LOCALE,$(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
 
-#Qt .qm file updates - run to create binary representation of translated strings for translation in gui
+#Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
 compile-translation-strings: compile
 	@#Compile qt messages binary
-	cd gui; lrelease inasafe.pro; cd ..
+	cd safe_qgis; lrelease inasafe.pro; cd ..
 	@#compile gettext messages binary
 	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 
@@ -85,7 +85,7 @@ lines-of-code:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	@git log | head -3
-	@sloccount gui impact_functions storage safe_api.py common gui realtime | grep '^[0-9]'
+	@sloccount safe_qgis impact_functions storage safe_api.py common realtime | grep '^[0-9]'
 
 
 clean:
@@ -122,7 +122,7 @@ test_suite_no_git: compile
 	@echo "----------------------"
 	@echo "Regression Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=common,storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=common,storage,engine,impact_functions,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -139,7 +139,7 @@ test_suite: compile testdata
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=common,storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=common,storage,engine,impact_functions,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -158,7 +158,7 @@ gui_test_suite_no_git: compile
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Run gui test suite only
 gui_test_suite: compile testdata
@@ -168,7 +168,7 @@ gui_test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Get test data
 # FIXME (Ole): Need to attempt cloning this r/w for those with
@@ -179,7 +179,7 @@ testdata:
 	@echo "Updating test data - please hit Enter if asked for password"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh a7abfaec3832b7c922d2534a2ec5203c1c66f454
+	@scripts/update-test-data.sh 17bab3b8e4e590f93e0c3ccb31959d7e2918bcbc
 
 disabled_tests:
 	@echo
@@ -238,7 +238,7 @@ pylint:
 	@echo "---------------------------------------"
 	@echo "Pylint report                          "
 	@echo "---------------------------------------"
-	pylint --disable=C,R common storage engine gui
+	pylint --disable=C,R common storage engine safe_qgis
 
 profile:
 	@echo
@@ -260,14 +260,14 @@ jenkins-test:
 	@echo "----------------------------------"
 	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
-		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=common,storage,engine,impact_functions,gui || :
+		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=common,storage,engine,impact_functions,safe_qgis || :
 
 jenkins-pyflakes:
 	@echo
 	@echo "----------------------------------"
 	@echo "PyFlakes check for Jenkins"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes common storage engine impact_functions gui > pyflakes.log || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes common storage engine impact_functions safe_qgis > pyflakes.log || :
 
 jenkins-sloccount:
 	@echo "----------------------"
@@ -275,7 +275,7 @@ jenkins-sloccount:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	# This line is for machine readble output for use by Jenkins
-	@sloccount --duplicates --wide --details  gui impact_functions storage safe_api.py common gui realtime | fgrep -v .svn > sloccount.sc || :
+	@sloccount --duplicates --wide --details  impact_functions storage safe_api.py common safe_qgis realtime | fgrep -v .svn > sloccount.sc || :
 
 jenkins-pylint:
 	@echo
@@ -289,7 +289,7 @@ jenkins-pylint:
 	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,is_help_base.py,is_keywords_dialog_base.py,is_options_dialog_base.py,is_dock_base.py common storage engine gui | grep -v 'I0011' > pylint.log || :
+	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,is_help_base.py,is_keywords_dialog_base.py,is_options_dialog_base.py,is_dock_base.py common storage engine safe_qgis | grep -v 'I0011' > pylint.log || :
 
 jenkins-pep8:
 	@echo
