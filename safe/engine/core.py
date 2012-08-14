@@ -91,7 +91,7 @@ def calculate_impact(layers, impact_fcn,
     return F
 
 
-def check_data_integrity(layer_objects):
+def check_data_integrity(layer_objects, tolerance=):
     """Check list of layer objects
 
     Input
@@ -147,6 +147,12 @@ def check_data_integrity(layer_objects):
                    '' % (layer, layer.projection, reference_projection))
             verify(reference_projection == layer.projection, msg)
 
+
+        #FIXME(Ariel): Make this configurable by the frontend choice?
+        # Relax tolerance requirements to have GeoNode compatibility
+        # tolerance = 10e-12
+        tolerance = 10e-7
+
         # Ensure that geotransform and dimensions is consistent across
         # all *raster* layers
         if layer.is_raster:
@@ -157,7 +163,7 @@ def check_data_integrity(layer_objects):
                        '%s %s' % (geotransform, layer.get_geotransform()))
                 verify(numpy.allclose(geotransform,
                                       layer.get_geotransform(),
-                                      rtol=1.0e-12), msg)
+                                      rtol=tolerance), msg)
 
         # In case of vector layers, we just check that they are non-empty
         # FIXME (Ole): Not good as nasty error is raised in cases where
