@@ -52,7 +52,7 @@ def icon():
 
 
 def classFactory(iface):
-    """Load ISPlugin class from file ISPlugin"""
+    """Load Plugin class from file Plugin"""
 
     # setup the logging
     #import logging
@@ -74,5 +74,5 @@ def classFactory(iface):
     # FIXME (TD): reload doesn't seem to reload the plugins anything
 
     #logger.debug("reload core 3")
-    from safe_qgis.plugin import ISPlugin
-    return ISPlugin(iface)
+    from safe_qgis.plugin import Plugin
+    return Plugin(iface)
