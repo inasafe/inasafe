@@ -152,7 +152,7 @@ def read_keywords(filename):
     Input
         filename: Name of keywords file. Extension expected to be .keywords
                   The format of one line is expected to be either
-                  string: string
+                  string: string or string
 
     Output
         keywords: Dictionary of keyword, value pairs
@@ -160,6 +160,7 @@ def read_keywords(filename):
     If filename does not exist, an empty dictionary is returned
     Blank lines are ignored
     Surrounding whitespace is removed from values, but keys are unmodified
+    If there are no ':', then the keyword is treated as a key with no value
     """
 
     # Input checks
@@ -187,14 +188,18 @@ def read_keywords(filename):
                'I got %s ' % text)
         verify(':' in text, msg)
 
-        # Get splitting point
-        idx = text.find(':')
+        if ':' not in text:
+            key = text.strip()
+            val = None
+        else:
+            # Get splitting point
+            idx = text.find(':')
 
-        # Take key as everything up to the first ':'
-        key = text[:idx]
+            # Take key as everything up to the first ':'
+            key = text[:idx]
 
-        # Take value as everything after the first ':'
-        val = text[idx + 1:].strip()
+            # Take value as everything after the first ':'
+            val = text[idx + 1:].strip()
 
         # Add entry to dictionary
         keywords[key] = val
