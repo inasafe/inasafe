@@ -17,7 +17,8 @@ __date__ = '20/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os, tempfile
+import os
+import tempfile
 import unittest
 from tables import Table, TableRow, TableCell, Link
 
@@ -67,7 +68,7 @@ class TablesTest(unittest.TestCase):
 
     def writeHtml(self, name):
         self.html += ' </body>\n</html>\n'
-        file(os.path.join(self.tmpDir(),'%s.html' % name),
+        file(os.path.join(self.tmpDir(), '%s.html' % name),
              'wt').write(self.html)
 
     def setUp(self):
