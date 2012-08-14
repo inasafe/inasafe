@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Thu May 24 11:00:46 2012
+# Created: Tue Aug 14 19:12:05 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -14,13 +14,13 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-class Ui_ISDockBase(object):
-    def setupUi(self, ISDockBase):
-        ISDockBase.setObjectName(_fromUtf8("ISDockBase"))
-        ISDockBase.resize(394, 547)
+class Ui_DockBase(object):
+    def setupUi(self, DockBase):
+        DockBase.setObjectName(_fromUtf8("DockBase"))
+        DockBase.resize(394, 547)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        ISDockBase.setWindowIcon(icon)
+        DockBase.setWindowIcon(icon)
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.dockWidgetContents)
@@ -120,30 +120,30 @@ class Ui_ISDockBase(object):
         self.pbnRunStop.setObjectName(_fromUtf8("pbnRunStop"))
         self.horizontalLayout.addWidget(self.pbnRunStop)
         self.gridLayout.addLayout(self.horizontalLayout, 4, 0, 1, 1)
-        ISDockBase.setWidget(self.dockWidgetContents)
+        DockBase.setWidget(self.dockWidgetContents)
         self.label_6.setBuddy(self.cboHazard)
         self.label_7.setBuddy(self.cboExposure)
         self.label_8.setBuddy(self.cboFunction)
 
-        self.retranslateUi(ISDockBase)
-        QtCore.QMetaObject.connectSlotsByName(ISDockBase)
-        ISDockBase.setTabOrder(self.cboHazard, self.cboExposure)
-        ISDockBase.setTabOrder(self.cboExposure, self.cboFunction)
-        ISDockBase.setTabOrder(self.cboFunction, self.wvResults)
-        ISDockBase.setTabOrder(self.wvResults, self.pbnRunStop)
-        ISDockBase.setTabOrder(self.pbnRunStop, self.pbnHelp)
+        self.retranslateUi(DockBase)
+        QtCore.QMetaObject.connectSlotsByName(DockBase)
+        DockBase.setTabOrder(self.cboHazard, self.cboExposure)
+        DockBase.setTabOrder(self.cboExposure, self.cboFunction)
+        DockBase.setTabOrder(self.cboFunction, self.wvResults)
+        DockBase.setTabOrder(self.wvResults, self.pbnRunStop)
+        DockBase.setTabOrder(self.pbnRunStop, self.pbnHelp)
 
-    def retranslateUi(self, ISDockBase):
-        ISDockBase.setWindowTitle(QtGui.QApplication.translate("ISDockBase", "InaSAFE", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpQuestion.setTitle(QtGui.QApplication.translate("ISDockBase", "Questions", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("ISDockBase", "In the event of", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("ISDockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_8.setText(QtGui.QApplication.translate("ISDockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_2.setTitle(QtGui.QApplication.translate("ISDockBase", "Results", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("ISDockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnHelp.setText(QtGui.QApplication.translate("ISDockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnPrint.setText(QtGui.QApplication.translate("ISDockBase", "Print...", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnRunStop.setText(QtGui.QApplication.translate("ISDockBase", "Run", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, DockBase):
+        DockBase.setWindowTitle(QtGui.QApplication.translate("DockBase", "InaSAFE", None, QtGui.QApplication.UnicodeUTF8))
+        self.grpQuestion.setTitle(QtGui.QApplication.translate("DockBase", "Questions", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_6.setText(QtGui.QApplication.translate("DockBase", "In the event of", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_2.setTitle(QtGui.QApplication.translate("DockBase", "Results", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnPrint.setText(QtGui.QApplication.translate("DockBase", "Print...", None, QtGui.QApplication.UnicodeUTF8))
+        self.pbnRunStop.setText(QtGui.QApplication.translate("DockBase", "Run", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
-import safe_qgis.resources_rc
+import resources_rc

@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
-from safe_qgis.options_dialog_base import Ui_ISOptionsDialogBase
+from safe_qgis.options_dialog_base import Ui_OptionsDialogBase
 from safe_qgis.help import Help
 from safe_qgis.keyword_io import KeywordIO
 
@@ -38,7 +38,7 @@ except ImportError:
     print 'Debugging was disabled'
 
 
-class OptionsDialog(QtGui.QDialog, Ui_ISOptionsDialogBase):
+class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
     """Options dialog for the InaSAFE plugin."""
 # pylint: disable=W0231
     def __init__(self, parent, iface, theDock=None):

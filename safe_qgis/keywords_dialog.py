@@ -25,7 +25,7 @@ from PyQt4.QtCore import pyqtSignature
 
 from odict import OrderedDict
 
-from safe_qgis.keywords_dialog_base import Ui_ISKeywordsDialogBase
+from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace
@@ -44,7 +44,7 @@ except ImportError:
     print 'Debugging was disabled'
 
 
-class KeywordsDialog(QtGui.QDialog, Ui_ISKeywordsDialogBase):
+class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
 # pylint: disable=W0231
     def __init__(self, parent, iface, theDock=None):

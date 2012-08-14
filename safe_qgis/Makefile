@@ -25,10 +25,10 @@ PY_FILES = plugin.py dock.py help.py options_dialog_base.py __init__.py
 
 EXTRAS = icon.png
 
-UI_FILES = is_dock_base.py \
-					 is_help_base.py \
-					 is_options_dialog_base.py \
-					 is_keywords_dialog_base.py
+UI_FILES = dock_base.py \
+					 help_base.py \
+					 options_dialog_base.py \
+					 keywords_dialog_base.py
 
 RESOURCE_FILES = resources.py
 

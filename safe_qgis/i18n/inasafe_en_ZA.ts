@@ -232,7 +232,7 @@ to%s: %s</source>
     </message>
 </context>
 <context>
-    <name>ISDock</name>
+    <name>Dock</name>
     <message>
         <location filename="ui_inasafedock.ui" line="14"/>
         <source>Risk-In-A-Box</source>
@@ -356,7 +356,7 @@ to%s: %s</source>
     </message>
 </context>
 <context>
-    <name>ISHelp</name>
+    <name>Help</name>
     <message>
         <location filename="ui_inasafehelp.ui" line="14"/>
         <source>Risk In A Box Help</source>
@@ -369,7 +369,7 @@ to%s: %s</source>
     </message>
 </context>
 <context>
-    <name>ISKeywordsDialog</name>
+    <name>KeywordsDialog</name>
     <message>
         <location filename="is_keywords_dialog.py" line="86"/>
         <source>earthquake [mmi]</source>
@@ -473,7 +473,7 @@ to%s: %s</source>
     </message>
 </context>
 <context>
-    <name>ISKeywordsDialogBase</name>
+    <name>KeywordsDialogBase</name>
     <message>
         <location filename="inasafekeywordsdialogbase.ui" line="14"/>
         <source>InaSAFE - Keyword Editor</source>

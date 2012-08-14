@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from PyQt4 import (QtGui, QtCore, QtWebKit)
-from help_base import Ui_ISHelpBase
+from help_base import Ui_HelpBase
 import os
 
 
@@ -48,7 +48,7 @@ class Help(QtGui.QDialog):
         """
         QtGui.QDialog.__init__(self, theParent)
         # Set up the user interface from Designer.
-        self.ui = Ui_ISHelpBase()
+        self.ui = Ui_HelpBase()
         self.ui.setupUi(self)
         self.context = theContext
         self.showContexthelp()

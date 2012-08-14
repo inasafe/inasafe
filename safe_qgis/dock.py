@@ -23,7 +23,7 @@ __type__ = 'alpha'  # beta, final etc will be shown in dock title
 import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
-from safe_qgis.dock_base import Ui_ISDockBase
+from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace, getWGS84resolution
 from qgis.core import (QgsMapLayer,
@@ -64,7 +64,7 @@ except ImportError:
     print 'Debugging was disabled'
 
 
-class Dock(QtGui.QDockWidget, Ui_ISDockBase):
+class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the Risk In A Box plugin."""
 
     def __init__(self, iface):

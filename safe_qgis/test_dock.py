@@ -246,7 +246,7 @@ def loadLayers(theLayerList, theClearFlag=True, DIR=TESTDATA):
 #    return myLayer, myType
 
 
-class ISDockTest(unittest.TestCase):
+class DockTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
     def setUp(self):
@@ -1213,8 +1213,8 @@ class ISDockTest(unittest.TestCase):
         assert myExpectedString in myHtml, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISDockTest, 'test')
-    suite = unittest.makeSuite(ISDockTest,
+    suite = unittest.makeSuite(DockTest, 'test')
+    suite = unittest.makeSuite(DockTest,
                                'test_runFloodPopulationImpactFunction')
 
     runner = unittest.TextTestRunner(verbosity=2)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ISOptionsDialogBase</class>
- <widget class="QDialog" name="ISOptionsDialogBase">
+ <class>OptionsDialogBase</class>
+ <widget class="QDialog" name="OptionsDialogBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -324,7 +324,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>ISOptionsDialogBase</receiver>
+   <receiver>OptionsDialogBase</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -340,7 +340,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>ISOptionsDialogBase</receiver>
+   <receiver>OptionsDialogBase</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

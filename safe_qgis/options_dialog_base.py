@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Wed May  2 12:13:59 2012
+# Created: Tue Aug 14 19:12:05 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -14,21 +14,21 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-class Ui_ISOptionsDialogBase(object):
-    def setupUi(self, ISOptionsDialogBase):
-        ISOptionsDialogBase.setObjectName(_fromUtf8("ISOptionsDialogBase"))
-        ISOptionsDialogBase.resize(501, 257)
+class Ui_OptionsDialogBase(object):
+    def setupUi(self, OptionsDialogBase):
+        OptionsDialogBase.setObjectName(_fromUtf8("OptionsDialogBase"))
+        OptionsDialogBase.resize(501, 257)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        ISOptionsDialogBase.setWindowIcon(icon)
-        self.gridLayout = QtGui.QGridLayout(ISOptionsDialogBase)
+        OptionsDialogBase.setWindowIcon(icon)
+        self.gridLayout = QtGui.QGridLayout(OptionsDialogBase)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.buttonBox = QtGui.QDialogButtonBox(ISOptionsDialogBase)
+        self.buttonBox = QtGui.QDialogButtonBox(OptionsDialogBase)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Help|QtGui.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
         self.gridLayout.addWidget(self.buttonBox, 2, 0, 1, 1)
-        self.scrollArea = QtGui.QScrollArea(ISOptionsDialogBase)
+        self.scrollArea = QtGui.QScrollArea(OptionsDialogBase)
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
@@ -154,43 +154,43 @@ class Ui_ISOptionsDialogBase(object):
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
 
-        self.retranslateUi(ISOptionsDialogBase)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), ISOptionsDialogBase.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), ISOptionsDialogBase.reject)
-        QtCore.QMetaObject.connectSlotsByName(ISOptionsDialogBase)
-        ISOptionsDialogBase.setTabOrder(self.cbxVisibleLayersOnly, self.cbxSetLayerNameFromTitle)
-        ISOptionsDialogBase.setTabOrder(self.cbxSetLayerNameFromTitle, self.lineEdit)
-        ISOptionsDialogBase.setTabOrder(self.lineEdit, self.toolButton)
-        ISOptionsDialogBase.setTabOrder(self.toolButton, self.lineEdit_2)
-        ISOptionsDialogBase.setTabOrder(self.lineEdit_2, self.toolButton_2)
-        ISOptionsDialogBase.setTabOrder(self.toolButton_2, self.lineEdit_3)
-        ISOptionsDialogBase.setTabOrder(self.lineEdit_3, self.toolButton_3)
-        ISOptionsDialogBase.setTabOrder(self.toolButton_3, self.lineEdit_4)
-        ISOptionsDialogBase.setTabOrder(self.lineEdit_4, self.toolButton_4)
-        ISOptionsDialogBase.setTabOrder(self.toolButton_4, self.spinBox)
-        ISOptionsDialogBase.setTabOrder(self.spinBox, self.cbxUseThread)
-        ISOptionsDialogBase.setTabOrder(self.cbxUseThread, self.buttonBox)
-        ISOptionsDialogBase.setTabOrder(self.buttonBox, self.scrollArea)
+        self.retranslateUi(OptionsDialogBase)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), OptionsDialogBase.accept)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), OptionsDialogBase.reject)
+        QtCore.QMetaObject.connectSlotsByName(OptionsDialogBase)
+        OptionsDialogBase.setTabOrder(self.cbxVisibleLayersOnly, self.cbxSetLayerNameFromTitle)
+        OptionsDialogBase.setTabOrder(self.cbxSetLayerNameFromTitle, self.lineEdit)
+        OptionsDialogBase.setTabOrder(self.lineEdit, self.toolButton)
+        OptionsDialogBase.setTabOrder(self.toolButton, self.lineEdit_2)
+        OptionsDialogBase.setTabOrder(self.lineEdit_2, self.toolButton_2)
+        OptionsDialogBase.setTabOrder(self.toolButton_2, self.lineEdit_3)
+        OptionsDialogBase.setTabOrder(self.lineEdit_3, self.toolButton_3)
+        OptionsDialogBase.setTabOrder(self.toolButton_3, self.lineEdit_4)
+        OptionsDialogBase.setTabOrder(self.lineEdit_4, self.toolButton_4)
+        OptionsDialogBase.setTabOrder(self.toolButton_4, self.spinBox)
+        OptionsDialogBase.setTabOrder(self.spinBox, self.cbxUseThread)
+        OptionsDialogBase.setTabOrder(self.cbxUseThread, self.buttonBox)
+        OptionsDialogBase.setTabOrder(self.buttonBox, self.scrollArea)
 
-    def retranslateUi(self, ISOptionsDialogBase):
-        ISOptionsDialogBase.setWindowTitle(QtGui.QApplication.translate("ISOptionsDialogBase", "InaSAFE - Options", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxVisibleLayersOnly.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Only show visible layers in InaSAFE dock", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxSetLayerNameFromTitle.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxZoomToImpact.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Zoom to impact layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxHideExposure.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Hide exposure layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblKeywordCache.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Keyword cache for remote datasources", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolKeywordCachePath.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpNotImplemented.setTitle(QtGui.QApplication.translate("ISOptionsDialogBase", "Not yet implemented", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxBubbleLayersUp.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Location for results", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Report template", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_2.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Logo for maps (must be x x y) ", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_3.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Organisation name (for maps, reports etc.)", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_4.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "DPI (Maps and reports)", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxUseThread.setText(QtGui.QApplication.translate("ISOptionsDialogBase", "Run analysis in a separate thread (experimental)", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, OptionsDialogBase):
+        OptionsDialogBase.setWindowTitle(QtGui.QApplication.translate("OptionsDialogBase", "InaSAFE - Options", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxVisibleLayersOnly.setText(QtGui.QApplication.translate("OptionsDialogBase", "Only show visible layers in InaSAFE dock", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxSetLayerNameFromTitle.setText(QtGui.QApplication.translate("OptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxZoomToImpact.setText(QtGui.QApplication.translate("OptionsDialogBase", "Zoom to impact layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxHideExposure.setText(QtGui.QApplication.translate("OptionsDialogBase", "Hide exposure layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblKeywordCache.setText(QtGui.QApplication.translate("OptionsDialogBase", "Keyword cache for remote datasources", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolKeywordCachePath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.grpNotImplemented.setTitle(QtGui.QApplication.translate("OptionsDialogBase", "Not yet implemented", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxBubbleLayersUp.setText(QtGui.QApplication.translate("OptionsDialogBase", "Bubble exposure and hazard layers to top when selected", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("OptionsDialogBase", "Location for results", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolButton.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("OptionsDialogBase", "Report template", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolButton_2.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("OptionsDialogBase", "Logo for maps (must be x x y) ", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolButton_3.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_4.setText(QtGui.QApplication.translate("OptionsDialogBase", "Organisation name (for maps, reports etc.)", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolButton_4.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_5.setText(QtGui.QApplication.translate("OptionsDialogBase", "DPI (Maps and reports)", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxUseThread.setText(QtGui.QApplication.translate("OptionsDialogBase", "Run analysis in a separate thread (experimental)", None, QtGui.QApplication.UnicodeUTF8))
 
-import safe_qgis.resources_rc
+import resources_rc
