@@ -179,7 +179,7 @@ testdata:
 	@echo "Updating test data - please hit Enter if asked for password"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh a7abfaec3832b7c922d2534a2ec5203c1c66f454
+	@scripts/update-test-data.sh 17bab3b8e4e590f93e0c3ccb31959d7e2918bcbc
 
 disabled_tests:
 	@echo
