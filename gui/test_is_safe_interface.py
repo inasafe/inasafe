@@ -27,7 +27,7 @@ from gui.is_safe_interface import (getOptimalExtent,
 from gui.is_exceptions import (KeywordNotFoundException,
                                InsufficientOverlapException,
                                InvalidBoundingBoxException)
-from safe.api import TESTDATA, HAZDATA, EXPDATA
+from common.testing import TESTDATA, HAZDATA, EXPDATA
 
 
 class ISSafeInterfaceTest(unittest.TestCase):

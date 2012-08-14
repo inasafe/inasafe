@@ -366,6 +366,8 @@ class Test_IO(unittest.TestCase):
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_ref == v_file
+        assert v_file.is_point_data
+        assert v_file.geometry_type == 1
 
         v = Vector(geometry=test_data[0], geometry_type='point')
         assert v.is_point_data
@@ -384,6 +386,8 @@ class Test_IO(unittest.TestCase):
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_ref == v_file
+        assert v_file.is_polygon_data
+        assert v_file.geometry_type == 3
 
         v = Vector(geometry=test_data, geometry_type='polygon')
         assert v == v_ref
@@ -400,6 +404,8 @@ class Test_IO(unittest.TestCase):
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_ref == v_file
+        assert v_file.is_line_data
+        assert v_file.geometry_type == 2
 
         v = Vector(geometry=test_data, geometry_type=2)
         assert v == v_ref
@@ -1052,6 +1058,95 @@ class Test_IO(unittest.TestCase):
 
                     i0 = i1
 
+    def test_raster_to_vector_points(self):
+        """Raster layers can be converted to vector point layers
+        """
+
+        filename = '%s/test_grid.asc' % TESTDATA
+        R = read_layer(filename)
+
+        # Check data directly
+        coordinates, values = R.to_vector_points()
+        longitudes, latitudes = R.get_geometry()
+        A = R.get_data()
+        M, N = A.shape
+        L = M * N
+
+        assert numpy.allclose(coordinates[:N, 0], longitudes)
+        assert numpy.allclose(coordinates[:L:N, 1], latitudes[::-1])
+        assert nanallclose(A.flat[:], values)
+
+        # Generate vector layer
+        V = R.to_vector_layer()
+        geometry = V.get_geometry()
+        attributes = V.get_data()
+
+        # Store it for visual inspection e.g. with QGIS
+        out_filename = unique_filename(suffix='.shp')
+        V.write_to_file(out_filename)
+        #print 'Written to ', out_filename
+
+        # Check against cells that were verified manually using QGIS
+        assert numpy.allclose(geometry[5, :], [96.97137053, -5.34965715])
+        assert numpy.allclose(attributes[5]['value'], 3)
+        assert numpy.allclose(attributes[5]['value'], A[1, 0])
+
+        assert numpy.allclose(geometry[11, :], [97.0021116, -5.38039821])
+        assert numpy.allclose(attributes[11]['value'], -50.6014, rtol=1.0e-6)
+        assert numpy.allclose(attributes[11]['value'], A[2, 1], rtol=1.0e-6)
+
+        assert numpy.allclose(geometry[16, :], [97.0021116, -5.411139276])
+        assert numpy.allclose(attributes[16]['value'], -15, rtol=1.0e-6)
+        assert numpy.allclose(attributes[16]['value'], A[3, 1], rtol=1.0e-6)
+
+        assert numpy.allclose(geometry[23, :], [97.06359372, -5.44188034])
+        assert numpy.isnan(attributes[23]['value'])
+        assert numpy.isnan(A[4, 3])
+
+    def test_raster_to_vector_points2(self):
+        """Raster layers can be converted to vector point layers (real data)
+
+        # See qgis project in test data: raster_point_and_clipping_test.qgs
+        """
+
+        filename = '%s/population_5x5_jakarta.asc' % TESTDATA
+        R = read_layer(filename)
+
+        # Check data directly
+        coordinates, values = R.to_vector_points()
+        longitudes, latitudes = R.get_geometry()
+        A = R.get_data()
+        M, N = A.shape
+        L = M * N
+
+        assert numpy.allclose(coordinates[:N, 0], longitudes)
+        assert numpy.allclose(coordinates[:L:N, 1], latitudes[::-1])
+        assert nanallclose(A.flat[:], values)
+
+        # Generate vector layer
+        V = R.to_vector_layer()
+        geometry = V.get_geometry()
+        attributes = V.get_data()
+
+        # Store it for visual inspection e.g. with QGIS
+        out_filename = unique_filename(suffix='.shp')
+        #V.write_to_file(out_filename)
+        #print 'Written to ', out_filename
+
+        # Systematic check of all cells
+        i = 0
+        for m, lat in enumerate(latitudes[::-1]):  # Start from bottom
+            for n, lon in enumerate(longitudes):  # The fastest varying dim
+
+                # Test location
+                assert numpy.allclose(geometry[i, :], [lon, lat])
+
+                # Test value
+                assert numpy.allclose(attributes[i]['value'],
+                                      A[m, n], rtol=1.0e-6)
+
+                i += 1
+
     def test_get_bounding_box(self):
         """Bounding box is correctly extracted from file.
 
@@ -1148,7 +1243,10 @@ class Test_IO(unittest.TestCase):
                    'get_nodata_value',
                    'get_attribute_names',
                    'get_resolution',
-                   'get_geometry_type']
+                   'get_geometry_type',
+                   'get_geometry_name',
+                   'to_vector_points',
+                   'to_vector_layer']
 
         V = Vector()  # Empty vector instance
         R = Raster()  # Empty raster instance

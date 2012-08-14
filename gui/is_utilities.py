@@ -282,16 +282,15 @@ def getExceptionWithStacktrace(e, html=False, context=None):
 def getTempDir(theSubDirectory=None):
     """Obtain the temporary working directory for the operating system.
 
-    A inasafe subdirectory will automatically be created under this and
+    An inasafe subdirectory will automatically be created under this and
     if specified, a user subdirectory under that.
 
     Args:
-        theSubDirectory - optional argument which will cause an additional
+        theSubDirectory str - optional argument which will cause an additional
                 subirectory to be created e.g. /tmp/inasafe/foo/
 
     Returns:
-        Path to the output clipped layer (placed in the
-        system temp dir).
+        Path to the output clipped layer (placed in the system temp dir).
 
     Raises:
        Any errors from the underlying system calls.

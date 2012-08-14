@@ -112,12 +112,7 @@ def check_inputs(x, z, points, mode, bounds_error):
     if mode not in ['linear', 'constant']:
         raise RuntimeError(msg)
 
-    try:
-        x = numpy.array(x)
-    except Exception, e:
-        msg = ('Input vector x could not be converted to numpy array: '
-               '%s' % str(e))
-        raise Exception(msg)
+    x = numpy.array(x)
 
     msg = ('Input vector x must be monotoneously increasing. I got '
            'min(x) == %.15f, but x[0] == %.15f' % (min(x), x[0]))

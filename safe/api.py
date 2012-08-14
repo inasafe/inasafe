@@ -35,5 +35,3 @@ from safe.engine.core import calculate_impact
 from safe.common.dynamic_translations import names as internationalisedNames
 from safe.common.numerics import nanallclose
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
-# For testing and demoing
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA

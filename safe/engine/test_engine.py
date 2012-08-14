@@ -18,8 +18,9 @@ from safe.storage.core import write_raster_data
 from safe.storage.vector import Vector
 from safe.storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
 
-from safe.common.polygon import separate_points_by_polygon, clip_lines_by_polygon
+from safe.common.polygon import separate_points_by_polygon
 from safe.common.polygon import is_inside_polygon
+from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from safe.common.numerics import nanallclose
@@ -461,7 +462,55 @@ class Test_Engine(unittest.TestCase):
 
             i += 1
 
+<<<<<<< HEAD
     test_jakarta_flood_study.slow = 1
+=======
+    def Xtest_clip_grid_by_polygons_optimisation(self):
+        """Rasters can be converted to points and clipped by polygons
+
+        This is a test for the basic machinery needed for issue #91
+
+        It uses over 400,000 gridpoints and 2704 complex polygons,
+        each with 10-200 vertices, and serves a test for optimising
+        the polygon clipping algorithm. With the optimisations requested
+        in https://github.com/AIFDR/inasafe/issues/222 it takes about 100
+        seconds on a good workstation while it takes over 2000 seconds
+        without it.
+        """
+
+        # Name input files
+        polyhazard = join(TESTDATA, 'rw_jakarta_singlepart.shp')
+        population = join(TESTDATA, 'Population_Jakarta_geographic.asc')
+
+        # Get layers using API
+        H = read_layer(polyhazard)
+        E = read_layer(population)
+
+        assert len(H) == 2704
+        res = clip_grid_by_polygons(E.get_data(),
+                                    E.get_geotransform(),
+                                    H.get_geometry())
+
+    def test_polygon_hazard_and_raster_exposure(self):
+        """Exposure rasters can be clipped by polygon exposure
+
+        This is a test for the basic machinery needed for issue #91
+        """
+
+        # Name input files
+        polyhazard = join(TESTDATA, 'rw_jakarta_singlepart.shp')
+        population = join(TESTDATA, 'Population_Jakarta_geographic.asc')
+
+        # Get layers using API
+        H = read_layer(polyhazard)
+        E = read_layer(population)
+
+        assert len(H) == 2704
+        #res = clip_grid_by_polygons(E.get_data(),
+        #                            E.get_geotransform(),
+        #                            H.get_geometry())
+        # FIXME (Ole): Not done yet
+>>>>>>> master
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works
@@ -1251,24 +1300,24 @@ class Test_Engine(unittest.TestCase):
         points = ensure_numeric(points)
 
         # Clip
-        indices, count = separate_points_by_polygon(points, polygon)
+        inside, outside = separate_points_by_polygon(points, polygon)
 
         # Expected number of points inside
-        assert count == 458
+        assert len(inside) == 458
 
         # First 10 inside
-        assert numpy.alltrue(indices[:10] == [2279, 2290, 2297, 2306, 2307,
-                                              2313, 2316, 2319, 2321, 2322])
+        assert numpy.alltrue(inside[:10] == [2279, 2290, 2297, 2306, 2307,
+                                             2313, 2316, 2319, 2321, 2322])
 
         # Last 10 outside
-        assert numpy.alltrue(indices[-10:] == [9, 8, 7, 6, 5, 4, 3, 2, 1, 0])
-
+        assert numpy.alltrue(outside[-10:] == [3519, 3520, 3521, 3522, 3523,
+                                               3524, 3525, 3526, 3527, 3528])
         # Store for viewing in e.g. QGis
         if False:  # True:
             Vector(geometry=[polygon]).write_to_file('test_poly.shp')
-            pts_inside = points[indices[:count]]
+            pts_inside = points[inside]
             Vector(geometry=pts_inside).write_to_file('test_points_in.shp')
-            pts_outside = points[indices[count:]]
+            pts_outside = points[outside]
             Vector(geometry=pts_outside).write_to_file('test_points_out.shp')
 
     def test_interpolation_from_polygons_one_poly(self):
@@ -2098,7 +2147,7 @@ class Test_Engine(unittest.TestCase):
 
                 # Check calculated damage
                 calculated_dam = attributes[i]['DAMAGE']
-                print calculated_mmi
+                #print calculated_mmi
                 verified_dam = padang_check_results(calculated_mmi,
                                                     building_class)
                 #print calculated_mmi, building_class, calculated_dam
@@ -2328,6 +2377,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_itb')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

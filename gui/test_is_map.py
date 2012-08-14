@@ -95,6 +95,7 @@ class ISMapTest(unittest.TestCase):
                             'b94cfd8a10d709ff28466ada425f24c8',  # ub11.10-64
                             '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
+                            'e4273364b33a943e1108f519dbe8e06c',	 # ub12.04-64
                             # ub11.04-64 laptop
                             '',
                             ]
@@ -117,6 +118,7 @@ class ISMapTest(unittest.TestCase):
                             'b94cfd8a10d709ff28466ada425f24c8',  # ub11.10-64
                             '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
+                            'e4273364b33a943e1108f519dbe8e06c',  # ub12.04-64
                             # ub11.04-64 laptop
                             '',
                             ]
@@ -139,6 +141,7 @@ class ISMapTest(unittest.TestCase):
                             '84bc3d518e3a0504f8dc36dfd620394e',  # ub11.10-64
                             'b68ccc328de852f0c66b8abe43eab3da',  # ub12.04
                             'cd5fb96f6c5926085d251400dd3b4928',  # ub12.04 xvfb
+                            'a654d0dcb6b6d14b0a7a62cd979c16b9',  # ub12.04-64
                             # ub11.04-64 laptop
                             '',
                             ]
@@ -191,6 +194,7 @@ class ISMapTest(unittest.TestCase):
                             'ea0702782c2ed5d950c427fbe1743858',  # ub11.10-64
                             '53e0ba1144e071ad41756595d29bf444',  # ub12.04
                             '0681c3587305074bc9272f456fb4dd09',  # ub12.04 xvfb
+                            'a37443d70604bdc8c279576b424a158c',  # ub12.04-64
                             # ub11.04-64 laptop
                             '',
                             ]

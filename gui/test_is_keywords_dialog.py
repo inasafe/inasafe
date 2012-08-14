@@ -30,12 +30,15 @@ from PyQt4.QtTest import QTest
 
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
-from safe.api import HAZDATA
+
 from gui.odict import OrderedDict
 from gui.utilities_test import (getQgisTestApp, unitTestDataPath)
 from gui.is_safe_interface import readKeywordsFromFile
 from gui.is_keywords_dialog import ISKeywordsDialog
 
+
+# For testing and demoing
+from common.testing import HAZDATA
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 

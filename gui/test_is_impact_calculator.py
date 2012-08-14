@@ -31,7 +31,8 @@ from gui.is_exceptions import (InsufficientParametersException,
                            StyleInfoNotFoundException)
 
 from gui.is_safe_interface import (readKeywordsFromLayer, getStyleInfo)
-from safe.api import TESTDATA, HAZDATA, EXPDATA
+
+from common.testing import  HAZDATA, EXPDATA, TESTDATA
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)

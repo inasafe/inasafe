@@ -483,6 +483,12 @@ class Test_interpolate(unittest.TestCase):
         refs = linear_function(points, 0)
         assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
+        # Exercise bounds_error flag
+        vals = interpolate1d(x, A, points, mode='linear',
+                             bounds_error=True)
+        refs = linear_function(points, 0)
+        assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
+
     def test_1d_constant_interpolation_basic(self):
         """Interpolation library works for 1D piecewise constant function
         """

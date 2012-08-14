@@ -26,8 +26,6 @@ from gui.is_help import ISHelp
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 
-
-
 class ISHelpTest(unittest.TestCase):
     """Test the InaSAFE help GUI
     .. note:: Currently these tests will all fail unless you comment out the

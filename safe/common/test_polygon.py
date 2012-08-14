@@ -308,9 +308,9 @@ class Test_Polygon(unittest.TestCase):
 
         points = [[2, 2], [1, 3], [-1, 1], [0, 2]]      # All outside
 
-        indices, count = separate_points_by_polygon(points, U)
-        assert count == 0                           # None inside
-        assert numpy.allclose(indices, [3, 2, 1, 0])
+        inside, outside = separate_points_by_polygon(points, U)
+        assert len(inside) == 0                           # None inside
+        assert numpy.allclose(outside, [0, 1, 2, 3])
 
         indices = outside_polygon(points, U, closed=True)
         assert numpy.allclose(indices, [0, 1, 2, 3])
@@ -326,9 +326,9 @@ class Test_Polygon(unittest.TestCase):
 
         points = [[0.5, 0.5], [0.2, 0.3], [0, 0.5]]  # All inside (or on edge)
 
-        indices, count = separate_points_by_polygon(points, U)
-        assert count == 3       # All inside
-        assert numpy.allclose(indices, [0, 1, 2])
+        inside, outside = separate_points_by_polygon(points, U)
+        assert len(outside) == 0       # All inside
+        assert numpy.allclose(inside, [0, 1, 2])
 
         indices = outside_polygon(points, U, closed=True)
         assert numpy.allclose(indices, [])
@@ -344,32 +344,32 @@ class Test_Polygon(unittest.TestCase):
         U = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
         # Try with boundary (vertical edge) point
-        indices, count = separate_points_by_polygon([[0, 0.5],
-                                                     [0.3, 0.3],
-                                                     [0.1, 0.6]], U)
-        assert count == 3
-        assert numpy.allclose(indices, [0, 1, 2])
+        inside, outside = separate_points_by_polygon([[0, 0.5],
+                                                      [0.3, 0.3],
+                                                      [0.1, 0.6]], U)
+        assert len(inside) == 3
+        assert numpy.allclose(inside, [0, 1, 2])
 
         # Try with boundary (horizontal edge) point
-        indices, count = separate_points_by_polygon([[0.5, 0.0],
-                                                     [0.3, 0.3],
-                                                     [0.1, 0.6]], U)
-        assert count == 3
-        assert numpy.allclose(indices, [0, 1, 2])
+        inside, outside = separate_points_by_polygon([[0.5, 0.0],
+                                                      [0.3, 0.3],
+                                                      [0.1, 0.6]], U)
+        assert len(inside) == 3
+        assert numpy.allclose(inside, [0, 1, 2])
 
         # Try with boundary (corner) point
-        indices, count = separate_points_by_polygon([[0.0, 0.0],
-                                                     [0.3, 0.3],
-                                                     [0.1, 0.6]], U)
-        assert count == 3
-        assert numpy.allclose(indices, [0, 1, 2])
+        inside, outside = separate_points_by_polygon([[0.0, 0.0],
+                                                      [0.3, 0.3],
+                                                      [0.1, 0.6]], U)
+        assert len(inside) == 3
+        assert numpy.allclose(inside, [0, 1, 2])
 
         # One outside
-        indices, count = separate_points_by_polygon([[0, 0.5],
-                                                     [1.3, 0.3],
-                                                     [0.1, 0.6]], U)
-        assert count == 2
-        assert numpy.allclose(indices, [0, 2, 1])
+        inside, outside = separate_points_by_polygon([[0, 0.5],
+                                                      [1.3, 0.3],
+                                                      [0.1, 0.6]], U)
+        assert len(inside) == 2
+        assert numpy.allclose(inside, [0, 2])
 
     def test_separate_points_by_polygon1(self):
         """Set of points is correctly separated according to polygon
@@ -378,76 +378,73 @@ class Test_Polygon(unittest.TestCase):
         # Unit square
         U = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
-        indices, count = separate_points_by_polygon([[0.5, 0.5]], U)
-        assert count == 1
-        assert numpy.allclose(indices, [0])
+        inside, outside = separate_points_by_polygon([[0.5, 0.5]], U)
+        assert len(inside) == 1
+        assert numpy.allclose(inside, [0])
 
-        indices, count = separate_points_by_polygon([[0.5, 0.5],
+        inside, outside = separate_points_by_polygon([[0.5, 0.5],
                                                      [0.3, 0.2]], U)
-        assert count == 2
-        assert numpy.allclose(indices, [0, 1])
+        assert len(inside) == 2
+        assert numpy.allclose(inside, [0, 1])
 
-        indices, count = separate_points_by_polygon([[0.5, 0.5],
+        inside, outside = separate_points_by_polygon([[0.5, 0.5],
                                                      [0.3, 0.2],
                                                      [0.6, 0.7]], U)
-        assert count == 3
-        assert numpy.allclose(indices, [0, 1, 2])
+        assert len(inside) == 3
+        assert numpy.allclose(inside, [0, 1, 2])
 
-        indices, count = separate_points_by_polygon([[0.3, 0.2]], U)
-        assert count == 1
-        assert numpy.allclose(indices, [0])
+        inside, outside = separate_points_by_polygon([[0.3, 0.2]], U)
+        assert len(inside) == 1
+        assert numpy.allclose(inside, [0])
 
-        indices, count = separate_points_by_polygon([[0.3, 0.2],
+        inside, outside = separate_points_by_polygon([[0.3, 0.2],
                                                      [1, -0.5]], U)
-        assert count == 1
-        assert numpy.allclose(indices, [0, 1])
+        assert len(inside) == 1
+        assert numpy.allclose(inside, [0])
+        assert numpy.allclose(outside, [1])
 
-        indices, count = separate_points_by_polygon([[0.5, 0.5],
+        inside, outside = separate_points_by_polygon([[0.5, 0.5],
                                                      [1, -0.5],
                                                      [0.3, 0.2]], U)
-        assert count == 2
-        assert numpy.allclose(indices, [0, 2, 1])
+        assert numpy.allclose(inside, [0, 2])
+        assert numpy.allclose(outside, [1])
 
-        indices, count = separate_points_by_polygon([[0.1, 0.1],
+        inside, outside = separate_points_by_polygon([[0.1, 0.1],
                                                      [0.5, 0.5],
                                                      [1, -0.5],
                                                      [0.3, 0.2]], U)
-        assert count == 3
-        assert numpy.allclose(indices, [0, 1, 3, 2])
+        assert numpy.allclose(inside, [0, 1, 3])
+        assert numpy.allclose(outside, [2])
 
         # Try with boundary (edge) point
-        indices, count = separate_points_by_polygon([[0, 0.5],
+        inside, outside = separate_points_by_polygon([[0, 0.5],
                                                      [0.1, 0.2]], U)
-        assert count == 2
-        assert numpy.allclose(indices, [0, 1])
+        assert numpy.allclose(inside, [0, 1])
 
         # Try with boundary (corner) point
-        indices, count = separate_points_by_polygon([[0, 0],
-                                                     [0.1, 0.2]], U)
-        assert count == 2
-        assert numpy.allclose(indices, [0, 1])
+        inside, outside = separate_points_by_polygon([[0, 0],
+                                                      [0.1, 0.2]], U)
+        assert numpy.allclose(inside, [0, 1])
 
         # Try with a range of cases point
-        indices, count = separate_points_by_polygon([[0, 0],  # corner
-                                                     [0, 0.5],  # edge
-                                                     [0.1, 0.2]], U)
-        assert count == 3
-        assert numpy.allclose(indices, [0, 1, 2])
+        inside, outside = separate_points_by_polygon([[0, 0],  # corner
+                                                      [0, 0.5],  # edge
+                                                      [0.1, 0.2]], U)
+        assert numpy.allclose(inside, [0, 1, 2])
 
         # One more test of vector formulation returning indices
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
-        res, count = separate_points_by_polygon(points, polygon)
-        assert count == 3
-        assert numpy.allclose(res, [0, 1, 2, 4, 3])
+        inside, outside = separate_points_by_polygon(points, polygon)
+        assert numpy.allclose(inside, [0, 1, 2])
+        assert numpy.allclose(outside, [3, 4])
 
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0],
                   [0.5, 1.5], [0.5, -0.5]]
-        res, count = separate_points_by_polygon(points, polygon)
-
-        assert numpy.allclose(res, [1, 2, 3, 5, 4, 0])
-        assert count == 3
+        inside, outside = separate_points_by_polygon(points, polygon)
+        assert numpy.allclose(inside, [1, 2, 3])
+        assert numpy.allclose(outside, [0, 4, 5])
 
     def test_separate_points_by_polygon_characterisation(self):
         """Numpy version of polygon clipping agrees with python version
@@ -456,42 +453,44 @@ class Test_Polygon(unittest.TestCase):
         # Unit square
         U = [[0, 0], [1, 0], [1, 1], [0, 1]]
 
-        indices_r, count_r = separate_points_by_polygon([[0.5, 0.5],
-                                                         [0.3, 0.2]],
-                                                        U,
-                                                        use_numpy=True)
-        indices_p, count_p = separate_points_by_polygon([[0.5, 0.5],
-                                                         [0.3, 0.2]],
-                                                        U,
-                                                        use_numpy=False)
+        inside_r, outside_r = separate_points_by_polygon([[0.5, 0.5],
+                                                          [0.3, 0.2]],
+                                                         U,
+                                                         use_numpy=True)
+        inside_p, outside_p = separate_points_by_polygon([[0.5, 0.5],
+                                                          [0.3, 0.2]],
+                                                         U,
+                                                         use_numpy=False)
 
-        assert count_r == count_p
-        assert numpy.allclose(indices_r, indices_p)
+        assert numpy.allclose(inside_r, inside_p)
+        assert numpy.allclose(outside_r, outside_p)
 
-        indices_r, count_r = separate_points_by_polygon([[0.5, 0.5],
-                                                         [0.3, 0.2],
-                                                         [0.6, 0.7]],
-                                                        U,
-                                                        use_numpy=True)
-        indices_p, count_p = separate_points_by_polygon([[0.5, 0.5],
-                                                         [0.3, 0.2],
-                                                         [0.6, 0.7]],
-                                                        U,
-                                                        use_numpy=False)
-        assert count_r == count_p
-        assert numpy.allclose(indices_r, indices_p)
+        inside_r, outside_r = separate_points_by_polygon([[0.5, 0.5],
+                                                          [0.3, 0.2],
+                                                          [0.6, 0.7]],
+                                                         U,
+                                                         use_numpy=True)
+        inside_p, outside_p = separate_points_by_polygon([[0.5, 0.5],
+                                                          [0.3, 0.2],
+                                                          [0.6, 0.7]],
+                                                         U,
+                                                         use_numpy=False)
+
+        assert numpy.allclose(inside_r, inside_p)
+        assert numpy.allclose(outside_r, outside_p)
 
         polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
         points = [[0.5, 1.4], [0.5, 0.5], [1, -0.5], [1.5, 0],
                   [0.5, 1.5], [0.5, -0.5]]
-        res_r, count_r = separate_points_by_polygon(points, polygon,
-                                                    use_numpy=True)
-        res_p, count_p = separate_points_by_polygon(points, polygon,
-                                                    use_numpy=False)
-        assert count_r == 3
-        assert count_p == 3
-        assert numpy.allclose(res_p, [1, 2, 3, 5, 4, 0])
-        assert numpy.allclose(res_r, [1, 2, 3, 5, 4, 0])
+        ins_r, out_r = separate_points_by_polygon(points, polygon,
+                                                  use_numpy=True)
+        ins_p, out_p = separate_points_by_polygon(points, polygon,
+                                                  use_numpy=False)
+        assert numpy.allclose(ins_r, ins_p)
+        assert numpy.allclose(out_r, out_p)
+
+        assert numpy.allclose(ins_p, [1, 2, 3])
+        assert numpy.allclose(out_p, [0, 4, 5])
 
     def test_polygon_clipping_error_handling(self):
         """Polygon clipping checks input as expected"""
@@ -673,17 +672,18 @@ class Test_Polygon(unittest.TestCase):
         all_points = numpy.concatenate((points_inside, points_outside))
         assert all_points.shape[0] == M + N
 
-        indices, count = separate_points_by_polygon(all_points, main_polygon)
+        inside, outside = separate_points_by_polygon(all_points, main_polygon)
+        count = len(inside)
         msg = 'Expected %i points inside, got %i' % (M, count)
         assert count == M, msg
 
-        msg = 'Expected %i indices, got %i' % (M + N, len(indices))
-        assert len(indices) == M + N, msg
+        msg = 'Expected %i indices outside, got %i' % (N, len(outside))
+        assert len(outside) == N, msg
 
-        for point in all_points[indices[:count]]:
+        for point in all_points[inside]:
             assert is_inside_polygon(point, main_polygon)
 
-        for point in all_points[indices[count:]]:
+        for point in all_points[outside]:
             assert not is_inside_polygon(point, main_polygon)
 
     test_large_example.slow = 1
@@ -727,17 +727,18 @@ class Test_Polygon(unittest.TestCase):
         all_points = numpy.concatenate((points_inside, points_outside))
         assert all_points.shape[0] == M + N
 
-        indices, count = separate_points_by_polygon(all_points, main_polygon)
+        inside, outside = separate_points_by_polygon(all_points, main_polygon)
+        count = len(inside)
         msg = 'Expected %i points inside, got %i' % (M, count)
         assert count == M, msg
 
-        msg = 'Expected %i indices, got %i' % (M + N, len(indices))
-        assert len(indices) == M + N, msg
+        msg = 'Expected %i indices outside, got %i' % (N, len(outside))
+        assert len(outside) == N, msg
 
-        for point in all_points[indices[:count]]:
+        for point in all_points[inside]:
             assert is_inside_polygon(point, main_polygon)
 
-        for point in all_points[indices[count:]]:
+        for point in all_points[outside]:
             assert not is_inside_polygon(point, main_polygon)
 
     test_large_convoluted_example.slow = 1
@@ -769,18 +770,18 @@ class Test_Polygon(unittest.TestCase):
         all_points = ensure_numeric(all_points)
 
         # Test separation algorithm
-        indices, count = separate_points_by_polygon(all_points, main_polygon)
-
+        inside, outside = separate_points_by_polygon(all_points, main_polygon)
+        count = len(inside)
         msg = 'Expected %i points inside, got %i' % (271, count)
         assert count == 271, msg
 
-        msg = 'Expected %i indices, got %i' % (M, len(indices))
-        assert len(indices) == M, msg
+        msg = 'Expected %i indices outside, got %i' % (729, len(outside))
+        assert len(outside) == 729, msg
 
-        for point in all_points[indices[:count]]:
+        for point in all_points[inside]:
             assert is_inside_polygon(point, main_polygon)
 
-        for point in all_points[indices[count:]]:
+        for point in all_points[outside]:
             assert not is_inside_polygon(point, main_polygon)
 
     test_large_convoluted_example_random.slow = 1

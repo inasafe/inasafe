@@ -15,8 +15,8 @@ from gui.is_keyword_io import ISKeywordIO
 from gui.is_exceptions import HashNotFoundException
 from gui.is_utilities import getTempDir
 
-from safe.api import TESTDATA, HAZDATA
-
+# For testing and demoing
+from common.testing import HAZDATA, TESTDATA
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 #Dont change this, not even formatting, you will break tests!
 PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'

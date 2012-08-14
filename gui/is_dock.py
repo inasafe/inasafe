@@ -1012,13 +1012,9 @@ class ISDock(QtGui.QDockWidget, Ui_ISDockBase):
                                                         myHazardGeoCellSize)
         else:
             # Hazard layer is vector
-            if myExposureLayer.type() == QgsMapLayer.RasterLayer:
-                myMessage = self.tr('Raster exposure with vector hazard not '
-                              'implemented')
-                raise Exception(myMessage)
-            else:
-                # Both layers are vector
-                pass
+
+            # FIXME (Ole): Check that it is a polygon layer
+            pass
 
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
