@@ -91,7 +91,7 @@ def calculate_impact(layers, impact_fcn,
     return F
 
 
-def check_data_integrity(layer_objects, tolerance=):
+def check_data_integrity(layer_objects):
     """Check list of layer objects
 
     Input
