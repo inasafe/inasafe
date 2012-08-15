@@ -210,8 +210,8 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
     myMessage += '--------------------------------------------------------\n'
 
     for myKey in myExpectedDict.keys():
-        myMessage += 'Expected: %s\n' % myExpectedDict[myKey]
-        myMessage += 'Actual  : %s\n' % myDict[myKey]
+        myMessage += 'Expected %s: %s\n' % (myKey, myExpectedDict[myKey])
+        myMessage += 'Actual   %s: %s\n' % (myKey, myDict[myKey])
         myMessage += '----\n'
     myMessage += '--------------------------------------------------------\n'
     myMessage += combosToString(DOCK)
@@ -783,23 +783,15 @@ class DockTest(unittest.TestCase):
 
         # Push OK with the left mouse button
 
-        print 'Haaaazard:' + DOCK.cboHazard.currentText()
-
-        myFunction = DOCK.cboFunction.currentText()
-        myMessage = ('Incorrect function selected - expected Terdampak,'
-                     ' got %s \n%s'
-                     % (myFunction, combosToString(DOCK)))
-        assert myFunction == 'Need evacuation', myMessage
-
+        print '--------------------'
+        print combosToString(DOCK)
 
         myResult, myMessage = setupScenario(
-            theHazard=('A flood in Jakarta in RW areas identified'
-                       ' as flood prone'),
-            theExposure='Penduduk Jakarta',
-            theFunction='Terdampak',
-            theFunctionId='Need evacuation')
+            theHazard=('A flood in Jakarta like in 2007'),
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function')
         assert myResult, myMessage
-
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
@@ -1096,7 +1088,6 @@ class DockTest(unittest.TestCase):
         """Check if the save/restore state methods work. See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
         DOCK.saveState()
