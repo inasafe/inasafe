@@ -18,12 +18,30 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from shake_data import ShakeData
+from ftp_client import FtpClient
 from safe_qgis.utilities_test import getQgisTestApp
+import sys
+if len(sys.argv) > 2:
+    sys.exit('Usage:\n%s [optional shakeid]\nor\n%s --list' % (
+        sys.argv[0], sys.argv[0]))
+elif len(sys.argv) == 2:
+    print('Processing shakemap %s' % sys.argv[1])
+    myEventId = sys.argv[1]
+    if myEventId in '--list':
+        myFtpClient = FtpClient()
+        myListing = myFtpClient.getListing()
+        for myEvent in myListing:
+            print myEvent
+        sys.exit(0)
+else:
+    myEventId = None
+    print('Processing latest shakemap')
+
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 # Used cached data where available
 myForceFlag = False
 # Get the latest dataset
-myShakeData = ShakeData()
+myShakeData = ShakeData(myEventId)
 # Extract the event
 myShakeEvent = myShakeData.shakeEvent(theForceFlag=myForceFlag)
 print 'Latest Event Id: %s' % myShakeEvent

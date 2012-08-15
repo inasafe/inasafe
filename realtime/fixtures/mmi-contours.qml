@@ -26,29 +26,35 @@
     <property key="labeling/bufferColorG" value="255"/>
     <property key="labeling/bufferColorR" value="255"/>
     <property key="labeling/bufferSize" value="1"/>
+    <property key="labeling/bufferTransp" value="37"/>
     <property key="labeling/dataDefinedProperty0" value=""/>
     <property key="labeling/dataDefinedProperty1" value=""/>
-    <property key="labeling/dataDefinedProperty10" value=""/>
+    <property key="labeling/dataDefinedProperty10" value="3"/>
     <property key="labeling/dataDefinedProperty11" value=""/>
     <property key="labeling/dataDefinedProperty12" value=""/>
     <property key="labeling/dataDefinedProperty13" value=""/>
     <property key="labeling/dataDefinedProperty14" value=""/>
+    <property key="labeling/dataDefinedProperty15" value=""/>
+    <property key="labeling/dataDefinedProperty16" value=""/>
+    <property key="labeling/dataDefinedProperty17" value=""/>
+    <property key="labeling/dataDefinedProperty18" value=""/>
+    <property key="labeling/dataDefinedProperty19" value=""/>
     <property key="labeling/dataDefinedProperty2" value=""/>
     <property key="labeling/dataDefinedProperty3" value=""/>
-    <property key="labeling/dataDefinedProperty4" value=""/>
+    <property key="labeling/dataDefinedProperty4" value="4"/>
     <property key="labeling/dataDefinedProperty5" value=""/>
     <property key="labeling/dataDefinedProperty6" value=""/>
     <property key="labeling/dataDefinedProperty7" value=""/>
     <property key="labeling/dataDefinedProperty8" value=""/>
-    <property key="labeling/dataDefinedProperty9" value=""/>
+    <property key="labeling/dataDefinedProperty9" value="2"/>
     <property key="labeling/decimals" value="2"/>
     <property key="labeling/dist" value="0"/>
     <property key="labeling/distInMapUnits" value="false"/>
     <property key="labeling/enabled" value="true"/>
-    <property key="labeling/fieldName" value="'MMI ' || ELEV"/>
+    <property key="labeling/fieldName" value=" 'MMI' || &quot;ROMAN&quot; "/>
     <property key="labeling/fontFamily" value="Times New Roman"/>
     <property key="labeling/fontItalic" value="false"/>
-    <property key="labeling/fontSize" value="10"/>
+    <property key="labeling/fontSize" value="12"/>
     <property key="labeling/fontSizeInMapUnits" value="false"/>
     <property key="labeling/fontStrikeout" value="false"/>
     <property key="labeling/fontUnderline" value="false"/>
@@ -59,15 +65,17 @@
     <property key="labeling/mergeLines" value="true"/>
     <property key="labeling/minFeatureSize" value="0"/>
     <property key="labeling/obstacle" value="true"/>
-    <property key="labeling/placement" value="3"/>
-    <property key="labeling/placementFlags" value="1"/>
+    <property key="labeling/placement" value="4"/>
+    <property key="labeling/placementFlags" value="0"/>
     <property key="labeling/plussign" value="false"/>
+    <property key="labeling/preserveRotation" value="true"/>
     <property key="labeling/priority" value="10"/>
     <property key="labeling/scaleMax" value="0"/>
     <property key="labeling/scaleMin" value="0"/>
     <property key="labeling/textColorB" value="0"/>
     <property key="labeling/textColorG" value="0"/>
     <property key="labeling/textColorR" value="255"/>
+    <property key="labeling/textTransp" value="0"/>
     <property key="labeling/wrapChar" value=""/>
   </customproperties>
   <displayfield>ID</displayfield>
@@ -95,6 +103,11 @@
   <edittypes>
     <edittype type="0" name="ELEV"/>
     <edittype type="0" name="ID"/>
+    <edittype type="0" name="MMI"/>
+    <edittype type="0" name="RGB"/>
+    <edittype type="0" name="ROMAN"/>
+    <edittype type="0" name="X"/>
+    <edittype type="0" name="Y"/>
   </edittypes>
   <editform>.</editform>
   <editforminit></editforminit>

@@ -540,7 +540,7 @@ class ShakeEvent:
     def mmiDataToContours(self, theForceFlag=True, theAlgorithm='nearest'):
         """Extract contours from the event's tif file.
 
-        Contours are extracted at a 1MMI interval. The resulting file will
+        Contours are extracted at a 0.5 MMI interval. The resulting file will
         be saved in the extract directory. In the easiest use case you can
         simply do::
 
@@ -593,10 +593,24 @@ class ShakeEvent:
         myLayer.CreateField(myFieldDefinition)
         myFieldDefinition = ogr.FieldDefn('MMI', ogr.OFTReal)
         myLayer.CreateField(myFieldDefinition)
+        # So we can fix the x pos to the same x coord as epicenter so
+        # labels line up nicely vertically
+        myFieldDefinition = ogr.FieldDefn('X', ogr.OFTReal)
+        myLayer.CreateField(myFieldDefinition)
+        # So we can fix the y pos to the min y coord of the whole contour so
+        # labels line up nicely vertically
+        myFieldDefinition = ogr.FieldDefn('Y', ogr.OFTReal)
+        myLayer.CreateField(myFieldDefinition)
+        # So that we can set the html hex colour based on its MMI class
+        myFieldDefinition = ogr.FieldDefn('RGB', ogr.OFTString)
+        myLayer.CreateField(myFieldDefinition)
+        # So that we can set the label in it roman numeral form
+        myFieldDefinition = ogr.FieldDefn('ROMAN', ogr.OFTString)
+        myLayer.CreateField(myFieldDefinition)
         myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
         # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
         myBand = 1
-        myContourInterval = 1  # MMI not M!
+        myContourInterval = 0.5  # MMI not M!
         myContourBase = 0
         myFixedLevelList = []
         myUseNoDataFlag = 0
@@ -618,13 +632,76 @@ class ShakeEvent:
         finally:
             del myTifDataset
             myOgrDataset.Release()
-            # Lastly copy over the standard qml (QGIS Style file)
+        # Now update the additional columns - X,Y, ROMAN and RGB
+        self.setContourProperties(myOutputFile)
+        # Lastly copy over the standard qml (QGIS Style file)
         myQmlPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
                                  'mmi-contours-%s.qml' % theAlgorithm)
         mySourceQml = os.path.join(dataDir(), 'mmi-contours.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myOutputFile
+
+    def setContourProperties(self, theFile):
+        """
+        Set the X, Y, RGB, ROMAN attributes of the contour layer.
+
+        Args: theFile str (Required) Name of the contour layer.
+
+        Returns: None
+
+        Raises: InvalidLayerError if anything is amiss with the layer.
+        """
+        LOGGER.debug('setContourProperties requested.')
+        myLayer = QgsVectorLayer(theFile , 'mmi-contours', "ogr")
+        if not myLayer.isValid():
+            raise InvalidLayerError(theFile)
+
+        myProvider = myLayer.dataProvider()
+        myIndexes = myProvider.attributeIndexes()
+        myLayer.select(myIndexes)
+        # Setup field indexes of our input dataset
+        myMMIIndex = myProvider.fieldNameIndex('MMI')
+        myRGBIndex = myProvider.fieldNameIndex('RGB')
+        myXIndex = myProvider.fieldNameIndex('X')
+        myYIndex = myProvider.fieldNameIndex('Y')
+        myRomanIndex = myProvider.fieldNameIndex('ROMAN')
+        myFeature = QgsFeature()
+        myLayer.startEditing()
+        # Now loop through the db adding selected features to mem layer
+        while myProvider.nextFeature(myFeature):
+            if not myFeature.isValid():
+                LOGGER.debug('Skipping feature')
+                continue
+            # Work out myX and myY
+            myLine = myFeature.geometry().asPolyline()
+            myY = myLine[0].y()
+            for myPoint in myLine:
+                if myPoint.y() < myY:
+                    myY = myPoint.y()
+            myX = self.longitude  # always align labels to epicenter longitude
+
+            myRomanList = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
+                           'IX', 'X', 'XI', 'XII']
+
+            myAttributes = myFeature.attributeMap()
+            myMMIValue = float(myAttributes[myMMIIndex].toString())
+            print 'MMI: ----> %s' % myAttributes[myMMIIndex].toString()
+            myRoman = myRomanList[int(round(myMMIValue))]
+            # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
+            myRGBList = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',
+                         '#FF0', '#FD0', '#ff9100', '#F00', '#D00', '#800',
+                         '#400']
+            myRGB = myRGBList[int(myMMIValue)]
+
+            # Now update the feature
+            myId = myFeature.id()
+            myLayer.changeAttributeValue(myId, myXIndex, QVariant(myX))
+            myLayer.changeAttributeValue(myId, myYIndex, QVariant(myY))
+            myLayer.changeAttributeValue(myId, myRGBIndex, QVariant(myRGB))
+            myLayer.changeAttributeValue(myId, myRomanIndex, QVariant(myRoman))
+
+        myLayer.commitChanges()
 
     def boundsToRectangle(self):
         """Convert the event bounding box to a QgsRectangle.
