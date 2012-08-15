@@ -347,7 +347,13 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
                               'Versions/1.9/Programs/')
     myCommand = myExecutablePrefix + myCommand
 
+    # For debugging only
+    # myCommand = myExecutablePrefix + myCommand
+    # myFile = file('C:/temp/command.txt', 'wt')
+    # myFile.write(myCommand)
+    # myFile.close()
     # Now run GDAL warp scottie...
+
     try:
         myResult = call(myCommand, shell=True)
         del myResult

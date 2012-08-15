@@ -97,6 +97,8 @@ class MapTest(unittest.TestCase):
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
                             #'e4273364b33a943e1108f519dbe8e06c',  # ub12.04-64
                             '91177a81bee4400be4e85789e3be1e91',  # binary read
+                            '57da6f81b4a55507e1bed0b73423244b',  # wVistaSP2-32
+                            ''
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
 
@@ -121,6 +123,8 @@ class MapTest(unittest.TestCase):
                             #'e4273364b33a943e1108f519dbe8e06c',  # ub12.04-64
                             # ub11.04-64 laptop
                             '91177a81bee4400be4e85789e3be1e91',  # Binary Read
+                            '57da6f81b4a55507e1bed0b73423244b',  # wVistaSP2-32
+                            ''
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
 
@@ -144,6 +148,7 @@ class MapTest(unittest.TestCase):
                             #'a654d0dcb6b6d14b0a7a62cd979c16b9',  # ub12.04-64
                             # ub11.04-64 laptop
                             '9692ba8dbf909b8fe3ed27a8f4924b78',  # binary read
+                            '5f4ef033bb1d6f36af4c08db55ca63be',  # wVistaSP2-32
                             '',
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
@@ -198,6 +203,7 @@ class MapTest(unittest.TestCase):
                             #'a37443d70604bdc8c279576b424a158c',  # ub12.04-64
                             # ub11.04-64 laptop
                             '944cee3eb9d916816b60ef41e8069683',  # binary read
+                            'de3ceb6547ffc6c557d031c0b7ee9e75',  # wVistaSP2-32
                             '',
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
