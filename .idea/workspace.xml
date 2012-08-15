@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/make_map.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/make-latest-shakemap.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/testEvent_All_Tests.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/ShakeEvent_All_Tests.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/make_map.py" afterPath="$PROJECT_DIR$/realtime/make_map.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/experimental/ashload_population_impact.py" afterPath="$PROJECT_DIR$/safe/impact_functions/experimental/ashload_population_impact.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/utilities_test.py" afterPath="$PROJECT_DIR$/safe_qgis/utilities_test.py" />

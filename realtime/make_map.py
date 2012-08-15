@@ -18,7 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from shake_data import ShakeData
-
+from safe_qgis.utilities_test import getQgisTestApp
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 # Used cached data where available
 myForceFlag = False
 # Get the latest dataset
@@ -32,8 +33,11 @@ for myAlgorithm in ['average', 'invdist', 'nearest']:
     myFile = myShakeEvent.mmiDataToContours(theForceFlag=myForceFlag,
                                    theAlgorithm=myAlgorithm)
     print 'Created: %s' % myFile
-myFile = myShakeEvent.citiesToShape()
-print 'Created: %s' % myFile
+try:
+    myFile = myShakeEvent.citiesToShape()
+    print 'Created: %s' % myFile
+except:
+    print 'No nearby cities found!'
 myFile = myShakeEvent.mmiDataToShapefile(theForceFlag=myForceFlag)
 print 'Created: %s' % myFile
 print '-------------------------------------------'

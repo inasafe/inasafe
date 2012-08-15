@@ -14,7 +14,7 @@ from qgis_interface import QgisInterface
 
 # For testing and demoing
 from safe.common.testing import TESTDATA
-from gui.is_safe_interface import readKeywordsFromFile
+from safe_qgis.safe_interface import readKeywordsFromFile
 import hashlib
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
