@@ -60,10 +60,7 @@ setup(name          = 'python-safe',
       long_description = read('README'),
       packages = packages,
       data_files = data_files,
-      install_requires = ['Numpy',
-                          #documentation
-                          'Sphinx',
-                          'cloud-sptheme'],
+      install_requires = ['Numpy',],
       classifiers   = [
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
