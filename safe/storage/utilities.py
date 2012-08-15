@@ -184,10 +184,6 @@ def read_keywords(filename):
         if text == '':
             continue
 
-        msg = ('Keyword entry must have the form "string: string". '
-               'I got %s ' % text)
-        verify(':' in text, msg)
-
         if ':' not in text:
             key = text.strip()
             val = None
