@@ -51,7 +51,8 @@ class TsunamiPopulationImpactFunction(FunctionProvider):
         # Create report
         impact_summary = ('<table border="0" width="320px">'
                           '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
-                          '   <tr></tr>' % ('Ambang batas', 'Jumlah orang terdampak'))
+                          '   <tr></tr>' % ('Ambang batas',
+                                            'Jumlah orang terdampak'))
 
         counts = []
         for i, threshold in enumerate(thresholds):
