@@ -141,7 +141,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Define style info for output polygons showing population counts
         style_classes = [dict(label=_('Nil'),
-                              colour='#FFFFFF', min=[0], max=cls[1],
+                              colour='#FFFFFF', min=cls[0], max=cls[1],
                               transparency=0, size=1),
                          dict(label=_('Low'),
                               colour='#38A800', min=cls[1], max=cls[2],
@@ -181,9 +181,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                    name=_('Population affected by flood prone areas'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
-                             'map_title': map_title})
-
-                   # FIXME (Ole): Have trouble getting styling to work
-                             #,
-                   #style_info=style_info)
+                             'map_title': map_title},
+                   style_info=style_info)
         return V

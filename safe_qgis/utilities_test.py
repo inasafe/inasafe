@@ -14,7 +14,7 @@ from qgis_interface import QgisInterface
 
 # For testing and demoing
 from safe.common.testing import TESTDATA
-from gui.is_safe_interface import readKeywordsFromFile
+from safe_qgis.safe_interface import readKeywordsFromFile
 import hashlib
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
@@ -50,7 +50,7 @@ def assertHashForFile(theHash, theFilename):
 def hashForFile(theFilename):
     """Return an md5 checksum for a file"""
     myPath = theFilename
-    myData = file(myPath).read()
+    myData = file(myPath, 'rb').read()
     myHash = hashlib.md5()
     myHash.update(myData)
     myHash = myHash.hexdigest()
@@ -73,7 +73,7 @@ def getQgisTestApp():
     global QGISAPP  # pylint: disable=W0603
 
     if QGISAPP is None:
-        myGuiFlag = True  # All test will run qgis in gui mode
+        myGuiFlag = True  # All test will run qgis in safe_qgis mode
         QGISAPP = QgsApplication(sys.argv, myGuiFlag)
         if 'QGISPATH' in os.environ:
             myPath = os.environ['QGISPATH']
@@ -117,28 +117,33 @@ def unitTestDataPath(theSubdir=None):
     myPath = UNITDATA
 
     if theSubdir is not None:
-        myPath = os.path.join(myPath, theSubdir)
-
+        myPath = os.path.abspath(os.path.join(myPath,
+                                              'unit_test_data',
+                                              theSubdir))
+    else:
+        myPath = os.path.abspath(os.path.join(myPath, 'unit_test_data'))
     return myPath
 
 
-def loadLayer(theLayerFile, DIR=TESTDATA):
+def loadLayer(theLayerFile, theDirectory=TESTDATA):
     """Helper to load and return a single QGIS layer
 
-    Input
+    Args:
         theLayerFile: Pathname to raster or vector file
         DIR: Optional parameter stating the parent dir. If None,
              pathname is assumed to be absolute
+
+    Returns: QgsMapLayer, str (for layer type)
 
     """
 
     # Extract basename and absolute path
     myFilename = os.path.split(theLayerFile)[-1]  # In case path was absolute
     myBaseName, myExt = os.path.splitext(myFilename)
-    if DIR is None:
+    if theDirectory is None:
         myPath = theLayerFile
     else:
-        myPath = os.path.join(DIR, theLayerFile)
+        myPath = os.path.join(theDirectory, theLayerFile)
     myKeywordPath = myPath[:-4] + '.keywords'
 
     # Determine if layer is hazard or exposure

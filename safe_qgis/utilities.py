@@ -37,18 +37,19 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency)
+from safe_qgis.exceptions import StyleError
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
 import safe_qgis.resources  # pylint: disable=W0611
 
 
-def setVectorStyle(theQgisVectorLayer, style):
+def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary
 
     Input
         theQgisVectorLayer: Qgis layer
-        style: Dictionary of the form as in the example below
+        theStyle: Dictionary of the form as in the example below
 
         {'target_field': 'DMGLEVEL',
         'style_classes':
@@ -65,8 +66,8 @@ def setVectorStyle(theQgisVectorLayer, style):
         Sets and saves style for theQgisVectorLayer
 
     """
-    myTargetField = style['target_field']
-    myClasses = style['style_classes']
+    myTargetField = theStyle['target_field']
+    myClasses = theStyle['style_classes']
     myGeometryType = theQgisVectorLayer.geometryType()
 
     myRangeList = []
@@ -79,8 +80,24 @@ def setVectorStyle(theQgisVectorLayer, style):
         myTransparencyPercent = 0
         if 'transparency' in myClass:
             myTransparencyPercent = myClass['transparency']
-        myMax = myClass['max']
-        myMin = myClass['min']
+
+        if 'min' not in myClass:
+            raise StyleError('Style info should provide a "min" entry')
+        if 'max' not in myClass:
+            raise StyleError('Style info should provide a "max" entry')
+
+        try:
+            myMin = float(myClass['min'])
+        except TypeError:
+            raise StyleError('Class break lower bound should be a number.'
+                'I got %s' % myClass['min'])
+
+        try:
+            myMax = float(myClass['max'])
+        except TypeError:
+            raise StyleError('Class break upper bound should be a number.'
+                             'I got %s' % myClass['max'])
+
         myColour = myClass['colour']
         myLabel = myClass['label']
         myColour = QtGui.QColor(myColour)

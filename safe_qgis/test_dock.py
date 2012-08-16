@@ -1166,7 +1166,7 @@ class DockTest(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     suite = unittest.makeSuite(DockTest,
-                               'test_runFloodPopulationImpactFunction')
+                        'test_runFloodPopulationPolygonHazardImpactFunction')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
