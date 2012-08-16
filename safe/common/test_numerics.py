@@ -7,7 +7,7 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from numerics import *
+from safe.common.numerics import *
 
 
 class Test_Numerics(unittest.TestCase):

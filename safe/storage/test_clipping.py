@@ -8,12 +8,12 @@ from os.path import join
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
-from common.polygon import is_inside_polygon, inside_polygon
-from raster import Raster
-from vector import Vector
-from storage.core import read_layer
-from clipping import *
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
+from safe.common.polygon import is_inside_polygon, inside_polygon
+from safe.raster import Raster
+from safe.vector import Vector
+from safe.storage.core import read_layer
+from safe.clipping import *
 
 
 class Test_Clipping(unittest.TestCase):

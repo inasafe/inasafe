@@ -1,11 +1,11 @@
 import numpy
-from impact_functions.core import FunctionProvider
-from impact_functions.core import get_hazard_layer, get_exposure_layer
-from impact_functions.core import get_question, get_function_title
-from storage.vector import Vector
-from storage.clipping import clip_raster_by_polygons
-from common.utilities import ugettext as _
-from common.tables import Table, TableRow
+from safe.impact_functions.core import FunctionProvider
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.impact_functions.core import get_question, get_function_title
+from safe.storage.vector import Vector
+from safe.storage.clipping import clip_raster_by_polygons
+from safe.common.utilities import ugettext as _
+from safe.common.tables import Table, TableRow
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):

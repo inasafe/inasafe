@@ -1,7 +1,7 @@
 """Raster clipping by polygons
 """
 
-from common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
+from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 
 
 def clip_raster_by_polygons(R, P):
