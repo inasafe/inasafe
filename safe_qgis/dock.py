@@ -1319,17 +1319,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #otherwise just add it to the end
         theCombo.insertItem(mySize, theItemText, theItemData)
 
-    def getFunctionID(self):
+    def getFunctionID(self, theIndex=None):
         """Get the canonical impact function ID for the currently selected
-           function
+           function (or the specified combo entry if theIndex is supplied.
         Args:
-            None
+            theIndex int - Optional index position in the combo that you
+                want the function id for. Defaults to None. If not set / None
+                the currently selected combo item's function id will be
+                returned.
         Returns:
-            FunctionID: String that identifies the function
+            myFunctionID str - String that identifies the function
         Raises:
            None
         """
-        myIndex = self.cboFunction.currentIndex()
+        if theIndex is None:
+            myIndex = self.cboFunction.currentIndex()
+        else:
+            myIndex = theIndex
         myItemData = self.cboFunction.itemData(myIndex, QtCore.Qt.UserRole)
         myFunctionID = str(myItemData.toString())
         return myFunctionID

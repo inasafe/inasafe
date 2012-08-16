@@ -91,12 +91,14 @@ class MapTest(unittest.TestCase):
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
         myExpectedHashes = ['',  # win
-                            #'d0c3071c4babe7db4f9762b311d61184',  # ub12.04xiner
+                            'd0c3071c4babe7db4f9762b311d61184',  # ub12.04xiner
                             'b94cfd8a10d709ff28466ada425f24c8',  # ub11.04-64
-                            #'00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
+                            '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
-                            #'e4273364b33a943e1108f519dbe8e06c',  # ub12.04-64
+                            'e4273364b33a943e1108f519dbe8e06c',  # ub12.04-64
                             '91177a81bee4400be4e85789e3be1e91',  # binary read
+                            '57da6f81b4a55507e1bed0b73423244b',  # wVistaSP2-32
+                            ''
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
 
@@ -114,13 +116,15 @@ class MapTest(unittest.TestCase):
         # of 'known good' renders.
         # Results currently identical to getLegend as image is same
         myExpectedHashes = ['',  # win
-                            #'d0c3071c4babe7db4f9762b311d61184',  # ub12.04 xinr
+                            'd0c3071c4babe7db4f9762b311d61184',  # ub12.04 xinr
                             'b94cfd8a10d709ff28466ada425f24c8',  # ub11.04-64
-                            #'00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
+                            '00dc58aa50867de9b617ccfab0d13f21',  # ub12.04
                             'e65853e217a4c9b0c2f303dd2aadb373',  # ub12.04 xvfb
-                            #'e4273364b33a943e1108f519dbe8e06c',  # ub12.04-64
+                            'e4273364b33a943e1108f519dbe8e06c',  # ub12.04-64
                             # ub11.04-64 laptop
                             '91177a81bee4400be4e85789e3be1e91',  # Binary Read
+                            '57da6f81b4a55507e1bed0b73423244b',  # wVistaSP2-32
+                            ''
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
 
@@ -137,13 +141,14 @@ class MapTest(unittest.TestCase):
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
         myExpectedHashes = ['',  # win
-                            #'9ead6ce0ac789adc65a6f00bd2d1f709',  # ub12.04xiner
+                            '9ead6ce0ac789adc65a6f00bd2d1f709',  # ub12.04xiner
                             '84bc3d518e3a0504f8dc36dfd620394e',  # ub11.04-64
-                            #'b68ccc328de852f0c66b8abe43eab3da',  # ub12.04
+                            'b68ccc328de852f0c66b8abe43eab3da',  # ub12.04
                             'cd5fb96f6c5926085d251400dd3b4928',  # ub12.04 xvfb
-                            #'a654d0dcb6b6d14b0a7a62cd979c16b9',  # ub12.04-64
+                            'a654d0dcb6b6d14b0a7a62cd979c16b9',  # ub12.04-64
                             # ub11.04-64 laptop
                             '9692ba8dbf909b8fe3ed27a8f4924b78',  # binary read
+                            '5f4ef033bb1d6f36af4c08db55ca63be',  # wVistaSP2-32
                             '',
                             ]
         assertHashesForFile(myExpectedHashes, myPath)
@@ -191,13 +196,14 @@ class MapTest(unittest.TestCase):
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
         myExpectedHashes = ['',  # win
-                            #'67c0f45792318298664dd02cc0ac94c3',  # ub12.04xiner
+                            '67c0f45792318298664dd02cc0ac94c3',  # ub12.04xiner
                             'ea0702782c2ed5d950c427fbe1743858',  # ub11.04-64
-                            #'53e0ba1144e071ad41756595d29bf444',  # ub12.04
+                            '53e0ba1144e071ad41756595d29bf444',  # ub12.04
                             '0681c3587305074bc9272f456fb4dd09',  # ub12.04 xvfb
-                            #'a37443d70604bdc8c279576b424a158c',  # ub12.04-64
+                            'a37443d70604bdc8c279576b424a158c',  # ub12.04-64
                             # ub11.04-64 laptop
                             '944cee3eb9d916816b60ef41e8069683',  # binary read
+                            'de3ceb6547ffc6c557d031c0b7ee9e75',  # wVistaSP2-32
                             '',
                             ]
         assertHashesForFile(myExpectedHashes, myPath)

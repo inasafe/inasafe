@@ -123,7 +123,7 @@ The repository can now be cloned by issuing the commands listed below. (Already 
 
    cd  /c/Documents\ and\ Settings/<your username>/.qgis/python/plugins/
 
-   git clone https://<your username>@github.com/AIFDR/inasafe-data.git inasafe_data
+   git clone https://<your username>@github.com/AIFDR/inasafe_data.git inasafe_data
 
 .. note:: The items in angle brackets above should be replaced with your 
    personal details as required.
@@ -131,7 +131,7 @@ The repository can now be cloned by issuing the commands listed below. (Already 
 When the final command above runs, you should see something like this in the
 console when the clone process is completed::
 
-   $ git clone https://timlinux@github.com/AIFDR/inasafe-data.git inasafe_data
+   $ git clone https://timlinux@github.com/AIFDR/inasafe_data.git inasafe_data
    Cloning into 'inasafe_data'...
    remote: Counting objects: 5002, done.
    remote: Compressing objects: 100% (1526/1526), done.
@@ -185,8 +185,8 @@ following listing in <QGIS Install Dir>/bin/python-shell.bat::
    path %PATH%;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2\lib
    path %PATH%;"%OSGEO4W_ROOT%\apps\Python27\Scripts\"
    
-   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;
-   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python27\\Lib\\site-packages
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\qgis\python;
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\Python27\Lib\site-packages
    set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
    cd "%HOMEPATH%\.qgis\python\plugins\inasafe-dev"
    start "Quantum GIS Shell" /B "cmd.exe" %*
@@ -406,8 +406,8 @@ environment has been imported. Here are the typical contexts of the file::
    @echo off
    SET GDAL_DRIVER_PATH=%OSGEO4W_ROOT%\bin\gdalplugins\1.8
    path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2\lib
-   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\qgis\\python;
-   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\\apps\\Python27\\Lib\\site-packages
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\qgis\python;
+   set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\Python27\Lib\site-packages
    set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
    "C:\Progra~2\eclipse\eclipse.exe"
 
@@ -460,27 +460,20 @@ your::
 The resulting list of python paths should look something like this::
    
    C:\Program Files\eclipse\plugins\org.python.pydev_2.6.0.2012062818\pysrc
-   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\Lib\site-packages\
-   setuptools-0.6c11-py2.7.egg
-   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\
-   setuptools-0.6c11-py2.7.egg
-   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\pip-1.1-py2.7.egg
-   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\Lib\site-packages
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\DLLs
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\plat-win
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\lib-tk
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27
-   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\PIL
+   C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\win32
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\win32\lib
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\Pythonwin
    C:\PROGRA~1\Quantum GIS Lisboa\apps\Python27\lib\site-packages\wx-2.8-msw-unicode
-   C:\Program Files\Quantum GIS Lisboa\apps\qgis\python
 
 Click on the :guilabel:`New folder` button and add the QGIS python dir::
 
-   C:\Program Files (x86)\Quantum GIS Lisboa\apps\qgis\python
+   C:\Program Files\Quantum GIS Lisboa\apps\qgis\python
 
 * :guilabel:`OK Button` : :kbd:`click this button`
 
@@ -498,9 +491,11 @@ Then click ok to close the environment variable editor.
 
 * :guilabel:`Ok` : :kbd:`click this button`
 
-Then click finsih to finish the new project dialog.
+Then click finsih to finish the new project dialog
+.
 
 * :guilabel:`Finish` : :kbd:`click this button`
+
 
 Remote Debugging with Eclipse
 .............................
@@ -561,8 +556,8 @@ You can view these individual entities by browsing and expanding nodes in the
 project panel in the left of the IDE.
 
 .. note:: If you run the test suite for the entire inasafe package, it
-    will mistakenly treat the sphinx documentation conf.py (docs.source.conf)
-    as a test and fail for that test. This is 'normal' and can be ignored.
+   will mistakenly treat the sphinx documentation conf.py (docs.source.conf)
+   as a test and fail for that test. This is 'normal' and can be ignored.
 
 Setting PyDev to use the Nose test runner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -581,3 +576,5 @@ As with using Pydev's built in test runner, you can also run any module, class
 etc. while using the nose test runner by right clicking on the item in the
 PyDev package explorer.
 
+.. note:: Actually, we can run the test runner until this step. But, we got a 
+   problem, so you need to install python in your windows machine.
