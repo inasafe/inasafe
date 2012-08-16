@@ -165,7 +165,8 @@ class UtilitiesTest(unittest.TestCase):
            .. seealso:: https://github.com/AIFDR/inasafe/issues/230
         """
         myPath = unitTestDataPath('impact')
-        myVectorLayer = loadLayer('polygons_for_styling.shp', myPath)
+        myVectorLayer, myType = loadLayer('polygons_for_styling.shp', myPath)
+        del myType
         myStyle = {'legend_title': u'Population Count',
                    'target_field': 'population',
                    'style_classes': [{
@@ -231,8 +232,8 @@ class UtilitiesTest(unittest.TestCase):
         except StyleError:
             # Exactly what should have happened
             return
-        except Exception:
-            pass
+        except Exception, e:
+            print str(e)
         assert False, 'Incorrect handling of broken styles'
 
 
