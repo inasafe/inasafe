@@ -1,7 +1,7 @@
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
-from safe.impact_functions.styles import earthquake_fatality_style as style_info
+from safe.impact_functions.styles import earthquake_fatality_style
 from safe.storage.raster import Raster
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import ugettext as _
@@ -157,7 +157,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
                              'impact_table': impact_table,
                              'map_title': map_title},
                    name=_('Estimated fatalities'),
-                   style_info=style_info)
+                   style_info=earthquake_fatality_style)
 
         # Maybe return a shape file with contours instead
         return L

@@ -4,6 +4,7 @@
 import os
 import gettext
 
+
 class VerificationError(RuntimeError):
     """Exception thrown by verify()
     """

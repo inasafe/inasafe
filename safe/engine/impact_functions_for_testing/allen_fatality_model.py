@@ -1,6 +1,6 @@
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layers
-from safe.impact_functions.styles import earthquake_fatality_style as style_info
+from safe.impact_functions.styles import earthquake_fatality_style
 from safe.storage.raster import Raster
 import numpy
 
@@ -113,5 +113,5 @@ class EarthquakeFatalityFunction(FunctionProvider):
                    geotransform=population.get_geotransform(),
                    name='Estimated fatalities',
                    keywords={'impact_summary': impact_summary})
-                   #style_info=style_info)  # See issue #126
+                   #style_info=earthquake_fatality_style)  # See issue #126
         return R

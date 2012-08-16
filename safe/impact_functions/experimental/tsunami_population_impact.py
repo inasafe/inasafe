@@ -50,8 +50,8 @@ class TsunamiPopulationImpactFunction(FunctionProvider):
 
         # Create report
         impact_summary = ('<table border="0" width="320px">'
-                   '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
-                   '   <tr></tr>' % ('Ambang batas', 'Jumlah orang terdampak'))
+                          '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+                          '   <tr></tr>' % ('Ambang batas', 'Jumlah orang terdampak'))
 
         counts = []
         for i, threshold in enumerate(thresholds):
@@ -59,7 +59,7 @@ class TsunamiPopulationImpactFunction(FunctionProvider):
             counts.append(numpy.nansum(I.flat))
 
             impact_summary += '   <tr><td>%s m</td><td>%i</td></tr>' % (
-                                 threshold, counts[i])
+                                threshold, counts[i])
 
         impact_summary += '</table>'
 

@@ -8,10 +8,11 @@ import types
 # Find parent parent directory to path
 # NOTE: This must match Makefile target testdata
 # FIXME (Ole): Use environment variable for this.
+# Assuming test data three lvls up
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                       '..',
                                       '..',
-                                      '..'))  # Assuming test data three lvls up
+                                      '..'))
 
 # Location of test data
 DATANAME = 'inasafe_data'
@@ -24,10 +25,12 @@ HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 
 UNITDATA = os.path.abspath(
-               os.path.join(os.path.dirname(__file__), #common/
-               '..', #safe/
-               'test',
-               'data'))
+                            #common/
+                            os.path.join(os.path.dirname(__file__),
+                            #safe/
+                            '..',
+                            'test',
+                            'data'))
 
 # Known feature counts in test data
 FEATURE_COUNTS = {'test_buildings.shp': 144,

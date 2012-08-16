@@ -1958,7 +1958,7 @@ class Test_Polygon(unittest.TestCase):
         # Not joined are (but that's OK)
         #[[122.231108, -8.626598], [122.231021, -8.626557]]
         #[[122.231021, -8.626557], [122.230284, -8.625983]]
-    test_clip_lines_by_polygon_real_data.slow =1
+    test_clip_lines_by_polygon_real_data.slow = 1
 
     def test_join_segments(self):
         """Consecutive line segments can be joined into continuous line
