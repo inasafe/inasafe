@@ -103,3 +103,8 @@ class InvalidBoundingBoxException(Exception):
     """An exception raised if an error occurs during extent calculation
     because one of the extents is invalid."""
     pass
+
+class StyleError(Exception):
+    """An exception relating to reading / generating GIS styles"""
+    pass
+

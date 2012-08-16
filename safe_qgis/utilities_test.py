@@ -112,7 +112,7 @@ def unitTestDataPath(theSubdir=None):
        * theSubdir: (Optional) Additional subdir to add to the path - typically
          'hazard' or 'exposure'.
     """
-    myPath = __file__
+    myPath = os.path.join(os.path.dirname(__file__), '..')
     if theSubdir is not None:
         myPath = os.path.abspath(os.path.join(myPath,
                                               'unit_test_data',
@@ -122,7 +122,7 @@ def unitTestDataPath(theSubdir=None):
     return myPath
 
 
-def loadLayer(theLayerFile, DIR=TESTDATA):
+def loadLayer(theLayerFile, theDirectory=TESTDATA):
     """Helper to load and return a single QGIS layer
 
     Input
@@ -135,10 +135,10 @@ def loadLayer(theLayerFile, DIR=TESTDATA):
     # Extract basename and absolute path
     myFilename = os.path.split(theLayerFile)[-1]  # In case path was absolute
     myBaseName, myExt = os.path.splitext(myFilename)
-    if DIR is None:
+    if theDirectory is None:
         myPath = theLayerFile
     else:
-        myPath = os.path.join(DIR, theLayerFile)
+        myPath = os.path.join(theDirectory, theLayerFile)
     myKeywordPath = myPath[:-4] + '.keywords'
 
     # Determine if layer is hazard or exposure
