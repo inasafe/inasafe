@@ -19,8 +19,9 @@ from safe.storage.core import check_bbox_string
 from safe.storage.core import read_layer
 from utilities import REQUIRED_KEYWORDS
 
+# The LOGGER is intialised in utilities.py by init
 import logging
-logger = logging.getLogger('risiko')
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def calculate_impact(layers, impact_fcn,
@@ -46,6 +47,8 @@ def calculate_impact(layers, impact_fcn,
         2. Layers are equipped with metadata such as names and categories
     """
 
+    LOGGER.debug('calculate_impact called with:\nLayers: %s\nFunction:%s' %
+                  (layers, impact_fcn))
     # Input checks
     check_data_integrity(layers)
 
@@ -242,7 +245,7 @@ def check_data_integrity(layer_objects):
 #             except Exception, e:
 #                 msg = ('Linked layer %s could not be found: %s'
 #                        % (basename, str(e)))
-#                 logger.info(msg)
+#                 LOGGER.info(msg)
 #                 #raise Exception(msg)
 #             else:
 #                 new_layers.append((server, new_layer, bbox, new_metadata))
