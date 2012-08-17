@@ -118,10 +118,7 @@ def unitTestDataPath(theSubdir=None):
 
     if theSubdir is not None:
         myPath = os.path.abspath(os.path.join(myPath,
-                                              'unit_test_data',
                                               theSubdir))
-    else:
-        myPath = os.path.abspath(os.path.join(myPath, 'unit_test_data'))
     return myPath
 
 
