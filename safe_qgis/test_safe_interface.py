@@ -152,8 +152,8 @@ class SafeInterfaceTest(unittest.TestCase):
     def test_availableFunctions(self):
         """Check we can get the available functions from the impact calculator.
         """
-        myList = availableFunctions()
-        assert myList > 1
+        myFunctionList = availableFunctions()
+        assert len(myFunctionList) > 1
 
         # Also test if it works when we give it two layers
         # to see if we can determine which functions will
@@ -161,8 +161,8 @@ class SafeInterfaceTest(unittest.TestCase):
         myKeywords1 = readKeywordsFromFile(self.rasterShakePath)
         myKeywords2 = readKeywordsFromFile(self.vectorPath)
         myList = [myKeywords1, myKeywords2]
-        myList = availableFunctions(myList)
-        assert myList > 1
+        myFunctionList = availableFunctions(myList)
+        assert len(myFunctionList) == 1
 
     def test_getKeywordFromFile(self):
         """Get keyword from a filesystem file's .keyword file."""
