@@ -72,7 +72,7 @@ def keywords_to_str(keywords):
     """
     result = '\n----------------- Keywords -------------------\n'
     if type(keywords) == type(dict()):
-        for item, value in keywords:
+        for item, value in keywords.iteritems():
             result += 'Key: %s Value: %s\n' % (item, value)
     if type(keywords) == type(list()):
         for list_item in keywords:
