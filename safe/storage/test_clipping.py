@@ -10,10 +10,9 @@ sys.path.append(pardir)
 
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.polygon import is_inside_polygon, inside_polygon
-from safe.raster import Raster
-from safe.vector import Vector
+from safe.storage.vector import Vector
 from safe.storage.core import read_layer
-from safe.clipping import *
+from safe.storage.clipping import *
 
 
 class Test_Clipping(unittest.TestCase):
