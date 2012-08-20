@@ -96,7 +96,7 @@ following steps are required:
   named after the module. For example, for the gui/riab.py module we would
   create :file:`docs/source/api-docs/gui/riab.rst` (note the .rst extension).
   See below for an example of its contents
-* Add the new file to the API docs master index 
+* Add the new file to the API docs master index
   (:file:`docs/source/api-docs/index.rst`).
   The .rst extension is not needed or desired when adding to the index list.
 * Regenerate the documentation using the :command:`make docs` command from
@@ -153,3 +153,50 @@ Where the 'keywords' parameter indicates the user-docs/\*.rst document that
 should be opened when the help button is clicked. The general style and
 approach used in existing documentation should inform your documentation
 process so that all the documentation is constent.
+
+Publishing the documentation to GitHub Pages
+--------------------------------------------
+
+Initially we have used http://readthedocs.org to host our site (and the pages
+you are reading now). However they don't support internationalisation and
+there are various other issues with it, so we opted to move our content into
+gh-pages. To use this, the site is stored in a special branch.
+
+Initial gh-pages setup
+......................
+
+Enable gh-pages in th gh project
+`admin page <https://github.com/AIFDR/inasafe/admin>`_. On your local system
+do something like this::
+
+   git clone file:///home/timlinux/dev/python/inasafe-dev \
+       inasafe-github-pages
+   cd inasafe-github-pages
+   cp ../inasafe-dev/.git/config .git/config
+   git pull
+   git symbolic-ref HEAD refs/heads/gh-pages
+   rm .git/index
+   git clean -fdx
+   cp -r ../inasafe-dev/docs/build/html .
+   cd html/
+   touch .nojekyll
+   git add .
+   git commit -a -m "First commit of docs"
+   git push origin gh-pages
+
+Now wait ten minutes or so and the pages should be visble here at
+http://aifdr.github.com/inasafe/
+
+Updating the site
+^^^^^^^^^^^^^^^^^
+
+Deployment of the site requires the following steps:
+
+* Regenerate the docs using make docs in the root dir of a master branch
+  checkout of InaSAFE.
+* Copy all files from :file:`docs/build/html` into a separate local repo
+  checked out in the gh-pages branch
+* Commit those changes and push
+* Wait approximately 10 minutes
+
+After this the changes should be visible here http://aifdr.github.com/inasafe/
