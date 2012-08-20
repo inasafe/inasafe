@@ -913,7 +913,7 @@ class Test_IO(unittest.TestCase):
                    'value %i but it was %s' % (filename, Amin, nodata))
             assert nodata == Amin, msg
 
-    test_nodata_value.slow =1
+    test_nodata_value.slow = 1
 
     def test_vector_extrema(self):
         """Vector extremum calculation works
@@ -965,10 +965,10 @@ class Test_IO(unittest.TestCase):
         """
 
         for rastername in ['Earthquake_Ground_Shaking_clip.tif',
-                             'Population_2010_clip.tif',
-                             'shakemap_padang_20090930.asc',
-                             'population_padang_1.asc',
-                             'population_padang_2.asc']:
+                           'Population_2010_clip.tif',
+                           'shakemap_padang_20090930.asc',
+                           'population_padang_1.asc',
+                           'population_padang_2.asc']:
 
             filename = '%s/%s' % (TESTDATA, rastername)
             R = read_layer(filename)
@@ -1920,9 +1920,7 @@ class Test_IO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
-
-    @numpy.testing.dec.skipif(sys.platform == 'darwin',
-                         'Known to fail in OSX because of issue #198')
+    @numpy.testing.dec.skipif(sys.platform == 'darwin', 'Fails in OSX, #198')
     def test_i18n(self):
         """Test to see if internationalisation is working correctly.
         Make sure to include this file when using xgettext to scan for
@@ -1936,7 +1934,7 @@ class Test_IO(unittest.TestCase):
         # Set the standard C locale.
         os.environ['LANG'] = 'C'
         os.environ['LC_ALL'] = 'C.UTF-8'
-        
+
         #must be after above
         string1 = 'Hello!'
         out1 = _(string1)
@@ -2002,7 +2000,7 @@ class Test_IO(unittest.TestCase):
         msg = 'Projections did not match: %s != %s' % (Hp, Ep)
         assert Hp == Ep, msg
 
-    test_projection_comparisons.slow =1
+    test_projection_comparisons.slow = 1
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test')

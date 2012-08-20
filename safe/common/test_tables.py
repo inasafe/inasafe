@@ -75,10 +75,10 @@ class TablesTest(unittest.TestCase):
         """Fixture run before all tests"""
         self.table_header = ['1', '2', '3', '4']
         self.table_data = [
-                   ['a', 'b', 'c', 'd'],
-                   ['a', 'b', 'c', 'd'],
-                   ['a', 'b', 'c', 'd'],
-                   ['a', 'b', 'c', 'd']]
+                    ['a', 'b', 'c', 'd'],
+                    ['a', 'b', 'c', 'd'],
+                    ['a', 'b', 'c', 'd'],
+                    ['a', 'b', 'c', 'd']]
         self.table_row = TableRow(['a', 'b', 'c', 'd'])
         self.table_row_data = [self.table_row,
                                self.table_row,

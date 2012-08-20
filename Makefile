@@ -41,20 +41,20 @@ docs: compile
 	@echo "-------------------------------"
 	cd docs; make html >/dev/null; cd ..
 
-#Qt .ts file updates - run to register new strings for translation in gui
+#Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile
 	@echo "Collecting strings requiring translations. Please provide translations by editing the translation files below:"
 	@# Qt translation stuff first.
-	@cd gui; pylupdate4 inasafe.pro; cd .
-	@$(foreach LOCALE,$(LOCALES), echo "gui/i18n/inasafe_$(LOCALE).ts";)
+	@cd safe_qgis; pylupdate4 inasafe.pro; cd .
+	@$(foreach LOCALE,$(LOCALES), echo "safe_qgis/i18n/inasafe_$(LOCALE).ts";)
 	@# Gettext translation stuff next.
 	@# apply same xgettext command for each supported locale. TS
 	@$(foreach LOCALE,$(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
 
-#Qt .qm file updates - run to create binary representation of translated strings for translation in gui
+#Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
 compile-translation-strings: compile
 	@#Compile qt messages binary
-	cd gui; lrelease inasafe.pro; cd ..
+	cd safe_qgis; lrelease inasafe.pro; cd ..
 	@#compile gettext messages binary
 	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 
@@ -85,7 +85,7 @@ lines-of-code:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	@git log | head -3
-	@sloccount . | grep '^[0-9]'
+	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
 
 
 clean:
@@ -114,7 +114,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
+	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
 
 # Run entire test suite
 test_suite_no_git: compile
@@ -122,7 +122,7 @@ test_suite_no_git: compile
 	@echo "----------------------"
 	@echo "Regression Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -139,7 +139,7 @@ test_suite: compile testdata
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=storage,engine,impact_functions,gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -158,7 +158,7 @@ gui_test_suite_no_git: compile
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Run gui test suite only
 gui_test_suite: compile testdata
@@ -168,16 +168,18 @@ gui_test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=gui gui 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Get test data
+# FIXME (Ole): Need to attempt cloning this r/w for those with
+# commit rights. See issue https://github.com/AIFDR/inasafe/issues/232
 testdata:
 	@echo
 	@echo "-----------------------------------------------------------"
 	@echo "Updating test data - please hit Enter if asked for password"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 7851101865a2
+	@scripts/update-test-data.sh 17bab3b8e4e590f93e0c3ccb31959d7e2918bcbc
 
 disabled_tests:
 	@echo
@@ -236,7 +238,7 @@ pylint:
 	@echo "---------------------------------------"
 	@echo "Pylint report                          "
 	@echo "---------------------------------------"
-	pylint --disable=C,R storage engine gui
+	pylint --disable=C,R safe safe_qgis
 
 profile:
 	@echo
@@ -258,7 +260,7 @@ jenkins-test:
 	@echo "----------------------------------"
 	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
-		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=storage,engine,impact_functions,gui || :
+		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis || :
 
 jenkins-pyflakes:
 	@echo
@@ -273,7 +275,7 @@ jenkins-sloccount:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	# This line is for machine readble output for use by Jenkins
-	@sloccount --duplicates --wide --details . | fgrep -v .svn > sloccount.sc || :
+	@sloccount --duplicates --wide --details  safe_api.py safe safe_qgis realtime | fgrep -v .svn > sloccount.sc || :
 
 jenkins-pylint:
 	@echo

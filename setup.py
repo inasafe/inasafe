@@ -1,39 +1,75 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import subprocess
+import sys
 
 from distutils.core import setup
+from distutils.command.install import INSTALL_SCHEMES
+
 safe = __import__('safe')
+
+
+def fullsplit(path, result=None):
+    """
+    Split a pathname into components (the opposite of os.path.join) in a
+    platform-neutral way.
+    """
+    if result is None:
+        result = []
+    head, tail = os.path.split(path)
+    if head == '':
+        return [tail] + result
+    if head == path:
+        return result
+    return fullsplit(head, [tail] + result)
+
+# Tell distutils not to put the data_files in platform-specific installation
+# locations.
+for scheme in INSTALL_SCHEMES.values():
+    scheme['data'] = scheme['purelib']
+
+# Compile the list of packages available, because distutils doesn't have
+# an easy way to do this.
+packages, data_files = [], []
+root_dir = os.path.dirname(__file__)
+if root_dir != '':
+    os.chdir(root_dir)
+safe_dir = 'safe'
+
+for dirpath, dirnames, filenames in os.walk(safe_dir):
+    # Ignore dirnames that start with '.'
+    for i, dirname in enumerate(dirnames):
+        if dirname.startswith('.'):
+            del dirnames[i]
+    if '__init__.py' in filenames:
+        packages.append('.'.join(fullsplit(dirpath)))
+    elif filenames:
+        data_files.append([dirpath,
+                          [os.path.join(dirpath, f) for f in filenames]])
+
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-setup(name          = 'python-safe',
-      version       = safe.get_version(),
-      description   = 'Spatial Analysis Functional Engine',
-      license       = 'GPL',
-      keywords      = 'gis vector feature raster data',
-      author        = 'Ole Nielsen, Tim Sutton, Ariel Núñez',
-      author_email  = 'ole.moller.nielsen@gmail.com',
-      url   = 'http://github.com/AIFDR/inasafe',
-      long_description = read('README.rst'),
-      packages = ['safe',
-                  'safe.common',
-                  'safe.storage',
-                  'safe.engine',
-                  'safe.engine.impact_functions_for_testing',
-                  'safe.impact_functions'],
-      package_dir = {'safe': 'safe'},
-      package_data = {'safe': ['test/data/*', 'i18n']},
-      install_requires = ['Numpy',],
-      classifiers   = [
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python',
-        'Topic :: Scientific/Engineering :: GIS',
-        ],
-)
+setup(name='python-safe',
+      version=safe.get_version(),
+      description='Spatial Analysis Functional Engine',
+      license='GPL',
+      keywords='gis vector feature raster data',
+      author='Ole Nielsen, Tim Sutton, Ariel Núñez',
+      author_email='ole.moller.nielsen@gmail.com',
+      url='http://github.com/AIFDR/inasafe',
+      long_description=read('README'),
+      packages=packages,
+      data_files=data_files,
+      install_requires=['Numpy', ],
+      classifiers=[
+          'Development Status :: 2 - Pre-Alpha',
+          'Intended Audience :: Developers',
+          'Intended Audience :: Science/Research',
+          'License :: OSI Approved :: BSD License',
+          'Operating System :: OS Independent',
+          'Programming Language :: Python',
+          'Topic :: Scientific/Engineering :: GIS',
+      ],
+      zip_safe=False,)

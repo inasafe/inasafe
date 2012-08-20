@@ -73,7 +73,7 @@ class Test_mappings(unittest.TestCase):
             else:
                 assert vclass == 2, msg
 
-    test_osm2padang.slow =1 
+    test_osm2padang.slow = 1
 
     def test_osm2bnpb(self):
         """OSM structure types maps to BNPB vulnerability curves

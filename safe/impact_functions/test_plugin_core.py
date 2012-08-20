@@ -1,10 +1,5 @@
 import unittest
-
-import numpy
-import sys
-import os
-import unittest
-import warnings
+import logging
 
 from core import FunctionProvider
 from core import requirements_collect
@@ -12,7 +7,9 @@ from core import requirement_check
 from core import requirements_met
 from core import get_admissible_plugins
 from core import get_function_title
+from core import get_plugins_as_table
 
+LOGGER = logging.getLogger('InaSAFE')
 
 class BasicFunction(FunctionProvider):
     """Risk plugin for testing
@@ -181,6 +178,29 @@ class Test_plugin_core(unittest.TestCase):
                % str(P.keys()))
         assert 'F1' in P and 'F2' in P and 'F3' in P, msg
 
+
+    def test_get_plugins_as_table(self):
+        """Test get plugins as table"""
+        T = get_plugins_as_table()
+        S = T.toNewlineFreeString()
+        LOGGER.debug(S)
+        #f = file('/tmp/tbl.html', 'wt')
+        #f.write(S)
+        #f.close()
+        # Rather arbitrary way to see if the table has some data in it
+        # maybe there is a nicer way to test given that fn list can change? TS
+        assert len(S) > 1000
+
+        # Now test the table for a single nominated fn
+        T = get_plugins_as_table('F1')
+        S = T.toNewlineFreeString()
+        LOGGER.debug(S)
+        #f = file('/tmp/tbl.html', 'wt')
+        #f.write(S)
+        #f.close()
+        # Expecting that F1 test wont change and that the table produced for
+        # it is of a deterministic length
+        assert len(S) == 514
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')

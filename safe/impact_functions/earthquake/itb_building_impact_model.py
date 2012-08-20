@@ -179,11 +179,11 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
                     '   <tr><td>%s (33-66%%)&#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s (66-100%%)&#58;</td><td>%i</td></tr>'
                     '</table></font>' % (_('Buildings'), _('Total'),
-                                  _('All'), N,
-                                  _('No damage'), count0,
-                                  _('Low damage'), count10,
-                                  _('Medium damage'), count25,
-                                  _('High damage'), count50))
+                                    _('All'), N,
+                                    _('No damage'), count0,
+                                    _('Low damage'), count10,
+                                    _('Medium damage'), count25,
+                                    _('High damage'), count50))
         impact_summary += '<br>'  # Blank separation row
         impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
         # This is the proper text:

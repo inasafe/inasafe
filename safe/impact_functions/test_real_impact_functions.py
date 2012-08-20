@@ -29,8 +29,11 @@ class Test_real_plugins(unittest.TestCase):
         msg = 'Available impact functions are: %s' % str(P.keys())
         #assert 'Earthquake Guidelines Function' in P, msg
         assert 'Padang Earthquake Building Damage Function' in P, msg
+        # Added by Tim to replace WB (see below)
         assert 'Flood Building Impact Function' in P, msg
-        assert 'W B Flood Evacuation Function' in P, msg
+        # Tim commented out W B Flood Evacuation Function as it is in experimental
+        #assert 'W B Flood Evacuation Function' in P, msg
+        #assert 'W B Flood Evacuation Function' in P, msg
         #assert 'Tephra Building Impact Function' in P, msg
         #assert 'Tephra Population Impact Function' in P, msg
         #assert 'Flood Road Impact Function' in P, msg
@@ -46,7 +49,8 @@ class Test_real_plugins(unittest.TestCase):
         D1['layertype'] = 'raster'
         D2['layertype'] = 'vector'
         P = get_admissible_plugins([D1, D2])
-        assert len(P) >= 2  # Depending on other tests there could be more
+        msg = 'Expected: len(P) >= 2, Got: len(P) is %i' % len(P)
+        assert len(P) >= 2, msg  # Depending on other tests there could be more
         #assert 'Earthquake Guidelines Function' in P
         assert 'Padang Earthquake Building Damage Function' in P
 

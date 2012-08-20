@@ -24,7 +24,7 @@ class FloodEvacuationFunction(FunctionProvider):
                     datatype=='density'
     """
 
-    plugin_name = _('Need evacuation')
+    title = _('Need evacuation')
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -51,7 +51,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         question = get_question(inundation.get_name(),
                                 population.get_name(),
-                                self.plugin_name)
+                                self)
 
         # Extract data as numeric arrays
         D = inundation.get_data(nan=0.0)  # Depth
@@ -89,23 +89,23 @@ class FloodEvacuationFunction(FunctionProvider):
         table_body = [question,
                       TableRow([_('People needing evacuation'),
                                 '%i' % evacuated],
-                               header=True),
+                                                 header=True),
                       TableRow(_('Map shows population density needing '
                                  'evacuation')),
                       #,
-##                      TableRow([_('People in 50cm to 1m of water '),
-##                                '%i' % medium],
-##                               header=True),
-##                      TableRow([_('People in 30cm to 50cm of water'),
-##                                '%i' % low],
-##                               header=True)]
+                      ##                      TableRow([_('People in 50cm to 1m of water '),
+                      ##                                '%i' % medium],
+                      ##                               header=True),
+                      ##                      TableRow([_('People in 30cm to 50cm of water'),
+                      ##                                '%i' % low],
+                      ##                               header=True)]
                       TableRow([_('Needs per week'), _('Total')],
-                               header=True),
-                      [_('Rice [kg]'), int(rice)],
-                      [_('Drinking Water [l]'), int(drinking_water)],
-                      [_('Clean Water [l]'), int(water)],
-                      [_('Family Kits'), int(family_kits)],
-                      [_('Toilets'), int(toilets)]]
+                                                                header=True),
+            [_('Rice [kg]'), int(rice)],
+            [_('Drinking Water [l]'), int(drinking_water)],
+            [_('Clean Water [l]'), int(water)],
+            [_('Family Kits'), int(family_kits)],
+            [_('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
@@ -119,13 +119,27 @@ class FloodEvacuationFunction(FunctionProvider):
                              'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('People in need of evacuation')
+
+        # Generare 8 equidistant classes across the range of flooded population
+        # 8 is the number of classes in the predefined flood population style
+        # as imported
+        classes = numpy.linspace(numpy.nanmin(I.flat[:]),
+                                 numpy.nanmax(I.flat[:]), 8)
+
+        # Modify labels in existing flood style to show quantities
+        style_classes = style_info['style_classes']
+
+        style_classes[1]['label'] = _('Low [%i people/cell]') % classes[1]
+        style_classes[4]['label'] = _('Medium [%i people/cell]') % classes[4]
+        style_classes[7]['label'] = _('High [%i people/cell]') % classes[7]
+
         style_info['legend_title'] = _('Population Density')
 
         # Create raster object and return
         R = Raster(I,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
-                   name=_('Population which %s') % self.plugin_name.lower(),
+                   name=_('Population which %s') % get_function_title(self),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},

@@ -161,10 +161,14 @@ class SafeInterfaceTest(unittest.TestCase):
         # work for them.
         myKeywords1 = readKeywordsFromFile(self.rasterShakePath)
         myKeywords2 = readKeywordsFromFile(self.vectorPath)
+        # We need to explicitly add the layer type to each keyword list
+        myKeywords1['layertype'] = 'raster'
+        myKeywords2['layertype'] = 'vector'
+
         myList = [myKeywords1, myKeywords2]
         myList = availableFunctions(myList)
         myMessage = 'No functions available (len=%ss)' % len(myList)
-        assert len(myList) > 1, myMessage
+        assert len(myList) > 0, myMessage
 
     def test_getKeywordFromFile(self):
         """Get keyword from a filesystem file's .keyword file."""

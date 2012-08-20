@@ -48,14 +48,13 @@ from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion)
 
-from common.testing import  HAZDATA, EXPDATA, TESTDATA
-
+from safe.common.testing import  HAZDATA, EXPDATA, TESTDATA, UNITDATA
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)
 # pylint: disable=W0611
-from engine.impact_functions_for_testing import allen_fatality_model
-from engine.impact_functions_for_testing import HKV_flood_study
-from engine.impact_functions_for_testing import BNPB_earthquake_guidelines
+from safe.engine.impact_functions_for_testing import allen_fatality_model
+from safe.engine.impact_functions_for_testing import HKV_flood_study
+from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # pylint: enable=W0611
 
 try:
@@ -255,12 +254,12 @@ def loadStandardLayers():
                   join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
                   join(TESTDATA, 'OSM_building_polygons_20110905.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                          DIR=None)
+                                                          theDataDirectory=None)
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList)
     return myHazardLayerCount, myExposureLayerCount
 
 
-def loadLayers(theLayerList, theClearFlag=True, DIR=TESTDATA):
+def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
     """Helper function to load layers as defined in a python list."""
     # First unload any layers that may already be loaded
     if theClearFlag:
@@ -275,7 +274,7 @@ def loadLayers(theLayerList, theClearFlag=True, DIR=TESTDATA):
     # Now create our new layers
     for myFile in theLayerList:
 
-        myLayer, myType = loadLayer(myFile, DIR)
+        myLayer, myType = loadLayer(myFile, theDataDirectory)
         if myType == 'hazard':
             myHazardLayerCount += 1
         elif myType == 'exposure':
@@ -913,7 +912,7 @@ class DockTest(unittest.TestCase):
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                              DIR=None)
+                                                              theDataDirectory=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -969,7 +968,7 @@ class DockTest(unittest.TestCase):
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                              DIR=None)
+                                                              theDataDirectory=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1016,10 +1015,9 @@ class DockTest(unittest.TestCase):
     def test_issue_160(self):
         """Test that multipart features can be used in a scenario - issue #160
         """
-        myTestDataDir = os.path.join(os.path.dirname(__file__), '..',
-                                     'unit_test_data')
-        myExposure = os.path.join('exposure', 'buildings_osm_4326.shp')
-        myHazard = os.path.join('hazard', 'multipart_polygons_osm_4326.shp')
+
+        myExposure = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
+        myHazard = os.path.join(UNITDATA, 'hazard', 'multipart_polygons_osm_4326.shp')
                 # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         print 'Using QGIS: %s' % qgisVersion()
@@ -1028,7 +1026,7 @@ class DockTest(unittest.TestCase):
         # First part of scenario should have enabled run
         myFileList = [myHazard, myExposure]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                            DIR=myTestDataDir)
+                                                        theDataDirectory=TESTDATA)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1115,7 +1113,7 @@ class DockTest(unittest.TestCase):
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                              DIR=None)
+                                                              theDataDirectory=None)
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
         DOCK.cboHazard.setCurrentIndex(0)
@@ -1166,7 +1164,7 @@ class DockTest(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     suite = unittest.makeSuite(DockTest,
-                               'test_runFloodPopulationImpactFunction')
+                        'test_runFloodPopulationPolygonHazardImpactFunction')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

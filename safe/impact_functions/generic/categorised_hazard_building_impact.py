@@ -69,15 +69,15 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         #FIXME: makes the output format the same as all other results
 
         impact_summary = ('<table border="0" width="320px">'
-                   '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
-                   '   <tr></tr>'
-                   '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                   '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                   '   <tr><td>%s&#58;</td><td>%i</td></tr>'
-                   '</table>' % (_('Category'), _('Affected'),
-                                 _('Low'), count0,
-                                 _('Medium'), count1,
-                                 _('High'), count2))
+                          '   <tr><th><b>%s</b></th><th><b>%s</b></th></th>'
+                          '   <tr></tr>'
+                          '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+                          '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+                          '   <tr><td>%s&#58;</td><td>%i</td></tr>'
+                          '</table>' % (_('Category'), _('Affected'),
+                                        _('Low'), count0,
+                                        _('Medium'), count1,
+                                        _('High'), count2))
 
         # Create style
         style_classes = [dict(label=_('Low'), min=0, max=0,

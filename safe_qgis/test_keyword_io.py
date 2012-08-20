@@ -37,7 +37,7 @@ class KeywordIOTest(unittest.TestCase):
         self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                        'spatialite')
         myHazardPath = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
-        self.fileRasterLayer, myType = loadLayer(myHazardPath, DIR=None)
+        self.fileRasterLayer, myType = loadLayer(myHazardPath, theDirectory=None)
         del myType
         self.fileVectorLayer, myType = loadLayer('Padang_WGS84.shp')
         del myType

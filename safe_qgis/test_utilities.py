@@ -7,12 +7,14 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from safe_api import bbox_intersection
+from safe.api import bbox_intersection
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                               setVectorStyle,
                               setRasterStyle,
                               qgisVersion)
+from safe_qgis.utilities_test import unitTestDataPath
 from safe_qgis.utilities_test import (loadLayer, getQgisTestApp)
+from safe_qgis.exceptions import StyleError
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -157,6 +159,84 @@ class UtilitiesTest(unittest.TestCase):
         except Exception, e:
             myMessage = getExceptionWithStacktrace(e, html=False)
             assert 'VerificationError : Western' in myMessage, myMessage
+
+    def test_issue230(self):
+        """Verify that we give informative errors when style is not correct
+           .. seealso:: https://github.com/AIFDR/inasafe/issues/230
+        """
+        myPath = unitTestDataPath('impact')
+        myVectorLayer, myType = loadLayer('polygons_for_styling.shp', myPath)
+        del myType
+        myStyle = {'legend_title': u'Population Count',
+                   'target_field': 'population',
+                   'style_classes': [{
+                       'transparency': 0,
+                       'min': [0],  # <-- intentionally broken list not number!
+                       'max': 139904.08186340332,
+                       'colour': '#FFFFFF',
+                       'size': 1,
+                       'label': u'Nil'
+                   }, {
+                       'transparency': 0,
+                       'min': 139904.08186340332,
+                       'max': 279808.16372680664,
+                       'colour': '#38A800',
+                       'size': 1,
+                       'label': u'Low'
+                   }, {
+                       'transparency': 0,
+                       'min': 279808.16372680664,
+                       'max': 419712.24559020996,
+                       'colour': '#79C900',
+                       'size': 1,
+                       'label': u'Low'
+                   }, {
+                       'transparency': 0,
+                       'min': 419712.24559020996,
+                       'max': 559616.32745361328,
+                       'colour': '#CEED00',
+                       'size': 1,
+                       'label': u'Low'
+                   }, {
+                       'transparency': 0,
+                       'min': 559616.32745361328,
+                       'max': 699520.4093170166,
+                       'colour': '#FFCC00',
+                       'size': 1,
+                       'label': u'Medium'
+                   }, {
+                       'transparency': 0,
+                       'min': 699520.4093170166,
+                       'max': 839424.49118041992,
+                       'colour': '#FF6600',
+                       'size': 1,
+                       'label': u'Medium'
+                   }, {
+                       'transparency': 0,
+                       'min': 839424.49118041992,
+                       'max': 979328.57304382324,
+                       'colour': '#FF0000',
+                       'size': 1,
+                       'label': u'Medium'
+                   }, {
+                       'transparency': 0,
+                       'min': 979328.57304382324,
+                       'max': 1119232.6549072266,
+                       'colour': '#7A0000',
+                       'size': 1,
+                       'label': u'High'
+                   }]
+            }
+        try:
+            setVectorStyle(myVectorLayer, myStyle)
+        except StyleError:
+            # Exactly what should have happened
+            return
+        except Exception, e:
+            print str(e)
+        assert False, 'Incorrect handling of broken styles'
+
+
 
     def test_getQgisVersion(self):
         """Test we can get the version of QGIS"""

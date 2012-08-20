@@ -16,7 +16,9 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as _
-from safe.impact_functions.mappings import osm2bnpb, unspecific2bnpb, sigab2bnpb
+from safe.impact_functions.mappings import osm2bnpb
+from safe.impact_functions.mappings import unspecific2bnpb
+from safe.impact_functions.mappings import sigab2bnpb
 
 # Damage 'curves' for the two vulnerability classes
 damage_parameters = {'URM': [6, 7],

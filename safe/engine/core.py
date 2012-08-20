@@ -19,8 +19,9 @@ from safe.storage.core import check_bbox_string
 from safe.storage.core import read_layer
 from utilities import REQUIRED_KEYWORDS
 
+# The LOGGER is intialised in utilities.py by init
 import logging
-logger = logging.getLogger('risiko')
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def calculate_impact(layers, impact_fcn,
@@ -46,6 +47,8 @@ def calculate_impact(layers, impact_fcn,
         2. Layers are equipped with metadata such as names and categories
     """
 
+    LOGGER.debug('calculate_impact called with:\nLayers: %s\nFunction:%s' %
+                  (layers, impact_fcn))
     # Input checks
     check_data_integrity(layers)
 
@@ -147,6 +150,11 @@ def check_data_integrity(layer_objects):
                    '' % (layer, layer.projection, reference_projection))
             verify(reference_projection == layer.projection, msg)
 
+        #FIXME(Ariel): Make this configurable by the frontend choice?
+        # Relax tolerance requirements to have GeoNode compatibility
+        # tolerance = 10e-12
+        tolerance = 10e-7
+
         # Ensure that geotransform and dimensions is consistent across
         # all *raster* layers
         if layer.is_raster:
@@ -157,7 +165,7 @@ def check_data_integrity(layer_objects):
                        '%s %s' % (geotransform, layer.get_geotransform()))
                 verify(numpy.allclose(geotransform,
                                       layer.get_geotransform(),
-                                      rtol=1.0e-12), msg)
+                                      rtol=tolerance), msg)
 
         # In case of vector layers, we just check that they are non-empty
         # FIXME (Ole): Not good as nasty error is raised in cases where
@@ -237,7 +245,7 @@ def check_data_integrity(layer_objects):
 #             except Exception, e:
 #                 msg = ('Linked layer %s could not be found: %s'
 #                        % (basename, str(e)))
-#                 logger.info(msg)
+#                 LOGGER.info(msg)
 #                 #raise Exception(msg)
 #             else:
 #                 new_layers.append((server, new_layer, bbox, new_metadata))

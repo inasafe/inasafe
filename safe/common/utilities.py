@@ -3,6 +3,9 @@
 
 import os
 import gettext
+import logging
+import logging.handlers
+
 
 class VerificationError(RuntimeError):
     """Exception thrown by verify()
@@ -38,3 +41,72 @@ def ugettext(s):
     t = gettext.translation(filename_prefix,
                             path, languages=[lang], fallback=True)
     return t.ugettext(s)
+
+
+def setupLogger():
+    """Run once when the module is loaded and enable logging
+    Borrowed heavily from this:
+    http://docs.python.org/howto/logging-cookbook.html
+
+    Use this to first initialise the logger (see safe/__init__.py)::
+
+       from safe.common import utilities
+       utilities.setupLogger()
+
+    You would typically only need to do the above once ever as the
+    safe modle is initialised early and will set up the logger
+    globally so it is available to all packages / subpackages as
+    shown below.
+
+    In a module that wants to do logging then use this example as
+    a guide to get the initialised logger instance::
+
+       # The LOGGER is intialised in utilities.py by init
+       import logging
+       LOGGER = logging.getLogger('InaSAFE')
+
+    Now to log a message do::
+       
+       LOGGER.debug('Some debug message')  
+
+    Args: None
+
+    Returns: None
+
+    Raises: None
+    """
+    myLogger = logging.getLogger('InaSAFE')
+    myLogger.setLevel(logging.DEBUG)
+    # create file handler which logs even debug messages
+    # shamelessly harcoding for now 
+    # TODO: put logs in <inasafe tmp>/logs/safe.log
+    myLogFile = os.path.join('/tmp', 'safe.log')
+    myFileHandler = logging.FileHandler(myLogFile)
+    myFileHandler.setLevel(logging.DEBUG)
+    # create console handler with a higher log level
+    myConsoleHandler = logging.StreamHandler()
+    myConsoleHandler.setLevel(logging.ERROR)
+    # Email handler for errors
+    myEmailServer = 'localhost'
+    myEmailServerPort = 25
+    mySenderAddress = 'logs@inasafe.org'
+    myRecipientAddresses = ['tim@linfiniti.com']
+    mySubject = 'Error'
+    myEmailHandler = logging.handlers.SMTPHandler(
+        (myEmailServer, myEmailServerPort),
+        mySenderAddress,
+        myRecipientAddresses,
+        mySubject)
+    myEmailHandler.setLevel(logging.ERROR)
+    # create formatter and add it to the handlers
+    myFormatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    myFileHandler.setFormatter(myFormatter)
+    myConsoleHandler.setFormatter(myFormatter)
+    myEmailHandler.setFormatter(myFormatter)
+    # add the handlers to the logger
+    myLogger.addHandler(myFileHandler)
+    myLogger.addHandler(myConsoleHandler)
+    myLogger.info('Safe Logger Module Loaded')
+    myLogger.info('----------------------')
+    myLogger.info('CWD: %s' % os.path.abspath(os.path.curdir))

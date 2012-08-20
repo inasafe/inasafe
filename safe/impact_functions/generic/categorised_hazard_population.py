@@ -57,7 +57,7 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
 
         # Calculate impact as population exposed to each catergory
         P = population.get_data(nan=0.0, scaling=True)
-        H = numpy.where(C == high_t , P, 0)
+        H = numpy.where(C == high_t, P, 0)
         M = numpy.where(C > medium_t, P, 0)
         L = numpy.where(C < low_t, P, 0)
 
