@@ -7,11 +7,12 @@ using it.
 """
 
 import numpy
-import types
 import logging
 import keyword
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as _
+from safe.impact_functions.utilities import (admissible_plugins_to_str,
+                                             keywords_to_str)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -460,8 +461,7 @@ def get_admissible_plugins(keywords=None):  # , name=None):
     Output
         Dictionary of impact functions ({name: class})
     """
-    LOGGER.debug('get_admissible_plugins requested with keywords:\n%s' %
-                 keywords)
+    LOGGER.debug(keywords_to_str(keywords))
     # Input checks
     if keywords is None:
         keywords = []
@@ -488,8 +488,5 @@ def get_admissible_plugins(keywords=None):  # , name=None):
             admissible_plugins[f_name] = func
 
     # Return (possibly empty) dictionary
-    LOGGER.debug('Admissible plugins found:\n%s' % str(
-        ['ID: %s' % x for x in admissible_plugins.keys()]))
-    LOGGER.debug('Admissible plugins found:\n%s' % str(
-        ['Title: %s' % x for x in admissible_plugins.values()]))
+    LOGGER.debug(admissible_plugins_to_str(admissible_plugins))
     return admissible_plugins
