@@ -38,7 +38,8 @@ from safe_qgis.keywords_dialog import KeywordsDialog
 
 
 # For testing and demoing
-from common.testing import HAZDATA
+from safe.common.testing import HAZDATA
+
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 

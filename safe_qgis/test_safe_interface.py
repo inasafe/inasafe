@@ -27,7 +27,7 @@ from safe_qgis.safe_interface import (getOptimalExtent,
 from safe_qgis.exceptions import (KeywordNotFoundException,
                                InsufficientOverlapException,
                                InvalidBoundingBoxException)
-from common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 
 
 class SafeInterfaceTest(unittest.TestCase):
@@ -152,17 +152,23 @@ class SafeInterfaceTest(unittest.TestCase):
     def test_availableFunctions(self):
         """Check we can get the available functions from the impact calculator.
         """
-        myFunctionList = availableFunctions()
-        assert len(myFunctionList) > 1
+        myList = availableFunctions()
+        myMessage = 'No functions available (len=%ss)' % len(myList)
+        assert len(myList) > 0, myMessage
 
         # Also test if it works when we give it two layers
         # to see if we can determine which functions will
         # work for them.
         myKeywords1 = readKeywordsFromFile(self.rasterShakePath)
         myKeywords2 = readKeywordsFromFile(self.vectorPath)
+        # We need to explicitly add the layer type to each keyword list
+        myKeywords1['layertype'] = 'raster'
+        myKeywords2['layertype'] = 'vector'
+
         myList = [myKeywords1, myKeywords2]
-        myFunctionList = availableFunctions(myList)
-        assert len(myFunctionList) == 1
+        myList = availableFunctions(myList)
+        myMessage = 'No functions available (len=%ss)' % len(myList)
+        assert len(myList) > 0, myMessage
 
     def test_getKeywordFromFile(self):
         """Get keyword from a filesystem file's .keyword file."""

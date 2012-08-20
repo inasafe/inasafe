@@ -13,7 +13,7 @@ from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 
 # For testing and demoing
-from common.testing import TESTDATA
+from safe.common.testing import TESTDATA
 from safe_qgis.safe_interface import readKeywordsFromFile
 import hashlib
 
@@ -112,13 +112,13 @@ def unitTestDataPath(theSubdir=None):
        * theSubdir: (Optional) Additional subdir to add to the path - typically
          'hazard' or 'exposure'.
     """
-    myPath = os.path.join(os.path.dirname(__file__), '..')
+    from safe.common.testing import UNITDATA
+
+    myPath = UNITDATA
+
     if theSubdir is not None:
         myPath = os.path.abspath(os.path.join(myPath,
-                                              'unit_test_data',
                                               theSubdir))
-    else:
-        myPath = os.path.abspath(os.path.join(myPath, 'unit_test_data'))
     return myPath
 
 

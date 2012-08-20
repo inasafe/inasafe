@@ -58,9 +58,10 @@ class PluginTest(unittest.TestCase):
 
     def test_ImpactFunctionI18n(self):
         """Library translations are working."""
-        # import this late so that i18n setup is already in place
-        from common.utilities import ugettext as _
+        # Import this late so that i18n setup is already in place
+        from safe.common.utilities import ugettext as _
         myUntranslatedString = 'Temporarily Closed'
+
         # Test indonesian too
         myParent = QWidget()
         myCanvas = QgsMapCanvas(myParent)

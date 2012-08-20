@@ -51,8 +51,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """Constructor for the dialog.
         .. note:: In QtDesigner the advanced editor's predefined keywords
            list should be shown in english always, so when adding entries to
-           cboKeyword, be sure to choose :safe_qgis:`Properties<<` and untick the
-           :safe_qgis:`translatable` property.
+           cboKeyword, be sure to choose :safe_qgis:`Properties<<` and untick
+           the :safe_qgis:`translatable` property.
 
         Args:
            * parent - parent widget of this dialog

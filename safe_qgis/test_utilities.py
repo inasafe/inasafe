@@ -7,7 +7,7 @@ import os
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
-from safe_api import bbox_intersection
+from safe.api import bbox_intersection
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                               setVectorStyle,
                               setRasterStyle,
@@ -245,6 +245,6 @@ class UtilitiesTest(unittest.TestCase):
         assert myVersion > 10700, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(UtilitiesTest, 'test')
+    suite = unittest.makeSuite(ISUtilitiesTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

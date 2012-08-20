@@ -104,7 +104,7 @@ class InvalidBoundingBoxException(Exception):
     because one of the extents is invalid."""
     pass
 
+
 class StyleError(Exception):
     """An exception relating to reading / generating GIS styles"""
     pass
-

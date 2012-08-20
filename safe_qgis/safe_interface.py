@@ -27,16 +27,16 @@ import os
 import unicodedata
 
 # SAFE functionality
-from safe_api import get_admissible_plugins
-from safe_api import get_function_title
-from safe_api import get_plugins as safe_get_plugins
-from safe_api import read_keywords, bbox_intersection
-from safe_api import write_keywords as safe_write_keywords
-from safe_api import read_layer as safe_read_layer
-from safe_api import (buffered_bounding_box,
+from safe.api import get_admissible_plugins
+from safe.api import get_function_title
+from safe.api import get_plugins as safe_get_plugins
+from safe.api import read_keywords, bbox_intersection
+from safe.api import write_keywords as safe_write_keywords
+from safe.api import read_layer as safe_read_layer
+from safe.api import (buffered_bounding_box,
                       verify as verify_util,
                       VerificationError)
-from safe_api import (calculate_impact as safe_calculate_impact,
+from safe.api import (calculate_impact as safe_calculate_impact,
                       internationalisedNames)  # pylint: disable=
 
 # InaSAFE GUI specific functionality
@@ -65,7 +65,7 @@ def tr(theText):
 
 
 def verify(theStatement, theMessage=None):
-    """This is just a thin wrapper around safe_api.verify.
+    """This is just a thin wrapper around safe.api.verify.
 
     Args:
         * theStatement - expression to verify
@@ -90,7 +90,7 @@ def getOptimalExtent(theHazardGeoExtent,
     to ensure that the extent is tenable, includes data from both
     etc.
 
-    This is just a thin wrapper around safe_api.bbox_intersection.
+    This is just a thin wrapper around safe.api.bbox_intersection.
 
     Typically the result of this function will be used to clip
     input layers to a commone extent before processing.
