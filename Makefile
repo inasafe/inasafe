@@ -85,7 +85,7 @@ lines-of-code:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	@git log | head -3
-	@sloccount safe_qgis impact_functions storage safe_api.py common realtime | grep '^[0-9]'
+	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
 
 
 clean:
@@ -122,7 +122,7 @@ test_suite_no_git: compile
 	@echo "----------------------"
 	@echo "Regression Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=common,storage,engine,impact_functions,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -139,7 +139,7 @@ test_suite: compile testdata
 	@echo "----------------------"
 	@echo "Regresssion Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=common,storage,engine,impact_functions,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -217,7 +217,7 @@ dependency_test:
 	@grep -R "geoserver" $(NONGUI) || true
 	@grep -R "owslib" $(NONGUI) || true
 
-list_gis_packages:
+list_gpackages:
 	@echo
 	@echo "---------------------------------------"
 	@echo "List of QGis related packages installed"
@@ -238,14 +238,14 @@ pylint:
 	@echo "---------------------------------------"
 	@echo "Pylint report                          "
 	@echo "---------------------------------------"
-	pylint --disable=C,R common storage engine safe_qgis
+	pylint --disable=C,R safe safe_qgis
 
 profile:
 	@echo
 	@echo "---------------------------------------"
 	@echo "Profiling engine                       "
 	@echo "---------------------------------------"
-	python -m cProfile engine/test_engine.py -s cumulative
+	python -m cProfile safe/engine/test_engine.py -s cumulative
 
 ##########################################################
 #
@@ -260,14 +260,14 @@ jenkins-test:
 	@echo "----------------------------------"
 	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
-		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=common,storage,engine,impact_functions,safe_qgis || :
+		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis || :
 
 jenkins-pyflakes:
 	@echo
 	@echo "----------------------------------"
 	@echo "PyFlakes check for Jenkins"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes common storage engine impact_functions safe_qgis > pyflakes.log || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis > pyflakes.log || :
 
 jenkins-sloccount:
 	@echo "----------------------"
@@ -275,7 +275,7 @@ jenkins-sloccount:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	# This line is for machine readble output for use by Jenkins
-	@sloccount --duplicates --wide --details  impact_functions storage safe_api.py common safe_qgis realtime | fgrep -v .svn > sloccount.sc || :
+	@sloccount --duplicates --wide --details  safe_api.py safe safe_qgis realtime | fgrep -v .svn > sloccount.sc || :
 
 jenkins-pylint:
 	@echo
@@ -289,11 +289,11 @@ jenkins-pylint:
 	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,is_help_base.py,is_keywords_dialog_base.py,is_options_dialog_base.py,is_dock_base.py common storage engine safe_qgis | grep -v 'I0011' > pylint.log || :
+	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,help_base.py,keywords_dialog_base.py,options_dialog_base.py,dock_base.py safe safe_qgis | grep -v 'I0011' > pylint.log || :
 
 jenkins-pep8:
 	@echo
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . > pep8.log || :
