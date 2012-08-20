@@ -195,9 +195,9 @@ class Test_plugin_core(unittest.TestCase):
         T = get_plugins_as_table('F1')
         S = T.toNewlineFreeString()
         LOGGER.debug(S)
-        f = file('/tmp/tbl.html', 'wt')
-        f.write(S)
-        f.close()
+        #f = file('/tmp/tbl.html', 'wt')
+        #f.write(S)
+        #f.close()
         # Expecting that F1 test wont change and that the table produced for
         # it is of a deterministic length
         assert len(S) == 514
