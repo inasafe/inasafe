@@ -14,6 +14,11 @@
 
 # import Cloud - the sphinx theme we are using - pip install cloud-sptheme
 # see http://packages.python.org/cloud_sptheme/cloud_theme.html
+import sys
+import os
+sys.path.append(os.path.abspath('../../'))
+sys.path.append(os.path.abspath('../../../'))
+sys.path.append(os.path.abspath('../cloud_sptheme/'))
 import cloud_sptheme as csp
 
 # see http://sphinx.pocoo.org/config.html#confval-rst_epilog
