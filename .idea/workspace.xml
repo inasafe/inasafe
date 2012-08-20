@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Fix inconsistencies in md5 hash comparison by opening files in binary mode. I have commented out all old hashes and they should be re-added per platform as/if needed, though I am hoping we can have one canonical md5 hash for all systems now.">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/GUI_I18n_Test.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/NoseTests_IS_Map.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/Nosetests_in__home_timlinux_dev_python_inasafe_dev_safe_qgis.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/Realtime_Tests.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/testEventToLocalCities.xml" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/.idea/runConfigurations/NoseTests_GUI.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/NoseTests_SAFE_QGIS.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/test_plugin_core.py" afterPath="$PROJECT_DIR$/safe/impact_functions/test_plugin_core.py" />
-    </list>
+    <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Fix inconsistencies in md5 hash comparison by opening files in binary mode. I have commented out all old hashes and they should be re-added per platform as/if needed, though I am hoping we can have one canonical md5 hash for all systems now." />
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
