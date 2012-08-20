@@ -27,7 +27,7 @@ from safe_qgis.safe_interface import (getOptimalExtent,
 from safe_qgis.exceptions import (KeywordNotFoundException,
                                InsufficientOverlapException,
                                InvalidBoundingBoxException)
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from common.testing import TESTDATA, HAZDATA, EXPDATA
 
 
 class SafeInterfaceTest(unittest.TestCase):
