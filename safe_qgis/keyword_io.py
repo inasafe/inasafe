@@ -1,23 +1,21 @@
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-  **IS Keyword IO implementation.**
+"""**Keyword IO implementation.**
 
-Contact : ole.moller.nielsen@gmail.com
+.. tip:: Provides functionality for reading and writing keywords from within
+   QGIS. It is an abstration for the keywords system used by the underlying
+   library.
 
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
 """
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
+__license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import logging
 import sqlite3 as sqlite
 import cPickle as pickle
 
@@ -32,12 +30,14 @@ from safe_qgis.safe_interface import (verify,
                                writeKeywordsToFile)
 from safe_qgis.utilities import qgisVersion
 
+LOGGER = logging.getLogger('InaSAFE')
 
 class KeywordIO(QObject):
-    """Class for doing keyword read/write operations. It abstracts away
-    differences between using SAFE to get keywords from a .keywords file
-    and this plugins implemenation of keyword caching in a local sqlite db
-    used for supporting keywords for remote datasources."""
+    """Class for doing keyword read/write operations.
+
+    It abstracts away differences between using SAFE to get keywords from a
+    .keywords file and this plugins implemenation of keyword caching in a local
+    sqlite db used for supporting keywords for remote datasources."""
 
     def __init__(self):
         """Constructor for the KeywordIO object.
@@ -56,8 +56,9 @@ class KeywordIO(QObject):
         self.connection = None
 
     def setKeywordDbPath(self, thePath):
-        """Set the path for the keyword database (sqlite) that should be used
-        to search for keywords for non local datasets.
+        """Set the path for the keyword database (sqlite).
+
+        The file will be used to search for keywords for non local datasets.
 
         Args:
             thePath - a valid path to a sqlite database. The database does

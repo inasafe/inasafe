@@ -1,6 +1,6 @@
-"""Module for 2D interpolation over a rectangular mesh
+"""**Module for 2D interpolation over a rectangular mesh**
 
-This module
+This module:
 
 * provides piecewise constant (nearest neighbour) and bilinear interpolation
 * is fast (based on numpy vector operations)
@@ -12,32 +12,45 @@ This module
 See end of this file for documentation of the mathematical derivation used.
 """
 
+__author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
+__version__ = '0.5.0'
+__revision__ = '$Format:%H$'
+__date__ = '01/11/2010'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
+
+
+import logging
 import numpy
 
+LOGGER = logging.getLogger('InaSAFE')
 
 def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
     """Fundamental 2D interpolation routine
 
-    Input
-        x: 1D array of x-coordinates of the mesh on which to interpolate
-        y: 1D array of y-coordinates of the mesh on which to interpolate
-        Z: 2D array of values for each x, y pair
-        points: Nx2 array of coordinates where interpolated values are sought
-        mode: Determines the interpolation order. Options are
+    Args:
+        * x: 1D array of x-coordinates of the mesh on which to interpolate
+        * y: 1D array of y-coordinates of the mesh on which to interpolate
+        * Z: 2D array of values for each x, y pair
+        * points: Nx2 array of coordinates where interpolated values are sought
+        * mode: Determines the interpolation order. Options are
 
             * 'constant' - piecewise constant nearest neighbour interpolation
             * 'linear' - bilinear interpolation using the four
-              nearest neighbours (default)
+                  nearest neighbours (default)
 
-        bounds_error: Boolean flag. If True (default) an exception will
-                      be raised when interpolated values are requested
-                      outside the domain of the input data. If False, nan
-                      is returned for those values
+        * bounds_error: Boolean flag. If True (default) an exception will
+              be raised when interpolated values are requested
+              outside the domain of the input data. If False, nan
+              is returned for those values
 
-    Output
-        1D array with same length as points with interpolated values
+    Returns:
+        * 1D array with same length as points with interpolated values
 
-    Notes
+    Raises: Exception, RuntimeError (see note about bounds_error)
+
+    Notes:
         Input coordinates x and y are assumed to be monotonically increasing,
         but need not be equidistantly spaced.
 

@@ -1,8 +1,21 @@
-"""Class Vector
+"""**Vector Module**
+
+.. tip:: Provides functionality for manipulation of vector data. The data can
+   be in-memory or file based.
+
 """
+
+__author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
+__version__ = '0.5.0'
+__revision__ = '$Format:%H$'
+__date__ = '01/11/2010'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 import os
 import numpy
+import logging
 
 import copy as copy_module
 from osgeo import ogr, gdal
@@ -23,45 +36,49 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
 
+LOGGER = logging.getLogger('InaSAFE')
 
 class Vector(Layer):
-    """Class for abstraction of vector data
+    """Class for abstraction of vector data.
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
-                 geometry_type=None,
-                 name='', keywords=None, style_info=None):
+                 geometry_type=None, name='', keywords=None, style_info=None):
         """Initialise object with either geometry or filename
 
-        Input
+        Args:
             data: Can be either
-                * a filename of a vector file format known to GDAL
-                * List of dictionaries of fields associated with
-                  point coordinates
+                * A filename of a vector file format known to GDAL.
+                * List of dictionaries of field names and attribute values
+                  associated with each point coordinate.
                 * None
             projection: Geospatial reference in WKT format.
-                        Only used if geometry is provide as a numeric array,
-                        if None, WGS84 geographic is assumed
+                Only used if geometry is provided as a numeric array,
+                if None, WGS84 geographic is assumed.
             geometry: A list of either point coordinates or polygons/lines
-                      (see note below)
+                (see note below).
             geometry_type: Desired interpretation of geometry.
-                           Valid options are 'point', 'line', 'polygon' or
-                           the ogr types: 1, 2, 3
-                           If None, a geometry_type will be inferred
+                Valid options are 'point', 'line', 'polygon' or
+                the ogr types: 1, 2, 3.
+                If None, a geometry_type will be inferred from the data.
             name: Optional name for layer.
-                  Only used if geometry is provide as a numeric array
+                Only used if geometry is provided as a numeric array.
             keywords: Optional dictionary with keywords that describe the
-                      layer. When the layer is stored, these keywords will
-                      be written into an associated file with extension
-                      .keywords.
+                layer. When the layer is stored, these keywords will
+                be written into an associated file with extension
+                '.keywords'.
 
-                      Keywords can for example be used to display text
-                      about the layer in a web application.
+                Keywords can for example be used to display text about the
+                layer in an application.
             style_info: Dictionary with information about how this layer
-                        should be styled. See impact_functions/styles.py
-                        for examples.
+                should be styled. See impact_functions/styles.py
+                for examples.
 
-        Notes
+        Returns: An instance of class Vector.
+
+        Raises: Propogates any exceptions encountered.
+
+        Notes:
 
         If data is a filename, all other arguments are ignored
         as they will be inferred from the file.
@@ -70,11 +87,11 @@ class Vector(Layer):
         If each entry is one set of coordinates the type will be ogr.wkbPoint,
         if it is an array of coordinates the type will be ogr.wkbPolygon.
 
-        To cast array entries as lines set geometry_type explicity to 'line' in
-        the call to Vector. Otherwise, they will default to polygons.
+        To cast array entries as lines set geometry_type explicitly to 'line'
+        in the call to Vector. Otherwise, they will default to polygons.
 
         Each polygon or line feature take the form of an Nx2 array representing
-        vertices where line segments are joined
+        vertices where line segments are joined.
         """
 
         # Invoke common layer constructor

@@ -44,29 +44,53 @@ Please observe the following coding standards when working on the codebase:
 
 **Example standard header**::
 
-   """
-   InaSAFE Disaster risk assessment tool developed by AusAid -
-     **QGIS plugin implementation.**
+    """**One line description.**
 
-   Contact : ole.moller.nielsen@gmail.com
+    .. tip::
+       Detailed multi-paragraph description...
 
-   .. note:: This program is free software; you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation; either version 2 of the License, or
-        (at your option) any later version.
+    """
 
-   """
+    __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
+    __version__ = '0.5.0'
+    __revision__ = '$Format:%H$'
+    __date__ = '01/11/2010'
+    __license__ = "GPL"
+    __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+    __copyright__ += 'Disaster Reduction'
 
-   __author__ = 'tim@linfiniti.com'
-   __version__ = '0.0.1'
-   __revision__ = '$Format:%H$'
-   __date__ = '10/01/2011'
-   __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-   __copyright__ += 'Disaster Reduction'
 
 .. note:: Please see :ref:`faq-revision-label` for details on how the revision
    tag is replaced with the SHA1 for the file when the release packages are
    made.
+
+Doc strings
+...........
+
+All code should be self documenting. We used the following style for documenting
+functions and class methods::
+
+    def setKeywordDbPath(self, thePath):
+        """Set the path for the keyword database (sqlite).
+
+        The file will be used to search for keywords for non local datasets.
+
+        Args:
+            * thePath: a valid path to a sqlite database. The database does
+                  not need to exist already, but the user should be able to write
+                  to the path provided.
+        Returns:
+            None
+        Raises:
+            None
+        """
+        self.keywordDbPath = str(thePath)
+
+
+Various other sphinx markup elements may be used in the docstrings too.
+For more information see also:
+http://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html
+
 
 .. _hig-label:
 
@@ -105,8 +129,6 @@ are listed here for your convenience:
 + Try to avoid technical terms and rather use a laymans equivalent e.g. use
   the word 'Transparency' rather than 'Alpha Channel' (contrived example),
   'Text' instead of 'String' and so on.
-+ Use consistent iconography. If you need an icon or icon elements, please
-  contact Robert Szczepanek on the mailing list for assistance.
 + Place long lists of widgets into scroll boxes. No dialog should exceed 580
   pixels in height and 1000 pixels in width.
 + Separate advanced options from basic ones. Novice users should be able to
@@ -117,6 +139,7 @@ are listed here for your convenience:
   user interface minimalistic and use sensible defaults.
 + If clicking a button will spawn a new dialog, an ellipsis (...) should be
   suffixed to the button text.
+
 
 
 Code statistics

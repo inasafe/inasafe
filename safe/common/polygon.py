@@ -1,67 +1,81 @@
-"""Polygon, line and point algorithms
+"""**Polygon, line and point algorithms**
 
-The main public functions are:
+.. tip::
+   The main public functions are:
     separate_points_by_polygon: Fundamental clipper
     intersection: Determine intersections of lines
 
-Some more specific or helper functions include:
+   Some more specific or helper functions include:
     inside_polygon
     is_inside_polygon
     outside_polygon
     is_outside_polygon
     point_on_line
+
 """
 
+__author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
+__version__ = '0.5.0'
+__revision__ = '$Format:%H$'
+__date__ = '01/11/2010'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
+
+
+import logging
 import numpy
-from math import sqrt
 from random import uniform, seed as seed_function
 
 from safe.common.numerics import ensure_numeric
 from safe.common.numerics import grid2points, geotransform2axes
 
+LOGGER = logging.getLogger('InaSAFE')
 
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
                                use_numpy=True):
-    """Determine whether points are inside or outside a polygon
+    """Determine whether points are inside or outside a polygon.
 
-    Input:
-       points - Tuple of (x, y) coordinates, or list of tuples
-       polygon - list or Nx2 array of polygon vertices
-       closed - (optional) determine whether points on boundary should be
-       regarded as belonging to the polygon (closed = True)
-       or not (closed = False)
-       check_input: Allows faster execution if set to False
-       use_numpy: Use the fast numpy implementation
+    Args:
+        * points: Tuple of (x, y) coordinates, or list of tuples
+        * polygon: list or Nx2 array of polygon vertices
+        * closed: (optional) determine whether points on boundary should be
+              regarded as belonging to the polygon (closed = True)
+              or not (closed = False)
+        * check_input: Allows faster execution if set to False
+        * use_numpy: Use the fast numpy implementation
 
-    Output:
-       indices: array of same length as points with indices of points falling
-       inside the polygon listed from the beginning and indices of points
-       falling outside listed from the end.
+    Returns:
+        * indices: array of same length as points with indices of points
+              falling inside the polygon listed from the beginning and indices
+              of points falling outside listed from the end.
 
-       count: count of points falling inside the polygon
+        * count: count of points falling inside the polygon
 
-       The indices of points inside are obtained as indices[:count]
-       The indices of points outside are obtained as indices[count:]
+        The indices of points inside are obtained as indices[:count]
+        The indices of points outside are obtained as indices[count:]
 
-    Examples:
-       U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square
+    Raises: A generic Exception is raised for unexpected input.
 
-       separate_points_by_polygon( [[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
-       will return the indices [0, 2, 1] and count == 2 as only the first
-       and the last point are inside the unit square
+    Example:
+
+        U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square
+        separate_points_by_polygon( [[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
+
+        will return the indices [0, 2, 1] and count == 2 as only the first
+        and the last point are inside the unit square
 
     Remarks:
-       The vertices may be listed clockwise or counterclockwise and
-       the first point may optionally be repeated.
-       Polygons do not need to be convex.
-       Polygons can have holes in them and points inside a hole is
-       regarded as being outside the polygon.
+        The vertices may be listed clockwise or counterclockwise and
+        the first point may optionally be repeated.
+        Polygons do not need to be convex.
+        Polygons can have holes in them and points inside a hole is
+        regarded as being outside the polygon.
 
     Algorithm is based on work by Darel Finley,
     http://www.alienryderflex.com/polygon/
-
     """
 
     if check_input:
