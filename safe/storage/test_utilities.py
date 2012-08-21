@@ -1,15 +1,4 @@
-"""**Tests for safe common utilire**
-
-This module:
-
-* provides piecewise constant (nearest neighbour) and bilinear interpolation
-* is fast (based on numpy vector operations)
-* depends only on numpy
-* guarantees that interpolated values never exceed the four nearest neighbours
-* handles missing values in domain sensibly using NaN
-* is unit tested with a range of common and corner cases
-
-See end of this file for documentation of the mathematical derivation used.
+"""**Tests for safe common utilities**
 """
 
 __author__ = 'Tim Sutton <tim@linfiniti.com>'
@@ -21,7 +10,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
-import sys
 import logging
 import unittest
 
@@ -40,6 +28,8 @@ class CommonUtilitiesTest(unittest.TestCase):
     def setUp(self):
         msg = 'Multifile keywords do not exist at %s' % PATH
         assert os.path.exists(PATH), msg
+        msg = 'Simple keywords do not exist at %s' % SIMPLE_PATH
+        assert os.path.exists(SIMPLE_PATH), msg
 
     def test_read_keywords(self):
         """Test reading keywords"""

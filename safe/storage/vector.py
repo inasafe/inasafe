@@ -43,7 +43,8 @@ class Vector(Layer):
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
-                 geometry_type=None, name='', keywords=None, style_info=None):
+                 geometry_type=None, name='', keywords=None, style_info=None,
+                 sublayer=None):
         """Initialise object with either geometry or filename
 
         Args:
@@ -73,6 +74,10 @@ class Vector(Layer):
             * style_info: Dictionary with information about how this layer
                 should be styled. See impact_functions/styles.py
                 for examples.
+            * sublayer: str Optional sublayer (band name in the case of raster,
+                  table name in case of sqlite etc.) to load. Only applicable
+                  to those dataformats supporting more than one layer in the
+                  data file.
 
         Returns: An instance of class Vector.
 
