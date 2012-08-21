@@ -115,7 +115,7 @@ quicktest:
 	nosetests -A 'not slow' -v safe --stop
 
 it: 
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe --stop
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' safe --stop
 
 # Run pep8 style checking
 pep8:
