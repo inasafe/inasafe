@@ -117,23 +117,6 @@ pep8:
 	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
 
 # Run entire test suite
-test_suite_no_git: compile
-	@echo
-	@echo "----------------------"
-	@echo "Regression Test Suite"
-	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
-
-	@# FIXME (Ole) - to get of the remaining junk I tried to use
-	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
-	@# This does clip the line, but does not flush and puts an extra
-	@# newline in.
-
-	@# Report expected failures if any!
-	@#echo Expecting 1 test to fail in support of issue #3
-	@#echo Expecting 1 test to fail in support of issue #160
-
-# Run entire test suite
 test_suite: compile testdata
 	@echo
 	@echo "----------------------"
