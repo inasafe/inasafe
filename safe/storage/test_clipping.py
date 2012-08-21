@@ -4,10 +4,6 @@ import sys
 import os
 from os.path import join
 
-# Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
-
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.polygon import is_inside_polygon, inside_polygon
 from safe.storage.vector import Vector
