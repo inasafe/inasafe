@@ -16,7 +16,7 @@ class BasicFunction(FunctionProvider):
 
     :author Allen
     :rating 1
-    :param requires category=="hazard"
+    :param requires category=="test_cat1"
     :param requires unit=="MMI"
     """
 
@@ -30,12 +30,12 @@ class BasicFunction(FunctionProvider):
 class F1(FunctionProvider):
     """Risk plugin for testing
 
-    :param requires category=='hazard' and \
+    :param requires category=='test_cat1' and \
                     subcategory.startswith('flood') and \
                     layertype=='raster' and \
                     unit=='m'
 
-    :param requires category=='exposure' and \
+    :param requires category=='test_cat2' and \
                     subcategory.startswith('population') and \
                     layertype=='raster' and \
                     datatype=='population'
@@ -52,12 +52,12 @@ class F1(FunctionProvider):
 class F2(FunctionProvider):
     """Risk plugin for testing
 
-    :param requires category=='hazard' and \
+    :param requires category=='test_cat1' and \
                     subcategory.startswith('flood') and \
                     layertype=='raster' and \
                     unit=='m'
 
-    :param requires category=='exposure' and \
+    :param requires category=='test_cat2' and \
                     subcategory.startswith('building')
     """
 
@@ -71,8 +71,8 @@ class F2(FunctionProvider):
 class F3(FunctionProvider):
     """Risk plugin for testing
 
-    :param requires category=='hazard'
-    :param requires category=='exposure'
+    :param requires category=='test_cat1'
+    :param requires category=='test_cat2'
     """
 
     @staticmethod
@@ -85,7 +85,7 @@ class SyntaxErrorFunction(FunctionProvider):
 
     :author Allen
     :rating 1
-    :param requires category=="hazard"
+    :param requires category=="test_cat1"
     :param requires unit="MMI" #Note the error should be ==
     """
 
@@ -103,17 +103,17 @@ class Test_plugin_core(unittest.TestCase):
         """Basic plugin requirements collection
         """
         requirelines = requirements_collect(BasicFunction)
-        params = {'category': 'hazard', 'unit': 'MMI'}
+        params = {'category': 'test_cat1', 'unit': 'MMI'}
         assert requirements_met(requirelines, params)
 
-        params = {'category': 'exposure', 'unit': 'mmi2'}
+        params = {'category': 'test_cat2', 'unit': 'mmi2'}
         assert requirements_met(requirelines, params, True) == False
 
     def test_basic_plugin_requirements_met(self):
         """Basic plugin requirements met
         """
         requirelines = requirements_collect(BasicFunction)
-        valid_return = ['category=="hazard"', 'unit=="MMI"']
+        valid_return = ['category=="test_cat1"', 'unit=="MMI"']
         for ret1, ret2 in zip(valid_return, requirelines):
             assert ret1 == ret2, "Error in requirements extraction"
 
@@ -121,13 +121,13 @@ class Test_plugin_core(unittest.TestCase):
         """Basic plugin requirements check
         """
         requirelines = requirements_collect(BasicFunction)
-        params = {'category': 'exposure'}
+        params = {'category': 'test_cat2'}
         for line in requirelines:
             check = requirement_check(params, line)
             assert check == False
 
         line = "unit='MMI'"
-        params = {'category': 'exposure'}
+        params = {'category': 'test_cat2'}
         msg = 'Malformed statement (logged)'
         assert requirement_check(params, line) == False, msg
         #self.assertRaises(SyntaxError, requirement_check, params, line)
@@ -144,15 +144,15 @@ class Test_plugin_core(unittest.TestCase):
         """
 
         # Keywords matching F1 and F3
-        haz_keywords1 = dict(category='hazard', subcategory='flood',
+        haz_keywords1 = dict(category='test_cat1', subcategory='flood',
                              layertype='raster', unit='m')
-        exp_keywords1 = dict(category='exposure', subcategory='population',
+        exp_keywords1 = dict(category='test_cat2', subcategory='population',
                              layertype='raster', datatype='population')
 
         # Keywords matching F2 and F3
-        haz_keywords2 = dict(category='hazard', subcategory='flood',
+        haz_keywords2 = dict(category='test_cat1', subcategory='flood',
                              layertype='raster', unit='m')
-        exp_keywords2 = dict(category='exposure', subcategory='building')
+        exp_keywords2 = dict(category='test_cat2', subcategory='building')
 
         # Check correct matching of keyword set 1
         P = get_admissible_plugins([haz_keywords1, exp_keywords1])
@@ -200,7 +200,7 @@ class Test_plugin_core(unittest.TestCase):
         #f.close()
         # Expecting that F1 test wont change and that the table produced for
         # it is of a deterministic length
-        assert len(S) == 514
+        assert len(S) == 518
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')
