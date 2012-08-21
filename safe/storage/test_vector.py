@@ -35,4 +35,3 @@ class VectorTest(unittest.TestCase):
     def testSublayerLoading(self):
         keywords = read_keywords(KEYWORD_PATH, 'osm_jk')
         layer = Vector(data=SQLITE_PATH, keywords=keywords)
-

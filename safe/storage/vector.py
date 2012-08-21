@@ -38,6 +38,7 @@ from utilities import geometrytype2string
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class Vector(Layer):
     """Class for abstraction of vector data.
     """
