@@ -70,6 +70,8 @@ class Test_Clipping(unittest.TestCase):
             elif filename == 'polygon_6.shp':
                 assert len(indices) == 6
 
+    test_clip_points_by_polygons.slow = 1
+
     def test_clip_raster_by_polygons(self):
         """Raster grids can be clipped by polygon layers
 
@@ -167,6 +169,7 @@ class Test_Clipping(unittest.TestCase):
                 point_layer.write_to_file('points_%i.shp' % i)
                 polygon_layer.write_to_file('polygon_%i.shp' % i)
 
+    test_clip_raster_by_polygons.slow = 1
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Clipping, 'test')

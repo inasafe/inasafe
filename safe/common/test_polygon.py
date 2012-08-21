@@ -588,6 +588,8 @@ class Test_Polygon(unittest.TestCase):
             assert is_inside_polygon(point, polygon)
             assert not is_inside_polygon(point, ex_poly), '%s' % str(point)
 
+    test_populate_polygon_with_exclude.slow = 1
+
     def test_populate_polygon_with_exclude2(self):
         """Polygon with hole can be populated by random points (2)
         """

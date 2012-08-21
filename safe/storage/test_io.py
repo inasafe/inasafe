@@ -556,6 +556,8 @@ class Test_IO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
+    test_reading_and_writing_of_vector_polygon_data.slow = 1
+
     def test_centroids_from_polygon_data(self):
         """Centroid point data can be derived from polygon data
 
@@ -842,6 +844,8 @@ class Test_IO(unittest.TestCase):
                     msg = 'Should have raised TypeError'
                     raise Exception(msg)
 
+    test_reading_and_writing_of_real_rasters.slow = 1
+
     def test_no_projection(self):
         """Raster layers with no projection causes Exception to be raised
         """
@@ -886,6 +890,8 @@ class Test_IO(unittest.TestCase):
             # Check that this error message reflects that file did not exist
             msg = 'Unexpected error message for non existing asc file: %s' % e
             assert 'Could not find file' in str(e), msg
+
+    test_bad_ascii_data.slow = 1
 
     def test_nodata_value(self):
         """NODATA value is correctly recorded in GDAL
