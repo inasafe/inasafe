@@ -150,6 +150,7 @@ def combosToString(ui):
     myString += '\n\n >> means combo item is selected'
     return myString
 
+
 def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
                   theOkButtonFlag=True):
     """Helper function to set the gui state to a given scenario.
@@ -218,7 +219,7 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
     if  myDict != myExpectedDict:
         return False, myMessage
 
-    return True,'Matched ok.'
+    return True, 'Matched ok.'
 
 
 def populatemyDock():
@@ -254,7 +255,7 @@ def loadStandardLayers():
                   join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
                   join(TESTDATA, 'OSM_building_polygons_20110905.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                          theDataDirectory=None)
+                                                       theDataDirectory=None)
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList)
     return myHazardLayerCount, myExposureLayerCount
 
@@ -687,7 +688,9 @@ class DockTest(unittest.TestCase):
         # Check that the number is as what was calculated by
         # Marco Hartman form HKV
         myMessage = 'Result not as expected: %s' % myResult
-        assert '2480' in myResult, myMessage  # This is the expected impact number
+        # This is the expected impact number
+        assert '2480' in myResult, myMessage
+
     def test_runFloodPopulationImpactFunction(self):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
@@ -723,7 +726,8 @@ class DockTest(unittest.TestCase):
         # Check that the number is as what was calculated by
         # Marco Hartman form HKV
         myMessage = 'Result not as expected: %s' % myResult
-        assert '2480' in myResult, myMessage  # This is the expected impact number
+        # This is the expected impact number
+        assert '2480' in myResult, myMessage
 
     def test_runFloodPopulationImpactFunction_scaling(self):
         """Flood function runs in GUI with 5x5km population data
@@ -911,7 +915,7 @@ class DockTest(unittest.TestCase):
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                              theDataDirectory=None)
+                                                    theDataDirectory=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -951,8 +955,8 @@ class DockTest(unittest.TestCase):
         # should be enabled
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-        myMessage = 'Run button was not enabled when exposure set to \n%s' % \
-            DOCK.cboExposure.currentText()
+        myMessage = ('Run button was not enabled when exposure set to \n%s' %
+            DOCK.cboExposure.currentText())
         assert myButton.isEnabled(), myMessage
 
     def test_Issue95(self):
@@ -967,7 +971,7 @@ class DockTest(unittest.TestCase):
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                              theDataDirectory=None)
+                                                theDataDirectory=None)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1007,16 +1011,18 @@ class DockTest(unittest.TestCase):
         # should be enabled
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Up)
         QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-        myMessage = 'Run button was not enabled when exposure set to \n%s' % \
-            DOCK.cboExposure.currentText()
+        myMessage = ('Run button was not enabled when exposure set to \n%s' %
+            DOCK.cboExposure.currentText())
         assert myButton.isEnabled(), myMessage
 
     def test_issue_160(self):
         """Test that multipart features can be used in a scenario - issue #160
         """
 
-        myExposure = os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326.shp')
-        myHazard = os.path.join(UNITDATA, 'hazard', 'multipart_polygons_osm_4326.shp')
+        myExposure = os.path.join(UNITDATA, 'exposure',
+                                  'buildings_osm_4326.shp')
+        myHazard = os.path.join(UNITDATA, 'hazard',
+                                  'multipart_polygons_osm_4326.shp')
                 # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         print 'Using QGIS: %s' % qgisVersion()
@@ -1025,7 +1031,7 @@ class DockTest(unittest.TestCase):
         # First part of scenario should have enabled run
         myFileList = [myHazard, myExposure]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                        theDataDirectory=TESTDATA)
+                                            theDataDirectory=TESTDATA)
 
         myMessage = ('Incorrect number of Hazard layers: expected 1 got %s'
                      % myHazardLayerCount)
@@ -1095,7 +1101,7 @@ class DockTest(unittest.TestCase):
                       join(TESTDATA,
                            'Population_Jakarta_geographic.asc')]
         myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
-                                                              theDataDirectory=None)
+                                                  theDataDirectory=None)
         assert myHazardLayerCount == 2
         assert myExposureLayerCount == 1
         DOCK.cboHazard.setCurrentIndex(0)

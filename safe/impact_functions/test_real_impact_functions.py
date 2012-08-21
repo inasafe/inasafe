@@ -31,7 +31,7 @@ class Test_real_plugins(unittest.TestCase):
         assert 'Padang Earthquake Building Damage Function' in P, msg
         # Added by Tim to replace WB (see below)
         assert 'Flood Building Impact Function' in P, msg
-        # Tim commented out W B Flood Evacuation Function as it is in experimental
+        # Tim commented out W B Flood Evacuation Function - its in experimental
         #assert 'W B Flood Evacuation Function' in P, msg
         #assert 'W B Flood Evacuation Function' in P, msg
         #assert 'Tephra Building Impact Function' in P, msg

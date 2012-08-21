@@ -210,7 +210,7 @@ def read_keywords(filename, sublayer=None):
             continue
 
         # Check if it is an ini style group header
-        block_flag = re.search( r'^\[.*]$' , text, re.M|re.I)
+        block_flag = re.search(r'^\[.*]$' , text, re.M | re.I)
         if block_flag:
             # check if we encountered a new block while reading the desired
             # sublayer block - if so return the keywords

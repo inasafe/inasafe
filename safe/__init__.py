@@ -6,6 +6,7 @@ __version__ = (0, 5, 0, 'alpha', 0)
 
 utilities.setupLogger()
 
+
 def get_version():
     import safe.common.version
     return safe.common.version.get_version(__version__)
