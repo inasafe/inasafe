@@ -32,6 +32,7 @@ from safe_qgis.utilities import qgisVersion
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class KeywordIO(QObject):
     """Class for doing keyword read/write operations.
 

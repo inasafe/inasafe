@@ -11,6 +11,7 @@ from core import get_plugins_as_table
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class BasicFunction(FunctionProvider):
     """Risk plugin for testing
 
@@ -177,7 +178,6 @@ class Test_plugin_core(unittest.TestCase):
         msg = ('Expected at least impact functions F1, F2 and F3 in %s'
                % str(P.keys()))
         assert 'F1' in P and 'F2' in P and 'F3' in P, msg
-
 
     def test_get_plugins_as_table(self):
         """Test get plugins as table"""

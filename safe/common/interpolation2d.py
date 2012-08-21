@@ -26,6 +26,7 @@ import numpy
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
     """Fundamental 2D interpolation routine
 

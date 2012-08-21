@@ -33,7 +33,6 @@ class Damage_curve:
         return interpolate1d(self.x, self.y, [zeta], mode='linear')[0]
 
 
-
 def admissible_plugins_to_str(plugin_list):
     """A helper to write the admissible plugin list to a string.
 

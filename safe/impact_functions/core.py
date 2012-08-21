@@ -17,6 +17,7 @@ from safe.impact_functions.utilities import (admissible_plugins_to_str,
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class PluginMount(type):
     def __init__(cls, name, bases, attrs):
         if not hasattr(cls, 'plugins'):
@@ -492,6 +493,7 @@ def get_admissible_plugins(keywords=None):  # , name=None):
     LOGGER.debug(admissible_plugins_to_str(admissible_plugins))
     return admissible_plugins
 
+
 def get_plugins_as_table(name=None):
     """Retrieve a table listing all plugins and their requirements.
 
@@ -505,7 +507,7 @@ def get_plugins_as_table(name=None):
     """
 
     table_body = []
-    header = TableRow([_('Title'), _('ID'),_('Requirements')], header=True)
+    header = TableRow([_('Title'), _('ID'), _('Requirements')], header=True)
     table_body.append(header)
 
     plugins_dict = dict([(pretty_function_name(p), p)
@@ -539,6 +541,6 @@ def get_plugins_as_table(name=None):
             table_body.append(TableRow(row))
 
     table = Table(table_body)
-    table.caption=_('Available Impact Functions')
+    table.caption = _('Available Impact Functions')
 
     return table

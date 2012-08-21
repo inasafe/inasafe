@@ -1,6 +1,5 @@
 """Utilities for InaSAFE
 """
-
 import os
 import gettext
 import logging
@@ -66,8 +65,8 @@ def setupLogger():
        LOGGER = logging.getLogger('InaSAFE')
 
     Now to log a message do::
-       
-       LOGGER.debug('Some debug message')  
+
+       LOGGER.debug('Some debug message')
 
     Args: None
 
@@ -78,7 +77,7 @@ def setupLogger():
     myLogger = logging.getLogger('InaSAFE')
     myLogger.setLevel(logging.DEBUG)
     # create file handler which logs even debug messages
-    # shamelessly harcoding for now 
+    # shamelessly harcoding for now
     # TODO: put logs in <inasafe tmp>/logs/safe.log
     myLogFile = os.path.join('/tmp', 'safe.log')
     myFileHandler = logging.FileHandler(myLogFile)

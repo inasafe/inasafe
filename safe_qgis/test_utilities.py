@@ -236,8 +236,6 @@ class UtilitiesTest(unittest.TestCase):
             print str(e)
         assert False, 'Incorrect handling of broken styles'
 
-
-
     def test_getQgisVersion(self):
         """Test we can get the version of QGIS"""
         myVersion = qgisVersion()

@@ -93,14 +93,14 @@ class FloodEvacuationFunction(FunctionProvider):
                       TableRow(_('Map shows population density needing '
                                  'evacuation')),
                       #,
-                      ##                      TableRow([_('People in 50cm to 1m of water '),
+                      ##TableRow([_('People in 50cm to 1m of water '),
                       ##                                '%i' % medium],
                       ##                               header=True),
-                      ##                      TableRow([_('People in 30cm to 50cm of water'),
+                      ##TableRow([_('People in 30cm to 50cm of water'),
                       ##                                '%i' % low],
                       ##                               header=True)]
                       TableRow([_('Needs per week'), _('Total')],
-                                                                header=True),
+                                              header=True),
             [_('Rice [kg]'), int(rice)],
             [_('Drinking Water [l]'), int(drinking_water)],
             [_('Clean Water [l]'), int(water)],

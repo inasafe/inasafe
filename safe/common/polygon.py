@@ -32,6 +32,7 @@ from safe.common.numerics import grid2points, geotransform2axes
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
