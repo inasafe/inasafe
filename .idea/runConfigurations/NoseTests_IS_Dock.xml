@@ -10,11 +10,11 @@
     <option name="IS_MODULE_SDK" value="false" />
     <module name="inasafe-dev" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui/test_is_dock.py" />
-    <option name="CLASS_NAME" value="ISDockTest" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/safe_qgis/test_dock.py" />
+    <option name="CLASS_NAME" value="DockTest" />
     <option name="METHOD_NAME" value="test_runFloodPopulationImpactFunction" />
     <option name="FOLDER_NAME" value="$PROJECT_DIR$/gui" />
-    <option name="TEST_TYPE" value="TEST_METHOD" />
+    <option name="TEST_TYPE" value="TEST_CLASS" />
     <option name="PATTERN" value="" />
     <option name="USE_PATTERN" value="false" />
     <option name="PARAMS" value="" />
