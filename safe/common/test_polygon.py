@@ -1463,6 +1463,8 @@ class Test_Polygon(unittest.TestCase):
         P4 = [3.0, 7.0]
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
+    test_intersection_bug_20081110_TR_TL.slow = 1
+
     def test_intersection_bug_20081110_TR_BL(self):
         """Intersection corner case top-right and bottom-left
 
@@ -1493,6 +1495,8 @@ class Test_Polygon(unittest.TestCase):
         P4 = [3.0, 4.0]
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
+    test_intersection_bug_20081110_TR_BL.slow = 1
+
     def test_intersection_bug_20081110_TR_BR(self):
         """Intersection corner case top-right and bottom-right
 
@@ -1522,6 +1526,8 @@ class Test_Polygon(unittest.TestCase):
         P3 = [3.0, -1.0]
         P4 = [7.0, 3.0]
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
+
+    test_intersection_bug_20081110_TR_BR.slow = 1
 
     def test_intersection_direction_invariance(self):
         """Intersection is direction invariant
@@ -1557,6 +1563,8 @@ class Test_Polygon(unittest.TestCase):
             assert status == 1
             msg = 'Order of lines gave different results'
             assert numpy.allclose(p1, p3), msg
+
+    test_intersection_direction_invariance.slow = 1
 
     def test_no_intersection(self):
         """Lines that don't intersect return None as expected

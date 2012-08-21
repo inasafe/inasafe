@@ -366,6 +366,8 @@ class Test_Engine(unittest.TestCase):
         assert 'women displaced' in impact_layer.get_impact_summary()
         assert 'pregnant' in impact_layer.get_impact_summary()
 
+    test_earthquake_impact_on_women_example.slow = 1
+
     def test_jakarta_flood_study(self):
         """HKV Jakarta flood study calculated correctly using aligned rasters
         """
@@ -1162,6 +1164,8 @@ class Test_Engine(unittest.TestCase):
                        'expected value %s. I got %s' % (key, val, Ival))
                 assert Ival == val, msg
 
+    test_interpolation_lembang.slow = 1
+
     def test_interpolation_tsunami(self):
         """Interpolation using tsunami data set works
 
@@ -1279,6 +1283,8 @@ class Test_Engine(unittest.TestCase):
             if not numpy.isnan(interpolated_depth):
                 assert depth_min <= interpolated_depth <= depth_max, msg
 
+    test_interpolation_tsunami_maumere.slow = 1
+
     def test_polygon_clipping(self):
         """Clipping using real polygon and point data from Maumere
         """
@@ -1322,6 +1328,8 @@ class Test_Engine(unittest.TestCase):
             Vector(geometry=pts_inside).write_to_file('test_points_in.shp')
             pts_outside = points[outside]
             Vector(geometry=pts_outside).write_to_file('test_points_out.shp')
+
+    test_polygon_clipping.slow = 1
 
     def test_interpolation_from_polygons_one_poly(self):
         """Point interpolation using one polygon from Maumere works
@@ -2254,6 +2262,8 @@ class Test_Engine(unittest.TestCase):
 
         impact_layer = calculate_impact(layers=[H, E],
                                         impact_fcn=IF)
+
+    test_flood_on_roads.slow = 1
 
     def test_erf(self):
         """Test ERF approximation

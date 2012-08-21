@@ -613,6 +613,8 @@ class Test_IO(unittest.TestCase):
             #print 'writing to', out_filename
             c_layer.write_to_file(out_filename)
 
+    test_centroids_from_polygon_data.slow = 1
+
     def test_rasters_and_arrays(self):
         """Consistency of rasters and associated arrays
         """
@@ -1003,6 +1005,8 @@ class Test_IO(unittest.TestCase):
             msg = '-9999 should have been replaced by 0.0 in %s' % rastername
             assert min(C.flat[:]) != -9999, msg
 
+    test_raster_extrema.slow = 1
+
     def test_bins(self):
         """Linear and quantile bins are correct
         """
@@ -1059,6 +1063,8 @@ class Test_IO(unittest.TestCase):
                         pass
 
                     i0 = i1
+
+    test_bins.slow = 1
 
     def test_raster_to_vector_points(self):
         """Raster layers can be converted to vector point layers
