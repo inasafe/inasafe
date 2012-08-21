@@ -109,7 +109,7 @@ test_no_git: docs test_suite_no_git pep8 disabled_tests dependency_test unwanted
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 
 quicktest: 
-	nosetests -A 'not slow' -v --with-id --with-coverage --cover-package=safe safe
+	nosetests -A 'not slow' -v safe
 
 # Run pep8 style checking
 pep8:
