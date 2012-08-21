@@ -824,8 +824,6 @@ class DockTest(unittest.TestCase):
         proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""
 
-        myButton = DOCK.pbnRunStop
-
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta like in 2007',
             theExposure='Penduduk Jakarta',
@@ -838,6 +836,7 @@ class DockTest(unittest.TestCase):
         setJakartaGoogleExtent()
 
         # Press RUN
+        myButton = DOCK.pbnRunStop
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myResult = DOCK.wvResults.page().currentFrame().toPlainText()
 
@@ -1045,30 +1044,13 @@ class DockTest(unittest.TestCase):
         myClearFlag = False
         myHazardLayerCount, myExposureLayerCount = (
             loadLayers(myFileList, myClearFlag))
-        # Hazard layers  -multipart_polygons_4326
-        myIndex = DOCK.cboHazard.findText('multipart_polygons_osm_4326')
-        assert myIndex != -1, 'multipart_polygons_4326 hazard layer not found'
-        DOCK.cboHazard.setCurrentIndex(myIndex)
-        # Exposure layers - buildings_osm_4326
-        myIndex = DOCK.cboExposure.findText('buildings_osm_4326')
-        assert myIndex != -1, 'buildings_osm_4326 exposure layer not found'
-        DOCK.cboExposure.setCurrentIndex(myIndex)
-        myDict = getUiState(DOCK)
-        myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function Id':
-                              'Flood Building Impact Function',
-                          'Impact Function Title':
-                              'Be temporarily closed',
-                          'Hazard': 'multipart_polygons_osm_4326',
-                          'Exposure': 'buildings_osm_4326'}
-        myMessage = ('Run button was not disabled when exposure set to \n%s'
-                     '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-            DOCK.cboExposure.currentText(),
-            myDict,
-            myExpectedDict,
-            combosToString(DOCK))
 
-        assert myExpectedDict == myDict, myMessage
+        myResult, myMessage = setupScenario(
+            theHazard='multipart_polygons_osm_4326',
+            theExposure='buildings_osm_4326',
+            theFunction='Be temporarily closed',
+            theFunctionId='Flood Building Impact Function')
+        assert myResult, myMessage
 
         # Enable on-the-fly reprojection
         setCanvasCrs(GEOCRS, True)
