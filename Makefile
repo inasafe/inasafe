@@ -108,6 +108,8 @@ test_no_git: docs test_suite_no_git pep8 disabled_tests dependency_test unwanted
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 
+it: quicktest
+
 quicktest: 
 	nosetests -A 'not slow' -v safe --stop
 
