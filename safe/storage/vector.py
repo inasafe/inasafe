@@ -47,30 +47,30 @@ class Vector(Layer):
         """Initialise object with either geometry or filename
 
         Args:
-            data: Can be either
+            * data: Can be either
                 * A filename of a vector file format known to GDAL.
                 * List of dictionaries of field names and attribute values
                   associated with each point coordinate.
                 * None
-            projection: Geospatial reference in WKT format.
+            * projection: Geospatial reference in WKT format.
                 Only used if geometry is provided as a numeric array,
                 if None, WGS84 geographic is assumed.
-            geometry: A list of either point coordinates or polygons/lines
+            * geometry: A list of either point coordinates or polygons/lines
                 (see note below).
-            geometry_type: Desired interpretation of geometry.
+            * geometry_type: Desired interpretation of geometry.
                 Valid options are 'point', 'line', 'polygon' or
                 the ogr types: 1, 2, 3.
                 If None, a geometry_type will be inferred from the data.
-            name: Optional name for layer.
+            * name: Optional name for layer.
                 Only used if geometry is provided as a numeric array.
-            keywords: Optional dictionary with keywords that describe the
+            * keywords: Optional dictionary with keywords that describe the
                 layer. When the layer is stored, these keywords will
                 be written into an associated file with extension
                 '.keywords'.
 
                 Keywords can for example be used to display text about the
                 layer in an application.
-            style_info: Dictionary with information about how this layer
+            * style_info: Dictionary with information about how this layer
                 should be styled. See impact_functions/styles.py
                 for examples.
 

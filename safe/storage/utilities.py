@@ -2,6 +2,7 @@
 """
 
 import os
+import re
 import copy
 import numpy
 import math
@@ -146,16 +147,39 @@ def write_keywords(keywords, filename):
     fid.close()
 
 
-def read_keywords(filename):
-    """Read keywords dictonary from file
+def read_keywords(filename, sublayer=None):
+    """Read keywords dictionary from file
 
-    Input
-        filename: Name of keywords file. Extension expected to be .keywords
-                  The format of one line is expected to be either
-                  string: string or string
+    Args:
+        * filename: Name of keywords file. Extension expected to be .keywords
+             The format of one line is expected to be either
+             string: string or string
+        * sublayer: str Optional sublayer applicable only to multilayer formats
+             such as sqlite or netcdf which can potentially hold more than
+             one layer. The string should map to the layer group as per the
+             example below. If the keywords file contains sublayer definitions
+             but no sublayer was defined, the first layer group will be
+             returned.
 
-    Output
+    Returns:
         keywords: Dictionary of keyword, value pairs
+
+    Raises: None
+
+    A keyword layer with sublayers may look like this:
+
+        [osm_buildings]
+        datatype: osm
+        category: exposure
+        subcategory: building
+        purpose: dki
+        title: buildings_osm_4326
+
+        [osm_flood]
+        datatype: flood
+        category: hazard
+        subcategory: building
+        title: flood_osm_4326
 
     If filename does not exist, an empty dictionary is returned
     Blank lines are ignored
@@ -176,12 +200,31 @@ def read_keywords(filename):
     # Read all entries
     keywords = {}
     fid = open(filename, 'r')
+    current_sublayer = None
     for line in fid.readlines():
         # Remove trailing (but not preceeding!) whitespace
         text = line.rstrip()
 
         # Ignore blank lines
         if text == '':
+            continue
+
+        # Check if it is an ini style group header
+        block_flag = re.search( r'^\[.*]$' , text, re.M|re.I)
+        if block_flag:
+            # check if we encountered a new block while reading the desired
+            # sublayer block - if so return the keywords
+            if (sublayer == current_sublayer) and current_sublayer is not None:
+                fid.close()
+                return keywords
+
+            current_sublayer = text[1:-1]
+            # grab the first block if no sublayer specified
+            if sublayer is None:
+                sublayer = current_sublayer
+            # reset the keywords each time we encounter a new bloc
+            # until we know we are on the desired one
+            keywords = {}
             continue
 
         if ':' not in text:
