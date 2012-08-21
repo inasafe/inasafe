@@ -47,9 +47,17 @@ for dirpath, dirnames, filenames in os.walk(safe_dir):
         data_files.append([dirpath,
                           [os.path.join(dirpath, f) for f in filenames]])
 
+#FIXME(Ariel): There is a case where we are putting data in python packages:
+# csv's in the plugins folder. While I do not think that's a good idea, let's
+# work around it in a very specific way.
+csv_files = ['itb_vulnerability_non_eng.csv', 'itb_vulnerability_eng.csv']
+csv_dir = os.path.join('safe', 'impact_functions', 'earthquake')
+data_files.append([csv_dir, [os.path.join(csv_dir, f) for f in csv_files]])
+
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 
 setup(name='python-safe',
       version=safe.get_version(),
