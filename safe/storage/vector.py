@@ -236,19 +236,15 @@ class Vector(Layer):
                         # Not obviously equal, try some special cases
 
                         res = None
-                        # pylint: disable=W0702
                         try:
                             # Try numerical comparison with tolerances
                             res = numpy.allclose(X, Y,
                                                  rtol=rtol, atol=atol)
-
-                            # FIXME (Ole): Write this without try-except
                         except:
                             pass
                         else:
                             if not res:
                                 return False
-                        # pylint: enable=W0702
 
                         try:
                             # Try to cast as booleans. This will take care of
