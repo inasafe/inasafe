@@ -111,10 +111,10 @@ guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 set_python:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
 
-quicktest: 
+quicktest:
 	nosetests -A 'not slow' -v safe --stop
 
-it: 
+it:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' safe --stop
 
 # Run pep8 style checking
@@ -230,7 +230,7 @@ pylint:
 	@echo "---------------------------------------"
 	@echo "Pylint report                          "
 	@echo "---------------------------------------"
-	pylint --disable=C,R safe safe_qgis
+	pylint --disable=C,R,W0142 safe safe_qgis
 
 profile:
 	@echo
@@ -281,7 +281,7 @@ jenkins-pylint:
 	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,help_base.py,keywords_dialog_base.py,options_dialog_base.py,dock_base.py safe safe_qgis | grep -v 'I0011' > pylint.log || :
+	pylint --output-format=parseable -i y --reports=y --disable=C,R,W0142 --rcfile=pylintrc --ignore=odict.py,help_base.py,keywords_dialog_base.py,options_dialog_base.py,dock_base.py safe safe_qgis | grep -v 'I0011' > pylint.log || :
 
 jenkins-pep8:
 	@echo
