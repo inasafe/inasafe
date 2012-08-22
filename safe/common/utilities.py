@@ -3,8 +3,11 @@
 import os
 import gettext
 import logging
-import logging.handlers
 
+# FIXME (Ole): For some reason this module doesn't work without this
+# pylint: disable=W0404
+import logging.handlers
+# pylint: enable=W0404
 
 class VerificationError(RuntimeError):
     """Exception thrown by verify()

@@ -3,7 +3,6 @@
 
 import numpy
 import os
-import types
 
 # Find parent parent directory to path
 # NOTE: This must match Makefile target testdata

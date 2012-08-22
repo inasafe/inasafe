@@ -1,10 +1,8 @@
-import os
-import sys
 import numpy
 import unittest
 
 # Import InaSAFE modules
-from safe.common.interpolation2d import interpolate2d, interpolate_raster
+from safe.common.interpolation2d import interpolate2d, interpolate_raster, BoundsError
 from safe.common.interpolation1d import interpolate1d
 from safe.common.testing import combine_coordinates
 from safe.common.numerics import nanallclose
@@ -338,7 +336,7 @@ class Test_interpolate(unittest.TestCase):
                                 vals = interpolate2d(x, y, A, points,
                                                      mode='linear',
                                                      bounds_error=True)
-                            except Exception, e:
+                            except BoundsError:
                                 pass
                             else:
                                 msg = 'Should have raise bounds error'
@@ -417,8 +415,6 @@ class Test_interpolate(unittest.TestCase):
         lat_ul = 10   # Latitude of upper left corner
         numlon = 8    # Number of longitudes
         numlat = 5    # Number of latitudes
-        dlon = 1
-        dlat = -1
 
         # Define array where latitudes are rows and longitude columns
         A = numpy.zeros((numlat, numlon))
