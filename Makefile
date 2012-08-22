@@ -99,10 +99,10 @@ clean:
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
 
-# Run the test suite followed by pep8 style checking
-test: docs test_suite pep8 dependency_test unwanted_strings data_audit test-translations
+# Run the test suite followed by style checking
+test: docs test_suite pep8 pylint dependency_test unwanted_strings data_audit test-translations
 
-# Run the test suite followed by pep8 style checking - dont update from git for test data
+# Run the test suite followed by style checking - dont update from git for test data
 test_no_git: docs test_suite_no_git pep8 disabled_tests dependency_test unwanted_strings data_audit
 
 # Run the test suite for gui only
@@ -228,9 +228,10 @@ data_audit:
 pylint:
 	@echo
 	@echo "---------------------------------------"
-	@echo "Pylint report                          "
+	@echo "Pylint violations. For details run     "
+	@echo "make jenkins-pylint                    "
 	@echo "---------------------------------------"
-	pylint --rcfile=pylintrc safe safe_qgis
+	@pylint --reports=n --rcfile=pylintrc safe safe_qgis | grep -v " Module " | wc -l
 
 profile:
 	@echo
