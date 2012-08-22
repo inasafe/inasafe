@@ -18,7 +18,7 @@ class EmpiricalFatalityFunction(FunctionProvider):
 
     @staticmethod
     def run(layers,
-            teta=14.05, beta=0.17):  #, zeta=2.15):
+            teta=14.05, beta=0.17):  # zeta=2.15):
         """Risk plugin for earthquake fatalities
 
         Input

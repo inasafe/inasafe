@@ -7,6 +7,7 @@ from safe.storage.vector import Vector
 
 # FIXME (Ole): I think this one can be deleted
 
+
 class TephraBuildingImpactFunction(FunctionProvider):
     """Risk plugin for tephra damage (FIXME: Origin?)
 
@@ -134,6 +135,3 @@ class TephraBuildingImpactFunction(FunctionProvider):
                        symbols=dict(zip(symbol_keys, symbol_values)),
                        scales=dict(zip(scale_keys, scale_values)),
                        classifications=dict(zip(class_keys, class_values)))
-
-
-

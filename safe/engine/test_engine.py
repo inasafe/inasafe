@@ -249,7 +249,8 @@ class Test_Engine(unittest.TestCase):
                                      1688.72362573,
                                      17174.9261705,
                                      19436.834531]))
-        msg = 'Aggregated number of fatalities not as expected: %i' % all_numbers
+        msg = ('Aggregated number of fatalities not as expected: %i'
+               % all_numbers)
         assert all_numbers == 40871, msg
 
         x = int(round(float(all_numbers) / 1000)) * 1000
@@ -306,7 +307,8 @@ class Test_Engine(unittest.TestCase):
         expected_shape = (263, 345)
         msg = ('Shape of calculated raster not as expected: '
                'C=%s, expected=%s' % (C.shape, expected_shape))
-        assert numpy.allclose(C.shape, expected_shape, rtol=1e-12, atol=1e-12), msg
+        assert numpy.allclose(C.shape, expected_shape,
+                              rtol=1e-12, atol=1e-12), msg
 
         # Calculate impact manually
         # FIXME (Ole): Jono will do this
@@ -1530,7 +1532,8 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute_name='Catergory')  # Spelling is as in test data
+                          # Spelling is as in test data
+                          attribute_name='Catergory')
         #I.write_to_file('MM_res.shp')
 
         I_attributes = I.get_data()
@@ -1844,7 +1847,8 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute_name='Catergory')  # Spelling is as in test data
+                          # Spelling is as in test data
+                          attribute_name='Catergory')
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
