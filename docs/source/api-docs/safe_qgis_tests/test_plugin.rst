@@ -1,8 +1,7 @@
-Module: safe_qgis.test_plugin
-=============================
-
-This page contains the documentation for the InaSAFE **test_plugin**
-unit tests.
+Module:  safe_qgis.test_plugin
+==============================
 
 .. automodule:: safe_qgis.test_plugin
       :members:
+
+This module forms part of the `InaSAFE <http://inasafe.org>`_ tool.
