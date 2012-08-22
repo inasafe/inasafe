@@ -36,6 +36,7 @@ LOGGER = logging.getLogger('InaSAFE')
 class PolygonInputError(Exception):
     pass
 
+
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
