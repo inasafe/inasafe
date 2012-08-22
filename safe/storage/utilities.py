@@ -490,7 +490,7 @@ def buffered_bounding_box(bbox, resolution):
         return bbox
     try:
         resx, resy = resolution
-    except:
+    except ValueError:
         resx = resy = resolution
 
     # This way does not work for some reason

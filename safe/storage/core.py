@@ -23,14 +23,23 @@ def read_layer(filename):
 
     _, ext = os.path.splitext(filename)
     if ext in ['.asc', '.tif']:
-        return Raster(filename)
+        try:
+            L = Raster(filename)
+        except Exception, e:
+            msg = ('Could not read %s: %s ' % (filename, e))
+            raise ReadLayerError(msg)
     elif ext in ['.shp', '.gml']:
-        return Vector(filename)
+        try:
+            L = Vector(filename)
+        except Exception, e:
+            msg = ('Could not read %s: %s ' % (filename, e))
+            raise ReadLayerError(msg)
     else:
         msg = ('Could not read %s. '
                'Extension "%s" has not been implemented' % (filename, ext))
         raise ReadLayerError(msg)
 
+    return L
 
 def write_raster_data(data, projection, geotransform, filename, keywords=None):
     """Write array to raster file with specified metadata and one data layer
