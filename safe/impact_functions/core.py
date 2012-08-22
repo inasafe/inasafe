@@ -463,7 +463,10 @@ def get_admissible_plugins(keywords=None):  # , name=None):
     Output
         Dictionary of impact functions ({name: class})
     """
-    LOGGER.debug(keywords_to_str(keywords))
+
+    # This is very verbose, but sometimes useful
+    # LOGGER.debug(keywords_to_str(keywords))
+
     # Input checks
     if keywords is None:
         keywords = []
@@ -489,8 +492,10 @@ def get_admissible_plugins(keywords=None):  # , name=None):
         if match:
             admissible_plugins[f_name] = func
 
+    # This is very verbose, but sometimes useful
+    # LOGGER.debug(admissible_plugins_to_str(admissible_plugins))
+
     # Return (possibly empty) dictionary
-    LOGGER.debug(admissible_plugins_to_str(admissible_plugins))
     return admissible_plugins
 
 
