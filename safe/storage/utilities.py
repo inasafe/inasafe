@@ -550,7 +550,7 @@ def get_geometry_type(geometry, geometry_type):
         try:
             float(geometry[0][0])
             float(geometry[0][1])
-        except TypeError:
+        except:
             pass
         else:
             # This geometry appears to be point data
@@ -558,7 +558,7 @@ def get_geometry_type(geometry, geometry_type):
     elif len(geometry[0]) > 2:
         try:
             x = numpy.array(geometry[0])
-        except ValueError:
+        except:
             pass
         else:
             # This geometry appears to be polygon data
@@ -584,7 +584,7 @@ def is_sequence(x):
 
     try:
         list(x)
-    except TypeError:
+    except:
         return False
     else:
         return True
@@ -608,11 +608,10 @@ def array2wkt(A, geom_type='POLYGON'):
 
     try:
         A = ensure_numeric(A, numpy.float)
-    except TypeError, e:
-        msg = ('Array (%s) could not be converted to numeric array. '
-               'I got type %s. Error message: %s'
-               % (geom_type, str(type(A)), e))
-        raise TypeError(msg)
+    except Exception, e:
+        msg = ('Array (%s) could not be converted to numeric array: %s'
+               % (geom_type, str(type(A))))
+        raise Exception(msg)
 
     msg = 'Array must be a 2d array of vertices. I got %s' % (str(A.shape))
     verify(len(A.shape) == 2, msg)

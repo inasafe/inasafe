@@ -549,8 +549,11 @@ class Raster(Layer):
 
                 resolution = keywords['resolution']
                 try:
+                    # FIXME (Ole): It seams float never
+                    # raises an exception. I am sure it used to,
+                    # this has to be rewritten more explicitly
                     res = float(resolution)
-                except TypeError:
+                except ValueError:
                     # Assume resolution is a string of the form:
                     # (0.00045228819716044, 0.00045228819716044)
 
