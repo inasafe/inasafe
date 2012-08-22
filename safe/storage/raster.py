@@ -549,7 +549,7 @@ class Raster(Layer):
 
                 resolution = keywords['resolution']
                 try:
-                    res = resolution
+                    res = float(resolution)
                 except TypeError:
                     # Assume resolution is a string of the form:
                     # (0.00045228819716044, 0.00045228819716044)
