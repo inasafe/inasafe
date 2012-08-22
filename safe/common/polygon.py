@@ -33,6 +33,9 @@ from safe.common.numerics import grid2points, geotransform2axes
 LOGGER = logging.getLogger('InaSAFE')
 
 
+class PolygonInputError(Exception):
+    pass
+
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
@@ -83,34 +86,34 @@ def separate_points_by_polygon(points, polygon,
         # Input checks
         msg = 'Keyword argument "closed" must be boolean'
         if not isinstance(closed, bool):
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         try:
             points = ensure_numeric(points, numpy.float)
         except Exception, e:
             msg = ('Points could not be converted to numeric array: %s'
                    % str(e))
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
         except Exception, e:
             msg = ('Polygon could not be converted to numeric array: %s'
                    % str(e))
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = 'Polygon array must be a 2d array of vertices'
         if len(polygon.shape) != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = 'Polygon array must have two columns'
         if polygon.shape[1] != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = ('Points array must be 1 or 2 dimensional. '
                'I got %d dimensions' % len(points.shape))
         if not 0 < len(points.shape) < 3:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         if len(points.shape) == 1:
             # Only one point was passed in. Convert to array of points.
@@ -119,16 +122,16 @@ def separate_points_by_polygon(points, polygon,
         msg = ('Point array must have two columns (x,y), '
                'I got points.shape[1]=%d' % points.shape[0])
         if points.shape[1] != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = ('Points array must be a 2d array. I got %s...'
                % str(points[:30]))
         if len(points.shape) != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = 'Points array must have two columns'
         if points.shape[1] != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
     # Exclude points that outside polygon bounding box
     minpx = min(polygon[:, 0])
@@ -480,8 +483,8 @@ def inside_polygon(points, polygon, closed=True):
     """
 
     indices, _ = separate_points_by_polygon(points, polygon,
-                                                closed=closed,
-                                                check_input=True)
+                                            closed=closed,
+                                            check_input=True)
 
     # Return indices of points inside polygon
     return indices
