@@ -23,7 +23,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from safe.storage.utilities import read_keywords, bbox_intersection
 from safe.storage.utilities import buffered_bounding_box, verify
-from safe.storage.utilities import VerificationError
 from safe.storage.utilities import write_keywords, read_keywords
 from safe.storage.core import read_layer
 
@@ -36,3 +35,4 @@ from safe.engine.core import calculate_impact
 from safe.common.dynamic_translations import names as internationalisedNames
 from safe.common.numerics import nanallclose
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
+from safe.common.utilities import VerificationError

@@ -984,7 +984,7 @@ def convert_line_to_points(V, delta):
     for i in range(N):
         c = points_along_line(geometry[i], delta)
         # We need to create a data entry for each point.
-        new_data.extend([data[i] for thing in c])
+        new_data.extend([data[i] for _ in c])
         points.extend(c)
 
     # Create new point vector layer with same attributes and return
