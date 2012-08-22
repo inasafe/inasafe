@@ -36,6 +36,7 @@ from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _
 from safe.common.utilities import VerificationError
 from safe.common.polygon import is_inside_polygon
+from safe.common.exceptions import BoundingBoxError
 
 
 # Auxiliary function for raster test
@@ -226,7 +227,6 @@ class Test_IO(unittest.TestCase):
 
             filename = '%s/%s' % (TESTDATA, vectorname)
             layer = read_layer(filename)
-            coords = layer.get_geometry()
             attributes = layer.get_data()
 
             # Check exceptions
@@ -512,7 +512,6 @@ class Test_IO(unittest.TestCase):
                              20: {'KAB_NAME': 'JAKARTA SELATAN',
                                   'KEC_NAME': 'MAMPANG PRAPATAN'}}
 
-        field_names = None
         for i in range(N):
             # Consistency with attributes read manually with qgis
 
@@ -1021,17 +1020,17 @@ class Test_IO(unittest.TestCase):
                          '%s/test_grid.asc' % TESTDATA]:
 
             R = read_layer(filename)
-            min, max = R.get_extrema()
+            rmin, rmax = R.get_extrema()
 
             for N in [2, 3, 5, 7, 10, 16]:
                 linear_intervals = R.get_bins(N=N, quantiles=False)
 
-                assert linear_intervals[0] == min
-                assert linear_intervals[-1] == max
+                assert linear_intervals[0] == rmin
+                assert linear_intervals[-1] == rmax
 
-                d = (max - min) / N
+                d = (rmax - rmin) / N
                 for i in range(N):
-                    assert numpy.allclose(linear_intervals[i], min + i * d)
+                    assert numpy.allclose(linear_intervals[i], rmin + i * d)
 
                 quantiles = R.get_bins(N=N, quantiles=True)
                 A = R.get_data(nan=True).flat[:]
@@ -1339,7 +1338,7 @@ class Test_IO(unittest.TestCase):
         kwd_filename = unique_filename(suffix='.xxxx')
         try:
             write_keywords(keywords, kwd_filename)
-        except:
+        except VerificationError:
             pass
         else:
             msg = 'Should have raised assertion error for wrong extension'
@@ -1427,10 +1426,10 @@ class Test_IO(unittest.TestCase):
                      [94.972335, 0, -11.009721, 141.014, 6]]:
             try:
                 bbox_string = bboxlist2string(bbox)
-            except:
+            except BoundingBoxError:
                 pass
             else:
-                msg = 'Should have raised exception'
+                msg = 'Should have raised BoundingBoxError'
                 raise Exception(msg)
 
         for x in ['106.5,-6.5,-6',
@@ -1438,7 +1437,7 @@ class Test_IO(unittest.TestCase):
                   '94.972335,x,141.014,6.07']:
             try:
                 bbox_list = bboxstring2list(x)
-            except:
+            except BoundingBoxError:
                 pass
             else:
                 msg = 'Should have raised exception: %s' % x
