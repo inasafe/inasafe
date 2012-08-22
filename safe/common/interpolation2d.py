@@ -25,6 +25,11 @@ import logging
 import numpy
 
 LOGGER = logging.getLogger('InaSAFE')
+# pylint: disable=W0105
+
+
+class BoundsError(RuntimeError):
+    pass
 
 
 def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
@@ -41,15 +46,15 @@ def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
             * 'linear' - bilinear interpolation using the four
                   nearest neighbours (default)
 
-        * bounds_error: Boolean flag. If True (default) an exception will
-              be raised when interpolated values are requested
+        * bounds_error: Boolean flag. If True (default) a BoundsErorr exception
+              will be raised when interpolated values are requested
               outside the domain of the input data. If False, nan
               is returned for those values
 
     Returns:
         * 1D array with same length as points with interpolated values
 
-    Raises: Exception, RuntimeError (see note about bounds_error)
+    Raises: Exception, BoundsError (see note about bounds_error)
 
     Notes:
         Input coordinates x and y are assumed to be monotonically increasing,
@@ -239,25 +244,26 @@ def check_inputs(x, y, Z, points, mode, bounds_error):
         msg = ('Interpolation point %f was less than the smallest value in '
                'domain %f and bounds_error was requested.' % (xi[0], x[0]))
         if xi[0] < x[0]:
-            raise Exception(msg)
+            raise BoundsError(msg)
 
         msg = ('Interpolation point %f was greater than the largest value in '
                'domain %f and bounds_error was requested.' % (xi[-1], x[-1]))
         if xi[-1] > x[-1]:
-            raise Exception(msg)
+            raise BoundsError(msg)
 
         msg = ('Interpolation point %f was less than the smallest value in '
                'domain %f and bounds_error was requested.' % (eta[0], y[0]))
         if eta[0] < y[0]:
-            raise Exception(msg)
+            raise BoundsError(msg)
 
         msg = ('Interpolation point %f was greater than the largest value in '
                'domain %f and bounds_error was requested.' % (eta[-1], y[-1]))
         if eta[-1] > y[-1]:
-            raise Exception(msg)
+            raise BoundsError(msg)
 
     return x, y, Z, xi, eta
 
+# Mathematical derivation of the interpolation formula used
 """
 Bilinear interpolation is based on the standard 1D linear interpolation
 formula:
@@ -330,3 +336,4 @@ z = |
 
 
 """
+# pylint: enable=W0105

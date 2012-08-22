@@ -444,7 +444,7 @@ class TablesTest(unittest.TestCase):
         # This is OK
         for cell in [cell_1, cell_2, cell_3]:
             msg = 'Wrong cell alignment %s' % cell
-            assert 'align="right"' in str(cell)
+            assert 'align="right"' in str(cell), msg
 
         table = Table(row)
         self.html += str(table)

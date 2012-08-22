@@ -137,7 +137,7 @@ def erf(z):
     # Input check
     try:
         len(z)
-    except:
+    except TypeError:
         scalar = True
         z = [z]
     else:

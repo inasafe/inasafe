@@ -1,15 +1,14 @@
 import datetime
 import os
-import base64
-import re
-import math
 import subprocess
 
 
 def get_version(version=None):
     "Returns a PEP 386-compliant version number from VERSION."
     if version is None:
+        # pylint: disable=W0404
         from safe import __version__ as version
+        # pylint: enable=W0404
     else:
         assert len(version) == 5
         assert version[3] in ('alpha', 'beta', 'rc', 'final')

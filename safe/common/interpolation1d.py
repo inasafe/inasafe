@@ -12,6 +12,7 @@ See interpolation2d.py for documentation of the mathematical derivation used.
 """
 
 import numpy
+# pylint: disable=W0105
 
 
 def interpolate1d(x, z, points, mode='linear', bounds_error=False):
@@ -128,6 +129,7 @@ def check_inputs(x, z, points, mode, bounds_error):
     try:
         z = numpy.array(z)
     except Exception, e:
+        msg += '%s: %s' % (msg, e)
         raise Exception(msg)
 
     if not len(z.shape) == 1:
@@ -160,6 +162,7 @@ def check_inputs(x, z, points, mode, bounds_error):
 
     return x, z, xi
 
+# Mathematical derivation of the interpolation formula used
 """
 Bilinear interpolation is based on the standard 1D linear interpolation
 formula:
@@ -187,3 +190,4 @@ z = |
     | z1   alpha >= 0.5   # higher value
 
 """
+# pylint: enable=W0105
