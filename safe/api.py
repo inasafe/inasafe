@@ -20,8 +20,8 @@ __date__ = '01/06/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# pylint: disable=W0611
-from safe.storage.utilities import bbox_intersection
+
+from safe.storage.utilities import read_keywords, bbox_intersection
 from safe.storage.utilities import buffered_bounding_box, verify
 from safe.storage.utilities import write_keywords, read_keywords
 from safe.storage.core import read_layer
@@ -36,4 +36,3 @@ from safe.common.dynamic_translations import names as internationalisedNames
 from safe.common.numerics import nanallclose
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
 from safe.common.utilities import VerificationError
-# pylint: enable=W0611
