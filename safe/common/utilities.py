@@ -77,7 +77,8 @@ def setupLogger():
     myLogger = logging.getLogger('InaSAFE')
     myLogger.setLevel(logging.DEBUG)
     # create syslog handler which logs even debug messages
-    #FIXME(ariel): Make this log to /var/log/safe.log instead of /var/log/syslog
+    # FIXME(ariel): Make this log to /var/log/safe.log instead of
+    #               /var/log/syslog
     mySysHandler = logging.handlers.SysLogHandler(address='/dev/log')
     mySysHandler.setLevel(logging.DEBUG)
     # create console handler with a higher log level
