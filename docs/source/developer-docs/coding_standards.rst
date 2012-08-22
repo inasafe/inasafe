@@ -27,7 +27,7 @@ Please observe the following coding standards when working on the codebase:
   group of lines so that they are not validated by lint. You can do this by
   adding either::
 
-     import foo  # pylint: diable=W1203
+     import foo  # pylint: disable=W1203
 
   or::
 
@@ -37,7 +37,11 @@ Please observe the following coding standards when working on the codebase:
      # pylint: enable=W1234
 
   The relevant id (W1234) is provided on the output of the above mentioned lint
-  command's output.
+  command's output. A complete list of codes is available at
+  http://pylint-messages.wikidot.com/all-codes.
+
+  .. note:: You can globally ignore messages by adding them to :file:`pylintrc`
+     in the :samp:`[MESSAGES CONTROL]` section.
 
 * Each source file should include a standard header containing copyright,
   authorship and version metadata as shown in the exampled below.
