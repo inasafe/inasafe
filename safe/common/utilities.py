@@ -66,8 +66,8 @@ def setupLogger():
        LOGGER = logging.getLogger('InaSAFE')
 
     Now to log a message do::
-       
-       LOGGER.debug('Some debug message')  
+
+       LOGGER.debug('Some debug message')
 
     Args: None
 

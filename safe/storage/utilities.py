@@ -22,7 +22,8 @@ DEFAULT_ATTRIBUTE = 'Affected'
 LAYER_TYPES = ['.shp', '.asc', '.tif', '.tiff', '.geotif', '.geotiff']
 
 # Map between extensions and ORG drivers
-DRIVER_MAP = {'.shp': 'ESRI Shapefile',
+DRIVER_MAP = {'.sqlite': 'SQLITE',
+              '.shp': 'ESRI Shapefile',
               '.gml': 'GML',
               '.tif': 'GTiff',
               '.asc': 'AAIGrid'}

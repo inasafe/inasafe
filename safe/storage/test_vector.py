@@ -22,7 +22,9 @@ KEYWORD_PATH = os.path.abspath(
     os.path.join(UNITDATA, 'exposure', 'exposure.keywords'))
 SQLITE_PATH = os.path.abspath(
     os.path.join(UNITDATA, 'exposure', 'exposure.sqlite'))
-
+SHP_BASE = os.path.abspath(
+    os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326'))
+EXPOSURE_SUBLAYER_NAME = 'buildings_osm_4326'
 
 class VectorTest(unittest.TestCase):
 
@@ -31,7 +33,39 @@ class VectorTest(unittest.TestCase):
         assert os.path.exists(SQLITE_PATH), msg
         msg = 'Keyword file does not exist at %s' % KEYWORD_PATH
         assert os.path.exists(KEYWORD_PATH), msg
+        msg = 'Shp file does not exist at %s.shp' % SHP_BASE
+        assert os.path.exists(SHP_BASE + '.shp'), msg
 
     def testSublayerLoading(self):
-        keywords = read_keywords(KEYWORD_PATH, 'osm_jk')
-        layer = Vector(data=SQLITE_PATH, keywords=keywords)
+        keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
+        layer = Vector(data=SQLITE_PATH, keywords=keywords,
+                       sublayer=EXPOSURE_SUBLAYER_NAME)
+        msg = ('Expected layer to be a polygon layer, got a %s' %
+               layer.geometry_type)
+        assert layer.is_polygon_data, msg
+        count = len(layer)
+        assert count == 250, 'Expected 250 features, got %s' % count
+        geoms = layer.get_geometry()
+        attrs = layer.get_data()
+        for i, geom in enumerate(geoms):
+            attr = attrs[i]
+
+    def testShpLoading(self):
+        """Test that loading a dataset with no sublayers works."""
+        keywords = read_keywords(SHP_BASE + '.keywords')
+        layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
+        msg = ('Expected layer to be a polygon layer, got a %s' %
+               layer.geometry_type)
+        assert layer.is_polygon_data, msg
+        count = len(layer)
+        assert count == 250, 'Expected 250 features, got %s' % count
+        geoms = layer.get_geometry()
+        attrs = layer.get_data()
+        for i, geom in enumerate(geoms):
+            attr = attrs[i]
+
+    def testSqliteWriting(self):
+        """Test that writing a dataset to sqlite worlks."""
+        keywords = read_keywords(SHP_BASE + '.keywords')
+        layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
+        layer.write_to_file('/tmp/test.sqlite', sublayer='foo')

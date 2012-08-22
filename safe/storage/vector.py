@@ -105,7 +105,8 @@ class Vector(Layer):
                        name=name,
                        projection=projection,
                        keywords=keywords,
-                       style_info=style_info)
+                       style_info=style_info,
+                       sublayer=sublayer)
 
         # Input checks
         if data is None and geometry is None:
@@ -320,19 +321,26 @@ class Vector(Layer):
         self.geometry_type = None  # In case there are no features
 
         fid = ogr.Open(filename)
+
         if fid is None:
             msg = 'Could not open %s' % filename
             raise IOError(msg)
 
         # Assume that file contains all data in one layer
         msg = 'Only one vector layer currently allowed'
-        if fid.GetLayerCount() > 1:
+        if fid.GetLayerCount() > 1 and self.sublayer is None:
             msg = ('WARNING: Number of layers in %s are %i. '
                    'Only the first layer will currently be '
-                   'used.' % (filename, fid.GetLayerCount()))
+                   'used. Specify sublayer when creating '
+                   'the Vector if you wish to use a different layer.'
+                   % (filename, fid.GetLayerCount()))
+            # Why do we raise an exception if it is only a warning? TS
             raise Exception(msg)
 
-        layer = fid.GetLayerByIndex(0)
+        if self.sublayer is not None:
+            layer = fid.GetLayerByName(self.sublayer)
+        else:
+            layer = fid.GetLayerByIndex(0)
 
         # Get spatial extent
         self.extent = layer.GetExtent()
@@ -341,18 +349,15 @@ class Vector(Layer):
         p = layer.GetSpatialRef()
         self.projection = Projection(p)
 
+        layer.ResetReading()
         # Get number of features
         N = layer.GetFeatureCount()
 
         # Extract coordinates and attributes for all features
         geometry = []
         data = []
-        for i in range(N):
-            feature = layer.GetFeature(i)
-            if feature is None:
-                msg = 'Could not get feature %i from %s' % (i, filename)
-                raise Exception(msg)
-
+        # Use feature iterator
+        for feature in layer:
             # Record coordinates ordered as Longitude, Latitude
             G = feature.GetGeometryRef()
             if G is None:
@@ -439,24 +444,30 @@ class Vector(Layer):
         self.geometry = geometry
         self.data = data
 
-    def write_to_file(self, filename):
+    def write_to_file(self, filename, sublayer=None):
         """Save vector data to file
 
-        Input
-            filename: filename with extension .shp or .gml
+        Args:
+            * filename: filename with extension .shp or .gml
+            * sublayer: Optional string for writing a sublayer. Ignored
+                  unless we are writing to an sqlite file.
 
-        Note, if attribute names are longer than 10 characters they will be
-        truncated. This is due to limitations in the shp file driver and has
-        to be done here since gdal v1.7 onwards has changed its handling of
-        this issue: http://www.gdal.org/ogr/drv_shapefile.html
+        .. note:: Shp limitation, if attribute names are longer than 10
+           characters they will be truncated. This is due to limitations in
+           the shp file driver and has to be done here since gdal v1.7 onwards
+           has changed its handling of this issue:
+           http://www.gdal.org/ogr/drv_shapefile.html
+
+           **For this reason we recommend writing to spatialite.**
+
         """
 
         # Check file format
         basename, extension = os.path.splitext(filename)
 
         msg = ('Invalid file type for file %s. Only extensions '
-               'shp or gml allowed.' % filename)
-        verify(extension == '.shp' or extension == '.gml', msg)
+               'sqlite, shp or gml allowed.' % filename)
+        verify(extension in ['.sqlite', '.shp', '.gml'], msg)
         driver = DRIVER_MAP[extension]
 
         # FIXME (Ole): Tempory flagging of GML issue (ticket #18)
@@ -467,7 +478,10 @@ class Vector(Layer):
             raise Exception(msg)
 
         # Derive layername from filename (excluding preceding dirs)
-        layername = os.path.split(basename)[-1]
+        if sublayer is None or extension == '.shp':
+            layername = os.path.split(basename)[-1]
+        else:
+            layername = sublayer
 
         # Get vector data
         geometry = self.get_geometry()
