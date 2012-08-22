@@ -393,7 +393,7 @@ class Vector(Layer):
                            'Geometry Tools -> Multipart to Singleparts and '
                            'use the resulting dataset.'
                            % (ogr.wkbMultiPolygon, filename))
-                    raise TypeError(msg)
+                    raise Exception(msg)
 
                 #    # FIXME: Unpact multiple polygons to simple polygons
                 #    # For hints on how to unpack see
@@ -418,7 +418,7 @@ class Vector(Layer):
                            'Geometry type in filename %s '
                            'was %s.' % (filename,
                                         self.geometry_type))
-                    raise TypeError(msg)
+                    raise Exception(msg)
 
             # Record attributes by name
             number_of_fields = feature.GetFieldCount()

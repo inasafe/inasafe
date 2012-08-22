@@ -36,7 +36,7 @@ from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _
 from safe.common.utilities import VerificationError
 from safe.common.polygon import is_inside_polygon
-from safe.common.exceptions import BoundingBoxError, ReadLayerError
+from safe.common.exceptions import BoundingBoxError
 
 
 # Auxiliary function for raster test
@@ -103,7 +103,7 @@ class Test_IO(unittest.TestCase):
         filename = unique_filename(suffix='nshoe66u')
         try:
             read_layer(filename)
-        except ReadLayerError:
+        except Exception:
             pass
         else:
             msg = 'Exception for unknown extension should have been raised'
@@ -112,7 +112,7 @@ class Test_IO(unittest.TestCase):
         filename = unique_filename(suffix='.gml')
         try:
             read_layer(filename)
-        except ReadLayerError:
+        except IOError:
             pass
         else:
             msg = 'Exception for non-existing file should have been raised'
@@ -861,10 +861,10 @@ class Test_IO(unittest.TestCase):
         filename = '%s/%s' % (TESTDATA, rastername)
         try:
             read_layer(filename)
-        except ReadLayerError:
+        except RuntimeError:
             pass
         else:
-            msg = 'Should have raised ReadLayerError'
+            msg = 'Should have raised RuntimeError'
             raise Exception(msg)
 
     def test_bad_ascii_data(self):
@@ -877,7 +877,7 @@ class Test_IO(unittest.TestCase):
         asc_filename = os.path.join(TESTDATA, 'bad_ascii_format.asc')
         try:
             read_layer(asc_filename)
-        except ReadLayerError, e:
+        except Exception, e:
             # Check that error message is reasonable, e.g.
             # File /home/nielso/sandpit/inasafe_data/test/bad_ascii_format.asc
             # exists, but could not be read. Please check if the file can
@@ -893,7 +893,7 @@ class Test_IO(unittest.TestCase):
         asc_filename = 'nonexisting_ascii_file_234xxxlcrhgqjk.asc'
         try:
             read_layer(asc_filename)
-        except ReadLayerError, e:
+        except Exception, e:
             # Check that this error message reflects that file did not exist
             msg = 'Unexpected error message for non existing asc file: %s' % e
             assert 'Could not find file' in str(e), msg
@@ -1973,11 +1973,11 @@ class Test_IO(unittest.TestCase):
 
         try:
             read_layer(hazard_filename)
-        except ReadLayerError, e:
+        except Exception, e:
             msg = 'Wrong error message: %s' % e
             assert 'convert multipart' in str(e), msg
         else:
-            msg = 'Multipart polygon should have raised ReadLayerError'
+            msg = 'Multipart polygon should have raised exception'
             raise Exception(msg)
 
     def test_projection_comparisons(self):
