@@ -135,7 +135,6 @@ class Test_Engine(unittest.TestCase):
         # Call calculation engine
         impact_layer = calculate_impact(layers=[H, E],
                                         impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
 
         # Do calculation manually and check result
         hazard_raster = read_layer(hazard_filename)
@@ -245,15 +244,15 @@ class Test_Engine(unittest.TestCase):
         #        keywords['impact_summary']
 
         # Check that aggregated number of fatilites is as expected
-        all = int(numpy.sum([31.8937368131,
-                             2539.26369372,
-                             1688.72362573,
-                             17174.9261705,
-                             19436.834531]))
-        msg = 'Aggregated number of fatalities not as expected: %i' % all
-        assert all == 40871, msg
+        all_numbers = int(numpy.sum([31.8937368131,
+                                     2539.26369372,
+                                     1688.72362573,
+                                     17174.9261705,
+                                     19436.834531]))
+        msg = 'Aggregated number of fatalities not as expected: %i' % all_numbers
+        assert all_numbers == 40871, msg
 
-        x = int(round(float(all) / 1000)) * 1000
+        x = int(round(float(all_numbers) / 1000)) * 1000
         msg = 'Did not find expected value %i in summary' % x
         assert str(x) in keywords['impact_summary'], msg
 
@@ -293,7 +292,6 @@ class Test_Engine(unittest.TestCase):
         # Call calculation engine
         impact_layer = calculate_impact(layers=[H, E],
                                         impact_fcn=IF)
-        impact_filename = impact_layer.get_filename()
 
         # Do calculation manually and check result
         hazard_raster = read_layer(hazard_filename)
@@ -305,33 +303,37 @@ class Test_Engine(unittest.TestCase):
         # Verify correctness of result
         C = impact_layer.get_data(nan=0)
 
+        expected_shape = (263, 345)
+        msg = ('Shape of calculated raster not as expected: '
+               'C=%s, expected=%s' % (C.shape, expected_shape))
+        assert numpy.allclose(C.shape, expected_shape, rtol=1e-12, atol=1e-12), msg
+
         # Calculate impact manually
         # FIXME (Ole): Jono will do this
-        return
 
-        # Compare shape and extrema
-        msg = ('Shape of calculated raster differs from reference raster: '
-               'C=%s, F=%s' % (C.shape, F.shape))
-        assert numpy.allclose(C.shape, F.shape, rtol=1e-12, atol=1e-12), msg
+        # # Compare shape and extrema
+        # msg = ('Shape of calculated raster differs from reference raster: '
+        #        'C=%s, F=%s' % (C.shape, F.shape))
+        # assert numpy.allclose(C.shape, F.shape, rtol=1e-12, atol=1e-12), msg
 
-        msg = ('Minimum of calculated raster differs from reference raster: '
-               'C=%s, F=%s' % (numpy.min(C), numpy.min(F)))
-        assert numpy.allclose(numpy.min(C), numpy.min(F),
-                              rtol=1e-12, atol=1e-12), msg
-        msg = ('Maximum of calculated raster differs from reference raster: '
-               'C=%s, F=%s' % (numpy.max(C), numpy.max(F)))
-        assert numpy.allclose(numpy.max(C), numpy.max(F),
-                              rtol=1e-12, atol=1e-12), msg
+        # msg = ('Minimum of calculated raster differs from reference raster: '
+        #        'C=%s, F=%s' % (numpy.min(C), numpy.min(F)))
+        # assert numpy.allclose(numpy.min(C), numpy.min(F),
+        #                       rtol=1e-12, atol=1e-12), msg
+        # msg = ('Maximum of calculated raster differs from reference raster: '
+        #        'C=%s, F=%s' % (numpy.max(C), numpy.max(F)))
+        # assert numpy.allclose(numpy.max(C), numpy.max(F),
+        #                       rtol=1e-12, atol=1e-12), msg
 
-        # Compare every single value numerically
-        msg = 'Array values of written raster array were not as expected'
-        assert numpy.allclose(C, F, rtol=1e-12, atol=1e-12), msg
+        # # Compare every single value numerically
+        # msg = 'Array values of written raster array were not as expected'
+        # assert numpy.allclose(C, F, rtol=1e-12, atol=1e-12), msg
 
-        # Check that extrema are in range
-        xmin, xmax = impact_layer.get_extrema()
-        assert numpy.alltrue(C >= xmin)
-        assert numpy.alltrue(C <= xmax)
-        assert numpy.alltrue(C >= 0)
+        # # Check that extrema are in range
+        # xmin, xmax = impact_layer.get_extrema()
+        # assert numpy.alltrue(C >= xmin)
+        # assert numpy.alltrue(C <= xmax)
+        # assert numpy.alltrue(C >= 0)
 
     test_earthquake_fatality_estimation_ghasemi.slow = 1
 
@@ -363,7 +365,7 @@ class Test_Engine(unittest.TestCase):
                                         impact_fcn=IF)
         impact_filename = impact_layer.get_filename()
 
-        I = read_layer(impact_filename)  # Can read result
+        read_layer(impact_filename)  # Can read result
 
         assert 'women displaced' in impact_layer.get_impact_summary()
         assert 'pregnant' in impact_layer.get_impact_summary()
@@ -494,6 +496,9 @@ class Test_Engine(unittest.TestCase):
                                     E.get_geotransform(),
                                     H.get_geometry())
 
+        assert len(res) == 2704
+        # FIXME (Ole): Not finished yet
+
     def test_polygon_hazard_and_raster_exposure(self):
         """Exposure rasters can be clipped by polygon exposure
 
@@ -509,10 +514,12 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(population)
 
         assert len(H) == 2704
-        #res = clip_grid_by_polygons(E.get_data(),
-        #                            E.get_geotransform(),
-        #                            H.get_geometry())
-        # FIXME (Ole): Not done yet
+        res = clip_grid_by_polygons(E.get_data(),
+                                    E.get_geotransform(),
+                                    H.get_geometry())
+        print len(res)
+        assert len(res) == 2704
+        # FIXME (Ole): Not finished yet
 
     test_polygon_hazard_and_raster_exposure.slow = 1
 
@@ -544,13 +551,16 @@ class Test_Engine(unittest.TestCase):
 
             impact_vector = calculate_impact(layers=[H, E],
                                              impact_fcn=IF)
-            impact_filename = impact_vector.get_filename()
 
             # Extract calculated result
             icoordinates = impact_vector.get_geometry()
             iattributes = impact_vector.get_data()
 
-            # FIXME (Ole): check some numbers
+            # Check
+            assert len(icoordinates) == 34960
+            assert len(iattributes) == 34960
+
+            # FIXME (Ole): check more numbers
 
     test_flood_building_impact_function.slow = 1
 
@@ -581,15 +591,10 @@ class Test_Engine(unittest.TestCase):
 
             impact_vector = calculate_impact(layers=[H, E],
                                              impact_fcn=IF)
-            impact_filename = impact_vector.get_filename()
 
             # Read input data
             hazard_raster = read_layer(haz_filename)
             mmi_min, mmi_max = hazard_raster.get_extrema()
-
-            exposure_vector = read_layer(exp_filename)
-            coordinates = exposure_vector.get_geometry()
-            attributes = exposure_vector.get_data()
 
             # Extract calculated result
             icoordinates = impact_vector.get_geometry()
@@ -719,18 +724,12 @@ class Test_Engine(unittest.TestCase):
             IF = plugin_list[0][plugin_name]
             impact_vector = calculate_impact(layers=[H, E],
                                              impact_fcn=IF)
-            impact_filename = impact_vector.get_filename()
 
             # Read input data
             hazard_raster = read_layer(hazard_filename)
             mmi_min, mmi_max = hazard_raster.get_extrema()
 
-            exposure_vector = read_layer(exposure_filename)
-            coordinates = exposure_vector.get_geometry()
-            attributes = exposure_vector.get_data()
-
             # Extract calculated result
-            icoordinates = impact_vector.get_geometry()
             iattributes = impact_vector.get_data()
 
             # Verify interpolated MMI with test result
@@ -893,19 +892,15 @@ class Test_Engine(unittest.TestCase):
         IF = plugin_list[0][plugin_name]
         impact_vector = calculate_impact(layers=[H, E],
                                          impact_fcn=IF)
-        impact_filename = impact_vector.get_filename()
 
         # Read input data
         hazard_raster = read_layer(hazard_filename)
-        A = hazard_raster.get_data()
         load_min, load_max = hazard_raster.get_extrema()
 
         exposure_vector = read_layer(exposure_filename)
-        coordinates = exposure_vector.get_geometry()
         attributes = exposure_vector.get_data()
 
         # Extract calculated result
-        coordinates = impact_vector.get_geometry()
         attributes = impact_vector.get_data()
 
         # Test that results are as expected
@@ -954,8 +949,6 @@ class Test_Engine(unittest.TestCase):
         lat_ul = 10   # Latitude of upper left corner
         numlon = 8    # Number of longitudes
         numlat = 5    # Number of latitudes
-        dlon = 1
-        dlat = -1
 
         # Define array where latitudes are rows and longitude columns
         A = numpy.zeros((numlat, numlon))
@@ -1181,7 +1174,6 @@ class Test_Engine(unittest.TestCase):
 
         exposure_vector = read_layer(exposure_filename)
         coordinates = exposure_vector.get_geometry()
-        attributes = exposure_vector.get_data()
 
         # Test interpolation function
         I = hazard_raster.interpolate(exposure_vector,
@@ -1215,7 +1207,6 @@ class Test_Engine(unittest.TestCase):
 
         # Read input data
         H = read_layer(hazard_filename)
-        A = H.get_data()
         depth_min, depth_max = H.get_extrema()
 
         # Compare extrema to values read off QGIS for this layer
@@ -1351,14 +1342,12 @@ class Test_Engine(unittest.TestCase):
         #H.write_to_file('MM_799.shp')  # E.g. to view with QGis
 
         E = read_layer(exposure_filename)
-        E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute_name=None)  # Take all attributes across
 
-        I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
         N = len(I_attributes)
@@ -1413,15 +1402,11 @@ class Test_Engine(unittest.TestCase):
                    projection=H.get_projection())
 
         E = read_layer(exposure_filename)
-        E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
                           attribute_name=None)  # Take all attributes across
-        #I.write_to_file('MM_res.shp')
-
-        I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
         N = len(I_attributes)
@@ -1545,10 +1530,9 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute='Catergory')  # Spelling is as in test data
+                          attribute_name='Catergory')  # Spelling is as in test data
         #I.write_to_file('MM_res.shp')
 
-        I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
         N = len(I_attributes)
@@ -1860,7 +1844,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute='Catergory')  # Spelling is as in test data
+                          attribute_name='Catergory')  # Spelling is as in test data
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
@@ -1930,7 +1914,7 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
-                          attribute=None)  # Take all attributes across
+                          attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
@@ -1990,30 +1974,30 @@ class Test_Engine(unittest.TestCase):
         assert count == 59, msg
 
         # FIXME (Ole): Not finished (5/3/12)
-        return
+        # return
 
-        print len(I_geometry)
-        assert len(I_geometry) == 181
+        # print len(I_geometry)
+        # assert len(I_geometry) == 181
 
-        assert I_attributes[129]['Catergory'] == 'Very High'
-        assert I_attributes[135]['Catergory'] is None
+        # assert I_attributes[129]['Catergory'] == 'Very High'
+        # assert I_attributes[135]['Catergory'] is None
 
-        # Check default attribute too
-        msg = ('Expected 14 segments tagged with default attribute '
-               '"%s = True", '
-               'but got only %i' % (DEFAULT_ATTRIBUTE,
-                                    counts[DEFAULT_ATTRIBUTE]))
-        assert counts[DEFAULT_ATTRIBUTE] == 14, msg
+        # # Check default attribute too
+        # msg = ('Expected 14 segments tagged with default attribute '
+        #        '"%s = True", '
+        #        'but got only %i' % (DEFAULT_ATTRIBUTE,
+        #                             counts[DEFAULT_ATTRIBUTE]))
+        # assert counts[DEFAULT_ATTRIBUTE] == 14, msg
 
-        msg = ('Expected 167 points tagged with default attribute '
-               '"%s = False", '
-               'but got only %i' % (DEFAULT_ATTRIBUTE,
-                                    counts['Not ' + DEFAULT_ATTRIBUTE]))
-        assert counts['Not ' + DEFAULT_ATTRIBUTE] == 167, msg
+        # msg = ('Expected 167 points tagged with default attribute '
+        #        '"%s = False", '
+        #        'but got only %i' % (DEFAULT_ATTRIBUTE,
+        #                             counts['Not ' + DEFAULT_ATTRIBUTE]))
+        # assert counts['Not ' + DEFAULT_ATTRIBUTE] == 167, msg
 
-        msg = 'Affected and not affected does not add up'
-        assert (counts[DEFAULT_ATTRIBUTE] +
-                counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
+        # msg = 'Affected and not affected does not add up'
+        # assert (counts[DEFAULT_ATTRIBUTE] +
+        #         counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
@@ -2065,7 +2049,7 @@ class Test_Engine(unittest.TestCase):
             try:
                 calculate_impact(layers=[H, E],
                                  impact_fcn=IF)
-            except Exception, e:
+            except VerificationError, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)
             else:

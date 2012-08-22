@@ -1,9 +1,13 @@
 import numpy
-from numpy import nansum as sum
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layers
 from safe.storage.raster import Raster
 from safe.common.utilities import verify
+
+# Want to use the human readably name in the impact function
+# pylint: disable=W0622
+from numpy import nansum as sum
+# pylint: enable=W0622
 
 
 class HKVFloodImpactFunctionTEST(FunctionProvider):
@@ -36,7 +40,6 @@ class HKVFloodImpactFunctionTEST(FunctionProvider):
 
         # Depth above which people are regarded affected [m]
         threshold = 0.1
-        thresholds = [0.1, 0.2, 0.3, 0.5, 0.8, 1.0]
 
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation [m]

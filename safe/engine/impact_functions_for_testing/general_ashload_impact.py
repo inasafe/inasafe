@@ -5,6 +5,7 @@ from safe.storage.vector import Vector
 # FIXME: Need style for this and allow the name to
 # be different from Percen_da
 
+# FIXME (Ole): I think this one can be deleted
 
 class TephraBuildingImpactFunction(FunctionProvider):
     """Risk plugin for tephra damage (FIXME: Origin?)
@@ -127,11 +128,12 @@ class TephraBuildingImpactFunction(FunctionProvider):
                         {'min': 2.5, 'max': 3.5,
                          'color': '#F31A1C', 'transparency': '1'}]
 
-        params = dict(name=data.get_name(),
-                      damage_field=self.target_field,
-                      symbol_field=symbol_field,
-                      symbols=dict(zip(symbol_keys, symbol_values)),
-                      scales=dict(zip(scale_keys, scale_values)),
-                      classifications=dict(zip(class_keys, class_values)))
+        _params = dict(name=data.get_name(),
+                       damage_field=self.target_field,
+                       symbol_field=symbol_field,
+                       symbols=dict(zip(symbol_keys, symbol_values)),
+                       scales=dict(zip(scale_keys, scale_values)),
+                       classifications=dict(zip(class_keys, class_values)))
 
-        return render_to_string('impact/styles/point_classes.sld', params)
+
+

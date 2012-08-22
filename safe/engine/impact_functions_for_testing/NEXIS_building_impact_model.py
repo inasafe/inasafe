@@ -1,5 +1,4 @@
 import sys
-import numpy
 
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
@@ -93,7 +92,7 @@ class TsunamiBuildingLossFunction(FunctionProvider):
             # Extract parameters
             #-------------------
             depth = float(inundation[i]['depth'])
-            shore_distance = E.get_data('SHORE_DIST', i)
+            #shore_distance = E.get_data('SHORE_DIST', i)
 
             # FIXME: Get rid of the type casting when
             #        issue #66 is done
