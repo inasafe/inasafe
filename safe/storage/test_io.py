@@ -556,6 +556,8 @@ class Test_IO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
+    test_reading_and_writing_of_vector_polygon_data.slow = 1
+
     def test_centroids_from_polygon_data(self):
         """Centroid point data can be derived from polygon data
 
@@ -610,6 +612,8 @@ class Test_IO(unittest.TestCase):
             out_filename = unique_filename(prefix='centroid', suffix='.shp')
             #print 'writing to', out_filename
             c_layer.write_to_file(out_filename)
+
+    test_centroids_from_polygon_data.slow = 1
 
     def test_rasters_and_arrays(self):
         """Consistency of rasters and associated arrays
@@ -842,6 +846,8 @@ class Test_IO(unittest.TestCase):
                     msg = 'Should have raised TypeError'
                     raise Exception(msg)
 
+    test_reading_and_writing_of_real_rasters.slow = 1
+
     def test_no_projection(self):
         """Raster layers with no projection causes Exception to be raised
         """
@@ -886,6 +892,8 @@ class Test_IO(unittest.TestCase):
             # Check that this error message reflects that file did not exist
             msg = 'Unexpected error message for non existing asc file: %s' % e
             assert 'Could not find file' in str(e), msg
+
+    test_bad_ascii_data.slow = 1
 
     def test_nodata_value(self):
         """NODATA value is correctly recorded in GDAL
@@ -997,6 +1005,8 @@ class Test_IO(unittest.TestCase):
             msg = '-9999 should have been replaced by 0.0 in %s' % rastername
             assert min(C.flat[:]) != -9999, msg
 
+    test_raster_extrema.slow = 1
+
     def test_bins(self):
         """Linear and quantile bins are correct
         """
@@ -1053,6 +1063,8 @@ class Test_IO(unittest.TestCase):
                         pass
 
                     i0 = i1
+
+    test_bins.slow = 1
 
     def test_raster_to_vector_points(self):
         """Raster layers can be converted to vector point layers

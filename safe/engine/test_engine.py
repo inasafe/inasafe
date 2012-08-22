@@ -174,6 +174,8 @@ class Test_Engine(unittest.TestCase):
         assert numpy.alltrue(C <= xmax)
         assert numpy.alltrue(C >= 0)
 
+    test_earthquake_fatality_estimation_allen.slow = 1
+
     def test_ITB_earthquake_fatality_estimation(self):
         """Fatalities from ground shaking can be computed correctly
            using the ITB fatality model (Test data from Hadi Ghasemi).
@@ -329,6 +331,8 @@ class Test_Engine(unittest.TestCase):
         assert numpy.alltrue(C <= xmax)
         assert numpy.alltrue(C >= 0)
 
+    test_earthquake_fatality_estimation_ghasemi.slow = 1
+
     def test_earthquake_impact_on_women_example(self):
         """Earthquake impact on women example works
         """
@@ -361,6 +365,8 @@ class Test_Engine(unittest.TestCase):
 
         assert 'women displaced' in impact_layer.get_impact_summary()
         assert 'pregnant' in impact_layer.get_impact_summary()
+
+    test_earthquake_impact_on_women_example.slow = 1
 
     def test_jakarta_flood_study(self):
         """HKV Jakarta flood study calculated correctly using aligned rasters
@@ -458,6 +464,8 @@ class Test_Engine(unittest.TestCase):
 
             i += 1
 
+    test_jakarta_flood_study.slow = 1
+
     def Xtest_clip_grid_by_polygons_optimisation(self):
         """Rasters can be converted to points and clipped by polygons
 
@@ -504,6 +512,8 @@ class Test_Engine(unittest.TestCase):
         #                            H.get_geometry())
         # FIXME (Ole): Not done yet
 
+    test_polygon_hazard_and_raster_exposure.slow = 1
+
     def test_flood_building_impact_function(self):
         """Flood building impact function works
 
@@ -539,6 +549,8 @@ class Test_Engine(unittest.TestCase):
             iattributes = impact_vector.get_data()
 
             # FIXME (Ole): check some numbers
+
+    test_flood_building_impact_function.slow = 1
 
     def test_earthquake_damage_schools(self):
         """Lembang building damage from ground shaking works
@@ -672,6 +684,8 @@ class Test_Engine(unittest.TestCase):
             #print 'Extrema', mmi_filename, min_damage, max_damage
             #print len(MMI)
 
+    test_earthquake_damage_schools.slow = 1
+
     def test_earthquake_impact_OSM_data(self):
         """Earthquake layer interpolation to OSM building data works
 
@@ -735,6 +749,8 @@ class Test_Engine(unittest.TestCase):
 
                 calculated_dam = iattributes[i]['DMGLEVEL']
                 assert calculated_dam in [1, 2, 3]
+
+    test_earthquake_impact_OSM_data.slow = 1
 
     def test_tsunami_loss_use_case(self):
         """Building loss from tsunami use case works
@@ -982,6 +998,8 @@ class Test_Engine(unittest.TestCase):
                                       linear_function(xi, eta),
                                       rtol=1e-12, atol=1e-12)
 
+    test_interpolation_wrapper.slow = 1
+
     def test_interpolation_functions(self):
         """Interpolation using Raster and Vector objects
         """
@@ -1146,6 +1164,8 @@ class Test_Engine(unittest.TestCase):
                        'expected value %s. I got %s' % (key, val, Ival))
                 assert Ival == val, msg
 
+    test_interpolation_lembang.slow = 1
+
     def test_interpolation_tsunami(self):
         """Interpolation using tsunami data set works
 
@@ -1263,6 +1283,8 @@ class Test_Engine(unittest.TestCase):
             if not numpy.isnan(interpolated_depth):
                 assert depth_min <= interpolated_depth <= depth_max, msg
 
+    test_interpolation_tsunami_maumere.slow = 1
+
     def test_polygon_clipping(self):
         """Clipping using real polygon and point data from Maumere
         """
@@ -1306,6 +1328,8 @@ class Test_Engine(unittest.TestCase):
             Vector(geometry=pts_inside).write_to_file('test_points_in.shp')
             pts_outside = points[outside]
             Vector(geometry=pts_outside).write_to_file('test_points_out.shp')
+
+    test_polygon_clipping.slow = 1
 
     def test_interpolation_from_polygons_one_poly(self):
         """Point interpolation using one polygon from Maumere works
@@ -1365,6 +1389,8 @@ class Test_Engine(unittest.TestCase):
         msg = ('Expected 458 points tagged with category, '
                'but got only %i' % count)
         assert count == 458, msg
+
+    test_interpolation_from_polygons_one_poly.slow = 1
 
     def test_interpolation_from_polygons_multiple(self):
         """Point interpolation using multiple polygons from Maumere works
@@ -1490,6 +1516,8 @@ class Test_Engine(unittest.TestCase):
         #for key in counts:
         #    print key, counts[key]
 
+    test_interpolation_from_polygons_multiple.slow = 1
+
     def Xtest_point_interpolation_from_polygons_one_attribute(self):
         """Point interpolation from multiple polygons works with attribute
 
@@ -1592,6 +1620,8 @@ class Test_Engine(unittest.TestCase):
         else:
             msg = 'Should have raised error about projection mismatch'
             raise Exception(msg)
+
+    test_interpolation_from_polygons_error_handling.slow = 1
 
     def test_line_clipping_by_polygon(self):
         """Multiple lines are clipped correctly by complex polygon
@@ -1702,6 +1732,8 @@ class Test_Engine(unittest.TestCase):
                                [122.18457453, -8.58798668],
                                [122.18466284, -8.5878697]])
 
+    test_line_clipping_by_polygon.slow = 1
+
     def test_line_interpolation_from_polygons_one_poly(self):
         """Line clipping and interpolation using one polygon works
 
@@ -1810,6 +1842,8 @@ class Test_Engine(unittest.TestCase):
         msg = 'Affected and not affected does not add up'
         assert (counts[DEFAULT_ATTRIBUTE] +
                 counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
+
+    test_line_interpolation_from_polygons_one_poly.slow = 1
 
     def Xtest_line_interpolation_from_polygons_one_attribute(self):
         """Line interpolation using one polygon works with attribute
@@ -2058,6 +2092,8 @@ class Test_Engine(unittest.TestCase):
                 msg = 'Missing keyword should have raised exception'
                 raise Exception(msg)
 
+    test_layer_integrity_raises_exception.slow = 1
+
     def test_padang_building_examples(self):
         """Padang building impact calculation works through the API
         """
@@ -2144,6 +2180,8 @@ class Test_Engine(unittest.TestCase):
             msg = 'Number buildings was not 3896.'
             assert count == 3896, msg
 
+    test_padang_building_examples.slow = 1
+
     def test_itb_building_function(self):
         """Damage ratio (estimated repair cost relative to replacement cost)
            can be computed using the ITB building vulnerability model.
@@ -2203,6 +2241,8 @@ class Test_Engine(unittest.TestCase):
 #        print keywords
 #        print calculated_damage
 
+    test_itb_building_function.slow = 1
+
     def test_flood_on_roads(self):
         """Jakarta flood impact on roads calculated correctly
         """
@@ -2222,6 +2262,8 @@ class Test_Engine(unittest.TestCase):
 
         impact_layer = calculate_impact(layers=[H, E],
                                         impact_fcn=IF)
+
+    test_flood_on_roads.slow = 1
 
     def test_erf(self):
         """Test ERF approximation
