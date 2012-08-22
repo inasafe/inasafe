@@ -94,12 +94,38 @@ def unique_filename(**kwargs):
     return filename
 
 
-def write_keywords(keywords, filename):
+def write_keywords(keywords, filename, sublayer=None):
     """Write keywords dictonary to file
 
-    Input
-        keywords: Dictionary of keyword, value pairs
-        filename: Name of keywords file. Extension expected to be .keywords
+    Args:
+        * keywords: Dictionary of keyword, value pairs
+              filename: Name of keywords file. Extension expected to be
+              .keywords
+        * sublayer: str Optional sublayer applicable only to multilayer formats
+             such as sqlite or netcdf which can potentially hold more than
+             one layer. The string should map to the layer group as per the
+             example below. If the keywords file contains sublayer definitions
+             but no sublayer was defined, keywords file content will be removed
+             and replaced with only the keywords provided here.
+
+    Returns: None
+
+    Raises: None
+
+    A keyword layer with sublayers may look like this:
+
+        [osm_buildings]
+        datatype: osm
+        category: exposure
+        subcategory: building
+        purpose: dki
+        title: buildings_osm_4326
+
+        [osm_flood]
+        datatype: flood
+        category: hazard
+        subcategory: building
+        title: flood_osm_4326
 
     Keys must be strings not containing the ":" character
     Values can be anything that can be converted to a string (using
@@ -148,7 +174,7 @@ def write_keywords(keywords, filename):
     fid.close()
 
 
-def read_keywords(filename, sublayer=None):
+def read_keywords(filename, sublayer=None, all_blocks=False):
     """Read keywords dictionary from file
 
     Args:
@@ -161,6 +187,10 @@ def read_keywords(filename, sublayer=None):
              example below. If the keywords file contains sublayer definitions
              but no sublayer was defined, the first layer group will be
              returned.
+        * all_blocks: bool Optional defaults to False. If True will return
+            a dict of dicts, where the top level dict entries each represent
+            a sublayer, and the values of that dict will be dicts of keyword
+            entries.
 
     Returns:
         keywords: Dictionary of keyword, value pairs
@@ -177,6 +207,13 @@ def read_keywords(filename, sublayer=None):
         title: buildings_osm_4326
 
         [osm_flood]
+        datatype: flood
+        category: hazard
+        subcategory: building
+        title: flood_osm_4326
+
+    Wheras a simple keywords file would look like this
+
         datatype: flood
         category: hazard
         subcategory: building
@@ -199,9 +236,11 @@ def read_keywords(filename, sublayer=None):
         return {}
 
     # Read all entries
+    blocks = {}
     keywords = {}
     fid = open(filename, 'r')
-    current_sublayer = None
+    current_block = None
+    first_keywords = None
     for line in fid.readlines():
         # Remove trailing (but not preceeding!) whitespace
         text = line.rstrip()
@@ -214,17 +253,15 @@ def read_keywords(filename, sublayer=None):
         block_flag = re.search(r'^\[.*]$', text, re.M | re.I)
 
         if block_flag:
-            # check if we encountered a new block while reading the desired
-            # sublayer block - if so return the keywords
-            if (sublayer == current_sublayer) and current_sublayer is not None:
-                fid.close()
-                return keywords
-
-            current_sublayer = text[1:-1]
-            # grab the first block if no sublayer specified
-            if sublayer is None:
-                sublayer = current_sublayer
-            # reset the keywords each time we encounter a new bloc
+            # Write the old block if it exists - must have a current
+            # block to prevent orphans
+            if len(keywords) > 0 and current_block is not None:
+                blocks[current_block] = keywords
+            if first_keywords is None and len(keywords) > 0:
+                first_keywords = keywords
+            # now set up for a new block
+            current_block = text[1:-1]
+            # reset the keywords each time we encounter a new block
             # until we know we are on the desired one
             keywords = {}
             continue
@@ -244,9 +281,25 @@ def read_keywords(filename, sublayer=None):
 
         # Add entry to dictionary
         keywords[key] = val
+
     fid.close()
 
-    return keywords
+    # Write our any unfinalised block data
+    if len(keywords) > 0 and current_block is not None and sublayer is not None:
+        blocks[current_block] = keywords
+    if first_keywords is None:
+        first_keywords = keywords
+
+    # Ok we have generated a structure that looks like this:
+    # blocks = {{ 'foo' : { 'a': 'b', 'c': 'd'},
+    #           { 'bar' : { 'd': 'e', 'f': 'g'}}
+    # where foo and bar are sublayers and their dicts are the sublayer keywords
+
+    if sublayer is not None:
+        if sublayer in blocks:
+            return blocks[sublayer]
+    else:
+        return first_keywords
 
 
 def geotransform2bbox(geotransform, columns, rows):

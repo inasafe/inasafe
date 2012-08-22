@@ -20,7 +20,7 @@ LOGGER = logging.getLogger('InaSAFE')
 PATH = os.path.abspath(
     os.path.join(UNITDATA, 'other', 'multilayer.keywords'))
 SIMPLE_PATH = os.path.abspath(
-    os.path.join(UNITDATA, 'other', 'multilayer.keywords'))
+    os.path.join(UNITDATA, 'other', 'simple.keywords'))
 
 
 class CommonUtilitiesTest(unittest.TestCase):
@@ -32,7 +32,7 @@ class CommonUtilitiesTest(unittest.TestCase):
         assert os.path.exists(SIMPLE_PATH), msg
 
     def test_read_keywords(self):
-        """Test reading keywords"""
+        """Test reading keywords - get first block from kwds as default."""
         keywords = read_keywords(PATH)
         expected_keywords = {'datatype': 'osm',
                              'category': 'exposure',
@@ -44,7 +44,7 @@ class CommonUtilitiesTest(unittest.TestCase):
         LOGGER.debug(keywords)
 
     def test_read_keywords_for_sublayer(self):
-        """Test reading keywords for sublayer"""
+        """Test reading keywords for specific sublayer."""
         keywords = read_keywords(PATH, 'osm_flood')
         expected_keywords = {'datatype': 'flood',
                              'category': 'hazard',
