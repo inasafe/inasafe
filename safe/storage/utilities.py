@@ -94,6 +94,64 @@ def unique_filename(**kwargs):
     return filename
 
 
+def _keywords_to_string(keywords):
+    """Create a string from a keywords dict.
+
+    .. note: Only simple keyword dicts should be passed here, not multilayer
+       dicts.
+
+    For example you pass a dict like this::
+
+        {'datatype': 'osm',
+         'category': 'exposure',
+         'title': 'buildings_osm_4326',
+         'subcategory': 'building',
+         'purpose': 'dki'}
+
+    and the following string would be returned:
+
+        datatype: osm
+        category: exposure
+        title: buildings_osm_4326
+        subcategory: building
+        purpose: dki
+
+    Args:
+        keywords: A required dictionary containing the keywords to stringify.
+
+
+    Returns: A string containing the keyword list.
+
+    Raises: Any errors will be propogated.
+    """
+
+    # Write
+    result = ''
+    for k, v in keywords.items():
+        # Create key
+        msg = ('Key in keywords dictionary must be a string. '
+               'I got %s with type %s' % (k, str(type(k))[1:-1]))
+        verify(isinstance(k, basestring), msg)
+
+        key = k
+        msg = ('Key in keywords dictionary must not contain the ":" '
+               'character. I got "%s"' % key)
+        verify(':' not in key, msg)
+
+        # Create value
+        msg = ('Value in keywords dictionary must be convertible to a string. '
+               'For key %s, I got %s with type %s'
+               % (k, v, str(type(v))[1:-1]))
+        try:
+            val = str(v)
+        except:
+            raise Exception(msg)
+
+        # Store
+        result += '%s: %s\n' % (key, val)
+    return result
+
+
 def write_keywords(keywords, filename, sublayer=None):
     """Write keywords dictonary to file
 
@@ -146,32 +204,33 @@ def write_keywords(keywords, filename, sublayer=None):
            'Expected %s.keywords' % (filename, basename))
     verify(ext == '.keywords', msg)
 
-    # Write
-    fid = open(filename, 'w')
-    for k, v in keywords.items():
+    # First read any keywords out of the file so that we can retain
+    # keywords for other sublayers
+    existing_keywords = read_keywords(filename, all_blocks=True)
 
-        # Create key
-        msg = ('Key in keywords dictionary must be a string. '
-               'I got %s with type %s' % (k, str(type(k))[1:-1]))
-        verify(isinstance(k, basestring), msg)
+    first_value = None
+    if len(existing_keywords) > 0:
+        first_value = existing_keywords[existing_keywords.keys()[0]]
+    multilayer_flag = type(first_value) == dict
 
-        key = k
-        msg = ('Key in keywords dictionary must not contain the ":" '
-               'character. I got "%s"' % key)
-        verify(':' not in key, msg)
+    handle = file(filename, 'wt')
 
-        # Create value
-        msg = ('Value in keywords dictionary must be convertible to a string. '
-               'For key %s, I got %s with type %s'
-               % (k, v, str(type(v))[1:-1]))
-        try:
-            val = str(v)
-        except:
-            raise Exception(msg)
+    if multilayer_flag:
+        if sublayer is not None:
+            #replace existing keywords / add new for this layer
+            existing_keywords[sublayer] = keywords
+        else:
+            # create a new dict since a sublayer was specified
+            existing_keywords = {sublayer: existing_keywords}
 
-        # Store
-        fid.write('%s: %s\n' % (key, val))
-    fid.close()
+        for key, val in existing_keywords.iteritems():
+            handle.write('[%s]\n' % key)
+            handle.write(_keywords_to_string(value))
+    else:
+        #write out as simple layer
+        handle.write(_keywords_to_string(keywords))
+
+    handle.close()
 
 
 def read_keywords(filename, sublayer=None, all_blocks=False):
@@ -187,7 +246,7 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
              example below. If the keywords file contains sublayer definitions
              but no sublayer was defined, the first layer group will be
              returned.
-        * all_blocks: bool Optional defaults to False. If True will return
+        * all_blocks: bool Optional, defaults to False. If True will return
             a dict of dicts, where the top level dict entries each represent
             a sublayer, and the values of that dict will be dicts of keyword
             entries.
@@ -285,7 +344,7 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
     fid.close()
 
     # Write our any unfinalised block data
-    if len(keywords) > 0 and current_block is not None and sublayer is not None:
+    if len(keywords) > 0 and current_block is not None:
         blocks[current_block] = keywords
     if first_keywords is None:
         first_keywords = keywords
@@ -294,7 +353,8 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
     # blocks = {{ 'foo' : { 'a': 'b', 'c': 'd'},
     #           { 'bar' : { 'd': 'e', 'f': 'g'}}
     # where foo and bar are sublayers and their dicts are the sublayer keywords
-
+    if all_blocks:
+        return blocks
     if sublayer is not None:
         if sublayer in blocks:
             return blocks[sublayer]

@@ -14,7 +14,7 @@ import logging
 import unittest
 
 from safe.common.testing import UNITDATA
-from safe.storage.utilities import read_keywords
+from safe.storage.utilities import read_keywords, write_keywords
 
 LOGGER = logging.getLogger('InaSAFE')
 PATH = os.path.abspath(
@@ -43,9 +43,37 @@ class CommonUtilitiesTest(unittest.TestCase):
         self.assertEquals(keywords, expected_keywords, msg)
         LOGGER.debug(keywords)
 
+    def test_write_keywords(self):
+        """Test writing keywords for named sublayer."""
+        keywords = {'datatype': 'osm',
+                    'category': 'exposure',
+                    'title': 'buildings_osm_4326',
+                    'subcategory': 'building',
+                    'purpose': 'dki'}
+        #continue here
+        write_keywords(keywords, '/tmp/test.keywords')
+
+    def test_read_all_keywords(self):
+        """Test reading all keywords for all layers"""
+        keywords = read_keywords(PATH, all_blocks=True)
+        expected_keywords = {'osm_buildings': {
+                                'datatype': 'osm',
+                                'category': 'exposure',
+                                'title': 'buildings_osm_4326',
+                                'subcategory': 'building',
+                                'purpose': 'dki'},
+                             'osm_flood': {
+                                 'datatype': 'flood',
+                                 'category': 'hazard',
+                                 'subcategory': 'building',
+                                 'title': 'flood_osm_4326'}}
+        msg = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
+        self.assertEquals(keywords, expected_keywords, msg)
+        LOGGER.debug(keywords)
+
     def test_read_keywords_for_sublayer(self):
         """Test reading keywords for specific sublayer."""
-        keywords = read_keywords(PATH, 'osm_flood')
+        keywords = read_keywords(PATH, sublayer='osm_flood')
         expected_keywords = {'datatype': 'flood',
                              'category': 'hazard',
                              'subcategory': 'building',
