@@ -1,7 +1,5 @@
 import unittest
 import numpy
-import sys
-import os
 from os.path import join
 
 from safe.common.testing import TESTDATA

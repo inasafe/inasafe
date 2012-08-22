@@ -9,7 +9,7 @@ import os
 from vector import Vector
 from raster import Raster
 from safe.common.utilities import verify, VerificationError
-from safe.common.exceptions import BoundingBoxError
+from safe.common.exceptions import BoundingBoxError, ReadLayerError
 
 # FIXME (Ole): make logging work again
 import logging
