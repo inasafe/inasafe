@@ -249,8 +249,10 @@ class Vector(Layer):
                         try:
                             # Try to cast as booleans. This will take care of
                             # None, '', True, False, ...
+                            # FIXME (Ole): This will never throw an exception
+                            # so remove try-except construct
                             res = (bool(X) is bool(Y))
-                        except:
+                        except ValueError:
                             pass
                         else:
                             if not res:
@@ -473,7 +475,7 @@ class Vector(Layer):
         # Clear any previous file of this name (ogr does not overwrite)
         try:
             os.remove(filename)
-        except:
+        except OSError:
             pass
 
         # Create new file with one layer

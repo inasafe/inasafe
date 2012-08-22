@@ -3,6 +3,7 @@ import os
 import subprocess
 from safe.common.utilities import verify
 
+
 def get_version(version=None):
     "Returns a PEP 386-compliant version number from VERSION."
     if version is None:
