@@ -21,13 +21,14 @@ from safe.common.interpolation2d import interpolate_raster
 from safe.common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from safe.common.numerics import nanallclose
 from safe.common.utilities import VerificationError
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.common.testing import TESTDATA, HAZDATA
 
 from safe.impact_functions import get_plugins
 
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
 # remove from here and update test to use the real one.
+# pylint: disable=W0611
 from impact_functions_for_testing import empirical_fatality_model
 from impact_functions_for_testing import allen_fatality_model
 from impact_functions_for_testing import unspecific_building_impact_model
@@ -36,6 +37,7 @@ from impact_functions_for_testing import HKV_flood_study
 from impact_functions_for_testing import BNPB_earthquake_guidelines
 from impact_functions_for_testing import general_ashload_impact
 from impact_functions_for_testing import flood_road_impact
+# pylint: enable=W0611
 
 
 def linear_function(x, y):
@@ -583,7 +585,6 @@ class Test_Engine(unittest.TestCase):
 
             # Read input data
             hazard_raster = read_layer(haz_filename)
-            A = hazard_raster.get_data()
             mmi_min, mmi_max = hazard_raster.get_extrema()
 
             exposure_vector = read_layer(exp_filename)
@@ -722,7 +723,6 @@ class Test_Engine(unittest.TestCase):
 
             # Read input data
             hazard_raster = read_layer(hazard_filename)
-            A = hazard_raster.get_data()
             mmi_min, mmi_max = hazard_raster.get_extrema()
 
             exposure_vector = read_layer(exposure_filename)
@@ -1106,7 +1106,6 @@ class Test_Engine(unittest.TestCase):
 
         # Read input data
         hazard_raster = read_layer(hazard_filename)
-        A = hazard_raster.get_data()
         mmi_min, mmi_max = hazard_raster.get_extrema()
 
         exposure_vector = read_layer(exposure_filename)
@@ -1124,7 +1123,6 @@ class Test_Engine(unittest.TestCase):
         fid = open('%s/test_buildings_percentage_loss_and_mmi.txt' % TESTDATA)
         reference_points = []
         MMI = []
-        DAM = []
         for line in fid.readlines()[1:]:
             fields = line.strip().split(',')
 
@@ -1179,7 +1177,6 @@ class Test_Engine(unittest.TestCase):
 
         # Read input data
         hazard_raster = read_layer(hazard_filename)
-        A = hazard_raster.get_data()
         depth_min, depth_max = hazard_raster.get_extrema()
 
         exposure_vector = read_layer(exposure_filename)
@@ -1544,7 +1541,6 @@ class Test_Engine(unittest.TestCase):
         #H.write_to_file('MM_cut.shp')  # E.g. to view with QGis
 
         E = read_layer(exposure_filename)
-        E_geometry = E.get_geometry()
         E_attributes = E.get_data()
 
         # Test interpolation function
@@ -1560,7 +1556,6 @@ class Test_Engine(unittest.TestCase):
 
         # Assert that expected attribute names exist
         I_names = I.get_attribute_names()
-        H_names = H.get_attribute_names()
         E_names = E.get_attribute_names()
 
         name = 'Catergory'
@@ -1603,12 +1598,7 @@ class Test_Engine(unittest.TestCase):
 
         # Read input data
         H = read_layer(hazard_filename)
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-
         E = read_layer(exposure_filename)
-        E_geometry = E.get_geometry()
-        E_attributes = E.get_data()
 
         # Check projection mismatch is caught
         try:
@@ -1755,10 +1745,7 @@ class Test_Engine(unittest.TestCase):
                    projection=H.get_projection())
         H_attributes = H.get_data()
         H_geometry = H.get_geometry()
-
         E = read_layer(exposure_filename)
-        E_geometry = E.get_geometry()
-        E_attributes = E.get_data()
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
@@ -1869,10 +1856,7 @@ class Test_Engine(unittest.TestCase):
                    projection=H.get_projection())
         H_attributes = H.get_data()
         H_geometry = H.get_geometry()
-
         E = read_layer(exposure_filename)
-        E_geometry = E.get_geometry()
-        E_attributes = E.get_data()
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
@@ -1894,7 +1878,6 @@ class Test_Engine(unittest.TestCase):
 
         # Assert that expected attribute names exist
         I_names = I.get_attribute_names()
-        H_names = H.get_attribute_names()
         E_names = E.get_attribute_names()
 
         name = 'Catergory'
@@ -1943,10 +1926,7 @@ class Test_Engine(unittest.TestCase):
                    projection=H.get_projection())
         H_attributes = H.get_data()
         H_geometry = H.get_geometry()
-
         E = read_layer(exposure_filename)
-        E_geometry = E.get_geometry()
-        E_attributes = E.get_data()
 
         # Test interpolation function
         I = H.interpolate(E, name='depth',
@@ -2057,15 +2037,15 @@ class Test_Engine(unittest.TestCase):
             IF = plugin_list[0][plugin_name]
 
             # Call impact calculation engine normally
-            impact_layer = calculate_impact(layers=[H, E],
-                                            impact_fcn=IF)
+            calculate_impact(layers=[H, E],
+                             impact_fcn=IF)
 
             # Make keyword value empty and verify exception is raised
             expected_category = E.keywords['category']
             E.keywords['category'] = ''
             try:
-                impact_layer = calculate_impact(layers=[H, E],
-                                                impact_fcn=IF)
+                calculate_impact(layers=[H, E],
+                                 impact_fcn=IF)
             except VerificationError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
@@ -2083,8 +2063,8 @@ class Test_Engine(unittest.TestCase):
                 del H.keywords['subcategory']
 
             try:
-                impact_layer = calculate_impact(layers=[H, E],
-                                                impact_fcn=IF)
+                calculate_impact(layers=[H, E],
+                                 impact_fcn=IF)
             except Exception, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)
@@ -2108,9 +2088,6 @@ class Test_Engine(unittest.TestCase):
             hazard_filename = join(HAZDATA, mmi_filename)
             exposure_filename = join(TESTDATA, 'Padang_WGS84.shp')
 
-            # Call calculation routine
-            bbox = '96.956, -5.51, 104.63933, 2.289497'
-
             # Get layers using API
             H = read_layer(hazard_filename)
             E = read_layer(exposure_filename)
@@ -2123,11 +2100,9 @@ class Test_Engine(unittest.TestCase):
             # Call impact calculation engine
             impact_vector = calculate_impact(layers=[H, E],
                                              impact_fcn=IF)
-            impact_filename = impact_vector.get_filename()
 
             # Read hazard data for reference
             hazard_raster = read_layer(hazard_filename)
-            A = hazard_raster.get_data()
             mmi_min, mmi_max = hazard_raster.get_extrema()
 
             # Extract calculated result
@@ -2260,8 +2235,9 @@ class Test_Engine(unittest.TestCase):
         plugin_list = get_plugins(plugin_name)
         IF = plugin_list[0][plugin_name]
 
-        impact_layer = calculate_impact(layers=[H, E],
-                                        impact_fcn=IF)
+        _ = calculate_impact(layers=[H, E],
+                             impact_fcn=IF)
+        # FIXME (Ole): To do when road functionality is done
 
     test_flood_on_roads.slow = 1
 
