@@ -488,11 +488,16 @@ def buffered_bounding_box(bbox, resolution):
 
     if resolution is None:
         return bbox
-
     try:
         resx, resy = resolution
     except:
         resx = resy = resolution
+
+    # This way does not work for some reason
+    #if len(resolution) == 2:
+    #    resx, resy = [float(x) for x in resolution]
+    #else:
+    #    resx = resy = float(resolution)
 
     bbox[0] -= resx
     bbox[1] -= resy
