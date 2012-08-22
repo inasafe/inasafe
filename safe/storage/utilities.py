@@ -12,7 +12,7 @@ from tempfile import mkstemp
 from datetime import date
 
 from safe.common.numerics import ensure_numeric
-from safe.common.utilities import verify, VerificationError
+from safe.common.utilities import verify
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'Affected'
@@ -59,11 +59,11 @@ def unique_filename(**kwargs):
 
     handle, filename = mkstemp(**kwargs)
 
+    # Need to close it using the filehandle first for windows!
+    os.close(handle)
     try:
-        # Need to close it using the filehandle first for windows!
-        os.close(handle)
         os.remove(filename)
-    except:
+    except OSError:
         pass
 
     path = None
@@ -84,12 +84,14 @@ def unique_filename(**kwargs):
         os.umask(umask)
     # Now we have the working dir set up go on and return the filename
     handle, filename = mkstemp(**kwargs)
+
+    # Need to close it using the filehandle first for windows!
+    os.close(handle)
     try:
-        # Need to close it using the filehandle first for windows!
-        os.close(handle)
         os.remove(filename)
-    except:
+    except OSError:
         pass
+
     return filename
 
 
@@ -486,11 +488,16 @@ def buffered_bounding_box(bbox, resolution):
 
     if resolution is None:
         return bbox
-
     try:
         resx, resy = resolution
-    except:
+    except ValueError:
         resx = resy = resolution
+
+    # This way does not work for some reason
+    #if len(resolution) == 2:
+    #    resx, resy = [float(x) for x in resolution]
+    #else:
+    #    resx = resy = float(resolution)
 
     bbox[0] -= resx
     bbox[1] -= resy
@@ -548,7 +555,7 @@ def get_geometry_type(geometry, geometry_type):
         try:
             float(geometry[0][0])
             float(geometry[0][1])
-        except:
+        except TypeError:
             pass
         else:
             # This geometry appears to be point data
@@ -556,7 +563,7 @@ def get_geometry_type(geometry, geometry_type):
     elif len(geometry[0]) > 2:
         try:
             x = numpy.array(geometry[0])
-        except:
+        except ValueError:
             pass
         else:
             # This geometry appears to be polygon data
@@ -582,7 +589,7 @@ def is_sequence(x):
 
     try:
         list(x)
-    except:
+    except TypeError:
         return False
     else:
         return True
@@ -606,10 +613,11 @@ def array2wkt(A, geom_type='POLYGON'):
 
     try:
         A = ensure_numeric(A, numpy.float)
-    except Exception, e:
-        msg = ('Array (%s) could not be converted to numeric array: %s'
-               % (geom_type, str(type(A))))
-        raise Exception(msg)
+    except TypeError, e:
+        msg = ('Array (%s) could not be converted to numeric array. '
+               'I got type %s. Error message: %s'
+               % (geom_type, str(type(A)), e))
+        raise TypeError(msg)
 
     msg = 'Array must be a 2d array of vertices. I got %s' % (str(A.shape))
     verify(len(A.shape) == 2, msg)

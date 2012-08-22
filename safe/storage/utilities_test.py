@@ -1,8 +1,6 @@
 """Utilities to to support test suite
 """
 
-import numpy
-import os
 import types
 
 

@@ -29,9 +29,7 @@ def ensure_numeric(A, typecode=None):
 
     if isinstance(A, basestring):
         msg = 'Sorry, cannot handle strings in ensure_numeric()'
-        # FIXME (Ole): Change this to whatever is the appropriate exception
-        # for wrong input type
-        raise Exception(msg)
+        raise TypeError(msg)
 
     if typecode is None:
         if isinstance(A, numpy.ndarray):

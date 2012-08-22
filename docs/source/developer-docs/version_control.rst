@@ -138,3 +138,21 @@ To update the master branch:
 
 For subsequent pull requests on that branch you can just do TortoiseGIT->Pull
 from the context menu and press ok
+
+Process for reverting to a previous commit:
+-------------------------------------------
+
+If you regret some commits made and want to revert to an earlier
+version, here's one procedure (http://stackoverflow.com/a/1625275):
+
+* Rename your current master branch:
+
+git branch -m crazyexperiment
+
+* Check out your good commit:
+
+git checkout c2e7af2b51
+
+* Make your new master branch here:
+
+git checkout -b master

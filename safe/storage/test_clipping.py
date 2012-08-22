@@ -1,14 +1,12 @@
 import unittest
 import numpy
-import sys
-import os
 from os.path import join
 
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
+from safe.common.testing import TESTDATA
 from safe.common.polygon import is_inside_polygon, inside_polygon
 from safe.storage.vector import Vector
 from safe.storage.core import read_layer
-from safe.storage.clipping import *
+from safe.storage.clipping import clip_raster_by_polygons
 
 
 class Test_Clipping(unittest.TestCase):
@@ -88,10 +86,17 @@ class Test_Clipping(unittest.TestCase):
 
         M = len(P)
         N = len(R)
+        assert N == 56
 
         # Clip
         C = clip_raster_by_polygons(R, P)
         assert len(C) == M
+
+        # Check points inside polygon
+        tot = 0
+        for c in C:
+            tot += len(c)
+        assert tot == 14
 
         # Check that points are inside the right polygon
         for i, polygon in enumerate(P.get_geometry()):
