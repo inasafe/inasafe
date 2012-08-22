@@ -2,7 +2,6 @@ import unittest
 import numpy
 import sys
 import os
-import locale
 
 from osgeo import gdal
 
@@ -36,6 +35,7 @@ from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _
 from safe.common.utilities import VerificationError
+from safe.common.polygon import is_inside_polygon
 
 
 # Auxiliary function for raster test
@@ -608,6 +608,12 @@ class Test_IO(unittest.TestCase):
                 assert numpy.allclose(c_geom, r_geom,
                                       rtol=1.0e-8, atol=1.0e-12)
 
+            # Check that each centroid fall within its polygon
+            for i in range(N):
+                point = c_geometry[i]
+                polygon = p_geometry[i]
+                assert is_inside_polygon(point, polygon, closed=False)
+
             # Write to file (for e.g. visual inspection)
             out_filename = unique_filename(prefix='centroid', suffix='.shp')
             #print 'writing to', out_filename
@@ -1137,7 +1143,7 @@ class Test_IO(unittest.TestCase):
         attributes = V.get_data()
 
         # Store it for visual inspection e.g. with QGIS
-        out_filename = unique_filename(suffix='.shp')
+        #out_filename = unique_filename(suffix='.shp')
         #V.write_to_file(out_filename)
         #print 'Written to ', out_filename
 
@@ -1488,6 +1494,9 @@ class Test_IO(unittest.TestCase):
               141.0140016666665, 6.0736123333332639)
 
         res = bbox_intersection(b1, b2, b3)
+        assert numpy.allclose(res, [95.059660952, -10.997409961,
+                                    141.001325781, 5.910922695999998],
+                              rtol=1.0e-12, atol=1.0e-12)
 
         # Empty intersection should return None
         assert bbox_intersection(bbox2, [50, 2, 53, 4]) is None
@@ -1589,9 +1598,6 @@ class Test_IO(unittest.TestCase):
             # Set common resolution which is bigger than the smallest box
             resolution = (0.1, 0.2)
 
-            dx = bbox[2] - bbox[0]
-            dy = bbox[3] - bbox[1]
-
             # Calculate minimal bounding box
             adjusted_bbox = buffered_bounding_box(bbox, resolution)
 
@@ -1669,7 +1675,6 @@ class Test_IO(unittest.TestCase):
         filename = '%s/%s' % (TESTDATA, 'test_polygon.shp')
         layer = read_layer(filename)
         geometry = layer.get_geometry()
-        attributes = layer.get_data()
 
         P = geometry[0]
         A = calculate_polygon_area(P)
@@ -1718,7 +1723,6 @@ class Test_IO(unittest.TestCase):
         filename = '%s/%s' % (TESTDATA, 'test_polygon.shp')
         layer = read_layer(filename)
         geometry = layer.get_geometry()
-        attributes = layer.get_data()
 
         P = geometry[0]
         C = calculate_polygon_centroid(P)
@@ -1785,7 +1789,6 @@ class Test_IO(unittest.TestCase):
         filename = '%s/%s' % (TESTDATA, 'indonesia_highway_sample.shp')
         layer = read_layer(filename)
         geometry = layer.get_geometry()
-        attributes = layer.get_data()
 
         P = geometry[0]
         C = points_along_line(P, delta)
@@ -1888,7 +1891,6 @@ class Test_IO(unittest.TestCase):
                                  'TYPE': 'secondary',
                                  'NAME': 'route2'}}
 
-        field_names = None
         for i in range(N):
             # Consistency with attributes read manually with qgis
 
@@ -1971,7 +1973,7 @@ class Test_IO(unittest.TestCase):
         hazard_filename = ('%s/boundaries/rw_jakarta.shp' % DATADIR)
 
         try:
-            H = read_layer(hazard_filename)
+            read_layer(hazard_filename)
         except Exception, e:
             msg = 'Wrong error message: %s' % e
             assert 'convert multipart' in str(e), msg
