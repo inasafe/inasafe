@@ -9,6 +9,7 @@ import logging
 import logging.handlers
 # pylint: enable=W0404
 
+
 class VerificationError(RuntimeError):
     """Exception thrown by verify()
     """

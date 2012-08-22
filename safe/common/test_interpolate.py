@@ -2,7 +2,8 @@ import numpy
 import unittest
 
 # Import InaSAFE modules
-from safe.common.interpolation2d import interpolate2d, interpolate_raster, BoundsError
+from safe.common.interpolation2d import interpolate2d, interpolate_raster
+from safe.common.interpolation2d import BoundsError
 from safe.common.interpolation1d import interpolate1d
 from safe.common.testing import combine_coordinates
 from safe.common.numerics import nanallclose

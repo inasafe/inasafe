@@ -27,8 +27,10 @@ import numpy
 LOGGER = logging.getLogger('InaSAFE')
 # pylint: disable=W0105
 
+
 class BoundsError(RuntimeError):
     pass
+
 
 def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
     """Fundamental 2D interpolation routine
