@@ -323,7 +323,7 @@ def getWGS84resolution(theLayer):
         # Reproject extent to EPSG:4326
         myGeoCrs = QgsCoordinateReferenceSystem()
         myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-        myXForm = QgsCoordinateTransform(myGeoCrs, theLayer.crs())
+        myXForm = QgsCoordinateTransform(theLayer.crs(), myGeoCrs)
         myExtent = theLayer.extent()
         myProjectedExtent = myXForm.transformBoundingBox(myExtent)
 

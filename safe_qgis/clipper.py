@@ -20,6 +20,7 @@ __copyright__ += 'Disaster Reduction'
 import os
 import sys
 import tempfile
+import logging
 from subprocess import (call, CalledProcessError)
 
 from PyQt4.QtCore import QCoreApplication
@@ -40,6 +41,7 @@ from safe_qgis.exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
                            InvalidProjectionException)
 
+LOGGER = logging.getLogger(name='InaSAFE')
 
 def tr(theText):
     """We define a tr() alias here since the ClipperTest implementation below
@@ -355,7 +357,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # myFile.write(myCommand)
     # myFile.close()
     # Now run GDAL warp scottie...
-
+    LOGGER.debug(myCommand)
     try:
         myResult = call(myCommand, shell=True)
         del myResult
