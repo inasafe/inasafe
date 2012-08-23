@@ -26,6 +26,7 @@ SHP_BASE = os.path.abspath(
     os.path.join(UNITDATA, 'exposure', 'buildings_osm_4326'))
 EXPOSURE_SUBLAYER_NAME = 'buildings_osm_4326'
 
+
 class VectorTest(unittest.TestCase):
 
     def setUp(self):

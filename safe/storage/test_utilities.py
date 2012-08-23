@@ -35,6 +35,7 @@ OSM_KEYWORDS = {'datatype': 'flood',
                 'subcategory': 'building',
                 'title': 'flood_osm_4326'}
 
+
 class CommonUtilitiesTest(unittest.TestCase):
 
     def setUp(self):

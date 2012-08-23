@@ -221,9 +221,10 @@ def write_keywords(keywords, filename, sublayer=None):
         * sublayer: str Optional sublayer applicable only to multilayer formats
              such as sqlite or netcdf which can potentially hold more than
              one layer. The string should map to the layer group as per the
-             example below. **If the keywords file contains sublayer definitions
-             but no sublayer was defined, keywords file content will be removed
-             and replaced with only the keywords provided here.**
+             example below. **If the keywords file contains sublayer
+             definitions but no sublayer was defined, keywords file content
+             will be removed and replaced with only the keywords provided
+             here.**
 
     Returns: None
 
