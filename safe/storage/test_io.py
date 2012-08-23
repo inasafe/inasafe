@@ -38,6 +38,7 @@ from safe.common.utilities import VerificationError
 from safe.common.polygon import is_inside_polygon
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
 
+
 # Auxiliary function for raster test
 def linear_function(x, y):
     """Auxiliary function for use with raster test
@@ -111,7 +112,7 @@ class Test_IO(unittest.TestCase):
         filename = unique_filename(suffix='.gml')
         try:
             read_layer(filename)
-        except ReadLayerError:
+        except IOError:
             pass
         else:
             msg = 'Exception for non-existing file should have been raised'
