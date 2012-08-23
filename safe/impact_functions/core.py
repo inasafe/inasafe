@@ -17,6 +17,7 @@ from safe.common.tables import Table, TableCell, TableRow
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 # Disable lots of pylint for this as it is using magic
 # for managing the plugin system devised by Ted Dunstone
 # pylint: disable=W0613,W0231
@@ -34,6 +35,7 @@ class PluginMount(type):
             # track of it later.
             cls.plugins.append(cls)
 # pylint: enable=W0613,W0231
+
 
 class FunctionProvider:
     """Mount point for plugins which refer to actions that can be performed.
