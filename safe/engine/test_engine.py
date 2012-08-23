@@ -12,7 +12,7 @@ from safe.storage.core import read_layer
 from safe.storage.core import write_vector_data
 from safe.storage.core import write_raster_data
 from safe.storage.vector import Vector
-from safe.storage.utilities import  DEFAULT_ATTRIBUTE
+from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 from safe.common.polygon import separate_points_by_polygon
 from safe.common.polygon import is_inside_polygon

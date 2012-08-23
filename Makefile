@@ -102,19 +102,16 @@ clean:
 # Run the test suite followed by style checking
 test: docs test_suite pep8 pylint dependency_test unwanted_strings data_audit test-translations
 
-# Run the test suite followed by style checking - dont update from git for test data
-test_no_git: docs test_suite_no_git pep8 disabled_tests dependency_test unwanted_strings data_audit
-
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 
 set_python:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
 
-quicktest:
+quicktest: 
 	nosetests -A 'not slow' -v safe --stop
 
-it:
+it: 
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' safe --stop
 
 # Run pep8 style checking
@@ -141,16 +138,6 @@ test_suite: compile testdata
 	@# Report expected failures if any!
 	@#echo Expecting 1 test to fail in support of issue #3
 	@#echo Expecting 1 test to fail in support of issue #160
-
-# Run gui test suite only and without git updating test data
-gui_test_suite_no_git: compile
-	@echo
-	@echo "----------------------"
-	@echo "Regresssion Test Suite"
-	@echo "----------------------"
-
-	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Run gui test suite only
 gui_test_suite: compile testdata
@@ -231,7 +218,7 @@ pylint:
 	@echo "Pylint violations. For details run     "
 	@echo "make jenkins-pylint                    "
 	@echo "---------------------------------------"
-	@pylint --reports=n --rcfile=pylintrc safe safe_qgis | grep -v " Module " | wc -l
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis | wc -l
 
 profile:
 	@echo
@@ -279,10 +266,9 @@ jenkins-pylint:
 	@echo " cases we want to suppress warnings in the python code like this:"
 	@echo " from pydevd import * # pylint: disable=F0401"
 	@echo " with 'F0401' being the warning code."
-	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --rcfile=pylintrc --ignore=odict.py,help_base.py,keywords_dialog_base.py,options_dialog_base.py,dock_base.py safe safe_qgis | grep -v 'I0011' > pylint.log || :
+	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis > pylint.log || :
 
 jenkins-pep8:
 	@echo

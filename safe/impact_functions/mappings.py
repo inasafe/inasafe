@@ -57,7 +57,11 @@ def osm2padang(E):
     # Start mapping
     N = len(E)
     attributes = E.get_data()
+
+    # FIXME (Ole): Pylint says variable count is unused. Why?
+    # pylint: disable=W0612
     count = 0
+    # pylint: enable=W0612
     for i in range(N):
         levels = E.get_data('levels', i)
         structure = E.get_data('structure', i)
@@ -71,7 +75,7 @@ def osm2padang(E):
 
             try:
                 levels = int(levels)
-            except:
+            except ValueError:
                 # E.g. 'ILP jalan'
                 vulnerability_class = 2
                 count += 1
@@ -158,9 +162,9 @@ def sigab2padang(E):
     for i in range(N):
         levels = E.get_data('Tingkat', i).lower()
         structure = E.get_data('Struktur_B', i).lower()
-        roof_type = E.get_data('Atap', i).lower()
-        wall_type = E.get_data('Dinding', i).lower()
-        floor_type = E.get_data('Lantai', i).lower()
+        #roof_type = E.get_data('Atap', i).lower()
+        #wall_type = E.get_data('Dinding', i).lower()
+        #floor_type = E.get_data('Lantai', i).lower()
         if levels == 'none' or structure == 'none':
             vulnerability_class = 2
         else:
@@ -230,7 +234,11 @@ def osm2bnpb(E, target_attribute='VCLASS'):
     # Start mapping
     N = len(E)
     attributes = E.get_data()
+
+    # FIXME (Ole): Pylint says variable count is unused. Why?
+    # pylint: disable=W0612
     count = 0
+    # pylint: enable=W0612
     for i in range(N):
         levels = E.get_data('levels', i)
         structure = E.get_data('structure', i)
@@ -244,7 +252,7 @@ def osm2bnpb(E, target_attribute='VCLASS'):
 
             try:
                 levels = int(levels)
-            except:
+            except ValueError:
                 # E.g. 'ILP jalan'
                 vulnerability_class = 'URM'
                 count += 1
@@ -306,7 +314,7 @@ def unspecific2bnpb(E, target_attribute='VCLASS'):
     # Start mapping
     N = len(E)
     attributes = E.get_data()
-    count = 0
+
     for i in range(N):
         # Store new attribute value
         attributes[i][target_attribute] = 'URM'
@@ -349,9 +357,9 @@ def sigab2bnpb(E, target_attribute='VCLASS'):
     for i in range(N):
         levels = E.get_data('Tingkat', i).lower()
         structure = E.get_data('Struktur_B', i).lower()
-        roof_type = E.get_data('Atap', i).lower()
-        wall_type = E.get_data('Dinding', i).lower()
-        floor_type = E.get_data('Lantai', i).lower()
+        #roof_type = E.get_data('Atap', i).lower()
+        #wall_type = E.get_data('Dinding', i).lower()
+        #floor_type = E.get_data('Lantai', i).lower()
         if levels == 'none' or structure == 'none':
             vulnerability_class = 'URM'
         elif structure.startswith('beton') or structure.startswith('kayu'):

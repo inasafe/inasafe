@@ -9,6 +9,7 @@ from osgeo import gdal
 from safe.common.utilities import verify
 from safe.common.numerics import nanallclose, geotransform2axes, grid2points
 from safe.common.dynamic_translations import names as internationalised_titles
+from safe.common.exceptions import ReadLayerError
 
 from layer import Layer
 from vector import Vector
@@ -151,7 +152,7 @@ class Raster(Layer):
                 msg = ('File %s exists, but could not be read. '
                        'Please check if the file can be opened with '
                        'e.g. qgis or gdalinfo' % filename)
-            raise Exception(msg)
+            raise ReadLayerError(msg)
 
         # Record raster metadata from file
         basename, ext = os.path.splitext(filename)

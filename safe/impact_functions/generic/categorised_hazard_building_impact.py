@@ -36,7 +36,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         N = len(category)
 
         # List attributes to carry forward to result layer
-        attributes = E.get_attribute_names()
+        #attributes = E.get_attribute_names()
 
         # Calculate building impact according to guidelines
         count2 = 0

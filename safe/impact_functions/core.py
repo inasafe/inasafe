@@ -8,16 +8,19 @@ using it.
 
 import numpy
 import logging
-import keyword
+import keyword as python_keywords
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableCell, TableRow
-from safe.impact_functions.utilities import (admissible_plugins_to_str,
-                                             keywords_to_str)
+#from safe.impact_functions.utilities import (admissible_plugins_to_str,
+#                                             keywords_to_str)
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
+# Disable lots of pylint for this as it is using magic
+# for managing the plugin system devised by Ted Dunstone
+# pylint: disable=W0613,W0231
 class PluginMount(type):
     def __init__(cls, name, bases, attrs):
         if not hasattr(cls, 'plugins'):
@@ -31,6 +34,7 @@ class PluginMount(type):
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
             cls.plugins.append(cls)
+# pylint: enable=W0613,W0231
 
 
 class FunctionProvider:
@@ -74,16 +78,20 @@ def get_plugins(name=None):
        Or all of them if no name is passed.
     """
 
+    # pylint: disable=E1101
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
+    # pylint: enable=E1101
 
     if name is None:
         return plugins_dict
 
     if isinstance(name, basestring):
         # Add the names
+        # pylint: disable=E1101
         plugins_dict.update(dict([(p.__name__, p)
                                   for p in FunctionProvider.plugins]))
+        # pylint: enable=E1101
 
         msg = ('No plugin named "%s" was found. '
                'List of available plugins is: %s'
@@ -103,10 +111,11 @@ def get_plugin(name):
     """Get plugin that matches given name
 
     This is just a wrapper around get_plugins to simplify
+    the overly complicated way of extracting the function
     """
 
     plugin_list = get_plugins(name)
-    _, impact_function = plugin_list[0].items()[0]
+    impact_function = plugin_list[0].items()[0][1]
 
     return impact_function
 
@@ -191,7 +200,7 @@ def requirement_check(params, require_str, verbose=False):
                 continue
 
         # Check that symbol is not a Python keyword
-        if key in keyword.kwlist:
+        if key in python_keywords.kwlist:
             msg = ('Error in plugin requirements'
                    'Must not use Python keywords as params: %s' % (key))
             #print msg
@@ -211,8 +220,13 @@ def requirement_check(params, require_str, verbose=False):
     if verbose:
         print execstr
     try:
+        # pylint: disable=W0122
         exec(compile(execstr, '<string>', 'exec'))
+        # pylint: enable=W0122
+
+        # pylint: disable=E0602
         return check()
+        # pylint: enable=E0602
     except NameError, e:
         # This condition will happen frequently since the function
         # is evaled against many params that are not relevant and
@@ -227,7 +241,7 @@ def requirement_check(params, require_str, verbose=False):
     return False
 
 
-def requirements_met(requirements, params, verbose=False):
+def requirements_met(requirements, params):  # , verbose=False):
     """Checks the plugin can run with a given layer.
 
        Based on the requirements specified in the doc string.
@@ -380,13 +394,14 @@ def aggregate_point_data(data=None, boundaries=None,
         raise Exception(msg)
 
     polygon_geoms = boundaries.get_geometry()
-    polygon_attrs = boundaries.get_data()
+    #polygon_attrs = boundaries.get_data()
 
     points = data.get_geometry()
     attributes = data.get_data()
 
     result = []
-    for i, polygon in enumerate(polygon_geoms):
+    #for i, polygon in enumerate(polygon_geoms):
+    for polygon in polygon_geoms:
         indices = inside_polygon(points, polygon)
 
         #print 'Found %i points in polygon %i' % (len(indices), i)
@@ -403,11 +418,11 @@ def aggregate_point_data(data=None, boundaries=None,
                 bins[val] += 1
             result.append(bins)
         elif aggregation_function == 'sum':
-            sum = 0
+            sum_ = 0
             for att in numpy.take(attributes, indices):
                 val = att[attribute_name]
-                sum += val
-            result.append(sum)
+                sum_ += val
+            result.append(sum_)
 
     return result
 
@@ -515,14 +530,18 @@ def get_plugins_as_table(name=None):
     header = TableRow([_('Title'), _('ID'), _('Requirements')], header=True)
     table_body.append(header)
 
+    # pylint: disable=E1101
     plugins_dict = dict([(pretty_function_name(p), p)
-    for p in FunctionProvider.plugins])
+                         for p in FunctionProvider.plugins])
+    # pylint: enable=E1101
 
     if name is not None:
         if isinstance(name, basestring):
             # Add the names
+            # pylint: disable=E1101
             plugins_dict.update(dict([(p.__name__, p)
-            for p in FunctionProvider.plugins]))
+                                      for p in FunctionProvider.plugins]))
+            # pylint: enable=E1101
 
             msg = ('No plugin named "%s" was found. '
                    'List of available plugins is: %s'

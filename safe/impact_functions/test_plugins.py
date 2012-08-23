@@ -1,10 +1,6 @@
 import numpy
-import sys
-import os
 import unittest
-import warnings
 
-# FIXME (Ole): Must use fully qualified path for these
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_plugins
 
@@ -23,11 +19,12 @@ DEFAULT_PLUGINS = ('Earthquake Fatality Function',)
 # is to be run independently - dont remove
 # If any of these get reinstated as "official" public impact functions,
 # remove from here and update test to use the real one.
+# pylint: disable=W0611
 from safe.engine.impact_functions_for_testing import empirical_fatality_model
 from safe.engine.impact_functions_for_testing import allen_fatality_model
+# pylint: enable=W0611
 
 
-# FIXME (Ole): Change H, E to layers.
 class BasicFunction(FunctionProvider):
     """Risk plugin for testing
 
@@ -37,9 +34,7 @@ class BasicFunction(FunctionProvider):
     """
 
     @staticmethod
-    def run(H, E,
-            a=0.97429, b=11.037):
-
+    def run():
         return None
 
 
@@ -47,10 +42,11 @@ class Test_plugins(unittest.TestCase):
     """Tests of Risiko calculations
     """
 
-    def test_get_plugins(self):
+    def test_get_plugin_list(self):
         """It is possible to retrieve the list of functions
         """
-        plugin_list = plugins.get_plugins()
+
+        plugin_list = get_plugins()
         msg = ('No plugins were found, not even the built-in ones')
         assert len(plugin_list) > 0, msg
 
@@ -165,7 +161,7 @@ class Test_plugins(unittest.TestCase):
         # Check exceptions
         try:
             Damage_curve(None)
-        except:
+        except RuntimeError:
             pass
         else:
             msg = 'Damage_curve should have raised exception for None'
@@ -173,7 +169,7 @@ class Test_plugins(unittest.TestCase):
 
         try:
             Damage_curve([[1, 2], [3, 4, 5]])
-        except:
+        except RuntimeError:
             pass
         else:
             msg = 'Damage_curve should have raised exception for invalid input'
@@ -181,7 +177,7 @@ class Test_plugins(unittest.TestCase):
 
         try:
             Damage_curve(x)
-        except:
+        except RuntimeError:
             pass
         else:
             msg = 'Damage_curve should have raised exception for 1d array'
@@ -189,7 +185,7 @@ class Test_plugins(unittest.TestCase):
 
         try:
             Damage_curve(numpy.zeros((3, 4, 5)))
-        except:
+        except RuntimeError:
             pass
         else:
             msg = ('Damage_curve should have raised exception for '
@@ -198,7 +194,7 @@ class Test_plugins(unittest.TestCase):
 
         try:
             Damage_curve(numpy.zeros((3, 3)))
-        except:
+        except RuntimeError:
             pass
         else:
             msg = ('Damage_curve should have raised exception for '
