@@ -168,7 +168,7 @@ def requirements_collect(func):
     return requires_lines
 
 
-def requirement_check(params, require_str):  # , verbose=False):
+def requirement_check(params, require_str, verbose=False):
     """Checks a dictionary params against the requirements defined
     in require_str. Require_str must be a valid python expression
     and evaluate to True or False"""
