@@ -50,6 +50,13 @@ def ugettext(s):
 
 def setup_logger():
     """Run once when the module is loaded and enable logging
+
+    Args: None
+
+    Returns: None
+
+    Raises: None
+
     Borrowed heavily from this:
     http://docs.python.org/howto/logging-cookbook.html
 
@@ -74,11 +81,9 @@ def setup_logger():
 
        LOGGER.debug('Some debug message')
 
-    Args: None
-
-    Returns: None
-
-    Raises: None
+    .. note:: The file logs are written to the inasafe user tmp dir e.g.:
+       /tmp/inasafe/23-08-2012/timlinux/logs/inasafe.log
+    
     """
     myLogger = logging.getLogger('InaSAFE')
     myLogger.setLevel(logging.DEBUG)
