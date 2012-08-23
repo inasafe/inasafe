@@ -17,7 +17,9 @@ from safe.common.tables import Table, TableCell, TableRow
 
 LOGGER = logging.getLogger('InaSAFE')
 
-
+# Disable lots of pylint for this as it is using magic
+# for managing the plugin system devised by Ted Dunstone
+# pylint: disable=W0613,W0231
 class PluginMount(type):
     def __init__(cls, name, bases, attrs):
         if not hasattr(cls, 'plugins'):
@@ -31,7 +33,7 @@ class PluginMount(type):
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
             cls.plugins.append(cls)
-
+# pylint: enable=W0613,W0231
 
 class FunctionProvider:
     """Mount point for plugins which refer to actions that can be performed.
@@ -74,8 +76,10 @@ def get_plugins(name=None):
        Or all of them if no name is passed.
     """
 
+    # pylint: disable=E1101
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
+    # pylint: enable=E1101
 
     if name is None:
         return plugins_dict
@@ -212,7 +216,9 @@ def requirement_check(params, require_str, verbose=False):
         print execstr
     try:
         exec(compile(execstr, '<string>', 'exec'))
+        # pylint: disable=E0602
         return check()
+        # pylint: enable=E0602
     except NameError, e:
         # This condition will happen frequently since the function
         # is evaled against many params that are not relevant and
@@ -387,7 +393,7 @@ def aggregate_point_data(data=None, boundaries=None,
 
     result = []
     #for i, polygon in enumerate(polygon_geoms):
-    for _, polygon in enumerate(polygon_geoms):
+    for polygon in polygon_geoms:
         indices = inside_polygon(points, polygon)
 
         #print 'Found %i points in polygon %i' % (len(indices), i)
@@ -404,11 +410,11 @@ def aggregate_point_data(data=None, boundaries=None,
                 bins[val] += 1
             result.append(bins)
         elif aggregation_function == 'sum':
-            sum = 0
+            sum_ = 0
             for att in numpy.take(attributes, indices):
                 val = att[attribute_name]
-                sum += val
-            result.append(sum)
+                sum_ += val
+            result.append(sum_)
 
     return result
 
