@@ -16,7 +16,7 @@ class Damage_curve:
             data = numpy.array(data)
         except:
             msg = 'Could not convert data %s to damage curve' % str(data)
-            raise Exception(msg)
+            raise RuntimeError(msg)
 
         msg = 'Damage curve data must be a 2d array or a list of lists'
         if len(data.shape) != 2:
