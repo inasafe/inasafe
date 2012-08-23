@@ -4,7 +4,7 @@ from safe.common import utilities
 
 __version__ = (0, 5, 0, 'alpha', 0)
 
-utilities.setupLogger()
+utilities.setup_logger()
 
 
 def get_version():

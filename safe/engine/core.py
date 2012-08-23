@@ -7,8 +7,7 @@ import numpy
 
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
-from safe.storage.utilities import unique_filename
-from safe.common.utilities import verify
+from safe.common.utilities import verify, unique_filename
 from utilities import REQUIRED_KEYWORDS
 
 # The LOGGER is intialised in utilities.py by init

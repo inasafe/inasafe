@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -32,7 +33,6 @@ from qgis.core import (QgsSymbol,
                        QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
 
-from safe_qgis.safe_interface import temp_dir
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       assertHashForFile,
                                       hashForFile,

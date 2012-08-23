@@ -12,7 +12,7 @@ from safe.storage.core import read_layer
 from safe.storage.core import write_vector_data
 from safe.storage.core import write_raster_data
 from safe.storage.vector import Vector
-from safe.storage.utilities import unique_filename, DEFAULT_ATTRIBUTE
+from safe.storage.utilities import  DEFAULT_ATTRIBUTE
 
 from safe.common.polygon import separate_points_by_polygon
 from safe.common.polygon import is_inside_polygon
@@ -20,7 +20,7 @@ from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from safe.common.numerics import nanallclose
-from safe.common.utilities import VerificationError
+from safe.common.utilities import VerificationError, unique_filename
 from safe.common.testing import TESTDATA, HAZDATA
 
 from safe.impact_functions import get_plugins

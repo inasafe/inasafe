@@ -1,5 +1,6 @@
 """**Tests for safe common utilities**
 """
+from safe.common.utilities import temp_dir, unique_filename
 
 __author__ = 'Tim Sutton <tim@linfiniti.com>'
 __version__ = '0.5.0'
@@ -15,9 +16,7 @@ import unittest
 
 from safe.common.testing import UNITDATA
 from safe.storage.utilities import (read_keywords,
-                                    write_keywords,
-                                    unique_filename,
-                                    temp_dir)
+                                    write_keywords  )
 
 LOGGER = logging.getLogger('InaSAFE')
 KEYWORD_PATH = os.path.abspath(
