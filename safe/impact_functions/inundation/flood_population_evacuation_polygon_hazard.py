@@ -1,7 +1,7 @@
 import numpy
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question, get_function_title
+from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
 from safe.storage.clipping import clip_raster_by_polygons
 from safe.common.utilities import ugettext as _
@@ -43,7 +43,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         """
 
         # Depth above which people are regarded affected [m]
-        threshold = 1.0  # Threshold [m]
+        #threshold = 1.0  # Threshold [m]
 
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation
@@ -66,7 +66,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             raise Exception(msg)
 
         # Extract data as numeric arrays
-        geometry = inundation.get_geometry()  # Flood footprints
+        #geometry = inundation.get_geometry()  # Flood footprints
         attributes = inundation.get_data()    # Flood attributes
 
         # Separate population grid points by flood footprints
