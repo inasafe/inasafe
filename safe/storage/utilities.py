@@ -494,6 +494,9 @@ def buffered_bounding_box(bbox, resolution):
     except:
         resx = resy = resolution
 
+    print
+    print resolution
+
     bbox[0] -= resx
     bbox[1] -= resy
     bbox[2] += resx
@@ -550,7 +553,7 @@ def get_geometry_type(geometry, geometry_type):
         try:
             float(geometry[0][0])
             float(geometry[0][1])
-        except:
+        except (ValueError, TypeError, IndexError):
             pass
         else:
             # This geometry appears to be point data
