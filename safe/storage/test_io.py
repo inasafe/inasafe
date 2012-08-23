@@ -12,7 +12,6 @@ from projection import Projection
 from projection import DEFAULT_PROJECTION
 from core import read_layer
 from core import write_raster_data
-from utilities import unique_filename
 from utilities import write_keywords
 from utilities import read_keywords
 from utilities import bbox_intersection
