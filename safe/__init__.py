@@ -7,10 +7,11 @@ __version__ = (0, 5, 0, 'alpha', 0)
 utilities.setupLogger()
 
 
-def get_version():
-    # FIXME (Ole): Why re-import here? (pylint W0404)
-    import safe.common.version
-    return safe.common.version.get_version(__version__)
+# FIXME (Ole): Delete and use the one in common/version.py
+#def get_version():
+#    # FIXME (Ole): Why re-import here? (pylint W0404)
+#    import safe.common.version
+#    return safe.common.version.get_version(__version__)
 
 
 class SafeTester(Tester):

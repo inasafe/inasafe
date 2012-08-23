@@ -5,7 +5,8 @@ from safe.common.utilities import verify
 
 
 def get_version(version=None):
-    "Returns a PEP 386-compliant version number from VERSION."
+    """Returns a PEP 386-compliant version number from VERSION."""
+
     if version is None:
         # pylint: disable=W0404
         from safe import __version__ as version
