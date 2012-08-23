@@ -8,6 +8,7 @@ utilities.setupLogger()
 
 
 def get_version():
+    # FIXME (Ole): Why re-import here? (pylint W0404)
     import safe.common.version
     return safe.common.version.get_version(__version__)
 

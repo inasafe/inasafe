@@ -279,7 +279,6 @@ jenkins-pylint:
 	@echo " cases we want to suppress warnings in the python code like this:"
 	@echo " from pydevd import * # pylint: disable=F0401"
 	@echo " with 'F0401' being the warning code."
-	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
 	pylint --output-format=parseable -i y --reports=y --rcfile=pylintrc safe safe_qgis > pylint.log || :
