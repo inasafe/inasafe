@@ -104,7 +104,7 @@ class Test_plugin_core(unittest.TestCase):
         assert requirements_met(requirelines, params)
 
         params = {'category': 'test_cat2', 'unit': 'mmi2'}
-        assert requirements_met(requirelines, params, True) == False
+        assert requirements_met(requirelines, params) == False
 
     def test_basic_plugin_requirements_met(self):
         """Basic plugin requirements met

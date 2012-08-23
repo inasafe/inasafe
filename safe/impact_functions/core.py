@@ -8,7 +8,7 @@ using it.
 
 import numpy
 import logging
-import keyword
+import keyword as python_keywords
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableCell, TableRow
@@ -111,10 +111,11 @@ def get_plugin(name):
     """Get plugin that matches given name
 
     This is just a wrapper around get_plugins to simplify
+    the overly complicated way of extracting the function
     """
 
     plugin_list = get_plugins(name)
-    _, impact_function = plugin_list[0].items()[0]
+    impact_function = plugin_list[0].items()[0][1]
 
     return impact_function
 
@@ -199,7 +200,7 @@ def requirement_check(params, require_str, verbose=False):
                 continue
 
         # Check that symbol is not a Python keyword
-        if key in keyword.kwlist:
+        if key in python_keywords.kwlist:
             msg = ('Error in plugin requirements'
                    'Must not use Python keywords as params: %s' % (key))
             #print msg
@@ -219,7 +220,10 @@ def requirement_check(params, require_str, verbose=False):
     if verbose:
         print execstr
     try:
+        # pylint: disable=W0122
         exec(compile(execstr, '<string>', 'exec'))
+        # pylint: enable=W0122
+
         # pylint: disable=E0602
         return check()
         # pylint: enable=E0602
@@ -237,7 +241,7 @@ def requirement_check(params, require_str, verbose=False):
     return False
 
 
-def requirements_met(requirements, params, verbose=False):
+def requirements_met(requirements, params):  # , verbose=False):
     """Checks the plugin can run with a given layer.
 
        Based on the requirements specified in the doc string.
