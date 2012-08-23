@@ -23,6 +23,7 @@ from safe.common.polygon import inside_polygon, clip_line_by_polygon
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.dynamic_translations import names as internationalised_titles
+from safe.common.exceptions import ReadLayerError
 
 from layer import Layer
 from projection import Projection
@@ -393,7 +394,7 @@ class Vector(Layer):
                            'Geometry Tools -> Multipart to Singleparts and '
                            'use the resulting dataset.'
                            % (ogr.wkbMultiPolygon, filename))
-                    raise Exception(msg)
+                    raise ReadLayerError(msg)
 
                 #    # FIXME: Unpact multiple polygons to simple polygons
                 #    # For hints on how to unpack see

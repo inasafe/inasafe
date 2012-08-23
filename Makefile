@@ -231,7 +231,7 @@ pylint:
 	@echo "Pylint violations. For details run     "
 	@echo "make jenkins-pylint                    "
 	@echo "---------------------------------------"
-	@pylint --reports=n --rcfile=pylintrc safe safe_qgis | grep -v " Module " | wc -l
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis | wc -l
 
 profile:
 	@echo
@@ -281,7 +281,7 @@ jenkins-pylint:
 	@echo " with 'F0401' being the warning code."
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --rcfile=pylintrc safe safe_qgis > pylint.log || :
+	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis > pylint.log || :
 
 jenkins-pep8:
 	@echo
