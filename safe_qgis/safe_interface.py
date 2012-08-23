@@ -33,11 +33,12 @@ from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_keywords, bbox_intersection
 from safe.api import write_keywords as safe_write_keywords
 from safe.api import read_layer as safe_read_layer
+from safe.api import temp_dir, unique_filename  # pylint: disable=W0611
 from safe.api import (buffered_bounding_box,
                       verify as verify_util,
                       VerificationError)
 from safe.api import (calculate_impact as safe_calculate_impact,
-                      internationalisedNames)  # pylint: disable=
+                      internationalisedNames)  # pylint: disable=W0611
 
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication

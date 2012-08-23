@@ -34,23 +34,23 @@ from qgis.core import (QgsMapLayer,
                        QgsCoordinateTransform)
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
-                                   getFunctionTitle,
-                                   getOptimalExtent,
-                                   getBufferedExtent,
-                                   internationalisedNames)
+                                      getFunctionTitle,
+                                      getOptimalExtent,
+                                      getBufferedExtent,
+                                      internationalisedNames,
+                                      temp_dir)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
-                               InsufficientOverlapException,
-                               InvalidParameterException,
-                               HashNotFoundException)
+                                  InsufficientOverlapException,
+                                  InvalidParameterException,
+                                  HashNotFoundException)
 from safe_qgis.map import Map
-from safe_qgis.utilities import (getTempDir,
-                              htmlHeader,
-                              htmlFooter,
-                              setVectorStyle,
-                              setRasterStyle,
-                              qgisVersion)
+from safe_qgis.utilities import (htmlHeader,
+                                 htmlFooter,
+                                 setVectorStyle,
+                                 setRasterStyle,
+                                 qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -1260,7 +1260,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
-                            getTempDir(),
+                            temp_dir(),
                             self.tr('Pdf File (*.pdf)'))
         myMap = Map(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())

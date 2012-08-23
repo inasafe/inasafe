@@ -56,24 +56,24 @@ def unique_filename(**kwargs):
     :file:`/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'
 
     See http://docs.python.org/library/tempfile.html for details.
+
+    Example usage:
+
+    tempdir = temp_dir(sub_dir='test')
+    filename = unique_filename(suffix='.keywords', dir=tempdir)
+    print filename
+    /tmp/inasafe/23-08-2012/timlinux/test/tmpyeO5VR.keywords
+
+    Or with no preferred subdir, a default subdir of 'impacts' is used:
+
+    filename = unique_filename(suffix='.shp')
+    print filename
+    /tmp/inasafe/23-08-2012/timlinux/impacts/tmpoOAmOi.shp
+
     """
 
-    handle, filename = mkstemp(**kwargs)
-
-    try:
-        # Need to close it using the filehandle first for windows!
-        os.close(handle)
-        os.remove(filename)
-    except:
-        pass
-
-    path = None
     if 'dir' not in kwargs:
-        user = getpass.getuser().replace(' ', '_')
-        current_date = date.today()
-        date_string = current_date.strftime("%d-%m-%Y")
-        path = os.path.dirname(filename)
-        path = os.path.join(path, 'inasafe', date_string, user, 'impacts')
+        path = temp_dir('impacts')
         kwargs['dir'] = path
     if not os.path.exists(kwargs['dir']):
         # Ensure that the dir mask won't conflict with the mode
@@ -92,6 +92,50 @@ def unique_filename(**kwargs):
     except:
         pass
     return filename
+
+
+def temp_dir(sub_dir='work'):
+    """Obtain the temporary working directory for the operating system.
+
+    An inasafe subdirectory will automatically be created under this and
+    if specified, a user subdirectory under that.
+
+    .. note:: You can use this together with unique_filename to create
+       a file in a temporary directory under the inasafe workspace. e.g.
+
+       tmpdir = temp_dir('testing')
+       tmpfile = unique_filename(dir=tmpdir)
+       print tmpfile
+       /tmp/inasafe/23-08-2012/timlinux/work/testing/tmpMRpF_C
+
+    Args:
+        sub_dir str - optional argument which will cause an additional
+                subirectory to be created e.g. /tmp/inasafe/foo/
+
+    Returns:
+        Path to the output clipped layer (placed in the system temp dir).
+
+    Raises:
+       Any errors from the underlying system calls.
+    """
+    user = getpass.getuser().replace(' ', '_')
+    current_date = date.today()
+    date_string = current_date.strftime("%d-%m-%Y")
+    # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
+    handle, filename = mkstemp()
+    os.close(handle)
+    dir = os.path.dirname(filename)
+    os.remove(filename)
+    path = os.path.join(dir, 'inasafe', date_string, user, sub_dir)
+
+    if not os.path.exists(path):
+        # Ensure that the dir is world writable
+        # Umask sets the new mask and returns the old
+        old_mask = os.umask(0000)
+        os.makedirs(path, 0777)
+        # Resinstate the old mask for tmp
+        os.umask(old_mask)
+    return path
 
 
 def _keywords_to_string(keywords):

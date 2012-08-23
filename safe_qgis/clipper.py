@@ -31,12 +31,14 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsVectorFileWriter,
                        QgsGeometry)
 
-from safe_qgis.safe_interface import verify, readKeywordsFromFile
+from safe_qgis.safe_interface import (verify,
+                                      readKeywordsFromFile,
+                                      temp_dir)
+
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
                            InvalidProjectionException)
-from safe_qgis.utilities import getTempDir
 
 
 def tr(theText):
@@ -127,7 +129,7 @@ def _clipVectorLayer(theLayer, theExtent,
         raise InvalidParameterException(myMessage)
 
     myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                            getTempDir())
+                                            temp_dir())
 
     # Ensure the file is deleted before we try to write to it
     # fixes windows specific issue where you get a message like this
@@ -319,7 +321,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
 
     # Create a filename for the clipped, resampled and reprojected layer
     myHandle, myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                            getTempDir())
+                                            temp_dir())
     os.close(myHandle)
     os.remove(myFilename)
 
@@ -411,7 +413,7 @@ def extentToKml(theExtent):
      myBottomLeftCorner))
 
     myFilename = tempfile.mkstemp('.kml', 'extent_',
-                                      getTempDir())[1]
+                                      temp_dir())[1]
     myFile = file(myFilename, 'wt')
     myFile.write(myKml)
     myFile.close()

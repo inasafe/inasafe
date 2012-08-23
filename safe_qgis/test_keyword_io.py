@@ -10,13 +10,12 @@ sys.path.append(pardir)
 
 from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 
+# For testing and demoing
+from safe.common.testing import HAZDATA, TESTDATA
+from safe_qgis.safe_interface import temp_dir
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundException
-from safe_qgis.utilities import getTempDir
-
-# For testing and demoing
-from safe.common.testing import HAZDATA, TESTDATA
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 # Don't change this, not even formatting, you will break tests!
@@ -67,7 +66,7 @@ class KeywordIOTest(unittest.TestCase):
     def test_writeReadKeywordFromUri(self):
         """Test we can set and get keywords for a non local datasource"""
         myHandle, myFilename = tempfile.mkstemp('.db', 'keywords_',
-                                            getTempDir())
+                                            temp_dir())
 
         # Ensure the file is deleted before we try to write to it
         # fixes windows specific issue where you get a message like this
