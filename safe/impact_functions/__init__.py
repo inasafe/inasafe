@@ -17,7 +17,6 @@ for f in os.listdir(dirname):
             pass
 
 
-
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_plugins  # FIXME: Deprecate
 from safe.impact_functions.core import get_admissible_plugins

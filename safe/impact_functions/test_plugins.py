@@ -24,6 +24,7 @@ from safe.engine.impact_functions_for_testing import empirical_fatality_model
 from safe.engine.impact_functions_for_testing import allen_fatality_model
 # pylint: enable=W0611
 
+
 class BasicFunction(FunctionProvider):
     """Risk plugin for testing
 

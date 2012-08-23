@@ -11,6 +11,7 @@ from core import get_plugins_as_table
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class BasicFunction(FunctionProvider):
     """Risk plugin for testing
 
