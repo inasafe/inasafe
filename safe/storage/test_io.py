@@ -36,8 +36,7 @@ from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _
 from safe.common.utilities import VerificationError
 from safe.common.polygon import is_inside_polygon
-from safe.common.exceptions import BoundingBoxError
-
+from safe.common.exceptions import BoundingBoxError, ReadLayerError
 
 # Auxiliary function for raster test
 def linear_function(x, y):
@@ -103,7 +102,7 @@ class Test_IO(unittest.TestCase):
         filename = unique_filename(suffix='nshoe66u')
         try:
             read_layer(filename)
-        except Exception:
+        except ReadLayerError:
             pass
         else:
             msg = 'Exception for unknown extension should have been raised'
@@ -112,7 +111,7 @@ class Test_IO(unittest.TestCase):
         filename = unique_filename(suffix='.gml')
         try:
             read_layer(filename)
-        except IOError:
+        except ReadLayerError:
             pass
         else:
             msg = 'Exception for non-existing file should have been raised'
