@@ -8,7 +8,7 @@ using it.
 
 import numpy
 import logging
-import keyword
+import keyword as python_keywords
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableCell, TableRow
@@ -199,7 +199,7 @@ def requirement_check(params, require_str, verbose=False):
                 continue
 
         # Check that symbol is not a Python keyword
-        if key in keyword.kwlist:
+        if key in python_keywords.kwlist:
             msg = ('Error in plugin requirements'
                    'Must not use Python keywords as params: %s' % (key))
             #print msg
@@ -219,7 +219,10 @@ def requirement_check(params, require_str, verbose=False):
     if verbose:
         print execstr
     try:
+        # pylint: disable=W0122
         exec(compile(execstr, '<string>', 'exec'))
+        # pylint: enable=W0122
+
         # pylint: disable=E0602
         return check()
         # pylint: enable=E0602
@@ -237,7 +240,7 @@ def requirement_check(params, require_str, verbose=False):
     return False
 
 
-def requirements_met(requirements, params, verbose=False):
+def requirements_met(requirements, params):  # , verbose=False):
     """Checks the plugin can run with a given layer.
 
        Based on the requirements specified in the doc string.
