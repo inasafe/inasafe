@@ -86,7 +86,7 @@ class CommonUtilitiesTest(unittest.TestCase):
         assert control_keywords == actual_keywords, msg
 
     def test_write_keywords_singlesublayer(self):
-        """Test writing keywords for named sublayer, no existing file."""
+        """Test writing keywords for single sublayer, no existing file."""
 
         filename = self.make_temp_file()
         write_keywords(OSM_KEYWORDS, filename=filename, sublayer='osm')
