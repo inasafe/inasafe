@@ -111,10 +111,11 @@ def get_plugin(name):
     """Get plugin that matches given name
 
     This is just a wrapper around get_plugins to simplify
+    the overly complicated way of extracting the function
     """
 
     plugin_list = get_plugins(name)
-    _, impact_function = plugin_list[0].items()[0]
+    impact_function = plugin_list[0].items()[0][1]
 
     return impact_function
 
