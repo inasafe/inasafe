@@ -20,11 +20,17 @@ def get_version(version=None):
                 status = line.strip().split('=')[1]
         fid.close()
         version = tuple(verlist + [status] + [0])
-    else:
-        if len(version) != 5:
 
-            raise RuntimeError(msg)
-        verify(version[3] in ('alpha', 'beta', 'rc', 'final'))
+    if len(version) != 5:
+        msg = ('Version must be a tuple of length 5. '
+               'I got %s' % str(version))
+        raise RuntimeError(msg)
+
+    if version[3] not in ('alpha', 'beta', 'rc', 'final'):
+        msg = ('Version tuple not as expected. '
+               'I got %s' % str(version))
+        raise RuntimeError(msg)
+
 
     # Now build the two parts of the version number:
     # main = X.Y[.Z]
