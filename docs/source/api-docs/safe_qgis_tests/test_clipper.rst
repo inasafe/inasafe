@@ -1,8 +1,7 @@
-Module: safe_qgis.test_clipper
-==============================
-
-This page contains the documentation for the InaSAFE **test_clipper**
-unit tests.
+Module:  safe_qgis.test_clipper
+===============================
 
 .. automodule:: safe_qgis.test_clipper
       :members:
+
+This module forms part of the `InaSAFE <http://inasafe.org>`_ tool.

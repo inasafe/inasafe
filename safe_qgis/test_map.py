@@ -100,8 +100,7 @@ class MapTest(unittest.TestCase):
                             'e4273364b33a943e1108f519dbe8e06c',  # ub12.04-64
                             '91177a81bee4400be4e85789e3be1e91',  # binary read
                             '57da6f81b4a55507e1bed0b73423244b',  # wVistaSP2-32
-                            ''
-                            ]
+                            '']
         assertHashesForFile(myExpectedHashes, myPath)
 
     def test_getVectorLegend(self):
@@ -126,8 +125,7 @@ class MapTest(unittest.TestCase):
                             # ub11.04-64 laptop
                             '91177a81bee4400be4e85789e3be1e91',  # Binary Read
                             '57da6f81b4a55507e1bed0b73423244b',  # wVistaSP2-32
-                            ''
-                            ]
+                            '']
         assertHashesForFile(myExpectedHashes, myPath)
 
     def test_getRasterLegend(self):

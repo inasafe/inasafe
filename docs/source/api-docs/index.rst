@@ -1,17 +1,16 @@
 InaSAFE's API documentation
 ===========================
 
-This is the API documentation for the InaSAFE project. You can find out
-more about the InaSAFE project by visiting `riskinabox.org
-<http://www.inasafe.org/>`_.
+This is the API documentation for the InaSAFE project.
+You can find out more about the InaSAFE project by visiting
+`riskinabox.org<http://www.inasafe.org/>`_.
 
-Packages
---------
+Packages safe_qgis
+------------------
 
 .. toctree::
    :maxdepth: 2
 
-   safe
    safe_qgis
 
 Unit Tests
@@ -21,4 +20,12 @@ Unit Tests
    :maxdepth: 2
 
    safe_qgis_tests
+
+Packages safe
+-------------
+
+.. toctree::
+   :maxdepth: 2
+
+   safe
 

@@ -4,7 +4,11 @@
 import os
 import gettext
 import logging
+
+# FIXME (Ole): For some reason this module doesn't work without this
+# pylint: disable=W0404
 import logging.handlers
+# pylint: enable=W0404
 
 
 class VerificationError(RuntimeError):
@@ -78,7 +82,8 @@ def setupLogger():
     myLogger = logging.getLogger('InaSAFE')
     myLogger.setLevel(logging.DEBUG)
     # create syslog handler which logs even debug messages
-    #FIXME(ariel): Make this log to /var/log/safe.log instead of /var/log/syslog
+    # FIXME(ariel): Make this log to /var/log/safe.log instead of
+    #               /var/log/syslog
     mySysHandler = logging.handlers.SysLogHandler(address='/dev/log')
     mySysHandler.setLevel(logging.DEBUG)
     # create console handler with a higher log level

@@ -33,6 +33,10 @@ from safe.common.numerics import grid2points, geotransform2axes
 LOGGER = logging.getLogger('InaSAFE')
 
 
+class PolygonInputError(Exception):
+    pass
+
+
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
@@ -83,34 +87,34 @@ def separate_points_by_polygon(points, polygon,
         # Input checks
         msg = 'Keyword argument "closed" must be boolean'
         if not isinstance(closed, bool):
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         try:
             points = ensure_numeric(points, numpy.float)
         except Exception, e:
             msg = ('Points could not be converted to numeric array: %s'
                    % str(e))
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
         except Exception, e:
             msg = ('Polygon could not be converted to numeric array: %s'
                    % str(e))
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = 'Polygon array must be a 2d array of vertices'
         if len(polygon.shape) != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = 'Polygon array must have two columns'
         if polygon.shape[1] != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = ('Points array must be 1 or 2 dimensional. '
                'I got %d dimensions' % len(points.shape))
         if not 0 < len(points.shape) < 3:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         if len(points.shape) == 1:
             # Only one point was passed in. Convert to array of points.
@@ -119,25 +123,22 @@ def separate_points_by_polygon(points, polygon,
         msg = ('Point array must have two columns (x,y), '
                'I got points.shape[1]=%d' % points.shape[0])
         if points.shape[1] != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = ('Points array must be a 2d array. I got %s...'
                % str(points[:30]))
         if len(points.shape) != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = 'Points array must have two columns'
         if points.shape[1] != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
     # Exclude points that outside polygon bounding box
     minpx = min(polygon[:, 0])
     maxpx = max(polygon[:, 0])
     minpy = min(polygon[:, 1])
     maxpy = max(polygon[:, 1])
-
-    M = points.shape[0]
-    N = polygon.shape[0]
 
     x = points[:, 0]
     y = points[:, 1]
@@ -483,8 +484,8 @@ def inside_polygon(points, polygon, closed=True):
     """
 
     indices, _ = separate_points_by_polygon(points, polygon,
-                                                closed=closed,
-                                                check_input=True)
+                                            closed=closed,
+                                            check_input=True)
 
     # Return indices of points inside polygon
     return indices
@@ -600,7 +601,7 @@ def clip_lines_by_polygon(lines, polygon,
             if not len(line.shape) == 2:
                 raise RuntimeError(msg)
 
-    N = polygon.shape[0]  # Number of vertices in polygon
+    #N = polygon.shape[0]  # Number of vertices in polygon
     M = len(lines)  # Number of lines
 
     inside_line_segments = []
@@ -956,31 +957,31 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 #------------------------------------
 # Functionality for line intersection
 #------------------------------------
-def multiple_intersection(segments0, segments1, rtol=1.0e-5, atol=1.0e-8):
-    """Returns intersecting points between multiple line segments.
-
-    Note, if parallel lines coincide partly (i.e. share a common segment),
-    the midpoint of the segment where lines coincide is returned
-
-    Inputs:
-        lines: A
-        , line1: Each defined by two end points as in:
-                      [[x0, y0], [x1, y1]]
-                      A line can also be a 2x2 numpy array with each row
-                      corresponding to a point.
-
-    Output:
-        status, value - where status and value is interpreted as follows:
-        status == 0: no intersection, value set to None.
-        status == 1: intersection point found and returned in value as [x,y].
-        status == 2: Collinear overlapping lines found.
-                     Value takes the form [[x0,y0], [x1,y1]] which is the
-                     segment common to both lines.
-        status == 3: Collinear non-overlapping lines. Value set to None.
-        status == 4: Lines are parallel. Value set to None.
-    """
-
-    pass
+#def multiple_intersection(segments0, segments1, rtol=1.0e-5, atol=1.0e-8):
+#    """Returns intersecting points between multiple line segments.
+#
+#    Note, if parallel lines coincide partly (i.e. share a common segment),
+#    the midpoint of the segment where lines coincide is returned
+#
+#    Inputs:
+#        lines: A
+#        , line1: Each defined by two end points as in:
+#                      [[x0, y0], [x1, y1]]
+#                      A line can also be a 2x2 numpy array with each row
+#                      corresponding to a point.
+#
+#    Output:
+#        status, value - where status and value is interpreted as follows:
+#        status == 0: no intersection, value set to None.
+#        status == 1: intersection point found and returned in value as [x,y].
+#        status == 2: Collinear overlapping lines found.
+#                     Value takes the form [[x0,y0], [x1,y1]] which is the
+#                     segment common to both lines.
+#        status == 3: Collinear non-overlapping lines. Value set to None.
+#        status == 4: Lines are parallel. Value set to None.
+#    """
+#
+#    pass
 
 
 def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
@@ -1061,32 +1062,32 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
 # of collinear lines
 # (p0,p1) defines line 0, (p2,p3) defines line 1.
 
-def lines_dont_coincide(p0, p1, p2, p3):
+def lines_dont_coincide(_p0, _p1, _p2, _p3):
     return 3, None
 
 
-def lines_0_fully_included_in_1(p0, p1, p2, p3):
-    return 2, numpy.array([p0, p1])
+def lines_0_fully_included_in_1(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p0, _p1])
 
 
-def lines_1_fully_included_in_0(p0, p1, p2, p3):
-    return 2, numpy.array([p2, p3])
+def lines_1_fully_included_in_0(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p2, _p3])
 
 
-def lines_overlap_same_direction(p0, p1, p2, p3):
-    return 2, numpy.array([p0, p3])
+def lines_overlap_same_direction(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p0, _p3])
 
 
-def lines_overlap_same_direction2(p0, p1, p2, p3):
-    return 2, numpy.array([p2, p1])
+def lines_overlap_same_direction2(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p2, _p1])
 
 
-def lines_overlap_opposite_direction(p0, p1, p2, p3):
-    return 2, numpy.array([p0, p2])
+def lines_overlap_opposite_direction(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p0, _p2])
 
 
-def lines_overlap_opposite_direction2(p0, p1, p2, p3):
-    return 2, numpy.array([p3, p1])
+def lines_overlap_opposite_direction2(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p3, _p1])
 
 
 # This function called when an impossible state is found
@@ -1118,8 +1119,7 @@ collinearmap = {(False, False, False, False): lines_dont_coincide,
 
 
 # Functions for clipping of rasters by polygons
-def clip_grid_by_polygons(A, geotransform, polygons,
-                          check_input=True):
+def clip_grid_by_polygons(A, geotransform, polygons):
     """Clip raster grid by polygon
 
     Input

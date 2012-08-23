@@ -85,11 +85,12 @@ def unique_filename(**kwargs):
         os.umask(umask)
     # Now we have the working dir set up go on and return the filename
     handle, filename = mkstemp(**kwargs)
+
+    # Need to close it using the filehandle first for windows!
+    os.close(handle)
     try:
-        # Need to close it using the filehandle first for windows!
-        os.close(handle)
         os.remove(filename)
-    except:
+    except OSError:
         pass
     return filename
 

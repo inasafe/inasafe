@@ -242,21 +242,27 @@ class Vector(Layer):
                         # Not obviously equal, try some special cases
 
                         res = None
+                        # pylint: disable=W0702
                         try:
                             # Try numerical comparison with tolerances
                             res = numpy.allclose(X, Y,
                                                  rtol=rtol, atol=atol)
+
+                            # FIXME (Ole): Write this without try-except
                         except:
                             pass
                         else:
                             if not res:
                                 return False
+                        # pylint: enable=W0702
 
                         try:
                             # Try to cast as booleans. This will take care of
                             # None, '', True, False, ...
+                            # FIXME (Ole): This will never throw an exception
+                            # so remove try-except construct
                             res = (bool(X) is bool(Y))
-                        except:
+                        except ValueError:
                             pass
                         else:
                             if not res:
@@ -492,7 +498,7 @@ class Vector(Layer):
         # Clear any previous file of this name (ogr does not overwrite)
         try:
             os.remove(filename)
-        except:
+        except OSError:
             pass
 
         # Create new file with one layer
@@ -1003,7 +1009,7 @@ def convert_line_to_points(V, delta):
     for i in range(N):
         c = points_along_line(geometry[i], delta)
         # We need to create a data entry for each point.
-        new_data.extend([data[i] for thing in c])
+        new_data.extend([data[i] for _ in c])
         points.extend(c)
 
     # Create new point vector layer with same attributes and return

@@ -1,12 +1,7 @@
 import unittest
 import numpy
-import sys
-import os
-
-from math import sqrt, pi
 
 from safe.storage.vector import Vector
-
 from safe.common.polygon import (separate_points_by_polygon,
                                  is_inside_polygon,
                                  is_outside_polygon,
@@ -18,7 +13,8 @@ from safe.common.polygon import (separate_points_by_polygon,
                                  intersection,
                                  join_line_segments,
                                  clip_line_by_polygon,
-                                 populate_polygon)
+                                 populate_polygon,
+                                 PolygonInputError)
 from safe.common.testing import test_polygon, test_lines
 from safe.common.numerics import ensure_numeric
 
@@ -350,6 +346,7 @@ class Test_Polygon(unittest.TestCase):
         inside, outside = separate_points_by_polygon([[0.5, 0.0],
                                                       [0.3, 0.3],
                                                       [0.1, 0.6]], U)
+        assert len(outside) == 0
         assert len(inside) == 3
         assert numpy.allclose(inside, [0, 1, 2])
 
@@ -357,6 +354,7 @@ class Test_Polygon(unittest.TestCase):
         inside, outside = separate_points_by_polygon([[0.0, 0.0],
                                                       [0.3, 0.3],
                                                       [0.1, 0.6]], U)
+        assert len(outside) == 0
         assert len(inside) == 3
         assert numpy.allclose(inside, [0, 1, 2])
 
@@ -364,6 +362,7 @@ class Test_Polygon(unittest.TestCase):
         inside, outside = separate_points_by_polygon([[0, 0.5],
                                                       [1.3, 0.3],
                                                       [0.1, 0.6]], U)
+        assert len(outside) == 1
         assert len(inside) == 2
         assert numpy.allclose(inside, [0, 2])
 
@@ -500,26 +499,26 @@ class Test_Polygon(unittest.TestCase):
         # Input errors
         try:
             outside_polygon(points, ['what'])
-        except:
+        except PolygonInputError:
             pass
         else:
-            msg = 'Should have raised exception'
+            msg = 'Should have raised PolygonInputError:'
             raise Exception(msg)
 
         try:
             outside_polygon('Hmmm', U)
-        except:
+        except PolygonInputError:
             pass
         else:
-            msg = 'Should have raised exception'
+            msg = 'Should have raised PolygonInputError'
             raise Exception(msg)
 
         try:
             inside_polygon(points, U, closed=7)
-        except:
+        except PolygonInputError:
             pass
         else:
-            msg = 'Should have raised exception'
+            msg = 'Should have raised PolygonInputError'
             raise Exception(msg)
 
     def test_populate_polygon(self):

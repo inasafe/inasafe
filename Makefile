@@ -99,10 +99,10 @@ clean:
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
 
-# Run the test suite followed by pep8 style checking
-test: docs test_suite pep8 dependency_test unwanted_strings data_audit test-translations
+# Run the test suite followed by style checking
+test: docs test_suite pep8 pylint dependency_test unwanted_strings data_audit test-translations
 
-# Run the test suite followed by pep8 style checking - dont update from git for test data
+# Run the test suite followed by style checking - dont update from git for test data
 test_no_git: docs test_suite_no_git pep8 disabled_tests dependency_test unwanted_strings data_audit
 
 # Run the test suite for gui only
@@ -111,10 +111,10 @@ guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 set_python:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
 
-quicktest: 
+quicktest:
 	nosetests -A 'not slow' -v safe --stop
 
-it: 
+it:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' safe --stop
 
 # Run pep8 style checking
@@ -168,7 +168,7 @@ gui_test_suite: compile testdata
 testdata:
 	@echo
 	@echo "-----------------------------------------------------------"
-	@echo "Updating test data - please hit Enter if asked for password"
+	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
 	@scripts/update-test-data.sh 17bab3b8e4e590f93e0c3ccb31959d7e2918bcbc
@@ -228,9 +228,10 @@ data_audit:
 pylint:
 	@echo
 	@echo "---------------------------------------"
-	@echo "Pylint report                          "
+	@echo "Pylint violations. For details run     "
+	@echo "make jenkins-pylint                    "
 	@echo "---------------------------------------"
-	pylint --disable=C,R safe safe_qgis
+	@pylint --reports=n --rcfile=pylintrc safe safe_qgis | grep -v " Module " | wc -l
 
 profile:
 	@echo
@@ -281,7 +282,7 @@ jenkins-pylint:
 	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,help_base.py,keywords_dialog_base.py,options_dialog_base.py,dock_base.py safe safe_qgis | grep -v 'I0011' > pylint.log || :
+	pylint --output-format=parseable -i y --reports=y --rcfile=pylintrc --ignore=odict.py,help_base.py,keywords_dialog_base.py,options_dialog_base.py,dock_base.py safe safe_qgis | grep -v 'I0011' > pylint.log || :
 
 jenkins-pep8:
 	@echo
