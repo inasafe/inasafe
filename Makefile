@@ -282,7 +282,7 @@ jenkins-pylint:
 	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --rcfile=pylintrc --ignore=odict.py,help_base.py,keywords_dialog_base.py,options_dialog_base.py,dock_base.py safe safe_qgis | grep -v 'I0011' > pylint.log || :
+	pylint --output-format=parseable -i y --reports=y --rcfile=pylintrc safe safe_qgis > pylint.log || :
 
 jenkins-pep8:
 	@echo
