@@ -161,7 +161,7 @@ class Test_plugins(unittest.TestCase):
         # Check exceptions
         try:
             Damage_curve(None)
-        except:
+        except RuntimeError:
             pass
         else:
             msg = 'Damage_curve should have raised exception for None'
@@ -169,7 +169,7 @@ class Test_plugins(unittest.TestCase):
 
         try:
             Damage_curve([[1, 2], [3, 4, 5]])
-        except:
+        except RuntimeError:
             pass
         else:
             msg = 'Damage_curve should have raised exception for invalid input'
@@ -177,7 +177,7 @@ class Test_plugins(unittest.TestCase):
 
         try:
             Damage_curve(x)
-        except:
+        except RuntimeError:
             pass
         else:
             msg = 'Damage_curve should have raised exception for 1d array'
@@ -185,7 +185,7 @@ class Test_plugins(unittest.TestCase):
 
         try:
             Damage_curve(numpy.zeros((3, 4, 5)))
-        except:
+        except RuntimeError:
             pass
         else:
             msg = ('Damage_curve should have raised exception for '
@@ -194,7 +194,7 @@ class Test_plugins(unittest.TestCase):
 
         try:
             Damage_curve(numpy.zeros((3, 3)))
-        except:
+        except RuntimeError:
             pass
         else:
             msg = ('Damage_curve should have raised exception for '
