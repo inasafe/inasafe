@@ -12,8 +12,8 @@ import keyword
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableCell, TableRow
-from safe.impact_functions.utilities import (admissible_plugins_to_str,
-                                             keywords_to_str)
+#from safe.impact_functions.utilities import (admissible_plugins_to_str,
+#                                             keywords_to_str)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -168,7 +168,7 @@ def requirements_collect(func):
     return requires_lines
 
 
-def requirement_check(params, require_str, verbose=False):
+def requirement_check(params, require_str):  # , verbose=False):
     """Checks a dictionary params against the requirements defined
     in require_str. Require_str must be a valid python expression
     and evaluate to True or False"""
@@ -380,13 +380,14 @@ def aggregate_point_data(data=None, boundaries=None,
         raise Exception(msg)
 
     polygon_geoms = boundaries.get_geometry()
-    polygon_attrs = boundaries.get_data()
+    #polygon_attrs = boundaries.get_data()
 
     points = data.get_geometry()
     attributes = data.get_data()
 
     result = []
-    for i, polygon in enumerate(polygon_geoms):
+    #for i, polygon in enumerate(polygon_geoms):
+    for _, polygon in enumerate(polygon_geoms):
         indices = inside_polygon(points, polygon)
 
         #print 'Found %i points in polygon %i' % (len(indices), i)
