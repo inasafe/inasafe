@@ -14,70 +14,103 @@ import logging
 import unittest
 
 from safe.common.testing import UNITDATA
-from safe.storage.utilities import read_keywords, write_keywords
+from safe.storage.utilities import (read_keywords,
+                                    write_keywords,
+                                    unique_filename,
+                                    temp_dir)
 
 LOGGER = logging.getLogger('InaSAFE')
-PATH = os.path.abspath(
+KEYWORD_PATH = os.path.abspath(
     os.path.join(UNITDATA, 'other', 'multilayer.keywords'))
 SIMPLE_PATH = os.path.abspath(
     os.path.join(UNITDATA, 'other', 'simple.keywords'))
 
+DKI_KEYWORDS = {'datatype': 'osm',
+                'category': 'exposure',
+                'title': 'buildings_osm_4326',
+                'subcategory': 'building',
+                'purpose': 'dki'}
+OSM_KEYWORDS = {'datatype': 'flood',
+                'category': 'hazard',
+                'subcategory': 'building',
+                'title': 'flood_osm_4326'}
 
 class CommonUtilitiesTest(unittest.TestCase):
 
     def setUp(self):
-        msg = 'Multifile keywords do not exist at %s' % PATH
-        assert os.path.exists(PATH), msg
+        msg = 'Multifile keywords do not exist at %s' % KEYWORD_PATH
+        assert os.path.exists(KEYWORD_PATH), msg
         msg = 'Simple keywords do not exist at %s' % SIMPLE_PATH
         assert os.path.exists(SIMPLE_PATH), msg
 
+    def make_temp_file(self):
+        """Helper to make a keywords file path"""
+        tempdir = temp_dir(sub_dir='test')
+        filename = unique_filename(suffix='.keywords', dir=tempdir)
+        LOGGER.debug(filename)
+        return filename
+
     def test_read_keywords(self):
         """Test reading keywords - get first block from kwds as default."""
-        keywords = read_keywords(PATH)
-        expected_keywords = {'datatype': 'osm',
-                             'category': 'exposure',
-                             'title': 'buildings_osm_4326',
-                             'subcategory': 'building',
-                             'purpose': 'dki'}
+        keywords = read_keywords(KEYWORD_PATH)
+        expected_keywords = DKI_KEYWORDS
         msg = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEquals(keywords, expected_keywords, msg)
         LOGGER.debug(keywords)
 
     def test_write_keywords(self):
-        """Test writing keywords for named sublayer."""
-        keywords = {'datatype': 'osm',
-                    'category': 'exposure',
-                    'title': 'buildings_osm_4326',
-                    'subcategory': 'building',
-                    'purpose': 'dki'}
-        #continue here
-        write_keywords(keywords, '/tmp/test.keywords')
+        """Test writing keywords with no sublayer, no existing file."""
+        keywords = DKI_KEYWORDS
+        filename = self.make_temp_file()
+        write_keywords(keywords, filename)
+        #read back contents and check against control dataset
+        control_path = os.path.abspath(
+            os.path.join(UNITDATA, 'other', 'expected_multilayer.keywords'))
+        control_keywords = read_keywords(SIMPLE_PATH, all_blocks=True)
+        actual_keywords = read_keywords(filename, all_blocks=True)
+        msg = 'Expected:\n%s\nGot:\n%s\n' % (control_keywords, actual_keywords)
+        assert control_keywords == actual_keywords, msg
+
+    def test_write_keywords_multisublayer(self):
+        """Test writing keywords for named sublayer, no existing file."""
+
+        filename = self.make_temp_file()
+        write_keywords(DKI_KEYWORDS, filename=filename, sublayer='dki')
+        write_keywords(OSM_KEYWORDS, filename=filename, sublayer='osm')
+        #read back contents and check against control dataset
+        control_path = os.path.abspath(
+            os.path.join(UNITDATA, 'other', 'expected_multilayer.keywords'))
+        control_keywords = read_keywords(control_path, all_blocks=True)
+        actual_keywords = read_keywords(filename, all_blocks=True)
+        msg = 'Expected:\n%s\nGot:\n%s\n' % (control_keywords, actual_keywords)
+        assert control_keywords == actual_keywords, msg
+
+    def test_write_keywords_singlesublayer(self):
+        """Test writing keywords for named sublayer, no existing file."""
+
+        filename = self.make_temp_file()
+        write_keywords(OSM_KEYWORDS, filename=filename, sublayer='osm')
+        #read back contents and check against control dataset
+        control_path = os.path.abspath(
+            os.path.join(UNITDATA, 'other', 'expected_singlelayer.keywords'))
+        control_keywords = read_keywords(control_path, all_blocks=True)
+        actual_keywords = read_keywords(filename, all_blocks=True)
+        msg = 'Expected:\n%s\nGot:\n%s\n' % (control_keywords, actual_keywords)
+        assert control_keywords == actual_keywords, msg
 
     def test_read_all_keywords(self):
         """Test reading all keywords for all layers"""
-        keywords = read_keywords(PATH, all_blocks=True)
-        expected_keywords = {'osm_buildings': {
-                                'datatype': 'osm',
-                                'category': 'exposure',
-                                'title': 'buildings_osm_4326',
-                                'subcategory': 'building',
-                                'purpose': 'dki'},
-                             'osm_flood': {
-                                 'datatype': 'flood',
-                                 'category': 'hazard',
-                                 'subcategory': 'building',
-                                 'title': 'flood_osm_4326'}}
+        keywords = read_keywords(KEYWORD_PATH, all_blocks=True)
+        expected_keywords = {'osm_buildings': DKI_KEYWORDS,
+                             'osm_flood': OSM_KEYWORDS}
         msg = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEquals(keywords, expected_keywords, msg)
         LOGGER.debug(keywords)
 
     def test_read_keywords_for_sublayer(self):
         """Test reading keywords for specific sublayer."""
-        keywords = read_keywords(PATH, sublayer='osm_flood')
-        expected_keywords = {'datatype': 'flood',
-                             'category': 'hazard',
-                             'subcategory': 'building',
-                             'title': 'flood_osm_4326'}
+        keywords = read_keywords(KEYWORD_PATH, sublayer='osm_flood')
+        expected_keywords = OSM_KEYWORDS
         msg = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEquals(keywords, expected_keywords, msg)
         LOGGER.debug(keywords)
@@ -85,11 +118,7 @@ class CommonUtilitiesTest(unittest.TestCase):
     def test_read_keywords_simple(self):
         """Test reading keywords from keywords file with no sublayers"""
         keywords = read_keywords(SIMPLE_PATH)
-        expected_keywords = {'datatype': 'osm',
-                             'category': 'exposure',
-                             'title': 'buildings_osm_4326',
-                             'subcategory': 'building',
-                             'purpose': 'dki'}
+        expected_keywords = DKI_KEYWORDS
         msg = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEquals(keywords, expected_keywords, msg)
         LOGGER.debug(keywords)

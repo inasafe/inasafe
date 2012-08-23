@@ -138,8 +138,18 @@ def temp_dir(sub_dir='work'):
     return path
 
 
-def _keywords_to_string(keywords):
+def _keywords_to_string(keywords, sublayer=None):
     """Create a string from a keywords dict.
+
+    Args:
+        * keywords: A required dictionary containing the keywords to stringify.
+        * sublayer: str optional group marker for a sub layer.
+
+    Returns:
+        str: a String containing the rendered keywords list
+
+    Raises:
+        Any exceptions are propogated.
 
     .. note: Only simple keyword dicts should be passed here, not multilayer
        dicts.
@@ -160,17 +170,21 @@ def _keywords_to_string(keywords):
         subcategory: building
         purpose: dki
 
-    Args:
-        keywords: A required dictionary containing the keywords to stringify.
+    If sublayer is provided e.g. _keywords_to_string(keywords, sublayer='foo'),
+    the following:
 
-
-    Returns: A string containing the keyword list.
-
-    Raises: Any errors will be propogated.
+        [foo]
+        datatype: osm
+        category: exposure
+        title: buildings_osm_4326
+        subcategory: building
+        purpose: dki
     """
 
     # Write
     result = ''
+    if sublayer is not None:
+        result = '[%s]\n' % sublayer
     for k, v in keywords.items():
         # Create key
         msg = ('Key in keywords dictionary must be a string. '
@@ -206,15 +220,15 @@ def write_keywords(keywords, filename, sublayer=None):
         * sublayer: str Optional sublayer applicable only to multilayer formats
              such as sqlite or netcdf which can potentially hold more than
              one layer. The string should map to the layer group as per the
-             example below. If the keywords file contains sublayer definitions
+             example below. **If the keywords file contains sublayer definitions
              but no sublayer was defined, keywords file content will be removed
-             and replaced with only the keywords provided here.
+             and replaced with only the keywords provided here.**
 
     Returns: None
 
     Raises: None
 
-    A keyword layer with sublayers may look like this:
+    A keyword file with sublayers may look like this:
 
         [osm_buildings]
         datatype: osm
@@ -260,19 +274,19 @@ def write_keywords(keywords, filename, sublayer=None):
     handle = file(filename, 'wt')
 
     if multilayer_flag:
-        if sublayer is not None:
+        if sublayer is not None and sublayer != '':
             #replace existing keywords / add new for this layer
             existing_keywords[sublayer] = keywords
+            for key, value in existing_keywords.iteritems():
+                handle.write(_keywords_to_string(value, sublayer=key))
+                handle.write('\n')
         else:
-            # create a new dict since a sublayer was specified
-            existing_keywords = {sublayer: existing_keywords}
-
-        for key, val in existing_keywords.iteritems():
-            handle.write('[%s]\n' % key)
-            handle.write(_keywords_to_string(value))
+            # It is currently a multilayer but we will replace it with
+            # a single keyword block since the user passed no sublayer
+            handle.write(_keywords_to_string(keywords))
     else:
-        #write out as simple layer
-        handle.write(_keywords_to_string(keywords))
+        #currently a simple layer so replace it with our content
+        handle.write(_keywords_to_string(keywords, sublayer=sublayer))
 
     handle.close()
 
