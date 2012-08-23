@@ -491,11 +491,8 @@ def buffered_bounding_box(bbox, resolution):
 
     try:
         resx, resy = resolution
-    except:
+    except TypeError:
         resx = resy = resolution
-
-    print
-    print resolution
 
     bbox[0] -= resx
     bbox[1] -= resy
