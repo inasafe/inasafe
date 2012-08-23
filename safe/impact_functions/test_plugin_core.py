@@ -11,7 +11,6 @@ from core import get_plugins_as_table
 
 LOGGER = logging.getLogger('InaSAFE')
 
-
 class BasicFunction(FunctionProvider):
     """Risk plugin for testing
 
@@ -22,9 +21,7 @@ class BasicFunction(FunctionProvider):
     """
 
     @staticmethod
-    def run(H, E,
-            a=0.97429, b=11.037):
-
+    def run():
         return None
 
 
@@ -87,12 +84,11 @@ class SyntaxErrorFunction(FunctionProvider):
     :author Allen
     :rating 1
     :param requires category=="test_cat1"
-    :param requires unit="MMI" #Note the error should be ==
+    :param requires unit="MMI"  # Note the error should be ==
     """
 
     @staticmethod
-    def run(H, E,
-            a=0.97429, b=11.037):
+    def run():
         return None
 
 

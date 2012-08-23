@@ -1,8 +1,6 @@
 """Works with real library impact functions rather than test examples
 """
 
-import sys
-import os
 import unittest
 
 from safe.impact_functions.core import get_admissible_plugins
