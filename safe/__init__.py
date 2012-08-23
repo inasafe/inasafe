@@ -1,22 +1,18 @@
 # Rely on our friends from numpy on the nose tests utils
 from numpy.testing import Tester
 from safe.common import utilities
+from safe.common.version import get_version
 
-__version__ = (0, 5, 0, 'alpha', 0)
+# Note - the version string is obtained in safe.common.version
+#        and stored in metadata.txt
 
 utilities.setupLogger()
 
-
-# FIXME (Ole): Delete and use the one in common/version.py
-#def get_version():
-#    # FIXME (Ole): Why re-import here? (pylint W0404)
-#    import safe.common.version
-#    return safe.common.version.get_version(__version__)
-
-
+# FIXME (Ole): I don't like this because it mixes test and production code.
+#              What is the rationale
 class SafeTester(Tester):
     def _show_system_info(self):
-        print "safe version %s" % get_version()
+        print 'safe version %s' % get_version()
         super(SafeTester, self)._show_system_info()
 
 test = SafeTester().test
