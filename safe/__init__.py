@@ -8,6 +8,7 @@ from safe.common.version import get_version
 
 utilities.setupLogger()
 
+
 # FIXME (Ole): I don't like this because it mixes test and production code.
 #              What is the rationale
 class SafeTester(Tester):
