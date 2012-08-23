@@ -12,6 +12,7 @@ import logging.handlers
 # pylint: enable=W0404
 from tempfile import mkstemp
 
+
 class VerificationError(RuntimeError):
     """Exception thrown by verify()
     """
@@ -83,7 +84,7 @@ def setup_logger():
 
     .. note:: The file logs are written to the inasafe user tmp dir e.g.:
        /tmp/inasafe/23-08-2012/timlinux/logs/inasafe.log
-    
+
     """
     myLogger = logging.getLogger('InaSAFE')
     myLogger.setLevel(logging.DEBUG)

@@ -20,6 +20,7 @@ __date__ = '17/06/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+
 class ReadLayerError(Exception):
     """When a layer can't be read"""
     pass

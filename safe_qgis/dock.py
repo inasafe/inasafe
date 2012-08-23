@@ -38,7 +38,7 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
                                       getOptimalExtent,
                                       getBufferedExtent,
-                                      internationalisedNames )
+                                      internationalisedNames)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,

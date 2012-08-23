@@ -34,7 +34,7 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsGeometry)
 
 from safe_qgis.safe_interface import (verify,
-                                      readKeywordsFromFile )
+                                      readKeywordsFromFile)
 
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (InvalidParameterException,
@@ -42,6 +42,7 @@ from safe_qgis.exceptions import (InvalidParameterException,
                            InvalidProjectionException)
 
 LOGGER = logging.getLogger(name='InaSAFE')
+
 
 def tr(theText):
     """We define a tr() alias here since the ClipperTest implementation below
