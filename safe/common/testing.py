@@ -25,9 +25,8 @@ TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
 HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 
-UNITDATA = os.path.abspath(#common/
+UNITDATA = os.path.abspath(
     os.path.join(os.path.dirname(__file__),
-                 #safe/
                  '..',
                  'test',
                  'data'))
@@ -53,6 +52,7 @@ def combine_coordinates(x, y):
     """
 
     return axes2points(x, y)
+
 
 # For polygon testing
 test_lines = [numpy.array([[122.231021, -8.626557],

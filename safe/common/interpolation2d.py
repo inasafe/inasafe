@@ -246,23 +246,27 @@ def check_inputs(x, y, Z, points, mode, bounds_error):
         eta0 = min(eta)
         eta1 = max(eta)
 
-        msg = ('Interpolation point xi=%f was less than the smallest value in '
-               'domain (x=%f) and bounds_error was requested.' % (xi0, x[0]))
+        msg = ('Interpolation point xi=%f was less than the smallest '
+               'value in domain (x=%f) and bounds_error was requested.'
+               % (xi0, x[0]))
         if xi0 < x[0]:
             raise BoundsError(msg)
 
-        msg = ('Interpolation point xi=%f was greater than the largest value in '
-               'domain (x=%f) and bounds_error was requested.' % (xi1, x[-1]))
+        msg = ('Interpolation point xi=%f was greater than the largest '
+               'value in domain (x=%f) and bounds_error was requested.'
+               % (xi1, x[-1]))
         if xi1 > x[-1]:
             raise BoundsError(msg)
 
-        msg = ('Interpolation point eta=%f was less than the smallest value in '
-               'domain (y=%f) and bounds_error was requested.' % (eta0, y[0]))
+        msg = ('Interpolation point eta=%f was less than the smallest '
+               'value in domain (y=%f) and bounds_error was requested.'
+               % (eta0, y[0]))
         if eta0 < y[0]:
             raise BoundsError(msg)
 
-        msg = ('Interpolation point eta=%f was greater than the largest value in '
-               'domain (y=%f) and bounds_error was requested.' % (eta1, y[-1]))
+        msg = ('Interpolation point eta=%f was greater than the largest '
+               'value in domain (y=%f) and bounds_error was requested.'
+               % (eta1, y[-1]))
         if eta1 > y[-1]:
             raise BoundsError(msg)
 
