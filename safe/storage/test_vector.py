@@ -14,6 +14,7 @@ import logging
 import unittest
 
 from safe.common.testing import UNITDATA
+from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.utilities import read_keywords
 from safe.storage.vector import Vector
 
@@ -58,7 +59,10 @@ class VectorTest(unittest.TestCase):
         assert count == 250, 'Expected 250 features, got %s' % count
 
     def testSqliteWriting(self):
-        """Test that writing a dataset to sqlite worlks."""
+        """Test that writing a dataset to sqlite works."""
         keywords = read_keywords(SHP_BASE + '.keywords')
         layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
-        layer.write_to_file('/tmp/test.sqlite', sublayer='foo')
+        test_dir = temp_dir(sub_dir='test')
+        test_file = unique_filename(suffix='.sqlite', dir=test_dir)
+        layer.write_to_file(test_file, sublayer='foo')
+    testSqliteWriting.slow = True
