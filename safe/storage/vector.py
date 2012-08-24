@@ -357,8 +357,9 @@ class Vector(Layer):
         self.projection = Projection(p)
 
         layer.ResetReading()
+
         # Get number of features
-        N = layer.GetFeatureCount()
+        # N = layer.GetFeatureCount()
 
         # Extract coordinates and attributes for all features
         geometry = []

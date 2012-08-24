@@ -156,9 +156,9 @@ def temp_dir(sub_dir='work'):
     # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
     handle, filename = mkstemp()
     os.close(handle)
-    dir = os.path.dirname(filename)
+    new_directory = os.path.dirname(filename)
     os.remove(filename)
-    path = os.path.join(dir, 'inasafe', date_string, user, sub_dir)
+    path = os.path.join(new_directory, 'inasafe', date_string, user, sub_dir)
 
     if not os.path.exists(path):
         # Ensure that the dir is world writable
