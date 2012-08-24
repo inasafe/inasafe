@@ -21,7 +21,7 @@ if __name__ == '__main__':
     locales = sys.argv[2:]
 
     files = {'QT': '%s/safe_qgis/i18n/inasafe_%s.ts',
-             'GT': '%s/i18n/%s/LC_MESSAGES/inasafe.po'}
+             'GT': '%s/safe/i18n/%s/LC_MESSAGES/inasafe.po'}
 
     commands = {'QT': 'lrelease %s',
                 'GT': 'msgfmt --statistics %s'}
