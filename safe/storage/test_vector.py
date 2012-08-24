@@ -46,10 +46,6 @@ class VectorTest(unittest.TestCase):
         assert layer.is_polygon_data, msg
         count = len(layer)
         assert count == 250, 'Expected 250 features, got %s' % count
-        geoms = layer.get_geometry()
-        attrs = layer.get_data()
-        for i, geom in enumerate(geoms):
-            attr = attrs[i]
 
     def testShpLoading(self):
         """Test that loading a dataset with no sublayers works."""
@@ -60,10 +56,6 @@ class VectorTest(unittest.TestCase):
         assert layer.is_polygon_data, msg
         count = len(layer)
         assert count == 250, 'Expected 250 features, got %s' % count
-        geoms = layer.get_geometry()
-        attrs = layer.get_data()
-        for i, geom in enumerate(geoms):
-            attr = attrs[i]
 
     def testSqliteWriting(self):
         """Test that writing a dataset to sqlite worlks."""

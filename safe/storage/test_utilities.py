@@ -63,9 +63,7 @@ class CommonUtilitiesTest(unittest.TestCase):
         keywords = DKI_KEYWORDS
         filename = self.make_temp_file()
         write_keywords(keywords, filename)
-        #read back contents and check against control dataset
-        control_path = os.path.abspath(
-            os.path.join(UNITDATA, 'other', 'expected_multilayer.keywords'))
+        # Read back contents and check against control dataset
         control_keywords = read_keywords(SIMPLE_PATH, all_blocks=True)
         actual_keywords = read_keywords(filename, all_blocks=True)
         msg = 'Expected:\n%s\nGot:\n%s\n' % (control_keywords, actual_keywords)
@@ -77,7 +75,7 @@ class CommonUtilitiesTest(unittest.TestCase):
         filename = self.make_temp_file()
         write_keywords(DKI_KEYWORDS, filename=filename, sublayer='dki')
         write_keywords(OSM_KEYWORDS, filename=filename, sublayer='osm')
-        #read back contents and check against control dataset
+        # Read back contents and check against control dataset
         control_path = os.path.abspath(
             os.path.join(UNITDATA, 'other', 'expected_multilayer.keywords'))
         control_keywords = read_keywords(control_path, all_blocks=True)

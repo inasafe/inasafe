@@ -9,7 +9,7 @@ import math
 from osgeo import ogr
 
 from safe.common.numerics import ensure_numeric
-from safe.common.utilities import verify, VerificationError
+from safe.common.utilities import verify
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'Affected'
