@@ -144,20 +144,14 @@ def separate_points_by_polygon(points, polygon,
     inside_box = -outside_box
     candidate_points = points[inside_box]
 
-    # FIXME (Ole): I would like to return just indices_inside, indices_outside
-    # instead of the legacy of one array with a break point
-    # in the underlying _separate_by_points functions too
     if use_numpy:
-        indices, count = _separate_points_by_polygon(candidate_points,
-                                                     polygon,
-                                                     closed=closed)
+        func = _separate_points_by_polygon
     else:
-        indices, count = _separate_points_by_polygon_python(candidate_points,
-                                                            polygon,
-                                                            closed=closed)
+        func = _separate_points_by_polygon_python
 
-    local_indices_inside = indices[:count]
-    local_indices_outside = indices[count:]
+    local_indices_inside, local_indices_outside = func(candidate_points,
+                                                       polygon,
+                                                       closed=closed)
 
     # Map local indices from candidate points to global indices of all points
     indices_outside_box = numpy.where(outside_box)[0]
@@ -168,6 +162,7 @@ def separate_points_by_polygon(points, polygon,
     indices_outside_polygon = numpy.concatenate((indices_outside_box,
                                                  indices_in_box_outside_poly))
 
+    # FIXME (Ole): Can we get rid of the sorting?
     indices_outside_polygon.sort()  # Ensure order is deterministic
 
     return indices_inside_polygon, indices_outside_polygon
@@ -203,8 +198,8 @@ def _separate_points_by_polygon(points, polygon,
     N = polygon.shape[0]
     M = points.shape[0]
     if M == 0:
-        # If no points return 0-vector
-        return numpy.arange(0), 0
+        # If no points return two 0-vectors
+        return numpy.arange(0), numpy.arange(0)
 
     x = points[:, 0]
     y = points[:, 1]
@@ -262,7 +257,7 @@ def _separate_points_by_polygon(points, polygon,
     # Indices of outside points
     indices[inside_index:] = numpy.where(1 - inside)[0]
 
-    return indices, inside_index
+    return indices[:inside_index], indices[inside_index:]
 
 
 def _separate_points_by_polygon_python(points, polygon,
@@ -362,7 +357,7 @@ def _separate_points_by_polygon_python(points, polygon,
     indices[inside_index:] = tmp[::-1]
 
     # Return reference result
-    return indices, inside_index
+    return indices[:inside_index], indices[inside_index:]
 
 
 def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):

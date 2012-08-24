@@ -250,6 +250,21 @@ class Test_Polygon(unittest.TestCase):
         res = inside_polygon(points, polygon)
         assert numpy.allclose(res, [0, 1, 2])
 
+
+    def test_separate_points_by_polygon0(self):
+        """Points can be separated by polygon
+        """
+
+        # Now try the vector formulation returning indices
+        polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
+        points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
+
+        inside, outside = separate_points_by_polygon(points, polygon)
+
+        assert len(inside) + len(outside) == len(points)
+        assert numpy.allclose(inside, [0, 1, 2])
+        assert numpy.allclose(outside, [3, 4])
+
     def test_outside_polygon(self):
         """Points are classified as either outside polygon or not
         """
