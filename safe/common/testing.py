@@ -4,6 +4,8 @@
 import numpy
 import os
 
+from numerics import axes2points
+
 # Find parent parent directory to path
 # NOTE: This must match Makefile target testdata
 # FIXME (Ole): Use environment variable for this.
@@ -24,12 +26,10 @@ HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 
 UNITDATA = os.path.abspath(
-                            #common/
-                            os.path.join(os.path.dirname(__file__),
-                            #safe/
-                            '..',
-                            'test',
-                            'data'))
+    os.path.join(os.path.dirname(__file__),
+                 '..',
+                 'test',
+                 'data'))
 
 # Known feature counts in test data
 FEATURE_COUNTS = {'test_buildings.shp': 144,
@@ -51,16 +51,8 @@ def combine_coordinates(x, y):
     """Make list of all combinations of points for x and y coordinates
     """
 
-    # FIXME (Ole): Write this using numpy for issue #91 and use that routine
-    # instead of the below. We need something like the Kronecker product
-    # numpy.kron
-    points = []
-    for px in x:
-        for py in y:
-            points.append((px, py))
-    points = numpy.array(points)
+    return axes2points(x, y)
 
-    return points
 
 # For polygon testing
 test_lines = [numpy.array([[122.231021, -8.626557],

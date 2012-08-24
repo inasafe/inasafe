@@ -199,10 +199,7 @@ class Test_Polygon(unittest.TestCase):
         assert is_inside_polygon((0.5, 0.5), polygon)
         assert is_inside_polygon((10.5, 10.5), polygon)
         assert not is_inside_polygon((0, 5.5), polygon)
-
-        # FIXME: Fails if point is 5.5, 5.5 - maybe ok, but
-        # need to understand it
-        #assert is_inside_polygon((5.5, 5.5), polygon)
+        assert is_inside_polygon((5.5, 5.5), polygon)
 
         # Polygon with a hole
         polygon = [[-1, -1], [2, -1], [2, 2], [-1, 2], [-1, -1],
@@ -249,6 +246,20 @@ class Test_Polygon(unittest.TestCase):
         points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
         res = inside_polygon(points, polygon)
         assert numpy.allclose(res, [0, 1, 2])
+
+    def test_separate_points_by_polygon0(self):
+        """Points can be separated by polygon
+        """
+
+        # Now try the vector formulation returning indices
+        polygon = [[0, 0], [1, 0], [0.5, -1], [2, -1], [2, 1], [0, 1]]
+        points = [[0.5, 0.5], [1, -0.5], [1.5, 0], [0.5, 1.5], [0.5, -0.5]]
+
+        inside, outside = separate_points_by_polygon(points, polygon)
+
+        assert len(inside) + len(outside) == len(points)
+        assert numpy.allclose(inside, [0, 1, 2])
+        assert numpy.allclose(outside, [3, 4])
 
     def test_outside_polygon(self):
         """Points are classified as either outside polygon or not
