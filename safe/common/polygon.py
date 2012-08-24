@@ -53,14 +53,10 @@ def separate_points_by_polygon(points, polygon,
         * use_numpy: Use the fast numpy implementation
 
     Returns:
-        * indices: array of same length as points with indices of points
-              falling inside the polygon listed from the beginning and indices
-              of points falling outside listed from the end.
-
-        * count: count of points falling inside the polygon
-
-        The indices of points inside are obtained as indices[:count]
-        The indices of points outside are obtained as indices[count:]
+        * indices_inside_polygon: array of indices of points
+              falling inside the polygon
+        * indices_outside_polygon: array of indices of points
+              falling outside the polygon
 
     Raises: A generic Exception is raised for unexpected input.
 
@@ -160,11 +156,15 @@ def separate_points_by_polygon(points, polygon,
                                                             polygon,
                                                             closed=closed)
 
-    # Map local indices from candidate points to global indices of all points
-    indices_inside_polygon = numpy.where(inside_box)[0][indices[:count]]
+    local_indices_inside = indices[:count]
+    local_indices_outside = indices[count:]
 
+    # Map local indices from candidate points to global indices of all points
     indices_outside_box = numpy.where(outside_box)[0]
-    indices_in_box_outside_poly = numpy.where(inside_box)[0][indices[count:]]
+    indices_inside_box = numpy.where(inside_box)[0]
+
+    indices_inside_polygon = indices_inside_box[local_indices_inside]
+    indices_in_box_outside_poly = indices_inside_box[local_indices_outside]
     indices_outside_polygon = numpy.concatenate((indices_outside_box,
                                                  indices_in_box_outside_poly))
 
