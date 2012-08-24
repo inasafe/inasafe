@@ -102,16 +102,15 @@ clean:
 # Run the test suite followed by style checking
 test: docs test_suite pep8 pylint dependency_test unwanted_strings data_audit test-translations
 
-# Run the test suite followed by style checking - dont update from git for test data
-test_no_git: docs test_suite_no_git pep8 disabled_tests dependency_test unwanted_strings data_audit
-
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 
 set_python:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
 
-quicktest:
+quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings data_audit test-translations
+
+test_suite_quick:
 	nosetests -A 'not slow' -v safe --stop
 
 it:
@@ -141,16 +140,6 @@ test_suite: compile testdata
 	@# Report expected failures if any!
 	@#echo Expecting 1 test to fail in support of issue #3
 	@#echo Expecting 1 test to fail in support of issue #160
-
-# Run gui test suite only and without git updating test data
-gui_test_suite_no_git: compile
-	@echo
-	@echo "----------------------"
-	@echo "Regresssion Test Suite"
-	@echo "----------------------"
-
-	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Run gui test suite only
 gui_test_suite: compile testdata

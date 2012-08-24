@@ -1,4 +1,4 @@
-"""**Polygon, line and point algorithms**
+"""**Polygon, line and point algorithms.**
 
 .. tip::
    The main public functions are:

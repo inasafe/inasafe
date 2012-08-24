@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.utilities import temp_dir, unique_filename
 
 __author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
 __version__ = '0.5.0'
@@ -37,7 +38,7 @@ from safe.api import (buffered_bounding_box,
                       verify as verify_util,
                       VerificationError)
 from safe.api import (calculate_impact as safe_calculate_impact,
-                      internationalisedNames)  # pylint: disable=
+                      internationalisedNames)  # pylint: disable=W0611
 
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication

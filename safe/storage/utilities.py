@@ -6,13 +6,10 @@ import re
 import copy
 import numpy
 import math
-import getpass
 from osgeo import ogr
-from tempfile import mkstemp
-from datetime import date
 
 from safe.common.numerics import ensure_numeric
-from safe.common.utilities import verify
+from safe.common.utilities import verify, VerificationError
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'Affected'
@@ -22,7 +19,8 @@ DEFAULT_ATTRIBUTE = 'Affected'
 LAYER_TYPES = ['.shp', '.asc', '.tif', '.tiff', '.geotif', '.geotiff']
 
 # Map between extensions and ORG drivers
-DRIVER_MAP = {'.shp': 'ESRI Shapefile',
+DRIVER_MAP = {'.sqlite': 'SQLITE',
+              '.shp': 'ESRI Shapefile',
               '.gml': 'GML',
               '.tif': 'GTiff',
               '.asc': 'AAIGrid'}
@@ -44,87 +42,54 @@ INVERSE_GEOMETRY_TYPE_MAP = {'point': ogr.wkbPoint,
 
 
 # Miscellaneous auxiliary functions
-def unique_filename(**kwargs):
-    """Create new filename guaranteed not to exist previously
+def _keywords_to_string(keywords, sublayer=None):
+    """Create a string from a keywords dict.
 
-    Use mkstemp to create the file, then remove it and return the name
+    Args:
+        * keywords: A required dictionary containing the keywords to stringify.
+        * sublayer: str optional group marker for a sub layer.
 
-    If dir is specified, the tempfile will be created in the path specified
-    otherwise the file will be created in a directory following this scheme:
+    Returns:
+        str: a String containing the rendered keywords list
 
-    :file:`/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'
+    Raises:
+        Any exceptions are propogated.
 
-    See http://docs.python.org/library/tempfile.html for details.
+    .. note: Only simple keyword dicts should be passed here, not multilayer
+       dicts.
+
+    For example you pass a dict like this::
+
+        {'datatype': 'osm',
+         'category': 'exposure',
+         'title': 'buildings_osm_4326',
+         'subcategory': 'building',
+         'purpose': 'dki'}
+
+    and the following string would be returned:
+
+        datatype: osm
+        category: exposure
+        title: buildings_osm_4326
+        subcategory: building
+        purpose: dki
+
+    If sublayer is provided e.g. _keywords_to_string(keywords, sublayer='foo'),
+    the following:
+
+        [foo]
+        datatype: osm
+        category: exposure
+        title: buildings_osm_4326
+        subcategory: building
+        purpose: dki
     """
-
-    handle, filename = mkstemp(**kwargs)
-
-    # Need to close it using the filehandle first for windows!
-    os.close(handle)
-    try:
-        os.remove(filename)
-    except OSError:
-        pass
-
-    path = None
-    if 'dir' not in kwargs:
-        user = getpass.getuser().replace(' ', '_')
-        current_date = date.today()
-        date_string = current_date.strftime("%d-%m-%Y")
-        path = os.path.dirname(filename)
-        path = os.path.join(path, 'inasafe', date_string, user, 'impacts')
-        kwargs['dir'] = path
-    if not os.path.exists(kwargs['dir']):
-        # Ensure that the dir mask won't conflict with the mode
-        # Umask sets the new mask and returns the old
-        umask = os.umask(0000)
-        # Ensure that the dir is world writable by explictly setting mode
-        os.makedirs(kwargs['dir'], 0777)
-        # Reinstate the old mask for tmp dir
-        os.umask(umask)
-    # Now we have the working dir set up go on and return the filename
-    handle, filename = mkstemp(**kwargs)
-
-    # Need to close it using the filehandle first for windows!
-    os.close(handle)
-    try:
-        os.remove(filename)
-    except OSError:
-        pass
-
-    return filename
-
-
-def write_keywords(keywords, filename):
-    """Write keywords dictonary to file
-
-    Input
-        keywords: Dictionary of keyword, value pairs
-        filename: Name of keywords file. Extension expected to be .keywords
-
-    Keys must be strings not containing the ":" character
-    Values can be anything that can be converted to a string (using
-    Python's str function)
-
-    Surrounding whitespace is removed from values, but keys are unmodified
-    The reason being that keys must always be valid for the dictionary they
-    came from. For values we have decided to be flexible and treat entries like
-    'unit:m' the same as 'unit: m', or indeed 'unit: m '.
-    Otherwise, unintentional whitespace in values would lead to surprising
-    errors in the application.
-    """
-
-    # Input checks
-    basename, ext = os.path.splitext(filename)
-
-    msg = ('Unknown extension for file %s. '
-           'Expected %s.keywords' % (filename, basename))
-    verify(ext == '.keywords', msg)
 
     # Write
-    fid = open(filename, 'w')
+    result = ''
+    if sublayer is not None:
+        result = '[%s]\n' % sublayer
     for k, v in keywords.items():
-
         # Create key
         msg = ('Key in keywords dictionary must be a string. '
                'I got %s with type %s' % (k, str(type(k))[1:-1]))
@@ -145,11 +110,93 @@ def write_keywords(keywords, filename):
             raise Exception(msg)
 
         # Store
-        fid.write('%s: %s\n' % (key, val))
-    fid.close()
+        result += '%s: %s\n' % (key, val)
+    return result
 
 
-def read_keywords(filename, sublayer=None):
+def write_keywords(keywords, filename, sublayer=None):
+    """Write keywords dictonary to file
+
+    Args:
+        * keywords: Dictionary of keyword, value pairs
+              filename: Name of keywords file. Extension expected to be
+              .keywords
+        * sublayer: str Optional sublayer applicable only to multilayer formats
+             such as sqlite or netcdf which can potentially hold more than
+             one layer. The string should map to the layer group as per the
+             example below. **If the keywords file contains sublayer
+             definitions but no sublayer was defined, keywords file content
+             will be removed and replaced with only the keywords provided
+             here.**
+
+    Returns: None
+
+    Raises: None
+
+    A keyword file with sublayers may look like this:
+
+        [osm_buildings]
+        datatype: osm
+        category: exposure
+        subcategory: building
+        purpose: dki
+        title: buildings_osm_4326
+
+        [osm_flood]
+        datatype: flood
+        category: hazard
+        subcategory: building
+        title: flood_osm_4326
+
+    Keys must be strings not containing the ":" character
+    Values can be anything that can be converted to a string (using
+    Python's str function)
+
+    Surrounding whitespace is removed from values, but keys are unmodified
+    The reason being that keys must always be valid for the dictionary they
+    came from. For values we have decided to be flexible and treat entries like
+    'unit:m' the same as 'unit: m', or indeed 'unit: m '.
+    Otherwise, unintentional whitespace in values would lead to surprising
+    errors in the application.
+    """
+
+    # Input checks
+    basename, ext = os.path.splitext(filename)
+
+    msg = ('Unknown extension for file %s. '
+           'Expected %s.keywords' % (filename, basename))
+    verify(ext == '.keywords', msg)
+
+    # First read any keywords out of the file so that we can retain
+    # keywords for other sublayers
+    existing_keywords = read_keywords(filename, all_blocks=True)
+
+    first_value = None
+    if len(existing_keywords) > 0:
+        first_value = existing_keywords[existing_keywords.keys()[0]]
+    multilayer_flag = type(first_value) == dict
+
+    handle = file(filename, 'wt')
+
+    if multilayer_flag:
+        if sublayer is not None and sublayer != '':
+            #replace existing keywords / add new for this layer
+            existing_keywords[sublayer] = keywords
+            for key, value in existing_keywords.iteritems():
+                handle.write(_keywords_to_string(value, sublayer=key))
+                handle.write('\n')
+        else:
+            # It is currently a multilayer but we will replace it with
+            # a single keyword block since the user passed no sublayer
+            handle.write(_keywords_to_string(keywords))
+    else:
+        #currently a simple layer so replace it with our content
+        handle.write(_keywords_to_string(keywords, sublayer=sublayer))
+
+    handle.close()
+
+
+def read_keywords(filename, sublayer=None, all_blocks=False):
     """Read keywords dictionary from file
 
     Args:
@@ -162,6 +209,10 @@ def read_keywords(filename, sublayer=None):
              example below. If the keywords file contains sublayer definitions
              but no sublayer was defined, the first layer group will be
              returned.
+        * all_blocks: bool Optional, defaults to False. If True will return
+            a dict of dicts, where the top level dict entries each represent
+            a sublayer, and the values of that dict will be dicts of keyword
+            entries.
 
     Returns:
         keywords: Dictionary of keyword, value pairs
@@ -178,6 +229,13 @@ def read_keywords(filename, sublayer=None):
         title: buildings_osm_4326
 
         [osm_flood]
+        datatype: flood
+        category: hazard
+        subcategory: building
+        title: flood_osm_4326
+
+    Wheras a simple keywords file would look like this
+
         datatype: flood
         category: hazard
         subcategory: building
@@ -200,9 +258,11 @@ def read_keywords(filename, sublayer=None):
         return {}
 
     # Read all entries
+    blocks = {}
     keywords = {}
     fid = open(filename, 'r')
-    current_sublayer = None
+    current_block = None
+    first_keywords = None
     for line in fid.readlines():
         # Remove trailing (but not preceeding!) whitespace
         text = line.rstrip()
@@ -215,17 +275,15 @@ def read_keywords(filename, sublayer=None):
         block_flag = re.search(r'^\[.*]$', text, re.M | re.I)
 
         if block_flag:
-            # check if we encountered a new block while reading the desired
-            # sublayer block - if so return the keywords
-            if (sublayer == current_sublayer) and current_sublayer is not None:
-                fid.close()
-                return keywords
-
-            current_sublayer = text[1:-1]
-            # grab the first block if no sublayer specified
-            if sublayer is None:
-                sublayer = current_sublayer
-            # reset the keywords each time we encounter a new bloc
+            # Write the old block if it exists - must have a current
+            # block to prevent orphans
+            if len(keywords) > 0 and current_block is not None:
+                blocks[current_block] = keywords
+            if first_keywords is None and len(keywords) > 0:
+                first_keywords = keywords
+            # now set up for a new block
+            current_block = text[1:-1]
+            # reset the keywords each time we encounter a new block
             # until we know we are on the desired one
             keywords = {}
             continue
@@ -245,9 +303,26 @@ def read_keywords(filename, sublayer=None):
 
         # Add entry to dictionary
         keywords[key] = val
+
     fid.close()
 
-    return keywords
+    # Write our any unfinalised block data
+    if len(keywords) > 0 and current_block is not None:
+        blocks[current_block] = keywords
+    if first_keywords is None:
+        first_keywords = keywords
+
+    # Ok we have generated a structure that looks like this:
+    # blocks = {{ 'foo' : { 'a': 'b', 'c': 'd'},
+    #           { 'bar' : { 'd': 'e', 'f': 'g'}}
+    # where foo and bar are sublayers and their dicts are the sublayer keywords
+    if all_blocks:
+        return blocks
+    if sublayer is not None:
+        if sublayer in blocks:
+            return blocks[sublayer]
+    else:
+        return first_keywords
 
 
 def geotransform2bbox(geotransform, columns, rows):

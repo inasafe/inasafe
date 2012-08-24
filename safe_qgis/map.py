@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -19,6 +20,8 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+
+from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
 from qgis.core import (QgsComposition,
                        QgsComposerMap,
                        QgsComposerLabel,
@@ -30,11 +33,11 @@ from qgis.core import (QgsComposition,
                        QgsPoint,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
-from PyQt4 import (QtCore, QtGui, QtWebKit, QtXml)
+
 from safe_qgis.exceptions import (LegendLayerException,
-                           KeywordNotFoundException)
+                                  KeywordNotFoundException)
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.utilities import getTempDir, htmlHeader, htmlFooter
+from safe_qgis.utilities import htmlHeader, htmlFooter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -840,7 +843,7 @@ class Map():
         """
         self.getLegend()
         myPicture1 = QgsComposerPicture(self.composition)
-        myLegendFile = os.path.join(getTempDir(), 'legend.png')
+        myLegendFile = os.path.join(temp_dir(), 'legend.png')
         self.legend.save(myLegendFile, 'PNG')
         myPicture1.setPictureFile(myLegendFile)
         myLegendHeight = self.pointsToMM(self.legend.height())
@@ -902,7 +905,7 @@ class Map():
         myTable = QgsComposerPicture(self.composition)
         myImage = self.renderImpactTable()
         if myImage is not None:
-            myTableFile = os.path.join(getTempDir(), 'table.png')
+            myTableFile = os.path.join(temp_dir(), 'table.png')
             myImage.save(myTableFile, 'PNG')
             myTable.setPictureFile(myTableFile)
             myScaleFactor = 1

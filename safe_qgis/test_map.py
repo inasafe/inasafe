@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -33,12 +34,13 @@ from qgis.core import (QgsSymbol,
 from qgis.gui import QgsMapCanvasLayer
 
 from safe_qgis.utilities_test import (getQgisTestApp,
-                                assertHashForFile,
-                                hashForFile,
-                                assertHashesForFile)
+                                      assertHashForFile,
+                                      hashForFile,
+                                      assertHashesForFile,
+                                      loadLayer,
+                                      setJakartaGeoExtent)
 from safe_qgis.map import Map
-from safe_qgis.utilities_test import (loadLayer, setJakartaGeoExtent)
-from safe_qgis.utilities import getTempDir
+
 try:
     from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
@@ -68,13 +70,13 @@ class MapTest(unittest.TestCase):
         CANVAS.setExtent(myRect)
         CANVAS.refresh()
         myMap.setImpactLayer(myLayer)
-        myPath = os.path.join(getTempDir(), 'outCustom.pdf')
+        myPath = os.path.join(temp_dir(), 'outCustom.pdf')
         if os.path.exists(myPath):
             os.remove(myPath)
         myMap.makePdf(myPath)
         assert os.path.exists(myPath)
         # ,, note:: Template writing is experimental
-        myMap.writeTemplate(os.path.join(getTempDir(), 'template.qpt'))
+        myMap.writeTemplate(os.path.join(temp_dir(), 'template.qpt'))
         #os.remove(myPath)
 
     def test_getLegend(self):
@@ -85,7 +87,7 @@ class MapTest(unittest.TestCase):
         myMap.setImpactLayer(myLayer)
         assert myMap.layer is not None
         myLegend = myMap.getLegend()
-        myPath = os.path.join(getTempDir(), 'getLegend.png')
+        myPath = os.path.join(temp_dir(), 'getLegend.png')
         myLegend.save(myPath, 'PNG')
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
@@ -108,7 +110,7 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getVectorLegend()
-        myPath = os.path.join(getTempDir(), 'getVectorLegend.png')
+        myPath = os.path.join(temp_dir(), 'getVectorLegend.png')
         myMap.legend.save(myPath, 'PNG')
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
@@ -133,7 +135,7 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getRasterLegend()
-        myPath = os.path.join(getTempDir(), 'getRasterLegend.png')
+        myPath = os.path.join(temp_dir(), 'getRasterLegend.png')
         myMap.legend.save(myPath, 'PNG')
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
@@ -165,7 +167,7 @@ class MapTest(unittest.TestCase):
                                 theMax=2,
                                 theCategory=None,
                                 theLabel='Foo')
-        myPath = os.path.join(getTempDir(), 'addSymbolToLegend.png')
+        myPath = os.path.join(temp_dir(), 'addSymbolToLegend.png')
         myMap.legend.save(myPath, 'PNG')
         myExpectedHash = '1234'
         assertHashForFile(myExpectedHash, myPath)
@@ -188,7 +190,7 @@ class MapTest(unittest.TestCase):
                                theMax=None,
                                theCategory=None,
                                theLabel='foo')
-        myPath = os.path.join(getTempDir(), 'addClassToLegend.png')
+        myPath = os.path.join(temp_dir(), 'addClassToLegend.png')
         myMap.legend.save(myPath, 'PNG')
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
@@ -254,7 +256,7 @@ class MapTest(unittest.TestCase):
                                     myPixmap.height(),
                                     myExpectedHeight)
         assert myPixmap.height() == myExpectedHeight
-        myPath = os.path.join(getTempDir(), 'renderImpactTable.png')
+        myPath = os.path.join(temp_dir(), 'renderImpactTable.png')
         myPixmap.save(myPath, 'PNG')
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
@@ -271,7 +273,7 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         setJakartaGeoExtent()
         myMap.setImpactLayer(myLayer)
-        myOutPath = os.path.join(getTempDir(), 'outTemplate.pdf')
+        myOutPath = os.path.join(temp_dir(), 'outTemplate.pdf')
         if os.path.exists(myOutPath):
             os.remove(myOutPath)
         myMap.renderTemplate(myInPath, myOutPath)
@@ -297,12 +299,12 @@ class MapTest(unittest.TestCase):
         # sometimes spurious lines are drawn on the layout
         myMap = Map(IFACE)
         myMap.setupComposition()
-        myPdfPath = os.path.join(getTempDir(), 'outArtifactsTest.pdf')
+        myPdfPath = os.path.join(temp_dir(), 'outArtifactsTest.pdf')
         myMap.setupPrinter(myPdfPath)
 
         myPixmap = QtGui.QPixmap(10, 10)
         myPixmap.fill(QtGui.QColor(250, 250, 250))
-        myFilename = os.path.join(getTempDir(), 'greyBox')
+        myFilename = os.path.join(temp_dir(), 'greyBox')
         myPixmap.save(myFilename, 'PNG')
         for i in range(10, 190, 10):
             myPicture = QgsComposerPicture(myMap.composition)

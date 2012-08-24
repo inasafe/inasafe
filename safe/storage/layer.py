@@ -10,7 +10,8 @@ class Layer:
     """
 
     def __init__(self, name='', projection=None,
-                 keywords=None, style_info=None):
+                 keywords=None, style_info=None,
+                 sublayer=None):
         """Common constructor for all types of layers
 
         See docstrings for class Raster and class Vector for details.
@@ -44,6 +45,7 @@ class Layer:
             self.style_info = style_info
 
         # Defaults
+        self.sublayer = sublayer
         self.filename = None
         self.data = None
 

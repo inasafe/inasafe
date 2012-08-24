@@ -12,7 +12,6 @@ from projection import Projection
 from projection import DEFAULT_PROJECTION
 from core import read_layer
 from core import write_raster_data
-from utilities import unique_filename
 from utilities import write_keywords
 from utilities import read_keywords
 from utilities import bbox_intersection
@@ -33,7 +32,7 @@ from safe.common.numerics import nanallclose
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as _, unique_filename
 from safe.common.utilities import VerificationError
 from safe.common.polygon import is_inside_polygon
 from safe.common.exceptions import BoundingBoxError, ReadLayerError

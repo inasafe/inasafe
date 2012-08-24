@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
+from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -20,6 +21,7 @@ __copyright__ += 'Disaster Reduction'
 import os
 import sys
 import tempfile
+import logging
 from subprocess import (call, CalledProcessError)
 
 from PyQt4.QtCore import QCoreApplication
@@ -31,12 +33,15 @@ from qgis.core import (QgsCoordinateTransform,
                        QgsVectorFileWriter,
                        QgsGeometry)
 
-from safe_qgis.safe_interface import verify, readKeywordsFromFile
+from safe_qgis.safe_interface import (verify,
+                                      readKeywordsFromFile)
+
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import (InvalidParameterException,
                            NoFeaturesInExtentException,
                            InvalidProjectionException)
-from safe_qgis.utilities import getTempDir
+
+LOGGER = logging.getLogger(name='InaSAFE')
 
 
 def tr(theText):
@@ -127,7 +132,7 @@ def _clipVectorLayer(theLayer, theExtent,
         raise InvalidParameterException(myMessage)
 
     myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                            getTempDir())
+                                            temp_dir())
 
     # Ensure the file is deleted before we try to write to it
     # fixes windows specific issue where you get a message like this
@@ -319,7 +324,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
 
     # Create a filename for the clipped, resampled and reprojected layer
     myHandle, myFilename = tempfile.mkstemp('.tif', 'clip_',
-                                            getTempDir())
+                                            temp_dir())
     os.close(myHandle)
     os.remove(myFilename)
 
@@ -353,7 +358,7 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
     # myFile.write(myCommand)
     # myFile.close()
     # Now run GDAL warp scottie...
-
+    LOGGER.debug(myCommand)
     try:
         myResult = call(myCommand, shell=True)
         del myResult
@@ -411,7 +416,7 @@ def extentToKml(theExtent):
      myBottomLeftCorner))
 
     myFilename = tempfile.mkstemp('.kml', 'extent_',
-                                      getTempDir())[1]
+                                      temp_dir())[1]
     myFile = file(myFilename, 'wt')
     myFile.write(myKml)
     myFile.close()
