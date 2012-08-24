@@ -58,7 +58,8 @@ def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
 
     Notes:
         Input coordinates x and y are assumed to be monotonically increasing,
-        but need not be equidistantly spaced.
+        but need not be equidistantly spaced. No such assumption regarding
+        ordering of points is made.
 
         Z is assumed to have dimension M x N, where M = len(x) and N = len(y).
         In other words it is assumed that the x values follow the first
