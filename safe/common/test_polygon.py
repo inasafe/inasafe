@@ -199,10 +199,7 @@ class Test_Polygon(unittest.TestCase):
         assert is_inside_polygon((0.5, 0.5), polygon)
         assert is_inside_polygon((10.5, 10.5), polygon)
         assert not is_inside_polygon((0, 5.5), polygon)
-
-        # FIXME: Fails if point is 5.5, 5.5 - maybe ok, but
-        # need to understand it
-        #assert is_inside_polygon((5.5, 5.5), polygon)
+        assert is_inside_polygon((5.5, 5.5), polygon)
 
         # Polygon with a hole
         polygon = [[-1, -1], [2, -1], [2, 2], [-1, 2], [-1, -1],

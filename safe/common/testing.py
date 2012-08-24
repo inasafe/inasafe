@@ -4,6 +4,8 @@
 import numpy
 import os
 
+from numerics import axes2points
+
 # Find parent parent directory to path
 # NOTE: This must match Makefile target testdata
 # FIXME (Ole): Use environment variable for this.
@@ -23,13 +25,12 @@ TESTDATA = os.path.join(DATADIR, 'test')  # Artificial datasets
 HAZDATA = os.path.join(DATADIR, 'hazard')  # Real hazard layers
 EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 
-UNITDATA = os.path.abspath(
-                            #common/
-                            os.path.join(os.path.dirname(__file__),
-                            #safe/
-                            '..',
-                            'test',
-                            'data'))
+UNITDATA = os.path.abspath(#common/
+    os.path.join(os.path.dirname(__file__),
+                 #safe/
+                 '..',
+                 'test',
+                 'data'))
 
 # Known feature counts in test data
 FEATURE_COUNTS = {'test_buildings.shp': 144,
@@ -53,7 +54,8 @@ def combine_coordinates(x, y):
 
     # FIXME (Ole): Write this using numpy for issue #91 and use that routine
     # instead of the below. We need something like the Kronecker product
-    # numpy.kron
+    # numpy.kron  -- axes2points()
+
     points = []
     for px in x:
         for py in y:

@@ -306,7 +306,7 @@ def _separate_points_by_polygon_python(points, polygon,
     inside_index = 0  # Keep track of points inside
     outside_index = M - 1  # Keep track of points outside (starting from end)
 
-    # Begin main loop (for each point) - FIXME (write as vector ops)
+    # Begin main loop (for each point)
     for k in range(M):
         x = points[k, 0]
         y = points[k, 1]
@@ -734,8 +734,6 @@ def clip_line_by_polygon(line, polygon,
     #    * Calculate its midpoint
     #    * Determine if it is inside or outside clipping polygon
 
-    # FIXME (Ole): Vectorise
-
     # Loop through line segments
     inside_line_segments = []
     outside_line_segments = []
@@ -1028,7 +1026,7 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
                                        [x2, y2], [x3, y3])
         else:
             # Lines are parallel but aren't collinear
-            return 4, None  # FIXME (Ole): Add distance here instead of None
+            return 4, None
     else:
         # Lines are not parallel, check if they intersect
         u0 = u0 / denom
