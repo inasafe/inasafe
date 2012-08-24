@@ -162,7 +162,6 @@ def separate_points_by_polygon(points, polygon,
     indices_outside_polygon = numpy.concatenate((indices_outside_box,
                                                  indices_in_box_outside_poly))
 
-    # FIXME (Ole): Can we get rid of the sorting?
     indices_outside_polygon.sort()  # Ensure order is deterministic
 
     return indices_inside_polygon, indices_outside_polygon

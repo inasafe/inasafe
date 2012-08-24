@@ -250,7 +250,6 @@ class Test_Polygon(unittest.TestCase):
         res = inside_polygon(points, polygon)
         assert numpy.allclose(res, [0, 1, 2])
 
-
     def test_separate_points_by_polygon0(self):
         """Points can be separated by polygon
         """
