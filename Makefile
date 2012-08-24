@@ -108,10 +108,12 @@ guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 set_python:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
 
-quicktest: 
+quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings data_audit test-translations
+
+test_suite_quick:
 	nosetests -A 'not slow' -v safe --stop
 
-it: 
+it:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' safe --stop
 
 # Run pep8 style checking
