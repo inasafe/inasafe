@@ -52,17 +52,7 @@ def combine_coordinates(x, y):
     """Make list of all combinations of points for x and y coordinates
     """
 
-    # FIXME (Ole): Write this using numpy for issue #91 and use that routine
-    # instead of the below. We need something like the Kronecker product
-    # numpy.kron  -- axes2points()
-
-    points = []
-    for px in x:
-        for py in y:
-            points.append((px, py))
-    points = numpy.array(points)
-
-    return points
+    return axes2points(x, y)
 
 # For polygon testing
 test_lines = [numpy.array([[122.231021, -8.626557],

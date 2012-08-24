@@ -321,6 +321,7 @@ class Test_interpolate(unittest.TestCase):
 
         # Try a range of combinations of points outside domain
         # with error_bounds True
+        print
         for lox in [x[0], x[0] - 1]:
             for hix in [x[-1], x[-1] + 1]:
                 for loy in [y[0], y[0] - 1]:
@@ -332,15 +333,15 @@ class Test_interpolate(unittest.TestCase):
                         points = combine_coordinates(xis, etas)
 
                         if lox < x[0] or hix > x[-1] or \
-                                loy < x[0] or hiy > y[-1]:
+                                loy < y[0] or hiy > y[-1]:
                             try:
                                 vals = interpolate2d(x, y, A, points,
                                                      mode='linear',
                                                      bounds_error=True)
-                            except BoundsError:
-                                pass
+                            except BoundsError, e:
+                                assert 'bounds_error was requested' in str(e)
                             else:
-                                msg = 'Should have raise bounds error'
+                                msg = 'Should have raised bounds error'
                                 raise Exception(msg)
 
         # Try a range of combinations of points outside domain with
