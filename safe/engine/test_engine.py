@@ -39,7 +39,6 @@ from impact_functions_for_testing import general_ashload_impact
 from impact_functions_for_testing import flood_road_impact
 # pylint: enable=W0611
 
-
 def linear_function(x, y):
     """Auxiliary function for use with interpolation test
     """

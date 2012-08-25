@@ -513,7 +513,15 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         try:
-            myKeywords = self.keywordIO.readKeywords(self.layer)
+            # First see if we could have sublayers
+            # move this to a shared location
+            mySubLayer = None
+            mySource = self.layer.source()
+
+
+            # Now read the layer with sub layer if needed
+            myKeywords = self.keywordIO.readKeywords(self.layer,
+                                                     theSubLayer=mySubLayer)
         except:
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume

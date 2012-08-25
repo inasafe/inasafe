@@ -253,7 +253,7 @@ def readKeywordsFromLayer(theLayer, keyword):
     return myValue
 
 
-def readKeywordsFromFile(theLayerPath, theKeyword=None):
+def readKeywordsFromFile(theLayerPath, theKeyword=None, theSubLayer=None):
     """Get metadata from the keywords file associated with a local
      file in the file system.
 
@@ -268,6 +268,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
        * theLayerPath - a string representing a path to a layer
            (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
        * theKeyword - optional - the metadata keyword to retrieve e.g. 'title'
+       * theSubLayer - optional - sublayer to read the keywords for.
 
     Returns:
        A string containing the retrieved value for the keyword if
@@ -293,7 +294,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     #now get the requested keyword using the inasafe library
     myDictionary = None
     try:
-        myDictionary = read_keywords(myKeywordFilePath)
+        myDictionary = read_keywords(myKeywordFilePath, sublayer=theSubLayer)
     except Exception, e:
         myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 myKeywordFilePath, theKeyword, str(e)))
