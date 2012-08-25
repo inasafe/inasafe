@@ -72,7 +72,7 @@ class KeywordIO(QObject):
         """
         self.keywordDbPath = str(thePath)
 
-    def readKeywords(self, theLayer, theKeyword=None):
+    def readKeywords(self, theLayer, theKeyword=None, theSubLayer):
         """Read keywords for a datasource and return them as a dictionary.
         This is a wrapper method that will 'do the right thing' to fetch
         keywords for the given datasource. In particular, if the datasource
@@ -82,7 +82,8 @@ class KeywordIO(QObject):
         Args:
             * theLayer - A QGIS QgsMapLayer instance.
             * theKeyword - optional - will extract only the specified keyword
-              from the keywords dict.
+                  from the keywords dict.
+            * theSubLayer - optional - sublayer to read the keywords for.
         Returns:
             A dict if theKeyword is omitted, otherwise the value for the
             given key if it is present.
@@ -95,9 +96,11 @@ class KeywordIO(QObject):
 
         try:
             if myFlag:
-                myKeywords = readKeywordsFromFile(mySource, theKeyword)
+                myKeywords = readKeywordsFromFile(mySource, theKeyword,
+                                                  theSubLayer)
             else:
-                myKeywords = self.readKeywordFromUri(mySource, theKeyword)
+                myKeywords = self.readKeywordFromUri(mySource, theKeyword,
+                                                     theSubLayer)
             return myKeywords
         except Exception:
             raise
@@ -130,7 +133,8 @@ class KeywordIO(QObject):
             raise
 
     def copyKeywords(self, theSourceLayer,
-                     theDestinationFile, theExtraKeywords=None):
+                     theDestinationFile, theExtraKeywords=None,
+                     theSubLayer=None):
         """Helper to copy the keywords file from a source dataset
         to a destination dataset.
 
@@ -156,12 +160,13 @@ class KeywordIO(QObject):
               original keywords from the source layer's keywords file and
               and the extra keywords (which will replace the source layers
               keywords if the key is identical).
+            * theSubLayer - optional - sublayer to read the keywords for.
         Returns:
             None.
         Raises:
             None
         """
-        myKeywords = self.readKeywords(theSourceLayer)
+        myKeywords = self.readKeywords(theSourceLayer, theSubLayer)
         if theExtraKeywords is None:
             theExtraKeywords = {}
         myMessage = self.tr('Expected extraKeywords to be a dictionary. Got %s'
@@ -174,7 +179,7 @@ class KeywordIO(QObject):
         try:
             for key in theExtraKeywords:
                 myKeywords[key] = theExtraKeywords[key]
-            writeKeywordsToFile(myNewDestination, myKeywords)
+            writeKeywordsToFile(myNewDestination, myKeywords, theSubLayer)
         except Exception, e:
             myMessage = self.tr('Failed to copy keywords file from :'
                            '\n%s\nto\%s: %s' %
@@ -324,13 +329,60 @@ class KeywordIO(QObject):
                           'gdal': True,
                           'gpx': False,
                           'wms': False,
-                          'spatialite': False,
+                          'spatialite': True,
                           'delimitedtext': True,
                           'postgres': False}
         myFileBasedKeywords = False
         if myProviderType in myProviderDict:
             myFileBasedKeywords = myProviderDict[myProviderType]
         return myFileBasedKeywords
+
+    def subLayerName(self, theDataSource):
+        """Given datasource, determine its sublayer name.
+
+        Args:
+            theDataSource: str optional. Datasource URI that will be used
+                to determine what the sublayer name is.
+        Returns:
+            str: A string containing the sub layer name or None as applicable.
+
+        Raises:
+            No exceptions raised explicitly, any exceptions will be propogated.
+
+        The sublayer name might be a hash or a physical layer name according
+        to the following logic:
+
+        * If the datasource is a shapefile with no query, the sublayer will be
+          the file basename with the .shp removed and a hash of the subquery
+          gumpf added to the path by QGIS. For example:
+
+            Source        :  c:\tmp\foo.shp
+            Sub layer name: 'foo'
+
+            Source        : c:\tmp\foo.shp|layerid=0|subset="KAB_NAME"
+                             = \'JAKARTA TIMUR\'
+            Sub layer name: foo-7667ds676
+
+        * If the datasource is a sqlite or pg database and there is no sql
+          query provided, the sublayer  will be the table or view name.
+          Examples:
+
+            Source        : dbname=\'c:\tmp\foo.sqlite\' table="osm_buildings"
+                            (Geometry) sql=''
+            Sub Layer Name: osm_buildings
+
+
+        * If the datasource is a sqlite or pg database and there *is* an
+          sql query provided, the sublayer name will be in the format
+          '<table or view name>-<hash>' where the hash is an md5 sum of the
+          query.
+
+        """
+        myURI = QgsDataSourceURI(theDataSource)
+        myDB = str(myURI.database())
+        myDBPath = os.path.split(myDB)[0]
+
+        pass
 
     def getHashForDatasource(self, theDataSource):
         """Given a datasource, return its hash.
@@ -441,7 +493,7 @@ class KeywordIO(QObject):
         finally:
             self.closeConnection()
 
-    def readKeywordFromUri(self, theUri, theKeyword=None):
+    def readKeywordFromUri(self, theUri, theKeyword=None, theSubLayer=None):
         """Get metadata from the keywords file associated with a
         non local layer (e.g. postgresql connection).
 
@@ -457,6 +509,7 @@ class KeywordIO(QObject):
              .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
              password=\'bar\' sslmode=disable key=\'id\' srid=4326
            * keyword - optional - the metadata keyword to retrieve e.g. 'title'
+           * theSubLayer - optional - sublayer to read the keywords for.
 
         Returns:
            A string containing the retrieved value for the keyword if
