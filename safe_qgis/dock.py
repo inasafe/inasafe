@@ -63,6 +63,7 @@ try:
 except ImportError:
     print 'Debugging was disabled'
 
+
 # pylint: disable=W0231
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the Risk In A Box plugin."""
@@ -232,6 +233,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                self.getLayers)
         except:
             pass
+
 #pylint: enable=W0702
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
