@@ -598,7 +598,7 @@ class Test_Polygon(unittest.TestCase):
             assert is_inside_polygon(point, polygon)
             assert not is_inside_polygon(point, ex_poly), '%s' % str(point)
 
-    test_populate_polygon_with_exclude.slow = 1
+    test_populate_polygon_with_exclude.slow = True
 
     def test_populate_polygon_with_exclude2(self):
         """Polygon with hole can be populated by random points (2)
@@ -641,7 +641,7 @@ class Test_Polygon(unittest.TestCase):
             assert is_inside_polygon(point, polygon)
             assert not is_inside_polygon(point, ex_poly), '%s' % str(point)
 
-    test_populate_polygon_with_exclude2.slow = 1
+    test_populate_polygon_with_exclude2.slow = True
 
     def test_large_example(self):
         """Large polygon clipping example works
@@ -694,7 +694,7 @@ class Test_Polygon(unittest.TestCase):
         for point in all_points[outside]:
             assert not is_inside_polygon(point, main_polygon)
 
-    test_large_example.slow = 1
+    test_large_example.slow = True
 
     def test_large_convoluted_example(self):
         """Large convoluted polygon clipping example works
@@ -749,7 +749,7 @@ class Test_Polygon(unittest.TestCase):
         for point in all_points[outside]:
             assert not is_inside_polygon(point, main_polygon)
 
-    test_large_convoluted_example.slow = 1
+    test_large_convoluted_example.slow = True
 
     def test_large_convoluted_example_random(self):
         """Large convoluted polygon clipping example works (random points)
@@ -792,7 +792,7 @@ class Test_Polygon(unittest.TestCase):
         for point in all_points[outside]:
             assert not is_inside_polygon(point, main_polygon)
 
-    test_large_convoluted_example_random.slow = 1
+    test_large_convoluted_example_random.slow = True
 
     def test_in_and_outside_polygon_main(self):
         """Set of points is correctly separated according to polygon (2)
@@ -1473,7 +1473,7 @@ class Test_Polygon(unittest.TestCase):
         P4 = [3.0, 7.0]
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
-    test_intersection_bug_20081110_TR_TL.slow = 1
+    test_intersection_bug_20081110_TR_TL.slow = True
 
     def test_intersection_bug_20081110_TR_BL(self):
         """Intersection corner case top-right and bottom-left
@@ -1505,7 +1505,7 @@ class Test_Polygon(unittest.TestCase):
         P4 = [3.0, 4.0]
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
-    test_intersection_bug_20081110_TR_BL.slow = 1
+    test_intersection_bug_20081110_TR_BL.slow = True
 
     def test_intersection_bug_20081110_TR_BR(self):
         """Intersection corner case top-right and bottom-right
@@ -1537,7 +1537,7 @@ class Test_Polygon(unittest.TestCase):
         P4 = [7.0, 3.0]
         self.helper_parallel_intersection_code(P1, P2, P3, P4)
 
-    test_intersection_bug_20081110_TR_BR.slow = 1
+    test_intersection_bug_20081110_TR_BR.slow = True
 
     def test_intersection_direction_invariance(self):
         """Intersection is direction invariant
@@ -1574,7 +1574,7 @@ class Test_Polygon(unittest.TestCase):
             msg = 'Order of lines gave different results'
             assert numpy.allclose(p1, p3), msg
 
-    test_intersection_direction_invariance.slow = 1
+    test_intersection_direction_invariance.slow = True
 
     def test_no_intersection(self):
         """Lines that don't intersect return None as expected
@@ -1978,7 +1978,7 @@ class Test_Polygon(unittest.TestCase):
         # Not joined are (but that's OK)
         #[[122.231108, -8.626598], [122.231021, -8.626557]]
         #[[122.231021, -8.626557], [122.230284, -8.625983]]
-    test_clip_lines_by_polygon_real_data.slow = 1
+    test_clip_lines_by_polygon_real_data.slow = True
 
     def test_join_segments(self):
         """Consecutive line segments can be joined into continuous line

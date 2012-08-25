@@ -135,7 +135,7 @@ class Test_interpolate(unittest.TestCase):
                 refs = linear_function(points[:, 0], points[:, 1])
                 assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
-    test_linear_interpolation_range.slow = 1
+    test_linear_interpolation_range.slow = True
 
     def test_linear_interpolation_nan_points(self):
         """Interpolation library works with interpolation points being NaN
@@ -281,7 +281,7 @@ class Test_interpolate(unittest.TestCase):
                     #print i, j, xi, eta, alpha, beta, vals[k], ref
                     assert nanallclose(vals[k], ref, rtol=1e-12, atol=1e-12)
 
-    test_interpolation_random_array_and_nan.slow = 1
+    test_interpolation_random_array_and_nan.slow = True
 
     def test_linear_interpolation_outside_domain(self):
         """Interpolation library sensibly handles values outside the domain
@@ -372,7 +372,7 @@ class Test_interpolate(unittest.TestCase):
                                                       rtol=1.0e-12,
                                                       atol=1.0e-12), msg
 
-    test_linear_interpolation_outside_domain.slow = 1
+    test_linear_interpolation_outside_domain.slow = True
 
     def test_interpolation_corner_cases(self):
         """Interpolation library returns NaN for incomplete grid points

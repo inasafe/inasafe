@@ -56,7 +56,7 @@ compile-translation-strings: compile
 	@#Compile qt messages binary
 	cd safe_qgis; lrelease inasafe.pro; cd ..
 	@#compile gettext messages binary
-	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 
 test-translations:
 	@echo
@@ -73,7 +73,7 @@ translation-stats:
 	@echo
 	@echo "Gettext translations (*.po):"
 	@echo "----------------------------"
-	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@echo
 	@echo "Qt translations (*.ts):"
 	@echo "----------------------------"
