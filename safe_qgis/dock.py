@@ -44,6 +44,7 @@ from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientOverlapException,
                                   InvalidParameterException,
+                                  InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
 from safe_qgis.utilities import (htmlHeader,
