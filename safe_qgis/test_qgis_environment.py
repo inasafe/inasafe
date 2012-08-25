@@ -23,7 +23,8 @@ from safe_qgis.utilities_test import getQgisTestApp
 
 QGISAPP = getQgisTestApp()
 
-
+import os
+os.path.rex`
 class QGISTest(unittest.TestCase):
     """Test the QGIS Environment"""
 
