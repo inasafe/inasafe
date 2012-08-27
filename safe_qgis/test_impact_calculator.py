@@ -93,7 +93,7 @@ class ImpactCalculatorTest(unittest.TestCase):
             myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
             myMessage = 'Calculator run failed. %s' % str(e)
             assert(), myMessage
 
@@ -109,7 +109,7 @@ class ImpactCalculatorTest(unittest.TestCase):
             myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
             myMessage = 'Calculator run failed:\n' + str(e)
             assert(), myMessage
 
@@ -119,7 +119,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         try:
             self.calculator.setExposureLayer(None)
             self.calculator.setHazardLayer(None)
-            #next line should raise an error
+            # Next line should raise an error
             myRunner = self.calculator.getRunner()
             myRunner.start()
         except RuntimeError, e:
@@ -167,7 +167,6 @@ class ImpactCalculatorTest(unittest.TestCase):
         self.calculator.setFunction('Flood Building Impact Function')
         try:
             myRunner = self.calculator.getRunner()
-
             # Run non threaded
             myRunner.run()
             myMessage = myRunner.result()
@@ -175,7 +174,7 @@ class ImpactCalculatorTest(unittest.TestCase):
             myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
             myMessage = 'Calculator run failed. %s' % str(e)
             assert(), myMessage
 

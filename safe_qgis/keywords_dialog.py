@@ -30,6 +30,7 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace
 
+from safe_qgis.exceptions import InvalidParameterException
 from safe.common.exceptions import InaSAFEError
 
 # Don't remove this even if it is flagged as unused by your ide
@@ -515,7 +516,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            no exceptions explicitly raised."""
         try:
             myKeywords = self.keywordIO.readKeywords(self.layer)
-        except InaSAFEError:
+        except InvalidParameterException:
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume
             # exposure to start with
