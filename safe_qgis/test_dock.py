@@ -563,8 +563,7 @@ class DockTest(unittest.TestCase):
         assert '31372262' in myResult, myMessage
 
     def test_runTsunamiBuildingImpactFunction(self):
-        """Tsunami function runs in GUI with Batemans Bay model"""
-        """Raster and vector based function runs as expected."""
+        """Tsunami function runs in GUI as expected."""
 
         # Push OK with the left mouse button
 
@@ -621,7 +620,7 @@ class DockTest(unittest.TestCase):
         assert '17' in myResult, myMessage
         assert '7' in myResult, myMessage
 
-    def test_runFloodPopulationImpactFunction(self):
+    def test_runFloodPopulationImpactFunction_1(self):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
 
@@ -691,7 +690,7 @@ class DockTest(unittest.TestCase):
         # This is the expected impact number
         assert '2480' in myResult, myMessage
 
-    def test_runFloodPopulationImpactFunction(self):
+    def test_runFloodPopulationImpactFunction_2(self):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
 

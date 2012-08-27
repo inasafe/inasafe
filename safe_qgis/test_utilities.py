@@ -234,6 +234,6 @@ class UtilitiesTest(unittest.TestCase):
         assert myVersion > 10700, myMessage
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ISUtilitiesTest, 'test')
+    suite = unittest.makeSuite(UtilitiesTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

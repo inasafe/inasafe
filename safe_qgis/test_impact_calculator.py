@@ -36,8 +36,9 @@ from safe.common.testing import  HAZDATA, EXPDATA, TESTDATA
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)
+# pylint: disable=W0611
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
-
+# pylint: enable=W0611
 
 class ImpactCalculatorTest(unittest.TestCase):
     """Test the InaSAFE plugin stub"""
