@@ -40,6 +40,7 @@ from safe.common.testing import  HAZDATA, EXPDATA, TESTDATA
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # pylint: enable=W0611
 
+
 class ImpactCalculatorTest(unittest.TestCase):
     """Test the InaSAFE plugin stub"""
 
