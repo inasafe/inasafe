@@ -29,12 +29,9 @@ from random import uniform, seed as seed_function
 
 from safe.common.numerics import ensure_numeric
 from safe.common.numerics import grid2points, geotransform2axes
+from safe.common.exceptions import PolygonInputError
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-class PolygonInputError(Exception):
-    pass
 
 
 def separate_points_by_polygon(points, polygon,

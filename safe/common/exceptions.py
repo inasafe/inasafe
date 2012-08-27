@@ -29,3 +29,19 @@ class ReadLayerError(Exception):
 class BoundingBoxError(Exception):
     """For errors relating to bboxes"""
     pass
+
+
+class VerificationError(RuntimeError):
+    """Exception thrown by verify()
+    """
+    pass
+
+
+class PolygonInputError(Exception):
+    """For invalid inputs to numeric polygon functions"""
+    pass
+
+
+class BoundsError(RuntimeError):
+    """For points falling outside interpolation grid"""
+    pass

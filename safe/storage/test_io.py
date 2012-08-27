@@ -33,9 +33,9 @@ from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _, unique_filename
-from safe.common.utilities import VerificationError
 from safe.common.polygon import is_inside_polygon
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
+from safe.common.exceptions import VerificationError
 
 
 # Auxiliary function for raster test
