@@ -78,20 +78,16 @@ def get_plugins(name=None):
        Or all of them if no name is passed.
     """
 
-    # pylint: disable=E1101
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
-    # pylint: enable=E1101
 
     if name is None:
         return plugins_dict
 
     if isinstance(name, basestring):
         # Add the names
-        # pylint: disable=E1101
         plugins_dict.update(dict([(p.__name__, p)
                                   for p in FunctionProvider.plugins]))
-        # pylint: enable=E1101
 
         msg = ('No plugin named "%s" was found. '
                'List of available plugins is: %s'
@@ -530,18 +526,14 @@ def get_plugins_as_table(name=None):
     header = TableRow([_('Title'), _('ID'), _('Requirements')], header=True)
     table_body.append(header)
 
-    # pylint: disable=E1101
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
-    # pylint: enable=E1101
 
     if name is not None:
         if isinstance(name, basestring):
             # Add the names
-            # pylint: disable=E1101
             plugins_dict.update(dict([(p.__name__, p)
                                       for p in FunctionProvider.plugins]))
-            # pylint: enable=E1101
 
             msg = ('No plugin named "%s" was found. '
                    'List of available plugins is: %s'

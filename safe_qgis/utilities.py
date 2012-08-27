@@ -365,8 +365,8 @@ def qgisVersion():
     """
     myVersion = None
     try:
-        myVersion = unicode(QGis.QGIS_VERSION_INT)  # pylint: disable=E1101
+        myVersion = unicode(QGis.QGIS_VERSION_INT)
     except AttributeError:
-        myVersion = unicode(QGis.qgisVersion)[0]  # pylint: disable=E1101
+        myVersion = unicode(QGis.qgisVersion)[0]
     myVersion = int(myVersion)
     return myVersion

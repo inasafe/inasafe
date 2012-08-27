@@ -4,7 +4,7 @@
 # can either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once).
-disable=C,R,I,W0142,W0511,E1103,W0232,W0201,W0403,W0212
+disable=C,R,I,W0142,W0511,E1103,W0232,W0201,W0403,W0212,E1101
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
