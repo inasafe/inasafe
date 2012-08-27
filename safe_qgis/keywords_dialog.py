@@ -30,6 +30,7 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace
 
+from safe.common.exceptions import InaSAFEError
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -514,7 +515,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            no exceptions explicitly raised."""
         try:
             myKeywords = self.keywordIO.readKeywords(self.layer)
-        except:
+        except InaSAFEError:
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume
             # exposure to start with
@@ -628,7 +629,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myKeywords = self.getKeywords()
         try:
             self.keywordIO.writeKeywords(self.layer, myKeywords)
-        except Exception, e:
+        except InaSAFEError, e:
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
             ((self.tr('An error was encountered when saving the keywords:\n'
                       '%s' % str(getExceptionWithStacktrace(e))))))

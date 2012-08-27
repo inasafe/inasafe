@@ -188,7 +188,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
 
-#pylint: disable=W0702
+    # pylint: disable=W0702
     def disconnectLayerListener(self):
         """Destroy the signal/slot to listen for changes in the layers loaded
         in QGIS.
@@ -233,8 +233,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                self.getLayers)
         except:
             pass
+    # pylint: enable=W0702
 
-#pylint: enable=W0702
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
         determine if it is appropriate for the OK button to be enabled
@@ -481,9 +481,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             myRegistry = QgsMapLayerRegistry.instance()
         except:
-            #pylint: ###disable=W0702
             return
-            #pylint: ###enable=W0702
+
         myCanvasLayers = self.iface.mapCanvas().layers()
         # mapLayers returns a QMap<QString id, QgsMapLayer layer>
         myLayers = myRegistry.mapLayers().values()
@@ -502,9 +501,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             try:
                 myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:
-                #pylint: disable=W0702
                 myTitle = myName
-                #pylint: enable=W0702
             else:
                 # Lookup internationalised title if available
                 if myTitle in internationalisedNames:
@@ -520,9 +517,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myCategory = self.keywordIO.readKeywords(myLayer, 'category')
             except:
                 # continue ignoring this layer
-                #pylint: disable=W0702
                 continue
-                #pylint: enable=W0702
 
             if myCategory == 'hazard':
                 self.addComboItemInOrder(self.cboHazard, myTitle, mySource)
