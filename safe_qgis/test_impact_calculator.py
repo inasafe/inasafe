@@ -167,7 +167,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         self.calculator.setFunction('Flood Building Impact Function')
         try:
             myRunner = self.calculator.getRunner()
-            # run non threaded
+
+            # Run non threaded
             myRunner.run()
             myMessage = myRunner.result()
             myImpactLayer = myRunner.impactLayer()

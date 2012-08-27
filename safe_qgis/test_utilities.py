@@ -15,6 +15,7 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
 from safe_qgis.utilities_test import unitTestDataPath
 from safe_qgis.utilities_test import (loadLayer, getQgisTestApp)
 from safe_qgis.exceptions import StyleError
+from safe.common.exceptions import VerificationError
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -33,6 +34,8 @@ class UtilitiesTest(unittest.TestCase):
         """Stack traces can be caught and rendered as html
         """
 
+        # This is about general exception handling, so ok to use catch-all
+        # pylint: disable=W0703
         try:
             bbox_intersection('aoeu', 'oaeu', [])
         except Exception, e:
@@ -49,6 +52,7 @@ class UtilitiesTest(unittest.TestCase):
             assert '<pre id="traceback"' in myMessage
             assert 'line' in myMessage
             assert 'File' in myMessage
+        # pylint: enable=W0703
 
     def test_issue126(self):
         """Test that non integer transparency ranges fail gracefully.
@@ -156,7 +160,7 @@ class UtilitiesTest(unittest.TestCase):
         """
         try:
             bbox_intersection('aoeu', 'oaeu', [])
-        except Exception, e:
+        except VerificationError, e:
             myMessage = getExceptionWithStacktrace(e, html=False)
             assert 'VerificationError : Western' in myMessage, myMessage
 

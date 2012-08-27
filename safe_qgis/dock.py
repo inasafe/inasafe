@@ -481,9 +481,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             myRegistry = QgsMapLayerRegistry.instance()
         except:
-            #pylint: disable=W0702
+            #pylint: ###disable=W0702
             return
-            #pylint: enable=W0702
+            #pylint: ###enable=W0702
         myCanvasLayers = self.iface.mapCanvas().layers()
         # mapLayers returns a QMap<QString id, QgsMapLayer layer>
         myLayers = myRegistry.mapLayers().values()

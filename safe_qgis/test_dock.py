@@ -61,7 +61,7 @@ try:
     from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except ImportError, e:
     print 'Debugging was disabled'
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()

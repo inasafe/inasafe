@@ -10,7 +10,7 @@ from safe.common.utilities import verify
 from safe.common.numerics import nanallclose, geotransform2axes, grid2points
 from safe.common.dynamic_translations import names as internationalised_titles
 from safe.common.exceptions import ReadLayerError, WriteLayerError
-from safe.common.exceptions import GetDataError
+from safe.common.exceptions import GetDataError, InaSAFEError
 
 from layer import Layer
 from vector import Vector
@@ -272,7 +272,7 @@ class Raster(Layer):
             if self.get_geotransform() != X.get_geotransform():
                 # Need interpolation between grids
                 msg = 'Intergrid interpolation not yet implemented'
-                raise Exception(msg)
+                raise InaSAFEError(msg)
             else:
                 # Rasters are aligned, no need to interpolate
                 return self
@@ -543,7 +543,7 @@ class Raster(Layer):
         except Exception, e:
             msg = ('Resolution for layer %s could not be obtained: %s '
                    % (self.get_name(), str(e)))
-            raise Exception(msg)
+            raise InaSAFEError(msg)
 
         if native:
             keywords = self.get_keywords()

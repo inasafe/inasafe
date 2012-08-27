@@ -24,7 +24,7 @@ from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.dynamic_translations import names as internationalised_titles
 from safe.common.exceptions import ReadLayerError, WriteLayerError
-from safe.common.exceptions import GetDataError
+from safe.common.exceptions import GetDataError, InaSAFEError
 
 from layer import Layer
 from projection import Projection
@@ -550,7 +550,7 @@ class Vector(Layer):
             else:
                 #msg = ('Input parameter "data" was specified '
                 #       'but appears to be empty')
-                #raise Exception(msg)
+                #raise InaSAFEError(msg)
                 pass
 
             # Create attribute fields in layer
@@ -748,7 +748,7 @@ class Vector(Layer):
         if attribute is None:
             msg = ('Valid attribute name must be specified in get_extrema '
                    'for vector layers. I got None.')
-            raise RuntimeError(msg)
+            raise InaSAFEError(msg)
 
         x = self.get_data(attribute)
         return min(x), max(x)
