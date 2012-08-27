@@ -23,7 +23,8 @@ from safe.common.polygon import inside_polygon, clip_line_by_polygon
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.dynamic_translations import names as internationalised_titles
-from safe.common.exceptions import ReadLayerError
+from safe.common.exceptions import ReadLayerError, WriteLayerError
+from safe.common.exceptions import GetDataError
 
 from layer import Layer
 from projection import Projection
@@ -331,7 +332,8 @@ class Vector(Layer):
 
         if fid is None:
             msg = 'Could not open %s' % filename
-            raise IOError(msg)
+            #raise ReadLayerError(msg)
+            raise IOError(msg)  # Delete this one and use the one above
 
         # Assume that file contains all data in one layer
         msg = 'Only one vector layer currently allowed'
@@ -342,7 +344,7 @@ class Vector(Layer):
                    'the Vector if you wish to use a different layer.'
                    % (filename, fid.GetLayerCount()))
             # Why do we raise an exception if it is only a warning? TS
-            raise Exception(msg)
+            raise ReadLayerError(msg)
 
         if self.sublayer is not None:
             layer = fid.GetLayerByName(self.sublayer)
@@ -370,7 +372,7 @@ class Vector(Layer):
             G = feature.GetGeometryRef()
             if G is None:
                 msg = ('Geometry was None in filename %s ' % filename)
-                raise Exception(msg)
+                raise ReadLayerError(msg)
             else:
                 self.geometry_type = G.GetGeometryType()
                 if self.is_point_data:
@@ -430,7 +432,7 @@ class Vector(Layer):
                            'Geometry type in filename %s '
                            'was %s.' % (filename,
                                         self.geometry_type))
-                    raise Exception(msg)
+                    raise ReadLayerError(msg)
 
             # Record attributes by name
             number_of_fields = feature.GetFieldCount()
@@ -483,7 +485,7 @@ class Vector(Layer):
             msg = ('OGR GML driver does not store geospatial reference.'
                    'This format is disabled for the time being. See '
                    'https://github.com/AIFDR/riab/issues/18')
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         # Derive layername from filename (excluding preceding dirs)
         if sublayer is None or extension == '.shp':
@@ -507,19 +509,19 @@ class Vector(Layer):
         drv = ogr.GetDriverByName(driver)
         if drv is None:
             msg = 'OGR driver %s not available' % driver
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         ds = drv.CreateDataSource(filename)
         if ds is None:
             msg = 'Creation of output file %s failed' % filename
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         lyr = ds.CreateLayer(layername,
                              self.projection.spatial_reference,
                              self.geometry_type)
         if lyr is None:
             msg = 'Could not create layer %s' % layername
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         # Define attributes if any
         store_attributes = False
@@ -533,7 +535,7 @@ class Vector(Layer):
                            'but it does not contain list of dictionaries '
                            'with field information as expected. The first '
                            'element is %s' % data[0])
-                    raise Exception(msg)
+                    raise WriteLayerError(msg)
                 else:
                     # Establish OGR types for each element
                     ogrtypes = {}
@@ -568,7 +570,7 @@ class Vector(Layer):
                 gdal.PushErrorHandler('CPLQuietErrorHandler')
                 if lyr.CreateField(fd) != 0:
                     msg = 'Could not create field %s' % name
-                    raise Exception(msg)
+                    raise WriteLayerError(msg)
 
                 # Restore error handler
                 gdal.PopErrorHandler()
@@ -593,14 +595,14 @@ class Vector(Layer):
                 geom = ogr.CreateGeometryFromWkt(wkt)
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
-                raise Exception(msg)
+                raise WriteLayerError(msg)
 
             feature.SetGeometry(geom)
 
             G = feature.GetGeometryRef()
             if G is None:
                 msg = 'Could not create GeometryRef for file %s' % filename
-                raise Exception(msg)
+                raise WriteLayerError(msg)
 
             # Store attributes
             if store_attributes:
@@ -623,7 +625,7 @@ class Vector(Layer):
             # Save this feature
             if lyr.CreateFeature(feature) != 0:
                 msg = 'Failed to create feature %i in file %s' % (i, filename)
-                raise Exception(msg)
+                raise WriteLayerError(msg)
 
             feature.Destroy()
 
@@ -697,7 +699,7 @@ class Vector(Layer):
                     return self.data[index][attribute]
         else:
             msg = 'Vector data instance does not have any attributes'
-            raise Exception(msg)
+            raise GetDataError(msg)
 
     def get_geometry_type(self):
         """Return geometry type for vector layer

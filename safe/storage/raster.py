@@ -9,7 +9,8 @@ from osgeo import gdal
 from safe.common.utilities import verify
 from safe.common.numerics import nanallclose, geotransform2axes, grid2points
 from safe.common.dynamic_translations import names as internationalised_titles
-from safe.common.exceptions import ReadLayerError
+from safe.common.exceptions import ReadLayerError, WriteLayerError
+from safe.common.exceptions import GetDataError
 
 from layer import Layer
 from vector import Vector
@@ -166,7 +167,7 @@ class Raster(Layer):
             except IOError:
                 msg = ('Projection file not found for %s. You must supply '
                        'a projection file with extension .prj' % filename)
-                raise RuntimeError(msg)
+                raise ReadLayerError(msg)
 
         # Look for any keywords
         self.keywords = read_keywords(basename + '.keywords')
@@ -200,13 +201,13 @@ class Raster(Layer):
                    'Only the first band will currently be '
                    'used.' % (filename, self.number_of_bands))
             # FIXME(Ole): Let us use python warnings here
-            raise Exception(msg)
+            raise ReadLayerError(msg)
 
         # Get first band.
         band = self.band = fid.GetRasterBand(1)
         if band is None:
             msg = 'Could not read raster band from %s' % filename
-            raise Exception(msg)
+            raise ReadLayerError(msg)
 
     def write_to_file(self, filename):
         """Save raster data to file
@@ -238,7 +239,7 @@ class Raster(Layer):
         if fid is None:
             msg = ('Gdal could not create filename %s using '
                    'format %s' % (filename, file_format))
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         # Write metada
         fid.SetProjection(str(self.projection))
@@ -374,11 +375,11 @@ class Raster(Layer):
             # See if scaling can work as a scalar value
             try:
                 sigma = float(scaling)
-            except Exception, e:
+            except ValueError, e:
                 msg = ('Keyword scaling "%s" could not be converted to a '
                        'number. It must be either True, False, None or a '
                        'number: %s' % (scaling, str(e)))
-                raise Exception(msg)
+                raise GetDataError(msg)
 
         # Return possibly scaled data
         return sigma * A
