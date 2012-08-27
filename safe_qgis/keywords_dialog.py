@@ -46,7 +46,7 @@ except ImportError:
 
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
-# pylint: disable=W0231
+
     def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
         .. note:: In QtDesigner the advanced editor's predefined keywords
@@ -65,7 +65,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised
         """
-# pylint: enable=W0231
+
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(

@@ -29,9 +29,6 @@ from safe_qgis.safe_interface import (readSafeLayer,
                                    getSafeImpactFunctions)
 
 
-from PyQt4.QtCore import QObject
-
-
 class ImpactCalculator(QObject):
     """A class to compute an impact scenario. We inherit from QObject
     so that we can use Qt translation self.tr calls."""

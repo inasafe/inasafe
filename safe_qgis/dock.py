@@ -65,7 +65,6 @@ except ImportError:
     print 'Debugging was disabled'
 
 
-# pylint: disable=W0231
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the Risk In A Box plugin."""
 
