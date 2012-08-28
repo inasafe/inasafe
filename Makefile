@@ -160,7 +160,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 83332a9
+	@scripts/update-test-data.sh 77d126e
 
 disabled_tests:
 	@echo
