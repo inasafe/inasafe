@@ -4,7 +4,7 @@
 #
 # T. Sutton June, 2012
 
-cd gui
+cd safe_qgis
 REPORT=`lrelease inasafe.pro 2>/dev/null`
 echo $REPORT| grep -o '[0-9]*\ finished\ and\ [0-9]*\ unfinished\|_[a-z][a-z]\.qm'|sed 's/_/Locale: /g'| sed 's/.qm//g'
 cd ..
