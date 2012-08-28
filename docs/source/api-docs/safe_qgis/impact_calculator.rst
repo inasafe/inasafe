@@ -1,8 +1,7 @@
 Module:  safe_qgis.impact_calculator
 ====================================
 
-This page contains the documentation for the InaSAFE **safe_qgis.impact_calculator** 
-module.
-
 .. automodule:: safe_qgis.impact_calculator
       :members:
+
+This module forms part of the `InaSAFE <http://inasafe.org>`_ tool.

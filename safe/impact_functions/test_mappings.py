@@ -1,13 +1,11 @@
 """Test mappings for impact functions
 """
 
-import sys
-import os
 import unittest
 
 from safe.storage.core import read_layer
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
-from safe.impact_functions.mappings import *
+from safe.common.testing import TESTDATA
+from safe.impact_functions.mappings import osm2padang, osm2bnpb
 
 
 class Test_mappings(unittest.TestCase):
@@ -16,12 +14,11 @@ class Test_mappings(unittest.TestCase):
         """OSM structure types maps to Padang vulnerability curves
         """
 
-        hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
+        #hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
         exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
                              % TESTDATA)
 
         # Calculate impact using API
-        H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
         # Map from OSM attributes to the padang building classes
@@ -47,7 +44,7 @@ class Test_mappings(unittest.TestCase):
 
             try:
                 levels = int(levels)
-            except:
+            except ValueError:
                 # E.g. 'ILP jalan'
                 assert vclass == 2, msg
                 continue
@@ -73,18 +70,17 @@ class Test_mappings(unittest.TestCase):
             else:
                 assert vclass == 2, msg
 
-    test_osm2padang.slow = 1
+    test_osm2padang.slow = True
 
     def test_osm2bnpb(self):
         """OSM structure types maps to BNPB vulnerability curves
         """
 
-        hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
+        #hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
         exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
                              % TESTDATA)
 
         # Calculate impact using API
-        H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
         # Map from OSM attributes to the padang building classes
@@ -94,8 +90,8 @@ class Test_mappings(unittest.TestCase):
             try:
                 vclass = Emap.get_data('VCLASS', i)
             except KeyError:
-                print
-                print i, Emap.get_data()[i]
+                #print
+                #print i, Emap.get_data()[i]
                 #import sys; sys.exit()
                 pass
 
@@ -115,7 +111,7 @@ class Test_mappings(unittest.TestCase):
 
             try:
                 levels = int(levels)
-            except:
+            except ValueError:
                 # E.g. 'ILP jalan'
                 assert vclass == 'URM', msg
                 continue
@@ -135,7 +131,7 @@ class Test_mappings(unittest.TestCase):
             else:
                 assert vclass == 'URM', msg
 
-    test_osm2bnpb.slow = 1
+    test_osm2bnpb.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_mappings, 'test')

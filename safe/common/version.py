@@ -1,24 +1,40 @@
 import datetime
 import os
-import base64
-import re
-import math
 import subprocess
 
 
 def get_version(version=None):
-    "Returns a PEP 386-compliant version number from VERSION."
+    """Returns a PEP 386-compliant version number from VERSION."""
+
     if version is None:
-        from safe import __version__ as version
-    else:
-        assert len(version) == 5
-        assert version[3] in ('alpha', 'beta', 'rc', 'final')
+        # Get location of application wide version info
+        rootdir = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                               '..', '..'))
+        fid = open(os.path.join(rootdir, 'metadata.txt'))
+        for line in fid.readlines():
+            if line.startswith('version'):
+                verstring = line.strip().split('=')[1]
+                verlist = verstring.split('.')
+
+            if line.startswith('status'):
+                status = line.strip().split('=')[1]
+        fid.close()
+        version = tuple(verlist + [status] + [0])
+
+    if len(version) != 5:
+        msg = ('Version must be a tuple of length 5. '
+               'I got %s' % str(version))
+        raise RuntimeError(msg)
+
+    if version[3] not in ('alpha', 'beta', 'rc', 'final'):
+        msg = ('Version tuple not as expected. '
+               'I got %s' % str(version))
+        raise RuntimeError(msg)
 
     # Now build the two parts of the version number:
     # main = X.Y[.Z]
     # sub = .devN - for pre-alpha releases
     #     | {a|b|c}N - for alpha, beta and rc releases
-
     parts = 2 if version[2] == 0 else 3
     main = '.'.join(str(x) for x in version[:parts])
 

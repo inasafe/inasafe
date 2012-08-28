@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
@@ -34,23 +35,23 @@ from qgis.core import (QgsMapLayer,
                        QgsCoordinateTransform)
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
-                                   getFunctionTitle,
-                                   getOptimalExtent,
-                                   getBufferedExtent,
-                                   internationalisedNames)
+                                      getFunctionTitle,
+                                      getOptimalExtent,
+                                      getBufferedExtent,
+                                      internationalisedNames)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
-                               InsufficientOverlapException,
-                               InvalidParameterException,
-                               HashNotFoundException)
+                                  InsufficientOverlapException,
+                                  InvalidParameterException,
+                                  InsufficientParametersException,
+                                  HashNotFoundException)
 from safe_qgis.map import Map
-from safe_qgis.utilities import (getTempDir,
-                              htmlHeader,
-                              htmlFooter,
-                              setVectorStyle,
-                              setRasterStyle,
-                              qgisVersion)
+from safe_qgis.utilities import (htmlHeader,
+                                 htmlFooter,
+                                 setVectorStyle,
+                                 setRasterStyle,
+                                 qgisVersion)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -64,6 +65,7 @@ except ImportError:
     print 'Debugging was disabled'
 
 
+# pylint: disable=W0231
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the Risk In A Box plugin."""
 
@@ -187,6 +189,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
 
+#pylint: disable=W0702
     def disconnectLayerListener(self):
         """Destroy the signal/slot to listen for changes in the layers loaded
         in QGIS.
@@ -232,6 +235,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except:
             pass
 
+#pylint: enable=W0702
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
         determine if it is appropriate for the OK button to be enabled
@@ -479,7 +483,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             myRegistry = QgsMapLayerRegistry.instance()
         except:
+            #pylint: disable=W0702
             return
+            #pylint: enable=W0702
         myCanvasLayers = self.iface.mapCanvas().layers()
         # mapLayers returns a QMap<QString id, QgsMapLayer layer>
         myLayers = myRegistry.mapLayers().values()
@@ -495,11 +501,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             mySource = str(myLayer.id())
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
-            myTitle = None
             try:
                 myTitle = self.keywordIO.readKeywords(myLayer, 'title')
             except:
+                #pylint: disable=W0702
                 myTitle = myName
+                #pylint: enable=W0702
             else:
                 # Lookup internationalised title if available
                 if myTitle in internationalisedNames:
@@ -515,7 +522,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myCategory = self.keywordIO.readKeywords(myLayer, 'category')
             except:
                 # continue ignoring this layer
+                #pylint: disable=W0702
                 continue
+                #pylint: enable=W0702
+
             if myCategory == 'hazard':
                 self.addComboItemInOrder(self.cboHazard, myTitle, mySource)
                 self.hazardLayers.append(myLayer)
@@ -658,9 +668,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def setupCalculator(self):
         """Initialise the ImpactCalculator based on the current
-        state of the ui."""
-        myHazardFilename = None
-        myExposureFilename = None
+        state of the ui.
+
+        Args: None
+
+        Returns: None
+
+        Raises: Propogates any error from :func:optimalClip()
+        """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
         except:
@@ -691,7 +706,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             self.setupCalculator()
-        except Exception, e:
+        except InsufficientOverlapException, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An exception occurred when setting up the '
@@ -703,21 +718,30 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
         try:
             self.runner = self.calculator.getRunner()
+        except InsufficientParametersException, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myContext = self.tr('An exception occurred when setting up the '
+                                ' model runner.')
+            myMessage = getExceptionWithStacktrace(e, html=True,
+                                                   context=myContext)
+            self.displayHtml(myMessage)
 
-            QtCore.QObject.connect(self.runner,
-                               QtCore.SIGNAL('done()'),
-                               self.completed)
-            QtGui.qApp.setOverrideCursor(
-                    QtGui.QCursor(QtCore.Qt.WaitCursor))
-            self.repaint()
-            QtGui.qApp.processEvents()
+        QtCore.QObject.connect(self.runner,
+                           QtCore.SIGNAL('done()'),
+                           self.completed)
+        QtGui.qApp.setOverrideCursor(
+                QtGui.QCursor(QtCore.Qt.WaitCursor))
+        self.repaint()
+        QtGui.qApp.processEvents()
 
-            myTitle = self.tr('Calculating impact...')
-            myMessage = self.tr('This may take a little while - we are '
-                                'computing the areas that will be impacted '
-                                'by the hazard and writing the result to '
-                                'a new layer.')
-            myProgress = 66
+        myTitle = self.tr('Calculating impact...')
+        myMessage = self.tr('This may take a little while - we are '
+                            'computing the areas that will be impacted '
+                            'by the hazard and writing the result to '
+                            'a new layer.')
+        myProgress = 66
+        try:
             self.showBusy(myTitle, myMessage, myProgress)
             if self.runInThreadFlag:
                 self.runner.start()  # Run in different thread
@@ -1261,7 +1285,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
-                            getTempDir(),
+                            temp_dir(),
                             self.tr('Pdf File (*.pdf)'))
         myMap = Map(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())

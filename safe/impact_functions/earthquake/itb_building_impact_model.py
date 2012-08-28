@@ -29,7 +29,6 @@ from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
 from safe.common.numerics import lognormal_cdf
 from safe.common.utilities import ugettext as _
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 from safe.common.utilities import verify
 
 path = os.path.dirname(__file__)
@@ -37,11 +36,11 @@ path = os.path.dirname(__file__)
 
 class AutoVivification(dict):
     """Implementation of perl's autovivification feature."""
-    def __getitem__(self, item):
+    def __getitem__(self, _item):
         try:
-            return dict.__getitem__(self, item)
+            return dict.__getitem__(self, _item)
         except KeyError:
-            value = self[item] = type(self)()
+            value = self[_item] = type(self)()
             return value
 
 # read vulnerability information

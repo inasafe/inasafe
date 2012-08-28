@@ -1,101 +1,116 @@
-"""Polygon, line and point algorithms
+"""**Polygon, line and point algorithms.**
 
-The main public functions are:
+.. tip::
+   The main public functions are:
     separate_points_by_polygon: Fundamental clipper
     intersection: Determine intersections of lines
 
-Some more specific or helper functions include:
+   Some more specific or helper functions include:
     inside_polygon
     is_inside_polygon
     outside_polygon
     is_outside_polygon
     point_on_line
+
 """
 
+__author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
+__version__ = '0.5.0'
+__revision__ = '$Format:%H$'
+__date__ = '01/11/2010'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
+
+
+import logging
 import numpy
-from math import sqrt
 from random import uniform, seed as seed_function
 
 from safe.common.numerics import ensure_numeric
 from safe.common.numerics import grid2points, geotransform2axes
+
+LOGGER = logging.getLogger('InaSAFE')
+
+
+class PolygonInputError(Exception):
+    pass
 
 
 def separate_points_by_polygon(points, polygon,
                                closed=True,
                                check_input=True,
                                use_numpy=True):
-    """Determine whether points are inside or outside a polygon
+    """Determine whether points are inside or outside a polygon.
 
-    Input:
-       points - Tuple of (x, y) coordinates, or list of tuples
-       polygon - list or Nx2 array of polygon vertices
-       closed - (optional) determine whether points on boundary should be
-       regarded as belonging to the polygon (closed = True)
-       or not (closed = False)
-       check_input: Allows faster execution if set to False
-       use_numpy: Use the fast numpy implementation
+    Args:
+        * points: Tuple of (x, y) coordinates, or list of tuples
+        * polygon: list or Nx2 array of polygon vertices
+        * closed: (optional) determine whether points on boundary should be
+              regarded as belonging to the polygon (closed = True)
+              or not (closed = False)
+        * check_input: Allows faster execution if set to False
+        * use_numpy: Use the fast numpy implementation
 
-    Output:
-       indices: array of same length as points with indices of points falling
-       inside the polygon listed from the beginning and indices of points
-       falling outside listed from the end.
+    Returns:
+        * indices_inside_polygon: array of indices of points
+              falling inside the polygon
+        * indices_outside_polygon: array of indices of points
+              falling outside the polygon
 
-       count: count of points falling inside the polygon
+    Raises: A generic Exception is raised for unexpected input.
 
-       The indices of points inside are obtained as indices[:count]
-       The indices of points outside are obtained as indices[count:]
+    Example:
 
-    Examples:
-       U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square
+        U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square
+        separate_points_by_polygon( [[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
 
-       separate_points_by_polygon( [[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
-       will return the indices [0, 2, 1] and count == 2 as only the first
-       and the last point are inside the unit square
+        will return the indices [0, 2, 1] and count == 2 as only the first
+        and the last point are inside the unit square
 
     Remarks:
-       The vertices may be listed clockwise or counterclockwise and
-       the first point may optionally be repeated.
-       Polygons do not need to be convex.
-       Polygons can have holes in them and points inside a hole is
-       regarded as being outside the polygon.
+        The vertices may be listed clockwise or counterclockwise and
+        the first point may optionally be repeated.
+        Polygons do not need to be convex.
+        Polygons can have holes in them and points inside a hole is
+        regarded as being outside the polygon.
 
     Algorithm is based on work by Darel Finley,
     http://www.alienryderflex.com/polygon/
-
     """
 
     if check_input:
         # Input checks
         msg = 'Keyword argument "closed" must be boolean'
         if not isinstance(closed, bool):
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         try:
             points = ensure_numeric(points, numpy.float)
         except Exception, e:
             msg = ('Points could not be converted to numeric array: %s'
                    % str(e))
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
         except Exception, e:
             msg = ('Polygon could not be converted to numeric array: %s'
                    % str(e))
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = 'Polygon array must be a 2d array of vertices'
         if len(polygon.shape) != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = 'Polygon array must have two columns'
         if polygon.shape[1] != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = ('Points array must be 1 or 2 dimensional. '
                'I got %d dimensions' % len(points.shape))
         if not 0 < len(points.shape) < 3:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         if len(points.shape) == 1:
             # Only one point was passed in. Convert to array of points.
@@ -104,25 +119,22 @@ def separate_points_by_polygon(points, polygon,
         msg = ('Point array must have two columns (x,y), '
                'I got points.shape[1]=%d' % points.shape[0])
         if points.shape[1] != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = ('Points array must be a 2d array. I got %s...'
                % str(points[:30]))
         if len(points.shape) != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
         msg = 'Points array must have two columns'
         if points.shape[1] != 2:
-            raise Exception(msg)
+            raise PolygonInputError(msg)
 
     # Exclude points that outside polygon bounding box
     minpx = min(polygon[:, 0])
     maxpx = max(polygon[:, 0])
     minpy = min(polygon[:, 1])
     maxpy = max(polygon[:, 1])
-
-    M = points.shape[0]
-    N = polygon.shape[0]
 
     x = points[:, 0]
     y = points[:, 1]
@@ -132,23 +144,21 @@ def separate_points_by_polygon(points, polygon,
     inside_box = -outside_box
     candidate_points = points[inside_box]
 
-    # FIXME (Ole): I would like to return just indices_inside, indices_outside
-    # instead of the legacy of one array with a break point
-    # in the underlying _separate_by_points functions too
     if use_numpy:
-        indices, count = _separate_points_by_polygon(candidate_points,
-                                                     polygon,
-                                                     closed=closed)
+        func = _separate_points_by_polygon
     else:
-        indices, count = _separate_points_by_polygon_python(candidate_points,
-                                                            polygon,
-                                                            closed=closed)
+        func = _separate_points_by_polygon_python
+
+    local_indices_inside, local_indices_outside = func(candidate_points,
+                                                       polygon,
+                                                       closed=closed)
 
     # Map local indices from candidate points to global indices of all points
-    indices_inside_polygon = numpy.where(inside_box)[0][indices[:count]]
-
     indices_outside_box = numpy.where(outside_box)[0]
-    indices_in_box_outside_poly = numpy.where(inside_box)[0][indices[count:]]
+    indices_inside_box = numpy.where(inside_box)[0]
+
+    indices_inside_polygon = indices_inside_box[local_indices_inside]
+    indices_in_box_outside_poly = indices_inside_box[local_indices_outside]
     indices_outside_polygon = numpy.concatenate((indices_outside_box,
                                                  indices_in_box_outside_poly))
 
@@ -187,8 +197,8 @@ def _separate_points_by_polygon(points, polygon,
     N = polygon.shape[0]
     M = points.shape[0]
     if M == 0:
-        # If no points return 0-vector
-        return numpy.arange(0), 0
+        # If no points return two 0-vectors
+        return numpy.arange(0), numpy.arange(0)
 
     x = points[:, 0]
     y = points[:, 1]
@@ -246,7 +256,7 @@ def _separate_points_by_polygon(points, polygon,
     # Indices of outside points
     indices[inside_index:] = numpy.where(1 - inside)[0]
 
-    return indices, inside_index
+    return indices[:inside_index], indices[inside_index:]
 
 
 def _separate_points_by_polygon_python(points, polygon,
@@ -296,7 +306,7 @@ def _separate_points_by_polygon_python(points, polygon,
     inside_index = 0  # Keep track of points inside
     outside_index = M - 1  # Keep track of points outside (starting from end)
 
-    # Begin main loop (for each point) - FIXME (write as vector ops)
+    # Begin main loop (for each point)
     for k in range(M):
         x = points[k, 0]
         y = points[k, 1]
@@ -346,7 +356,7 @@ def _separate_points_by_polygon_python(points, polygon,
     indices[inside_index:] = tmp[::-1]
 
     # Return reference result
-    return indices, inside_index
+    return indices[:inside_index], indices[inside_index:]
 
 
 def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
@@ -468,8 +478,8 @@ def inside_polygon(points, polygon, closed=True):
     """
 
     indices, _ = separate_points_by_polygon(points, polygon,
-                                                closed=closed,
-                                                check_input=True)
+                                            closed=closed,
+                                            check_input=True)
 
     # Return indices of points inside polygon
     return indices
@@ -585,7 +595,7 @@ def clip_lines_by_polygon(lines, polygon,
             if not len(line.shape) == 2:
                 raise RuntimeError(msg)
 
-    N = polygon.shape[0]  # Number of vertices in polygon
+    #N = polygon.shape[0]  # Number of vertices in polygon
     M = len(lines)  # Number of lines
 
     inside_line_segments = []
@@ -723,8 +733,6 @@ def clip_line_by_polygon(line, polygon,
     # 3: For each new line segment
     #    * Calculate its midpoint
     #    * Determine if it is inside or outside clipping polygon
-
-    # FIXME (Ole): Vectorise
 
     # Loop through line segments
     inside_line_segments = []
@@ -941,31 +949,31 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 #------------------------------------
 # Functionality for line intersection
 #------------------------------------
-def multiple_intersection(segments0, segments1, rtol=1.0e-5, atol=1.0e-8):
-    """Returns intersecting points between multiple line segments.
-
-    Note, if parallel lines coincide partly (i.e. share a common segment),
-    the midpoint of the segment where lines coincide is returned
-
-    Inputs:
-        lines: A
-        , line1: Each defined by two end points as in:
-                      [[x0, y0], [x1, y1]]
-                      A line can also be a 2x2 numpy array with each row
-                      corresponding to a point.
-
-    Output:
-        status, value - where status and value is interpreted as follows:
-        status == 0: no intersection, value set to None.
-        status == 1: intersection point found and returned in value as [x,y].
-        status == 2: Collinear overlapping lines found.
-                     Value takes the form [[x0,y0], [x1,y1]] which is the
-                     segment common to both lines.
-        status == 3: Collinear non-overlapping lines. Value set to None.
-        status == 4: Lines are parallel. Value set to None.
-    """
-
-    pass
+#def multiple_intersection(segments0, segments1, rtol=1.0e-5, atol=1.0e-8):
+#    """Returns intersecting points between multiple line segments.
+#
+#    Note, if parallel lines coincide partly (i.e. share a common segment),
+#    the midpoint of the segment where lines coincide is returned
+#
+#    Inputs:
+#        lines: A
+#        , line1: Each defined by two end points as in:
+#                      [[x0, y0], [x1, y1]]
+#                      A line can also be a 2x2 numpy array with each row
+#                      corresponding to a point.
+#
+#    Output:
+#        status, value - where status and value is interpreted as follows:
+#        status == 0: no intersection, value set to None.
+#        status == 1: intersection point found and returned in value as [x,y].
+#        status == 2: Collinear overlapping lines found.
+#                     Value takes the form [[x0,y0], [x1,y1]] which is the
+#                     segment common to both lines.
+#        status == 3: Collinear non-overlapping lines. Value set to None.
+#        status == 4: Lines are parallel. Value set to None.
+#    """
+#
+#    pass
 
 
 def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
@@ -1018,7 +1026,7 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
                                        [x2, y2], [x3, y3])
         else:
             # Lines are parallel but aren't collinear
-            return 4, None  # FIXME (Ole): Add distance here instead of None
+            return 4, None
     else:
         # Lines are not parallel, check if they intersect
         u0 = u0 / denom
@@ -1046,32 +1054,32 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
 # of collinear lines
 # (p0,p1) defines line 0, (p2,p3) defines line 1.
 
-def lines_dont_coincide(p0, p1, p2, p3):
+def lines_dont_coincide(_p0, _p1, _p2, _p3):
     return 3, None
 
 
-def lines_0_fully_included_in_1(p0, p1, p2, p3):
-    return 2, numpy.array([p0, p1])
+def lines_0_fully_included_in_1(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p0, _p1])
 
 
-def lines_1_fully_included_in_0(p0, p1, p2, p3):
-    return 2, numpy.array([p2, p3])
+def lines_1_fully_included_in_0(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p2, _p3])
 
 
-def lines_overlap_same_direction(p0, p1, p2, p3):
-    return 2, numpy.array([p0, p3])
+def lines_overlap_same_direction(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p0, _p3])
 
 
-def lines_overlap_same_direction2(p0, p1, p2, p3):
-    return 2, numpy.array([p2, p1])
+def lines_overlap_same_direction2(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p2, _p1])
 
 
-def lines_overlap_opposite_direction(p0, p1, p2, p3):
-    return 2, numpy.array([p0, p2])
+def lines_overlap_opposite_direction(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p0, _p2])
 
 
-def lines_overlap_opposite_direction2(p0, p1, p2, p3):
-    return 2, numpy.array([p3, p1])
+def lines_overlap_opposite_direction2(_p0, _p1, _p2, _p3):
+    return 2, numpy.array([_p3, _p1])
 
 
 # This function called when an impossible state is found
@@ -1103,8 +1111,7 @@ collinearmap = {(False, False, False, False): lines_dont_coincide,
 
 
 # Functions for clipping of rasters by polygons
-def clip_grid_by_polygons(A, geotransform, polygons,
-                          check_input=True):
+def clip_grid_by_polygons(A, geotransform, polygons):
     """Clip raster grid by polygon
 
     Input

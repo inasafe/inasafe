@@ -56,7 +56,7 @@ compile-translation-strings: compile
 	@#Compile qt messages binary
 	cd safe_qgis; lrelease inasafe.pro; cd ..
 	@#compile gettext messages binary
-	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 
 test-translations:
 	@echo
@@ -73,7 +73,7 @@ translation-stats:
 	@echo
 	@echo "Gettext translations (*.po):"
 	@echo "----------------------------"
-	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@echo
 	@echo "Qt translations (*.ts):"
 	@echo "----------------------------"
@@ -99,14 +99,22 @@ clean:
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
 
-# Run the test suite followed by pep8 style checking
-test: docs test_suite pep8 dependency_test unwanted_strings data_audit test-translations
-
-# Run the test suite followed by pep8 style checking - dont update from git for test data
-test_no_git: docs test_suite_no_git pep8 disabled_tests dependency_test unwanted_strings data_audit
+# Run the test suite followed by style checking
+test: docs test_suite pep8 pylint dependency_test unwanted_strings data_audit test-translations
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
+
+set_python:
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
+
+quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings data_audit test-translations
+
+test_suite_quick:
+	nosetests -A 'not slow' -v safe --stop
+
+it:
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' safe --stop
 
 # Run pep8 style checking
 pep8:
@@ -176,10 +184,10 @@ gui_test_suite: compile testdata
 testdata:
 	@echo
 	@echo "-----------------------------------------------------------"
-	@echo "Updating test data - please hit Enter if asked for password"
+	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 17bab3b8e4e590f93e0c3ccb31959d7e2918bcbc
+	@scripts/update-test-data.sh 83332a9
 
 disabled_tests:
 	@echo
@@ -217,7 +225,7 @@ dependency_test:
 	@grep -R "geoserver" $(NONGUI) || true
 	@grep -R "owslib" $(NONGUI) || true
 
-list_gis_packages:
+list_gpackages:
 	@echo
 	@echo "---------------------------------------"
 	@echo "List of QGis related packages installed"
@@ -236,16 +244,17 @@ data_audit:
 pylint:
 	@echo
 	@echo "---------------------------------------"
-	@echo "Pylint report                          "
+	@echo "Pylint violations. For details run     "
+	@echo "make jenkins-pylint                    "
 	@echo "---------------------------------------"
-	pylint --disable=C,R safe safe_qgis
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime | wc -l
 
 profile:
 	@echo
 	@echo "---------------------------------------"
 	@echo "Profiling engine                       "
 	@echo "---------------------------------------"
-	python -m cProfile engine/test_engine.py -s cumulative
+	python -m cProfile safe/engine/test_engine.py -s cumulative
 
 ##########################################################
 #
@@ -267,7 +276,7 @@ jenkins-pyflakes:
 	@echo "----------------------------------"
 	@echo "PyFlakes check for Jenkins"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes common storage engine impact_functions safe_qgis > pyflakes.log || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis realtime > pyflakes.log || :
 
 jenkins-sloccount:
 	@echo "----------------------"
@@ -289,11 +298,11 @@ jenkins-pylint:
 	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable -i y --reports=y --disable=C,R --rcfile=pylintrc --ignore=odict.py,is_help_base.py,is_keywords_dialog_base.py,is_options_dialog_base.py,is_dock_base.py common storage engine safe_qgis | grep -v 'I0011' > pylint.log || :
+	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis realtime > pylint.log || :
 
 jenkins-pep8:
 	@echo
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,is_keywords_dialog_base.py,is_dock_base.py,is_options_dialog_base.py,resources.py,resources_rc.py,is_help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . > pep8.log || :

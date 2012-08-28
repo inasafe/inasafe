@@ -5,7 +5,7 @@
   </metadata>
 
   <datafile>
-    <filename>padang_buildings_osm_4326.shp</filename>
+    <filename>padang_buildings_osm_900913.shp</filename>
     <checksum>2478438015</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
@@ -15,7 +15,7 @@
   </datafile>
 
   <datafile>
-    <filename>padang_buildings_osm_4326.shx</filename>
+    <filename>padang_buildings_osm_900913.shx</filename>
     <checksum>3775130319</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
@@ -25,7 +25,7 @@
   </datafile>
 
   <datafile>
-    <filename>padang_buildings_osm_4326.dbf</filename>
+    <filename>padang_buildings_osm_900913.dbf</filename>
     <checksum>3290371744</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>

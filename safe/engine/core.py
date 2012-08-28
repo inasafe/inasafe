@@ -3,20 +3,11 @@
 Provides the function calculate_impact()
 """
 
-import os
-import sys
 import numpy
 
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
-from safe.storage.utilities import unique_filename
-from safe.storage.utilities import bbox_intersection
-from safe.storage.utilities import buffered_bounding_box
-from safe.storage.utilities import is_sequence
-from safe.common.utilities import verify
-from safe.storage.core import bboxlist2string, bboxstring2list
-from safe.storage.core import check_bbox_string
-from safe.storage.core import read_layer
+from safe.common.utilities import unique_filename, verify
 from utilities import REQUIRED_KEYWORDS
 
 # The LOGGER is intialised in utilities.py by init
@@ -24,15 +15,13 @@ import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def calculate_impact(layers, impact_fcn,
-                     comment=''):
+def calculate_impact(layers, impact_fcn):
     """Calculate impact levels as a function of list of input layers
 
     Input
         layers: List of Raster and Vector layer objects to be used for analysis
 
         impact_fcn: Function of the form f(layers)
-        comment:
 
     Output
         filename of resulting impact layer (GML). Comment is embedded as
@@ -124,7 +113,6 @@ def check_data_integrity(layer_objects):
     # Choosing 'None' will use value of first layer.
     reference_projection = Projection(DEFAULT_PROJECTION)
     geotransform = None
-    coordinates = None
 
     for layer in layer_objects:
 

@@ -296,43 +296,6 @@ def getExceptionWithStacktrace(e, html=False, context=None):
         return s
 
 
-def getTempDir(theSubDirectory=None):
-    """Obtain the temporary working directory for the operating system.
-
-    An inasafe subdirectory will automatically be created under this and
-    if specified, a user subdirectory under that.
-
-    Args:
-        theSubDirectory str - optional argument which will cause an additional
-                subirectory to be created e.g. /tmp/inasafe/foo/
-
-    Returns:
-        Path to the output clipped layer (placed in the system temp dir).
-
-    Raises:
-       Any errors from the underlying system calls.
-    """
-    myUser = getpass.getuser().replace(' ', '_')
-    myCurrentDate = date.today()
-    myDateString = myCurrentDate.strftime("%d-%m-%Y")
-    # Following 4 lines are a workaround for tempfile.tempdir() unreliabilty
-    myHandle, myFilename = tempfile.mkstemp()
-    os.close(myHandle)
-    myDir = os.path.dirname(myFilename)
-    os.remove(myFilename)
-    myPath = os.path.join(myDir, 'inasafe', myDateString, myUser, 'work')
-    if theSubDirectory is not None:
-        myPath = os.path.join(myPath, 'theSubDirectory')
-    if not os.path.exists(myPath):
-        # Ensure that the dir is world writable
-        # Umask sets the new mask and returns the old
-        myOldMask = os.umask(0000)
-        os.makedirs(myPath, 0777)
-        # Resinstate the old mask for tmp
-        os.umask(myOldMask)
-    return myPath
-
-
 def getWGS84resolution(theLayer):
     """Return resolution of raster layer in EPSG:4326
 
@@ -360,7 +323,7 @@ def getWGS84resolution(theLayer):
         # Reproject extent to EPSG:4326
         myGeoCrs = QgsCoordinateReferenceSystem()
         myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-        myXForm = QgsCoordinateTransform(myGeoCrs, theLayer.crs())
+        myXForm = QgsCoordinateTransform(theLayer.crs(), myGeoCrs)
         myExtent = theLayer.extent()
         myProjectedExtent = myXForm.transformBoundingBox(myExtent)
 

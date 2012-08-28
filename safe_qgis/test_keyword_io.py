@@ -5,18 +5,18 @@ import tempfile
 import shutil
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
+from safe.common.utilities import temp_dir
+
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 
+# For testing and demoing
+from safe.common.testing import HAZDATA, TESTDATA
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundException
-from safe_qgis.utilities import getTempDir
-
-# For testing and demoing
-from safe.common.testing import HAZDATA, TESTDATA
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 # Don't change this, not even formatting, you will break tests!
@@ -37,7 +37,8 @@ class KeywordIOTest(unittest.TestCase):
         self.sqliteLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
                                        'spatialite')
         myHazardPath = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
-        self.fileRasterLayer, myType = loadLayer(myHazardPath, theDirectory=None)
+        self.fileRasterLayer, myType = loadLayer(myHazardPath,
+                                                 theDirectory=None)
         del myType
         self.fileVectorLayer, myType = loadLayer('Padang_WGS84.shp')
         del myType
@@ -66,7 +67,7 @@ class KeywordIOTest(unittest.TestCase):
     def test_writeReadKeywordFromUri(self):
         """Test we can set and get keywords for a non local datasource"""
         myHandle, myFilename = tempfile.mkstemp('.db', 'keywords_',
-                                            getTempDir())
+                                            temp_dir())
 
         # Ensure the file is deleted before we try to write to it
         # fixes windows specific issue where you get a message like this

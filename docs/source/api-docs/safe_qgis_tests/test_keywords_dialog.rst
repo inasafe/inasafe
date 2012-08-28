@@ -1,8 +1,7 @@
-Module: safe_qgis.test_keywords_dialog
-======================================
-
-This page contains the documentation for the InaSAFE **test_keywords_dialog**
-unit tests.
+Module:  safe_qgis.test_keywords_dialog
+=======================================
 
 .. automodule:: safe_qgis.test_keywords_dialog
       :members:
+
+This module forms part of the `InaSAFE <http://inasafe.org>`_ tool.

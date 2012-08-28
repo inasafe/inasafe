@@ -4,7 +4,6 @@ from safe.impact_functions.core import get_question
 from safe.storage.raster import Raster
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
-from safe.common.numerics import normal_cdf
 
 import numpy
 
@@ -82,7 +81,7 @@ class ITBFatalityFunction(FunctionProvider):
     title = _('Die')
 
     def run(self, layers,
-            x=0.62275231, y=8.03314466, zeta=2.15):
+            x=0.62275231, y=8.03314466):  # , zeta=2.15):
         """Indonesian Earthquake Fatality Model
 
         Input
@@ -133,7 +132,7 @@ class ITBFatalityFunction(FunctionProvider):
             # Calculate expected number of displaced people per level
             try:
                 D = displacement_rate[mmi] * I
-            except Exception, e:
+            except KeyError, e:
                 msg = 'mmi = %i, I = %s, Error msg: %s' % (mmi, str(I), str(e))
                 fid = open('C:\\error_message.txt', 'wb')
                 fid.write(msg)

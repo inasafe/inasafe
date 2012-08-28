@@ -146,7 +146,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         Returns:
            None
         Raises:
-           None
+           InsufficientParametersException
            set.
         """
         if (self._hazardLayer is None or self._exposureLayer is None

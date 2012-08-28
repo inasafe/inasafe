@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -x
 LOCALE=$1
-PODIR=i18n/${LOCALE}/LC_MESSAGES
+PODIR=safe/i18n/${LOCALE}/LC_MESSAGES
 POPATH=${PODIR}/inasafe.po
 
 # Keep the current field separator

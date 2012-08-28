@@ -74,7 +74,7 @@ the riab.py setupI18n method)::
 
         Args:
            thePreferredLocale - optional parameter which if set
-           will override any other way of determining locale.
+               will override any other way of determining locale.
         Returns:
            None.
         Raises:
@@ -108,13 +108,13 @@ following steps are required:
 
 An example of the contents of a module's API .rst if provided below::
 
-   Module: riab
-   ============
-   This page contains the documentation for the  InaSAFE code **riab**
-   module.
+    Module:  safe.common.polygon
+    ============================
 
-   .. automodule:: gui.riab
-      :members:
+    .. automodule:: safe.common.polygon
+          :members:
+
+This module forms part of the `InaSAFE <http://inasafe.org>`_ tool.
 
 A couple of things should be noted here:
 

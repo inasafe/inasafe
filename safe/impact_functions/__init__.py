@@ -8,11 +8,13 @@ dirname = os.path.dirname(__file__)
 
 # Import all the subdirectories
 for f in os.listdir(dirname):
-    if f in ['experimental']:
-        continue
-
     if os.path.isdir(os.path.join(dirname, f)):
-        __import__('safe.impact_functions.%s' % f)
+        try:
+            __import__('safe.impact_functions.%s' % f)
+        except ImportError:
+            # Ignore e.g. directories that are not Python modules
+            # FIXME (Ole): Should we emit a warning to the log file?
+            pass
 
 
 from safe.impact_functions.core import FunctionProvider

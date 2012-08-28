@@ -1,0 +1,12 @@
+[osm_buildings]
+datatype: osm
+category: exposure
+subcategory: building
+purpose: dki
+title: buildings_osm_4326
+
+[osm_flood]
+datatype: flood
+category: hazard
+subcategory: building
+title: flood_osm_4326

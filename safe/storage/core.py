@@ -8,8 +8,8 @@ import os
 
 from vector import Vector
 from raster import Raster
-from safe.common.utilities import verify
-from safe.common.exceptions import ReadLayerError, BoundingBoxError
+from safe.common.utilities import verify, VerificationError
+from safe.common.exceptions import BoundingBoxError, ReadLayerError
 
 # FIXME (Ole): make logging work again
 import logging
@@ -114,7 +114,10 @@ def bboxlist2string(bbox, decimals=6):
 
     msg = ('Bounding box must have 4 coordinates [W, S, E, N]. '
            'I got %s' % str(bbox))
-    verify(len(bbox) == 4, msg)
+    try:
+        verify(len(bbox) == 4, msg)
+    except VerificationError:
+        raise BoundingBoxError(msg)
 
     for x in bbox:
         try:
@@ -122,7 +125,7 @@ def bboxlist2string(bbox, decimals=6):
         except ValueError, e:
             msg = ('Bounding box %s contained non-numeric entry %s, '
                    'original error was "%s".' % (bbox, x, e))
-            raise AssertionError(msg)
+            raise BoundingBoxError(msg)
 
     # Make template of the form '%.5f,%.5f,%.5f,%.5f'
     template = (('%%.%if,' % decimals) * 4)[:-1]
@@ -149,7 +152,10 @@ def bboxstring2list(bbox_string):
     fields = bbox_string.split(',')
     msg = ('Bounding box string must have 4 coordinates in the form '
            '"W,S,E,N". I got bbox == "%s"' % bbox_string)
-    verify(len(fields) == 4, msg)
+    try:
+        verify(len(fields) == 4, msg)
+    except VerificationError:
+        raise BoundingBoxError(msg)
 
     for x in fields:
         try:
@@ -157,7 +163,7 @@ def bboxstring2list(bbox_string):
         except ValueError, e:
             msg = ('Bounding box %s contained non-numeric entry %s, '
                    'original error was "%s".' % (bbox_string, x, e))
-            raise AssertionError(msg)
+            raise BoundingBoxError(msg)
 
     return [float(x) for x in fields]
 

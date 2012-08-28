@@ -1,13 +1,17 @@
 import unittest
 import numpy
-import sys
-import os
 
-# Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
+# Import functions tested by this module.
+# NOTE (Ole): Those missing here are in fact tested elsewhere
 
-from safe.common.numerics import *
+#from safe.common.numerics import ensure_numeric
+#from safe.common.numerics import nanallclose
+#from safe.common.numerics import normal_cdf
+#from safe.common.numerics import lognormal_cdf
+#from safe.common.numerics import erf
+from safe.common.numerics import axes2points
+from safe.common.numerics import grid2points
+#from safe.common.numerics import geotransform2axes
 
 
 class Test_Numerics(unittest.TestCase):

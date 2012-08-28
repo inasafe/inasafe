@@ -1,8 +1,21 @@
-"""Class Vector
+"""**Vector Module**
+
+.. tip:: Provides functionality for manipulation of vector data. The data can
+   be in-memory or file based.
+
 """
+
+__author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
+__version__ = '0.5.0'
+__revision__ = '$Format:%H$'
+__date__ = '01/11/2010'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 import os
 import numpy
+import logging
 
 import copy as copy_module
 from osgeo import ogr, gdal
@@ -10,6 +23,7 @@ from safe.common.polygon import inside_polygon, clip_line_by_polygon
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.dynamic_translations import names as internationalised_titles
+from safe.common.exceptions import ReadLayerError
 
 from layer import Layer
 from projection import Projection
@@ -23,45 +37,55 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
 
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class Vector(Layer):
-    """Class for abstraction of vector data
+    """Class for abstraction of vector data.
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
-                 geometry_type=None,
-                 name='', keywords=None, style_info=None):
+                 geometry_type=None, name='', keywords=None, style_info=None,
+                 sublayer=None):
         """Initialise object with either geometry or filename
 
-        Input
-            data: Can be either
-                * a filename of a vector file format known to GDAL
-                * List of dictionaries of fields associated with
-                  point coordinates
+        Args:
+            * data: Can be either
+                * A filename of a vector file format known to GDAL.
+                * List of dictionaries of field names and attribute values
+                  associated with each point coordinate.
                 * None
-            projection: Geospatial reference in WKT format.
-                        Only used if geometry is provide as a numeric array,
-                        if None, WGS84 geographic is assumed
-            geometry: A list of either point coordinates or polygons/lines
-                      (see note below)
-            geometry_type: Desired interpretation of geometry.
-                           Valid options are 'point', 'line', 'polygon' or
-                           the ogr types: 1, 2, 3
-                           If None, a geometry_type will be inferred
-            name: Optional name for layer.
-                  Only used if geometry is provide as a numeric array
-            keywords: Optional dictionary with keywords that describe the
-                      layer. When the layer is stored, these keywords will
-                      be written into an associated file with extension
-                      .keywords.
+            * projection: Geospatial reference in WKT format.
+                Only used if geometry is provided as a numeric array,
+                if None, WGS84 geographic is assumed.
+            * geometry: A list of either point coordinates or polygons/lines
+                (see note below).
+            * geometry_type: Desired interpretation of geometry.
+                Valid options are 'point', 'line', 'polygon' or
+                the ogr types: 1, 2, 3.
+                If None, a geometry_type will be inferred from the data.
+            * name: Optional name for layer.
+                Only used if geometry is provided as a numeric array.
+            * keywords: Optional dictionary with keywords that describe the
+                layer. When the layer is stored, these keywords will
+                be written into an associated file with extension
+                '.keywords'.
 
-                      Keywords can for example be used to display text
-                      about the layer in a web application.
-            style_info: Dictionary with information about how this layer
-                        should be styled. See impact_functions/styles.py
-                        for examples.
+                Keywords can for example be used to display text about the
+                layer in an application.
+            * style_info: Dictionary with information about how this layer
+                should be styled. See impact_functions/styles.py
+                for examples.
+            * sublayer: str Optional sublayer (band name in the case of raster,
+                  table name in case of sqlite etc.) to load. Only applicable
+                  to those dataformats supporting more than one layer in the
+                  data file.
 
-        Notes
+        Returns: An instance of class Vector.
+
+        Raises: Propogates any exceptions encountered.
+
+        Notes:
 
         If data is a filename, all other arguments are ignored
         as they will be inferred from the file.
@@ -70,11 +94,11 @@ class Vector(Layer):
         If each entry is one set of coordinates the type will be ogr.wkbPoint,
         if it is an array of coordinates the type will be ogr.wkbPolygon.
 
-        To cast array entries as lines set geometry_type explicity to 'line' in
-        the call to Vector. Otherwise, they will default to polygons.
+        To cast array entries as lines set geometry_type explicitly to 'line'
+        in the call to Vector. Otherwise, they will default to polygons.
 
         Each polygon or line feature take the form of an Nx2 array representing
-        vertices where line segments are joined
+        vertices where line segments are joined.
         """
 
         # Invoke common layer constructor
@@ -82,7 +106,8 @@ class Vector(Layer):
                        name=name,
                        projection=projection,
                        keywords=keywords,
-                       style_info=style_info)
+                       style_info=style_info,
+                       sublayer=sublayer)
 
         # Input checks
         if data is None and geometry is None:
@@ -218,21 +243,27 @@ class Vector(Layer):
                         # Not obviously equal, try some special cases
 
                         res = None
+                        # pylint: disable=W0702
                         try:
                             # Try numerical comparison with tolerances
                             res = numpy.allclose(X, Y,
                                                  rtol=rtol, atol=atol)
+
+                            # FIXME (Ole): Write this without try-except
                         except:
                             pass
                         else:
                             if not res:
                                 return False
+                        # pylint: enable=W0702
 
                         try:
                             # Try to cast as booleans. This will take care of
                             # None, '', True, False, ...
+                            # FIXME (Ole): This will never throw an exception
+                            # so remove try-except construct
                             res = (bool(X) is bool(Y))
-                        except:
+                        except ValueError:
                             pass
                         else:
                             if not res:
@@ -297,19 +328,26 @@ class Vector(Layer):
         self.geometry_type = None  # In case there are no features
 
         fid = ogr.Open(filename)
+
         if fid is None:
             msg = 'Could not open %s' % filename
             raise IOError(msg)
 
         # Assume that file contains all data in one layer
         msg = 'Only one vector layer currently allowed'
-        if fid.GetLayerCount() > 1:
+        if fid.GetLayerCount() > 1 and self.sublayer is None:
             msg = ('WARNING: Number of layers in %s are %i. '
                    'Only the first layer will currently be '
-                   'used.' % (filename, fid.GetLayerCount()))
+                   'used. Specify sublayer when creating '
+                   'the Vector if you wish to use a different layer.'
+                   % (filename, fid.GetLayerCount()))
+            # Why do we raise an exception if it is only a warning? TS
             raise Exception(msg)
 
-        layer = fid.GetLayerByIndex(0)
+        if self.sublayer is not None:
+            layer = fid.GetLayerByName(self.sublayer)
+        else:
+            layer = fid.GetLayerByIndex(0)
 
         # Get spatial extent
         self.extent = layer.GetExtent()
@@ -318,18 +356,16 @@ class Vector(Layer):
         p = layer.GetSpatialRef()
         self.projection = Projection(p)
 
+        layer.ResetReading()
+
         # Get number of features
-        N = layer.GetFeatureCount()
+        # N = layer.GetFeatureCount()
 
         # Extract coordinates and attributes for all features
         geometry = []
         data = []
-        for i in range(N):
-            feature = layer.GetFeature(i)
-            if feature is None:
-                msg = 'Could not get feature %i from %s' % (i, filename)
-                raise Exception(msg)
-
+        # Use feature iterator
+        for feature in layer:
             # Record coordinates ordered as Longitude, Latitude
             G = feature.GetGeometryRef()
             if G is None:
@@ -369,7 +405,7 @@ class Vector(Layer):
                            'Geometry Tools -> Multipart to Singleparts and '
                            'use the resulting dataset.'
                            % (ogr.wkbMultiPolygon, filename))
-                    raise Exception(msg)
+                    raise ReadLayerError(msg)
 
                 #    # FIXME: Unpact multiple polygons to simple polygons
                 #    # For hints on how to unpack see
@@ -416,24 +452,30 @@ class Vector(Layer):
         self.geometry = geometry
         self.data = data
 
-    def write_to_file(self, filename):
+    def write_to_file(self, filename, sublayer=None):
         """Save vector data to file
 
-        Input
-            filename: filename with extension .shp or .gml
+        Args:
+            * filename: filename with extension .shp or .gml
+            * sublayer: Optional string for writing a sublayer. Ignored
+                  unless we are writing to an sqlite file.
 
-        Note, if attribute names are longer than 10 characters they will be
-        truncated. This is due to limitations in the shp file driver and has
-        to be done here since gdal v1.7 onwards has changed its handling of
-        this issue: http://www.gdal.org/ogr/drv_shapefile.html
+        .. note:: Shp limitation, if attribute names are longer than 10
+           characters they will be truncated. This is due to limitations in
+           the shp file driver and has to be done here since gdal v1.7 onwards
+           has changed its handling of this issue:
+           http://www.gdal.org/ogr/drv_shapefile.html
+
+           **For this reason we recommend writing to spatialite.**
+
         """
 
         # Check file format
         basename, extension = os.path.splitext(filename)
 
         msg = ('Invalid file type for file %s. Only extensions '
-               'shp or gml allowed.' % filename)
-        verify(extension == '.shp' or extension == '.gml', msg)
+               'sqlite, shp or gml allowed.' % filename)
+        verify(extension in ['.sqlite', '.shp', '.gml'], msg)
         driver = DRIVER_MAP[extension]
 
         # FIXME (Ole): Tempory flagging of GML issue (ticket #18)
@@ -444,7 +486,10 @@ class Vector(Layer):
             raise Exception(msg)
 
         # Derive layername from filename (excluding preceding dirs)
-        layername = os.path.split(basename)[-1]
+        if sublayer is None or extension == '.shp':
+            layername = os.path.split(basename)[-1]
+        else:
+            layername = sublayer
 
         # Get vector data
         geometry = self.get_geometry()
@@ -455,7 +500,7 @@ class Vector(Layer):
         # Clear any previous file of this name (ogr does not overwrite)
         try:
             os.remove(filename)
-        except:
+        except OSError:
             pass
 
         # Create new file with one layer
@@ -966,7 +1011,7 @@ def convert_line_to_points(V, delta):
     for i in range(N):
         c = points_along_line(geometry[i], delta)
         # We need to create a data entry for each point.
-        new_data.extend([data[i] for thing in c])
+        new_data.extend([data[i] for _ in c])
         points.extend(c)
 
     # Create new point vector layer with same attributes and return

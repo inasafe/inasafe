@@ -27,7 +27,7 @@ Please observe the following coding standards when working on the codebase:
   group of lines so that they are not validated by lint. You can do this by
   adding either::
 
-     import foo  # pylint: diable=W1203
+     import foo  # pylint: disable=W1203
 
   or::
 
@@ -37,60 +37,69 @@ Please observe the following coding standards when working on the codebase:
      # pylint: enable=W1234
 
   The relevant id (W1234) is provided on the output of the above mentioned lint
-  command's output.
+  command's output. A complete list of codes is available at
+  http://pylint-messages.wikidot.com/all-codes.
+
+  .. note:: You can globally ignore messages by adding them to :file:`pylintrc`
+     in the :samp:`[MESSAGES CONTROL]` section.
 
 * Each source file should include a standard header containing copyright,
   authorship and version metadata as shown in the exampled below.
 
 **Example standard header**::
 
-   """
-   InaSAFE Disaster risk assessment tool developed by AusAid -
-     **QGIS plugin implementation.**
+    """**One line description.**
 
-   Contact : ole.moller.nielsen@gmail.com
+    .. tip::
+       Detailed multi-paragraph description...
 
-   .. note:: This program is free software; you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation; either version 2 of the License, or
-        (at your option) any later version.
+    """
 
-   """
+    __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
+    __version__ = '0.5.0'
+    __revision__ = '$Format:%H$'
+    __date__ = '01/11/2010'
+    __license__ = "GPL"
+    __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+    __copyright__ += 'Disaster Reduction'
 
-   __author__ = 'tim@linfiniti.com'
-   __version__ = '0.0.1'
-   __revision__ = '$Format:%H$'
-   __date__ = '10/01/2011'
-   __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-   __copyright__ += 'Disaster Reduction'
 
 .. note:: Please see :ref:`faq-revision-label` for details on how the revision
    tag is replaced with the SHA1 for the file when the release packages are
    made.
 
-**Example method docstring**::
+Doc strings
+...........
 
-  def translate(self, message):
-      """
-      One line description.
+All code should be self documenting. We used the following style for documenting
+functions and class methods::
 
-      Additional notes go here...
+    def setKeywordDbPath(self, thePath):
+        """Set the path for the keyword database (sqlite).
 
-      Args:
-          message str - Required. String for translation.
-      Returns:
-          str - Translated version of theString.
-      Raises:
-          no exceptions explicitly raised.
-      """
+        The file will be used to search for keywords for non local datasets.
 
-  The arguments should be followed by their type and then an indication of
-  whether the argument is optional or required.
+        Args:
+            * thePath: a valid path to a sqlite database. The database does
+                  not need to exist already, but the user should be able to write
+                  to the path provided.
+        Returns:
+            None
+        Raises:
+            None
+        """
+        self.keywordDbPath = str(thePath)
 
 * If you use a few lines of code in more than one place, refactor them into
   their own function.
 * If you use a literal string or expression in more than one place, refactor
   it into a function or variable.
+
+
+Various other sphinx markup elements may be used in the docstrings too.
+For more information see also:
+http://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html
+
 
 .. _hig-label:
 

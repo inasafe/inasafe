@@ -9,6 +9,7 @@ from osgeo import gdal
 from safe.common.utilities import verify
 from safe.common.numerics import nanallclose, geotransform2axes, grid2points
 from safe.common.dynamic_translations import names as internationalised_titles
+from safe.common.exceptions import ReadLayerError
 
 from layer import Layer
 from vector import Vector
@@ -151,7 +152,7 @@ class Raster(Layer):
                 msg = ('File %s exists, but could not be read. '
                        'Please check if the file can be opened with '
                        'e.g. qgis or gdalinfo' % filename)
-            raise Exception(msg)
+            raise ReadLayerError(msg)
 
         # Record raster metadata from file
         basename, ext = os.path.splitext(filename)
@@ -220,7 +221,7 @@ class Raster(Layer):
         msg = ('Invalid file type for file %s. Only extension '
                'tif allowed.' % filename)
         verify(extension in ['.tif', '.asc'], msg)
-        format = DRIVER_MAP[extension]
+        file_format = DRIVER_MAP[extension]
 
         # Get raster data
         A = self.get_data()
@@ -232,11 +233,11 @@ class Raster(Layer):
         # FIXME (Ole): It appears that this is created as single
         #              precision even though Float64 is specified
         #              - see issue #17
-        driver = gdal.GetDriverByName(format)
+        driver = gdal.GetDriverByName(file_format)
         fid = driver.Create(filename, M, N, 1, gdal.GDT_Float64)
         if fid is None:
             msg = ('Gdal could not create filename %s using '
-                   'format %s' % (filename, format))
+                   'format %s' % (filename, file_format))
             raise Exception(msg)
 
         # Write metada
@@ -450,10 +451,10 @@ class Raster(Layer):
         """
 
         A = self.get_data(nan=True)
-        min = numpy.nanmin(A.flat[:])
-        max = numpy.nanmax(A.flat[:])
+        Amin = numpy.nanmin(A.flat[:])
+        Amax = numpy.nanmax(A.flat[:])
 
-        return min, max
+        return Amin, Amax
 
     def get_nodata_value(self):
         """Get the internal representation of NODATA
@@ -481,15 +482,15 @@ class Raster(Layer):
         If quantiles is False, they represent equidistant interval boundaries.
         """
 
-        min, max = self.get_extrema()
+        rmin, rmax = self.get_extrema()
 
         levels = []
         if quantiles is False:
             # Linear intervals
-            d = (max - min) / N
+            d = (rmax - rmin) / N
 
             for i in range(N):
-                levels.append(min + i * d)
+                levels.append(rmin + i * d)
         else:
             # Quantiles
             # FIXME (Ole): Not 100% sure about this algorithm,
@@ -508,7 +509,7 @@ class Raster(Layer):
             for i in range(N):
                 levels.append(A[int(i * d)])
 
-        levels.append(max)
+        levels.append(rmax)
 
         return levels
 
@@ -549,8 +550,11 @@ class Raster(Layer):
 
                 resolution = keywords['resolution']
                 try:
+                    # FIXME (Ole): It seams float never
+                    # raises an exception. I am sure it used to,
+                    # this has to be rewritten more explicitly
                     res = float(resolution)
-                except:
+                except ValueError:
                     # Assume resolution is a string of the form:
                     # (0.00045228819716044, 0.00045228819716044)
 

@@ -1,10 +1,9 @@
-import os
-import sys
 import numpy
 import unittest
 
 # Import InaSAFE modules
 from safe.common.interpolation2d import interpolate2d, interpolate_raster
+from safe.common.interpolation2d import BoundsError
 from safe.common.interpolation1d import interpolate1d
 from safe.common.testing import combine_coordinates
 from safe.common.numerics import nanallclose
@@ -135,6 +134,8 @@ class Test_interpolate(unittest.TestCase):
                 vals = interpolate2d(x, y, A, points, mode='linear')
                 refs = linear_function(points[:, 0], points[:, 1])
                 assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
+
+    test_linear_interpolation_range.slow = True
 
     def test_linear_interpolation_nan_points(self):
         """Interpolation library works with interpolation points being NaN
@@ -280,7 +281,7 @@ class Test_interpolate(unittest.TestCase):
                     #print i, j, xi, eta, alpha, beta, vals[k], ref
                     assert nanallclose(vals[k], ref, rtol=1e-12, atol=1e-12)
 
-    test_interpolation_random_array_and_nan.slow = 1
+    test_interpolation_random_array_and_nan.slow = True
 
     def test_linear_interpolation_outside_domain(self):
         """Interpolation library sensibly handles values outside the domain
@@ -320,6 +321,7 @@ class Test_interpolate(unittest.TestCase):
 
         # Try a range of combinations of points outside domain
         # with error_bounds True
+        print
         for lox in [x[0], x[0] - 1]:
             for hix in [x[-1], x[-1] + 1]:
                 for loy in [y[0], y[0] - 1]:
@@ -331,15 +333,15 @@ class Test_interpolate(unittest.TestCase):
                         points = combine_coordinates(xis, etas)
 
                         if lox < x[0] or hix > x[-1] or \
-                                loy < x[0] or hiy > y[-1]:
+                                loy < y[0] or hiy > y[-1]:
                             try:
                                 vals = interpolate2d(x, y, A, points,
                                                      mode='linear',
                                                      bounds_error=True)
-                            except Exception, e:
-                                pass
+                            except BoundsError, e:
+                                assert 'bounds_error was requested' in str(e)
                             else:
-                                msg = 'Should have raise bounds error'
+                                msg = 'Should have raised bounds error'
                                 raise Exception(msg)
 
         # Try a range of combinations of points outside domain with
@@ -369,6 +371,8 @@ class Test_interpolate(unittest.TestCase):
                                 assert numpy.allclose(vals[i], refs[i],
                                                       rtol=1.0e-12,
                                                       atol=1.0e-12), msg
+
+    test_linear_interpolation_outside_domain.slow = True
 
     def test_interpolation_corner_cases(self):
         """Interpolation library returns NaN for incomplete grid points
@@ -413,8 +417,6 @@ class Test_interpolate(unittest.TestCase):
         lat_ul = 10   # Latitude of upper left corner
         numlon = 8    # Number of longitudes
         numlat = 5    # Number of latitudes
-        dlon = 1
-        dlat = -1
 
         # Define array where latitudes are rows and longitude columns
         A = numpy.zeros((numlat, numlon))

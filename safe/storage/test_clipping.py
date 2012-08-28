@@ -1,18 +1,12 @@
 import unittest
 import numpy
-import sys
-import os
 from os.path import join
 
-# Add parent directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
-
-from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
+from safe.common.testing import TESTDATA
 from safe.common.polygon import is_inside_polygon, inside_polygon
 from safe.storage.vector import Vector
 from safe.storage.core import read_layer
-from safe.storage.clipping import *
+from safe.storage.clipping import clip_raster_by_polygons
 
 
 class Test_Clipping(unittest.TestCase):
@@ -74,6 +68,8 @@ class Test_Clipping(unittest.TestCase):
             elif filename == 'polygon_6.shp':
                 assert len(indices) == 6
 
+    test_clip_points_by_polygons.slow = True
+
     def test_clip_raster_by_polygons(self):
         """Raster grids can be clipped by polygon layers
 
@@ -90,10 +86,17 @@ class Test_Clipping(unittest.TestCase):
 
         M = len(P)
         N = len(R)
+        assert N == 56
 
         # Clip
         C = clip_raster_by_polygons(R, P)
         assert len(C) == M
+
+        # Check points inside polygon
+        tot = 0
+        for c in C:
+            tot += len(c)
+        assert tot == 14
 
         # Check that points are inside the right polygon
         for i, polygon in enumerate(P.get_geometry()):
@@ -171,6 +174,7 @@ class Test_Clipping(unittest.TestCase):
                 point_layer.write_to_file('points_%i.shp' % i)
                 polygon_layer.write_to_file('polygon_%i.shp' % i)
 
+    test_clip_raster_by_polygons.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Clipping, 'test')

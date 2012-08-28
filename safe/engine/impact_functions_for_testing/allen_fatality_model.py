@@ -112,6 +112,6 @@ class EarthquakeFatalityFunction(FunctionProvider):
                    projection=population.get_projection(),
                    geotransform=population.get_geotransform(),
                    name='Estimated fatalities',
-                   keywords={'impact_summary': impact_summary})
-                   #style_info=earthquake_fatality_style)  # See issue #126
+                   keywords={'impact_summary': impact_summary},
+                   style_info=earthquake_fatality_style)  # See issue #126
         return R

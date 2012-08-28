@@ -526,8 +526,8 @@ if __name__ == '__main__':
         for x in range(1, n + 1):
             yield (x, x * x)
 
-        t = Table(rows=gen_table_squares(10), header_row=('x', 'square(x)'))
-        f.write(str(t) + '<p>\n')
+        s = Table(rows=gen_table_squares(10), header_row=('x', 'square(x)'))
+        f.write(str(s) + '<p>\n')
 
         print '-' * 79
         l = List(['aaa', 'bbb', 'ccc'])
