@@ -1071,12 +1071,10 @@ class Test_Engine(unittest.TestCase):
 
         # Test interpolation function with default layer_name
         I = R.interpolate(V, attribute_name='value')
+        assert V.get_name() == I.get_name()
+
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
-        print '---------------'
-        print I.get_name()
-
-
         assert numpy.allclose(Icoordinates, coordinates)
 
         # Test that interpolated points are correct
