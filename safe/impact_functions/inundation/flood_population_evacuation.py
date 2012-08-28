@@ -75,14 +75,15 @@ class FloodEvacuationFunction(FunctionProvider):
                 I = M = numpy.where(D >= lo, P, 0)
             else:
                 # Intermediate thresholds
-                hi = thresholds[i+1]
+                hi = thresholds[i + 1]
                 M = numpy.where((D >= lo) * (D < hi), P, 0)
 
             # Count
             val = int(numpy.sum(M))
 
             # Don't show digits less than a 1000
-            if val > 1000: val = val // 1000 * 1000
+            if val > 1000:
+                val = val // 1000 * 1000
             counts.append(val)
 
         # Count totals
@@ -128,7 +129,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
             for i, val in enumerate(counts[:-1]):
                 s = (_('People in %.1f m to %.1f m of water: %i')
-                     % (thresholds[i], thresholds[i+1], val))
+                     % (thresholds[i], thresholds[i + 1], val))
                 table_body.append(TableRow(s, header=False))
 
         impact_summary = Table(table_body).toNewlineFreeString()

@@ -12,8 +12,6 @@ import keyword as python_keywords
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableCell, TableRow
-#from safe.impact_functions.utilities import (admissible_plugins_to_str,
-#                                             keywords_to_str)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -356,6 +354,7 @@ def get_question(hazard_title, exposure_title, func):
                'exposure': exposure_title.lower(),
                'impact': function_title.lower()})
 
+
 def get_thresholds(layer):
     """Extract thresholds form layer keywords if present
     """
@@ -368,6 +367,7 @@ def get_thresholds(layer):
         thresholds = []
 
     return thresholds
+
 
 def aggregate_point_data(data=None, boundaries=None,
                          attribute_name=None,
