@@ -12,12 +12,15 @@ from safe.common.utilities import verify
 from safe.common.utilities import ugettext as _
 
 
-def interpolate_raster_vector_points(R, V, attribute_name=None):
+def interpolate_raster_vector_points(R, V, layer_name=None,
+                                     attribute_name=None):
     """Interpolate from raster layer to point data
 
     Input
         R: Raster data set (grid)
         V: Vector data set (points)
+        layer_name: Optional name of returned interpolated layer.
+            If None the name of V is used for the returned layer.
         attribute_name: Name for new attribute.
               If None (default) the name of layer R is used
 
@@ -34,6 +37,9 @@ def interpolate_raster_vector_points(R, V, attribute_name=None):
     verify(R.is_raster)
     verify(V.is_vector)
     verify(V.is_point_data)
+
+    if layer_name is None:
+        layer_name = V.get_name()
 
     # Get raster data and corresponding x and y axes
     A = R.get_data(nan=True)
@@ -71,15 +77,17 @@ def interpolate_raster_vector_points(R, V, attribute_name=None):
     return Vector(data=attributes,
                   projection=V.get_projection(),
                   geometry=coordinates,
-                  name=V.get_name())
+                  name=layer_name)
 
 
-def interpolate_raster_vector(R, V, attribute_name=None):
+def interpolate_raster_vector(R, V, layer_name=None, attribute_name=None):
     """Interpolate from raster layer to vector data
 
     Input
         R: Raster data set (grid)
         V: Vector data set (points or polygons)
+        layer_name: Optional name of returned interpolated layer.
+            If None the name of V is used for the returned layer.
         attribute_name: Name for new attribute.
               If None (default) the name of R is used
 
@@ -102,6 +110,7 @@ def interpolate_raster_vector(R, V, attribute_name=None):
 
     # Interpolate from raster to point data
     R = interpolate_raster_vector_points(R, P,
+                                         layer_name=layer_name,
                                          attribute_name=attribute_name)
     if V.is_polygon_data:
         # In case of polygon data, restore the polygon geometry

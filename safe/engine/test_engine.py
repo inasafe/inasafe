@@ -1069,11 +1069,12 @@ class Test_Engine(unittest.TestCase):
         msg = 'Raster data was %s, should have been %s' % (AA, A)
         assert numpy.allclose(AA, A), msg
 
-        # Test interpolation function
+        # Test interpolation function with default layer_name
         I = R.interpolate(V, attribute_name='value')
+        assert V.get_name() == I.get_name()
+
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
-
         assert numpy.allclose(Icoordinates, coordinates)
 
         # Test that interpolated points are correct
@@ -1347,10 +1348,11 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, name='depth',
+        I = H.interpolate(E, layer_name='depth',
                           attribute_name=None)  # Take all attributes across
 
         I_attributes = I.get_data()
+        assert I.get_name() == 'depth'
 
         N = len(I_attributes)
         assert N == len(E_attributes)
@@ -1407,7 +1409,7 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, name='depth',
+        I = H.interpolate(E, layer_name='depth',
                           attribute_name=None)  # Take all attributes across
         I_attributes = I.get_data()
 
@@ -1531,13 +1533,13 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, name='depth',
+        I = H.interpolate(E, layer_name='depth',
                           # Spelling is as in test data
                           attribute_name='Catergory')
         #I.write_to_file('MM_res.shp')
 
         I_attributes = I.get_data()
-
+        assert I.get_name() == 'depth'
         N = len(I_attributes)
         assert N == len(E_attributes)
 
@@ -1735,10 +1737,11 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        I = H.interpolate(E, name='depth',
+        I = H.interpolate(E, layer_name='depth',
                           attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
+        assert I.get_name() == 'depth'
 
         N = len(I_attributes)
 
@@ -1846,7 +1849,7 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        I = H.interpolate(E, name='depth',
+        I = H.interpolate(E, layer_name='depth',
                           # Spelling is as in test data
                           attribute_name='Catergory')
         I_geometry = I.get_geometry()
@@ -1917,11 +1920,11 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        I = H.interpolate(E, name='depth',
+        I = H.interpolate(E, layer_name='depth',
                           attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
-
+        assert I.get_name() == 'depth'
         N = len(I_attributes)
 
         # Possibly generate files for visual inspection with e.g. QGis
