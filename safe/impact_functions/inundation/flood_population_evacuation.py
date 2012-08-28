@@ -5,7 +5,8 @@ from safe.impact_functions.core import (get_question, get_function_title,
                                         get_thresholds)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
-from safe.common.utilities import verify, ugettext as _
+from safe.common.utilities import ugettext as _
+from safe.common.utilities import verify
 from safe.common.tables import Table, TableRow
 
 
@@ -120,7 +121,7 @@ class FloodEvacuationFunction(FunctionProvider):
         table_body.extend([TableRow(_('Notes'), header=True),
                            _('Total population: %i') % total,
                            _('People need evacuation if flood levels '
-                             'exceed %(eps)i m') % {'eps': thresholds[-1]},
+                             'exceed %(eps).1f m') % {'eps': thresholds[-1]},
                            _('Minimum needs are defined in BNPB '
                              'regulation 7/2008')])
 
@@ -128,8 +129,10 @@ class FloodEvacuationFunction(FunctionProvider):
             table_body.append(TableRow(_('Detailed breakdown'), header=True))
 
             for i, val in enumerate(counts[:-1]):
-                s = (_('People in %.1f m to %.1f m of water: %i')
-                     % (thresholds[i], thresholds[i + 1], val))
+                s = (_('People in %(lo).1f m to %(hi).1f m of water: %(val)i')
+                     % {'lo': thresholds[i],
+                        'hi': thresholds[i + 1],
+                        'val': val})
                 table_body.append(TableRow(s, header=False))
 
         impact_summary = Table(table_body).toNewlineFreeString()

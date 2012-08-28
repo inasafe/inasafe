@@ -126,7 +126,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(_('Notes:'), header=True),
+        table_body.extend([TableRow(_('Notes'), header=True),
                            _('Total population: %i') % total,
                            _('People need evacuation if in area identified '
                              'as "Flood Prone"'),

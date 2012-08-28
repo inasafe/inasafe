@@ -180,7 +180,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         table_body.append(TableRow(_('Are the critical facilities still '
                                      'open?')))
 
-        table_body.append(TableRow(_('Notes:'), header=True))
+        table_body.append(TableRow(_('Notes'), header=True))
         assumption = _('Buildings are said to be flooded when ')
         if hazard_type == 'depth':
             assumption += _('flood levels exceed %.1f m') % threshold

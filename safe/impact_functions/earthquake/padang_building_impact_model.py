@@ -127,7 +127,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                       TableRow([_('Medium damage'), count_medium]),
                       TableRow([_('High damage'), count_high])]
 
-        table_body.append(TableRow(_('Notes:'), header=True))
+        table_body.append(TableRow(_('Notes'), header=True))
         table_body.append(_('Levels of impact are defined by post 2009 '
                             'Padang earthquake survey conducted by Geoscience '
                             'Australia and Institute of Teknologi Bandung.'))
