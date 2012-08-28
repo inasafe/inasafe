@@ -251,11 +251,13 @@ class Raster(Layer):
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
 
-    def interpolate(self, X, attribute_name=None):
+    def interpolate(self, X, layer_name=None, attribute_name=None):
         """Interpolate values of this raster layer to other layer
 
         Input
             X: Layer object defining target
+            layer_name: Optional name of returned interpolated layer.
+                If None the name of X is used for the returned layer.
             attribute_name: Optional name of interpolated layer.
                             If attribute_name is None,
                             the name of self is used.
@@ -286,6 +288,7 @@ class Raster(Layer):
                    or isinstance(attribute_name, basestring), msg)
 
             return interpolate_raster_vector(self, X,
+                                             layer_name=layer_name,
                                              attribute_name=attribute_name)
 
     def get_data(self, nan=True, scaling=None, copy=False):
