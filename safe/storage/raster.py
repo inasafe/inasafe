@@ -271,7 +271,9 @@ class Raster(Layer):
         if X.is_raster:
             if self.get_geotransform() != X.get_geotransform():
                 # Need interpolation between grids
-                msg = 'Intergrid interpolation not yet implemented'
+                msg = ('Intergrid interpolation not implemented here. '
+                       'Make sure rasters are aligned and sampled to '
+                       'the same resolution')
                 raise InaSAFEError(msg)
             else:
                 # Rasters are aligned, no need to interpolate

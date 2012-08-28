@@ -1347,10 +1347,11 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, name='depth',
+        I = H.interpolate(E, layer_name='depth',
                           attribute_name=None)  # Take all attributes across
 
         I_attributes = I.get_data()
+        assert I.get_name() == 'depth'
 
         N = len(I_attributes)
         assert N == len(E_attributes)
@@ -1407,7 +1408,7 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, name='depth',
+        I = H.interpolate(E, layer_name='depth',
                           attribute_name=None)  # Take all attributes across
         I_attributes = I.get_data()
 
@@ -1735,10 +1736,11 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        I = H.interpolate(E, name='depth',
+        I = H.interpolate(E, layer_name='depth',
                           attribute_name=None)  # Take all attributes across
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
+        assert I.get_name() == 'depth'
 
         N = len(I_attributes)
 

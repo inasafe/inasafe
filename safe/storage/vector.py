@@ -751,8 +751,6 @@ class Vector(Layer):
             layer: New vector layer with selected features
         """
 
-        # FIXME (Ole): Maybe generalise this to arbitrary expressions
-
         # Input checks
         msg = ('Specfied attribute must be a string. '
                'I got %s' % (type(attribute)))
@@ -780,13 +778,13 @@ class Vector(Layer):
                       geometry=geometry,
                       keywords=self.get_keywords())
 
-    # FIXME (Ole): Name should be layer_name
-    def interpolate(self, X, name=None, attribute_name=None):
+    def interpolate(self, X, layer_name=None, attribute_name=None):
         """Interpolate values of this vector layer to other layer
 
         Input
             X: Layer object defining target
-            name: Optional name of returned interpolated layer
+            layer_name: Optional name of returned interpolated layer.
+                If None the name of X is used for the returned layer.
             attribute_name: Optional attribute name to use.
                             If None, all attributes are used.
 
@@ -809,6 +807,9 @@ class Vector(Layer):
                'I got OGR geometry type %s'
                % geometrytype2string(self.geometry_type))
         verify(self.is_polygon_data, msg)
+
+        if layer_name is None:
+            layer_name = X.get_name()
 
         # FIXME (Ole): Organise this the same way it is done with rasters
         original_geometry = X.get_geometry()  # Geometry for returned data
@@ -878,7 +879,8 @@ class Vector(Layer):
             V = Vector(data=clipped_attributes,
                        projection=X.get_projection(),
                        geometry=clipped_geometry,
-                       geometry_type='line')
+                       geometry_type='line',
+                       name=layer_name)
             #V.write_to_file('clipped_and_tagged.shp')
             return V
 
@@ -890,7 +892,8 @@ class Vector(Layer):
 
         msg = ('Name must be either a string or None. I got %s'
                % (str(type(X)))[1:-1])
-        verify(name is None or isinstance(name, basestring), msg)
+        verify(layer_name is None or
+               isinstance(layer_name, basestring), msg)
 
         msg = ('Attribute must be either a string or None. I got %s'
                % (str(type(X)))[1:-1])
@@ -955,7 +958,7 @@ class Vector(Layer):
         V = Vector(data=attributes,
                    projection=X.get_projection(),
                    geometry=original_geometry,
-                   name=X.get_name())
+                   name=layer_name)
         return V
 
     @property
