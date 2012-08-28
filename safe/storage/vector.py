@@ -179,6 +179,10 @@ class Vector(Layer):
            other: Vector instance to compare to
            rtol, atol: Relative and absolute tolerance.
                        See numpy.allclose for details
+
+        The algorithm will try to falsify every aspect of equality for the
+        two layers such as data, geometry, projection, keywords etc.
+        Only if none of them can be falsified will it return True.
         """
 
         # Check type
@@ -186,6 +190,10 @@ class Vector(Layer):
             msg = ('Vector instance cannot be compared to %s'
                    ' as its type is %s ' % (str(other), type(other)))
             raise TypeError(msg)
+
+        # Check keywords
+        if self.keywords != other.keywords:
+            return False
 
         # Check number of features match
         if len(self) != len(other):
@@ -216,7 +224,7 @@ class Vector(Layer):
                                       rtol=rtol, atol=atol):
                     return False
 
-        # Check keys
+        # Check keys for attribute values
         x = self.get_data()
         y = other.get_data()
 
@@ -234,7 +242,7 @@ class Vector(Layer):
                     if key not in x[i]:
                         return False
 
-            # Check data
+            # Check attribute values
             for i, a in enumerate(x):
                 for key in a:
                     X = a[key]
@@ -243,7 +251,6 @@ class Vector(Layer):
                     if X != Y:
                         # Not obviously equal, try some special cases
 
-                        res = None
                         try:
                             # Try numerical comparison with tolerances
                             res = numpy.allclose(X, Y,
@@ -253,27 +260,13 @@ class Vector(Layer):
                             # or   None or {} (Type error)
                             pass
                         else:
-                            return res
-
-                        try:
-                            # Try to cast as booleans. This will take care of
-                            # None, '', True, False, ...
-                            # FIXME (Ole): This will never throw an exception
-                            # so remove try-except construct
-                            res = (bool(X) is bool(Y))
-                        except ValueError:
-                            pass
-                        else:
                             if not res:
                                 return False
 
-                        if res is None:
-                            # None of the comparisons could be done
+                        # Finally cast as booleans.
+                        # This will e.g. match False with None or ''
+                        if not (bool(X) is bool(Y)):
                             return False
-
-        # Check keywords
-        if self.keywords != other.keywords:
-            return False
 
         # Vector layers are identical up to the specified tolerance
         return True
@@ -784,7 +777,8 @@ class Vector(Layer):
         # Create new Vector instance and return
         return Vector(data=data,
                       projection=self.get_projection(),
-                      geometry=geometry)
+                      geometry=geometry,
+                      keywords=self.get_keywords())
 
     # FIXME (Ole): Name should be layer_name
     def interpolate(self, X, name=None, attribute_name=None):

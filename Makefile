@@ -218,9 +218,17 @@ pylint:
 	@echo
 	@echo "---------------------------------------"
 	@echo "Pylint violations. For details run     "
-	@echo "make jenkins-pylint                    "
+	@echo "make pylint-details                    "
 	@echo "---------------------------------------"
 	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis | wc -l
+
+pylint-details:
+	@echo
+	@echo "---------------------------------------"
+	@echo "Pylint violations. For details run     "
+	@echo "make pylint-details                    "
+	@echo "---------------------------------------"
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis
 
 profile:
 	@echo
