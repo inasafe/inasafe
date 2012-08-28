@@ -320,7 +320,6 @@ class Vector(Layer):
 
             vectorname = title
         else:
-
             # Use basename without leading directories as name
             vectorname = os.path.split(basename)[-1]
 
@@ -329,11 +328,9 @@ class Vector(Layer):
         self.geometry_type = None  # In case there are no features
 
         fid = ogr.Open(filename)
-
         if fid is None:
             msg = 'Could not open %s' % filename
-            #raise ReadLayerError(msg)
-            raise IOError(msg)  # Delete this one and use the one above
+            raise ReadLayerError(msg)
 
         # Assume that file contains all data in one layer
         msg = 'Only one vector layer currently allowed'

@@ -111,7 +111,7 @@ class Test_IO(unittest.TestCase):
         filename = unique_filename(suffix='.gml')
         try:
             read_layer(filename)
-        except IOError:
+        except ReadLayerError:
             pass
         else:
             msg = 'Exception for non-existing file should have been raised'
