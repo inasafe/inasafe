@@ -1,10 +1,11 @@
 import numpy
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import get_question, get_function_title
+from safe.impact_functions.core import (get_question, get_function_title,
+                                        get_thresholds)
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import verify, ugettext as _
 from safe.common.tables import Table, TableRow
 
 
@@ -42,9 +43,6 @@ class FloodEvacuationFunction(FunctionProvider):
           Table with number of people evacuated and supplies required
         """
 
-        # Depth above which people are regarded affected [m]
-        threshold = 1.0  # Threshold [m]
-
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation [m]
         population = get_exposure_layer(layers)
@@ -53,30 +51,46 @@ class FloodEvacuationFunction(FunctionProvider):
                                 population.get_name(),
                                 self)
 
+        # Determine depths above which people are regarded affected [m]
+        # Use thresholds from inundation layer if specified
+        thresholds = get_thresholds(inundation)
+        if len(thresholds) == 0:
+            # Default threshold
+            thresholds = [1.0]
+
+        verify(isinstance(thresholds, list),
+               'Expected thresholds to be a list. Got %s' % str(thresholds))
+
         # Extract data as numeric arrays
         D = inundation.get_data(nan=0.0)  # Depth
 
-        # Calculate impact as population exposed to depths > threshold
+        # Calculate impact as population exposed to depths > max threshold
         P = population.get_data(nan=0.0, scaling=True)
-        I = numpy.where(D > threshold, P, 0)
-        M = numpy.where(D > 0.5, P, 0)
-        L = numpy.where(D > 0.3, P, 0)
+
+        # Calculate impact to intermediate thresholds
+        counts = []
+        for i, lo in enumerate(thresholds):
+            if i == len(thresholds) - 1:
+                # The last threshold
+                I = M = numpy.where(D >= lo, P, 0)
+            else:
+                # Intermediate thresholds
+                hi = thresholds[i+1]
+                M = numpy.where((D >= lo) * (D < hi), P, 0)
+
+            # Count
+            val = int(numpy.sum(M))
+
+            # Don't show digits less than a 1000
+            if val > 1000: val = val // 1000 * 1000
+            counts.append(val)
 
         # Count totals
+        evacuated = counts[-1]
         total = int(numpy.sum(P))
-        evacuated = int(numpy.sum(I))
-        medium = int(numpy.sum(M)) - int(numpy.sum(I))
-        low = int(numpy.sum(L)) - int(numpy.sum(M))
-
         # Don't show digits less than a 1000
         if total > 1000:
             total = total // 1000 * 1000
-        if evacuated > 1000:
-            evacuated = evacuated // 1000 * 1000
-        if medium > 1000:
-            medium = medium // 1000 * 1000
-        if low > 1000:
-            low = low // 1000 * 1000
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
         rice = evacuated * 2.8
@@ -89,18 +103,11 @@ class FloodEvacuationFunction(FunctionProvider):
         table_body = [question,
                       TableRow([_('People needing evacuation'),
                                 '%i' % evacuated],
-                                                 header=True),
+                               header=True),
                       TableRow(_('Map shows population density needing '
                                  'evacuation')),
-                      #,
-                      ##TableRow([_('People in 50cm to 1m of water '),
-                      ##                                '%i' % medium],
-                      ##                               header=True),
-                      ##TableRow([_('People in 30cm to 50cm of water'),
-                      ##                                '%i' % low],
-                      ##                               header=True)]
                       TableRow([_('Needs per week'), _('Total')],
-                                              header=True),
+                               header=True),
             [_('Rice [kg]'), int(rice)],
             [_('Drinking Water [l]'), int(drinking_water)],
             [_('Clean Water [l]'), int(water)],
@@ -109,18 +116,25 @@ class FloodEvacuationFunction(FunctionProvider):
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(_('Notes:'), header=True),
+        table_body.extend([TableRow(_('Notes'), header=True),
                            _('Total population: %i') % total,
                            _('People need evacuation if flood levels '
-                             'exceed %(eps)i m') % {'eps': threshold},
-                           #_('People in 50cm to 1m of water: %i') % medium,
-                           #_('People in 30cm to 50cm of water: %i') % low])
+                             'exceed %(eps)i m') % {'eps': thresholds[-1]},
                            _('Minimum needs are defined in BNPB '
                              'regulation 7/2008')])
+
+        if len(counts) > 1:
+            table_body.append(TableRow(_('Detailed breakdown'), header=True))
+
+            for i, val in enumerate(counts[:-1]):
+                s = (_('People in %.1f m to %.1f m of water: %i')
+                     % (thresholds[i], thresholds[i+1], val))
+                table_body.append(TableRow(s, header=False))
+
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('People in need of evacuation')
 
-        # Generare 8 equidistant classes across the range of flooded population
+        # Generate 8 equidistant classes across the range of flooded population
         # 8 is the number of classes in the predefined flood population style
         # as imported
         classes = numpy.linspace(numpy.nanmin(I.flat[:]),

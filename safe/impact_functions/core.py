@@ -356,6 +356,18 @@ def get_question(hazard_title, exposure_title, func):
                'exposure': exposure_title.lower(),
                'impact': function_title.lower()})
 
+def get_thresholds(layer):
+    """Extract thresholds form layer keywords if present
+    """
+
+    if 'thresholds' in layer.keywords:
+        s = layer.keywords['thresholds']
+        thresholds = [float(x) for x in s.split(',')]
+        thresholds.sort()
+    else:
+        thresholds = []
+
+    return thresholds
 
 def aggregate_point_data(data=None, boundaries=None,
                          attribute_name=None,
