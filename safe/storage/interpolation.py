@@ -106,7 +106,7 @@ def interpolate_polygon_vector(V, X,
         R = interpolate_polygon_lines(V, X,
                                       layer_name=layer_name,
                                       attribute_name=attribute_name)
-    if X.is_polygon_data:
+    elif X.is_polygon_data:
         # Use polygon centroids
         X = safe.storage.vector.convert_polygons_to_centroids(X)
         P = interpolate_polygon_points(V, X,
