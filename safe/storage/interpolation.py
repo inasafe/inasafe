@@ -17,7 +17,6 @@ from utilities import geometrytype2string
 from utilities import DEFAULT_ATTRIBUTE
 
 
-
 def interpolate_raster_vector(R, V, layer_name=None, attribute_name=None):
     """Interpolate from raster layer to vector data
 
@@ -174,6 +173,7 @@ def interpolate_raster_vector_points(R, V,
                   geometry=coordinates,
                   name=layer_name)
 
+
 def interpolate_polygon_points(V, X,
                                layer_name=None,
                                attribute_name=None):
@@ -269,7 +269,6 @@ def interpolate_polygon_points(V, X,
     return V
 
 
-
 def interpolate_polygon_lines(V, X,
                               layer_name=None,
                               attribute_name=None):
@@ -339,4 +338,3 @@ def interpolate_polygon_lines(V, X,
                name=layer_name)
     #V.write_to_file('clipped_and_tagged.shp')
     return V
-
