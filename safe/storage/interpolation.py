@@ -10,6 +10,189 @@ from safe.storage.vector import convert_polygons_to_centroids
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as _
+from safe.common.numerics import ensure_numeric
+from safe.common.polygon import inside_polygon, clip_line_by_polygon
+
+from utilities import geometrytype2string
+from utilities import DEFAULT_ATTRIBUTE
+
+
+def interpolate_polygon_vector(V, X,
+                               layer_name=None, attribute_name=None):
+    """Interpolate from polygon vector layer to vector data
+
+    Input
+        V: Vector data set (polygon)
+        X: Vector data set (points or polygons)  - tba also lines
+        layer_name: Optional name of returned interpolated layer.
+            If None the name of X is used for the returned layer.
+        attribute_name: Name for new attribute.
+              If None (default) the name of V is used
+
+    Output
+        I: Vector data set; points located as X with values interpolated from V
+
+    Note: If target geometry is polygon, data will be interpolated to
+    its centroids and the output is a point data set.
+    """
+
+    # Input checks
+    verify(V.is_vector)
+    verify(X.is_vector)
+    verify(V.is_polygon_data)
+
+    if layer_name is None:
+        layer_name = V.get_name()
+
+    original_geometry = X.get_geometry()  # Geometry for returned data
+    if X.is_polygon_data:
+        # Use centroids, in case of polygons
+        X = convert_polygons_to_centroids(X)
+    elif X.is_line_data:
+
+        # Clip lines to polygon and return centroids
+
+        # FIXME (Ole): Need to separate this out, but identify what is
+        #              common with points and lines
+        #
+
+        #X.write_to_file('line_data.shp')
+        #V.write_to_file('poly_data.shp')
+
+        # Extract line features
+        lines = X.get_geometry()
+        line_attributes = X.get_data()
+        N = len(X)
+        verify(len(lines) == N)
+        verify(len(line_attributes) == N)
+
+        # Extract polygon features
+        polygons = V.get_geometry()
+        poly_attributes = V.get_data()
+        verify(len(polygons) == len(poly_attributes))
+
+        # Data structure for resulting line segments
+        clipped_geometry = []
+        clipped_attributes = []
+
+        # Clip line lines to polygons
+        for i, polygon in enumerate(polygons):
+            for j, line in enumerate(lines):
+                inside, outside = clip_line_by_polygon(line, polygon)
+
+                # Create new attributes
+                # FIXME (Ole): Not done single specified polygon
+                #              attribute
+                inside_attributes = {}
+                outside_attributes = {}
+                for key in line_attributes[j]:
+                    inside_attributes[key] = line_attributes[j][key]
+                    outside_attributes[key] = line_attributes[j][key]
+
+                for key in poly_attributes[i]:
+                    inside_attributes[key] = poly_attributes[i][key]
+                    outside_attributes[key] = None
+
+                # Always create default attribute flagging if segment was
+                # inside any of the polygons
+                inside_attributes[DEFAULT_ATTRIBUTE] = True
+                outside_attributes[DEFAULT_ATTRIBUTE] = False
+
+                # Assign new attribute set to clipped lines
+                for segment in inside:
+                    clipped_geometry.append(segment)
+                    clipped_attributes.append(inside_attributes)
+
+                for segment in outside:
+                    clipped_geometry.append(segment)
+                    clipped_attributes.append(outside_attributes)
+
+        # Create new Vector instance and return
+        V = Vector(data=clipped_attributes,
+                   projection=X.get_projection(),
+                   geometry=clipped_geometry,
+                   geometry_type='line',
+                   name=layer_name)
+        #V.write_to_file('clipped_and_tagged.shp')
+        return V
+
+    # FIXME (Ole): Put into interpolate_polygon_point function.
+    # The following applies only to Polygon-Point interpolation
+    msg = ('Vector layer to interpolate to must be point geometry. '
+           'I got OGR geometry type %s'
+           % geometrytype2string(X.geometry_type))
+    verify(X.is_point_data, msg)
+
+    msg = ('Name must be either a string or None. I got %s'
+           % (str(type(X)))[1:-1])
+    verify(layer_name is None or
+           isinstance(layer_name, basestring), msg)
+
+    msg = ('Attribute must be either a string or None. I got %s'
+           % (str(type(X)))[1:-1])
+    verify(attribute_name is None or
+           isinstance(attribute_name, basestring), msg)
+
+    attribute_names = V.get_attribute_names()
+    if attribute_name is not None:
+        msg = ('Requested attribute "%s" did not exist in %s'
+               % (attribute_name, attribute_names))
+        verify(attribute_name in attribute_names, msg)
+
+    #----------------
+    # Start algorithm
+    #----------------
+
+    # Extract point features
+    points = ensure_numeric(X.get_geometry())
+    attributes = X.get_data()
+    N = len(X)
+
+    # Extract polygon features
+    geom = V.get_geometry()
+    data = V.get_data()
+    verify(len(geom) == len(data))
+
+    # Augment point features with empty attributes from polygon
+    for a in attributes:
+        if attribute_name is None:
+            # Use all attributes
+            for key in attribute_names:
+                a[key] = None
+        else:
+            # Use only requested attribute
+            # FIXME (Ole): Test for this is not finished
+            a[attribute_name] = None
+
+        # Always create default attribute flagging if point was
+        # inside any of the polygons
+        a[DEFAULT_ATTRIBUTE] = None
+
+    # Traverse polygons and assign attributes to points that fall inside
+    for i, polygon in enumerate(geom):
+        if attribute_name is None:
+            # Use all attributes
+            poly_attr = data[i]
+        else:
+            # Use only requested attribute
+            poly_attr = {attribute_name: data[i][attribute_name]}
+
+        # Assign default attribute to indicate points inside
+        poly_attr[DEFAULT_ATTRIBUTE] = True
+
+        # Clip data points by polygons and add polygon attributes
+        indices = inside_polygon(points, polygon)
+        for k in indices:
+            for key in poly_attr:
+                # Assign attributes from polygon to points
+                attributes[k][key] = poly_attr[key]
+
+    # Create new Vector instance and return
+    V = Vector(data=attributes,
+               projection=X.get_projection(),
+               geometry=original_geometry,
+               name=layer_name)
+    return V
 
 
 def interpolate_raster_vector_points(R, V, layer_name=None,
