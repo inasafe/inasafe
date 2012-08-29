@@ -18,6 +18,8 @@ from utilities import geometrytype2string
 from utilities import DEFAULT_ATTRIBUTE
 
 
+# FIXME (Ole): Rename arguments to source, target instead of R, V, X, ...
+
 def interpolate_raster_vector(R, V, layer_name=None, attribute_name=None):
     """Interpolate from raster layer to vector data
 
@@ -40,17 +42,19 @@ def interpolate_raster_vector(R, V, layer_name=None, attribute_name=None):
     verify(R.is_raster)
     verify(V.is_vector)
 
-    if V.is_polygon_data:
+    if V.is_point_data:
+        # Interpolate from raster to point data
+        R = interpolate_raster_vector_points(R, V,
+                                             layer_name=layer_name,
+                                             attribute_name=attribute_name)
+    #elif V.is_line_data:
+    #
+    elif V.is_polygon_data:
         # Use centroids, in case of polygons
         P = safe.storage.vector.convert_polygons_to_centroids(V)
-    else:
-        P = V
-
-    # Interpolate from raster to point data
-    R = interpolate_raster_vector_points(R, P,
-                                         layer_name=layer_name,
-                                         attribute_name=attribute_name)
-    if V.is_polygon_data:
+        R = interpolate_raster_vector_points(R, P,
+                                             layer_name=layer_name,
+                                             attribute_name=attribute_name)
         # In case of polygon data, restore the polygon geometry
         # Do this setting the geometry of the returned set to
         # that of the original polygon
@@ -58,6 +62,10 @@ def interpolate_raster_vector(R, V, layer_name=None, attribute_name=None):
                          projection=R.get_projection(),
                          geometry=V.get_geometry(),
                          name=R.get_name())
+    else:
+        msg = ('Unknown datatype for raster2vector interpolation: '
+               'I got %s' % str(V))
+        raise InaSAFEError(msg)
 
     # Return interpolated vector layer
     return R
@@ -91,27 +99,34 @@ def interpolate_polygon_vector(V, X,
         layer_name = V.get_name()
 
     if X.is_point_data:
-        return interpolate_polygon_points(V, X,
-                                          layer_name=layer_name,
-                                          attribute_name=attribute_name)
+        R = interpolate_polygon_points(V, X,
+                                       layer_name=layer_name,
+                                       attribute_name=attribute_name)
     elif X.is_line_data:
-        return interpolate_polygon_lines(V, X,
-                                         layer_name=layer_name,
-                                         attribute_name=attribute_name)
+        R = interpolate_polygon_lines(V, X,
+                                      layer_name=layer_name,
+                                      attribute_name=attribute_name)
     if X.is_polygon_data:
         # Use polygon centroids
         X = safe.storage.vector.convert_polygons_to_centroids(X)
-        return interpolate_polygon_points(V, X,
-                                          layer_name=layer_name,
-                                          attribute_name=attribute_name)
-        #R = safe.storage.vector.Vector(data=R.get_data(),
-        #                 projection=R.get_projection(),
-        #                 geometry=V.get_geometry(),
-        #                 name=R.get_name())
+        P = interpolate_polygon_points(V, X,
+                                       layer_name=layer_name,
+                                       attribute_name=attribute_name)
+
+        # In case of polygon data, restore the polygon geometry
+        # Do this setting the geometry of the returned set to
+        # that of the original polygon
+        R = safe.storage.vector.Vector(data=P.get_data(),
+                                       projection=P.get_projection(),
+                                       geometry=X.get_geometry(),
+                                       name=P.get_name())
     else:
         msg = ('Unknown datatype for polygon2vector interpolation: '
                'I got %s' % str(X))
         raise InaSAFEError(msg)
+
+    # Return interpolated vector layer
+    return R
 
 
 #-------------------------------------------------------------
