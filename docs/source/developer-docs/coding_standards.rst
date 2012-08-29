@@ -13,6 +13,7 @@ Please observe the following coding standards when working on the codebase:
   `pep8 <http://www.python.org/dev/peps/pep-0008>`_ and
   using the command line tool pep8 (or :samp:`make pep8`) to enforce this.
 * `Python documentation guide <http://www.python.org/dev/peps/pep-0257>`_
+* Comments should be complete sentences. If a comment is a phrase or sentence, its first word should be capitalized, unless it is an identifier that begins with a lower case letter (never alter the case of identifiers!).
 * Adherence to regression/unit testing wherever possible (:samp:`make test`)
 * Use of github for revision control, issue tracking and management
 * Simple deployment procedure - all dependencies must be delivered with
