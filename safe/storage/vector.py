@@ -26,6 +26,7 @@ from safe.common.exceptions import GetDataError, InaSAFEError
 
 from layer import Layer
 from projection import Projection
+from interpolation import interpolate_polygon_vector
 
 from utilities import DRIVER_MAP, TYPE_MAP
 from utilities import read_keywords
@@ -794,10 +795,6 @@ class Vector(Layer):
             Y: Layer object with values of this vector layer interpolated to
                geometry of input layer X
         """
-
-        # FIXME (Ole): Done here to avoid circular import.
-        #              How to solve that?
-        from interpolation import interpolate_polygon_vector
 
         msg = 'Input to Vector.interpolate must be a vector layer instance'
         verify(X.is_vector, msg)
