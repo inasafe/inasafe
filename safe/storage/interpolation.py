@@ -220,7 +220,6 @@ def interpolate_polygon_points(V, X,
     points = ensure_numeric(X.get_geometry())
     attributes = X.get_data()
     original_geometry = X.get_geometry()  # Geometry for returned data
-    N = len(X)
 
     # Extract polygon features
     geom = V.get_geometry()
@@ -272,15 +271,24 @@ def interpolate_polygon_points(V, X,
 def interpolate_polygon_lines(V, X,
                               layer_name=None,
                               attribute_name=None):
+    """Interpolate from polygon vector layer to line vector data
 
-    # Clip lines to polygon and return centroids
+    Input
+        V: Vector data set (polygon)
+        X: Vector data set (lines)
+        layer_name: Optional name of returned interpolated layer.
+            If None the name of X is used for the returned layer.
+        attribute_name: Name for new attribute.
+              If None (default) the name of V is used
 
-    # FIXME (Ole): Need to separate this out, but identify what is
-    #              common with points and lines
-    #
+    Output
+        Vector data set (lines) with values interpolated from V
+    """
 
     #X.write_to_file('line_data.shp')
     #V.write_to_file('poly_data.shp')
+    if attribute_name is None:
+        attribute_name = V.get_name()
 
     # Extract line features
     lines = X.get_geometry()
