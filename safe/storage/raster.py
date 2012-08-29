@@ -291,7 +291,8 @@ class Raster(Layer):
                                              layer_name=layer_name,
                                              attribute_name=attribute_name)
 
-    def get_data(self, nan=True, scaling=None, copy=False):
+    def get_data(self, nan=True, scaling=None, copy=False,
+                 rtol=1.0e-4, atol=1.0e-8):
         """Get raster data as numeric array
 
         Input
@@ -315,6 +316,8 @@ class Raster(Layer):
                      scalar value: If scaling takes a numerical scalar value,
                                    that will be use to scale the data
         copy (optional): If present and True return copy
+        rtol, atol: Tolerances as to how much difference is accepted
+                    between dx and dy when scaling is True.
 
         NOTE: Scaling does not currently work with projected layers.
         See issue #123
@@ -369,8 +372,10 @@ class Raster(Layer):
         elif scaling is True:
             # Calculate scaling based on resolution change
 
-            actual_res = self.get_resolution(isotropic=True)
-            native_res = self.get_resolution(isotropic=True, native=True)
+            actual_res = self.get_resolution(isotropic=True,
+                                             rtol=rtol, atol=atol)
+            native_res = self.get_resolution(isotropic=True,
+                                             rtol=rtol, atol=atol, native=True)
             #print
             #print 'Actual res', actual_res
             #print 'Native res', native_res
