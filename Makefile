@@ -217,8 +217,7 @@ data_audit:
 pylint:
 	@echo
 	@echo "---------------------------------------"
-	@echo "Pylint violations. For details run     "
-	@echo "make pylint-details                    "
+	@echo "Pylint violations.                     "
 	@echo "---------------------------------------"
 	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis | wc -l
 
