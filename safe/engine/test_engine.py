@@ -519,7 +519,6 @@ class Test_Engine(unittest.TestCase):
         res = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
                                     H.get_geometry())
-        print len(res)
         assert len(res) == 2704
         # FIXME (Ole): Not finished yet
 
