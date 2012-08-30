@@ -21,7 +21,7 @@ if __name__ == '__main__':
     locales = sys.argv[2:]
 
     files = {'QT': '%s/safe_qgis/i18n/inasafe_%s.ts',
-             'GT': '%s/i18n/%s/LC_MESSAGES/inasafe.po'}
+             'GT': '%s/safe/i18n/%s/LC_MESSAGES/inasafe.po'}
 
     commands = {'QT': 'lrelease %s',
                 'GT': 'msgfmt --statistics %s'}
@@ -44,19 +44,24 @@ if __name__ == '__main__':
             if key == 'QT' and p.stdout is not None:
                 lines = p.stdout.readlines()
 
+            missing = 0
             for line in lines:
                 if 'untranslated' in line:
                     fields = line.split()
                     i = fields.index('untranslated')
-                    untranslated = int(fields[i - 1])
-                    #print 'untranslated', untranslated
-                    if untranslated == 0:
-                        status = 'OK'
-                    else:
-                        status = '%i untranslated' % untranslated
-                        status += ' - please edit %s' % filename
-                    break
+                    missing += int(fields[i - 1])
+
+                if 'unfinished' in line:
+                    fields = line.strip().split()
+                    i = fields.index('unfinished)')
+                    missing += int(fields[i - 1])
+
+            #print 'untranslated', untranslated
+            if missing == 0:
                 status = 'OK'
+            else:
+                status = '%i missing' % missing
+                status += ' - please edit %s' % filename
 
             if status != 'OK':
                 msg += status

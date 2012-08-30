@@ -146,7 +146,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         Returns:
            None
         Raises:
-           None
+           InsufficientParametersException
            set.
         """
         if (self._hazardLayer is None or self._exposureLayer is None
@@ -159,6 +159,8 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             myLayers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculateSafeImpact(theLayers=myLayers,
                                         theFunction=self._function)
+        # Catch and handle all exceptions:
+        # pylint: disable=W0703
         except Exception, e:
             myMessage = self.tr('Calculation error encountered:\n')
             #store the exception so that controller class can get it later
@@ -168,6 +170,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             self._result = myMessage
         else:
             self._result = self.tr('Calculation completed successfully.')
+        # pylint: enable=W0703
 
         #  Let any listening slots know we are done
         self.done.emit()

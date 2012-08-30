@@ -40,7 +40,7 @@ except ImportError:
 
 class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
     """Options dialog for the InaSAFE plugin."""
-# pylint: disable=W0231
+
     def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
 
@@ -55,7 +55,7 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         Raises:
            no exceptions explicitly raised
         """
-# pylint: enable=W0231
+
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr('InaSAFE %s Options' % __version__))

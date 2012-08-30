@@ -92,7 +92,7 @@ class PluginTest(unittest.TestCase):
         # (see http://effbot.org/zone/metaclass-plugins.htm)
         # lang in the context of the ugettext function in inasafe libs
         # must be imported late so that i18n is set up already
-        from common.utilities import ugettext as _
+        from safe.common.utilities import ugettext as _
         myUntranslatedString = 'Temporarily Closed'
         myExpectedString = 'Tydelik gesluit'  # afrikaans
         myTranslation = _(myUntranslatedString)

@@ -33,9 +33,9 @@ from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _, unique_filename
-from safe.common.utilities import VerificationError
 from safe.common.polygon import is_inside_polygon
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
+from safe.common.exceptions import VerificationError
 
 
 # Auxiliary function for raster test
@@ -92,7 +92,7 @@ class Test_IO(unittest.TestCase):
             assert len(attributes) == N
             assert FEATURE_COUNTS[vectorname] == N
 
-    test_vector_feature_count.slow = 1
+    test_vector_feature_count.slow = True
 
     def test_reading_and_writing_of_vector_point_data(self):
         """Vector point data can be read and written correctly
@@ -111,7 +111,7 @@ class Test_IO(unittest.TestCase):
         filename = unique_filename(suffix='.gml')
         try:
             read_layer(filename)
-        except IOError:
+        except ReadLayerError:
             pass
         else:
             msg = 'Exception for non-existing file should have been raised'
@@ -215,7 +215,7 @@ class Test_IO(unittest.TestCase):
             lon = layer.get_data(attribute='LONGITUDE')
             assert numpy.allclose(lon, coords[:, 0])
 
-    test_reading_and_writing_of_vector_point_data.slow = 1
+    test_reading_and_writing_of_vector_point_data.slow = True
 
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
@@ -267,6 +267,10 @@ class Test_IO(unittest.TestCase):
         filename = '%s/%s' % (TESTDATA, layername)
         V = read_layer(filename)
 
+        # Add some additional keywords
+        V.keywords['kw1'] = 'value1'
+        V.keywords['kw2'] = 'value2'
+
         # Check string representation of vector class
         assert str(V).startswith('Vector data')
         assert str(len(V)) in str(V)
@@ -278,8 +282,12 @@ class Test_IO(unittest.TestCase):
         data = V_ref.get_data()
         projection = V_ref.get_projection()
 
+        assert 'kw1' in V_ref.get_keywords()
+        assert 'kw2' in V_ref.get_keywords()
+
         # Create new object from test data
-        V_new = Vector(data=data, projection=projection, geometry=geometry)
+        V_new = Vector(data=data, projection=projection, geometry=geometry,
+                       keywords=V_ref.get_keywords())
 
         # Check equality operations
         assert V_new == V_ref
@@ -333,6 +341,12 @@ class Test_IO(unittest.TestCase):
         else:
             msg = 'Should have raised TypeError'
             raise Exception(msg)
+
+        # Check that differences in keywords affect comparison
+        assert V_new == V_ref
+        V_tmp.keywords['kw2'] = 'blah'
+        assert not V_tmp == V_ref
+        assert V_tmp != V_ref
 
     def test_vector_class_geometry_types(self):
         """Admissible geometry types work in vector class
@@ -554,7 +568,7 @@ class Test_IO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
-    test_reading_and_writing_of_vector_polygon_data.slow = 1
+    test_reading_and_writing_of_vector_polygon_data.slow = True
 
     def test_centroids_from_polygon_data(self):
         """Centroid point data can be derived from polygon data
@@ -617,7 +631,7 @@ class Test_IO(unittest.TestCase):
             #print 'writing to', out_filename
             c_layer.write_to_file(out_filename)
 
-    test_centroids_from_polygon_data.slow = 1
+    test_centroids_from_polygon_data.slow = True
 
     def test_rasters_and_arrays(self):
         """Consistency of rasters and associated arrays
@@ -850,7 +864,7 @@ class Test_IO(unittest.TestCase):
                     msg = 'Should have raised TypeError'
                     raise Exception(msg)
 
-    test_reading_and_writing_of_real_rasters.slow = 1
+    test_reading_and_writing_of_real_rasters.slow = True
 
     def test_no_projection(self):
         """Raster layers with no projection causes Exception to be raised
@@ -897,7 +911,7 @@ class Test_IO(unittest.TestCase):
             msg = 'Unexpected error message for non existing asc file: %s' % e
             assert 'Could not find file' in str(e), msg
 
-    test_bad_ascii_data.slow = 1
+    test_bad_ascii_data.slow = True
 
     def test_nodata_value(self):
         """NODATA value is correctly recorded in GDAL
@@ -925,7 +939,7 @@ class Test_IO(unittest.TestCase):
                    'value %i but it was %s' % (filename, Amin, nodata))
             assert nodata == Amin, msg
 
-    test_nodata_value.slow = 1
+    test_nodata_value.slow = True
 
     def test_vector_extrema(self):
         """Vector extremum calculation works
@@ -1009,7 +1023,7 @@ class Test_IO(unittest.TestCase):
             msg = '-9999 should have been replaced by 0.0 in %s' % rastername
             assert min(C.flat[:]) != -9999, msg
 
-    test_raster_extrema.slow = 1
+    test_raster_extrema.slow = True
 
     def test_bins(self):
         """Linear and quantile bins are correct
@@ -1068,7 +1082,7 @@ class Test_IO(unittest.TestCase):
 
                     i0 = i1
 
-    test_bins.slow = 1
+    test_bins.slow = True
 
     def test_raster_to_vector_points(self):
         """Raster layers can be converted to vector point layers
@@ -2012,7 +2026,7 @@ class Test_IO(unittest.TestCase):
         msg = 'Projections did not match: %s != %s' % (Hp, Ep)
         assert Hp == Ep, msg
 
-    test_projection_comparisons.slow = 1
+    test_projection_comparisons.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test')

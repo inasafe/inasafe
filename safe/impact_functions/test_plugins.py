@@ -229,7 +229,7 @@ class Test_plugins(unittest.TestCase):
 
         # FIXME (Ole): Need test by manual inspection in QGis
         #print res
-    test_aggregate.slow = 1
+    test_aggregate.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugins, 'test')

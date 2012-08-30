@@ -29,12 +29,9 @@ from random import uniform, seed as seed_function
 
 from safe.common.numerics import ensure_numeric
 from safe.common.numerics import grid2points, geotransform2axes
+from safe.common.exceptions import PolygonInputError
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-class PolygonInputError(Exception):
-    pass
 
 
 def separate_points_by_polygon(points, polygon,
@@ -53,14 +50,10 @@ def separate_points_by_polygon(points, polygon,
         * use_numpy: Use the fast numpy implementation
 
     Returns:
-        * indices: array of same length as points with indices of points
-              falling inside the polygon listed from the beginning and indices
-              of points falling outside listed from the end.
-
-        * count: count of points falling inside the polygon
-
-        The indices of points inside are obtained as indices[:count]
-        The indices of points outside are obtained as indices[count:]
+        * indices_inside_polygon: array of indices of points
+              falling inside the polygon
+        * indices_outside_polygon: array of indices of points
+              falling outside the polygon
 
     Raises: A generic Exception is raised for unexpected input.
 
@@ -148,23 +141,21 @@ def separate_points_by_polygon(points, polygon,
     inside_box = -outside_box
     candidate_points = points[inside_box]
 
-    # FIXME (Ole): I would like to return just indices_inside, indices_outside
-    # instead of the legacy of one array with a break point
-    # in the underlying _separate_by_points functions too
     if use_numpy:
-        indices, count = _separate_points_by_polygon(candidate_points,
-                                                     polygon,
-                                                     closed=closed)
+        func = _separate_points_by_polygon
     else:
-        indices, count = _separate_points_by_polygon_python(candidate_points,
-                                                            polygon,
-                                                            closed=closed)
+        func = _separate_points_by_polygon_python
+
+    local_indices_inside, local_indices_outside = func(candidate_points,
+                                                       polygon,
+                                                       closed=closed)
 
     # Map local indices from candidate points to global indices of all points
-    indices_inside_polygon = numpy.where(inside_box)[0][indices[:count]]
-
     indices_outside_box = numpy.where(outside_box)[0]
-    indices_in_box_outside_poly = numpy.where(inside_box)[0][indices[count:]]
+    indices_inside_box = numpy.where(inside_box)[0]
+
+    indices_inside_polygon = indices_inside_box[local_indices_inside]
+    indices_in_box_outside_poly = indices_inside_box[local_indices_outside]
     indices_outside_polygon = numpy.concatenate((indices_outside_box,
                                                  indices_in_box_outside_poly))
 
@@ -203,8 +194,8 @@ def _separate_points_by_polygon(points, polygon,
     N = polygon.shape[0]
     M = points.shape[0]
     if M == 0:
-        # If no points return 0-vector
-        return numpy.arange(0), 0
+        # If no points return two 0-vectors
+        return numpy.arange(0), numpy.arange(0)
 
     x = points[:, 0]
     y = points[:, 1]
@@ -262,7 +253,7 @@ def _separate_points_by_polygon(points, polygon,
     # Indices of outside points
     indices[inside_index:] = numpy.where(1 - inside)[0]
 
-    return indices, inside_index
+    return indices[:inside_index], indices[inside_index:]
 
 
 def _separate_points_by_polygon_python(points, polygon,
@@ -312,7 +303,7 @@ def _separate_points_by_polygon_python(points, polygon,
     inside_index = 0  # Keep track of points inside
     outside_index = M - 1  # Keep track of points outside (starting from end)
 
-    # Begin main loop (for each point) - FIXME (write as vector ops)
+    # Begin main loop (for each point)
     for k in range(M):
         x = points[k, 0]
         y = points[k, 1]
@@ -362,7 +353,7 @@ def _separate_points_by_polygon_python(points, polygon,
     indices[inside_index:] = tmp[::-1]
 
     # Return reference result
-    return indices, inside_index
+    return indices[:inside_index], indices[inside_index:]
 
 
 def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
@@ -740,8 +731,6 @@ def clip_line_by_polygon(line, polygon,
     #    * Calculate its midpoint
     #    * Determine if it is inside or outside clipping polygon
 
-    # FIXME (Ole): Vectorise
-
     # Loop through line segments
     inside_line_segments = []
     outside_line_segments = []
@@ -1034,7 +1023,7 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
                                        [x2, y2], [x3, y3])
         else:
             # Lines are parallel but aren't collinear
-            return 4, None  # FIXME (Ole): Add distance here instead of None
+            return 4, None
     else:
         # Lines are not parallel, check if they intersect
         u0 = u0 / denom

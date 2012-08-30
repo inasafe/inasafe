@@ -44,6 +44,7 @@ from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientOverlapException,
                                   InvalidParameterException,
+                                  InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
 from safe_qgis.utilities import (htmlHeader,
@@ -187,6 +188,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                QtCore.SIGNAL('layersChanged()'),
                                self.getLayers)
 
+    # pylint: disable=W0702
     def disconnectLayerListener(self):
         """Destroy the signal/slot to listen for changes in the layers loaded
         in QGIS.
@@ -231,6 +233,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                self.getLayers)
         except:
             pass
+    # pylint: enable=W0702
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog and
@@ -475,12 +478,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.exposureLayers = []
         # Map registry may be invalid if QGIS is shutting down
         myRegistry = None
+        # pylint: disable=W0702
         try:
             myRegistry = QgsMapLayerRegistry.instance()
         except:
             return
+        # pylint: enable=W0702
+
         myCanvasLayers = self.iface.mapCanvas().layers()
-        # mapLayers returns a QMap<QString id, QgsMapLayer layer>
+
+        # MapLayers returns a QMap<QString id, QgsMapLayer layer>
         myLayers = myRegistry.mapLayers().values()
         for myLayer in myLayers:
             if (self.showOnlyVisibleLayersFlag and
@@ -494,10 +501,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             mySource = str(myLayer.id())
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
-            myTitle = None
+
             try:
                 myTitle = self.keywordIO.readKeywords(myLayer, 'title')
-            except:
+            except:  # pylint: disable=W0702
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
@@ -512,9 +519,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # the layer will be ignored.
             try:
                 myCategory = self.keywordIO.readKeywords(myLayer, 'category')
-            except:
+            except:  # pylint: disable=W0702
                 # continue ignoring this layer
                 continue
+
             if myCategory == 'hazard':
                 self.addComboItemInOrder(self.cboHazard, myTitle, mySource)
                 self.hazardLayers.append(myLayer)
@@ -657,9 +665,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def setupCalculator(self):
         """Initialise the ImpactCalculator based on the current
-        state of the ui."""
-        myHazardFilename = None
-        myExposureFilename = None
+        state of the ui.
+
+        Args: None
+
+        Returns: None
+
+        Raises: Propogates any error from :func:optimalClip()
+        """
         try:
             myHazardFilename, myExposureFilename = self.optimalClip()
         except:
@@ -690,7 +703,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             self.setupCalculator()
-        except Exception, e:
+        except InsufficientOverlapException, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myMessage = self.tr('An exception occurred when setting up the '
@@ -702,21 +715,31 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
         try:
             self.runner = self.calculator.getRunner()
+        except InsufficientParametersException, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myContext = self.tr('An exception occurred when setting up the '
+                                ' model runner.')
+            myMessage = getExceptionWithStacktrace(e, html=True,
+                                                   context=myContext)
+            self.displayHtml(myMessage)
 
-            QtCore.QObject.connect(self.runner,
-                               QtCore.SIGNAL('done()'),
-                               self.completed)
-            QtGui.qApp.setOverrideCursor(
-                    QtGui.QCursor(QtCore.Qt.WaitCursor))
-            self.repaint()
-            QtGui.qApp.processEvents()
+        QtCore.QObject.connect(self.runner,
+                           QtCore.SIGNAL('done()'),
+                           self.completed)
+        QtGui.qApp.setOverrideCursor(
+                QtGui.QCursor(QtCore.Qt.WaitCursor))
+        self.repaint()
+        QtGui.qApp.processEvents()
 
-            myTitle = self.tr('Calculating impact...')
-            myMessage = self.tr('This may take a little while - we are '
-                                'computing the areas that will be impacted '
-                                'by the hazard and writing the result to '
-                                'a new layer.')
-            myProgress = 66
+        myTitle = self.tr('Calculating impact...')
+        myMessage = self.tr('This may take a little while - we are '
+                            'computing the areas that will be impacted '
+                            'by the hazard and writing the result to '
+                            'a new layer.')
+        myProgress = 66
+
+        try:
             self.showBusy(myTitle, myMessage, myProgress)
             if self.runInThreadFlag:
                 self.runner.start()  # Run in different thread
@@ -724,7 +747,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.runner.run()  # Run in same thread
             QtGui.qApp.restoreOverrideCursor()
             # .. todo :: Disconnect done slot/signal
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
+
+            # FIXME (Ole): This branch is not covered by the tests
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myContext = self.tr('An exception occurred when starting'
@@ -739,7 +764,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Try to run completion code
         try:
             myReport = self._completed()
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
+
+            # FIXME (Ole): This branch is not covered by the tests
+
             # Display message and traceback
             myMessage = getExceptionWithStacktrace(e, html=True)
             self.displayHtml(myMessage)
@@ -1282,7 +1310,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                   'The generated pdf is saved as: %s' %
                                   myFilename),
                           theProgress=100)
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
+            # FIXME (Ole): This branch is not covered by the tests
             myReport = getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)

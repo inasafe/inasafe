@@ -70,7 +70,7 @@ class Test_mappings(unittest.TestCase):
             else:
                 assert vclass == 2, msg
 
-    test_osm2padang.slow = 1
+    test_osm2padang.slow = True
 
     def test_osm2bnpb(self):
         """OSM structure types maps to BNPB vulnerability curves
@@ -131,7 +131,7 @@ class Test_mappings(unittest.TestCase):
             else:
                 assert vclass == 'URM', msg
 
-    test_osm2bnpb.slow = 1
+    test_osm2bnpb.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_mappings, 'test')

@@ -11,8 +11,9 @@ Please observe the following coding standards when working on the codebase:
 * Simple strings in source code should be quoted with :samp:`'`
 * Coding must follow a style guide. In case of Python it is
   `pep8 <http://www.python.org/dev/peps/pep-0008>`_ and
-  using the command line tool pep8 (or :samp:`make pep8`) to enforce this
+  using the command line tool pep8 (or :samp:`make pep8`) to enforce this.
 * `Python documentation guide <http://www.python.org/dev/peps/pep-0257>`_
+* Comments should be complete sentences. If a comment is a phrase or sentence, its first word should be capitalized, unless it is an identifier that begins with a lower case letter (never alter the case of identifiers!). Comments should start with a # and a single space.
 * Adherence to regression/unit testing wherever possible (:samp:`make test`)
 * Use of github for revision control, issue tracking and management
 * Simple deployment procedure - all dependencies must be delivered with
@@ -22,8 +23,8 @@ Please observe the following coding standards when working on the codebase:
   be assumed to represent a working demo with all tests passing.
 * All strings should be internationalisation enabled. Please see :doc:`i18n`
   for details.
-* All code should pass lint validation. You can test this using the make target
-  ``make jenkins-lint``. In some cases you may wish to override a line or
+* Code must pass a pylint validation (http://www.logilab.org/card/pylint_manual#what-is-pylint). You can test this using the make target
+  ``make pylint``. In some cases you may wish to override a line or
   group of lines so that they are not validated by lint. You can do this by
   adding either::
 
@@ -43,6 +44,28 @@ Please observe the following coding standards when working on the codebase:
   .. note:: You can globally ignore messages by adding them to :file:`pylintrc`
      in the :samp:`[MESSAGES CONTROL]` section.
 
+  The following pylint messages have been thus globally excluded from the
+  check. For a discussion of these see also github issue https://github.com/AIFDR/inasafe/issues/245.
+
+  * All type R: Refactor suggestions such as limiting the number of local
+                variables. We may bring some back later.
+  * All type I: Information only
+  * W0142: Allow the Python feature F(*args, **kwargs)
+  * W0201: Allow definition of class attributes outside the constructor.
+  * W0212: Allow access to protected members (e.g. _show_system_info)
+  * W0231: Allow classes without constructors.
+  * W0232: Un-instantiated classes is a feature used in this project.
+  * W0403: Relative imports are OK for modules that live in the same dir
+  * W0511: Appearance of TODO and FIXME is not a sign of poor quality
+  * E1101: Disable check for missing attributes.
+  * E1103: This one does not understand numpy variables.
+  * C0103: Allow mathematical variables such as x0 or A.
+  * C0111: Allow missing docstrings in some cases
+  * C0302: No restriction on the number of lines per module
+
+  It is of course possible to run all pylint checks on any part of the code
+  if desired: E.g pylint safe/storage/raster.py
+
 * Each source file should include a standard header containing copyright,
   authorship and version metadata as shown in the exampled below.
 
@@ -56,7 +79,6 @@ Please observe the following coding standards when working on the codebase:
     """
 
     __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
-    __version__ = '0.5.0'
     __revision__ = '$Format:%H$'
     __date__ = '01/11/2010'
     __license__ = "GPL"

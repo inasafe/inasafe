@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import temp_dir, unique_filename
 
 __author__ = 'tim@linfiniti.com, ole.moller.nielsen@gmail.com'
 __version__ = '0.5.0'
@@ -27,7 +26,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unicodedata
 
-# SAFE functionality
+# SAFE functionality - passed on to QGIS modules
+# pylint: disable=W0611
 from safe.api import get_admissible_plugins
 from safe.api import get_function_title
 from safe.api import get_plugins as safe_get_plugins
@@ -37,8 +37,12 @@ from safe.api import read_layer as safe_read_layer
 from safe.api import (buffered_bounding_box,
                       verify as verify_util,
                       VerificationError)
+
 from safe.api import (calculate_impact as safe_calculate_impact,
-                      internationalisedNames)  # pylint: disable=W0611
+                      internationalisedNames)
+
+from safe.common.utilities import temp_dir, unique_filename
+# pylint: enable=W0611
 
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication

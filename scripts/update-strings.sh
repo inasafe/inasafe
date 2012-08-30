@@ -1,12 +1,14 @@
 #!/bin/bash
 #set -x
 LOCALE=$1
-PODIR=i18n/${LOCALE}/LC_MESSAGES
+PODIR=safe/i18n/${LOCALE}/LC_MESSAGES
 POPATH=${PODIR}/inasafe.po
 
 # Keep the current field separator
 oIFS=$IFS
 POFILES=$(egrep -r "import ugettext" . | cut -f 1 -d ':' | grep 'py$' | sort | uniq | tr '\n' ' ')
+#echo
+#echo $PODIR
 #echo $POFILES
 # double brackets deal gracefully if path has spaces
 if [[ ! -f $POPATH ]]

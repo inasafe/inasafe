@@ -20,6 +20,9 @@ __date__ = '12/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# FIXME (Ole): Shouldn't at least some these move to safe.common.exceptions
+#              so that they can be reused
+
 
 class QgisPathException(Exception):
     """Custom exception for when qgispath.txt could not be read."""

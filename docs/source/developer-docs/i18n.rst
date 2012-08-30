@@ -42,8 +42,9 @@ Translation of strings *not* in the gui such as impact functions
 
 * Import the gettext helper e.g::
 
-   from common.utilities import ugettext as _
+   from safe.common.utilities import ugettext as _
 
+   (Note that you must have the sequence "import ugettext" in the statement. It will not work as part of a multiple import such as import x, y, ugettext as _)
 * All strings should be wrapped using the _ helper e.g::
 
     _('Are there enough shelters available for %i people?') % displaced

@@ -23,13 +23,10 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 import numpy
+from safe.common.exceptions import BoundsError
 
 LOGGER = logging.getLogger('InaSAFE')
 # pylint: disable=W0105
-
-
-class BoundsError(RuntimeError):
-    pass
 
 
 def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
@@ -46,7 +43,7 @@ def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
             * 'linear' - bilinear interpolation using the four
                   nearest neighbours (default)
 
-        * bounds_error: Boolean flag. If True (default) a BoundsErorr exception
+        * bounds_error: Boolean flag. If True (default) a BoundsError exception
               will be raised when interpolated values are requested
               outside the domain of the input data. If False, nan
               is returned for those values
@@ -58,7 +55,8 @@ def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
 
     Notes:
         Input coordinates x and y are assumed to be monotonically increasing,
-        but need not be equidistantly spaced.
+        but need not be equidistantly spaced. No such assumption regarding
+        ordering of points is made.
 
         Z is assumed to have dimension M x N, where M = len(x) and N = len(y).
         In other words it is assumed that the x values follow the first
@@ -241,24 +239,33 @@ def check_inputs(x, y, Z, points, mode, bounds_error):
     eta = points[:, 1]
 
     if bounds_error:
-        msg = ('Interpolation point %f was less than the smallest value in '
-               'domain %f and bounds_error was requested.' % (xi[0], x[0]))
-        if xi[0] < x[0]:
+        xi0 = min(xi)
+        xi1 = max(xi)
+        eta0 = min(eta)
+        eta1 = max(eta)
+
+        msg = ('Interpolation point xi=%f was less than the smallest '
+               'value in domain (x=%f) and bounds_error was requested.'
+               % (xi0, x[0]))
+        if xi0 < x[0]:
             raise BoundsError(msg)
 
-        msg = ('Interpolation point %f was greater than the largest value in '
-               'domain %f and bounds_error was requested.' % (xi[-1], x[-1]))
-        if xi[-1] > x[-1]:
+        msg = ('Interpolation point xi=%f was greater than the largest '
+               'value in domain (x=%f) and bounds_error was requested.'
+               % (xi1, x[-1]))
+        if xi1 > x[-1]:
             raise BoundsError(msg)
 
-        msg = ('Interpolation point %f was less than the smallest value in '
-               'domain %f and bounds_error was requested.' % (eta[0], y[0]))
-        if eta[0] < y[0]:
+        msg = ('Interpolation point eta=%f was less than the smallest '
+               'value in domain (y=%f) and bounds_error was requested.'
+               % (eta0, y[0]))
+        if eta0 < y[0]:
             raise BoundsError(msg)
 
-        msg = ('Interpolation point %f was greater than the largest value in '
-               'domain %f and bounds_error was requested.' % (eta[-1], y[-1]))
-        if eta[-1] > y[-1]:
+        msg = ('Interpolation point eta=%f was greater than the largest '
+               'value in domain (y=%f) and bounds_error was requested.'
+               % (eta1, y[-1]))
+        if eta1 > y[-1]:
             raise BoundsError(msg)
 
     return x, y, Z, xi, eta
