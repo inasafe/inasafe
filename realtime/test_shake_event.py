@@ -133,6 +133,8 @@ mmiData: Populated"""
         assert os.path.exists(myPath)
         myExpectedQml = myPath.replace('tif','qml')
         assert os.path.exists(myExpectedQml)
+        myExpectedKeywords = myPath.replace('tif','keywords')
+        assert os.path.exists(myExpectedKeywords)
 
     def testEventToShapefile(self):
         """Check we can convert the shake event to a raster"""

@@ -25,13 +25,7 @@ import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 import logging
-from utils import shakemapExtractDir, dataDir
-from rt_exceptions import (GridXmlFileNotFoundError,
-                           GridXmlParseError,
-                           ContourCreationError,
-                           InvalidLayerError,
-                           CityShapefileCreationError,
-                           CityMemoryLayerCreationError)
+
 from qgis.core import (QgsPoint,
                        QgsField,
                        QgsFeature,
@@ -43,6 +37,26 @@ from qgis.core import (QgsPoint,
                        QgsCoordinateReferenceSystem)
 from PyQt4.QtCore import QVariant, QFileInfo, QString, QStringList
 
+from safe.api import get_admissible_plugins
+from safe.api import get_function_title
+from safe.api import get_plugins as safe_get_plugins
+from safe.api import read_keywords, bbox_intersection
+from safe.api import write_keywords as safe_write_keywords
+from safe.api import read_layer as safe_read_layer
+from safe.api import (buffered_bounding_box,
+                      verify as verify_util,
+                      VerificationError)
+from safe.api import (calculate_impact as safe_calculate_impact,
+                      internationalisedNames)  # pylint: disable=W0611
+
+from utils import shakemapExtractDir, dataDir
+from rt_exceptions import (GridXmlFileNotFoundError,
+                           GridXmlParseError,
+                           ContourCreationError,
+                           InvalidLayerError,
+                           CityShapefileCreationError,
+                           CityMemoryLayerCreationError)
+
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
@@ -51,14 +65,17 @@ class ShakeEvent:
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magnitude etc."""
 
-    def __init__(self, theEventId):
+    def __init__(self, theEventId, thePopulationRasterPath=None):
         """Constructor for the shake event class.
 
         Args:
             theEventId - (Mandatory) Id of the event. Will be used to
                 determine the path to an grid.xml file that
                 will be used to intialise the state of the ShakeEvent instance.
-
+            thePopulationRasterPath - (Optional) - path to the population raster
+                that will be used if you want to calculate the impact. This
+                is optional because there are various ways this can be
+                specified before calling :func:`calculateFatalities`.
             e.g.
 
             /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/grid.xml
@@ -86,6 +103,7 @@ class ShakeEvent:
         self.rows = None
         self.columns = None
         self.mmiData = None
+        self.populationRasterPath = thePopulationRasterPath
         self.parseGridXml()
 
 
@@ -528,6 +546,12 @@ class ShakeEvent:
         # Now run GDAL warp scottie...
         self._runCommand(myCommand)
 
+        # copy the keywords file from fixtures for this layer
+        myKeywordPath = os.path.join(shakemapExtractDir(),
+                                 self.eventId,
+                                 'mmi-%s.keywords' % theAlgorithm)
+        mySourceKeywords = os.path.join(dataDir(), 'mmi.keywords')
+        shutil.copyfile(mySourceKeywords, myKeywordPath)
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         myQmlPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
@@ -999,4 +1023,46 @@ class ShakeEvent:
                     })
         return myString
 
+    def calculateFatalities(self, thePopulationRasterPath=None):
+        """Use the earthquake fatalities  function to calculate fatalities.
 
+        Args:
+            thePopulationRasterPath: str optional. see
+                :func:`_getPopulationPath` for more details on how the path will
+                be resolved if not explicitly given.
+        Returns:
+            A dict containing fatality counts for the shake events. Keys
+                for the dict will be MMI classes (I-X) and values will be
+                fatalities for that class.
+        Raises:
+            None
+        """
+        myHazardPath = 'foo'
+        myExposurePath = 'foo'
+        myHazardLayer = safe_read_layer(makeAscii(theHazardPath))
+        myExposureLayer = safe_read_layer(makeAscii(theExposurePath))
+        myLayers = [myHazardLayer, myExposureLayer]
+        myImpactLayer = safe_calculate_impact(myLayers, theFunction)
+
+    def _getPopulationPath(self):
+        """Helper for :func:`calculateFatalities` to determine population path.
+
+        Args:
+            thePopulationPath: str optional path to the population raster.
+                If not passed as a parameter, the following priority will be
+                used to determine the path:
+                1) the class attribute self.populationRasterPath
+                          will be checked and if not None it will be used.
+                2) the environment variable 'SAFE_POPULATION_PATH' will be
+                checked if set it will be used.
+                4) A hard coded path of
+                :file:`/fixtures/exposure/population.tif` will be appended to
+                os.path.abspath(os.path.curdir)
+                5) A hard coded path of
+                :file:`/usr/local/share/inasafe/exposure/` will be used.
+        Returns:
+            str - path to a population raster file.
+        Raises:
+            FileNotFoundError
+        """
+        pass
