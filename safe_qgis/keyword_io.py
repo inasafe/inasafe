@@ -92,6 +92,7 @@ class KeywordIO(QObject):
         mySource = str(theLayer.source())
         myFlag = self.areKeywordsFileBased(theLayer)
         myKeywords = None
+
         try:
             if myFlag:
                 myKeywords = readKeywordsFromFile(mySource, theKeyword)

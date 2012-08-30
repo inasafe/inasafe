@@ -44,6 +44,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                             setJakartaGeoExtent)
 
 from safe.common.testing import HAZDATA, TESTDATA
+from safe.common.exceptions import GetDataError
 from safe.api import nanallclose
 
 # Setup pathnames for test data sets
@@ -335,7 +336,7 @@ class ClipperTest(unittest.TestCase):
                 # Check that an exception is raised for bad arguments
                 try:
                     mySafeLayer.get_data(scaling='bad')
-                except:
+                except GetDataError:
                     pass
                 else:
                     myMessage = 'String argument should have raised exception'
@@ -343,7 +344,7 @@ class ClipperTest(unittest.TestCase):
 
                 try:
                     mySafeLayer.get_data(scaling='(1, 3)')
-                except:
+                except GetDataError:
                     pass
                 else:
                     myMessage = 'Tuple argument should have raised exception'
@@ -402,11 +403,10 @@ class ClipperTest(unittest.TestCase):
             myExtraKeywords = {'resolution': myNativeResolution}
             myRasterLayer = QgsRasterLayer(myRasterPath, 'xxx')
             try:
-                myResult = clipLayer(myRasterLayer,
-                                     myBoundingBox,
-                                     myResolution,
-                                     theExtraKeywords=myExtraKeywords)
-                del myResult
+                clipLayer(myRasterLayer,
+                          myBoundingBox,
+                          myResolution,
+                          theExtraKeywords=myExtraKeywords)
             except InvalidProjectionException:
                 pass
             else:

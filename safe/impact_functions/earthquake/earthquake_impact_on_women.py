@@ -137,7 +137,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
         table_body.append(_('Are enough facilities available to assist %i '
                             'pregnant women?') % displaced_pregnant_women)
 
-        table_body.append(TableRow(_('Notes:'), header=True))
+        table_body.append(TableRow(_('Notes'), header=True))
 
         table_body.append(_('Fatality model is from '
                             'Institute of Teknologi Bandung 2012.'))

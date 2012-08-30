@@ -61,7 +61,7 @@ try:
     from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
     DEBUG = True
-except Exception, e:
+except ImportError, e:
     print 'Debugging was disabled'
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -563,8 +563,7 @@ class DockTest(unittest.TestCase):
         assert '31372262' in myResult, myMessage
 
     def test_runTsunamiBuildingImpactFunction(self):
-        """Tsunami function runs in GUI with Batemans Bay model"""
-        """Raster and vector based function runs as expected."""
+        """Tsunami function runs in GUI as expected."""
 
         # Push OK with the left mouse button
 
@@ -625,84 +624,7 @@ class DockTest(unittest.TestCase):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
 
-        # FIXME (Ole):
-        # Temporarily disabled as it was depending on old scaling method
-        # specific to this dataset. After cleaning up the 'official'
-        # impact function, this one doesn't work. Use instead
-        # HKV impact function in engine/impact_functions_for_testing
-
         # Push OK with the left mouse button
-
-        myButton = DOCK.pbnRunStop
-
-        myMessage = 'Run button was not enabled'
-        assert myButton.isEnabled(), myMessage
-
-        # Hazard layers - default is already Banjir Jakarta seperti 2007
-        myIndex = DOCK.cboHazard.findText('A flood in Jakarta like in 2007')
-        myMessage = 'Jakarta 2007 flood hazard layer not found'
-        assert myIndex != -1, myMessage
-        DOCK.cboHazard.setCurrentIndex(myIndex)
-
-        # Exposure layers - Penduduk Jakarta
-        myIndex = DOCK.cboExposure.findText('Penduduk Jakarta')
-        assert myIndex != -1, 'Penduduk Jakarta exposure layer not found'
-        DOCK.cboExposure.setCurrentIndex(myIndex)
-
-        # Choose impact function - HKVtest
-        myIndex = DOCK.cboFunction.findText('HKVtest')
-        myMessage = ('HKVtest impact function not '
-               'found: ' + combosToString(DOCK))
-        assert myIndex != -1, myMessage
-        DOCK.cboFunction.setCurrentIndex(myIndex)
-
-        # Exposure layers - Penduduk Jakarta
-        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
-        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
-
-        # Choose impact Terdampak
-        #QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
-        #QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Down)
-        #QTest.keyClick(DOCK.cboFunction, QtCore.Qt.Key_Enter)
-
-        # Check that layers and impact function are correct
-        myDict = getUiState(DOCK)
-
-        myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function Id': 'HKVtest',
-                          'Hazard': 'A flood in Jakarta like in 2007',
-                          'Exposure': 'Penduduk Jakarta'}
-        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-                            myDict, myExpectedDict, combosToString(DOCK))
-        assert myDict == myExpectedDict, myMessage
-
-        # Enable on-the-fly reprojection
-        setCanvasCrs(GEOCRS, True)
-        setJakartaGeoExtent()
-
-        # Press RUN
-        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
-        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
-
-        # Check that the number is as what was calculated by
-        # Marco Hartman form HKV
-        myMessage = 'Result not as expected: %s' % myResult
-        # This is the expected impact number
-        assert '2480' in myResult, myMessage
-
-    def test_runFloodPopulationImpactFunction(self):
-        """Flood function runs in GUI with Jakarta data
-           Raster on raster based function runs as expected."""
-
-        # FIXME (Ole):
-        # Temporarily disabled as it was depending on old scaling method
-        # specific to this dataset. After cleaning up the 'official'
-        # impact function, this one doesn't work. Use instead
-        # HKV impact function in engine/impact_functions_for_testing
-
-        # Push OK with the left mouse button
-
         myButton = DOCK.pbnRunStop
 
         myMessage = 'Run button was not enabled'

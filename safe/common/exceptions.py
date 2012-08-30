@@ -21,11 +21,42 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-class ReadLayerError(Exception):
+class InaSAFEError(RuntimeError):
+    """Base class for all user defined execptions"""
+    pass
+
+
+class ReadLayerError(InaSAFEError):
     """When a layer can't be read"""
     pass
 
 
-class BoundingBoxError(Exception):
+class WriteLayerError(InaSAFEError):
+    """When a layer can't be written"""
+    pass
+
+
+class BoundingBoxError(InaSAFEError):
     """For errors relating to bboxes"""
+    pass
+
+
+class VerificationError(InaSAFEError):
+    """Exception thrown by verify()
+    """
+    pass
+
+
+class PolygonInputError(InaSAFEError):
+    """For invalid inputs to numeric polygon functions"""
+    pass
+
+
+class BoundsError(InaSAFEError):
+    """For points falling outside interpolation grid"""
+    pass
+
+
+class GetDataError(InaSAFEError):
+    """When layer data cannot be obtained"""
     pass

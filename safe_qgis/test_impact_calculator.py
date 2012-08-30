@@ -36,7 +36,9 @@ from safe.common.testing import  HAZDATA, EXPDATA, TESTDATA
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)
+# pylint: disable=W0611
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
+# pylint: enable=W0611
 
 
 class ImpactCalculatorTest(unittest.TestCase):
@@ -91,7 +93,7 @@ class ImpactCalculatorTest(unittest.TestCase):
             myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
             myMessage = 'Calculator run failed. %s' % str(e)
             assert(), myMessage
 
@@ -107,7 +109,7 @@ class ImpactCalculatorTest(unittest.TestCase):
             myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
             myMessage = 'Calculator run failed:\n' + str(e)
             assert(), myMessage
 
@@ -117,7 +119,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         try:
             self.calculator.setExposureLayer(None)
             self.calculator.setHazardLayer(None)
-            #next line should raise an error
+            # Next line should raise an error
             myRunner = self.calculator.getRunner()
             myRunner.start()
         except RuntimeError, e:
@@ -165,14 +167,14 @@ class ImpactCalculatorTest(unittest.TestCase):
         self.calculator.setFunction('Flood Building Impact Function')
         try:
             myRunner = self.calculator.getRunner()
-            # run non threaded
+            # Run non threaded
             myRunner.run()
             myMessage = myRunner.result()
             myImpactLayer = myRunner.impactLayer()
             myFilename = myImpactLayer.get_filename()
             assert(myFilename and not myFilename == '')
             assert(myMessage and not myMessage == '')
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
             myMessage = 'Calculator run failed. %s' % str(e)
             assert(), myMessage
 

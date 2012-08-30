@@ -33,9 +33,9 @@ from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _, unique_filename
-from safe.common.utilities import VerificationError
 from safe.common.polygon import is_inside_polygon
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
+from safe.common.exceptions import VerificationError
 
 
 # Auxiliary function for raster test
@@ -111,7 +111,7 @@ class Test_IO(unittest.TestCase):
         filename = unique_filename(suffix='.gml')
         try:
             read_layer(filename)
-        except IOError:
+        except ReadLayerError:
             pass
         else:
             msg = 'Exception for non-existing file should have been raised'
@@ -267,6 +267,10 @@ class Test_IO(unittest.TestCase):
         filename = '%s/%s' % (TESTDATA, layername)
         V = read_layer(filename)
 
+        # Add some additional keywords
+        V.keywords['kw1'] = 'value1'
+        V.keywords['kw2'] = 'value2'
+
         # Check string representation of vector class
         assert str(V).startswith('Vector data')
         assert str(len(V)) in str(V)
@@ -278,8 +282,12 @@ class Test_IO(unittest.TestCase):
         data = V_ref.get_data()
         projection = V_ref.get_projection()
 
+        assert 'kw1' in V_ref.get_keywords()
+        assert 'kw2' in V_ref.get_keywords()
+
         # Create new object from test data
-        V_new = Vector(data=data, projection=projection, geometry=geometry)
+        V_new = Vector(data=data, projection=projection, geometry=geometry,
+                       keywords=V_ref.get_keywords())
 
         # Check equality operations
         assert V_new == V_ref
@@ -333,6 +341,12 @@ class Test_IO(unittest.TestCase):
         else:
             msg = 'Should have raised TypeError'
             raise Exception(msg)
+
+        # Check that differences in keywords affect comparison
+        assert V_new == V_ref
+        V_tmp.keywords['kw2'] = 'blah'
+        assert not V_tmp == V_ref
+        assert V_tmp != V_ref
 
     def test_vector_class_geometry_types(self):
         """Admissible geometry types work in vector class

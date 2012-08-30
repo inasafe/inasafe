@@ -23,13 +23,10 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 import numpy
+from safe.common.exceptions import BoundsError
 
 LOGGER = logging.getLogger('InaSAFE')
 # pylint: disable=W0105
-
-
-class BoundsError(RuntimeError):
-    pass
 
 
 def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):

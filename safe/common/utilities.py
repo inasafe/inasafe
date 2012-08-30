@@ -12,11 +12,7 @@ import logging.handlers
 # pylint: enable=W0404
 from tempfile import mkstemp
 
-
-class VerificationError(RuntimeError):
-    """Exception thrown by verify()
-    """
-    pass
+from safe.common.exceptions import VerificationError
 
 
 def verify(statement, message=None):
