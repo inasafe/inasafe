@@ -70,19 +70,20 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
 
         * theLayer - a valid QGIS vector or raster layer
         * theExtent - an array representing the exposure layer
-           extents in the form [xmin, ymin, xmax, ymax]. It is assumed
-           that the coordinates are in EPSG:4326 although currently
-           no checks are made to enforce this.
+              extents in the form [xmin, ymin, xmax, ymax]. It is assumed
+              that the coordinates are in EPSG:4326 although currently
+              no checks are made to enforce this.
         * theCellSize - cell size which the layer should be resampled to.
-            This argument will be ignored for vector layers and if not provided
-            for a raster layer, the native raster cell size will be used.
+              This argument will be ignored for vector layers and if not
+              provided for a raster layer, the native raster cell size will be
+              used.
         * theExtraKeywords - Optional keywords dictionary to be added to
                           output layer
 
     Returns:
-        Path to the output clipped layer (placed in the
-        system temp dir). The output layer will be reprojected to EPSG:4326
-        if needed.
+        Path to the output clipped layer (placed in the inasafe temp dir).
+            The output layer will be reprojected to EPSG:4326
+            if needed.
 
     Raises:
         None
@@ -256,8 +257,9 @@ def explodeMultiPartGeometry(theGeom):
 
 def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
                      theExtraKeywords=None):
-    """Clip a Hazard or Exposure raster layer to the extents provided. The
-    layer must be a raster layer or an exception will be thrown.
+    """Clip a Hazard or Exposure raster layer to the extents provided.
+
+    The layer must be a raster layer or an exception will be thrown.
 
     .. note:: The extent *must* be in EPSG:4326.
 
@@ -275,12 +277,12 @@ def _clipRasterLayer(theLayer, theExtent, theCellSize=None,
             theCellSize=None), the native raster cell size will be used.
 
     Returns:
-        Path to the output clipped layer (placed in the
+        str: Path to the output clipped layer (placed in the
         system temp dir).
 
     Raises:
-       Exception if input layer is a density layer in projected coordinates -
-       see issue #123
+        Exception if input layer is a density layer in projected coordinates -
+        see issue #123
 
     """
     if not theLayer or not theExtent:

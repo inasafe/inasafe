@@ -222,6 +222,17 @@ mmiData: Populated"""
         myPath = myShakeEvent.citiesToShape()
         assert os.path.exists(myPath)
 
+    def testCalculateFatalities(self):
+        """Test that we can calculate fatalities."""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myResult = myShakeEvent.calculateFatalities()
+        myExpectedResult = ''
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
+        assert myResult == myExpectedResult, myMessage
+
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
