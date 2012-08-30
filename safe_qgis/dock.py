@@ -934,9 +934,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def optimalClip(self):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
-        the three inputs. The inasafe library will perform various checks
-        to ensure that the extent is tenable, includes data from both
-        etc.
+        the three inputs (hazard, exposure and viewport).
+
+        The inasafe library will perform various checks to ensure that the
+        extent is tenable, includes data from both etc.
 
         The result of this function will be two layers which are
         clipped and resampled if needed, and in the EPSG:4326 geographic

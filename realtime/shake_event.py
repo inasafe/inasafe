@@ -1072,6 +1072,94 @@ class ShakeEvent:
         myResult = safe_calculate_impact(myLayers, myFunction)
         return myResult
 
+    def clipPopulationToShake(self, thePopulationRasterPath):
+        """Clip population (exposure) layer to dimensions of shake data.
+
+        Args:
+            thePopulationRasterPath: Path to the population raster.
+
+        Returns:
+            str: Path to the clipped dataset.
+
+        Raises:
+            FileNotFoundError
+        """
+        myExtent = self.boundsToRectangle()
+        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
+                                                  myHazardLayer.crs())
+
+        # Get the hazard and exposure layers selected in the combos
+        myHazardLayer = self.getHazardLayer()
+        myExposureLayer = self.getExposureLayer()
+
+        # Reproject all extents to EPSG:4326 if needed
+        myGeoCrs = QgsCoordinateReferenceSystem()
+        myGeoCrs.createFromEpsg(4326)
+
+
+        # Get the Hazard extents as an array in EPSG:4326
+        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
+                                                  myHazardLayer.crs())
+
+        # Fake the viewport extent to be the same as hazard extent
+        myViewportGeoExtent = self.viewportGeoArray()
+
+        # Get the Exposure extents as an array in EPSG:4326
+        myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
+                                                    myExposureLayer.crs())
+
+        # Now work out the optimal extent between the two layers and
+        # the current view extent. The optimal extent is the intersection
+        # between the two layers and the viewport.
+        myGeoExtent = None
+        try:
+            # Extent is returned as an array [xmin,ymin,xmax,ymax]
+            # We will convert it to a QgsRectangle afterwards.
+            myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                                           myExposureGeoExtent,
+                                           myViewportGeoExtent)
+        except InsufficientOverlapException, e:
+            myMessage = ('There was insufficient overlap between the input'
+                         ' layers')
+            raise Exception(myMessage)
+
+        # Next work out the ideal spatial resolution for rasters
+        # in the analysis. If layers are not native WGS84, we estimate
+        # this based on the geographic extents
+        # rather than the layers native extents so that we can pass
+        # the ideal WGS84 cell size and extents to the layer prep routines
+        # and do all preprocessing in a single operation.
+        # All this is done in the function getWGS84resolution
+        myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
+        myCellSize = None
+        extraExposureKeywords = {}
+
+        # Hazard layer is raster
+        myHazardGeoCellSize = getWGS84resolution(myHazardLayer)
+
+        # In case of two raster layers establish common resolution
+        myExposureGeoCellSize = getWGS84resolution(myExposureLayer)
+
+        if myHazardGeoCellSize < myExposureGeoCellSize:
+            myCellSize = myHazardGeoCellSize
+        else:
+            myCellSize = myExposureGeoCellSize
+
+        # Record native resolution to allow rescaling of exposure data
+        if not numpy.allclose(myCellSize, myExposureGeoCellSize):
+            extraExposureKeywords['resolution'] = myExposureGeoCellSize
+
+        myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
+                                                myHazardGeoCellSize)
+
+        myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
+                                        myCellSize)
+        myClippedExposurePath = clipLayer(myExposureLayer,
+                                          myGeoExtent, myCellSize,
+                                          theExtraKeywords=extraExposureKeywords)
+
+        return myClippedHazardPath, myClippedExposurePath
+
     def _getPopulationPath(self):
         """Helper to determine population raster spath.
 
