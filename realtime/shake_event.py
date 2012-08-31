@@ -21,11 +21,13 @@ import sys
 import shutil
 from xml.dom import minidom
 from subprocess import call, CalledProcessError
+import logging
+
 import ogr
 import gdal
 from gdalconst import GA_ReadOnly
-import logging
 
+from PyQt4.QtCore import QVariant, QFileInfo, QString, QStringList
 from qgis.core import (QgsPoint,
                        QgsField,
                        QgsFeature,
@@ -35,7 +37,6 @@ from qgis.core import (QgsPoint,
                        QgsDataSourceURI,
                        QgsVectorFileWriter,
                        QgsCoordinateReferenceSystem)
-from PyQt4.QtCore import QVariant, QFileInfo, QString, QStringList
 
 from safe.api import get_admissible_plugins
 from safe.api import get_function_title
@@ -49,6 +50,7 @@ from safe.api import (buffered_bounding_box,
 from safe.api import (calculate_impact as safe_calculate_impact,
                       internationalisedNames)  # pylint: disable=W0611
 
+from safe_qgis.clipper import extentToGeoArray
 from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
@@ -974,61 +976,6 @@ class ShakeEvent:
 
         return myMemoryLayer
 
-    def __str__(self):
-        """The unicode representation for an event object's state.
-
-        Args: None
-
-        Returns: str A string describing the ShakeEvent instance
-
-        Raises: None
-        """
-        if self.mmiData:
-            mmiData = 'Populated'
-        else:
-            mmiData = 'Not populated'
-        myString = (('latitude: %(latitude)s\n'
-                     'longitude: %(longitude)s\n'
-                     'eventId: %(eventId)s\n'
-                     'magnitude: %(magnitude)s\n'
-                     'depth: %(depth)s\n'
-                     'description: %(description)s\n'
-                     'location: %(location)s\n'
-                     'day: %(day)s\n'
-                     'month: %(month)s\n'
-                     'year: %(year)s\n'
-                     'time: %(time)s\n'
-                     'timeZone: %(timeZone)s\n'
-                     'xMinimum: %(xMinimum)s\n'
-                     'xMaximum: %(xMaximum)s\n'
-                     'yMinimum: %(yMinimum)s\n'
-                     'yMaximum: %(yMaximum)s\n'
-                     'rows: %(rows)s\n'
-                     'columns: %(columns)s\n'
-                     'mmiData: %(mmiData)s') %
-                    {
-                        'latitude': self.latitude,
-                        'longitude': self.longitude,
-                        'eventId': self.eventId,
-                        'magnitude': self.magnitude,
-                        'depth': self.depth,
-                        'description': self.description,
-                        'location': self.location,
-                        'day': self.day,
-                        'month': self.month,
-                        'year': self.year,
-                        'time': self.time,
-                        'timeZone': self.timeZone,
-                        'xMinimum': self.xMinimum,
-                        'xMaximum': self.xMaximum,
-                        'yMinimum': self.yMinimum,
-                        'yMaximum': self.yMaximum,
-                        'rows': self.rows,
-                        'columns': self.columns,
-                        'mmiData': mmiData
-                    })
-        return myString
-
     def calculateFatalities(self,
                             thePopulationRasterPath=None,
                             theForceFlag=False,
@@ -1063,6 +1010,10 @@ class ShakeEvent:
                 theForceFlag=theForceFlag,
                 theAlgorithm=theAlgorithm)
 
+        myClippedShakePath, myClippedPopulationPath = self.clipLayers(
+            the myExposurePath, myHazardPath)
+        )
+
         myHazardLayer = safe_read_layer(myHazardPath)
         myExposureLayer = safe_read_layer(myExposurePath)
         myLayers = [myHazardLayer, myExposureLayer]
@@ -1072,46 +1023,52 @@ class ShakeEvent:
         myResult = safe_calculate_impact(myLayers, myFunction)
         return myResult
 
-    def clipPopulationToShake(self, thePopulationRasterPath):
+    def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):
         """Clip population (exposure) layer to dimensions of shake data.
 
+        It is possible (though unlikely) that the shake may be clipped too.
+
         Args:
+            theShakeRasterPath: Path to the shake raster.
             thePopulationRasterPath: Path to the population raster.
 
         Returns:
-            str: Path to the clipped dataset.
+            str, str: Path to the clipped datasets (clipped shake, clipped pop).
 
         Raises:
             FileNotFoundError
         """
         myExtent = self.boundsToRectangle()
-        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
+
+        myHazardGeoExtent = extentToGeoArray(myHazardLayer.extent(),
                                                   myHazardLayer.crs())
 
-        # Get the hazard and exposure layers selected in the combos
-        myHazardLayer = self.getHazardLayer()
-        myExposureLayer = self.getExposureLayer()
+        # _ is syntactical trick to ignore second returned value
+        myBaseName, _ = os.path.splitext(theShakeRasterPath)
+        myHazardLayer = QgsRasterLayer(theShakeRasterPath, myBaseName)
+        myBaseName, _ = os.path.splitext(thePopulationRasterPath)
+        myExposureLayer = QgsRasterLayer(thePopulationRasterPath, myBaseName)
 
         # Reproject all extents to EPSG:4326 if needed
         myGeoCrs = QgsCoordinateReferenceSystem()
         myGeoCrs.createFromEpsg(4326)
 
-
         # Get the Hazard extents as an array in EPSG:4326
-        myHazardGeoExtent = self.extentToGeoArray(myHazardLayer.extent(),
+        myHazardGeoExtent = extentToGeoArray(myHazardLayer.extent(),
                                                   myHazardLayer.crs())
 
         # Fake the viewport extent to be the same as hazard extent
-        myViewportGeoExtent = self.viewportGeoArray()
+        # since we are doing this headless without any vieport but I wanted
+        # to re-use code from safe_qgis
+        myViewportGeoExtent = myHazardGeoExtent
 
         # Get the Exposure extents as an array in EPSG:4326
-        myExposureGeoExtent = self.extentToGeoArray(myExposureLayer.extent(),
+        myExposureGeoExtent = extentToGeoArray(myExposureLayer.extent(),
                                                     myExposureLayer.crs())
 
         # Now work out the optimal extent between the two layers and
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
-        myGeoExtent = None
         try:
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
@@ -1130,8 +1087,6 @@ class ShakeEvent:
         # the ideal WGS84 cell size and extents to the layer prep routines
         # and do all preprocessing in a single operation.
         # All this is done in the function getWGS84resolution
-        myBufferedGeoExtent = myGeoExtent  # Bbox to use for hazard layer
-        myCellSize = None
         extraExposureKeywords = {}
 
         # Hazard layer is raster
@@ -1196,3 +1151,57 @@ class ShakeEvent:
         else:
             raise FileNotFoundError('Population file could not be found')
 
+    def __str__(self):
+        """The unicode representation for an event object's state.
+
+        Args: None
+
+        Returns: str A string describing the ShakeEvent instance
+
+        Raises: None
+        """
+        if self.mmiData:
+            mmiData = 'Populated'
+        else:
+            mmiData = 'Not populated'
+        myString = (('latitude: %(latitude)s\n'
+                     'longitude: %(longitude)s\n'
+                     'eventId: %(eventId)s\n'
+                     'magnitude: %(magnitude)s\n'
+                     'depth: %(depth)s\n'
+                     'description: %(description)s\n'
+                     'location: %(location)s\n'
+                     'day: %(day)s\n'
+                     'month: %(month)s\n'
+                     'year: %(year)s\n'
+                     'time: %(time)s\n'
+                     'timeZone: %(timeZone)s\n'
+                     'xMinimum: %(xMinimum)s\n'
+                     'xMaximum: %(xMaximum)s\n'
+                     'yMinimum: %(yMinimum)s\n'
+                     'yMaximum: %(yMaximum)s\n'
+                     'rows: %(rows)s\n'
+                     'columns: %(columns)s\n'
+                     'mmiData: %(mmiData)s') %
+                    {
+                        'latitude': self.latitude,
+                        'longitude': self.longitude,
+                        'eventId': self.eventId,
+                        'magnitude': self.magnitude,
+                        'depth': self.depth,
+                        'description': self.description,
+                        'location': self.location,
+                        'day': self.day,
+                        'month': self.month,
+                        'year': self.year,
+                        'time': self.time,
+                        'timeZone': self.timeZone,
+                        'xMinimum': self.xMinimum,
+                        'xMaximum': self.xMaximum,
+                        'yMinimum': self.yMinimum,
+                        'yMaximum': self.yMaximum,
+                        'rows': self.rows,
+                        'columns': self.columns,
+                        'mmiData': mmiData
+                    })
+        return myString

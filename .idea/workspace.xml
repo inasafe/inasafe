@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/testEventCalculateFatalities.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/clipper.py" afterPath="$PROJECT_DIR$/safe_qgis/clipper.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/dock.py" afterPath="$PROJECT_DIR$/safe_qgis/dock.py" />
     </list>
     <ignored path="inasafe-realtime.iws" />
@@ -30,7 +30,16 @@
       <file leaf-file-name="shake_event.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1162" column="0" selection-start="47377" selection-end="47377" vertical-scroll-proportion="3.7692308">
+            <state line="1014" column="9" selection-start="41189" selection-end="41199" vertical-scroll-proportion="0.4825462">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utilities_test.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/utilities_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="138" column="4" selection-start="4129" selection-end="4177" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -39,7 +48,7 @@
       <file leaf-file-name="clipper.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe_qgis/clipper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="425" column="0" selection-start="15989" selection-end="15989" vertical-scroll-proportion="0.0">
+            <state line="436" column="38" selection-start="16396" selection-end="16396" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -48,7 +57,7 @@
       <file leaf-file-name="dock.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="933" column="0" selection-start="35110" selection-end="43080" vertical-scroll-proportion="-7.4745765">
+            <state line="41" column="57" selection-start="1542" selection-end="1542" vertical-scroll-proportion="-2.20339">
               <folding />
             </state>
           </provider>
@@ -116,8 +125,8 @@
         <option value="$PROJECT_DIR$/realtime/make_map.py" />
         <option value="$PROJECT_DIR$/realtime/rt_exceptions.py" />
         <option value="$PROJECT_DIR$/realtime/test_shake_event.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/clipper.py" />
         <option value="$PROJECT_DIR$/safe_qgis/dock.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/clipper.py" />
         <option value="$PROJECT_DIR$/realtime/shake_event.py" />
       </list>
     </option>
@@ -697,7 +706,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/realtime/shake_event.py</url>
-          <line>767</line>
+          <line>769</line>
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -716,11 +725,6 @@
     <entry file="file://$PROJECT_DIR$/safe/engine/test_engine.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1457" column="0" selection-start="56976" selection-end="56976" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="15" selection-start="455" selection-end="455" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/make-shakemap.sh">
@@ -768,23 +772,30 @@
         <state line="22" column="23" selection-start="681" selection-end="698" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/clipper.py">
+    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="425" column="0" selection-start="15989" selection-end="15989" vertical-scroll-proportion="0.0">
+        <state line="41" column="57" selection-start="1542" selection-end="1542" vertical-scroll-proportion="-2.20339">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+    <entry file="file://$PROJECT_DIR$/safe_qgis/clipper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="933" column="0" selection-start="35110" selection-end="43080" vertical-scroll-proportion="-7.4745765">
+        <state line="436" column="38" selection-start="16396" selection-end="16396" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="138" column="4" selection-start="4129" selection-end="4177" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1162" column="0" selection-start="47377" selection-end="47377" vertical-scroll-proportion="3.7692308">
+        <state line="1014" column="9" selection-start="41189" selection-end="41199" vertical-scroll-proportion="0.4825462">
           <folding />
         </state>
       </provider>

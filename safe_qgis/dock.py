@@ -24,15 +24,14 @@ __type__ = 'alpha'  # beta, final etc will be shown in dock title
 import numpy
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
-from safe_qgis.dock_base import Ui_DockBase
-from safe_qgis.help import Help
-from safe_qgis.utilities import getExceptionWithStacktrace, getWGS84resolution
+
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform)
+
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
@@ -40,7 +39,7 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getBufferedExtent,
                                       internationalisedNames)
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.clipper import clipLayer
+from safe_qgis.clipper import clipLayer, extentToGeoArray
 from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientOverlapException,
                                   InvalidParameterException,
@@ -52,6 +51,10 @@ from safe_qgis.utilities import (htmlHeader,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion)
+
+from safe_qgis.dock_base import Ui_DockBase
+from safe_qgis.help import Help
+from safe_qgis.utilities import getExceptionWithStacktrace, getWGS84resolution
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -1114,27 +1117,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myCrs = QgsCoordinateReferenceSystem()
             myCrs.createFromEpsg(4326)
 
-        return self.extentToGeoArray(myRect, myCrs)
-
-    def extentToGeoArray(self, theExtent, theSourceCrs):
-        """Convert the supplied extent to geographic and return as as array"""
-
-        # FIXME (Ole): As there is no reference to self, this function
-        #              should be a general helper outside the class
-        myGeoCrs = QgsCoordinateReferenceSystem()
-        myGeoCrs.createFromEpsg(4326)
-        myXForm = QgsCoordinateTransform(
-                            theSourceCrs,
-                            myGeoCrs)
-
-        # Get the clip area in the layer's crs
-        myTransformedExtent = myXForm.transformBoundingBox(theExtent)
-
-        myGeoExtent = [myTransformedExtent.xMinimum(),
-                       myTransformedExtent.yMinimum(),
-                       myTransformedExtent.xMaximum(),
-                       myTransformedExtent.yMaximum()]
-        return myGeoExtent
+        return extentToGeoArray(myRect, myCrs)
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
