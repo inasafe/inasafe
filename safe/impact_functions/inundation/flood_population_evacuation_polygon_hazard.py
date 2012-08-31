@@ -3,7 +3,6 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
-from safe.storage.clipping import clip_raster_by_polygons
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
 
@@ -129,39 +128,23 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('People affected by flood prone areas')
 
-        # Generate 8 intervals across the range of flooded population
+        # Define classes for legend for flooded population counts
+        colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
+                   '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
         population_counts = [x['population'] for x in new_attributes]
-        cls = numpy.linspace(min(population_counts), max(population_counts), 9)
+        cls = numpy.linspace(min(population_counts), max(population_counts),
+                             len(colours) + 1)
 
         # Define style info for output polygons showing population counts
-        style_classes = [dict(label=_('Nil'),
-                              colour='#FFFFFF', min=cls[0], max=cls[1],
-                              transparency=0, size=1),
-                         dict(label=_('Low'),
-                              colour='#38A800', min=cls[1], max=cls[2],
-                              transparency=0, size=1),
-                         dict(label=_('Low'),
-                              colour='#79C900', min=cls[2], max=cls[3],
-                              transparency=0, size=1),
-                         dict(label=_('Low'),
-                              colour='#CEED00', min=cls[3], max=cls[4],
-                              transparency=0, size=1),
-                         dict(label=_('Medium'),
-                              colour='#FFCC00', min=cls[4], max=cls[5],
-                              transparency=0, size=1),
-                         dict(label=_('Medium'),
-                              colour='#FF6600', min=cls[5], max=cls[6],
-                              transparency=0, size=1),
-                         dict(label=_('Medium'),
-                              colour='#FF0000', min=cls[6], max=cls[7],
-                              transparency=0, size=1),
-                         dict(label=_('High'),
-                              colour='#7A0000', min=cls[7], max=cls[8],
-                              transparency=0, size=1)]
+        style_classes = []
+        for i, colour in enumerate(colours):
+            lo = cls[i]
+            hi = cls[i + 1]
 
-        #style_classes[1]['label'] = _('Low [%i people/area]') % classes[1]
-        #style_classes[4]['label'] = _('Medium [%i people/area]') % classes[4]
-        #style_classes[7]['label'] = _('High [%i people/area]') % classes[7]
+            label = _('%i - %i people/area') % (lo, hi)
+            entry = dict(label=label, colour=colour, min=lo, max=hi,
+                         transparency=0, size=1)
+            style_classes.append(entry)
 
         # Override style info with new classes and name
         style_info = dict(target_field=self.target_field,

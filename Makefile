@@ -227,7 +227,7 @@ pylint-details:
 	@echo "Pylint violations. For details run     "
 	@echo "make pylint-details                    "
 	@echo "---------------------------------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis || true
 
 profile:
 	@echo
