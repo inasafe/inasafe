@@ -22,6 +22,7 @@ import shutil
 from xml.dom import minidom
 from subprocess import call, CalledProcessError
 import logging
+import numpy
 
 import ogr
 import gdal
@@ -38,19 +39,13 @@ from qgis.core import (QgsPoint,
                        QgsVectorFileWriter,
                        QgsCoordinateReferenceSystem)
 
-from safe.api import get_admissible_plugins
-from safe.api import get_function_title
 from safe.api import get_plugins as safe_get_plugins
-from safe.api import read_keywords, bbox_intersection
-from safe.api import write_keywords as safe_write_keywords
 from safe.api import read_layer as safe_read_layer
-from safe.api import (buffered_bounding_box,
-                      verify as verify_util,
-                      VerificationError)
-from safe.api import (calculate_impact as safe_calculate_impact,
-                      internationalisedNames)  # pylint: disable=W0611
-
-from safe_qgis.clipper import extentToGeoArray
+from safe.api import calculate_impact as safe_calculate_impact
+from safe_qgis.safe_interface import getOptimalExtent, getBufferedExtent
+from safe_qgis.utilities import getWGS84resolution
+from safe_qgis.clipper import extentToGeoArray, clipLayer
+from safe_qgis.exceptions import InsufficientOverlapException
 from utils import shakemapExtractDir, dataDir
 from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
@@ -1010,15 +1005,15 @@ class ShakeEvent:
                 theForceFlag=theForceFlag,
                 theAlgorithm=theAlgorithm)
 
-        myClippedShakePath, myClippedPopulationPath = self.clipLayers(
-            the myExposurePath, myHazardPath)
-        )
+        myClippedHazardPath, myClippedExposurePath = self.clipLayers(
+            theShakeRasterPath=myHazardPath,
+            thePopulationRasterPath=myExposurePath)
 
-        myHazardLayer = safe_read_layer(myHazardPath)
-        myExposureLayer = safe_read_layer(myExposurePath)
-        myLayers = [myHazardLayer, myExposureLayer]
+        myClippedHazardLayer = safe_read_layer(myClippedHazardPath)
+        myClippedExposureLayer = safe_read_layer(myClippedExposurePath)
+        myLayers = [myClippedHazardLayer, myClippedExposureLayer]
 
-        myFunction = safe_get_plugins('I T B Fatality Function')
+        myFunction = safe_get_plugins('I T B Fatality Function')[0]
 
         myResult = safe_calculate_impact(myLayers, myFunction)
         return myResult
@@ -1038,12 +1033,8 @@ class ShakeEvent:
         Raises:
             FileNotFoundError
         """
-        myExtent = self.boundsToRectangle()
 
-        myHazardGeoExtent = extentToGeoArray(myHazardLayer.extent(),
-                                                  myHazardLayer.crs())
-
-        # _ is syntactical trick to ignore second returned value
+        # _ is a syntactical trick to ignore second returned value
         myBaseName, _ = os.path.splitext(theShakeRasterPath)
         myHazardLayer = QgsRasterLayer(theShakeRasterPath, myBaseName)
         myBaseName, _ = os.path.splitext(thePopulationRasterPath)
@@ -1079,7 +1070,6 @@ class ShakeEvent:
             myMessage = ('There was insufficient overlap between the input'
                          ' layers')
             raise Exception(myMessage)
-
         # Next work out the ideal spatial resolution for rasters
         # in the analysis. If layers are not native WGS84, we estimate
         # this based on the geographic extents
@@ -1104,14 +1094,15 @@ class ShakeEvent:
         if not numpy.allclose(myCellSize, myExposureGeoCellSize):
             extraExposureKeywords['resolution'] = myExposureGeoCellSize
 
-        myBufferedGeoExtent = getBufferedExtent(myGeoExtent,
-                                                myHazardGeoCellSize)
-
-        myClippedHazardPath = clipLayer(myHazardLayer, myBufferedGeoExtent,
-                                        myCellSize)
-        myClippedExposurePath = clipLayer(myExposureLayer,
-                                          myGeoExtent, myCellSize,
-                                          theExtraKeywords=extraExposureKeywords)
+        myClippedHazardPath = clipLayer(
+                                theLayer=myHazardLayer,
+                                theExtent=myGeoExtent,
+                                theCellSize=myCellSize)
+        myClippedExposurePath = clipLayer(
+                                    theLayer=myExposureLayer,
+                                    theExtent=myGeoExtent,
+                                    theCellSize=myCellSize,
+                                    theExtraKeywords=extraExposureKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 
