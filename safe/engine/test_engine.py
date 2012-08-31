@@ -1019,7 +1019,8 @@ class Test_Engine(unittest.TestCase):
                                          impact_fcn=IF)
         impact_filename = impact_vector.get_filename()
         # Read calculated result
-        my_impact_vector = read_layer(impact_filename)  # Read to have truncation
+        # Read to have truncation
+        my_impact_vector = read_layer(impact_filename)
         icoordinates = my_impact_vector.get_geometry()
         iattributes = my_impact_vector.get_data()
         N = len(icoordinates)
