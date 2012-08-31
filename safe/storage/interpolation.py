@@ -20,12 +20,11 @@ from utilities import geometrytype2string
 from utilities import DEFAULT_ATTRIBUTE
 
 
-
 # FIXME (Ole): Not finished (issue #101)
-
 # FIXME: Add mode parameter too
 def assign_hazard_values_to_exposure_data(hazard, exposure,
-                                          layer_name=None, attribute_name=None):
+                                          layer_name=None,
+                                          attribute_name=None):
     """Assign hazard values to exposure data
 
     This is the high level wrapper around interpolation functions for different
@@ -35,7 +34,8 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
        hazard: Layer representing the hazard levels
        exposure: Layer representing the exposure data
        layer_name: Optional name of returned layer.
-          If None (default) the name of the exposure layer is used for the returned layer.
+          If None (default) the name of the exposure layer is used for
+          the returned layer.
        attribute_name: Name for new attribute if one needs to be created.
           If None (default) the name of hazard is used
 
@@ -67,11 +67,14 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
 
     with the following methodologies used:
 
-    Polygon-Point:   Clip points to polygon and assign polygon attributes to them.
+    Polygon-Point:   Clip points to polygon and assign polygon attributes
+       to them.
     Polygon-Line:    * Not Implemented *
     Polygon-Polygon: * Not Implemented *
-    Polygon-Raster:  Convert raster to points, clip to polygon, assign values and return point data
-    Raster-Point:    Bilinear (or constant) interpolation as currently implemented
+    Polygon-Raster:  Convert raster to points, clip to polygon, assign values
+       and return point data
+    Raster-Point:    Bilinear (or constant) interpolation as currently
+       implemented
     Raster-Line:     * Not Implemented *
     Raster-Polygon:  Calculate centroids and use Raster - Point algorithm
     Raster-Raster:   Exposure raster is returned as is

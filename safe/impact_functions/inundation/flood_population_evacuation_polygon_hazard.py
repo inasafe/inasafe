@@ -6,8 +6,6 @@ from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
 
-from safe.storage.interpolation import interpolate_polygon_raster
-
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     """Risk plugin for flood evacuation

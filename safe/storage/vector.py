@@ -23,6 +23,7 @@ from safe.common.utilities import verify
 from safe.common.dynamic_translations import names as internationalised_titles
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
+from safe.common.utilities import ugettext as _
 
 from layer import Layer
 from projection import Projection
@@ -293,7 +294,7 @@ class Vector(Layer):
         * http://www.packtpub.com/article/geospatial-data-python-geometry
         """
 
-        basename, _ = os.path.splitext(filename)
+        basename = os.path.splitext(filename)[0]
 
         # Look for any keywords
         self.keywords = read_keywords(basename + '.keywords')
@@ -770,7 +771,7 @@ class Vector(Layer):
         A.sort()
 
         # Pick top N and unpack
-        _, data, geometry = zip(*A[-N:])
+        data, geometry = zip(*A[-N:])[1:]
 
         # Create new Vector instance and return
         return Vector(data=data,
@@ -868,7 +869,10 @@ def convert_line_to_points(V, delta):
     for i in range(N):
         c = points_along_line(geometry[i], delta)
         # We need to create a data entry for each point.
+        # FIXME (Ole): What on earth is this?
+        # pylint: disable=W0621
         new_data.extend([data[i] for _ in c])
+        # pylint: enable=W0621
         points.extend(c)
 
     # Create new point vector layer with same attributes and return
