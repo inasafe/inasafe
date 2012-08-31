@@ -5,6 +5,9 @@ from safe.common.polygon import clip_grid_by_polygons
 #from safe.common.polygon import clip_lines_by_polygon
 
 
+# FIXME (Ole): Order should be reversed and this should move into
+# interpolation module.
+# Then retire this one
 def clip_raster_by_polygons(R, P):
     """Separate raster grid points by polygons
 
@@ -20,4 +23,6 @@ def clip_raster_by_polygons(R, P):
     res = clip_grid_by_polygons(R.get_data(),
                                 R.get_geotransform(),
                                 P.get_geometry())
+
+    # Return
     return res

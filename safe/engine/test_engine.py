@@ -12,6 +12,7 @@ from safe.storage.core import read_layer
 from safe.storage.core import write_vector_data
 from safe.storage.core import write_raster_data
 from safe.storage.vector import Vector
+from safe.storage.interpolation import interpolate_polygon_raster
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 from safe.common.polygon import separate_points_by_polygon
@@ -472,7 +473,7 @@ class Test_Engine(unittest.TestCase):
 
     test_jakarta_flood_study.slow = True
 
-    def Xtest_clip_grid_by_polygons_optimisation(self):
+    def test_polygon_hazard_and_raster_exposure_big(self):
         """Rasters can be converted to points and clipped by polygons
 
         This is a test for the basic machinery needed for issue #91
@@ -483,6 +484,10 @@ class Test_Engine(unittest.TestCase):
         in https://github.com/AIFDR/inasafe/issues/222 it takes about 100
         seconds on a good workstation while it takes over 2000 seconds
         without it.
+
+        This test also runs the high level interpolation routine which assigns
+        attributes to the new point layer. The runtime is virtually the same as
+        the underlying function.
         """
 
         # Name input files
@@ -493,36 +498,162 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(polyhazard)
         E = read_layer(population)
 
-        assert len(H) == 2704
+        N = len(H)
+        assert N == 2704
+
+        # Run and test the fundamental clipping routine
+        #import time
+        #t0 = time.time()
         res = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
                                     H.get_geometry())
+        #print 'Engine took %i seconds' % (time.time() - t0)
 
-        assert len(res) == 2704
-        # FIXME (Ole): Not finished yet
+        assert len(res) == N
 
-    def test_polygon_hazard_and_raster_exposure(self):
+        # Characterisation test
+        assert H.get_data()[0]['RW'] == 'RW 01'
+        assert H.get_data()[0]['KAB_NAME'] == 'JAKARTA UTARA'
+        assert H.get_data()[0]['KEC_NAME'] == 'TANJUNG PRIOK'
+        assert H.get_data()[0]['KEL_NAME'] == 'KEBON BAWANG'
+
+        geom = res[0][0]
+        vals = res[0][1]
+        assert numpy.allclose(vals[17], 1481.98)
+        assert numpy.allclose(geom[17][0], 106.88746869)  # LON
+        assert numpy.allclose(geom[17][1], -6.11493812)  # LAT
+
+        # Then run and test the high level interpolation function
+        #t0 = time.time()
+        P = interpolate_polygon_raster(H, E,
+                                       layer_name='poly2raster_test',
+                                       attribute_name='grid_value')
+        #print 'High level function took %i seconds' % (time.time() - t0)
+        #P.write_to_file('polygon_raster_interpolation_example_big.shp')
+
+        # Characterisation tests (values verified using QGIS)
+        attributes = P.get_data()[17]
+        geometry = P.get_geometry()[17]
+
+        assert attributes['RW'] == 'RW 01'
+        assert attributes['KAB_NAME'] == 'JAKARTA UTARA'
+        assert attributes['KEC_NAME'] == 'TANJUNG PRIOK'
+        assert attributes['KEL_NAME'] == 'KEBON BAWANG'
+        assert numpy.allclose(attributes['grid_value'], 1481.984)
+
+        assert numpy.allclose(geometry[0], 106.88746869)  # LON
+        assert numpy.allclose(geometry[1], -6.11493812)  # LAT
+
+        # A second characterisation test
+        attributes = P.get_data()[10000]
+        geometry = P.get_geometry()[10000]
+
+        assert attributes['RW'] == 'RW 06'
+        assert attributes['KAB_NAME'] == 'JAKARTA UTARA'
+        assert attributes['KEC_NAME'] == 'PENJARINGAN'
+        assert attributes['KEL_NAME'] == 'KAMAL MUARA'
+        assert numpy.allclose(attributes['grid_value'], 715.6508)
+
+        assert numpy.allclose(geometry[0], 106.74092731)  # LON
+        assert numpy.allclose(geometry[1], -6.1081538)  # LAT
+
+        # A third characterisation test
+        attributes = P.get_data()[99000]
+        geometry = P.get_geometry()[99000]
+
+        assert attributes['RW'] == 'RW 08'
+        assert attributes['KAB_NAME'] == 'JAKARTA TIMUR'
+        assert attributes['KEC_NAME'] == 'CAKUNG'
+        assert attributes['KEL_NAME'] == 'CAKUNG TIMUR'
+        assert numpy.allclose(attributes['grid_value'], 770.7628)
+
+        assert numpy.allclose(geometry[0], 106.9675237)  # LON
+        assert numpy.allclose(geometry[1], -6.16966499)  # LAT
+
+    test_polygon_hazard_and_raster_exposure_big.slow = True
+
+    def test_polygon_hazard_and_raster_exposure_small(self):
         """Exposure rasters can be clipped by polygon exposure
 
         This is a test for the basic machinery needed for issue #91
         """
 
         # Name input files
-        polyhazard = join(TESTDATA, 'rw_jakarta_singlepart.shp')
-        population = join(TESTDATA, 'Population_Jakarta_geographic.asc')
+        polyhazard = join(TESTDATA, 'test_polygon_on_test_grid.shp')
+        population = join(TESTDATA, 'test_grid.asc')
 
         # Get layers using API
         H = read_layer(polyhazard)
         E = read_layer(population)
 
-        assert len(H) == 2704
-        res = clip_grid_by_polygons(E.get_data(),
+        N = len(H)
+        assert N == 4
+
+        # Run underlying clipping routine
+        res0 = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
                                     H.get_geometry())
-        assert len(res) == 2704
-        # FIXME (Ole): Not finished yet
+        assert len(res0) == N
 
-    test_polygon_hazard_and_raster_exposure.slow = True
+        # Run higher level interpolation routine
+        P = interpolate_polygon_raster(H, E,
+                                       layer_name='poly2raster_test',
+                                       attribute_name='grid_value')
+
+        # Verify result (numbers obtained from using QGIS)
+        #P.write_to_file('poly2raster_test.shp')
+        attributes = P.get_data()
+        geometry = P.get_geometry()
+
+        # Polygon 0
+        assert attributes[0]['id'] == 0
+        assert attributes[0]['name'] == 'A'
+        assert numpy.allclose(attributes[0]['number'], 31415)
+        assert numpy.allclose(attributes[0]['grid_value'], 50.8147)
+
+        assert attributes[1]['id'] == 0
+        assert attributes[1]['name'] == 'A'
+        assert numpy.allclose(geometry[1][0], 96.97137053)  # Lon
+        assert numpy.allclose(geometry[1][1], -5.349657148)  # Lat
+        assert numpy.allclose(attributes[1]['number'], 31415)
+        assert numpy.allclose(attributes[1]['grid_value'], 3)
+
+        assert attributes[3]['id'] == 0
+        assert attributes[3]['name'] == 'A'
+        assert numpy.allclose(attributes[3]['number'], 31415)
+        assert numpy.allclose(attributes[3]['grid_value'], 50.127)
+
+        # Polygon 1
+        assert attributes[6]['id'] == 1
+        assert attributes[6]['name'] == 'B'
+        assert numpy.allclose(attributes[6]['number'], 13)
+        assert numpy.allclose(attributes[6]['grid_value'], -15)
+
+        assert attributes[11]['id'] == 1
+        assert attributes[11]['name'] == 'B'
+        assert numpy.allclose(attributes[11]['number'], 13)
+        assert numpy.isnan(attributes[11]['grid_value'])
+
+        assert attributes[13]['id'] == 1
+        assert attributes[13]['name'] == 'B'
+        assert numpy.allclose(geometry[13][0], 97.063559372)  # Lon
+        assert numpy.allclose(geometry[13][1], -5.472621404)  # Lat
+        assert numpy.allclose(attributes[13]['number'], 13)
+        assert numpy.allclose(attributes[13]['grid_value'], 50.8258)
+
+        # Polygon 2 (overlapping)
+        assert attributes[16]['id'] == 2
+        assert attributes[16]['name'] == 'Intersecting'
+        assert numpy.allclose(attributes[16]['number'], 100)
+        assert numpy.allclose(attributes[16]['grid_value'], 50.9574)
+
+        # Polygon 3
+        assert attributes[23]['id'] == 3
+        assert attributes[23]['name'] == 'D'
+        assert numpy.allclose(geometry[23][0], 97.0021116)  # Lon
+        assert numpy.allclose(geometry[23][1], -5.503362468)  # Lat
+        assert numpy.allclose(attributes[23]['number'], -50)
+        assert numpy.allclose(attributes[23]['grid_value'], 50.0377)
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works

@@ -11,7 +11,9 @@ from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as _
 from safe.common.numerics import ensure_numeric
-from safe.common.polygon import inside_polygon, clip_line_by_polygon
+from safe.common.polygon import (inside_polygon,
+                                 clip_line_by_polygon, clip_grid_by_polygons)
+
 from safe.common.exceptions import InaSAFEError
 
 from utilities import geometrytype2string
@@ -127,6 +129,57 @@ def interpolate_polygon_vector(V, X,
 
     # Return interpolated vector layer
     return R
+
+
+def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
+    """Interpolate from polygon layer to raster data
+
+    Input
+        P: Polygon data set
+        R: Raster data set
+        layer_name: Optional name of returned interpolated layer.
+            If None the name of P is used for the returned layer.
+        attribute_name: Name for new attribute.
+              If None (default) the name of layer R is used
+    Output
+        I: Vector data set; points located as R with values interpolated from P
+
+    """
+
+    # Input checks
+    verify(R.is_raster)
+    verify(P.is_vector)
+    verify(P.is_polygon_data)
+
+    if layer_name is None:
+        layer_name = P.get_name()
+
+    if attribute_name is None:
+        attribute_name = R.get_name()
+
+    # Run underlying clipping algorithm
+    polygon_geometry = P.get_geometry()
+    polygon_attributes = P.get_data()
+    res = clip_grid_by_polygons(R.get_data(),
+                                R.get_geotransform(),
+                                polygon_geometry)
+
+    # Create new point layer with interpolated attributes
+    new_geometry = []
+    new_attributes = []
+    for i, (geometry, values) in enumerate(res):
+
+        # For each polygon assign attributes to points that fall inside it
+        for j, geom in enumerate(geometry):
+            attr = polygon_attributes[i].copy()  # Attributes for this polygon
+            attr[attribute_name] = values[j]  # Attribute value from grid cell
+            new_attributes.append(attr)
+            new_geometry.append(geom)
+
+    return safe.storage.vector.Vector(data=new_attributes,
+                                      projection=P.get_projection(),
+                                      geometry=new_geometry,
+                                      name=layer_name)
 
 
 #-------------------------------------------------------------
