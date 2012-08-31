@@ -20,6 +20,102 @@ from utilities import geometrytype2string
 from utilities import DEFAULT_ATTRIBUTE
 
 
+
+# FIXME (Ole): Not finished (issue #101)
+
+# FIXME: Add mode parameter too
+def assign_hazard_values_to_exposure_data(hazard, exposure,
+                                          layer_name=None, attribute_name=None):
+    """Assign hazard values to exposure data
+
+    This is the high level wrapper around interpolation functions for different
+    combinations of data types.
+
+    Args
+       hazard: Layer representing the hazard levels
+       exposure: Layer representing the exposure data
+       layer_name: Optional name of returned layer.
+          If None (default) the name of the exposure layer is used for the returned layer.
+       attribute_name: Name for new attribute if one needs to be created.
+          If None (default) the name of hazard is used
+
+    Raises: Underlying exceptions are propagated
+
+    Returns:
+    Layer representing the exposure data with hazard levels assigned.
+    The data type depends on the combination of input types as follows:
+
+    Polygon-Point:   Point data
+    Polygon-Line:    N/A
+    Polygon-Polygon: N/A
+    Polygon-Raster:  Point data
+    Raster-Point:    Point data
+    Raster-Line:     N/A
+    Raster-Polygon:  Polygon data
+    Raster-Raster:   Raster data
+
+
+    Note:
+
+    Admissible combinations are
+
+           Exposure |  Raster     Polygon    Line     Point
+    Hazard          |
+    -------------------------------------------------------
+    Polygon         |  Y          Y          Y        Y
+    Raster          |  Y          Y          Y        Y
+
+    with the following methodologies used:
+
+    Polygon-Point:   Clip points to polygon and assign polygon attributes to them.
+    Polygon-Line:    * Not Implemented *
+    Polygon-Polygon: * Not Implemented *
+    Polygon-Raster:  Convert raster to points, clip to polygon, assign values and return point data
+    Raster-Point:    Bilinear (or constant) interpolation as currently implemented
+    Raster-Line:     * Not Implemented *
+    Raster-Polygon:  Calculate centroids and use Raster - Point algorithm
+    Raster-Raster:   Exposure raster is returned as is
+
+    """
+
+    # FIXME: Push type checking into the individual modules
+    if hazard.is_raster:
+        if exposure.is_vector:
+            # Interpolate this raster layer to geometry of exposure
+            msg = ('Name must be either a string or None. I got %s'
+                   % (str(type(exposure)))[1:-1])
+            verify(attribute_name is None
+                   or isinstance(attribute_name, basestring), msg)
+            return interpolate_raster_vector(hazard, exposure,
+                                             layer_name=layer_name,
+                                             attribute_name=attribute_name)
+        elif exposure.is_raster:
+            if hazard.get_geotransform() != exposure.get_geotransform():
+                # Need interpolation between grids
+                msg = ('Intergrid interpolation not implemented here. '
+                       'Make sure rasters are aligned and sampled to '
+                       'the same resolution')
+                raise InaSAFEError(msg)
+            else:
+                # Rasters are aligned, no need to interpolate
+                return exposure
+        else:
+            pass
+    elif hazard.is_vector and hazard.is_polygon_data:
+        if exposure.is_vector:
+            return interpolate_polygon_vector(hazard, exposure,
+                                              layer_name=layer_name,
+                                              attribute_name=attribute_name)
+        elif exposure.is_raster:
+            return interpolate_polygon_raster(hazard, exposure,
+                                              layer_name=layer_name,
+                                              attribute_name=attribute_name)
+        else:
+            pass
+    else:
+        pass
+
+
 # FIXME (Ole): Rename arguments to source, target instead of R, V, X, ...
 
 def interpolate_raster_vector(R, V, layer_name=None, attribute_name=None):
