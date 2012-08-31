@@ -132,8 +132,9 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
         population_counts = [x['population'] for x in new_attributes]
-        cls = numpy.linspace(min(population_counts), max(population_counts),
-                             len(colours) + 1)
+        cls = [0] + numpy.linspace(1,
+                                   max(population_counts),
+                                   len(colours)).tolist()
 
         # Define style info for output polygons showing population counts
         style_classes = []
@@ -141,7 +142,11 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             lo = cls[i]
             hi = cls[i + 1]
 
-            label = _('%i - %i people/area') % (lo, hi)
+            if i == 0:
+                label = _('0')
+            else:
+                label = _('%i - %i') % (lo, hi)
+
             entry = dict(label=label, colour=colour, min=lo, max=hi,
                          transparency=0, size=1)
             style_classes.append(entry)
