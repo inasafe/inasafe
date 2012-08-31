@@ -1119,7 +1119,6 @@ def clip_grid_by_polygons(A, geotransform, polygons):
         polygons: list of polygons, each an array of vertices
 
     Output
-        #List of rasters - one per input polygon.
         List of points, values - one per input polygon.
 
     Implementing algorithm suggested in
@@ -1129,6 +1128,8 @@ def clip_grid_by_polygons(A, geotransform, polygons):
           that each point represents the center of its grid cell.
           The required half cell shifts are taken care of by the
           function geotransform2axes
+
+          If multiple polygons overlap, the one first encountered will be used
     """
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
