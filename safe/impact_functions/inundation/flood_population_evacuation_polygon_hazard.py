@@ -44,32 +44,31 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         """
 
         # Identify hazard and exposure layers
-        inundation = get_hazard_layer(layers)  # Flood inundation
-        population = get_exposure_layer(layers)
+        H = get_hazard_layer(layers)  # Flood inundation
+        E = get_exposure_layer(layers)
 
-        question = get_question(inundation.get_name(),
-                                population.get_name(),
+        question = get_question(H.get_name(),
+                                E.get_name(),
                                 self)
 
         # Check that hazard is polygon type
-        if not inundation.is_vector:
+        if not H.is_vector:
             msg = ('Input hazard %s  was not a vector layer as expected '
-                   % inundation.get_name())
+                   % H.get_name())
             raise Exception(msg)
 
         msg = ('Input hazard must be a polygon layer. I got %s with layer '
-               'type %s' % (inundation.get_name(),
-                            inundation.get_geometry_name()))
-        if not inundation.is_polygon_data:
+               'type %s' % (H.get_name(),
+                            H.get_geometry_name()))
+        if not H.is_polygon_data:
             raise Exception(msg)
 
         # Run polygon2raster interpolation function
-        P = interpolate_polygon_raster(inundation, population,
-                                       attribute_name='population')
+        P = H.interpolate(E, attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
-        new_attributes = inundation.get_data()
+        new_attributes = H.get_data()
         for attr in new_attributes:
             attr[self.target_field] = 0
 
@@ -87,7 +86,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             evacuated += pop
 
         # Count totals
-        total = int(numpy.sum(population.get_data(nan=0, scaling=False)))
+        total = int(numpy.sum(E.get_data(nan=0, scaling=False)))
 
         # Don't show digits less than a 1000
         if total > 1000:
@@ -158,8 +157,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Create vector layer and return
         V = Vector(data=new_attributes,
-                   projection=inundation.get_projection(),
-                   geometry=inundation.get_geometry(),
+                   projection=H.get_projection(),
+                   geometry=H.get_geometry(),
                    name=_('Population affected by flood prone areas'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,

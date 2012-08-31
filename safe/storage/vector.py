@@ -27,7 +27,7 @@ from safe.common.exceptions import GetDataError, InaSAFEError
 from layer import Layer
 from projection import Projection
 from interpolation import interpolate_polygon_vector
-
+from interpolation import interpolate_polygon_raster
 from utilities import DRIVER_MAP, TYPE_MAP
 from utilities import read_keywords
 from utilities import write_keywords
@@ -796,9 +796,6 @@ class Vector(Layer):
                geometry of input layer X
         """
 
-        msg = 'Input to Vector.interpolate must be a vector layer instance'
-        verify(X.is_vector, msg)
-
         msg = ('Projections must be the same: I got %s and %s'
                % (self.projection, X.projection))
         verify(self.projection == X.projection, msg)
@@ -813,9 +810,20 @@ class Vector(Layer):
         verify(attribute_name is None
                or isinstance(attribute_name, basestring), msg)
 
-        return interpolate_polygon_vector(self, X,
+        if X.is_vector:
+            I = interpolate_polygon_vector(self, X,
                                           layer_name=layer_name,
                                           attribute_name=attribute_name)
+        elif X.is_raster:
+            I = interpolate_polygon_raster(self, X,
+                                          layer_name=layer_name,
+                                          attribute_name=attribute_name)
+        else:
+            msg = (_('Input to Vector.interpolate is neither vector or '
+                   'raster data: I got %s') % str(X))
+            raise InaSAFEError(msg)
+
+        return I
 
     @property
     def is_point_data(self):
