@@ -13,6 +13,7 @@ from safe.storage.core import write_vector_data
 from safe.storage.core import write_raster_data
 from safe.storage.vector import Vector
 from safe.storage.interpolation import interpolate_polygon_raster
+from safe.storage.interpolation import interpolate_raster_vector_points
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 from safe.common.polygon import separate_points_by_polygon
@@ -903,6 +904,34 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
+        # Check hazard data
+        A = H.get_data()
+        assert len(H) == 20855
+        assert numpy.sum(numpy.isnan(A)) == 8547
+
+        # Do interpolation using underlying library
+        # This was to debug this test failing under Windows
+        I = interpolate_raster_vector_points(H, E)
+        for feature in I.get_data():
+            if (feature['LONGITUDE'] == 150.1787 and
+                feature['LATITUDE'] == -35.70413):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            elif (feature['LONGITUDE'] == 150.1793 and
+                  feature['LATITUDE'] == -35.70632):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            elif (feature['LONGITUDE'] == 150.18208 and
+                  feature['LATITUDE'] == -35.70996):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            elif (feature['LONGITUDE'] == 150.18664 and
+                  feature['LATITUDE'] == -35.70253):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            elif (feature['LONGITUDE'] == 150.18487 and
+                  feature['LATITUDE'] == -35.70561):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            else:
+                assert not numpy.isnan(feature['Tsunami Max Inundation Geo'])
+
+        # Run main test
         plugin_name = 'Tsunami Building Loss Function'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1

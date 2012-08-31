@@ -350,6 +350,7 @@ class Raster(Layer):
             if nan is True:
                 NAN = numpy.nan
             else:
+                # E.g. if nan is a number
                 NAN = nan
 
             # Replace NODATA_VALUE with NaN
