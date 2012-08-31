@@ -131,7 +131,8 @@ def interpolate_polygon_vector(V, X,
     return R
 
 
-def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
+def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None,
+                               return_layers_by_polygon=False):
     """Interpolate from polygon layer to raster data
 
     Input
@@ -141,8 +142,18 @@ def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
             If None the name of P is used for the returned layer.
         attribute_name: Name for new attribute.
               If None (default) the name of layer R is used
+        return_layers_by_polygon: Optional flag deciding the return value
+              If False, one point layer is returned
+              If True, a list of point layers are returned - one for each
+              polygon
+              This mode is for example useful if there is a need aggregate the
+              interpolated values by the original polygons.
     Output
         I: Vector data set; points located as R with values interpolated from P
+           (see note about return_layers_by_polygon)
+
+    Note, each point in the resulting dataset will have an attribute
+    'polygon_id' which refers to the polygon it belongs to.
 
     """
 
@@ -164,22 +175,48 @@ def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
                                 R.get_geotransform(),
                                 polygon_geometry)
 
-    # Create new point layer with interpolated attributes
-    new_geometry = []
-    new_attributes = []
-    for i, (geometry, values) in enumerate(res):
+    if return_layers_by_polygon:
+        # Create multiple points layers with interpolated attributes -
+        # one for each polygon
 
-        # For each polygon assign attributes to points that fall inside it
-        for j, geom in enumerate(geometry):
-            attr = polygon_attributes[i].copy()  # Attributes for this polygon
-            attr[attribute_name] = values[j]  # Attribute value from grid cell
-            new_attributes.append(attr)
-            new_geometry.append(geom)
+        layer_list = []
+        for i, (geometry, values) in enumerate(res):
+            new_geometry = []
+            new_attributes = []
 
-    return safe.storage.vector.Vector(data=new_attributes,
-                                      projection=P.get_projection(),
-                                      geometry=new_geometry,
-                                      name=layer_name)
+            # For each polygon assign attributes to points that fall inside it
+            for j, geom in enumerate(geometry):
+                attr = polygon_attributes[i].copy()  # Attributes for this poly
+                attr[attribute_name] = values[j]  # Attribute value from cell
+                new_attributes.append(attr)
+                new_geometry.append(geom)
+
+            V = safe.storage.vector.Vector(data=new_attributes,
+                                           projection=P.get_projection(),
+                                           geometry=new_geometry,
+                                           name=layer_name)
+            layer_list.append(V)
+        return layer_list
+
+    else:
+        # Create one new point layer with interpolated attributes
+        new_geometry = []
+        new_attributes = []
+        for i, (geometry, values) in enumerate(res):
+
+            # For each polygon assign attributes to points that fall inside it
+            for j, geom in enumerate(geometry):
+                attr = polygon_attributes[i].copy()  # Attributes for this poly
+                attr[attribute_name] = values[j]  # Attribute value from grid cell
+                attr['polygon_id'] = i  # Store id for associated polygon
+                new_attributes.append(attr)
+                new_geometry.append(geom)
+
+        V = safe.storage.vector.Vector(data=new_attributes,
+                                       projection=P.get_projection(),
+                                       geometry=new_geometry,
+                                       name=layer_name)
+        return V
 
 
 #-------------------------------------------------------------

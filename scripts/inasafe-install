@@ -29,10 +29,6 @@ sudo pip install sphinx pylint==0.25.2
 # For code metrics / line counts
 sudo apt-get install sloccount
 
-# To get the gui test suite to pass.
-# FIXME (Ole): gdal version is currently hardwired
-sudo apt-get install libgdal1-1.8.0-grass
-
 # Setup environment variable. FIXME: Not used (yet)
 if grep -q InaSAFEQGIS ~/.bash_aliases
 then

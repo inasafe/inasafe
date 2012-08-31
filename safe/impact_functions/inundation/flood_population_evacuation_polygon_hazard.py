@@ -7,6 +7,8 @@ from safe.storage.clipping import clip_raster_by_polygons
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
 
+from safe.storage.interpolation import interpolate_polygon_raster
+
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     """Risk plugin for flood evacuation
@@ -65,20 +67,42 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         if not inundation.is_polygon_data:
             raise Exception(msg)
 
+        # Run polygon2raster interpolation function
+        P = interpolate_polygon_raster(inundation, population,
+                                       attribute_name='population')
+
+        # Initialise attributes of output dataset with all attributes
+        # from input polygon and a population count of zero
+        new_attributes = inundation.get_data()
+        for attr in new_attributes:
+            attr[self.target_field] = 0
+
+        # Count affected population per polygon and total
+        ref_evacuated = 0
+        for attr in P.get_data():
+            # Get population at this location
+            pop = float(attr['population'])
+
+            # Update population count for associated polygon
+            poly_id = attr['polygon_id']
+            new_attributes[poly_id][self.target_field] += pop
+
+            # Update total
+            ref_evacuated += pop
+
         # Extract data as numeric arrays
         #geometry = inundation.get_geometry()  # Flood footprints
-        attributes = inundation.get_data()    # Flood attributes
+        attributes = inundation.get_data()  # Flood attributes
 
         # Separate population grid points by flood footprints
-        print 'Clip'
         L = clip_raster_by_polygons(population, inundation)
 
-        print 'Sum'
         # Sum up population affected by polygons
         evacuated = 0
         attributes = []
         minpop = 1000
         maxpop = -minpop
+        count = 0
         for l in L:
             values = l[1]
             s = numpy.sum(values)
@@ -86,11 +110,21 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 minpop = s
             if s > maxpop:
                 maxpop = s
-            attributes.append({self.target_field: int(s)})
+            attributes.append({self.target_field: s})
             evacuated += s
+            count += len(values)
 
         print 'minpop', minpop
         print 'maxpop', maxpop
+
+        msg = 'got %i, expected %i.' % (evacuated, ref_evacuated)
+        assert evacuated == ref_evacuated, msg
+
+        for i, attr in enumerate(attributes):
+            print i, self.target_field, attr, new_attributes[i]
+            print attr[self.target_field], new_attributes[i][self.target_field]
+            assert numpy.allclose(attr[self.target_field],
+                                  new_attributes[i][self.target_field])
 
         # Count totals
         total = int(numpy.sum(population.get_data(nan=0, scaling=False)))
