@@ -44,9 +44,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
           Table with number of people evacuated and supplies required
         """
 
-        # Depth above which people are regarded affected [m]
-        #threshold = 1.0  # Threshold [m]
-
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation
         population = get_exposure_layer(layers)
@@ -78,7 +75,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             attr[self.target_field] = 0
 
         # Count affected population per polygon and total
-        ref_evacuated = 0
+        evacuated = 0
         for attr in P.get_data():
             # Get population at this location
             pop = float(attr['population'])
@@ -88,43 +85,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             new_attributes[poly_id][self.target_field] += pop
 
             # Update total
-            ref_evacuated += pop
-
-        # Extract data as numeric arrays
-        #geometry = inundation.get_geometry()  # Flood footprints
-        attributes = inundation.get_data()  # Flood attributes
-
-        # Separate population grid points by flood footprints
-        L = clip_raster_by_polygons(population, inundation)
-
-        # Sum up population affected by polygons
-        evacuated = 0
-        attributes = []
-        minpop = 1000
-        maxpop = -minpop
-        count = 0
-        for l in L:
-            values = l[1]
-            s = numpy.sum(values)
-            if s < minpop:
-                minpop = s
-            if s > maxpop:
-                maxpop = s
-            attributes.append({self.target_field: s})
-            evacuated += s
-            count += len(values)
-
-        print 'minpop', minpop
-        print 'maxpop', maxpop
-
-        msg = 'got %i, expected %i.' % (evacuated, ref_evacuated)
-        assert evacuated == ref_evacuated, msg
-
-        for i, attr in enumerate(attributes):
-            print i, self.target_field, attr, new_attributes[i]
-            print attr[self.target_field], new_attributes[i][self.target_field]
-            assert numpy.allclose(attr[self.target_field],
-                                  new_attributes[i][self.target_field])
+            evacuated += pop
 
         # Count totals
         total = int(numpy.sum(population.get_data(nan=0, scaling=False)))
@@ -134,7 +95,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             total = total // 1000 * 1000
         if evacuated > 1000:
             evacuated = evacuated // 1000 * 1000
-        print 'Done'
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
         rice = evacuated * 2.8
@@ -169,9 +129,9 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('People affected by flood prone areas')
 
-        # Generare 8 intervals across the range of flooded population
-        cls = numpy.linspace(minpop, maxpop, 9)
-        print 'cls', cls, len(cls)
+        # Generate 8 intervals across the range of flooded population
+        population_counts = [x['population'] for x in new_attributes]
+        cls = numpy.linspace(min(population_counts), max(population_counts), 9)
 
         # Define style info for output polygons showing population counts
         style_classes = [dict(label=_('Nil'),
@@ -209,7 +169,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                           legend_title=_('Population Count'))
 
         # Create vector layer and return
-        V = Vector(data=attributes,
+        V = Vector(data=new_attributes,
                    projection=inundation.get_projection(),
                    geometry=inundation.get_geometry(),
                    name=_('Population affected by flood prone areas'),
