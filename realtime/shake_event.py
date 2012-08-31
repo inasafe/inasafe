@@ -102,6 +102,8 @@ class ShakeEvent:
         self.columns = None
         self.mmiData = None
         self.populationRasterPath = thePopulationRasterPath
+        self.impactFile = None
+        self.fatalityCounts = None
         self.parseGridXml()
 
 
@@ -987,9 +989,12 @@ class ShakeEvent:
                 use to create the underlying raster. see
                 :func:`mmiToRasterData` for information about default behaviour.
         Returns:
-            A dict containing fatality counts for the shake events. Keys
-                for the dict will be MMI classes (I-X) and values will be
-                fatalities for that class.
+            str - the path to the computed impact file.
+                The class members self.impactFile and self.fatalityCounts
+                will be populated.
+                self.fatalityCounts is a dict containing fatality counts for
+                the shake events. Keys for the dict will be MMI classes (I-X)
+                and values will be fatalities for that class.
         Raises:
             None
         """
@@ -1013,10 +1018,13 @@ class ShakeEvent:
         myClippedExposureLayer = safe_read_layer(myClippedExposurePath)
         myLayers = [myClippedHazardLayer, myClippedExposureLayer]
 
-        myFunction = safe_get_plugins('I T B Fatality Function')[0]
+        myFunctionId = 'I T B Fatality Function'
+        myFunction = safe_get_plugins(myFunctionId)[0][myFunctionId]
 
         myResult = safe_calculate_impact(myLayers, myFunction)
-        return myResult
+        self.impactFile = result.filename
+        self.fatalityCounts = result.keywords
+        return myResult.filename
 
     def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):
         """Clip population (exposure) layer to dimensions of shake data.
@@ -1173,7 +1181,10 @@ class ShakeEvent:
                      'yMaximum: %(yMaximum)s\n'
                      'rows: %(rows)s\n'
                      'columns: %(columns)s\n'
-                     'mmiData: %(mmiData)s') %
+                     'mmiData: %(mmiData)s\n'
+                     'populationRasterPath: %(populationRasterPath)\n'
+                     'impactFile: %(impactFile)\n'
+                     'fatalityCounts: %(fatalityCounts)') %
                     {
                         'latitude': self.latitude,
                         'longitude': self.longitude,
@@ -1193,6 +1204,9 @@ class ShakeEvent:
                         'yMaximum': self.yMaximum,
                         'rows': self.rows,
                         'columns': self.columns,
-                        'mmiData': mmiData
+                        'mmiData': mmiData,
+                        'populationRasterPath': self.populationRasterPath,
+                        'impactFile': self.impactFile,
+                        'fatalityCounts': self.fatalityCounts
                     })
         return myString

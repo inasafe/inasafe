@@ -233,7 +233,6 @@ mmiData: Populated"""
         assert myResult == myExpectedResult, myMessage
 
 
-
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
     runner = unittest.TextTestRunner(verbosity=2)
