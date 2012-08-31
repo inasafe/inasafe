@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="id_ID">
+<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
         <location filename="clipper.py" line="287"/>
         <source>Layer or Extent passed to clip is None.</source>
-        <translation>Tidak ada Lapisan atau cakupan wilayah untuk memotong.</translation>
+        <translation>Tidak ada Lapisan atau cakupan wilayah untuk dipotong.</translation>
     </message>
     <message>
         <location filename="clipper.py" line="130"/>
         <source>Expected a vector layer but received a %s.</source>
-        <translation>Yang diharapkan lapisan vektor akan tetapi yang diterima %s.</translation>
+        <translation>Yang diharapkan berupa lapisan vektor akan tetapi yang diterima %s.</translation>
     </message>
     <message>
         <location filename="clipper.py" line="156"/>
         <source>Could not obtain data provider from layer &quot;%s&quot;</source>
-        <translation>Tidak mendapatkan penyedia data pada lapisan &quot;%s&quot;</translation>
+        <translation>Tidak dapat mendapatkan penyedia data pada lapisan &quot;%s&quot;</translation>
     </message>
     <message>
         <location filename="clipper.py" line="181"/>
@@ -25,7 +25,7 @@
     <message>
         <location filename="clipper.py" line="291"/>
         <source>Expected a raster layer but received a %s.</source>
-        <translation>Yang diharapkan lapisan raster akan tetapi yang diterima %s.</translation>
+        <translation>Yang diharapkan berupa lapisan raster akan tetapi yang diterima %s.</translation>
     </message>
     <message>
         <location filename="clipper.py" line="299"/>
@@ -200,12 +200,12 @@ ke %s: %s</translation>
     <message>
         <location filename="utilities.py" line="287"/>
         <source>Click for Diagnostic Information:</source>
-        <translation>Tombol untuk informasi diagnostik:</translation>
+        <translation>Klik untuk informasi diagnostik:</translation>
     </message>
     <message>
         <location filename="utilities.py" line="268"/>
         <source>No details provided</source>
-        <translation>Tidak ada detil</translation>
+        <translation>Tidak ada detil yang tersedia</translation>
     </message>
 </context>
 <context>
@@ -239,8 +239,7 @@ ke %s: %s</translation>
         <location filename="dock.py" line="804"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
-        <translation>Tidak ada lapisan dampak yang dihitung. Pesan kesalahan: %s
-</translation>
+        <translation>Tidak ada lapisan dampak yang dihitung. Pesan kesalahan: %s</translation>
     </message>
     <message>
         <location filename="dock.py" line="842"/>
@@ -350,7 +349,7 @@ ke %s: %s</translation>
     <message>
         <location filename="dock.py" line="1289"/>
         <source>Write to PDF</source>
-        <translation>menulis ke pdf</translation>
+        <translation>Menulis ke pdf</translation>
     </message>
     <message>
         <location filename="dock.py" line="1308"/>
@@ -365,7 +364,7 @@ ke %s: %s</translation>
     <message>
         <location filename="dock.py" line="1300"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
-        <translation>PDF diciptakan .... membuka menggunakan peninjau standar PDF pada system.FIle pdf yang dihasilkan disimpan sebagai:% s</translation>
+        <translation>Dokumen PDF telah dibuat .... membuka menggunakan peninjau standar PDF pada system.FIle pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
         <location filename="dock.py" line="1308"/>
@@ -380,32 +379,32 @@ ke %s: %s</translation>
     <message>
         <location filename="dock.py" line="1203"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
-        <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai dampak bahaya atau lapisan dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
+        <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai lapisan dampak atau lapisan bahaya dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
     </message>
     <message>
         <location filename="dock.py" line="984"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</source>
-        <translation>Tidak cukup tumpang-tindih antara lapisan input dan atau lapisan dan tampilan peta yang aktif. Silahkan memilih dua lapisan yang saling tumpang-tindih dan perbesar atau geser ke detil penuh:&lt;/p&gt;&lt;p&gt;Gagal memberikan cakupan optimal:&lt;/p&gt;&lt;p&gt;Ancaman: %1&lt;/p&gt;&lt;p&gt;Terpapar: %2&lt;/p&gt;&lt;p&gt;Cakupan tampilan peta geografis yang aktif: %3&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis ancaman: %4&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis terpapar: %5&lt;/p&gt;&lt;p&gt;Detil: %6&lt;/p&gt;</translation>
+        <translation>Tidak ada cukup tumpang-tindih antara lapisan input dan atau lapisan dan tampilan peta yang aktif. Silahkan memilih dua lapisan yang saling tumpang-tindih dan perbesar atau geser ke lapisan tersebut. Detil yang lebih lengkap adalah sebagai berikut::&lt;/p&gt;&lt;p&gt;Gagal memberikan cakupan optimal:&lt;/p&gt;&lt;p&gt;Ancaman: %1&lt;/p&gt;&lt;p&gt;Terpapar: %2&lt;/p&gt;&lt;p&gt;Cakupan tampilan peta geografis yang aktif: %3&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis ancaman: %4&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis terpapar: %5&lt;/p&gt;&lt;p&gt;Detil: %6&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="dock.py" line="268"/>
         <source>To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
-        <translation>Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik &lt;em&gt; tombol&lt;/em&gt; jalankan di bawah ini.</translation>
+        <translation>Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik tombol&lt;em&gt; jalankan&lt;/em&gt; di bawah ini.</translation>
     </message>
     <message>
         <location filename="dock.py" line="274"/>
         <source>Getting started:</source>
-        <translation>Memulai</translation>
+        <translation>Memulai:</translation>
     </message>
     <message>
         <location filename="dock.py" line="290"/>
         <source>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function.</source>
-        <translation>Tidak ada fungsi yang tersedia untuk input yang anda masukan. Coba untuk memilih kombinasi input yang berbeda. Silahkan mengacu pada panduan pengguna &lt;FIXME: add link&gt; untuk lebih jelasnya mengenai input yang benar untuk fungsi risiko yang diberikan.</translation>
+        <translation>Tidak ada fungsi yang tersedia untuk input yang anda masukan. Cobalah untuk memilih kombinasi input yang berbeda. Silahkan mengacu pada panduan pengguna &lt;FIXME: add link&gt; untuk lebih jelasnya mengenai input yang benar untuk fungsi risiko yang diberikan.</translation>
     </message>
     <message>
         <location filename="dock.py" line="296"/>
         <source>No valid functions:</source>
-        <translation>Tidak ada fungsi yang valid</translation>
+        <translation>Tidak ada fungsi yang valid:</translation>
     </message>
     <message>
         <location filename="dock.py" line="299"/>
@@ -420,7 +419,7 @@ ke %s: %s</translation>
     <message>
         <location filename="dock.py" line="310"/>
         <source>You can now proceed to run your model by clicking the &lt;em&gt;Run&lt;/em&gt; button.</source>
-        <translation>Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung</translation>
+        <translation>Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt;Hitung.</translation>
     </message>
     <message>
         <location filename="dock.py" line="312"/>
@@ -430,7 +429,7 @@ ke %s: %s</translation>
     <message>
         <location filename="dock.py" line="709"/>
         <source>An exception occurred when setting up the impact calculator.</source>
-        <translation>Terjadi pengecualian ketika menyiapkan kalkulator dampak.</translation>
+        <translation>Terjadi pengecualian ketika mempersiapkan kalkulator dampak.</translation>
     </message>
     <message>
         <location filename="dock.py" line="755"/>
@@ -440,7 +439,7 @@ ke %s: %s</translation>
     <message>
         <location filename="dock.py" line="721"/>
         <source>An exception occurred when setting up the  model runner.</source>
-        <translation>Terjadi pengecualian ketika memulai menyiapkan.model.pelari.</translation>
+        <translation>Terjadi pengecualian ketika memulai mempersiapkan model pelari.</translation>
     </message>
 </context>
 <context>
@@ -478,7 +477,7 @@ ke %s: %s</translation>
     <message>
         <location filename="dock_base.ui" line="116"/>
         <source>about:blank</source>
-        <translation>Tentang:kosong</translation>
+        <translation>Perihal:kosong</translation>
     </message>
     <message>
         <location filename="is_dock_base.ui" line="166"/>
@@ -534,7 +533,7 @@ ke %s: %s</translation>
     <message>
         <location filename="help_base.ui" line="25"/>
         <source>about:blank</source>
-        <translation>Tentang:kosong</translation>
+        <translation>Perihal:kosong</translation>
     </message>
 </context>
 <context>
@@ -638,17 +637,17 @@ ke %s: %s</translation>
     <message>
         <location filename="impact_calculator.py" line="151"/>
         <source>Error: Hazard layer not set.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan: Lapisan ancaman belum ditentukan.</translation>
     </message>
     <message>
         <location filename="impact_calculator.py" line="155"/>
         <source>Error: Exposure layer not set.</source>
-        <translation type="unfinished">Kesalahan: Lapisan terpapar tidak ditentukan.</translation>
+        <translation>Kesalahan: Lapisan terpapar belum ditentukan.</translation>
     </message>
     <message>
         <location filename="impact_calculator.py" line="159"/>
         <source>Error: Function not set.</source>
-        <translation type="unfinished">Kesalahan: Fungsi tidak ditentukan.</translation>
+        <translation>Kesalahan: Fungsi belum ditentukan.</translation>
     </message>
 </context>
 <context>
@@ -656,19 +655,18 @@ ke %s: %s</translation>
     <message>
         <location filename="impact_calculator_thread.py" line="154"/>
         <source>Ensure that hazard, exposure and function are all set before trying to run the analysis.</source>
-        <translation type="unfinished">Pastikan bahwa bahaya, paparan dan fungsi telah siap sebelum mencoba untuk menjalankan analisa.</translation>
+        <translation>Pastikan bahwa bahaya, paparan dan fungsi telah siap sebelum mencoba untuk menjalankan analisa.</translation>
     </message>
     <message>
         <location filename="impact_calculator_thread.py" line="165"/>
         <source>Calculation error encountered:
 </source>
-        <translation type="unfinished">Terjadi kesalahan perhitungan:
-</translation>
+        <translation>Terjadi kesalahan perhitungan:</translation>
     </message>
     <message>
         <location filename="impact_calculator_thread.py" line="172"/>
         <source>Calculation completed successfully.</source>
-        <translation type="unfinished">Perhitungan berhasil.</translation>
+        <translation>Perhitungan berhasil.</translation>
     </message>
 </context>
 <context>
@@ -676,7 +674,7 @@ ke %s: %s</translation>
     <message>
         <location filename="keyword_io.py" line="167"/>
         <source>Expected extraKeywords to be a dictionary. Got %s</source>
-        <translation>Diharapkan Kata kunci tambahan untuk menjadi kamus. Mendapat %s</translation>
+        <translation>Diharapkan Kata kunci tambahan dalam bentuk dictionary. Mendapat %s</translation>
     </message>
     <message>
         <location filename="keyword_io.py" line="179"/>
@@ -733,7 +731,7 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog.py" line="80"/>
         <source>population [count]</source>
-        <translation>populasi [jumlah]</translation>
+        <translation>populasi [banyak]</translation>
     </message>
     <message>
         <location filename="keywords_dialog.py" line="80"/>
@@ -778,7 +776,7 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog.py" line="364"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
-        <translation>tanda titik dua (:) tidak diijinkan, ganti dengan &quot;.&quot;</translation>
+        <translation>Tanda titik dua (:) tidak diijinkan, ganti dengan &quot;.&quot;</translation>
     </message>
     <message>
         <location filename="is_keywords_dialog.py" line="620"/>
@@ -1011,7 +1009,7 @@ ke %s: %s</translation>
     <message>
         <location filename="options_dialog_base.ui" line="229"/>
         <source>Organisation name (for maps, reports etc.)</source>
-        <translation>Organisasi nama (untuk peta, laporan-laporan dll.)</translation>
+        <translation>Nama organisasi (untuk peta, laporan-laporan dll.)</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="262"/>
@@ -1039,47 +1037,47 @@ ke %s: %s</translation>
     <message>
         <location filename="plugin.py" line="151"/>
         <source>Toggle InaSAFE Dock</source>
-        <translation type="unfinished">Tombol untuk beralih ke InaSAFE</translation>
+        <translation>Tombol untuk beralih ke InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="155"/>
         <source>Show/hide InaSAFE dock widget</source>
-        <translation type="unfinished">Tampilkan/hilangkan widget InaSAFE</translation>
+        <translation>Tampilkan/hilangkan widget InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="259"/>
         <source>InaSAFE</source>
-        <translation type="unfinished">InaSAFE</translation>
+        <translation>InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="170"/>
         <source>Keyword Editor</source>
-        <translation type="unfinished">Editor Kata Kunci</translation>
+        <translation>Editor Kata Kunci</translation>
     </message>
     <message>
         <location filename="plugin.py" line="175"/>
         <source>Open the keywords editor</source>
-        <translation type="unfinished">Buka editor kata kunci</translation>
+        <translation>Buka editor kata kunci</translation>
     </message>
     <message>
         <location filename="plugin.py" line="186"/>
         <source>Reset Dock</source>
-        <translation type="unfinished">Reset panel</translation>
+        <translation>Reset panel</translation>
     </message>
     <message>
         <location filename="plugin.py" line="191"/>
         <source>Reset the InaSAFE Dock</source>
-        <translation type="unfinished">Reset panel InaSAFE</translation>
+        <translation>Reset panel InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="203"/>
         <source>InaSAFE Options</source>
-        <translation type="unfinished">Opsi-opsi InaSAFE</translation>
+        <translation>Opsi-opsi InaSAFE</translation>
     </message>
     <message>
         <location filename="plugin.py" line="208"/>
         <source>Open InaSAFE options dialog</source>
-        <translation type="unfinished">Buka  pilihan dialog InaSAFE</translation>
+        <translation>Buka dialog opsi InaSAFE</translation>
     </message>
 </context>
 </TS>
