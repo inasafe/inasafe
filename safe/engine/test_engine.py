@@ -540,6 +540,7 @@ class Test_Engine(unittest.TestCase):
         assert attributes['KAB_NAME'] == 'JAKARTA UTARA'
         assert attributes['KEC_NAME'] == 'TANJUNG PRIOK'
         assert attributes['KEL_NAME'] == 'KEBON BAWANG'
+        assert attributes['polygon_id'] == 0
         assert numpy.allclose(attributes['grid_value'], 1481.984)
 
         assert numpy.allclose(geometry[0], 106.88746869)  # LON
@@ -553,6 +554,7 @@ class Test_Engine(unittest.TestCase):
         assert attributes['KAB_NAME'] == 'JAKARTA UTARA'
         assert attributes['KEC_NAME'] == 'PENJARINGAN'
         assert attributes['KEL_NAME'] == 'KAMAL MUARA'
+        assert attributes['polygon_id'] == 93
         assert numpy.allclose(attributes['grid_value'], 715.6508)
 
         assert numpy.allclose(geometry[0], 106.74092731)  # LON
@@ -566,6 +568,7 @@ class Test_Engine(unittest.TestCase):
         assert attributes['KAB_NAME'] == 'JAKARTA TIMUR'
         assert attributes['KEC_NAME'] == 'CAKUNG'
         assert attributes['KEL_NAME'] == 'CAKUNG TIMUR'
+        assert attributes['polygon_id'] == 927
         assert numpy.allclose(attributes['grid_value'], 770.7628)
 
         assert numpy.allclose(geometry[0], 106.9675237)  # LON
@@ -611,6 +614,7 @@ class Test_Engine(unittest.TestCase):
         assert attributes[0]['name'] == 'A'
         assert numpy.allclose(attributes[0]['number'], 31415)
         assert numpy.allclose(attributes[0]['grid_value'], 50.8147)
+        assert attributes[0]['polygon_id'] == 0
 
         assert attributes[1]['id'] == 0
         assert attributes[1]['name'] == 'A'
@@ -618,22 +622,26 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(geometry[1][1], -5.349657148)  # Lat
         assert numpy.allclose(attributes[1]['number'], 31415)
         assert numpy.allclose(attributes[1]['grid_value'], 3)
+        assert attributes[1]['polygon_id'] == 0
 
         assert attributes[3]['id'] == 0
         assert attributes[3]['name'] == 'A'
         assert numpy.allclose(attributes[3]['number'], 31415)
         assert numpy.allclose(attributes[3]['grid_value'], 50.127)
+        assert attributes[3]['polygon_id'] == 0
 
         # Polygon 1
         assert attributes[6]['id'] == 1
         assert attributes[6]['name'] == 'B'
         assert numpy.allclose(attributes[6]['number'], 13)
         assert numpy.allclose(attributes[6]['grid_value'], -15)
+        assert attributes[6]['polygon_id'] == 1
 
         assert attributes[11]['id'] == 1
         assert attributes[11]['name'] == 'B'
         assert numpy.allclose(attributes[11]['number'], 13)
         assert numpy.isnan(attributes[11]['grid_value'])
+        assert attributes[11]['polygon_id'] == 1
 
         assert attributes[13]['id'] == 1
         assert attributes[13]['name'] == 'B'
@@ -641,12 +649,19 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(geometry[13][1], -5.472621404)  # Lat
         assert numpy.allclose(attributes[13]['number'], 13)
         assert numpy.allclose(attributes[13]['grid_value'], 50.8258)
+        assert attributes[13]['polygon_id'] == 1
 
         # Polygon 2 (overlapping)
         assert attributes[16]['id'] == 2
         assert attributes[16]['name'] == 'Intersecting'
         assert numpy.allclose(attributes[16]['number'], 100)
         assert numpy.allclose(attributes[16]['grid_value'], 50.9574)
+        assert attributes[16]['polygon_id'] == 2
+
+        assert attributes[21]['id'] == 2
+        assert attributes[21]['name'] == 'Intersecting'
+        assert numpy.allclose(attributes[21]['number'], 100)
+        assert numpy.allclose(attributes[21]['grid_value'], 50.2238)
 
         # Polygon 3
         assert attributes[23]['id'] == 3
@@ -655,6 +670,68 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(geometry[23][1], -5.503362468)  # Lat
         assert numpy.allclose(attributes[23]['number'], -50)
         assert numpy.allclose(attributes[23]['grid_value'], 50.0377)
+        assert attributes[23]['polygon_id'] == 3
+
+        # Run higher level interpolation routine - returning layer list
+        layer_list = interpolate_polygon_raster(H, E,
+                                                layer_name='poly2raster_test',
+                                                attribute_name='grid_value',
+                                                return_layers_by_polygon=True)
+
+        assert len(layer_list) == len(H)
+        for i, P in enumerate(layer_list):
+
+            # Check that all attributes have been carried
+            # from polygon to grid point
+            attributes = P.get_data()
+            geometry = P.get_geometry()
+            for att in attributes:
+                for key in H.get_attribute_names():
+                    assert key in att
+                    assert att[key] == H.get_data()[i][key]
+
+            # Verify result (numbers obtained from using QGIS)
+            P.write_to_file('poly2raster_test_%i.shp' % i)
+
+            # A few spot checks
+            if i == 0:
+                # Polygon 0
+                assert attributes[1]['id'] == 0
+                assert attributes[1]['name'] == 'A'
+                assert numpy.allclose(geometry[1][0], 96.97137053)  # Lon
+                assert numpy.allclose(geometry[1][1], -5.349657148)  # Lat
+                assert numpy.allclose(attributes[1]['number'], 31415)
+                assert numpy.allclose(attributes[1]['grid_value'], 3)
+            if i == 1:
+                # Polygon 1
+                assert attributes[0]['id'] == 1
+                assert attributes[0]['name'] == 'B'
+                assert numpy.allclose(attributes[0]['number'], 13)
+                assert numpy.allclose(attributes[0]['grid_value'], -15)
+
+                assert attributes[5]['id'] == 1
+                assert attributes[5]['name'] == 'B'
+                assert numpy.allclose(attributes[5]['number'], 13)
+                assert numpy.isnan(attributes[5]['grid_value'])
+            if i == 2:
+                # Polygon 2
+                assert attributes[1]['id'] == 2
+                assert attributes[1]['name'] == 'Intersecting'
+                assert numpy.allclose(attributes[1]['number'], 100)
+                assert numpy.allclose(attributes[1]['grid_value'], 50.9574)
+
+                assert attributes[6]['id'] == 2
+                assert attributes[6]['name'] == 'Intersecting'
+                assert numpy.allclose(attributes[6]['number'], 100)
+                assert numpy.allclose(attributes[6]['grid_value'], 50.2238)
+            if i == 3:
+                # Polygon 3
+                assert attributes[1]['id'] == 3
+                assert attributes[1]['name'] == 'D'
+                assert numpy.allclose(geometry[1][0], 97.0021116)  # Lon
+                assert numpy.allclose(geometry[1][1], -5.503362468)  # Lat
+                assert numpy.allclose(attributes[1]['number'], -50)
+                assert numpy.allclose(attributes[1]['grid_value'], 50.0377)
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works

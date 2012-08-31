@@ -7,6 +7,8 @@ from safe.storage.clipping import clip_raster_by_polygons
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
 
+from safe.storage.interpolation import interpolate_polygon_raster
+
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
     """Risk plugin for flood evacuation
@@ -42,9 +44,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
           Table with number of people evacuated and supplies required
         """
 
-        # Depth above which people are regarded affected [m]
-        #threshold = 1.0  # Threshold [m]
-
         # Identify hazard and exposure layers
         inundation = get_hazard_layer(layers)  # Flood inundation
         population = get_exposure_layer(layers)
@@ -65,32 +64,28 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         if not inundation.is_polygon_data:
             raise Exception(msg)
 
-        # Extract data as numeric arrays
-        #geometry = inundation.get_geometry()  # Flood footprints
-        attributes = inundation.get_data()    # Flood attributes
+        # Run polygon2raster interpolation function
+        P = interpolate_polygon_raster(inundation, population,
+                                       attribute_name='population')
 
-        # Separate population grid points by flood footprints
-        print 'Clip'
-        L = clip_raster_by_polygons(population, inundation)
+        # Initialise attributes of output dataset with all attributes
+        # from input polygon and a population count of zero
+        new_attributes = inundation.get_data()
+        for attr in new_attributes:
+            attr[self.target_field] = 0
 
-        print 'Sum'
-        # Sum up population affected by polygons
+        # Count affected population per polygon and total
         evacuated = 0
-        attributes = []
-        minpop = 1000
-        maxpop = -minpop
-        for l in L:
-            values = l[1]
-            s = numpy.sum(values)
-            if s < minpop:
-                minpop = s
-            if s > maxpop:
-                maxpop = s
-            attributes.append({self.target_field: int(s)})
-            evacuated += s
+        for attr in P.get_data():
+            # Get population at this location
+            pop = float(attr['population'])
 
-        print 'minpop', minpop
-        print 'maxpop', maxpop
+            # Update population count for associated polygon
+            poly_id = attr['polygon_id']
+            new_attributes[poly_id][self.target_field] += pop
+
+            # Update total
+            evacuated += pop
 
         # Count totals
         total = int(numpy.sum(population.get_data(nan=0, scaling=False)))
@@ -100,7 +95,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             total = total // 1000 * 1000
         if evacuated > 1000:
             evacuated = evacuated // 1000 * 1000
-        print 'Done'
 
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
         rice = evacuated * 2.8
@@ -135,9 +129,9 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = _('People affected by flood prone areas')
 
-        # Generare 8 intervals across the range of flooded population
-        cls = numpy.linspace(minpop, maxpop, 9)
-        print 'cls', cls, len(cls)
+        # Generate 8 intervals across the range of flooded population
+        population_counts = [x['population'] for x in new_attributes]
+        cls = numpy.linspace(min(population_counts), max(population_counts), 9)
 
         # Define style info for output polygons showing population counts
         style_classes = [dict(label=_('Nil'),
@@ -175,7 +169,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                           legend_title=_('Population Count'))
 
         # Create vector layer and return
-        V = Vector(data=attributes,
+        V = Vector(data=new_attributes,
                    projection=inundation.get_projection(),
                    geometry=inundation.get_geometry(),
                    name=_('Population affected by flood prone areas'),
