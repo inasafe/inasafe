@@ -61,8 +61,15 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         if not H.is_polygon_data:
             raise Exception(msg)
 
+        # FIXME (Ole): Why can this not be at the top?
+        # And why does the impact function then not show up?
+        from safe.api import assign_hazard_values_to_exposure_data
         # Run polygon2raster interpolation function
-        P = H.interpolate(E, attribute_name='population')
+        P = assign_hazard_values_to_exposure_data(H, E,
+                                             attribute_name='population')
+
+        # Run polygon2raster interpolation function
+        #P = H.interpolate(E, attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
