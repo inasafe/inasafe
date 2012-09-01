@@ -36,8 +36,12 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
        layer_name: Optional name of returned layer.
           If None (default) the name of the exposure layer is used for
           the returned layer.
-       attribute_name: Name for new attribute if one needs to be created.
-          If None (default) the name of hazard is used
+       attribute_name:
+         If hazard layer is of type raster, this is the name for new attribute
+         in the result containing the hazard level.
+         If hazard layer is of type vector, it is the name of the attribute
+         to transfer from the hazard layer into the result.
+         If None (default) the name of hazard is used
 
     Raises: Underlying exceptions are propagated
 

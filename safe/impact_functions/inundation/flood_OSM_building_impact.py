@@ -36,12 +36,17 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                 self)
 
         # Interpolate hazard level to building locations
+
+        # FIXME (Ole): Why can this not be at the top?
+        # And why does the impact function then not show up?
+        from safe.api import assign_hazard_values_to_exposure_data
         if H.is_raster:
-            I = H.interpolate(E, attribute_name='depth')
-            hazard_type = 'depth'
+            hazard_attribute = 'depth'
         else:
-            I = H.interpolate(E)
-            hazard_type = 'floodprone'
+            hazard_attribute = 'FLOODPRONE'
+
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                             attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
         attribute_names = I.get_attribute_names()
@@ -53,11 +58,11 @@ class FloodBuildingImpactFunction(FunctionProvider):
         buildings = {}
         affected_buildings = {}
         for i in range(N):
-            if hazard_type == 'depth':
+            if hazard_attribute == 'depth':
                 # Get the interpolated depth
                 x = float(attributes[i]['depth'])
                 x = x > threshold
-            elif hazard_type == 'floodprone':
+            elif hazard_attribute == 'FLOODPRONE':
                 # Use interpolated polygon attribute
                 atts = attributes[i]
 
@@ -79,7 +84,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
             else:
                 msg = (_('Unknown hazard type %s. '
                          'Must be either "depth" or "floodprone"')
-                       % hazard_type)
+                       % hazard_attribute)
                 raise Exception(msg)
 
             # Count affected buildings by usage type if available
@@ -182,7 +187,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         table_body.append(TableRow(_('Notes'), header=True))
         assumption = _('Buildings are said to be flooded when ')
-        if hazard_type == 'depth':
+        if hazard_attribute == 'depth':
             assumption += _('flood levels exceed %.1f m') % threshold
         else:
             assumption += _('in areas marked as flood prone')

@@ -32,6 +32,7 @@ from safe.impact_functions import get_admissible_plugins
 
 from safe.engine.core import calculate_impact
 #from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.storage.interpolation import assign_hazard_values_to_exposure_data
 
 from safe.common.dynamic_translations import names as internationalisedNames
 from safe.common.numerics import nanallclose
