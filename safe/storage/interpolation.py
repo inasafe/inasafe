@@ -20,8 +20,8 @@ from utilities import geometrytype2string
 from utilities import DEFAULT_ATTRIBUTE
 
 
-# FIXME (Ole): Not finished (issue #101)
-# FIXME: Add mode parameter too
+# FIXME (Ole): Move to engine
+# FIXME (Ole): Add mode parameter too
 def assign_hazard_values_to_exposure_data(hazard, exposure,
                                           layer_name=None,
                                           attribute_name=None):
