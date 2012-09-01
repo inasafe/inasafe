@@ -133,7 +133,13 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
     verify(layer_name is None
            or isinstance(layer_name, basestring), msg)
 
-    # FIXME: Still need to establish names here
+    # Establish default names
+    if layer_name is None:
+        layer_name = exposure.get_name()
+
+    if hazard.is_raster and attribute_name is None:
+        layer_name = hazard.get_name()
+
     return layer_name, attribute_name
 
 
@@ -218,6 +224,7 @@ def interpolate_polygon_vector(V, X,
     verify(X.is_vector)
     verify(V.is_polygon_data)
 
+    # Remove
     if layer_name is None:
         layer_name = V.get_name()
 
@@ -275,6 +282,7 @@ def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
     verify(P.is_vector)
     verify(P.is_polygon_data)
 
+    # Remove ?
     if layer_name is None:
         layer_name = P.get_name()
 
@@ -336,6 +344,7 @@ def interpolate_raster_vector_points(R, V,
     verify(V.is_vector)
     verify(V.is_point_data)
 
+    # Remove
     if layer_name is None:
         layer_name = V.get_name()
 
