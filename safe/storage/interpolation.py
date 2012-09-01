@@ -309,7 +309,6 @@ def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
     return V
 
 
-
 def interpolate_raster_vector_points(R, V,
                                      layer_name=None,
                                      attribute_name=None):
@@ -565,4 +564,3 @@ def interpolate_raster_raster(hazard, exposure):
     else:
         # Rasters are aligned, no need to interpolate
         return exposure
-
