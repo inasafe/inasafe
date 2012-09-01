@@ -117,8 +117,6 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
 
     """
 
-    # FIXME: Push type checking into separate function input_checks
-    # Also take care of None values there
     msg = ('Projections must be the same: I got %s and %s'
            % (hazard.projection, exposure.projection))
     verify(hazard.projection == exposure.projection, msg)
@@ -224,10 +222,6 @@ def interpolate_polygon_vector(V, X,
     verify(X.is_vector)
     verify(V.is_polygon_data)
 
-    # Remove
-    if layer_name is None:
-        layer_name = V.get_name()
-
     if X.is_point_data:
         R = interpolate_polygon_points(V, X,
                                        layer_name=layer_name,
@@ -281,13 +275,6 @@ def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
     verify(R.is_raster)
     verify(P.is_vector)
     verify(P.is_polygon_data)
-
-    # Remove ?
-    if layer_name is None:
-        layer_name = P.get_name()
-
-    if attribute_name is None:
-        attribute_name = R.get_name()
 
     # Run underlying clipping algorithm
     polygon_geometry = P.get_geometry()
@@ -344,7 +331,9 @@ def interpolate_raster_vector_points(R, V,
     verify(V.is_vector)
     verify(V.is_point_data)
 
-    # Remove
+    # FIXME (Ole): Why can we not remove this ???
+    # It should now be taken care of in the general input_check above
+    # OK - remove when we leave using the form H.interpolate in impact funcs
     if layer_name is None:
         layer_name = V.get_name()
 
