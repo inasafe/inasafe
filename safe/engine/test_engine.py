@@ -14,6 +14,7 @@ from safe.storage.core import write_raster_data
 from safe.storage.vector import Vector
 from safe.storage.interpolation import interpolate_polygon_raster
 from safe.storage.interpolation import interpolate_raster_vector_points
+from safe.storage.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 from safe.common.polygon import separate_points_by_polygon
@@ -1246,7 +1247,8 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(AA, A), msg
 
         # Test interpolation function with default layer_name
-        I = R.interpolate(V, attribute_name='value')
+        #I = R.interpolate(V, attribute_name='value')
+        I = assign_hazard_values_to_exposure_data(R, V, attribute_name='value')
         assert V.get_name() == I.get_name()
 
         Icoordinates = I.get_geometry()
@@ -1285,8 +1287,11 @@ class Test_Engine(unittest.TestCase):
         attributes = exposure_vector.get_data()
 
         # Test interpolation function
-        I = hazard_raster.interpolate(exposure_vector,
-                                      attribute_name='MMI')
+        #I = hazard_raster.interpolate(exposure_vector,
+        #                              attribute_name='MMI')
+        I = assign_hazard_values_to_exposure_data(hazard_raster,
+                                                  exposure_vector,
+                                                  attribute_name='MMI')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1343,7 +1348,7 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = ('%s/tsunami_max_inundation_depth_utm56s.tif'
+        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
                             % TESTDATA)
         exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
 
@@ -1355,8 +1360,11 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
 
         # Test interpolation function
-        I = hazard_raster.interpolate(exposure_vector,
-                                      attribute_name='depth')
+        #I = hazard_raster.interpolate(exposure_vector,
+        #                              attribute_name='depth')
+        I = assign_hazard_values_to_exposure_data(hazard_raster,
+                                                  exposure_vector,
+                                                  attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1397,7 +1405,8 @@ class Test_Engine(unittest.TestCase):
         attributes = E.get_data()
 
         # Test the interpolation function
-        I = H.interpolate(E, attribute_name='depth')
+        #I = H.interpolate(E, attribute_name='depth')
+        I = assign_hazard_values_to_exposure_data(H, E, attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1524,8 +1533,12 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          attribute_name=None)  # Take all attributes across
+        #I = H.interpolate(E, layer_name='depth',
+        #                  attribute_name=None)  # Take all attributes across
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
 
         I_attributes = I.get_data()
         assert I.get_name() == 'depth'
@@ -1585,8 +1598,13 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          attribute_name=None)  # Take all attributes across
+        #I = H.interpolate(E, layer_name='depth',
+        #                  attribute_name=None)  # Take all attributes across
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
+
         I_attributes = I.get_data()
 
         N = len(I_attributes)
@@ -1709,9 +1727,14 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          # Spelling is as in test data
-                          attribute_name='Catergory')
+        #I = H.interpolate(E, layer_name='depth',
+        #                  # Spelling is as in test data
+        #                  attribute_name='Catergory')
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Spelling is as in test data
+                                                  attribute_name='Catergory')
+
         #I.write_to_file('MM_res.shp')
 
         I_attributes = I.get_data()
@@ -1767,9 +1790,10 @@ class Test_Engine(unittest.TestCase):
 
         # Check projection mismatch is caught
         try:
-            H.interpolate(E)
+            #H.interpolate(E)
+            assign_hazard_values_to_exposure_data(H, E)
         except VerificationError, e:
-            msg = ('Projection mismatch shoud have been caught: %s'
+            msg = ('Projection mismatch should have been caught: %s'
                    % str(e))
             assert 'Projections' in str(e), msg
         else:
@@ -1913,8 +1937,13 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          attribute_name=None)  # Take all attributes across
+        #I = H.interpolate(E, layer_name='depth',
+        #                  attribute_name=None)  # Take all attributes across
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
+
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
         assert I.get_name() == 'depth'
@@ -2025,9 +2054,14 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          # Spelling is as in test data
-                          attribute_name='Catergory')
+        #I = H.interpolate(E, layer_name='depth',
+        #                  # Spelling is as in test data
+        #                  attribute_name='Catergory')
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Spelling is as in test data
+                                                  attribute_name='Catergory')
+
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
@@ -2096,8 +2130,13 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          attribute_name=None)  # Take all attributes across
+        #I = H.interpolate(E, layer_name='depth',
+        #                  attribute_name=None)  # Take all attributes across
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
+
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
         assert I.get_name() == 'depth'
@@ -2534,6 +2573,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_interpolation_tsunami')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

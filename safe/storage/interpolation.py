@@ -81,14 +81,25 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
 
     """
 
-    # FIXME: Push type checking into the individual modules
+    # FIXME: Push type checking into separate function input_checks
+    # Also take care of None values there
+    msg = ('Projections must be the same: I got %s and %s'
+           % (hazard.projection, exposure.projection))
+    verify(hazard.projection == exposure.projection, msg)
+
+    msg = ('Parameter attribute_name must be either a string or None. '
+           'I got %s' % (str(type(exposure)))[1:-1])
+    verify(attribute_name is None
+           or isinstance(attribute_name, basestring), msg)
+
+    msg = ('Parameter layer_name must be either a string or None. '
+           'I got %s' % (str(type(exposure)))[1:-1])
+    verify(layer_name is None
+           or isinstance(layer_name, basestring), msg)
+
     if hazard.is_raster:
         if exposure.is_vector:
             # Interpolate this raster layer to geometry of exposure
-            msg = ('Name must be either a string or None. I got %s'
-                   % (str(type(exposure)))[1:-1])
-            verify(attribute_name is None
-                   or isinstance(attribute_name, basestring), msg)
             return interpolate_raster_vector(hazard, exposure,
                                              layer_name=layer_name,
                                              attribute_name=attribute_name)
