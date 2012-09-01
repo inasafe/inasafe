@@ -85,38 +85,16 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
 
     """
 
-    # FIXME: Push type checking into separate function input_checks
-    # Also take care of None values there
-    msg = ('Projections must be the same: I got %s and %s'
-           % (hazard.projection, exposure.projection))
-    verify(hazard.projection == exposure.projection, msg)
-
-    msg = ('Parameter attribute_name must be either a string or None. '
-           'I got %s' % (str(type(exposure)))[1:-1])
-    verify(attribute_name is None
-           or isinstance(attribute_name, basestring), msg)
-
-    msg = ('Parameter layer_name must be either a string or None. '
-           'I got %s' % (str(type(exposure)))[1:-1])
-    verify(layer_name is None
-           or isinstance(layer_name, basestring), msg)
+    layer_name, attribute_name = check_inputs(hazard, exposure,
+                                              layer_name, attribute_name)
 
     if hazard.is_raster:
         if exposure.is_vector:
-            # Interpolate this raster layer to geometry of exposure
             return interpolate_raster_vector(hazard, exposure,
                                              layer_name=layer_name,
                                              attribute_name=attribute_name)
         elif exposure.is_raster:
-            if hazard.get_geotransform() != exposure.get_geotransform():
-                # Need interpolation between grids
-                msg = ('Intergrid interpolation not implemented here. '
-                       'Make sure rasters are aligned and sampled to '
-                       'the same resolution')
-                raise InaSAFEError(msg)
-            else:
-                # Rasters are aligned, no need to interpolate
-                return exposure
+            return interpolate_raster_raster(hazard, exposure)
         else:
             pass
     elif hazard.is_vector and hazard.is_polygon_data:
@@ -134,8 +112,36 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
         pass
 
 
-# FIXME (Ole): Rename arguments to source, target instead of R, V, X, ...
+def check_inputs(hazard, exposure, layer_name, attribute_name):
+    """Check inputs and establish default values
 
+    """
+
+    # FIXME: Push type checking into separate function input_checks
+    # Also take care of None values there
+    msg = ('Projections must be the same: I got %s and %s'
+           % (hazard.projection, exposure.projection))
+    verify(hazard.projection == exposure.projection, msg)
+
+    msg = ('Parameter attribute_name must be either a string or None. '
+           'I got %s' % (str(type(exposure)))[1:-1])
+    verify(attribute_name is None
+           or isinstance(attribute_name, basestring), msg)
+
+    msg = ('Parameter layer_name must be either a string or None. '
+           'I got %s' % (str(type(exposure)))[1:-1])
+    verify(layer_name is None
+           or isinstance(layer_name, basestring), msg)
+
+    # FIXME: Still need to establish names here
+    return layer_name, attribute_name
+
+
+#-------------------------------------------------------------
+# Specific functions for each individual kind of interpolation
+#-------------------------------------------------------------
+
+# FIXME (Ole): Rename arguments to source, target instead of R, V, X, ...
 def interpolate_raster_vector(R, V, layer_name=None, attribute_name=None):
     """Interpolate from raster layer to vector data
 
@@ -164,6 +170,7 @@ def interpolate_raster_vector(R, V, layer_name=None, attribute_name=None):
                                              layer_name=layer_name,
                                              attribute_name=attribute_name)
     #elif V.is_line_data:
+    # TBA - issue https://github.com/AIFDR/inasafe/issues/36
     #
     elif V.is_polygon_data:
         # Use centroids, in case of polygons
@@ -302,9 +309,7 @@ def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
     return V
 
 
-#-------------------------------------------------------------
-# Specific functions for each individual kind of interpolation
-#-------------------------------------------------------------
+
 def interpolate_raster_vector_points(R, V,
                                      layer_name=None,
                                      attribute_name=None):
@@ -546,3 +551,18 @@ def interpolate_polygon_lines(V, X,
                                    name=layer_name)
     #V.write_to_file('clipped_and_tagged.shp')
     return V
+
+
+def interpolate_raster_raster(hazard, exposure):
+    """Check for alignment and returns exposure layer as is
+    """
+
+    if hazard.get_geotransform() != exposure.get_geotransform():
+        msg = ('Intergrid interpolation not implemented here. '
+               'Make sure rasters are aligned and sampled to '
+               'the same resolution')
+        raise InaSAFEError(msg)
+    else:
+        # Rasters are aligned, no need to interpolate
+        return exposure
+
