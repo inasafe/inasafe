@@ -7,14 +7,14 @@ from os.path import join
 
 # Import InaSAFE modules
 from safe.engine.core import calculate_impact
+from safe.engine.interpolation import interpolate_polygon_raster
+from safe.engine.interpolation import interpolate_raster_vector_points
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 from safe.storage.core import read_layer
 from safe.storage.core import write_vector_data
 from safe.storage.core import write_raster_data
 from safe.storage.vector import Vector
-from safe.storage.interpolation import interpolate_polygon_raster
-from safe.storage.interpolation import interpolate_raster_vector_points
-from safe.storage.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 from safe.common.polygon import separate_points_by_polygon
