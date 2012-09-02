@@ -23,7 +23,6 @@ from safe.common.utilities import verify
 from safe.common.dynamic_translations import names as internationalised_titles
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
-from safe.common.utilities import ugettext as _
 
 from layer import Layer
 from projection import Projection
