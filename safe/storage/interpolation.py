@@ -4,9 +4,12 @@ It provides interpolation functionality to Raster and Vector instances
 using the underlying interpolation algorithm in interpolate2d.py
 """
 
+# FIXME (Ole): Move all of this to engine
+
 import numpy
 
-import safe.storage.vector
+import safe.storage.vector  # FIXME: Revisit when interpolate method has been
+                            # removed from raster and vector
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as _
@@ -15,12 +18,10 @@ from safe.common.polygon import (inside_polygon,
                                  clip_line_by_polygon, clip_grid_by_polygons)
 
 from safe.common.exceptions import InaSAFEError
-
 from utilities import geometrytype2string
 from utilities import DEFAULT_ATTRIBUTE
 
 
-# FIXME (Ole): Move to engine
 # FIXME (Ole): Add mode parameter too
 def assign_hazard_values_to_exposure_data(hazard, exposure,
                                           layer_name=None,
@@ -144,96 +145,97 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
 #-------------------------------------------------------------
 # Specific functions for each individual kind of interpolation
 #-------------------------------------------------------------
-
-# FIXME (Ole): Rename arguments to source, target instead of R, V, X, ...
-def interpolate_raster_vector(R, V, layer_name=None, attribute_name=None):
+def interpolate_raster_vector(source, target,
+                              layer_name=None, attribute_name=None):
     """Interpolate from raster layer to vector data
 
     Input
-        R: Raster data set (grid)
-        V: Vector data set (points or polygons)
+        source: Raster data set (grid)
+        target: Vector data set (points or polygons)
         layer_name: Optional name of returned interpolated layer.
             If None the name of V is used for the returned layer.
         attribute_name: Name for new attribute.
               If None (default) the name of R is used
 
     Output
-        I: Vector data set; points located as V with values interpolated from R
+        I: Vector data set; points located as target with values
+           interpolated from source
 
     Note: If target geometry is polygon, data will be interpolated to
     its centroids and the output is a point data set.
     """
 
     # Input checks
-    verify(R.is_raster)
-    verify(V.is_vector)
+    verify(source.is_raster)
+    verify(target.is_vector)
 
-    if V.is_point_data:
+    if target.is_point_data:
         # Interpolate from raster to point data
-        R = interpolate_raster_vector_points(R, V,
+        R = interpolate_raster_vector_points(source, target,
                                              layer_name=layer_name,
                                              attribute_name=attribute_name)
-    #elif V.is_line_data:
+    #elif target.is_line_data:
     # TBA - issue https://github.com/AIFDR/inasafe/issues/36
     #
-    elif V.is_polygon_data:
+    elif target.is_polygon_data:
         # Use centroids, in case of polygons
-        P = safe.storage.vector.convert_polygons_to_centroids(V)
-        R = interpolate_raster_vector_points(R, P,
+        P = safe.storage.vector.convert_polygons_to_centroids(target)
+        R = interpolate_raster_vector_points(source, P,
                                              layer_name=layer_name,
                                              attribute_name=attribute_name)
         # In case of polygon data, restore the polygon geometry
         # Do this setting the geometry of the returned set to
         # that of the original polygon
         R = safe.storage.vector.Vector(data=R.get_data(),
-                         projection=R.get_projection(),
-                         geometry=V.get_geometry(),
-                         name=R.get_name())
+                                       projection=R.get_projection(),
+                                       geometry=target.get_geometry(),
+                                       name=R.get_name())
     else:
         msg = ('Unknown datatype for raster2vector interpolation: '
-               'I got %s' % str(V))
+               'I got %s' % str(target))
         raise InaSAFEError(msg)
 
     # Return interpolated vector layer
     return R
 
 
-def interpolate_polygon_vector(V, X,
+def interpolate_polygon_vector(source, target,
                                layer_name=None, attribute_name=None):
     """Interpolate from polygon vector layer to vector data
 
     Input
-        V: Vector data set (polygon)
-        X: Vector data set (points or polygons)  - TBA also lines
+        source: Vector data set (polygon)
+        target: Vector data set (points or polygons)  - TBA also lines
         layer_name: Optional name of returned interpolated layer.
-            If None the name of X is used for the returned layer.
+            If None the name of target is used for the returned layer.
         attribute_name: Name for new attribute.
-              If None (default) the name of V is used
+              If None (default) the name of source is used
 
     Output
-        I: Vector data set; points located as X with values interpolated from V
+        I: Vector data set; points located as target with values interpolated
+           from source
 
     Note: If target geometry is polygon, data will be interpolated to
     its centroids and the output is a point data set.
     """
 
     # Input checks
-    verify(V.is_vector)
-    verify(X.is_vector)
-    verify(V.is_polygon_data)
+    verify(source.is_vector)
+    verify(target.is_vector)
+    verify(source.is_polygon_data)
 
-    if X.is_point_data:
-        R = interpolate_polygon_points(V, X,
+    if target.is_point_data:
+        R = interpolate_polygon_points(source, target,
                                        layer_name=layer_name,
                                        attribute_name=attribute_name)
-    elif X.is_line_data:
-        R = interpolate_polygon_lines(V, X,
+    elif target.is_line_data:
+        R = interpolate_polygon_lines(source, target,
                                       layer_name=layer_name,
                                       attribute_name=attribute_name)
-    elif X.is_polygon_data:
+    elif target.is_polygon_data:
         # Use polygon centroids
-        X = safe.storage.vector.convert_polygons_to_centroids(X)
-        P = interpolate_polygon_points(V, X,
+        X = safe.storage.vector.convert_polygons_to_centroids(target)
+        P = interpolate_polygon_points(source, X,
                                        layer_name=layer_name,
                                        attribute_name=attribute_name)
 
@@ -246,25 +248,27 @@ def interpolate_polygon_vector(V, X,
                                        name=P.get_name())
     else:
         msg = ('Unknown datatype for polygon2vector interpolation: '
-               'I got %s' % str(X))
+               'I got %s' % str(target))
         raise InaSAFEError(msg)
 
     # Return interpolated vector layer
     return R
 
 
-def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
+def interpolate_polygon_raster(source, target,
+                               layer_name=None, attribute_name=None):
     """Interpolate from polygon layer to raster data
 
     Input
-        P: Polygon data set
-        R: Raster data set
+        source: Polygon data set
+        target: Raster data set
         layer_name: Optional name of returned interpolated layer.
-            If None the name of P is used for the returned layer.
+            If None the name of source is used for the returned layer.
         attribute_name: Name for new attribute.
-              If None (default) the name of layer R is used
+              If None (default) the name of layer target is used
     Output
-        I: Vector data set; points located as R with values interpolated from P
+        I: Vector data set; points located as target with
+           values interpolated from source
 
     Note, each point in the resulting dataset will have an attribute
     'polygon_id' which refers to the polygon it belongs to.
@@ -272,15 +276,15 @@ def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
     """
 
     # Input checks
-    verify(R.is_raster)
-    verify(P.is_vector)
-    verify(P.is_polygon_data)
+    verify(target.is_raster)
+    verify(source.is_vector)
+    verify(source.is_polygon_data)
 
     # Run underlying clipping algorithm
-    polygon_geometry = P.get_geometry()
-    polygon_attributes = P.get_data()
-    res = clip_grid_by_polygons(R.get_data(),
-                                R.get_geotransform(),
+    polygon_geometry = source.get_geometry()
+    polygon_attributes = source.get_data()
+    res = clip_grid_by_polygons(target.get_data(),
+                                target.get_geotransform(),
                                 polygon_geometry)
 
     # Create one new point layer with interpolated attributes
@@ -297,63 +301,65 @@ def interpolate_polygon_raster(P, R, layer_name=None, attribute_name=None):
             new_attributes.append(attr)
             new_geometry.append(geom)
 
-    V = safe.storage.vector.Vector(data=new_attributes,
-                                   projection=P.get_projection(),
+    R = safe.storage.vector.Vector(data=new_attributes,
+                                   projection=source.get_projection(),
                                    geometry=new_geometry,
                                    name=layer_name)
-    return V
+    return R
 
 
-def interpolate_raster_vector_points(R, V,
+def interpolate_raster_vector_points(source, target,
                                      layer_name=None,
                                      attribute_name=None):
     """Interpolate from raster layer to point data
 
     Input
-        R: Raster data set (grid)
-        V: Vector data set (points)
+        source: Raster data set (grid)
+        target: Vector data set (points)
         layer_name: Optional name of returned interpolated layer.
-            If None the name of V is used for the returned layer.
+            If None the name of target is used for the returned layer.
         attribute_name: Name for new attribute.
-              If None (default) the name of layer R is used
+              If None (default) the name of layer source is used
 
     Output
-        I: Vector data set; points located as V with values interpolated from R
+        I: Vector data set; points located as target with values
+           interpolated from source
 
     """
 
     msg = ('There are no data points to interpolate to. Perhaps zoom out '
            'and try again')
-    verify(len(V) > 0, msg)
+    verify(len(target) > 0, msg)
 
     # Input checks
-    verify(R.is_raster)
-    verify(V.is_vector)
-    verify(V.is_point_data)
+    verify(source.is_raster)
+    verify(target.is_vector)
+    verify(target.is_point_data)
 
     # FIXME (Ole): Why can we not remove this ???
     # It should now be taken care of in the general input_check above
     # OK - remove when we leave using the form H.interpolate in impact funcs
     if layer_name is None:
-        layer_name = V.get_name()
+        layer_name = target.get_name()
 
     # Get raster data and corresponding x and y axes
-    A = R.get_data(nan=True)
-    longitudes, latitudes = R.get_geometry()
+    A = source.get_data(nan=True)
+    longitudes, latitudes = source.get_geometry()
     verify(len(longitudes) == A.shape[1])
     verify(len(latitudes) == A.shape[0])
 
     # Get vector point geometry as Nx2 array
-    coordinates = numpy.array(V.get_geometry(),
+    coordinates = numpy.array(target.get_geometry(),
                               dtype='d',
                               copy=False)
     # Get original attributes
-    attributes = V.get_data()
+    attributes = target.get_data()
 
     # Create new attribute and interpolate
-    N = len(V)
+    # Remove?
+    N = len(target)
     if attribute_name is None:
-        attribute_name = R.get_name()
+        attribute_name = source.get_name()
 
     try:
         values = interpolate_raster(longitudes, latitudes, A,
@@ -361,8 +367,8 @@ def interpolate_raster_vector_points(R, V,
     except Exception, e:
         msg = (_('Could not interpolate from raster layer %(raster)s to '
                  'vector layer %(vector)s. Error message: %(error)s')
-               % {'raster': R.get_name(),
-                  'vector': V.get_name(),
+               % {'raster': source.get_name(),
+                  'vector': target.get_name(),
                   'error': str(e)})
         raise Exception(msg)
 
@@ -371,44 +377,45 @@ def interpolate_raster_vector_points(R, V,
         attributes[i][attribute_name] = values[i]
 
     return safe.storage.vector.Vector(data=attributes,
-                         projection=V.get_projection(),
+                         projection=target.get_projection(),
                          geometry=coordinates,
                          name=layer_name)
 
 
-def interpolate_polygon_points(V, X,
+def interpolate_polygon_points(source, target,
                                layer_name=None,
                                attribute_name=None):
     """Interpolate from polygon vector layer to point vector data
 
     Input
-        V: Vector data set (polygon)
-        X: Vector data set (points)
+        source: Vector data set (polygon)
+        target: Vector data set (points)
         layer_name: Optional name of returned interpolated layer.
-            If None the name of X is used for the returned layer.
+            If None the name of target is used for the returned layer.
         attribute_name: Name for new attribute.
-              If None (default) the name of V is used
+              If None (default) the name of source is used
 
     Output
-        I: Vector data set; points located as X with values interpolated from V
+        I: Vector data set; points located as target with values interpolated
+        from source
     """
 
     msg = ('Vector layer to interpolate to must be point geometry. '
            'I got OGR geometry type %s'
-           % geometrytype2string(X.geometry_type))
-    verify(X.is_point_data, msg)
+           % geometrytype2string(target.geometry_type))
+    verify(target.is_point_data, msg)
 
     msg = ('Name must be either a string or None. I got %s'
-           % (str(type(X)))[1:-1])
+           % (str(type(target)))[1:-1])
     verify(layer_name is None or
            isinstance(layer_name, basestring), msg)
 
     msg = ('Attribute must be either a string or None. I got %s'
-           % (str(type(X)))[1:-1])
+           % (str(type(target)))[1:-1])
     verify(attribute_name is None or
            isinstance(attribute_name, basestring), msg)
 
-    attribute_names = V.get_attribute_names()
+    attribute_names = source.get_attribute_names()
     if attribute_name is not None:
         msg = ('Requested attribute "%s" did not exist in %s'
                % (attribute_name, attribute_names))
@@ -419,13 +426,13 @@ def interpolate_polygon_points(V, X,
     #----------------
 
     # Extract point features
-    points = ensure_numeric(X.get_geometry())
-    attributes = X.get_data()
-    original_geometry = X.get_geometry()  # Geometry for returned data
+    points = ensure_numeric(target.get_geometry())
+    attributes = target.get_data()
+    original_geometry = target.get_geometry()  # Geometry for returned data
 
     # Extract polygon features
-    geom = V.get_geometry()
-    data = V.get_data()
+    geom = source.get_geometry()
+    data = source.get_data()
     verify(len(geom) == len(data))
 
     # Augment point features with empty attributes from polygon
@@ -464,44 +471,45 @@ def interpolate_polygon_points(V, X,
 
     # Create new Vector instance and return
     V = safe.storage.vector.Vector(data=attributes,
-                      projection=X.get_projection(),
+                      projection=target.get_projection(),
                       geometry=original_geometry,
                       name=layer_name)
     return V
 
 
-def interpolate_polygon_lines(V, X,
+def interpolate_polygon_lines(source, target,
                               layer_name=None,
                               attribute_name=None):
     """Interpolate from polygon vector layer to line vector data
 
     Input
-        V: Vector data set (polygon)
-        X: Vector data set (lines)
+        source: Vector data set (polygon)
+        target: Vector data set (lines)
         layer_name: Optional name of returned interpolated layer.
-            If None the name of X is used for the returned layer.
+            If None the name of target is used for the returned layer.
         attribute_name: Name for new attribute.
-              If None (default) the name of V is used
+              If None (default) the name of source is used
 
     Output
-        Vector data set (lines) with values interpolated from V
+        Vector data set (lines) with values interpolated from source
     """
 
-    #X.write_to_file('line_data.shp')
-    #V.write_to_file('poly_data.shp')
+    #target.write_to_file('line_data.shp')
+    #source.write_to_file('poly_data.shp')
+    # Remove?
     if attribute_name is None:
-        attribute_name = V.get_name()
+        attribute_name = source.get_name()
 
     # Extract line features
-    lines = X.get_geometry()
-    line_attributes = X.get_data()
-    N = len(X)
+    lines = target.get_geometry()
+    line_attributes = target.get_data()
+    N = len(target)
     verify(len(lines) == N)
     verify(len(line_attributes) == N)
 
     # Extract polygon features
-    polygons = V.get_geometry()
-    poly_attributes = V.get_data()
+    polygons = source.get_geometry()
+    poly_attributes = source.get_data()
     verify(len(polygons) == len(poly_attributes))
 
     # Data structure for resulting line segments
@@ -541,24 +549,24 @@ def interpolate_polygon_lines(V, X,
                 clipped_attributes.append(outside_attributes)
 
     # Create new Vector instance and return
-    V = safe.storage.vector.Vector(data=clipped_attributes,
-                                   projection=X.get_projection(),
+    R = safe.storage.vector.Vector(data=clipped_attributes,
+                                   projection=target.get_projection(),
                                    geometry=clipped_geometry,
                                    geometry_type='line',
                                    name=layer_name)
-    #V.write_to_file('clipped_and_tagged.shp')
-    return V
+    #R.write_to_file('clipped_and_tagged.shp')
+    return R
 
 
-def interpolate_raster_raster(hazard, exposure):
-    """Check for alignment and returns exposure layer as is
+def interpolate_raster_raster(source, target):
+    """Check for alignment and returns target layer as is
     """
 
-    if hazard.get_geotransform() != exposure.get_geotransform():
+    if source.get_geotransform() != target.get_geotransform():
         msg = ('Intergrid interpolation not implemented here. '
                'Make sure rasters are aligned and sampled to '
                'the same resolution')
         raise InaSAFEError(msg)
     else:
         # Rasters are aligned, no need to interpolate
-        return exposure
+        return target
