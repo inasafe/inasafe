@@ -65,7 +65,13 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
             E = unspecific2bnpb(E, target_attribute=self.vclass_tag)
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E, attribute_name='MMI')
+        # FIXME (Ole): Why can this not be at the top?
+        # And why does the impact function then not show up?
+        # Will be OK when .interpolate in vector and raster retired
+        from safe.api import assign_hazard_values_to_exposure_data
+        #H = H.interpolate(E, attribute_name='MMI')
+        H = assign_hazard_values_to_exposure_data(H, E,
+                                             attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()
