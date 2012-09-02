@@ -82,7 +82,13 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
             Emap = E
 
         # Interpolate hazard level to building locations
-        I = H.interpolate(Emap, attribute_name='MMI')
+        # FIXME (Ole): Why can this not be at the top?
+        # And why does the impact function then not show up?
+        # Will be OK when .interpolate in vector and raster retired
+        from safe.api import assign_hazard_values_to_exposure_data
+        #I = H.interpolate(Emap, attribute_name='MMI')
+        I = assign_hazard_values_to_exposure_data(H, Emap,
+                                                  attribute_name='MMI')
 
         # Extract relevant numerical data
         attributes = I.get_data()

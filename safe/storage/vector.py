@@ -783,53 +783,6 @@ class Vector(Layer):
                       geometry=geometry,
                       keywords=self.get_keywords())
 
-    def interpolate(self, X, layer_name=None, attribute_name=None):
-        """Interpolate values of this vector layer to other layer
-
-        Input
-            X: Layer object defining target
-            layer_name: Optional name of returned interpolated layer.
-                If None the name of X is used for the returned layer.
-            attribute_name: Optional attribute name to use.
-                            If None, all attributes are used.
-
-                            FIXME (Ole): Single attribute not tested well yet
-                            and not implemented for lines
-
-        Output
-            Y: Layer object with values of this vector layer interpolated to
-               geometry of input layer X
-        """
-
-        msg = ('Projections must be the same: I got %s and %s'
-               % (self.projection, X.projection))
-        verify(self.projection == X.projection, msg)
-
-        msg = ('Vector layer to interpolate from must be polygon geometry. '
-               'I got OGR geometry type %s'
-               % geometrytype2string(self.geometry_type))
-        verify(self.is_polygon_data, msg)
-
-        msg = ('Name must be either a string or None. I got %s'
-               % (str(type(X)))[1:-1])
-        verify(attribute_name is None
-               or isinstance(attribute_name, basestring), msg)
-
-        if X.is_vector:
-            I = interpolate_polygon_vector(self, X,
-                                          layer_name=layer_name,
-                                          attribute_name=attribute_name)
-        elif X.is_raster:
-            I = interpolate_polygon_raster(self, X,
-                                          layer_name=layer_name,
-                                          attribute_name=attribute_name)
-        else:
-            msg = (_('Input to Vector.interpolate is neither vector or '
-                   'raster data: I got %s') % str(X))
-            raise InaSAFEError(msg)
-
-        return I
-
     @property
     def is_point_data(self):
         return self.is_vector and self.geometry_type == ogr.wkbPoint

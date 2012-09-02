@@ -254,46 +254,6 @@ class Raster(Layer):
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
 
-    def interpolate(self, X, layer_name=None, attribute_name=None):
-        """Interpolate values of this raster layer to other layer
-
-        Input
-            X: Layer object defining target
-            layer_name: Optional name of returned interpolated layer.
-                If None the name of X is used for the returned layer.
-            attribute_name: Optional name of interpolated layer.
-                            If attribute_name is None,
-                            the name of self is used.
-
-        Output
-            Y: Layer object with values of this raster layer interpolated to
-               geometry of input layer X
-
-        Note: If target geometry is polygon, data will be interpolated to
-        its centroids and the output is a point data set.
-        """
-
-        if X.is_raster:
-            if self.get_geotransform() != X.get_geotransform():
-                # Need interpolation between grids
-                msg = ('Intergrid interpolation not implemented here. '
-                       'Make sure rasters are aligned and sampled to '
-                       'the same resolution')
-                raise InaSAFEError(msg)
-            else:
-                # Rasters are aligned, no need to interpolate
-                return self
-        else:
-            # Interpolate this raster layer to geometry of X
-            msg = ('Name must be either a string or None. I got %s'
-                   % (str(type(X)))[1:-1])
-            verify(attribute_name is None
-                   or isinstance(attribute_name, basestring), msg)
-
-            return interpolate_raster_vector(self, X,
-                                             layer_name=layer_name,
-                                             attribute_name=attribute_name)
-
     def get_data(self, nan=True, scaling=None, copy=False,
                  rtol=1.0e-4, atol=1.0e-8):
         """Get raster data as numeric array
