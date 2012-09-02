@@ -4,12 +4,11 @@ It provides interpolation functionality to Raster and Vector instances
 using the underlying interpolation algorithm in interpolate2d.py
 """
 
-# FIXME (Ole): Move all of this to engine
-
 import numpy
 
 import safe.storage.vector  # FIXME: Revisit when interpolate method has been
                             # removed from raster and vector
+#from safe.storage.vector import Vector
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as _

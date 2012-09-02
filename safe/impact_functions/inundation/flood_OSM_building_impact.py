@@ -39,6 +39,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         # FIXME (Ole): Why can this not be at the top?
         # And why does the impact function then not show up?
+        # Will be OK when .interpolate in vector and raster retired
         from safe.api import assign_hazard_values_to_exposure_data
         if H.is_raster:
             hazard_attribute = 'depth'
