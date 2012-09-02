@@ -88,28 +88,28 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
     layer_name, attribute_name = check_inputs(hazard, exposure,
                                               layer_name, attribute_name)
 
-    if hazard.is_raster:
-        if exposure.is_vector:
-            return interpolate_raster_vector(hazard, exposure,
-                                             layer_name=layer_name,
-                                             attribute_name=attribute_name)
-        elif exposure.is_raster:
-            return interpolate_raster_raster(hazard, exposure)
-        else:
-            pass
-    elif hazard.is_vector and hazard.is_polygon_data:
-        if exposure.is_vector:
-            return interpolate_polygon_vector(hazard, exposure,
-                                              layer_name=layer_name,
-                                              attribute_name=attribute_name)
-        elif exposure.is_raster:
-            return interpolate_polygon_raster(hazard, exposure,
-                                              layer_name=layer_name,
-                                              attribute_name=attribute_name)
-        else:
-            pass
+    if hazard.is_raster and exposure.is_vector:
+        return interpolate_raster_vector(hazard, exposure,
+                                         layer_name=layer_name,
+                                         attribute_name=attribute_name)
+
+    elif hazard.is_raster and exposure.is_raster:
+        return interpolate_raster_raster(hazard, exposure)
+
+    elif hazard.is_vector and exposure.is_vector:
+        return interpolate_polygon_vector(hazard, exposure,
+                                          layer_name=layer_name,
+                                          attribute_name=attribute_name)
+
+    elif hazard.is_vector and exposure.is_raster:
+        return interpolate_polygon_raster(hazard, exposure,
+                                          layer_name=layer_name,
+                                          attribute_name=attribute_name)
+
     else:
-        pass
+        msg = ('Unknown combination of types for hazard and exposure data. '
+               'hazard: %s, exposure: %s' % (str(hazard), str(exposure)))
+        raise InaSAFEError(msg)
 
 
 def check_inputs(hazard, exposure, layer_name, attribute_name):
