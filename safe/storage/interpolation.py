@@ -18,8 +18,8 @@ from safe.common.polygon import (inside_polygon,
                                  clip_line_by_polygon, clip_grid_by_polygons)
 
 from safe.common.exceptions import InaSAFEError
-from utilities import geometrytype2string
-from utilities import DEFAULT_ATTRIBUTE
+from safe.storage.utilities import geometrytype2string
+from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 
 # FIXME (Ole): Add mode parameter too

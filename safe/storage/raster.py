@@ -15,6 +15,9 @@ from safe.common.exceptions import GetDataError, InaSAFEError
 from layer import Layer
 from vector import Vector
 from projection import Projection
+
+# Remove when interpolate method has been retired
+#from safe.engine.interpolation import interpolate_raster_vector
 from interpolation import interpolate_raster_vector
 
 from utilities import DRIVER_MAP
