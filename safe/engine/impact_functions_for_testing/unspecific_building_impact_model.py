@@ -33,7 +33,6 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
         H = assign_hazard_values_to_exposure_data(H, E,
                                              attribute_name='MMI')
 
-
         # Extract relevant numerical data
         coordinates = E.get_geometry()
         shaking = H.get_data()

@@ -27,12 +27,6 @@ from safe.common.utilities import ugettext as _
 
 from layer import Layer
 from projection import Projection
-
-# Remove when interpolate method has been retired
-from safe.engine.interpolation import interpolate_polygon_vector
-from safe.engine.interpolation import interpolate_polygon_raster
-#from interpolation import interpolate_polygon_vector
-#from interpolation import interpolate_polygon_raster
 from utilities import DRIVER_MAP, TYPE_MAP
 from utilities import read_keywords
 from utilities import write_keywords
