@@ -242,7 +242,7 @@ profile:
 #
 ##########################################################
 
-jenkins-test:
+jenkins-test: testdata
 	@echo
 	@echo "----------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"
