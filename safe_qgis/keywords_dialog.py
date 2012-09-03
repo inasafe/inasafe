@@ -520,7 +520,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             mySubLayer = None
             mySource = self.layer.source()
 
-
             # Now read the layer with sub layer if needed
             myKeywords = self.keywordIO.readKeywords(self.layer,
                                                      theSubLayer=mySubLayer)
