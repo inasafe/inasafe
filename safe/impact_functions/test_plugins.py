@@ -8,7 +8,11 @@ from safe.impact_functions.core import requirements_collect
 from safe.impact_functions.core import requirement_check
 from safe.impact_functions.core import compatible_layers
 from safe.impact_functions.core import aggregate
+from safe.impact_functions.core import get_function_title
+
 from safe.impact_functions.utilities import Damage_curve
+from safe.impact_functions.utilities import admissible_plugins_to_str
+from safe.impact_functions.utilities import keywords_to_str
 
 from safe.storage.core import read_layer
 from safe.common.testing import TESTDATA
@@ -58,6 +62,25 @@ class Test_plugins(unittest.TestCase):
         msg = ('No plugins were found matching %s' % plugin_name)
         assert len(plugin_list) > 0, msg
 
+    def test_keywords_to_str(self):
+        """String representation of keywords works
+        """
+
+        kwds = {'category': 'hazard',
+                'subcategory': 'tsunami',
+                'unit': 'm'}
+
+        s = keywords_to_str(kwds)
+        #print
+        #print s
+        for key in kwds:
+            msg = ('Expected key %s to appear in %s' % (key, s))
+            assert key in s, msg
+
+            val = kwds[key]
+            msg = ('Expected value %s to appear in %s' % (val, s))
+            assert val in s, msg
+
     def test_get_plugins(self):
         """Plugins can be collected
         """
@@ -65,8 +88,18 @@ class Test_plugins(unittest.TestCase):
         plugin_list = get_plugins()
         assert(len(plugin_list) > 0)
 
-        # Check that every plugin has a requires line
+        # Obtain string representation
+        string_rep = admissible_plugins_to_str(plugin_list)
+
+        # Check each plugin
         for plugin in plugin_list.values():
+            # Check that it's name appeears in string representation
+            title = get_function_title(plugin)
+            msg = ('Expected title %s in string representation: %s'
+                   % (title, string_rep))
+            assert title in string_rep, msg
+
+            # Check that every plugin has a requires line
             requirements = requirements_collect(plugin)
             msg = 'There were no requirements in plugin %s' % plugin
             assert(len(requirements) > 0), msg
