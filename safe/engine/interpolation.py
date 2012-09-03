@@ -6,9 +6,7 @@ using the underlying interpolation algorithm in interpolate2d.py
 
 import numpy
 
-import safe.storage.vector  # FIXME: Revisit when interpolate method has been
-                            # removed from raster and vector
-#from safe.storage.vector import Vector
+from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as _
@@ -178,17 +176,17 @@ def interpolate_raster_vector(source, target,
     #
     elif target.is_polygon_data:
         # Use centroids, in case of polygons
-        P = safe.storage.vector.convert_polygons_to_centroids(target)
+        P = convert_polygons_to_centroids(target)
         R = interpolate_raster_vector_points(source, P,
                                              layer_name=layer_name,
                                              attribute_name=attribute_name)
         # In case of polygon data, restore the polygon geometry
         # Do this setting the geometry of the returned set to
         # that of the original polygon
-        R = safe.storage.vector.Vector(data=R.get_data(),
-                                       projection=R.get_projection(),
-                                       geometry=target.get_geometry(),
-                                       name=R.get_name())
+        R = Vector(data=R.get_data(),
+                   projection=R.get_projection(),
+                   geometry=target.get_geometry(),
+                   name=R.get_name())
     else:
         msg = ('Unknown datatype for raster2vector interpolation: '
                'I got %s' % str(target))
@@ -233,7 +231,7 @@ def interpolate_polygon_vector(source, target,
                                       attribute_name=attribute_name)
     elif target.is_polygon_data:
         # Use polygon centroids
-        X = safe.storage.vector.convert_polygons_to_centroids(target)
+        X = convert_polygons_to_centroids(target)
         P = interpolate_polygon_points(source, X,
                                        layer_name=layer_name,
                                        attribute_name=attribute_name)
@@ -241,10 +239,10 @@ def interpolate_polygon_vector(source, target,
         # In case of polygon data, restore the polygon geometry
         # Do this setting the geometry of the returned set to
         # that of the original polygon
-        R = safe.storage.vector.Vector(data=P.get_data(),
-                                       projection=P.get_projection(),
-                                       geometry=X.get_geometry(),
-                                       name=P.get_name())
+        R = Vector(data=P.get_data(),
+                   projection=P.get_projection(),
+                   geometry=X.get_geometry(),
+                   name=P.get_name())
     else:
         msg = ('Unknown datatype for polygon2vector interpolation: '
                'I got %s' % str(target))
@@ -300,10 +298,10 @@ def interpolate_polygon_raster(source, target,
             new_attributes.append(attr)
             new_geometry.append(geom)
 
-    R = safe.storage.vector.Vector(data=new_attributes,
-                                   projection=source.get_projection(),
-                                   geometry=new_geometry,
-                                   name=layer_name)
+    R = Vector(data=new_attributes,
+               projection=source.get_projection(),
+               geometry=new_geometry,
+               name=layer_name)
     return R
 
 
@@ -375,10 +373,10 @@ def interpolate_raster_vector_points(source, target,
     for i in range(N):
         attributes[i][attribute_name] = values[i]
 
-    return safe.storage.vector.Vector(data=attributes,
-                         projection=target.get_projection(),
-                         geometry=coordinates,
-                         name=layer_name)
+    return Vector(data=attributes,
+                  projection=target.get_projection(),
+                  geometry=coordinates,
+                  name=layer_name)
 
 
 def interpolate_polygon_points(source, target,
@@ -469,10 +467,10 @@ def interpolate_polygon_points(source, target,
                 attributes[k][key] = poly_attr[key]
 
     # Create new Vector instance and return
-    V = safe.storage.vector.Vector(data=attributes,
-                      projection=target.get_projection(),
-                      geometry=original_geometry,
-                      name=layer_name)
+    V = Vector(data=attributes,
+               projection=target.get_projection(),
+               geometry=original_geometry,
+               name=layer_name)
     return V
 
 
@@ -548,11 +546,11 @@ def interpolate_polygon_lines(source, target,
                 clipped_attributes.append(outside_attributes)
 
     # Create new Vector instance and return
-    R = safe.storage.vector.Vector(data=clipped_attributes,
-                                   projection=target.get_projection(),
-                                   geometry=clipped_geometry,
-                                   geometry_type='line',
-                                   name=layer_name)
+    R = Vector(data=clipped_attributes,
+               projection=target.get_projection(),
+               geometry=clipped_geometry,
+               geometry_type='line',
+               name=layer_name)
     #R.write_to_file('clipped_and_tagged.shp')
     return R
 
