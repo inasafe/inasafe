@@ -1,20 +1,20 @@
-"""Wrapper around interpolation.
+"""**Interpolation from hazard to exposure layers.**
 
-It provides interpolation functionality to Raster and Vector instances
-using the underlying interpolation algorithm in interpolate2d.py
+Provides interpolation functionality to assign values from one layer instance
+to another irrespective of layer types.
 """
 
 import numpy
 
-from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as _
 from safe.common.numerics import ensure_numeric
+from safe.common.exceptions import InaSAFEError
 from safe.common.polygon import (inside_polygon,
                                  clip_line_by_polygon, clip_grid_by_polygons)
 
-from safe.common.exceptions import InaSAFEError
+from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import geometrytype2string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
@@ -28,82 +28,86 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
     This is the high level wrapper around interpolation functions for different
     combinations of data types.
 
-    Args
-       hazard: Layer representing the hazard levels
-       exposure: Layer representing the exposure data
-       layer_name: Optional name of returned layer.
-          If None (default) the name of the exposure layer is used for
-          the returned layer.
-       attribute_name:
-         If hazard layer is of type raster, this is the name for new attribute
-         in the result containing the hazard level.
-         If hazard layer is of type vector, it is the name of the attribute
-         to transfer from the hazard layer into the result.
-         If None (default) the name of hazard is used
+    Args:
+       * hazard: Layer representing the hazard levels
+       * exposure: Layer representing the exposure data
+       * layer_name: Optional name of returned layer.
+             If None (default) the name of the exposure layer is used for
+             the returned layer.
+       * attribute_name:
+             If hazard layer is of type raster, this is the name for new
+             attribute in the result containing the hazard level.
+             If None (default) the name of hazard is used
 
-    Raises: Underlying exceptions are propagated
+             If hazard layer is of type vector, it is the name of the
+             attribute to transfer from the hazard layer into the result.
+             If None (default) all attributes are transferred.
 
     Returns:
-    Layer representing the exposure data with hazard levels assigned.
-    The data type depends on the combination of input types as follows:
+        Layer representing the exposure data with hazard levels assigned.
 
-    Polygon-Point:   Point data
-    Polygon-Line:    N/A
-    Polygon-Polygon: N/A
-    Polygon-Raster:  Point data
-    Raster-Point:    Point data
-    Raster-Line:     N/A
-    Raster-Polygon:  Polygon data
-    Raster-Raster:   Raster data
-
+    Raises:
+        Underlying exceptions are propagated
 
     Note:
 
-    Admissible combinations are
+        Admissible combinations of input layer types are
 
-           Exposure |  Raster     Polygon    Line     Point
-    Hazard          |
-    -------------------------------------------------------
-    Polygon         |  Y          Y          Y        Y
-    Raster          |  Y          Y          Y        Y
+               Exposure |  Raster     Polygon    Line     Point
+        Hazard          |
+        -------------------------------------------------------
+        Polygon         |  Y          Y          Y        Y
+        Raster          |  Y          Y          Y        Y
 
-    with the following methodologies used:
+        with the following methodologies used:
 
-    Polygon-Point:   Clip points to polygon and assign polygon attributes
-       to them.
-    Polygon-Line:    * Not Implemented *
-    Polygon-Polygon: * Not Implemented *
-    Polygon-Raster:  Convert raster to points, clip to polygon, assign values
-       and return point data
-    Raster-Point:    Bilinear (or constant) interpolation as currently
-       implemented
-    Raster-Line:     * Not Implemented *
-    Raster-Polygon:  Calculate centroids and use Raster - Point algorithm
-    Raster-Raster:   Exposure raster is returned as is
+        Polygon-Point:   Clip points to polygon and assign polygon attributes
+            to them.
+        Polygon-Line:    * Not Implemented *
+        Polygon-Polygon: * Not Implemented *
+        Polygon-Raster:  Convert raster to points, clip to polygon,
+            assign values and return point data
+        Raster-Point:    Bilinear (or constant) interpolation as currently
+            implemented
+        Raster-Line:     * Not Implemented *
+        Raster-Polygon:  Calculate centroids and use Raster - Point algorithm
+        Raster-Raster:   Exposure raster is returned as is
 
+
+        The data type of the resulting layer depends on the combination of
+        input types as follows:
+
+        Polygon-Point:   Point data
+        Polygon-Line:    N/A
+        Polygon-Polygon: N/A
+        Polygon-Raster:  Point data
+        Raster-Point:    Point data
+        Raster-Line:     N/A
+        Raster-Polygon:  Polygon data
+        Raster-Raster:   Raster data
     """
 
     layer_name, attribute_name = check_inputs(hazard, exposure,
                                               layer_name, attribute_name)
-
+    # Raster-Vector
     if hazard.is_raster and exposure.is_vector:
         return interpolate_raster_vector(hazard, exposure,
                                          layer_name=layer_name,
                                          attribute_name=attribute_name)
-
+    # Raster-Raster
     elif hazard.is_raster and exposure.is_raster:
         return interpolate_raster_raster(hazard, exposure)
-
+    # Vector-Vector
     elif hazard.is_vector and exposure.is_vector:
         return interpolate_polygon_vector(hazard, exposure,
                                           layer_name=layer_name,
                                           attribute_name=attribute_name)
-
+    # Vector-Raster
     elif hazard.is_vector and exposure.is_raster:
         return interpolate_polygon_raster(hazard, exposure,
                                           layer_name=layer_name,
                                           attribute_name=attribute_name)
-
+    # Unknown
     else:
         msg = ('Unknown combination of types for hazard and exposure data. '
                'hazard: %s, exposure: %s' % (str(hazard), str(exposure)))
@@ -113,6 +117,18 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
 def check_inputs(hazard, exposure, layer_name, attribute_name):
     """Check inputs and establish default values
 
+    Args:
+        * hazard: Hazard layer instance (any type)
+        * exposure: Exposure layer instance (any type)
+        * layer_name: Name of returned layer or None
+        * attribute_name: Name of interpolated attribute or None
+
+    Returns:
+        * layer_name
+        * attribute_name
+
+    Raises:
+        VerificationError
     """
 
     msg = ('Projections must be the same: I got %s and %s'
@@ -146,15 +162,15 @@ def interpolate_raster_vector(source, target,
                               layer_name=None, attribute_name=None):
     """Interpolate from raster layer to vector data
 
-    Input
-        source: Raster data set (grid)
-        target: Vector data set (points or polygons)
-        layer_name: Optional name of returned interpolated layer.
-            If None the name of V is used for the returned layer.
-        attribute_name: Name for new attribute.
+    Args:
+        * source: Raster data set (grid)
+        * target: Vector data set (points or polygons)
+        * layer_name: Optional name of returned interpolated layer.
+              If None the name of V is used for the returned layer.
+        * attribute_name: Name for new attribute.
               If None (default) the name of R is used
 
-    Output
+    Returns:
         I: Vector data set; points located as target with values
            interpolated from source
 
@@ -200,20 +216,21 @@ def interpolate_polygon_vector(source, target,
                                layer_name=None, attribute_name=None):
     """Interpolate from polygon vector layer to vector data
 
-    Input
-        source: Vector data set (polygon)
-        target: Vector data set (points or polygons)  - TBA also lines
-        layer_name: Optional name of returned interpolated layer.
-            If None the name of target is used for the returned layer.
-        attribute_name: Name for new attribute.
+    Args:
+        * source: Vector data set (polygon)
+        * target: Vector data set (points or polygons)  - TBA also lines
+        * layer_name: Optional name of returned interpolated layer.
+              If None the name of target is used for the returned layer.
+        * attribute_name: Name for new attribute.
               If None (default) the name of source is used
 
     Output
         I: Vector data set; points located as target with values interpolated
            from source
 
-    Note: If target geometry is polygon, data will be interpolated to
-    its centroids and the output is a point data set.
+    Note:
+        If target geometry is polygon, data will be interpolated to
+        its centroids and the output is a point data set.
     """
 
     # Input checks
@@ -256,19 +273,20 @@ def interpolate_polygon_raster(source, target,
                                layer_name=None, attribute_name=None):
     """Interpolate from polygon layer to raster data
 
-    Input
-        source: Polygon data set
-        target: Raster data set
-        layer_name: Optional name of returned interpolated layer.
-            If None the name of source is used for the returned layer.
-        attribute_name: Name for new attribute.
+    Args
+        * source: Polygon data set
+        * target: Raster data set
+        * layer_name: Optional name of returned interpolated layer.
+              If None the name of source is used for the returned layer.
+        * attribute_name: Name for new attribute.
               If None (default) the name of layer target is used
     Output
         I: Vector data set; points located as target with
            values interpolated from source
 
-    Note, each point in the resulting dataset will have an attribute
-    'polygon_id' which refers to the polygon it belongs to.
+    Note:
+        Each point in the resulting dataset will have an attribute
+        'polygon_id' which refers to the polygon it belongs to.
 
     """
 
@@ -310,12 +328,12 @@ def interpolate_raster_vector_points(source, target,
                                      attribute_name=None):
     """Interpolate from raster layer to point data
 
-    Input
-        source: Raster data set (grid)
-        target: Vector data set (points)
-        layer_name: Optional name of returned interpolated layer.
-            If None the name of target is used for the returned layer.
-        attribute_name: Name for new attribute.
+    Args:
+        * source: Raster data set (grid)
+        * target: Vector data set (points)
+        * layer_name: Optional name of returned interpolated layer.
+              If None the name of target is used for the returned layer.
+        * attribute_name: Name for new attribute.
               If None (default) the name of layer source is used
 
     Output
@@ -384,12 +402,12 @@ def interpolate_polygon_points(source, target,
                                attribute_name=None):
     """Interpolate from polygon vector layer to point vector data
 
-    Input
-        source: Vector data set (polygon)
-        target: Vector data set (points)
-        layer_name: Optional name of returned interpolated layer.
-            If None the name of target is used for the returned layer.
-        attribute_name: Name for new attribute.
+    Args:
+        * source: Vector data set (polygon)
+        * target: Vector data set (points)
+        * layer_name: Optional name of returned interpolated layer.
+              If None the name of target is used for the returned layer.
+        * attribute_name: Name for new attribute.
               If None (default) the name of source is used
 
     Output
@@ -479,15 +497,15 @@ def interpolate_polygon_lines(source, target,
                               attribute_name=None):
     """Interpolate from polygon vector layer to line vector data
 
-    Input
-        source: Vector data set (polygon)
-        target: Vector data set (lines)
-        layer_name: Optional name of returned interpolated layer.
-            If None the name of target is used for the returned layer.
-        attribute_name: Name for new attribute.
+    Args:
+        * source: Vector data set (polygon)
+        * target: Vector data set (lines)
+        * layer_name: Optional name of returned interpolated layer.
+              If None the name of target is used for the returned layer.
+        * attribute_name: Name for new attribute.
               If None (default) the name of source is used
 
-    Output
+    Returns:
         Vector data set (lines) with values interpolated from source
     """
 
