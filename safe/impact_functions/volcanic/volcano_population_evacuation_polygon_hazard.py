@@ -8,13 +8,13 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
-class FloodEvacuationFunctionVectorHazard(FunctionProvider):
+class VolcanoFunctionVectorHazard(FunctionProvider):
     """Risk plugin for flood evacuation
 
     :author AIFDR
     :rating 4
     :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
+                    subcategory in ['volcano'] and \
                     layertype=='vector'
 
     :param requires category=='exposure' and \
@@ -23,7 +23,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                     datatype=='density'
     """
 
-    title = _('Need evacuation')
+    title = _('be affected')
     target_field = 'population'
 
     def run(self, layers):
@@ -31,7 +31,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Raster layer of flood depth
+              H: Raster layer of volcano depth
               P: Raster layer of population data on the same grid as H
 
         Counts number of people exposed to flood levels exceeding
@@ -76,7 +76,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             cat = attr[category_title]
             categories[cat] = 0
 
-        # Count affected population per polygon, per category and total
+        # Count affected population per polygon and total
         evacuated = 0
         for attr in P.get_data():
             # Get population at this location
@@ -96,44 +96,47 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         # Count totals
         total = int(numpy.sum(E.get_data(nan=0, scaling=False)))
 
-        # Don't show digits less than a 1000
-        if total > 1000:
-            total = total // 1000 * 1000
-        if evacuated > 1000:
-            evacuated = evacuated // 1000 * 1000
+##        # Don't show digits less than a 1000
+##        if total > 1000:
+##            total = total // 1000 * 1000
+##        if evacuated > 1000:
+##            evacuated = evacuated // 1000 * 1000
 
-        # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
-        rice = evacuated * 2.8
-        drinking_water = evacuated * 17.5
-        water = evacuated * 67
-        family_kits = evacuated / 5
-        toilets = evacuated / 20
+##        # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
+##        rice = evacuated * 2.8
+##        drinking_water = evacuated * 17.5
+##        water = evacuated * 67
+##        family_kits = evacuated / 5
+##        toilets = evacuated / 20
 
         # Generate impact report for the pdf map
         table_body = [question,
                       TableRow([_('People needing evacuation'),
                                 '%i' % evacuated],
                                header=True),
-                      TableRow(_('Map shows population affected in each flood '
-                                 'prone area ')),
-                      TableRow([_('Needs per week'), _('Total')],
-                               header=True),
-                      [_('Rice [kg]'), int(rice)],
-                      [_('Drinking Water [l]'), int(drinking_water)],
-                      [_('Clean Water [l]'), int(water)],
-                      [_('Family Kits'), int(family_kits)],
-                      [_('Toilets'), int(toilets)]]
+                      TableRow([_('Category'), _('Total')],
+                               header=True)]
+        for name,pop in categories.iteritems():
+            table_body.append(TableRow([name, int(pop)]))
+                 
+        table_body.append(TableRow(_('Map shows population affected in '
+                                     'each of volcano hazard polygons.')))
+##                      TableRow([_('Needs per week'), _('Total')],
+##                               header=True),
+##                      [_('Rice [kg]'), int(rice)],
+##                      [_('Drinking Water [l]'), int(drinking_water)],
+##                      [_('Clean Water [l]'), int(water)],
+##                      [_('Family Kits'), int(family_kits)],
+##                      [_('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(_('Notes'), header=True),
-                           _('Total population: %i') % total,
-                           _('People need evacuation if in area identified '
-                             'as "Flood Prone"'),
-                           _('Minimum needs are defined in BNPB '
-                             'regulation 7/2008')])
+                           _('Total population %i in view port') % total,
+                           _('People need evacuation if they are within the '
+                             'volcanic hazard zones.')])
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = _('People affected by flood prone areas')
+        map_title = _('People affected by volcanic hazard zone')
 
         # Define classes for legend for flooded population counts
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -167,7 +170,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         V = Vector(data=new_attributes,
                    projection=H.get_projection(),
                    geometry=H.get_geometry(),
-                   name=_('Population affected by flood prone areas'),
+                   name=_('Population affected by volcanic hazard zone'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},

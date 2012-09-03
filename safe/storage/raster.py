@@ -251,7 +251,7 @@ class Raster(Layer):
         write_keywords(self.keywords, basename + '.keywords')
 
     def get_data(self, nan=True, scaling=None, copy=False,
-                 rtol=1.0e-4, atol=1.0e-8):
+                 rtol=1.0e-2, atol=1.0e-6):
         """Get raster data as numeric array
 
         Input
