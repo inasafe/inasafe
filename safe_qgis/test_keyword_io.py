@@ -64,6 +64,13 @@ class KeywordIOTest(unittest.TestCase):
         myMessage = "Got: %s\nExpected: %s" % (myHash, myExpectedHash)
         assert myHash == myExpectedHash, myMessage
 
+    def test_getSubLayerForDatasource(self):
+        """Test we can reliably get a sublayer name for a uri"""
+        mySubLayerName = self.keywordIO.subLayerName(PG_URI)
+        myExpectedName = '7cc153e1b119ca54a91ddb98a56ea95e'
+        myMessage = "Got: %s\nExpected: %s" % (mySubLayerName, myExpectedName)
+        assert mySubLayerName == myExpectedName, myMessage
+
     def test_writeReadKeywordFromUri(self):
         """Test we can set and get keywords for a non local datasource"""
         myHandle, myFilename = tempfile.mkstemp('.db', 'keywords_',

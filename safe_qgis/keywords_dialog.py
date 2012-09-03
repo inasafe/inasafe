@@ -517,8 +517,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         try:
             # First see if we could have sublayers
             # move this to a shared location
-            mySubLayer = None
-            mySource = self.layer.source()
+            myKeywordIO = KeywordIO()
+            mySubLayer = myKeywordIO.subLayerName(self.layer.source())
 
             # Now read the layer with sub layer if needed
             myKeywords = self.keywordIO.readKeywords(self.layer,

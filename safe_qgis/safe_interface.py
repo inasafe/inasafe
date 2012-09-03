@@ -319,14 +319,15 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None, theSubLayer=None):
     return myValue
 
 
-def writeKeywordsToFile(theFilename, theKeywords):
+def writeKeywordsToFile(theFilename, theKeywords, theSubLayer=None):
     """Thin wrapper around the safe write_keywords function.
 
     Args:
-        * thePath - str representing path to layer that must be written.
+        * thePath: str representing path to layer that must be written.
           If the file does not end in .keywords, its extension will be
           stripped off and the basename + .keywords will be used as the file.
-        * theKeywords - a dictionary of keywords to be written
+        * theKeywords: a dictionary of keywords to be written
+        * theSubLayer: str Optional sublayer name for the keywords.
     Returns:
         None
     Raises:
@@ -336,7 +337,7 @@ def writeKeywordsToFile(theFilename, theKeywords):
     if 'keywords' not in myExtension:
         theFilename = myBasename + '.keywords'
     try:
-        safe_write_keywords(theKeywords, theFilename)
+        safe_write_keywords(theKeywords, theFilename, theSubLayer)
     except:
         raise
 
