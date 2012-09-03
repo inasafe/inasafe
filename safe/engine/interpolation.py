@@ -10,7 +10,7 @@ from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as _
 from safe.common.numerics import ensure_numeric
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.common.polygon import (inside_polygon,
                                  clip_line_by_polygon, clip_grid_by_polygons)
 
@@ -342,6 +342,8 @@ def interpolate_raster_vector_points(source, target,
               If None the name of target is used for the returned layer.
         * attribute_name: Name for new attribute.
               If None (default) the name of layer source is used
+        * mode: 'linear' or 'constant' - determines whether interpolation
+              from grid to points should be bilinear or piecewise constant
 
     Output
         I: Vector data set; points located as target with values
@@ -386,13 +388,13 @@ def interpolate_raster_vector_points(source, target,
     try:
         values = interpolate_raster(longitudes, latitudes, A,
                                     coordinates, mode=mode)
-    except Exception, e:
+    except (BoundsError, InaSAFEError), e:
         msg = (_('Could not interpolate from raster layer %(raster)s to '
                  'vector layer %(vector)s. Error message: %(error)s')
                % {'raster': source.get_name(),
                   'vector': target.get_name(),
                   'error': str(e)})
-        raise Exception(msg)
+        raise InaSAFEError(msg)
 
     # Add interpolated attribute to existing attributes and return
     for i in range(N):
