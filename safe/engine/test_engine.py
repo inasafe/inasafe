@@ -25,7 +25,7 @@ from safe.common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from safe.common.numerics import nanallclose
 from safe.common.utilities import VerificationError, unique_filename
 from safe.common.testing import TESTDATA, HAZDATA
-
+from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins
 
 # These imports are needed for impact function registration - dont remove
@@ -1044,6 +1044,27 @@ class Test_Engine(unittest.TestCase):
             # to different damage curves and should therefore be different
             if depth > 0 and contents_damage > 0:
                 assert contents_damage != structural_damage
+
+    def test_raster_vector_interpolation_exception(self):
+        """Exceptions are caught by interpolate_raster_points
+        """
+
+        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
+                            % TESTDATA)
+        exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        try:
+            interpolate_raster_vector_points(H, E, mode='oexoeua')
+        except InaSAFEError:
+            pass
+        else:
+            msg = 'Should have raised InaSAFEError'
+            raise Exception(msg)
+        # FIXME (Ole): Try some other error conditions
 
     def test_tephra_load_impact(self):
         """Hypothetical tephra load scenario can be computed

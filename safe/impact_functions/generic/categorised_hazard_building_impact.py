@@ -22,7 +22,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 
     target_field = 'ICLASS'
     title = _('Be affected')
-    
+
     def run(self, layers):
         """Impact plugin for hazard impact
         """
@@ -39,7 +39,6 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         H = assign_hazard_values_to_exposure_data(H, E,
                                              attribute_name='hazard_level',
                                              mode='constant')
-
 
         # Extract relevant numerical data
         coordinates = H.get_geometry()
@@ -81,7 +80,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                 count0 += 1
             else:
                 affected = 'None'
-                
+
             # Collect depth and calculated damage
             result_dict = {self.target_field: affected,
                            'CATEGORY': val}
@@ -102,7 +101,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         table_body.append(TableRow(_('Notes'), header=True))
         table_body.append(_('Categorised hazard has only 3'
                             ' classes, high, medium and low.'))
-        
+
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
         map_title = _('Categorised hazard impact on buildings')
@@ -125,7 +124,9 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                    projection=E.get_projection(),
                    geometry=coordinates,
                    geometry_type=E.geometry_type,
-                   keywords={'impact_summary': impact_summary},
+                   keywords={'impact_summary': impact_summary,
+                             'impact_table': impact_table,
+                             'map_title': map_title},
                    name=name,
                    style_info=style_info)
         return V

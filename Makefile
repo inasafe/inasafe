@@ -100,7 +100,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by style checking
-test: docs test_suite pep8 pylint dependency_test unwanted_strings data_audit test-translations
+test: docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
@@ -108,7 +108,7 @@ guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 set_python:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
 
-quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings data_audit test-translations
+quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
 
 test_suite_quick:
 	nosetests -A 'not slow' -v safe --stop
@@ -160,7 +160,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh e47e44e1254f547857c9bb2fed838002db83e21f
+	@scripts/update-test-data.sh 40c11b7b899a3c74ffdab5eb3c40164af9473f7f
 
 disabled_tests:
 	@echo
@@ -207,7 +207,9 @@ list_gpackages:
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
 
-data_audit:
+data_audit: testdata run_data_audit
+
+run_data_audit:
 	@echo
 	@echo "---------------------------------------"
 	@echo "Audit of IP status for bundled data    "
@@ -242,7 +244,7 @@ profile:
 #
 ##########################################################
 
-jenkins-test:
+jenkins-test: testdata
 	@echo
 	@echo "----------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"
