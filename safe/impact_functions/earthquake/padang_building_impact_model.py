@@ -27,6 +27,7 @@ from safe.common.utilities import ugettext as _
 from safe.common.numerics import lognormal_cdf
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.mappings import osm2padang, sigab2padang
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
 # Damage curves for each of the nine classes derived from the Padang survey
@@ -82,7 +83,8 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
             Emap = E
 
         # Interpolate hazard level to building locations
-        I = H.interpolate(Emap, attribute_name='MMI')
+        I = assign_hazard_values_to_exposure_data(H, Emap,
+                                                  attribute_name='MMI')
 
         # Extract relevant numerical data
         attributes = I.get_data()
@@ -127,7 +129,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                       TableRow([_('Medium damage'), count_medium]),
                       TableRow([_('High damage'), count_high])]
 
-        table_body.append(TableRow(_('Notes:'), header=True))
+        table_body.append(TableRow(_('Notes'), header=True))
         table_body.append(_('Levels of impact are defined by post 2009 '
                             'Padang earthquake survey conducted by Geoscience '
                             'Australia and Institute of Teknologi Bandung.'))

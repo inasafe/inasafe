@@ -217,7 +217,7 @@ class ITBFatalityFunction(FunctionProvider):
             table_body.append(_('Are there enough shelters available for %i '
                                 'people?') % displaced)
 
-        table_body.append(TableRow(_('Notes:'), header=True))
+        table_body.append(TableRow(_('Notes'), header=True))
         table_body.append(_('Fatality model is from '
                             'Institute of Teknologi Bandung 2012.'))
         table_body.append(_('Population numbers rounded to nearest 1000.'))

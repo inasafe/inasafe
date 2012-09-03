@@ -2,7 +2,68 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/safe/engine/interpolation.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/safe/storage/interpolation.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/i18n/af/LC_MESSAGES/inasafe.mo" afterPath="$PROJECT_DIR$/safe/i18n/af/LC_MESSAGES/inasafe.mo" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/i18n/id/LC_MESSAGES/inasafe.mo" afterPath="$PROJECT_DIR$/safe/i18n/id/LC_MESSAGES/inasafe.mo" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_af.ts" afterPath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_af.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_id.qm" afterPath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_id.qm" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_id.ts" afterPath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_id.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/inasafe-install" afterPath="$PROJECT_DIR$/scripts/inasafe-install" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/_templates/index.html" afterPath="$PROJECT_DIR$/docs/source/_templates/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/i18n.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/i18n.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pylintrc" afterPath="$PROJECT_DIR$/pylintrc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/dynamic_translations.py" afterPath="$PROJECT_DIR$/safe/common/dynamic_translations.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/exceptions.py" afterPath="$PROJECT_DIR$/safe/common/exceptions.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/interpolation2d.py" afterPath="$PROJECT_DIR$/safe/common/interpolation2d.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/polygon.py" afterPath="$PROJECT_DIR$/safe/common/polygon.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/utilities.py" afterPath="$PROJECT_DIR$/safe/common/utilities.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/flood_road_impact.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/flood_road_impact.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/general_ashload_impact.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/general_ashload_impact.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/test_engine.py" afterPath="$PROJECT_DIR$/safe/engine/test_engine.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/i18n/af/LC_MESSAGES/inasafe.po" afterPath="$PROJECT_DIR$/safe/i18n/af/LC_MESSAGES/inasafe.po" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/i18n/id/LC_MESSAGES/inasafe.po" afterPath="$PROJECT_DIR$/safe/i18n/id/LC_MESSAGES/inasafe.po" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/core.py" afterPath="$PROJECT_DIR$/safe/impact_functions/core.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/earthquake/earthquake_impact_on_women.py" afterPath="$PROJECT_DIR$/safe/impact_functions/earthquake/earthquake_impact_on_women.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/earthquake/itb_building_impact_model.py" afterPath="$PROJECT_DIR$/safe/impact_functions/earthquake/itb_building_impact_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py" afterPath="$PROJECT_DIR$/safe/impact_functions/earthquake/itb_earthquake_fatality_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/earthquake/padang_building_impact_model.py" afterPath="$PROJECT_DIR$/safe/impact_functions/earthquake/padang_building_impact_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/generic/categorised_hazard_building_impact.py" afterPath="$PROJECT_DIR$/safe/impact_functions/generic/categorised_hazard_building_impact.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/generic/categorised_hazard_population.py" afterPath="$PROJECT_DIR$/safe/impact_functions/generic/categorised_hazard_population.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/inundation/__init__.py" afterPath="$PROJECT_DIR$/safe/impact_functions/inundation/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_OSM_building_impact.py" afterPath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_OSM_building_impact.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_population_evacuation.py" afterPath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_population_evacuation.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py" afterPath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/clipping.py" afterPath="$PROJECT_DIR$/safe/storage/clipping.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/raster.py" afterPath="$PROJECT_DIR$/safe/storage/raster.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/test_clipping.py" afterPath="$PROJECT_DIR$/safe/storage/test_clipping.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/test_io.py" afterPath="$PROJECT_DIR$/safe/storage/test_io.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/vector.py" afterPath="$PROJECT_DIR$/safe/storage/vector.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/dock.py" afterPath="$PROJECT_DIR$/safe_qgis/dock.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/exceptions.py" afterPath="$PROJECT_DIR$/safe_qgis/exceptions.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/impact_calculator.py" afterPath="$PROJECT_DIR$/safe_qgis/impact_calculator.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/impact_calculator_thread.py" afterPath="$PROJECT_DIR$/safe_qgis/impact_calculator_thread.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/keyword_io.py" afterPath="$PROJECT_DIR$/safe_qgis/keyword_io.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/keywords_dialog.py" afterPath="$PROJECT_DIR$/safe_qgis/keywords_dialog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/options_dialog.py" afterPath="$PROJECT_DIR$/safe_qgis/options_dialog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/plugin.py" afterPath="$PROJECT_DIR$/safe_qgis/plugin.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/safe_interface.py" afterPath="$PROJECT_DIR$/safe_qgis/safe_interface.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_clipper.py" afterPath="$PROJECT_DIR$/safe_qgis/test_clipper.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_dock.py" afterPath="$PROJECT_DIR$/safe_qgis/test_dock.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_impact_calculator.py" afterPath="$PROJECT_DIR$/safe_qgis/test_impact_calculator.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_plugin.py" afterPath="$PROJECT_DIR$/safe_qgis/test_plugin.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_qgis_environment.py" afterPath="$PROJECT_DIR$/safe_qgis/test_qgis_environment.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_utilities.py" afterPath="$PROJECT_DIR$/safe_qgis/test_utilities.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/utilities.py" afterPath="$PROJECT_DIR$/safe_qgis/utilities.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/gen_rst_script.py" afterPath="$PROJECT_DIR$/scripts/gen_rst_script.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/missing_translations.py" afterPath="$PROJECT_DIR$/scripts/missing_translations.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/string-stats.sh" afterPath="$PROJECT_DIR$/scripts/string-stats.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/update-strings.sh" afterPath="$PROJECT_DIR$/scripts/update-strings.sh" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,16 +95,7 @@
       <file leaf-file-name="dock.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="715" column="51" selection-start="26777" selection-end="26786" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="scrapbook.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/scrapbook.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="719" column="27" selection-start="26862" selection-end="26862" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -52,7 +104,7 @@
       <file leaf-file-name="impact_calculator.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe_qgis/impact_calculator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="173" column="33" selection-start="5425" selection-end="5425" vertical-scroll-proportion="0.0">
+            <state line="170" column="33" selection-start="5390" selection-end="5390" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -61,7 +113,7 @@
       <file leaf-file-name="impact_calculator_thread.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe_qgis/impact_calculator_thread.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="159" column="51" selection-start="5507" selection-end="5526" vertical-scroll-proportion="0.0">
+            <state line="162" column="31" selection-start="5507" selection-end="5526" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -70,16 +122,16 @@
       <file leaf-file-name="safe_interface.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe_qgis/safe_interface.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="452" column="36" selection-start="15002" selection-end="15023" vertical-scroll-proportion="0.0">
+            <state line="455" column="36" selection-start="14945" selection-end="14966" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="core.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="core.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/safe/engine/core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="4" selection-start="414" selection-end="414" vertical-scroll-proportion="0.0">
+            <state line="17" column="4" selection-start="414" selection-end="414" vertical-scroll-proportion="0.021664767">
               <folding />
             </state>
           </provider>
@@ -118,10 +170,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="y" value="26" />
-    <option name="width" value="1368" />
-    <option name="height" value="743" />
+    <option name="x" value="1918" />
+    <option name="y" value="-3" />
+    <option name="width" value="1924" />
+    <option name="height" value="1052" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -266,11 +318,11 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="preferences.externalTools" />
     <property name="recentsLimit" value="5" />
+    <property name="options.lastSelected" value="preferences.externalTools" />
     <property name="last_opened_file_path" value="/tmp" />
-    <property name="options.splitter.details.proportions" value="0.31698564" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.31698564" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -434,22 +486,6 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="MULTIPROCESS" value="false" />
-      <method />
-    </configuration>
     <configuration default="true" type="docs" factoryName="Docutils task">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -464,6 +500,22 @@
       <option name="docutils_params" value="" />
       <option name="docutils_task" value="" />
       <option name="docutils_open_in_browser" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="MULTIPROCESS" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="docs" factoryName="Sphinx task">
@@ -547,19 +599,18 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <list size="12">
-      <item index="0" class="java.lang.String" itemvalue="Python.Flood Polygon Hazard Test" />
-      <item index="1" class="java.lang.String" itemvalue="Python docs.InaSAFE Docs" />
-      <item index="2" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
-      <item index="3" class="java.lang.String" itemvalue="Python's test.NoseTests GUI I18N" />
+    <list size="11">
+      <item index="0" class="java.lang.String" itemvalue="Python's test.NoseTests Realtime" />
+      <item index="1" class="java.lang.String" itemvalue="Python.Flood Polygon Hazard Test" />
+      <item index="2" class="java.lang.String" itemvalue="Python docs.InaSAFE Docs" />
+      <item index="3" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
       <item index="4" class="java.lang.String" itemvalue="Python's test.NoseTests SAFE_QGIS" />
-      <item index="5" class="java.lang.String" itemvalue="Python's test.NoseTests Dock" />
-      <item index="6" class="java.lang.String" itemvalue="Python's test.Nosetests in test_vector" />
-      <item index="7" class="java.lang.String" itemvalue="Python's test.NoseTest VectorTest" />
-      <item index="8" class="java.lang.String" itemvalue="Python's test.Nosetests in CommonUtilitiesTest.test_write_keywords" />
-      <item index="9" class="java.lang.String" itemvalue="Python's test.Nosetests in DockTest.test_runTsunamiBuildingImpactFunction" />
-      <item index="10" class="java.lang.String" itemvalue="Python's test.Nosetests in test_engine" />
-      <item index="11" class="java.lang.String" itemvalue="Python's test.Nosetests in Test_Engine.test_interpolation_tsunami" />
+      <item index="5" class="java.lang.String" itemvalue="Python's test.Nosetests in test_vector" />
+      <item index="6" class="java.lang.String" itemvalue="Python's test.NoseTest VectorTest" />
+      <item index="7" class="java.lang.String" itemvalue="Python's test.Nosetests in CommonUtilitiesTest.test_write_keywords" />
+      <item index="8" class="java.lang.String" itemvalue="Python's test.Nosetests in DockTest.test_runTsunamiBuildingImpactFunction" />
+      <item index="9" class="java.lang.String" itemvalue="Python's test.Nosetests in test_engine" />
+      <item index="10" class="java.lang.String" itemvalue="Python's test.Nosetests in Test_Engine.test_interpolation_tsunami" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -647,14 +698,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="26" width="1368" height="743" extended-state="6" />
-    <editor active="true" />
+    <frame x="1918" y="-3" width="1924" height="1052" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32959402" sideWeight="0.6105611" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34370258" sideWeight="0.3082077" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2693475" sideWeight="0.40703517" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27214515" sideWeight="0.40703517" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28162816" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5929648" sideWeight="0.5273141" order="11" side_tool="true" content_ui="tabs" />
@@ -737,7 +788,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/safe_qgis/test_utilities.py</url>
-          <line>220</line>
+          <line>224</line>
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -755,9 +806,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/safe/engine/test_engine.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="22" selection-start="1697" selection-end="1697" vertical-scroll-proportion="0.039399624">
-          <folding />
-        </state>
+        <state line="39" column="22" selection-start="1697" selection-end="1697" vertical-scroll-proportion="0.039399624" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/keywords_dialog.py">
@@ -779,16 +828,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/test_qgis_environment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="12" selection-start="751" selection-end="751" vertical-scroll-proportion="0.25703564">
-          <folding />
-        </state>
+        <state line="26" column="12" selection-start="751" selection-end="751" vertical-scroll-proportion="0.25703564" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/safe/storage/test_vector.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="33" selection-start="2624" selection-end="2624" vertical-scroll-proportion="0.7356115">
-          <folding />
-        </state>
+        <state line="67" column="33" selection-start="2624" selection-end="2624" vertical-scroll-proportion="0.7356115" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/test_keyword_io.py">
@@ -803,44 +848,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="719" column="27" selection-start="26862" selection-end="26862" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/impact_calculator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="173" column="33" selection-start="5425" selection-end="5425" vertical-scroll-proportion="0.0">
+        <state line="170" column="33" selection-start="5390" selection-end="5390" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/impact_calculator_thread.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="159" column="51" selection-start="5507" selection-end="5526" vertical-scroll-proportion="0.0">
+        <state line="162" column="31" selection-start="5507" selection-end="5526" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/safe_interface.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="452" column="36" selection-start="15002" selection-end="15023" vertical-scroll-proportion="0.0">
+        <state line="455" column="36" selection-start="14945" selection-end="14966" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/safe/engine/core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="4" selection-start="414" selection-end="414" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="715" column="51" selection-start="26777" selection-end="26786" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scrapbook.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="17" column="4" selection-start="414" selection-end="414" vertical-scroll-proportion="0.021664767">
           <folding />
         </state>
       </provider>

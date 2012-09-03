@@ -12,15 +12,13 @@ import keyword as python_keywords
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableCell, TableRow
-#from safe.impact_functions.utilities import (admissible_plugins_to_str,
-#                                             keywords_to_str)
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
 # Disable lots of pylint for this as it is using magic
 # for managing the plugin system devised by Ted Dunstone
-# pylint: disable=W0613,W0231
+# pylint: disable=W0613,C0203
 class PluginMount(type):
     def __init__(cls, name, bases, attrs):
         if not hasattr(cls, 'plugins'):
@@ -34,7 +32,7 @@ class PluginMount(type):
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
             cls.plugins.append(cls)
-# pylint: enable=W0613,W0231
+# pylint: enable=W0613,C0203
 
 
 class FunctionProvider:
@@ -78,20 +76,16 @@ def get_plugins(name=None):
        Or all of them if no name is passed.
     """
 
-    # pylint: disable=E1101
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
-    # pylint: enable=E1101
 
     if name is None:
         return plugins_dict
 
     if isinstance(name, basestring):
         # Add the names
-        # pylint: disable=E1101
         plugins_dict.update(dict([(p.__name__, p)
                                   for p in FunctionProvider.plugins]))
-        # pylint: enable=E1101
 
         msg = ('No plugin named "%s" was found. '
                'List of available plugins is: %s'
@@ -361,6 +355,20 @@ def get_question(hazard_title, exposure_title, func):
                'impact': function_title.lower()})
 
 
+def get_thresholds(layer):
+    """Extract thresholds form layer keywords if present
+    """
+
+    if 'thresholds' in layer.keywords:
+        s = layer.keywords['thresholds']
+        thresholds = [float(x) for x in s.split(',')]
+        thresholds.sort()
+    else:
+        thresholds = []
+
+    return thresholds
+
+
 def aggregate_point_data(data=None, boundaries=None,
                          attribute_name=None,
                          aggregation_function='count'):
@@ -530,18 +538,14 @@ def get_plugins_as_table(name=None):
     header = TableRow([_('Title'), _('ID'), _('Requirements')], header=True)
     table_body.append(header)
 
-    # pylint: disable=E1101
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
-    # pylint: enable=E1101
 
     if name is not None:
         if isinstance(name, basestring):
             # Add the names
-            # pylint: disable=E1101
             plugins_dict.update(dict([(p.__name__, p)
                                       for p in FunctionProvider.plugins]))
-            # pylint: enable=E1101
 
             msg = ('No plugin named "%s" was found. '
                    'List of available plugins is: %s'

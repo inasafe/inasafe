@@ -9,12 +9,12 @@ from osgeo import gdal
 from safe.common.utilities import verify
 from safe.common.numerics import nanallclose, geotransform2axes, grid2points
 from safe.common.dynamic_translations import names as internationalised_titles
-from safe.common.exceptions import ReadLayerError
+from safe.common.exceptions import ReadLayerError, WriteLayerError
+from safe.common.exceptions import GetDataError, InaSAFEError
 
 from layer import Layer
 from vector import Vector
 from projection import Projection
-from interpolation import interpolate_raster_vector
 
 from utilities import DRIVER_MAP
 from utilities import read_keywords
@@ -166,7 +166,7 @@ class Raster(Layer):
             except IOError:
                 msg = ('Projection file not found for %s. You must supply '
                        'a projection file with extension .prj' % filename)
-                raise RuntimeError(msg)
+                raise ReadLayerError(msg)
 
         # Look for any keywords
         self.keywords = read_keywords(basename + '.keywords')
@@ -200,13 +200,13 @@ class Raster(Layer):
                    'Only the first band will currently be '
                    'used.' % (filename, self.number_of_bands))
             # FIXME(Ole): Let us use python warnings here
-            raise Exception(msg)
+            raise ReadLayerError(msg)
 
         # Get first band.
         band = self.band = fid.GetRasterBand(1)
         if band is None:
             msg = 'Could not read raster band from %s' % filename
-            raise Exception(msg)
+            raise ReadLayerError(msg)
 
     def write_to_file(self, filename):
         """Save raster data to file
@@ -238,7 +238,7 @@ class Raster(Layer):
         if fid is None:
             msg = ('Gdal could not create filename %s using '
                    'format %s' % (filename, file_format))
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         # Write metada
         fid.SetProjection(str(self.projection))
@@ -250,42 +250,8 @@ class Raster(Layer):
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
 
-    def interpolate(self, X, attribute_name=None):
-        """Interpolate values of this raster layer to other layer
-
-        Input
-            X: Layer object defining target
-            attribute_name: Optional name of interpolated layer.
-                            If attribute_name is None,
-                            the name of self is used.
-
-        Output
-            Y: Layer object with values of this raster layer interpolated to
-               geometry of input layer X
-
-        Note: If target geometry is polygon, data will be interpolated to
-        its centroids and the output is a point data set.
-        """
-
-        if X.is_raster:
-            if self.get_geotransform() != X.get_geotransform():
-                # Need interpolation between grids
-                msg = 'Intergrid interpolation not yet implemented'
-                raise Exception(msg)
-            else:
-                # Rasters are aligned, no need to interpolate
-                return self
-        else:
-            # Interpolate this raster layer to geometry of X
-            msg = ('Name must be either a string or None. I got %s'
-                   % (str(type(X)))[1:-1])
-            verify(attribute_name is None
-                   or isinstance(attribute_name, basestring), msg)
-
-            return interpolate_raster_vector(self, X,
-                                             attribute_name=attribute_name)
-
-    def get_data(self, nan=True, scaling=None, copy=False):
+    def get_data(self, nan=True, scaling=None, copy=False,
+                 rtol=1.0e-4, atol=1.0e-8):
         """Get raster data as numeric array
 
         Input
@@ -309,6 +275,8 @@ class Raster(Layer):
                      scalar value: If scaling takes a numerical scalar value,
                                    that will be use to scale the data
         copy (optional): If present and True return copy
+        rtol, atol: Tolerances as to how much difference is accepted
+                    between dx and dy when scaling is True.
 
         NOTE: Scaling does not currently work with projected layers.
         See issue #123
@@ -341,6 +309,7 @@ class Raster(Layer):
             if nan is True:
                 NAN = numpy.nan
             else:
+                # E.g. if nan is a number
                 NAN = nan
 
             # Replace NODATA_VALUE with NaN
@@ -363,8 +332,10 @@ class Raster(Layer):
         elif scaling is True:
             # Calculate scaling based on resolution change
 
-            actual_res = self.get_resolution(isotropic=True)
-            native_res = self.get_resolution(isotropic=True, native=True)
+            actual_res = self.get_resolution(isotropic=True,
+                                             rtol=rtol, atol=atol)
+            native_res = self.get_resolution(isotropic=True,
+                                             rtol=rtol, atol=atol, native=True)
             #print
             #print 'Actual res', actual_res
             #print 'Native res', native_res
@@ -374,11 +345,11 @@ class Raster(Layer):
             # See if scaling can work as a scalar value
             try:
                 sigma = float(scaling)
-            except Exception, e:
+            except ValueError, e:
                 msg = ('Keyword scaling "%s" could not be converted to a '
                        'number. It must be either True, False, None or a '
                        'number: %s' % (scaling, str(e)))
-                raise Exception(msg)
+                raise GetDataError(msg)
 
         # Return possibly scaled data
         return sigma * A
@@ -542,7 +513,7 @@ class Raster(Layer):
         except Exception, e:
             msg = ('Resolution for layer %s could not be obtained: %s '
                    % (self.get_name(), str(e)))
-            raise Exception(msg)
+            raise InaSAFEError(msg)
 
         if native:
             keywords = self.get_keywords()

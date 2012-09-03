@@ -30,6 +30,8 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace
 
+from safe_qgis.exceptions import InvalidParameterException
+from safe.common.exceptions import InaSAFEError
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -46,7 +48,7 @@ except ImportError:
 
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
-# pylint: disable=W0231
+
     def __init__(self, parent, iface, theDock=None):
         """Constructor for the dialog.
         .. note:: In QtDesigner the advanced editor's predefined keywords
@@ -65,7 +67,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised
         """
-# pylint: enable=W0231
+
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
@@ -513,16 +515,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         try:
-            # First see if we could have sublayers
-            # move this to a shared location
-            mySubLayer = None
-            mySource = self.layer.source()
-
-
-            # Now read the layer with sub layer if needed
-            myKeywords = self.keywordIO.readKeywords(self.layer,
-                                                     theSubLayer=mySubLayer)
-        except:
+            myKeywords = self.keywordIO.readKeywords(self.layer)
+        except InvalidParameterException:
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume
             # exposure to start with
@@ -636,7 +630,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myKeywords = self.getKeywords()
         try:
             self.keywordIO.writeKeywords(self.layer, myKeywords)
-        except Exception, e:
+        except InaSAFEError, e:
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
             ((self.tr('An error was encountered when saving the keywords:\n'
                       '%s' % str(getExceptionWithStacktrace(e))))))

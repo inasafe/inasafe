@@ -30,6 +30,7 @@ from safe.storage.vector import Vector
 from safe.common.numerics import lognormal_cdf
 from safe.common.utilities import ugettext as _
 from safe.common.utilities import verify
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 path = os.path.dirname(__file__)
 
@@ -103,7 +104,8 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
             Emap = E
 
         # Interpolate hazard level to building locations
-        Hi = H.interpolate(Emap, attribute_name='MMI')
+        Hi = assign_hazard_values_to_exposure_data(H, Emap,
+                                                   attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = Emap.get_geometry()

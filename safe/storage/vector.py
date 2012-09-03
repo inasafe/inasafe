@@ -19,15 +19,14 @@ import logging
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from safe.common.polygon import inside_polygon, clip_line_by_polygon
-from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.dynamic_translations import names as internationalised_titles
-from safe.common.exceptions import ReadLayerError
+from safe.common.exceptions import ReadLayerError, WriteLayerError
+from safe.common.exceptions import GetDataError, InaSAFEError
 
 from layer import Layer
 from projection import Projection
-from utilities import DRIVER_MAP, TYPE_MAP, DEFAULT_ATTRIBUTE
+from utilities import DRIVER_MAP, TYPE_MAP
 from utilities import read_keywords
 from utilities import write_keywords
 from utilities import get_geometry_type
@@ -178,6 +177,10 @@ class Vector(Layer):
            other: Vector instance to compare to
            rtol, atol: Relative and absolute tolerance.
                        See numpy.allclose for details
+
+        The algorithm will try to falsify every aspect of equality for the
+        two layers such as data, geometry, projection, keywords etc.
+        Only if none of them can be falsified will it return True.
         """
 
         # Check type
@@ -185,6 +188,10 @@ class Vector(Layer):
             msg = ('Vector instance cannot be compared to %s'
                    ' as its type is %s ' % (str(other), type(other)))
             raise TypeError(msg)
+
+        # Check keywords
+        if self.keywords != other.keywords:
+            return False
 
         # Check number of features match
         if len(self) != len(other):
@@ -215,7 +222,7 @@ class Vector(Layer):
                                       rtol=rtol, atol=atol):
                     return False
 
-        # Check keys
+        # Check keys for attribute values
         x = self.get_data()
         y = other.get_data()
 
@@ -233,7 +240,7 @@ class Vector(Layer):
                     if key not in x[i]:
                         return False
 
-            # Check data
+            # Check attribute values
             for i, a in enumerate(x):
                 for key in a:
                     X = a[key]
@@ -242,40 +249,22 @@ class Vector(Layer):
                     if X != Y:
                         # Not obviously equal, try some special cases
 
-                        res = None
-                        # pylint: disable=W0702
                         try:
                             # Try numerical comparison with tolerances
                             res = numpy.allclose(X, Y,
                                                  rtol=rtol, atol=atol)
-
-                            # FIXME (Ole): Write this without try-except
-                        except:
-                            pass
-                        else:
-                            if not res:
-                                return False
-                        # pylint: enable=W0702
-
-                        try:
-                            # Try to cast as booleans. This will take care of
-                            # None, '', True, False, ...
-                            # FIXME (Ole): This will never throw an exception
-                            # so remove try-except construct
-                            res = (bool(X) is bool(Y))
-                        except ValueError:
+                        except (NotImplementedError, TypeError):
+                            # E.g. '' (Not implemented)
+                            # or   None or {} (Type error)
                             pass
                         else:
                             if not res:
                                 return False
 
-                        if res is None:
-                            # None of the comparisons could be done
+                        # Finally cast as booleans.
+                        # This will e.g. match False with None or ''
+                        if not (bool(X) is bool(Y)):
                             return False
-
-        # Check keywords
-        if self.keywords != other.keywords:
-            return False
 
         # Vector layers are identical up to the specified tolerance
         return True
@@ -302,7 +291,7 @@ class Vector(Layer):
         * http://www.packtpub.com/article/geospatial-data-python-geometry
         """
 
-        basename, _ = os.path.splitext(filename)
+        basename = os.path.splitext(filename)[0]
 
         # Look for any keywords
         self.keywords = read_keywords(basename + '.keywords')
@@ -319,7 +308,6 @@ class Vector(Layer):
 
             vectorname = title
         else:
-
             # Use basename without leading directories as name
             vectorname = os.path.split(basename)[-1]
 
@@ -328,10 +316,9 @@ class Vector(Layer):
         self.geometry_type = None  # In case there are no features
 
         fid = ogr.Open(filename)
-
         if fid is None:
             msg = 'Could not open %s' % filename
-            raise IOError(msg)
+            raise ReadLayerError(msg)
 
         # Assume that file contains all data in one layer
         msg = 'Only one vector layer currently allowed'
@@ -342,7 +329,7 @@ class Vector(Layer):
                    'the Vector if you wish to use a different layer.'
                    % (filename, fid.GetLayerCount()))
             # Why do we raise an exception if it is only a warning? TS
-            raise Exception(msg)
+            raise ReadLayerError(msg)
 
         if self.sublayer is not None:
             layer = fid.GetLayerByName(self.sublayer)
@@ -370,7 +357,7 @@ class Vector(Layer):
             G = feature.GetGeometryRef()
             if G is None:
                 msg = ('Geometry was None in filename %s ' % filename)
-                raise Exception(msg)
+                raise ReadLayerError(msg)
             else:
                 self.geometry_type = G.GetGeometryType()
                 if self.is_point_data:
@@ -430,7 +417,7 @@ class Vector(Layer):
                            'Geometry type in filename %s '
                            'was %s.' % (filename,
                                         self.geometry_type))
-                    raise Exception(msg)
+                    raise ReadLayerError(msg)
 
             # Record attributes by name
             number_of_fields = feature.GetFieldCount()
@@ -483,7 +470,7 @@ class Vector(Layer):
             msg = ('OGR GML driver does not store geospatial reference.'
                    'This format is disabled for the time being. See '
                    'https://github.com/AIFDR/riab/issues/18')
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         # Derive layername from filename (excluding preceding dirs)
         if sublayer is None or extension == '.shp':
@@ -507,19 +494,19 @@ class Vector(Layer):
         drv = ogr.GetDriverByName(driver)
         if drv is None:
             msg = 'OGR driver %s not available' % driver
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         ds = drv.CreateDataSource(filename)
         if ds is None:
             msg = 'Creation of output file %s failed' % filename
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         lyr = ds.CreateLayer(layername,
                              self.projection.spatial_reference,
                              self.geometry_type)
         if lyr is None:
             msg = 'Could not create layer %s' % layername
-            raise Exception(msg)
+            raise WriteLayerError(msg)
 
         # Define attributes if any
         store_attributes = False
@@ -533,7 +520,7 @@ class Vector(Layer):
                            'but it does not contain list of dictionaries '
                            'with field information as expected. The first '
                            'element is %s' % data[0])
-                    raise Exception(msg)
+                    raise WriteLayerError(msg)
                 else:
                     # Establish OGR types for each element
                     ogrtypes = {}
@@ -548,7 +535,7 @@ class Vector(Layer):
             else:
                 #msg = ('Input parameter "data" was specified '
                 #       'but appears to be empty')
-                #raise Exception(msg)
+                #raise InaSAFEError(msg)
                 pass
 
             # Create attribute fields in layer
@@ -568,7 +555,7 @@ class Vector(Layer):
                 gdal.PushErrorHandler('CPLQuietErrorHandler')
                 if lyr.CreateField(fd) != 0:
                     msg = 'Could not create field %s' % name
-                    raise Exception(msg)
+                    raise WriteLayerError(msg)
 
                 # Restore error handler
                 gdal.PopErrorHandler()
@@ -593,14 +580,14 @@ class Vector(Layer):
                 geom = ogr.CreateGeometryFromWkt(wkt)
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
-                raise Exception(msg)
+                raise WriteLayerError(msg)
 
             feature.SetGeometry(geom)
 
             G = feature.GetGeometryRef()
             if G is None:
                 msg = 'Could not create GeometryRef for file %s' % filename
-                raise Exception(msg)
+                raise WriteLayerError(msg)
 
             # Store attributes
             if store_attributes:
@@ -623,7 +610,7 @@ class Vector(Layer):
             # Save this feature
             if lyr.CreateFeature(feature) != 0:
                 msg = 'Failed to create feature %i in file %s' % (i, filename)
-                raise Exception(msg)
+                raise WriteLayerError(msg)
 
             feature.Destroy()
 
@@ -697,7 +684,7 @@ class Vector(Layer):
                     return self.data[index][attribute]
         else:
             msg = 'Vector data instance does not have any attributes'
-            raise Exception(msg)
+            raise GetDataError(msg)
 
     def get_geometry_type(self):
         """Return geometry type for vector layer
@@ -746,7 +733,7 @@ class Vector(Layer):
         if attribute is None:
             msg = ('Valid attribute name must be specified in get_extrema '
                    'for vector layers. I got None.')
-            raise RuntimeError(msg)
+            raise InaSAFEError(msg)
 
         x = self.get_data(attribute)
         return min(x), max(x)
@@ -761,8 +748,6 @@ class Vector(Layer):
         Output
             layer: New vector layer with selected features
         """
-
-        # FIXME (Ole): Maybe generalise this to arbitrary expressions
 
         # Input checks
         msg = ('Specfied attribute must be a string. '
@@ -783,190 +768,13 @@ class Vector(Layer):
         A.sort()
 
         # Pick top N and unpack
-        _, data, geometry = zip(*A[-N:])
+        data, geometry = zip(*A[-N:])[1:]
 
         # Create new Vector instance and return
         return Vector(data=data,
                       projection=self.get_projection(),
-                      geometry=geometry)
-
-    # FIXME (Ole): Name should be layer_name
-    def interpolate(self, X, name=None, attribute_name=None):
-        """Interpolate values of this vector layer to other layer
-
-        Input
-            X: Layer object defining target
-            name: Optional name of returned interpolated layer
-            attribute_name: Optional attribute name to use.
-                            If None, all attributes are used.
-
-                            FIXME (Ole): Single attribute not tested well yet
-                            and not implemented for lines
-
-        Output
-            Y: Layer object with values of this vector layer interpolated to
-               geometry of input layer X
-        """
-
-        msg = 'Input to Vector.interpolate must be a vector layer instance'
-        verify(X.is_vector, msg)
-
-        msg = ('Projections must be the same: I got %s and %s'
-               % (self.projection, X.projection))
-        verify(self.projection == X.projection, msg)
-
-        msg = ('Vector layer to interpolate from must be polygon geometry. '
-               'I got OGR geometry type %s'
-               % geometrytype2string(self.geometry_type))
-        verify(self.is_polygon_data, msg)
-
-        # FIXME (Ole): Organise this the same way it is done with rasters
-        original_geometry = X.get_geometry()  # Geometry for returned data
-        if X.is_polygon_data:
-            # Use centroids, in case of polygons
-            X = convert_polygons_to_centroids(X)
-        elif X.is_line_data:
-
-            # Clip lines to polygon and return centroids
-
-            # FIXME (Ole): Need to separate this out, but identify what is
-            #              common with points and lines
-            #
-
-            #X.write_to_file('line_data.shp')
-            #self.write_to_file('poly_data.shp')
-
-            # Extract line features
-            lines = X.get_geometry()
-            line_attributes = X.get_data()
-            N = len(X)
-            verify(len(lines) == N)
-            verify(len(line_attributes) == N)
-
-            # Extract polygon features
-            polygons = self.get_geometry()
-            poly_attributes = self.get_data()
-            verify(len(polygons) == len(poly_attributes))
-
-            # Data structure for resulting line segments
-            clipped_geometry = []
-            clipped_attributes = []
-
-            # Clip line lines to polygons
-            for i, polygon in enumerate(polygons):
-                for j, line in enumerate(lines):
-                    inside, outside = clip_line_by_polygon(line, polygon)
-
-                    # Create new attributes
-                    # FIXME (Ole): Not done single specified polygon
-                    #              attribute
-                    inside_attributes = {}
-                    outside_attributes = {}
-                    for key in line_attributes[j]:
-                        inside_attributes[key] = line_attributes[j][key]
-                        outside_attributes[key] = line_attributes[j][key]
-
-                    for key in poly_attributes[i]:
-                        inside_attributes[key] = poly_attributes[i][key]
-                        outside_attributes[key] = None
-
-                    # Always create default attribute flagging if segment was
-                    # inside any of the polygons
-                    inside_attributes[DEFAULT_ATTRIBUTE] = True
-                    outside_attributes[DEFAULT_ATTRIBUTE] = False
-
-                    # Assign new attribute set to clipped lines
-                    for segment in inside:
-                        clipped_geometry.append(segment)
-                        clipped_attributes.append(inside_attributes)
-
-                    for segment in outside:
-                        clipped_geometry.append(segment)
-                        clipped_attributes.append(outside_attributes)
-
-            # Create new Vector instance and return
-            V = Vector(data=clipped_attributes,
-                       projection=X.get_projection(),
-                       geometry=clipped_geometry,
-                       geometry_type='line')
-            #V.write_to_file('clipped_and_tagged.shp')
-            return V
-
-        # The following applies only to Polygon-Point interpolation
-        msg = ('Vector layer to interpolate to must be point geometry. '
-               'I got OGR geometry type %s'
-               % geometrytype2string(X.geometry_type))
-        verify(X.is_point_data, msg)
-
-        msg = ('Name must be either a string or None. I got %s'
-               % (str(type(X)))[1:-1])
-        verify(name is None or isinstance(name, basestring), msg)
-
-        msg = ('Attribute must be either a string or None. I got %s'
-               % (str(type(X)))[1:-1])
-        verify(attribute_name is None or
-               isinstance(attribute_name, basestring), msg)
-
-        attribute_names = self.get_attribute_names()
-        if attribute_name is not None:
-            msg = ('Requested attribute "%s" did not exist in %s'
-                   % (attribute_name, attribute_names))
-            verify(attribute_name in attribute_names, msg)
-
-        #----------------
-        # Start algorithm
-        #----------------
-
-        # Extract point features
-        points = ensure_numeric(X.get_geometry())
-        attributes = X.get_data()
-        N = len(X)
-
-        # Extract polygon features
-        geom = self.get_geometry()
-        data = self.get_data()
-        verify(len(geom) == len(data))
-
-        # Augment point features with empty attributes from polygon
-        for a in attributes:
-            if attribute_name is None:
-                # Use all attributes
-                for key in attribute_names:
-                    a[key] = None
-            else:
-                # Use only requested attribute
-                # FIXME (Ole): Test for this is not finished
-                a[attribute_name] = None
-
-            # Always create default attribute flagging if point was
-            # inside any of the polygons
-            a[DEFAULT_ATTRIBUTE] = None
-
-        # Traverse polygons and assign attributes to points that fall inside
-        for i, polygon in enumerate(geom):
-            if attribute_name is None:
-                # Use all attributes
-                poly_attr = data[i]
-            else:
-                # Use only requested attribute
-                poly_attr = {attribute_name: data[i][attribute_name]}
-
-            # Assign default attribute to indicate points inside
-            poly_attr[DEFAULT_ATTRIBUTE] = True
-
-            # Clip data points by polygons and add polygon attributes
-            indices = inside_polygon(points, polygon)
-            for k in indices:
-                for key in poly_attr:
-                    # Assign attributes from polygon to points
-                    attributes[k][key] = poly_attr[key]
-
-        # Create new Vector instance and return
-        V = Vector(data=attributes,
-                   projection=X.get_projection(),
-                   geometry=original_geometry,
-                   name=X.get_name())
-        return V
+                      geometry=geometry,
+                      keywords=self.get_keywords())
 
     @property
     def is_point_data(self):
@@ -1011,7 +819,10 @@ def convert_line_to_points(V, delta):
     for i in range(N):
         c = points_along_line(geometry[i], delta)
         # We need to create a data entry for each point.
+        # FIXME (Ole): What on earth is this?
+        # pylint: disable=W0621
         new_data.extend([data[i] for _ in c])
+        # pylint: enable=W0621
         points.extend(c)
 
     # Create new point vector layer with same attributes and return

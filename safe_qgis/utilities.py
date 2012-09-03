@@ -18,12 +18,8 @@ __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os
 import sys
 import traceback
-import tempfile
-import getpass
-from datetime import date
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QGis,
@@ -369,8 +365,8 @@ def qgisVersion():
     """
     myVersion = None
     try:
-        myVersion = unicode(QGis.QGIS_VERSION_INT)  # pylint: disable=E1101
+        myVersion = unicode(QGis.QGIS_VERSION_INT)
     except AttributeError:
-        myVersion = unicode(QGis.qgisVersion)[0]  # pylint: disable=E1101
+        myVersion = unicode(QGis.qgisVersion)[0]
     myVersion = int(myVersion)
     return myVersion

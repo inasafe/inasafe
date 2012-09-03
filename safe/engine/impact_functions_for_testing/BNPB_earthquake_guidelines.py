@@ -19,6 +19,8 @@ from safe.common.utilities import ugettext as _
 from safe.impact_functions.mappings import osm2bnpb
 from safe.impact_functions.mappings import unspecific2bnpb
 from safe.impact_functions.mappings import sigab2bnpb
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+
 
 # Damage 'curves' for the two vulnerability classes
 damage_parameters = {'URM': [6, 7],
@@ -65,7 +67,8 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
             E = unspecific2bnpb(E, target_attribute=self.vclass_tag)
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E, attribute_name='MMI')
+        H = assign_hazard_values_to_exposure_data(H, E,
+                                             attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()

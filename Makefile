@@ -44,19 +44,19 @@ docs: compile
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile
 	@echo "Collecting strings requiring translations. Please provide translations by editing the translation files below:"
-	@# Qt translation stuff first.
-	@cd safe_qgis; pylupdate4 inasafe.pro; cd .
-	@$(foreach LOCALE,$(LOCALES), echo "safe_qgis/i18n/inasafe_$(LOCALE).ts";)
-	@# Gettext translation stuff next.
+	@# Gettext translation stuff
 	@# apply same xgettext command for each supported locale. TS
-	@$(foreach LOCALE,$(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
+	@$(foreach LOCALE, $(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
+	@# Qt translation stuff
+	@cd safe_qgis; pylupdate4 inasafe.pro; cd ..
+	@$(foreach LOCALE, $(LOCALES), echo "safe_qgis/i18n/inasafe_$(LOCALE).ts";)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
 compile-translation-strings: compile
+	@#compile gettext messages binary
+	$(foreach LOCALE, $(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@#Compile qt messages binary
 	cd safe_qgis; lrelease inasafe.pro; cd ..
-	@#compile gettext messages binary
-	$(foreach LOCALE,$(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 
 test-translations:
 	@echo
@@ -160,7 +160,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 83332a9
+	@scripts/update-test-data.sh 31d2ab24788b33c2d0367cc9b8ef2021aaaaf245
 
 disabled_tests:
 	@echo
@@ -207,7 +207,7 @@ list_gpackages:
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
 
-data_audit:
+data_audit: testdata
 	@echo
 	@echo "---------------------------------------"
 	@echo "Audit of IP status for bundled data    "
@@ -217,10 +217,17 @@ data_audit:
 pylint:
 	@echo
 	@echo "---------------------------------------"
-	@echo "Pylint violations. For details run     "
-	@echo "make jenkins-pylint                    "
+	@echo "Pylint violations.                     "
 	@echo "---------------------------------------"
 	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis | wc -l
+
+pylint-details:
+	@echo
+	@echo "---------------------------------------"
+	@echo "Pylint violations. For details run     "
+	@echo "make pylint-details                    "
+	@echo "---------------------------------------"
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis || true
 
 profile:
 	@echo
@@ -235,7 +242,7 @@ profile:
 #
 ##########################################################
 
-jenkins-test:
+jenkins-test: testdata
 	@echo
 	@echo "----------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"
