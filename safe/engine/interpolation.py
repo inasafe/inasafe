@@ -22,7 +22,8 @@ from safe.storage.utilities import DEFAULT_ATTRIBUTE
 # FIXME (Ole): Add mode parameter too
 def assign_hazard_values_to_exposure_data(hazard, exposure,
                                           layer_name=None,
-                                          attribute_name=None):
+                                          attribute_name=None,
+                                          mode='linear'):
     """Assign hazard values to exposure data
 
     This is the high level wrapper around interpolation functions for different
@@ -42,6 +43,8 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
              If hazard layer is of type vector, it is the name of the
              attribute to transfer from the hazard layer into the result.
              If None (default) all attributes are transferred.
+        * mode:
+             Interpolation mode for raster to point interpolation only
 
     Returns:
         Layer representing the exposure data with hazard levels assigned.
@@ -93,7 +96,8 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
     if hazard.is_raster and exposure.is_vector:
         return interpolate_raster_vector(hazard, exposure,
                                          layer_name=layer_name,
-                                         attribute_name=attribute_name)
+                                         attribute_name=attribute_name,
+                                         mode=mode)
     # Raster-Raster
     elif hazard.is_raster and exposure.is_raster:
         return interpolate_raster_raster(hazard, exposure)
@@ -159,7 +163,8 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
 # Specific functions for each individual kind of interpolation
 #-------------------------------------------------------------
 def interpolate_raster_vector(source, target,
-                              layer_name=None, attribute_name=None):
+                              layer_name=None, attribute_name=None,
+                              mode='linear'):
     """Interpolate from raster layer to vector data
 
     Args:
@@ -186,7 +191,8 @@ def interpolate_raster_vector(source, target,
         # Interpolate from raster to point data
         R = interpolate_raster_vector_points(source, target,
                                              layer_name=layer_name,
-                                             attribute_name=attribute_name)
+                                             attribute_name=attribute_name,
+                                             mode=mode)
     #elif target.is_line_data:
     # TBA - issue https://github.com/AIFDR/inasafe/issues/36
     #
@@ -325,7 +331,8 @@ def interpolate_polygon_raster(source, target,
 
 def interpolate_raster_vector_points(source, target,
                                      layer_name=None,
-                                     attribute_name=None):
+                                     attribute_name=None,
+                                     mode='linear'):
     """Interpolate from raster layer to point data
 
     Args:
@@ -378,7 +385,7 @@ def interpolate_raster_vector_points(source, target,
 
     try:
         values = interpolate_raster(longitudes, latitudes, A,
-                                    coordinates, mode='linear')
+                                    coordinates, mode=mode)
     except Exception, e:
         msg = (_('Could not interpolate from raster layer %(raster)s to '
                  'vector layer %(vector)s. Error message: %(error)s')
