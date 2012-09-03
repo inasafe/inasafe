@@ -27,6 +27,7 @@ from safe.common.utilities import ugettext as _
 from safe.common.numerics import lognormal_cdf
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.mappings import osm2padang, sigab2padang
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
 # Damage curves for each of the nine classes derived from the Padang survey
@@ -82,11 +83,6 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
             Emap = E
 
         # Interpolate hazard level to building locations
-        # FIXME (Ole): Why can this not be at the top?
-        # And why does the impact function then not show up?
-        # Will be OK when .interpolate in vector and raster retired
-        from safe.api import assign_hazard_values_to_exposure_data
-        #I = H.interpolate(Emap, attribute_name='MMI')
         I = assign_hazard_values_to_exposure_data(H, Emap,
                                                   attribute_name='MMI')
 

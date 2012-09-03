@@ -2,6 +2,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as _
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
 #FIXME: need to normalise all raster data Ole/Kristy
@@ -28,7 +29,8 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E, attribute_name='hazard_level')
+        H = assign_hazard_values_to_exposure_data(H, E,
+                                             attribute_name='hazard_level')
 
         # Extract relevant numerical data
         coordinates = H.get_geometry()

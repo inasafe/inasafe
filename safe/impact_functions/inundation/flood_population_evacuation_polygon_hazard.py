@@ -5,6 +5,7 @@ from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
 class FloodEvacuationFunctionVectorHazard(FunctionProvider):
@@ -61,15 +62,9 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         if not H.is_polygon_data:
             raise Exception(msg)
 
-        # FIXME (Ole): Why can this not be at the top?
-        # And why does the impact function then not show up?
-        from safe.api import assign_hazard_values_to_exposure_data
-        # Run polygon2raster interpolation function
+        # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(H, E,
                                              attribute_name='population')
-
-        # Run polygon2raster interpolation function
-        #P = H.interpolate(E, attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero

@@ -5,6 +5,7 @@ from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
 from safe.common.dynamic_translations import names as internationalised_values
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
@@ -35,17 +36,13 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                 E.get_name(),
                                 self)
 
-        # Interpolate hazard level to building locations
-
-        # FIXME (Ole): Why can this not be at the top?
-        # And why does the impact function then not show up?
-        # Will be OK when .interpolate in vector and raster retired
-        from safe.api import assign_hazard_values_to_exposure_data
+        # Determine attribute name for hazard levels
         if H.is_raster:
             hazard_attribute = 'depth'
         else:
             hazard_attribute = 'FLOODPRONE'
 
+        # Interpolate hazard level to building locations
         I = assign_hazard_values_to_exposure_data(H, E,
                                              attribute_name=hazard_attribute)
 

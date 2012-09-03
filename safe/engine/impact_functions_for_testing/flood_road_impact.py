@@ -2,6 +2,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
 from safe.storage.vector import convert_line_to_points
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
 class FloodRoadImpactFunction(FunctionProvider):
@@ -33,11 +34,6 @@ class FloodRoadImpactFunction(FunctionProvider):
         E = convert_line_to_points(R, delta)
 
         # Interpolate hazard level to building locations
-        # FIXME (Ole): Why can this not be at the top?
-        # And why does the impact function then not show up?
-        # Will be OK when .interpolate in vector and raster retired
-        from safe.api import assign_hazard_values_to_exposure_data
-        #H = H.interpolate(E, attribute_name='flood_level')
         H = assign_hazard_values_to_exposure_data(H, E,
                                              attribute_name='flood_level')
 

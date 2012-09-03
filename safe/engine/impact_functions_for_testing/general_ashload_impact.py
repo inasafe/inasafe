@@ -1,6 +1,7 @@
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 # FIXME: Need style for this and allow the name to
 # be different from Percen_da
@@ -31,12 +32,6 @@ class TephraBuildingImpactFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-
-        # FIXME (Ole): Why can this not be at the top?
-        # And why does the impact function then not show up?
-        # Will be OK when .interpolate in vector and raster retired
-        from safe.api import assign_hazard_values_to_exposure_data
-        #H = H.interpolate(E, attribute_name='load')
         H = assign_hazard_values_to_exposure_data(H, E,
                                              attribute_name='load')
 
