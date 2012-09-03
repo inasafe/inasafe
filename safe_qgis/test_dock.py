@@ -706,7 +706,7 @@ class DockTest(unittest.TestCase):
 
     def test_runCategorizedHazardBuildingImpact(self):
         """Flood function runs in GUI with Flood in Jakarta hazard data
-        Uses DKI buildings exposure data."""
+            Uses DKI buildings exposure data."""
 
         myResult, myMessage = setupScenario(
             theHazard='Flood in Jakarta',
