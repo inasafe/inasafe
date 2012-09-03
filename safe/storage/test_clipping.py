@@ -9,6 +9,8 @@ from safe.storage.core import read_layer
 from safe.storage.clipping import clip_raster_by_polygons
 
 
+# FIXME (Ole): Move this along with contents of clipping.py to
+# common and consolidate
 class Test_Clipping(unittest.TestCase):
     """Tests for clipping module
     """

@@ -8,6 +8,7 @@ from safe.common.polygon import clip_grid_by_polygons
 # FIXME (Ole): Order should be reversed and this should move into
 # interpolation module.
 # Then retire this one
+# I THINK WE CAN RETIRE THIS NOW (3/9/12)
 def clip_raster_by_polygons(R, P):
     """Separate raster grid points by polygons
 

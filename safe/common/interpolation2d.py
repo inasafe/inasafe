@@ -23,7 +23,7 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 import numpy
-from safe.common.exceptions import BoundsError
+from safe.common.exceptions import BoundsError, InaSAFEError
 
 LOGGER = logging.getLogger('InaSAFE')
 # pylint: disable=W0105
@@ -89,10 +89,10 @@ def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
            'Please email Ole.Moller.Nielsen@gmail.com')
     if len(idx) > 0:
         if not max(idx) < len(x):
-            raise RuntimeError(msg)
+            raise InaSAFEError(msg)
     if len(idy) > 0:
         if not max(idy) < len(y):
-            raise RuntimeError(msg)
+            raise InaSAFEError(msg)
 
     # Get the four neighbours for each interpolation point
     x0 = x[idx - 1]
@@ -145,7 +145,7 @@ def interpolate2d(x, y, Z, points, mode='linear', bounds_error=False):
                'exceeds max grid value %.15f ' % (mz, mZ))
         if not(numpy.isnan(mz) or numpy.isnan(mZ)):
             if not mz <= mZ:
-                raise RuntimeError(msg)
+                raise InaSAFEError(msg)
 
     # Populate result with interpolated values for points inside domain
     # and NaN for values outside
@@ -185,9 +185,10 @@ def check_inputs(x, y, Z, points, mode, bounds_error):
     """Check inputs for interpolate2d function
     """
 
-    msg = 'Only mode "linear" and "constant" are implemented. I got %s' % mode
+    msg = ('Only mode "linear" and "constant" are implemented. '
+           'I got "%s"' % mode)
     if mode not in ['linear', 'constant']:
-        raise RuntimeError(msg)
+        raise InaSAFEError(msg)
 
     x = numpy.array(x)
 
@@ -201,22 +202,22 @@ def check_inputs(x, y, Z, points, mode, bounds_error):
     msg = ('Input vector x must be monotoneously increasing. I got '
            'min(x) == %.15f, but x[0] == %.15f' % (min(x), x[0]))
     if not min(x) == x[0]:
-        raise RuntimeError(msg)
+        raise InaSAFEError(msg)
 
     msg = ('Input vector y must be monotoneously increasing. '
            'I got min(y) == %.15f, but y[0] == %.15f' % (min(y), y[0]))
     if not min(y) == y[0]:
-        raise RuntimeError(msg)
+        raise InaSAFEError(msg)
 
     msg = ('Input vector x must be monotoneously increasing. I got '
            'max(x) == %.15f, but x[-1] == %.15f' % (max(x), x[-1]))
     if not max(x) == x[-1]:
-        raise RuntimeError(msg)
+        raise InaSAFEError(msg)
 
     msg = ('Input vector y must be monotoneously increasing. I got '
            'max(y) == %.15f, but y[-1] == %.15f' % (max(y), y[-1]))
     if not max(y) == y[-1]:
-        raise RuntimeError(msg)
+        raise InaSAFEError(msg)
 
     try:
         Z = numpy.array(Z)
@@ -231,7 +232,7 @@ def check_inputs(x, y, Z, points, mode, bounds_error):
            'lengths of the input coordinates x and y. However, '
            'Z has dimensions %i x %i.' % (Nx, Ny, m, n))
     if not (Nx == m and Ny == n):
-        raise RuntimeError(msg)
+        raise InaSAFEError(msg)
 
     # Get interpolation points
     points = numpy.array(points)
