@@ -207,7 +207,7 @@ list_gpackages:
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
 
-data_audit:
+data_audit: testdata
 	@echo
 	@echo "---------------------------------------"
 	@echo "Audit of IP status for bundled data    "

@@ -253,7 +253,9 @@ def loadStandardLayers():
                   join(TESTDATA, 'Population_Jakarta_geographic.asc'),
                   join(HAZDATA, 'eq_yogya_2006.asc'),
                   join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
-                  join(TESTDATA, 'OSM_building_polygons_20110905.shp')]
+                  join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
+                  join(EXPDATA, 'DKI_buildings.shp'),
+                  join(HAZDATA, 'jakarta_flood_category_123.asc')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList)
@@ -702,6 +704,32 @@ class DockTest(unittest.TestCase):
         # This is the expected number of people needing evacuation
         assert '134953000' in myResult, myMessage
 
+    def test_runCategorizedHazardBuildingImpact(self):
+        """Flood function runs in GUI with Flood in Jakarta hazard data
+        Uses DKI buildings exposure data."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='Flood in Jakarta',
+            theExposure='DKI buildings',
+            theFunction='Be affected',
+            theFunctionId='Categorised Hazard Building Impact Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of building might be affected
+        assert '535' in myResult, myMessage
+        assert '453' in myResult, myMessage
+        assert '436' in myResult, myMessage
+
     def test_ResultStyling(self):
         """Test that ouputs from a model are correctly styled (colours and
         opacity. """
@@ -1074,7 +1102,7 @@ class DockTest(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     suite = unittest.makeSuite(DockTest,
-                        'test_runTsunamiBuildingImpactFunction')
+                        'test_runCateogrizedHazardBuildingImpact')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
