@@ -100,7 +100,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by style checking
-test: docs test_suite pep8 pylint dependency_test unwanted_strings data_audit test-translations
+test: docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
@@ -108,7 +108,7 @@ guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
 set_python:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
 
-quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings data_audit test-translations
+quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
 
 test_suite_quick:
 	nosetests -A 'not slow' -v safe --stop
@@ -207,7 +207,9 @@ list_gpackages:
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
 
-data_audit: testdata
+data_audit: testdata run_data_audit
+
+run_data_audit:
 	@echo
 	@echo "---------------------------------------"
 	@echo "Audit of IP status for bundled data    "
