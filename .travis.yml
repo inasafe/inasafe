@@ -1,0 +1,11 @@
+language: python
+python:
+  - "2.7"
+virtualenv:
+  system_site_packages: true
+before_install:
+  - sudo apt-get install -qq -y python-numpy python-gdal python-nose
+install:
+  - pip install . --use-mirrors
+script:
+  - nosetests -A 'not slow' -v safe
