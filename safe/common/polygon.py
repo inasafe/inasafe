@@ -533,7 +533,7 @@ def in_and_outside_polygon(points, polygon, closed=True):
     inside, outside = separate_points_by_polygon(points, polygon,
                                                  closed=closed,
                                                  check_input=True)
-    return  inside, outside
+    return inside, outside
 
 
 def clip_lines_by_polygon(lines, polygon,
@@ -551,8 +551,15 @@ def clip_lines_by_polygon(lines, polygon,
        check_input: Allows faster execution if set to False
 
     Output
-       inside_line_segments: Clipped line segments that are inside polygon
-       outside_line_segments: Clipped line segments that are outside polygon
+       inside_lines: Dictionary of lines that are inside polygon
+       outside_lines: Dictionary of lines that are outside polygon
+
+       Elements in output dictionaries can be multiple lines.
+
+       Both output dictionaries use the indices of the original line as keys.
+       This makes it possible to track which line the new clipped lines
+       come from, if one e.g. wants to assign the original attribute values
+       to clipped lines.
 
     This is a wrapper around clip_line_by_polygon
     """
@@ -570,6 +577,10 @@ def clip_lines_by_polygon(lines, polygon,
                 msg = ('Line could not be converted to numeric array: %s'
                        % str(e))
                 raise Exception(msg)
+
+            msg = 'Lines must be 2d array of vertices'
+            if not len(lines[i].shape) == 2:
+                raise RuntimeError(msg)
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
@@ -595,8 +606,8 @@ def clip_lines_by_polygon(lines, polygon,
     #N = polygon.shape[0]  # Number of vertices in polygon
     M = len(lines)  # Number of lines
 
-    inside_line_segments = []
-    outside_line_segments = []
+    inside_line_segments = {}
+    outside_line_segments = {}
 
     # Get polygon extents to quickly rule out lines where all segments
     # are outside and on the same side of its bounding box
@@ -607,7 +618,7 @@ def clip_lines_by_polygon(lines, polygon,
 
     # Loop through lines
     for k in range(M):
-        line = lines[k]
+        line = numpy.array(lines[k])
 
         # Optimisation (will depend on how many lines are outside)
         # In test_engine.py
@@ -619,14 +630,16 @@ def clip_lines_by_polygon(lines, polygon,
             max(line[:, 1]) < minpy or  # Everything is to the south
             min(line[:, 1]) > maxpy):   # Everything is to the north
 
-            outside_line_segments.append(line)
+            outside_line_segments[k] = [line]
             continue
 
         inside, outside = clip_line_by_polygon(line, polygon,
                                                closed=closed,
                                                check_input=check_input)
-        inside_line_segments += inside
-        outside_line_segments += outside
+
+        # Record clipped line segments from line k
+        inside_line_segments[k] = inside
+        outside_line_segments[k] = outside
 
     return inside_line_segments, outside_line_segments
 
@@ -649,7 +662,8 @@ def clip_line_by_polygon(line, polygon,
        inside_lines: Clipped lines that are inside polygon
        outside_lines: Clipped lines that are outside polygon
 
-       Both outputs take the form of lists of Nx2 line arrays
+       Both outputs lines take the form of lists of Nx2 numpy arrays,
+       i.e. each line is an array of multiple segments
 
     Example:
 
@@ -873,13 +887,30 @@ def join_line_segments(segments, rtol=1.0e-12, atol=1.0e-12):
             line.append(segments[i + 1][1])
         else:
             # Segments are disjoint - current line finishes here
-            lines.append(line)
+            lines.append(numpy.array(line))
             line = segments[i + 1]
 
-    # Finish
-    lines.append(line)
+    # Finish line
+    lines.append(numpy.array(line))
 
     # Return
+    return lines
+
+
+def line_dictionary_to_geometry(D):
+    """Convert dictionary of lines to list of Nx2 arrays
+
+    Input
+        D: Dictionary of lines e.g. as produced by clip_lines_by_polygon
+
+    Output:
+        List of Nx2 arrays suitable as geometry input to class Vector
+    """
+
+    lines = []
+    for key in D:
+        lines += D[key]
+
     return lines
 
 
