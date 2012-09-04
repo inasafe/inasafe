@@ -12,14 +12,14 @@ from safe.common.utilities import ugettext as _
 from safe.common.numerics import ensure_numeric
 from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.common.polygon import (inside_polygon,
-                                 clip_line_by_polygon, clip_grid_by_polygons)
+                                 clip_lines_by_polygon, clip_grid_by_polygons)
+from safe.common.polygon import line_dictionary_to_geometry
 
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import geometrytype2string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 
-# FIXME (Ole): Add mode parameter too
 def assign_hazard_values_to_exposure_data(hazard, exposure,
                                           layer_name=None,
                                           attribute_name=None,
@@ -542,44 +542,74 @@ def interpolate_polygon_lines(source, target,
 
     # Clip line lines to polygons
     for i, polygon in enumerate(polygons):
-        for j, line in enumerate(lines):
-            inside, outside = clip_line_by_polygon(line, polygon)
+        print 'Doing polygon %i of %i with %i lines' % (i,
+                                                       len(polygons),
+                                                       len(lines))
+        inside_lines, outside_lines = clip_lines_by_polygon(lines, polygon)
 
-            # Create new attributes
-            # FIXME (Ole): Not done single specified polygon
-            #              attribute
-            inside_attributes = {}
-            outside_attributes = {}
-            for key in line_attributes[j]:
-                inside_attributes[key] = line_attributes[j][key]
-                outside_attributes[key] = line_attributes[j][key]
 
-            for key in poly_attributes[i]:
-                inside_attributes[key] = poly_attributes[i][key]
-                outside_attributes[key] = None
 
-            # Always create default attribute flagging if segment was
-            # inside any of the polygons
-            inside_attributes[DEFAULT_ATTRIBUTE] = True
-            outside_attributes[DEFAULT_ATTRIBUTE] = False
 
-            # Assign new attribute set to clipped lines
-            for segment in inside:
-                clipped_geometry.append(segment)
-                clipped_attributes.append(inside_attributes)
 
-            for segment in outside:
-                clipped_geometry.append(segment)
-                clipped_attributes.append(outside_attributes)
 
-    # Create new Vector instance and return
-    R = Vector(data=clipped_attributes,
-               projection=target.get_projection(),
-               geometry=clipped_geometry,
-               geometry_type='line',
+    # Create one new point layer with interpolated attributes
+    new_geometry = []
+    new_attributes = []
+    for i, (geometry, values) in enumerate(res):
+
+        # For each polygon assign attributes to points that fall inside it
+        for j, geom in enumerate(geometry):
+            attr = polygon_attributes[i].copy()  # Attributes for this polygon
+            attr[attribute_name] = values[j]  # Attribute value from grid cell
+            attr['polygon_id'] = i  # Store id for associated polygon
+
+            new_attributes.append(attr)
+            new_geometry.append(geom)
+
+    R = Vector(data=new_attributes,
+               projection=source.get_projection(),
+               geometry=new_geometry,
                name=layer_name)
-    #R.write_to_file('clipped_and_tagged.shp')
     return R
+
+    #   inside_line_segments = line_dictionary_to_geometry(inside)
+    #   outside_line_segments = line_dictionary_to_geometry(outside)
+
+        # Create new attributes
+        # FIXME (Ole): Not done single specified polygon
+        #              attribute
+        inside_attributes = {}
+        outside_attributes = {}
+        for key in line_attributes[j]:
+            inside_attributes[key] = line_attributes[j][key]
+            outside_attributes[key] = line_attributes[j][key]
+
+    #         for key in poly_attributes[i]:
+    #             inside_attributes[key] = poly_attributes[i][key]
+    #             outside_attributes[key] = None
+
+    #         # Always create default attribute flagging if segment was
+    #         # inside any of the polygons
+    #         inside_attributes[DEFAULT_ATTRIBUTE] = True
+    #         outside_attributes[DEFAULT_ATTRIBUTE] = False
+
+    #         # Assign new attribute set to clipped lines
+    #         for segment in inside_line_segments:
+    #             clipped_geometry.append(segment)
+    #             clipped_attributes.append(inside_attributes)
+
+    #         for segment in outside_line_segments:
+    #             clipped_geometry.append(segment)
+    #             clipped_attributes.append(outside_attributes)
+
+    # # Create new Vector instance and return
+    # R = Vector(data=clipped_attributes,
+    #            projection=target.get_projection(),
+    #            geometry=clipped_geometry,
+    #            geometry_type='line',
+    #            name=layer_name)
+    # R.write_to_file('clipped_and_tagged.shp')
+    # return R
 
 
 def interpolate_raster_raster(source, target):

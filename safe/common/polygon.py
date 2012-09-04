@@ -554,7 +554,8 @@ def clip_lines_by_polygon(lines, polygon,
        inside_lines: Dictionary of lines that are inside polygon
        outside_lines: Dictionary of lines that are outside polygon
 
-       Elements in output dictionaries can be multiple lines.
+       Elements in output dictionaries can be a list of multiple lines.
+       One line is a numpy array of vertices.
 
        Both output dictionaries use the indices of the original line as keys.
        This makes it possible to track which line the new clipped lines
@@ -1191,3 +1192,21 @@ def clip_grid_by_polygons(A, geotransform, polygons):
         #print len(result), len(polygons), len(polygon), 'inside', len(inside),
 
     return result
+
+
+
+def clip_lines_by_polygons(lines, polygons, check_input=True):
+    """Clip multiple lines by multiple polygons
+
+    Args:
+        lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
+               where pi and qi are point coordinates (x, y).
+        polygons: list of polygons, each an array of vertices
+
+    Returs
+        List of polylines, values - one per input polygon.
+
+
+    If multiple polygons overlap, the one first encountered will be used
+    """
+
