@@ -69,7 +69,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
         new_attributes = H.get_data()
-        category_title = 'Category'
+        category_title = 'FLOODPRONE'  # FIXME: Should come from keywords
         categories = {}
         for attr in new_attributes:
             attr[self.target_field] = 0
@@ -89,7 +89,7 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
             # Update population count for each category
             cat = new_attributes[poly_id][category_title]
             categories[cat] += pop
-            
+
             # Update total
             evacuated += pop
 

@@ -1,6 +1,7 @@
-"""Module for 1D interpolation
+"""**Module for 1D interpolation**
 
-This module
+This module:
+
 * provides piecewise constant (nearest neighbour) and bilinear interpolation
 * is fast (based on numpy vector operations)
 * depends only on numpy
@@ -18,22 +19,22 @@ import numpy
 def interpolate1d(x, z, points, mode='linear', bounds_error=False):
     """Fundamental 2D interpolation routine
 
-    Input
-        x: 1D array of x-coordinates on which to interpolate
-        z: 1D array of values for each x
-        points: 1D array of coordinates where interpolated values are sought
-        mode: Determines the interpolation order. Options are
-              'constant' - piecewise constant nearest neighbour interpolation
-              'linear' - bilinear interpolation using the two
-                         nearest neighbours (default)
-        bounds_error: Boolean flag. If True (default) an exception will
-                      be raised when interpolated values are requested
-                      outside the domain of the input data. If False, nan
-                      is returned for those values
-    Output
-        1D array with same length as points with interpolated values
+    Args:
+        * x: 1D array of x-coordinates on which to interpolate
+        * z: 1D array of values for each x
+        * points: 1D array of coordinates where interpolated values are sought
+        * mode: Determines the interpolation order. Options are
+                'constant' - piecewise constant nearest neighbour interpolation
+                'linear' - bilinear interpolation using the two
+                           nearest neighbours (default)
+        * bounds_error: Boolean flag. If True (default) an exception will
+                        be raised when interpolated values are requested
+                        outside the domain of the input data. If False, nan
+                        is returned for those values
+    Returns:
+        * 1D array with same length as points with interpolated values
 
-    Notes
+    Note:
         Input coordinates x are assumed to be monotonically increasing,
         but need not be equidistantly spaced.
 

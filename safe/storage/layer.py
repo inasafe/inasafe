@@ -1,4 +1,4 @@
-"""Class Layer
+"""**Class Layer**
 """
 
 from safe.common.utilities import verify
@@ -71,8 +71,8 @@ class Layer:
     def get_keywords(self, key=None):
         """Return a copy of the keywords dictionary
 
-        Input
-            key (optional): If specified value will be returned for key only
+        Args:
+            * key (optional): If specified value will be returned for key only
         """
         if key is None:
             return self.keywords.copy()

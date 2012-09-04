@@ -1,4 +1,4 @@
-"""Class projection
+"""**Class projection**
 """
 
 from osgeo import osr
@@ -14,10 +14,10 @@ class Projection:
     def __init__(self, p):
         """Constructor for Projection.
 
-        input:
-            p: Projection information.
-               Any of the GDAL formats are OK including WKT, proj4, ESRI, XML
-               It can also be an instance of Projection.
+        Args:
+            * p: Projection information.
+                 Any of the GDAL formats are OK including WKT, proj4, ESRI, XML
+                 It can also be an instance of Projection.
         """
 
         if p is None:
@@ -63,13 +63,15 @@ class Projection:
     def get_projection(self, proj4=False):
         """Return projection
 
-        Input
-            proj4: If True, projection will be returned in proj4 format.
-                   If False (default) projection will be returned in WKT format
+        Args:
+            * proj4: If True, projection will be returned in proj4 format.
+                     If False (default) projection will be returned in WKT
+                     format
 
-        Note: To compare projections, use the __eq__ method directly on the
-        projection objects: E.g.
-        self.projection == other.projection
+        Note:
+            To compare projections, use the __eq__ method directly on the
+            projection objects: E.g.
+            self.projection == other.projection
         """
 
         if proj4:
