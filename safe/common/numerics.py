@@ -22,10 +22,10 @@ def ensure_numeric(A, typecode=None):
                      typecode will always be one of num.float, num.int, etc.
 
     Note :
-            that numpy.array(A, dtype) will sometimes copy.  Use 'copy=False' to
-            copy only when required.
+        that numpy.array(A, dtype) will sometimes copy.  Use 'copy=False' to
+        copy only when required.
 
-            This function is necessary as array(A) can cause memory overflow.
+        This function is necessary as array(A) can cause memory overflow.
     """
 
     if isinstance(A, basestring):
@@ -129,11 +129,11 @@ def erf(z):
         http://www.cs.princeton.edu/introcs/21function/ErrorFunction.java.html
         Implements the Gauss error function.
         erf(z) = 2 / sqrt(pi) * integral(exp(-t*t), t = 0..z)
-    
+
         Fractional error in math formula less than 1.2 * 10 ^ -7.
         although subject to catastrophic cancellation when z in very close to 0
         from Chebyshev fitting formula for erf(z) from Numerical Recipes, 6.2
-    
+
         Source:
         http://stackoverflow.com/questions/457408/
         is-there-an-easily-available-implementation-of-erf-for-python
@@ -191,10 +191,10 @@ def axes2points(x, y):
 
     Note:
         Example
-    
+
         x = [1, 2, 3]
         y = [10, 20]
-    
+
         P = [[1, 10],
              [2, 10],
              [3, 10],
