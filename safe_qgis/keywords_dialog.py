@@ -39,6 +39,7 @@ from safe.common.exceptions import InaSAFEError
 import safe_qgis.resources  # pylint: disable=W0611
 
 #see if we can import pydev - see development docs for details
+from pydev import pydevd
 try:
     from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
@@ -515,20 +516,17 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        try:
-            # First see if we could have sublayers
-            # move this to a shared location
-            myKeywordIO = KeywordIO()
-            mySubLayer = myKeywordIO.subLayerName(self.layer.source())
+        pydevd.settrace('192.168.1.62', port=53100, stdoutToServer=True, stderrToServer=True)
+        # In case the layer has no keywords or any problem occurs reading them,
+        # start with a blank slate so that subcategory gets populated nicely &
+        # we will assume exposure to start with.
+        myKeywords = {'category': 'exposure'}
 
+        try:
             # Now read the layer with sub layer if needed
-            myKeywords = self.keywordIO.readKeywords(self.layer,
-                                                     theSubLayer=mySubLayer)
+            myKeywords = self.keywordIO.readKeywords(self.layer)
         except (InvalidParameterException, HashNotFoundException, Exception):
-            # layer has no keywords file so just start with a blank slate
-            # so that subcategory gets populated nicely & we will assume
-            # exposure to start with
-            myKeywords = {'category': 'exposure'}
+            pass
 
         myLayerName = self.layer.name()
         if 'title' not in myKeywords:
@@ -636,11 +634,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         myKeywords = self.getKeywords()
-        mySubLayer = self.keywordIO.subLayerName(self.layer.source())
         try:
             self.keywordIO.writeKeywords(theLayer=self.layer,
-                                         theKeywords=myKeywords,
-                                         theSubLayer=mySubLayer)
+                                         theKeywords=myKeywords)
         except InaSAFEError, e:
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
             ((self.tr('An error was encountered when saving the keywords:\n'

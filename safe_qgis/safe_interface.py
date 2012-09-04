@@ -31,7 +31,7 @@ import unicodedata
 from safe.api import get_admissible_plugins
 from safe.api import get_function_title
 from safe.api import get_plugins as safe_get_plugins
-from safe.api import read_keywords, bbox_intersection
+from safe.api import read_keywords, bbox_intersection, NoKeywordsFoundError
 from safe.api import write_keywords as safe_write_keywords
 from safe.api import read_layer as safe_read_layer
 from safe.api import (buffered_bounding_box,
@@ -246,7 +246,7 @@ def readKeywordsFromLayer(theLayer, keyword):
         raise InvalidParameterException()
     try:
         myValue = theLayer.get_keywords(keyword)
-    except Exception, e:
+    except (NoKeywordsFoundError, Exception), e:
         myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 theLayer.get_filename(), keyword, str(e)))
         raise KeywordNotFoundException(myMessage)

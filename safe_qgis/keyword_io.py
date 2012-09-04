@@ -26,7 +26,8 @@ from qgis.core import QgsMapLayer, QgsDataSourceURI
 from safe_qgis.exceptions import HashNotFoundException, KeywordNotFoundException
 from safe_qgis.safe_interface import (verify,
                                readKeywordsFromFile,
-                               writeKeywordsToFile)
+                               writeKeywordsToFile,
+                               NoKeywordsFoundError)
 from safe_qgis.utilities import qgisVersion
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -82,7 +83,9 @@ class KeywordIO(QObject):
             * theLayer - A QGIS QgsMapLayer instance.
             * theKeyword - optional - will extract only the specified keyword
                   from the keywords dict.
-            * theSubLayer - optional - sublayer to read the keywords for.
+            * theSubLayer - optional - sublayer to read the keywords for. If
+                  not supplied we will automatically try to detect it using a
+                  call to :func:`subLayerName`.
         Returns:
             A dict if theKeyword is omitted, otherwise the value for the
             given key if it is present.
@@ -91,7 +94,8 @@ class KeywordIO(QObject):
         """
 
         myFlag = self.dataSourceIsFileBased(theLayer)
-
+        if theSubLayer is None:
+            theSubLayer = self.subLayerName(theLayer.source())
         # Special case for sqlite - file name needs to be extracted from src.
         if 'spatialite' == theLayer.dataProvider().name():
             mySource = str(QgsDataSourceURI(theLayer.source()).database())
@@ -120,12 +124,16 @@ class KeywordIO(QObject):
             * theLayer: A QGIS QgsMapLayer instance.
             * theKeywords: a dict containing all the keywords to be written
               for the layer.
-            * theSubLayer: str Optional name of a sublayer.
+            * theSubLayer: str Optional name of a sublayer. If not supplied,
+                  the sub layer name will be determined with a call to
+                  func:`subLayerName`.
         Returns:
             None.
         Raises:
             None
         """
+        if theSubLayer is None:
+            theSubLayer = self.subLayerName(theLayer.source())
         # Special case for sqlite - file name needs to be extracted from src
         if 'spatialite' == theLayer.dataProvider().name():
             mySource = str(QgsDataSourceURI(theLayer.source()).database())
@@ -170,11 +178,15 @@ class KeywordIO(QObject):
               and the extra keywords (which will replace the source layers
               keywords if the key is identical).
             * theSubLayer - optional - sublayer to read the keywords for.
+                  If not supplied, the sub layer name will be determined with a
+                  call to func:`subLayerName`.
         Returns:
             None.
         Raises:
             None
         """
+        if theSubLayer is None:
+            theSubLayer = self.subLayerName(theLayer.source())
         myKeywords = self.readKeywords(theSourceLayer, theSubLayer)
         if theExtraKeywords is None:
             theExtraKeywords = {}
@@ -410,7 +422,7 @@ class KeywordIO(QObject):
         # Some providers e.g. spatialite include a full path to the db
         # file so we are going to strip it down a little in the next 2 lines...
         myDB = str(myURI.database())
-        myDBPath = os.path.split(myDB)[0]
+        myDBPath = os.path.split(myDB)[1]
         mySQL = str(myURI.sql())
         if qgisVersion() >= 10900:  # 1.9 or newer needed for srid accessor
             mySrid = str(myURI.srid())

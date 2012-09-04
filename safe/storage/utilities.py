@@ -306,7 +306,7 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
 
     fid.close()
 
-    # Write our any unfinalised block data
+    # Write out any unfinalised block data
     if len(keywords) > 0 and current_block is not None:
         blocks[current_block] = keywords
     if first_keywords is None:
@@ -323,6 +323,8 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
             return blocks[sublayer]
     else:
         return first_keywords
+    raise NoKeywordsFoundError('Could not find any keywords for File: %s, '
+                               'SubLayer: %s.' % (filename, sublayer ))
 
 
 def geotransform2bbox(geotransform, columns, rows):

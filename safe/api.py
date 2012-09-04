@@ -34,6 +34,8 @@ from safe.engine.core import calculate_impact
 
 from safe.common.dynamic_translations import names as internationalisedNames
 from safe.common.numerics import nanallclose
-from safe.common.exceptions import BoundingBoxError, ReadLayerError
+from safe.common.exceptions import (BoundingBoxError,
+                                    ReadLayerError,
+                                    NoKeywordsFoundError)
 from safe.common.utilities import VerificationError, temp_dir, unique_filename
 # pylint: enable=W0611
