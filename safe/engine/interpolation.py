@@ -13,7 +13,7 @@ from safe.common.numerics import ensure_numeric
 from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.common.polygon import (inside_polygon,
                                  clip_lines_by_polygons, clip_grid_by_polygons)
-from safe.common.polygon import line_dictionary_to_geometry
+#from safe.common.polygon import line_dictionary_to_geometry
 
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import geometrytype2string
@@ -539,16 +539,17 @@ def interpolate_polygon_lines(source, target,
     verify(len(polygons) == len(polygon_attributes))
 
     # Data structure for resulting line segments
-    clipped_geometry = []
-    clipped_attributes = []
+    #clipped_geometry = []
+    #clipped_attributes = []
 
     # Clip line lines to polygons
     lines_covered = clip_lines_by_polygons(lines, polygons)
 
-    # Create one new line data layer with joined attributes from polygons and lines
+    # Create one new line data layer with joined attributes
+    # from polygons and lines
     new_geometry = []
     new_attributes = []
-    for i, polygon in enumerate(polygons):
+    for i in range(len(polygons)):
         # Loop over polygons
 
         for j in lines_covered[i]:
@@ -575,6 +576,7 @@ def interpolate_polygon_lines(source, target,
                geometry_type='line',
                name=layer_name)
     return R
+
 
 def interpolate_raster_raster(source, target):
     """Check for alignment and returns target layer as is

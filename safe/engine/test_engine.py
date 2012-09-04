@@ -1848,22 +1848,8 @@ class Test_Engine(unittest.TestCase):
         fid.close()
 
         # Clip
-        #for i in range(len(lines)):
-        #    inside_line_segments, outside_line_segments = \
-        #        clip_lines_by_polygon([lines[i]], polygon)
-        #
-        #    if len(inside_line_segments) > 0:
-        #        print
-        #        print 'Found', i, len(lines[i]), len(outside_line_segments)
-        #
-        #        print
-        #        print 'Line'
-        #        for j in range(lines[i].shape[0]):
-        #            print '[%f, %f], ' % (lines[i][j, 0], lines[i][j, 1])
-        #        print
-
-        # Clip
-        inside_lines, outside_lines = clip_lines_by_polygon(test_lines, test_polygon)
+        inside_lines, outside_lines = clip_lines_by_polygon(test_lines,
+                                                            test_polygon)
 
         # Convert dictionaries to lists of lines (to fit test)
         inside_line_geometry = line_dictionary_to_geometry(inside_lines)
@@ -1998,7 +1984,8 @@ class Test_Engine(unittest.TestCase):
 
         # New attributes
         for name in [DEFAULT_ATTRIBUTE, 'polygon_id', 'parent_line_id']:
-            msg = 'Did not find new attribute name "%s" in %s' % (name, I_names)
+            msg = 'Did not find new attribute name "%s" in %s' % (name,
+                                                                  I_names)
             assert name in I_names, msg
 
         # Verify interpolated values with test result
@@ -2028,7 +2015,7 @@ class Test_Engine(unittest.TestCase):
                 assert category.lower() in ['high', 'very high']
                 count += 1
 
-        msg = ('Expected 14 points tagged with category, '
+        msg = ('Expected 14 lines tagged with category, '
                'but got only %i' % count)
         assert count == 14, msg
         assert len(I_geometry) == 14
@@ -2049,7 +2036,7 @@ class Test_Engine(unittest.TestCase):
     test_line_interpolation_from_polygons_one_poly.slow = True
 
     def test_line_interpolation_from_multiple_polygons(self):
-        """Line clipping and interpolation using multiple polygon works
+        """Line interpolation using multiple polygons works
 
         This is a test for road interpolation (issue #55)
         """
@@ -2065,19 +2052,23 @@ class Test_Engine(unittest.TestCase):
         H_attributes = H.get_data()
         H_geometry = H.get_geometry()
 
-        # Cut down to 100 polygons
-        H = Vector(data=H_attributes[700:800],
-                   geometry=H_geometry[700:800],
+        # Cut down to 500 polygons
+        # (some e.g. #657 have thousands of vertices, others just a few)
+        H = Vector(data=H_attributes[300:657] + H_attributes[658:800],
+                   geometry=H_geometry[300:657] + H_geometry[658:800],
                    projection=H.get_projection())
         H_attributes = H.get_data()
         H_geometry = H.get_geometry()
         E = read_layer(exposure_filename)
 
         # Test interpolation function
+        #import time
+        #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   # Take all attributes across
                                                   attribute_name=None)
+        #print 'This took', time.time() - t0
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -2086,7 +2077,7 @@ class Test_Engine(unittest.TestCase):
         N = len(I_attributes)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if True:
+        if False:  # True:
             H.write_to_file('test_polygon.shp')
             E.write_to_file('test_lines.shp')
             I.write_to_file('interpolated_lines.shp')
@@ -2108,7 +2099,8 @@ class Test_Engine(unittest.TestCase):
 
         # New attributes
         for name in [DEFAULT_ATTRIBUTE, 'polygon_id', 'parent_line_id']:
-            msg = 'Did not find new attribute name "%s" in %s' % (name, I_names)
+            msg = 'Did not find new attribute name "%s" in %s' % (name,
+                                                                  I_names)
             assert name in I_names, msg
 
         # Verify interpolated values with test result
@@ -2135,26 +2127,40 @@ class Test_Engine(unittest.TestCase):
             # Check specific attribute
             category = I_attributes[i]['Catergory']  # The typo is as the data
             if category is not None:
-                assert category.lower() in ['high', 'very high']
+                msg = 'category = %s' % category
+                assert category.lower() in ['low', 'medium',
+                                            'high', 'very high'], msg
                 count += 1
 
-        msg = ('Expected 14 points tagged with category, '
+        msg = ('Expected 103 lines tagged with category, '
                'but got only %i' % count)
-        assert count == 14, msg
-        assert len(I_geometry) == 14
+        assert count == 103, msg
+        assert len(I_geometry) == 103
 
         # Check default attribute too
-        msg = ('Expected 14 segments tagged with default attribute '
+        msg = ('Expected 103 segments tagged with default attribute '
                '"%s = True", '
                'but got only %i' % (DEFAULT_ATTRIBUTE,
                                     counts[DEFAULT_ATTRIBUTE]))
-        assert counts[DEFAULT_ATTRIBUTE] == 14, msg
+        assert counts[DEFAULT_ATTRIBUTE] == 103, msg
 
         # Check against correctness verified in QGIS
-        assert I_attributes[13]['highway'] == 'road'
-        assert I_attributes[13]['osm_id'] == 69372744
-        assert I_attributes[13]['polygon_id'] == 0
-        assert I_attributes[13]['parent_line_id'] == 131
+        assert I_attributes[40]['highway'] == 'residential'
+        assert I_attributes[40]['osm_id'] == 69373107
+        assert I_attributes[40]['polygon_id'] == 111
+        assert I_attributes[40]['parent_line_id'] == 54
+
+        assert I_attributes[76]['highway'] == 'secondary'
+        assert I_attributes[76]['Catergory'] == 'High'
+        assert I_attributes[76]['osm_id'] == 69370718
+        assert I_attributes[76]['polygon_id'] == 374
+        assert I_attributes[76]['parent_line_id'] == 1
+
+        assert I_attributes[85]['highway'] == 'secondary'
+        assert I_attributes[85]['Catergory'] == 'Very High'
+        assert I_attributes[85]['osm_id'] == 69371482
+        assert I_attributes[85]['polygon_id'] == 453
+        assert I_attributes[85]['parent_line_id'] == 133
 
     test_line_interpolation_from_multiple_polygons.slow = True
 
@@ -2200,10 +2206,8 @@ class Test_Engine(unittest.TestCase):
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
-        N = len(I_attributes)
-
         # Possibly generate files for visual inspection with e.g. QGis
-        if True:
+        if False:
             L = Vector(geometry=H_geometry, geometry_type='polygon',
                        data=H_attributes)
             L.write_to_file('flood_polygon.shp')
@@ -2225,9 +2229,9 @@ class Test_Engine(unittest.TestCase):
             assert name in I_names, msg
 
         # Check that attributes have been carried through
-        for i, attr in enumerate(I_attributes):
-            pass
-            # TODO
+        #for i, attr in enumerate(I_attributes):
+        #    pass
+        #    # TODO
 
     Xtest_polygon_to_roads_interpolation_flood_example.slow = True
 
@@ -2781,7 +2785,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    #suite = unittest.makeSuite(Test_Engine, 'test_polygon_to_roads_interpolation_flood_example')
     suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

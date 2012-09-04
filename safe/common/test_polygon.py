@@ -1908,13 +1908,13 @@ class Test_Polygon(unittest.TestCase):
         assert len(inside_lines) == 2
         assert len(outside_lines) == 2
 
-        for key, values in inside_lines.items():
+        for _, values in inside_lines.items():
             for line in values:
                 assert type(line) == numpy.ndarray
                 assert len(line.shape) == 2
                 assert line.shape[1] == 2
 
-        for key, values in outside_lines.items():
+        for _, values in outside_lines.items():
             for line in values:
                 assert type(line) == numpy.ndarray
                 assert len(line.shape) == 2
@@ -2001,18 +2001,21 @@ class Test_Polygon(unittest.TestCase):
         # Spot checks
 
         # Polygon 2, line 1
-        assert numpy.allclose(lines_covered[2][1][0], [[ 2.,  2.],
-                                                       [ 2.,  3.],
-                                                       [ 2.,  4.]])
+        assert numpy.allclose(lines_covered[2][1][0],
+                              [[2., 2.],
+                               [2., 3.],
+                               [2., 4.]])
 
         # Polygon 4, line 2
-        assert numpy.allclose(lines_covered[4][2][0], [[0., 0.],
-                                                       [2.5, 2.5],
-                                                       [5., 5.]])
+        assert numpy.allclose(lines_covered[4][2][0],
+                              [[0., 0.],
+                               [2.5, 2.5],
+                               [5., 5.]])
 
         # Polygon 4, line 7
-        assert numpy.allclose(lines_covered[4][7][0], [[0.3,  0.2],
-                                                       [0.31666667, 0.31666667]])
+        assert numpy.allclose(lines_covered[4][7][0],
+                              [[0.3, 0.2],
+                               [0.31666667, 0.31666667]])
 
     def test_clip_lines_by_polygon_real_data(self):
         """Real roads are clipped by complex polygon

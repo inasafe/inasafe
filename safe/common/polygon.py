@@ -911,9 +911,9 @@ def line_dictionary_to_geometry(D):
 
     lines = []
 
-    # Ensure reproducibility
-    keys = D.keys()
-    keys.sort
+    # Ensure reproducibility (needed?)
+    #keys = D.keys()
+    #keys.sort()
 
     # Add line geometries up
     for key in D:
@@ -1210,7 +1210,8 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
         polygons: list of polygons, each an array of vertices
 
     Returns:
-        lines_covered: List of polylines inside a polygon - one per input polygon.
+        lines_covered: List of polylines inside a polygon
+                       - one per input polygon.
 
 
     If multiple polygons overlap, the one first encountered will be used
@@ -1221,13 +1222,18 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
     remaining_lines = lines
 
     # Clip lines to polygons
-    for i, polygon in enumerate(polygons):
-        #print 'Doing polygon %i of %i with %i lines' % (i,
-        #                                               len(polygons),
-        #                                               len(remaining_lines))
-        inside_lines, outside_lines = clip_lines_by_polygon(remaining_lines,
-                                                            polygon,
-                                                            check_input=check_input)
+    for polygon in polygons:
+    #for i, polygon in enumerate(polygons):
+        #print ('Doing polygon %i (%i vertices) of %i with '
+        #       '%i lines' % (i, len(polygon),
+        #                     len(polygons),
+        #                     len(remaining_lines)))
+
+        inside_lines, _ = clip_lines_by_polygon(remaining_lines,
+                                                polygon,
+                                                check_input=check_input)
+        #print ('- %i segments were inside'
+        #       % len(line_dictionary_to_geometry(inside_lines)))
 
         # Record lines inside this polygon
         lines_covered.append(inside_lines)
@@ -1240,5 +1246,3 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
         #remaining_lines = outside_lines
 
     return lines_covered
-
-
