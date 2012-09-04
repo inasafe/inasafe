@@ -90,8 +90,14 @@ class KeywordIO(QObject):
         Raises:
             Propogates any exception from the underlying reader delegate.
         """
-        mySource = str(theLayer.source())
-        myFlag = self.areKeywordsFileBased(theLayer)
+
+        myFlag = self.dataSourceIsFileBased(theLayer)
+
+        # Special case for sqlite - file name needs to be extracted from src.
+        if 'spatialite' == theLayer.dataProvider().name():
+            mySource = str(QgsDataSourceURI(theLayer.source()).database())
+        else:
+            mySource = str(theLayer.source())
 
         try:
             if myFlag:
@@ -121,8 +127,12 @@ class KeywordIO(QObject):
         Raises:
             None
         """
-        mySource = str(theLayer.source())
-        myFlag = self.areKeywordsFileBased(theLayer)
+        # Special case for sqlite - file name needs to be extracted from src
+        if 'spatialite' == theLayer.dataProvider().name():
+            mySource = str(QgsDataSourceURI(theLayer.source()).database())
+        else:
+            mySource = str(theLayer.source())
+        myFlag = self.dataSourceIsFileBased(theLayer)
         try:
             if myFlag:
                 writeKeywordsToFile(mySource, theKeywords, theSubLayer)
@@ -403,9 +413,18 @@ class KeywordIO(QObject):
         myDB = str(myURI.database())
         myDBPath = os.path.split(myDB)[0]
         mySQL = str(myURI.sql())
-        mySrid = str(myURI.srid())
+        if qgisVersion() >= 10900:  # 1.9 or newer needed for srid accessor
+            mySrid = str(myURI.srid())
+            myType = myURI.wkbType()
+        else:
+            # We could work around this by passing the layer instance
+            # to this method and then interrogating it for its CRS but
+            # that also seems ugly.
+            mySrid = 'NULL'
+            myType = 'NULL'
+
         mySubLayer = ('%(myDB)s.%(mySchema)s.%(myTable)s.'
-            '%(mySrid)s.%(myType)s.%(mySQL)s' %
+                      '%(mySrid)s.%(myType)s.%(mySQL)s' %
             {
                 'myDB': myDBPath,
                 'mySchema': mySchema,

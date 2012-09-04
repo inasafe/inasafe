@@ -14,6 +14,7 @@ from qgis.core import (QgsDataSourceURI, QgsVectorLayer)
 
 # For testing and demoing
 from safe.common.testing import HAZDATA, TESTDATA
+from safe_qgis.utilities import qgisVersion
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundException
@@ -22,7 +23,7 @@ QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 # Don't change this, not even formatting, you will break tests!
 PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
          password=\'bar\' sslmode=disable key=\'id\' srid=4326
-         type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='"""
+         type=MULTIPOLYGON table="valuations_parcel" (geometry) sql="""
 
 
 class KeywordIOTest(unittest.TestCase):
@@ -60,15 +61,19 @@ class KeywordIOTest(unittest.TestCase):
     def test_getHashForDatasource(self):
         """Test we can reliably get a hash for a uri"""
         myHash = self.keywordIO.getHashForDatasource(PG_URI)
-        myExpectedHash = '7cc153e1b119ca54a91ddb98a56ea95e'
+        myExpectedHash = '5acf4de7324339af7f8143c0454b395a'
         myMessage = "Got: %s\nExpected: %s" % (myHash, myExpectedHash)
         assert myHash == myExpectedHash, myMessage
 
     def test_getSubLayerForDatasource(self):
         """Test we can reliably get a sublayer name for a uri"""
         mySubLayerName = self.keywordIO.subLayerName(PG_URI)
-        myExpectedName = '7cc153e1b119ca54a91ddb98a56ea95e'
-        myMessage = "Got: %s\nExpected: %s" % (mySubLayerName, myExpectedName)
+        if qgisVersion() >= 10900:
+            # TODO: Update the expected string for 1.9
+            myExpectedName = '..valuations_parcel.4326.????.'
+        else:
+            myExpectedName = '..valuations_parcel.NULL.NULL.'
+        myMessage = "Got:\n%s\nExpected:\n%s" % (mySubLayerName, myExpectedName)
         assert mySubLayerName == myExpectedName, myMessage
 
     def test_writeReadKeywordFromUri(self):
@@ -118,12 +123,12 @@ class KeywordIOTest(unittest.TestCase):
             #we expect this outcome so good!
             pass
 
-    def test_areKeywordsFileBased(self):
+    def test_dataSourceIsFileBased(self):
         """Can we correctly determine if keywords should be written to file or
         to database?"""
-        assert not self.keywordIO.areKeywordsFileBased(self.sqliteLayer)
-        assert self.keywordIO.areKeywordsFileBased(self.fileRasterLayer)
-        assert self.keywordIO.areKeywordsFileBased(self.fileVectorLayer)
+        assert self.keywordIO.dataSourceIsFileBased(self.sqliteLayer)
+        assert self.keywordIO.dataSourceIsFileBased(self.fileRasterLayer)
+        assert self.keywordIO.dataSourceIsFileBased(self.fileVectorLayer)
 
     def test_readRasterFileKeywords(self):
         """Can we read raster file keywords using generic readKeywords method
@@ -168,7 +173,8 @@ class KeywordIOTest(unittest.TestCase):
         myMessage = 'Got source: %s\n\nExpected %s\n' % (
                     mySqliteLayer.source, myExpectedSource)
         assert mySqliteLayer.source() == myExpectedSource, myMessage
-        myKeywords = self.keywordIO.readKeywords(mySqliteLayer)
+        myKeywords = self.keywordIO.readKeywords(mySqliteLayer,
+                                                 theSubLayer='osm_buildings')
         myExpectedKeywords = self.expectedSqliteKeywords
         assert myKeywords == myExpectedKeywords, myMessage
         mySource = self.sqliteLayer.source()

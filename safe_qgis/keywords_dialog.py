@@ -635,8 +635,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         myKeywords = self.getKeywords()
+        mySubLayer = self.keywordIO.subLayerName(self.layer.source())
         try:
-            self.keywordIO.writeKeywords(self.layer, myKeywords)
+            self.keywordIO.writeKeywords(theLayer=self.layer,
+                                         theKeywords=myKeywords,
+                                         theSubLayer=mySubLayer)
         except InaSAFEError, e:
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
             ((self.tr('An error was encountered when saving the keywords:\n'
