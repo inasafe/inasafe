@@ -1863,43 +1863,47 @@ class Test_Engine(unittest.TestCase):
         #        print
 
         # Clip
-        inside_lines, outside_lines = \
-            clip_lines_by_polygon(test_lines, test_polygon)
+        inside_lines, outside_lines = clip_lines_by_polygon(test_lines, test_polygon)
 
         # Convert dictionaries to lists of lines (to fit test)
-        inside_line_segments = line_dictionary_to_geometry(inside_lines)
-        outside_line_segments = line_dictionary_to_geometry(outside_lines)
+        inside_line_geometry = line_dictionary_to_geometry(inside_lines)
+        outside_line_geometry = line_dictionary_to_geometry(outside_lines)
 
         # These lines have compontes both inside and outside
-        assert len(inside_line_segments) > 0
-        assert len(outside_line_segments) > 0
+        assert len(inside_line_geometry) == 14
+        assert len(outside_line_geometry) == 167
 
         # Check that midpoints of each segment are correctly placed
         inside_centroids = []
-        for seg in inside_line_segments:
-            midpoint = (seg[0] + seg[1]) / 2
-            inside_centroids.append(midpoint)
-            assert is_inside_polygon(midpoint, test_polygon)
+        for line in inside_line_geometry:
+            for i in range(len(line) - 1):
+                seg0 = line[i]
+                seg1 = line[i + 1]
+                midpoint = (seg0 + seg1) / 2
+                inside_centroids.append(midpoint)
+                assert is_inside_polygon(midpoint, test_polygon)
 
         outside_centroids = []
-        for seg in outside_line_segments:
-            midpoint = (seg[0] + seg[1]) / 2
-            outside_centroids.append(midpoint)
-            assert not is_inside_polygon(midpoint, test_polygon)
+        for line in outside_line_geometry:
+            for i in range(len(line) - 1):
+                seg0 = line[i]
+                seg1 = line[i + 1]
+                midpoint = (seg0 + seg1) / 2
+                outside_centroids.append(midpoint)
+                assert not is_inside_polygon(midpoint, test_polygon)
 
         # Possibly generate files for visual inspection with e.g. QGis
         if True:
-            # Store as shape files for visual inspection e.g. by QGis
             P = Vector(geometry=[test_polygon])
             P.write_to_file('test_polygon.shp')
 
             L = Vector(geometry=test_lines, geometry_type='line')
             L.write_to_file('test_lines.shp')
 
-            L = Vector(geometry=inside_line_segments, geometry_type='line')
+            L = Vector(geometry=inside_line_geometry, geometry_type='line')
             L.write_to_file('inside_lines.shp')
 
-            L = Vector(geometry=outside_line_segments, geometry_type='line')
+            L = Vector(geometry=outside_line_geometry, geometry_type='line')
             L.write_to_file('outside_lines.shp')
 
             L = Vector(geometry=inside_centroids, geometry_type='point')
@@ -1909,8 +1913,15 @@ class Test_Engine(unittest.TestCase):
             L.write_to_file('outside_centroids.shp')
 
         # Characterisation test based on against visual inspection with QGIS
-        #print outside_line_segments[5]
-        assert numpy.allclose(outside_line_segments[5],
+        #print inside_line_geometry[6]
+        assert numpy.allclose(inside_line_geometry[6],
+                              [[122.23438722, -8.6277337],
+                               [122.23316953, -8.62733247],
+                               [122.23162128, -8.62683715],
+                               [122.23156661, -8.62681168]])
+
+        #print outside_line_geometry[5]
+        assert numpy.allclose(outside_line_geometry[5],
                               [[122.18321143, -8.58901526],
                                [122.18353015, -8.58890024],
                                [122.18370883, -8.58884135],
@@ -1965,25 +1976,29 @@ class Test_Engine(unittest.TestCase):
         N = len(I_attributes)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if False:  # True:
-            L = Vector(geometry=H_geometry, geometry_type='polygon',
-                       data=H_attributes)
-            L.write_to_file('test_polygon.shp')
+        if False:
+            H.write_to_file('test_polygon.shp')
+            E.write_to_file('test_lines.shp')
+            I.write_to_file('interpolated_lines.shp')
 
-            L = Vector(geometry=I_geometry, geometry_type='line',
-                       data=I_attributes)
-            L.write_to_file('interpolated_lines.shp')
-
-        # Assert that expected attribute names exist
+        # Assert that all expected attribute names exist
         I_names = I.get_attribute_names()
         H_names = H.get_attribute_names()
         E_names = E.get_attribute_names()
+
+        # Attributes from polygons
         for name in H_names:
             msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
             assert name in I_names, msg
 
+        # Attributes from original lines
         for name in E_names:
             msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # New attributes
+        for name in [DEFAULT_ATTRIBUTE, 'polygon_id', 'parent_line_id']:
+            msg = 'Did not find new attribute name "%s" in %s' % (name, I_names)
             assert name in I_names, msg
 
         # Verify interpolated values with test result
@@ -2016,11 +2031,7 @@ class Test_Engine(unittest.TestCase):
         msg = ('Expected 14 points tagged with category, '
                'but got only %i' % count)
         assert count == 14, msg
-
-        assert len(I_geometry) == 181
-
-        assert I_attributes[129]['Catergory'] == 'Very High'
-        assert I_attributes[135]['Catergory'] is None
+        assert len(I_geometry) == 14
 
         # Check default attribute too
         msg = ('Expected 14 segments tagged with default attribute '
@@ -2029,22 +2040,128 @@ class Test_Engine(unittest.TestCase):
                                     counts[DEFAULT_ATTRIBUTE]))
         assert counts[DEFAULT_ATTRIBUTE] == 14, msg
 
-        msg = ('Expected 167 points tagged with default attribute '
-               '"%s = False", '
-               'but got only %i' % (DEFAULT_ATTRIBUTE,
-                                    counts['Not ' + DEFAULT_ATTRIBUTE]))
-        assert counts['Not ' + DEFAULT_ATTRIBUTE] == 167, msg
-
-        msg = 'Affected and not affected does not add up'
-        assert (counts[DEFAULT_ATTRIBUTE] +
-                counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
+        # Check against correctness verified in QGIS
+        assert I_attributes[13]['highway'] == 'road'
+        assert I_attributes[13]['osm_id'] == 69372744
+        assert I_attributes[13]['polygon_id'] == 0
+        assert I_attributes[13]['parent_line_id'] == 131
 
     test_line_interpolation_from_polygons_one_poly.slow = True
+
+    def test_line_interpolation_from_multiple_polygons(self):
+        """Line clipping and interpolation using multiple polygon works
+
+        This is a test for road interpolation (issue #55)
+        """
+
+        # TODO!!!!!!!!!!!!!!
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
+        exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        # Cut down to 100 polygons
+        H = Vector(data=H_attributes[700:800],
+                   geometry=H_geometry[700:800],
+                   projection=H.get_projection())
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+        E = read_layer(exposure_filename)
+
+        # Test interpolation function
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
+
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+        assert I.get_name() == 'depth'
+
+        N = len(I_attributes)
+
+        # Possibly generate files for visual inspection with e.g. QGis
+        if True:
+            H.write_to_file('test_polygon.shp')
+            E.write_to_file('test_lines.shp')
+            I.write_to_file('interpolated_lines.shp')
+
+        # Assert that all expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+
+        # Attributes from polygons
+        for name in H_names:
+            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # Attributes from original lines
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # New attributes
+        for name in [DEFAULT_ATTRIBUTE, 'polygon_id', 'parent_line_id']:
+            msg = 'Did not find new attribute name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # Verify interpolated values with test result
+        count = 0
+        counts = {}
+        for i in range(N):
+
+            # Check that default attribute is present
+            attrs = I_attributes[i]
+            msg = ('Did not find default attribute %s in %s'
+                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+            assert DEFAULT_ATTRIBUTE in attrs, msg
+
+            # Count items using default attribute
+            if DEFAULT_ATTRIBUTE not in counts:
+                counts[DEFAULT_ATTRIBUTE] = 0
+                counts['Not ' + DEFAULT_ATTRIBUTE] = 0
+
+            if attrs[DEFAULT_ATTRIBUTE] is True:
+                counts[DEFAULT_ATTRIBUTE] += 1
+            else:
+                counts['Not ' + DEFAULT_ATTRIBUTE] += 1
+
+            # Check specific attribute
+            category = I_attributes[i]['Catergory']  # The typo is as the data
+            if category is not None:
+                assert category.lower() in ['high', 'very high']
+                count += 1
+
+        msg = ('Expected 14 points tagged with category, '
+               'but got only %i' % count)
+        assert count == 14, msg
+        assert len(I_geometry) == 14
+
+        # Check default attribute too
+        msg = ('Expected 14 segments tagged with default attribute '
+               '"%s = True", '
+               'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                    counts[DEFAULT_ATTRIBUTE]))
+        assert counts[DEFAULT_ATTRIBUTE] == 14, msg
+
+        # Check against correctness verified in QGIS
+        assert I_attributes[13]['highway'] == 'road'
+        assert I_attributes[13]['osm_id'] == 69372744
+        assert I_attributes[13]['polygon_id'] == 0
+        assert I_attributes[13]['parent_line_id'] == 131
+
+    test_line_interpolation_from_multiple_polygons.slow = True
 
     # FIXME (Ole): This test shows that current polygon-line interpolation
     # functionality is unacceptably slow.
     # For the moment, it has been cut down to a few polygons
-    def test_polygon_to_roads_interpolation_flood_example(self):
+    def Xtest_polygon_to_roads_interpolation_flood_example(self):
         """Roads can be tagged with values from flood polygons
 
         This is a test for road interpolation (issue #55)
@@ -2112,8 +2229,7 @@ class Test_Engine(unittest.TestCase):
             pass
             # TODO
 
-
-    test_polygon_to_roads_interpolation_flood_example.slow = True
+    Xtest_polygon_to_roads_interpolation_flood_example.slow = True
 
     def Xtest_line_interpolation_from_polygons_one_attribute(self):
         """Line interpolation using one polygon works with attribute
@@ -2123,6 +2239,8 @@ class Test_Engine(unittest.TestCase):
 
         # FIXME: test passes, but functionality is not really there.
         # Do we need it?
+
+        # RETIRE
 
         # Name file names for hazard level and exposure
         hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
@@ -2199,6 +2317,8 @@ class Test_Engine(unittest.TestCase):
         """
 
         # NOT YET FULLY DONE
+
+        # RETIRE
 
         # Name file names for hazard level and exposure
         hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
@@ -2661,6 +2781,7 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test_polygon_to_roads_interpolation_flood_example')
+    #suite = unittest.makeSuite(Test_Engine, 'test_polygon_to_roads_interpolation_flood_example')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

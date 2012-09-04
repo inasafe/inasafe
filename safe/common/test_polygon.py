@@ -9,6 +9,7 @@ from safe.common.polygon import (separate_points_by_polygon,
                                  outside_polygon,
                                  inside_polygon,
                                  clip_lines_by_polygon,
+                                 clip_lines_by_polygons,
                                  in_and_outside_polygon,
                                  intersection,
                                  join_line_segments,
@@ -1949,6 +1950,69 @@ class Test_Polygon(unittest.TestCase):
                               [[[-1, 0.5], [0, 0.5]],
                                [[0.5, 1], [0.5, 2]],
                                [[-1, 0], [0, 1.0 / 3]]])
+
+    def test_clip_lines_by_multiple_polygons(self):
+        """Multiple composite lines are clipped by multiple polygons
+        """
+
+        # Test polys
+        polygons = [[[0, 0], [1, 0], [1, 1], [0, 1]],  # Unit square
+                    [[1, 0], [3, 0], [2, 1]],  # Adjacent triangle
+                    [[0, 3], [1, 3], [0.5, 2],
+                     [2, 2], [2, 4], [0, 4]],  # Convoluted
+                    [[-1, -1], [5, -1], [5, 3], [5, 3]],  # Overlapping
+                    [[-1, -1], [6, -1], [6, 6], [6, 6]]]  # Cover the others
+
+        # Test lines
+        input_lines = [[[0, 0.5], [4, 0.5]],
+                       [[2, 0], [2, 5]],
+                       [[0, 0], [5, 5]],
+                       [[10, 10], [30, 10]],
+                       [[-1, 0.5], [0.5, 0.5], [2.5, 3]],
+                       [[0.5, 0.5], [0.5, 2]],
+                       [[100, 100], [300, 100]],
+                       [[0.3, 0.2], [0.7, 3], [1.0, 1.9]],
+                       [[30, 10], [30, 20]]]
+
+        lines_covered = clip_lines_by_polygons(input_lines, polygons)
+
+        # Sanity checks
+        assert len(lines_covered) == len(polygons)
+        for lines in lines_covered:
+            assert len(lines) == len(input_lines)
+
+        # Thorough check of all lines
+        for i, polygon in enumerate(polygons):
+
+            lines_in_polygon = lines_covered[i]
+            for key in lines_in_polygon:
+                for line in lines_covered[i][key]:
+
+                    # Assert that this line is fully inside polygon
+                    inside, outside = clip_line_by_polygon(line, polygon)
+                    assert len(outside) == 0
+
+                    # Line can be joined from separate segments but
+                    # endpoints must match
+                    for x in inside:
+                        assert numpy.allclose(x[0], line[0])
+                        assert numpy.allclose(x[-1], line[-1])
+
+        # Spot checks
+
+        # Polygon 2, line 1
+        assert numpy.allclose(lines_covered[2][1][0], [[ 2.,  2.],
+                                                       [ 2.,  3.],
+                                                       [ 2.,  4.]])
+
+        # Polygon 4, line 2
+        assert numpy.allclose(lines_covered[4][2][0], [[0., 0.],
+                                                       [2.5, 2.5],
+                                                       [5., 5.]])
+
+        # Polygon 4, line 7
+        assert numpy.allclose(lines_covered[4][7][0], [[0.3,  0.2],
+                                                       [0.31666667, 0.31666667]])
 
     def test_clip_lines_by_polygon_real_data(self):
         """Real roads are clipped by complex polygon

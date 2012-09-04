@@ -105,7 +105,7 @@ def separate_points_by_polygon(points, polygon,
             raise PolygonInputError(msg)
 
         msg = ('Points array must be 1 or 2 dimensional. '
-               'I got %d dimensions' % len(points.shape))
+               'I got %d dimensions: %s' % (len(points.shape), points))
         if not 0 < len(points.shape) < 3:
             raise PolygonInputError(msg)
 
@@ -631,6 +631,7 @@ def clip_lines_by_polygon(lines, polygon,
             max(line[:, 1]) < minpy or  # Everything is to the south
             min(line[:, 1]) > maxpy):   # Everything is to the north
 
+            inside_line_segments[k] = []
             outside_line_segments[k] = [line]
             continue
 
@@ -909,6 +910,12 @@ def line_dictionary_to_geometry(D):
     """
 
     lines = []
+
+    # Ensure reproducibility
+    keys = D.keys()
+    keys.sort
+
+    # Add line geometries up
     for key in D:
         lines += D[key]
 
@@ -1139,7 +1146,9 @@ collinearmap = {(False, False, False, False): lines_dont_coincide,
                 (True, True, True, True): lines_0_fully_included_in_1}
 
 
-# Functions for clipping of rasters by polygons
+# Main functions for polygon clipping
+# FIXME (Ole): Both can be rigged to return points or lines
+# outside any polygon by adding that as the entry in the list returned
 def clip_grid_by_polygons(A, geotransform, polygons):
     """Clip raster grid by polygon
 
@@ -1151,7 +1160,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
         polygons: list of polygons, each an array of vertices
 
     Output
-        List of points, values - one per input polygon.
+        points_covered: List of (points, values) - one per input polygon.
 
     Implementing algorithm suggested in
     https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
@@ -1170,7 +1179,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     points, values = grid2points(A, x, y)
 
     # Generate list of points and values that fall inside each polygon
-    result = []
+    points_covered = []
     remaining_points = points
     remaining_values = values
 
@@ -1182,17 +1191,14 @@ def clip_grid_by_polygons(A, geotransform, polygons):
                                                      closed=True,
                                                      check_input=False)
         # Add features inside this polygon
-        result.append((remaining_points[inside],
-                       remaining_values[inside]))
+        points_covered.append((remaining_points[inside],
+                               remaining_values[inside]))
 
         # Select remaining points to clip
         remaining_points = remaining_points[outside]
         remaining_values = remaining_values[outside]
 
-        #print len(result), len(polygons), len(polygon), 'inside', len(inside),
-
-    return result
-
+    return points_covered
 
 
 def clip_lines_by_polygons(lines, polygons, check_input=True):
@@ -1203,10 +1209,36 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
                where pi and qi are point coordinates (x, y).
         polygons: list of polygons, each an array of vertices
 
-    Returs
-        List of polylines, values - one per input polygon.
+    Returns:
+        lines_covered: List of polylines inside a polygon - one per input polygon.
 
 
     If multiple polygons overlap, the one first encountered will be used
     """
+
+    # Initialise structures
+    lines_covered = []
+    remaining_lines = lines
+
+    # Clip lines to polygons
+    for i, polygon in enumerate(polygons):
+        #print 'Doing polygon %i of %i with %i lines' % (i,
+        #                                               len(polygons),
+        #                                               len(remaining_lines))
+        inside_lines, outside_lines = clip_lines_by_polygon(remaining_lines,
+                                                            polygon,
+                                                            check_input=check_input)
+
+        # Record lines inside this polygon
+        lines_covered.append(inside_lines)
+
+        # Keep lines outside as remaining lines
+        # FIXME (Ole): This optimisation needs some thought
+        # as lines are often partially clipped. We also need to keep
+        # track of the parent line to get its attributes if we want
+        # to go down this road
+        #remaining_lines = outside_lines
+
+    return lines_covered
+
 
