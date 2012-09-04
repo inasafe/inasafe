@@ -89,7 +89,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
             # Update population count for each category
             cat = new_attributes[poly_id][category_title]
             categories[cat] += pop
-            
+
             # Update total
             evacuated += pop
 
@@ -102,7 +102,8 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
 ##        if evacuated > 1000:
 ##            evacuated = evacuated // 1000 * 1000
 
-##        # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
+##        # Calculate estimated needs based on BNPB Perka
+##        # 7/2008 minimum bantuan
 ##        rice = evacuated * 2.8
 ##        drinking_water = evacuated * 17.5
 ##        water = evacuated * 67
@@ -116,9 +117,9 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
                                header=True),
                       TableRow([_('Category'), _('Total')],
                                header=True)]
-        for name,pop in categories.iteritems():
+        for name, pop in categories.iteritems():
             table_body.append(TableRow([name, int(pop)]))
-                 
+
         table_body.append(TableRow(_('Map shows population affected in '
                                      'each of volcano hazard polygons.')))
 ##                      TableRow([_('Needs per week'), _('Total')],
