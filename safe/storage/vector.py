@@ -80,24 +80,28 @@ class Vector(Layer):
                   to those dataformats supporting more than one layer in the
                   data file.
 
-        Returns: An instance of class Vector.
+        Returns:
+            * An instance of class Vector.
 
-        Raises: Propogates any exceptions encountered.
+        Raises:
+            * Propogates any exceptions encountered.
 
         Notes:
 
-        If data is a filename, all other arguments are ignored
-        as they will be inferred from the file.
+            If data is a filename, all other arguments are ignored
+            as they will be inferred from the file.
 
-        The geometry type will be inferred from the dimensions of geometry.
-        If each entry is one set of coordinates the type will be ogr.wkbPoint,
-        if it is an array of coordinates the type will be ogr.wkbPolygon.
+            The geometry type will be inferred from the dimensions of geometry.
+            If each entry is one set of coordinates the type will be
+            ogr.wkbPoint,
+            if it is an array of coordinates the type will be ogr.wkbPolygon.
 
-        To cast array entries as lines set geometry_type explicitly to 'line'
-        in the call to Vector. Otherwise, they will default to polygons.
+            To cast array entries as lines set geometry_type explicitly to
+            'line' in the call to Vector. Otherwise, they will default to
+            polygons.
 
-        Each polygon or line feature take the form of an Nx2 array representing
-        vertices where line segments are joined.
+            Each polygon or line feature take the form of an Nx2 array
+            representing vertices where line segments are joined.
         """
 
         # Invoke common layer constructor
@@ -173,14 +177,15 @@ class Vector(Layer):
     def __eq__(self, other, rtol=1.0e-5, atol=1.0e-8):
         """Override '==' to allow comparison with other vector objecs
 
-        Input
-           other: Vector instance to compare to
-           rtol, atol: Relative and absolute tolerance.
+        Args:
+           * other: Vector instance to compare to
+           * rtol, atol: Relative and absolute tolerance.
                        See numpy.allclose for details
 
-        The algorithm will try to falsify every aspect of equality for the
-        two layers such as data, geometry, projection, keywords etc.
-        Only if none of them can be falsified will it return True.
+        Note:
+            The algorithm will try to falsify every aspect of equality for the
+            two layers such as data, geometry, projection, keywords etc.
+            Only if none of them can be falsified will it return True.
         """
 
         # Check type
@@ -447,13 +452,14 @@ class Vector(Layer):
             * sublayer: Optional string for writing a sublayer. Ignored
                   unless we are writing to an sqlite file.
 
-        .. note:: Shp limitation, if attribute names are longer than 10
-           characters they will be truncated. This is due to limitations in
-           the shp file driver and has to be done here since gdal v1.7 onwards
-           has changed its handling of this issue:
-           http://www.gdal.org/ogr/drv_shapefile.html
+        Note:
+            Shp limitation, if attribute names are longer than 10
+            characters they will be truncated. This is due to limitations in
+            the shp file driver and has to be done here since gdal v1.7 onwards
+            has changed its handling of this issue:
+            http://www.gdal.org/ogr/drv_shapefile.html
 
-           **For this reason we recommend writing to spatialite.**
+            **For this reason we recommend writing to spatialite.**
 
         """
 
@@ -641,18 +647,20 @@ class Vector(Layer):
     def get_data(self, attribute=None, index=None, copy=False):
         """Get vector attributes
 
-        Data is returned as a list where each entry is a dictionary of
-        attributes for one feature. Entries in get_geometry() and
-        get_data() are related as 1-to-1
+        Note:
+            Data is returned as a list where each entry is a dictionary of
+            attributes for one feature. Entries in get_geometry() and
+            get_data() are related as 1-to-1
 
-        If optional argument attribute is specified and a valid name,
-        then the list of values for that attribute is returned.
+            If optional argument attribute is specified and a valid name,
+            then the list of values for that attribute is returned.
 
-        If optional argument index is specified on the that value will
-        be returned. Any value of index is ignored if attribute is None.
+            If optional argument index is specified on the that value will
+            be returned. Any value of index is ignored if attribute is None.
 
-        If optional argument copy is True and all attributes are requested,
-        a copy will be returned. Otherwise a pointer to the data is returned.
+            If optional argument copy is True and all attributes are requested,
+            a copy will be returned. Otherwise a pointer to the data is
+            returned.
         """
 
         if hasattr(self, 'data'):
@@ -741,12 +749,12 @@ class Vector(Layer):
     def get_topN(self, attribute, N=10):
         """Get top N features
 
-        Input
-            attribute: The name of attribute where values are sought
-            N: How many
+        Args:
+            * attribute: The name of attribute where values are sought
+            * N: How many
 
-        Output
-            layer: New vector layer with selected features
+        Returns:
+            * layer: New vector layer with selected features
         """
 
         # Input checks
@@ -799,11 +807,11 @@ class Vector(Layer):
 def convert_line_to_points(V, delta):
     """Convert line vector data to point vector data
 
-    Input
-        V: Vector layer with line data
-        delta: Incremental step to find the points
-    Output
-        Vector layer with point data and the same attributes as V
+    Args:
+        * V: Vector layer with line data
+        * delta: Incremental step to find the points
+    Returns:
+        * Vector layer with point data and the same attributes as V
     """
 
     msg = 'Input data %s must be line vector data' % V
@@ -837,11 +845,11 @@ def convert_line_to_points(V, delta):
 def convert_polygons_to_centroids(V):
     """Convert polygon vector data to point vector data
 
-    Input
-        V: Vector layer with polygon data
+    Args:
+        * V: Vector layer with polygon data
 
-    Output
-        Vector layer with point data and the same attributes as V
+    Returns:
+        * Vector layer with point data and the same attributes as V
     """
 
     msg = 'Input data %s must be polygon vector data' % V

@@ -1,4 +1,4 @@
-"""Utilities for storage module
+"""**Utilities for storage module**
 """
 
 import os
@@ -328,21 +328,22 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
 def geotransform2bbox(geotransform, columns, rows):
     """Convert geotransform to bounding box
 
-    Input
-        geotransform: GDAL geotransform (6-tuple).
-                      (top left x, w-e pixel resolution, rotation,
-                      top left y, rotation, n-s pixel resolution).
-                      See e.g. http://www.gdal.org/gdal_tutorial.html
-        columns: Number of columns in grid
-        rows: Number of rows in grid
+    Args :
+        * geotransform: GDAL geotransform (6-tuple).
+                        (top left x, w-e pixel resolution, rotation,
+                        top left y, rotation, n-s pixel resolution).
+                        See e.g. http://www.gdal.org/gdal_tutorial.html
+        * columns: Number of columns in grid
+        * rows: Number of rows in grid
 
-    Output
-        bbox: Bounding box as a list of geographic coordinates
-              [west, south, east, north]
+    Returns:
+        * bbox: Bounding box as a list of geographic coordinates
+                [west, south, east, north]
 
-    Rows and columns are needed to determine eastern and northern bounds.
-    FIXME: Not sure if the pixel vs gridline registration issue is observed
-    correctly here. Need to check against gdal > v1.7
+    Note:
+        Rows and columns are needed to determine eastern and northern bounds.
+        FIXME: Not sure if the pixel vs gridline registration issue is observed
+        correctly here. Need to check against gdal > v1.7
     """
 
     x_origin = geotransform[0]  # top left x
@@ -364,22 +365,21 @@ def geotransform2resolution(geotransform, isotropic=False,
                             rtol=1.0e-6, atol=1.0e-8):
     """Convert geotransform to resolution
 
-    Input
-        geotransform: GDAL geotransform (6-tuple).
-                      (top left x, w-e pixel resolution, rotation,
-                      top left y, rotation, n-s pixel resolution).
-                      See e.g. http://www.gdal.org/gdal_tutorial.html
-        Input
-            isotropic: If True, verify that dx == dy and return dx
-                       If False (default) return 2-tuple (dx, dy)
-            rtol, atol: Used to control how close dx and dy must be
-                        to quality for isotropic. These are passed on to
-                        numpy.allclose for comparison.
+    Args:
+        * geotransform: GDAL geotransform (6-tuple).
+                        (top left x, w-e pixel resolution, rotation,
+                        top left y, rotation, n-s pixel resolution).
+                        See e.g. http://www.gdal.org/gdal_tutorial.html
+        * isotropic: If True, verify that dx == dy and return dx
+                     If False (default) return 2-tuple (dx, dy)
+        * rtol, atol: Used to control how close dx and dy must be
+                      to quality for isotropic. These are passed on to
+                      numpy.allclose for comparison.
 
-    Output
-        resolution: grid spacing (resx, resy) in (positive) decimal
-                    degrees ordered as longitude first, then latitude.
-                    or resx (if isotropic is True)
+    Returns:
+        * resolution: grid spacing (resx, resy) in (positive) decimal
+                      degrees ordered as longitude first, then latitude.
+                      or resx (if isotropic is True)
     """
 
     resx = geotransform[1]   # w-e pixel resolution
@@ -402,14 +402,15 @@ def geotransform2resolution(geotransform, isotropic=False,
 def raster_geometry2geotransform(longitudes, latitudes):
     """Convert vectors of longitudes and latitudes to geotransform
 
-    This is the inverse operation of Raster.get_geometry().
+    Note:
+        This is the inverse operation of Raster.get_geometry().
 
-    Input
-       longitudes, latitudes: Vectors of geographic coordinates
+    Args:
+       * longitudes, latitudes: Vectors of geographic coordinates
 
-    Output
-       geotransform: 6-tuple (top left x, w-e pixel resolution, rotation,
-                              top left y, rotation, n-s pixel resolution)
+    Returns:
+       * geotransform: 6-tuple (top left x, w-e pixel resolution, rotation,
+                                top left y, rotation, n-s pixel resolution)
 
     """
 
@@ -446,13 +447,13 @@ def raster_geometry2geotransform(longitudes, latitudes):
 def bbox_intersection(*args):
     """Compute intersection between two or more bounding boxes
 
-    Input
-        args: two or more bounding boxes.
+    Args:
+        * args: two or more bounding boxes.
               Each is assumed to be a list or a tuple with
               four coordinates (W, S, E, N)
 
-    Output
-        result: The minimal common bounding box
+    Returns:
+        * result: The minimal common bounding box
 
     """
 
@@ -497,13 +498,13 @@ def bbox_intersection(*args):
 def minimal_bounding_box(bbox, min_res, eps=1.0e-6):
     """Grow bounding box to exceed specified resolution if needed
 
-    Input
-        bbox: Bounding box with format [W, S, E, N]
-        min_res: Minimal acceptable resolution to exceed
-        eps: Optional tolerance that will be applied to 'buffer' result
+    Args:
+        * bbox: Bounding box with format [W, S, E, N]
+        * min_res: Minimal acceptable resolution to exceed
+        * eps: Optional tolerance that will be applied to 'buffer' result
 
-    Ouput
-        Adjusted bounding box guaranteed to exceed specified resolution
+    Returns:
+        * Adjusted bounding box guaranteed to exceed specified resolution
     """
 
     # FIXME (Ole): Probably obsolete now
@@ -529,34 +530,35 @@ def minimal_bounding_box(bbox, min_res, eps=1.0e-6):
 def buffered_bounding_box(bbox, resolution):
     """Grow bounding box with one unit of resolution in each direction
 
-    This will ensure there is enough pixels to robustly provide
-    interpolated values without having to painstakingly deal with
-    all corner cases such as 1 x 1, 1 x 2 and 2 x 1 arrays.
+    Note:
+        This will ensure there is enough pixels to robustly provide
+        interpolated values without having to painstakingly deal with
+        all corner cases such as 1 x 1, 1 x 2 and 2 x 1 arrays.
 
-    The border will also make sure that points that would otherwise fall
-    outside the domain (as defined by a tight bounding box) get assigned
-    values.
+        The border will also make sure that points that would otherwise fall
+        outside the domain (as defined by a tight bounding box) get assigned
+        values.
 
-    Input
-        bbox: Bounding box with format [W, S, E, N]
-        resolution: (resx, resy) - Raster resolution in each direction.
-                    res - Raster resolution in either direction
-                    If resolution is None bbox is returned unchanged.
+    Args:
+        * bbox: Bounding box with format [W, S, E, N]
+        * resolution: (resx, resy) - Raster resolution in each direction.
+                      res - Raster resolution in either direction
+                      If resolution is None bbox is returned unchanged.
 
-    Ouput
-        Adjusted bounding box
+    Returns:
+        * Adjusted bounding box
 
+    Note:
+        Case in point: Interpolation point O would fall outside this domain
+                       even though there are enough grid points to support it
 
-    Case in point: Interpolation point O would fall outside this domain
-                   even though there are enough grid points to support it
-
-    --------------
-    |            |
-    |   *     *  | *    *
-    |           O|
-    |            |
-    |   *     *  | *    *
-    --------------
+        --------------
+        |            |
+        |   *     *  | *    *
+        |           O|
+        |            |
+        |   *     *  | *    *
+        --------------
     """
 
     bbox = copy.copy(list(bbox))
@@ -580,18 +582,20 @@ def buffered_bounding_box(bbox, resolution):
 def get_geometry_type(geometry, geometry_type):
     """Determine geometry type based on data
 
-    Input
-        geometry: A list of either point coordinates [lon, lat] or polygons
-                  which are assumed to be numpy arrays of coordinates
-        geometry_type: Optional type - 'point', 'line', 'polygon' or None
+    Args:
+        * geometry: A list of either point coordinates [lon, lat] or polygons
+                    which are assumed to be numpy arrays of coordinates
+        * geometry_type: Optional type - 'point', 'line', 'polygon' or None
 
-    Output
-        geometry_type: Either ogr.wkbPoint, ogr.wkbLineString or ogr.wkbPolygon
+    Returns:
+        * geometry_type: Either ogr.wkbPoint, ogr.wkbLineString or
+                        ogr.wkbPolygon
 
-    If geometry type cannot be determined an Exception is raised.
+    Note:
+        If geometry type cannot be determined an Exception is raised.
 
-    Note, there is no consistency check across all entries of the
-    geometry list, only the first element is used in this determination.
+        There is no consistency check across all entries of the
+        geometry list, only the first element is used in this determination.
     """
 
     # FIXME (Ole): Perhaps use OGR's own symbols
@@ -650,8 +654,9 @@ def get_geometry_type(geometry, geometry_type):
 def is_sequence(x):
     """Determine if x behaves like a true sequence but not a string
 
-    This will for example return True for lists, tuples and numpy arrays
-    but False for strings and dictionaries.
+    Note:
+        This will for example return True for lists, tuples and numpy arrays
+        but False for strings and dictionaries.
     """
 
     if isinstance(x, basestring):
@@ -668,14 +673,15 @@ def is_sequence(x):
 def array2wkt(A, geom_type='POLYGON'):
     """Convert coordinates to wkt format
 
-    Input
-        A: Nx2 Array of coordinates representing either a polygon or a line.
-           A can be either a numpy array or a list of coordinates.
-        geom_type: Determines output keyword 'POLYGON' or 'LINESTRING'
+    Args:
+        * A: Nx2 Array of coordinates representing either a polygon or a line.
+             A can be either a numpy array or a list of coordinates.
+        * geom_type: Determines output keyword 'POLYGON' or 'LINESTRING'
 
-    Output
-        wkt: geometry in the format known to ogr: Examples
+    Returns:
+        * wkt: geometry in the format known to ogr: Examples
 
+    Note:
         POLYGON((1020 1030,1020 1045,1050 1045,1050 1030,1020 1030))
         LINESTRING(1000 1000, 1100 1050)
 
@@ -756,21 +762,24 @@ def geometrytype2string(g_type):
 def calculate_polygon_area(polygon, signed=False):
     """Calculate the signed area of non-self-intersecting polygon
 
-    Input
-        polygon: Numeric array of points (longitude, latitude). It is assumed
-                 to be closed, i.e. first and last points are identical
-        signed: Optional flag deciding whether returned area retains its sign:
-                If points are ordered counter clockwise, the signed area
-                will be positive.
-                If points are ordered clockwise, it will be negative
-                Default is False which means that the area is always positive.
+    Args:
+        * polygon: Numeric array of points (longitude, latitude). It is assumed
+                   to be closed, i.e. first and last points are identical
+        * signed: Optional flag deciding whether returned area retains its
+                    sign:
+                  If points are ordered counter clockwise, the signed area
+                  will be positive.
+                  If points are ordered clockwise, it will be negative
+                  Default is False which means that the area is always
+                  positive.
 
-    Output
-        area: Area of polygon (subject to the value of argument signed)
+    Returns:
+        * area: Area of polygon (subject to the value of argument signed)
 
-    Sources
-        http://paulbourke.net/geometry/polyarea/
-        http://en.wikipedia.org/wiki/Centroid
+    Note:
+        Sources
+            http://paulbourke.net/geometry/polyarea/
+            http://en.wikipedia.org/wiki/Centroid
     """
 
     # Make sure it is numeric
@@ -798,13 +807,14 @@ def calculate_polygon_area(polygon, signed=False):
 def calculate_polygon_centroid(polygon):
     """Calculate the centroid of non-self-intersecting polygon
 
-    Input
-        polygon: Numeric array of points (longitude, latitude). It is assumed
+    Args:
+        * polygon: Numeric array of points (longitude, latitude). It is assumed
                  to be closed, i.e. first and last points are identical
 
-    Sources
-        http://paulbourke.net/geometry/polyarea/
-        http://en.wikipedia.org/wiki/Centroid
+    Note:
+        Sources
+            http://paulbourke.net/geometry/polyarea/
+            http://en.wikipedia.org/wiki/Centroid
     """
 
     # Make sure it is numeric
@@ -844,6 +854,7 @@ def calculate_polygon_centroid(polygon):
 def points_between_points(point1, point2, delta):
     """Creates an array of points between two points given a delta
 
+    Note:
        u = (x1-x0, y1-y0)/L, where
        L=sqrt( (x1-x0)^2 + (y1-y0)^2).
        If r is the resolution, then the
@@ -866,16 +877,17 @@ def points_between_points(point1, point2, delta):
 def points_along_line(line, delta):
     """Calculate a list of points along a line with a given delta
 
-    Input
-        line: Numeric array of points (longitude, latitude).
-        delta: Decimal number to be used as step
+    Args:
+        * line: Numeric array of points (longitude, latitude).
+        * delta: Decimal number to be used as step
 
-    Output
-        V: Numeric array of points (longitude, latitude).
+    Returns:
+        * V: Numeric array of points (longitude, latitude).
 
-    Sources
-        http://paulbourke.net/geometry/polyarea/
-        http://en.wikipedia.org/wiki/Centroid
+    Note:
+        Sources
+            http://paulbourke.net/geometry/polyarea/
+            http://en.wikipedia.org/wiki/Centroid
     """
 
     # Make sure it is numeric
