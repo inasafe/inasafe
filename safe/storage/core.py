@@ -35,17 +35,18 @@ def read_layer(filename):
 def write_raster_data(data, projection, geotransform, filename, keywords=None):
     """Write array to raster file with specified metadata and one data layer
 
-    Input:
-        data: Numpy array containing grid data
-        projection: WKT projection information
-        geotransform: 6 digit vector
-                      (top left x, w-e pixel resolution, rotation,
-                       top left y, rotation, n-s pixel resolution).
-                       See e.g. http://www.gdal.org/gdal_tutorial.html
-        filename: Output filename
-        keywords: Optional dictionary
+    Args:
+        * data: Numpy array containing grid data
+        * projection: WKT projection information
+        * geotransform: 6 digit vector
+                        (top left x, w-e pixel resolution, rotation,
+                         top left y, rotation, n-s pixel resolution).
+                         See e.g. http://www.gdal.org/gdal_tutorial.html
+        * filename: Output filename
+        * keywords: Optional dictionary
 
-    Note: The only format implemented is GTiff and the extension must be .tif
+    Note:
+        The only format implemented is GTiff and the extension must be .tif
     """
 
     R = Raster(data, projection, geotransform, keywords=keywords)
@@ -55,25 +56,26 @@ def write_raster_data(data, projection, geotransform, filename, keywords=None):
 def write_vector_data(data, projection, geometry, filename, keywords=None):
     """Write point data and any associated attributes to vector file
 
-    Input:
-        data: List of N dictionaries each with M fields where
-              M is the number of attributes.
-              A value of None is acceptable.
-        projection: WKT projection information
-        geometry: List of points or polygons.
-        filename: Output filename
-        keywords: Optional dictionary
+    Args:
+        * data: List of N dictionaries each with M fields where
+                M is the number of attributes.
+                A value of None is acceptable.
+        * projection: WKT projection information
+        * geometry: List of points or polygons.
+        * filename: Output filename
+        * keywords: Optional dictionary
 
-    Note: The only format implemented is GML and SHP so the extension
-    must be either .gml or .shp
+    Note
+        The only format implemented is GML and SHP so the extension
+        must be either .gml or .shp
 
     # FIXME (Ole): When the GML driver is used,
     #              the spatial reference is not stored.
     #              I suspect this is a bug in OGR.
 
     Background:
-    * http://www.gdal.org/ogr/ogr_apitut.html (last example)
-    * http://invisibleroads.com/tutorials/gdal-shapefile-points-save.html
+        * http://www.gdal.org/ogr/ogr_apitut.html (last example)
+        * http://invisibleroads.com/tutorials/gdal-shapefile-points-save.html
     """
 
     V = Vector(data, projection, geometry, keywords=keywords)
@@ -83,11 +85,11 @@ def write_vector_data(data, projection, geometry, filename, keywords=None):
 def get_bounding_box(filename):
     """Get bounding box for specified raster or vector file
 
-    Input:
-        filename
+    Args:
+        * filename
 
-    Output:
-        bounding box as python list of numbers [West, South, East, North]
+    Returns:
+        * bounding box as python list of numbers [West, South, East, North]
     """
 
     layer = read_layer(filename)
@@ -97,10 +99,11 @@ def get_bounding_box(filename):
 def bboxlist2string(bbox, decimals=6):
     """Convert bounding box list to comma separated string
 
-    Input
-        bbox: List of coordinates of the form [W, S, E, N]
-    Output
-        bbox_string: Format 'W,S,E,N' - each will have 6 decimal points
+    Args:
+        * bbox: List of coordinates of the form [W, S, E, N]
+
+    Returns:
+        * bbox_string: Format 'W,S,E,N' - each will have 6 decimal points
     """
 
     msg = 'Got string %s, but expected bounding box as a list' % str(bbox)
@@ -137,10 +140,11 @@ def bboxlist2string(bbox, decimals=6):
 def bboxstring2list(bbox_string):
     """Convert bounding box string to list
 
-    Input
-        bbox_string: String of bounding box coordinates of the form 'W,S,E,N'
-    Output
-        bbox: List of floating point numbers with format [W, S, E, N]
+    Args:
+        * bbox_string: String of bounding box coordinates of the form 'W,S,E,N'
+
+    Returns:
+        * bbox: List of floating point numbers with format [W, S, E, N]
     """
 
     msg = ('Bounding box must be a string with coordinates following the '
@@ -171,11 +175,11 @@ def bboxstring2list(bbox_string):
 def get_bounding_box_string(filename):
     """Get bounding box for specified raster or vector file
 
-    Input:
-        filename
+    Args:
+        * filename
 
-    Output:
-        bounding box as python string 'West, South, East, North'
+    Returns:
+        * bounding box as python string 'West, South, East, North'
     """
 
     return bboxlist2string(get_bounding_box(filename))

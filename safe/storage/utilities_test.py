@@ -1,4 +1,4 @@
-"""Utilities to to support test suite
+"""**Utilities to to support test suite**
 """
 
 import types
@@ -33,9 +33,9 @@ def _same_API(X, Y, exclude=None):
 def same_API(X, Y, exclude=None):
     """Check that public methods of X and Y are the same.
 
-    Input
-        X, Y: Python objects
-        exclude: List of names to exclude from comparison or None
+    Args:
+        * X, Y: Python objects
+        * exclude: List of names to exclude from comparison or None
     """
 
     _same_API(X, Y, exclude=exclude)

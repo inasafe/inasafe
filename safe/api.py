@@ -1,4 +1,4 @@
-"""SAFE (Scenario Assessment For Emergencies) - API
+"""**SAFE (Scenario Assessment For Emergencies) - API**
 
 The purpose of the module is to provide a well defined public API
 for the packages that constitute the SAFE engine. Modules using SAFE
