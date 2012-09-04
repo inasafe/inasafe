@@ -1,4 +1,4 @@
-"""Numerical tools
+"""**Numerical tools**
 """
 
 import numpy
@@ -8,23 +8,24 @@ from utilities import verify
 def ensure_numeric(A, typecode=None):
     """Ensure that sequence is a numeric array.
 
-    Inputs:
-        A: Sequence. If A is already a numeric array it will be returned
-                     unaltered
-                     If not, an attempt is made to convert it to a numeric
-                     array
-        A: Scalar.   Return 0-dimensional array containing that value. Note
-                     that a 0-dim array DOES NOT HAVE A LENGTH UNDER numpy.
-        A: String.   Array of ASCII values (numpy can't handle this)
+    Args:
+        * A: Sequence. If A is already a numeric array it will be returned
+                       unaltered
+                       If not, an attempt is made to convert it to a numeric
+                       array
+        * A: Scalar.   Return 0-dimensional array containing that value. Note
+                       that a 0-dim array DOES NOT HAVE A LENGTH UNDER numpy.
+        * A: String.   Array of ASCII values (numpy can't handle this)
 
-        typecode:    numeric type. If specified, use this in the conversion.
+        * typecode:    numeric type. If specified, use this in the conversion.
                      If not, let numeric package decide.
                      typecode will always be one of num.float, num.int, etc.
 
-    Note that numpy.array(A, dtype) will sometimes copy.  Use 'copy=False' to
-    copy only when required.
+    Note :
+            that numpy.array(A, dtype) will sometimes copy.  Use 'copy=False' to
+            copy only when required.
 
-    This function is necessary as array(A) can cause memory overflow.
+            This function is necessary as array(A) can cause memory overflow.
     """
 
     if isinstance(A, basestring):
@@ -45,13 +46,14 @@ def ensure_numeric(A, typecode=None):
 def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
     """Numpy allclose function which allows NaN
 
-    Input
-        x, y: Either scalars or numpy arrays
+    Args:
+        * x, y: Either scalars or numpy arrays
 
-    Output
-        True or False
+    Returns:
+        * True or False
 
-    Returns True if all non-nan elements pass.
+    Note:
+        Returns True if all non-nan elements pass.
     """
 
     xn = numpy.isnan(x)
@@ -77,18 +79,19 @@ def nanallclose(x, y, rtol=1.0e-5, atol=1.0e-8):
 def normal_cdf(x, mu=0, sigma=1):
     """Cumulative Normal Distribution Function
 
-    Input
-        x: scalar or array of real numbers
-        mu: Mean value. Default 0
-        sigma: Standard deviation. Default 1
+    Args:
+        * x: scalar or array of real numbers
+        * mu: Mean value. Default 0
+        * sigma: Standard deviation. Default 1
 
-    Output
-        An approximation of the cdf of the normal
+    Returns:
+        * An approximation of the cdf of the normal
 
-    CDF of the normal distribution is defined as
-    \frac12 [1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})], x \in \R
+    Note:
+        CDF of the normal distribution is defined as
+        \frac12 [1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})], x \in \R
 
-    Source: http://en.wikipedia.org/wiki/Normal_distribution
+        Source: http://en.wikipedia.org/wiki/Normal_distribution
     """
 
     arg = (x - mu) / (sigma * numpy.sqrt(2))
@@ -100,18 +103,19 @@ def normal_cdf(x, mu=0, sigma=1):
 def lognormal_cdf(x, median=1, sigma=1):
     """Cumulative Log Normal Distribution Function
 
-    Input
-        x: scalar or array of real numbers
-        mu: Median (exp(mean of log(x)). Default 1
-        sigma: Log normal standard deviation. Default 1
+    Args:
+        * x: scalar or array of real numbers
+        * mu: Median (exp(mean of log(x)). Default 1
+        * sigma: Log normal standard deviation. Default 1
 
-    Output
-        An approximation of the cdf of the normal
+    Returns:
+        * An approximation of the cdf of the normal
 
-    CDF of the normal distribution is defined as
-    \frac12 [1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})], x \in \R
+    Note:
+        CDF of the normal distribution is defined as
+        \frac12 [1 + erf(\frac{x - \mu}{\sigma \sqrt{2}})], x \in \R
 
-    Source: http://en.wikipedia.org/wiki/Normal_distribution
+        Source: http://en.wikipedia.org/wiki/Normal_distribution
     """
 
     return normal_cdf(numpy.log(x), mu=numpy.log(median), sigma=sigma)
@@ -120,18 +124,19 @@ def lognormal_cdf(x, median=1, sigma=1):
 def erf(z):
     """Approximation to ERF
 
-    from:
-    http://www.cs.princeton.edu/introcs/21function/ErrorFunction.java.html
-    Implements the Gauss error function.
-    erf(z) = 2 / sqrt(pi) * integral(exp(-t*t), t = 0..z)
-
-    Fractional error in math formula less than 1.2 * 10 ^ -7.
-    although subject to catastrophic cancellation when z in very close to 0
-    from Chebyshev fitting formula for erf(z) from Numerical Recipes, 6.2
-
-    Source:
-    http://stackoverflow.com/questions/457408/
-    is-there-an-easily-available-implementation-of-erf-for-python
+    Note:
+        from:
+        http://www.cs.princeton.edu/introcs/21function/ErrorFunction.java.html
+        Implements the Gauss error function.
+        erf(z) = 2 / sqrt(pi) * integral(exp(-t*t), t = 0..z)
+    
+        Fractional error in math formula less than 1.2 * 10 ^ -7.
+        although subject to catastrophic cancellation when z in very close to 0
+        from Chebyshev fitting formula for erf(z) from Numerical Recipes, 6.2
+    
+        Source:
+        http://stackoverflow.com/questions/457408/
+        is-there-an-easily-available-implementation-of-erf-for-python
     """
 
     # Input check
@@ -172,29 +177,30 @@ def erf(z):
 def axes2points(x, y):
     """Generate all combinations of grid point coordinates from x and y axes
 
-    Input
-        x: x coordinates (array)
-        y: y coordinates (array)
+    Args:
+        * x: x coordinates (array)
+        * y: y coordinates (array)
 
-    Output
-        P: Nx2 array consisting of coordinates for all
-           grid points defined by x and y axes. The x coordinate
-           will vary the fastest to match the way 2D numpy
-           arrays are laid out by default ('C' order). That way,
-           the x and y coordinates will match a corresponding
-           2D array A when flattened (A.flat[:] or A.reshape(-1))
+    Returns:
+        * P: Nx2 array consisting of coordinates for all
+             grid points defined by x and y axes. The x coordinate
+             will vary the fastest to match the way 2D numpy
+             arrays are laid out by default ('C' order). That way,
+             the x and y coordinates will match a corresponding
+             2D array A when flattened (A.flat[:] or A.reshape(-1))
 
-    Example
-
-    x = [1, 2, 3]
-    y = [10, 20]
-
-    P = [[1, 10],
-         [2, 10],
-         [3, 10],
-         [1, 20],
-         [2, 20],
-         [3, 20]]
+    Note:
+        Example
+    
+        x = [1, 2, 3]
+        y = [10, 20]
+    
+        P = [[1, 10],
+             [2, 10],
+             [3, 10],
+             [1, 20],
+             [2, 20],
+             [3, 20]]
     """
 
     # Reverse y coordinates to have them start at bottom of array
@@ -222,14 +228,14 @@ def axes2points(x, y):
 def grid2points(A, x, y):
     """Convert grid data to point data
 
-    Input
-        A: Array of pixel values
-        x: Longitudes corresponding to columns in A (left->right)
-        y: Latitudes corresponding to rows in A (top->bottom)
+    Args:
+        * A: Array of pixel values
+        * x: Longitudes corresponding to columns in A (left->right)
+        * y: Latitudes corresponding to rows in A (top->bottom)
 
-    Output
-        P: Nx2 array of point coordinates
-        V: N array of point values
+    Returns:
+        * P: Nx2 array of point coordinates
+        * V: N array of point values
     """
 
     # Create Nx2 array of x, y points corresponding to each
@@ -251,27 +257,27 @@ def grid2points(A, x, y):
 def geotransform2axes(G, nx, ny):
     """Convert geotransform to coordinate axes
 
-    Input
-        G: GDAL geotransform (6-tuple).
-           (top left x, w-e pixel resolution, rotation,
-            top left y, rotation, n-s pixel resolution).
-        nx: Number of cells in the w-e direction
-        ny: Number of cells in the n-s direction
+    Args:
+        * G: GDAL geotransform (6-tuple).
+             (top left x, w-e pixel resolution, rotation,
+              top left y, rotation, n-s pixel resolution).
+        * nx: Number of cells in the w-e direction
+        * ny: Number of cells in the n-s direction
 
 
-    Output
-        Return two vectors (longitudes and latitudes) representing the grid
-        defined by the geotransform.
+    Returns:
+        * Return two vectors (longitudes and latitudes) representing the grid
+          defined by the geotransform.
 
-        The values are offset by half a pixel size to correspond to
-        pixel registration.
+          The values are offset by half a pixel size to correspond to
+          pixel registration.
 
-        I.e. If the grid origin (top left corner) is (105, 10) and the
-        resolution is 1 degrees in each direction, then the vectors will
-        take the form
+          I.e. If the grid origin (top left corner) is (105, 10) and the
+          resolution is 1 degrees in each direction, then the vectors will
+          take the form
 
-        longitudes = [100.5, 101.5, ..., 109.5]
-        latitudes = [0.5, 1.5, ..., 9.5]
+          longitudes = [100.5, 101.5, ..., 109.5]
+          latitudes = [0.5, 1.5, ..., 9.5]
     """
 
     lon_ul = float(G[0])  # Longitude of upper left corner
