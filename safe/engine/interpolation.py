@@ -12,14 +12,14 @@ from safe.common.utilities import ugettext as _
 from safe.common.numerics import ensure_numeric
 from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.common.polygon import (inside_polygon,
-                                 clip_line_by_polygon, clip_grid_by_polygons)
+                                 clip_lines_by_polygons, clip_grid_by_polygons)
+#from safe.common.polygon import line_dictionary_to_geometry
 
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import geometrytype2string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 
-# FIXME (Ole): Add mode parameter too
 def assign_hazard_values_to_exposure_data(hazard, exposure,
                                           layer_name=None,
                                           attribute_name=None,
@@ -515,11 +515,13 @@ def interpolate_polygon_lines(source, target,
               If None (default) the name of source is used
 
     Returns:
-        Vector data set (lines) with values interpolated from source
+        Vector data set of lines inside polygons
+           Attributes are combined from polygon they fall into and
+           line that was clipped.
+
+           Lines not in any polygon are ignored.
     """
 
-    #target.write_to_file('line_data.shp')
-    #source.write_to_file('poly_data.shp')
     # Remove?
     if attribute_name is None:
         attribute_name = source.get_name()
@@ -533,52 +535,46 @@ def interpolate_polygon_lines(source, target,
 
     # Extract polygon features
     polygons = source.get_geometry()
-    poly_attributes = source.get_data()
-    verify(len(polygons) == len(poly_attributes))
+    polygon_attributes = source.get_data()
+    verify(len(polygons) == len(polygon_attributes))
 
     # Data structure for resulting line segments
-    clipped_geometry = []
-    clipped_attributes = []
+    #clipped_geometry = []
+    #clipped_attributes = []
 
     # Clip line lines to polygons
-    for i, polygon in enumerate(polygons):
-        for j, line in enumerate(lines):
-            inside, outside = clip_line_by_polygon(line, polygon)
+    lines_covered = clip_lines_by_polygons(lines, polygons)
 
-            # Create new attributes
-            # FIXME (Ole): Not done single specified polygon
-            #              attribute
-            inside_attributes = {}
-            outside_attributes = {}
-            for key in line_attributes[j]:
-                inside_attributes[key] = line_attributes[j][key]
-                outside_attributes[key] = line_attributes[j][key]
+    # Create one new line data layer with joined attributes
+    # from polygons and lines
+    new_geometry = []
+    new_attributes = []
+    for i in range(len(polygons)):
+        # Loop over polygons
 
-            for key in poly_attributes[i]:
-                inside_attributes[key] = poly_attributes[i][key]
-                outside_attributes[key] = None
+        for j in lines_covered[i]:
+            # Loop over parent lines
 
-            # Always create default attribute flagging if segment was
-            # inside any of the polygons
-            inside_attributes[DEFAULT_ATTRIBUTE] = True
-            outside_attributes[DEFAULT_ATTRIBUTE] = False
+            lines = lines_covered[i][j]
+            for line in lines:
+                # Loop over lines clipped from line j by polygon i
 
-            # Assign new attribute set to clipped lines
-            for segment in inside:
-                clipped_geometry.append(segment)
-                clipped_attributes.append(inside_attributes)
+                # Associated polygon and line attributes
+                attr = polygon_attributes[i].copy()
+                attr.update(line_attributes[j].copy())
+                attr['polygon_id'] = i  # Store id for associated polygon
+                attr['parent_line_id'] = j  # Store id for parent line
+                attr[DEFAULT_ATTRIBUTE] = True
 
-            for segment in outside:
-                clipped_geometry.append(segment)
-                clipped_attributes.append(outside_attributes)
+                # Store new line feature
+                new_geometry.append(line)
+                new_attributes.append(attr)
 
-    # Create new Vector instance and return
-    R = Vector(data=clipped_attributes,
-               projection=target.get_projection(),
-               geometry=clipped_geometry,
+    R = Vector(data=new_attributes,
+               projection=source.get_projection(),
+               geometry=new_geometry,
                geometry_type='line',
                name=layer_name)
-    #R.write_to_file('clipped_and_tagged.shp')
     return R
 
 

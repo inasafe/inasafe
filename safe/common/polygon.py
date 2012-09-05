@@ -105,7 +105,7 @@ def separate_points_by_polygon(points, polygon,
             raise PolygonInputError(msg)
 
         msg = ('Points array must be 1 or 2 dimensional. '
-               'I got %d dimensions' % len(points.shape))
+               'I got %d dimensions: %s' % (len(points.shape), points))
         if not 0 < len(points.shape) < 3:
             raise PolygonInputError(msg)
 
@@ -533,7 +533,7 @@ def in_and_outside_polygon(points, polygon, closed=True):
     inside, outside = separate_points_by_polygon(points, polygon,
                                                  closed=closed,
                                                  check_input=True)
-    return  inside, outside
+    return inside, outside
 
 
 def clip_lines_by_polygon(lines, polygon,
@@ -551,8 +551,16 @@ def clip_lines_by_polygon(lines, polygon,
        check_input: Allows faster execution if set to False
 
     Output
-       inside_line_segments: Clipped line segments that are inside polygon
-       outside_line_segments: Clipped line segments that are outside polygon
+       inside_lines: Dictionary of lines that are inside polygon
+       outside_lines: Dictionary of lines that are outside polygon
+
+       Elements in output dictionaries can be a list of multiple lines.
+       One line is a numpy array of vertices.
+
+       Both output dictionaries use the indices of the original line as keys.
+       This makes it possible to track which line the new clipped lines
+       come from, if one e.g. wants to assign the original attribute values
+       to clipped lines.
 
     This is a wrapper around clip_line_by_polygon
     """
@@ -570,6 +578,10 @@ def clip_lines_by_polygon(lines, polygon,
                 msg = ('Line could not be converted to numeric array: %s'
                        % str(e))
                 raise Exception(msg)
+
+            msg = 'Lines must be 2d array of vertices'
+            if not len(lines[i].shape) == 2:
+                raise RuntimeError(msg)
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
@@ -595,8 +607,8 @@ def clip_lines_by_polygon(lines, polygon,
     #N = polygon.shape[0]  # Number of vertices in polygon
     M = len(lines)  # Number of lines
 
-    inside_line_segments = []
-    outside_line_segments = []
+    inside_line_segments = {}
+    outside_line_segments = {}
 
     # Get polygon extents to quickly rule out lines where all segments
     # are outside and on the same side of its bounding box
@@ -607,7 +619,7 @@ def clip_lines_by_polygon(lines, polygon,
 
     # Loop through lines
     for k in range(M):
-        line = lines[k]
+        line = numpy.array(lines[k])
 
         # Optimisation (will depend on how many lines are outside)
         # In test_engine.py
@@ -619,14 +631,17 @@ def clip_lines_by_polygon(lines, polygon,
             max(line[:, 1]) < minpy or  # Everything is to the south
             min(line[:, 1]) > maxpy):   # Everything is to the north
 
-            outside_line_segments.append(line)
+            inside_line_segments[k] = []
+            outside_line_segments[k] = [line]
             continue
 
         inside, outside = clip_line_by_polygon(line, polygon,
                                                closed=closed,
                                                check_input=check_input)
-        inside_line_segments += inside
-        outside_line_segments += outside
+
+        # Record clipped line segments from line k
+        inside_line_segments[k] = inside
+        outside_line_segments[k] = outside
 
     return inside_line_segments, outside_line_segments
 
@@ -649,7 +664,8 @@ def clip_line_by_polygon(line, polygon,
        inside_lines: Clipped lines that are inside polygon
        outside_lines: Clipped lines that are outside polygon
 
-       Both outputs take the form of lists of Nx2 line arrays
+       Both outputs lines take the form of lists of Nx2 numpy arrays,
+       i.e. each line is an array of multiple segments
 
     Example:
 
@@ -873,13 +889,36 @@ def join_line_segments(segments, rtol=1.0e-12, atol=1.0e-12):
             line.append(segments[i + 1][1])
         else:
             # Segments are disjoint - current line finishes here
-            lines.append(line)
+            lines.append(numpy.array(line))
             line = segments[i + 1]
 
-    # Finish
-    lines.append(line)
+    # Finish line
+    lines.append(numpy.array(line))
 
     # Return
+    return lines
+
+
+def line_dictionary_to_geometry(D):
+    """Convert dictionary of lines to list of Nx2 arrays
+
+    Input
+        D: Dictionary of lines e.g. as produced by clip_lines_by_polygon
+
+    Output:
+        List of Nx2 arrays suitable as geometry input to class Vector
+    """
+
+    lines = []
+
+    # Ensure reproducibility (needed?)
+    #keys = D.keys()
+    #keys.sort()
+
+    # Add line geometries up
+    for key in D:
+        lines += D[key]
+
     return lines
 
 
@@ -1107,7 +1146,9 @@ collinearmap = {(False, False, False, False): lines_dont_coincide,
                 (True, True, True, True): lines_0_fully_included_in_1}
 
 
-# Functions for clipping of rasters by polygons
+# Main functions for polygon clipping
+# FIXME (Ole): Both can be rigged to return points or lines
+# outside any polygon by adding that as the entry in the list returned
 def clip_grid_by_polygons(A, geotransform, polygons):
     """Clip raster grid by polygon
 
@@ -1119,7 +1160,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
         polygons: list of polygons, each an array of vertices
 
     Output
-        List of points, values - one per input polygon.
+        points_covered: List of (points, values) - one per input polygon.
 
     Implementing algorithm suggested in
     https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
@@ -1138,7 +1179,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     points, values = grid2points(A, x, y)
 
     # Generate list of points and values that fall inside each polygon
-    result = []
+    points_covered = []
     remaining_points = points
     remaining_values = values
 
@@ -1150,13 +1191,58 @@ def clip_grid_by_polygons(A, geotransform, polygons):
                                                      closed=True,
                                                      check_input=False)
         # Add features inside this polygon
-        result.append((remaining_points[inside],
-                       remaining_values[inside]))
+        points_covered.append((remaining_points[inside],
+                               remaining_values[inside]))
 
         # Select remaining points to clip
         remaining_points = remaining_points[outside]
         remaining_values = remaining_values[outside]
 
-        #print len(result), len(polygons), len(polygon), 'inside', len(inside),
+    return points_covered
 
-    return result
+
+def clip_lines_by_polygons(lines, polygons, check_input=True):
+    """Clip multiple lines by multiple polygons
+
+    Args:
+        lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
+               where pi and qi are point coordinates (x, y).
+        polygons: list of polygons, each an array of vertices
+
+    Returns:
+        lines_covered: List of polylines inside a polygon
+                       - one per input polygon.
+
+
+    If multiple polygons overlap, the one first encountered will be used
+    """
+
+    # Initialise structures
+    lines_covered = []
+    remaining_lines = lines
+
+    # Clip lines to polygons
+    for polygon in polygons:
+    #for i, polygon in enumerate(polygons):
+        #print ('Doing polygon %i (%i vertices) of %i with '
+        #       '%i lines' % (i, len(polygon),
+        #                     len(polygons),
+        #                     len(remaining_lines)))
+
+        inside_lines, _ = clip_lines_by_polygon(remaining_lines,
+                                                polygon,
+                                                check_input=check_input)
+        #print ('- %i segments were inside'
+        #       % len(line_dictionary_to_geometry(inside_lines)))
+
+        # Record lines inside this polygon
+        lines_covered.append(inside_lines)
+
+        # Keep lines outside as remaining lines
+        # FIXME (Ole): This optimisation needs some thought
+        # as lines are often partially clipped. We also need to keep
+        # track of the parent line to get its attributes if we want
+        # to go down this road
+        #remaining_lines = outside_lines
+
+    return lines_covered

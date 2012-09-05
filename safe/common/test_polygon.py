@@ -9,12 +9,14 @@ from safe.common.polygon import (separate_points_by_polygon,
                                  outside_polygon,
                                  inside_polygon,
                                  clip_lines_by_polygon,
+                                 clip_lines_by_polygons,
                                  in_and_outside_polygon,
                                  intersection,
                                  join_line_segments,
                                  clip_line_by_polygon,
                                  populate_polygon,
-                                 PolygonInputError)
+                                 PolygonInputError,
+                                 line_dictionary_to_geometry)
 from safe.common.testing import test_polygon, test_lines
 from safe.common.numerics import ensure_numeric
 
@@ -1888,55 +1890,161 @@ class Test_Polygon(unittest.TestCase):
         lines = [[[-1, 0.5], [0.5, 0.5]],
                  [[0.5, 0.5], [0.5, 2]]]
 
-        inside_line_segments, outside_line_segments = \
-            clip_lines_by_polygon(lines, polygon)
+        inside_lines, outside_lines = clip_lines_by_polygon(lines, polygon)
 
-        assert numpy.allclose(inside_line_segments,
-                              [[[0, 0.5], [0.5, 0.5]],
-                               [[0.5, 0.5], [0.5, 1]]])
+        assert numpy.allclose(inside_lines[0], [[0, 0.5], [0.5, 0.5]])
+        assert numpy.allclose(inside_lines[1], [[0.5, 0.5], [0.5, 1]])
 
-        assert numpy.allclose(outside_line_segments,
-                              [[[-1, 0.5], [0, 0.5]],
-                               [[0.5, 1], [0.5, 2]]])
+        assert numpy.allclose(outside_lines[0], [[-1, 0.5], [0, 0.5]])
+        assert numpy.allclose(outside_lines[1], [[0.5, 1], [0.5, 2]])
 
         # Multiple lines with different number of segments
         lines = [[[-1, 0.5], [0.5, 0.5], [0.5, 2]],
                  [[-1, 0.0], [1, 2.0 / 3]]]
 
-        inside_line_segments, outside_line_segments = \
-            clip_lines_by_polygon(lines, polygon)
+        inside_lines, outside_lines = \
+            clip_lines_by_polygon(lines, polygon, check_input=True)
 
-        assert numpy.allclose(inside_line_segments[0],
+        assert len(inside_lines) == 2
+        assert len(outside_lines) == 2
+
+        for _, values in inside_lines.items():
+            for line in values:
+                assert type(line) == numpy.ndarray
+                assert len(line.shape) == 2
+                assert line.shape[1] == 2
+
+        for _, values in outside_lines.items():
+            for line in values:
+                assert type(line) == numpy.ndarray
+                assert len(line.shape) == 2
+                assert line.shape[1] == 2
+
+        assert numpy.allclose(inside_lines[0],
+                              [[[0, 0.5], [0.5, 0.5], [0.5, 1]]])
+        assert numpy.allclose(inside_lines[1],
+                              [[[0, 1.0 / 3], [1, 2.0 / 3]]])
+
+        assert numpy.allclose(outside_lines[0],
+                              [[[-1, 0.5], [0, 0.5]],
+                               [[0.5, 1], [0.5, 2]]])  # Two lines
+        assert numpy.allclose(outside_lines[1], [[-1, 0], [0, 1.0 / 3]])
+
+        # Test that lines dictionaries convert to geometries
+        # (lists of Nx2 arrays)
+        inside_geo = line_dictionary_to_geometry(inside_lines)
+        outside_geo = line_dictionary_to_geometry(outside_lines)
+
+        for line in inside_geo + outside_geo:
+            assert type(line) == numpy.ndarray
+            assert len(line.shape) == 2
+            assert line.shape[1] == 2
+
+        assert numpy.allclose(inside_geo[0],
                               [[0, 0.5], [0.5, 0.5], [0.5, 1]])
-        assert numpy.allclose(inside_line_segments[1],
-                              [[0, 1.0 / 3], [1, 2.0 / 3]])
 
-        assert numpy.allclose(outside_line_segments,
+        assert numpy.allclose(inside_geo[1],
+                               [[0, 1.0 / 3], [1, 2.0 / 3]])
+
+        assert numpy.allclose(outside_geo,
                               [[[-1, 0.5], [0, 0.5]],
                                [[0.5, 1], [0.5, 2]],
                                [[-1, 0], [0, 1.0 / 3]]])
+
+    def test_clip_lines_by_multiple_polygons(self):
+        """Multiple composite lines are clipped by multiple polygons
+        """
+
+        # Test polys
+        polygons = [[[0, 0], [1, 0], [1, 1], [0, 1]],  # Unit square
+                    [[1, 0], [3, 0], [2, 1]],  # Adjacent triangle
+                    [[0, 3], [1, 3], [0.5, 2],
+                     [2, 2], [2, 4], [0, 4]],  # Convoluted
+                    [[-1, -1], [5, -1], [5, 3], [5, 3]],  # Overlapping
+                    [[-1, -1], [6, -1], [6, 6], [6, 6]]]  # Cover the others
+
+        # Test lines
+        input_lines = [[[0, 0.5], [4, 0.5]],
+                       [[2, 0], [2, 5]],
+                       [[0, 0], [5, 5]],
+                       [[10, 10], [30, 10]],
+                       [[-1, 0.5], [0.5, 0.5], [2.5, 3]],
+                       [[0.5, 0.5], [0.5, 2]],
+                       [[100, 100], [300, 100]],
+                       [[0.3, 0.2], [0.7, 3], [1.0, 1.9]],
+                       [[30, 10], [30, 20]]]
+
+        lines_covered = clip_lines_by_polygons(input_lines, polygons)
+
+        # Sanity checks
+        assert len(lines_covered) == len(polygons)
+        for lines in lines_covered:
+            assert len(lines) == len(input_lines)
+
+        # Thorough check of all lines
+        for i, polygon in enumerate(polygons):
+
+            lines_in_polygon = lines_covered[i]
+            for key in lines_in_polygon:
+                for line in lines_covered[i][key]:
+
+                    # Assert that this line is fully inside polygon
+                    inside, outside = clip_line_by_polygon(line, polygon)
+                    assert len(outside) == 0
+
+                    # Line can be joined from separate segments but
+                    # endpoints must match
+                    for x in inside:
+                        assert numpy.allclose(x[0], line[0])
+                        assert numpy.allclose(x[-1], line[-1])
+
+        # Spot checks
+
+        # Polygon 2, line 1
+        assert numpy.allclose(lines_covered[2][1][0],
+                              [[2., 2.],
+                               [2., 3.],
+                               [2., 4.]])
+
+        # Polygon 4, line 2
+        assert numpy.allclose(lines_covered[4][2][0],
+                              [[0., 0.],
+                               [2.5, 2.5],
+                               [5., 5.]])
+
+        # Polygon 4, line 7
+        assert numpy.allclose(lines_covered[4][7][0],
+                              [[0.3, 0.2],
+                               [0.31666667, 0.31666667]])
 
     def test_clip_lines_by_polygon_real_data(self):
         """Real roads are clipped by complex polygon
         """
 
-        inside_line_segments, outside_line_segments = \
-            clip_lines_by_polygon(test_lines, test_polygon)
+        inside_lines, outside_lines = \
+            clip_lines_by_polygon(test_lines, test_polygon,
+                                  check_input=True)
+
+        # Convert dictionaries to lists of lines
+        inside_line_segments = line_dictionary_to_geometry(inside_lines)
+        outside_line_segments = line_dictionary_to_geometry(outside_lines)
 
         # These lines have compontes both inside and outside
         assert len(inside_line_segments) == 13
         assert len(outside_line_segments) == 17
 
         # Store for visual inspection by e.g. QGis
+        # Set to True, run test and do
+        # qgis test_polygon.shp test_lines.shp in_segments.shp out_segments.shp
         if False:
             Vector(geometry=[test_polygon],
                    geometry_type='polygon').write_to_file('test_polygon.shp')
             Vector(geometry=test_lines,
                    geometry_type='line').write_to_file('test_lines.shp')
             Vector(geometry=inside_line_segments,
-                   geometry_type='line').write_to_file('inside_segments.shp')
+                   geometry_type='line').write_to_file('in_segments.shp')
             Vector(geometry=outside_line_segments,
-                   geometry_type='line').write_to_file('outside_segments.shp')
+                   geometry_type='line').write_to_file('out_segments.shp')
 
         # Check that midpoints of each segment are correctly placed
         for seg in inside_line_segments:
@@ -1952,8 +2060,6 @@ class Test_Polygon(unittest.TestCase):
                 assert not is_inside_polygon(midpoint, test_polygon)
 
         # Characterisation test based on visually verified result
-        #print inside_line_segments, len(inside_line_segments)
-        #print outside_line_segments, len(outside_line_segments)
         assert len(inside_line_segments) == 13
         assert len(outside_line_segments) == 17
         assert numpy.allclose(inside_line_segments[0],
@@ -1978,6 +2084,41 @@ class Test_Polygon(unittest.TestCase):
         # Not joined are (but that's OK)
         #[[122.231108, -8.626598], [122.231021, -8.626557]]
         #[[122.231021, -8.626557], [122.230284, -8.625983]]
+
+        # Check dictionaries directly (same data):
+        assert len(inside_lines) == 6
+        assert len(outside_lines) == 6
+        assert numpy.allclose(inside_lines[0][0],
+                              [[122.23028405, -8.62598333],
+                               [122.22879, -8.624855],
+                               [122.22776827, -8.62420644]])
+
+        assert numpy.allclose(inside_lines[5][0],
+                              [[122.247938, -8.632926],
+                               [122.24793987, -8.63351817]])
+
+        assert numpy.allclose(outside_lines[0][0],
+                              [[122.231021, -8.626557],
+                               [122.230563, -8.626194],
+                               [122.23028405, -8.62598333]])
+
+        assert numpy.allclose(outside_lines[0][1],
+                              [[122.22776827, -8.62420644],
+                               [122.227536, -8.624059],
+                               [122.226648, -8.623494],
+                               [122.225775, -8.623022],
+                               [122.224872, -8.622444],
+                               [122.22423, -8.6221],
+                               [122.221931, -8.621082],
+                               [122.2217, -8.62098],
+                               [122.220577, -8.620555],
+                               [122.21958, -8.62103]])
+
+        assert numpy.allclose(outside_lines[5][0],
+                              [[122.24793987, -8.63351817],
+                               [122.24794, -8.63356],
+                               [122.24739, -8.63622]])
+
     test_clip_lines_by_polygon_real_data.slow = True
 
     def test_join_segments(self):

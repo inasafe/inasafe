@@ -1,4 +1,3 @@
-
 Frequently Asked Questions
 ==========================
 
@@ -83,4 +82,27 @@ The deployment of version tagged files is automated by using the
 :file:`scripts\release.sh` script.
 
 
+How do you profile code?
+........................
+........................
+
+sudo apt-get install python-profiler 
+python -m cProfile -s time safe/common/test_polygon.py
+
+and 
+
+sudo easy_install pycallgraph
+sudo apt-get install graphviz
+pycallgraph safe/common/test_polygon.py
+
+
+
+
+
+
+
+
+
+See also
+http://stackoverflow.com/posts/7693928/edit
 
