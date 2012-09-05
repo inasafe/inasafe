@@ -15,6 +15,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import re
 import logging
 import sqlite3 as sqlite
 import cPickle as pickle
@@ -416,46 +417,74 @@ class KeywordIO(QObject):
           query.
 
         """
-        myFileFlag = self.dataSourceIsFileBased(theLayer) and not (
-            theLayer.providerType() == 'spatialite'):
+        myFileFlag = (self.dataSourceIsFileBased(theLayer) and not
+            theLayer.providerType() == 'spatialite')
 
         if myFileFlag:
+            # Example layer source that has a subquery.
+            #'/tmp/DKI_buildings.shp|layerid=0|subset="type" != \'Apartemen\''
+            # We will break it into:
+            # base: DKI_Buildings
+            # layerid: 0
+            # subset: "type" != \'Apartemen\'
+            # if layerid is 0 it will be ommitted
+            # if subset is '' it will be ommitted
             # Get the actual base part of the file name with no extension
-            mySubLayer = os.path.split(str(theLayer.source()))
-            mySubLayer = os.path.splitext(mySubLayer[1])[0]
-            # TODO some formats have true sublayers too e.g. MIF which we
-            # need to be able to deal with in some fashion.
+            myFileBase = os.path.split(str(theLayer.source()))
+            myFileBase = os.path.splitext(myFileBase[1])[0]
+
+            # Get the sublayer if available
+            myTokens = str(theLayer.source()).split('|')
+            myLayerId = None
+            if len(myTokens) > 1:
+                myLayerIdString = myTokens[1]
+                myTokens = myLayerIdString.split('=')
+                if len(myTokens) > 1:
+                    myLayerId = myTokens[1]
+
             # Get the sql subquery if any
+            mySQL  = None
+            myRegex = re.search('subset=', theLayer.source())
+            if myRegex is not None:
+                # Chop out everything from the end of the match to end of line
+                mySQL = theLayer.source()[myRegex.end():]
 
+            mySubLayer = ('%(myFileBase)s.%(myLayerId)s.%(mySQL)s.' %
+                    {
+                        'myFileBase': myFileBase,
+                        'myLayerId': myLayerId,
+                        'mySQL': mySQL
+                    })
 
-        myURI = theLayer.dataProvider().dataSourceUri()
-        mySchema = str(myURI.schema())
-        myTable = str(myURI.table())
-        # Some providers e.g. spatialite include a full path to the db
-        # file so we are going to strip it down a little in the next 2 lines...
-        myDB = str(myURI.database())
-        myDBPath = os.path.split(myDB)[1]
-        mySQL = str(myURI.sql())
-        if qgisVersion() >= 10900:  # 1.9 or newer needed for srid accessor
-            mySrid = str(myURI.srid())
-            myType = myURI.wkbType()
         else:
-            # We could work around this by passing the layer instance
-            # to this method and then interrogating it for its CRS but
-            # that also seems ugly.
-            mySrid = 'NULL'
-            myType = 'NULL'
+            myURI = QgsDataSourceURI(theLayer.source())
+            mySchema = str(myURI.schema())
+            myTable = str(myURI.table())
+            # Some providers e.g. spatialite include a full path to the db
+            # file so we are going to strip it down a little in the next 2 lines...
+            myDB = str(myURI.database())
+            myDBPath = os.path.split(myDB)[1]
+            mySQL = str(myURI.sql())
+            if qgisVersion() >= 10900:  # 1.9 or newer needed for srid accessor
+                mySrid = str(myURI.srid())
+                myType = myURI.wkbType()
+            else:
+                # We could work around this by passing the layer instance
+                # to this method and then interrogating it for its CRS but
+                # that also seems ugly.
+                mySrid = 'NULL'
+                myType = 'NULL'
 
-        mySubLayer = ('%(myDB)s.%(mySchema)s.%(myTable)s.'
-                      '%(mySrid)s.%(myType)s.%(mySQL)s' %
-            {
-                'myDB': myDBPath,
-                'mySchema': mySchema,
-                'myTable': myTable,
-                'mySrid': mySrid,
-                'myType': myType,
-                'mySQL': mySQL
-            })
+            mySubLayer = ('%(myDB)s.%(mySchema)s.%(myTable)s.'
+                          '%(mySrid)s.%(myType)s.%(mySQL)s' %
+                {
+                    'myDB': myDBPath,
+                    'mySchema': mySchema,
+                    'myTable': myTable,
+                    'mySrid': mySrid,
+                    'myType': myType,
+                    'mySQL': mySQL
+                })
         return mySubLayer
 
     def getHashForDatasource(self, theDataSource):
