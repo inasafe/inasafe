@@ -39,7 +39,7 @@ from safe.common.exceptions import InaSAFEError
 import safe_qgis.resources  # pylint: disable=W0611
 
 #see if we can import pydev - see development docs for details
-from pydev import pydevd
+#from pydev import pydevd  # PyCharm style
 try:
     from pydevd import *  # pylint: disable=F0401
     print 'Remote debugging is enabled.'
@@ -516,7 +516,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        pydevd.settrace('192.168.1.62', port=53100, stdoutToServer=True, stderrToServer=True)
+        #pydevd.settrace('192.168.1.62',
+        #                port=53100,
+        #                stdoutToServer=True,
+        #                stderrToServer=True)
         # In case the layer has no keywords or any problem occurs reading them,
         # start with a blank slate so that subcategory gets populated nicely &
         # we will assume exposure to start with.

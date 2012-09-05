@@ -95,7 +95,7 @@ class KeywordIO(QObject):
 
         myFlag = self.dataSourceIsFileBased(theLayer)
         if theSubLayer is None:
-            theSubLayer = self.subLayerName(theLayer.source())
+            theSubLayer = self.subLayerName(theLayer)
         # Special case for sqlite - file name needs to be extracted from src.
         if 'spatialite' == theLayer.dataProvider().name():
             mySource = str(QgsDataSourceURI(theLayer.source()).database())
@@ -133,7 +133,7 @@ class KeywordIO(QObject):
             None
         """
         if theSubLayer is None:
-            theSubLayer = self.subLayerName(theLayer.source())
+            theSubLayer = self.subLayerName(theLayer)
         # Special case for sqlite - file name needs to be extracted from src
         if 'spatialite' == theLayer.dataProvider().name():
             mySource = str(QgsDataSourceURI(theLayer.source()).database())
@@ -186,7 +186,7 @@ class KeywordIO(QObject):
             None
         """
         if theSubLayer is None:
-            theSubLayer = self.subLayerName(theLayer.source())
+            theSubLayer = self.subLayerName(theLayer)
         myKeywords = self.readKeywords(theSourceLayer, theSubLayer)
         if theExtraKeywords is None:
             theExtraKeywords = {}
@@ -359,11 +359,11 @@ class KeywordIO(QObject):
             myFileBasedFlag = myProviderDict[myProviderType]
         return myFileBasedFlag
 
-    def subLayerName(self, theDataSource):
+    def subLayerName(self, theLayer):
         """Given datasource, determine its sublayer name.
 
         Args:
-            theDataSource: str Required. Datasource URI which will be used to
+            theLayer: str Required. Layer which will be used to
             determine what the sublayer name is.
         Returns:
             str: A string containing the sub layer name or None as applicable.
@@ -374,7 +374,7 @@ class KeywordIO(QObject):
         The sublayer name might be a hash or a physical layer name according
         to the following logic:
 
-        * If the datasource is a shapefile with no query, the sublayer will be
+        * If the layer is a shapefile with no query, the sublayer will be
           the file basename with the .shp removed and a hash of the subquery
           gumpf added to the path by QGIS. For example:
 
@@ -416,7 +416,19 @@ class KeywordIO(QObject):
           query.
 
         """
-        myURI = QgsDataSourceURI(theDataSource)
+        myFileFlag = self.dataSourceIsFileBased(theLayer) and not (
+            theLayer.providerType() == 'spatialite'):
+
+        if myFileFlag:
+            # Get the actual base part of the file name with no extension
+            mySubLayer = os.path.split(str(theLayer.source()))
+            mySubLayer = os.path.splitext(mySubLayer[1])[0]
+            # TODO some formats have true sublayers too e.g. MIF which we
+            # need to be able to deal with in some fashion.
+            # Get the sql subquery if any
+
+
+        myURI = theLayer.dataProvider().dataSourceUri()
         mySchema = str(myURI.schema())
         myTable = str(myURI.table())
         # Some providers e.g. spatialite include a full path to the db
