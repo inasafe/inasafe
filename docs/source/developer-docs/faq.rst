@@ -97,12 +97,7 @@ pycallgraph safe/common/test_polygon.py
 
 
 
-
-
-
-
-
-
 See also
-http://stackoverflow.com/posts/7693928/edit
+http://stackoverflow.com/questions/582336/how-can-you-profile-a-python-script
+
 
