@@ -112,7 +112,7 @@ class CommonUtilitiesTest(unittest.TestCase):
         expected_names = ['osm_buildings', 'osm_flood']
         msg = 'Expected:\n%s\nGot:\n%s\n' % (expected_names, sublayers)
         self.assertEquals(sublayers, expected_names, msg)
-        LOGGER.debug(keywords)
+        LOGGER.debug(sublayers)
 
     def test_read_keywords_for_sublayer(self):
         """Test reading keywords for specific sublayer."""
