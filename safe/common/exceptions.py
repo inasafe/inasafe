@@ -61,6 +61,7 @@ class GetDataError(InaSAFEError):
     """When layer data cannot be obtained"""
     pass
 
+
 class NoKeywordsFoundError(InaSAFEError):
     """When no keywords could be found for a layer."""
     pass

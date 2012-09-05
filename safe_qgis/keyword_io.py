@@ -24,7 +24,8 @@ from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsMapLayer, QgsDataSourceURI
 
-from safe_qgis.exceptions import HashNotFoundException, KeywordNotFoundException
+from safe_qgis.exceptions import (HashNotFoundException,
+                                  KeywordNotFoundException)
 from safe_qgis.safe_interface import (verify,
                                readKeywordsFromFile,
                                writeKeywordsToFile,
@@ -443,7 +444,7 @@ class KeywordIO(QObject):
                     myLayerId = myTokens[1]
 
             # Get the sql subquery if any
-            mySQL  = None
+            mySQL = None
             myRegex = re.search('subset=', theLayer.source())
             if myRegex is not None:
                 # Chop out everything from the end of the match to end of line

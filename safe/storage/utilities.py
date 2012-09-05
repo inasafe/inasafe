@@ -368,7 +368,7 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
     else:
         return first_keywords
     raise NoKeywordsFoundError('Could not find any keywords for File: %s, '
-                               'SubLayer: %s.' % (filename, sublayer ))
+                               'SubLayer: %s.' % (filename, sublayer))
 
 
 def geotransform2bbox(geotransform, columns, rows):

@@ -73,7 +73,8 @@ class KeywordIOTest(unittest.TestCase):
             myExpectedName = '..valuations_parcel.4326.????.'
         else:
             myExpectedName = '..valuations_parcel.NULL.NULL.'
-        myMessage = "Got:\n%s\nExpected:\n%s" % (mySubLayerName, myExpectedName)
+        myMessage = "Got:\n%s\nExpected:\n%s" % (
+                      mySubLayerName, myExpectedName)
         assert mySubLayerName == myExpectedName, myMessage
 
     def test_writeReadKeywordFromUri(self):
