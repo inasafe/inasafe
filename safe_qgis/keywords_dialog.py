@@ -113,7 +113,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
-        QtCore.QObject.connect(self.lstKeywords,QtCore.SIGNAL(
+        QtCore.QObject.connect(self.lstKeywords, QtCore.SIGNAL(
                                 "itemClicked(QListWidgetItem *)"),
                                self.setLeKeyLeValue)
         self.helpDialog = None
