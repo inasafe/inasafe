@@ -461,28 +461,18 @@ class KeywordIO(QObject):
             mySchema = str(myURI.schema())
             myTable = str(myURI.table())
             # Some providers e.g. spatialite include a full path to the db
-            # file so we are going to strip it down a little in the next 2 lines...
+            # file so we are going to strip it down a little in
+            # the next 3 lines...
             myDB = str(myURI.database())
             myDBPath = os.path.split(myDB)[1]
+            myDBPath = os.path.splitext(myDBPath)[0]
             mySQL = str(myURI.sql())
-            if qgisVersion() >= 10900:  # 1.9 or newer needed for srid accessor
-                mySrid = str(myURI.srid())
-                myType = myURI.wkbType()
-            else:
-                # We could work around this by passing the layer instance
-                # to this method and then interrogating it for its CRS but
-                # that also seems ugly.
-                mySrid = 'NULL'
-                myType = 'NULL'
 
-            mySubLayer = ('%(myDB)s.%(mySchema)s.%(myTable)s.'
-                          '%(mySrid)s.%(myType)s.%(mySQL)s' %
+            mySubLayer = ('%(myDB)s.%(mySchema)s.%(myTable)s.%(mySQL)s' %
                 {
                     'myDB': myDBPath,
                     'mySchema': mySchema,
                     'myTable': myTable,
-                    'mySrid': mySrid,
-                    'myType': myType,
                     'mySQL': mySQL
                 })
         return mySubLayer
