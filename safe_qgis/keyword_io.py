@@ -29,7 +29,7 @@ from safe_qgis.exceptions import (HashNotFoundException,
 from safe_qgis.safe_interface import (verify,
                                readKeywordsFromFile,
                                writeKeywordsToFile,
-                               NoKeywordsFoundError)
+                               readSubLayerNames)
 from safe_qgis.utilities import qgisVersion
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -103,6 +103,14 @@ class KeywordIO(QObject):
             mySource = str(QgsDataSourceURI(theLayer.source()).database())
         else:
             mySource = str(theLayer.source())
+        # Temporary hack for backwards compatibility to keyword files that
+        # had no sublayer groupings. We set sublayer to none and then the
+        # global keywords are retrieved.
+        # TODO: Remove this hack
+        myBaseName, _ = os.path.splitext(mySource)
+        myBaseName += '.keywords'
+        if len(readSubLayerNames(myBaseName)) == 0:
+            theSubLayer = None
 
         try:
             if myFlag:

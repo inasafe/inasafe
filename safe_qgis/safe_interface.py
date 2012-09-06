@@ -31,7 +31,10 @@ import unicodedata
 from safe.api import get_admissible_plugins
 from safe.api import get_function_title
 from safe.api import get_plugins as safe_get_plugins
-from safe.api import read_keywords, bbox_intersection, NoKeywordsFoundError
+from safe.api import (read_sublayer_names,
+                      read_keywords,
+                      bbox_intersection,
+                      NoKeywordsFoundError)
 from safe.api import write_keywords as safe_write_keywords
 from safe.api import read_layer as safe_read_layer
 from safe.api import (buffered_bounding_box,
@@ -255,6 +258,10 @@ def readKeywordsFromLayer(theLayer, keyword):
                     theLayer.get_filename(), keyword))
         raise KeywordNotFoundException(myMessage)
     return myValue
+
+def readSubLayerNames(theLayerPath):
+    """Get the list of the sublayers having keywords for this file."""
+    return read_sublayer_names(theLayerPath)
 
 
 def readKeywordsFromFile(theLayerPath, theKeyword=None, theSubLayer=None):
