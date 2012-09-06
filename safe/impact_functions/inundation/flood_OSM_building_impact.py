@@ -144,6 +144,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
 ##                                    _('Temporarily closed'),
 ##                                    _('Total')))
 
+        school_closed = 0
+        hospital_closed = 0
         # Generate break down by building usage type is available
         if 'type' in attribute_names:
             # Make list of building types
@@ -162,6 +164,10 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 building_list.append([building_type.capitalize(),
                                       affected_buildings[usage],
                                       buildings[usage]])
+                if building_type == 'school':
+                        school_closed = affected_buildings[usage]
+                if building_type == 'hospital':
+                        hospital_closed = affected_buildings[usage]
 ##                fid.write('%s, %i, %i\n' % (building_type.capitalize(),
 ##                                            affected_buildings[usage],
 ##                                            buildings[usage]))
@@ -182,6 +188,23 @@ class FloodBuildingImpactFunction(FunctionProvider):
         table_body.append(TableRow(_('Action Checklist:'), header=True))
         table_body.append(TableRow(_('Are the critical facilities still '
                                      'open?')))
+        table_body.append(TableRow(_('Which structures have warning capacity '
+                                     '(eg. sirens, speakers, etc.)?')))
+        table_body.append(TableRow(_('Which buildings will be evacuation '
+                                     'centres?')))
+        table_body.append(TableRow(_('Where will we locate the operations '
+                                     'centre?')))
+        table_body.append(TableRow(_('Where will we locate warehouse and/or '
+                                     'distribution centres?')))
+        if school_closed > 0:
+            table_body.append(TableRow(_('Where will the students from the %d '
+                                         'closed schools go to study?') %
+                                         school_closed))
+        if hospital_closed > 0:
+            table_body.append(TableRow(_('Where will the patients from the %d '
+                                         'closed hospitals go for treatment '
+                                         'and how will we transport them?') %
+                                         hospital_closed))
 
         table_body.append(TableRow(_('Notes'), header=True))
         assumption = _('Buildings are said to be flooded when ')

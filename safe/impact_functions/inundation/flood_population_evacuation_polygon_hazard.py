@@ -125,6 +125,16 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                       [_('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
+        table_body.append(TableRow(_('Action Checklist:'), header=True))
+        table_body.append(TableRow(_('How will warnings be disseminated?')))
+        table_body.append(TableRow(_('How will we reach stranded people?')))
+        table_body.append(TableRow(_('Do we have enough relief items?')))
+        table_body.append(TableRow(_('If yes, where are they located and how '
+                                     'will we distribute them?')))
+        table_body.append(TableRow(_('If no, where can we obtain additional '
+                                     'relief items from and how will we '
+                                     'transport them to here?')))
+
         # Extend impact report for on-screen display
         table_body.extend([TableRow(_('Notes'), header=True),
                            _('Total population: %i') % total,

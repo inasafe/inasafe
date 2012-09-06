@@ -165,7 +165,12 @@ gh-pages. To use this, the site is stored in a special branch.
 Initial gh-pages setup
 ......................
 
-Enable gh-pages in th gh project
+In order to set up the gh-pages branch this is the procedure followed.
+
+.. note:: This is a once-off process you do not need to repeat it, it is
+   here for reference purposes only.
+
+Enable gh-pages in the gh project
 `admin page <https://github.com/AIFDR/inasafe/admin>`_. On your local system
 do something like this::
 
@@ -187,6 +192,8 @@ do something like this::
 Now wait ten minutes or so and the pages should be visble here at
 http://aifdr.github.com/inasafe/
 
+See also: http://help.github.com/articles/creating-project-pages-manually
+
 Updating the site
 ^^^^^^^^^^^^^^^^^
 
@@ -200,3 +207,7 @@ Deployment of the site requires the following steps:
 * Wait approximately 10 minutes
 
 After this the changes should be visible here http://aifdr.github.com/inasafe/
+and http://inasafe.org.
+
+Also see http://github.com/AIFDR/inasafe/issues/257 for further details of
+how the documentation publishing process works.

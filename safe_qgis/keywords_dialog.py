@@ -30,7 +30,8 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace
 
-from safe_qgis.exceptions import InvalidParameterException
+from safe_qgis.exceptions import (InvalidParameterException,
+                                  HashNotFoundException)
 from safe.common.exceptions import InaSAFEError
 
 # Don't remove this even if it is flagged as unused by your ide
@@ -112,6 +113,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
+        QtCore.QObject.connect(self.lstKeywords, QtCore.SIGNAL(
+                                "itemClicked(QListWidgetItem *)"),
+                               self.setLeKeyLeValue)
         self.helpDialog = None
         # set some inital ui state:
         self.pbnAdvanced.setChecked(True)
@@ -516,7 +520,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            no exceptions explicitly raised."""
         try:
             myKeywords = self.keywordIO.readKeywords(self.layer)
-        except InvalidParameterException:
+        except (InvalidParameterException, HashNotFoundException):
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume
             # exposure to start with
@@ -637,3 +641,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if self.dock is not None:
             self.dock.getLayers()
         self.close()
+
+    def setLeKeyLeValue(self):
+        """Set lekey and levalue to the clicked item in the lstKeywords."""
+        if self.radUserDefined.isChecked():
+            for myItem in self.lstKeywords.selectedItems():
+                tempLeKey = myItem.text().split(':')[0]
+                tempLeValue = myItem.text().split(':')[1]
+                self.leKey.setText(tempLeKey)
+                self.leValue.setText(tempLeValue)
