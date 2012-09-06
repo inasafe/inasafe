@@ -165,9 +165,9 @@ class FloodBuildingImpactFunction(FunctionProvider):
                                       affected_buildings[usage],
                                       buildings[usage]])
                 if building_type == 'school':
-                        school_closed = affected_buildings[usage]
+                    school_closed = affected_buildings[usage]
                 if building_type == 'hospital':
-                        hospital_closed = affected_buildings[usage]
+                    hospital_closed = affected_buildings[usage]
 ##                fid.write('%s, %i, %i\n' % (building_type.capitalize(),
 ##                                            affected_buildings[usage],
 ##                                            buildings[usage]))
