@@ -356,7 +356,8 @@ def _separate_points_by_polygon_python(points, polygon,
     return indices[:inside_index], indices[inside_index:]
 
 
-def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
+def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8,
+                  check_input=True):
     """Determine if a point is on a line segment
 
     Input
@@ -380,24 +381,26 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8):
     Tolerances rtol and atol are used with numpy.allclose()
     """
 
-    # Prepare input data
-    points = ensure_numeric(points)
-    line = ensure_numeric(line)
+    one_point = False
+    if check_input:
+        # Prepare input data
+        points = ensure_numeric(points)
+        line = ensure_numeric(line)
 
-    if len(points.shape) == 1:
-        # One point only - make into 1 x 2 array
-        points = points[numpy.newaxis, :]
-        one_point = True
-    else:
-        one_point = False
+        if len(points.shape) == 1:
+            # One point only - make into 1 x 2 array
+            points = points[numpy.newaxis, :]
+            one_point = True
+        else:
+            one_point = False
 
-    msg = 'Argument points must be either [x, y] or an Nx2 array of points'
-    if len(points.shape) != 2:
-        raise Exception(msg)
-    if not points.shape[0] > 0:
-        raise Exception(msg)
-    if points.shape[1] != 2:
-        raise Exception(msg)
+        msg = 'Argument points must be either [x, y] or an Nx2 array of points'
+        if len(points.shape) != 2:
+            raise Exception(msg)
+        if not points.shape[0] > 0:
+            raise Exception(msg)
+        if points.shape[1] != 2:
+            raise Exception(msg)
 
     N = points.shape[0]  # Number of points
 
@@ -621,13 +624,9 @@ def clip_lines_by_polygon(lines, polygon,
     for k in range(M):
         line = numpy.array(lines[k])
 
-        # Optimisation (will depend on how many lines are outside)
-        # In test_engine.py
-        # Multiple lines are clipped correctly by complex polygon ... ok
-        # Ran 1 test in 12.517s
-        # Ran 1 test in 11.474s
-        if (max(line[:, 0]) < minpx or  # Everything is to the left
-            min(line[:, 0]) > maxpx or  # Everything is to the right
+        # Exclude lines that are fully outside polygon bounding box
+        if (max(line[:, 0]) < minpx or  # Everything is to the west
+            min(line[:, 0]) > maxpx or  # Everything is to the east
             max(line[:, 1]) < minpy or  # Everything is to the south
             min(line[:, 1]) > maxpy):   # Everything is to the north
 
@@ -635,9 +634,12 @@ def clip_lines_by_polygon(lines, polygon,
             outside_line_segments[k] = [line]
             continue
 
+        # Call underlying function for one line and one polygon
         inside, outside = clip_line_by_polygon(line, polygon,
                                                closed=closed,
-                                               check_input=check_input)
+                                               polygon_bbox=[minpx, maxpx,
+                                                             minpy, maxpy],
+                                               check_input=False)
 
         # Record clipped line segments from line k
         inside_line_segments[k] = inside
@@ -648,6 +650,7 @@ def clip_lines_by_polygon(lines, polygon,
 
 def clip_line_by_polygon(line, polygon,
                          closed=True,
+                         polygon_bbox=None,
                          check_input=True):
     """Clip line segments by polygon
 
@@ -658,6 +661,7 @@ def clip_line_by_polygon(line, polygon,
        closed: (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False) - False is not recommended here
+       polygon_bbox: Provide bounding box around polygon if known. This is a small optimisation
        check_input: Allows faster execution if set to False
 
     Outputs
@@ -726,12 +730,18 @@ def clip_line_by_polygon(line, polygon,
         if not polygon.shape[1] == 2:
             raise RuntimeError(msg)
 
-    # Get polygon extents to quickly rule out segments that
+    # Get polygon extents to rule out segments that
     # are outside its bounding box
-    minpx = min(polygon[:, 0])
-    maxpx = max(polygon[:, 0])
-    minpy = min(polygon[:, 1])
-    maxpy = max(polygon[:, 1])
+    if polygon_bbox is None:
+        minpx = min(polygon[:, 0])
+        maxpx = max(polygon[:, 0])
+        minpy = min(polygon[:, 1])
+        maxpy = max(polygon[:, 1])
+    else:
+        minpx = polygon_bbox[0]
+        maxpx = polygon_bbox[1]
+        minpy = polygon_bbox[2]
+        maxpy = polygon_bbox[3]
 
     N = polygon.shape[0]  # Number of vertices in polygon
     M = line.shape[0]  # Number of segments
@@ -763,28 +773,35 @@ def clip_line_by_polygon(line, polygon,
         # and which don't intersect the bounding box
 
         # In test_engine.py
-        # Multiple lines are clipped correctly by complex polygon ... ok
-        # Ran 1 test in 187.759s
-        # Ran 1 test in 12.517s
-        segment_is_outside_bbox = True
-        for p in [p0, p1]:
-            x = p[0]
-            y = p[1]
-            if not (x > maxpx or x < minpx or y > maxpy or y < minpy):
-                #  This end point is inside polygon bounding box
-                segment_is_outside_bbox = False
-                break
+        # test_polygon_to_roads_interpolation_flood_example took (E_attributes[:-1:100])
+        # * Without this: 92s
+        # * With this optimisation: 61s
+        # * With simpler version: 42s
 
-        # Does segment intersect polygon bounding box?
-        corners = numpy.array([[minpx, minpy], [maxpx, minpy],
-                               [maxpx, maxpy], [minpx, maxpy]])
-        for i in range(3):
-            edge = [corners[i, :], corners[i + 1, :]]
-            status, value = intersection(segment, edge)
-            if value is not None:
-                # Segment intersects polygon bounding box
-                segment_is_outside_bbox = False
-                break
+        if p0[0] < minpx and p1[0] < minpx:
+            # Everything is to the west
+            segment_is_outside_bbox = True
+        elif p0[0] > maxpx and p1[0] > maxpx:
+            # Everything is to the east
+            segment_is_outside_bbox = True
+        elif p0[1] < minpy and p1[1] < minpy:
+            # Everything is to the south
+            segment_is_outside_bbox = True
+        elif p0[1] > maxpy and p1[1] > maxpy:
+            # Everything is to the south
+            segment_is_outside_bbox = True
+        else:
+            # Does segment intersect polygon bounding box?
+            corners = numpy.array([[minpx, minpy], [maxpx, minpy],
+                                   [maxpx, maxpy], [minpx, maxpy]])
+            segment_is_outside_bbox = True
+            for i in range(3):
+                edge = [corners[i, :], corners[i + 1, :]]
+                status, value = intersection(segment, edge)
+                if value is not None:
+                    # Segment intersects polygon bounding box
+                    segment_is_outside_bbox = False
+                    break
         #-----------------
         # End optimisation
         #-----------------
@@ -1222,8 +1239,8 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
     remaining_lines = lines
 
     # Clip lines to polygons
-    for polygon in polygons:
-    #for i, polygon in enumerate(polygons):
+    #for polygon in polygons:
+    for i, polygon in enumerate(polygons):
         #print ('Doing polygon %i (%i vertices) of %i with '
         #       '%i lines' % (i, len(polygon),
         #                     len(polygons),
