@@ -3,6 +3,8 @@ IRC Notes for InaSAFE
 
 The IRC channel is #inasafe on freenode.
 
+The channel is logged, you can read the logs at http://irclogs.geoapt.com/inasafe/.
+
 Tim (timlinux) has ops and has registered the channel::
 
    /query chanserv
