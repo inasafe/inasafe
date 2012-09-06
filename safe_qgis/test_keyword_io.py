@@ -36,13 +36,15 @@ class KeywordIOTest(unittest.TestCase):
         myUri.setDatabase(os.path.join(
             UNITDATA, 'exposure', 'exposure.sqlite'))
         myUri.setDataSource('', 'buildings_osm_4326', 'Geometry')
-        self.sqliteBuildingsLayer = QgsVectorLayer(myUri.uri(), 'OSM Buildings',
-                                       'spatialite')
+        self.sqliteBuildingsLayer = QgsVectorLayer(myUri.uri(),
+                                                   'OSM Buildings',
+                                                   'spatialite')
         assert self.sqliteBuildingsLayer.isValid(), myUri.database()
 
         myUri.setDataSource('', 'indonesia_highway', 'geom')
-        self.sqliteRoadsLayer = QgsVectorLayer(myUri.uri(), 'Indonesia Highways',
-                                       'spatialite')
+        self.sqliteRoadsLayer = QgsVectorLayer(myUri.uri(),
+                                               'Indonesia Highways',
+                                               'spatialite')
 
         myHazardPath = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
         # _ is syntactic sugar to ignore a var

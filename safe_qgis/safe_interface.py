@@ -259,6 +259,7 @@ def readKeywordsFromLayer(theLayer, keyword):
         raise KeywordNotFoundException(myMessage)
     return myValue
 
+
 def readSubLayerNames(theLayerPath):
     """Get the list of the sublayers having keywords for this file."""
     return read_sublayer_names(theLayerPath)
