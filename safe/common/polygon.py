@@ -210,6 +210,16 @@ def _separate_points_by_polygon(points, polygon,
     candidates = numpy.ones(M, dtype=numpy.bool)  # All True initially
 
     # Find points on polygon boundary
+    # FIXME (Ole): If this is removed, the test
+    # test_polygon_to_roads_interpolation_flood_example
+    # Will run in 46 - 47 seconds instead of 54s.
+    # How important is this and can we do it differently
+    # Such as
+    #if closed:
+    #    mask = (px_i + sigma <= x) * (seg_i + seg_j) * candidates
+    #else:
+    #    mask = (px_i + sigma < x) * (seg_i + seg_j) * candidates
+
     for i in range(N):
         # Loop through polygon edges
         j = (i + 1) % N
@@ -225,6 +235,10 @@ def _separate_points_by_polygon(points, polygon,
 
         # Remove boundary point from further analysis
         candidates[boundary_points] = False
+
+    # FIXME (Ole): If in deed we take this path, perhaps we work only with
+    # candidaties (that are True)
+    #in the next loop (use take and where as we do in separate_points_by_poly
 
     # Algorithm for finding points inside polygon
     for i in range(N):
