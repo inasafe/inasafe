@@ -679,7 +679,7 @@ ke %s: %s</translation>
         <translation>Tampilkan/hilangkan widget InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="259"/>
+        <location filename="plugin.py" line="268"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>

@@ -676,7 +676,7 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="259"/>
+        <location filename="plugin.py" line="268"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
