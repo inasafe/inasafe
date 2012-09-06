@@ -520,7 +520,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            no exceptions explicitly raised."""
         try:
             myKeywords = self.keywordIO.readKeywords(self.layer)
-        except (InvalidParameterException, HashNotFoundException, Exception):
+        except (InvalidParameterException, HashNotFoundException):
             # layer has no keywords file so just start with a blank slate
             # so that subcategory gets populated nicely & we will assume
             # exposure to start with
