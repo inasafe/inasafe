@@ -8,6 +8,7 @@ import numpy
 import math
 from osgeo import ogr
 
+from safe.common.exceptions import NoKeywordsFoundError
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 
