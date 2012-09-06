@@ -48,7 +48,7 @@ update-translation-strings: compile
 	@# apply same xgettext command for each supported locale. TS
 	@$(foreach LOCALE, $(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
 	@# Qt translation stuff
-	@cd safe_qgis; pylupdate4 inasafe.pro; cd ..
+	@cd safe_qgis; pylupdate4 -noobsolete inasafe.pro; cd ..
 	@$(foreach LOCALE, $(LOCALES), echo "safe_qgis/i18n/inasafe_$(LOCALE).ts";)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
