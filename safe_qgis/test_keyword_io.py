@@ -77,11 +77,19 @@ class KeywordIOTest(unittest.TestCase):
         myMessage = "Got: %s\nExpected: %s" % (myHash, myExpectedHash)
         assert myHash == myExpectedHash, myMessage
 
-    def test_getSubLayer(self):
-        """Test we can reliably get a sublayer name for a qgis layer"""
+    def test_getSqliteSubLayer(self):
+        """Test we can reliably get a sublayer name for a qgis sqlite layer"""
         mySubLayerName = self.keywordIO.subLayerName(self.sqliteBuildingsLayer)
-        myExpectedName = 'exposure..buildings_osm_4326.'
-        myMessage = "Got:\n%s\nExpected:\n%s" % (
+        myExpectedName = 'exposure.buildings_osm_4326'
+        myMessage = "\nGot:\n%s\nExpected:\n%s" % (
+                      mySubLayerName, myExpectedName)
+        assert mySubLayerName == myExpectedName, myMessage
+
+    def test_getFileSubLayer(self):
+        """Test we can reliably get a sublayer name for a qgis layer"""
+        mySubLayerName = self.keywordIO.subLayerName(self.fileVectorLayer)
+        myExpectedName = 'Padang_WGS84'
+        myMessage = "\nGot:\n%s\nExpected:\n%s" % (
                       mySubLayerName, myExpectedName)
         assert mySubLayerName == myExpectedName, myMessage
 
@@ -165,7 +173,6 @@ class KeywordIOTest(unittest.TestCase):
         myKeywords = self.keywordIO.readKeywords(self.sqliteBuildingsLayer)
         myMessage = 'Got: %s\n\nExpected %s' % (
                     myKeywords, self.expectedBuildingsKeywords)
-        myExpectedKeywords = self.expectedBuildingsKeywords
         assert myKeywords == self.expectedBuildingsKeywords, myMessage
 
 if __name__ == '__main__':

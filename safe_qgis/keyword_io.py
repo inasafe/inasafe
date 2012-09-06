@@ -370,6 +370,20 @@ class KeywordIO(QObject):
             myFileBasedFlag = myProviderDict[myProviderType]
         return myFileBasedFlag
 
+    def prependDot(self, theWord):
+        """Small helper to prepend a dot to sublayer name part.
+
+        Args:
+            theWord - string to have dot conditionally prepended to it.
+        Returns:
+            str - theWord + '.' or ''
+        Raises:
+            None
+        """
+        if theWord is None or theWord == '':
+            return ''
+        return '.' + theWord
+
     def subLayerName(self, theLayer):
         """Given datasource, determine its sublayer name.
 
@@ -459,11 +473,11 @@ class KeywordIO(QObject):
                 # Chop out everything from the end of the match to end of line
                 mySQL = theLayer.source()[myRegex.end():]
 
-            mySubLayer = ('%(myFileBase)s.%(myLayerId)s.%(mySQL)s.' %
+            mySubLayer = ('%(myFileBase)s%(myLayerId)s%(mySQL)s' %
                     {
                         'myFileBase': myFileBase,
-                        'myLayerId': myLayerId,
-                        'mySQL': mySQL
+                        'myLayerId': self.prependDot(myLayerId),
+                        'mySQL': self.prependDot(mySQL)
                     })
 
         else:
@@ -478,12 +492,12 @@ class KeywordIO(QObject):
             myDBPath = os.path.splitext(myDBPath)[0]
             mySQL = str(myURI.sql())
 
-            mySubLayer = ('%(myDB)s.%(mySchema)s.%(myTable)s.%(mySQL)s' %
+            mySubLayer = ('%(myDB)s%(mySchema)s%(myTable)s%(mySQL)s' %
                 {
                     'myDB': myDBPath,
-                    'mySchema': mySchema,
-                    'myTable': myTable,
-                    'mySQL': mySQL
+                    'mySchema': self.prependDot(mySchema),
+                    'myTable': self.prependDot(myTable),
+                    'mySQL': self.prependDot(mySQL)
                 })
         return mySubLayer
 
