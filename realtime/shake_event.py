@@ -636,6 +636,10 @@ class ShakeEvent:
         # So that we can set the label in it roman numeral form
         myFieldDefinition = ogr.FieldDefn('ROMAN', ogr.OFTString)
         myLayer.CreateField(myFieldDefinition)
+        # So that we can set the label horizontal alignment
+        myFieldDefinition = ogr.FieldDefn('ALIGN', ogr.OFTString)
+        myLayer.CreateField(myFieldDefinition)
+
         myTifDataset = gdal.Open(myTifPath, GA_ReadOnly)
         # see http://gdal.org/java/org/gdal/gdal/gdal.html for these options
         myBand = 1
@@ -695,6 +699,7 @@ class ShakeEvent:
         myXIndex = myProvider.fieldNameIndex('X')
         myYIndex = myProvider.fieldNameIndex('Y')
         myRomanIndex = myProvider.fieldNameIndex('ROMAN')
+        myAlignIndex = myProvider.fieldNameIndex('ALIGN')
         myFeature = QgsFeature()
         myLayer.startEditing()
         # Now loop through the db adding selected features to mem layer
@@ -716,7 +721,11 @@ class ShakeEvent:
             myAttributes = myFeature.attributeMap()
             myMMIValue = float(myAttributes[myMMIIndex].toString())
             print 'MMI: ----> %s' % myAttributes[myMMIIndex].toString()
-            myRoman = myRomanList[int(round(myMMIValue))]
+	    # We only want labels on the half contours so test for that
+            if myMMIValue != round(myMMIValue):
+                myRoman = myRomanList[int(round(myMMIValue))]
+            else:
+                myRoman = ''
             # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
             myRGBList = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',
                          '#FF0', '#FD0', '#ff9100', '#F00', '#D00', '#800',
@@ -729,6 +738,7 @@ class ShakeEvent:
             myLayer.changeAttributeValue(myId, myYIndex, QVariant(myY))
             myLayer.changeAttributeValue(myId, myRGBIndex, QVariant(myRGB))
             myLayer.changeAttributeValue(myId, myRomanIndex, QVariant(myRoman))
+            myLayer.changeAttributeValue(myId, myAlignIndex, QVariant('Center'))
 
         myLayer.commitChanges()
 
