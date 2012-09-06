@@ -6,7 +6,7 @@
 
   <datafile>
     <filename>exposure.sqlite</filename>
-    <checksum>281692441</checksum>
+    <checksum>3247063810</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
     <source>Open Street Map (OSM)</source>
