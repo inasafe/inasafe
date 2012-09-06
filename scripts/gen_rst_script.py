@@ -176,7 +176,7 @@ def main():
     #creating index.rst file
     module_text = create_index('Packages safe_qgis', def_max_depth,
     ['safe_qgis'])
-    test_module_txt = create_index('Unit Tests', def_max_depth,
+    test_module_text = create_index('Unit Tests', def_max_depth,
     ['safe_qgis_tests'])
     safe_package_text = create_index('Packages safe', def_max_depth,
     ['safe'])
