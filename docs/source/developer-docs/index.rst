@@ -23,6 +23,7 @@ Developer Documentation Contents:
    bug_reporting
    preparing_a_release
    jenkins_ci
+   irc
    faq
    todo
 
