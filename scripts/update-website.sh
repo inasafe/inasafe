@@ -55,12 +55,12 @@ else
     git push
   fi
   
-  echo "Syncing html"
+  echo "Syncing html to gh-pages"
   cd $GHPAGESDIR
   rsync --delete -av --exclude=.buildinfo --exclude=.nojekyll --exclude=CNAME --exclude=.git $INASAFEDIR/docs/build/html/ $GHPAGESDIR
   git add -A
   git commit -m 'Automated docs update'
-  git push
+  git push origin gh-pages
   echo "Done"
   exit 0
 fi
