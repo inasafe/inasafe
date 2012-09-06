@@ -105,7 +105,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.dock = theDock
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
-
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
         QtCore.QObject.connect(self.lstKeywords, QtCore.SIGNAL(

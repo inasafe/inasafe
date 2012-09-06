@@ -1,11 +1,6 @@
-[exposure.indonesia_highway]
-category: exposure
-subcategory: roads
-title: indonesia_highway
-
-[exposure.buildings_osm_4326]
+[buildings_osm_4326]
 datatype: osm
 category: exposure
 subcategory: building
+purpose: dki
 title: buildings_osm_4326
-

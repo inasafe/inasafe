@@ -23,9 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # pylint: disable=W0611
 from safe.storage.utilities import bbox_intersection
 from safe.storage.utilities import buffered_bounding_box, verify
-from safe.storage.utilities import (write_keywords,
-                                    read_keywords,
-                                    read_sublayer_names)
+from safe.storage.utilities import write_keywords, read_keywords
 from safe.storage.core import read_layer
 
 from safe.impact_functions import get_plugins
@@ -36,8 +34,6 @@ from safe.engine.core import calculate_impact
 
 from safe.common.dynamic_translations import names as internationalisedNames
 from safe.common.numerics import nanallclose
-from safe.common.exceptions import (BoundingBoxError,
-                                    ReadLayerError,
-                                    NoKeywordsFoundError)
+from safe.common.exceptions import BoundingBoxError, ReadLayerError
 from safe.common.utilities import VerificationError, temp_dir, unique_filename
 # pylint: enable=W0611
