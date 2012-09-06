@@ -197,7 +197,7 @@ class KeywordIO(QObject):
             None
         """
         if theSubLayer is None:
-            theSubLayer = self.subLayerName(theLayer)
+            theSubLayer = self.subLayerName(theSourceLayer)
         myKeywords = self.readKeywords(theSourceLayer, theSubLayer)
         if theExtraKeywords is None:
             theExtraKeywords = {}
@@ -636,6 +636,9 @@ class KeywordIO(QObject):
         Raises:
            KeywordNotFoundException if the keyword is not found.
         """
+        # TODO use sublayer where appropriate
+        del theSubLayer
+
         myHash = self.getHashForDatasource(theUri)
         self.openConnection()
         try:
