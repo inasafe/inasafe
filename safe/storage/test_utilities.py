@@ -16,7 +16,8 @@ import unittest
 
 from safe.common.testing import UNITDATA
 from safe.storage.utilities import (read_keywords,
-                                    write_keywords)
+                                    write_keywords,
+                                    read_sublayer_names)
 
 LOGGER = logging.getLogger('InaSAFE')
 KEYWORD_PATH = os.path.abspath(
@@ -104,6 +105,14 @@ class CommonUtilitiesTest(unittest.TestCase):
         msg = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEquals(keywords, expected_keywords, msg)
         LOGGER.debug(keywords)
+
+    def test_read_sublayer_names(self):
+        """Test we can get a list of sublayer names for a keywords file."""
+        sublayers = read_sublayer_names(KEYWORD_PATH)
+        expected_names = ['osm_buildings', 'osm_flood']
+        msg = 'Expected:\n%s\nGot:\n%s\n' % (expected_names, sublayers)
+        self.assertEquals(sublayers, expected_names, msg)
+        LOGGER.debug(sublayers)
 
     def test_read_keywords_for_sublayer(self):
         """Test reading keywords for specific sublayer."""

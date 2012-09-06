@@ -15,19 +15,21 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import re
 import logging
 import sqlite3 as sqlite
 import cPickle as pickle
 
 from PyQt4.QtCore import QObject
 from PyQt4.QtCore import QSettings
-from qgis.core import QgsMapLayer
+from qgis.core import QgsMapLayer, QgsDataSourceURI
 
 from safe_qgis.exceptions import (HashNotFoundException,
-                                    KeywordNotFoundException)
+                                  KeywordNotFoundException)
 from safe_qgis.safe_interface import (verify,
                                readKeywordsFromFile,
-                               writeKeywordsToFile)
+                               writeKeywordsToFile,
+                               readSubLayerNames)
 from safe_qgis.utilities import qgisVersion
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -37,8 +39,8 @@ class KeywordIO(QObject):
     """Class for doing keyword read/write operations.
 
     It abstracts away differences between using SAFE to get keywords from a
-    .keywords file and this plugins implemenation of keyword caching in a local
-    sqlite db used for supporting keywords for remote datasources."""
+    .keywords file and this plugin's implementation of keyword caching in a
+    local sqlite db used for supporting keywords for remote datasources."""
 
     def __init__(self):
         """Constructor for the KeywordIO object.
@@ -72,7 +74,7 @@ class KeywordIO(QObject):
         """
         self.keywordDbPath = str(thePath)
 
-    def readKeywords(self, theLayer, theKeyword=None):
+    def readKeywords(self, theLayer, theKeyword=None, theSubLayer=None):
         """Read keywords for a datasource and return them as a dictionary.
         This is a wrapper method that will 'do the right thing' to fetch
         keywords for the given datasource. In particular, if the datasource
@@ -82,27 +84,47 @@ class KeywordIO(QObject):
         Args:
             * theLayer - A QGIS QgsMapLayer instance.
             * theKeyword - optional - will extract only the specified keyword
-              from the keywords dict.
+                  from the keywords dict.
+            * theSubLayer - optional - sublayer to read the keywords for. If
+                  not supplied we will automatically try to detect it using a
+                  call to :func:`subLayerName`.
         Returns:
             A dict if theKeyword is omitted, otherwise the value for the
             given key if it is present.
         Raises:
             Propogates any exception from the underlying reader delegate.
         """
-        mySource = str(theLayer.source())
-        myFlag = self.areKeywordsFileBased(theLayer)
-        myKeywords = None
+
+        myFlag = self.dataSourceIsFileBased(theLayer)
+        if theSubLayer is None:
+            theSubLayer = self.subLayerName(theLayer)
+        # Special case for sqlite - file name needs to be extracted from src.
+        if 'spatialite' == theLayer.dataProvider().name():
+            mySource = str(QgsDataSourceURI(theLayer.source()).database())
+        else:
+            mySource = str(theLayer.source())
+        # Temporary hack for backwards compatibility to keyword files that
+        # had no sublayer groupings. We set sublayer to none and then the
+        # global keywords are retrieved.
+        # TODO: Remove this hack
+        myBaseName, _ = os.path.splitext(mySource)
+        myBaseName += '.keywords'
+        mySubLayerNames = readSubLayerNames(myBaseName)
+        if len(mySubLayerNames) == 0:
+            theSubLayer = None
 
         try:
             if myFlag:
-                myKeywords = readKeywordsFromFile(mySource, theKeyword)
+                myKeywords = readKeywordsFromFile(mySource, theKeyword,
+                                                  theSubLayer)
             else:
-                myKeywords = self.readKeywordFromUri(mySource, theKeyword)
+                myKeywords = self.readKeywordFromUri(mySource, theKeyword,
+                                                     theSubLayer)
             return myKeywords
         except (HashNotFoundException, Exception):
             raise
 
-    def writeKeywords(self, theLayer, theKeywords):
+    def writeKeywords(self, theLayer, theKeywords, theSubLayer=None):
         """Write keywords for a datasource.
         This is a wrapper method that will 'do the right thing' to store
         keywords for the given datasource. In particular, if the datasource
@@ -110,19 +132,28 @@ class KeywordIO(QObject):
         the keywords store.
 
         Args:
-            * theLayer - A QGIS QgsMapLayer instance.
-            * theKeywords - a dict containing all the keywords to be written
+            * theLayer: A QGIS QgsMapLayer instance.
+            * theKeywords: a dict containing all the keywords to be written
               for the layer.
+            * theSubLayer: str Optional name of a sublayer. If not supplied,
+                  the sub layer name will be determined with a call to
+                  func:`subLayerName`.
         Returns:
             None.
         Raises:
             None
         """
-        mySource = str(theLayer.source())
-        myFlag = self.areKeywordsFileBased(theLayer)
+        if theSubLayer is None:
+            theSubLayer = self.subLayerName(theLayer)
+        # Special case for sqlite - file name needs to be extracted from src
+        if 'spatialite' == theLayer.dataProvider().name():
+            mySource = str(QgsDataSourceURI(theLayer.source()).database())
+        else:
+            mySource = str(theLayer.source())
+        myFlag = self.dataSourceIsFileBased(theLayer)
         try:
             if myFlag:
-                writeKeywordsToFile(mySource, theKeywords)
+                writeKeywordsToFile(mySource, theKeywords, theSubLayer)
             else:
                 self.writeKeywordsForUri(mySource, theKeywords)
             return
@@ -130,7 +161,8 @@ class KeywordIO(QObject):
             raise
 
     def copyKeywords(self, theSourceLayer,
-                     theDestinationFile, theExtraKeywords=None):
+                     theDestinationFile, theExtraKeywords=None,
+                     theSubLayer=None):
         """Helper to copy the keywords file from a source dataset
         to a destination dataset.
 
@@ -156,12 +188,17 @@ class KeywordIO(QObject):
               original keywords from the source layer's keywords file and
               and the extra keywords (which will replace the source layers
               keywords if the key is identical).
+            * theSubLayer - optional - sublayer to read the keywords for.
+                  If not supplied, the sub layer name will be determined with a
+                  call to func:`subLayerName`.
         Returns:
             None.
         Raises:
             None
         """
-        myKeywords = self.readKeywords(theSourceLayer)
+        if theSubLayer is None:
+            theSubLayer = self.subLayerName(theLayer)
+        myKeywords = self.readKeywords(theSourceLayer, theSubLayer)
         if theExtraKeywords is None:
             theExtraKeywords = {}
         myMessage = self.tr('Expected extraKeywords to be a dictionary. Got %s'
@@ -174,7 +211,7 @@ class KeywordIO(QObject):
         try:
             for key in theExtraKeywords:
                 myKeywords[key] = theExtraKeywords[key]
-            writeKeywordsToFile(myNewDestination, myKeywords)
+            writeKeywordsToFile(myNewDestination, myKeywords, theSubLayer)
         except Exception, e:
             myMessage = self.tr('Failed to copy keywords file from :'
                            '\n%s\nto\%s: %s' %
@@ -293,16 +330,17 @@ class KeywordIO(QObject):
             print "Error %s:" % e.args[0]
             raise
 
-    def areKeywordsFileBased(self, theLayer):
-        """Find out if keywords should be read/written to file or our keywords
-          db.
+    def dataSourceIsFileBased(self, theLayer):
+        """Find out if the datasource for a layer is on a file system.
 
         Args:
             * theLayer - A QGIS QgsMapLayer instance.
 
         Returns:
-            True if keywords are storedin a file next to the dataset,
-            else False if the dataset is remove e.g. a database.
+            bool True if the datasource is file based (typically we want to
+                know this so we can determind if keywords are stored in a file
+                next to the dataset. False if the dataset is remote e.g.
+                a database.
         Raises:
             None
         """
@@ -320,17 +358,134 @@ class KeywordIO(QObject):
         else:
             myProviderType = str(theLayer.providerType())
 
-        myProviderDict = {'ogr': True,
+        myProviderDict = {'ogr': True,  # There could be gotchas with this one!
                           'gdal': True,
                           'gpx': False,
                           'wms': False,
-                          'spatialite': False,
+                          'spatialite': True,
                           'delimitedtext': True,
                           'postgres': False}
-        myFileBasedKeywords = False
+        myFileBasedFlag = False
         if myProviderType in myProviderDict:
-            myFileBasedKeywords = myProviderDict[myProviderType]
-        return myFileBasedKeywords
+            myFileBasedFlag = myProviderDict[myProviderType]
+        return myFileBasedFlag
+
+    def subLayerName(self, theLayer):
+        """Given datasource, determine its sublayer name.
+
+        Args:
+            theLayer: str Required. Layer which will be used to
+            determine what the sublayer name is.
+        Returns:
+            str: A string containing the sub layer name or None as applicable.
+
+        Raises:
+            No exceptions raised explicitly, any exceptions will be propagated.
+
+        The sublayer name might be a hash or a physical layer name according
+        to the following logic:
+
+        * If the layer is a shapefile with no query, the sublayer will be
+          the file basename with the .shp removed and a hash of the subquery
+          gumpf added to the path by QGIS. For example:
+
+            Source        :  c:\tmp\foo.shp
+            Sub layer name: 'foo'
+
+            Source        : c:\tmp\foo.shp|layerid=0|subset="KAB_NAME"
+                             = \'JAKARTA TIMUR\'
+            Sub layer name: foo-7667ds676
+
+        * If the datasource is a remote datasource, such as postgres, the
+          username and password and other parts are stripped from the uri and
+          the remaining connection string is hashed. In theory this would make
+          the keywords portable to other users on different clients.
+
+            Source        : dbname=\'gis\' host=localhost port=5432 user=
+                            \'timlinux\' password=\'foo\' sslmode=disable
+                            key=\'gid\' estimatedmetadata=true srid=4326
+                            type=MULTIPOLYGON table="africa"."coastline"
+                            (the_geom) sql=
+
+            Sub Layer Name: gis.africa.coastline.4326.MULTIPOLYGON
+
+
+        * If the datasource is a sqlite or other local file based multilayer
+          datasource and there is *no* sql query provided, the sublayer will
+          be the schema + table or view name.
+
+          Examples:
+
+            Source        : dbname=\'c:\tmp\foo.sqlite\' table="osm_buildings"
+                            (Geometry) sql=''
+            Sub Layer Name: osm_buildings
+
+
+        * If the datasource is a sqlite or pg database and there *is* an
+          sql query provided, the sublayer name will be in the format
+          '<table or view name>-<hash>' where the hash is an md5 sum of the
+          query.
+
+        """
+        myFileFlag = (self.dataSourceIsFileBased(theLayer) and not
+            theLayer.providerType() == 'spatialite')
+
+        if myFileFlag:
+            # Example layer source that has a subquery.
+            #'/tmp/DKI_buildings.shp|layerid=0|subset="type" != \'Apartemen\''
+            # We will break it into:
+            # base: DKI_Buildings
+            # layerid: 0
+            # subset: "type" != \'Apartemen\'
+            # if layerid is 0 it will be ommitted
+            # if subset is '' it will be ommitted
+            # Get the actual base part of the file name with no extension
+            myFileBase = os.path.split(str(theLayer.source()))
+            myFileBase = os.path.splitext(myFileBase[1])[0]
+
+            # Get the sublayer if available
+            myTokens = str(theLayer.source()).split('|')
+            myLayerId = None
+            if len(myTokens) > 1:
+                myLayerIdString = myTokens[1]
+                myTokens = myLayerIdString.split('=')
+                if len(myTokens) > 1:
+                    myLayerId = myTokens[1]
+
+            # Get the sql subquery if any
+            mySQL = None
+            myRegex = re.search('subset=', theLayer.source())
+            if myRegex is not None:
+                # Chop out everything from the end of the match to end of line
+                mySQL = theLayer.source()[myRegex.end():]
+
+            mySubLayer = ('%(myFileBase)s.%(myLayerId)s.%(mySQL)s.' %
+                    {
+                        'myFileBase': myFileBase,
+                        'myLayerId': myLayerId,
+                        'mySQL': mySQL
+                    })
+
+        else:
+            myURI = QgsDataSourceURI(theLayer.source())
+            mySchema = str(myURI.schema())
+            myTable = str(myURI.table())
+            # Some providers e.g. spatialite include a full path to the db
+            # file so we are going to strip it down a little in
+            # the next 3 lines...
+            myDB = str(myURI.database())
+            myDBPath = os.path.split(myDB)[1]
+            myDBPath = os.path.splitext(myDBPath)[0]
+            mySQL = str(myURI.sql())
+
+            mySubLayer = ('%(myDB)s.%(mySchema)s.%(myTable)s.%(mySQL)s' %
+                {
+                    'myDB': myDBPath,
+                    'mySchema': mySchema,
+                    'myTable': myTable,
+                    'mySQL': mySQL
+                })
+        return mySubLayer
 
     def getHashForDatasource(self, theDataSource):
         """Given a datasource, return its hash.
@@ -441,7 +596,7 @@ class KeywordIO(QObject):
         finally:
             self.closeConnection()
 
-    def readKeywordFromUri(self, theUri, theKeyword=None):
+    def readKeywordFromUri(self, theUri, theKeyword=None, theSubLayer=None):
         """Get metadata from the keywords file associated with a
         non local layer (e.g. postgresql connection).
 
@@ -457,6 +612,7 @@ class KeywordIO(QObject):
              .e.g. 'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
              password=\'bar\' sslmode=disable key=\'id\' srid=4326
            * keyword - optional - the metadata keyword to retrieve e.g. 'title'
+           * theSubLayer - optional - sublayer to read the keywords for.
 
         Returns:
            A string containing the retrieved value for the keyword if

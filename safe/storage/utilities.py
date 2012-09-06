@@ -8,6 +8,7 @@ import numpy
 import math
 from osgeo import ogr
 
+from safe.common.exceptions import NoKeywordsFoundError
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
 
@@ -196,6 +197,50 @@ def write_keywords(keywords, filename, sublayer=None):
     handle.close()
 
 
+def read_sublayer_names(filename):
+    """Parse a keywords file returning a list of all sublayer block names.
+
+    Args:
+        * filename: Name of keywords file. Extension expected to be .keywords
+             The format of one line is expected to be either
+             string: string or string
+
+    Returns:
+        str: List of 0 or more block names
+
+    Raises: None
+    """
+    # Input checks
+    basename, ext = os.path.splitext(filename)
+
+    msg = ('Unknown extension for file %s. '
+           'Expected %s.keywords' % (filename, basename))
+    verify(ext == '.keywords', msg)
+
+    if not os.path.isfile(filename):
+        return {}
+
+    # Read all entries
+    blocks = []
+    fid = open(filename, 'r')
+    for line in fid.readlines():
+        # Remove trailing (but not preceeding!) whitespace
+        text = line.rstrip()
+
+        # Ignore blank lines
+        if text == '':
+            continue
+
+        # Check if it is an ini style group header
+        block_flag = re.search(r'^\[.*]$', text, re.M | re.I)
+
+        if block_flag:
+            # now set up for a new block
+            blocks.append(text[1:-1])
+
+    return blocks
+
+
 def read_keywords(filename, sublayer=None, all_blocks=False):
     """Read keywords dictionary from file
 
@@ -306,7 +351,7 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
 
     fid.close()
 
-    # Write our any unfinalised block data
+    # Write out any unfinalised block data
     if len(keywords) > 0 and current_block is not None:
         blocks[current_block] = keywords
     if first_keywords is None:
@@ -323,6 +368,8 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
             return blocks[sublayer]
     else:
         return first_keywords
+    raise NoKeywordsFoundError('Could not find any keywords for File: %s, '
+                               'SubLayer: %s.' % (filename, sublayer))
 
 
 def geotransform2bbox(geotransform, columns, rows):

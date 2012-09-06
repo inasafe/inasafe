@@ -31,7 +31,10 @@ import unicodedata
 from safe.api import get_admissible_plugins
 from safe.api import get_function_title
 from safe.api import get_plugins as safe_get_plugins
-from safe.api import read_keywords, bbox_intersection
+from safe.api import (read_sublayer_names,
+                      read_keywords,
+                      bbox_intersection,
+                      NoKeywordsFoundError)
 from safe.api import write_keywords as safe_write_keywords
 from safe.api import read_layer as safe_read_layer
 from safe.api import (buffered_bounding_box,
@@ -246,7 +249,7 @@ def readKeywordsFromLayer(theLayer, keyword):
         raise InvalidParameterException()
     try:
         myValue = theLayer.get_keywords(keyword)
-    except Exception, e:
+    except (NoKeywordsFoundError, Exception), e:
         myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 theLayer.get_filename(), keyword, str(e)))
         raise KeywordNotFoundException(myMessage)
@@ -257,7 +260,12 @@ def readKeywordsFromLayer(theLayer, keyword):
     return myValue
 
 
-def readKeywordsFromFile(theLayerPath, theKeyword=None):
+def readSubLayerNames(theLayerPath):
+    """Get the list of the sublayers having keywords for this file."""
+    return read_sublayer_names(theLayerPath)
+
+
+def readKeywordsFromFile(theLayerPath, theKeyword=None, theSubLayer=None):
     """Get metadata from the keywords file associated with a local
      file in the file system.
 
@@ -272,6 +280,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
        * theLayerPath - a string representing a path to a layer
            (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
        * theKeyword - optional - the metadata keyword to retrieve e.g. 'title'
+       * theSubLayer - optional - sublayer to read the keywords for.
 
     Returns:
        A string containing the retrieved value for the keyword if
@@ -297,7 +306,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     #now get the requested keyword using the inasafe library
     myDictionary = None
     try:
-        myDictionary = read_keywords(myKeywordFilePath)
+        myDictionary = read_keywords(myKeywordFilePath, sublayer=theSubLayer)
     except Exception, e:
         myMessage = tr('Keyword retrieval failed for %s (%s) \n %s' % (
                 myKeywordFilePath, theKeyword, str(e)))
@@ -318,14 +327,15 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     return myValue
 
 
-def writeKeywordsToFile(theFilename, theKeywords):
+def writeKeywordsToFile(theFilename, theKeywords, theSubLayer=None):
     """Thin wrapper around the safe write_keywords function.
 
     Args:
-        * thePath - str representing path to layer that must be written.
+        * thePath: str representing path to layer that must be written.
           If the file does not end in .keywords, its extension will be
           stripped off and the basename + .keywords will be used as the file.
-        * theKeywords - a dictionary of keywords to be written
+        * theKeywords: a dictionary of keywords to be written
+        * theSubLayer: str Optional sublayer name for the keywords.
     Returns:
         None
     Raises:
@@ -335,7 +345,7 @@ def writeKeywordsToFile(theFilename, theKeywords):
     if 'keywords' not in myExtension:
         theFilename = myBasename + '.keywords'
     try:
-        safe_write_keywords(theKeywords, theFilename)
+        safe_write_keywords(theKeywords, theFilename, theSubLayer)
     except:
         raise
 

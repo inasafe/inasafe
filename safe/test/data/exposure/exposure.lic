@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Tim Sutton, Linfiniti Consulting CC</author>
+  </metadata>
+
+  <datafile>
+    <filename>exposure.sqlite</filename>
+    <checksum>3247063810</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset and a small part of the Indonesia highways dataset (both of which originate from OSM).</IP_info>
+  </datafile>
+
+</ga_license_file>
+

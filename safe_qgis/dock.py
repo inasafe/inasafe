@@ -501,9 +501,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             mySource = str(myLayer.id())
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
-
             try:
-                myTitle = self.keywordIO.readKeywords(myLayer, 'title')
+                myTitle = self.keywordIO.readKeywords(theLayer=myLayer,
+                                                      theKeyword='title')
             except:  # pylint: disable=W0702
                 myTitle = myName
             else:

@@ -23,8 +23,7 @@ extensions_to_ignore += ['.prj', '.sbn', '.sbx', '.cpg']
 extensions_to_ignore += ['.keywords']
 
 # Ignore QGIS projects and styles
-extensions_to_ignore += ['.qml', '.qpj', '.qgs',
-                         '.sld', '.sqlite', '.db']
+extensions_to_ignore += ['.qml', '.qpj', '.qgs', '.sld']
 
 # Ignore pdf, doc and csv documents
 extensions_to_ignore += ['.pdf', '.doc', '.csv']
