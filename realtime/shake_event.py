@@ -1182,9 +1182,9 @@ class ShakeEvent:
                      'rows: %(rows)s\n'
                      'columns: %(columns)s\n'
                      'mmiData: %(mmiData)s\n'
-                     'populationRasterPath: %(populationRasterPath)\n'
-                     'impactFile: %(impactFile)\n'
-                     'fatalityCounts: %(fatalityCounts)') %
+                     'populationRasterPath: %(populationRasterPath)s\n'
+                     'impactFile: %(impactFile)s\n'
+                     'fatalityCounts: %(fatalityCounts)s') %
                     {
                         'latitude': self.latitude,
                         'longitude': self.longitude,
