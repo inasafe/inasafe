@@ -1879,7 +1879,7 @@ class Test_Engine(unittest.TestCase):
                 assert not is_inside_polygon(midpoint, test_polygon)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if True:
+        if False:  # True:
             P = Vector(geometry=[test_polygon])
             P.write_to_file('test_polygon.shp')
 
@@ -2041,8 +2041,6 @@ class Test_Engine(unittest.TestCase):
         This is a test for road interpolation (issue #55)
         """
 
-        # TODO!!!!!!!!!!!!!!
-
         # Name file names for hazard level and exposure
         hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
         exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
@@ -2167,10 +2165,18 @@ class Test_Engine(unittest.TestCase):
     # FIXME (Ole): This test shows that current polygon-line interpolation
     # functionality is unacceptably slow.
     # For the moment, it has been cut down to a few polygons
-    def Xtest_polygon_to_roads_interpolation_flood_example(self):
+    def test_polygon_to_roads_interpolation_flood_example(self):
         """Roads can be tagged with values from flood polygons
 
         This is a test for road interpolation (issue #55)
+
+        # The dataset is large: 2704 complex polygons
+        and 108082 complex line features.
+
+        The runtime for the whole set is in the order of more than
+        1 hour. Cutting the number of lines down by a factor of 10 years
+        brings it down to about 10 minutes (500 seconds).
+        A factor of 100 gives about 1 minute.
         """
 
         # Name file names for hazard level and exposure
@@ -2178,31 +2184,36 @@ class Test_Engine(unittest.TestCase):
         exposure_filename = ('%s/indonesia_highway.shp' % EXPDATA)
 
         # Read all input data
-        H = read_layer(hazard_filename)
+        H = read_layer(hazard_filename)  # Polygons
         H_attributes = H.get_data()
         H_geometry = H.get_geometry()
         assert len(H) == 2704
 
-        E = read_layer(exposure_filename)  # This is slow to read
+        E = read_layer(exposure_filename)  # Lines - this is slow to read
         E_geometry = E.get_geometry()
         E_attributes = E.get_data()
         assert len(E) == 108082
 
-        # Cut number of features down
-        H = Vector(data=H_attributes[:-1:100],
-                   geometry=H_geometry[:-1:100],
-                   projection=H.get_projection())
-
+        # Cut number of road features down
+        # A factor of ten brings the runtime down to about 10 minutes.
+        # A factor of ten brings the runtime down to less than 1 minute.
         E = Vector(data=E_attributes[:-1:100],
                    geometry=E_geometry[:-1:100],
                    projection=E.get_projection(),
                    geometry_type=E.geometry_type)
 
         # Test interpolation function
+        import time
+        t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   # Take all attributes across
                                                   attribute_name=None)
+        print 'That took %f seconds' % (time.time() - t0)
+
+        # TODO:
+        # Keep only those roads that are marked FLOODPRONE == 'YES'
+
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
@@ -2214,7 +2225,7 @@ class Test_Engine(unittest.TestCase):
 
             L = Vector(geometry=I_geometry, geometry_type='line',
                        data=I_attributes)
-            L.write_to_file('flooded_roads.shp')
+            L.write_to_file('flood_tagged_roads.shp')
 
         # Assert that expected attribute names exist
         I_names = I.get_attribute_names()
@@ -2228,12 +2239,18 @@ class Test_Engine(unittest.TestCase):
             msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
             assert name in I_names, msg
 
+        # FIXME (Ole): Finish this test
         # Check that attributes have been carried through
         #for i, attr in enumerate(I_attributes):
         #    pass
         #    # TODO
+        # Check against correctness verified in QGIS
+        #assert I_attributes[]['highway'] ==
+        #assert I_attributes[]['osm_id'] ==
+        #assert I_attributes[]['polygon_id'] ==
+        #assert I_attributes[]['parent_line_id'] ==
 
-    Xtest_polygon_to_roads_interpolation_flood_example.slow = True
+    test_polygon_to_roads_interpolation_flood_example.slow = True
 
     def Xtest_line_interpolation_from_polygons_one_attribute(self):
         """Line interpolation using one polygon works with attribute
@@ -2244,7 +2261,7 @@ class Test_Engine(unittest.TestCase):
         # FIXME: test passes, but functionality is not really there.
         # Do we need it?
 
-        # RETIRE
+        # RETIRE!!!!!!
 
         # Name file names for hazard level and exposure
         hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
@@ -2264,9 +2281,6 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  # Spelling is as in test data
-        #                  attribute_name='Catergory')
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   # Spelling is as in test data
@@ -2313,125 +2327,6 @@ class Test_Engine(unittest.TestCase):
         msg = ('Expected 14 segments tagged with category "Very High", '
                'but got only %i' % counts['Very High'])
         assert counts['Very High'] == 14, msg
-
-    def Xtest_line_interpolation_from_polygons(self):
-        """Line clipping and interpolation using multiple polygons works
-
-        This is a test for road interpolation (issue #55)
-        """
-
-        # NOT YET FULLY DONE
-
-        # RETIRE
-
-        # Name file names for hazard level and exposure
-        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
-        exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
-
-        # Read input data
-        H = read_layer(hazard_filename)
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-
-        # MakeCut down to a few polygons
-        H = Vector(data=H_attributes[799:],
-                   geometry=H_geometry[799:],
-                   projection=H.get_projection())
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-        E = read_layer(exposure_filename)
-
-        # Test interpolation function
-        #I = H.interpolate(E, layer_name='depth',
-        #                  attribute_name=None)  # Take all attributes across
-        I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth',
-                                                  # Take all attributes across
-                                                  attribute_name=None)
-
-        I_geometry = I.get_geometry()
-        I_attributes = I.get_data()
-        assert I.get_name() == 'depth'
-        N = len(I_attributes)
-
-        # Possibly generate files for visual inspection with e.g. QGis
-        if False:  # True:
-            L = Vector(geometry=H_geometry, geometry_type='polygon',
-                       data=H_attributes)
-            L.write_to_file('test_polygon.shp')
-
-            L = Vector(geometry=I_geometry, geometry_type='line',
-                       data=I_attributes)
-            L.write_to_file('interpolated_lines.shp')
-
-        # Assert that expected attribute names exist
-        I_names = I.get_attribute_names()
-        H_names = H.get_attribute_names()
-        E_names = E.get_attribute_names()
-        for name in H_names:
-            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
-            assert name in I_names, msg
-
-        for name in E_names:
-            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
-            assert name in I_names, msg
-
-        # Verify interpolated values with test result
-        count = 0
-        counts = {}
-        for i in range(N):
-
-            # Check that default attribute is present
-            attrs = I_attributes[i]
-            msg = ('Did not find default attribute %s in %s'
-                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
-            assert DEFAULT_ATTRIBUTE in attrs, msg
-
-            # Count items using default attribute
-            if DEFAULT_ATTRIBUTE not in counts:
-                counts[DEFAULT_ATTRIBUTE] = 0
-                counts['Not ' + DEFAULT_ATTRIBUTE] = 0
-
-            if attrs[DEFAULT_ATTRIBUTE] is True:
-                counts[DEFAULT_ATTRIBUTE] += 1
-            else:
-                counts['Not ' + DEFAULT_ATTRIBUTE] += 1
-
-            # Check specific attribute
-            category = I_attributes[i]['Catergory']  # The typo is as the data
-            if category is not None:
-                assert category.lower() in ['high', 'very high']
-                count += 1
-
-        msg = ('Expected 59 points tagged with category, '
-               'but got %i' % count)
-        assert count == 59, msg
-
-        # FIXME (Ole): Not finished (5/3/12)
-        # return
-
-        # print len(I_geometry)
-        # assert len(I_geometry) == 181
-
-        # assert I_attributes[129]['Catergory'] == 'Very High'
-        # assert I_attributes[135]['Catergory'] is None
-
-        # # Check default attribute too
-        # msg = ('Expected 14 segments tagged with default attribute '
-        #        '"%s = True", '
-        #        'but got only %i' % (DEFAULT_ATTRIBUTE,
-        #                             counts[DEFAULT_ATTRIBUTE]))
-        # assert counts[DEFAULT_ATTRIBUTE] == 14, msg
-
-        # msg = ('Expected 167 points tagged with default attribute '
-        #        '"%s = False", '
-        #        'but got only %i' % (DEFAULT_ATTRIBUTE,
-        #                             counts['Not ' + DEFAULT_ATTRIBUTE]))
-        # assert counts['Not ' + DEFAULT_ATTRIBUTE] == 167, msg
-
-        # msg = 'Affected and not affected does not add up'
-        # assert (counts[DEFAULT_ATTRIBUTE] +
-        #         counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception

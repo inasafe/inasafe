@@ -661,7 +661,8 @@ def clip_line_by_polygon(line, polygon,
        closed: (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
        or not (closed = False) - False is not recommended here
-       polygon_bbox: Provide bounding box around polygon if known. This is a small optimisation
+       polygon_bbox: Provide bounding box around polygon if known.
+           This is a small optimisation
        check_input: Allows faster execution if set to False
 
     Outputs
@@ -769,39 +770,48 @@ def clip_line_by_polygon(line, polygon,
         #-------------
         # Optimisation
         #-------------
-        # Skip segments where both end points are outside polygon bounding box
-        # and which don't intersect the bounding box
+        # Skip segments that are outside polygon bounding box
 
         # In test_engine.py
-        # test_polygon_to_roads_interpolation_flood_example took (E_attributes[:-1:100])
+        # test_polygon_to_roads_interpolation_flood_example with
+        # (E_attributes[:-1:100]) took
         # * Without this: 92s
-        # * With this optimisation: 61s
-        # * With simpler version: 42s
-
-        if p0[0] < minpx and p1[0] < minpx:
-            # Everything is to the west
+        # * With original optimisation: 61s
+        # * With new version: 54s
+        if p0[0] < minpx and p1[0] < minpx:  # Entire segment to the west
             segment_is_outside_bbox = True
-        elif p0[0] > maxpx and p1[0] > maxpx:
-            # Everything is to the east
+        elif p0[0] > maxpx and p1[0] > maxpx:  # Entire segment to the east
             segment_is_outside_bbox = True
-        elif p0[1] < minpy and p1[1] < minpy:
-            # Everything is to the south
+        elif p0[1] < minpy and p1[1] < minpy:  # Entire segment to the south
             segment_is_outside_bbox = True
-        elif p0[1] > maxpy and p1[1] > maxpy:
-            # Everything is to the south
+        elif p0[1] > maxpy and p1[1] > maxpy:  # Entire segment to the north
             segment_is_outside_bbox = True
         else:
-            # Does segment intersect polygon bounding box?
-            corners = numpy.array([[minpx, minpy], [maxpx, minpy],
-                                   [maxpx, maxpy], [minpx, maxpy]])
+            # Skip segments where both end points are outside polygon
+            # bounding box and which don't intersect the bounding box
             segment_is_outside_bbox = True
-            for i in range(3):
-                edge = [corners[i, :], corners[i + 1, :]]
-                status, value = intersection(segment, edge)
-                if value is not None:
-                    # Segment intersects polygon bounding box
-                    segment_is_outside_bbox = False
-                    break
+            if minpx < p0[0] < maxpx or minpy < p0[1] < maxpy:
+                # First endpoint is inside bounding box
+                segment_is_outside_bbox = False
+            elif minpx < p1[0] < maxpx or minpy < p1[1] < maxpy:
+                # Second endpoint is inside bounding box
+                segment_is_outside_bbox = False
+            else:
+                # Both end points are outside bounding box, but could be on
+                # either side so need to check if segment intersects polygon
+                # bounding box.
+                corners = numpy.array([[minpx, minpy], [maxpx, minpy],
+                                       [maxpx, maxpy], [minpx, maxpy],
+                                       [minpx, minpy]])
+                for i in range(4):
+                    edge = [corners[i, :], corners[i + 1, :]]
+                    status, value = intersection(segment, edge,
+                                                 fast=True)
+                    if value is not None:
+                        # Segment intersects polygon bounding box
+                        segment_is_outside_bbox = False
+                        break
+
         #-----------------
         # End optimisation
         #-----------------
@@ -818,14 +828,14 @@ def clip_line_by_polygon(line, polygon,
                 j = (i + 1) % N
                 edge = [polygon[i, :], polygon[j, :]]
 
-                status, value = intersection(segment, edge)
+                status, value = intersection(segment, edge,
+                                             fast=True)
                 if status == 2:
                     # Collinear overlapping lines found
                     # Use midpoint of common segment
                     # FIXME (Ole): Maybe better to use
                     #              common segment directly
-                    value = (value[0] + value[1]) / 2
-
+                    value = (segment[0] + segment[1]) / 2
                 if value is not None:
                     # Record intersection point found
                     intersections.append(value)
@@ -1029,7 +1039,8 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 #    pass
 
 
-def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
+def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
+                 fast=False):
     """Returns intersecting point between two line segments.
 
     However, if parallel lines coincide partly (i.e. share a common segment),
@@ -1041,6 +1052,7 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
                       A line can also be a 2x2 numpy array with each row
                       corresponding to a point.
         rtol, atol: Tolerances passed onto numpy.allclose
+        fast: Default False. If True collinear return values are simplified
 
     Output:
         status, value - where status and value is interpreted as follows:
@@ -1048,7 +1060,8 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
         status == 1: intersection point found and returned in value as [x,y].
         status == 2: Collinear overlapping lines found.
                      Value takes the form [[x0,y0], [x1,y1]] which is the
-                     segment common to both lines.
+                     segment common to both lines. If argument fast is True
+                     we return 2, x, y on the common segment
         status == 3: Collinear non-overlapping lines. Value set to None.
         status == 4: Lines are parallel. Value set to None.
     """
@@ -1070,13 +1083,18 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
         # Lines are parallel - check if they are collinear
         if numpy.allclose([u0, u1], 0.0, rtol=rtol, atol=atol):
             # We now know that the lines are collinear
-            state = (point_on_line([x0, y0], line1, rtol=rtol, atol=atol),
-                     point_on_line([x1, y1], line1, rtol=rtol, atol=atol),
-                     point_on_line([x2, y2], line0, rtol=rtol, atol=atol),
-                     point_on_line([x3, y3], line0, rtol=rtol, atol=atol))
-
-            return collinearmap[state]([x0, y0], [x1, y1],
-                                       [x2, y2], [x3, y3])
+            if fast:
+                # Just return one of the points
+                return 2, numpy.array([x0, y0])
+            else:
+                # FIXME (Ole): It would make sense to maybe return mid point
+                #              of the smallest common segments
+                state = (point_on_line([x0, y0], line1, rtol=rtol, atol=atol),
+                         point_on_line([x1, y1], line1, rtol=rtol, atol=atol),
+                         point_on_line([x2, y2], line0, rtol=rtol, atol=atol),
+                         point_on_line([x3, y3], line0, rtol=rtol, atol=atol))
+                return collinearmap[state]([x0, y0], [x1, y1],
+                                           [x2, y2], [x3, y3])
         else:
             # Lines are parallel but aren't collinear
             return 4, None
@@ -1089,10 +1107,10 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
         y = y0 + u0 * (y1 - y0)
 
         # Sanity check - can be removed to speed up if needed
-        if not numpy.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol):
-            raise Exception
-        if not numpy.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol):
-            raise Exception
+        #if not numpy.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol):
+        #    raise Exception
+        #if not numpy.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol):
+        #    raise Exception
 
         # Check if point found lies within given line segments
         if 0.0 <= u0 <= 1.0 and 0.0 <= u1 <= 1.0:
@@ -1239,8 +1257,8 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
     remaining_lines = lines
 
     # Clip lines to polygons
-    #for polygon in polygons:
-    for i, polygon in enumerate(polygons):
+    for polygon in polygons:
+    #for i, polygon in enumerate(polygons):
         #print ('Doing polygon %i (%i vertices) of %i with '
         #       '%i lines' % (i, len(polygon),
         #                     len(polygons),

@@ -1849,6 +1849,18 @@ class Test_Polygon(unittest.TestCase):
                               [[[-10, 6], [6, 6]], [[14, 6], [16, 6]],
                               [[22, 6], [28, 6]], [[32, 6], [60, 6]]])
 
+    def test_clip_line_by_polygon_already_inside(self):
+        """Polygon line clipping works for special cases
+        """
+
+        line = [[1.5, 0.5], [2.5, 0.5]]
+        polygon = [[1, 0], [3, 0], [2, 1]]
+
+        # Assert that this line is fully inside polygon
+        inside, outside = clip_line_by_polygon(line, polygon)
+        assert len(outside) == 0
+        assert len(inside) > 0
+
     def test_clip_composite_lines_by_polygon(self):
         """Composite lines are clipped and classified by polygon
         """
@@ -1974,11 +1986,21 @@ class Test_Polygon(unittest.TestCase):
                        [[0.3, 0.2], [0.7, 3], [1.0, 1.9]],
                        [[30, 10], [30, 20]]]
 
+        #Vector(geometry=polygons).write_to_file('multiple_polygons.shp')
+        #Vector(geometry=input_lines,
+        #       geometry_type='line').write_to_file('input_lines.shp')
         lines_covered = clip_lines_by_polygons(input_lines, polygons)
 
         # Sanity checks
         assert len(lines_covered) == len(polygons)
+
+        i = 0
         for lines in lines_covered:
+            #filename = 'clipped_lines_%i.shp' % i
+            #Vector(geometry=line_dictionary_to_geometry(lines),
+            #       geometry_type='line').write_to_file(filename)
+            i += 1
+
             assert len(lines) == len(input_lines)
 
         # Thorough check of all lines
@@ -2003,7 +2025,7 @@ class Test_Polygon(unittest.TestCase):
         # Polygon 2, line 1
         assert numpy.allclose(lines_covered[2][1][0],
                               [[2., 2.],
-                               [2., 3.],
+                               [2., 2.5],
                                [2., 4.]])
 
         # Polygon 4, line 2
