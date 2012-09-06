@@ -1879,7 +1879,7 @@ class Test_Engine(unittest.TestCase):
                 assert not is_inside_polygon(midpoint, test_polygon)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if True:
+        if False:  # True:
             P = Vector(geometry=[test_polygon])
             P.write_to_file('test_polygon.shp')
 
