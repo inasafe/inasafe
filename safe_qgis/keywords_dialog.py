@@ -105,8 +105,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.dock = theDock
         # Set up things for context help
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
+
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
+        QtCore.QObject.connect(self.lstKeywords, QtCore.SIGNAL(
+            "itemClicked(QListWidgetItem *)"),
+            self.setLeKeyLeValue)
+
         self.helpDialog = None
         # set some inital ui state:
         self.pbnAdvanced.setChecked(True)
@@ -636,3 +641,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if self.dock is not None:
             self.dock.getLayers()
         self.close()
+
+    def setLeKeyLeValue(self):
+        """Set lekey and levalue to the clicked item in the lstKeywords."""
+        if self.radUserDefined.isChecked():
+            for myItem in self.lstKeywords.selectedItems():
+                myTempKey = myItem.text().split(':')[0]
+                myTempValue = myItem.text().split(':')[1]
+                self.leKey.setText(myTempKey)
+                self.leValue.setText(myTempValue)
