@@ -34,6 +34,7 @@ from safe_qgis.utilities import qgisVersion
 
 LOGGER = logging.getLogger('InaSAFE')
 
+#from pydev import pydevd  # PyCharm style
 
 class KeywordIO(QObject):
     """Class for doing keyword read/write operations.
@@ -57,6 +58,10 @@ class KeywordIO(QObject):
         self.keywordDbPath = None
         self.setupKeywordDbPath()
         self.connection = None
+        #pydevd.settrace('192.168.1.62',
+        #                port=53100,
+        #                stdoutToServer=True,
+        #                stderrToServer=True)
 
     def setKeywordDbPath(self, thePath):
         """Set the path for the keyword database (sqlite).
@@ -109,7 +114,8 @@ class KeywordIO(QObject):
         # TODO: Remove this hack
         myBaseName, _ = os.path.splitext(mySource)
         myBaseName += '.keywords'
-        if len(readSubLayerNames(myBaseName)) == 0:
+        mySubLayerNames = readSubLayerNames(myBaseName)
+        if len(mySubLayerNames) == 0:
             theSubLayer = None
 
         try:
