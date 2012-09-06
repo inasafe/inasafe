@@ -337,7 +337,6 @@ class Vector(Layer):
             # Why do we raise an exception if it is only a warning? TS
             raise ReadLayerError(msg)
 
-
         if self.sublayer is not None:
             layer = fid.GetLayerByName(self.sublayer)
         else:
