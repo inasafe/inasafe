@@ -110,11 +110,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.parent = parent
         self.dock = theDock
         # Set up things for context help
-        myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
-                               self.showHelp)
-        QtCore.QObject.connect(self.lstKeywords, QtCore.SIGNAL(
-                                "itemClicked(QListWidgetItem *)"),
+        QtCore.QObject.connect(self.buttonBox,
+                               QtCore.SIGNAL('clicked(QAbstractButton *)'),
+                               self.on_StandardButton_clicked)
+        QtCore.QObject.connect(self.lstKeywords,
+                               QtCore.SIGNAL("itemClicked(QListWidgetItem *)"),
                                self.setLeKeyLeValue)
         self.helpDialog = None
         # set some inital ui state:
@@ -312,6 +312,28 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             pass
         self.addListEntry(myCurrentKey, myCurrentValue)
         self.updateControlsFromList()
+
+    def on_StandardButton_clicked(self, button):
+        """Handle event when standards button clicked.
+            Args:
+                * button = button which is clicked
+            Note (Sunni):
+                I do this because standard approach doesn't work
+        """
+
+        btnClicked = self.buttonBox.standardButton(button)
+        if int(btnClicked) == 16777216:  # Help Button, show help window
+            self.showHelp()
+        elif int(btnClicked) == 4194304:  # Cancel Button
+            pass
+        elif int(btnClicked) == 1024:  # Ok Button, save kvp in value box
+            # The same function when pbnAddToList2 or pbnAddToList2 is clicked
+            if self.radPredefined.isChecked():
+                self.on_pbnAddToList1_clicked()
+            elif self.radUserDefined.isChecked():
+                self.on_pbnAddToList2_clicked()
+            else:
+                self.on_pbnAddToList2_clicked()
 
     # prevents actions being handled twice
     @pyqtSignature('')
