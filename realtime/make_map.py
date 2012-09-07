@@ -17,10 +17,17 @@ __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import sys
+import logging
+
 from shake_data import ShakeData
 from ftp_client import FtpClient
 from safe_qgis.utilities_test import getQgisTestApp
-import sys
+
+# The logger is intialised in utils.py by init
+LOGGER = logging.getLogger('InaSAFE-Realtime')
+
+
 if len(sys.argv) > 2:
     sys.exit('Usage:\n%s [optional shakeid]\nor\n%s --list' % (
         sys.argv[0], sys.argv[0]))
@@ -44,18 +51,18 @@ myForceFlag = False
 myShakeData = ShakeData(myEventId)
 # Extract the event
 myShakeEvent = myShakeData.shakeEvent(theForceFlag=myForceFlag)
-print 'Latest Event Id: %s' % myShakeEvent
-print '-------------------------------------------'
+logging.info('Latest Event Id: %s' % myShakeEvent)
+logging.info('-------------------------------------------')
 # Make contours
 for myAlgorithm in ['average', 'invdist', 'nearest']:
     myFile = myShakeEvent.mmiDataToContours(theForceFlag=myForceFlag,
                                    theAlgorithm=myAlgorithm)
-    print 'Created: %s' % myFile
+    logging.info('Created: %s' % myFile)
 try:
     myFile = myShakeEvent.citiesToShape()
-    print 'Created: %s' % myFile
+    logging.info('Created: %s' % myFile)
 except:
-    print 'No nearby cities found!'
+    logging.exception('No nearby cities found!')
 myFile = myShakeEvent.mmiDataToShapefile(theForceFlag=myForceFlag)
-print 'Created: %s' % myFile
-print '-------------------------------------------'
+logging.info('Created: %s' % myFile)
+logging.info('-------------------------------------------')

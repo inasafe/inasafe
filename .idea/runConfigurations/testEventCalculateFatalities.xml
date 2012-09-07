@@ -5,9 +5,9 @@
     <envs>
       <env name="QGISPATH" value="/usr/local/qgis-master" />
     </envs>
-    <option name="SDK_HOME" value="" />
+    <option name="SDK_HOME" value="/usr/bin/python2.7" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
-    <option name="IS_MODULE_SDK" value="true" />
+    <option name="IS_MODULE_SDK" value="false" />
     <module name="inasafe-realtime" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />

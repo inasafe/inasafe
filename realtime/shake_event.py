@@ -104,8 +104,12 @@ class ShakeEvent:
         self.populationRasterPath = thePopulationRasterPath
         self.impactFile = None
         self.fatalityCounts = None
+        # After selecting affected cities near the event, the bbox of
+        # shake map + cities
+        self.extentWithCities = None
+        # how much to iteratively zoom out by when searching for cities
+        self.zoomFactor = 2
         self.parseGridXml()
-
 
     def gridFilePath(self):
         """A helper to retrieve the path to the grid.xml file
@@ -773,7 +777,6 @@ class ShakeEvent:
         LOGGER.debug('citiesToShape requested.')
         myMemoryLayer = self.localCitiesMemoryLayer()
 
-
         LOGGER.debug(str(myMemoryLayer.dataProvider().attributeIndexes()))
         if myMemoryLayer.featureCount() < 1:
             raise CityShapefileCreationError('Memory layer has no features')
@@ -823,6 +826,13 @@ class ShakeEvent:
         else:
             raise CityShapefileCreationError('Failed with error: %s' % myResult)
 
+        # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
+        myQmlPath = os.path.join(shakemapExtractDir(),
+                                 self.eventId,
+                                 'mmi-cities.qml')
+        mySourceQml = os.path.join(dataDir(), 'mmi-cities.qml')
+        shutil.copyfile(mySourceQml, myQmlPath)
+
         return myOutputFile
 
     def localCityFeatures(self):
@@ -847,6 +857,17 @@ class ShakeEvent:
 
         The distance to and direction to/from fields will be set using QGIS
         geometry API.
+
+        It is a requirement that there will always be at least one city
+        on the map for context so we will iteratively do a city selection,
+        starting with the extents of the MMI dataset and then zooming
+        out by self.zoomFactor until we have some cities selected.
+
+        After making a selection the extents used (taking into account the
+        iterative scaling mentioned above) will be stored in the class
+        attributes so that when producing a map it can be used to ensure
+        the cities and the shake area are visible on the map. See
+        :samp:`self.extentWithCities` in :func:`__init__`.
 
         .. note:: We separate the logic of creating features from writing a
           layer so that we can write to any format we like whilst reusing the
@@ -886,11 +907,20 @@ class ShakeEvent:
         myFetchGeometryFlag = True
         myUseIntersectionFlag = True
         myRectangle = self.boundsToRectangle()
-        myLayer.select(myIndexes, myRectangle,
-                       myFetchGeometryFlag, myUseIntersectionFlag)
 
-        # TODO: Add logic if the selection is None then get the
-        # closest city ignoring bbox
+
+        # Do iterative selection using expanding selection area
+        # Until we have got some cities selected
+
+        myAttemptsLimit = 5
+        myMinimumCityCount = 3
+        for _ in range(myAttemptsLimit):
+            myLayer.select(myIndexes, myRectangle,
+                           myFetchGeometryFlag, myUseIntersectionFlag)
+            if myLayer.selectedFeatureCount() < myMinimumCityCount:
+                myRectangle.scale(self.zoomFactor)
+            else:
+                break
 
         # Setup field indexes of our input and out datasets
         myCities = []
@@ -930,7 +960,12 @@ class ShakeEvent:
             if not myResult:
                 # position not found on raster
                 continue
-            myMmi = float(myRasterValues[QString('Band 1')])
+            myValue = myRasterValues[QString('Band 1')]
+            if 'no data' not in myValue:
+                myMmi = float(myValue)
+            else:
+                myMmi = 0
+
             LOGGER.debug('Looked up mmi of %s on raster for %ss' %
                          (myMmi, myPoint.toString()))
 
