@@ -21,7 +21,7 @@ sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get -qq update
 sudo apt-get install -q -y qgis python-qgis
 echo "Installing Ubuntu packages for development"
-sudo apt-get install -y git pep8 python-nose python-coverage python-numpy\
+sudo apt-get install -y git rsync pep8 python-nose python-coverage python-numpy\
      pyqt4-dev-tools python-pip libqt4-dev pyflakes python-nosexcover
 echo "Installing sphinx from pip because at least 1.1 is needed for i18n support"
 echo "Installing specific pylint version (0.25) for cross host comparison"

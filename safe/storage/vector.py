@@ -333,6 +333,7 @@ class Vector(Layer):
                    'used. Specify sublayer when creating '
                    'the Vector if you wish to use a different layer.'
                    % (filename, fid.GetLayerCount()))
+            LOGGER.warn(msg)
             # Why do we raise an exception if it is only a warning? TS
             raise ReadLayerError(msg)
 

@@ -39,12 +39,6 @@ from safe.common.exceptions import InaSAFEError
 import safe_qgis.resources  # pylint: disable=W0611
 
 #see if we can import pydev - see development docs for details
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
 
 
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
@@ -109,7 +103,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = theDock
-        # Set up things for context help
         QtCore.QObject.connect(self.buttonBox,
                                QtCore.SIGNAL('clicked(QAbstractButton *)'),
                                self.on_StandardButton_clicked)
@@ -540,13 +533,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
+        # In case the layer has no keywords or any problem occurs reading them,
+        # start with a blank slate so that subcategory gets populated nicely &
+        # we will assume exposure to start with.
+        myKeywords = {'category': 'exposure'}
+
         try:
+            # Now read the layer with sub layer if needed
             myKeywords = self.keywordIO.readKeywords(self.layer)
         except (InvalidParameterException, HashNotFoundException):
-            # layer has no keywords file so just start with a blank slate
-            # so that subcategory gets populated nicely & we will assume
-            # exposure to start with
-            myKeywords = {'category': 'exposure'}
+            pass
 
         myLayerName = self.layer.name()
         if 'title' not in myKeywords:
@@ -655,7 +651,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            no exceptions explicitly raised."""
         myKeywords = self.getKeywords()
         try:
-            self.keywordIO.writeKeywords(self.layer, myKeywords)
+            self.keywordIO.writeKeywords(theLayer=self.layer,
+                                         theKeywords=myKeywords)
         except InaSAFEError, e:
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
             ((self.tr('An error was encountered when saving the keywords:\n'
@@ -668,7 +665,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """Set lekey and levalue to the clicked item in the lstKeywords."""
         if self.radUserDefined.isChecked():
             for myItem in self.lstKeywords.selectedItems():
-                tempLeKey = myItem.text().split(':')[0]
-                tempLeValue = myItem.text().split(':')[1]
-                self.leKey.setText(tempLeKey)
-                self.leValue.setText(tempLeValue)
+                myTempKey = myItem.text().split(':')[0]
+                myTempValue = myItem.text().split(':')[1]
+                self.leKey.setText(myTempKey)
+                self.leValue.setText(myTempValue)

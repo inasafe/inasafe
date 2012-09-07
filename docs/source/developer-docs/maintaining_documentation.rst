@@ -199,11 +199,10 @@ Updating the site
 
 Deployment of the site requires the following steps:
 
-* Regenerate the docs using make docs in the root dir of a master branch
-  checkout of InaSAFE.
-* Copy all files from :file:`docs/build/html` into a separate local repo
-  checked out in the gh-pages branch
-* Commit those changes and push
+* Update the documentation as needed
+* Commit/push to master
+* Run scripts/update_website.sh
+* Apidoc are build automatically, this might update/create/remove some files. If it is the case, the script will ask you if you wish to commit those changes to master. Normally you should.
 * Wait approximately 10 minutes
 
 After this the changes should be visible here http://aifdr.github.com/inasafe/

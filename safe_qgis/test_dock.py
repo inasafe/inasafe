@@ -574,29 +574,12 @@ class DockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        # Hazard layers
-        myIndex = DOCK.cboHazard.findText('Tsunami Max Inundation')
-        assert myIndex != -1, 'Tsunami Max Inundation hazard layer not found'
-        DOCK.cboHazard.setCurrentIndex(myIndex)
-
-        # Exposure layers
-        myIndex = DOCK.cboExposure.findText('Tsunami Building Exposure')
-        assert myIndex != -1, 'Tsunami Building Exposure layer not found'
-        DOCK.cboExposure.setCurrentIndex(myIndex)
-
-        # Check that layers and impact function are correct
-        myDict = getUiState(DOCK)
-
-        myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function Id':
-                              'Flood Building Impact Function',
-                          'Impact Function Title':
-                              'Be temporarily closed',
-                          'Hazard': 'Tsunami Max Inundation',
-                          'Exposure': 'Tsunami Building Exposure'}
-        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-            myDict, myExpectedDict, combosToString(DOCK))
-        assert myDict == myExpectedDict, myMessage
+        myResult, myMessage = setupScenario(
+            theHazard='Tsunami Max Inundation',
+            theExposure='Tsunami Building Exposure',
+            theFunction='Be temporarily closed',
+            theFunctionId='Flood Building Impact Function')
+        assert myResult, myMessage
 
         setCanvasCrs(GEOCRS, True)
         setBatemansBayGeoExtent()
