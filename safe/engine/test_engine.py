@@ -2162,16 +2162,14 @@ class Test_Engine(unittest.TestCase):
 
     test_line_interpolation_from_multiple_polygons.slow = True
 
-    # FIXME (Ole): This test shows that current polygon-line interpolation
-    # functionality is unacceptably slow.
-    # For the moment, it has been cut down to a few polygons
     def test_polygon_to_roads_interpolation_flood_example(self):
         """Roads can be tagged with values from flood polygons
 
         This is a test for road interpolation (issue #55)
 
         # The dataset is large: 2704 complex polygons
-        and 108082 complex line features.
+        and 108082 complex line features - so has been cut down
+        in this test.
 
         The runtime for the whole set is in the order of more than
         1 hour. Cutting the number of lines down by a factor of 10 years
@@ -2251,6 +2249,94 @@ class Test_Engine(unittest.TestCase):
         #assert I_attributes[]['parent_line_id'] ==
 
     test_polygon_to_roads_interpolation_flood_example.slow = True
+
+    def test_polygon_to_roads_interpolation_jakarta_flood_example(self):
+        """Roads can be tagged with values from flood polygons
+
+        This is a test for road interpolation (issue #55)
+
+        # The dataset is: 2704 complex polygonsand 18574 complex line features
+        """
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/rw_jakarta_singlepart.shp' % TESTDATA)
+        exposure_filename = ('%s/jakarta_roads.shp' % EXPDATA)
+
+        # Read all input data
+        H = read_layer(hazard_filename)  # Polygons
+        H_attributes = H.get_data()
+        H_geometries = H.get_geometry()
+        assert len(H) == 2704
+
+        # Use only polygons marked as flood prone
+        # to get the result quicker.
+        cut_attributes = []
+        cut_geometries = []
+        for i in range(len(H)):
+            val = H_attributes[i]['FLOODPRONE']
+            if val is not None and val.lower().startswith('yes'):
+                cut_attributes.append(H_attributes[i])
+                cut_geometries.append(H_geometries[i])
+
+        H = Vector(data=cut_attributes,
+                   geometry=cut_geometries,
+                   projection=H.get_projection(),
+                   geometry_type=H.geometry_type)
+        assert len(H) == 1011
+
+        E = read_layer(exposure_filename)
+        E_geometries = E.get_geometry()
+        E_attributes = E.get_data()
+        assert len(E) == 18574
+
+        # Get statistics of road types
+        road_types = {}
+        E_attributes = E.get_data()
+        for i in range(len(E)):
+            roadtype = E_attributes[i]['TYPE']
+            if roadtype in road_types:
+                road_types[roadtype] += 1
+            else:
+                road_types[roadtype] = 0
+
+        #for att in road_types:
+        #    print att, road_types[att]
+        assert road_types['residential'] == 14853
+
+        # Remove residental roads
+        cut_attributes = []
+        cut_geometries = []
+        for i in range(len(E)):
+            val = E_attributes[i]['TYPE']
+            if val != 'residential':
+                cut_attributes.append(E_attributes[i])
+                cut_geometries.append(E_geometries[i])
+
+        # Cut even further for the purpose of testing
+        E = Vector(data=cut_attributes[:-1:5],
+                   geometry=cut_geometries[:-1:5],
+                   projection=E.get_projection(),
+                   geometry_type=E.geometry_type)
+        assert len(E) == 744
+
+        # Test interpolation function
+        #import time
+        #t0 = time.time()
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  attribute_name=None)
+        #print 'That took %f seconds' % (time.time() - t0)
+        #I.write_to_file('flood_prone_roads_jakarta.shp')
+
+        # Check against correctness verified in QGIS
+        I_attributes = I.get_data()
+        assert I_attributes[198]['TYPE'] == 'secondary'
+        assert I_attributes[198]['NAME'] == 'Lingkar Mega Kuningan'
+        assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
+        assert I_attributes[198]['polygon_id'] == 235
+        assert I_attributes[198]['parent_line_id'] == 333
+
+    test_polygon_to_roads_interpolation_jakarta_flood_example.slow = True
 
     def Xtest_line_interpolation_from_polygons_one_attribute(self):
         """Line interpolation using one polygon works with attribute
