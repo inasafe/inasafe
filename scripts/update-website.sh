@@ -43,16 +43,19 @@ else
   make clean docs
   
   git add -A docs/source/api-docs
-  git status docs/source/api-docs
-  CONTINUE="n"
-  echo
-  echo "########################################################"
-  echo "Do you want to commit and push the files above? [y, n*]:"
-  read CONTINUE
-  CONTINUE=$(echo $CONTINUE | tr "[:upper:]" "[:lower:]")
-  if [ "$CONTINUE" == "y" ]; then
-    git commit -m "Automatic updates of api-docs" docs/source/api-docs
-    git push
+  MESSAGE="$(git status docs/source/api-docs)"
+  #nothing new in local repo, so no need to ask for confirmation for push
+  if [[ "$MESSAGE" != *"nothing to commit"* ]]; then
+      CONTINUE="n"
+      git status docs/source/api-docs
+      echo "########################################################"
+      echo "Do you want to commit and push the files above to master this should be normally .rst files? [y, n*]:"
+      read CONTINUE
+      CONTINUE=$(echo $CONTINUE | tr "[:upper:]" "[:lower:]")
+      if [ "$CONTINUE" == "y" ]; then
+        git commit -m "Automatic updates of api-docs" docs/source/api-docs
+        git push origin master
+      fi
   fi
   
   echo "Syncing html to gh-pages"
