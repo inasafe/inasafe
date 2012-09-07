@@ -351,9 +351,19 @@ class Test_Polygon(unittest.TestCase):
         # Try with boundary (vertical edge) point
         inside, outside = separate_points_by_polygon([[0, 0.5],
                                                       [0.3, 0.3],
-                                                      [0.1, 0.6]], U)
+                                                      [0.1, 0.6]],
+                                                     U,
+                                                     closed=True)
         assert len(inside) == 3
         assert numpy.allclose(inside, [0, 1, 2])
+
+        inside, outside = separate_points_by_polygon([[0, 0.5],
+                                                      [0.3, 0.3],
+                                                      [0.1, 0.6]],
+                                                     U,
+                                                     closed=False)
+        assert len(inside) == 2
+        assert numpy.allclose(inside, [1, 2])
 
         # Try with boundary (horizontal edge) point
         inside, outside = separate_points_by_polygon([[0.5, 0.0],
@@ -2196,7 +2206,6 @@ class Test_Polygon(unittest.TestCase):
         assert len(lines) == 3
         for i in range(len(lines)):
             assert numpy.allclose(lines[i], segments[i])
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Polygon, 'test')
