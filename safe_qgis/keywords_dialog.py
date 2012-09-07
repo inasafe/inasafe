@@ -103,13 +103,17 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = theDock
-        QtCore.QObject.connect(self.buttonBox,
-                               QtCore.SIGNAL('clicked(QAbstractButton *)'),
-                               self.on_StandardButton_clicked)
+
         QtCore.QObject.connect(self.lstKeywords,
                                QtCore.SIGNAL("itemClicked(QListWidgetItem *)"),
-                               self.setLeKeyLeValue)
+                               self.makeKeyValueEditable)
+
+        # Set up help dialog showing logic.
         self.helpDialog = None
+        myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+                               self.showHelp)
+
         # set some inital ui state:
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
@@ -270,11 +274,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-
-        myCurrentKey = self.tr(self.cboKeyword.currentText())
-        myCurrentValue = self.lePredefinedValue.text()
-        self.addListEntry(myCurrentKey, myCurrentValue)
-        self.updateControlsFromList()
+        if (not self.lePredefinedValue.text().isEmpty() and not
+            self.cboKeyword.currentText().isEmpty()):
+            myCurrentKey = self.tr(self.cboKeyword.currentText())
+            myCurrentValue = self.lePredefinedValue.text()
+            self.addListEntry(myCurrentKey, myCurrentValue)
+            self.lePredefinedValue.setText('')
+            self.updateControlsFromList()
 
     # prevents actions being handled twice
     @pyqtSignature('')
@@ -304,29 +310,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             #.. todo:: notify the user their category is invalid
             pass
         self.addListEntry(myCurrentKey, myCurrentValue)
+        self.leKey.setText('')
+        self.leValue.setText('')
         self.updateControlsFromList()
-
-    def on_StandardButton_clicked(self, button):
-        """Handle event when standards button clicked.
-            Args:
-                * button = button which is clicked
-            Note (Sunni):
-                I do this because standard approach doesn't work
-        """
-
-        btnClicked = self.buttonBox.standardButton(button)
-        if int(btnClicked) == 16777216:  # Help Button, show help window
-            self.showHelp()
-        elif int(btnClicked) == 4194304:  # Cancel Button
-            pass
-        elif int(btnClicked) == 1024:  # Ok Button, save kvp in value box
-            # The same function when pbnAddToList2 or pbnAddToList2 is clicked
-            if self.radPredefined.isChecked():
-                self.on_pbnAddToList1_clicked()
-            elif self.radUserDefined.isChecked():
-                self.on_pbnAddToList2_clicked()
-            else:
-                self.on_pbnAddToList2_clicked()
 
     # prevents actions being handled twice
     @pyqtSignature('')
@@ -343,6 +329,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            no exceptions explicitly raised."""
         for myItem in self.lstKeywords.selectedItems():
             self.lstKeywords.takeItem(self.lstKeywords.row(myItem))
+        self.leKey.setText('')
+        self.leValue.setText('')
         self.updateControlsFromList()
 
     def addListEntry(self, theKey, theValue):
@@ -649,6 +637,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
+        self.applyPendingChanges()
         myKeywords = self.getKeywords()
         try:
             self.keywordIO.writeKeywords(theLayer=self.layer,
@@ -661,11 +650,33 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.dock.getLayers()
         self.close()
 
-    def setLeKeyLeValue(self):
-        """Set lekey and levalue to the clicked item in the lstKeywords."""
+    def applyPendingChanges(self):
+        """Apply any pending changes e.g. keywords entered without being added.
+        See https://github.com/AIFDR/inasafe/issues/249
+
+        Args: None
+
+        Returns: None
+
+        Raises: None
+        """
+
+        if self.radPredefined.isChecked():
+            self.on_pbnAddToList1_clicked()
+        else:
+            self.on_pbnAddToList2_clicked()
+
+    def makeKeyValueEditable(self, theItem):
+        """Set leKey and leValue to the clicked item in the lstKeywords.
+
+        Args: None
+
+        Returns: None
+
+        Raises: None
+        """
         if self.radUserDefined.isChecked():
-            for myItem in self.lstKeywords.selectedItems():
-                myTempKey = myItem.text().split(':')[0]
-                myTempValue = myItem.text().split(':')[1]
-                self.leKey.setText(myTempKey)
-                self.leValue.setText(myTempValue)
+            myTempKey = theItem.text().split(':')[0]
+            myTempValue = theItem.text().split(':')[1]
+            self.leKey.setText(myTempKey)
+            self.leValue.setText(myTempValue)
