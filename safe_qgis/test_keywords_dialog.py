@@ -368,6 +368,28 @@ class KeywordsDialogTest(unittest.TestCase):
                      (myKeywords, myExpectedKeywords))
         assert myKeywords == myExpectedKeywords, myMessage
 
+    def test_addKeywordWhenPressOkButton(self):
+        """Test add keyword when ok button is pressed."""
+        myDialog = KeywordsDialog(PARENT, IFACE)
+        myLayer = makePadangLayer()
+        myDialog.layer = myLayer
+        myDialog.loadStateFromKeywords()
+
+        myDialog.radUserDefined.setChecked(True)
+        myDialog.leKey.setText('foo')
+        myDialog.leValue.setText('bar')
+        okButton = myDialog.buttonBox.button(QtGui.QDialogButtonBox.Ok)
+        QTest.mouseClick(okButton, QtCore.Qt.LeftButton)
+
+        myExpectedResult = 'bar'
+        myResult = myDialog.getValueForKey('foo')
+        myMessage = ('\nGot: %s\nExpected: %s\n' %
+                     (myResult, myExpectedResult))
+        assert myExpectedResult == myResult, myMessage
+        # delete the added key so that the data test doesn't change
+        myDialog.removeItemByKey('foo')
+        QTest.mouseClick(okButton, QtCore.Qt.LeftButton)
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordsDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
