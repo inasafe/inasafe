@@ -2680,6 +2680,6 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_polygon_to_roads_interpolation_flood_example')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

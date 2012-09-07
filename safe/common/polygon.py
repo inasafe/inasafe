@@ -596,7 +596,8 @@ def clip_lines_by_polygon(lines, polygon,
                        % str(e))
                 raise Exception(msg)
 
-            msg = 'Lines must be 2d array of vertices'
+            msg = ('Lines must be 2d array of vertices: '
+                   'I got %d dimensions' % len(lines[i].shape))
             if not len(lines[i].shape) == 2:
                 raise RuntimeError(msg)
 
@@ -615,13 +616,6 @@ def clip_lines_by_polygon(lines, polygon,
         if not polygon.shape[1] == 2:
             raise RuntimeError(msg)
 
-        for line in lines:
-            msg = ('Each line segment must be 2 dimensional. '
-                   'I got %d dimensions' % len(line.shape))
-            if not len(line.shape) == 2:
-                raise RuntimeError(msg)
-
-    #N = polygon.shape[0]  # Number of vertices in polygon
     M = len(lines)  # Number of lines
 
     inside_line_segments = {}
@@ -771,6 +765,9 @@ def clip_line_by_polygon(line, polygon,
     # 3: For each new line segment
     #    * Calculate its midpoint
     #    * Determine if it is inside or outside clipping polygon
+    # 4: Join adjacent segments into polylines that are either
+    #     fully inside or outside polygon
+    # 5
 
     # Loop through line segments
     inside_line_segments = []
@@ -825,7 +822,6 @@ def clip_line_by_polygon(line, polygon,
                         # Segment intersects polygon bounding box
                         segment_is_outside_bbox = False
                         break
-
         #-----------------
         # End optimisation
         #-----------------
@@ -858,21 +854,18 @@ def clip_line_by_polygon(line, polygon,
 
             # Loop through intersections for this line segment
             distances = {}
-            P = len(intersections)
-            for i in range(P):
+            for i in range(len(intersections)):
                 v = segment[0] - intersections[i]
                 d = numpy.dot(v, v)
                 distances[d] = intersections[i]  # Don't record duplicates
 
-            # Sort by Schwarzian transform
+            # Sort intersections by distance using Schwarzian transform
             A = zip(distances.keys(), distances.values())
             A.sort()
             _, intersections = zip(*A)
 
-            P = len(intersections)
-
             # Separate segments according to polygon
-            for i in range(P - 1):
+            for i in range(len(intersections) - 1):
                 segment = [intersections[i], intersections[i + 1]]
                 midpoint = (segment[0] + segment[1]) / 2
 
@@ -907,23 +900,6 @@ def join_line_segments(segments, rtol=1.0e-12, atol=1.0e-12):
 
     line = segments[0]
     for i in range(len(segments) - 1):
-
-        #flag = False
-        #segment = segments[i]
-        #if (numpy.allclose(segment[0], [122.231108, -8.626598]) or
-        #    numpy.allclose(segment[0], [122.231021, -8.626557]) or
-        #    numpy.allclose(segment[1], [122.231108, -8.626598]) or
-        #    numpy.allclose(segment[1], [122.231021, -8.626557])):
-        #    print
-        #    print 'Found ', i, segment, segments[i + 1]
-        #    flag = True
-        #else:
-        #    flag = False
-
-        # Not joined are
-        #[[122.231108, -8.626598], [122.231021, -8.626557]]
-        #[[122.231021, -8.626557], [122.230284, -8.625983]]
-
         if numpy.allclose(segments[i][1], segments[i + 1][0],
                           rtol=rtol, atol=atol):
             # Segments are adjacent
@@ -1026,32 +1002,6 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 #------------------------------------
 # Functionality for line intersection
 #------------------------------------
-#def multiple_intersection(segments0, segments1, rtol=1.0e-5, atol=1.0e-8):
-#    """Returns intersecting points between multiple line segments.
-#
-#    Note, if parallel lines coincide partly (i.e. share a common segment),
-#    the midpoint of the segment where lines coincide is returned
-#
-#    Inputs:
-#        lines: A
-#        , line1: Each defined by two end points as in:
-#                      [[x0, y0], [x1, y1]]
-#                      A line can also be a 2x2 numpy array with each row
-#                      corresponding to a point.
-#
-#    Output:
-#        status, value - where status and value is interpreted as follows:
-#        status == 0: no intersection, value set to None.
-#        status == 1: intersection point found and returned in value as [x,y].
-#        status == 2: Collinear overlapping lines found.
-#                     Value takes the form [[x0,y0], [x1,y1]] which is the
-#                     segment common to both lines.
-#        status == 3: Collinear non-overlapping lines. Value set to None.
-#        status == 4: Lines are parallel. Value set to None.
-#    """
-#
-#    pass
-
 
 def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
                  fast=False):
@@ -1266,6 +1216,27 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
     If multiple polygons overlap, the one first encountered will be used
     """
 
+    if check_input:
+        for i in range(len(lines)):
+            try:
+                lines[i] = ensure_numeric(lines[i], numpy.float)
+            except Exception, e:
+                msg = ('Line could not be converted to numeric array: %s'
+                       % str(e))
+                raise Exception(msg)
+
+            msg = 'Lines must be 2d array of vertices'
+            if not len(lines[i].shape) == 2:
+                raise RuntimeError(msg)
+
+        for i in range(len(polygons)):
+            try:
+                polygons[i] = ensure_numeric(polygons[i], numpy.float)
+            except Exception, e:
+                msg = ('Polygon could not be converted to numeric array: %s'
+                       % str(e))
+                raise Exception(msg)
+
     # Initialise structures
     lines_covered = []
     remaining_lines = lines
@@ -1280,14 +1251,14 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
 
         inside_lines, _ = clip_lines_by_polygon(remaining_lines,
                                                 polygon,
-                                                check_input=check_input)
+                                                check_input=False)
         #print ('- %i segments were inside'
         #       % len(line_dictionary_to_geometry(inside_lines)))
 
         # Record lines inside this polygon
         lines_covered.append(inside_lines)
 
-        # Keep lines outside as remaining lines
+        # Use lines outside as remaining lines
         # FIXME (Ole): This optimisation needs some thought
         # as lines are often partially clipped. We also need to keep
         # track of the parent line to get its attributes if we want
