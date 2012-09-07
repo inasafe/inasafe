@@ -193,12 +193,10 @@ def _separate_points_by_polygon(points, polygon,
 
     N = polygon.shape[0]
     M = points.shape[0]
+
     if M == 0:
         # If no points return two 0-vectors
         return numpy.arange(0), numpy.arange(0)
-
-    x = points[:, 0]
-    y = points[:, 1]
 
     # Vector to return sorted indices (inside first, then outside)
     indices = numpy.zeros(M, numpy.int)
@@ -206,33 +204,8 @@ def _separate_points_by_polygon(points, polygon,
     # Vector keeping track of which points are inside
     inside = numpy.zeros(M, dtype=numpy.int)  # All assumed outside initially
 
-    # Mask for points can be considered for inclusion
-    candidates = numpy.ones(M, dtype=numpy.bool)  # All True initially
-
-    # Find points on polygon boundary
-    # FIXME (Ole): If this is removed, the test
-    # test_polygon_to_roads_interpolation_flood_example
-    # Will run in 46 - 47 seconds instead of 54s.
-    # How important is this and can we do it differently?
-    for i in range(N):
-        # Loop through polygon edges
-        j = (i + 1) % N
-        edge = [polygon[i, :], polygon[j, :]]
-
-        # Select those that are on the boundary
-        boundary_points = point_on_line(points, edge, rtol, atol)
-
-        if closed:
-            inside[boundary_points] = 1
-        else:
-            inside[boundary_points] = 0
-
-        # Remove boundary point from further analysis
-        candidates[boundary_points] = False
-
-    # FIXME (Ole): If in deed we take this path, perhaps we work only with
-    # candidaties (that are True)
-    #in the next loop (use take and where) as we do in separate_points_by_poly
+    x = points[:, 0]
+    y = points[:, 1]
 
     # Algorithm for finding points inside polygon
     for i in range(N):
@@ -245,12 +218,26 @@ def _separate_points_by_polygon(points, polygon,
         sigma = (y - py_i) / (py_j - py_i) * (px_j - px_i)
         seg_i = (py_i < y) * (py_j >= y)
         seg_j = (py_j < y) * (py_i >= y)
-        mask = (px_i + sigma < x) * (seg_i + seg_j) * candidates
+        mask = (px_i + sigma < x) * (seg_i + seg_j)
 
         inside[mask] = 1 - inside[mask]
 
     # Restore numpy warnings
     numpy.seterr(**original_numpy_settings)
+
+    # Find points on polygon boundary
+    for i in range(N):
+        # Loop through polygon edges
+        j = (i + 1) % N
+        edge = [polygon[i, :], polygon[j, :]]
+
+        # Select those that are on the boundary
+        boundary_points = point_on_line(points, edge, rtol, atol)
+
+        if closed:
+            inside[boundary_points] = 1
+        else:
+            inside[boundary_points] = 0
 
     # Record point as either inside or outside
     inside_index = numpy.sum(inside)  # How many points are inside
