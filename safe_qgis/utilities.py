@@ -230,6 +230,8 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
             myTransparencyList)
     else:
         #TODO implement QGIS2.0 variant
+        #In master branch, use QgsRasterRenderer::rasterRenderer() to
+        # get/set how a raster is displayed.
         pass
 
     theQgsRasterLayer.saveDefaultStyle()
