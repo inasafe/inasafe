@@ -32,7 +32,8 @@ from qgis.core import (QgsMapLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform)
+                       QgsCoordinateTransform,
+                       QGis)
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
@@ -456,11 +457,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
 
-        On invocation, this method will populate cboHazard and
-        cboExposure on the dialog with a list of available layers. Only
-        **singleband raster** layers will be added to the hazard layer list,
-        and only **point vector** layers will be added to the exposure layer
-        list.
+        On invocation, this method will populate cboHazard,
+        cboExposure and cboAggregate on the dialog with a list of available
+        layers.
+        Only **singleband raster** layers will be added to the hazard layer
+        list,only **point vector** layers will be added to the exposure layer
+        list and Only **polygon vector** layers will be added to the aggregate
+        list
 
         Args:
            None.
@@ -474,8 +477,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
+        self.cboAggregation.clear()
         self.hazardLayers = []
         self.exposureLayers = []
+        self.aggregationLayers = []
         # Map registry may be invalid if QGIS is shutting down
         myRegistry = None
         # pylint: disable=W0702
@@ -514,6 +519,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if myTitle and self.setLayerNameFromTitleFlag:
                 myLayer.setLayerName(myTitle)
 
+            #check if layer is a vector polygon layer
+            layer = myRegistry.mapLayer(mySource)
+            if (layer.type() == QgsMapLayer.VectorLayer) and (
+                layer.geometryType() == QGis.Polygon):
+                self.addComboItemInOrder(self.cboAggregation, myTitle,
+                    mySource)
+                self.aggregationLayers.append(myLayer)
+
             # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
@@ -529,6 +542,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             elif myCategory == 'exposure':
                 self.addComboItemInOrder(self.cboExposure, myTitle, mySource)
                 self.exposureLayers.append(myLayer)
+        #TODO i18n (MB)
+        self.cboAggregation.insertItem(0, "No Aggregation")
+        self.cboAggregation.setCurrentIndex(0)
 
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
