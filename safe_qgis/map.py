@@ -240,20 +240,26 @@ class Map():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
-        myShader = self.layer.rasterShader().rasterShaderFunction()
-        myRampItems = myShader.colorRampItemList()
-        myLastValue = 0  # Making an assumption here...
-        print 'Source: %s' % self.layer.source()
-        for myItem in myRampItems:
-            myValue = myItem.value
-            myLabel = myItem.label
-            myColor = myItem.color
-            print 'Value: %s Label %s' % (myValue, myLabel)
-            self.addClassToLegend(myColor,
-                      theMin=myLastValue,
-                      theMax=myValue,
-                      theLabel=myLabel)
-            myLastValue = myValue
+        #test if newer than QGIS 1.8.0
+        #see issue #259
+        if hasattr(self.layer, "rasterShader"):
+            myShader = self.layer.rasterShader().rasterShaderFunction()
+            myRampItems = myShader.colorRampItemList()
+            myLastValue = 0  # Making an assumption here...
+            print 'Source: %s' % self.layer.source()
+            for myItem in myRampItems:
+                myValue = myItem.value
+                myLabel = myItem.label
+                myColor = myItem.color
+                print 'Value: %s Label %s' % (myValue, myLabel)
+                self.addClassToLegend(myColor,
+                          theMin=myLastValue,
+                          theMax=myValue,
+                          theLabel=myLabel)
+                myLastValue = myValue
+            else:
+                #TODO implement QGIS2.0 variant
+                pass
         return self.legend
 
     def addSymbolToLegend(self,
