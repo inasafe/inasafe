@@ -213,17 +213,25 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
                     myTransparencyList.append(myPixel)
         #myLabel = myClass['label']
 
-    # Apply the shading algorithm and design their ramp
-    theQgsRasterLayer.setColorShadingAlgorithm(QgsRasterLayer.ColorRampShader)
-    myFunction = theQgsRasterLayer.rasterShader().rasterShaderFunction()
-    # Discrete will shade any cell between maxima of this break
-    # and mamima of previous break to the colour of this break
-    myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
-    myFunction.setColorRampItemList(myRangeList)
+    #test if newer than QGIS 1.8.0
+    #see issue #259
+    if hasattr(theQgsRasterLayer, "rasterShader"):
+        # Apply the shading algorithm and design their ramp
+        theQgsRasterLayer.setColorShadingAlgorithm(
+            QgsRasterLayer.ColorRampShader)
+        myFunction = theQgsRasterLayer.rasterShader().rasterShaderFunction()
+        # Discrete will shade any cell between maxima of this break
+        # and mamima of previous break to the colour of this break
+        myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
+        myFunction.setColorRampItemList(myRangeList)
 
-    # Now set the raster transparency
-    theQgsRasterLayer.rasterTransparency().setTransparentSingleValuePixelList(
-                                                myTransparencyList)
+        # Now set the raster transparency
+        theQgsRasterLayer.rasterTransparency().setTransparentSingleValuePixelList(
+            myTransparencyList)
+    else:
+        #TODO implement QGIS2.0 variant
+        pass
+
     theQgsRasterLayer.saveDefaultStyle()
     return myRangeList, myTransparencyList
 
