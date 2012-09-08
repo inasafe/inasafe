@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Tue Aug 14 19:12:05 2012
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Sat Sep  8 17:42:05 2012
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -52,6 +52,12 @@ class Ui_DockBase(object):
         self.cboHazard.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
         self.cboHazard.setObjectName(_fromUtf8("cboHazard"))
         self.gridLayout_3.addWidget(self.cboHazard, 1, 0, 1, 1)
+        self.label_2 = QtGui.QLabel(self.grpQuestion)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.gridLayout_3.addWidget(self.label_2, 7, 0, 1, 1)
+        self.cboAggregation = QtGui.QComboBox(self.grpQuestion)
+        self.cboAggregation.setObjectName(_fromUtf8("cboAggregation"))
+        self.gridLayout_3.addWidget(self.cboAggregation, 8, 0, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 0, 0, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(self.dockWidgetContents)
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
@@ -139,6 +145,7 @@ class Ui_DockBase(object):
         self.label_6.setText(QtGui.QApplication.translate("DockBase", "In the event of", None, QtGui.QApplication.UnicodeUTF8))
         self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
         self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("DockBase", "Aggregate by", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("DockBase", "Results", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
