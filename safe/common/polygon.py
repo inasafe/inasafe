@@ -983,16 +983,21 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
     they are considered to not intersect.
 
     Inputs:
-        lines
         line0, line1: Each defined by two end points as in:
                       [[x0, y0], [x1, y1]]
-                      A line can also be a 2x2 numpy array with each row
-                      corresponding to a point.
+
+                      Lines can also be vectors following the format
+                      line[0,0,:] = x0
+                      line[0,1,:] = y0
+                      line[1,0,:] = x1
+                      line[1,1,:] = y1
+                      NOT YET IMPLEMENTED!
 
         rtol, atol: Tolerances passed onto numpy.allclose
 
     Output:
-        value: None or [x, y] in case there is intersection
+        intersections: Nx2 array with intersection points or
+                       NaN where no intersections were found
     """
 
     line0 = ensure_numeric(line0, numpy.float)
@@ -1021,7 +1026,7 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
         # Lines are not parallel, check if they intersect
         x2x0 = x2 - x0
         y2y0 = y2 - y0
-        u0 = x3x2 * (y0 - y2) - y3y2 * (x0 - x2)
+        u0 = y3y2 * x2x0 - x3x2 * y2y0
         u1 = x2x0 * y1y0 - y2y0 * x1x0
 
         u0 = u0 / denom
@@ -1036,6 +1041,7 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
         else:
             # No intersection
             return None
+
 
 # Main functions for polygon clipping
 # FIXME (Ole): Both can be rigged to return points or lines

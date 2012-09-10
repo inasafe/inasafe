@@ -1460,8 +1460,6 @@ class Test_Polygon(unittest.TestCase):
             assert numpy.allclose(lines[i], segments[i])
 
 if __name__ == '__main__':
-    #suite = unittest.makeSuite(Test_Polygon, 'test_clip_lines_by_polygon_real_data')
-    #suite = unittest.makeSuite(Test_Polygon, 'test_clip_lines_by_multiple_polygons')
     suite = unittest.makeSuite(Test_Polygon, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
