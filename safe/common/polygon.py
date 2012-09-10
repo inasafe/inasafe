@@ -976,7 +976,7 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 # Functionality for line intersection
 #------------------------------------
 
-def intersection(line0, line1, atol=1.0e-12):
+def intersection(line0, line1):
     """Returns intersecting point between two line segments.
 
     If the lines are parallel or coincide partly (i.e. share a common segment),
@@ -991,8 +991,6 @@ def intersection(line0, line1, atol=1.0e-12):
                line[0,1,:] = y2
                line[1,0,:] = x3
                line[1,1,:] = y3
-
-        atol: Tolerance applied to decision about whether lines are parallel
 
     Output:
         intersections: Nx2 array with intersection points or nan
@@ -1050,34 +1048,31 @@ def intersection(line0, line1, atol=1.0e-12):
     x3x2 = x3 - x2
     x1x0 = x1 - x0
     y1y0 = y1 - y0
-    denominator = y3y2 * x1x0 - x3x2 * y1y0
-
-    # Determine if lines are parallel (or collinear) up to a tolerance
-    N = line1.shape[2]
-    ok = numpy.zeros(N, dtype=numpy.bool)  # All False
-    ok[numpy.abs(denominator) > atol] = True  # True if not parallel
-
-    # Intersection formula
     x2x0 = x2 - x0
     y2y0 = y2 - y0
+    denominator = y3y2 * x1x0 - x3x2 * y1y0
 
-    u0 = y3y2 * x2x0 - x3x2 * y2y0
-    u1 = x2x0 * y1y0 - y2y0 * x1x0
+    # Suppress numpy warnings (as we'll be dividing by zero)
+    original_numpy_settings = numpy.seterr(invalid='ignore', divide='ignore')
 
-    u0[ok] = u0[ok] / denominator[ok]
-    u1[ok] = u1[ok] / denominator[ok]
-    u0[-ok] = u1[-ok] = numpy.nan
+    u0 = (y3y2 * x2x0 - x3x2 * y2y0) / denominator
+    u1 = (x2x0 * y1y0 - y2y0 * x1x0) / denominator
 
-    x = x0 + u0 * x1x0
-    y = y0 + u0 * y1y0
+    # Restore numpy warnings
+    numpy.seterr(**original_numpy_settings)
 
-    # Points that lie within given line segments are true intersections
+     # Only points that lie within given line segments are true intersections
     mask = (0.0 <= u0) * (u0 <= 1.0) * (0.0 <= u1) * (u1 <= 1.0)
 
+    # Calculate intersection points
+    x = x0 + u0[mask] * x1x0
+    y = y0 + u0[mask] * y1y0
+
     # Return intersection points as N x 2 array
+    N = line1.shape[2]
     result = numpy.zeros((N, 2)) * numpy.nan
-    result[mask, 0] = x[mask]
-    result[mask, 1] = y[mask]
+    result[mask, 0] = x
+    result[mask, 1] = y
 
     # Special treatment of return value if line1 was non vectorised
     if one_point:
