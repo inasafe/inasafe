@@ -17,7 +17,7 @@
 # ***************************************************************************/
 
 # Makefile for InaSAFE - QGIS
-
+SHELL := /bin/bash
 NONGUI := safe
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
@@ -105,10 +105,10 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by style checking
-test: quiet-qgis docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
+test: quiet-qgis docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
 
 # Run the test suite for gui only
-guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
+guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck
 
 set_python:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
@@ -116,7 +116,7 @@ set_python:
 quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
 
 test_suite_quick:
-	nosetests -A 'not slow' -v safe --stop
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe --stop
 
 it:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' safe --stop
@@ -135,7 +135,7 @@ pep8:
 test_suite: compile testdata
 	@echo
 	@echo "----------------------"
-	@echo "Regresssion Test Suite"
+	@echo "Regression Test Suite"
 	@echo "----------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
@@ -170,8 +170,14 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 7181ff2048031de71eed85decdda77736de2587c
+	@scripts/update-test-data.sh 7181ff2048031de71eed85decdda77736de2587c 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
+#check and show if there was an error retrieving the test data
+testdata_errorcheck:
+	@echo
+	@echo "-----------------inasafe_data updater Log-------------------"
+	@[ -f tmp_warnings.txt ] && more tmp_warnings.txt || echo "inasafe_data have been succesfully updated"; rm -f tmp_warnings.txt || true
+	
 disabled_tests:
 	@echo
 	@echo "--------------"
