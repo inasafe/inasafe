@@ -23,10 +23,10 @@ import logging
 from shake_data import ShakeData
 from ftp_client import FtpClient
 from safe_qgis.utilities_test import getQgisTestApp
-
-# The logger is intialised in utils.py by init
+from realtime.utils import setupLogger
+# Loading from package __init__ not working in this context so manually doing
+setupLogger()
 LOGGER = logging.getLogger('InaSAFE-Realtime')
-
 
 if len(sys.argv) > 2:
     sys.exit('Usage:\n%s [optional shakeid]\nor\n%s --list' % (
@@ -53,13 +53,17 @@ myShakeData = ShakeData(myEventId)
 myShakeEvent = myShakeData.shakeEvent(theForceFlag=myForceFlag)
 logging.info('Latest Event Id: %s' % myShakeEvent)
 logging.info('-------------------------------------------')
+
+# Always regenerate the products
+myForceFlag = True
 # Make contours
-for myAlgorithm in ['average', 'invdist', 'nearest']:
+#for myAlgorithm in ['average', 'invdist', 'nearest']:
+for myAlgorithm in ['nearest']:
     myFile = myShakeEvent.mmiDataToContours(theForceFlag=myForceFlag,
                                    theAlgorithm=myAlgorithm)
     logging.info('Created: %s' % myFile)
 try:
-    myFile = myShakeEvent.citiesToShape()
+    myFile = myShakeEvent.citiesToShape(theForceFlag=myForceFlag)
     logging.info('Created: %s' % myFile)
 except:
     logging.exception('No nearby cities found!')

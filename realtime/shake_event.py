@@ -584,9 +584,9 @@ class ShakeEvent:
         ftp server.
 
         Args: theForceFlag bool - (Optional). Whether to force the regeneration
-            of contour product. Defaults to False.
+                  of contour product. Defaults to False.
               theAlgorithm str - (Optional) Which interpolation algorithm to
-              use to create the underlying raster. Defaults to 'nearest'.
+                  use to create the underlying raster. Defaults to 'nearest'.
               **Only enforced if theForceFlag is true!**
 
         Returns: An absolute filesystem path pointing to the generated
@@ -604,10 +604,14 @@ class ShakeEvent:
         if os.path.exists(myOutputFile) and theForceFlag is not True:
             return myOutputFile
         elif os.path.exists(myOutputFile):
-            os.remove(myOutputFileBase + 'shp')
-            os.remove(myOutputFileBase + 'shx')
-            os.remove(myOutputFileBase + 'dbf')
-            os.remove(myOutputFileBase + 'prj')
+            try:
+                os.remove(myOutputFileBase + 'shp')
+                os.remove(myOutputFileBase + 'shx')
+                os.remove(myOutputFileBase + 'dbf')
+                os.remove(myOutputFileBase + 'prj')
+            except:
+                LOGGER.exception('Old contour files not deleted'
+                    ' - this may indicate a file permissions issue.')
 
         myTifPath = self.mmiDataToRaster(theForceFlag, theAlgorithm)
         # Based largely on
@@ -724,12 +728,14 @@ class ShakeEvent:
 
             myAttributes = myFeature.attributeMap()
             myMMIValue = float(myAttributes[myMMIIndex].toString())
-            print 'MMI: ----> %s' % myAttributes[myMMIIndex].toString()
-	    # We only want labels on the half contours so test for that
+            LOGGER.debug('MMI: ----> %s' % myAttributes[myMMIIndex].toString())
+
+            # We only want labels on the half contours so test for that
             if myMMIValue != round(myMMIValue):
                 myRoman = myRomanList[int(round(myMMIValue))]
             else:
                 myRoman = ''
+
             # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
             myRGBList = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',
                          '#FF0', '#FD0', '#ff9100', '#F00', '#D00', '#800',
@@ -749,7 +755,8 @@ class ShakeEvent:
     def boundsToRectangle(self):
         """Convert the event bounding box to a QgsRectangle.
 
-        Args: None
+        Args: theForceFlag bool - (Optional). Whether to force the regeneration
+                  of contour product. Defaults to False.
 
         Returns: QgsRectangle
 
@@ -762,7 +769,7 @@ class ShakeEvent:
                                    self.yMaximum)
         return myRectangle
 
-    def citiesToShape(self):
+    def citiesToShape(self, theForceFlag=False):
         """Write the local cities to a shapefile.
 
         .. note:: Delegates to localCitiesMemoryLayer then uses
@@ -791,11 +798,14 @@ class ShakeEvent:
         if os.path.exists(myOutputFile) and theForceFlag is not True:
             return myOutputFile
         elif os.path.exists(myOutputFile):
-            os.remove(myOutputFileBase + 'shp')
-            os.remove(myOutputFileBase + 'shx')
-            os.remove(myOutputFileBase + 'dbf')
-            os.remove(myOutputFileBase + 'prj')
-
+            try:
+                os.remove(myOutputFileBase + 'shp')
+                os.remove(myOutputFileBase + 'shx')
+                os.remove(myOutputFileBase + 'dbf')
+                os.remove(myOutputFileBase + 'prj')
+            except:
+                LOGGER.exception('Old cities files not deleted'
+                    ' - this may indicate a file permissions issue.')
 
         # Next two lines a workaround for a QGIS bug (lte 1.8)
         # preventing mem layer attributes being saved to shp.
@@ -915,6 +925,7 @@ class ShakeEvent:
         myAttemptsLimit = 5
         myMinimumCityCount = 3
         for _ in range(myAttemptsLimit):
+            LOGGER.debug('City Search Rectangle: %s' % myRectangle.toString())
             myLayer.select(myIndexes, myRectangle,
                            myFetchGeometryFlag, myUseIntersectionFlag)
             if myLayer.selectedFeatureCount() < myMinimumCityCount:
@@ -1001,9 +1012,9 @@ class ShakeEvent:
             QgsField('name', QVariant.String),
             QgsField('population', QVariant.Int),
             QgsField('mmi', QVariant.Double),
-            QgsField('distance_to', QVariant.Double),
-            QgsField('direction_to', QVariant.Double),
-            QgsField('direction_from', QVariant.Double)])
+            QgsField('dist_to', QVariant.Double),
+            QgsField('dir_to', QVariant.Double),
+            QgsField('dir_from', QVariant.Double)])
         myCities = self.localCityFeatures()
         myResult = myMemoryProvider.addFeatures(myCities)
         if not myResult:

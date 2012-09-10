@@ -37,14 +37,15 @@
     <property key="labeling" value="pal"/>
     <property key="labeling/addDirectionSymbol" value="false"/>
     <property key="labeling/angleOffset" value="0"/>
-    <property key="labeling/bufferColorB" value="255"/>
-    <property key="labeling/bufferColorG" value="255"/>
-    <property key="labeling/bufferColorR" value="255"/>
+    <property key="labeling/bufferColorB" value="0"/>
+    <property key="labeling/bufferColorG" value="0"/>
+    <property key="labeling/bufferColorR" value="0"/>
     <property key="labeling/bufferJoinStyle" value="64"/>
-    <property key="labeling/bufferNoFill" value="false"/>
-    <property key="labeling/bufferSize" value="1"/>
+    <property key="labeling/bufferNoFill" value="true"/>
+    <property key="labeling/bufferSize" value="1.2"/>
     <property key="labeling/bufferSizeInMapUnits" value="false"/>
     <property key="labeling/bufferTransp" value="37"/>
+    <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/dataDefinedProperty0" value=""/>
     <property key="labeling/dataDefinedProperty1" value=""/>
     <property key="labeling/dataDefinedProperty10" value="3"/>
@@ -70,12 +71,12 @@
     <property key="labeling/dist" value="0"/>
     <property key="labeling/distInMapUnits" value="false"/>
     <property key="labeling/enabled" value="true"/>
-    <property key="labeling/fieldName" value=" CASE WHEN &quot;MMI&quot; - toint(&quot;MMI&quot;) = 0 THEN 'MMI' || &quot;ROMAN&quot;  END"/>
+    <property key="labeling/fieldName" value="&quot;ROMAN&quot; "/>
     <property key="labeling/fontCapitals" value="0"/>
-    <property key="labeling/fontFamily" value="Ubuntu"/>
+    <property key="labeling/fontFamily" value="Times New Roman"/>
     <property key="labeling/fontItalic" value="false"/>
     <property key="labeling/fontLetterSpacing" value="0"/>
-    <property key="labeling/fontSize" value="12"/>
+    <property key="labeling/fontSize" value="16"/>
     <property key="labeling/fontSizeInMapUnits" value="false"/>
     <property key="labeling/fontStrikeout" value="false"/>
     <property key="labeling/fontUnderline" value="false"/>
@@ -86,7 +87,7 @@
     <property key="labeling/labelOffsetInMapUnits" value="true"/>
     <property key="labeling/labelPerPart" value="false"/>
     <property key="labeling/mergeLines" value="true"/>
-    <property key="labeling/minFeatureSize" value="0"/>
+    <property key="labeling/minFeatureSize" value="20"/>
     <property key="labeling/namedStyle" value="Bold"/>
     <property key="labeling/obstacle" value="true"/>
     <property key="labeling/placement" value="4"/>
@@ -97,8 +98,8 @@
     <property key="labeling/priority" value="10"/>
     <property key="labeling/scaleMax" value="0"/>
     <property key="labeling/scaleMin" value="0"/>
-    <property key="labeling/textColorB" value="0"/>
-    <property key="labeling/textColorG" value="0"/>
+    <property key="labeling/textColorB" value="255"/>
+    <property key="labeling/textColorG" value="255"/>
     <property key="labeling/textColorR" value="255"/>
     <property key="labeling/textTransp" value="0"/>
     <property key="labeling/wrapChar" value=""/>
@@ -130,6 +131,7 @@
     <selectedonly on=""/>
   </labelattributes>
   <edittypes>
+    <edittype type="0" name="ALIGN"/>
     <edittype type="0" name="ALIGNMENT"/>
     <edittype type="0" name="ELEV"/>
     <edittype type="0" name="ID"/>
