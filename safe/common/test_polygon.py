@@ -854,8 +854,7 @@ class Test_Polygon(unittest.TestCase):
         line0 = [[-1, 0], [1, 0]]
         line1 = [[0, -1], [0, 1]]
 
-        status, value = intersection(line0, line1)
-        assert status == 1
+        value = intersection(line0, line1)
         assert numpy.allclose(value, [0.0, 0.0])
 
     def test_intersection2(self):
@@ -865,20 +864,17 @@ class Test_Polygon(unittest.TestCase):
         line0 = [[0, 0], [24, 12]]
         line1 = [[0, 12], [24, 0]]
 
-        status, value = intersection(line0, line1)
-        assert status == 1
+        value = intersection(line0, line1)
         assert numpy.allclose(value, [12.0, 6.0])
 
         # Swap direction of one line
         line1 = [[24, 0], [0, 12]]
 
-        status, value = intersection(line0, line1)
-        assert status == 1
+        value = intersection(line0, line1)
         assert numpy.allclose(value, [12.0, 6.0])
 
         # Swap order of lines
-        status, value = intersection(line1, line0)
-        assert status == 1
+        value = intersection(line1, line0)
         assert numpy.allclose(value, [12.0, 6.0])
 
     def test_intersection3(self):
@@ -888,20 +884,17 @@ class Test_Polygon(unittest.TestCase):
         line0 = [[0, 0], [24, 12]]
         line1 = [[0, 17], [24, 0]]
 
-        status, value = intersection(line0, line1)
-        assert status == 1
+        value = intersection(line0, line1)
         assert numpy.allclose(value, [14.068965517, 7.0344827586])
 
         # Swap direction of one line
         line1 = [[24, 0], [0, 17]]
 
-        status, value = intersection(line0, line1)
-        assert status == 1
+        value = intersection(line0, line1)
         assert numpy.allclose(value, [14.068965517, 7.0344827586])
 
         # Swap order of lines
-        status, value = intersection(line1, line0)
-        assert status == 1
+        value = intersection(line1, line0)
         assert numpy.allclose(value, [14.068965517, 7.0344827586])
 
     def test_intersection_endpoints(self):
@@ -913,643 +906,14 @@ class Test_Polygon(unittest.TestCase):
         line0 = [[0, 0], [1, 1]]
         line1 = [[1, 1], [2, 1]]
 
-        status, value = intersection(line0, line1)
-        assert status == 1
+        value = intersection(line0, line1)
         assert numpy.allclose(value, [1.0, 1.0])
 
         line0 = [[1, 1], [2, 0]]
         line1 = [[1, 1], [2, 1]]
 
-        status, value = intersection(line0, line1)
-        assert status == 1
+        value = intersection(line0, line1)
         assert numpy.allclose(value, [1.0, 1.0])
-
-    # This function is a helper function for
-    # the test_intersection_bug_20081110_?() set of tests.
-    # This function tests all parallel line cases for 4 collinear points.
-    # This function should never be run directly by the unittest code.
-    def helper_parallel_intersection_code(self, P1, P2, P3, P4):
-        # lines in same direction, no overlap
-        # 0:         ---->----
-        # 1:                     --------->-----------
-        line0 = [P1, P2]
-        line1 = [P3, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 3,
-                    'Expected status 3, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(value is None,
-                        'Expected value of None, got %s' % str(value))
-
-        # lines in same direction, no overlap
-        # 0:         ----<----
-        # 1:                     ---------<-----------
-        line0 = [P2, P1]
-        line1 = [P4, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 3,
-                    'Expected status 3, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(value is None,
-                        'Expected value of None, got %s' % str(value))
-
-        # lines in opposite direction, no overlap
-        # 0:         ----<----
-        # 1:                     --------->-----------
-        line0 = [P2, P1]
-        line1 = [P3, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 3,
-                    'Expected status 3, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(value is None,
-                        'Expected value of None, got %s' % str(value))
-
-        # lines in opposite direction, no overlap
-        # 0:         ---->----
-        # 1:                     ---------<-----------
-        line0 = [P1, P2]
-        line1 = [P4, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 3,
-                    'Expected status 3, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(value is None,
-                        'Expected value of None, got %s' % str(value))
-
-        # ---------------------------------------------------------------
-
-        # line0 fully within line1, same direction
-        # 0:         ---->----
-        # 1:    --------->-----------
-        # value should be line0:
-        #            ---->----
-        line0 = [P2, P3]
-        line1 = [P1, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line0 fully within line1, same direction
-        # 0:         ----<----
-        # 1:    ---------<-----------
-        # value should be line0:
-        #            ----<----
-        line0 = [P3, P2]
-        line1 = [P4, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line0 fully within line1, opposite direction
-        # 0:         ----<----
-        # 1:    --------->-----------
-        # value should be line0:
-        #            ----<----
-        line0 = [P3, P2]
-        line1 = [P1, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line0 fully within line1, opposite direction
-        # 0:         ---->----
-        # 1:    ---------<-----------
-        # value should be line0:
-        #            ---->----
-        line0 = [P2, P3]
-        line1 = [P4, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # --------------------------------------------------------------
-        # line1 fully within line0, same direction
-        # 0:    --------->-----------
-        # 1:         ---->----
-        # value should be line1:
-        #            ---->----
-        line0 = [P1, P4]
-        line1 = [P2, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # line1 fully within line0, same direction
-        # 0:    ---------<-----------
-        # 1:         ----<----
-        # value should be line1:
-        #            ----<----
-        line0 = [P4, P1]
-        line1 = [P3, P2]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # line1 fully within line0, opposite direction
-        # 0:    ---------<-----------
-        # 1:         ---->----
-        # value should be line1:
-        #            ---->----
-        line0 = [P4, P1]
-        line1 = [P2, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # line1 fully within line0, opposite direction
-        # 0:    --------->-----------
-        # 1:         ----<----
-        # value should be line1:
-        #            ----<----
-        line0 = [P1, P4]
-        line1 = [P3, P2]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # ----------------------------------------------------------------
-        # line in same direction, partial overlap
-        # 0:    ----->-----
-        # 1:       ------->--------
-        # value should be segment line1_start->line0_end:
-        #          --->----
-        line0 = [P1, P3]
-        line1 = [P2, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, [line1[0], line0[1]]))
-
-        # line in same direction, partial overlap
-        # 0:    -----<-----
-        # 1:       -------<--------
-        # value should be segment line0_start->line1_end:
-        #          ---<----
-        line0 = [P3, P1]
-        line1 = [P4, P2]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, [line0[0], line1[1]]))
-
-        # line in opposite direction, partial overlap
-        # 0:    -----<-----
-        # 1:       ------->--------
-        # value should be segment line0_start->line1_start:
-        #          ---<----
-        line0 = [P3, P1]
-        line1 = [P2, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, [line0[0], line1[0]]))
-
-        # line in opposite direction, partial overlap
-        # 0:    ----->-----
-        # 1:       -------<--------
-        # value should be segment line1_end->line0_end:
-        #          --->----
-        line0 = [P1, P3]
-        line1 = [P4, P2]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, [line1[1], line0[1]]))
-
-        # -------------------------------------------------------------------
-        # line in same direction, partial overlap
-        # 0:       ------>------
-        # 1:    ------>------
-        # value should be segment line0_start->line1_end:
-        #          --->----
-        line0 = [P2, P4]
-        line1 = [P1, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, [line0[0], line1[1]]))
-
-        # line in same direction, partial overlap
-        # 0:       ------<------
-        # 1:    ------<------
-        # value should be segment line1_start->line0_end:
-        #          ----<-----
-        line0 = [P4, P2]
-        line1 = [P3, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, [line1[0], line0[1]]))
-
-        # line in opposite direction, partial overlap
-        # 0:       ------<------
-        # 1:    ----->------
-        # value should be segment line1_end->line0_end:
-        #          --->----
-        line0 = [P4, P2]
-        line1 = [P1, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, [line1[1], line0[1]]))
-
-        # line in opposite direction, partial overlap
-        # 0:       ------>------
-        # 1:    -----<------
-        # value should be segment line0_start->line1_start:
-        #          ---<----
-        line0 = [P2, P4]
-        line1 = [P3, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, [line0[0], line1[0]]))
-
-        # --------------------------------------------------------------------
-        # line in same direction, same left point, line1 longer
-        # 0:    ----->------
-        # 1:    ------->--------
-        # value should be line0:
-        #       ----->------
-        line0 = [P1, P3]
-        line1 = [P1, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line in same direction, same left point, line1 longer
-        # 0:    -----<------
-        # 1:    -------<--------
-        # value should be line0:
-        #       -----<------
-        line0 = [P3, P1]
-        line1 = [P4, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line in opposite direction, same left point, line1 longer
-        # 0:    ----->------
-        # 1:    -------<--------
-        # value should be line0:
-        #       ----->------
-        line0 = [P1, P3]
-        line1 = [P4, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line in opposite direction, same start point, line1 longer
-        # 0:    -----<------
-        # 1:    ------->--------
-        # value should be line0:
-        #       -----<------
-        line0 = [P3, P1]
-        line1 = [P1, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # -------------------------------------------------------------------
-        # line in same direction, same left point, same right point
-        # 0:    ------->--------
-        # 1:    ------->--------
-        # value should be line0 or line1:
-        #       ------->--------
-        line0 = [P1, P3]
-        line1 = [P1, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line in same direction, same left point, same right point
-        # 0:    -------<--------
-        # 1:    -------<--------
-        # value should be line0 (or line1):
-        #       -------<--------
-        line0 = [P3, P1]
-        line1 = [P3, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line in opposite direction, same left point, same right point
-        # 0:    ------->--------
-        # 1:    -------<--------
-        # value should be line0:
-        #       ------->--------
-        line0 = [P1, P3]
-        line1 = [P3, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line in opposite direction, same left point, same right point
-        # 0:    -------<--------
-        # 1:    ------->--------
-        # value should be line0:
-        #       -------<--------
-        line0 = [P3, P1]
-        line1 = [P1, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # -------------------------------------------------------------------
-        # line in same direction, same right point, line1 longer
-        # 0:        ----->------
-        # 1:    ------->--------
-        # value should be line0:
-        #           ----->------
-        line0 = [P2, P4]
-        line1 = [P1, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line in same direction, same right point, line1 longer
-        # 0:        -----<------
-        # 1:    -------<--------
-        # value should be line0:
-        #           -----<------
-        line0 = [P4, P2]
-        line1 = [P4, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line in opposite direction, same right point, line1 longer
-        # 0:        ----->------
-        # 1:    -------<--------
-        # value should be line0:
-        #           ----->------
-        line0 = [P2, P4]
-        line1 = [P4, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # line in opposite direction, same right point, line1 longer
-        # 0:        -----<------
-        # 1:    ------->--------
-        # value should be line0:
-        #           -----<------
-        line0 = [P4, P2]
-        line1 = [P1, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line0))
-
-        # -------------------------------------------------------------------
-        # line in same direction, same left point, line0 longer
-        # 0:    ------->--------
-        # 1:    ----->------
-        # value should be line1:
-        #       ----->------
-        line0 = [P1, P4]
-        line1 = [P1, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # line in same direction, same left point, line0 longer
-        # 0:    -------<--------
-        # 1:    -----<------
-        # value should be line1:
-        #       -----<------
-        line0 = [P4, P1]
-        line1 = [P3, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # line in opposite direction, same left point, line0 longer
-        # 0:    ------->--------
-        # 1:    -----<------
-        # value should be line1:
-        #       -----<------
-        line0 = [P1, P4]
-        line1 = [P3, P1]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # line in opposite direction, same left point, line0 longer
-        # 0:    -------<--------
-        # 1:    ----->------
-        # value should be line1:
-        #       ----->------
-        line0 = [P4, P1]
-        line1 = [P1, P3]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # -------------------------------------------------------------------
-        # line in same direction, same right point, line0 longer
-        # 0:    ------->--------
-        # 1:        ----->------
-        # value should be line1:
-        #           ----->------
-        line0 = [P1, P4]
-        line1 = [P2, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # line in same direction, same right point, line0 longer
-        # 0:    -------<--------
-        # 1:        -----<------
-        # value should be line1:
-        #           -----<------
-        line0 = [P4, P1]
-        line1 = [P4, P2]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # line in opposite direction, same right point, line0 longer
-        # 0:    ------->--------
-        # 1:        -----<------
-        # value should be line1:
-        #           -----<------
-        line0 = [P1, P4]
-        line1 = [P4, P2]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-        # line in opposite direction, same right point, line0 longer
-        # 0:    -------<--------
-        # 1:        ----->------
-        # value should be line1:
-        #           ----->------
-        line0 = [P4, P1]
-        line1 = [P2, P4]
-        status, value = intersection(line0, line1)
-        self.failIf(status != 2,
-                    'Expected status 2, got status=%s, value=%s' %
-                    (str(status), str(value)))
-        self.failUnless(numpy.allclose(value, line1))
-
-    def test_intersection_bug_20081110_TR_TL(self):
-        """Intersection corner case top-right and top-left
-
-        Test all cases in top-right & top-left quadrant
-        """
-
-        # define 4 collinear points, 1 in TL, 3 in TR
-        #    P1-+-P2---P3---P4
-        P1 = [-3.0, 1.0]
-        P2 = [1.0, 5.0]
-        P3 = [2.0, 6.0]
-        P4 = [3.0, 7.0]
-        self.helper_parallel_intersection_code(P1, P2, P3, P4)
-
-        # define 4 collinear points, 2 in TL, 2 in TR
-        #    P1---P2-+-P3---P4
-        P1 = [-3.0, 1.0]
-        P2 = [-2.0, 2.0]
-        P3 = [2.0, 6.0]
-        P4 = [3.0, 7.0]
-        self.helper_parallel_intersection_code(P1, P2, P3, P4)
-
-        # define 4 collinear points, 3 in TL, 1 in TR
-        #    P1---P2---P3-+-P4
-        P1 = [-3.0, 1.0]
-        P2 = [-2.0, 2.0]
-        P3 = [-1.0, 3.0]
-        P4 = [3.0, 7.0]
-        self.helper_parallel_intersection_code(P1, P2, P3, P4)
-
-    test_intersection_bug_20081110_TR_TL.slow = True
-
-    def test_intersection_bug_20081110_TR_BL(self):
-        """Intersection corner case top-right and bottom-left
-
-        Test all cases in top-right & bottom-left quadrant
-        """
-
-        # define 4 collinear points, 1 in BL, 3 in TR
-        #    P1-+-P2---P3---P4
-        P1 = [-4.0, -3.0]
-        P2 = [1.0, 2.0]
-        P3 = [2.0, 3.0]
-        P4 = [3.0, 4.0]
-        self.helper_parallel_intersection_code(P1, P2, P3, P4)
-
-        # define 4 collinear points, 2 in TL, 2 in TR
-        #    P1---P2-+-P3---P4
-        P1 = [-4.0, -3.0]
-        P2 = [-3.0, -2.0]
-        P3 = [2.0, 3.0]
-        P4 = [3.0, 4.0]
-        self.helper_parallel_intersection_code(P1, P2, P3, P4)
-
-        # define 4 collinear points, 3 in TL, 1 in TR
-        #    P1---P2---P3-+-P4
-        P1 = [-4.0, -3.0]
-        P2 = [-3.0, -2.0]
-        P3 = [-2.0, -1.0]
-        P4 = [3.0, 4.0]
-        self.helper_parallel_intersection_code(P1, P2, P3, P4)
-
-    test_intersection_bug_20081110_TR_BL.slow = True
-
-    def test_intersection_bug_20081110_TR_BR(self):
-        """Intersection corner case top-right and bottom-right
-
-        Test all cases in top-right & bottom-right quadrant
-        """
-
-        # define 4 collinear points, 1 in BR, 3 in TR
-        #    P1-+-P2---P3---P4
-        P1 = [1.0, -3.0]
-        P2 = [5.0, 1.0]
-        P3 = [6.0, 2.0]
-        P4 = [7.0, 3.0]
-        self.helper_parallel_intersection_code(P1, P2, P3, P4)
-
-        # define 4 collinear points, 2 in BR, 2 in TR
-        #    P1---P2-+-P3---P4
-        P1 = [1.0, -3.0]
-        P2 = [2.0, -2.0]
-        P3 = [6.0, 2.0]
-        P4 = [7.0, 3.0]
-        self.helper_parallel_intersection_code(P1, P2, P3, P4)
-
-        # define 4 collinear points, 3 in BR, 1 in TR
-        #    P1---P2---P3-+-P4
-        P1 = [1.0, -3.0]
-        P2 = [2.0, -2.0]
-        P3 = [3.0, -1.0]
-        P4 = [7.0, 3.0]
-        self.helper_parallel_intersection_code(P1, P2, P3, P4)
-
-    test_intersection_bug_20081110_TR_BR.slow = True
 
     def test_intersection_direction_invariance(self):
         """Intersection is direction invariant
@@ -1566,13 +930,11 @@ class Test_Polygon(unittest.TestCase):
             x = 20 + i * 1.0 / 100
 
             line1 = [[x, 0], common_end_point]
-            status, p1 = intersection(line0, line1)
-            assert status == 1
+            p1 = intersection(line0, line1)
 
             # Swap direction of line1
             line1 = [common_end_point, [x, 0]]
-            status, p2 = intersection(line0, line1)
-            assert status == 1
+            p2 = intersection(line0, line1)
 
             msg = ('Orientation of line should not matter.\n'
                    'However, segment [%f,%f], [%f, %f]' %
@@ -1581,8 +943,7 @@ class Test_Polygon(unittest.TestCase):
             assert numpy.allclose(p1, p2), msg
 
             # Swap order of lines
-            status, p3 = intersection(line1, line0)
-            assert status == 1
+            p3 = intersection(line1, line0)
             msg = 'Order of lines gave different results'
             assert numpy.allclose(p1, p3), msg
 
@@ -1595,9 +956,103 @@ class Test_Polygon(unittest.TestCase):
         line0 = [[-1, 1], [1, 1]]
         line1 = [[0, -1], [0, 0]]
 
-        status, value = intersection(line0, line1)
-        assert status == 0
+        value = intersection(line0, line1)
         assert value is None
+
+    def Xtest_vectorised_intersection0(self):
+        """Vectorised intersection of multiple lines works
+        """
+
+        #FIXME: Retire...
+
+        # First vectorise only one of the line arguments
+        line0 = [[0, 0], [100, 100]]
+
+        N = 10
+        line1 = numpy.zeros(40, numpy.float).reshape(2, 2, N)
+
+        x0 = numpy.arange(N) * 10
+        y0 = numpy.zeros(N)
+        x1 = numpy.arange(N) * 10
+        y1 = numpy.ones(N) * 100
+
+        line1[0, 0, :] = x0
+        line1[0, 1, :] = y0
+        line1[1, 0, :] = x1
+        line1[1, 1, :] = y1
+
+        value = intersection(line0, line1)
+
+        assert len(value.shape) == 2
+        assert value.shape[0] == N
+        assert value.shape[1] == 2
+
+        print value
+
+    def test_vectorised_intersection1(self):
+        """Vectorised intersection of multiple lines works 1
+        """
+
+        line0 = [[0, 0], [24, 12]]
+
+        # One way of building the array
+        line1 = numpy.zeros(16).reshape(2, 2, 4)  # Three lines
+        line1[0, 0, :] = [0, 24, 0, 15]   # x0
+        line1[0, 1, :] = [12, 0, 24, 0]   # y0
+        line1[1, 0, :] = [24, 0, 0, 5]    # x1
+        line1[1, 1, :] = [0, 12, 12, 15]  # y1
+
+        value = intersection(line0, line1)
+        mask = - numpy.isnan(value[:, 0])
+        v = value[mask]
+        assert numpy.allclose(v,
+                              [[12.0, 6.0],
+                               [12.0, 6.0],
+                               [11.25, 5.625]])
+
+        # A more direct way of building the array
+        line1 = [[[0, 24, 0, 15],    # x0
+                  [12, 0, 24, 0]],   # y0
+                 [[24, 0, 0, 5],     # x1
+                  [0, 12, 12, 15]]]  # y1
+
+        value = intersection(line0, line1)
+        mask = - numpy.isnan(value[:, 0])
+        v = value[mask]
+        assert numpy.allclose(v,
+                              [[12.0, 6.0],
+                               [12.0, 6.0],
+                               [11.25, 5.625]])
+
+    def test_vectorised_intersection2(self):
+        """Vectorised intersection of multiple lines works 2
+        """
+
+        # Common line segment to intersect with
+        line0 = [[0, 0], [100, 100]]
+
+        # Vectorised collection of line arguments
+        N = 15  # Line 0 to 10 will intersect, 11 - 14 won't
+        line1 = numpy.zeros(4 * N, numpy.float).reshape(2, 2, N)
+        x0 = numpy.arange(N) * 10
+        y0 = numpy.zeros(N)
+        x1 = numpy.arange(N) * 10
+        y1 = numpy.ones(N) * 100
+        line1[0, 0, :] = x0
+        line1[0, 1, :] = y0
+        line1[1, 0, :] = x1
+        line1[1, 1, :] = y1
+
+        value = intersection(line0, line1)
+        assert len(value.shape) == 2
+        assert value.shape[0] == N
+        assert value.shape[1] == 2
+
+        for i in range(0, 11):
+            assert value[i, 0] == i * 10
+
+        for i in range(11, 15):
+            assert numpy.all(numpy.isnan(value[i]))
 
     def test_intersection_parallel(self):
         """Parallel lines are correctly detected in intersection code
@@ -1606,117 +1061,13 @@ class Test_Polygon(unittest.TestCase):
         line0 = [[-1, 1], [1, 1]]
         line1 = [[-1, 0], [5, 0]]
 
-        status, value = intersection(line0, line1)
-        assert status == 4
+        value = intersection(line0, line1)
         assert value is None
 
         line0 = [[0, 0], [10, 100]]
         line1 = [[-10, 5], [0, 105]]
 
-        status, value = intersection(line0, line1)
-        assert status == 4
-        assert value is None
-
-    def test_intersection_coincide(self):
-        """Two lines that partly coincide are handled correctly
-        """
-
-        # Overlap 1
-        line0 = [[0, 0], [5, 0]]
-        line1 = [[-3, 0], [3, 0]]
-
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, [[0, 0], [3, 0]])
-
-        # Overlap 2
-        line0 = [[-10, 0], [5, 0]]
-        line1 = [[-3, 0], [10, 0]]
-
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, [[-3, 0], [5, 0]])
-
-        # Inclusion 1
-        line0 = [[0, 0], [5, 0]]
-        line1 = [[2, 0], [3, 0]]
-
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, line1)
-
-        # Inclusion 2
-        line0 = [[1, 0], [5, 0]]
-        line1 = [[-10, 0], [15, 0]]
-
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, line0)
-
-        # Exclusion (no intersection)
-        line0 = [[-10, 0], [1, 0]]
-        line1 = [[3, 0], [15, 0]]
-
-        status, value = intersection(line0, line1)
-        assert status == 3
-        assert value is None
-
-        # Try examples with some slope (y=2*x+5)
-
-        # Overlap
-        line0 = [[0, 5], [7, 19]]
-        line1 = [[1, 7], [10, 25]]
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, [[1, 7], [7, 19]])
-
-        status, value = intersection(line1, line0)
-        assert status == 2
-        assert numpy.allclose(value, [[1, 7], [7, 19]])
-
-        # Swap direction
-        line0 = [[7, 19], [0, 5]]
-        line1 = [[1, 7], [10, 25]]
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, [[7, 19], [1, 7]])
-
-        line0 = [[0, 5], [7, 19]]
-        line1 = [[10, 25], [1, 7]]
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, [[1, 7], [7, 19]])
-
-        # Inclusion
-        line0 = [[1, 7], [7, 19]]
-        line1 = [[0, 5], [10, 25]]
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, [[1, 7], [7, 19]])
-
-        line0 = [[0, 5], [10, 25]]
-        line1 = [[1, 7], [7, 19]]
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, [[1, 7], [7, 19]])
-
-        line0 = [[0, 5], [10, 25]]
-        line1 = [[7, 19], [1, 7]]
-        status, value = intersection(line0, line1)
-        assert status == 2
-        assert numpy.allclose(value, [[7, 19], [1, 7]])
-
-        # Real life issue
-        p1 = [122.22480486608671, -8.6220054852698347]
-        p2 = [122.22467227475077, -8.621828474280294]
-        p3 = [122.22485121475052, -8.6220016038563081]
-        p4 = [122.22472918310231, -8.6218197001101728]
-        line0 = [p1, p2]
-        line1 = [p3, p4]
-        #Vector(geometry=[line0, line1],
-        #       geometry_type='line').write_to_file('impossible_state.shp')
-        status, value = intersection(line0, line1)
-        assert status == 0
+        value = intersection(line0, line1)
         assert value is None
 
     def test_clip_line_by_polygon_simple(self):
@@ -1740,14 +1091,13 @@ class Test_Polygon(unittest.TestCase):
                                [[1, 0.5], [2, 0.5]]])
 
         # Simple horizontal line coinciding with polygon edge
-        # It will be clipped at its midpoint, but segments fused again
         line = [[-1, 1], [2, 1]]
 
         inside_line_segments, outside_line_segments = \
             clip_line_by_polygon(line, polygon)
 
         assert numpy.allclose(inside_line_segments,
-                              [[[0, 1], [0.5, 1], [1, 1]]])
+                              [[[0, 1], [1, 1]]])
 
         assert numpy.allclose(outside_line_segments,
                               [[[-1, 1], [0, 1]],
@@ -1767,14 +1117,13 @@ class Test_Polygon(unittest.TestCase):
                                [[0.5, 1], [0.5, 2]]])
 
         # Simple vertical line coinciding with polygon edge
-        # It will be clipped at its midpoint, but segments fused again
         line = [[1, -1], [1, 2]]
 
         inside_line_segments, outside_line_segments = \
             clip_line_by_polygon(line, polygon)
 
         assert numpy.allclose(inside_line_segments,
-                              [[[1, 0], [1, 0.5], [1, 1]]])
+                              [[[1, 0], [1, 1]]])
 
         assert numpy.allclose(outside_line_segments,
                               [[[1, -1], [1, 0]],
@@ -2035,13 +1384,11 @@ class Test_Polygon(unittest.TestCase):
         # Polygon 2, line 1
         assert numpy.allclose(lines_covered[2][1][0],
                               [[2., 2.],
-                               [2., 2.5],
                                [2., 4.]])
 
         # Polygon 4, line 2
         assert numpy.allclose(lines_covered[4][2][0],
                               [[0., 0.],
-                               [2.5, 2.5],
                                [5., 5.]])
 
         # Polygon 4, line 7
