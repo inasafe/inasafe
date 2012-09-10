@@ -26,4 +26,6 @@ pushd .
 cd ../inasafe_data
 git fetch
 git checkout $VERSION
+EXITCODE=$?
 popd
+exit $EXITCODE

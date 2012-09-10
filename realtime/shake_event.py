@@ -630,8 +630,8 @@ class ShakeEvent:
         myLayer.CreateField(myFieldDefinition)
         myFieldDefinition = ogr.FieldDefn('MMI', ogr.OFTReal)
         myLayer.CreateField(myFieldDefinition)
-        # So we can fix the x pos to the same x coord as epicenter so
-        # labels line up nicely vertically
+        # So we can fix the x pos to the same x coord as centroid of the
+        # feature so labels line up nicely vertically
         myFieldDefinition = ogr.FieldDefn('X', ogr.OFTReal)
         myLayer.CreateField(myFieldDefinition)
         # So we can fix the y pos to the min y coord of the whole contour so
@@ -675,6 +675,15 @@ class ShakeEvent:
             myOgrDataset.Release()
         # Now update the additional columns - X,Y, ROMAN and RGB
         self.setContourProperties(myOutputFile)
+
+        # Copy over the standard .prj file since ContourGenerate does not
+        # create a projection definition
+        myQmlPath = os.path.join(shakemapExtractDir(),
+                                 self.eventId,
+                                 'mmi-contours-%s.prj' % theAlgorithm)
+        mySourceQml = os.path.join(dataDir(), 'mmi-contours.prj')
+        shutil.copyfile(mySourceQml, myQmlPath)
+
         # Lastly copy over the standard qml (QGIS Style file)
         myQmlPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
@@ -718,23 +727,33 @@ class ShakeEvent:
             # Work out myX and myY
             myLine = myFeature.geometry().asPolyline()
             myY = myLine[0].y()
+
+            myXMax = myLine[0].x()
+            myXMin = myXMax
             for myPoint in myLine:
                 if myPoint.y() < myY:
                     myY = myPoint.y()
-            myX = self.longitude  # always align labels to epicenter longitude
+                myX = myPoint.x()
+                if myX < myXMin:
+                    myXMin = myX
+                if myX > myXMax:
+                    myXMax = myX
+            myX = myXMin + ((myXMax - myXMin) / 2)
 
             myRomanList = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
                            'IX', 'X', 'XI', 'XII']
 
             myAttributes = myFeature.attributeMap()
             myMMIValue = float(myAttributes[myMMIIndex].toString())
-            LOGGER.debug('MMI: ----> %s' % myAttributes[myMMIIndex].toString())
 
             # We only want labels on the half contours so test for that
             if myMMIValue != round(myMMIValue):
                 myRoman = myRomanList[int(round(myMMIValue))]
             else:
                 myRoman = ''
+
+            #LOGGER.debug('MMI: %s ----> %s' % (
+            #    myAttributes[myMMIIndex].toString(), myRoman))
 
             # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
             myRGBList = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',

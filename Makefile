@@ -17,7 +17,7 @@
 # ***************************************************************************/
 
 # Makefile for InaSAFE - QGIS
-
+SHELL := /bin/bash
 NONGUI := safe
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
@@ -48,7 +48,7 @@ update-translation-strings: compile
 	@# apply same xgettext command for each supported locale. TS
 	@$(foreach LOCALE, $(LOCALES), scripts/update-strings.sh $(LOCALE) $(POFILES);)
 	@# Qt translation stuff
-	@cd safe_qgis; pylupdate4 inasafe.pro; cd ..
+	@cd safe_qgis; pylupdate4 -noobsolete inasafe.pro; cd ..
 	@$(foreach LOCALE, $(LOCALES), echo "safe_qgis/i18n/inasafe_$(LOCALE).ts";)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
@@ -87,6 +87,11 @@ lines-of-code:
 	@git log | head -3
 	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
 
+quiet-qgis:
+	# Make qgis console output quiet
+	@export QGIS_DEBUG=0
+	@export QGIS_LOG_FILE=/dev/null
+	@export QGIS_DEBUG_FILE=/dev/null
 
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
@@ -100,29 +105,31 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by style checking
-test: docs test_suite pep8 pylint dependency_test unwanted_strings data_audit test-translations
+test: quiet-qgis docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
 
 # Run the test suite for gui only
-guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings
+guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck
 
 set_python:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
 
-quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings data_audit test-translations
+quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
 
 test_suite_quick:
-	nosetests -A 'not slow' -v safe --stop
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe --stop
 
 it:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' safe --stop
 
 # Run pep8 style checking
+#http://pypi.python.org/pypi/pep8
 pep8:
 	@echo
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
+	@echo "disabed E121-E128 checks until pep8 version 1.3 becomes widely available"
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
 
 # Run entire test suite
 test_suite_no_git: compile
@@ -145,9 +152,9 @@ test_suite_no_git: compile
 test_suite: compile testdata
 	@echo
 	@echo "----------------------"
-	@echo "Regresssion Test Suite"
+	@echo "Regression Test Suite"
 	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
 	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
@@ -176,7 +183,10 @@ gui_test_suite: compile testdata
 	@echo "----------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	#Noisy version - uncomment if you want to see all qgis stdout
+	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	#Quiet version
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Get test data
 # FIXME (Ole): Need to attempt cloning this r/w for those with
@@ -187,8 +197,14 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 5600646aacc2872c17867ebedeb09564ff5a8c83
+	@scripts/update-test-data.sh 7181ff2048031de71eed85decdda77736de2587c 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
+#check and show if there was an error retrieving the test data
+testdata_errorcheck:
+	@echo
+	@echo "-----------------inasafe_data updater Log-------------------"
+	@[ -f tmp_warnings.txt ] && more tmp_warnings.txt || echo "inasafe_data have been succesfully updated"; rm -f tmp_warnings.txt || true
+	
 disabled_tests:
 	@echo
 	@echo "--------------"
@@ -234,7 +250,9 @@ list_gpackages:
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
 
-data_audit:
+data_audit: testdata run_data_audit
+
+run_data_audit:
 	@echo
 	@echo "---------------------------------------"
 	@echo "Audit of IP status for bundled data    "
@@ -254,7 +272,7 @@ pylint-details:
 	@echo "Pylint violations. For details run     "
 	@echo "make pylint-details                    "
 	@echo "---------------------------------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis || true
 
 profile:
 	@echo
@@ -269,7 +287,7 @@ profile:
 #
 ##########################################################
 
-jenkins-test:
+jenkins-test: testdata
 	@echo
 	@echo "----------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"

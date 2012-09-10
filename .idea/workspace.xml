@@ -2,14 +2,91 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Test_Shake_Event.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/fixtures/mmi-contours.qml" afterPath="$PROJECT_DIR$/realtime/fixtures/mmi-contours.qml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/fixtures/realtime.qgs" afterPath="$PROJECT_DIR$/realtime/fixtures/realtime.qgs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/make_map.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/make_map.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/engine/interpolation.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/storage/test_utilities.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/storage/test_vector.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/developer-docs/irc.rst" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/realtime/fixtures/mmi-contours.prj" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/safe/engine/interpolation.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/update-website.sh" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/safe/storage/interpolation.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/i18n/af/LC_MESSAGES/inasafe.mo" afterPath="$PROJECT_DIR$/safe/i18n/af/LC_MESSAGES/inasafe.mo" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/i18n/id/LC_MESSAGES/inasafe.mo" afterPath="$PROJECT_DIR$/safe/i18n/id/LC_MESSAGES/inasafe.mo" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_af.ts" afterPath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_af.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_id.qm" afterPath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_id.qm" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_id.ts" afterPath="$PROJECT_DIR$/safe_qgis/i18n/inasafe_id.ts" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/make_map.py" afterPath="$PROJECT_DIR$/realtime/make_map.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/_templates/index.html" afterPath="$PROJECT_DIR$/docs/source/_templates/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/common.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/common.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/engine.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/engine.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/engine/impact_functions_for_testing.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/engine/impact_functions_for_testing.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/earthquake.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/earthquake.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/inundation.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/inundation.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/volcanic.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/impact_functions/volcanic.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe/storage.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe/storage.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe_qgis.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe_qgis.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/api-docs/safe_qgis_tests.rst" afterPath="$PROJECT_DIR$/docs/source/api-docs/safe_qgis_tests.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/faq.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/faq.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/i18n.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/i18n.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/index.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/index.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/maintaining_documentation.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/maintaining_documentation.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/platform_linux.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/platform_linux.rst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/run-single-test.sh" afterPath="$PROJECT_DIR$/scripts/run-single-test.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/api.py" afterPath="$PROJECT_DIR$/safe/api.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/dynamic_translations.py" afterPath="$PROJECT_DIR$/safe/common/dynamic_translations.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/interpolation1d.py" afterPath="$PROJECT_DIR$/safe/common/interpolation1d.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/interpolation2d.py" afterPath="$PROJECT_DIR$/safe/common/interpolation2d.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/numerics.py" afterPath="$PROJECT_DIR$/safe/common/numerics.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/polygon.py" afterPath="$PROJECT_DIR$/safe/common/polygon.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/tables.py" afterPath="$PROJECT_DIR$/safe/common/tables.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/common/test_polygon.py" afterPath="$PROJECT_DIR$/safe/common/test_polygon.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/flood_road_impact.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/flood_road_impact.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/general_ashload_impact.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/general_ashload_impact.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py" afterPath="$PROJECT_DIR$/safe/engine/impact_functions_for_testing/unspecific_building_impact_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/engine/test_engine.py" afterPath="$PROJECT_DIR$/safe/engine/test_engine.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/i18n/af/LC_MESSAGES/inasafe.po" afterPath="$PROJECT_DIR$/safe/i18n/af/LC_MESSAGES/inasafe.po" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/i18n/id/LC_MESSAGES/inasafe.po" afterPath="$PROJECT_DIR$/safe/i18n/id/LC_MESSAGES/inasafe.po" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/earthquake/itb_building_impact_model.py" afterPath="$PROJECT_DIR$/safe/impact_functions/earthquake/itb_building_impact_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/earthquake/padang_building_impact_model.py" afterPath="$PROJECT_DIR$/safe/impact_functions/earthquake/padang_building_impact_model.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/generic/categorised_hazard_building_impact.py" afterPath="$PROJECT_DIR$/safe/impact_functions/generic/categorised_hazard_building_impact.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/inundation/__init__.py" afterPath="$PROJECT_DIR$/safe/impact_functions/inundation/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_OSM_building_impact.py" afterPath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_OSM_building_impact.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_population_evacuation.py" afterPath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_population_evacuation.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py" afterPath="$PROJECT_DIR$/safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/test_plugin_core.py" afterPath="$PROJECT_DIR$/safe/impact_functions/test_plugin_core.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/test_plugins.py" afterPath="$PROJECT_DIR$/safe/impact_functions/test_plugins.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/impact_functions/utilities.py" afterPath="$PROJECT_DIR$/safe/impact_functions/utilities.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/clipping.py" afterPath="$PROJECT_DIR$/safe/storage/clipping.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/core.py" afterPath="$PROJECT_DIR$/safe/storage/core.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/layer.py" afterPath="$PROJECT_DIR$/safe/storage/layer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/projection.py" afterPath="$PROJECT_DIR$/safe/storage/projection.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/raster.py" afterPath="$PROJECT_DIR$/safe/storage/raster.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/test_clipping.py" afterPath="$PROJECT_DIR$/safe/storage/test_clipping.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/test_io.py" afterPath="$PROJECT_DIR$/safe/storage/test_io.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/utilities.py" afterPath="$PROJECT_DIR$/safe/storage/utilities.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/utilities_test.py" afterPath="$PROJECT_DIR$/safe/storage/utilities_test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/vector.py" afterPath="$PROJECT_DIR$/safe/storage/vector.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/dock.py" afterPath="$PROJECT_DIR$/safe_qgis/dock.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/dock_base.py" afterPath="$PROJECT_DIR$/safe_qgis/dock_base.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/keyword_io.py" afterPath="$PROJECT_DIR$/safe_qgis/keyword_io.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/keywords_dialog.py" afterPath="$PROJECT_DIR$/safe_qgis/keywords_dialog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/map.py" afterPath="$PROJECT_DIR$/safe_qgis/map.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/plugin.py" afterPath="$PROJECT_DIR$/safe_qgis/plugin.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/safe_interface.py" afterPath="$PROJECT_DIR$/safe_qgis/safe_interface.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_dock.py" afterPath="$PROJECT_DIR$/safe_qgis/test_dock.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_impact_calculator.py" afterPath="$PROJECT_DIR$/safe_qgis/test_impact_calculator.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_keywords_dialog.py" afterPath="$PROJECT_DIR$/safe_qgis/test_keywords_dialog.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/utilities.py" afterPath="$PROJECT_DIR$/safe_qgis/utilities.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/gen_rst_script.py" afterPath="$PROJECT_DIR$/scripts/gen_rst_script.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/inasafe-install" afterPath="$PROJECT_DIR$/scripts/inasafe-install" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/update-test-data.sh" afterPath="$PROJECT_DIR$/scripts/update-test-data.sh" />
     </list>
     <ignored path="inasafe-realtime.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,7 +111,7 @@
       <file leaf-file-name="shake_event.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="611" column="19" selection-start="24263" selection-end="24263" vertical-scroll-proportion="0.29295427">
+            <state line="677" column="0" selection-start="27563" selection-end="27563" vertical-scroll-proportion="0.57589805">
               <folding />
             </state>
           </provider>
@@ -845,7 +922,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="611" column="19" selection-start="24263" selection-end="24263" vertical-scroll-proportion="0.29295427">
+        <state line="677" column="0" selection-start="27563" selection-end="27563" vertical-scroll-proportion="0.57589805">
           <folding />
         </state>
       </provider>

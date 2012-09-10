@@ -21,17 +21,15 @@ sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get -qq update
 sudo apt-get install -q -y qgis python-qgis
 echo "Installing Ubuntu packages for development"
-sudo apt-get install -y git subversion pep8 python-nose python-coverage python-numpy\
+sudo apt-get install -y git rsync pep8 python-nose python-coverage python-numpy\
      pyqt4-dev-tools python-pip libqt4-dev pyflakes python-nosexcover
 echo "Installing sphinx from pip because at least 1.1 is needed for i18n support"
 echo "Installing specific pylint version (0.25) for cross host comparison"
 sudo pip install sphinx pylint==0.25.2
 # For code metrics / line counts
 sudo apt-get install sloccount
-
-# To get the gui test suite to pass.
-# FIXME (Ole): gdal version is currently hardwired
-sudo apt-get install libgdal1-1.8.0-grass
+# For gettext translation, translation statistics
+sudo apt-get install gettext
 
 # Setup environment variable. FIXME: Not used (yet)
 if grep -q InaSAFEQGIS ~/.bash_aliases

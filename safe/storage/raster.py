@@ -1,4 +1,4 @@
-"""Class Raster
+"""**Class Raster**
 """
 
 import os
@@ -15,7 +15,6 @@ from safe.common.exceptions import GetDataError, InaSAFEError
 from layer import Layer
 from vector import Vector
 from projection import Projection
-from interpolation import interpolate_raster_vector
 
 from utilities import DRIVER_MAP
 from utilities import read_keywords
@@ -31,34 +30,35 @@ class Raster(Layer):
                  name='', keywords=None, style_info=None):
         """Initialise object with either data or filename
 
-        Input
-            data: Can be either
-                * a filename of a raster file format known to GDAL
-                * an MxN array of raster data
-                * None (FIXME (Ole): Remove this option)
-            projection: Geospatial reference in WKT format.
-                        Only used if data is provide as a numeric array,
-                        if None, WGS84 geographic is assumed
-            geotransform: GDAL geotransform (6-tuple).
-                          (top left x, w-e pixel resolution, rotation,
-                           top left y, rotation, n-s pixel resolution).
-                          See e.g. http://www.gdal.org/gdal_tutorial.html
+        Args:
+            * data: Can be either
+                  * a filename of a raster file format known to GDAL
+                  * an MxN array of raster data
+                  * None (FIXME (Ole): Remove this option)
+            * projection: Geospatial reference in WKT format.
                           Only used if data is provide as a numeric array,
-            name: Optional name for layer.
-                  Only used if data is provide as a numeric array,
-            keywords: Optional dictionary with keywords that describe the
-                      layer. When the layer is stored, these keywords will
-                      be written into an associated file with extension
-                      .keywords.
+                          if None, WGS84 geographic is assumed
+            * geotransform: GDAL geotransform (6-tuple).
+                            (top left x, w-e pixel resolution, rotation,
+                             top left y, rotation, n-s pixel resolution).
+                            See e.g. http://www.gdal.org/gdal_tutorial.html
+                            Only used if data is provide as a numeric array,
+            * name: Optional name for layer.
+                    Only used if data is provide as a numeric array,
+            * keywords: Optional dictionary with keywords that describe the
+                        layer. When the layer is stored, these keywords will
+                        be written into an associated file with extension
+                        .keywords.
 
-                      Keywords can for example be used to display text
-                      about the layer in a web application.
-            style_info: Dictionary with information about how this layer
-                        should be styled. See impact_functions/styles.py
-                        for examples.
+                        Keywords can for example be used to display text
+                        about the layer in a web application.
+            * style_info: Dictionary with information about how this layer
+                          should be styled. See impact_functions/styles.py
+                          for examples.
 
-        Note that if data is a filename, all other arguments are ignored
-        as they will be inferred from the file.
+        Note:
+            If data is a filename, all other arguments are ignored
+            as they will be inferred from the file.
         """
 
         # Invoke common layer constructor
@@ -104,10 +104,10 @@ class Raster(Layer):
     def __eq__(self, other, rtol=1.0e-5, atol=1.0e-8):
         """Override '==' to allow comparison with other raster objecs
 
-        Input
-           other: Raster instance to compare to
-           rtol, atol: Relative and absolute tolerance.
-                       See numpy.allclose for details
+        Args:
+           * other: Raster instance to compare to
+           * rtol, atol: Relative and absolute tolerance.
+                         See numpy.allclose for details
         """
 
         # Check type
@@ -212,8 +212,8 @@ class Raster(Layer):
     def write_to_file(self, filename):
         """Save raster data to file
 
-        Input
-            filename: filename with extension .tif
+        Args:
+            * filename: filename with extension .tif
         """
 
         # Check file format
@@ -251,76 +251,37 @@ class Raster(Layer):
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
 
-    def interpolate(self, X, layer_name=None, attribute_name=None):
-        """Interpolate values of this raster layer to other layer
-
-        Input
-            X: Layer object defining target
-            layer_name: Optional name of returned interpolated layer.
-                If None the name of X is used for the returned layer.
-            attribute_name: Optional name of interpolated layer.
-                            If attribute_name is None,
-                            the name of self is used.
-
-        Output
-            Y: Layer object with values of this raster layer interpolated to
-               geometry of input layer X
-
-        Note: If target geometry is polygon, data will be interpolated to
-        its centroids and the output is a point data set.
-        """
-
-        if X.is_raster:
-            if self.get_geotransform() != X.get_geotransform():
-                # Need interpolation between grids
-                msg = ('Intergrid interpolation not implemented here. '
-                       'Make sure rasters are aligned and sampled to '
-                       'the same resolution')
-                raise InaSAFEError(msg)
-            else:
-                # Rasters are aligned, no need to interpolate
-                return self
-        else:
-            # Interpolate this raster layer to geometry of X
-            msg = ('Name must be either a string or None. I got %s'
-                   % (str(type(X)))[1:-1])
-            verify(attribute_name is None
-                   or isinstance(attribute_name, basestring), msg)
-
-            return interpolate_raster_vector(self, X,
-                                             layer_name=layer_name,
-                                             attribute_name=attribute_name)
-
     def get_data(self, nan=True, scaling=None, copy=False,
-                 rtol=1.0e-4, atol=1.0e-8):
+                 rtol=1.0e-2, atol=1.0e-6):
         """Get raster data as numeric array
 
-        Input
-            nan: Optional flag controlling handling of missing values.
-                 If nan is True (default), nodata values will be replaced
-                 with numpy.nan
-                 If keyword nan has a numeric value, nodata values will
-                 be replaced by that value. E.g. to set missing values to 0,
-                 do get_data(nan=0.0)
-            scaling: Optional flag controlling if data is to be scaled
-                     if it has been resampled. Admissible values are
-                     False: data is retrieved without modification.
-                     True: Data is rescaled based on the squared ratio between
-                           its current and native resolution. This is typically
-                           required if raster data represents a density
-                           such as population per km^2
-                     None: The behaviour will depend on the keyword
-                           "population" associated with the layer. If
-                           it is "density", scaling will be applied
-                           otherwise not. This is the default.
-                     scalar value: If scaling takes a numerical scalar value,
-                                   that will be use to scale the data
-        copy (optional): If present and True return copy
-        rtol, atol: Tolerances as to how much difference is accepted
+        Args:
+            * nan: Optional flag controlling handling of missing values.
+                   If nan is True (default), nodata values will be replaced
+                   with numpy.nan
+                   If keyword nan has a numeric value, nodata values will
+                   be replaced by that value. E.g. to set missing values to 0,
+                   do get_data(nan=0.0)
+            * scaling: Optional flag controlling if data is to be scaled
+                       if it has been resampled. Admissible values are
+                       False: data is retrieved without modification.
+                       True: Data is rescaled based on the squared ratio
+                             between its current and native resolution. This
+                             is typically required if raster data represents a
+                             density such as population per km^2
+                       None: The behaviour will depend on the keyword
+                             "population" associated with the layer. If
+                             it is "density", scaling will be applied
+                             otherwise not. This is the default.
+                       scalar value: If scaling takes a numerical scalar value,
+                                     that will be use to scale the data
+        * copy (optional): If present and True return copy
+        * rtol, atol: Tolerances as to how much difference is accepted
                     between dx and dy when scaling is True.
 
-        NOTE: Scaling does not currently work with projected layers.
-        See issue #123
+        Note:
+            Scaling does not currently work with projected layers.
+            See issue #123
         """
 
         if hasattr(self, 'data') and self.data is not None:
@@ -350,6 +311,7 @@ class Raster(Layer):
             if nan is True:
                 NAN = numpy.nan
             else:
+                # E.g. if nan is a number
                 NAN = nan
 
             # Replace NODATA_VALUE with NaN
@@ -397,13 +359,13 @@ class Raster(Layer):
     def get_geotransform(self, copy=False):
         """Return geotransform for this raster layer
 
-        Output
-        geotransform: 6 digit vector
-                      (top left x, w-e pixel resolution, rotation,
-                       top left y, rotation, n-s pixel resolution).
+        Returns:
+        * geotransform: 6 digit vector
+                        (top left x, w-e pixel resolution, rotation,
+                         top left y, rotation, n-s pixel resolution).
 
-                       See e.g. http://www.gdal.org/gdal_tutorial.html
-        copy (optional): If present and True return copy
+                         See e.g. http://www.gdal.org/gdal_tutorial.html
+        * copy (optional): If present and True return copy
         """
 
         if copy:
@@ -414,16 +376,17 @@ class Raster(Layer):
     def get_geometry(self):
         """Return longitudes and latitudes (the axes) for grid.
 
-        Return two vectors (longitudes and latitudes) corresponding to
-        grid. The values are offset by half a pixel size to correspond to
-        pixel registration.
+        Note:
+            Return two vectors (longitudes and latitudes) corresponding to
+            grid. The values are offset by half a pixel size to correspond to
+            pixel registration.
 
-        I.e. If the grid origin (top left corner) is (105, 10) and the
-        resolution is 1 degrees in each direction, then the vectors will
-        take the form
+            I.e. If the grid origin (top left corner) is (105, 10) and the
+            resolution is 1 degrees in each direction, then the vectors will
+            take the form
 
-        longitudes = [100.5, 101.5, ..., 109.5]
-        latitudes = [0.5, 1.5, ..., 9.5]
+            longitudes = [100.5, 101.5, ..., 109.5]
+            latitudes = [0.5, 1.5, ..., 9.5]
         """
 
         # Get parameters for axes
@@ -456,9 +419,11 @@ class Raster(Layer):
 
     def get_extrema(self):
         """Get min and max from raster
-        If raster has a nominated no_data value, this is ignored.
+        Note:
+            If raster has a nominated no_data value, this is ignored.
 
-        Return min, max
+        Returns:
+            min, max
         """
 
         A = self.get_data(nan=True)
@@ -470,7 +435,8 @@ class Raster(Layer):
     def get_nodata_value(self):
         """Get the internal representation of NODATA
 
-        If the internal value is None, the standard -9999 is assumed
+        Note:
+            If the internal value is None, the standard -9999 is assumed
         """
 
         if hasattr(self, 'band'):
@@ -527,7 +493,8 @@ class Raster(Layer):
     def get_bounding_box(self):
         """Get bounding box coordinates for raster layer
 
-        Format is [West, South, East, North]
+        Note:
+            Format is [West, South, East, North]
         """
 
         return geotransform2bbox(self.geotransform, self.columns, self.rows)
@@ -536,13 +503,13 @@ class Raster(Layer):
                        rtol=1.0e-4, atol=1.0e-8):
         """Get raster resolution as a 2-tuple (resx, resy)
 
-        Input
-            isotropic: If True, verify that dx == dy and return dx
-                       If False return 2-tuple (dx, dy)
-            native: Optional flag. If True, return native resolution if
-                                   available. Otherwise return actual.
-            rtol, atol: Tolerances as to how much difference is accepted
-                        between dx and dy if isotropic is True.
+        Args:
+            * isotropic: If True, verify that dx == dy and return dx
+                         If False return 2-tuple (dx, dy)
+            * native: Optional flag. If True, return native resolution if
+                                     available. Otherwise return actual.
+            * rtol, atol: Tolerances as to how much difference is accepted
+                          between dx and dy if isotropic is True.
         """
 
         # Get actual resolution first
@@ -593,9 +560,9 @@ class Raster(Layer):
     def to_vector_points(self):
         """Convert raster grid to vector point data
 
-        Output
-           coordinates: Nx2 array of x, y (lon, lat) coordinates
-           values: N array of corresponding grid values
+        Returns:
+           * coordinates: Nx2 array of x, y (lon, lat) coordinates
+           * values: N array of corresponding grid values
         """
 
         # Convert grid data to point data
@@ -608,9 +575,10 @@ class Raster(Layer):
     def to_vector_layer(self):
         """Convert raster grid to vector point data
 
-        Return a vector layer object with data points corresponding to
-        grid points. The order is row-major which means that the
-        x (longitude) direction is varying the fastest.
+        Returns:
+            a vector layer object with data points corresponding to
+            grid points. The order is row-major which means that the
+            x (longitude) direction is varying the fastest.
         """
 
         # Get vector data

@@ -30,7 +30,8 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace
 
-from safe_qgis.exceptions import InvalidParameterException
+from safe_qgis.exceptions import (InvalidParameterException,
+                                  HashNotFoundException)
 from safe.common.exceptions import InaSAFEError
 
 # Don't remove this even if it is flagged as unused by your ide
@@ -38,12 +39,6 @@ from safe.common.exceptions import InaSAFEError
 import safe_qgis.resources  # pylint: disable=W0611
 
 #see if we can import pydev - see development docs for details
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
 
 
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
@@ -108,11 +103,17 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.iface = iface
         self.parent = parent
         self.dock = theDock
-        # Set up things for context help
+
+        QtCore.QObject.connect(self.lstKeywords,
+                               QtCore.SIGNAL("itemClicked(QListWidgetItem *)"),
+                               self.makeKeyValueEditable)
+
+        # Set up help dialog showing logic.
+        self.helpDialog = None
         myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
-        self.helpDialog = None
+
         # set some inital ui state:
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
@@ -273,11 +274,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-
-        myCurrentKey = self.tr(self.cboKeyword.currentText())
-        myCurrentValue = self.lePredefinedValue.text()
-        self.addListEntry(myCurrentKey, myCurrentValue)
-        self.updateControlsFromList()
+        if (not self.lePredefinedValue.text().isEmpty() and not
+            self.cboKeyword.currentText().isEmpty()):
+            myCurrentKey = self.tr(self.cboKeyword.currentText())
+            myCurrentValue = self.lePredefinedValue.text()
+            self.addListEntry(myCurrentKey, myCurrentValue)
+            self.lePredefinedValue.setText('')
+            self.updateControlsFromList()
 
     # prevents actions being handled twice
     @pyqtSignature('')
@@ -307,6 +310,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             #.. todo:: notify the user their category is invalid
             pass
         self.addListEntry(myCurrentKey, myCurrentValue)
+        self.leKey.setText('')
+        self.leValue.setText('')
         self.updateControlsFromList()
 
     # prevents actions being handled twice
@@ -324,6 +329,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            no exceptions explicitly raised."""
         for myItem in self.lstKeywords.selectedItems():
             self.lstKeywords.takeItem(self.lstKeywords.row(myItem))
+        self.leKey.setText('')
+        self.leValue.setText('')
         self.updateControlsFromList()
 
     def addListEntry(self, theKey, theValue):
@@ -514,13 +521,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
+        # In case the layer has no keywords or any problem occurs reading them,
+        # start with a blank slate so that subcategory gets populated nicely &
+        # we will assume exposure to start with.
+        myKeywords = {'category': 'exposure'}
+
         try:
+            # Now read the layer with sub layer if needed
             myKeywords = self.keywordIO.readKeywords(self.layer)
-        except InvalidParameterException:
-            # layer has no keywords file so just start with a blank slate
-            # so that subcategory gets populated nicely & we will assume
-            # exposure to start with
-            myKeywords = {'category': 'exposure'}
+        except (InvalidParameterException, HashNotFoundException):
+            pass
 
         myLayerName = self.layer.name()
         if 'title' not in myKeywords:
@@ -627,9 +637,11 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
+        self.applyPendingChanges()
         myKeywords = self.getKeywords()
         try:
-            self.keywordIO.writeKeywords(self.layer, myKeywords)
+            self.keywordIO.writeKeywords(theLayer=self.layer,
+                                         theKeywords=myKeywords)
         except InaSAFEError, e:
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
             ((self.tr('An error was encountered when saving the keywords:\n'
@@ -637,3 +649,34 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if self.dock is not None:
             self.dock.getLayers()
         self.close()
+
+    def applyPendingChanges(self):
+        """Apply any pending changes e.g. keywords entered without being added.
+        See https://github.com/AIFDR/inasafe/issues/249
+
+        Args: None
+
+        Returns: None
+
+        Raises: None
+        """
+
+        if self.radPredefined.isChecked():
+            self.on_pbnAddToList1_clicked()
+        else:
+            self.on_pbnAddToList2_clicked()
+
+    def makeKeyValueEditable(self, theItem):
+        """Set leKey and leValue to the clicked item in the lstKeywords.
+
+        Args: None
+
+        Returns: None
+
+        Raises: None
+        """
+        if self.radUserDefined.isChecked():
+            myTempKey = theItem.text().split(':')[0]
+            myTempValue = theItem.text().split(':')[1]
+            self.leKey.setText(myTempKey)
+            self.leValue.setText(myTempValue)

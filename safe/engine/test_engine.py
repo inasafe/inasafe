@@ -7,6 +7,9 @@ from os.path import join
 
 # Import InaSAFE modules
 from safe.engine.core import calculate_impact
+from safe.engine.interpolation import interpolate_polygon_raster
+from safe.engine.interpolation import interpolate_raster_vector_points
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 from safe.storage.core import read_layer
 from safe.storage.core import write_vector_data
@@ -17,12 +20,13 @@ from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.common.polygon import separate_points_by_polygon
 from safe.common.polygon import is_inside_polygon
 from safe.common.polygon import clip_lines_by_polygon, clip_grid_by_polygons
+from safe.common.polygon import line_dictionary_to_geometry
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.numerics import normal_cdf, lognormal_cdf, erf, ensure_numeric
 from safe.common.numerics import nanallclose
 from safe.common.utilities import VerificationError, unique_filename
-from safe.common.testing import TESTDATA, HAZDATA
-
+from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
+from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins
 
 # These imports are needed for impact function registration - dont remove
@@ -472,7 +476,7 @@ class Test_Engine(unittest.TestCase):
 
     test_jakarta_flood_study.slow = True
 
-    def Xtest_clip_grid_by_polygons_optimisation(self):
+    def test_polygon_hazard_and_raster_exposure_big(self):
         """Rasters can be converted to points and clipped by polygons
 
         This is a test for the basic machinery needed for issue #91
@@ -483,6 +487,10 @@ class Test_Engine(unittest.TestCase):
         in https://github.com/AIFDR/inasafe/issues/222 it takes about 100
         seconds on a good workstation while it takes over 2000 seconds
         without it.
+
+        This test also runs the high level interpolation routine which assigns
+        attributes to the new point layer. The runtime is virtually the same as
+        the underlying function.
         """
 
         # Name input files
@@ -493,36 +501,178 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(polyhazard)
         E = read_layer(population)
 
-        assert len(H) == 2704
+        N = len(H)
+        assert N == 2704
+
+        # Run and test the fundamental clipping routine
+        #import time
+        #t0 = time.time()
         res = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
                                     H.get_geometry())
+        #print 'Engine took %i seconds' % (time.time() - t0)
 
-        assert len(res) == 2704
-        # FIXME (Ole): Not finished yet
+        assert len(res) == N
 
-    def test_polygon_hazard_and_raster_exposure(self):
+        # Characterisation test
+        assert H.get_data()[0]['RW'] == 'RW 01'
+        assert H.get_data()[0]['KAB_NAME'] == 'JAKARTA UTARA'
+        assert H.get_data()[0]['KEC_NAME'] == 'TANJUNG PRIOK'
+        assert H.get_data()[0]['KEL_NAME'] == 'KEBON BAWANG'
+
+        geom = res[0][0]
+        vals = res[0][1]
+        assert numpy.allclose(vals[17], 1481.98)
+        assert numpy.allclose(geom[17][0], 106.88746869)  # LON
+        assert numpy.allclose(geom[17][1], -6.11493812)  # LAT
+
+        # Then run and test the high level interpolation function
+        #t0 = time.time()
+        P = interpolate_polygon_raster(H, E,
+                                       layer_name='poly2raster_test',
+                                       attribute_name='grid_value')
+        #print 'High level function took %i seconds' % (time.time() - t0)
+        #P.write_to_file('polygon_raster_interpolation_example_big.shp')
+
+        # Characterisation tests (values verified using QGIS)
+        attributes = P.get_data()[17]
+        geometry = P.get_geometry()[17]
+
+        assert attributes['RW'] == 'RW 01'
+        assert attributes['KAB_NAME'] == 'JAKARTA UTARA'
+        assert attributes['KEC_NAME'] == 'TANJUNG PRIOK'
+        assert attributes['KEL_NAME'] == 'KEBON BAWANG'
+        assert attributes['polygon_id'] == 0
+        assert numpy.allclose(attributes['grid_value'], 1481.984)
+
+        assert numpy.allclose(geometry[0], 106.88746869)  # LON
+        assert numpy.allclose(geometry[1], -6.11493812)  # LAT
+
+        # A second characterisation test
+        attributes = P.get_data()[10000]
+        geometry = P.get_geometry()[10000]
+
+        assert attributes['RW'] == 'RW 06'
+        assert attributes['KAB_NAME'] == 'JAKARTA UTARA'
+        assert attributes['KEC_NAME'] == 'PENJARINGAN'
+        assert attributes['KEL_NAME'] == 'KAMAL MUARA'
+        assert attributes['polygon_id'] == 93
+        assert numpy.allclose(attributes['grid_value'], 715.6508)
+
+        assert numpy.allclose(geometry[0], 106.74092731)  # LON
+        assert numpy.allclose(geometry[1], -6.1081538)  # LAT
+
+        # A third characterisation test
+        attributes = P.get_data()[99000]
+        geometry = P.get_geometry()[99000]
+
+        assert attributes['RW'] == 'RW 08'
+        assert attributes['KAB_NAME'] == 'JAKARTA TIMUR'
+        assert attributes['KEC_NAME'] == 'CAKUNG'
+        assert attributes['KEL_NAME'] == 'CAKUNG TIMUR'
+        assert attributes['polygon_id'] == 927
+        assert numpy.allclose(attributes['grid_value'], 770.7628)
+
+        assert numpy.allclose(geometry[0], 106.9675237)  # LON
+        assert numpy.allclose(geometry[1], -6.16966499)  # LAT
+
+    test_polygon_hazard_and_raster_exposure_big.slow = True
+
+    def test_polygon_hazard_and_raster_exposure_small(self):
         """Exposure rasters can be clipped by polygon exposure
 
         This is a test for the basic machinery needed for issue #91
         """
 
         # Name input files
-        polyhazard = join(TESTDATA, 'rw_jakarta_singlepart.shp')
-        population = join(TESTDATA, 'Population_Jakarta_geographic.asc')
+        polyhazard = join(TESTDATA, 'test_polygon_on_test_grid.shp')
+        population = join(TESTDATA, 'test_grid.asc')
 
         # Get layers using API
         H = read_layer(polyhazard)
         E = read_layer(population)
 
-        assert len(H) == 2704
-        res = clip_grid_by_polygons(E.get_data(),
+        N = len(H)
+        assert N == 4
+
+        # Run underlying clipping routine
+        res0 = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
                                     H.get_geometry())
-        assert len(res) == 2704
-        # FIXME (Ole): Not finished yet
+        assert len(res0) == N
 
-    test_polygon_hazard_and_raster_exposure.slow = True
+        # Run higher level interpolation routine
+        P = interpolate_polygon_raster(H, E,
+                                       layer_name='poly2raster_test',
+                                       attribute_name='grid_value')
+
+        # Verify result (numbers obtained from using QGIS)
+        #P.write_to_file('poly2raster_test.shp')
+        attributes = P.get_data()
+        geometry = P.get_geometry()
+
+        # Polygon 0
+        assert attributes[0]['id'] == 0
+        assert attributes[0]['name'] == 'A'
+        assert numpy.allclose(attributes[0]['number'], 31415)
+        assert numpy.allclose(attributes[0]['grid_value'], 50.8147)
+        assert attributes[0]['polygon_id'] == 0
+
+        assert attributes[1]['id'] == 0
+        assert attributes[1]['name'] == 'A'
+        assert numpy.allclose(geometry[1][0], 96.97137053)  # Lon
+        assert numpy.allclose(geometry[1][1], -5.349657148)  # Lat
+        assert numpy.allclose(attributes[1]['number'], 31415)
+        assert numpy.allclose(attributes[1]['grid_value'], 3)
+        assert attributes[1]['polygon_id'] == 0
+
+        assert attributes[3]['id'] == 0
+        assert attributes[3]['name'] == 'A'
+        assert numpy.allclose(attributes[3]['number'], 31415)
+        assert numpy.allclose(attributes[3]['grid_value'], 50.127)
+        assert attributes[3]['polygon_id'] == 0
+
+        # Polygon 1
+        assert attributes[6]['id'] == 1
+        assert attributes[6]['name'] == 'B'
+        assert numpy.allclose(attributes[6]['number'], 13)
+        assert numpy.allclose(attributes[6]['grid_value'], -15)
+        assert attributes[6]['polygon_id'] == 1
+
+        assert attributes[11]['id'] == 1
+        assert attributes[11]['name'] == 'B'
+        assert numpy.allclose(attributes[11]['number'], 13)
+        assert numpy.isnan(attributes[11]['grid_value'])
+        assert attributes[11]['polygon_id'] == 1
+
+        assert attributes[13]['id'] == 1
+        assert attributes[13]['name'] == 'B'
+        assert numpy.allclose(geometry[13][0], 97.063559372)  # Lon
+        assert numpy.allclose(geometry[13][1], -5.472621404)  # Lat
+        assert numpy.allclose(attributes[13]['number'], 13)
+        assert numpy.allclose(attributes[13]['grid_value'], 50.8258)
+        assert attributes[13]['polygon_id'] == 1
+
+        # Polygon 2 (overlapping)
+        assert attributes[16]['id'] == 2
+        assert attributes[16]['name'] == 'Intersecting'
+        assert numpy.allclose(attributes[16]['number'], 100)
+        assert numpy.allclose(attributes[16]['grid_value'], 50.9574)
+        assert attributes[16]['polygon_id'] == 2
+
+        assert attributes[21]['id'] == 2
+        assert attributes[21]['name'] == 'Intersecting'
+        assert numpy.allclose(attributes[21]['number'], 100)
+        assert numpy.allclose(attributes[21]['grid_value'], 50.2238)
+
+        # Polygon 3
+        assert attributes[23]['id'] == 3
+        assert attributes[23]['name'] == 'D'
+        assert numpy.allclose(geometry[23][0], 97.0021116)  # Lon
+        assert numpy.allclose(geometry[23][1], -5.503362468)  # Lat
+        assert numpy.allclose(attributes[23]['number'], -50)
+        assert numpy.allclose(attributes[23]['grid_value'], 50.0377)
+        assert attributes[23]['polygon_id'] == 3
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works
@@ -772,6 +922,34 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
+        # Check hazard data
+        A = H.get_data()
+        assert len(H) == 20855
+        assert numpy.sum(numpy.isnan(A)) == 8547
+
+        # Do interpolation using underlying library
+        # This was to debug this test failing under Windows
+        I = interpolate_raster_vector_points(H, E)
+        for feature in I.get_data():
+            if (feature['LONGITUDE'] == 150.1787 and
+                feature['LATITUDE'] == -35.70413):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            elif (feature['LONGITUDE'] == 150.1793 and
+                  feature['LATITUDE'] == -35.70632):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            elif (feature['LONGITUDE'] == 150.18208 and
+                  feature['LATITUDE'] == -35.70996):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            elif (feature['LONGITUDE'] == 150.18664 and
+                  feature['LATITUDE'] == -35.70253):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            elif (feature['LONGITUDE'] == 150.18487 and
+                  feature['LATITUDE'] == -35.70561):
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
+            else:
+                assert not numpy.isnan(feature['Tsunami Max Inundation Geo'])
+
+        # Run main test
         plugin_name = 'Tsunami Building Loss Function'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
@@ -782,9 +960,10 @@ class Test_Engine(unittest.TestCase):
                                          impact_fcn=IF)
         impact_filename = impact_vector.get_filename()
         # Read calculated result
-        impact_vector = read_layer(impact_filename)  # Read to have truncation
-        icoordinates = impact_vector.get_geometry()
-        iattributes = impact_vector.get_data()
+        # Read to have truncation
+        my_impact_vector = read_layer(impact_filename)
+        icoordinates = my_impact_vector.get_geometry()
+        iattributes = my_impact_vector.get_data()
         N = len(icoordinates)
 
         # Ensure that calculated point locations coincide with
@@ -866,6 +1045,27 @@ class Test_Engine(unittest.TestCase):
             # to different damage curves and should therefore be different
             if depth > 0 and contents_damage > 0:
                 assert contents_damage != structural_damage
+
+    def test_raster_vector_interpolation_exception(self):
+        """Exceptions are caught by interpolate_raster_points
+        """
+
+        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
+                            % TESTDATA)
+        exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        try:
+            interpolate_raster_vector_points(H, E, mode='oexoeua')
+        except InaSAFEError:
+            pass
+        else:
+            msg = 'Should have raised InaSAFEError'
+            raise Exception(msg)
+        # FIXME (Ole): Try some other error conditions
 
     def test_tephra_load_impact(self):
         """Hypothetical tephra load scenario can be computed
@@ -1069,7 +1269,8 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(AA, A), msg
 
         # Test interpolation function with default layer_name
-        I = R.interpolate(V, attribute_name='value')
+        #I = R.interpolate(V, attribute_name='value')
+        I = assign_hazard_values_to_exposure_data(R, V, attribute_name='value')
         assert V.get_name() == I.get_name()
 
         Icoordinates = I.get_geometry()
@@ -1108,8 +1309,11 @@ class Test_Engine(unittest.TestCase):
         attributes = exposure_vector.get_data()
 
         # Test interpolation function
-        I = hazard_raster.interpolate(exposure_vector,
-                                      attribute_name='MMI')
+        #I = hazard_raster.interpolate(exposure_vector,
+        #                              attribute_name='MMI')
+        I = assign_hazard_values_to_exposure_data(hazard_raster,
+                                                  exposure_vector,
+                                                  attribute_name='MMI')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1166,7 +1370,7 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Name file names for hazard level, exposure and expected fatalities
-        hazard_filename = ('%s/tsunami_max_inundation_depth_utm56s.tif'
+        hazard_filename = ('%s/tsunami_max_inundation_depth_4326.tif'
                             % TESTDATA)
         exposure_filename = ('%s/tsunami_building_exposure.shp' % TESTDATA)
 
@@ -1178,8 +1382,11 @@ class Test_Engine(unittest.TestCase):
         coordinates = exposure_vector.get_geometry()
 
         # Test interpolation function
-        I = hazard_raster.interpolate(exposure_vector,
-                                      attribute_name='depth')
+        #I = hazard_raster.interpolate(exposure_vector,
+        #                              attribute_name='depth')
+        I = assign_hazard_values_to_exposure_data(hazard_raster,
+                                                  exposure_vector,
+                                                  attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1220,7 +1427,8 @@ class Test_Engine(unittest.TestCase):
         attributes = E.get_data()
 
         # Test the interpolation function
-        I = H.interpolate(E, attribute_name='depth')
+        #I = H.interpolate(E, attribute_name='depth')
+        I = assign_hazard_values_to_exposure_data(H, E, attribute_name='depth')
         Icoordinates = I.get_geometry()
         Iattributes = I.get_data()
         assert numpy.allclose(Icoordinates, coordinates)
@@ -1347,8 +1555,12 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          attribute_name=None)  # Take all attributes across
+        #I = H.interpolate(E, layer_name='depth',
+        #                  attribute_name=None)  # Take all attributes across
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
 
         I_attributes = I.get_data()
         assert I.get_name() == 'depth'
@@ -1408,8 +1620,13 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          attribute_name=None)  # Take all attributes across
+        #I = H.interpolate(E, layer_name='depth',
+        #                  attribute_name=None)  # Take all attributes across
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
+
         I_attributes = I.get_data()
 
         N = len(I_attributes)
@@ -1532,9 +1749,14 @@ class Test_Engine(unittest.TestCase):
         E_attributes = E.get_data()
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          # Spelling is as in test data
-                          attribute_name='Catergory')
+        #I = H.interpolate(E, layer_name='depth',
+        #                  # Spelling is as in test data
+        #                  attribute_name='Catergory')
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Spelling is as in test data
+                                                  attribute_name='Catergory')
+
         #I.write_to_file('MM_res.shp')
 
         I_attributes = I.get_data()
@@ -1590,9 +1812,10 @@ class Test_Engine(unittest.TestCase):
 
         # Check projection mismatch is caught
         try:
-            H.interpolate(E)
+            #H.interpolate(E)
+            assign_hazard_values_to_exposure_data(H, E)
         except VerificationError, e:
-            msg = ('Projection mismatch shoud have been caught: %s'
+            msg = ('Projection mismatch should have been caught: %s'
                    % str(e))
             assert 'Projections' in str(e), msg
         else:
@@ -1625,54 +1848,48 @@ class Test_Engine(unittest.TestCase):
         fid.close()
 
         # Clip
-        #for i in range(len(lines)):
-        #    inside_line_segments, outside_line_segments = \
-        #        clip_lines_by_polygon([lines[i]], polygon)
-        #
-        #    if len(inside_line_segments) > 0:
-        #        print
-        #        print 'Found', i, len(lines[i]), len(outside_line_segments)
-        #
-        #        print
-        #        print 'Line'
-        #        for j in range(lines[i].shape[0]):
-        #            print '[%f, %f], ' % (lines[i][j, 0], lines[i][j, 1])
-        #        print
+        inside_lines, outside_lines = clip_lines_by_polygon(test_lines,
+                                                            test_polygon)
 
-        # Clip
-        inside_line_segments, outside_line_segments = \
-            clip_lines_by_polygon(test_lines, test_polygon)
+        # Convert dictionaries to lists of lines (to fit test)
+        inside_line_geometry = line_dictionary_to_geometry(inside_lines)
+        outside_line_geometry = line_dictionary_to_geometry(outside_lines)
 
         # These lines have compontes both inside and outside
-        assert len(inside_line_segments) > 0
-        assert len(outside_line_segments) > 0
+        assert len(inside_line_geometry) == 14
+        assert len(outside_line_geometry) == 167
 
         # Check that midpoints of each segment are correctly placed
         inside_centroids = []
-        for seg in inside_line_segments:
-            midpoint = (seg[0] + seg[1]) / 2
-            inside_centroids.append(midpoint)
-            assert is_inside_polygon(midpoint, test_polygon)
+        for line in inside_line_geometry:
+            for i in range(len(line) - 1):
+                seg0 = line[i]
+                seg1 = line[i + 1]
+                midpoint = (seg0 + seg1) / 2
+                inside_centroids.append(midpoint)
+                assert is_inside_polygon(midpoint, test_polygon)
 
         outside_centroids = []
-        for seg in outside_line_segments:
-            midpoint = (seg[0] + seg[1]) / 2
-            outside_centroids.append(midpoint)
-            assert not is_inside_polygon(midpoint, test_polygon)
+        for line in outside_line_geometry:
+            for i in range(len(line) - 1):
+                seg0 = line[i]
+                seg1 = line[i + 1]
+                midpoint = (seg0 + seg1) / 2
+                outside_centroids.append(midpoint)
+                assert not is_inside_polygon(midpoint, test_polygon)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if False:
-            # Store as shape files for visual inspection e.g. by QGis
+        if False:  # True:
             P = Vector(geometry=[test_polygon])
             P.write_to_file('test_polygon.shp')
 
             L = Vector(geometry=test_lines, geometry_type='line')
             L.write_to_file('test_lines.shp')
 
-            L = Vector(geometry=inside_line_segments, geometry_type='line')
+            L = Vector(geometry=inside_line_geometry, geometry_type='line')
             L.write_to_file('inside_lines.shp')
 
-            L = Vector(geometry=outside_line_segments, geometry_type='line')
+            L = Vector(geometry=outside_line_geometry, geometry_type='line')
             L.write_to_file('outside_lines.shp')
 
             L = Vector(geometry=inside_centroids, geometry_type='point')
@@ -1682,18 +1899,15 @@ class Test_Engine(unittest.TestCase):
             L.write_to_file('outside_centroids.shp')
 
         # Characterisation test based on against visual inspection with QGIS
-        #print inside_line_segments[10]
-        #print outside_line_segments[5]
-        assert numpy.allclose(inside_line_segments[10],
-                              [[122.24672045, -8.63255444],
-                               [122.24699685, -8.63265486],
-                               [122.24793801, -8.63292556],
-                               [122.24829356, -8.63304013],
-                               [122.25118524, -8.63364424],
-                               [122.25520475, -8.63433717],
-                               [122.25695448, -8.63469273]])
+        #print inside_line_geometry[6]
+        assert numpy.allclose(inside_line_geometry[6],
+                              [[122.23438722, -8.6277337],
+                               [122.23316953, -8.62733247],
+                               [122.23162128, -8.62683715],
+                               [122.23156661, -8.62681168]])
 
-        assert numpy.allclose(outside_line_segments[5],
+        #print outside_line_geometry[5]
+        assert numpy.allclose(outside_line_geometry[5],
                               [[122.18321143, -8.58901526],
                                [122.18353015, -8.58890024],
                                [122.18370883, -8.58884135],
@@ -1736,8 +1950,11 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          attribute_name=None)  # Take all attributes across
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
+
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
         assert I.get_name() == 'depth'
@@ -1745,25 +1962,30 @@ class Test_Engine(unittest.TestCase):
         N = len(I_attributes)
 
         # Possibly generate files for visual inspection with e.g. QGis
-        if False:  # True:
-            L = Vector(geometry=H_geometry, geometry_type='polygon',
-                       data=H_attributes)
-            L.write_to_file('test_polygon.shp')
+        if False:
+            H.write_to_file('test_polygon.shp')
+            E.write_to_file('test_lines.shp')
+            I.write_to_file('interpolated_lines.shp')
 
-            L = Vector(geometry=I_geometry, geometry_type='line',
-                       data=I_attributes)
-            L.write_to_file('interpolated_lines.shp')
-
-        # Assert that expected attribute names exist
+        # Assert that all expected attribute names exist
         I_names = I.get_attribute_names()
         H_names = H.get_attribute_names()
         E_names = E.get_attribute_names()
+
+        # Attributes from polygons
         for name in H_names:
             msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
             assert name in I_names, msg
 
+        # Attributes from original lines
         for name in E_names:
             msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # New attributes
+        for name in [DEFAULT_ATTRIBUTE, 'polygon_id', 'parent_line_id']:
+            msg = 'Did not find new attribute name "%s" in %s' % (name,
+                                                                  I_names)
             assert name in I_names, msg
 
         # Verify interpolated values with test result
@@ -1793,14 +2015,10 @@ class Test_Engine(unittest.TestCase):
                 assert category.lower() in ['high', 'very high']
                 count += 1
 
-        msg = ('Expected 14 points tagged with category, '
+        msg = ('Expected 14 lines tagged with category, '
                'but got only %i' % count)
         assert count == 14, msg
-
-        assert len(I_geometry) == 181
-
-        assert I_attributes[129]['Catergory'] == 'Very High'
-        assert I_attributes[135]['Catergory'] is None
+        assert len(I_geometry) == 14
 
         # Check default attribute too
         msg = ('Expected 14 segments tagged with default attribute '
@@ -1809,17 +2027,316 @@ class Test_Engine(unittest.TestCase):
                                     counts[DEFAULT_ATTRIBUTE]))
         assert counts[DEFAULT_ATTRIBUTE] == 14, msg
 
-        msg = ('Expected 167 points tagged with default attribute '
-               '"%s = False", '
-               'but got only %i' % (DEFAULT_ATTRIBUTE,
-                                    counts['Not ' + DEFAULT_ATTRIBUTE]))
-        assert counts['Not ' + DEFAULT_ATTRIBUTE] == 167, msg
-
-        msg = 'Affected and not affected does not add up'
-        assert (counts[DEFAULT_ATTRIBUTE] +
-                counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
+        # Check against correctness verified in QGIS
+        assert I_attributes[13]['highway'] == 'road'
+        assert I_attributes[13]['osm_id'] == 69372744
+        assert I_attributes[13]['polygon_id'] == 0
+        assert I_attributes[13]['parent_line_id'] == 131
 
     test_line_interpolation_from_polygons_one_poly.slow = True
+
+    def test_line_interpolation_from_multiple_polygons(self):
+        """Line interpolation using multiple polygons works
+
+        This is a test for road interpolation (issue #55)
+        """
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
+        exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
+
+        # Read input data
+        H = read_layer(hazard_filename)
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+
+        # Cut down to 500 polygons
+        # (some e.g. #657 have thousands of vertices, others just a few)
+        H = Vector(data=H_attributes[300:657] + H_attributes[658:800],
+                   geometry=H_geometry[300:657] + H_geometry[658:800],
+                   projection=H.get_projection())
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+        E = read_layer(exposure_filename)
+
+        # Test interpolation function
+        #import time
+        #t0 = time.time()
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
+        #print 'This took', time.time() - t0
+
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+        assert I.get_name() == 'depth'
+
+        N = len(I_attributes)
+
+        # Possibly generate files for visual inspection with e.g. QGis
+        if False:  # True:
+            H.write_to_file('test_polygon.shp')
+            E.write_to_file('test_lines.shp')
+            I.write_to_file('interpolated_lines.shp')
+
+        # Assert that all expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+
+        # Attributes from polygons
+        for name in H_names:
+            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # Attributes from original lines
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # New attributes
+        for name in [DEFAULT_ATTRIBUTE, 'polygon_id', 'parent_line_id']:
+            msg = 'Did not find new attribute name "%s" in %s' % (name,
+                                                                  I_names)
+            assert name in I_names, msg
+
+        # Verify interpolated values with test result
+        count = 0
+        counts = {}
+        for i in range(N):
+
+            # Check that default attribute is present
+            attrs = I_attributes[i]
+            msg = ('Did not find default attribute %s in %s'
+                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+            assert DEFAULT_ATTRIBUTE in attrs, msg
+
+            # Count items using default attribute
+            if DEFAULT_ATTRIBUTE not in counts:
+                counts[DEFAULT_ATTRIBUTE] = 0
+                counts['Not ' + DEFAULT_ATTRIBUTE] = 0
+
+            if attrs[DEFAULT_ATTRIBUTE] is True:
+                counts[DEFAULT_ATTRIBUTE] += 1
+            else:
+                counts['Not ' + DEFAULT_ATTRIBUTE] += 1
+
+            # Check specific attribute
+            category = I_attributes[i]['Catergory']  # The typo is as the data
+            if category is not None:
+                msg = 'category = %s' % category
+                assert category.lower() in ['low', 'medium',
+                                            'high', 'very high'], msg
+                count += 1
+
+        msg = ('Expected 103 lines tagged with category, '
+               'but got only %i' % count)
+        assert count == 103, msg
+        assert len(I_geometry) == 103
+
+        # Check default attribute too
+        msg = ('Expected 103 segments tagged with default attribute '
+               '"%s = True", '
+               'but got only %i' % (DEFAULT_ATTRIBUTE,
+                                    counts[DEFAULT_ATTRIBUTE]))
+        assert counts[DEFAULT_ATTRIBUTE] == 103, msg
+
+        # Check against correctness verified in QGIS
+        assert I_attributes[40]['highway'] == 'residential'
+        assert I_attributes[40]['osm_id'] == 69373107
+        assert I_attributes[40]['polygon_id'] == 111
+        assert I_attributes[40]['parent_line_id'] == 54
+
+        assert I_attributes[76]['highway'] == 'secondary'
+        assert I_attributes[76]['Catergory'] == 'High'
+        assert I_attributes[76]['osm_id'] == 69370718
+        assert I_attributes[76]['polygon_id'] == 374
+        assert I_attributes[76]['parent_line_id'] == 1
+
+        assert I_attributes[85]['highway'] == 'secondary'
+        assert I_attributes[85]['Catergory'] == 'Very High'
+        assert I_attributes[85]['osm_id'] == 69371482
+        assert I_attributes[85]['polygon_id'] == 453
+        assert I_attributes[85]['parent_line_id'] == 133
+
+    test_line_interpolation_from_multiple_polygons.slow = True
+
+    def test_polygon_to_roads_interpolation_flood_example(self):
+        """Roads can be tagged with values from flood polygons
+
+        This is a test for road interpolation (issue #55)
+
+        # The dataset is large: 2704 complex polygons
+        and 108082 complex line features - so has been cut down
+        in this test.
+
+        The runtime for the whole set is in the order of more than
+        1 hour. Cutting the number of lines down by a factor of 10 years
+        brings it down to about 10 minutes (500 seconds).
+        A factor of 100 gives about 1 minute.
+        """
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/rw_jakarta_singlepart.shp' % TESTDATA)
+        exposure_filename = ('%s/indonesia_highway.shp' % EXPDATA)
+
+        # Read all input data
+        H = read_layer(hazard_filename)  # Polygons
+        H_attributes = H.get_data()
+        H_geometry = H.get_geometry()
+        assert len(H) == 2704
+
+        E = read_layer(exposure_filename)  # Lines - this is slow to read
+        E_geometry = E.get_geometry()
+        E_attributes = E.get_data()
+        assert len(E) == 108082
+
+        # Cut number of road features down
+        # A factor of ten brings the runtime down to about 10 minutes.
+        # A factor of ten brings the runtime down to less than 1 minute.
+        E = Vector(data=E_attributes[:-1:100],
+                   geometry=E_geometry[:-1:100],
+                   projection=E.get_projection(),
+                   geometry_type=E.geometry_type)
+
+        # Test interpolation function
+        #import time
+        #t0 = time.time()
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Take all attributes across
+                                                  attribute_name=None)
+        #print 'That took %f seconds' % (time.time() - t0)
+
+        # TODO:
+        # Keep only those roads that are marked FLOODPRONE == 'YES'
+
+        I_geometry = I.get_geometry()
+        I_attributes = I.get_data()
+
+        # Possibly generate files for visual inspection with e.g. QGis
+        if False:
+            L = Vector(geometry=H_geometry, geometry_type='polygon',
+                       data=H_attributes)
+            L.write_to_file('flood_polygon.shp')
+
+            L = Vector(geometry=I_geometry, geometry_type='line',
+                       data=I_attributes)
+            L.write_to_file('flood_tagged_roads.shp')
+
+        # Assert that expected attribute names exist
+        I_names = I.get_attribute_names()
+        H_names = H.get_attribute_names()
+        E_names = E.get_attribute_names()
+        for name in H_names:
+            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        for name in E_names:
+            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
+            assert name in I_names, msg
+
+        # FIXME (Ole): Finish this test
+        # Check that attributes have been carried through
+        #for i, attr in enumerate(I_attributes):
+        #    pass
+        #    # TODO
+        # Check against correctness verified in QGIS
+        #assert I_attributes[]['highway'] ==
+        #assert I_attributes[]['osm_id'] ==
+        #assert I_attributes[]['polygon_id'] ==
+        #assert I_attributes[]['parent_line_id'] ==
+
+    test_polygon_to_roads_interpolation_flood_example.slow = True
+
+    def test_polygon_to_roads_interpolation_jakarta_flood_example(self):
+        """Roads can be tagged with values from flood polygons
+
+        This is a test for road interpolation (issue #55)
+
+        # The dataset is: 2704 complex polygonsand 18574 complex line features
+        """
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/rw_jakarta_singlepart.shp' % TESTDATA)
+        exposure_filename = ('%s/jakarta_roads.shp' % EXPDATA)
+
+        # Read all input data
+        H = read_layer(hazard_filename)  # Polygons
+        H_attributes = H.get_data()
+        H_geometries = H.get_geometry()
+        assert len(H) == 2704
+
+        # Use only polygons marked as flood prone
+        # to get the result quicker.
+        cut_attributes = []
+        cut_geometries = []
+        for i in range(len(H)):
+            val = H_attributes[i]['FLOODPRONE']
+            if val is not None and val.lower().startswith('yes'):
+                cut_attributes.append(H_attributes[i])
+                cut_geometries.append(H_geometries[i])
+
+        H = Vector(data=cut_attributes,
+                   geometry=cut_geometries,
+                   projection=H.get_projection(),
+                   geometry_type=H.geometry_type)
+        assert len(H) == 1011
+
+        E = read_layer(exposure_filename)
+        E_geometries = E.get_geometry()
+        E_attributes = E.get_data()
+        assert len(E) == 18574
+
+        # Get statistics of road types
+        road_types = {}
+        E_attributes = E.get_data()
+        for i in range(len(E)):
+            roadtype = E_attributes[i]['TYPE']
+            if roadtype in road_types:
+                road_types[roadtype] += 1
+            else:
+                road_types[roadtype] = 0
+
+        #for att in road_types:
+        #    print att, road_types[att]
+        assert road_types['residential'] == 14853
+
+        # Remove residental roads
+        cut_attributes = []
+        cut_geometries = []
+        for i in range(len(E)):
+            val = E_attributes[i]['TYPE']
+            if val != 'residential':
+                cut_attributes.append(E_attributes[i])
+                cut_geometries.append(E_geometries[i])
+
+        # Cut even further for the purpose of testing
+        E = Vector(data=cut_attributes[:-1:5],
+                   geometry=cut_geometries[:-1:5],
+                   projection=E.get_projection(),
+                   geometry_type=E.geometry_type)
+        assert len(E) == 744
+
+        # Test interpolation function
+        #import time
+        #t0 = time.time()
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  attribute_name=None)
+        #print 'That took %f seconds' % (time.time() - t0)
+        #I.write_to_file('flood_prone_roads_jakarta.shp')
+
+        # Check against correctness verified in QGIS
+        I_attributes = I.get_data()
+        assert I_attributes[198]['TYPE'] == 'secondary'
+        assert I_attributes[198]['NAME'] == 'Lingkar Mega Kuningan'
+        assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
+        assert I_attributes[198]['polygon_id'] == 235
+        assert I_attributes[198]['parent_line_id'] == 333
+
+    test_polygon_to_roads_interpolation_jakarta_flood_example.slow = True
 
     def Xtest_line_interpolation_from_polygons_one_attribute(self):
         """Line interpolation using one polygon works with attribute
@@ -1829,6 +2346,8 @@ class Test_Engine(unittest.TestCase):
 
         # FIXME: test passes, but functionality is not really there.
         # Do we need it?
+
+        # RETIRE!!!!!!
 
         # Name file names for hazard level and exposure
         hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
@@ -1848,9 +2367,11 @@ class Test_Engine(unittest.TestCase):
         E = read_layer(exposure_filename)
 
         # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          # Spelling is as in test data
-                          attribute_name='Catergory')
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  # Spelling is as in test data
+                                                  attribute_name='Catergory')
+
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
 
@@ -1892,118 +2413,6 @@ class Test_Engine(unittest.TestCase):
         msg = ('Expected 14 segments tagged with category "Very High", '
                'but got only %i' % counts['Very High'])
         assert counts['Very High'] == 14, msg
-
-    def Xtest_line_interpolation_from_polygons(self):
-        """Line clipping and interpolation using multiple polygons works
-
-        This is a test for road interpolation (issue #55)
-        """
-
-        # NOT YET FULLY DONE
-
-        # Name file names for hazard level and exposure
-        hazard_filename = ('%s/tsunami_polygon_WGS84.shp' % TESTDATA)
-        exposure_filename = ('%s/roads_Maumere.shp' % TESTDATA)
-
-        # Read input data
-        H = read_layer(hazard_filename)
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-
-        # MakeCut down to a few polygons
-        H = Vector(data=H_attributes[799:],
-                   geometry=H_geometry[799:],
-                   projection=H.get_projection())
-        H_attributes = H.get_data()
-        H_geometry = H.get_geometry()
-        E = read_layer(exposure_filename)
-
-        # Test interpolation function
-        I = H.interpolate(E, layer_name='depth',
-                          attribute_name=None)  # Take all attributes across
-        I_geometry = I.get_geometry()
-        I_attributes = I.get_data()
-        assert I.get_name() == 'depth'
-        N = len(I_attributes)
-
-        # Possibly generate files for visual inspection with e.g. QGis
-        if False:  # True:
-            L = Vector(geometry=H_geometry, geometry_type='polygon',
-                       data=H_attributes)
-            L.write_to_file('test_polygon.shp')
-
-            L = Vector(geometry=I_geometry, geometry_type='line',
-                       data=I_attributes)
-            L.write_to_file('interpolated_lines.shp')
-
-        # Assert that expected attribute names exist
-        I_names = I.get_attribute_names()
-        H_names = H.get_attribute_names()
-        E_names = E.get_attribute_names()
-        for name in H_names:
-            msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
-            assert name in I_names, msg
-
-        for name in E_names:
-            msg = 'Did not find exposure name "%s" in %s' % (name, I_names)
-            assert name in I_names, msg
-
-        # Verify interpolated values with test result
-        count = 0
-        counts = {}
-        for i in range(N):
-
-            # Check that default attribute is present
-            attrs = I_attributes[i]
-            msg = ('Did not find default attribute %s in %s'
-                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
-            assert DEFAULT_ATTRIBUTE in attrs, msg
-
-            # Count items using default attribute
-            if DEFAULT_ATTRIBUTE not in counts:
-                counts[DEFAULT_ATTRIBUTE] = 0
-                counts['Not ' + DEFAULT_ATTRIBUTE] = 0
-
-            if attrs[DEFAULT_ATTRIBUTE] is True:
-                counts[DEFAULT_ATTRIBUTE] += 1
-            else:
-                counts['Not ' + DEFAULT_ATTRIBUTE] += 1
-
-            # Check specific attribute
-            category = I_attributes[i]['Catergory']  # The typo is as the data
-            if category is not None:
-                assert category.lower() in ['high', 'very high']
-                count += 1
-
-        msg = ('Expected 59 points tagged with category, '
-               'but got %i' % count)
-        assert count == 59, msg
-
-        # FIXME (Ole): Not finished (5/3/12)
-        # return
-
-        # print len(I_geometry)
-        # assert len(I_geometry) == 181
-
-        # assert I_attributes[129]['Catergory'] == 'Very High'
-        # assert I_attributes[135]['Catergory'] is None
-
-        # # Check default attribute too
-        # msg = ('Expected 14 segments tagged with default attribute '
-        #        '"%s = True", '
-        #        'but got only %i' % (DEFAULT_ATTRIBUTE,
-        #                             counts[DEFAULT_ATTRIBUTE]))
-        # assert counts[DEFAULT_ATTRIBUTE] == 14, msg
-
-        # msg = ('Expected 167 points tagged with default attribute '
-        #        '"%s = False", '
-        #        'but got only %i' % (DEFAULT_ATTRIBUTE,
-        #                             counts['Not ' + DEFAULT_ATTRIBUTE]))
-        # assert counts['Not ' + DEFAULT_ATTRIBUTE] == 167, msg
-
-        # msg = 'Affected and not affected does not add up'
-        # assert (counts[DEFAULT_ATTRIBUTE] +
-        #         counts['Not ' + DEFAULT_ATTRIBUTE]) == len(I), msg
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception
@@ -2209,7 +2618,7 @@ class Test_Engine(unittest.TestCase):
     test_itb_building_function.slow = True
 
     def test_flood_on_roads(self):
-        """Jakarta flood impact on roads calculated correctly
+        """Jakarta flood (raster) impact on roads calculated correctly
         """
         floods = 'Flood_Current_Depth_Jakarta_geographic.asc'
         roads = 'indonesia_highway_sample.shp'
@@ -2357,6 +2766,9 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
+    #suite = unittest.makeSuite(Test_Engine,
+    #                           ('test_polygon_to_roads_interpolation'
+    #                            '_flood_example'))
     suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

@@ -231,6 +231,15 @@ class Plugin:
         QObject.connect(self.iface,
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),
             self.layerChanged)
+
+        #
+        # Hook up a slot for when the dock is hidden using its close button
+        # or  view-panels
+        #
+        QObject.connect(self.dockWidget,
+            SIGNAL("visibilityChanged (bool)"),
+            self.toggleActionDock)
+
         # pylint: disable=W0201
 
     def unload(self):
@@ -265,6 +274,24 @@ class Plugin:
         QObject.disconnect(self.iface,
             SIGNAL("currentLayerChanged(QgsMapLayer*)"),
             self.layerChanged)
+
+    def toggleActionDock(self, checked):
+        """check or uncheck the toggle inaSAFE toolbar button.
+
+        This slot is called when the user hides the inaSAFE panel using its
+        close button or using view->panels
+
+        .. see also:: :func:`Plugin.initGui`.
+
+        Args:
+           checked - if actionDock has to be checked or not
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+
+        self.actionDock.setChecked(checked)
 
     # Run method that performs all the real work
     def showHideDockWidget(self):

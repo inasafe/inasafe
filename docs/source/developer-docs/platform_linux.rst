@@ -24,8 +24,7 @@ command line::
 
 This will run all the regression tests and also highlight any code issues.
 Note that first time the tests are run they will pull 250MB of test data from
-our subversion repository (If asked for a password just hit Enter). See further
-notes on running tests below.
+our git repository. See further notes on running tests below.
 
 To run the plugin start QGIS and enable it from the
 :menuselection:`Plugins --> Manage Plugins` menu.
@@ -48,7 +47,7 @@ technologies (python, Qt4, PyQt4, QGIS). In addition, the following are needed
 on your machine in order to work effectively with the code base:
 
 * git
-* subversion
+* rsync
 * pep8
 * nosetests (with coverage plugin)
 * python-numpy (for numerical computations)
@@ -62,7 +61,7 @@ on your machine in order to work effectively with the code base:
 
 On an ubuntu system you can install these requirements using apt::
 
-   sudo apt-get install git subversion pep8 python-nose python-coverage \
+   sudo apt-get install git rsync pep8 python-nose python-coverage \
    python-gdal python-numpy python-sphinx pyqt4-dev-tools pyflakes \
    sudo pip install cloud-sptheme python-nosexcover
 

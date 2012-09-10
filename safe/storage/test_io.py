@@ -120,12 +120,19 @@ class Test_IO(unittest.TestCase):
         # Read and verify test data
         for vectorname in ['test_buildings.shp',
                            'tsunami_building_exposure.shp',
-                           'Padang_WGS84.shp']:
+                           'Padang_WGS84.shp',
+                           'nan_here.shp']:
 
             filename = '%s/%s' % (TESTDATA, vectorname)
             layer = read_layer(filename)
             coords = numpy.array(layer.get_geometry())
             attributes = layer.get_data()
+
+            # Check NaN is read as NaN
+            if vectorname == 'nan_here.shp':
+                msg = 'It should be NaN but found %s' % attributes[00]['DEPTH']
+                assert numpy.isnan(attributes[00]['DEPTH']), msg
+                continue
 
             # Check basic data integrity
             N = len(layer)
@@ -1974,7 +1981,7 @@ class Test_IO(unittest.TestCase):
 
         #must be after above
         indoout1 = _(string1)  # translate as 'Hi'
-        indoexpected1 = 'Hi'
+        indoexpected1 = 'Hi!'
         msg = 'Expected %s, got %s' % (indoexpected1, indoout1)
         assert indoout1 == indoexpected1, msg
 

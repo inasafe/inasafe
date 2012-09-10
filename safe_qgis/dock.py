@@ -143,8 +143,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
 
         mySettings = QtCore.QSettings()
-        myFlag = mySettings.value(
-                        'inasafe/useThreadingFlag', False).toBool()
+        myFlag = mySettings.value('inasafe/useThreadingFlag',
+                                  False).toBool()
         self.runInThreadFlag = myFlag
 
         myFlag = mySettings.value(

@@ -48,7 +48,7 @@ from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion)
 
-from safe.common.testing import  HAZDATA, EXPDATA, TESTDATA, UNITDATA
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)
 # pylint: disable=W0611
@@ -216,7 +216,7 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
     myMessage += '--------------------------------------------------------\n'
     myMessage += combosToString(DOCK)
 
-    if  myDict != myExpectedDict:
+    if myDict != myExpectedDict:
         return False, myMessage
 
     return True, 'Matched ok.'
@@ -253,7 +253,9 @@ def loadStandardLayers():
                   join(TESTDATA, 'Population_Jakarta_geographic.asc'),
                   join(HAZDATA, 'eq_yogya_2006.asc'),
                   join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
-                  join(TESTDATA, 'OSM_building_polygons_20110905.shp')]
+                  join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
+                  join(EXPDATA, 'DKI_buildings.shp'),
+                  join(HAZDATA, 'jakarta_flood_category_123.asc')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList)
@@ -572,29 +574,12 @@ class DockTest(unittest.TestCase):
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
 
-        # Hazard layers
-        myIndex = DOCK.cboHazard.findText('Tsunami Max Inundation')
-        assert myIndex != -1, 'Tsunami Max Inundation hazard layer not found'
-        DOCK.cboHazard.setCurrentIndex(myIndex)
-
-        # Exposure layers
-        myIndex = DOCK.cboExposure.findText('Tsunami Building Exposure')
-        assert myIndex != -1, 'Tsunami Building Exposure layer not found'
-        DOCK.cboExposure.setCurrentIndex(myIndex)
-
-        # Check that layers and impact function are correct
-        myDict = getUiState(DOCK)
-
-        myExpectedDict = {'Run Button Enabled': True,
-                          'Impact Function Id':
-                              'Flood Building Impact Function',
-                          'Impact Function Title':
-                              'Be temporarily closed',
-                          'Hazard': 'Tsunami Max Inundation',
-                          'Exposure': 'Tsunami Building Exposure'}
-        myMessage = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-            myDict, myExpectedDict, combosToString(DOCK))
-        assert myDict == myExpectedDict, myMessage
+        myResult, myMessage = setupScenario(
+            theHazard='Tsunami Max Inundation',
+            theExposure='Tsunami Building Exposure',
+            theFunction='Be temporarily closed',
+            theFunctionId='Flood Building Impact Function')
+        assert myResult, myMessage
 
         setCanvasCrs(GEOCRS, True)
         setBatemansBayGeoExtent()
@@ -701,6 +686,32 @@ class DockTest(unittest.TestCase):
         myMessage = 'Result not as expected: %s' % myResult
         # This is the expected number of people needing evacuation
         assert '134953000' in myResult, myMessage
+
+    def test_runCategorizedHazardBuildingImpact(self):
+        """Flood function runs in GUI with Flood in Jakarta hazard data
+            Uses DKI buildings exposure data."""
+
+        myResult, myMessage = setupScenario(
+            theHazard='Flood in Jakarta',
+            theExposure='DKI buildings',
+            theFunction='Be affected',
+            theFunctionId='Categorised Hazard Building Impact Function')
+        assert myResult, myMessage
+
+        # Enable on-the-fly reprojection
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+
+        # Press RUN
+        myButton = DOCK.pbnRunStop
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myResult = DOCK.wvResults.page().currentFrame().toPlainText()
+
+        myMessage = 'Result not as expected: %s' % myResult
+        # This is the expected number of building might be affected
+        assert '535' in myResult, myMessage
+        assert '453' in myResult, myMessage
+        assert '436' in myResult, myMessage
 
     def test_ResultStyling(self):
         """Test that ouputs from a model are correctly styled (colours and
@@ -1074,7 +1085,7 @@ class DockTest(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     suite = unittest.makeSuite(DockTest,
-                        'test_runTsunamiBuildingImpactFunction')
+                        'test_runCateogrizedHazardBuildingImpact')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

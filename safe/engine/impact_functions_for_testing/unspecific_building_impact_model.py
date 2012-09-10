@@ -1,6 +1,7 @@
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
 class EarthquakeBuildingDamageFunction(FunctionProvider):
@@ -25,7 +26,8 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
         E = get_exposure_layer(layers)  # Building locations
 
         # Interpolate hazard level to building locations
-        H = H.interpolate(E, attribute_name='MMI')
+        H = assign_hazard_values_to_exposure_data(H, E,
+                                             attribute_name='MMI')
 
         # Extract relevant numerical data
         coordinates = E.get_geometry()
