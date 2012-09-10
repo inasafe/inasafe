@@ -969,17 +969,17 @@ class Test_Polygon(unittest.TestCase):
         line0 = [[0, 0], [100, 100]]
 
         N = 10
-        line1 = numpy.zeros(40, numpy.float).reshape(2,2,N)
+        line1 = numpy.zeros(40, numpy.float).reshape(2, 2, N)
 
-        x0 = numpy.arange(N)*10
+        x0 = numpy.arange(N) * 10
         y0 = numpy.zeros(N)
-        x1 = numpy.arange(N)*10
-        y1 = numpy.ones(N)*100
+        x1 = numpy.arange(N) * 10
+        y1 = numpy.ones(N) * 100
 
-        line1[0,0,:] = x0
-        line1[0,1,:] = y0
-        line1[1,0,:] = x1
-        line1[1,1,:] = y1
+        line1[0, 0, :] = x0
+        line1[0, 1, :] = y0
+        line1[1, 0, :] = x1
+        line1[1, 1, :] = y1
 
         value = intersection(line0, line1)
 
@@ -996,7 +996,7 @@ class Test_Polygon(unittest.TestCase):
         line0 = [[0, 0], [24, 12]]
 
         # One way of building the array
-        line1 = numpy.zeros(16).reshape(2,2,4)  # Three lines
+        line1 = numpy.zeros(16).reshape(2, 2, 4)  # Three lines
         line1[0, 0, :] = [0, 24, 0, 15]   # x0
         line1[0, 1, :] = [12, 0, 24, 0]   # y0
         line1[1, 0, :] = [24, 0, 0, 5]    # x1
@@ -1009,7 +1009,6 @@ class Test_Polygon(unittest.TestCase):
                               [[12.0, 6.0],
                                [12.0, 6.0],
                                [11.25, 5.625]])
-
 
         # A more direct way of building the array
         line1 = [[[0, 24, 0, 15],    # x0
@@ -1054,7 +1053,6 @@ class Test_Polygon(unittest.TestCase):
 
         for i in range(11, 15):
             assert numpy.all(numpy.isnan(value[i]))
-
 
     def test_intersection_parallel(self):
         """Parallel lines are correctly detected in intersection code
