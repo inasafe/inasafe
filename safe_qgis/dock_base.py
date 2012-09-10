@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Tue Aug 14 19:12:05 2012
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Mon Sep 10 16:07:17 2012
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -145,7 +145,7 @@ class Ui_DockBase(object):
         self.label_6.setText(QtGui.QApplication.translate("DockBase", "In the event of", None, QtGui.QApplication.UnicodeUTF8))
         self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
         self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("DockBase", "Aggregate by", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("DockBase", "Aggregate results by", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("DockBase", "Results", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))

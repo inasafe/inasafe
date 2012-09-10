@@ -33,7 +33,10 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
-                       QGis)
+                       QGis
+                       )
+from qgis.analysis import (QgsZonalStatistics
+                           )
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
@@ -542,8 +545,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             elif myCategory == 'exposure':
                 self.addComboItemInOrder(self.cboExposure, myTitle, mySource)
                 self.exposureLayers.append(myLayer)
-        #TODO i18n (MB)
-        self.cboAggregation.insertItem(0, "No Aggregation")
+
+        self.cboAggregation.insertItem(0, self.tr("No Aggregation"))
         self.cboAggregation.setCurrentIndex(0)
 
         # Now populate the functions list based on the layers loaded
@@ -554,6 +557,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connectLayerListener()
         self.blockSignals(False)
+        self.getAggregationLayer()
         return
 
     def getFunctions(self):
@@ -679,6 +683,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
+    def getAggregationLayer(self):
+        """Obtain the name of the path to the aggregation file from the
+        userrole of the QtCombo for aggregation."""
+
+        myIndex = self.cboAggregation.currentIndex()
+        if myIndex < 0:
+            return None
+        myLayerId = self.cboAggregation.itemData(myIndex,
+            QtCore.Qt.UserRole).toString()
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        return myLayer
+
     def setupCalculator(self):
         """Initialise the ImpactCalculator based on the current
         state of the ui.
@@ -707,7 +723,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def accept(self):
         """Execute analysis when ok button is clicked."""
         #.. todo:: FIXME (Tim) We may have to implement some polling logic
-        # because the putton click accept() function and the updating
+        # becaube the putton click accept() function and the updating
         # of the web view after model completion are asynchronous (when
         # threading mode is enabled especially)
         self.showBusy()
@@ -780,6 +796,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Try to run completion code
         try:
             myReport = self._completed()
+            if self.cboAggregation.currentIndex() is not 0:
+                self.aggregateResults()
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
@@ -793,6 +811,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.saveState()
         # Hide hour glass
         self.hideBusy()
+
+    def aggregateResults(self):
+        aggregationLayer = self.getAggregationLayer()
+        #memoryLayer = utils.loadInMemory( vLayer )
+        myEngineImpactLayer = self.runner.impactLayer()
+        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+        print "DEBUG: Aggregating"
+        if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
+            #TODO implement polzgon to polygon aggregation (dissolve,
+            # line in polygon, point in polygon)
+            print "DEBUG: Vector aggregation not implemented yet"
+        elif myQgisImpactLayer.type() == QgsMapLayer.RasterLayer:
+            print "DEBUG: Aggregating Zonal statistics"
+            prefix = ""
+            zonStat = QgsZonalStatistics( aggregationLayer,
+                myQgisImpactLayer, prefix )
+            progressDialog = QtGui.QProgressDialog( self.tr( "Calculating "
+                "zonal statistics" ), self.tr( "Abort..." ), 0, 0 )
+            zonStat.calculateStatistics( progressDialog )
+            print "done"
 
     def _completed(self):
         """Helper function for slot activated when the process is done.
@@ -1246,6 +1284,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myStateDict = {'hazard': self.cboHazard.currentText(),
                        'exposure': self.cboExposure.currentText(),
                        'function': self.cboFunction.currentText(),
+                       'aggregation': self.cboAggregation.currentText(),
                        'report':
                            self.wvResults.page().currentFrame().toHtml()}
         self.state = myStateDict
@@ -1271,6 +1310,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myItemText = self.cboHazard.itemText(myCount)
             if myItemText == self.state['hazard']:
                 self.cboHazard.setCurrentIndex(myCount)
+                break
+        for myCount in range(0, self.cboAggregation.count()):
+            myItemText = self.cboAggregation.itemText(myCount)
+            if myItemText == self.state['aggregation']:
+                self.cboAggregation.setCurrentIndex(myCount)
                 break
         self.restoreFunctionState(self.state['function'])
         self.wvResults.setHtml(self.state['report'])
@@ -1358,7 +1402,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         for myCount in range(0, mySize):
             myItemText = str(theCombo.itemText(myCount))
             # see if theItemText alphabetically precedes myItemText
-            if cmp(theItemText, myItemText) < 0:
+            if cmp(str(theItemText).lower(), myItemText.lower()) < 0:
                 theCombo.insertItem(myCount, theItemText, theItemData)
                 return
         #otherwise just add it to the end

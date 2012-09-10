@@ -103,7 +103,7 @@
        <item row="7" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>Aggregate by</string>
+          <string>Aggregate results by</string>
          </property>
         </widget>
        </item>
