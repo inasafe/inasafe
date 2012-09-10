@@ -32,7 +32,7 @@ from safe_qgis.exceptions import (InsufficientParametersException,
 
 from safe_qgis.safe_interface import (readKeywordsFromLayer, getStyleInfo)
 
-from safe.common.testing import  HAZDATA, EXPDATA, TESTDATA
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA
 
 # Retired impact function for characterisation
 # (need import here if test is run independently)

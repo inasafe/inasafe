@@ -105,7 +105,7 @@ class Test_plugin_core(unittest.TestCase):
         assert requirements_met(requirelines, params)
 
         params = {'category': 'test_cat2', 'unit': 'mmi2'}
-        assert requirements_met(requirelines, params) == False
+        assert not requirements_met(requirelines, params)
 
     def test_basic_plugin_requirements_met(self):
         """Basic plugin requirements met
@@ -122,12 +122,12 @@ class Test_plugin_core(unittest.TestCase):
         params = {'category': 'test_cat2'}
         for line in requirelines:
             check = requirement_check(params, line)
-            assert check == False
+            assert not check
 
         line = "unit='MMI'"
         params = {'category': 'test_cat2'}
         msg = 'Malformed statement (logged)'
-        assert requirement_check(params, line) == False, msg
+        assert not requirement_check(params, line), msg
         #self.assertRaises(SyntaxError, requirement_check, params, line)
 
     def test_keywords_error(self):
@@ -135,7 +135,7 @@ class Test_plugin_core(unittest.TestCase):
         line = "unit=='MMI'"
         params = {'class': 'myclass'}
         msg = 'Reserved keyword in statement (logged)'
-        assert requirement_check(params, line) == False, msg
+        assert not requirement_check(params, line), msg
 
     def test_filtering_of_impact_functions(self):
         """Impact functions are filtered correctly

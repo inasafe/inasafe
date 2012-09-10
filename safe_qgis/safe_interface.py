@@ -291,7 +291,8 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     myKeywordFilePath = os.path.splitext(theLayerPath)[0]
     myKeywordFilePath += '.keywords'
     if not os.path.isfile(myKeywordFilePath):
-        myMessage = tr('No keywords file found for %s' % theLayerPath)
+        wrappedPath = theLayerPath.replace(os.sep, '<wbr>' + os.sep)
+        myMessage = tr('No keywords file found for %s' % wrappedPath)
         raise InvalidParameterException(myMessage)
 
     #now get the requested keyword using the inasafe library

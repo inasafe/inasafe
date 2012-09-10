@@ -2201,13 +2201,13 @@ class Test_Engine(unittest.TestCase):
                    geometry_type=E.geometry_type)
 
         # Test interpolation function
-        import time
-        t0 = time.time()
+        #import time
+        #t0 = time.time()
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   # Take all attributes across
                                                   attribute_name=None)
-        print 'That took %f seconds' % (time.time() - t0)
+        #print 'That took %f seconds' % (time.time() - t0)
 
         # TODO:
         # Keep only those roads that are marked FLOODPRONE == 'YES'

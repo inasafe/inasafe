@@ -37,7 +37,7 @@ from qgis.gui import QgsComposerView
 from safe_qgis.exceptions import (LegendLayerException,
                                   KeywordNotFoundException)
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.utilities import htmlHeader, htmlFooter
+from safe_qgis.utilities import htmlHeader, htmlFooter, qgisVersion
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -240,20 +240,28 @@ class Map():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
-        myShader = self.layer.rasterShader().rasterShaderFunction()
-        myRampItems = myShader.colorRampItemList()
-        myLastValue = 0  # Making an assumption here...
-        print 'Source: %s' % self.layer.source()
-        for myItem in myRampItems:
-            myValue = myItem.value
-            myLabel = myItem.label
-            myColor = myItem.color
-            print 'Value: %s Label %s' % (myValue, myLabel)
-            self.addClassToLegend(myColor,
-                      theMin=myLastValue,
-                      theMax=myValue,
-                      theLabel=myLabel)
-            myLastValue = myValue
+        #test if newer than QGIS 1.8.0
+        #see issue #259
+        if qgisVersion() < 1800:
+            myShader = self.layer.rasterShader().rasterShaderFunction()
+            myRampItems = myShader.colorRampItemList()
+            myLastValue = 0  # Making an assumption here...
+            print 'Source: %s' % self.layer.source()
+            for myItem in myRampItems:
+                myValue = myItem.value
+                myLabel = myItem.label
+                myColor = myItem.color
+                print 'Value: %s Label %s' % (myValue, myLabel)
+                self.addClassToLegend(myColor,
+                          theMin=myLastValue,
+                          theMax=myValue,
+                          theLabel=myLabel)
+                myLastValue = myValue
+            else:
+                #TODO implement QGIS2.0 variant
+                #In master branch, use QgsRasterRenderer::rasterRenderer() to
+                # get/set how a raster is displayed.
+                pass
         return self.legend
 
     def addSymbolToLegend(self,
