@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import logging
+from zipfile import BadZipfile
 
 from shake_data import ShakeData
 from ftp_client import FtpClient
@@ -50,7 +51,15 @@ myForceFlag = False
 # Get the latest dataset
 myShakeData = ShakeData(myEventId)
 # Extract the event
-myShakeEvent = myShakeData.shakeEvent(theForceFlag=myForceFlag)
+try:
+    myShakeEvent = myShakeData.shakeEvent(theForceFlag=myForceFlag)
+except BadZipfile:
+    # retry with force flag true
+    myShakeEvent = myShakeData.shakeEvent(theForceFlag=True)
+except:
+    LOGGER.exception('An error occurred setting up the latest shake event.')
+    exit()
+
 logging.info('Latest Event Id: %s' % myShakeEvent)
 logging.info('-------------------------------------------')
 

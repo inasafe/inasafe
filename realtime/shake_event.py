@@ -937,21 +937,25 @@ class ShakeEvent:
         myUseIntersectionFlag = True
         myRectangle = self.boundsToRectangle()
 
-
         # Do iterative selection using expanding selection area
         # Until we have got some cities selected
 
         myAttemptsLimit = 5
-        myMinimumCityCount = 3
+        myMinimumCityCount = 1
+        myFoundFlag = False
         for _ in range(myAttemptsLimit):
-            LOGGER.debug('City Search Rectangle: %s' % myRectangle.toString())
+            LOGGER.debug('City Search Rectangle: %s' %
+                          myRectangle.asWktPolygon())
             myLayer.select(myIndexes, myRectangle,
                            myFetchGeometryFlag, myUseIntersectionFlag)
             if myLayer.selectedFeatureCount() < myMinimumCityCount:
                 myRectangle.scale(self.zoomFactor)
             else:
+                myFoundFlag = True
                 break
-
+        if not myFoundFlag:
+            LOGGER.debug('Could not find %s cities after expanding rect '
+                    '%s times.' % (myMinimumCityCount, myAttemptsLimit))
         # Setup field indexes of our input and out datasets
         myCities = []
         myLayerPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
