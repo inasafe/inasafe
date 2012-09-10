@@ -232,6 +232,16 @@ mmiData: Populated"""
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 
+    def testBoundsToRect(self):
+        """Test that we can calculate the event bounds properly"""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myBounds = myShakeEvent.boundsToRectangle().toString()
+        myExpectedResult = ('122.4500000000000028,-2.2100000000000000 : '
+                           '126.4500000000000028,1.7900000000000000')
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myBounds, myExpectedResult)
+        assert myBounds == myExpectedResult, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')

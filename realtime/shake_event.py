@@ -783,9 +783,9 @@ class ShakeEvent:
         """
         LOGGER.debug('bounds to rectangle called.')
         myRectangle = QgsRectangle(self.xMinimum,
-                                   self.yMinimum,
+                                   self.yMaximum,
                                    self.xMaximum,
-                                   self.yMaximum)
+                                   self.yMinimum)
         return myRectangle
 
     def citiesToShape(self, theForceFlag=False):
@@ -943,9 +943,9 @@ class ShakeEvent:
         myAttemptsLimit = 5
         myMinimumCityCount = 1
         myFoundFlag = False
+        LOGGER.debug('Search polygons for cities:')
         for _ in range(myAttemptsLimit):
-            LOGGER.debug('City Search Rectangle: %s' %
-                          myRectangle.asWktPolygon())
+            LOGGER.debug(myRectangle.asWktPolygon())
             myLayer.select(myIndexes, myRectangle,
                            myFetchGeometryFlag, myUseIntersectionFlag)
             if myLayer.selectedFeatureCount() < myMinimumCityCount:
