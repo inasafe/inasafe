@@ -88,8 +88,8 @@ When new strings have been added as described above the procedure to translate t
 * run :samp:`make update-translation-strings` to collect all strings marked for translation
 * Using either an editor or the tool Qt Linguist provide translations in the files
 
-  * i18n/id/LC_MESSAGES/inasafe.po
-  * gui/i18n/inasafe_id.ts
+  * safe/i18n/id/LC_MESSAGES/inasafe.po
+  * safe_qgis/i18n/inasafe_id.ts
 
 * run :samp:`make compile-translation-strings` to make the translations available to InaSAFE
 
