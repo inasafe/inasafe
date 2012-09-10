@@ -37,7 +37,7 @@ from qgis.gui import QgsComposerView
 from safe_qgis.exceptions import (LegendLayerException,
                                   KeywordNotFoundException)
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.utilities import htmlHeader, htmlFooter
+from safe_qgis.utilities import htmlHeader, htmlFooter, qgisVersion
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -242,7 +242,7 @@ class Map():
         """
         #test if newer than QGIS 1.8.0
         #see issue #259
-        if hasattr(self.layer, "rasterShader"):
+        if qgisVersion() < 1800:
             myShader = self.layer.rasterShader().rasterShaderFunction()
             myRampItems = myShader.colorRampItemList()
             myLastValue = 0  # Making an assumption here...

@@ -215,7 +215,7 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
 
     #test if newer than QGIS 1.8.0
     #see issue #259
-    if hasattr(theQgsRasterLayer, "rasterShader"):
+    if qgisVersion() < 1800:
         # Apply the shading algorithm and design their ramp
         theQgsRasterLayer.setColorShadingAlgorithm(
             QgsRasterLayer.ColorRampShader)
