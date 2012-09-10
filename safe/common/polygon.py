@@ -983,21 +983,45 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
     they are considered to not intersect.
 
     Inputs:
-        line0, line1: Each defined by two end points as in:
-                      [[x0, y0], [x1, y1]]
+        line0: A simple line segment defined by two end points:
+              [[x0, y0], [x1, y1]]
 
-                      Lines can also be vectors following the format
-                      line[0,0,:] = x0
-                      line[0,1,:] = y0
-                      line[1,0,:] = x1
-                      line[1,1,:] = y1
-                      NOT YET IMPLEMENTED!
+        line1: A collection of line segments vectorised following the format
+               line[0,0,:] = x2
+               line[0,1,:] = y2
+               line[1,0,:] = x3
+               line[1,1,:] = y3
 
         rtol, atol: Tolerances passed onto numpy.allclose
 
     Output:
-        intersections: Nx2 array with intersection points or
-                       NaN where no intersections were found
+        intersections: Nx2 array with intersection points or nan (in case of no intersection)
+                      If line1 consisted of just one line, None is returned for
+                      backwards compatibility
+
+
+    Notes
+
+    A vectorised input line can be constructed either as list:
+    line1 = [[[0, 24, 0, 15],    # x2
+              [12, 0, 24, 0]],   # y2
+             [[24, 0, 0, 5],     # x3
+              [0, 12, 12, 15]]]  # y3
+
+    or as an array
+
+    line1 = numpy.zeros(16).reshape(2,2,4)  # Three lines
+    line1[0, 0, :] = [0, 24, 0, 15]   # x2
+    line1[0, 1, :] = [12, 0, 24, 0]   # y2
+    line1[1, 0, :] = [24, 0, 0, 5]    # x3
+    line1[1, 1, :] = [0, 12, 12, 15]  # y3
+
+
+    To select true intersections from result, use the following idiom:
+
+    value = intersection(line0, line1)
+    mask = - numpy.isnan(value[:, 0])
+    v = value[mask]
     """
 
     line0 = ensure_numeric(line0, numpy.float)
@@ -1006,41 +1030,67 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
     x0, y0 = line0[0, :]
     x1, y1 = line0[1, :]
 
-    x2, y2 = line1[0, :]
-    x3, y3 = line1[1, :]
+    # Special treatment of return value if line1 was non vectorised
+    if len(line1.shape) == 2:
+        one_point = True
+        # Broadcast to vectorised version
+        line1 = line1.reshape(2, 2, 1)
+    else:
+        one_point = False
 
-    # Define intermediate variables and denominator for formulas:
-    # denom = (y3 - y2) * (x1 - x0) - (x3 - x2) * (y1 - y0)
-    # u0 = (x3 - x2) * (y0 - y2) - (y3 - y2) * (x0 - x2)
-    # u1 = (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0)
+    # Extract vectorised coordinates
+    x2 = line1[0, 0, :]
+    y2 = line1[0, 1, :]
+    x3 = line1[1, 0, :]
+    y3 = line1[1, 1, :]
 
+    # Calculate denominator (lines are parallel if it is 0)
     y3y2 = y3 - y2
     x3x2 = x3 - x2
     x1x0 = x1 - x0
     y1y0 = y1 - y0
-    denom = y3y2 * x1x0 - x3x2 * y1y0
+    denominator = y3y2 * x1x0 - x3x2 * y1y0
 
-    if numpy.allclose(denom, 0.0, rtol=rtol, atol=atol):
-        return None
-    else:
-        # Lines are not parallel, check if they intersect
-        x2x0 = x2 - x0
-        y2y0 = y2 - y0
-        u0 = y3y2 * x2x0 - x3x2 * y2y0
-        u1 = x2x0 * y1y0 - y2y0 * x1x0
+    # Determine if lines are parallel (or collinear) up to a tolerance
+    N = line1.shape[2]
 
-        u0 = u0 / denom
-        u1 = u1 / denom
+    # Intersection formula
+    x2x0 = x2 - x0
+    y2y0 = y2 - y0
 
-        # Check if point found lies within given line segments
-        if 0.0 <= u0 <= 1.0 and 0.0 <= u1 <= 1.0:
-            # We have intersection
-            x = x0 + u0 * x1x0
-            y = y0 + u0 * y1y0
-            return numpy.array([x, y])
-        else:
-            # No intersection
+    u0 = y3y2 * x2x0 - x3x2 * y2y0
+    u1 = x2x0 * y1y0 - y2y0 * x1x0
+
+    # Suppress numpy warnings (as we'll be dividing by zero)
+    original_numpy_settings = numpy.seterr(invalid='ignore', divide='ignore')
+
+    u0 = u0 / denominator
+    u1 = u1 / denominator
+
+    # Restore numpy warnings
+    numpy.seterr(**original_numpy_settings)
+
+    x = x0 + u0 * x1x0
+    y = y0 + u0 * y1y0
+
+    # Points that lie within given line segments are true intersections
+    mask = (0.0 <= u0) * (u0 <= 1.0) * (0.0 <= u1) * (u1 <= 1.0)
+
+    # Return intersection points as N x 2 array
+    result = numpy.zeros((N, 2)) * numpy.nan
+    result[mask, 0] = x[mask]
+    result[mask, 1] = y[mask]
+
+    # Special treatment of return value if line1 was non vectorised
+    if one_point:
+        result = result.reshape(2)
+        if numpy.any(numpy.isnan(result)):
             return None
+        else:
+            return result
+
+    # Normal return of Nx2 array of intersections (or nan)
+    return result
 
 
 # Main functions for polygon clipping
