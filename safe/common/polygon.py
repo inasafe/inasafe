@@ -821,12 +821,6 @@ def clip_line_by_polygon(line, polygon,
 
                 status, value = intersection(segment, edge,
                                              fast=True)
-                if status == 2:
-                    # Collinear overlapping lines found
-                    # Use midpoint of common segment
-                    # FIXME (Ole): Maybe better to use
-                    #              common segment directly
-                    value = (segment[0] + segment[1]) / 2
                 if value is not None:
                     # Record intersection point found
                     intersections.append(value)
@@ -988,8 +982,8 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
                  fast=False):
     """Returns intersecting point between two line segments.
 
-    However, if parallel lines coincide partly (i.e. share a common segment),
-    the line segment where lines coincide is returned
+    If the lines are parallel or coincide partly (i.e. share a common segment),
+    they are considered to not intersect.
 
     Inputs:
         line0, line1: Each defined by two end points as in:
@@ -1001,14 +995,8 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
 
     Output:
         status, value - where status and value is interpreted as follows:
-        status == 0: no intersection, value set to None.
+        status == 0: no intersection (or parallel or collinear), value set to None.
         status == 1: intersection point found and returned in value as [x,y].
-        status == 2: Collinear overlapping lines found.
-                     Value takes the form [[x0,y0], [x1,y1]] which is the
-                     segment common to both lines. If argument fast is True
-                     we return 2, x, y on the common segment
-        status == 3: Collinear non-overlapping lines. Value set to None.
-        status == 4: Lines are parallel. Value set to None.
     """
 
     line0 = ensure_numeric(line0, numpy.float)
@@ -1052,67 +1040,6 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
         else:
             # No intersection
             return 0, None
-
-
-# Result functions used in intersection() below for possible states
-# of collinear lines
-# (p0,p1) defines line 0, (p2,p3) defines line 1.
-
-def lines_dont_coincide(_p0, _p1, _p2, _p3):
-    return 3, None
-
-
-def lines_0_fully_included_in_1(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p0, _p1])
-
-
-def lines_1_fully_included_in_0(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p2, _p3])
-
-
-def lines_overlap_same_direction(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p0, _p3])
-
-
-def lines_overlap_same_direction2(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p2, _p1])
-
-
-def lines_overlap_opposite_direction(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p0, _p2])
-
-
-def lines_overlap_opposite_direction2(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p3, _p1])
-
-
-# This function called when an impossible state is found
-def lines_error(p1, p2, p3, p4):
-    msg = ('Impossible state: p1=%s, p2=%s, p3=%s, p4=%s'
-           % (str(p1), str(p2), str(p3), str(p4)))
-    raise RuntimeError(msg)
-
-# Mapping to possible states for line intersection
-#
-#                 0s1    0e1    1s0    1e0   # line 0 starts on 1, 0 ends 1,
-#                                                   1 starts 0, 1 ends 0
-collinearmap = {(False, False, False, False): lines_dont_coincide,
-                (False, False, False, True): lines_error,
-                (False, False, True, False): lines_error,
-                (False, False, True, True): lines_1_fully_included_in_0,
-                (False, True, False, False): lines_error,
-                (False, True, False, True): lines_overlap_opposite_direction2,
-                (False, True, True, False): lines_overlap_same_direction2,
-                (False, True, True, True): lines_1_fully_included_in_0,
-                (True, False, False, False): lines_error,
-                (True, False, False, True): lines_overlap_same_direction,
-                (True, False, True, False): lines_overlap_opposite_direction,
-                (True, False, True, True): lines_1_fully_included_in_0,
-                (True, True, False, False): lines_0_fully_included_in_1,
-                (True, True, False, True): lines_0_fully_included_in_1,
-                (True, True, True, False): lines_0_fully_included_in_1,
-                (True, True, True, True): lines_0_fully_included_in_1}
-
 
 # Main functions for polygon clipping
 # FIXME (Ole): Both can be rigged to return points or lines
