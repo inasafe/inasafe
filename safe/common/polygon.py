@@ -214,7 +214,7 @@ def _separate_points_by_polygon(points, polygon,
         px_i, py_i = polygon[i, :]
         px_j, py_j = polygon[j, :]
 
-        # Intersection formula
+        # Edge crossing formula
         sigma = (y - py_i) / (py_j - py_i) * (px_j - px_i)
         seg_i = (py_i < y) * (py_j >= y)
         seg_j = (py_j < y) * (py_i >= y)
@@ -1020,46 +1020,34 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
     x2, y2 = line1[0, :]
     x3, y3 = line1[1, :]
 
-    denom = (y3 - y2) * (x1 - x0) - (x3 - x2) * (y1 - y0)
-    u0 = (x3 - x2) * (y0 - y2) - (y3 - y2) * (x0 - x2)
-    u1 = (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0)
+    # Define intermediate variables and denominator for formulas:
+    # denom = (y3 - y2) * (x1 - x0) - (x3 - x2) * (y1 - y0)
+    # u0 = (x3 - x2) * (y0 - y2) - (y3 - y2) * (x0 - x2)
+    # u1 = (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0)
+
+    y3y2 = y3 - y2
+    x3x2 = x3 - x2
+    x1x0 = x1 - x0
+    y1y0 = y1 - y0
+    denom = y3y2 * x1x0 - x3x2 * y1y0
 
     if numpy.allclose(denom, 0.0, rtol=rtol, atol=atol):
-        # Lines are parallel - check if they are collinear
-        if numpy.allclose([u0, u1], 0.0, rtol=rtol, atol=atol):
-            # We now know that the lines are collinear
-            if fast:
-                # Just return one of the points
-                return 2, numpy.array([x0, y0])
-            else:
-                # FIXME (Ole): It would make sense to maybe return mid point
-                #              of the smallest common segments
-                state = (point_on_line([x0, y0], line1, rtol=rtol, atol=atol),
-                         point_on_line([x1, y1], line1, rtol=rtol, atol=atol),
-                         point_on_line([x2, y2], line0, rtol=rtol, atol=atol),
-                         point_on_line([x3, y3], line0, rtol=rtol, atol=atol))
-                return collinearmap[state]([x0, y0], [x1, y1],
-                                           [x2, y2], [x3, y3])
-        else:
-            # Lines are parallel but aren't collinear
-            return 4, None
+        return 4, None
     else:
         # Lines are not parallel, check if they intersect
+        x2x0 = x2 - x0
+        y2y0 = y2 - y0
+        u0 = x3x2 * (y0 - y2) - y3y2 * (x0 - x2)
+        u1 = x2x0 * y1y0 - y2y0 * x1x0
+
         u0 = u0 / denom
         u1 = u1 / denom
-
-        x = x0 + u0 * (x1 - x0)
-        y = y0 + u0 * (y1 - y0)
-
-        # Sanity check - can be removed to speed up if needed
-        #if not numpy.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol):
-        #    raise Exception
-        #if not numpy.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol):
-        #    raise Exception
 
         # Check if point found lies within given line segments
         if 0.0 <= u0 <= 1.0 and 0.0 <= u1 <= 1.0:
             # We have intersection
+            x = x0 + u0 * x1x0
+            y = y0 + u0 * y1y0
             return 1, numpy.array([x, y])
         else:
             # No intersection
