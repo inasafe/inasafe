@@ -48,7 +48,7 @@ from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion)
 
-from safe.common.testing import  HAZDATA, EXPDATA, TESTDATA, UNITDATA
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)
 # pylint: disable=W0611
@@ -216,7 +216,7 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
     myMessage += '--------------------------------------------------------\n'
     myMessage += combosToString(DOCK)
 
-    if  myDict != myExpectedDict:
+    if myDict != myExpectedDict:
         return False, myMessage
 
     return True, 'Matched ok.'

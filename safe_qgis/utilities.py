@@ -226,7 +226,8 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
         myFunction.setColorRampItemList(myRangeList)
 
         # Now set the raster transparency
-        theQgsRasterLayer.rasterTransparency().setTransparentSingleValuePixelList(
+        theQgsRasterLayer.rasterTransparency()\
+        .setTransparentSingleValuePixelList(
             myTransparencyList)
     else:
         #TODO implement QGIS2.0 variant
