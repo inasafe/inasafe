@@ -797,8 +797,7 @@ def clip_line_by_polygon(line, polygon,
                                        [minpx, minpy]])
                 for i in range(4):
                     edge = [corners[i, :], corners[i + 1, :]]
-                    status, value = intersection(segment, edge,
-                                                 fast=True)
+                    value = intersection(segment, edge)
                     if value is not None:
                         # Segment intersects polygon bounding box
                         segment_is_outside_bbox = False
@@ -819,8 +818,7 @@ def clip_line_by_polygon(line, polygon,
                 j = (i + 1) % N
                 edge = [polygon[i, :], polygon[j, :]]
 
-                status, value = intersection(segment, edge,
-                                             fast=True)
+                value = intersection(segment, edge)
                 if value is not None:
                     # Record intersection point found
                     intersections.append(value)
@@ -978,25 +976,23 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 # Functionality for line intersection
 #------------------------------------
 
-def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
-                 fast=False):
+def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12):
     """Returns intersecting point between two line segments.
 
     If the lines are parallel or coincide partly (i.e. share a common segment),
     they are considered to not intersect.
 
     Inputs:
+        lines
         line0, line1: Each defined by two end points as in:
                       [[x0, y0], [x1, y1]]
                       A line can also be a 2x2 numpy array with each row
                       corresponding to a point.
+
         rtol, atol: Tolerances passed onto numpy.allclose
-        fast: Default False. If True collinear return values are simplified
 
     Output:
-        status, value - where status and value is interpreted as follows:
-        status == 0: no intersection (or parallel or collinear), value set to None.
-        status == 1: intersection point found and returned in value as [x,y].
+        value: None or [x, y] in case there is intersection
     """
 
     line0 = ensure_numeric(line0, numpy.float)
@@ -1020,7 +1016,7 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
     denom = y3y2 * x1x0 - x3x2 * y1y0
 
     if numpy.allclose(denom, 0.0, rtol=rtol, atol=atol):
-        return 4, None
+        return None
     else:
         # Lines are not parallel, check if they intersect
         x2x0 = x2 - x0
@@ -1036,10 +1032,10 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
             # We have intersection
             x = x0 + u0 * x1x0
             y = y0 + u0 * y1y0
-            return 1, numpy.array([x, y])
+            return numpy.array([x, y])
         else:
             # No intersection
-            return 0, None
+            return None
 
 # Main functions for polygon clipping
 # FIXME (Ole): Both can be rigged to return points or lines
