@@ -608,6 +608,10 @@ def clip_lines_by_polygon(lines, polygon,
     maxpx = max(polygon[:, 0])
     minpy = min(polygon[:, 1])
     maxpy = max(polygon[:, 1])
+    polygon_bbox = [minpx, maxpx, minpy, maxpy]
+
+    # Get polygon_segments
+    polygon_segments = polygon2segments(polygon)
 
     # Loop through lines
     for k in range(M):
@@ -624,11 +628,12 @@ def clip_lines_by_polygon(lines, polygon,
             continue
 
         # Call underlying function for one line and one polygon
-        inside, outside = clip_line_by_polygon(line, polygon,
-                                               closed=closed,
-                                               polygon_bbox=[minpx, maxpx,
-                                                             minpy, maxpy],
-                                               check_input=False)
+        inside, outside = _clip_line_by_polygon(line,
+                                                polygon,
+                                                polygon_segments,
+                                                polygon_bbox,
+                                                closed=closed)
+
 
         # Record clipped line segments from line k
         inside_line_segments[k] = inside
@@ -727,19 +732,35 @@ def clip_line_by_polygon(line, polygon,
         maxpx = max(polygon[:, 0])
         minpy = min(polygon[:, 1])
         maxpy = max(polygon[:, 1])
+        polygon_bbox = [minpx, maxpx, minpy, maxpy]
     else:
         minpx = polygon_bbox[0]
         maxpx = polygon_bbox[1]
         minpy = polygon_bbox[2]
         maxpy = polygon_bbox[3]
 
-    M = line.shape[0]  # Number of segments
-
     # Convert polygon to segments
     # FIXME (Ole): Important further optimisation:
     # Move out as should be done *once* only per polygon
     polygon_segments = polygon2segments(polygon)
 
+    return _clip_line_by_polygon(line,
+                                 polygon,
+                                 polygon_segments,
+                                 polygon_bbox,
+                                 closed=closed)
+
+
+def _clip_line_by_polygon(line,
+                          polygon,
+                          polygon_segments,
+                          polygon_bbox,
+                          closed=True):
+    """Clip line segments by polygon
+
+    This is the underlying function
+    - see public clip_line_by_polygon() for details
+    """
 
     # Algorithm
     #
@@ -755,10 +776,17 @@ def clip_line_by_polygon(line, polygon,
     #     fully inside or outside polygon
     # 5
 
+    # Get bounding box
+    minpx = polygon_bbox[0]
+    maxpx = polygon_bbox[1]
+    minpy = polygon_bbox[2]
+    maxpy = polygon_bbox[3]
+
     # Loop through line segments
     inside_line_segments = []
     outside_line_segments = []
 
+    M = line.shape[0]
     for k in range(M - 1):
         p0 = line[k, :]
         p1 = line[k + 1, :]
@@ -824,7 +852,7 @@ def clip_line_by_polygon(line, polygon,
             intersections = list(segment)  # Include end points
             intersections.extend(V)
 
-            # FIXME (Ole): Next candidate for vectorisation (11/9/2012)
+            # FIXME (Ole): Next candidate for vectorisation (11/9/2012) below
             # Loop through intersections for this line segment
             distances = {}
             for i in range(len(intersections)):
@@ -901,7 +929,7 @@ def line_dictionary_to_geometry(D):
 
     lines = []
 
-    # Ensure reproducibility (needed?)
+    # Ensure reproducibility (FIXME: is this needed?)
     #keys = D.keys()
     #keys.sort()
 
