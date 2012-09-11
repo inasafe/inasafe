@@ -599,9 +599,6 @@ def clip_lines_by_polygon(lines, polygon,
 
     M = len(lines)  # Number of lines
 
-    inside_line_segments = {}
-    outside_line_segments = {}
-
     # Get polygon extents to quickly rule out lines where all segments
     # are outside and on the same side of its bounding box
     minpx = min(polygon[:, 0])
@@ -613,7 +610,36 @@ def clip_lines_by_polygon(lines, polygon,
     # Get polygon_segments
     polygon_segments = polygon2segments(polygon)
 
+    # Call underlying function
+    return _clip_lines_by_polygon(lines,
+                                  polygon,
+                                  polygon_segments,
+                                  polygon_bbox,
+                                  closed=closed)
+
+def _clip_lines_by_polygon(lines,
+                           polygon,
+                           polygon_segments,
+                           polygon_bbox,
+                           closed=True):
+    """Clip multiple lines by polygon
+
+    Underlying function.
+    - see clip_lines_by_polygon for details
+    """
+
+    # Get bounding box
+    minpx = polygon_bbox[0]
+    maxpx = polygon_bbox[1]
+    minpy = polygon_bbox[2]
+    maxpy = polygon_bbox[3]
+
+    inside_line_segments = {}
+    outside_line_segments = {}
+
+
     # Loop through lines
+    M = len(lines)
     for k in range(M):
         line = numpy.array(lines[k])
 
@@ -740,8 +766,6 @@ def clip_line_by_polygon(line, polygon,
         maxpy = polygon_bbox[3]
 
     # Convert polygon to segments
-    # FIXME (Ole): Important further optimisation:
-    # Move out as should be done *once* only per polygon
     polygon_segments = polygon2segments(polygon)
 
     return _clip_line_by_polygon(line,
