@@ -936,6 +936,7 @@ class ShakeEvent:
         myFetchGeometryFlag = True
         myUseIntersectionFlag = True
         myRectangle = self.boundsToRectangle()
+        myFeature = QgsFeature()
 
         # Do iterative selection using expanding selection area
         # Until we have got some cities selected
@@ -946,13 +947,22 @@ class ShakeEvent:
         LOGGER.debug('Search polygons for cities:')
         for _ in range(myAttemptsLimit):
             LOGGER.debug(myRectangle.asWktPolygon())
+            myLayer.removeSelection()
             myLayer.select(myIndexes, myRectangle,
                            myFetchGeometryFlag, myUseIntersectionFlag)
-            if myLayer.selectedFeatureCount() < myMinimumCityCount:
+            # This is klunky - must be a better way in the QGIS api!?
+            # but myLayer.selectedFeatureCount() relates to gui
+            # selection it seems...
+            myCount = 0
+            while myLayerProvider.nextFeature(myFeature):
+                myCount += 1
+
+            if myCount < myMinimumCityCount:
                 myRectangle.scale(self.zoomFactor)
             else:
                 myFoundFlag = True
                 break
+
         if not myFoundFlag:
             LOGGER.debug('Could not find %s cities after expanding rect '
                     '%s times.' % (myMinimumCityCount, myAttemptsLimit))
@@ -969,8 +979,10 @@ class ShakeEvent:
 
         # For measuring distance and direction from each city to epicenter
         myEpicenter = QgsPoint(self.longitude, self.latitude)
-        myFeature = QgsFeature()
 
+        # Should not need this to be repeated here but not working without it
+        myLayer.select(myIndexes, myRectangle,
+               myFetchGeometryFlag, myUseIntersectionFlag)
         # Now loop through the db adding selected features to mem layer
         while myLayerProvider.nextFeature(myFeature):
             if not myFeature.isValid():
@@ -1041,9 +1053,9 @@ class ShakeEvent:
         myCities = self.localCityFeatures()
         myResult = myMemoryProvider.addFeatures(myCities)
         if not myResult:
-            raise CityMemoryLayerCreationError('Add feature failed for:' %
-                myAttributes[myLayerPopulationIndex].toString())
-            #LOGGER.debug('Features: %s' % myMemoryLayer.featureCount())
+            LOGGER.exception()
+            raise
+
         myMemoryLayer.commitChanges()
         myMemoryLayer.updateExtents()
 
