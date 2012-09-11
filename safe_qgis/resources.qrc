@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/plugins/inasafe">
     <file alias="icon.png">resources/img/icon.png</file>
+    <file alias="functions-table.png">resources/img/functions-table.png</file>
     <file alias="keywords.png">resources/img/keywords.png</file>
     <file alias="reload.png">resources/img/reload.png</file>
     <file alias="options.png">resources/img/options.png</file>
