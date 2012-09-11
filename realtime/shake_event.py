@@ -1113,8 +1113,8 @@ class ShakeEvent:
         myFunction = safe_get_plugins(myFunctionId)[0][myFunctionId]
 
         myResult = safe_calculate_impact(myLayers, myFunction)
-        self.impactFile = result.filename
-        self.fatalityCounts = result.keywords
+        self.impactFile = myResult.filename
+        self.fatalityCounts = myResult.keywords
         return myResult.filename
 
     def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):
@@ -1228,7 +1228,10 @@ class ShakeEvent:
             FileNotFoundError
         """
         myFixturePath = os.path.join(os.path.abspath(os.path.curdir),
-                                     'fixtures', 'exposure', 'population.tif')
+                                     'realtime',
+                                     'fixtures',
+                                     'exposure',
+                                     'population.tif')
         myLocalPath = '/usr/local/share/inasafe/exposure/population.tif'
         if self.populationRasterPath is not None:
             return self.populationRasterPath
@@ -1236,7 +1239,7 @@ class ShakeEvent:
             return os.environ['SAFE_POPULATION_PATH']
         elif os.path.exists(myFixturePath):
             return myFixturePath
-        elif os.path.exists(os.path.exists(myLocalPath)):
+        elif os.path.exists(myLocalPath):
             return myLocalPath
         else:
             raise FileNotFoundError('Population file could not be found')

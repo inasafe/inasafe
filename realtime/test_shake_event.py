@@ -224,6 +224,7 @@ mmiData: Populated"""
 
     def testCalculateFatalities(self):
         """Test that we can calculate fatalities."""
+        LOGGER.debug(QGISAPP.showSettings())
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()

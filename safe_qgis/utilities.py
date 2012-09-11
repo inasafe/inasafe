@@ -20,6 +20,8 @@ __copyright__ += 'Disaster Reduction'
 
 import sys
 import traceback
+import logging
+
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
 from qgis.core import (QGis,
@@ -33,11 +35,16 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency)
+
 from safe_qgis.exceptions import StyleError
+import safe
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
 import safe_qgis.resources  # pylint: disable=W0611
+
+safe.common.utilities.setup_logger()
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
@@ -197,20 +204,24 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
         if myTransparencyPercent > 0:
             # Check if range extrema are integers so we know if we can
             # use them to calculate a value range
-            if ((myLastValue == int(myLastValue)) and (myMax == int(myMax))):
-                # Ensure that they are integers
-                # (e.g 2.0 must become 2, see issue #126)
-                myLastValue = int(myLastValue)
-                myMax = int(myMax)
+            try:
+                if ((myLastValue == int(myLastValue)) and
+                    (myMax == int(myMax))):
+                    # Ensure that they are integers
+                    # (e.g 2.0 must become 2, see issue #126)
+                    myLastValue = int(myLastValue)
+                    myMax = int(myMax)
 
-                # Set transparencies
-                myRange = range(myLastValue, myMax)
-                for myValue in myRange:
-                    myPixel = \
-                         QgsRasterTransparency.TransparentSingleValuePixel()
-                    myPixel.pixelValue = myValue
-                    myPixel.percentTransparent = myTransparencyPercent
-                    myTransparencyList.append(myPixel)
+                    # Set transparencies
+                    myRange = range(myLastValue, myMax)
+                    for myValue in myRange:
+                        myPixel = \
+                             QgsRasterTransparency.TransparentSingleValuePixel()
+                        myPixel.pixelValue = myValue
+                        myPixel.percentTransparent = myTransparencyPercent
+                        myTransparencyList.append(myPixel)
+            except:
+                LOGGER.exception()
         #myLabel = myClass['label']
 
     # test if QGIS 1.8.0 or older
