@@ -733,28 +733,13 @@ def clip_line_by_polygon(line, polygon,
         minpy = polygon_bbox[2]
         maxpy = polygon_bbox[3]
 
-    N = polygon.shape[0]  # Number of vertices in polygon
     M = line.shape[0]  # Number of segments
 
     # Convert polygon to segments
     # FIXME (Ole): Important further optimisation:
     # Move out as should be done *once* only per polygon
-    polygon_segments = numpy.zeros(N * 4).reshape(2, 2, N)
-    x3 = numpy.zeros(N)
-    y3 = numpy.zeros(N)
+    polygon_segments = polygon2segments(polygon)
 
-    x2 = polygon[:, 0]
-    y2 = polygon[:, 1]
-
-    x3[:-1] = x2[1:]
-    x3[-1] = x2[0]
-    y3[:-1] = y2[1:]
-    y3[-1] = y2[0]
-
-    polygon_segments[0, 0, :] = x2
-    polygon_segments[0, 1, :] = y2
-    polygon_segments[1, 0, :] = x3
-    polygon_segments[1, 1, :] = y3
 
     # Algorithm
     #
@@ -834,12 +819,12 @@ def clip_line_by_polygon(line, polygon,
             # and decide for each sub-segment
 
             values = intersection(segment, polygon_segments)
-
-            intersections = list(segment)  # Initialise with end points
             mask = -numpy.isnan(values[:, 0])
             V = values[mask]
+            intersections = list(segment)  # Include end points
             intersections.extend(V)
 
+            # FIXME (Ole): Next candidate for vectorisation (11/9/2012)
             # Loop through intersections for this line segment
             distances = {}
             for i in range(len(intersections)):
@@ -1205,6 +1190,9 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
         #                     len(polygons),
         #                     len(remaining_lines)))
 
+        # FIXME (Ole): Convert polygon to polygon_segments array suitable for intersection
+        #              Also establish bounding box here.
+
         inside_lines, _ = clip_lines_by_polygon(remaining_lines,
                                                 polygon,
                                                 check_input=False)
@@ -1222,3 +1210,48 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
         #remaining_lines = outside_lines
 
     return lines_covered
+
+
+def polygon2segments(polygon):
+    """Convert polygon to segments structure suitable for use in intersection
+
+    Args:
+        polygon: Nx2 array of polygon vertices
+
+    Returns:
+        A collection of line segments (x0, y0) -> (x1, y1) vectorised
+        following the format
+               line[0, 0, :] = x0
+               line[0, 1, :] = y0
+               line[1, 0, :] = x1
+               line[1, 1, :] = y1
+
+    """
+
+    try:
+        polygon = ensure_numeric(polygon, numpy.float)
+    except Exception, e:
+        msg = ('Polygon could not be converted to numeric array: %s'
+               % str(e))
+        raise Exception(msg)
+
+    N = polygon.shape[0]  # Number of vertices in polygon
+
+    segments = numpy.zeros(N * 4).reshape(2, 2, N)
+    x3 = numpy.zeros(N)
+    y3 = numpy.zeros(N)
+
+    x2 = polygon[:, 0]
+    y2 = polygon[:, 1]
+
+    x3[:-1] = x2[1:]
+    x3[-1] = x2[0]
+    y3[:-1] = y2[1:]
+    y3[-1] = y2[0]
+
+    segments[0, 0, :] = x2
+    segments[0, 1, :] = y2
+    segments[1, 0, :] = x3
+    segments[1, 1, :] = y3
+
+    return segments
