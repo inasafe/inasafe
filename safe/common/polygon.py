@@ -736,6 +736,26 @@ def clip_line_by_polygon(line, polygon,
     N = polygon.shape[0]  # Number of vertices in polygon
     M = line.shape[0]  # Number of segments
 
+    # Convert polygon to segments
+    # FIXME (Ole): Important further optimisation:
+    # Move out as should be done *once* only per polygon
+    polygon_segments = numpy.zeros(N * 4).reshape(2, 2, N)
+    x3 = numpy.zeros(N)
+    y3 = numpy.zeros(N)
+
+    x2 = polygon[:, 0]
+    y2 = polygon[:, 1]
+
+    x3[:-1] = x2[1:]
+    x3[-1] = x2[0]
+    y3[:-1] = y2[1:]
+    y3[-1] = y2[0]
+
+    polygon_segments[0, 0, :] = x2
+    polygon_segments[0, 1, :] = y2
+    polygon_segments[1, 0, :] = x3
+    polygon_segments[1, 1, :] = y3
+
     # Algorithm
     #
     # 1: Find all intersection points between line segments and polygon edges
@@ -812,18 +832,13 @@ def clip_line_by_polygon(line, polygon,
         else:
             # Intersect segment with all polygon edges
             # and decide for each sub-segment
-            intersections = list(segment)  # Initialise with end points
-            for i in range(N):
-                # Loop through polygon edges
-                j = (i + 1) % N
-                edge = [polygon[i, :], polygon[j, :]]
 
-                value = intersection(segment, edge)
-                if value is not None:
-                    # Record intersection point found
-                    intersections.append(value)
-                else:
-                    pass
+            values = intersection(segment, polygon_segments)
+
+            intersections = list(segment)  # Initialise with end points
+            mask = -numpy.isnan(values[:, 0])
+            V = values[mask]
+            intersections.extend(V)
 
             # Loop through intersections for this line segment
             distances = {}
@@ -987,10 +1002,10 @@ def intersection(line0, line1):
               [[x0, y0], [x1, y1]]
 
         line1: A collection of line segments vectorised following the format
-               line[0,0,:] = x2
-               line[0,1,:] = y2
-               line[1,0,:] = x3
-               line[1,1,:] = y3
+               line[0, 0, :] = x2
+               line[0, 1, :] = y2
+               line[1, 0, :] = x3
+               line[1, 1, :] = y3
 
     Output:
         intersections: Nx2 array with intersection points or nan
@@ -1009,17 +1024,17 @@ def intersection(line0, line1):
 
     or as an array
 
-    line1 = numpy.zeros(16).reshape(2,2,4)  # Three lines
+    line1 = numpy.zeros(16).reshape(2, 2, 4)  # Four segments
     line1[0, 0, :] = [0, 24, 0, 15]   # x2
     line1[0, 1, :] = [12, 0, 24, 0]   # y2
     line1[1, 0, :] = [24, 0, 0, 5]    # x3
     line1[1, 1, :] = [0, 12, 12, 15]  # y3
 
 
-    To select true intersections from result, use the following idiom:
+    To select array of intersections from result, use the following idiom:
 
     value = intersection(line0, line1)
-    mask = - numpy.isnan(value[:, 0])
+    mask = -numpy.isnan(value[:, 0])
     v = value[mask]
     """
 
