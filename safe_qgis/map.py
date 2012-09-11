@@ -240,9 +240,9 @@ class Map():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
-        #test if newer than QGIS 1.8.0
-        #see issue #259
-        if qgisVersion() < 1800:
+        # test if QGIS 1.8.0 or older
+        # see issue #259
+        if qgisVersion() <= 10800:
             myShader = self.layer.rasterShader().rasterShaderFunction()
             myRampItems = myShader.colorRampItemList()
             myLastValue = 0  # Making an assumption here...
