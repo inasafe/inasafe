@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Mon Sep 10 09:38:52 2012
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Tue Sep 11 15:41:52 2012
+#      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -31,6 +31,10 @@ class Ui_DockBase(object):
         self.gridLayout_3 = QtGui.QGridLayout(self.grpQuestion)
         self.gridLayout_3.setContentsMargins(0, 6, 0, 0)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
+        self.cboExposure = QtGui.QComboBox(self.grpQuestion)
+        self.cboExposure.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
+        self.cboExposure.setObjectName(_fromUtf8("cboExposure"))
+        self.gridLayout_3.addWidget(self.cboExposure, 4, 0, 1, 2)
         self.label_6 = QtGui.QLabel(self.grpQuestion)
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.gridLayout_3.addWidget(self.label_6, 0, 0, 1, 1)
@@ -40,18 +44,33 @@ class Ui_DockBase(object):
         self.label_8 = QtGui.QLabel(self.grpQuestion)
         self.label_8.setObjectName(_fromUtf8("label_8"))
         self.gridLayout_3.addWidget(self.label_8, 5, 0, 1, 1)
-        self.cboFunction = QtGui.QComboBox(self.grpQuestion)
-        self.cboFunction.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
-        self.cboFunction.setObjectName(_fromUtf8("cboFunction"))
-        self.gridLayout_3.addWidget(self.cboFunction, 6, 0, 1, 1)
-        self.cboExposure = QtGui.QComboBox(self.grpQuestion)
-        self.cboExposure.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
-        self.cboExposure.setObjectName(_fromUtf8("cboExposure"))
-        self.gridLayout_3.addWidget(self.cboExposure, 4, 0, 1, 1)
         self.cboHazard = QtGui.QComboBox(self.grpQuestion)
         self.cboHazard.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
         self.cboHazard.setObjectName(_fromUtf8("cboHazard"))
-        self.gridLayout_3.addWidget(self.cboHazard, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.cboHazard, 1, 0, 1, 2)
+        self.cboFunction = QtGui.QComboBox(self.grpQuestion)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.cboFunction.sizePolicy().hasHeightForWidth())
+        self.cboFunction.setSizePolicy(sizePolicy)
+        self.cboFunction.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
+        self.cboFunction.setObjectName(_fromUtf8("cboFunction"))
+        self.gridLayout_3.addWidget(self.cboFunction, 6, 0, 1, 1)
+        self.toolButton = QtGui.QToolButton(self.grpQuestion)
+        self.toolButton.setEnabled(False)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.toolButton.sizePolicy().hasHeightForWidth())
+        self.toolButton.setSizePolicy(sizePolicy)
+        self.toolButton.setMinimumSize(QtCore.QSize(40, 28))
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/edit.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.toolButton.setIcon(icon1)
+        self.toolButton.setIconSize(QtCore.QSize(48, 48))
+        self.toolButton.setObjectName(_fromUtf8("toolButton"))
+        self.gridLayout_3.addWidget(self.toolButton, 6, 1, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 0, 0, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(self.dockWidgetContents)
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
@@ -139,6 +158,8 @@ class Ui_DockBase(object):
         self.label_6.setText(QtGui.QApplication.translate("DockBase", "In the event of", None, QtGui.QApplication.UnicodeUTF8))
         self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
         self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolButton.setToolTip(QtGui.QApplication.translate("DockBase", "Configure Impact Function Parameter", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolButton.setText(QtGui.QApplication.translate("DockBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("DockBase", "Results", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
