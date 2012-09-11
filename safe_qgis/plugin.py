@@ -218,7 +218,7 @@ class Plugin:
         # Create action for impact functions doc dialog
         #--------------------------------------
         self.actionImpactFunctionsDoc = QAction(
-                        QIcon(':/plugins/inasafe/options.png'),
+                        QIcon(':/plugins/inasafe/functions-table.png'),
                         self.tr('InaSAFE Impact Functions Doc'),
                         self.iface.mainWindow())
         self.actionImpactFunctionsDoc.setStatusTip(self.tr(
