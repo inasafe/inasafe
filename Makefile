@@ -110,16 +110,10 @@ test: quiet-qgis docs test_suite pep8 pylint dependency_test unwanted_strings ru
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck
 
-set_python:
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH)
-
 quicktest: test_suite_quick pep8 pylint dependency_test unwanted_strings run_data_audit test-translations
 
 test_suite_quick:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe --stop
-
-it:
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' safe --stop
 
 # Run pep8 style checking
 #http://pypi.python.org/pypi/pep8
@@ -128,25 +122,8 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@echo "disabed E121-E128 checks until pep8 version 1.3 becomes widely available"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . || true
-
-# Run entire test suite
-test_suite_no_git: compile
-	@echo
-	@echo "----------------------"
-	@echo "Regression Test Suite"
-	@echo "----------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
-
-	@# FIXME (Ole) - to get of the remaining junk I tried to use
-	@#  ...| awk 'BEGIN {FS="Object::"} {print $1}'
-	@# This does clip the line, but does not flush and puts an extra
-	@# newline in.
-
-	@# Report expected failures if any!
-	@#echo Expecting 1 test to fail in support of issue #3
-	@#echo Expecting 1 test to fail in support of issue #160
+	@echo "disabled E121-E128 checks until pep8 version 1.3 becomes widely available"
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . || true
 
 # Run entire test suite
 test_suite: compile testdata
@@ -164,16 +141,6 @@ test_suite: compile testdata
 	@# Report expected failures if any!
 	@#echo Expecting 1 test to fail in support of issue #3
 	@#echo Expecting 1 test to fail in support of issue #160
-
-# Run gui test suite only and without git updating test data
-gui_test_suite_no_git: compile
-	@echo
-	@echo "----------------------"
-	@echo "Regresssion Test Suite"
-	@echo "----------------------"
-
-	@# Preceding dash means that make will continue in case of errors
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 # Run gui test suite only
 gui_test_suite: compile testdata
@@ -330,7 +297,8 @@ jenkins-pep8:
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py . > pep8.log || :
+	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . > pep8.log || :
+
 
 jenkins-realtime-test:
 	@echo
