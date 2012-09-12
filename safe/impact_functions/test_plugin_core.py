@@ -9,6 +9,7 @@ from core import get_admissible_plugins
 from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
+from core import get_plugins_as_table2
 from utilities import pretty_string
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -248,7 +249,9 @@ class Test_plugin_core(unittest.TestCase):
 
     def test_get_plugins_as_table2(self):
         """Test get plugins as table with filtering."""
-        pass  # TO DO (Ismail)
+        T = get_plugins_as_table2()
+        S = T.toNewlineFreeString()
+        LOGGER.debug(S)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')

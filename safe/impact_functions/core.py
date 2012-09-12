@@ -602,9 +602,7 @@ def parse_single_requirement(requirement):
     return retval
 
 
-def get_plugins_as_table2(name=None, dict_filter={
-                                    'category': ['exposure', 'hazard'],
-                                    'layertype': ['raster']}):
+def get_plugins_as_table2(name=None, dict_filter={}):
     """Retrieve a table listing all plugins and their requirements.
 
        Or just a single plugin if name is passed.
@@ -656,92 +654,41 @@ def get_plugins_as_table2(name=None, dict_filter={
     not_found_value = 'N/A'
     for key, func in plugins_dict.iteritems():
         for requirement in requirements_collect(func):
-            category_found = False
-            subcategory_found = False
-            layertype_found = False
-            datatype_found = False
-            unit_found = False
-            disabled_found = False
+            dict_found = {'category': False,
+                              'subcategory': False,
+                              'layertype': False,
+                              'datatype': False,
+                              'unit': False,
+                              'disabled': False
+                              }
 
             dict_req = parse_single_requirement(str(requirement))
 
-            category_filter = dict_filter.get('category', None)
-            my_category = pretty_string(dict_req.get('category',
-                                                     not_found_value))
-            if category_filter != None and my_category == not_found_value:
-                for cf in category_filter:
-                    if my_category.find(str(cf)) != -1:
-                        category_found = True
-                        break
-            else:
-                category_found = True
+            for myKey in dict_found.iterkeys():
+                myFilter = dict_filter.get(myKey, None)
+                myValue = pretty_string(dict_req.get(myKey, not_found_value))
+                if myFilter is not None and myValue != not_found_value:
+                    for myKeyword in myFilter:
+                        if myValue.find(str(myKeyword)) != -1:
+                            dict_found[myKey] = True
+                            break
+                else:
+                    dict_found[myKey] = True
 
-            subcategory_filter = dict_filter.get('subcategory', None)
-            my_subcategory = pretty_string(dict_req.get('subcategory',
-                                                        not_found_value))
-            if (subcategory_filter != None and
-                    my_subcategory == not_found_value):
-                for sf in subcategory_filter:
-                    if my_subcategory.find(str(sf)) != -1:
-                        subcategory_found = True
-                        break
-            else:
-                subcategory_found = True
+            add_row = True
+            for found_value in dict_found.itervalues():
+                if not found_value:
+                    add_row = False
+                    break
 
-            layertype_filter = dict_filter.get('layertype', None)
-            my_layertype = pretty_string(dict_req.get('layertype',
-                                                      not_found_value))
-            if layertype_filter != None and my_layertype == not_found_value:
-                for lf in layertype_filter:
-                    if my_layertype.find(str(lf)) != -1:
-                        layertype_found = True
-                        break
-            else:
-                layertype_found = True
-
-            datatype_filter = dict_filter.get('datatype', None)
-            my_datatype = pretty_string(dict_req.get('datatype',
-                                                     not_found_value))
-            if datatype_filter != None and my_datatype == not_found_value:
-                for lf in datatype_filter:
-                    if my_datatype.find(str(lf)) != -1:
-                        datatype_found = True
-                        break
-            else:
-                datatype_found = True
-
-            unit_filter = dict_filter.get('unit', None)
-            my_unit = pretty_string(dict_req.get('unit', not_found_value))
-            if unit_filter != None and my_unit == not_found_value:
-                for lf in unit_filter:
-                    if my_unit.find(str(lf)) != -1:
-                        unit_found = True
-                        break
-            else:
-                unit_found = True
-
-            disabled_filter = dict_filter.get('disabled', None)
-            my_disabled = pretty_string(dict_req.get('disabled',
-                                                     not_found_value))
-            if disabled_filter != None and my_disabled == not_found_value:
-                for lf in disabled_filter:
-                    if my_disabled.find(str(lf)) != -1:
-                        disabled_found = True
-                        break
-            else:
-                disabled_found = True
-
-            if (category_found and subcategory_found and layertype_found
-                and datatype_found and unit_found and disabled_found):
+            if add_row:
                 row = []
                 row.append(TableCell(get_function_title(func), header=True))
                 row.append(key)
-                row.append(my_category)
-                row.append(my_subcategory)
-                row.append(my_layertype)
-                row.append(my_datatype)
-                row.append(my_unit)
-                row.append(my_disabled)
+                for myKey in dict_found.iterkeys():
+                    myValue = pretty_string(dict_req.get(myKey,
+                                                not_found_value))
+                    row.append(myValue)
                 table_body.append(TableRow(row))
 
     table = Table(table_body)
