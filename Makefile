@@ -87,12 +87,6 @@ lines-of-code:
 	@git log | head -3
 	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
 
-quiet-qgis:
-	# Make qgis console output quiet
-	@export QGIS_DEBUG=0
-	@export QGIS_LOG_FILE=/dev/null
-	@export QGIS_DEBUG_FILE=/dev/null
-
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
