@@ -2,10 +2,12 @@
 # A simple bash script to make it easy to run a single test
 # Note it assumes QGIS is in /usr/local
 echo "To use:"
-echo "$0 <packagename.modulename.testname>"
+echo "$0 packagename.modulename [/path/to/qgis]"
 echo "e.g."
-echo "$0 safe_qgis.test_utilities"
-export QGISPATH=/usr/local/
+echo "$0 safe_qgis.test_utilities /usr/local"
+qgispath=${2-'/usr/local/'}
+echo "Setting QGISPATH to $qgispath..."
+export QGISPATH=$qgispath
 export PYTHONPATH=/usr/local/share/qgis/python/:`pwd`:$PYTHONPATH
 export QGIS_DEBUG=0;
 export QGIS_LOG_FILE=/dev/null;
