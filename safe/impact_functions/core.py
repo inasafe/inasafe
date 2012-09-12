@@ -602,7 +602,9 @@ def parse_single_requirement(requirement):
     return retval
 
 
-def get_plugins_as_table2(name=None, dict_filter={}):
+def get_plugins_as_table2(name=None, dict_filter={
+                                    'category': ['exposure', 'hazard'],
+                                    'layertype': ['raster']}):
     """Retrieve a table listing all plugins and their requirements.
 
        Or just a single plugin if name is passed.
@@ -610,6 +612,12 @@ def get_plugins_as_table2(name=None, dict_filter={}):
        Args:
            * name =  str optional name of a specific plugin.
            * dict_filter = dictionary that contains filters
+               - category : list_category
+               - subcategory : list_subcategory
+               - layertype : list_layertype
+               - datatype : list_datatype
+               - unit: list_unit
+               - disabled : list_disabled
 
        Returns:
            * table contains plugins match with dict_filter
@@ -648,21 +656,94 @@ def get_plugins_as_table2(name=None, dict_filter={}):
     not_found_value = 'N/A'
     for key, func in plugins_dict.iteritems():
         for requirement in requirements_collect(func):
-            row = []
-            row.append(TableCell(get_function_title(func), header=True))
-            row.append(key)
+            category_found = False
+            subcategory_found = False
+            layertype_found = False
+            datatype_found = False
+            unit_found = False
+            disabled_found = False
+
             dict_req = parse_single_requirement(str(requirement))
-            row.append(dict_req.get('category', not_found_value))
-            row.append(pretty_string((dict_req.get('subcategory',
-                                        not_found_value))))
-            row.append(pretty_string(dict_req.get('layertype',
-                                        not_found_value)))
-            row.append(pretty_string(dict_req.get('datatype',
-                                        not_found_value)))
-            row.append(pretty_string(dict_req.get('unit', not_found_value)))
-            row.append(pretty_string(dict_req.get('disabled',
-                                        not_found_value)))
-            table_body.append(TableRow(row))
+
+            category_filter = dict_filter.get('category', None)
+            my_category = dict_req.get('category', not_found_value)
+            if category_filter != None:
+                for cf in category_filter:
+                    if my_category.find(str(cf)) != -1:
+                        category_found = True
+                        break
+            else:
+                category_found = True
+
+            subcategory_filter = dict_filter.get('subcategory', None)
+            my_subcategory = dict_req.get('subcategory', not_found_value)
+            if subcategory_filter != None:
+                for sf in subcategory_filter:
+                    if my_subcategory.find(str(sf)) != -1:
+                        subcategory_found = True
+                        break
+            else:
+                subcategory_found = True
+
+            layertype_filter = dict_filter.get('layertype', None)
+            my_layertype = dict_req.get('layertype', not_found_value)
+            if layertype_filter != None:
+                for lf in layertype_filter:
+                    if my_layertype.find(str(lf)) != -1:
+                        layertype_found = True
+                        break
+            else:
+                layertype_found = True
+
+            datatype_filter = dict_filter.get('datatype', None)
+            my_datatype = dict_req.get('datatype', not_found_value)
+            if datatype_filter != None:
+                for lf in datatype_filter:
+                    if my_datatype.find(str(lf)) != -1:
+                        datatype_found = True
+                        break
+            else:
+                datatype_found = True
+
+            unit_filter = dict_filter.get('unit', None)
+            my_unit = dict_req.get('unit', not_found_value)
+            if unit_filter != None:
+                for lf in unit_filter:
+                    if my_unit.find(str(lf)) != -1:
+                        unit_found = True
+                        break
+            else:
+                unit_found = True
+
+            disabled_filter = dict_filter.get('disabled', None)
+            my_disabled = dict_req.get('disabled', not_found_value)
+            if disabled_filter != None:
+                for lf in disabled_filter:
+                    if my_disabled.find(str(lf)) != -1:
+                        disabled_found = True
+                        break
+            else:
+                disabled_found = True
+
+            if (category_found and subcategory_found and layertype_found
+                and datatype_found and unit_found and disabled_found):
+                row = []
+                row.append(TableCell(get_function_title(func), header=True))
+                row.append(key)
+                row.append(pretty_string(dict_req.get('category',
+                                            not_found_value)))
+                row.append(pretty_string((dict_req.get('subcategory',
+                                            not_found_value))))
+                row.append(pretty_string(dict_req.get('layertype',
+                                            not_found_value)))
+                row.append(pretty_string(dict_req.get('datatype',
+                                            not_found_value)))
+                row.append(pretty_string(dict_req.get('unit',
+                                            not_found_value)))
+                row.append(pretty_string(dict_req.get('disabled',
+                                            not_found_value)))
+                table_body.append(TableRow(row))
+
     table = Table(table_body)
     table.caption = _('Available Impact Functions')
 
