@@ -213,9 +213,9 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
                     myTransparencyList.append(myPixel)
         #myLabel = myClass['label']
 
-    #test if newer than QGIS 1.8.0
-    #see issue #259
-    if qgisVersion() < 1800:
+    # test if QGIS 1.8.0 or older
+    # see issue #259
+    if qgisVersion() <= 10800:
         # Apply the shading algorithm and design their ramp
         theQgsRasterLayer.setColorShadingAlgorithm(
             QgsRasterLayer.ColorRampShader)

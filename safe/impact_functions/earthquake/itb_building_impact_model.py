@@ -69,15 +69,15 @@ for item in a[1:]:
 class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
     """Risk plugin for ITB earthquake damage to buildings in Padang
 
-    :param requires category == 'hazard' and \
-                    subcategory == 'earthquake' and \
-                    layertype == 'raster' and \
-                    unit == 'MMI' and \
-                    disabled == True
+    :param requires category=='hazard' and \
+                    subcategory=='earthquake' and \
+                    layertype=='raster' and \
+                    unit=='MMI' and \
+                    disabled=='True'
 
-    :param requires category == 'exposure' and \
+    :param requires category=='exposure' and \
                     subcategory in ['building', 'structure'] and \
-                    layertype == 'vector' and \
+                    layertype=='vector' and \
                     datatype in ['osm', 'itb', 'sigab']
     """
 

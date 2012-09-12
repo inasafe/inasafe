@@ -215,6 +215,31 @@ class Plugin:
                                    self.actionOptions)
 
         #--------------------------------------
+        # Create action for impact functions doc dialog
+        #--------------------------------------
+        self.actionImpactFunctionsDoc = QAction(
+                        QIcon(':/plugins/inasafe/functions-table.png'),
+                        self.tr('InaSAFE Impact Functions Doc'),
+                        self.iface.mainWindow())
+        self.actionImpactFunctionsDoc.setStatusTip(self.tr(
+                                    'Open InaSAFE impact functions doc'))
+        self.actionImpactFunctionsDoc.setWhatsThis(self.tr(
+                                    'Open InaSAFE impact functions doc'))
+        QObject.connect(self.actionImpactFunctionsDoc, SIGNAL('triggered()'),
+                        self.showImpactFunctionsDoc)
+
+        self.iface.addToolBarIcon(self.actionImpactFunctionsDoc)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'),
+                                   self.actionImpactFunctionsDoc)
+
+        # Short cut for Open Impact Functions Doc
+        self.keyAction = QAction("Test Plugin", self.iface.mainWindow())
+        self.iface.registerMainWindowAction(self.keyAction, "F7")
+        self.iface.addPluginToMenu("&Test plugins", self.keyAction)
+        QObject.connect(self.keyAction, SIGNAL("triggered()"),
+                        self.keyActionF7)
+
+        #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
         self.dockWidget = Dock(self.iface)
@@ -268,6 +293,9 @@ class Plugin:
         self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionOptions)
         self.iface.removeToolBarIcon(self.actionOptions)
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
+                                    self.actionImpactFunctionsDoc)
+        self.iface.removeToolBarIcon(self.actionImpactFunctionsDoc)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
@@ -364,6 +392,27 @@ class Plugin:
                                       self.dockWidget)
         myDialog.show()
 
+    def showImpactFunctionsDoc(self):
+        """Show the keywords editor.
+
+        This slot is called when the user clicks the impact functions
+        toolbar icon or menu item associated with this plugin
+
+        .. see also:: :func:`Plugin.initGui`.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        # import here only so that it is AFTER i18n set up
+        from safe_qgis.impact_functions_doc import ImpactFunctionsDoc
+
+        myDialog = ImpactFunctionsDoc(self.iface.mainWindow())
+        myDialog.show()
+
     def resetDock(self):
         """Reset the dock to its default state.
 
@@ -401,3 +450,7 @@ class Plugin:
         else:
             self.actionKeywordsDialog.setEnabled(True)
         self.dockWidget.layerChanged(theLayer)
+
+    def keyActionF7(self):
+        '''Executed when user press F7'''
+        self.showImpactFunctionsDoc()
