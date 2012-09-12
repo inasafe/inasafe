@@ -615,7 +615,7 @@ def get_plugins_as_table2(name=None, dict_filter={}):
                - layertype : list_layertype
                - datatype : list_datatype
                - unit: list_unit
-               - disabled : list_disabled
+               - disabled : list_disabled # not included
 
        Returns:
            * table contains plugins match with dict_filter
@@ -623,9 +623,12 @@ def get_plugins_as_table2(name=None, dict_filter={}):
        Raises: None
     """
     table_body = []
+    # use this list for avoiding wrong order in dict
+    atts = ['category', 'subcategory', 'layertype',
+                           'datatype', 'unit']
     header = TableRow([_('Title'), _('ID'), _('Category'),
                        _('Sub Category'), _('Layer type'), _('Data type'),
-                       _('Unit'), _('Disabled')],
+                       _('Unit')],
                       header=True)
     table_body.append(header)
 
@@ -658,8 +661,7 @@ def get_plugins_as_table2(name=None, dict_filter={}):
                               'subcategory': False,
                               'layertype': False,
                               'datatype': False,
-                              'unit': False,
-                              'disabled': False
+                              'unit': False
                               }
 
             dict_req = parse_single_requirement(str(requirement))
@@ -685,13 +687,45 @@ def get_plugins_as_table2(name=None, dict_filter={}):
                 row = []
                 row.append(TableCell(get_function_title(func), header=True))
                 row.append(key)
-                for myKey in dict_found.iterkeys():
+                for myKey in atts:
                     myValue = pretty_string(dict_req.get(myKey,
                                                 not_found_value))
                     row.append(myValue)
                 table_body.append(TableRow(row))
 
-    table = Table(table_body)
+    table = Table(table_body, width='1')
     table.caption = _('Available Impact Functions')
 
     return table
+
+
+def get_unique_values():
+    """Get unique possible value for each column in impact functions doc
+        table.
+
+        Args: None
+
+        Returns:
+            * Dictionary contains set unique value for each column
+        """
+    atts = ['category', 'subcategory', 'layertype', 'datatype', 'unit']
+    dict_retval = {'category': set(),
+                        'subcategory': set(),
+                        'layertype': set(),
+                        'datatype': set(),
+                        'unit': set()
+                              }
+    plugins_dict = dict([(pretty_function_name(p), p)
+                         for p in FunctionProvider.plugins])
+    for key, func in plugins_dict.iteritems():
+        for requirement in requirements_collect(func):
+            dict_req = parse_single_requirement(str(requirement))
+            for key in dict_req.iterkeys():
+                if key not in atts:
+                    break
+                if type(dict_req[key]) == type(str()):
+                    dict_retval[key].add(dict_req[key])
+                elif type(dict_req[key]) == type(list()):
+                    dict_retval[key] |= set(dict_req[key])
+
+    return dict_retval
