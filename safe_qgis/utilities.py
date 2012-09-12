@@ -44,6 +44,7 @@ import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary
 
@@ -247,7 +248,7 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
                 # Set transparencies
                 myRange = range(myLastValue, myMax)
                 for myValue in myRange:
-                    myPixel =\
+                    myPixel = \
                     QgsRasterTransparency.TransparentSingleValuePixel()
                     myPixel.pixelValue = myValue
                     myPixel.percentTransparent = myTransparencyPercent
@@ -303,10 +304,16 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
         list: TransparencyList
     """
     # Note imports here to prevent importing on unsupported QGIS versions
+    # pylint: disable=E0611
+    # pylint: disable=E0621
+    # pylint: disable=E0404
     from qgis.core import (QgsRasterShader,
                            QgsColorRampShader,
                            QgsSingleBandPseudoColorRenderer,
                            QgsRasterTransparency)
+    # pylint: enable=E0611
+    # pylint: enable=E0621
+    # pylint: enable=E0404
 
     myClasses = theStyle['style_classes']
     myRampItemList = []
@@ -333,21 +340,15 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
         if myTransparencyPercent > 0:
             # Check if range extrema are integers so we know if we can
             # use them to calculate a value range
-            try:
-                myPixel = \
-                    QgsRasterTransparency.TransparentSingleValuePixel()
-                myPixel.min = myLastValue
-                myPixel.max = myMax
-                myPixel.percentTransparent = myTransparencyPercent
-                myTransparencyList.append(myPixel)
-                myLastValue = myMax
-            except:
-                LOGGER.exception()
-        #myLabel = myClass['label']
+            myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
+            myPixel.min = myLastValue
+            myPixel.max = myMax
+            myPixel.percentTransparent = myTransparencyPercent
+            myTransparencyList.append(myPixel)
+            myLastValue = myMax
 
     myBand = 1  # gdal counts bands from base 1
     LOGGER.debug('Setting colour ramp list')
-
     myRasterShader = QgsRasterShader()
     myColorRampShader = QgsColorRampShader()
     myColorRampShader.setColorRampType(QgsColorRampShader.INTERPOLATED)
