@@ -87,12 +87,6 @@ lines-of-code:
 	@git log | head -3
 	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
 
-quiet-qgis:
-	# Make qgis console output quiet
-	@export QGIS_DEBUG=0
-	@export QGIS_LOG_FILE=/dev/null
-	@export QGIS_DEBUG_FILE=/dev/null
-
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
@@ -105,7 +99,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by style checking
-test: docs testdata test_suite quiet-qgis pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
+test: docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck

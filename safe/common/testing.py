@@ -10,10 +10,11 @@ from numerics import axes2points
 # NOTE: This must match Makefile target testdata
 # FIXME (Ole): Use environment variable for this.
 # Assuming test data three lvls up
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                      '..',
-                                      '..',
-                                      '..'))
+pardir = os.path.abspath(os.path.join(os.path.realpath(os.path.dirname(
+    __file__)),
+      '..',
+      '..',
+      '..'))
 
 # Location of test data
 DATANAME = 'inasafe_data'
