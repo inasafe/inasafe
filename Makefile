@@ -122,7 +122,6 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@echo "disabled E121-E128 checks until pep8 version 1.3 becomes widely available"
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . || true
 
 # Run entire test suite
@@ -171,7 +170,7 @@ testdata_errorcheck:
 	@echo
 	@echo "-----------------inasafe_data updater Log-------------------"
 	@[ -f tmp_warnings.txt ] && more tmp_warnings.txt || echo "inasafe_data have been succesfully updated"; rm -f tmp_warnings.txt || true
-	
+
 disabled_tests:
 	@echo
 	@echo "--------------"

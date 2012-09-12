@@ -11,12 +11,12 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
 
-    :param requires category == 'hazard' and \
+    :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami']
 
-    :param requires category == 'exposure' and \
+    :param requires category=='exposure' and \
                     subcategory in ['building', 'structure'] and \
-                    layertype == 'vector'
+                    layertype=='vector'
     """
 
     target_field = 'INUNDATED'
