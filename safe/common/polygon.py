@@ -597,8 +597,6 @@ def clip_lines_by_polygon(lines, polygon,
         if not polygon.shape[1] == 2:
             raise RuntimeError(msg)
 
-    M = len(lines)  # Number of lines
-
     # Get polygon extents to quickly rule out lines where all segments
     # are outside and on the same side of its bounding box
     minpx = min(polygon[:, 0])
@@ -641,7 +639,7 @@ def _clip_lines_by_polygon(lines,
     # Loop through lines
     M = len(lines)
     for k in range(M):
-        line = numpy.array(lines[k])
+        line = lines[k]
 
         # Exclude lines that are fully outside polygon bounding box
         if (max(line[:, 0]) < minpx or  # Everything is to the west
@@ -868,7 +866,6 @@ def _clip_line_by_polygon(line,
         else:
             # Intersect segment with all polygon edges
             # and decide for each sub-segment
-
             values = intersection(segment, polygon_segments)
             mask = -numpy.isnan(values[:, 0])
             V = values[mask]
@@ -1240,10 +1237,6 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
         #       '%i lines' % (i, len(polygon),
         #                     len(polygons),
         #                     len(remaining_lines)))
-
-        # FIXME (Ole): Convert polygon to polygon_segments array
-        #              suitable for intersection
-        #              Also establish bounding box here.
         inside_lines, _ = clip_lines_by_polygon(remaining_lines,
                                                 polygon,
                                                 check_input=False)
