@@ -8,6 +8,7 @@ from core import requirements_met
 from core import get_admissible_plugins
 from core import get_function_title
 from core import get_plugins_as_table
+from core import parse_single_requirement
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -78,6 +79,21 @@ class F3(FunctionProvider):
     def run():
         return None
 
+
+class F4(FunctionProvider):
+    """Risk plugin for testing
+
+    :param requires category == 'hazard' and \
+                    subcategory in ['flood', 'tsunami']
+
+    :param requires category == 'exposure' and \
+                    subcategory in ['building', 'structure'] and \
+                    layertype == 'vector'
+    """
+
+    @staticmethod
+    def run():
+        return None
 
 class SyntaxErrorFunction(FunctionProvider):
     """Risk plugin for testing
@@ -198,6 +214,23 @@ class Test_plugin_core(unittest.TestCase):
         # Expecting that F1 test wont change and that the table produced for
         # it is of a deterministic length
         assert len(S) == 518
+
+    def test_parse_requirement(self):
+        """Test parse requirements of a function to dictionary."""
+        myRequirement = requirements_collect(F4)[0]
+        parsed_req = parse_single_requirement(myRequirement)
+        expected_req = {'category': 'hazard',
+                        'subcategory': ['flood', 'tsunami']}
+        myMessage = 'Get %s should be % s' % (parsed_req, expected_req)
+        assert parsed_req == expected_req, myMessage
+
+        myRequirement = requirements_collect(F4)[1]
+        parsed_req = parse_single_requirement(myRequirement)
+        expected_req = {'category': 'exposure',
+                        'subcategory': ['building', 'structure'],
+                        'layertype': 'vector'}
+        myMessage = 'Get %s should be % s' % (parsed_req, expected_req)
+        assert parsed_req == expected_req, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')

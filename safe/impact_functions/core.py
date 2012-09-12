@@ -535,7 +535,8 @@ def get_plugins_as_table(name=None):
     """
 
     table_body = []
-    header = TableRow([_('Title'), _('ID'), _('Requirements')], header=True)
+    header = TableRow([_('Title'), _('ID'), _('Requirements')],
+                      header=True)
     table_body.append(header)
 
     plugins_dict = dict([(pretty_function_name(p), p)
@@ -572,3 +573,29 @@ def get_plugins_as_table(name=None):
     table.caption = _('Available Impact Functions')
 
     return table
+
+
+def parse_single_requirement(requirement):
+    '''Parse single requirement from impact function's doc to category,
+        subcategory, layertype, datatype, unit, and disabled.'''
+    retval = {}
+    parts = requirement.split(' and ')
+    for part in parts:
+        if part.find(' == ') != -1:
+            myKey = part.split(' == ')[0]
+            myValue = part.split(' == ')[1]
+            retval[myKey] = myValue[1:-1]  # Removing single quote
+        elif part.find(' in ') != -1:
+            myKey = part.split(' in ')[0]
+            myListString = part.split(' in ')[1][1:-1]  # Removing '['
+            elmtList = myListString.split(', ')
+            myList = []
+            for elmt in elmtList:
+                myList.append(elmt[1:-1])  # Removing single quote
+            retval[myKey] = myList
+        elif part.find('.startswith') != -1:
+            pass  # Not yet implemented
+        else:
+            pass
+
+    return retval
