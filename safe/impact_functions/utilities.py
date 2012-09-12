@@ -46,7 +46,7 @@ def admissible_plugins_to_str(plugin_list):
     Raises: None
     """
     result = '\n------------ Admissible Plugins ------------------------\n'
-    for plugin, func in  plugin_list.iteritems():
+    for plugin, func in plugin_list.iteritems():
         result += 'ID: %s\n' % plugin
         if hasattr(func, 'title'):
             result += 'Title: %s\n' % func.title

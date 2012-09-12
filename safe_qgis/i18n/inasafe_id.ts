@@ -38,7 +38,7 @@
         <translation>&lt;p&gt;Error ketika menjalankan perintah berikut:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Pesan Kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="307"/>
+        <location filename="utilities.py" line="318"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation>Lapisan input untuk mendapatkan resolusi WGS84 harus merupakan lapisan raster. Saya mendapatkan: %s</translation>
     </message>
@@ -48,22 +48,22 @@
         <translation>Tidak ada fitur termasuk dalam luasan klip. Cobalah panning / zoom ke area yang berisi data dan kemudian mencoba untuk menjalankan analisis Anda lagi.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="283"/>
+        <location filename="utilities.py" line="294"/>
         <source>Problem:</source>
         <translation>Permasalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="279"/>
+        <location filename="utilities.py" line="290"/>
         <source>Error:</source>
         <translation>Kesalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="287"/>
+        <location filename="utilities.py" line="298"/>
         <source>Click for Diagnostic Information:</source>
         <translation>Klik untuk informasi diagnostik:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="268"/>
+        <location filename="utilities.py" line="279"/>
         <source>No details provided</source>
         <translation>Tidak ada detil yang tersedia</translation>
     </message>
@@ -360,109 +360,109 @@ ke %s: %s</translation>
 <context>
     <name>KeywordsDialog</name>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>tsunami [m]</source>
         <translation>tsunami [m]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>tsunami [wet/dry]</source>
         <translation>tsunami [basah/kering]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>tsunami [feet]</source>
         <translation>tsunami [kaki]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>flood [m]</source>
         <translation>banjir [m]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>flood [wet/dry]</source>
         <translation>banjir [basah/kering]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>flood [feet]</source>
         <translation>banjir [kaki]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>population [density]</source>
         <translation>populasi [kepadatan]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>population [count]</source>
         <translation>populasi [banyak]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>building [osm]</source>
         <translation>bangunan [osm]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>building [sigab]</source>
         <translation>bangunan [sigab]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>roads</source>
         <translation>jalan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>building</source>
         <translation>bangunan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>tephra [kg2/m2]</source>
         <translation>tephra [kg2/m2]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="153"/>
+        <location filename="keywords_dialog.py" line="150"/>
         <source>Hide advanced editor</source>
         <translation>Sembunyikan editor lanjut</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="155"/>
+        <location filename="keywords_dialog.py" line="152"/>
         <source>Show advanced editor</source>
         <translation>Tampilkan editor lanjut</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="583"/>
+        <location filename="keywords_dialog.py" line="589"/>
         <source>Not Set</source>
         <translation>Tidak ditentukan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="368"/>
+        <location filename="keywords_dialog.py" line="371"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation>Tanda titik dua (:) tidak diijinkan, ganti dengan &quot;.&quot;</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="74"/>
+        <location filename="keywords_dialog.py" line="68"/>
         <source>InaSAFE %s Keywords Editor</source>
         <translation>InaSAFE %s Editor kata kunci</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>earthquake [MMI]</source>
         <translation>gempa bumi [MMI]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="638"/>
+        <location filename="keywords_dialog.py" line="646"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation>Terjadi kesalahan saat menyimpan kata-kata kunci:
 %s</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="638"/>
+        <location filename="keywords_dialog.py" line="646"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -679,7 +679,7 @@ ke %s: %s</translation>
         <translation>Tampilkan/hilangkan widget InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="268"/>
+        <location filename="plugin.py" line="286"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -712,6 +712,16 @@ ke %s: %s</translation>
         <location filename="plugin.py" line="208"/>
         <source>Open InaSAFE options dialog</source>
         <translation>Buka dialog opsi InaSAFE</translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="220"/>
+        <source>InaSAFE Impact Functions Doc</source>
+        <translation>Dokumentasi Fungsi Dampak InaSAFE</translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="226"/>
+        <source>Open InaSAFE impact functions doc</source>
+        <translation>Buka dokumentasi fungsi dampak InaSAFE</translation>
     </message>
 </context>
 </TS>

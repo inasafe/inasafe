@@ -214,7 +214,7 @@ def _separate_points_by_polygon(points, polygon,
         px_i, py_i = polygon[i, :]
         px_j, py_j = polygon[j, :]
 
-        # Intersection formula
+        # Edge crossing formula
         sigma = (y - py_i) / (py_j - py_i) * (px_j - px_i)
         seg_i = (py_i < y) * (py_j >= y)
         seg_j = (py_j < y) * (py_i >= y)
@@ -797,8 +797,7 @@ def clip_line_by_polygon(line, polygon,
                                        [minpx, minpy]])
                 for i in range(4):
                     edge = [corners[i, :], corners[i + 1, :]]
-                    status, value = intersection(segment, edge,
-                                                 fast=True)
+                    value = intersection(segment, edge)
                     if value is not None:
                         # Segment intersects polygon bounding box
                         segment_is_outside_bbox = False
@@ -819,14 +818,7 @@ def clip_line_by_polygon(line, polygon,
                 j = (i + 1) % N
                 edge = [polygon[i, :], polygon[j, :]]
 
-                status, value = intersection(segment, edge,
-                                             fast=True)
-                if status == 2:
-                    # Collinear overlapping lines found
-                    # Use midpoint of common segment
-                    # FIXME (Ole): Maybe better to use
-                    #              common segment directly
-                    value = (segment[0] + segment[1]) / 2
+                value = intersection(segment, edge)
                 if value is not None:
                     # Record intersection point found
                     intersections.append(value)
@@ -984,31 +976,51 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
 # Functionality for line intersection
 #------------------------------------
 
-def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
-                 fast=False):
+def intersection(line0, line1):
     """Returns intersecting point between two line segments.
 
-    However, if parallel lines coincide partly (i.e. share a common segment),
-    the line segment where lines coincide is returned
+    If the lines are parallel or coincide partly (i.e. share a common segment),
+    they are considered to not intersect.
 
     Inputs:
-        line0, line1: Each defined by two end points as in:
-                      [[x0, y0], [x1, y1]]
-                      A line can also be a 2x2 numpy array with each row
-                      corresponding to a point.
-        rtol, atol: Tolerances passed onto numpy.allclose
-        fast: Default False. If True collinear return values are simplified
+        line0: A simple line segment defined by two end points:
+              [[x0, y0], [x1, y1]]
+
+        line1: A collection of line segments vectorised following the format
+               line[0,0,:] = x2
+               line[0,1,:] = y2
+               line[1,0,:] = x3
+               line[1,1,:] = y3
 
     Output:
-        status, value - where status and value is interpreted as follows:
-        status == 0: no intersection, value set to None.
-        status == 1: intersection point found and returned in value as [x,y].
-        status == 2: Collinear overlapping lines found.
-                     Value takes the form [[x0,y0], [x1,y1]] which is the
-                     segment common to both lines. If argument fast is True
-                     we return 2, x, y on the common segment
-        status == 3: Collinear non-overlapping lines. Value set to None.
-        status == 4: Lines are parallel. Value set to None.
+        intersections: Nx2 array with intersection points or nan
+                       (in case of no intersection)
+                       If line1 consisted of just one line,
+                       None is returned for backwards compatibility
+
+
+    Notes
+
+    A vectorised input line can be constructed either as list:
+    line1 = [[[0, 24, 0, 15],    # x2
+              [12, 0, 24, 0]],   # y2
+             [[24, 0, 0, 5],     # x3
+              [0, 12, 12, 15]]]  # y3
+
+    or as an array
+
+    line1 = numpy.zeros(16).reshape(2,2,4)  # Three lines
+    line1[0, 0, :] = [0, 24, 0, 15]   # x2
+    line1[0, 1, :] = [12, 0, 24, 0]   # y2
+    line1[1, 0, :] = [24, 0, 0, 5]    # x3
+    line1[1, 1, :] = [0, 12, 12, 15]  # y3
+
+
+    To select true intersections from result, use the following idiom:
+
+    value = intersection(line0, line1)
+    mask = - numpy.isnan(value[:, 0])
+    v = value[mask]
     """
 
     line0 = ensure_numeric(line0, numpy.float)
@@ -1017,113 +1029,61 @@ def intersection(line0, line1, rtol=1.0e-12, atol=1.0e-12,
     x0, y0 = line0[0, :]
     x1, y1 = line0[1, :]
 
-    x2, y2 = line1[0, :]
-    x3, y3 = line1[1, :]
-
-    denom = (y3 - y2) * (x1 - x0) - (x3 - x2) * (y1 - y0)
-    u0 = (x3 - x2) * (y0 - y2) - (y3 - y2) * (x0 - x2)
-    u1 = (x2 - x0) * (y1 - y0) - (y2 - y0) * (x1 - x0)
-
-    if numpy.allclose(denom, 0.0, rtol=rtol, atol=atol):
-        # Lines are parallel - check if they are collinear
-        if numpy.allclose([u0, u1], 0.0, rtol=rtol, atol=atol):
-            # We now know that the lines are collinear
-            if fast:
-                # Just return one of the points
-                return 2, numpy.array([x0, y0])
-            else:
-                # FIXME (Ole): It would make sense to maybe return mid point
-                #              of the smallest common segments
-                state = (point_on_line([x0, y0], line1, rtol=rtol, atol=atol),
-                         point_on_line([x1, y1], line1, rtol=rtol, atol=atol),
-                         point_on_line([x2, y2], line0, rtol=rtol, atol=atol),
-                         point_on_line([x3, y3], line0, rtol=rtol, atol=atol))
-                return collinearmap[state]([x0, y0], [x1, y1],
-                                           [x2, y2], [x3, y3])
-        else:
-            # Lines are parallel but aren't collinear
-            return 4, None
+    # Special treatment of return value if line1 was non vectorised
+    if len(line1.shape) == 2:
+        one_point = True
+        # Broadcast to vectorised version
+        line1 = line1.reshape(2, 2, 1)
     else:
-        # Lines are not parallel, check if they intersect
-        u0 = u0 / denom
-        u1 = u1 / denom
+        one_point = False
 
-        x = x0 + u0 * (x1 - x0)
-        y = y0 + u0 * (y1 - y0)
+    # Extract vectorised coordinates
+    x2 = line1[0, 0, :]
+    y2 = line1[0, 1, :]
+    x3 = line1[1, 0, :]
+    y3 = line1[1, 1, :]
 
-        # Sanity check - can be removed to speed up if needed
-        #if not numpy.allclose(x, x2 + u1 * (x3 - x2), rtol=rtol, atol=atol):
-        #    raise Exception
-        #if not numpy.allclose(y, y2 + u1 * (y3 - y2), rtol=rtol, atol=atol):
-        #    raise Exception
+    # Calculate denominator (lines are parallel if it is 0)
+    y3y2 = y3 - y2
+    x3x2 = x3 - x2
+    x1x0 = x1 - x0
+    y1y0 = y1 - y0
+    x2x0 = x2 - x0
+    y2y0 = y2 - y0
+    denominator = y3y2 * x1x0 - x3x2 * y1y0
 
-        # Check if point found lies within given line segments
-        if 0.0 <= u0 <= 1.0 and 0.0 <= u1 <= 1.0:
-            # We have intersection
-            return 1, numpy.array([x, y])
+    # Suppress numpy warnings (as we'll be dividing by zero)
+    original_numpy_settings = numpy.seterr(invalid='ignore', divide='ignore')
+
+    u0 = (y3y2 * x2x0 - x3x2 * y2y0) / denominator
+    u1 = (x2x0 * y1y0 - y2y0 * x1x0) / denominator
+
+    # Restore numpy warnings
+    numpy.seterr(**original_numpy_settings)
+
+     # Only points that lie within given line segments are true intersections
+    mask = (0.0 <= u0) * (u0 <= 1.0) * (0.0 <= u1) * (u1 <= 1.0)
+
+    # Calculate intersection points
+    x = x0 + u0[mask] * x1x0
+    y = y0 + u0[mask] * y1y0
+
+    # Return intersection points as N x 2 array
+    N = line1.shape[2]
+    result = numpy.zeros((N, 2)) * numpy.nan
+    result[mask, 0] = x
+    result[mask, 1] = y
+
+    # Special treatment of return value if line1 was non vectorised
+    if one_point:
+        result = result.reshape(2)
+        if numpy.any(numpy.isnan(result)):
+            return None
         else:
-            # No intersection
-            return 0, None
+            return result
 
-
-# Result functions used in intersection() below for possible states
-# of collinear lines
-# (p0,p1) defines line 0, (p2,p3) defines line 1.
-
-def lines_dont_coincide(_p0, _p1, _p2, _p3):
-    return 3, None
-
-
-def lines_0_fully_included_in_1(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p0, _p1])
-
-
-def lines_1_fully_included_in_0(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p2, _p3])
-
-
-def lines_overlap_same_direction(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p0, _p3])
-
-
-def lines_overlap_same_direction2(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p2, _p1])
-
-
-def lines_overlap_opposite_direction(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p0, _p2])
-
-
-def lines_overlap_opposite_direction2(_p0, _p1, _p2, _p3):
-    return 2, numpy.array([_p3, _p1])
-
-
-# This function called when an impossible state is found
-def lines_error(p1, p2, p3, p4):
-    msg = ('Impossible state: p1=%s, p2=%s, p3=%s, p4=%s'
-           % (str(p1), str(p2), str(p3), str(p4)))
-    raise RuntimeError(msg)
-
-# Mapping to possible states for line intersection
-#
-#                 0s1    0e1    1s0    1e0   # line 0 starts on 1, 0 ends 1,
-#                                                   1 starts 0, 1 ends 0
-collinearmap = {(False, False, False, False): lines_dont_coincide,
-                (False, False, False, True): lines_error,
-                (False, False, True, False): lines_error,
-                (False, False, True, True): lines_1_fully_included_in_0,
-                (False, True, False, False): lines_error,
-                (False, True, False, True): lines_overlap_opposite_direction2,
-                (False, True, True, False): lines_overlap_same_direction2,
-                (False, True, True, True): lines_1_fully_included_in_0,
-                (True, False, False, False): lines_error,
-                (True, False, False, True): lines_overlap_same_direction,
-                (True, False, True, False): lines_overlap_opposite_direction,
-                (True, False, True, True): lines_1_fully_included_in_0,
-                (True, True, False, False): lines_0_fully_included_in_1,
-                (True, True, False, True): lines_0_fully_included_in_1,
-                (True, True, True, False): lines_0_fully_included_in_1,
-                (True, True, True, True): lines_0_fully_included_in_1}
+    # Normal return of Nx2 array of intersections (or nan)
+    return result
 
 
 # Main functions for polygon clipping
