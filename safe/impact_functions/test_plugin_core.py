@@ -246,6 +246,10 @@ class Test_plugin_core(unittest.TestCase):
         myMessage = 'Get %s should be % s' % (realStr2, expectedStr2)
         assert expectedStr2 == realStr2, myMessage
 
+    def test_get_plugins_as_table2(self):
+        """Test get plugins as table with filtering."""
+        pass  # TO DO (Ismail)
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
