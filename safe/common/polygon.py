@@ -807,9 +807,6 @@ def _clip_line_by_polygon(line,
     inside_line_segments = []
     outside_line_segments = []
 
-    ref_inside_line_segments = []
-    ref_outside_line_segments = []
-
     # Loop through line segments
     M = line.shape[0]
     for k in range(M - 1):
@@ -867,19 +864,14 @@ def _clip_line_by_polygon(line,
         # Separate segments that are inside from those outside
         if segment_is_outside_bbox:
             outside_line_segments.append(segment)
-            ref_outside_line_segments.append(segment)
         else:
             # Intersect segment with all polygon edges
-            # and decide for each sub-segment
+            # and decide for each sub-segment whether in or out
             values = intersection(segment, polygon_segments)
             mask = -numpy.isnan(values[:, 0])
             V = values[mask]
             intersections = list(segment)  # Include end points
             intersections.extend(V)
-
-            #print
-            #print 'Intersections'
-            #print intersections
 
             # FIXME (Ole): Next candidate for vectorisation (11/9/2012) below
             # Loop through intersections for this line segment
@@ -889,72 +881,31 @@ def _clip_line_by_polygon(line,
                 d = numpy.dot(v, v)
                 distances[d] = intersections[i]  # Don't record duplicates
 
-            #print 'Distances'
-            #print distances
-
             # Sort intersections by distance using Schwarzian transform
             A = zip(distances.keys(), distances.values())
             A.sort()
             _, intersections = zip(*A)
 
-            # Separate segments according to polygon
-            #print
-            #print 'Sorted intersections'
+            # Separate segment midpoints according to polygon
             intersections = numpy.array(intersections)
-            #print intersections
             midpoints = (intersections[:-1] + intersections[1:]) / 2
-            #print midpoints
             inside, outside = separate_points_by_polygon(midpoints, polygon,
                                                          closed=closed)
 
-            #print
-            if len(inside) > 0:
-                inside_segments = numpy.concatenate((intersections[inside, :],
-                                                     intersections[inside + 1, :]),
-                                                    axis=1)
-                m, n = inside_segments.shape
-                inside_segments = numpy.reshape(inside_segments, (m, n / 2, 2))
-                #print
-                #print '------------'
-                #print inside
-                #print 'inside segs', inside_segments, inside_segments.shape
-                inside_line_segments.extend(inside_segments.tolist())
-
-            if len(outside) > 0:
-                outside_segments = numpy.concatenate((intersections[outside, :],
-                                                      intersections[outside + 1, :]),
-                                                     axis=1)
-                m, n = outside_segments.shape
-                outside_segments = numpy.reshape(outside_segments, (m, n / 2, 2))
-                #print outside
-                #print 'Components'
-                #print intersections[outside, :]
-                #print intersections[outside + 1, :]
-                #print 'outside segs', outside_segments, outside_segments.shape
-                outside_line_segments.extend(outside_segments.tolist())
-
-            #print
-            #for i in range(len(intersections) - 1):
-            #    segment = [intersections[i], intersections[i + 1]]
-            #    midpoint = (segment[0] + segment[1]) / 2
-            #    if is_inside_polygon(midpoint, polygon, closed=closed):
-            #        ref_inside_line_segments.append(segment)
-            #        #print i, 'inside', segment
-            #    else:
-            #        ref_outside_line_segments.append(segment)
-            #        #print i, 'outside', segment
+            # Form segments and add to the right lists
+            for i, idx in enumerate([inside, outside]):
+                if len(idx) > 0:
+                    segments = numpy.concatenate((intersections[idx, :],
+                                                  intersections[idx + 1, :]),
+                                                 axis=1)
+                    m, n = segments.shape
+                    segments = numpy.reshape(segments, (m, n / 2, 2))
+                    if i == 0:
+                        inside_line_segments.extend(segments.tolist())
+                    else:
+                        outside_line_segments.extend(segments.tolist())
 
     # Rejoin adjacent segments and add to result lines
-
-    #print
-    #print 'What we need'
-    #print numpy.array(ref_inside_line_segments), numpy.array(ref_inside_line_segments).shape
-    #print numpy.array(ref_outside_line_segments), numpy.array(ref_outside_line_segments).shape
-
-    #print 'What we got'
-    #print numpy.array(inside_line_segments), numpy.array(inside_line_segments).shape
-    #print numpy.array(outside_line_segments), numpy.array(outside_line_segments).shape
-
     inside_lines = join_line_segments(inside_line_segments)
     outside_lines = join_line_segments(outside_line_segments)
 
@@ -979,9 +930,6 @@ def join_line_segments(segments, rtol=1.0e-12, atol=1.0e-12):
         return lines
 
     line = segments[0]
-    #print
-    #print '------ JOIN -------'
-    #print segments
     for i in range(len(segments) - 1):
         if numpy.allclose(segments[i][1], segments[i + 1][0],
                           rtol=rtol, atol=atol):

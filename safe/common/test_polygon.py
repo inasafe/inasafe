@@ -1556,6 +1556,5 @@ class Test_Polygon(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Polygon, 'test')
-    #suite = unittest.makeSuite(Test_Polygon, 'test_clip_line_by_polygon_simple')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
