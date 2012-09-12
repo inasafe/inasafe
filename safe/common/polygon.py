@@ -617,6 +617,7 @@ def clip_lines_by_polygon(lines, polygon,
                                   polygon_bbox,
                                   closed=closed)
 
+
 def _clip_lines_by_polygon(lines,
                            polygon,
                            polygon_segments,
@@ -636,7 +637,6 @@ def _clip_lines_by_polygon(lines,
 
     inside_line_segments = {}
     outside_line_segments = {}
-
 
     # Loop through lines
     M = len(lines)
@@ -659,7 +659,6 @@ def _clip_lines_by_polygon(lines,
                                                 polygon_segments,
                                                 polygon_bbox,
                                                 closed=closed)
-
 
         # Record clipped line segments from line k
         inside_line_segments[k] = inside
@@ -1242,9 +1241,9 @@ def clip_lines_by_polygons(lines, polygons, check_input=True):
         #                     len(polygons),
         #                     len(remaining_lines)))
 
-        # FIXME (Ole): Convert polygon to polygon_segments array suitable for intersection
+        # FIXME (Ole): Convert polygon to polygon_segments array
+        #              suitable for intersection
         #              Also establish bounding box here.
-
         inside_lines, _ = clip_lines_by_polygon(remaining_lines,
                                                 polygon,
                                                 check_input=False)
