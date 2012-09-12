@@ -205,9 +205,9 @@ dependency_test:
 
 list_gpackages:
 	@echo
-	@echo "---------------------------------------"
-	@echo "List of QGis related packages installed"
-	@echo "---------------------------------------"
+	@echo "----------------------------------------"
+	@echo "List of QGis related packages installed."
+	@echo "----------------------------------------"
 	@dpkg -l | grep qgis || true
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
@@ -216,24 +216,24 @@ data_audit: testdata run_data_audit
 
 run_data_audit:
 	@echo
-	@echo "---------------------------------------"
-	@echo "Audit of IP status for bundled data    "
-	@echo "---------------------------------------"
+	@echo "------------------------------------"
+	@echo "Audit of IP status for bundled data."
+	@echo "------------------------------------"
 	@python scripts/data_IP_audit.py
+
+pylint-count:
+	@echo
+	@echo "----------------------------"
+	@echo "Number of pylint violations."
+	@echo "For details run make pylint "
+	@echo "----------------------------"
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis | wc -l
 
 pylint:
 	@echo
-	@echo "---------------------------------------"
-	@echo "Pylint violations.                     "
-	@echo "---------------------------------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis | wc -l
-
-pylint-details:
-	@echo
-	@echo "---------------------------------------"
-	@echo "Pylint violations. For details run     "
-	@echo "make pylint-details                    "
-	@echo "---------------------------------------"
+	@echo "------------------"
+	@echo "Pylint violations."
+	@echo "------------------"
 	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis || true
 
 profile:
