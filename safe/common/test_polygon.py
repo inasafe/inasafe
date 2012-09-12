@@ -1231,21 +1231,15 @@ class Test_Polygon(unittest.TestCase):
         # One line with same two segments changing direction inside polygon
         line = [[-1, 0.5], [0.5, 0.5], [0.5, 2]]
 
-        #print
-        #print 'CLIPPING'
         inside_lines, outside_lines = \
             clip_line_by_polygon(line, polygon)
-        #print 'DONE'
 
         assert numpy.allclose(inside_lines,
                               [[[0, 0.5], [0.5, 0.5], [0.5, 1]]])
 
         assert numpy.allclose(outside_lines,
-                              [[[-1, 0.5], [0, 0.5]],
+                             [[[-1, 0.5], [0, 0.5]],
                                [[0.5, 1], [0.5, 2]]])
-
-        # FIXME ###########
-        #return
 
         # One line with multiple segments both inside and outside polygon
         line = [[-1, 0.5], [-0.5, 0.5], [0.5, 0.5],
@@ -1561,6 +1555,7 @@ class Test_Polygon(unittest.TestCase):
             assert numpy.allclose(lines[i], segments[i])
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Polygon, 'test_clip_composite')
+    suite = unittest.makeSuite(Test_Polygon, 'test')
+    #suite = unittest.makeSuite(Test_Polygon, 'test_clip_line_by_polygon_simple')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
