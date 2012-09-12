@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Tue Sep 11 15:41:52 2012
+# Created: Wed Sep 12 15:02:17 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -57,20 +57,20 @@ class Ui_DockBase(object):
         self.cboFunction.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
         self.cboFunction.setObjectName(_fromUtf8("cboFunction"))
         self.gridLayout_3.addWidget(self.cboFunction, 6, 0, 1, 1)
-        self.toolButton = QtGui.QToolButton(self.grpQuestion)
-        self.toolButton.setEnabled(False)
+        self.toolFunctionOptions = QtGui.QToolButton(self.grpQuestion)
+        self.toolFunctionOptions.setEnabled(False)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.toolButton.sizePolicy().hasHeightForWidth())
-        self.toolButton.setSizePolicy(sizePolicy)
-        self.toolButton.setMinimumSize(QtCore.QSize(40, 28))
+        sizePolicy.setHeightForWidth(self.toolFunctionOptions.sizePolicy().hasHeightForWidth())
+        self.toolFunctionOptions.setSizePolicy(sizePolicy)
+        self.toolFunctionOptions.setMinimumSize(QtCore.QSize(32, 32))
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/edit.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.toolButton.setIcon(icon1)
-        self.toolButton.setIconSize(QtCore.QSize(48, 48))
-        self.toolButton.setObjectName(_fromUtf8("toolButton"))
-        self.gridLayout_3.addWidget(self.toolButton, 6, 1, 1, 1)
+        self.toolFunctionOptions.setIcon(icon1)
+        self.toolFunctionOptions.setIconSize(QtCore.QSize(48, 48))
+        self.toolFunctionOptions.setObjectName(_fromUtf8("toolFunctionOptions"))
+        self.gridLayout_3.addWidget(self.toolFunctionOptions, 6, 1, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 0, 0, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(self.dockWidgetContents)
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
@@ -158,8 +158,8 @@ class Ui_DockBase(object):
         self.label_6.setText(QtGui.QApplication.translate("DockBase", "In the event of", None, QtGui.QApplication.UnicodeUTF8))
         self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
         self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton.setToolTip(QtGui.QApplication.translate("DockBase", "Configure Impact Function Parameter", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton.setText(QtGui.QApplication.translate("DockBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolFunctionOptions.setToolTip(QtGui.QApplication.translate("DockBase", "Configure Impact Function Parameter", None, QtGui.QApplication.UnicodeUTF8))
+        self.toolFunctionOptions.setText(QtGui.QApplication.translate("DockBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("DockBase", "Results", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
