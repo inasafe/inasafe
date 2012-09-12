@@ -71,164 +71,179 @@
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="639"/>
+        <location filename="dock.py" line="664"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="804"/>
+        <location filename="dock.py" line="864"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="842"/>
+        <location filename="dock.py" line="902"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1289"/>
+        <location filename="dock.py" line="1355"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="95"/>
+        <location filename="dock.py" line="99"/>
         <source>InaSAFE %s %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="735"/>
+        <location filename="dock.py" line="773"/>
         <source>Calculating impact...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="736"/>
+        <location filename="dock.py" line="774"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="794"/>
+        <location filename="dock.py" line="854"/>
         <source>Loading results...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="795"/>
+        <location filename="dock.py" line="855"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="884"/>
+        <location filename="dock.py" line="944"/>
         <source>Analyzing this question...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1050"/>
+        <location filename="dock.py" line="1110"/>
         <source>Preparing hazard data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1051"/>
+        <location filename="dock.py" line="1111"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1059"/>
+        <location filename="dock.py" line="1119"/>
         <source>Preparing exposure data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1060"/>
+        <location filename="dock.py" line="1120"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1289"/>
+        <location filename="dock.py" line="1355"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1308"/>
+        <location filename="dock.py" line="1374"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1295"/>
+        <location filename="dock.py" line="1361"/>
         <source>Generating your map as a PDF document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1300"/>
+        <location filename="dock.py" line="1366"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1308"/>
+        <location filename="dock.py" line="1374"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1203"/>
+        <location filename="dock.py" line="1263"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="984"/>
+        <location filename="dock.py" line="1044"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Daar is nie genoeg oorvleuling tussen die &apos;gevaar&apos; en &apos;in gevaar&apos; laers. Kies asseblief twee laers wat mekaar oorvleul en gebruik &apos;pan&apos; en &apos;zoom&apos; om hulle sigbaar te maak. Volledige details volg:&lt;/p&gt;&lt;p&gt;Probleem om optimale area te bepaal met:&lt;/p&gt;&lt;p&gt;Gevaar: %1&lt;/p&gt;&lt;p&gt;In-gevaar: %2&lt;/p&gt;&lt;p&gt;Sigbare area: %3&lt;/p&gt;&lt;p&gt;Gevaar geografiese area: %4&lt;/p&gt;&lt;p&gt;In-gevaar geografiese area: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="dock.py" line="268"/>
+        <location filename="dock.py" line="272"/>
         <source>To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="274"/>
+        <location filename="dock.py" line="278"/>
         <source>Getting started:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="290"/>
+        <location filename="dock.py" line="294"/>
         <source>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="296"/>
+        <location filename="dock.py" line="300"/>
         <source>No valid functions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="299"/>
+        <location filename="dock.py" line="303"/>
         <source>Hazard keywords:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="302"/>
+        <location filename="dock.py" line="306"/>
         <source>Exposure keywords:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="310"/>
+        <location filename="dock.py" line="314"/>
         <source>You can now proceed to run your model by clicking the &lt;em&gt;Run&lt;/em&gt; button.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="312"/>
+        <location filename="dock.py" line="316"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="709"/>
+        <location filename="dock.py" line="747"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="755"/>
+        <location filename="dock.py" line="793"/>
         <source>An exception occurred when starting the model.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="721"/>
+        <location filename="dock.py" line="759"/>
         <source>An exception occurred when setting up the  model runner.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="805"/>
+        <source>No aggregation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="836"/>
+        <source>Calculating zonal statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="836"/>
+        <source>Abort...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -255,27 +270,27 @@
         <translation>&amp;Mag</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="109"/>
+        <location filename="dock_base.ui" line="119"/>
         <source>Results</source>
         <translation>Resultate</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="116"/>
+        <location filename="dock_base.ui" line="126"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="237"/>
+        <location filename="dock_base.ui" line="247"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="257"/>
+        <location filename="dock_base.ui" line="267"/>
         <source>Print...</source>
         <translation>Druk...</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="277"/>
+        <location filename="dock_base.ui" line="287"/>
         <source>Run</source>
         <translation>Begin</translation>
     </message>
@@ -285,8 +300,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="162"/>
+        <location filename="dock_base.ui" line="172"/>
         <source>Supported by:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="106"/>
+        <source>Aggregate by</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -676,7 +696,7 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="286"/>
+        <location filename="plugin.py" line="296"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>

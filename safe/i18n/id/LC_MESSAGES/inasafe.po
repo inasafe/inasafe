@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-11 10:47+0700\n"
+"POT-Creation-Date: 2012-09-12 16:08+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -615,6 +615,7 @@ msgstr "Berdasarkan Perka 2 BNPB - 2012"
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_building_impact.py:77
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:94
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
+#: safe/impact_functions/core.py:624 safe/impact_functions/core.py:624
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:94
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
 msgid "Category"
@@ -2276,7 +2277,7 @@ msgstr ""
 #: impact_functions/core.py:338 safe/impact_functions/core.py:353
 #: safe/impact_functions/core.py:351
 #: scripts/inasafe-dev/safe/impact_functions/core.py:351
-#: safe/impact_functions/core.py:351
+#: safe/impact_functions/core.py:352 safe/impact_functions/core.py:352
 #, python-format
 msgid ""
 "In the event of <i>%(hazard)s</i> how many <i>%(exposure)s</i> might <i>"
@@ -2541,25 +2542,28 @@ msgstr "Penduduk terkena dampak daerah rawan banjir"
 
 #: safe/impact_functions/core.py:526 safe/impact_functions/core.py:538
 #: scripts/inasafe-dev/safe/impact_functions/core.py:538
-#: safe/impact_functions/core.py:538
+#: safe/impact_functions/core.py:539 safe/impact_functions/core.py:624
+#: safe/impact_functions/core.py:539 safe/impact_functions/core.py:624
 msgid "Title"
 msgstr "Judul"
 
 #: safe/impact_functions/core.py:526 safe/impact_functions/core.py:538
 #: scripts/inasafe-dev/safe/impact_functions/core.py:538
-#: safe/impact_functions/core.py:538
+#: safe/impact_functions/core.py:539 safe/impact_functions/core.py:624
+#: safe/impact_functions/core.py:539 safe/impact_functions/core.py:624
 msgid "ID"
 msgstr "ID"
 
 #: safe/impact_functions/core.py:526 safe/impact_functions/core.py:538
 #: scripts/inasafe-dev/safe/impact_functions/core.py:538
-#: safe/impact_functions/core.py:538
+#: safe/impact_functions/core.py:539 safe/impact_functions/core.py:539
 msgid "Requirements"
 msgstr "Persyaratan"
 
 #: safe/impact_functions/core.py:560 safe/impact_functions/core.py:572
 #: scripts/inasafe-dev/safe/impact_functions/core.py:572
-#: safe/impact_functions/core.py:572
+#: safe/impact_functions/core.py:574 safe/impact_functions/core.py:671
+#: safe/impact_functions/core.py:574 safe/impact_functions/core.py:671
 msgid "Available Impact Functions"
 msgstr "Tersedia Dampak Fungsi"
 
@@ -2781,3 +2785,23 @@ msgid ""
 msgstr ""
 "Jika tidak, dimana kita dapat mendapatkan bahan bantuan tambahan dan "
 "bagaimana membawanya ke sini?"
+
+#: safe/impact_functions/core.py:625 safe/impact_functions/core.py:625
+msgid "Sub Category"
+msgstr ""
+
+#: safe/impact_functions/core.py:625 safe/impact_functions/core.py:625
+msgid "Layer type"
+msgstr ""
+
+#: safe/impact_functions/core.py:625 safe/impact_functions/core.py:625
+msgid "Data type"
+msgstr ""
+
+#: safe/impact_functions/core.py:626 safe/impact_functions/core.py:626
+msgid "Unit"
+msgstr ""
+
+#: safe/impact_functions/core.py:626 safe/impact_functions/core.py:626
+msgid "Disabled"
+msgstr ""
