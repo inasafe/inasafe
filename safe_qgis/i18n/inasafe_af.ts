@@ -43,27 +43,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="307"/>
+        <location filename="utilities.py" line="318"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="283"/>
+        <location filename="utilities.py" line="294"/>
         <source>Problem:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="279"/>
+        <location filename="utilities.py" line="290"/>
         <source>Error:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="287"/>
+        <location filename="utilities.py" line="298"/>
         <source>Click for Diagnostic Information:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="268"/>
+        <location filename="utilities.py" line="279"/>
         <source>No details provided</source>
         <translation type="unfinished"></translation>
     </message>
@@ -358,108 +358,108 @@ to%s: %s</source>
 <context>
     <name>KeywordsDialog</name>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>population [density]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>population [count]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>building</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>building [osm]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>building [sigab]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="81"/>
+        <location filename="keywords_dialog.py" line="75"/>
         <source>roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>tsunami [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>tsunami [wet/dry]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>tsunami [feet]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>flood [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>flood [wet/dry]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>flood [feet]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>tephra [kg2/m2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="153"/>
+        <location filename="keywords_dialog.py" line="150"/>
         <source>Hide advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="155"/>
+        <location filename="keywords_dialog.py" line="152"/>
         <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="583"/>
+        <location filename="keywords_dialog.py" line="589"/>
         <source>Not Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="368"/>
+        <location filename="keywords_dialog.py" line="371"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="74"/>
+        <location filename="keywords_dialog.py" line="68"/>
         <source>InaSAFE %s Keywords Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="93"/>
+        <location filename="keywords_dialog.py" line="87"/>
         <source>earthquake [MMI]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="638"/>
+        <location filename="keywords_dialog.py" line="646"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="638"/>
+        <location filename="keywords_dialog.py" line="646"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -676,7 +676,7 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="268"/>
+        <location filename="plugin.py" line="286"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -708,6 +708,16 @@ to%s: %s</source>
     <message>
         <location filename="plugin.py" line="208"/>
         <source>Open InaSAFE options dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="220"/>
+        <source>InaSAFE Impact Functions Doc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="plugin.py" line="226"/>
+        <source>Open InaSAFE impact functions doc</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
