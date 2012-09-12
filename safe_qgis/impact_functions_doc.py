@@ -53,7 +53,7 @@ class ImpactFunctionsDoc(QtGui.QDialog):
     def showImpactFunctionsTable(self):
         '''Show table of impact functions.
         '''
-        impact_functions_table = core.get_plugins_as_table(
+        impact_functions_table = core.get_plugins_as_table2(
                                                         self.impact_function)
         self.ui.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)

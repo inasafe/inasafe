@@ -8,6 +8,8 @@ from core import requirements_met
 from core import get_admissible_plugins
 from core import get_function_title
 from core import get_plugins_as_table
+from core import parse_single_requirement
+from utilities import pretty_string
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -72,6 +74,22 @@ class F3(FunctionProvider):
 
     :param requires category=='test_cat1'
     :param requires category=='test_cat2'
+    """
+
+    @staticmethod
+    def run():
+        return None
+
+
+class F4(FunctionProvider):
+    """Risk plugin for testing
+
+    :param requires category=='hazard' and \
+                    subcategory in ['flood', 'tsunami']
+
+    :param requires category=='exposure' and \
+                    subcategory in ['building', 'structure'] and \
+                    layertype=='vector'
     """
 
     @staticmethod
@@ -198,6 +216,35 @@ class Test_plugin_core(unittest.TestCase):
         # Expecting that F1 test wont change and that the table produced for
         # it is of a deterministic length
         assert len(S) == 518
+
+    def test_parse_requirement(self):
+        """Test parse requirements of a function to dictionary."""
+        myRequirement = requirements_collect(F4)[0]
+        parsed_req = parse_single_requirement(myRequirement)
+        expected_req = {'category': 'hazard',
+                        'subcategory': ['flood', 'tsunami']}
+        myMessage = 'Get %s should be % s' % (parsed_req, expected_req)
+        assert parsed_req == expected_req, myMessage
+
+        myRequirement = requirements_collect(F4)[1]
+        parsed_req = parse_single_requirement(myRequirement)
+        expected_req = {'category': 'exposure',
+                        'subcategory': ['building', 'structure'],
+                        'layertype': 'vector'}
+        myMessage = 'Get %s should be % s' % (parsed_req, expected_req)
+        assert parsed_req == expected_req, myMessage
+
+    def test_pretty_string(self):
+        """Test return prettu string from list or string."""
+        myStr = 'Aloha'
+        mylist = ['a', 'b', 'c']
+        expectedStr = 'Aloha'
+        expectedStr2 = 'a, b, c'
+        realStr = pretty_string(myStr)
+        realStr2 = pretty_string(mylist)
+        assert expectedStr == realStr, 'String not Ok'
+        myMessage = 'Get %s should be % s' % (realStr2, expectedStr2)
+        assert expectedStr2 == realStr2, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')
