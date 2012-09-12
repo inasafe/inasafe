@@ -646,15 +646,12 @@ def get_plugins_as_table2(name=None, dict_filter={}):
             raise Exception(msg)
 
     not_found_value = 'N/A'
-    f = open('atos.txt', 'wt')
     for key, func in plugins_dict.iteritems():
         for requirement in requirements_collect(func):
             row = []
             row.append(TableCell(get_function_title(func), header=True))
             row.append(key)
             dict_req = parse_single_requirement(str(requirement))
-            f.write(str(get_function_title(func) + '\t' + requirement) + '\n')
-            # f.write(str(dict_req) + '\n')
             row.append(dict_req.get('category', not_found_value))
             row.append(pretty_string((dict_req.get('subcategory',
                                         not_found_value))))
@@ -666,7 +663,6 @@ def get_plugins_as_table2(name=None, dict_filter={}):
             row.append(pretty_string(dict_req.get('disabled',
                                         not_found_value)))
             table_body.append(TableRow(row))
-    f.close()
     table = Table(table_body)
     table.caption = _('Available Impact Functions')
 

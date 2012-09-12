@@ -96,6 +96,7 @@ class F4(FunctionProvider):
     def run():
         return None
 
+
 class SyntaxErrorFunction(FunctionProvider):
     """Risk plugin for testing
 
