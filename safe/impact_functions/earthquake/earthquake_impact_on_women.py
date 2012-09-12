@@ -25,14 +25,14 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
     :author Ole Nielsen
     :rating 1
 
-    :param requires category == 'hazard' and \
-                    subcategory == 'earthquake' and \
-                    layertype == 'raster' and \
-                    unit == 'MMI'
+    :param requires category=='hazard' and \
+                    subcategory=='earthquake' and \
+                    layertype=='raster' and \
+                    unit=='MMI'
 
-    :param requires category == 'exposure' and \
-                    subcategory == 'population' and \
-                    layertype == 'raster'
+    :param requires category=='exposure' and \
+                    subcategory=='population' and \
+                    layertype=='raster'
 
     """
 

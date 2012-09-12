@@ -9,6 +9,7 @@ from core import get_admissible_plugins
 from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
+from utilities import pretty_string
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -83,12 +84,12 @@ class F3(FunctionProvider):
 class F4(FunctionProvider):
     """Risk plugin for testing
 
-    :param requires category == 'hazard' and \
+    :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami']
 
-    :param requires category == 'exposure' and \
+    :param requires category=='exposure' and \
                     subcategory in ['building', 'structure'] and \
-                    layertype == 'vector'
+                    layertype=='vector'
     """
 
     @staticmethod
@@ -231,6 +232,18 @@ class Test_plugin_core(unittest.TestCase):
                         'layertype': 'vector'}
         myMessage = 'Get %s should be % s' % (parsed_req, expected_req)
         assert parsed_req == expected_req, myMessage
+
+    def test_pretty_string(self):
+        """Test return prettu string from list or string."""
+        myStr = 'Aloha'
+        mylist = ['a', 'b', 'c']
+        expectedStr = 'Aloha'
+        expectedStr2 = 'a, b, c'
+        realStr = pretty_string(myStr)
+        realStr2 = pretty_string(mylist)
+        assert expectedStr == realStr, 'String not Ok'
+        myMessage = 'Get %s should be % s' % (realStr2, expectedStr2)
+        assert expectedStr2 == realStr2, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')

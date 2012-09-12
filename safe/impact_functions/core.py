@@ -12,6 +12,7 @@ import keyword as python_keywords
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableCell, TableRow
+from utilities import pretty_string
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -581,9 +582,9 @@ def parse_single_requirement(requirement):
     retval = {}
     parts = requirement.split(' and ')
     for part in parts:
-        if part.find(' == ') != -1:
-            myKey = part.split(' == ')[0]
-            myValue = part.split(' == ')[1]
+        if part.find('==') != -1:
+            myKey = part.split('==')[0]
+            myValue = part.split('==')[1]
             retval[myKey] = myValue[1:-1]  # Removing single quote
         elif part.find(' in ') != -1:
             myKey = part.split(' in ')[0]
@@ -599,3 +600,74 @@ def parse_single_requirement(requirement):
             pass
 
     return retval
+
+
+def get_plugins_as_table2(name=None, dict_filter={}):
+    """Retrieve a table listing all plugins and their requirements.
+
+       Or just a single plugin if name is passed.
+
+       Args:
+           * name =  str optional name of a specific plugin.
+           * dict_filter = dictionary that contains filters
+
+       Returns:
+           * table contains plugins match with dict_filter
+
+       Raises: None
+    """
+    table_body = []
+    header = TableRow([_('Title'), _('ID'), _('Category'),
+                       _('Sub Category'), _('Layer type'), _('Data type'),
+                       _('Unit'), _('Disabled')],
+                      header=True)
+    table_body.append(header)
+
+    plugins_dict = dict([(pretty_function_name(p), p)
+                         for p in FunctionProvider.plugins])
+
+    if name is not None:
+        if isinstance(name, basestring):
+            # Add the names
+            plugins_dict.update(dict([(p.__name__, p)
+                                      for p in FunctionProvider.plugins]))
+
+            msg = ('No plugin named "%s" was found. '
+                   'List of available plugins is: %s'
+                   % (name, ', '.join(plugins_dict.keys())))
+            if name not in plugins_dict:
+                raise RuntimeError(msg)
+
+            plugins_dict = {name: plugins_dict[name]}
+        else:
+            msg = ('get_plugins expects either no parameters or a string '
+                   'with the name of the plugin, you passed: '
+                   '%s which is a %s' % (name, type(name)))
+            raise Exception(msg)
+
+    not_found_value = 'N/A'
+    f = open('atos.txt', 'wt')
+    for key, func in plugins_dict.iteritems():
+        for requirement in requirements_collect(func):
+            row = []
+            row.append(TableCell(get_function_title(func), header=True))
+            row.append(key)
+            dict_req = parse_single_requirement(str(requirement))
+            f.write(str(get_function_title(func) + '\t' + requirement) + '\n')
+            # f.write(str(dict_req) + '\n')
+            row.append(dict_req.get('category', not_found_value))
+            row.append(pretty_string((dict_req.get('subcategory',
+                                        not_found_value))))
+            row.append(pretty_string(dict_req.get('layertype',
+                                        not_found_value)))
+            row.append(pretty_string(dict_req.get('datatype',
+                                        not_found_value)))
+            row.append(pretty_string(dict_req.get('unit', not_found_value)))
+            row.append(pretty_string(dict_req.get('disabled',
+                                        not_found_value)))
+            table_body.append(TableRow(row))
+    f.close()
+    table = Table(table_body)
+    table.caption = _('Available Impact Functions')
+
+    return table
