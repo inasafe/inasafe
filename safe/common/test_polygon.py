@@ -1132,64 +1132,64 @@ class Test_Polygon(unittest.TestCase):
         # Simple sloping fully intersecting line
         line = [[-1, 0.0], [2, 1.0]]
 
-        inside_line_segments, outside_line_segments = \
+        inside_lines, outside_lines = \
             clip_line_by_polygon(line, polygon)
 
-        assert numpy.allclose(inside_line_segments,
+        assert numpy.allclose(inside_lines,
                               [[[0, 1.0 / 3], [1, 2.0 / 3]]])
 
-        assert numpy.allclose(outside_line_segments,
+        assert numpy.allclose(outside_lines,
                               [[[-1, 0], [0, 1.0 / 3]],
                                [[1, 2.0 / 3], [2, 1]]])
 
         # Simple sloping line coinciding with one edge, intersecting another
         line = [[-1, 0.0], [1, 2.0 / 3]]
 
-        inside_line_segments, outside_line_segments = \
+        inside_lines, outside_lines = \
             clip_line_by_polygon(line, polygon)
 
-        assert numpy.allclose(inside_line_segments,
+        assert numpy.allclose(inside_lines,
                               [[[0, 1.0 / 3], [1, 2.0 / 3]]])
 
-        assert numpy.allclose(outside_line_segments,
+        assert numpy.allclose(outside_lines,
                               [[[-1, 0], [0, 1.0 / 3]]])
 
         # Diagonal line intersecting corners
         line = [[-1, -1], [2, 2]]
 
-        inside_line_segments, outside_line_segments = \
+        inside_lines, outside_lines = \
             clip_line_by_polygon(line, polygon)
 
-        assert numpy.allclose(inside_line_segments,
+        assert numpy.allclose(inside_lines,
                               [[[0, 0], [1, 1]]])
 
-        assert numpy.allclose(outside_line_segments,
+        assert numpy.allclose(outside_lines,
                               [[[-1, -1], [0, 0]],
                                [[1, 1], [2, 2]]])
 
         # Diagonal line intersecting corners - other way
         line = [[-1, 2], [2, -1]]
 
-        inside_line_segments, outside_line_segments = \
+        inside_lines, outside_lines = \
             clip_line_by_polygon(line, polygon)
 
-        assert numpy.allclose(inside_line_segments,
+        assert numpy.allclose(inside_lines,
                               [[[0, 1], [1, 0]]])
 
-        assert numpy.allclose(outside_line_segments,
+        assert numpy.allclose(outside_lines,
                               [[[-1, 2], [0, 1]],
                                [[1, 0], [2, -1]]])
 
         # Diagonal line coinciding with one corner
         line = [[-1, -1], [1, 1]]
 
-        inside_line_segments, outside_line_segments = \
+        inside_lines, outside_lines = \
             clip_line_by_polygon(line, polygon)
 
-        assert numpy.allclose(inside_line_segments,
+        assert numpy.allclose(inside_lines,
                               [[[0, 0], [1, 1]]])
 
-        assert numpy.allclose(outside_line_segments,
+        assert numpy.allclose(outside_lines,
                               [[[-1, -1], [0, 0]]])
 
         # Very convoluted polygon
@@ -1198,13 +1198,14 @@ class Test_Polygon(unittest.TestCase):
 
         line = [[-10, 6], [60, 6]]
 
-        inside_line_segments, outside_line_segments = \
+        inside_lines, outside_lines = \
             clip_line_by_polygon(line, polygon)
 
-        assert numpy.allclose(inside_line_segments,
-                              [[[6, 6], [14, 6]], [[16, 6.], [22, 6]],
-                              [[28, 6], [32, 6]]])
-        assert numpy.allclose(outside_line_segments,
+        assert numpy.allclose(inside_lines,
+                              [[[6, 6], [14, 6]],
+                               [[16, 6.], [22, 6]],
+                               [[28, 6], [32, 6]]])
+        assert numpy.allclose(outside_lines,
                               [[[-10, 6], [6, 6]], [[14, 6], [16, 6]],
                               [[22, 6], [28, 6]], [[32, 6], [60, 6]]])
 
@@ -1230,24 +1231,23 @@ class Test_Polygon(unittest.TestCase):
         # One line with same two segments changing direction inside polygon
         line = [[-1, 0.5], [0.5, 0.5], [0.5, 2]]
 
-        inside_line_segments, outside_line_segments = \
+        inside_lines, outside_lines = \
             clip_line_by_polygon(line, polygon)
 
-        assert numpy.allclose(inside_line_segments,
+        assert numpy.allclose(inside_lines,
                               [[[0, 0.5], [0.5, 0.5], [0.5, 1]]])
 
-        assert numpy.allclose(outside_line_segments,
-                              [[[-1, 0.5], [0, 0.5]],
+        assert numpy.allclose(outside_lines,
+                             [[[-1, 0.5], [0, 0.5]],
                                [[0.5, 1], [0.5, 2]]])
 
         # One line with multiple segments both inside and outside polygon
         line = [[-1, 0.5], [-0.5, 0.5], [0.5, 0.5],
                 [1.0, 0.5], [1.5, 0.5], [2.0, 0.5]]
 
-        inside_line_segments, outside_line_segments = \
-            clip_line_by_polygon(line, polygon)
-        assert len(inside_line_segments) == 1
-        assert numpy.allclose(inside_line_segments,
+        inside_lines, outside_lines = clip_line_by_polygon(line, polygon)
+        assert len(inside_lines) == 1
+        assert numpy.allclose(inside_lines,
                               [[0, 0.5], [0.5, 0.5], [1.0, 0.5]])
 
     def test_clip_lines_by_polygon_multi(self):
