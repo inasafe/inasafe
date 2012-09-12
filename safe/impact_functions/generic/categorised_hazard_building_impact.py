@@ -11,13 +11,13 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     """Impact plugin for categorising hazard impact on building data
 
-    :param requires category == 'hazard' and \
-                    unit == 'normalised' and \
-                    layertype == 'raster'
+    :param requires category=='hazard' and \
+                    unit=='normalised' and \
+                    layertype=='raster'
 
-    :param requires category == 'exposure' and \
+    :param requires category=='exposure' and \
                     subcategory in ['building', 'structure'] and \
-                    layertype == 'vector'
+                    layertype=='vector'
     """
 
     target_field = 'ICLASS'

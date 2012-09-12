@@ -21,6 +21,7 @@ __copyright__ += 'Disaster Reduction'
 import sys
 import traceback
 import logging
+import math
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
@@ -35,15 +36,12 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency)
-
 from safe_qgis.exceptions import StyleError
-import safe
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
 import safe_qgis.resources  # pylint: disable=W0611
 
-safe.common.utilities.setup_logger()
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -160,15 +158,7 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
     This function will set both the colour map and the transparency
     for the passed in layer.
 
-    .. note:: There is currently a limitation in QGIS in that
-       pixel transparency values can not be specified in ranges and
-       consequently the opacity is of limited value and seems to
-       only work effectively with integer values.
-
-    .. todo:: Get Tim to implement range based transparency in
-       the core QGIS library.
-
-    Input
+    Args:
         theQgsRasterLayer: Qgis layer
         style: Dictionary of the form as in the example below
         style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
@@ -180,16 +170,56 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
                          dict(colour='#FF0000', quantity=200, transparency=1),
                          dict(colour='#7A0000', quantity=300, transparency=1)]
 
-    Output
-        Sets and saves style for theQgsRasterLayer
+    Returns:
+        list: RangeList
+        list: TransparencyList
+    """
+    # test if QGIS 1.8.0 or older
+    # see issue #259
+    if qgisVersion() <= 10800:
+        LOGGER.debug('Rendering raster using <= 1.8 styling')
+        return _setLegacyRasterStyle(theQgsRasterLayer, theStyle)
+    else:
+        LOGGER.debug('Rendering raster using 2+ styling')
+        return _setNewRasterStyle(theQgsRasterLayer, theStyle)
+
+
+def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
+    """Set QGIS raster style based on InaSAFE style dictionary for QGIS > 2.0.
+
+    This function will set both the colour map and the transparency
+    for the passed in layer.
+
+    Args:
+        theQgsRasterLayer: Qgis layer
+        style: Dictionary of the form as in the example below
+        style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
+                         dict(colour='#38A800', quantity=5, transparency=1),
+                         dict(colour='#79C900', quantity=10, transparency=1),
+                         dict(colour='#CEED00', quantity=20, transparency=1),
+                         dict(colour='#FFCC00', quantity=50, transparency=1),
+                         dict(colour='#FF6600', quantity=100, transparency=1),
+                         dict(colour='#FF0000', quantity=200, transparency=1),
+                         dict(colour='#7A0000', quantity=300, transparency=1)]
+
+    Returns:
+        list: RangeList
+        list: TransparencyList
+
+    .. note:: There is currently a limitation in QGIS in that
+       pixel transparency values can not be specified in ranges and
+       consequently the opacity is of limited value and seems to
+       only work effectively with integer values.
 
     """
     theQgsRasterLayer.setDrawingStyle(QgsRasterLayer.PalettedColor)
     myClasses = theStyle['style_classes']
+    LOGGER.debug(myClasses)
     myRangeList = []
     myTransparencyList = []
     myLastValue = 0
     for myClass in myClasses:
+        LOGGER.debug('Evaluating class:\n%s\n' % myClass)
         myMax = myClass['quantity']
         myColour = QtGui.QColor(myClass['colour'])
         myLabel = QtCore.QString()
@@ -197,6 +227,11 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
             myLabel = QtCore.QString(myClass['label'])
         myShader = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
         myRangeList.append(myShader)
+
+        if math.isnan(myMax):
+            LOGGER.debug('Skipping class.')
+            continue
+
         # Create opacity entries for this range
         myTransparencyPercent = 0
         if 'transparency' in myClass:
@@ -204,25 +239,21 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
         if myTransparencyPercent > 0:
             # Check if range extrema are integers so we know if we can
             # use them to calculate a value range
-            try:
-                if ((myLastValue == int(myLastValue)) and
-                    (myMax == int(myMax))):
-                    # Ensure that they are integers
-                    # (e.g 2.0 must become 2, see issue #126)
-                    myLastValue = int(myLastValue)
-                    myMax = int(myMax)
+            if ((myLastValue == int(myLastValue)) and (myMax == int(myMax))):
+                # Ensure that they are integers
+                # (e.g 2.0 must become 2, see issue #126)
+                myLastValue = int(myLastValue)
+                myMax = int(myMax)
 
-                    # Set transparencies
-                    myRange = range(myLastValue, myMax)
-                    for myValue in myRange:
-                        myPixel = \
-                             QgsRasterTransparency.TransparentSingleValuePixel()
-                        myPixel.pixelValue = myValue
-                        myPixel.percentTransparent = myTransparencyPercent
-                        myTransparencyList.append(myPixel)
-            except:
-                LOGGER.exception()
-        #myLabel = myClass['label']
+                # Set transparencies
+                myRange = range(myLastValue, myMax)
+                for myValue in myRange:
+                    myPixel = \
+                    QgsRasterTransparency.TransparentSingleValuePixel()
+                    myPixel.pixelValue = myValue
+                    myPixel.percentTransparent = myTransparencyPercent
+                    myTransparencyList.append(myPixel)
+                    #myLabel = myClass['label']
 
     # test if QGIS 1.8.0 or older
     # see issue #259
@@ -248,6 +279,99 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
 
     theQgsRasterLayer.saveDefaultStyle()
     return myRangeList, myTransparencyList
+
+
+def _setNewRasterStyle(theQgsRasterLayer, theStyle):
+    """Set QGIS raster style based on InaSAFE style dictionary for QGIS >= 2.0.
+
+    This function will set both the colour map and the transparency
+    for the passed in layer.
+
+    Args:
+        theQgsRasterLayer: Qgis layer
+        style: Dictionary of the form as in the example below
+        style_classes = [dict(colour='#38A800', quantity=2, transparency=0),
+                         dict(colour='#38A800', quantity=5, transparency=1),
+                         dict(colour='#79C900', quantity=10, transparency=1),
+                         dict(colour='#CEED00', quantity=20, transparency=1),
+                         dict(colour='#FFCC00', quantity=50, transparency=1),
+                         dict(colour='#FF6600', quantity=100, transparency=1),
+                         dict(colour='#FF0000', quantity=200, transparency=1),
+                         dict(colour='#7A0000', quantity=300, transparency=1)]
+
+    Returns:
+        list: RangeList
+        list: TransparencyList
+    """
+    # Note imports here to prevent importing on unsupported QGIS versions
+    # pylint: disable=E0611
+    # pylint: disable=W0621
+    # pylint: disable=W0404
+    from qgis.core import (QgsRasterShader,
+                           QgsColorRampShader,
+                           QgsSingleBandPseudoColorRenderer,
+                           QgsRasterTransparency)
+    # pylint: enable=E0611
+    # pylint: enable=W0621
+    # pylint: enable=W0404
+
+    myClasses = theStyle['style_classes']
+    myRampItemList = []
+    myTransparencyList = []
+    myLastValue = 0
+    for myClass in myClasses:
+        LOGGER.debug('Evaluating class:\n%s\n' % myClass)
+        myMax = myClass['quantity']
+
+        if math.isnan(myMax):
+            LOGGER.debug('Skipping class.')
+            continue
+
+        myColour = QtGui.QColor(myClass['colour'])
+        myLabel = QtCore.QString()
+        if 'label' in myClass:
+            myLabel = QtCore.QString(myClass['label'])
+        myRampItem = QgsColorRampShader.ColorRampItem(myMax, myColour, myLabel)
+        myRampItemList.append(myRampItem)
+        # Create opacity entries for this range
+        myTransparencyPercent = 0
+        if 'transparency' in myClass:
+            myTransparencyPercent = int(myClass['transparency'])
+        if myTransparencyPercent > 0:
+            # Check if range extrema are integers so we know if we can
+            # use them to calculate a value range
+            myPixel = QgsRasterTransparency.TransparentSingleValuePixel()
+            myPixel.min = myLastValue
+            myPixel.max = myMax
+            myPixel.percentTransparent = myTransparencyPercent
+            myTransparencyList.append(myPixel)
+            myLastValue = myMax
+
+    myBand = 1  # gdal counts bands from base 1
+    LOGGER.debug('Setting colour ramp list')
+    myRasterShader = QgsRasterShader()
+    myColorRampShader = QgsColorRampShader()
+    myColorRampShader.setColorRampType(QgsColorRampShader.INTERPOLATED)
+    myColorRampShader.setColorRampItemList(myRampItemList)
+    LOGGER.debug('Setting shader function')
+    myRasterShader.setRasterShaderFunction(myColorRampShader)
+    LOGGER.debug('Setting up renderer')
+    myRenderer = QgsSingleBandPseudoColorRenderer(
+        theQgsRasterLayer.dataProvider(),
+        myBand,
+        myRasterShader)
+    LOGGER.debug('Assigning renderer to raster layer')
+    theQgsRasterLayer.setRenderer(myRenderer)
+    LOGGER.debug('Setting raster transparency list')
+    #if len(myTransparencyList) > 0:
+    #    myRasterTransparency = QgsRasterTransparency()
+    #    myRasterTransparency.setTransparentSingleValuePixelList(
+    #        myTransparencyList)
+    #    myRenderer.setRasterTransparency(myRasterTransparency)
+    LOGGER.debug('Saving style as default')
+    theQgsRasterLayer.saveDefaultStyle()
+    LOGGER.debug('Setting raster style done!')
+    return myRampItemList, myTransparencyList
 
 
 def tr(theText):

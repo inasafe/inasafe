@@ -232,6 +232,13 @@ class Plugin:
         self.iface.addPluginToMenu(self.tr('InaSAFE'),
                                    self.actionImpactFunctionsDoc)
 
+        # Short cut for Open Impact Functions Doc
+        self.keyAction = QAction("Test Plugin", self.iface.mainWindow())
+        self.iface.registerMainWindowAction(self.keyAction, "F7")
+        self.iface.addPluginToMenu("&Test plugins", self.keyAction)
+        QObject.connect(self.keyAction, SIGNAL("triggered()"),
+                        self.keyActionF7)
+
         #--------------------------------------
         # create dockwidget and tabify it with the legend
         #--------------------------------------
@@ -286,6 +293,9 @@ class Plugin:
         self.iface.removePluginMenu(self.tr('InaSAFE'),
                                     self.actionOptions)
         self.iface.removeToolBarIcon(self.actionOptions)
+        self.iface.removePluginMenu(self.tr('InaSAFE'),
+                                    self.actionImpactFunctionsDoc)
+        self.iface.removeToolBarIcon(self.actionImpactFunctionsDoc)
         self.iface.mainWindow().removeDockWidget(self.dockWidget)
         self.dockWidget.setVisible(False)
         self.dockWidget.destroy()
@@ -440,3 +450,7 @@ class Plugin:
         else:
             self.actionKeywordsDialog.setEnabled(True)
         self.dockWidget.layerChanged(theLayer)
+
+    def keyActionF7(self):
+        '''Executed when user press F7'''
+        self.showImpactFunctionsDoc()
