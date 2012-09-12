@@ -305,15 +305,15 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
     """
     # Note imports here to prevent importing on unsupported QGIS versions
     # pylint: disable=E0611
-    # pylint: disable=E0621
-    # pylint: disable=E0404
+    # pylint: disable=W0621
+    # pylint: disable=W0404
     from qgis.core import (QgsRasterShader,
                            QgsColorRampShader,
                            QgsSingleBandPseudoColorRenderer,
                            QgsRasterTransparency)
     # pylint: enable=E0611
-    # pylint: enable=E0621
-    # pylint: enable=E0404
+    # pylint: enable=W0621
+    # pylint: enable=W0404
 
     myClasses = theStyle['style_classes']
     myRampItemList = []
