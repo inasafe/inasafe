@@ -119,7 +119,7 @@ pep8:
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . || true
 
 # Run entire test suite
-test_suite: compile testdata
+test_suite: compile
 	@echo
 	@echo "----------------------"
 	@echo "Regression Test Suite"
@@ -157,13 +157,15 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 7181ff2048031de71eed85decdda77736de2587c 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 69852cc0958792e573a4be8cb203ef6579dd4940 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
 	@echo
-	@echo "-----------------inasafe_data updater Log-------------------"
-	@[ -f tmp_warnings.txt ] && more tmp_warnings.txt || echo "inasafe_data have been succesfully updated"; rm -f tmp_warnings.txt || true
+	@echo "---------------------"
+	@echo "Inasafe_data problems"
+	@echo "---------------------"
+	@[ -f tmp_warnings.txt ] && more tmp_warnings.txt || true; rm -f tmp_warnings.txt
 
 disabled_tests:
 	@echo
