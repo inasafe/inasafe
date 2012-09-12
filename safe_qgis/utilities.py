@@ -363,7 +363,11 @@ def _setNewRasterStyle(theQgsRasterLayer, theStyle):
     LOGGER.debug('Assigning renderer to raster layer')
     theQgsRasterLayer.setRenderer(myRenderer)
     LOGGER.debug('Setting raster transparency list')
-    myRenderer.setTransparentSingleValuePixelList(myTransparencyList)
+    if len(myTransparencyList) > 0:
+        myRasterTransparency = QgsRasterTransparency()
+        myRasterTransparency.setTransparentSingleValuePixelList(
+            myTransparencyList)
+        myRenderer.setRasterTransparency(myRasterTransparency)
     LOGGER.debug('Saving style as default')
     theQgsRasterLayer.saveDefaultStyle()
     LOGGER.debug('Setting raster style done!')
