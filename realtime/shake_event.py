@@ -1253,11 +1253,6 @@ class ShakeEvent:
                                      'fixtures',
                                      'exposure',
                                      'population.tif')
-        # In case we are testing from in the realtime dir
-        myFixturePath2 = os.path.join(os.path.abspath(os.path.curdir),
-                                     'fixtures',
-                                     'exposure',
-                                     'population.tif')
         myLocalPath = '/usr/local/share/inasafe/exposure/population.tif'
         if self.populationRasterPath is not None:
             return self.populationRasterPath
@@ -1265,8 +1260,6 @@ class ShakeEvent:
             return os.environ['SAFE_POPULATION_PATH']
         elif os.path.exists(myFixturePath):
             return myFixturePath
-        elif os.path.exists(myFixturePath2):
-            return myFixturePath2
         elif os.path.exists(myLocalPath):
             return myLocalPath
         else:
