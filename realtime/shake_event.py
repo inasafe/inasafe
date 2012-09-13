@@ -1306,6 +1306,7 @@ class ShakeEvent:
                      'mmiData: %(mmiData)s\n'
                      'populationRasterPath: %(populationRasterPath)s\n'
                      'impactFile: %(impactFile)s\n'
+                     'impactKeywordsFile: %(impactKeywordsFile)s\n'
                      'fatalityCounts: %(fatalityCounts)s') %
                     {
                         'latitude': self.latitude,
@@ -1329,6 +1330,7 @@ class ShakeEvent:
                         'mmiData': mmiData,
                         'populationRasterPath': self.populationRasterPath,
                         'impactFile': self.impactFile,
+                        'impactKeywordsFile': self.impactKeywordsFile,
                         'fatalityCounts': self.fatalityCounts
                     })
         return myString

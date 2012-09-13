@@ -123,7 +123,11 @@ yMinimum: -2.21
 yMaximum: 1.79
 rows: 161.0
 columns: 161.0
-mmiData: Populated"""
+mmiData: Populated
+populationRasterPath: None
+impactFile: None
+impactKeywordsFile: None
+fatalityCounts: None"""
         myState = str(myShakeEvent)
         myMessage = (('Expected:\n----------------\n%s'
                      '\n\nGot\n------------------\n%s\n') %
@@ -229,7 +233,8 @@ mmiData: Populated"""
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
         myResult = myShakeEvent.calculateFatalities()
-        myExpectedResult = ''
+        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
+                           '/20120726022003/impact-nearest.tif')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 
