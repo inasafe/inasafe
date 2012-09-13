@@ -29,7 +29,7 @@ from rt_exceptions import ( EventUndefinedError,
                             EventValidationError,
                             InvalidInputZipError,
                             ExtractionError
-                        )
+                          )
 from ftp_client import FtpClient
 from utils import (shakemapZipDir,
                    shakemapExtractDir)
@@ -384,12 +384,9 @@ class ShakeData:
 
         Returns: A ShakeEvent object.
 
-        Raises: EventXmlParseError
+        Raises: propogates any exceptions from ShakeEvent
         """
         if self._shakeEvent is None or theForceFlag is True:
             self.extract(theForceFlag)
-            try:
-                self._shakeEvent = ShakeEvent(self.eventId)
-            except EventXmlParseError:
-                raise
+            self._shakeEvent = ShakeEvent(self.eventId)
         return self._shakeEvent

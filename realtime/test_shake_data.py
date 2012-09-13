@@ -23,9 +23,8 @@ import unittest
 
 from shake_data import ShakeData
 from utils import (shakemapZipDir,
-                            shakemapDataDir,
-                            shakemapExtractDir,
-                            purgeWorkingData)
+                   shakemapExtractDir,
+                   purgeWorkingData)
 
 # Clear away working dirs so we can be sure they are
 # actually created

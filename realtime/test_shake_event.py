@@ -95,7 +95,7 @@ class TestShakeEvent(unittest.TestCase):
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
         myPath = myShakeEvent.mmiDataToDelimitedFile(theForceFlag=True)
-        myFile = file(myPath,'rt')
+        myFile = file(myPath, 'rt')
         myString = myFile.readlines()
         myFile.close()
         self.assertEqual(25922, len(myString))
@@ -135,9 +135,9 @@ fatalityCounts: None"""
         assert myState == myExpectedState, myMessage
         myPath = myShakeEvent.mmiDataToRaster(theForceFlag=True)
         assert os.path.exists(myPath)
-        myExpectedQml = myPath.replace('tif','qml')
+        myExpectedQml = myPath.replace('tif', 'qml')
         assert os.path.exists(myExpectedQml)
-        myExpectedKeywords = myPath.replace('tif','keywords')
+        myExpectedKeywords = myPath.replace('tif', 'keywords')
         assert os.path.exists(myExpectedKeywords)
 
     def testEventToShapefile(self):
@@ -147,7 +147,7 @@ fatalityCounts: None"""
         myShakeEvent = myShakeData.shakeEvent()
         myPath = myShakeEvent.mmiDataToShapefile(theForceFlag=True)
         assert os.path.exists(myPath)
-        myExpectedQml = myPath.replace('shp','qml')
+        myExpectedQml = myPath.replace('shp', 'qml')
         myMessage = '%s not found' % myExpectedQml
         assert os.path.exists(myExpectedQml), myMessage
 
@@ -176,7 +176,7 @@ fatalityCounts: None"""
                                                 theAlgorithm='invdist')
         assert self.checkFeatureCount(myPath, 16)
         assert os.path.exists(myPath)
-        myExpectedQml = myPath.replace('shp','qml')
+        myExpectedQml = myPath.replace('shp', 'qml')
         myMessage = '%s not found' % myExpectedQml
         assert os.path.exists(myExpectedQml), myMessage
 
@@ -208,7 +208,7 @@ fatalityCounts: None"""
         while myProvider.nextFeature(myFeature):
             # fetch map of attributes
             myAttributes = myFeature.attributeMap()
-            for (myKey,myValue) in myAttributes.iteritems():
+            for (myKey, myValue) in myAttributes.iteritems():
                 myString += ("%d: %s\n" % (myKey, myValue.toString()))
             myString += '------------------\n'
         LOGGER.debug('Mem table:\n %s' % myString)
