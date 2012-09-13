@@ -292,3 +292,16 @@ jenkins-pep8:
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
 	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . > pep8.log || :
+
+
+jenkins-realtime-test:
+	@echo
+	@echo "---------------------------------------------------------------"
+	@echo "Regresssion Test Suite for Jenkins (Realtime module only)"
+	@echo "if you are going to run more than "
+	@echo "one InaSAFE Jenkins job, you should run each on a different"
+	@echo "display by changing the :100 option below to a different number"
+	@echo "---------------------------------------------------------------"
+	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
+	nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime|| :
