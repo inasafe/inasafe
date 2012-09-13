@@ -1135,7 +1135,7 @@ class ShakeEvent:
         self.impactFile = myTifPath
         self.impactKeywordsFile = myKeywordsPath
         self.fatalityCounts = myResult.keywords
-        return myResult.filename
+        return self.impactFile
 
     def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):
         """Clip population (exposure) layer to dimensions of shake data.
@@ -1247,8 +1247,14 @@ class ShakeEvent:
         Raises:
             FileNotFoundError
         """
+        # When used via the scripts make_shakemap.sh
         myFixturePath = os.path.join(os.path.abspath(os.path.curdir),
                                      'realtime',
+                                     'fixtures',
+                                     'exposure',
+                                     'population.tif')
+        # In case we are testing from in the realtime dir
+        myFixturePath2 = os.path.join(os.path.abspath(os.path.curdir),
                                      'fixtures',
                                      'exposure',
                                      'population.tif')
@@ -1259,6 +1265,8 @@ class ShakeEvent:
             return os.environ['SAFE_POPULATION_PATH']
         elif os.path.exists(myFixturePath):
             return myFixturePath
+        elif os.path.exists(myFixturePath2):
+            return myFixturePath2
         elif os.path.exists(myLocalPath):
             return myLocalPath
         else:
