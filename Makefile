@@ -87,12 +87,6 @@ lines-of-code:
 	@git log | head -3
 	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
 
-quiet-qgis:
-	# Make qgis console output quiet
-	@export QGIS_DEBUG=0
-	@export QGIS_LOG_FILE=/dev/null
-	@export QGIS_DEBUG_FILE=/dev/null
-
 clean:
 	@# FIXME (Ole): Use normal Makefile rules instead
 	@# Preceding dash means that make will continue in case of errors
@@ -105,7 +99,7 @@ clean:
 	@-/bin/rm .coverage 2>/dev/null || true
 
 # Run the test suite followed by style checking
-test: quiet-qgis docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
+test: docs test_suite pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations
 
 # Run the test suite for gui only
 guitest: gui_test_suite pep8 disabled_tests dependency_test unwanted_strings testdata_errorcheck
@@ -122,10 +116,11 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
+	@echo "disabled E121-E128 checks until pep8 version 1.3 becomes widely available"
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . || true
 
 # Run entire test suite
-test_suite: compile testdata
+test_suite: compile
 	@echo
 	@echo "----------------------"
 	@echo "Regression Test Suite"
@@ -163,13 +158,15 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 7181ff2048031de71eed85decdda77736de2587c 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 69852cc0958792e573a4be8cb203ef6579dd4940 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
 	@echo
-	@echo "-----------------inasafe_data updater Log-------------------"
-	@[ -f tmp_warnings.txt ] && more tmp_warnings.txt || echo "inasafe_data have been succesfully updated"; rm -f tmp_warnings.txt || true
+	@echo "---------------------"
+	@echo "Inasafe_data problems"
+	@echo "---------------------"
+	@[ -f tmp_warnings.txt ] && more tmp_warnings.txt || true; rm -f tmp_warnings.txt
 
 disabled_tests:
 	@echo
@@ -209,9 +206,9 @@ dependency_test:
 
 list_gpackages:
 	@echo
-	@echo "---------------------------------------"
-	@echo "List of QGis related packages installed"
-	@echo "---------------------------------------"
+	@echo "----------------------------------------"
+	@echo "List of QGis related packages installed."
+	@echo "----------------------------------------"
 	@dpkg -l | grep qgis || true
 	@dpkg -l | grep gdal || true
 	@dpkg -l | grep geos || true
@@ -225,19 +222,19 @@ run_data_audit:
 	@echo "---------------------------------------"
 	@python scripts/data_IP_audit.py
 
+pylint-count:
+	@echo
+	@echo "----------------------------"
+	@echo "Number of pylint violations."
+	@echo "For details run make pylint "
+	@echo "----------------------------"
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime| wc -l
+
 pylint:
 	@echo
-	@echo "---------------------------------------"
-	@echo "Pylint violations.                     "
-	@echo "---------------------------------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime | wc -l
-
-pylint-details:
-	@echo
-	@echo "---------------------------------------"
-	@echo "Pylint violations. For details run     "
-	@echo "make pylint-details                    "
-	@echo "---------------------------------------"
+	@echo "------------------"
+	@echo "Pylint violations."
+	@echo "------------------"
 	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis || true
 
 profile:
@@ -267,7 +264,7 @@ jenkins-pyflakes:
 	@echo "----------------------------------"
 	@echo "PyFlakes check for Jenkins"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis realtime > pyflakes.log || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis > pyflakes.log || :
 
 jenkins-sloccount:
 	@echo "----------------------"
@@ -286,10 +283,9 @@ jenkins-pylint:
 	@echo " cases we want to suppress warnings in the python code like this:"
 	@echo " from pydevd import * # pylint: disable=F0401"
 	@echo " with 'F0401' being the warning code."
-	@echo " Ignored lines will generate an I0011 message id which are grepped away"
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis realtime > pylint.log || :
+	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis realtime> pylint.log || :
 
 jenkins-pep8:
 	@echo
@@ -297,17 +293,3 @@ jenkins-pep8:
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
 	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . > pep8.log || :
-
-
-jenkins-realtime-test:
-	@echo
-	@echo "---------------------------------------------------------------"
-	@echo "Regresssion Test Suite for Jenkins (Realtime module only)"
-	@echo "if you are going to run more than "
-	@echo "one InaSAFE Jenkins job, you should run each on a different"
-	@echo "display by changing the :100 option below to a different number"
-	@echo "---------------------------------------------------------------"
-	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
-	nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime|| :
-

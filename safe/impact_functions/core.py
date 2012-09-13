@@ -602,7 +602,7 @@ def parse_single_requirement(requirement):
     return retval
 
 
-def get_plugins_as_table2(name=None, dict_filter={}):
+def get_plugins_as_table2(name=None, dict_filter=None):
     """Retrieve a table listing all plugins and their requirements.
 
        Or just a single plugin if name is passed.
@@ -616,6 +616,10 @@ def get_plugins_as_table2(name=None, dict_filter={}):
 
        Raises: None
     """
+
+    if dict_filter is None:
+        dict_filter = {}
+
     table_body = []
     header = TableRow([_('Title'), _('ID'), _('Category'),
                        _('Sub Category'), _('Layer type'), _('Data type'),
