@@ -15,6 +15,7 @@ from safe.common.tables import Table, TableCell, TableRow
 from utilities import pretty_string
 
 LOGGER = logging.getLogger('InaSAFE')
+not_found_value = 'N/A'
 
 
 # Disable lots of pylint for this as it is using magic
@@ -602,7 +603,9 @@ def parse_single_requirement(requirement):
     return retval
 
 
-def get_plugins_as_table2(name=None, dict_filter=None):
+def get_plugins_as_table2(dict_filter={'category': [''],
+                        'subcategory': [], 'title': [], 'datatype': [],
+                        'layertype': [], 'id': [], 'unit': []}):
     """Retrieve a table listing all plugins and their requirements.
 
        Or just a single plugin if name is passed.
@@ -639,26 +642,27 @@ def get_plugins_as_table2(name=None, dict_filter=None):
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
 
-    if name is not None:
-        if isinstance(name, basestring):
-            # Add the names
-            plugins_dict.update(dict([(p.__name__, p)
-                                      for p in FunctionProvider.plugins]))
+#===============================================================================
+#    if name is not None:
+#        if isinstance(name, basestring):
+#            # Add the names
+#            plugins_dict.update(dict([(p.__name__, p)
+#                                      for p in FunctionProvider.plugins]))
+# 
+#            msg = ('No plugin named "%s" was found. '
+#                   'List of available plugins is: %s'
+#                   % (name, ', '.join(plugins_dict.keys())))
+#            if name not in plugins_dict:
+#                raise RuntimeError(msg)
+# 
+#            plugins_dict = {name: plugins_dict[name]}
+#        else:
+#            msg = ('get_plugins expects either no parameters or a string '
+#                   'with the name of the plugin, you passed: '
+#                   '%s which is a %s' % (name, type(name)))
+#            raise Exception(msg)
+#===============================================================================
 
-            msg = ('No plugin named "%s" was found. '
-                   'List of available plugins is: %s'
-                   % (name, ', '.join(plugins_dict.keys())))
-            if name not in plugins_dict:
-                raise RuntimeError(msg)
-
-            plugins_dict = {name: plugins_dict[name]}
-        else:
-            msg = ('get_plugins expects either no parameters or a string '
-                   'with the name of the plugin, you passed: '
-                   '%s which is a %s' % (name, type(name)))
-            raise Exception(msg)
-
-    not_found_value = 'N/A'
     for key, func in plugins_dict.iteritems():
         for requirement in requirements_collect(func):
             dict_found = {'category': False,
@@ -674,6 +678,11 @@ def get_plugins_as_table2(name=None, dict_filter=None):
                 myFilter = dict_filter.get(myKey, None)
                 myValue = pretty_string(dict_req.get(myKey, not_found_value))
                 if myFilter is not None and myValue != not_found_value:
+                    for myKeyword in myFilter:
+                        if myValue.find(str(myKeyword)) != -1:
+                            dict_found[myKey] = True
+                            break
+                elif myFilter is not [] and myValue != not_found_value:
                     for myKeyword in myFilter:
                         if myValue.find(str(myKeyword)) != -1:
                             dict_found[myKey] = True
@@ -695,9 +704,13 @@ def get_plugins_as_table2(name=None, dict_filter=None):
                     myValue = pretty_string(dict_req.get(myKey,
                                                 not_found_value))
                     row.append(myValue)
-                table_body.append(TableRow(row))
+                table_body.append(TableRow(row, ))
 
-    table = Table(table_body, width='1')
+    cw = 100 / 7
+    table_col_width = [str(cw) + '%', str(cw) + '%', str(cw) + '%',
+                       str(cw) + '%', str(cw) + '%', str(cw) + '%',
+                       str(cw) + '%']
+    table = Table(table_body, col_width=table_col_width)
     table.caption = _('Available Impact Functions')
 
     return table
@@ -710,18 +723,23 @@ def get_unique_values():
         Args: None
 
         Returns:
-            * Dictionary contains set unique value for each column
+            * Dictionary contains list unique value for each column
         """
     atts = ['category', 'subcategory', 'layertype', 'datatype', 'unit']
     dict_retval = {'category': set(),
                         'subcategory': set(),
                         'layertype': set(),
                         'datatype': set(),
-                        'unit': set()
+                        'unit': set(),
+                        'id': set(),
+                        'title': set()
                               }
+
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
     for key, func in plugins_dict.iteritems():
+        dict_retval['title'].add(get_function_title(func))
+        dict_retval['id'].add(key)
         for requirement in requirements_collect(func):
             dict_req = parse_single_requirement(str(requirement))
             for key in dict_req.iterkeys():
@@ -732,4 +750,7 @@ def get_unique_values():
                 elif type(dict_req[key]) == type(list()):
                     dict_retval[key] |= set(dict_req[key])
 
+    # convert to list
+    for key in dict_retval.iterkeys():
+        dict_retval[key] = list(dict_retval[key])
     return dict_retval
