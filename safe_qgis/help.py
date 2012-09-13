@@ -23,7 +23,7 @@ from safe_qgis.help_base import Ui_HelpBase
 import os
 
 
-class ISHelp(QtGui.QDialog):
+class Help(QtGui.QDialog):
     """Help dialog class for the Risk In A Box plugin.
 
     .. todo:: Add navigation buttons. See url for example of how to do so.
@@ -48,7 +48,7 @@ class ISHelp(QtGui.QDialog):
         """
         QtGui.QDialog.__init__(self, theParent)
         # Set up the user interface from Designer.
-        self.ui = Ui_ISHelpBase()
+        self.ui = Ui_HelpBase()
         self.ui.setupUi(self)
         self.context = theContext
         self.showContexthelp()

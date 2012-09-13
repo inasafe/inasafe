@@ -29,8 +29,7 @@ from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
-                       QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform)
+                       QgsCoordinateReferenceSystem)
 
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
@@ -631,6 +630,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myName = myEngineImpactLayer.get_name()
 
         # Read layer
+        myQgisLayer = None
         if myEngineImpactLayer.is_vector:
             myQgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
         elif myEngineImpactLayer.is_raster:
