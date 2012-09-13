@@ -116,15 +116,14 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@echo "disabled E121-E128 checks until pep8 version 1.3 becomes widely available"
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . || true
 
 # Run entire test suite
 test_suite: compile
 	@echo
-	@echo "----------------------"
+	@echo "---------------------"
 	@echo "Regression Test Suite"
-	@echo "----------------------"
+	@echo "---------------------"
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 	@# FIXME (Ole) - to get of the remaining junk I tried to use
@@ -217,32 +216,32 @@ data_audit: testdata run_data_audit
 
 run_data_audit:
 	@echo
-	@echo "---------------------------------------"
-	@echo "Audit of IP status for bundled data    "
-	@echo "---------------------------------------"
+	@echo "-----------------------------------"
+	@echo "Audit of IP status for bundled data"
+	@echo "-----------------------------------"
 	@python scripts/data_IP_audit.py
 
 pylint-count:
 	@echo
-	@echo "----------------------------"
-	@echo "Number of pylint violations."
-	@echo "For details run make pylint "
-	@echo "----------------------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis realtime| wc -l
+	@echo "---------------------------"
+	@echo "Number of pylint violations"
+	@echo "For details run make pylint"
+	@echo "---------------------------"
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis | wc -l
 
 pylint:
 	@echo
-	@echo "------------------"
-	@echo "Pylint violations."
-	@echo "------------------"
+	@echo "-----------------"
+	@echo "Pylint violations"
+	@echo "-----------------"
 	@pylint --output-format=parseable --reports=n --rcfile=pylintrc -i y safe safe_qgis || true
 
 profile:
 	@echo
-	@echo "---------------------------------------"
-	@echo "Profiling engine                       "
-	@echo "---------------------------------------"
-	python -m cProfile safe/engine/test_engine.py -s cumulative
+	@echo "----------------"
+	@echo "Profiling engine"
+	@echo "----------------"
+	python -m cProfile safe/engine/test_engine.py -s time
 
 ##########################################################
 #
@@ -285,7 +284,7 @@ jenkins-pylint:
 	@echo " with 'F0401' being the warning code."
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis realtime> pylint.log || :
+	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis realtime > pylint.log || :
 
 jenkins-pep8:
 	@echo
