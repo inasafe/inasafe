@@ -42,7 +42,7 @@ from qgis.core import (QgsPoint,
 from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
-from safe_qgis.safe_interface import getOptimalExtent, getBufferedExtent
+from safe_qgis.safe_interface import getOptimalExtent
 from safe_qgis.utilities import getWGS84resolution
 from safe_qgis.clipper import extentToGeoArray, clipLayer
 from safe_qgis.exceptions import InsufficientOverlapException
@@ -541,7 +541,7 @@ class ShakeEvent:
 
         myCommand = (('gdal_grid -a %(alg)s -zfield "mmi" -txe %(xMin)s '
                       '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
-                      '%(dimX)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
+                      '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
                       '%(vrt)s %(tif)s') % {
             'alg': myAlgorithm,
             'xMin': self.xMinimum,
@@ -825,7 +825,7 @@ class ShakeEvent:
                 os.remove(myOutputFileBase + 'shx')
                 os.remove(myOutputFileBase + 'dbf')
                 os.remove(myOutputFileBase + 'prj')
-            except:
+            except OSError:
                 LOGGER.exception('Old cities files not deleted'
                     ' - this may indicate a file permissions issue.')
 
@@ -1056,8 +1056,9 @@ class ShakeEvent:
         myCities = self.localCityFeatures()
         myResult = myMemoryProvider.addFeatures(myCities)
         if not myResult:
-            LOGGER.exception()
-            raise
+            LOGGER.exception('Unable to add features to cities memory layer')
+            raise CityMemoryLayerCreationError('Could not add any features'
+                'to cities memory layer.')
 
         myMemoryLayer.commitChanges()
         myMemoryLayer.updateExtents()
@@ -1185,10 +1186,10 @@ class ShakeEvent:
             myGeoExtent = getOptimalExtent(myHazardGeoExtent,
                                            myExposureGeoExtent,
                                            myViewportGeoExtent)
-        except InsufficientOverlapException, e:
-            myMessage = ('There was insufficient overlap between the input'
+        except InsufficientOverlapException:
+            LOGGER.exception('There was insufficient overlap between the input'
                          ' layers')
-            raise Exception(myMessage)
+            raise
         # Next work out the ideal spatial resolution for rasters
         # in the analysis. If layers are not native WGS84, we estimate
         # this based on the geographic extents
