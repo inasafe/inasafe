@@ -159,7 +159,7 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
         theHazard str - (Required) name of the hazard combo entry to set.
         theExposure str - (Required) name of exposure combo entry to set.
         theFunction - (Required) name of the function combo entry to set.
-        theFunctionId - (Required) the imact function id that should be used.
+        theFunctionId - (Required) the impact function id that should be used.
         theOkButtonFlag - (Optional) Whether the ok button should be enabled
           after this scenario is set up.
 
@@ -167,7 +167,7 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
     multiple functions with the same name but different id's so we need to be
     sure we have the right one.
 
-    Returs: bool - Indicating if the setup was successful
+    Returns: bool - Indicating if the setup was successful
             str - A message indicating why it may have failed.
 
     Raises: None
@@ -255,7 +255,8 @@ def loadStandardLayers():
                   join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
                   join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
                   join(EXPDATA, 'DKI_buildings.shp'),
-                  join(HAZDATA, 'jakarta_flood_category_123.asc')]
+                  join(HAZDATA, 'jakarta_flood_category_123.asc'),
+                  join(TESTDATA, 'roads_Maumere.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
     assert myHazardLayerCount + myExposureLayerCount == len(myFileList)
@@ -348,12 +349,15 @@ class DockTest(unittest.TestCase):
         QgsMapLayerRegistry.instance().removeAllMapLayers()
         DOCK.cboHazard.clear()
         DOCK.cboExposure.clear()
+        #DOCK.cboAggregation.clear() #dont do this because the cboAggregation
+        # need to be able to react to the status changes of the other combos
 
     def test_defaults(self):
         """Test the GUI in its default state"""
         self.assertEqual(DOCK.cboHazard.currentIndex(), 0)
         self.assertEqual(DOCK.cboExposure.currentIndex(), 0)
         self.assertEqual(DOCK.cboFunction.currentIndex(), 0)
+        self.assertEqual(DOCK.cboAggregation.currentIndex(), 0)
 
     def test_validate(self):
         """Validate function work as expected"""
@@ -388,6 +392,34 @@ class DockTest(unittest.TestCase):
         myMessage = ('Validation expected to pass on a ' +
                      'populated DOCK with selections.')
         assert myFlag, myMessage
+
+    def test_cboAggregationEmptyProject(self):
+        """Aggregation combo changes properly according loaded layers"""
+        self.tearDown()
+        myMessage = ('The aggregation combobox should have only the "No '
+                     'aggregation" item when the project has no layer. Found:'
+                     ' %s' % (DOCK.cboAggregation.currentText()))
+
+        self.assertEqual(DOCK.cboAggregation.currentText(), DOCK.tr(
+            'No aggregation'), myMessage)
+
+        self.assertEqual(DOCK.cboAggregation.isEnabled(), False,
+            'The aggregation combobox should be disabled when the project has'
+            ' no layer.')
+
+    def test_cboAggregationLoadedProject(self):
+
+        myLayerList = [DOCK.tr('No aggregation'),
+                       DOCK.tr('A flood in Jakarta in RW areas identified as '
+                               'flood prone'),
+                       DOCK.tr('DKI buildings'),
+                       DOCK.tr('OSM Building Polygons')]
+        currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(DOCK
+        .cboAggregation.count())]
+
+        myMessage = ('The aggregation combobox should have:\n %s \nFound: %s'
+                     % (myLayerList, currentLayers))
+        self.assertEquals(currentLayers, myLayerList, myMessage)
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
