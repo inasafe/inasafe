@@ -610,7 +610,7 @@ class ShakeEvent:
                 os.remove(myOutputFileBase + 'shx')
                 os.remove(myOutputFileBase + 'dbf')
                 os.remove(myOutputFileBase + 'prj')
-            except:
+            except OSError:
                 LOGGER.exception('Old contour files not deleted'
                     ' - this may indicate a file permissions issue.')
 
