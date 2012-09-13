@@ -20,9 +20,11 @@ __date__ = '31/07/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+
 class FileNotFoundError(Exception):
     """Exception for when a file could not be found."""
     pass
+
 
 class EventIdError(Exception):
     """Exceptions relating to null or incorrect event id's"""
@@ -81,13 +83,16 @@ class GridXmlFileNotFoundError(Exception):
     """An exception for when an grid.xml could not be found"""
     pass
 
+
 class InvalidLayerError(Exception):
     """Raised when a gis layer is invalid"""
     pass
 
+
 class CityShapefileCreationError(Exception):
     """Raised if an error occurs creating the cities file"""
     pass
+
 
 class CityMemoryLayerCreationError(Exception):
     """Raised if an error occurs creating the cities memory layer"""
