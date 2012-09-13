@@ -855,7 +855,8 @@ class ShakeEvent:
         if myResult == QgsVectorFileWriter.NoError:
             LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)
         else:
-            raise CityShapefileCreationError('Failed with error: %s' % myResult)
+            raise CityShapefileCreationError(
+                'Failed with error: %s' % myResult)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         myQmlPath = os.path.join(shakemapExtractDir(),
