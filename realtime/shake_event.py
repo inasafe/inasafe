@@ -102,7 +102,10 @@ class ShakeEvent:
         self.columns = None
         self.mmiData = None
         self.populationRasterPath = thePopulationRasterPath
+        # Path to tif of impact result - probably we wont even use it
         self.impactFile = None
+        # Path to impact keywords file - this is GOLD here!
+        self.impactKeywordsFile = None
         self.fatalityCounts = None
         # After selecting affected cities near the event, the bbox of
         # shake map + cities
@@ -1067,7 +1070,7 @@ class ShakeEvent:
     def calculateFatalities(self,
                             thePopulationRasterPath=None,
                             theForceFlag=False,
-                            theAlgorithm=None):
+                            theAlgorithm='nearest'):
         """Use the earthquake fatalities  function to calculate fatalities.
 
         Args:
@@ -1113,7 +1116,24 @@ class ShakeEvent:
         myFunction = safe_get_plugins(myFunctionId)[0][myFunctionId]
 
         myResult = safe_calculate_impact(myLayers, myFunction)
-        self.impactFile = myResult.filename
+
+        # Copy the impact layer into our extract dir.
+        myTifPath = os.path.join(shakemapExtractDir(),
+                                 self.eventId,
+                                 'impact-%s.tif' % theAlgorithm)
+        shutil.copyfile(myResult.filename, myTifPath)
+        LOGGER.debug('Copied impact result to:\n%s\n' % myTifPath)
+        # Copy the impact keywords layer into our extract dir.
+        myKeywordsPath = os.path.join(shakemapExtractDir(),
+                                 self.eventId,
+                                 'impact-%s.keywords' % theAlgorithm)
+        myKeywordsSource = os.path.splitext(myResult.filename)[0]
+        myKeywordsSource = '%s.keywords' % myKeywordsSource
+        shutil.copyfile(myKeywordsSource, myKeywordsPath)
+        LOGGER.debug('Copied impact keywords to:\n%s\n' % myKeywordsPath)
+
+        self.impactFile = myTifPath
+        self.impactKeywordsFile = myKeywordsPath
         self.fatalityCounts = myResult.keywords
         return myResult.filename
 
