@@ -3,10 +3,13 @@
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
+      <env name="QGIS_DEBUG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
+      <env name="QGIS_LOG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
       <env name="QGISPATH" value="/usr/local/qgis-master" />
+      <env name="QGIS_DEBUG" value="0" />
     </envs>
     <option name="SDK_HOME" value="" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
     <option name="IS_MODULE_SDK" value="true" />
     <module name="inasafe-realtime" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
