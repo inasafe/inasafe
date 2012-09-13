@@ -60,7 +60,7 @@ except:
     LOGGER.exception('An error occurred setting up the latest shake event.')
     exit()
 
-logging.info('Latest Event Id: %s' % myShakeEvent)
+logging.info('Latest Event Id: %s', myShakeEvent)
 logging.info('-------------------------------------------')
 
 # Always regenerate the products
@@ -70,14 +70,14 @@ myForceFlag = True
 for myAlgorithm in ['nearest']:
     myFile = myShakeEvent.mmiDataToContours(theForceFlag=myForceFlag,
                                    theAlgorithm=myAlgorithm)
-    logging.info('Created: %s' % myFile)
+    logging.info('Created: %s', myFile)
 try:
     myFile = myShakeEvent.citiesToShape(theForceFlag=myForceFlag)
-    logging.info('Created: %s' % myFile)
+    logging.info('Created: %s', myFile)
 except:
     logging.exception('No nearby cities found!')
 myFile = myShakeEvent.mmiDataToShapefile(theForceFlag=myForceFlag)
-logging.info('Created: %s' % myFile)
+logging.info('Created: %s', myFile)
 
 myShakeEvent.calculateFatalities()
 
