@@ -70,7 +70,7 @@ class ShakeEvent:
             theEventId - (Mandatory) Id of the event. Will be used to
                 determine the path to an grid.xml file that
                 will be used to intialise the state of the ShakeEvent instance.
-            thePopulationRasterPath - (Optional) - path to the population raster
+            thePopulationRasterPath - (Optional)path to the population raster
                 that will be used if you want to calculate the impact. This
                 is optional because there are various ways this can be
                 specified before calling :func:`calculateFatalities`.
@@ -133,7 +133,6 @@ class ShakeEvent:
         else:
             LOGGER.error('Event file not found. %s' % myGridXmlPath)
             raise GridXmlFileNotFoundError('%s not found' % myGridXmlPath)
-
 
     def parseGridXml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
@@ -425,7 +424,7 @@ class ShakeEvent:
                 raise Exception(myMessage)
 
     def mmiDataToShapefile(self, theForceFlag=False):
-        """Convert the grid.xml's mmi column to a vector shp file using ogr2ogr.
+        """Convert grid.xml's mmi column to a vector shp file using ogr2ogr.
 
         An ESRI shape file will be created.
 
@@ -571,7 +570,6 @@ class ShakeEvent:
         mySourceQml = os.path.join(dataDir(), 'mmi.qml')
         shutil.copyfile(mySourceQml, myQmlPath)
         return myTifPath
-
 
     def mmiDataToContours(self, theForceFlag=True, theAlgorithm='nearest'):
         """Extract contours from the event's tif file.
@@ -770,7 +768,8 @@ class ShakeEvent:
             myLayer.changeAttributeValue(myId, myYIndex, QVariant(myY))
             myLayer.changeAttributeValue(myId, myRGBIndex, QVariant(myRGB))
             myLayer.changeAttributeValue(myId, myRomanIndex, QVariant(myRoman))
-            myLayer.changeAttributeValue(myId, myAlignIndex, QVariant('Center'))
+            myLayer.changeAttributeValue(
+                myId, myAlignIndex, QVariant('Center'))
 
         myLayer.commitChanges()
 
@@ -907,7 +906,7 @@ class ShakeEvent:
 
         Args: None
 
-        Returns: A list of QgsFeature instances, each representing a place/city.
+        Returns: list of QgsFeature instances, each representing a place/city.
 
         Raises: InvalidLayerError
 
@@ -1031,7 +1030,6 @@ class ShakeEvent:
             myCities.append(myNewFeature)
         return myCities
 
-
     def localCitiesMemoryLayer(self):
         """Fetch a collection of the cities that are nearby.
 
@@ -1076,13 +1074,14 @@ class ShakeEvent:
 
         Args:
             thePopulationRasterPath: str optional. see
-                :func:`_getPopulationPath` for more details on how the path will
-                be resolved if not explicitly given.
+                :func:`_getPopulationPath` for more details on how the path
+                will be resolved if not explicitly given.
             theForceFlag bool - (Optional). Whether to force the regeneration
                 of contour product. Defaults to False.
             theAlgorithm str - (Optional) Which interpolation algorithm to
                 use to create the underlying raster. see
-                :func:`mmiToRasterData` for information about default behaviour.
+                :func:`mmiToRasterData` for information about default
+                behaviour.
         Returns:
             str - the path to the computed impact file.
                 The class members self.impactFile and self.fatalityCounts
@@ -1148,7 +1147,8 @@ class ShakeEvent:
             thePopulationRasterPath: Path to the population raster.
 
         Returns:
-            str, str: Path to the clipped datasets (clipped shake, clipped pop).
+            str, str: Path to the clipped datasets (clipped shake, clipped
+            pop).
 
         Raises:
             FileNotFoundError
