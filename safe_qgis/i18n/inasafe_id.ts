@@ -306,7 +306,7 @@
     </message>
     <message>
         <location filename="dock_base.ui" line="106"/>
-        <source>Aggregate by</source>
+        <source>Aggregate results by</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
