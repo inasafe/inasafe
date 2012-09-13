@@ -35,6 +35,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def separate_points_by_polygon(points, polygon,
+                               polygon_bbox=None,
                                closed=True,
                                check_input=True,
                                use_numpy=True):
@@ -43,6 +44,7 @@ def separate_points_by_polygon(points, polygon,
     Args:
         * points: Tuple of (x, y) coordinates, or list of tuples
         * polygon: list or Nx2 array of polygon vertices
+        * polygon_bbox: (optional) bounding box for polygon
         * closed: (optional) determine whether points on boundary should be
               regarded as belonging to the polygon (closed = True)
               or not (closed = False)
@@ -127,11 +129,19 @@ def separate_points_by_polygon(points, polygon,
         if points.shape[1] != 2:
             raise PolygonInputError(msg)
 
-    # Exclude points that outside polygon bounding box
-    minpx = min(polygon[:, 0])
-    maxpx = max(polygon[:, 0])
-    minpy = min(polygon[:, 1])
-    maxpy = max(polygon[:, 1])
+    # Get polygon extents to rule out segments that
+    # are outside its bounding box
+    if polygon_bbox is None:
+        minpx = min(polygon[:, 0])
+        maxpx = max(polygon[:, 0])
+        minpy = min(polygon[:, 1])
+        maxpy = max(polygon[:, 1])
+        polygon_bbox = [minpx, maxpx, minpy, maxpy]
+    else:
+        minpx = polygon_bbox[0]
+        maxpx = polygon_bbox[1]
+        minpy = polygon_bbox[2]
+        maxpy = polygon_bbox[3]
 
     x = points[:, 0]
     y = points[:, 1]
@@ -889,7 +899,10 @@ def _clip_line_by_polygon(line,
             # Separate segment midpoints according to polygon
             intersections = numpy.array(intersections)
             midpoints = (intersections[:-1] + intersections[1:]) / 2
-            inside, outside = separate_points_by_polygon(midpoints, polygon,
+            inside, outside = separate_points_by_polygon(midpoints,
+                                                         polygon,
+                                                         polygon_bbox,
+                                                         check_input=False,
                                                          closed=closed)
 
             # Form segments and add to the right lists
