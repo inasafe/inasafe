@@ -830,11 +830,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print "DEBUG: Vector aggregation not implemented yet"
         elif myQgisImpactLayer.type() == QgsMapLayer.RasterLayer:
             print "DEBUG: Aggregating Zonal statistics"
-            prefix = ""
-            zonStat = QgsZonalStatistics(aggregationLayer,
-                myQgisImpactLayer, prefix)
-            progressDialog = QtGui.QProgressDialog(self.tr("Calculating "
-                "zonal statistics"), self.tr("Abort..."), 0, 0)
+            prefix = "zonal"
+            zonStat = QgsZonalStatistics(
+                aggregationLayer,
+                myQgisImpactLayer.dataProvider().dataSourceUri(),
+                prefix
+            )
+            progressDialog = QtGui.QProgressDialog(
+                self.tr("Calculating zonal statistics"),
+                self.tr("Abort..."),
+                0,
+                0
+            )
             zonStat.calculateStatistics(progressDialog)
             print "done"
 
