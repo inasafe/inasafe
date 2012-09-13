@@ -12,6 +12,7 @@ Please observe the following coding standards when working on the codebase:
 * Coding must follow a style guide. In case of Python it is
   `pep8 <http://www.python.org/dev/peps/pep-0008>`_ and
   using the command line tool pep8 (or :samp:`make pep8`) to enforce this.
+  The pep8 checks E121-E128 have been disabled until pep8 version 1.3 becomes widely available.
 * `Python documentation guide <http://www.python.org/dev/peps/pep-0257>`_
 * Comments should be complete sentences. If a comment is a phrase or sentence, its first word should be capitalized, unless it is an identifier that begins with a lower case letter (never alter the case of identifiers!). Comments should start with a # and a single space.
 * Adherence to regression/unit testing wherever possible (:samp:`make test`)
