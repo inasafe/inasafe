@@ -222,8 +222,15 @@ fatalityCounts: None"""
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
-        # Get the mem layer
-        myPath = myShakeEvent.citiesToShape()
+        myPath = myShakeEvent.citiesToShapefile()
+        assert os.path.exists(myPath)
+
+    def testCitiesSearchBoxesToShape(self):
+        """Test that we can retrieve the search boxes used to find cities."""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myPath = myShakeEvent.citySearchBoxesToShapefile()
         assert os.path.exists(myPath)
 
     def testCalculateFatalities(self):

@@ -89,7 +89,7 @@ class InvalidLayerError(Exception):
     pass
 
 
-class CityShapefileCreationError(Exception):
+class ShapefileCreationError(Exception):
     """Raised if an error occurs creating the cities file"""
     pass
 

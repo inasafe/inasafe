@@ -72,7 +72,9 @@ for myAlgorithm in ['nearest']:
                                    theAlgorithm=myAlgorithm)
     logging.info('Created: %s' % myFile)
 try:
-    myFile = myShakeEvent.citiesToShape(theForceFlag=myForceFlag)
+    myFile = myShakeEvent.citiesToShapefile(theForceFlag=myForceFlag)
+    logging.info('Created: %s' % myFile)
+    myFile = myShakeEvent.citySearchBoxesToShapefile(theForceFlag=myForceFlag)
     logging.info('Created: %s' % myFile)
 except:
     logging.exception('No nearby cities found!')

@@ -51,7 +51,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            GridXmlParseError,
                            ContourCreationError,
                            InvalidLayerError,
-                           CityShapefileCreationError,
+                           ShapefileCreationError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError)
 
@@ -110,8 +110,12 @@ class ShakeEvent:
         # After selecting affected cities near the event, the bbox of
         # shake map + cities
         self.extentWithCities = None
-        # how much to iteratively zoom out by when searching for cities
-        self.zoomFactor = 2
+        # How much to iteratively zoom out by when searching for cities
+        self.zoomFactor = 1.25
+        # The search boxes used to find extentWithCities
+        # Stored in the form [{'city_count': int, 'geometry': QgsRectangle()}]
+        self.searchBoxes = None
+
         self.parseGridXml()
 
     def gridFilePath(self):
@@ -610,7 +614,7 @@ class ShakeEvent:
                 os.remove(myOutputFileBase + 'shx')
                 os.remove(myOutputFileBase + 'dbf')
                 os.remove(myOutputFileBase + 'prj')
-            except:
+            except OSError:
                 LOGGER.exception('Old contour files not deleted'
                     ' - this may indicate a file permissions issue.')
 
@@ -790,31 +794,87 @@ class ShakeEvent:
                                    self.yMinimum)
         return myRectangle
 
-    def citiesToShape(self, theForceFlag=False):
-        """Write the local cities to a shapefile.
+    def citiesToShapefile(self, theForceFlag=False):
+        """Write a cities memory layer to a shapefile.
 
-        .. note:: Delegates to localCitiesMemoryLayer then uses
-           QgsVectorFileWriter to write it to a shp.
+        .. note:: The file will be saved into the shakemap extract dir
+           event id folder. Any existing shp by the same name will be
+           overwritten if theForceFlag is False, otherwise it will
+           be returned directly without creating a new file.
 
-        Args: None
+        Args:
+            theForceFlag: bool (Optional). Whether to force the overwrite
+                of any existing data. Defaults to False.
+
 
         Returns: str Path to the created shapefile
 
-        Raises: CityShapefileCreationError
+        Raises: ShapefileCreationError
         """
-        LOGGER.debug('citiesToShape requested.')
+        myFileName = 'cities-mmi'
         myMemoryLayer = self.localCitiesMemoryLayer()
+        return self.memoryLayerToShapefile(theFileName=myFileName,
+                                           theMemoryLayer= myMemoryLayer,
+                                           theForceFlag=theForceFlag)
 
-        LOGGER.debug(str(myMemoryLayer.dataProvider().attributeIndexes()))
-        if myMemoryLayer.featureCount() < 1:
-            raise CityShapefileCreationError('Memory layer has no features')
+
+    def citySearchBoxesToShapefile(self, theForceFlag=False):
+        """Write a cities memory layer to a shapefile.
+
+        .. note:: The file will be saved into the shakemap extract dir
+           event id folder. Any existing shp by the same name will be
+           overwritten if theForceFlag is False, otherwise it will
+           be returned directly without creating a new file.
+
+        Args:
+            theForceFlag: bool (Optional). Whether to force the overwrite
+                of any existing data. Defaults to False.
+
+
+        Returns: str Path to the created shapefile
+
+        Raises: ShapefileCreationError
+        """
+        myFileName = 'city-search-boxes'
+        myMemoryLayer = self.citySearchBoxMemoryLayer()
+        return self.memoryLayerToShapefile(theFileName=myFileName,
+                                           theMemoryLayer=myMemoryLayer,
+                                           theForceFlag=theForceFlag)
+
+    def memoryLayerToShapefile(self,
+                               theFileName,
+                               theMemoryLayer,
+                               theForceFlag=False):
+        """Write a memory layer to a shapefile.
+
+        .. note:: The file will be asved into the shakemap extract dir
+           event id folder. If a qml matching theFileName.qml can be
+           found it will automatically copied over to the output dir.
+           Any existing shp by the same name will be overridden if
+           theForceFlag is True, otherwise the existing file will be returned.
+
+        Args:
+            theFileName: str filename excluding path and ext. e.g. 'mmi-cities'
+            theMemoryLayer: QGIS memory layer instance.
+            theForceFlag: bool (Optional). Whether to force the overwrite
+                of any existing data. Defaults to False.
+
+        Returns: str Path to the created shapefile
+
+        Raises: ShapefileCreationError
+        """
+        LOGGER.debug('memoryLayerToShapefile requested.')
+
+        LOGGER.debug(str(theMemoryLayer.dataProvider().attributeIndexes()))
+        if theMemoryLayer.featureCount() < 1:
+            raise ShapefileCreationError('Memory layer has no features')
 
         myGeoCrs = QgsCoordinateReferenceSystem()
         myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
 
         myOutputFileBase = os.path.join(shakemapExtractDir(),
                                         self.eventId,
-                                        'mmi-cities.')
+                                        '%s.' % theFileName)
         myOutputFile = myOutputFileBase + 'shp'
         if os.path.exists(myOutputFile) and theForceFlag is not True:
             return myOutputFile
@@ -830,8 +890,8 @@ class ShakeEvent:
 
         # Next two lines a workaround for a QGIS bug (lte 1.8)
         # preventing mem layer attributes being saved to shp.
-        myMemoryLayer.startEditing()
-        myMemoryLayer.commitChanges()
+        theMemoryLayer.startEditing()
+        theMemoryLayer.commitChanges()
 
         LOGGER.debug('Writing mem layer to shp: %s' % myOutputFile)
         # Explicitly giving all options, not really needed but nice for clarity
@@ -841,7 +901,7 @@ class ShakeEvent:
         mySelectedOnlyFlag = False
         mySkipAttributesFlag = False
         myResult = QgsVectorFileWriter.writeAsVectorFormat(
-            myMemoryLayer,
+            theMemoryLayer,
             myOutputFile,
             'utf-8',
             myGeoCrs,
@@ -855,14 +915,14 @@ class ShakeEvent:
         if myResult == QgsVectorFileWriter.NoError:
             LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)
         else:
-            raise CityShapefileCreationError(
+            raise ShapefileCreationError(
                 'Failed with error: %s' % myResult)
 
         # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
         myQmlPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
-                                 'mmi-cities.qml')
-        mySourceQml = os.path.join(dataDir(), 'mmi-cities.qml')
+                                 '%s.qml' % theFileName)
+        mySourceQml = os.path.join(dataDir(), '%s.qml' % theFileName)
         shutil.copyfile(mySourceQml, myQmlPath)
 
         return myOutputFile
@@ -947,6 +1007,7 @@ class ShakeEvent:
         myAttemptsLimit = 5
         myMinimumCityCount = 1
         myFoundFlag = False
+        mySearchBoxes = []
         LOGGER.debug('Search polygons for cities:')
         for _ in range(myAttemptsLimit):
             LOGGER.debug(myRectangle.asWktPolygon())
@@ -959,13 +1020,15 @@ class ShakeEvent:
             myCount = 0
             while myLayerProvider.nextFeature(myFeature):
                 myCount += 1
-
+            # Store the box plus city count so we can visualise it later
+            myRecord = {'city_count': myCount, 'geometry': myRectangle}
+            mySearchBoxes.append(myRecord)
             if myCount < myMinimumCityCount:
                 myRectangle.scale(self.zoomFactor)
             else:
                 myFoundFlag = True
                 break
-
+        self.searchBoxes = mySearchBoxes
         if not myFoundFlag:
             LOGGER.debug('Could not find %s cities after expanding rect '
                     '%s times.' % (myMinimumCityCount, myAttemptsLimit))
@@ -1040,7 +1103,7 @@ class ShakeEvent:
 
         Raises: an exceptions will be propogated
         """
-        LOGGER.debug('mmiDataToContours requested.')
+        LOGGER.debug('localCitiesMemoryLayer requested.')
         # Now store the selection in a temporary memory layer
         myMemoryLayer = QgsVectorLayer('Point', 'affected_cities', 'memory')
         myMemoryProvider = myMemoryLayer.dataProvider()
@@ -1066,6 +1129,57 @@ class ShakeEvent:
                      myMemoryLayer.featureCount())
 
         return myMemoryLayer
+
+
+    def citySearchBoxMemoryLayer(self, theForceFlag=False):
+        """Return the search boxes used to search for cities as a memory layer.
+
+        This is mainly useful for diagnostic purposes.
+
+        Args:
+            theForceFlag: bool (Optional). Whether to force the overwrite
+                of any existing data. Defaults to False.
+
+        Returns: QgsVectorLayer - A QGIS memory layer
+
+        Raises: an exceptions will be propogated
+        """
+        LOGGER.debug('citySearchBoxMemoryLayer requested.')
+        # There is a dependency on localCitiesMemoryLayer so run it first
+        if self.searchBoxes is None or theForceFlag:
+            self.localCitiesMemoryLayer()
+        # Now store the selection in a temporary memory layer
+        myMemoryLayer = QgsVectorLayer('Polygon', 'City Search Boxes', 'memory')
+        myMemoryProvider = myMemoryLayer.dataProvider()
+        # add field defs
+        myMemoryProvider.addAttributes([
+            QgsField('cities_found', QVariant.Int)])
+
+        myFeatures = []
+        for mySearchBox in self.searchBoxes:
+            myNewFeature = QgsFeature()
+            myNewFeature.setGeometry(mySearchBox['rectangle'])
+            myAttributeMap = {
+                0: QVariant(mySearchBox['city_count']),
+            }
+            myNewFeature.setAttributeMap(myAttributeMap)
+            myFeatures.append(myNewFeature)
+
+        myResult = myMemoryProvider.addFeatures(myFeatures)
+        if not myResult:
+            LOGGER.exception('Unable to add features to city search boxes'
+                             'memory layer')
+            raise CityMemoryLayerCreationError('Could not add any features'
+                             'to city search boxes memory layer.')
+
+        myMemoryLayer.commitChanges()
+        myMemoryLayer.updateExtents()
+
+        LOGGER.debug('Feature count of search box mem layer:  %s' %
+                     myMemoryLayer.featureCount())
+
+        return myMemoryLayer
+
 
     def calculateFatalities(self,
                             thePopulationRasterPath=None,
@@ -1302,7 +1416,11 @@ class ShakeEvent:
                      'populationRasterPath: %(populationRasterPath)s\n'
                      'impactFile: %(impactFile)s\n'
                      'impactKeywordsFile: %(impactKeywordsFile)s\n'
-                     'fatalityCounts: %(fatalityCounts)s') %
+                     'fatalityCounts: %(fatalityCounts)s\n'
+                     'extentWithCities: %(extentWithCities)s\n'
+                     'zoomFactor: %(zoomFactor)s\n'
+                     'searchBoxes: %(searchBoxes)s\n'
+                        ) %
                     {
                         'latitude': self.latitude,
                         'longitude': self.longitude,
@@ -1326,6 +1444,10 @@ class ShakeEvent:
                         'populationRasterPath': self.populationRasterPath,
                         'impactFile': self.impactFile,
                         'impactKeywordsFile': self.impactKeywordsFile,
-                        'fatalityCounts': self.fatalityCounts
+                        'fatalityCounts': self.fatalityCounts,
+                        'extentWithCities':
+                            self.extentWithCities.asWktPolygon(),
+                        'zoomFactor': self.zoomFactor,
+                        'searchBoxes': self.searchBoxes
                     })
         return myString
