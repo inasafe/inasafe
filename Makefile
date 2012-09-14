@@ -243,6 +243,13 @@ profile:
 	@echo "----------------"
 	python -m cProfile safe/engine/test_engine.py -s time
 
+pyflakes:
+	@echo
+	@echo "---------------"
+	@echo "PyFlakes issues"
+	@echo "---------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis | wc -l
+
 ##########################################################
 #
 # Make targets specific to Jenkins go below this point
