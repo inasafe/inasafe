@@ -259,6 +259,36 @@ searchBoxes: None"""
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myBounds, myExpectedResult)
         assert myBounds == myExpectedResult, myMessage
 
+    def testRomanize(self):
+        """Test we can convert MMI values to float."""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+
+        myValues = range(1,9)
+        myExpectedResult = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
+        myResult = []
+        for myValue in myValues:
+            myResult.append(myShakeEvent.romanize(myValue))
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
+        assert myResult == myExpectedResult, myMessage
+
+    def testMmiColour(self):
+        """Test that we can get a colour given an mmi number."""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+
+        myValues = range(0,12)
+        myExpectedResult = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',
+         '#FF0', '#FD0', '#ff9100', '#F00', '#D00', '#800',
+         '#400']
+        myResult = []
+        for myValue in myValues:
+            myResult.append(myShakeEvent.mmiColour(myValue))
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
+        assert myResult == myExpectedResult, myMessage
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
     runner = unittest.TextTestRunner(verbosity=2)

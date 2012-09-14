@@ -698,6 +698,38 @@ class ShakeEvent:
         shutil.copyfile(mySourceQml, myQmlPath)
         return myOutputFile
 
+    def romanize(self, theMMIValue):
+        """Return the roman numeral for an mmi value.
+
+        Args:
+            theMMIValue: float
+        Returns:
+            str: Roman numeral equivalent of the value
+        Raises:
+            None
+        """
+        myRomanList = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
+                       'IX', 'X', 'XI', 'XII']
+        return myRomanList[int(round(theMMIValue))]
+
+
+    def mmiColour(self, theMMIValue):
+        """Return the colour for an mmi value.
+
+        Args:
+            theMMIValue: float or int required.
+        Returns:
+            str: html hex code colour for the value
+        Raises:
+            None
+        """
+
+        myRGBList = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',
+                         '#FF0', '#FD0', '#ff9100', '#F00', '#D00', '#800',
+                         '#400']
+        myRGB = myRGBList[int(theMMIValue)]
+        return myRGB
+
     def setContourProperties(self, theFile):
         """
         Set the X, Y, RGB, ROMAN attributes of the contour layer.
@@ -746,15 +778,12 @@ class ShakeEvent:
                     myXMax = myX
             myX = myXMin + ((myXMax - myXMin) / 2)
 
-            myRomanList = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
-                           'IX', 'X', 'XI', 'XII']
-
             myAttributes = myFeature.attributeMap()
             myMMIValue = float(myAttributes[myMMIIndex].toString())
 
             # We only want labels on the half contours so test for that
             if myMMIValue != round(myMMIValue):
-                myRoman = myRomanList[int(round(myMMIValue))]
+                myRoman = self.romanize(myMMIValue)
             else:
                 myRoman = ''
 
@@ -762,10 +791,7 @@ class ShakeEvent:
             #    myAttributes[myMMIIndex].toString(), myRoman))
 
             # RGB from http://en.wikipedia.org/wiki/Mercalli_intensity_scale
-            myRGBList = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',
-                         '#FF0', '#FD0', '#ff9100', '#F00', '#D00', '#800',
-                         '#400']
-            myRGB = myRGBList[int(myMMIValue)]
+            myRGB = self.mmiColour(myMMIValue)
 
             # Now update the feature
             myId = myFeature.id()
