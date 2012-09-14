@@ -289,6 +289,16 @@ searchBoxes: None"""
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 
+    def testSortedImpactedCities(self):
+        """Test getting impacted cities sorted by mmi then population."""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myTable = myShakeEvent.sortedImpactedCities()
+        myExpectedResult = ''
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myTable, myExpectedResult)
+        assert myTable == myExpectedResult, myMessage
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
     runner = unittest.TextTestRunner(verbosity=2)

@@ -1055,6 +1055,7 @@ class ShakeEvent:
             else:
                 myFoundFlag = True
                 break
+
         self.searchBoxes = mySearchBoxes
         # TODO: Perhaps it might be neater to combine the bbox of cities and
         #       mmi to get a tigher AOI then do a small zoom out.
@@ -1219,6 +1220,74 @@ class ShakeEvent:
 
         return myMemoryLayer
 
+    def sortedImpactedCities(self, theCount=5):
+        """Return an html snippet with place, mmi, pop sorted by mmi then pop.
+
+        Args:
+            theCount: int optional limit to how many rows should be returned.
+                Defaults to 5 if not specified.
+            theForceFlag: bool (Optional). Whether to force the overwrite
+                of any existing data. Defaults to False.
+        Returns:
+            str: An html document containing the sorted cities in a little
+                table.
+        Raises:
+            None
+
+        Straw man illustrating how sorting is done:
+
+        m = [
+             {'name': 'b', 'mmi': 10,  'pop':10},
+             {'name': 'a', 'mmi': 100, 'pop': 20},
+             {'name': 'c', 'mmi': 10, 'pop': 14}]
+
+        sorted(m, key=lambda d: (-d['mmi'], -d['pop'], d['name']))
+        Out[10]:
+        [{'mmi': 100, 'name': 'a', 'pop': 20},
+         {'mmi': 10, 'name': 'c', 'pop': 14},
+         {'mmi': 10, 'name': 'b', 'pop': 10}]
+
+        """
+        myLayer = self.localCitiesMemoryLayer()
+        myLayerProvider = myLayer.dataProvider()
+        myCities = []
+        myPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
+        myMmiIndex = myLayerProvider.fieldNameIndex('mmi')
+        myPopulationIndex = myLayerProvider.fieldNameIndex('population')
+        myRomanIndex = myLayerProvider.fieldNameIndex('roman')
+        # Should not need this to be repeated here but not working without it
+        myLayerProvider = myLayer.dataProvider()
+        myIndexes = myLayerProvider.attributeIndexes()
+
+        myLayer.select(myIndexes)
+        # Now loop through the db adding selected features to mem layer
+        myCount = 0
+        myFeature = QgsFeature()
+        while myLayerProvider.nextFeature(myFeature) and myCount < theCount:
+            if not myFeature.isValid():
+                LOGGER.debug('Skipping feature')
+                continue
+            myCount += 1
+            # calculate the distance and direction from this point
+            # to and from the epicenter
+            myAttributes = myFeature.attributeMap()
+            myPlaceName = str(myAttributes[myPlaceNameIndex].toString())
+            myMmi = myAttributes[myMmiIndex]
+            myPopulation = myAttributes[myPopulationIndex]
+            myRoman = str(myAttributes[myRomanIndex].toString())
+            myCity = {'name': myPlaceName,
+                      'mmi': myMmi,
+                      'population': myPopulation,
+                      'roman': myRoman}
+            myCities.append(myCity)
+
+        mySortedCities = sorted(myCities,
+                                key=lambda d: (
+                                    -d['mmi'],
+                                    -d['population'],
+                                    d['name'],
+                                    d['roman']))
+        return mySortedCities
 
     def calculateFatalities(self,
                             thePopulationRasterPath=None,
