@@ -880,21 +880,46 @@ def _clip_line_by_polygon(line,
             values = intersection(segment, polygon_segments)
             mask = -numpy.isnan(values[:, 0])
             V = values[mask]
-            intersections = list(segment)  # Include end points
-            intersections.extend(V)
+
+            # Array for intersections
+            intersections = numpy.zeros((len(V) + 2, 2))
+
+            # Include end points
+            intersections[0, :] = p0
+            intersections[1, :] = p1
+
+            # Add internal intersections
+            intersections[2:, :] = V
+
+            # For each intersection, computer distance from first end point
+            V = intersections - p0
+            distances = (V * V).sum(axis=1)
+
+            # Sort intersections by distance
+            idx = numpy.argsort(distances)
+            distances = distances[idx]
+            intersections = intersections[idx]
+
+            # Remove duplicate points
+            duplicates = numpy.zeros(len(distances), dtype=bool)
+            duplicates[1:] = distances[1:] - distances[:-1] == 0
+            intersections = intersections[-duplicates, :]
 
             # FIXME (Ole): Next candidate for vectorisation (11/9/2012) below
             # Loop through intersections for this line segment
-            distances = {}
-            for i in range(len(intersections)):
-                v = segment[0] - intersections[i]
-                d = numpy.dot(v, v)
-                distances[d] = intersections[i]  # Don't record duplicates
+            #distances = {}
+            #for i in range(len(intersections)):
+            #    v = p0 - intersections[i]
+            #    d = numpy.dot(v, v)
+            #    if d in distances:
+            #        print i, d, distances[d], intersections[i]
+            #        import sys; sys.exit()
+            #    distances[d] = intersections[i]  # Don't record duplicates
 
             # Sort intersections by distance using Schwarzian transform
-            A = zip(distances.keys(), distances.values())
-            A.sort()
-            _, intersections = zip(*A)
+            #A = zip(distances.keys(), distances.values())
+            #A.sort()
+            #_, intersections = zip(*A)
 
             # Separate segment midpoints according to polygon
             intersections = numpy.array(intersections)
