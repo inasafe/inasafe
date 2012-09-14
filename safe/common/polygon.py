@@ -785,6 +785,7 @@ def clip_line_by_polygon(line, polygon,
                                  polygon_bbox,
                                  closed=closed)
 
+
 # FIXME (Ole, 14 sep 2012): Will clean this up soon, promise
 # pylint: disable=W0613
 def _clip_line_by_polygon(line,
