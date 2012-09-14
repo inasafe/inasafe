@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/fixtures/exposure-table.html" afterPath="$PROJECT_DIR$/realtime/fixtures/exposure-table.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_event.py" afterPath="$PROJECT_DIR$/realtime/test_shake_event.py" />
     </list>
     <ignored path="inasafe-realtime.iws" />
@@ -31,22 +33,22 @@
           <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="814" column="32" selection-start="33155" selection-end="33155" vertical-scroll-proportion="0.0">
+                <state line="1250" column="0" selection-start="50813" selection-end="50813" vertical-scroll-proportion="0.0">
                   <folding>
-                    <marker date="1347614976826" expanded="true" signature="2176:61288" placeholder="..." />
-                    <marker date="1347614976826" expanded="true" signature="34558:35340" placeholder="&quot;&quot;&quot;Write the local cities to a shapefile....&quot;&quot;&quot;" />
-                    <marker date="1347614976826" expanded="true" signature="38002:39911" placeholder="&quot;&quot;&quot;Create a list of features representing cities impacted....&quot;&quot;&quot;" />
-                    <marker date="1347614976826" expanded="true" signature="45486:46837" placeholder="..." />
-                    <marker date="1347614976826" expanded="true" signature="45495:45684" placeholder="&quot;&quot;&quot;Fetch a collection of the cities that are nearby....&quot;&quot;&quot;" />
+                    <marker date="1347633363705" expanded="true" signature="2176:65061" placeholder="..." />
+                    <marker date="1347633363705" expanded="true" signature="35172:35954" placeholder="&quot;&quot;&quot;Write the local cities to a shapefile....&quot;&quot;&quot;" />
+                    <marker date="1347633363705" expanded="true" signature="38616:40525" placeholder="&quot;&quot;&quot;Create a list of features representing cities impacted....&quot;&quot;&quot;" />
+                    <marker date="1347633363705" expanded="true" signature="46278:47740" placeholder="..." />
+                    <marker date="1347633363705" expanded="true" signature="46287:46476" placeholder="&quot;&quot;&quot;Fetch a collection of the cities that are nearby....&quot;&quot;&quot;" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="test_shake_event.py" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="132" column="17" selection-start="4810" selection-end="4810" vertical-scroll-proportion="0.45421687">
+                <state line="296" column="52" selection-start="12106" selection-end="12106" vertical-scroll-proportion="0.6566265">
                   <folding />
                 </state>
               </provider>
@@ -92,19 +94,19 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1165" column="72" selection-start="48078" selection-end="48078" vertical-scroll-proportion="-8.092592">
+                <state line="1250" column="8" selection-start="50821" selection-end="50821" vertical-scroll-proportion="0.7247059">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="exposure-table.html" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="exposure-table.html" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/realtime/fixtures/exposure-table.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="16" column="10" selection-start="580" selection-end="580" vertical-scroll-proportion="0.36982968">
+                <state line="16" column="10" selection-start="580" selection-end="580" vertical-scroll-proportion="-10.857142">
                   <folding />
                 </state>
               </provider>
@@ -138,9 +140,9 @@
         <option value="$PROJECT_DIR$/realtime/test_shake_data.py" />
         <option value="$PROJECT_DIR$/realtime/rt_exceptions.py" />
         <option value="$PROJECT_DIR$/realtime/make_map.py" />
+        <option value="$PROJECT_DIR$/realtime/fixtures/exposure-table.html" />
         <option value="$PROJECT_DIR$/realtime/shake_event.py" />
         <option value="$PROJECT_DIR$/realtime/test_shake_event.py" />
-        <option value="$PROJECT_DIR$/realtime/fixtures/exposure-table.html" />
       </list>
     </option>
   </component>
@@ -218,24 +220,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-realtime" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="realtime" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fixtures" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -264,95 +248,7 @@
       <recent name="$PROJECT_DIR$/common" />
     </key>
   </component>
-  <component name="RunManager" selected="Python's test.Nosetests in TestShakeEvent.testCitiesSearchBoxesToShape">
-    <configuration default="false" name="testEventToRaster" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-realtime" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
-      <option name="CLASS_NAME" value="TestShakeEvent" />
-      <option name="METHOD_NAME" value="testEventToRaster" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Nosetests in TestShakeMap.test_ExtractShakeMap" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-realtime" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_data.py" />
-      <option name="CLASS_NAME" value="TestShakeMap" />
-      <option name="METHOD_NAME" value="test_ExtractShakeMap" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Nosetests in test_utils" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-realtime" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_utils.py" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Nosetests in test_shake_event" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-realtime" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python's test.Nosetests in TestShakeEvent.testSortedImpactedCities">
     <configuration default="false" name="Nosetests in TestShakeEvent.testCitiesSearchBoxesToShape" type="tests" factoryName="Nosetests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -369,6 +265,102 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
       <option name="CLASS_NAME" value="TestShakeEvent" />
       <option name="METHOD_NAME" value="testCitiesSearchBoxesToShape" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Nosetests in TestShakeEvent.testRomanize" type="tests" factoryName="Nosetests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="" value="" />
+        <env name="LD_LIBDARY_PATH" value="/usr/local/qgis-master/lib" />
+        <env name="QGISPATH" value="/usr/local/qgis-master" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-realtime" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
+      <option name="CLASS_NAME" value="TestShakeEvent" />
+      <option name="METHOD_NAME" value="testRomanize" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Nosetests in TestShakeEvent.testMmiColour" type="tests" factoryName="Nosetests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="" value="" />
+        <env name="LD_LIBDARY_PATH" value="/usr/local/qgis-master/lib" />
+        <env name="QGISPATH" value="/usr/local/qgis-master" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-realtime" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
+      <option name="CLASS_NAME" value="TestShakeEvent" />
+      <option name="METHOD_NAME" value="testMmiColour" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="shake_event" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-realtime" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/shake_event.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="MULTIPROCESS" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Nosetests in TestShakeEvent.testSortedImpactedCities" type="tests" factoryName="Nosetests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="" value="" />
+        <env name="LD_LIBDARY_PATH" value="/usr/local/qgis-master/lib" />
+        <env name="QGISPATH" value="/usr/local/qgis-master" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-realtime" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
+      <option name="CLASS_NAME" value="TestShakeEvent" />
+      <option name="METHOD_NAME" value="testSortedImpactedCities" />
       <option name="FOLDER_NAME" value="" />
       <option name="TEST_TYPE" value="TEST_METHOD" />
       <option name="PATTERN" value="" />
@@ -540,15 +532,19 @@
       <item index="8" class="java.lang.String" itemvalue="Python's test.testEventCalculateFatalities" />
       <item index="9" class="java.lang.String" itemvalue="Python's test.Test Shake Event" />
       <item index="10" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent" />
-      <item index="11" class="java.lang.String" itemvalue="Python's test.testEventToRaster" />
-      <item index="12" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeMap.test_ExtractShakeMap" />
-      <item index="13" class="java.lang.String" itemvalue="Python's test.Nosetests in test_utils" />
-      <item index="14" class="java.lang.String" itemvalue="Python's test.Nosetests in test_shake_event" />
-      <item index="15" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testCitiesSearchBoxesToShape" />
+      <item index="11" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testCitiesSearchBoxesToShape" />
+      <item index="12" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testRomanize" />
+      <item index="13" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testMmiColour" />
+      <item index="14" class="java.lang.String" itemvalue="Python.shake_event" />
+      <item index="15" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testSortedImpactedCities" />
     </list>
     <recent_temporary>
-      <list size="1">
-        <item index="0" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testCitiesSearchBoxesToShape" />
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testSortedImpactedCities" />
+        <item index="1" class="java.lang.String" itemvalue="Python.shake_event" />
+        <item index="2" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testMmiColour" />
+        <item index="3" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testRomanize" />
+        <item index="4" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testCitiesSearchBoxesToShape" />
       </list>
     </recent_temporary>
   </component>
@@ -612,8 +608,8 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277027" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20170757" sideWeight="0.32545045" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20170757" sideWeight="0.6666667" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20170757" sideWeight="0.3367117" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20170757" sideWeight="0.6554054" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.3963964" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" x="494" y="299" width="1246" height="672" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22613065" sideWeight="0.5341426" order="11" side_tool="true" content_ui="tabs" />
@@ -791,23 +787,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/realtime/fixtures/exposure-table.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="10" selection-start="580" selection-end="580" vertical-scroll-proportion="-10.857142">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1165" column="72" selection-start="48078" selection-end="48078" vertical-scroll-proportion="-8.092592">
-          <folding />
+        <state line="1250" column="0" selection-start="50813" selection-end="50813" vertical-scroll-proportion="0.0">
+          <folding>
+            <marker date="1347633363705" expanded="true" signature="2176:65061" placeholder="..." />
+            <marker date="1347633363705" expanded="true" signature="35172:35954" placeholder="&quot;&quot;&quot;Write the local cities to a shapefile....&quot;&quot;&quot;" />
+            <marker date="1347633363705" expanded="true" signature="38616:40525" placeholder="&quot;&quot;&quot;Create a list of features representing cities impacted....&quot;&quot;&quot;" />
+            <marker date="1347633363705" expanded="true" signature="46278:47740" placeholder="..." />
+            <marker date="1347633363705" expanded="true" signature="46287:46476" placeholder="&quot;&quot;&quot;Fetch a collection of the cities that are nearby....&quot;&quot;&quot;" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="132" column="17" selection-start="4810" selection-end="4810" vertical-scroll-proportion="0.45421687">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/fixtures/exposure-table.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="10" selection-start="580" selection-end="580" vertical-scroll-proportion="0.36982968">
+        <state line="296" column="52" selection-start="12106" selection-end="12106" vertical-scroll-proportion="0.6566265">
           <folding />
         </state>
       </provider>
