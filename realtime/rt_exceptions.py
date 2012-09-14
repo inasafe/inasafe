@@ -69,11 +69,6 @@ class ContourCreationError(Exception):
     pass
 
 
-class EventIdError(Exception):
-    """An exception for when an event id is invalid"""
-    pass
-
-
 class GridXmlParseError(Exception):
     """An exception for when something went wrong parsing the grid.xml """
     pass
