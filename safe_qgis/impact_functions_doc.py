@@ -51,13 +51,13 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         self.no_filter = 'No Filter'
         if dict_filter is None:
             dict_filter = {'id': [],
-                          'title': [],
-                          'category': [],
-                          'subcategory': [],
-                          'layertype': [],
-                          'datatype': [],
-                          'unit': []
-                              }
+                           'title': [],
+                           'category': [],
+                           'subcategory': [],
+                           'layertype': [],
+                           'datatype': [],
+                           'unit': []}
+
         self.dict_filter = dict_filter
         self.showImpactFunctionsTable()
         self.combo_box_content = None  # for storing combo box content

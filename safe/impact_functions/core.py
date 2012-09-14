@@ -626,13 +626,12 @@ def get_plugins_as_table2(dict_filter=None):
 
     if dict_filter is None:
         dict_filter = {'id': [],
-                          'title': [],
-                          'category': [],
-                          'subcategory': [],
-                          'layertype': [],
-                          'datatype': [],
-                          'unit': []
-                              }
+                       'title': [],
+                       'category': [],
+                       'subcategory': [],
+                       'layertype': [],
+                       'datatype': [],
+                       'unit': []}
 
     table_body = []
     # use this list for avoiding wrong order in dict
@@ -656,8 +655,7 @@ def get_plugins_as_table2(dict_filter=None):
                           'subcategory': False,
                           'layertype': False,
                           'datatype': False,
-                          'unit': False
-                              }
+                          'unit': False}
 
             dict_req = parse_single_requirement(str(requirement))
 
@@ -724,13 +722,12 @@ def get_unique_values():
         """
     atts = ['category', 'subcategory', 'layertype', 'datatype', 'unit']
     dict_retval = {'category': set(),
-                        'subcategory': set(),
-                        'layertype': set(),
-                        'datatype': set(),
-                        'unit': set(),
-                        'id': set(),
-                        'title': set()
-                              }
+                   'subcategory': set(),
+                   'layertype': set(),
+                   'datatype': set(),
+                   'unit': set(),
+                   'id': set(),
+                   'title': set()}
 
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
