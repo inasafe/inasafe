@@ -127,7 +127,10 @@ mmiData: Populated
 populationRasterPath: None
 impactFile: None
 impactKeywordsFile: None
-fatalityCounts: None"""
+fatalityCounts: None
+extentWithCities: Not set
+zoomFactor: 1.25
+searchBoxes: None"""
         myState = str(myShakeEvent)
         myMessage = (('Expected:\n----------------\n%s'
                      '\n\nGot\n------------------\n%s\n') %

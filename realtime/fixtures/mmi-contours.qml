@@ -3,8 +3,17 @@
   <transparencyLevelInt>255</transparencyLevelInt>
   <renderer-v2 symbollevels="0" type="RuleRenderer">
     <rules>
-      <rule description="Integer MMI valued contouirs will be shown but not labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) = 0" symbol="0" label="Whole Intervals"/>
-      <rule description="Integer MMI valued contouirs will be hidden but labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) != 0" symbol="1" label="Half Intervals"/>
+      <rule description="Integer MMI valued contouirs will be shown but not labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) = 0" symbol="0" label="Whole Intervals">
+        <rule filter="&quot;MMI&quot; = '2'" symbol="1" label="&quot;MMI&quot; = '2'"/>
+        <rule filter="&quot;MMI&quot; = '3'" symbol="2" label="&quot;MMI&quot; = '3'"/>
+        <rule filter="&quot;MMI&quot; = '4'" symbol="3" label="&quot;MMI&quot; = '4'"/>
+        <rule filter="&quot;MMI&quot; = '5'" symbol="4" label="&quot;MMI&quot; = '5'"/>
+        <rule filter="&quot;MMI&quot; = '6'" symbol="5" label="&quot;MMI&quot; = '6'"/>
+        <rule filter="&quot;MMI&quot; = '7'" symbol="6" label="&quot;MMI&quot; = '7'"/>
+        <rule filter="&quot;MMI&quot; = '8'" symbol="7" label="&quot;MMI&quot; = '8'"/>
+        <rule filter="&quot;MMI&quot; = '9'" symbol="8" label="&quot;MMI&quot; = '9'"/>
+      </rule>
+      <rule description="Integer MMI valued contouirs will be hidden but labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) != 0" symbol="9" label="Half Intervals"/>
     </rules>
     <symbols>
       <symbol outputUnit="MM" alpha="1" type="line" name="0">
@@ -19,7 +28,103 @@
           <prop k="width" v="0.26"/>
         </layer>
       </symbol>
-      <symbol outputUnit="MM" alpha="0.176471" type="line" name="1">
+      <symbol outputUnit="MM" alpha="1" type="line" name="1">
+        <layer pass="0" class="SimpleLine" locked="1">
+          <prop k="capstyle" v="round"/>
+          <prop k="color" v="32,159,255,255"/>
+          <prop k="customdash" v="5;2"/>
+          <prop k="joinstyle" v="round"/>
+          <prop k="offset" v="0"/>
+          <prop k="penstyle" v="solid"/>
+          <prop k="use_custom_dash" v="0"/>
+          <prop k="width" v="1"/>
+        </layer>
+      </symbol>
+      <symbol outputUnit="MM" alpha="1" type="line" name="2">
+        <layer pass="0" class="SimpleLine" locked="1">
+          <prop k="capstyle" v="square"/>
+          <prop k="color" v="0,207,255,255"/>
+          <prop k="customdash" v="5;2"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0"/>
+          <prop k="penstyle" v="solid"/>
+          <prop k="use_custom_dash" v="0"/>
+          <prop k="width" v="1"/>
+        </layer>
+      </symbol>
+      <symbol outputUnit="MM" alpha="1" type="line" name="3">
+        <layer pass="0" class="SimpleLine" locked="1">
+          <prop k="capstyle" v="square"/>
+          <prop k="color" v="85,255,255,255"/>
+          <prop k="customdash" v="5;2"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0"/>
+          <prop k="penstyle" v="solid"/>
+          <prop k="use_custom_dash" v="0"/>
+          <prop k="width" v="1"/>
+        </layer>
+      </symbol>
+      <symbol outputUnit="MM" alpha="1" type="line" name="4">
+        <layer pass="0" class="SimpleLine" locked="1">
+          <prop k="capstyle" v="square"/>
+          <prop k="color" v="170,255,255,255"/>
+          <prop k="customdash" v="5;2"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0"/>
+          <prop k="penstyle" v="solid"/>
+          <prop k="use_custom_dash" v="0"/>
+          <prop k="width" v="1"/>
+        </layer>
+      </symbol>
+      <symbol outputUnit="MM" alpha="1" type="line" name="5">
+        <layer pass="0" class="SimpleLine" locked="1">
+          <prop k="capstyle" v="square"/>
+          <prop k="color" v="255,240,0,255"/>
+          <prop k="customdash" v="5;2"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0"/>
+          <prop k="penstyle" v="solid"/>
+          <prop k="use_custom_dash" v="0"/>
+          <prop k="width" v="1"/>
+        </layer>
+      </symbol>
+      <symbol outputUnit="MM" alpha="1" type="line" name="6">
+        <layer pass="0" class="SimpleLine" locked="1">
+          <prop k="capstyle" v="square"/>
+          <prop k="color" v="255,168,0,255"/>
+          <prop k="customdash" v="5;2"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0"/>
+          <prop k="penstyle" v="solid"/>
+          <prop k="use_custom_dash" v="0"/>
+          <prop k="width" v="1"/>
+        </layer>
+      </symbol>
+      <symbol outputUnit="MM" alpha="1" type="line" name="7">
+        <layer pass="0" class="SimpleLine" locked="1">
+          <prop k="capstyle" v="square"/>
+          <prop k="color" v="255,112,0,255"/>
+          <prop k="customdash" v="5;2"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0"/>
+          <prop k="penstyle" v="solid"/>
+          <prop k="use_custom_dash" v="0"/>
+          <prop k="width" v="1"/>
+        </layer>
+      </symbol>
+      <symbol outputUnit="MM" alpha="1" type="line" name="8">
+        <layer pass="0" class="SimpleLine" locked="1">
+          <prop k="capstyle" v="square"/>
+          <prop k="color" v="255,0,0,255"/>
+          <prop k="customdash" v="5;2"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0"/>
+          <prop k="penstyle" v="solid"/>
+          <prop k="use_custom_dash" v="0"/>
+          <prop k="width" v="1"/>
+        </layer>
+      </symbol>
+      <symbol outputUnit="MM" alpha="0.176471" type="line" name="9">
         <layer pass="0" class="SimpleLine" locked="0">
           <prop k="capstyle" v="square"/>
           <prop k="color" v="72,160,0,255"/>

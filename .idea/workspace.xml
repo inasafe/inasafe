@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/realtime/fixtures/exposure-table.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/make_map.py" afterPath="$PROJECT_DIR$/realtime/make_map.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/rt_exceptions.py" afterPath="$PROJECT_DIR$/realtime/rt_exceptions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/make-shakemap.sh" afterPath="$PROJECT_DIR$/scripts/make-shakemap.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/fixtures/exposure-table.html" afterPath="$PROJECT_DIR$/realtime/fixtures/exposure-table.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_event.py" afterPath="$PROJECT_DIR$/realtime/test_shake_event.py" />
     </list>
     <ignored path="inasafe-realtime.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,10 +43,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="227" column="8" selection-start="9021" selection-end="9021" vertical-scroll-proportion="0.0">
+                <state line="132" column="17" selection-start="4810" selection-end="4810" vertical-scroll-proportion="0.45421687">
                   <folding />
                 </state>
               </provider>
@@ -72,10 +70,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="make_map.py" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="make_map.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/realtime/make_map.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="79" column="48" selection-start="2657" selection-end="2657" vertical-scroll-proportion="0.74216866">
+                <state line="79" column="48" selection-start="2657" selection-end="2657" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -106,7 +104,7 @@
           <file leaf-file-name="exposure-table.html" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/fixtures/exposure-table.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="12" column="8" selection-start="134" selection-end="134" vertical-scroll-proportion="0.27305388">
+                <state line="16" column="10" selection-start="580" selection-end="580" vertical-scroll-proportion="0.36982968">
                   <folding />
                 </state>
               </provider>
@@ -140,8 +138,8 @@
         <option value="$PROJECT_DIR$/realtime/test_shake_data.py" />
         <option value="$PROJECT_DIR$/realtime/rt_exceptions.py" />
         <option value="$PROJECT_DIR$/realtime/make_map.py" />
-        <option value="$PROJECT_DIR$/realtime/test_shake_event.py" />
         <option value="$PROJECT_DIR$/realtime/shake_event.py" />
+        <option value="$PROJECT_DIR$/realtime/test_shake_event.py" />
         <option value="$PROJECT_DIR$/realtime/fixtures/exposure-table.html" />
       </list>
     </option>
@@ -692,7 +690,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/realtime/test_shake_event.py</url>
-          <line>245</line>
+          <line>248</line>
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/safe_qgis/utilities.py</url>
@@ -779,13 +777,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="227" column="8" selection-start="9021" selection-end="9021" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/make-shakemap.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1" column="0" selection-start="12" selection-end="12" vertical-scroll-proportion="0.0">
@@ -795,7 +786,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/make_map.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="48" selection-start="2657" selection-end="2657" vertical-scroll-proportion="0.74216866">
+        <state line="79" column="48" selection-start="2657" selection-end="2657" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -807,9 +798,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="132" column="17" selection-start="4810" selection-end="4810" vertical-scroll-proportion="0.45421687">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/realtime/fixtures/exposure-table.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="8" selection-start="134" selection-end="134" vertical-scroll-proportion="0.27305388">
+        <state line="16" column="10" selection-start="580" selection-end="580" vertical-scroll-proportion="0.36982968">
           <folding />
         </state>
       </provider>
