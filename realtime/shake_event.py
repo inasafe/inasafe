@@ -32,6 +32,7 @@ from PyQt4.QtCore import QVariant, QFileInfo, QString, QStringList
 from qgis.core import (QgsPoint,
                        QgsField,
                        QgsFeature,
+                       QgsGeometry,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsRectangle,
@@ -811,7 +812,7 @@ class ShakeEvent:
 
         Raises: ShapefileCreationError
         """
-        myFileName = 'cities-mmi'
+        myFileName = 'mmi-cities'
         myMemoryLayer = self.localCitiesMemoryLayer()
         return self.memoryLayerToShapefile(theFileName=myFileName,
                                            theMemoryLayer= myMemoryLayer,
@@ -1029,6 +1030,9 @@ class ShakeEvent:
                 myFoundFlag = True
                 break
         self.searchBoxes = mySearchBoxes
+        # TODO: Perhaps it might be neater to combine the bbox of cities and
+        #       mmi to get a tigher AOI then do a small zoom out.
+        self.extentWithCities = myRectangle
         if not myFoundFlag:
             LOGGER.debug('Could not find %s cities after expanding rect '
                     '%s times.' % (myMinimumCityCount, myAttemptsLimit))
@@ -1158,7 +1162,9 @@ class ShakeEvent:
         myFeatures = []
         for mySearchBox in self.searchBoxes:
             myNewFeature = QgsFeature()
-            myNewFeature.setGeometry(mySearchBox['rectangle'])
+            myRectangle = mySearchBox['geometry']
+            myGeometry = QgsGeometry.fromWkt(myRectangle.asWktPolygon())
+            myNewFeature.setGeometry(myGeometry)
             myAttributeMap = {
                 0: QVariant(mySearchBox['city_count']),
             }
@@ -1390,10 +1396,16 @@ class ShakeEvent:
 
         Raises: None
         """
+        if self.extentWithCities is not None:
+            myExtentWithCities = self.extentWithCities.asWktPolygon()
+        else:
+            myExtentWithCities = 'Not set'
+
         if self.mmiData:
             mmiData = 'Populated'
         else:
             mmiData = 'Not populated'
+
         myString = (('latitude: %(latitude)s\n'
                      'longitude: %(longitude)s\n'
                      'eventId: %(eventId)s\n'
@@ -1445,8 +1457,7 @@ class ShakeEvent:
                         'impactFile': self.impactFile,
                         'impactKeywordsFile': self.impactKeywordsFile,
                         'fatalityCounts': self.fatalityCounts,
-                        'extentWithCities':
-                            self.extentWithCities.asWktPolygon(),
+                        'extentWithCities': myExtentWithCities,
                         'zoomFactor': self.zoomFactor,
                         'searchBoxes': self.searchBoxes
                     })
