@@ -1072,6 +1072,8 @@ class ShakeEvent:
         myDistanceIndex = 3
         myDirectionToIndex = 4
         myDirectionFromIndex = 5
+        myRomanIndex = 6
+        myColourIndex = 7
 
         # For measuring distance and direction from each city to epicenter
         myEpicenter = QgsPoint(self.longitude, self.latitude)
@@ -1117,7 +1119,9 @@ class ShakeEvent:
                 myMmiIndex: QVariant(myMmi),
                 myDistanceIndex: QVariant(myDistance),
                 myDirectionToIndex: QVariant(myDirectionTo),
-                myDirectionFromIndex: QVariant(myDirectionFrom)
+                myDirectionFromIndex: QVariant(myDirectionFrom),
+                myRomanIndex: QVariant(self.romanize(myMmi)),
+                myColourIndex: QVariant(self.mmiColour(myMmi))
             }
             #LOGGER.debug('Attribute Map: %s' % str(myAttributeMap))
             myNewFeature.setAttributeMap(myAttributeMap)
@@ -1144,7 +1148,10 @@ class ShakeEvent:
             QgsField('mmi', QVariant.Double),
             QgsField('dist_to', QVariant.Double),
             QgsField('dir_to', QVariant.Double),
-            QgsField('dir_from', QVariant.Double)])
+            QgsField('dir_from', QVariant.Double),
+            QgsField('roman', QVariant.String),
+            QgsField('colour', QVariant.String),
+            ])
         myCities = self.localCityFeatures()
         myResult = myMemoryProvider.addFeatures(myCities)
         if not myResult:
