@@ -47,7 +47,10 @@ def separate_points_by_polygon(points, polygon,
         * polygon_bbox: (optional) bounding box for polygon
         * closed: (optional) determine whether points on boundary should be
               regarded as belonging to the polygon (closed = True)
-              or not (closed = False)
+              or not (closed = False). If None, boundary is left undefined,
+              i.e. some points on boundary may be deemed to be inside while
+              others may be deemed to be outside. This options makes
+              the code faster.
         * check_input: Allows faster execution if set to False
         * use_numpy: Use the fast numpy implementation
 
@@ -80,8 +83,8 @@ def separate_points_by_polygon(points, polygon,
 
     if check_input:
         # Input checks
-        msg = 'Keyword argument "closed" must be boolean'
-        if not isinstance(closed, bool):
+        msg = 'Keyword argument "closed" must be boolean or None'
+        if not (isinstance(closed, bool) or closed is None):
             raise PolygonInputError(msg)
 
         try:
@@ -183,7 +186,7 @@ def _separate_points_by_polygon(points, polygon,
        polygon - Nx2 array of polygon vertices
        closed - (optional) determine whether points on boundary should be
        regarded as belonging to the polygon (closed = True)
-       or not (closed = False)
+       or not (closed = False). Close can also be None.
        rtol, atol: Tolerances for when a point is considered to coincide with
                    a line. Default 0.0.
 
@@ -235,19 +238,20 @@ def _separate_points_by_polygon(points, polygon,
     # Restore numpy warnings
     numpy.seterr(**original_numpy_settings)
 
-    # Find points on polygon boundary
-    for i in range(N):
-        # Loop through polygon edges
-        j = (i + 1) % N
-        edge = [polygon[i, :], polygon[j, :]]
+    if closed is not None:
+        # Find points on polygon boundary
+        for i in range(N):
+            # Loop through polygon edges
+            j = (i + 1) % N
+            edge = [polygon[i, :], polygon[j, :]]
 
-        # Select those that are on the boundary
-        boundary_points = point_on_line(points, edge, rtol, atol)
+            # Select those that are on the boundary
+            boundary_points = point_on_line(points, edge, rtol, atol)
 
-        if closed:
-            inside[boundary_points] = 1
-        else:
-            inside[boundary_points] = 0
+            if closed:
+                inside[boundary_points] = 1
+            else:
+                inside[boundary_points] = 0
 
     # Record point as either inside or outside
     inside_index = numpy.sum(inside)  # How many points are inside
@@ -781,7 +785,8 @@ def clip_line_by_polygon(line, polygon,
                                  polygon_bbox,
                                  closed=closed)
 
-
+# FIXME (Ole, 14 sep 2012): Will clean this up soon, promise
+# pylint: disable=W0613
 def _clip_line_by_polygon(line,
                           polygon,
                           polygon_segments,
@@ -922,13 +927,15 @@ def _clip_line_by_polygon(line,
             #_, intersections = zip(*A)
 
             # Separate segment midpoints according to polygon
+            # Deliberately ignore boundary as midpoints by definition
+            # are fully inside or fully outside.
             intersections = numpy.array(intersections)
             midpoints = (intersections[:-1] + intersections[1:]) / 2
             inside, outside = separate_points_by_polygon(midpoints,
                                                          polygon,
                                                          polygon_bbox,
                                                          check_input=False,
-                                                         closed=closed)
+                                                         closed=None)
 
             # Form segments and add to the right lists
             for i, idx in enumerate([inside, outside]):
