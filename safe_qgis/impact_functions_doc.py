@@ -59,12 +59,10 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
                            'unit': []}
 
         self.dict_filter = dict_filter
+        self.if_table = None  # for storing impact functions table
         self.showImpactFunctionsTable()
         self.combo_box_content = None  # for storing combo box content
         self.populate_combo_box()
-        applyButton = self.ui.myButtonBox.button(QtGui.QDialogButtonBox.Apply)
-        QtCore.QObject.connect(applyButton, QtCore.SIGNAL('clicked()'),
-                                   self.update_table)
         resetButton = self.ui.myButtonBox.button(QtGui.QDialogButtonBox.Reset)
         QtCore.QObject.connect(resetButton, QtCore.SIGNAL('clicked()'),
                                    self.reset_button_clicked)
@@ -95,10 +93,10 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
     def showImpactFunctionsTable(self):
         '''Show table of impact functions.
         '''
-        impact_functions_table = core.get_plugins_as_table2(self.dict_filter)
+        self.if_table = core.get_plugins_as_table2(self.dict_filter)
         self.ui.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
-        self.displayHtml(QtCore.QString(str(impact_functions_table)))
+        self.displayHtml(QtCore.QString(str(self.if_table)))
 
     def generate_combo_box_content(self):
         '''Generate list for each combo box's content.
