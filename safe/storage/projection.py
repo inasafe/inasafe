@@ -44,7 +44,19 @@ class Projection:
                             srs.ImportFromUSGS,
                             srs.ImportFromUrl]:
 
-            res = import_func(p)
+            try:
+                res = import_func(p)
+            except TypeError:
+                # FIXME: NetCDF raster layer gives SRS error
+                # Occasionally we get things like
+                #   File "/usr/lib/python2.7/dist-packages/osgeo/osr.py",
+                #   line 639, in ImportFromEPSG
+                #   return _osr.SpatialReference_ImportFromEPSG(self, *args)
+                #   TypeError: in method 'SpatialReference_ImportFromEPSG',
+                #   argument 2 of type 'int'
+                # e.g. when using NetCDF multiband data. Why?
+                pass
+
             if res == 0:
                 input_OK = True
                 break
