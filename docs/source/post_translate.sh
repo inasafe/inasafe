@@ -27,6 +27,9 @@ fi
 
 for LOCALE in ${LOCALES}
 do
+  # Create static dirs
+  mkdir -p _build/html/${LOCALE}/tutorial-docs/static
+
   # Compile the html docs for this locale
   echo "Building HTML for locale '${LOCALE}'..."
   sphinx-build -D language=${LOCALE} -b html . _build/html/${LOCALE}
@@ -37,5 +40,5 @@ do
   # Compile the pdf docs for that locale
   #sphinx-build -D language=${LOCALE} -b latexpdf . _build/pdf/${LOCALE}
 
-  cp -r tutorial-docs/static_${LOCALE} _build/html/${LOCALE}/tutorial-docs/static
+  cp -r tutorial-docs/static_${LOCALE}/* _build/html/${LOCALE}/tutorial-docs/static/
 done
