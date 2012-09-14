@@ -49,25 +49,53 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         self.ui = Ui_ImpactFunctionsDocBase()
         self.ui.setupUi(self)
         self.no_filter = 'No Filter'
-        if dict_filter == None:
-            self.dict_filter = dict()
+        if dict_filter is None:
+            dict_filter = {'id': [],
+                          'title': [],
+                          'category': [],
+                          'subcategory': [],
+                          'layertype': [],
+                          'datatype': [],
+                          'unit': []
+                              }
+        self.dict_filter = dict_filter
         self.showImpactFunctionsTable()
         self.combo_box_content = None  # for storing combo box content
         self.populate_combo_box()
         applyButton = self.ui.myButtonBox.button(QtGui.QDialogButtonBox.Apply)
         QtCore.QObject.connect(applyButton, QtCore.SIGNAL('clicked()'),
-                                   self.apply_button_clicked)
+                                   self.update_table)
+        resetButton = self.ui.myButtonBox.button(QtGui.QDialogButtonBox.Reset)
+        QtCore.QObject.connect(resetButton, QtCore.SIGNAL('clicked()'),
+                                   self.reset_button_clicked)
+
+        # Combo box change event
+        QtCore.QObject.connect(self.ui.comboBox_id,
+                               QtCore.SIGNAL('currentIndexChanged(int)'),
+                               self.update_table)
+        QtCore.QObject.connect(self.ui.comboBox_title,
+                               QtCore.SIGNAL('currentIndexChanged(int)'),
+                               self.update_table)
+        QtCore.QObject.connect(self.ui.comboBox_category,
+                               QtCore.SIGNAL('currentIndexChanged(int)'),
+                               self.update_table)
+        QtCore.QObject.connect(self.ui.comboBox_subcategory,
+                               QtCore.SIGNAL('currentIndexChanged(int)'),
+                               self.update_table)
+        QtCore.QObject.connect(self.ui.comboBox_layertype,
+                               QtCore.SIGNAL('currentIndexChanged(int)'),
+                               self.update_table)
+        QtCore.QObject.connect(self.ui.comboBox_datatype,
+                               QtCore.SIGNAL('currentIndexChanged(int)'),
+                               self.update_table)
+        QtCore.QObject.connect(self.ui.comboBox_unit,
+                               QtCore.SIGNAL('currentIndexChanged(int)'),
+                               self.update_table)
 
     def showImpactFunctionsTable(self):
         '''Show table of impact functions.
         '''
-        impact_functions_table = core.get_plugins_as_table2()
-        import datetime as d
-        f = open('atos_' + str(d.datetime.now()) + '.txt', 'wt')
-        f.write('update Table\n\n')
-        f.write(str(self.dict_filter) + '\n\n')
-        f.write(impact_functions_table.toNewlineFreeString())
-        f.close()
+        impact_functions_table = core.get_plugins_as_table2(self.dict_filter)
         self.ui.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
         self.displayHtml(QtCore.QString(str(impact_functions_table)))
@@ -84,7 +112,7 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
     def populate_combo_box(self):
         '''Populate item in each combo box.
         '''
-        if self.combo_box_content == None:
+        if self.combo_box_content is None:
             self.combo_box_content = self.generate_combo_box_content()
 
         self.ui.comboBox_title.addItems(self.combo_box_content['title'])
@@ -97,21 +125,20 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         self.ui.comboBox_datatype.addItems(self.combo_box_content['datatype'])
         self.ui.comboBox_unit.addItems(self.combo_box_content['unit'])
 
-    def apply_button_clicked(self):
-        """Function when apply button is clicked.
-            Updating table according to the filter."""
+    def update_table(self):
+        """Updating table according to the filter."""
         # get filter
-        self.dict_filter['title'] = [self.ui.comboBox_title.currentText()]
-        self.dict_filter['id'] = [self.ui.comboBox_id.currentText()]
+        self.dict_filter['title'] = [str(self.ui.comboBox_title.currentText())]
+        self.dict_filter['id'] = [str(self.ui.comboBox_id.currentText())]
         self.dict_filter['category'] = (
-                                [self.ui.comboBox_category.currentText()])
+                                [str(self.ui.comboBox_category.currentText())])
         self.dict_filter['subcategory'] = (
-                                [self.ui.comboBox_subcategory.currentText()])
+                            [str(self.ui.comboBox_subcategory.currentText())])
         self.dict_filter['layertype'] = (
-                                [self.ui.comboBox_layertype.currentText()])
+                            [str(self.ui.comboBox_layertype.currentText())])
         self.dict_filter['datatype'] = (
-                                [self.ui.comboBox_datatype.currentText()])
-        self.dict_filter['unit'] = [self.ui.comboBox_unit.currentText()]
+                                [str(self.ui.comboBox_datatype.currentText())])
+        self.dict_filter['unit'] = [str(self.ui.comboBox_unit.currentText())]
         for key, value in self.dict_filter.iteritems():
             for val in value:
                 if str(val) == self.no_filter:
@@ -119,6 +146,20 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
                     break
         # update table
         self.showImpactFunctionsTable()
+
+    def reset_button_clicked(self):
+        """Function when reset button is clicked.
+            All combo box become No Filter.
+            Updating table according to the filter."""
+        self.ui.comboBox_title.setCurrentIndex(0)
+        self.ui.comboBox_id.setCurrentIndex(0)
+        self.ui.comboBox_category.setCurrentIndex(0)
+        self.ui.comboBox_subcategory.setCurrentIndex(0)
+        self.ui.comboBox_layertype.setCurrentIndex(0)
+        self.ui.comboBox_datatype.setCurrentIndex(0)
+        self.ui.comboBox_unit.setCurrentIndex(0)
+
+        self.update_table()
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""

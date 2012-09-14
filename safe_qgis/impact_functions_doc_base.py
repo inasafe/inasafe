@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'impact_functions_doc_base.ui'
 #
-# Created: Thu Sep 13 15:18:34 2012
+# Created: Fri Sep 14 09:39:36 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,8 +27,8 @@ class Ui_ImpactFunctionsDocBase(object):
         self.myButtonBox.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.myButtonBox.setAutoFillBackground(False)
         self.myButtonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.myButtonBox.setStandardButtons(QtGui.QDialogButtonBox.Apply|QtGui.QDialogButtonBox.Close)
-        self.myButtonBox.setCenterButtons(True)
+        self.myButtonBox.setStandardButtons(QtGui.QDialogButtonBox.Apply|QtGui.QDialogButtonBox.Close|QtGui.QDialogButtonBox.Reset)
+        self.myButtonBox.setCenterButtons(False)
         self.myButtonBox.setObjectName(_fromUtf8("myButtonBox"))
         self.gridLayout.addWidget(self.myButtonBox, 1, 1, 1, 1)
         self.gridLayoutMain = QtGui.QGridLayout()
@@ -58,18 +58,18 @@ class Ui_ImpactFunctionsDocBase(object):
         self.label_id.setFont(font)
         self.label_id.setObjectName(_fromUtf8("label_id"))
         self.gridLayoutMain.addWidget(self.label_id, 1, 1, 1, 1)
-        self.label_subcategory_2 = QtGui.QLabel(ImpactFunctionsDocBase)
+        self.label_subcategory = QtGui.QLabel(ImpactFunctionsDocBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.label_subcategory_2.sizePolicy().hasHeightForWidth())
-        self.label_subcategory_2.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.label_subcategory.sizePolicy().hasHeightForWidth())
+        self.label_subcategory.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
-        self.label_subcategory_2.setFont(font)
-        self.label_subcategory_2.setObjectName(_fromUtf8("label_subcategory_2"))
-        self.gridLayoutMain.addWidget(self.label_subcategory_2, 1, 3, 1, 1)
+        self.label_subcategory.setFont(font)
+        self.label_subcategory.setObjectName(_fromUtf8("label_subcategory"))
+        self.gridLayoutMain.addWidget(self.label_subcategory, 1, 3, 1, 1)
         self.label_category = QtGui.QLabel(ImpactFunctionsDocBase)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -156,7 +156,7 @@ class Ui_ImpactFunctionsDocBase(object):
         ImpactFunctionsDocBase.setWindowTitle(QtGui.QApplication.translate("ImpactFunctionsDocBase", "InaSAFE Impact Functions", None, QtGui.QApplication.UnicodeUTF8))
         self.label_title.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Title", None, QtGui.QApplication.UnicodeUTF8))
         self.label_id.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "ID", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_subcategory_2.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Subcategory", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_subcategory.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Subcategory", None, QtGui.QApplication.UnicodeUTF8))
         self.label_category.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Category", None, QtGui.QApplication.UnicodeUTF8))
         self.label_layertype.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Layer Type", None, QtGui.QApplication.UnicodeUTF8))
         self.label_unit.setText(QtGui.QApplication.translate("ImpactFunctionsDocBase", "Unit", None, QtGui.QApplication.UnicodeUTF8))

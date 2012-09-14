@@ -15,7 +15,6 @@ from safe.common.tables import Table, TableCell, TableRow
 from utilities import pretty_string
 
 LOGGER = logging.getLogger('InaSAFE')
-not_found_value = 'N/A'
 
 
 # Disable lots of pylint for this as it is using magic
@@ -603,16 +602,15 @@ def parse_single_requirement(requirement):
     return retval
 
 
-def get_plugins_as_table2(dict_filter={'category': [''],
-                        'subcategory': [], 'title': [], 'datatype': [],
-                        'layertype': [], 'id': [], 'unit': []}):
+def get_plugins_as_table2(dict_filter=None):
     """Retrieve a table listing all plugins and their requirements.
 
        Or just a single plugin if name is passed.
 
        Args:
-           * name =  str optional name of a specific plugin.
            * dict_filter = dictionary that contains filters
+               - id = list_id
+               - title = list_title
                - category : list_category
                - subcategory : list_subcategory
                - layertype : list_layertype
@@ -627,7 +625,14 @@ def get_plugins_as_table2(dict_filter={'category': [''],
     """
 
     if dict_filter is None:
-        dict_filter = {}
+        dict_filter = {'id': [],
+                          'title': [],
+                          'category': [],
+                          'subcategory': [],
+                          'layertype': [],
+                          'datatype': [],
+                          'unit': []
+                              }
 
     table_body = []
     # use this list for avoiding wrong order in dict
@@ -642,51 +647,43 @@ def get_plugins_as_table2(dict_filter={'category': [''],
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
 
-#===============================================================================
-#    if name is not None:
-#        if isinstance(name, basestring):
-#            # Add the names
-#            plugins_dict.update(dict([(p.__name__, p)
-#                                      for p in FunctionProvider.plugins]))
-# 
-#            msg = ('No plugin named "%s" was found. '
-#                   'List of available plugins is: %s'
-#                   % (name, ', '.join(plugins_dict.keys())))
-#            if name not in plugins_dict:
-#                raise RuntimeError(msg)
-# 
-#            plugins_dict = {name: plugins_dict[name]}
-#        else:
-#            msg = ('get_plugins expects either no parameters or a string '
-#                   'with the name of the plugin, you passed: '
-#                   '%s which is a %s' % (name, type(name)))
-#            raise Exception(msg)
-#===============================================================================
-
+    not_found_value = 'N/A'
     for key, func in plugins_dict.iteritems():
         for requirement in requirements_collect(func):
-            dict_found = {'category': False,
-                              'subcategory': False,
-                              'layertype': False,
-                              'datatype': False,
-                              'unit': False
+            dict_found = {'title': False,
+                          'id': False,
+                          'category': False,
+                          'subcategory': False,
+                          'layertype': False,
+                          'datatype': False,
+                          'unit': False
                               }
 
             dict_req = parse_single_requirement(str(requirement))
 
             for myKey in dict_found.iterkeys():
-                myFilter = dict_filter.get(myKey, None)
-                myValue = pretty_string(dict_req.get(myKey, not_found_value))
-                if myFilter is not None and myValue != not_found_value:
+                myFilter = dict_filter.get(myKey, [])
+                if myKey == 'title':
+                    myValue = str(get_function_title(func))
+                elif myKey == 'id':
+                    myValue = str(key)
+                else:
+                    myValue = dict_req.get(myKey, not_found_value)
+
+                if myFilter != [] and myValue != not_found_value:
                     for myKeyword in myFilter:
-                        if myValue.find(str(myKeyword)) != -1:
-                            dict_found[myKey] = True
-                            break
-                elif myFilter is not [] and myValue != not_found_value:
-                    for myKeyword in myFilter:
-                        if myValue.find(str(myKeyword)) != -1:
-                            dict_found[myKey] = True
-                            break
+                        if type(myValue) == type(str()):
+                            if myValue == myKeyword:
+                                dict_found[myKey] = True
+                                break
+                        elif type(myValue) == type(list()):
+                            if myKeyword in myValue:
+                                dict_found[myKey] = True
+                                break
+                        else:
+                            if myValue.find(str(myKeyword)) != -1:
+                                dict_found[myKey] = True
+                                break
                 else:
                     dict_found[myKey] = True
 
