@@ -79,7 +79,7 @@ class ITBFatalityFunction(FunctionProvider):
 
     """
 
-    parameters = dict(x=0.62275231, y=8.03314466, # Model coefficients
+    parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
                       # Rates of people displaced for each MMI level
                       displacement_rate={1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0,
                                          7: 0.1, 8: 0.5, 9: 0.75, 10: 1.0},
@@ -146,7 +146,7 @@ class ITBFatalityFunction(FunctionProvider):
                 D = displacement_rate[mmi] * I
             except KeyError, e:
                 msg = 'mmi = %i, I = %s, Error msg: %s' % (mmi, str(I), str(e))
-                raise InaSAFEERROR(msg)
+                raise InaSAFEError(msg)
 
             # Sum up numbers for map
             R += F   # Fatalities
