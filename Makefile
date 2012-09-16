@@ -157,7 +157,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 69852cc0958792e573a4be8cb203ef6579dd4940 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 63370a454a0530ceabf0e5500e8f7f65e33267bb 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -242,6 +242,13 @@ profile:
 	@echo "Profiling engine"
 	@echo "----------------"
 	python -m cProfile safe/engine/test_engine.py -s time
+
+pyflakes:
+	@echo
+	@echo "---------------"
+	@echo "PyFlakes issues"
+	@echo "---------------"
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis | wc -l
 
 ##########################################################
 #

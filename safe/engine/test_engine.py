@@ -231,8 +231,6 @@ class Test_Engine(unittest.TestCase):
         F = read_layer(fatality_filename)
         fatality_result = F.get_data()
 
-#        print fatality_result
-
         msg = ('Calculated fatality map did not match expected result: '
                'I got %s\n'
                'Expected %s' % (calculated_result, fatality_result))
@@ -258,8 +256,16 @@ class Test_Engine(unittest.TestCase):
         assert all_numbers == 40871, msg
 
         x = int(round(float(all_numbers) / 1000)) * 1000
-        msg = 'Did not find expected value %i in summary' % x
+        msg = 'Did not find expected fatality value %i in summary' % x
         assert str(x) in keywords['impact_summary'], msg
+
+        # Characterisation test of formula for displaced people
+        # This may well change in the future
+        #print keywords['impact_summary']
+        exp_disp_val = '14366000'
+        msg = ('Did not find expected displacement value %s in summary'
+               % exp_disp_val)
+        assert exp_disp_val in keywords['impact_summary'], msg
 
         # Individual check does not work anymore, because the function
         # now only returns
@@ -2766,9 +2772,9 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_Engine,
-                               ('test_polygon_to_roads_interpolation'
-                                '_flood_example'))
-    #suite = unittest.makeSuite(Test_Engine, 'test')
+    #suite = unittest.makeSuite(Test_Engine,
+    #                           ('test_polygon_to_roads_interpolation'
+    #                            '_flood_example'))
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

@@ -22,7 +22,7 @@ def read_layer(filename):
     """
 
     _, ext = os.path.splitext(filename)
-    if ext in ['.asc', '.tif']:
+    if ext in ['.asc', '.tif', '.nc']:
         return Raster(filename)
     elif ext in ['.shp', '.gml']:
         return Vector(filename)
