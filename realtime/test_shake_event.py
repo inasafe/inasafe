@@ -316,7 +316,7 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
         myTable, myPath = myShakeEvent.impactedCitiesTable()
-        myExpectedResult = 908
+        myExpectedResult = 938
         myTable = myTable.toNewlineFreeString()
         myResult = len(myTable)
         myMessage = ('Got:\n%s\nExpected:\n%s\nFor rendered table:\n%s' %
