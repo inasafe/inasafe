@@ -675,8 +675,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         Raises: None
         """
+        myTempKey = theItem.text().split(':')[0]
+        myTempValue = theItem.text().split(':')[1]
         if self.radUserDefined.isChecked():
-            myTempKey = theItem.text().split(':')[0]
-            myTempValue = theItem.text().split(':')[1]
             self.leKey.setText(myTempKey)
             self.leValue.setText(myTempValue)
+        elif self.radPredefined.isChecked():
+            idxKey = self.cboKeyword.findText(myTempKey)
+            if idxKey > -1:
+                self.cboKeyword.setCurrentIndex(idxKey)
+                self.lePredefinedValue.setText(myTempValue)
