@@ -263,6 +263,7 @@ class ITBFatalityFunction(FunctionProvider):
                    keywords={'impact_summary': impact_summary,
                              'total_population': total,
                              'total_fatalities': fatalities,
+                             'fatalites_per_mmi': number_of_fatalities,
                              'impact_table': impact_table,
                              'map_title': map_title},
                    name=_('Estimated fatalities'),
