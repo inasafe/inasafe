@@ -4,6 +4,7 @@ from safe.impact_functions.core import get_question
 from safe.storage.raster import Raster
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
+from safe.common.exceptions import InaSAFEError
 
 import numpy
 
@@ -78,10 +79,15 @@ class ITBFatalityFunction(FunctionProvider):
 
     """
 
+    parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
+                      # Rates of people displaced for each MMI level
+                      displacement_rate={1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0,
+                                         7: 0.1, 8: 0.5, 9: 0.75, 10: 1.0},
+                      # Threshold below which layer should be transparent
+                      tolerance=0.01)
     title = _('Die')
 
-    def run(self, layers,
-            x=0.62275231, y=8.03314466):  # , zeta=2.15):
+    def run(self, layers):
         """Indonesian Earthquake Fatality Model
 
         Input
@@ -91,9 +97,15 @@ class ITBFatalityFunction(FunctionProvider):
 
         """
 
+        # Establish model coefficients
+        x = self.parameters['x']
+        y = self.parameters['y']
+
         # Define percentages of people being displaced at each mmi level
-        displacement_rate = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0,
-                             7: 0.1, 8: 0.5, 9: 0.75, 10: 1.0}
+        displacement_rate = self.parameters['displacement_rate']
+
+        # Tolerance for transparency
+        tolerance = self.parameters['tolerance']
 
         # Extract input layers
         intensity = get_hazard_layer(layers)
@@ -134,9 +146,7 @@ class ITBFatalityFunction(FunctionProvider):
                 D = displacement_rate[mmi] * I
             except KeyError, e:
                 msg = 'mmi = %i, I = %s, Error msg: %s' % (mmi, str(I), str(e))
-                fid = open('C:\\error_message.txt', 'wb')
-                fid.write(msg)
-                fid.close()
+                raise InaSAFEError(msg)
 
             # Sum up numbers for map
             R += F   # Fatalities
@@ -150,7 +160,7 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Set resulting layer to NaN when less than a threshold. This is to
         # achieve transparency (see issue #126).
-        R[R < 0.01] = numpy.nan
+        R[R < tolerance] = numpy.nan
 
         # Total statistics
         total = int(round(numpy.nansum(P.flat) / 1000) * 1000)
