@@ -26,7 +26,8 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
-from safe_qgis.utilities import getExceptionWithStacktrace, getWGS84resolution
+from safe_qgis.utilities import getExceptionWithStacktrace, \
+    getWGS84resolution, logOnQgsMessageLog
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
@@ -729,7 +730,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def accept(self):
         """Execute analysis when ok button is clicked."""
         #.. todo:: FIXME (Tim) We may have to implement some polling logic
-        # because the putton click accept() function and the updating
+        # because the button click accept() function and the updating
         # of the web view after model completion are asynchronous (when
         # threading mode is enabled especially)
         self.showBusy()
@@ -761,10 +762,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = getExceptionWithStacktrace(e, html=True,
                                                    context=myContext)
             self.displayHtml(myMessage)
+            return
 
         QtCore.QObject.connect(self.runner,
                            QtCore.SIGNAL('done()'),
-                           self.completed)
+                           self.aggregateResults)
         QtGui.qApp.setOverrideCursor(
                 QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
@@ -802,8 +804,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Try to run completion code
         try:
             myReport = self._completed()
-            if self.cboAggregation.currentText() == self.tr('No aggregation'):
-                self.aggregateResults()
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
@@ -818,18 +818,55 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Hide hour glass
         self.hideBusy()
 
+
     def aggregateResults(self):
+        if self.cboAggregation.currentText() == self.tr(
+            'No aggregation'):
+            self.completed()
+        else:
+            myTitle = self.tr('Aggregating results...')
+            myMessage = self.tr('This may take a little while - we are '
+                                ' aggregating the hazards by %1').arg(
+                                self.cboAggregation.currentText())
+            myProgress = 88
+
+            try:
+                self.showBusy(myTitle, myMessage, myProgress)
+                self._aggregateResults()
+                QtGui.qApp.restoreOverrideCursor()
+                self.completed()
+                # .. todo :: Disconnect done slot/signal
+            except Exception, e:  # pylint: disable=W0703
+
+                # FIXME (Ole): This branch is not covered by the tests
+                QtGui.qApp.restoreOverrideCursor()
+                self.hideBusy()
+                myContext = self.tr(
+                    'An exception occurred when aggregating '
+                    'the results')
+                myMessage = getExceptionWithStacktrace(e, html=True,
+                    context=myContext)
+                self.displayHtml(myMessage)
+
+    def _aggregateResults(self):
         aggregationLayer = self.getAggregationLayer()
-        #memoryLayer = utils.loadInMemory( vLayer )
-        myEngineImpactLayer = self.runner.impactLayer()
-        myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
-        print "DEBUG: Aggregating"
+        logOnQgsMessageLog('Aggregating using ' + aggregationLayer.name())
+        myQgisImpactLayer = self.readImpactLayer(self.runner.impactLayer())
+
+
+#        self.progressBar.setRange(0, 3)
+#        self.progressBar.setValue(0)
+#        self.progressBar.setValue(self.progressBar.value() + 1)
+#        self.progressBar.setValue(self.progressBar.value() + 1)
+
+
+
         if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
             #TODO implement polygon to polygon aggregation (dissolve,
             # line in polygon, point in polygon)
-            print "DEBUG: Vector aggregation not implemented yet"
+            logOnQgsMessageLog('Vector aggregation not implemented yet')
         elif myQgisImpactLayer.type() == QgsMapLayer.RasterLayer:
-            print "DEBUG: Aggregating Zonal statistics"
+            logOnQgsMessageLog('Aggregating Zonal statistics')
             prefix = "zonal"
             zonStat = QgsZonalStatistics(
                 aggregationLayer,
@@ -843,7 +880,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 0
             )
             zonStat.calculateStatistics(progressDialog)
-            print "done"
+            if progressDialog.wasCanceled():
+                QtGui.QMessageBox.error(self, self.tr("ZonalStats: Error"),
+                    self.tr(
+                        "You aborted aggregation, "
+                        "so there are no data for analysis. Exiting..."))
+#            self.progressBar.setValue(0)
+            QgsMapLayerRegistry.instance().addMapLayer(aggregationLayer)
+            return
+        logOnQgsMessageLog('done')
 
     def _completed(self):
         """Helper function for slot activated when the process is done.
@@ -981,8 +1026,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.runner:
             QtCore.QObject.disconnect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.completed)
-            del self.runner
+                               self.aggregateResults)
             self.runner = None
 
         self.grpQuestion.setEnabled(True)
