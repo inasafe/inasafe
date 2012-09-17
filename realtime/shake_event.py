@@ -1429,7 +1429,7 @@ class ShakeEvent:
         myFunction = safe_get_plugins(myFunctionId)[0][myFunctionId]
 
         myResult = safe_calculate_impact(myLayers, myFunction)
-
+        myMmiLevels = myResult.keywords['fatalaties_per_mmi']
         # Copy the impact layer into our extract dir.
         myTifPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
@@ -1448,7 +1448,7 @@ class ShakeEvent:
         self.impactFile = myTifPath
         self.impactKeywordsFile = myKeywordsPath
         self.fatalityCounts = myResult.keywords
-        return self.impactFile
+        return self.impactFile, myMmiLevels
 
     def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):
         """Clip population (exposure) layer to dimensions of shake data.

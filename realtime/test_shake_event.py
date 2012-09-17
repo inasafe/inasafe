@@ -243,11 +243,15 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
-        myResult = myShakeEvent.calculateFatalities()
+        myResult, myMmiFatalities = myShakeEvent.calculateFatalities()
         myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
                            '/20120726022003/impact-nearest.tif')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
+
+        myExpectedFatalities = {}
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myMmiFatalities, myExpectedFatalities)
+        assert myMmiFatalities==myExpectedFatalities, myMessage
 
     def testBoundsToRect(self):
         """Test that we can calculate the event bounds properly"""
