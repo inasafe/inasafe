@@ -1325,28 +1325,59 @@ class ShakeEvent:
             theCount: optional maximum number of cities to show. Default is 5.
 
         Returns:
-            A Table object (see :func:`safe.impact_functions.tables.Table`)
+            two tuple of:
+                A Table object (see :func:`safe.impact_functions.tables.Table`)
+                A file path to the html file saved to disk.
 
         Raises:
             Propogates any exceptions.
         """
         myTableData = self.sortedImpactedCities(theCount)
         myTableBody = []
-        myHeader = TableRow(['', 'Name', 'Affected (x 1000)', 'Intensity'])
+        myHeader = TableRow(['', 'Name', 'Affected (x 1000)', 'Intensity'],
+                            header=True)
         myTableBody.append(myHeader)
         for myRowData in myTableData:
             myIntensity = myRowData['roman']
             myName = myRowData['name']
-            myPopulation = round(myRowData['population']/1000)
+            myPopulation = int(round(myRowData['population']/1000))
             myColour = self.mmiColour(myRowData['mmi'])
-            myColourBox = ('<span style="width: 16px; height: 16px;'
-                                 'bgcolour=%s></span>' % myColour)
+            myColourBox = ('<div style="width: 16px; height: 16px;'
+                           'background-color: %s"></div>' % myColour)
             myRow = TableRow([myColourBox, myName, myPopulation, myIntensity])
             myTableBody.append(myRow)
 
         myTable = Table(myTableBody)
         myTable.caption = 'Impacted Cities'
-        return myTable
+
+        # Also make an html file on disk
+        myPath = os.path.join(shakemapExtractDir(),
+                                      self.eventId,
+                                      'affected-cities.html')
+        myHtmlFile = file(myPath, 'wt')
+        myHeaderFile = os.path.join(self._fixturePath(), 'header.html')
+        myFooterFile = os.path.join(self._fixturePath(), 'footer.html')
+
+        myHeaderFile = file(myHeaderFile, 'rt')
+        myHeader = myHeaderFile.read()
+        myHeaderFile.close()
+
+        myFooterFile = file(myFooterFile, 'rt')
+        myFooter = myFooterFile.read()
+        myFooterFile.close()
+
+        myHtmlFile.write(myHeader)
+        myHtmlFile.write(myTable.toNewlineFreeString())
+        myHtmlFile.write(myFooter)
+        myHtmlFile.close()
+
+        # Also bootstrap gets copied to extract dir
+        myDestination = os.path.join(shakemapExtractDir(),
+                      self.eventId,
+                      'bootstrap.css')
+        mySource = os.path.join(self._fixturePath(), 'bootstrap.css')
+        shutil.copyfile(mySource, myDestination)
+        return myTable, myPath
 
     def calculateFatalities(self,
                             thePopulationRasterPath=None,
@@ -1508,6 +1539,13 @@ class ShakeEvent:
 
         return myClippedHazardPath, myClippedExposurePath
 
+    def _fixturePath(self):
+        """Helper to get the path to the realtime fixtures dir."""
+        myFixturePath = os.path.join(os.path.abspath(os.path.curdir),
+                                     'realtime',
+                                     'fixtures')
+        return myFixturePath
+
     def _getPopulationPath(self):
         """Helper to determine population raster spath.
 
@@ -1531,11 +1569,10 @@ class ShakeEvent:
             FileNotFoundError
         """
         # When used via the scripts make_shakemap.sh
-        myFixturePath = os.path.join(os.path.abspath(os.path.curdir),
-                                     'realtime',
-                                     'fixtures',
-                                     'exposure',
-                                     'population.tif')
+        myFixturePath = os.path.join(self._fixturePath(),
+                        'exposure',
+                        'population.tif')
+
         myLocalPath = '/usr/local/share/inasafe/exposure/population.tif'
         if self.populationRasterPath is not None:
             return self.populationRasterPath
