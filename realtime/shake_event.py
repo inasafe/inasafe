@@ -727,8 +727,8 @@ class ShakeEvent:
             None
         """
 
-        myRGBList = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',
-                         '#FF0', '#FD0', '#ff9100', '#F00', '#D00', '#800',
+        myRGBList = ['#FFFFFF', '#209fff', '#00cfff', '#55ffff', '#aaffff',
+                         '#fff000', '#ffa800', '#ff7000', '#ff0000', '#D00', '#800',
                          '#400']
         myRGB = myRGBList[int(theMMIValue)]
         return myRGB
