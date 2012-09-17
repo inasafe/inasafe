@@ -216,7 +216,7 @@ searchBoxes: None
                 myString += ("%d: %s\n" % (myKey, myValue.toString()))
             myString += '------------------\n'
         LOGGER.debug('Mem table:\n %s' % myString)
-        myExpectedLength = 751
+        myExpectedLength = 874
         myLength = len(myString)
         myMessage = 'Expected: %s Got %s' % (myExpectedLength, myLength)
         self.assertEquals(myExpectedLength, myLength, myMessage)

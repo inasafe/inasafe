@@ -415,6 +415,7 @@ class ShakeEvent:
             myResult = call(myCommand, shell=True)
             del myResult
         except CalledProcessError, e:
+            LOGGER.exception('Running command failed %s' % myCommand)
             myMessage = ('Error while executing the following shell '
                          'command: %s\nError message: %s'
                          % (myCommand, str(e)))
@@ -675,6 +676,7 @@ class ShakeEvent:
                                  myIdField,
                                  myElevationField)
         except Exception, e:
+            LOGGER.exception('Contour creation failed')
             raise ContourCreationError(str(e))
         finally:
             del myTifDataset

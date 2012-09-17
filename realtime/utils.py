@@ -123,6 +123,7 @@ def setupLogger():
         myRecipientAddresses,
         mySubject)
     myEmailHandler.setLevel(logging.ERROR)
+
     # create formatter and add it to the handlers
     myFormatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -132,6 +133,24 @@ def setupLogger():
     # add the handlers to the logger
     myLogger.addHandler(myFileHandler)
     myLogger.addHandler(myConsoleHandler)
+    myLogger.addHandler(myEmailHandler)
+
+    # Sentry handler - this is optional hence the localised import
+    try:
+        from raven.handlers.logging import SentryHandler
+        from raven import Client
+
+        myClient = Client('http://faaf2c12f0b74e13a9f2104c9e0225c1:69e4e4ad8c'
+                          '2f4997ba63a64acdc6e2e7@localhost:9000/2')
+        mySentryHandler = SentryHandler(myClient)
+        mySentryHandler.setFormatter(myFormatter)
+        mySentryHandler.setLevel(logging.ERROR)
+        myLogger.addHandler(mySentryHandler)
+        mySentryMessage = 'Sentry logging enabled'
+    except:
+        mySentryMessage = 'Sentry logging could not be enabled'
+
     myLogger.info('Realtime Module Loaded')
     myLogger.info('----------------------')
     myLogger.info('CWD: %s' % os.path.abspath(os.path.curdir))
+    myLogger.info(mySentryMessage)
