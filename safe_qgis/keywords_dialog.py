@@ -685,3 +685,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             if idxKey > -1:
                 self.cboKeyword.setCurrentIndex(idxKey)
                 self.lePredefinedValue.setText(myTempValue)
+            else:
+                self.radUserDefined.setChecked(True)
+                self.leKey.setText(myTempKey)
+                self.leValue.setText(myTempValue)
