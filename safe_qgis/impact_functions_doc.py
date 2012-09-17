@@ -22,6 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import (QtGui, QtCore, QtWebKit,)
 from impact_functions_doc_base import Ui_ImpactFunctionsDocBase
 from safe.impact_functions import core
+from safe_qgis.help import Help
 from safe.impact_functions.core import get_unique_values
 from utilities import htmlFooter, htmlHeader
 
@@ -43,11 +44,14 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
            no exceptions explicitly raised
         '''
         QtGui.QDialog.__init__(self, theParent)
+        self.parent = theParent
         self.header = None  # for storing html header template
         self.footer = None  # for storing html footer template
         # Set up the user interface from Designer.
         self.ui = Ui_ImpactFunctionsDocBase()
         self.ui.setupUi(self)
+        self.setWindowTitle(self.tr(
+                            'InaSAFE %s Impact Functions Doc' % __version__))
         self.no_filter = 'No Filter'
         if dict_filter is None:
             dict_filter = {'id': [],
@@ -59,16 +63,19 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
                            'unit': []}
 
         self.dict_filter = dict_filter
+        self.if_table = None  # for storing impact functions table
         self.showImpactFunctionsTable()
         self.combo_box_content = None  # for storing combo box content
         self.populate_combo_box()
-        applyButton = self.ui.myButtonBox.button(QtGui.QDialogButtonBox.Apply)
-        QtCore.QObject.connect(applyButton, QtCore.SIGNAL('clicked()'),
-                                   self.update_table)
         resetButton = self.ui.myButtonBox.button(QtGui.QDialogButtonBox.Reset)
         QtCore.QObject.connect(resetButton, QtCore.SIGNAL('clicked()'),
                                    self.reset_button_clicked)
 
+        # Set up help dialog showing logic.
+        self.helpDialog = None
+        helpButton = self.ui.myButtonBox.button(QtGui.QDialogButtonBox.Help)
+        QtCore.QObject.connect(helpButton, QtCore.SIGNAL('clicked()'),
+                               self.showHelp)
         # Combo box change event
         QtCore.QObject.connect(self.ui.comboBox_id,
                                QtCore.SIGNAL('currentIndexChanged(int)'),
@@ -95,10 +102,10 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
     def showImpactFunctionsTable(self):
         '''Show table of impact functions.
         '''
-        impact_functions_table = core.get_plugins_as_table2(self.dict_filter)
+        self.if_table = core.get_plugins_as_table2(self.dict_filter)
         self.ui.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
-        self.displayHtml(QtCore.QString(str(impact_functions_table)))
+        self.displayHtml(QtCore.QString(str(self.if_table)))
 
     def generate_combo_box_content(self):
         '''Generate list for each combo box's content.
@@ -160,6 +167,12 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         self.ui.comboBox_unit.setCurrentIndex(0)
 
         self.update_table()
+
+    def showHelp(self):
+        """Load the help text for the keywords safe_qgis"""
+        if not self.helpDialog:
+            self.helpDialog = Help(self, 'impact_functions')
+        self.helpDialog.show()
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
