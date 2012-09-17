@@ -185,7 +185,7 @@ def setRasterStyle(theQgsRasterLayer, theStyle):
 
 
 def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
-    """Set QGIS raster style based on InaSAFE style dictionary for QGIS > 2.0.
+    """Set QGIS raster style based on InaSAFE style dictionary for QGIS < 2.0.
 
     This function will set both the colour map and the transparency
     for the passed in layer.
@@ -255,27 +255,18 @@ def _setLegacyRasterStyle(theQgsRasterLayer, theStyle):
                     myTransparencyList.append(myPixel)
                     #myLabel = myClass['label']
 
-    # test if QGIS 1.8.0 or older
-    # see issue #259
-    if qgisVersion() <= 10800:
-        # Apply the shading algorithm and design their ramp
-        theQgsRasterLayer.setColorShadingAlgorithm(
-            QgsRasterLayer.ColorRampShader)
-        myFunction = theQgsRasterLayer.rasterShader().rasterShaderFunction()
-        # Discrete will shade any cell between maxima of this break
-        # and mamima of previous break to the colour of this break
-        myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
-        myFunction.setColorRampItemList(myRangeList)
+    # Apply the shading algorithm and design their ramp
+    theQgsRasterLayer.setColorShadingAlgorithm(
+        QgsRasterLayer.ColorRampShader)
+    myFunction = theQgsRasterLayer.rasterShader().rasterShaderFunction()
+    # Discrete will shade any cell between maxima of this break
+    # and mamima of previous break to the colour of this break
+    myFunction.setColorRampType(QgsColorRampShader.DISCRETE)
+    myFunction.setColorRampItemList(myRangeList)
 
-        # Now set the raster transparency
-        theQgsRasterLayer.rasterTransparency()\
-        .setTransparentSingleValuePixelList(
-            myTransparencyList)
-    else:
-        #TODO implement QGIS2.0 variant
-        #In master branch, use QgsRasterRenderer::rasterRenderer() to
-        # get/set how a raster is displayed.
-        pass
+    # Now set the raster transparency
+    theQgsRasterLayer.rasterTransparency()\
+    .setTransparentSingleValuePixelList(myTransparencyList)
 
     theQgsRasterLayer.saveDefaultStyle()
     return myRangeList, myTransparencyList
