@@ -296,7 +296,17 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
         myTable = myShakeEvent.sortedImpactedCities()
-        myExpectedResult = ''
+        myExpectedResult = [
+            {'roman': 'III', 'mmi': 1.909999966621399,
+             'name': 'Tondano', 'population': 33317},
+            {'roman': 'III', 'mmi': 1.809999942779541,
+             'name': 'Manado', 'population': 451893},
+            {'roman': 'III', 'mmi': 1.75,
+             'name': 'Provinsi Sulawesi Utara', 'population': 2146600},
+            {'roman': 'III', 'mmi': 1.690000057220459,
+             'name': 'Tomohon', 'population': 27624},
+            {'roman': 'III', 'mmi': 1.5299999713897705,
+             'name': 'Luwuk', 'population': 47778}]
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myTable, myExpectedResult)
         assert myTable == myExpectedResult, myMessage
 

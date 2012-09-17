@@ -914,7 +914,7 @@ class ShakeEvent:
                 os.remove(myOutputFileBase + 'dbf')
                 os.remove(myOutputFileBase + 'prj')
             except OSError:
-                LOGGER.exception('Old cities files not deleted'
+                LOGGER.exception('Old shape files not deleted'
                     ' - this may indicate a file permissions issue.')
 
         # Next two lines a workaround for a QGIS bug (lte 1.8)
@@ -1253,7 +1253,7 @@ class ShakeEvent:
         myLayer = self.localCitiesMemoryLayer()
         myLayerProvider = myLayer.dataProvider()
         myCities = []
-        myPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
+        myPlaceNameIndex = myLayerProvider.fieldNameIndex('name')
         myMmiIndex = myLayerProvider.fieldNameIndex('mmi')
         myPopulationIndex = myLayerProvider.fieldNameIndex('population')
         myRomanIndex = myLayerProvider.fieldNameIndex('roman')
@@ -1274,15 +1274,17 @@ class ShakeEvent:
             # to and from the epicenter
             myAttributes = myFeature.attributeMap()
             myPlaceName = str(myAttributes[myPlaceNameIndex].toString())
-            myMmi = myAttributes[myMmiIndex]
-            myPopulation = myAttributes[myPopulationIndex]
+            # TODO: figure out why it gets a tuple back instead of just a
+            # float. For now [0] at end gets the tupe[0] element which is float
+            myMmi = myAttributes[myMmiIndex].toFloat()[0]
+            myPopulation = myAttributes[myPopulationIndex].toInt()[0]
             myRoman = str(myAttributes[myRomanIndex].toString())
             myCity = {'name': myPlaceName,
                       'mmi': myMmi,
                       'population': myPopulation,
                       'roman': myRoman}
             myCities.append(myCity)
-
+        #LOGGER.exception(myCities)
         mySortedCities = sorted(myCities,
                                 key=lambda d: (
                                     -d['mmi'],
