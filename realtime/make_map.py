@@ -76,6 +76,8 @@ try:
     logging.info('Created: %s', myFile)
     myFile = myShakeEvent.citySearchBoxesToShapefile(theForceFlag=myForceFlag)
     logging.info('Created: %s', myFile)
+    _, myPath = myShakeEvent.impactedCitiesTable()
+    logging.info('Created: %s', myPath)
 except:
     logging.exception('No nearby cities found!')
 myFile = myShakeEvent.mmiDataToShapefile(theForceFlag=myForceFlag)

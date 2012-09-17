@@ -320,10 +320,10 @@ searchBoxes: None
         myTable = myTable.toNewlineFreeString()
         myResult = len(myTable)
         myMessage = ('Got:\n%s\nExpected:\n%s\nFor rendered table:\n%s' %
-                    (myTable, myExpectedResult, myResult))
+                    (myResult, myExpectedResult, myResult))
         assert myTable == myExpectedResult, myMessage
 
-        myExpectedPath = ''
+        myExpectedPath = '/tmp/inasafe/realtime/shakemaps-extracted/20120916223752/affected-cities.html'
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myPath, myExpectedPath)
         assert myPath == myExpectedPath, myMessage
 
