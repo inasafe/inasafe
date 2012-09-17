@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/realtime/fixtures/footer.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/realtime/fixtures/header.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Makefile" afterPath="$PROJECT_DIR$/Makefile" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_event.py" afterPath="$PROJECT_DIR$/realtime/test_shake_event.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/api.py" afterPath="$PROJECT_DIR$/safe/api.py" />
     </list>
     <ignored path="inasafe-realtime.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,22 +35,40 @@
           <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1250" column="0" selection-start="50813" selection-end="50813" vertical-scroll-proportion="0.0">
+                <state line="733" column="20" selection-start="29806" selection-end="29806" vertical-scroll-proportion="0.0">
                   <folding>
-                    <marker date="1347633363705" expanded="true" signature="2176:65061" placeholder="..." />
-                    <marker date="1347633363705" expanded="true" signature="35172:35954" placeholder="&quot;&quot;&quot;Write the local cities to a shapefile....&quot;&quot;&quot;" />
-                    <marker date="1347633363705" expanded="true" signature="38616:40525" placeholder="&quot;&quot;&quot;Create a list of features representing cities impacted....&quot;&quot;&quot;" />
-                    <marker date="1347633363705" expanded="true" signature="46278:47740" placeholder="..." />
-                    <marker date="1347633363705" expanded="true" signature="46287:46476" placeholder="&quot;&quot;&quot;Fetch a collection of the cities that are nearby....&quot;&quot;&quot;" />
+                    <marker date="1347894521253" expanded="true" signature="2224:69183" placeholder="..." />
+                    <marker date="1347894521253" expanded="true" signature="35346:36128" placeholder="&quot;&quot;&quot;Write the local cities to a shapefile....&quot;&quot;&quot;" />
+                    <marker date="1347894521253" expanded="true" signature="38789:40698" placeholder="&quot;&quot;&quot;Create a list of features representing cities impacted....&quot;&quot;&quot;" />
+                    <marker date="1347894521253" expanded="true" signature="46451:47913" placeholder="..." />
+                    <marker date="1347894521253" expanded="true" signature="46460:46649" placeholder="&quot;&quot;&quot;Fetch a collection of the cities that are nearby....&quot;&quot;&quot;" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="test_shake_event.py" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="296" column="52" selection-start="12106" selection-end="12106" vertical-scroll-proportion="0.6566265">
+                <state line="319" column="26" selection-start="13155" selection-end="13155" vertical-scroll-proportion="0.7137891">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="core.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/safe/impact_functions/core.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="utils.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/realtime/utils.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="124" column="41" selection-start="3882" selection-end="3882" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -58,24 +78,6 @@
             <entry file="file://$PROJECT_DIR$/realtime/shake_data.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state line="35" column="0" selection-start="1199" selection-end="1199" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="rt_exceptions.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/realtime/rt_exceptions.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="85" column="0" selection-start="2155" selection-end="2155" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="make_map.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/realtime/make_map.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="79" column="48" selection-start="2657" selection-end="2657" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -94,10 +96,10 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="shake_event.py" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1250" column="8" selection-start="50821" selection-end="50821" vertical-scroll-proportion="0.7247059">
+                <state line="1345" column="55" selection-start="55313" selection-end="55313" vertical-scroll-proportion="0.6823239">
                   <folding />
                 </state>
               </provider>
@@ -106,7 +108,25 @@
           <file leaf-file-name="exposure-table.html" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/realtime/fixtures/exposure-table.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="16" column="10" selection-start="580" selection-end="580" vertical-scroll-proportion="-10.857142">
+                <state line="56" column="0" selection-start="1828" selection-end="1847" vertical-scroll-proportion="-23.928572">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="footer.html" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/realtime/fixtures/footer.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="2" column="0" selection-start="16" selection-end="16" vertical-scroll-proportion="-1.3571428">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="header.html" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/realtime/fixtures/header.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="16" column="6" selection-start="520" selection-end="520" vertical-scroll-proportion="-10.857142">
                   <folding />
                 </state>
               </provider>
@@ -127,10 +147,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/safe/impact_functions/experimental/ashload_population_impact.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/utilities_test.py" />
-        <option value="$PROJECT_DIR$/realtime/realtime.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/clipper.py" />
         <option value="$PROJECT_DIR$/safe/engine/core.py" />
         <option value="$PROJECT_DIR$/safe_qgis/utilities.py" />
         <option value="$PROJECT_DIR$/Makefile" />
@@ -141,8 +157,12 @@
         <option value="$PROJECT_DIR$/realtime/rt_exceptions.py" />
         <option value="$PROJECT_DIR$/realtime/make_map.py" />
         <option value="$PROJECT_DIR$/realtime/fixtures/exposure-table.html" />
-        <option value="$PROJECT_DIR$/realtime/shake_event.py" />
+        <option value="$PROJECT_DIR$/realtime/utils.py" />
+        <option value="$PROJECT_DIR$/safe/api.py" />
+        <option value="$PROJECT_DIR$/realtime/fixtures/header.html" />
+        <option value="$PROJECT_DIR$/realtime/fixtures/footer.html" />
         <option value="$PROJECT_DIR$/realtime/test_shake_event.py" />
+        <option value="$PROJECT_DIR$/realtime/shake_event.py" />
       </list>
     </option>
   </component>
@@ -216,7 +236,89 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="safe_qgis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="safe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="safe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impact_functions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="safe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fixtures" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -476,6 +578,13 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
+      <JSDebuggerConfigurationSettings>
+        <option name="engineId" />
+        <option name="fileUrl" />
+      </JSDebuggerConfigurationSettings>
+      <method />
+    </configuration>
     <configuration default="false" name="testEventToShapefile" type="tests" factoryName="Nosetests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -608,8 +717,8 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277027" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20170757" sideWeight="0.3367117" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20170757" sideWeight="0.6554054" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20170757" sideWeight="0.3367117" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20170757" sideWeight="0.6554054" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.3963964" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" x="494" y="299" width="1246" height="672" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22613065" sideWeight="0.5341426" order="11" side_tool="true" content_ui="tabs" />
@@ -686,7 +795,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/realtime/test_shake_event.py</url>
-          <line>248</line>
+          <line>249</line>
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/safe_qgis/utilities.py</url>
@@ -694,50 +803,10 @@
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="7" />
+      <option name="time" value="8" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/lib/python2.7/zipfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="764" column="24" selection-start="26665" selection-end="26665" vertical-scroll-proportion="0.3765933" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="156" column="0" selection-start="5940" selection-end="14560" vertical-scroll-proportion="0.022016222">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe/common/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="269" selection-end="293" vertical-scroll-proportion="0.17612977">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe/common/utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="685" selection-end="685" vertical-scroll-proportion="0.022016222">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Makefile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="285" column="0" selection-start="11738" selection-end="11738" vertical-scroll-proportion="0.48588234">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="486" column="8" selection-start="17834" selection-end="17834" vertical-scroll-proportion="0.33256084">
@@ -787,29 +856,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/realtime/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="124" column="41" selection-start="3882" selection-end="3882" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="31" selection-start="1552" selection-end="1578" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe/common/utilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="0" selection-start="685" selection-end="685" vertical-scroll-proportion="0.686747">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe/impact_functions/core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/realtime/fixtures/exposure-table.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="10" selection-start="580" selection-end="580" vertical-scroll-proportion="-10.857142">
+        <state line="56" column="0" selection-start="1828" selection-end="1847" vertical-scroll-proportion="-23.928572">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="319" column="26" selection-start="13155" selection-end="13155" vertical-scroll-proportion="0.7137891">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/realtime/fixtures/header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="6" selection-start="520" selection-end="520" vertical-scroll-proportion="-10.857142">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/realtime/fixtures/footer.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="16" selection-end="16" vertical-scroll-proportion="-1.3571428">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1250" column="0" selection-start="50813" selection-end="50813" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1347633363705" expanded="true" signature="2176:65061" placeholder="..." />
-            <marker date="1347633363705" expanded="true" signature="35172:35954" placeholder="&quot;&quot;&quot;Write the local cities to a shapefile....&quot;&quot;&quot;" />
-            <marker date="1347633363705" expanded="true" signature="38616:40525" placeholder="&quot;&quot;&quot;Create a list of features representing cities impacted....&quot;&quot;&quot;" />
-            <marker date="1347633363705" expanded="true" signature="46278:47740" placeholder="..." />
-            <marker date="1347633363705" expanded="true" signature="46287:46476" placeholder="&quot;&quot;&quot;Fetch a collection of the cities that are nearby....&quot;&quot;&quot;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="296" column="52" selection-start="12106" selection-end="12106" vertical-scroll-proportion="0.6566265">
+        <state line="1345" column="55" selection-start="55313" selection-end="55313" vertical-scroll-proportion="0.6823239">
           <folding />
         </state>
       </provider>
