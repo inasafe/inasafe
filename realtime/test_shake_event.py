@@ -310,6 +310,18 @@ searchBoxes: None
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myTable, myExpectedResult)
         assert myTable == myExpectedResult, myMessage
 
+    def testImpactedCitiesTable(self):
+        """Test getting impacted cities table."""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myTable = myShakeEvent.impactedCitiesTable().toNewlineFreeString()
+        myExpectedResult = 908
+        myResult = len(myTable)
+        myMessage = ('Got:\n%s\nExpected:\n%s\nFor rendered table:\n%s' %
+                    (myTable, myExpectedResult, myResult))
+        assert myTable == myExpectedResult, myMessage
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
     runner = unittest.TextTestRunner(verbosity=2)

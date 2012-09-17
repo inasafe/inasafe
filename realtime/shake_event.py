@@ -43,6 +43,7 @@ from qgis.core import (QgsPoint,
 from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
+from safe.api import Table, TableCell, TableRow
 from safe_qgis.safe_interface import getOptimalExtent
 from safe_qgis.utilities import getWGS84resolution
 from safe_qgis.clipper import extentToGeoArray, clipLayer
@@ -1223,7 +1224,7 @@ class ShakeEvent:
         return myMemoryLayer
 
     def sortedImpactedCities(self, theCount=5):
-        """Return an html snippet with place, mmi, pop sorted by mmi then pop.
+        """Return an data structure with place, mmi, pop sorted by mmi then pop.
 
         Args:
             theCount: int optional limit to how many rows should be returned.
@@ -1231,8 +1232,19 @@ class ShakeEvent:
             theForceFlag: bool (Optional). Whether to force the overwrite
                 of any existing data. Defaults to False.
         Returns:
-            str: An html document containing the sorted cities in a little
-                table.
+            list: An list of dicts containing the sorted cities and their
+                attributes. See below for example output.
+
+                [{'roman': 'III', 'mmi': 1.909999966621399,
+                  'name': 'Tondano', 'population': 33317},
+                  {'roman': 'III', 'mmi': 1.809999942779541,
+                  'name': 'Manado', 'population': 451893},
+                  {'roman': 'III', 'mmi': 1.75,
+                  'name': 'Provinsi Sulawesi Utara', 'population': 2146600},
+                  {'roman': 'III', 'mmi': 1.690000057220459,
+                  'name': 'Tomohon', 'population': 27624},
+                  {'roman': 'III', 'mmi': 1.5299999713897705,
+                  'name': 'Luwuk', 'population': 47778}]
         Raises:
             None
 
@@ -1292,6 +1304,49 @@ class ShakeEvent:
                                     d['name'],
                                     d['roman']))
         return mySortedCities
+
+    def impactedCitiesTable(self, theCount=5):
+        """Return a table object of sorted impacted cities.
+
+        The cities will be listed in the order computed by sortedImpactedCities
+        but will only list in the following format:
+
+        +------+--------+-----------------+-----------+
+        | Icon | Name   | People Affected | Intensity |
+        +======+========+=================+===========+
+        | img  | Padang |    2000         |    IV     +
+        +------+--------+-----------------+-----------+
+
+        .. note:: Population will be rounded pop / 1000
+
+        The icon img will be an image with an icon showing the relevant colour.
+
+        Args:
+            theCount: optional maximum number of cities to show. Default is 5.
+
+        Returns:
+            A Table object (see :func:`safe.impact_functions.tables.Table`)
+
+        Raises:
+            Propogates any exceptions.
+        """
+        myTableData = self.sortedImpactedCities(theCount)
+        myTableBody = []
+        myHeader = TableRow(['', 'Name', 'Affected (x 1000)', 'Intensity'])
+        myTableBody.append(myHeader)
+        for myRowData in myTableData:
+            myIntensity = myRowData['roman']
+            myName = myRowData['name']
+            myPopulation = round(myRowData['population']/1000)
+            myColour = self.mmiColour(myRowData['mmi'])
+            myColourBox = ('<span style="width: 16px; height: 16px;'
+                                 'bgcolour=%s></span>' % myColour)
+            myRow = TableRow([myColourBox, myName, myPopulation, myIntensity])
+            myTableBody.append(myRow)
+
+        myTable = Table(myTableBody)
+        myTable.caption = 'Impacted Cities'
+        return myTable
 
     def calculateFatalities(self,
                             thePopulationRasterPath=None,
