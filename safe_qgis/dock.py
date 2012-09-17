@@ -723,6 +723,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = getExceptionWithStacktrace(e, html=True,
                                                    context=myContext)
             self.displayHtml(myMessage)
+            return
 
         QtCore.QObject.connect(self.runner,
                            QtCore.SIGNAL('done()'),
