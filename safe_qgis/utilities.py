@@ -35,7 +35,8 @@ from qgis.core import (QGis,
                        QgsRendererRangeV2,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
-                       QgsRasterTransparency)
+                       QgsRasterTransparency,
+                       QgsMessageLog)
 from safe_qgis.exceptions import StyleError
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
@@ -44,6 +45,8 @@ import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
+def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+    QgsMessageLog.logMessage(msg, tag, level)
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary
