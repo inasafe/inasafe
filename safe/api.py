@@ -36,4 +36,5 @@ from safe.common.dynamic_translations import names as internationalisedNames
 from safe.common.numerics import nanallclose
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
 from safe.common.utilities import VerificationError, temp_dir, unique_filename
+from safe.common.tables import Table, TableCell, TableRow
 # pylint: enable=W0611
