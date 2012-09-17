@@ -585,7 +585,7 @@ def parse_single_requirement(requirement):
         if part.find('==') != -1:
             myKey = part.split('==')[0]
             myValue = part.split('==')[1]
-            retval[myKey] = myValue[1:-1]  # Removing single quote
+            retval[myKey] = [myValue[1:-1]]  # Removing single quote
         elif part.find(' in ') != -1:
             myKey = part.split(' in ')[0]
             myListString = part.split(' in ')[1][1:-1]  # Removing '['
