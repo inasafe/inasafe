@@ -115,6 +115,14 @@ class ImpactFunctionsDocTest(unittest.TestCase):
 pressed."
         assert expectedTable == realTableReset, msgReset
 
+    def test_showHelp(self):
+        """Test that help button works"""
+        myDialog = ImpactFunctionsDoc(PARENT)
+        myButton = myDialog.ui.myButtonBox.button(QtGui.QDialogButtonBox.Help)
+        QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
+        myMessage = 'Help dialog was not created when help button pressed'
+        assert myDialog.helpDialog is not None, myMessage
+
 if __name__ == "__main__":
     suite = unittest.makeSuite(ImpactFunctionsDocTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
