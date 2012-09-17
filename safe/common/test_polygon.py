@@ -959,36 +959,6 @@ class Test_Polygon(unittest.TestCase):
         value = intersection(line0, line1)
         assert value is None
 
-    def Xtest_vectorised_intersection0(self):
-        """Vectorised intersection of multiple lines works
-        """
-
-        #FIXME: Retire...
-
-        # First vectorise only one of the line arguments
-        line0 = [[0, 0], [100, 100]]
-
-        N = 10
-        line1 = numpy.zeros(40, numpy.float).reshape(2, 2, N)
-
-        x0 = numpy.arange(N) * 10
-        y0 = numpy.zeros(N)
-        x1 = numpy.arange(N) * 10
-        y1 = numpy.ones(N) * 100
-
-        line1[0, 0, :] = x0
-        line1[0, 1, :] = y0
-        line1[1, 0, :] = x1
-        line1[1, 1, :] = y1
-
-        value = intersection(line0, line1)
-
-        assert len(value.shape) == 2
-        assert value.shape[0] == N
-        assert value.shape[1] == 2
-
-        print value
-
     def test_vectorised_intersection1(self):
         """Vectorised intersection of multiple lines works 1
         """
@@ -1387,6 +1357,7 @@ class Test_Polygon(unittest.TestCase):
                                [2., 4.]])
 
         # Polygon 4, line 2
+        # This one will fail if we ignore points_on_line check
         assert numpy.allclose(lines_covered[4][2][0],
                               [[0., 0.],
                                [5., 5.]])

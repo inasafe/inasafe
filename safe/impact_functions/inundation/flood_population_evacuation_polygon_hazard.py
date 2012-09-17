@@ -31,14 +31,13 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         Input
           layers: List of layers expected to contain
-              H: Raster layer of flood depth
+              H: Vector polygon layer of flood depth
               P: Raster layer of population data on the same grid as H
 
-        Counts number of people exposed to flood levels exceeding
-        specified threshold.
+        Counts number of people exposed to areas identified as flood prone
 
         Return
-          Map of population exposed to flood levels exceeding the threshold
+          Map of population exposed to flooding
           Table with number of people evacuated and supplies required
         """
 

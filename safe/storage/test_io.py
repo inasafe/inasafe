@@ -2035,6 +2035,27 @@ class Test_IO(unittest.TestCase):
 
     test_projection_comparisons.slow = True
 
+    def Xtest_reading_and_writing_of_multiband_rasters(self):
+        """Multiband rasters can be read and written correctly
+        """
+
+        # FIXME (Ole, Sep 2012): WORK IN PROGRESS
+        rastername = ('201208140700_Jakarta_200m_Sobek_Hypothetical_'
+                      'Scenario_ACCESSA.nc')
+
+        filename = '%s/%s' % (TESTDATA, rastername)
+        R1 = read_layer(filename)
+
+        # Check consistency of raster
+        A1 = R1.get_data()
+        M, N = A1.shape
+
+        msg = ('Dimensions of raster array do not match those of '
+               'raster file %s' % R1.filename)
+        assert M == R1.rows, msg
+        assert N == R1.columns, msg
+        # More...
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
