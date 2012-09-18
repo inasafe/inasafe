@@ -101,7 +101,7 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
     def showImpactFunctionsTable(self):
         '''Show table of impact functions.
         '''
-        self.if_table = core.get_plugins_as_table2(self.dict_filter)
+        self.if_table = core.get_plugins_as_table(self.dict_filter)
         self.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
         self.displayHtml(QtCore.QString(str(self.if_table)))

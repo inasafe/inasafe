@@ -9,7 +9,7 @@ from core import get_admissible_plugins
 from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
-from core import get_plugins_as_table2
+from core import get_plugins_as_table
 from utilities import pretty_string
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -247,9 +247,9 @@ class Test_plugin_core(unittest.TestCase):
         myMessage = 'Get %s should be % s' % (realStr2, expectedStr2)
         assert expectedStr2 == realStr2, myMessage
 
-    def test_get_plugins_as_table2(self):
+    def test_get_plugins_as_table(self):
         """Test get plugins as table with filtering."""
-        T = get_plugins_as_table2()
+        T = get_plugins_as_table()
         S = T.toNewlineFreeString()
         LOGGER.debug(S)
 
