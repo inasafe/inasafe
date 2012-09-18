@@ -89,11 +89,11 @@ class ImpactFunctionsDocTest(unittest.TestCase):
         myDialog = ImpactFunctionsDoc(PARENT)
         list_category = myDialog.combo_box_content['category']
         for i in xrange(1, len(list_category)):
-            myDialog.ui.comboBox_category.setCurrentIndex(i)
+            myDialog.comboBox_category.setCurrentIndex(i)
             verifyColumn(myDialog.if_table, 2, list_category[i], 'only')
 
-        myDialog.ui.comboBox_datatype.setCurrentIndex(3)
-        myDatatype = myDialog.ui.comboBox_datatype.currentText()
+        myDialog.comboBox_datatype.setCurrentIndex(3)
+        myDatatype = myDialog.comboBox_datatype.currentText()
         # datatype is the 5th column
         if myDatatype == 'sigab':
             verifyColumn(myDialog.if_table, 5, myDatatype, 'included')
@@ -102,10 +102,10 @@ class ImpactFunctionsDocTest(unittest.TestCase):
         """Test when reset button is pressed."""
         myDialog = ImpactFunctionsDoc(PARENT)
         expectedTable = myDialog.if_table.toNewlineFreeString()
-        myDialog.ui.comboBox_category.setCurrentIndex(1)
-        myDialog.ui.comboBox_subcategory.setCurrentIndex(1)
+        myDialog.comboBox_category.setCurrentIndex(1)
+        myDialog.comboBox_subcategory.setCurrentIndex(1)
         realTableFilter = myDialog.if_table.toNewlineFreeString()
-        resetButton = myDialog.ui.myButtonBox.button(
+        resetButton = myDialog.myButtonBox.button(
                                             QtGui.QDialogButtonBox.Reset)
         QTest.mouseClick(resetButton, QtCore.Qt.LeftButton)
         realTableReset = myDialog.if_table.toNewlineFreeString()
@@ -118,7 +118,7 @@ pressed."
     def test_showHelp(self):
         """Test that help button works"""
         myDialog = ImpactFunctionsDoc(PARENT)
-        myButton = myDialog.ui.myButtonBox.button(QtGui.QDialogButtonBox.Help)
+        myButton = myDialog.myButtonBox.button(QtGui.QDialogButtonBox.Help)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
         myMessage = 'Help dialog was not created when help button pressed'
         assert myDialog.helpDialog is not None, myMessage
