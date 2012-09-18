@@ -56,7 +56,9 @@ from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
                                  setRasterStyle,
-                                 qgisVersion)
+                                 qgisVersion,
+                                 copyInMemory,
+                                 memoryLayerToShapefile)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -850,24 +852,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def _aggregateResults(self):
         aggregationLayer = self.getAggregationLayer()
+        aggregationLayer = copyInMemory(
+            self.getAggregationLayer(),
+            self.tr('%1 aggregation results').arg(aggregationLayer.name())
+        )
+
         logOnQgsMessageLog('Aggregating using ' + aggregationLayer.name())
         myQgisImpactLayer = self.readImpactLayer(self.runner.impactLayer())
-
-
-#        self.progressBar.setRange(0, 3)
-#        self.progressBar.setValue(0)
-#        self.progressBar.setValue(self.progressBar.value() + 1)
-#        self.progressBar.setValue(self.progressBar.value() + 1)
-
-
 
         if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
             #TODO implement polygon to polygon aggregation (dissolve,
             # line in polygon, point in polygon)
             logOnQgsMessageLog('Vector aggregation not implemented yet')
+            return
         elif myQgisImpactLayer.type() == QgsMapLayer.RasterLayer:
             logOnQgsMessageLog('Aggregating Zonal statistics')
-            prefix = "zonal"
+            prefix = "zonal_"
             zonStat = QgsZonalStatistics(
                 aggregationLayer,
                 myQgisImpactLayer.dataProvider().dataSourceUri(),
@@ -885,10 +885,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     self.tr(
                         "You aborted aggregation, "
                         "so there are no data for analysis. Exiting..."))
-#            self.progressBar.setValue(0)
             QgsMapLayerRegistry.instance().addMapLayer(aggregationLayer)
+            shape = memoryLayerToShapefile(
+                'name',
+                '/home/marco/tmp',
+                aggregationLayer
+            )
+#            QgsMapLayerRegistry.instance().addMapLayer(shape)
             return
-        logOnQgsMessageLog('done')
 
     def _completed(self):
         """Helper function for slot activated when the process is done.

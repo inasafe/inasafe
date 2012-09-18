@@ -532,15 +532,14 @@ def copyInMemory(vLayer, copyName=''):
     """
 
     if copyName is '':
-        copyName = 'tmp'
-    logOnQgsMessageLog(vLayer.type())
-    logOnQgsMessageLog(QGis.Point)
+        copyName = vLayer.name() + ' TMP'
+
     if vLayer.type() == QgsMapLayer.VectorLayer:
-        vType = vLayer.type()
+        vType = vLayer.geometryType()
         if vType == QGis.Point:
             typeStr = 'Point'
         elif vType == QGis.Line:
-            typeStr = 'Line's
+            typeStr = 'Line'
         elif vType == QGis.Polygon:
             typeStr = 'Polygon'
         else:
@@ -577,8 +576,7 @@ def copyInMemory(vLayer, copyName=''):
     return memLayer
 
 
-def memoryLayerToShapefile(self,
-                           theFileName,
+def memoryLayerToShapefile(theFileName,
                            theFilePath,
                            theMemoryLayer,
                            theForceFlag=False,
