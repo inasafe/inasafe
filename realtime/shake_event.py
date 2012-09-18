@@ -1311,6 +1311,9 @@ class ShakeEvent:
         some inlined css markup for our mmi charts which will be ignored
         if you are not using the css classes it defines.
 
+        The bootstrap.css file will also be written to the same directory
+        where the table is written.
+
         Args:
             * theFileName: file name (without full path) .e.g foo.html
             * theTable: A Table instance.
@@ -1335,6 +1338,13 @@ class ShakeEvent:
         myHtmlFile.write(theTable.toNewlineFreeString())
         myHtmlFile.write(myFooter)
         myHtmlFile.close()
+        # Also bootstrap gets copied to extract dir
+        myDestination = os.path.join(shakemapExtractDir(),
+                                     self.eventId,
+                                     'bootstrap.css')
+        mySource = os.path.join(self._fixturePath(), 'bootstrap.css')
+        shutil.copyfile(mySource, myDestination)
+
         return myPath
 
     def impactedCitiesTable(self, theCount=5):
@@ -1386,12 +1396,6 @@ class ShakeEvent:
         myPath = self.writeHtmlTable(theFileName='affected-cities.html',
                                      theTable=myTable)
 
-        # Also bootstrap gets copied to extract dir
-        myDestination = os.path.join(shakemapExtractDir(),
-                      self.eventId,
-                      'bootstrap.css')
-        mySource = os.path.join(self._fixturePath(), 'bootstrap.css')
-        shutil.copyfile(mySource, myDestination)
         return myTable, myPath
 
     def fatalitiesTable(self, theMmiLevels):
@@ -1413,10 +1417,12 @@ class ShakeEvent:
                 8: 0.0,
                 9: 0.0}
         """
-        myHeader = [TableCell('Intesity', header=True)]
+        myHeader = [TableCell('Intensity', header=True)]
         myRow = [TableCell()]
-        for myMmi in range(2, 10):
-            myHeader.append(self.romanize(myMmi))
+        for myMmi in range(2, 9):
+            myHeader.append(TableCell(self.romanize(myMmi),
+                                      cell_class='mmi-%s' % myMmi,
+                                      header=True))
             if myMmi in theMmiLevels:
                 myRow.append('%.2f' % theMmiLevels[myMmi])
             else:
@@ -1509,8 +1515,10 @@ class ShakeEvent:
 
         self.impactFile = myTifPath
         self.impactKeywordsFile = myKeywordsPath
-        self.fatalityCounts = myResult.keywords
-        return self.impactFile, myMmiLevels
+        self.fatalityCounts = myMmiLevels
+
+        myImpactTablePath = self.fatalitiesTable(myMmiLevels)
+        return self.impactFile, myImpactTablePath
 
     def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):
         """Clip population (exposure) layer to dimensions of shake data.

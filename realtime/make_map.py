@@ -82,7 +82,6 @@ except:
     logging.exception('No nearby cities found!')
 myFile = myShakeEvent.mmiDataToShapefile(theForceFlag=myForceFlag)
 logging.info('Created: %s', myFile)
-
 myShakeEvent.calculateFatalities()
 
 logging.info('-------------------------------------------')

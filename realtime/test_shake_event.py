@@ -240,11 +240,18 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
-        myResult, myMmiFatalities = myShakeEvent.calculateFatalities()
+        myResult, myFatalitiesHtml = myShakeEvent.calculateFatalities()
+
         myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
                            '/20120726022003/impact-nearest.tif')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
+
+
+        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
+                            '/20120726022003/impacts.html')
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myFatalitiesHtml, myExpectedResult)
+        assert myFatalitiesHtml == myExpectedResult, myMessage
 
         myExpectedFatalities = {2: 0.47386375223673427,
                                 3: 0.024892573693488258,
@@ -256,8 +263,8 @@ searchBoxes: None
                                 9: 0.0}
 
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (
-                    myMmiFatalities, myExpectedFatalities)
-        assert myMmiFatalities == myExpectedFatalities, myMessage
+                myShakeEvent.fatalityCounts, myExpectedFatalities)
+        assert myShakeEvent.fatalityCounts == myExpectedFatalities, myMessage
 
     def testBoundsToRect(self):
         """Test that we can calculate the event bounds properly"""
@@ -346,6 +353,26 @@ searchBoxes: None
                          '20120726022003/affected-cities.html')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myPath, myExpectedPath)
         assert myPath == myExpectedPath, myMessage
+
+    def testFatalitiesTable(self):
+        """Test rendering a fatalities table."""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myDict = {2: 0.47386375223673427,
+         3: 0.024892573693488258,
+         4: 0.0,
+         5: 0.0,
+         6: 0.0,
+         7: 0.0,
+         8: 0.0,
+         9: 0.0}
+        myResult = myShakeEvent.fatalitiesTable(myDict)
+        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted/'
+                           '20120726022003/impacts.html')
+        myMessage = ('Got:\n%s\nExpected:\n%s' %
+                    (myResult, myExpectedResult))
+        assert myResult == myExpectedResult, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
