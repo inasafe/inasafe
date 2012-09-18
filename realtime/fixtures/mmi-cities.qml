@@ -16,7 +16,7 @@
       </symbol>
     </symbols>
     <rotation field=""/>
-    <sizescale field="" scalemethod=""/>
+    <sizescale field="" scalemethod="area"/>
   </renderer-v2>
   <customproperties>
     <property key="labeling" value="pal"/>
@@ -30,6 +30,7 @@
     <property key="labeling/bufferSize" value="1"/>
     <property key="labeling/bufferSizeInMapUnits" value="false"/>
     <property key="labeling/bufferTransp" value="49"/>
+    <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/dataDefinedProperty0" value=""/>
     <property key="labeling/dataDefinedProperty1" value=""/>
     <property key="labeling/dataDefinedProperty10" value=""/>
@@ -115,15 +116,20 @@
     <selectedonly on=""/>
   </labelattributes>
   <edittypes>
+    <edittype type="0" name="colour"/>
+    <edittype type="0" name="dir_from"/>
+    <edittype type="0" name="dir_to"/>
     <edittype type="0" name="directio_1"/>
     <edittype type="0" name="direction_"/>
+    <edittype type="0" name="dist_to"/>
     <edittype type="0" name="distance_t"/>
     <edittype type="0" name="mmi"/>
     <edittype type="0" name="name"/>
     <edittype type="0" name="population"/>
+    <edittype type="0" name="roman"/>
   </edittypes>
-  <editform></editform>
+  <editform>.</editform>
   <editforminit></editforminit>
-  <annotationform></annotationform>
+  <annotationform>.</annotationform>
   <attributeactions/>
 </qgis>

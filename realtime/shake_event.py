@@ -964,7 +964,6 @@ class ShakeEvent:
             QgsField("population",  QVariant.Int),
             QgsField("mmi", QVariant.Double),
             QgsField("distance_to", QVariant.Double),
-            QgsField("direction_to", QVariant.Double),
             QgsField("direction_from", QVariant.Double)
 
         The 'name' and 'population' fields will be obtained from our geonames
@@ -1304,6 +1303,40 @@ class ShakeEvent:
                                     d['roman']))
         return mySortedCities
 
+    def writeHtmlTable(self, theFileName, theTable):
+        """Write a Table object to disk with a standard header and footer.
+
+        This is a helper function that allows you to easily write a table
+        to disk with a standard header and footer. The header contains
+        some inlined css markup for our mmi charts which will be ignored
+        if you are not using the css classes it defines.
+
+        Args:
+            * theFileName: file name (without full path) .e.g foo.html
+            * theTable: A Table instance.
+        Returns:
+            str: full path to file that was created on disk.
+        Raises:
+            None
+        """
+        myPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              theFileName)
+        myHtmlFile = file(myPath, 'wt')
+        myHeaderFile = os.path.join(self._fixturePath(), 'header.html')
+        myFooterFile = os.path.join(self._fixturePath(), 'footer.html')
+        myHeaderFile = file(myHeaderFile, 'rt')
+        myHeader = myHeaderFile.read()
+        myHeaderFile.close()
+        myFooterFile = file(myFooterFile, 'rt')
+        myFooter = myFooterFile.read()
+        myFooterFile.close()
+        myHtmlFile.write(myHeader)
+        myHtmlFile.write(theTable.toNewlineFreeString())
+        myHtmlFile.write(myFooter)
+        myHtmlFile.close()
+        return myPath
+
     def impactedCitiesTable(self, theCount=5):
         """Return a table object of sorted impacted cities.
 
@@ -1346,29 +1379,12 @@ class ShakeEvent:
             myRow = TableRow([myColourBox, myName, myPopulation, myIntensity])
             myTableBody.append(myRow)
 
-        myTable = Table(myTableBody)
+        myTable = Table(myTableBody,)
         myTable.caption = 'Impacted Cities'
 
         # Also make an html file on disk
-        myPath = os.path.join(shakemapExtractDir(),
-                                      self.eventId,
-                                      'affected-cities.html')
-        myHtmlFile = file(myPath, 'wt')
-        myHeaderFile = os.path.join(self._fixturePath(), 'header.html')
-        myFooterFile = os.path.join(self._fixturePath(), 'footer.html')
-
-        myHeaderFile = file(myHeaderFile, 'rt')
-        myHeader = myHeaderFile.read()
-        myHeaderFile.close()
-
-        myFooterFile = file(myFooterFile, 'rt')
-        myFooter = myFooterFile.read()
-        myFooterFile.close()
-
-        myHtmlFile.write(myHeader)
-        myHtmlFile.write(myTable.toNewlineFreeString())
-        myHtmlFile.write(myFooter)
-        myHtmlFile.close()
+        myPath = self.writeHtmlTable(theFileName='affected-cities.html',
+                                     theTable=myTable)
 
         # Also bootstrap gets copied to extract dir
         myDestination = os.path.join(shakemapExtractDir(),
@@ -1377,6 +1393,45 @@ class ShakeEvent:
         mySource = os.path.join(self._fixturePath(), 'bootstrap.css')
         shutil.copyfile(mySource, myDestination)
         return myTable, myPath
+
+    def fatalitiesTable(self, theMmiLevels):
+        """Create the html listing fatalities per mmi interval.
+        Args:
+            dict: A dictionary with keys mmi leves and values mortalities as
+                per the example below. This is typically going to be passed
+                from the :func:`calculateFatalities` function defined below.
+        Returns:
+            str: full absolute path to the saved html content.
+
+        Example:
+                {2: 0.47386375223673427,
+                3: 0.024892573693488258,
+                4: 0.0,
+                5: 0.0,
+                6: 0.0,
+                7: 0.0,
+                8: 0.0,
+                9: 0.0}
+        """
+        myHeader = [TableCell('Intesity', header=True)]
+        myRow = [TableCell()]
+        for myMmi in range(2, 10):
+            myHeader.append(self.romanize(myMmi))
+            if myMmi in theMmiLevels:
+                myRow.append('%.2f' % theMmiLevels[myMmi])
+            else:
+                myRow.append(0.00)
+        # TODO translate to eng and then internationalise
+        myImpactRow = ['Lemah', 'Lemah', 'Agak Lemah', 'Sedang',
+                       'Kuat', 'Sangat Kuat', 'Keras', 'Sangat Keras']
+        myTableBody = []
+        myTableBody.append(TableRow(myHeader, header=True))
+        myTableBody.append(myRow)
+        myTableBody.append(myImpactRow)
+        myTable = Table(myTableBody)
+        myPath = self.writeHtmlTable(theFileName='impacts.html',
+                            theTable=myTable)
+        return myPath
 
     def calculateFatalities(self,
                             thePopulationRasterPath=None,
@@ -1395,14 +1450,17 @@ class ShakeEvent:
                 :func:`mmiToRasterData` for information about default
                 behaviour.
         Returns:
-            str - the path to the computed impact file.
+            str: the path to the computed impact file.
                 The class members self.impactFile and self.fatalityCounts
                 will be populated.
                 self.fatalityCounts is a dict containing fatality counts for
                 the shake events. Keys for the dict will be MMI classes (I-X)
                 and values will be fatalities for that class.
+            str: Path to the html report showing a table of mortalities per
+                mmi interval.
         Raises:
             None
+
         """
         if thePopulationRasterPath is None or (
             not os.path.isfile(thePopulationRasterPath) and

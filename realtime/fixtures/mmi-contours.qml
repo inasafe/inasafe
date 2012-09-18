@@ -4,14 +4,14 @@
   <renderer-v2 symbollevels="0" type="RuleRenderer">
     <rules>
       <rule description="Integer MMI valued contouirs will be shown but not labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) = 0" symbol="0" label="Whole Intervals">
-        <rule filter="&quot;MMI&quot; = '2'" symbol="1" label="&quot;MMI&quot; = '2'"/>
-        <rule filter="&quot;MMI&quot; = '3'" symbol="2" label="&quot;MMI&quot; = '3'"/>
-        <rule filter="&quot;MMI&quot; = '4'" symbol="3" label="&quot;MMI&quot; = '4'"/>
-        <rule filter="&quot;MMI&quot; = '5'" symbol="4" label="&quot;MMI&quot; = '5'"/>
-        <rule filter="&quot;MMI&quot; = '6'" symbol="5" label="&quot;MMI&quot; = '6'"/>
-        <rule filter="&quot;MMI&quot; = '7'" symbol="6" label="&quot;MMI&quot; = '7'"/>
-        <rule filter="&quot;MMI&quot; = '8'" symbol="7" label="&quot;MMI&quot; = '8'"/>
-        <rule filter="&quot;MMI&quot; = '9'" symbol="8" label="&quot;MMI&quot; = '9'"/>
+        <rule filter="&quot;MMI&quot; = '2'" symbol="1" label="II"/>
+        <rule filter="&quot;MMI&quot; = '3'" symbol="2" label="III"/>
+        <rule filter="&quot;MMI&quot; = '4'" symbol="3" label="IV"/>
+        <rule filter="&quot;MMI&quot; = '5'" symbol="4" label="V"/>
+        <rule filter="&quot;MMI&quot; = '6'" symbol="5" label="VI"/>
+        <rule filter="&quot;MMI&quot; = '7'" symbol="6" label="VII"/>
+        <rule filter="&quot;MMI&quot; = '8'" symbol="7" label="VIII"/>
+        <rule filter="&quot;MMI&quot; = '9'" symbol="8" label="IX"/>
       </rule>
       <rule description="Integer MMI valued contouirs will be hidden but labelled" filter="&quot;MMI&quot; - toint(&quot;MMI&quot;) != 0" symbol="9" label="Half Intervals"/>
     </rules>
@@ -146,10 +146,10 @@
     <property key="labeling/bufferColorG" value="0"/>
     <property key="labeling/bufferColorR" value="0"/>
     <property key="labeling/bufferJoinStyle" value="64"/>
-    <property key="labeling/bufferNoFill" value="true"/>
-    <property key="labeling/bufferSize" value="1.2"/>
+    <property key="labeling/bufferNoFill" value="false"/>
+    <property key="labeling/bufferSize" value="0"/>
     <property key="labeling/bufferSizeInMapUnits" value="false"/>
-    <property key="labeling/bufferTransp" value="37"/>
+    <property key="labeling/bufferTransp" value="0"/>
     <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/dataDefinedProperty0" value=""/>
     <property key="labeling/dataDefinedProperty1" value=""/>
@@ -171,12 +171,12 @@
     <property key="labeling/dataDefinedProperty7" value=""/>
     <property key="labeling/dataDefinedProperty8" value=""/>
     <property key="labeling/dataDefinedProperty9" value="2"/>
-    <property key="labeling/decimals" value="2"/>
+    <property key="labeling/decimals" value="0"/>
     <property key="labeling/displayAll" value="false"/>
     <property key="labeling/dist" value="0"/>
     <property key="labeling/distInMapUnits" value="false"/>
     <property key="labeling/enabled" value="true"/>
-    <property key="labeling/fieldName" value="&quot;ROMAN&quot; "/>
+    <property key="labeling/fieldName" value="ROMAN"/>
     <property key="labeling/fontCapitals" value="0"/>
     <property key="labeling/fontFamily" value="Times New Roman"/>
     <property key="labeling/fontItalic" value="false"/>
@@ -187,17 +187,17 @@
     <property key="labeling/fontUnderline" value="false"/>
     <property key="labeling/fontWeight" value="75"/>
     <property key="labeling/fontWordSpacing" value="0"/>
-    <property key="labeling/formatNumbers" value="true"/>
-    <property key="labeling/isExpression" value="true"/>
+    <property key="labeling/formatNumbers" value="false"/>
+    <property key="labeling/isExpression" value="false"/>
     <property key="labeling/labelOffsetInMapUnits" value="true"/>
     <property key="labeling/labelPerPart" value="false"/>
     <property key="labeling/mergeLines" value="true"/>
     <property key="labeling/minFeatureSize" value="20"/>
     <property key="labeling/namedStyle" value="Bold"/>
     <property key="labeling/obstacle" value="true"/>
-    <property key="labeling/placement" value="4"/>
-    <property key="labeling/placementFlags" value="0"/>
-    <property key="labeling/plussign" value="false"/>
+    <property key="labeling/placement" value="2"/>
+    <property key="labeling/placementFlags" value="9"/>
+    <property key="labeling/plussign" value="true"/>
     <property key="labeling/preserveRotation" value="true"/>
     <property key="labeling/previewBkgrdColor" value="#ffffff"/>
     <property key="labeling/priority" value="10"/>
