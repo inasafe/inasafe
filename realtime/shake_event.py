@@ -1429,7 +1429,12 @@ class ShakeEvent:
         myFunction = safe_get_plugins(myFunctionId)[0][myFunctionId]
 
         myResult = safe_calculate_impact(myLayers, myFunction)
-        myMmiLevels = myResult.keywords['fatalities_per_mmi']
+        try:
+            myMmiLevels = myResult.keywords['fatalites_per_mmi']
+        except:
+            LOGGER.exception('fatalities_per_mmi key not found in:\n%s' %
+                            myResult.keywords)
+            raise
         # Copy the impact layer into our extract dir.
         myTifPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,

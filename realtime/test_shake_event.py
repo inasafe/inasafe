@@ -191,9 +191,6 @@ searchBoxes: None
                                                 theAlgorithm='average')
         assert self.checkFeatureCount(myPath, 132)
 
-
-
-
     def testLocalCities(self):
         """Test that we can retrieve the cities local to the event"""
         myShakeId = '20120726022003'
@@ -216,7 +213,7 @@ searchBoxes: None
                 myString += ("%d: %s\n" % (myKey, myValue.toString()))
             myString += '------------------\n'
         LOGGER.debug('Mem table:\n %s' % myString)
-        myExpectedLength = 874
+        myExpectedLength = 877
         myLength = len(myString)
         myMessage = 'Expected: %s Got %s' % (myExpectedLength, myLength)
         self.assertEquals(myExpectedLength, myLength, myMessage)
@@ -249,7 +246,15 @@ searchBoxes: None
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 
-        myExpectedFatalities = {}
+        myExpectedFatalities = {2: 0.47386375223673427,
+                                3: 0.024892573693488258,
+                                4: 0.0,
+                                5: 0.0,
+                                6: 0.0,
+                                7: 0.0,
+                                8: 0.0,
+                                9: 0.0}
+
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myMmiFatalities, myExpectedFatalities)
         assert myMmiFatalities==myExpectedFatalities, myMessage
 
