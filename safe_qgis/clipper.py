@@ -45,7 +45,7 @@ LOGGER = logging.getLogger(name='InaSAFE')
 
 
 def tr(theText):
-    """We define a tr() alias here since the ClipperTest implementation below
+    """We define a tr() alias here since the Clipper implementation below
     is not a class and does not inherit from QObject.
 
     .. note:: see http://tinyurl.com/pyqt-differences
@@ -57,7 +57,7 @@ def tr(theText):
        Translated version of the given string if available, otherwise
        the original string.
     """
-    myContext = "ClipperTest"
+    myContext = "Clipper"
     return QCoreApplication.translate(myContext, theText)
 
 

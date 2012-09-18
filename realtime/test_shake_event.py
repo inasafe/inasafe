@@ -191,9 +191,6 @@ searchBoxes: None
                                                 theAlgorithm='average')
         assert self.checkFeatureCount(myPath, 132)
 
-
-
-
     def testLocalCities(self):
         """Test that we can retrieve the cities local to the event"""
         myShakeId = '20120726022003'
@@ -216,7 +213,7 @@ searchBoxes: None
                 myString += ("%d: %s\n" % (myKey, myValue.toString()))
             myString += '------------------\n'
         LOGGER.debug('Mem table:\n %s' % myString)
-        myExpectedLength = 874
+        myExpectedLength = 877
         myLength = len(myString)
         myMessage = 'Expected: %s Got %s' % (myExpectedLength, myLength)
         self.assertEquals(myExpectedLength, myLength, myMessage)
@@ -243,15 +240,31 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
-        myResult, myMmiFatalities = myShakeEvent.calculateFatalities()
+        myResult, myFatalitiesHtml = myShakeEvent.calculateFatalities()
+
         myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
                            '/20120726022003/impact-nearest.tif')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myResult, myExpectedResult)
         assert myResult == myExpectedResult, myMessage
 
-        myExpectedFatalities = {}
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myMmiFatalities, myExpectedFatalities)
-        assert myMmiFatalities==myExpectedFatalities, myMessage
+
+        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
+                            '/20120726022003/impacts.html')
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myFatalitiesHtml, myExpectedResult)
+        assert myFatalitiesHtml == myExpectedResult, myMessage
+
+        myExpectedFatalities = {2: 0.47386375223673427,
+                                3: 0.024892573693488258,
+                                4: 0.0,
+                                5: 0.0,
+                                6: 0.0,
+                                7: 0.0,
+                                8: 0.0,
+                                9: 0.0}
+
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (
+                myShakeEvent.fatalityCounts, myExpectedFatalities)
+        assert myShakeEvent.fatalityCounts == myExpectedFatalities, myMessage
 
     def testBoundsToRect(self):
         """Test that we can calculate the event bounds properly"""
@@ -270,7 +283,7 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
 
-        myValues = range(1,9)
+        myValues = range(1, 9)
         myExpectedResult = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
         myResult = []
         for myValue in myValues:
@@ -284,10 +297,19 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
 
-        myValues = range(0,12)
-        myExpectedResult = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',
-         '#FF0', '#FD0', '#ff9100', '#F00', '#D00', '#800',
-         '#400']
+        myValues = range(0, 12)
+        myExpectedResult = ['#FFFFFF',
+                            '#209fff',
+                            '#00cfff',
+                            '#55ffff',
+                            '#aaffff',
+                            '#fff000',
+                            '#ffa800',
+                            '#ff7000',
+                            '#ff0000',
+                            '#D00',
+                            '#800',
+                            '#400']
         myResult = []
         for myValue in myValues:
             myResult.append(myShakeEvent.mmiColour(myValue))
@@ -325,11 +347,32 @@ searchBoxes: None
         myResult = len(myTable)
         myMessage = ('Got:\n%s\nExpected:\n%s\nFor rendered table:\n%s' %
                     (myResult, myExpectedResult, myTable))
-        assert myTable == myExpectedResult, myMessage
+        assert myResult == myExpectedResult, myMessage
 
-        myExpectedPath = '/tmp/inasafe/realtime/shakemaps-extracted/20120916223752/affected-cities.html'
+        myExpectedPath = ('/tmp/inasafe/realtime/shakemaps-extracted/'
+                         '20120726022003/affected-cities.html')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myPath, myExpectedPath)
         assert myPath == myExpectedPath, myMessage
+
+    def testFatalitiesTable(self):
+        """Test rendering a fatalities table."""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myDict = {2: 0.47386375223673427,
+         3: 0.024892573693488258,
+         4: 0.0,
+         5: 0.0,
+         6: 0.0,
+         7: 0.0,
+         8: 0.0,
+         9: 0.0}
+        myResult = myShakeEvent.fatalitiesTable(myDict)
+        myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted/'
+                           '20120726022003/impacts.html')
+        myMessage = ('Got:\n%s\nExpected:\n%s' %
+                    (myResult, myExpectedResult))
+        assert myResult == myExpectedResult, myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')

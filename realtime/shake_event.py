@@ -28,7 +28,12 @@ import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 
-from PyQt4.QtCore import QVariant, QFileInfo, QString, QStringList
+from PyQt4.QtCore import (QCoreApplication,
+                          QObject,
+                          QVariant,
+                          QFileInfo,
+                          QString,
+                          QStringList)
 from qgis.core import (QgsPoint,
                        QgsField,
                        QgsFeature,
@@ -61,7 +66,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 
 
-class ShakeEvent:
+class ShakeEvent(QObject):
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magnitude etc."""
 
@@ -84,6 +89,8 @@ class ShakeEvent:
 
         Raises: EventXmlParseError
         """
+        # We inherit from QObject for translation support
+        QObject.__init__(self)
         self.latitude = None
         self.longitude = None
         self.eventId = theEventId
@@ -229,7 +236,7 @@ class ShakeEvent:
             self.hour = int(myTimeTokens[0])
             self.minute = int(myTimeTokens[1])
             self.second = int(myTimeTokens[2])
-            # Note teh timezone here is inconsistent with YZ from grid.xml
+            # Note the timezone here is inconsistent with YZ from grid.xml
             # use the latter
             self.timeZone = myTimeStamp[-3:]
 
@@ -715,7 +722,6 @@ class ShakeEvent:
                        'IX', 'X', 'XI', 'XII']
         return myRomanList[int(round(theMMIValue))]
 
-
     def mmiColour(self, theMMIValue):
         """Return the colour for an mmi value.
 
@@ -728,8 +734,8 @@ class ShakeEvent:
         """
 
         myRGBList = ['#FFFFFF', '#209fff', '#00cfff', '#55ffff', '#aaffff',
-                         '#fff000', '#ffa800', '#ff7000', '#ff0000', '#D00', '#800',
-                         '#400']
+                     '#fff000', '#ffa800', '#ff7000', '#ff0000', '#D00',
+                     '#800', '#400']
         myRGB = myRGBList[int(theMMIValue)]
         return myRGB
 
@@ -844,9 +850,8 @@ class ShakeEvent:
         myFileName = 'mmi-cities'
         myMemoryLayer = self.localCitiesMemoryLayer()
         return self.memoryLayerToShapefile(theFileName=myFileName,
-                                           theMemoryLayer= myMemoryLayer,
+                                           theMemoryLayer=myMemoryLayer,
                                            theForceFlag=theForceFlag)
-
 
     def citySearchBoxesToShapefile(self, theForceFlag=False):
         """Write a cities memory layer to a shapefile.
@@ -966,7 +971,6 @@ class ShakeEvent:
             QgsField("population",  QVariant.Int),
             QgsField("mmi", QVariant.Double),
             QgsField("distance_to", QVariant.Double),
-            QgsField("direction_to", QVariant.Double),
             QgsField("direction_from", QVariant.Double)
 
         The 'name' and 'population' fields will be obtained from our geonames
@@ -1171,7 +1175,6 @@ class ShakeEvent:
 
         return myMemoryLayer
 
-
     def citySearchBoxMemoryLayer(self, theForceFlag=False):
         """Return the search boxes used to search for cities as a memory layer.
 
@@ -1190,7 +1193,9 @@ class ShakeEvent:
         if self.searchBoxes is None or theForceFlag:
             self.localCitiesMemoryLayer()
         # Now store the selection in a temporary memory layer
-        myMemoryLayer = QgsVectorLayer('Polygon', 'City Search Boxes', 'memory')
+        myMemoryLayer = QgsVectorLayer('Polygon',
+                                       'City Search Boxes',
+                                       'memory')
         myMemoryProvider = myMemoryLayer.dataProvider()
         # add field defs
         myMemoryProvider.addAttributes([
@@ -1224,7 +1229,7 @@ class ShakeEvent:
         return myMemoryLayer
 
     def sortedImpactedCities(self, theCount=5):
-        """Return an data structure with place, mmi, pop sorted by mmi then pop.
+        """Return a data structure with place, mmi, pop sorted by mmi then pop.
 
         Args:
             theCount: int optional limit to how many rows should be returned.
@@ -1305,6 +1310,50 @@ class ShakeEvent:
                                     d['roman']))
         return mySortedCities
 
+    def writeHtmlTable(self, theFileName, theTable):
+        """Write a Table object to disk with a standard header and footer.
+
+        This is a helper function that allows you to easily write a table
+        to disk with a standard header and footer. The header contains
+        some inlined css markup for our mmi charts which will be ignored
+        if you are not using the css classes it defines.
+
+        The bootstrap.css file will also be written to the same directory
+        where the table is written.
+
+        Args:
+            * theFileName: file name (without full path) .e.g foo.html
+            * theTable: A Table instance.
+        Returns:
+            str: full path to file that was created on disk.
+        Raises:
+            None
+        """
+        myPath = os.path.join(shakemapExtractDir(),
+                              self.eventId,
+                              theFileName)
+        myHtmlFile = file(myPath, 'wt')
+        myHeaderFile = os.path.join(self._fixturePath(), 'header.html')
+        myFooterFile = os.path.join(self._fixturePath(), 'footer.html')
+        myHeaderFile = file(myHeaderFile, 'rt')
+        myHeader = myHeaderFile.read()
+        myHeaderFile.close()
+        myFooterFile = file(myFooterFile, 'rt')
+        myFooter = myFooterFile.read()
+        myFooterFile.close()
+        myHtmlFile.write(myHeader)
+        myHtmlFile.write(theTable.toNewlineFreeString())
+        myHtmlFile.write(myFooter)
+        myHtmlFile.close()
+        # Also bootstrap gets copied to extract dir
+        myDestination = os.path.join(shakemapExtractDir(),
+                                     self.eventId,
+                                     'bootstrap.css')
+        mySource = os.path.join(self._fixturePath(), 'bootstrap.css')
+        shutil.copyfile(mySource, myDestination)
+
+        return myPath
+
     def impactedCitiesTable(self, theCount=5):
         """Return a table object of sorted impacted cities.
 
@@ -1334,50 +1383,80 @@ class ShakeEvent:
         """
         myTableData = self.sortedImpactedCities(theCount)
         myTableBody = []
-        myHeader = TableRow(['', 'Name', 'Affected (x 1000)', 'Intensity'],
+        myHeader = TableRow(['',
+                             self.tr('Name'),
+                             self.tr('Affected (x 1000)'),
+                             self.tr('Intensity')],
                             header=True)
         myTableBody.append(myHeader)
         for myRowData in myTableData:
             myIntensity = myRowData['roman']
             myName = myRowData['name']
-            myPopulation = int(round(myRowData['population']/1000))
+            myPopulation = int(round(myRowData['population'] / 1000))
             myColour = self.mmiColour(myRowData['mmi'])
             myColourBox = ('<div style="width: 16px; height: 16px;'
                            'background-color: %s"></div>' % myColour)
             myRow = TableRow([myColourBox, myName, myPopulation, myIntensity])
             myTableBody.append(myRow)
 
-        myTable = Table(myTableBody)
-        myTable.caption = 'Impacted Cities'
+        myTable = Table(myTableBody,)
+        myTable.caption = self.tr('Impacted Cities')
 
         # Also make an html file on disk
-        myPath = os.path.join(shakemapExtractDir(),
-                                      self.eventId,
-                                      'affected-cities.html')
-        myHtmlFile = file(myPath, 'wt')
-        myHeaderFile = os.path.join(self._fixturePath(), 'header.html')
-        myFooterFile = os.path.join(self._fixturePath(), 'footer.html')
+        myPath = self.writeHtmlTable(theFileName='affected-cities.html',
+                                     theTable=myTable)
 
-        myHeaderFile = file(myHeaderFile, 'rt')
-        myHeader = myHeaderFile.read()
-        myHeaderFile.close()
-
-        myFooterFile = file(myFooterFile, 'rt')
-        myFooter = myFooterFile.read()
-        myFooterFile.close()
-
-        myHtmlFile.write(myHeader)
-        myHtmlFile.write(myTable.toNewlineFreeString())
-        myHtmlFile.write(myFooter)
-        myHtmlFile.close()
-
-        # Also bootstrap gets copied to extract dir
-        myDestination = os.path.join(shakemapExtractDir(),
-                      self.eventId,
-                      'bootstrap.css')
-        mySource = os.path.join(self._fixturePath(), 'bootstrap.css')
-        shutil.copyfile(mySource, myDestination)
         return myTable, myPath
+
+    def fatalitiesTable(self, theMmiLevels):
+        """Create the html listing fatalities per mmi interval.
+        Args:
+            dict: A dictionary with keys mmi leves and values mortalities as
+                per the example below. This is typically going to be passed
+                from the :func:`calculateFatalities` function defined below.
+        Returns:
+            str: full absolute path to the saved html content.
+
+        Example:
+                {2: 0.47386375223673427,
+                3: 0.024892573693488258,
+                4: 0.0,
+                5: 0.0,
+                6: 0.0,
+                7: 0.0,
+                8: 0.0,
+                9: 0.0}
+        """
+        myHeader = [TableCell(self.tr('Intensity'),
+                              header=True)]
+        myRow = [TableCell(self.tr('Fatalities (x 1000)'),
+                           header=True)]
+        for myMmi in range(1, 9):
+            myHeader.append(TableCell(self.romanize(myMmi),
+                                      cell_class='mmi-%s' % myMmi,
+                                      header=True))
+            if myMmi in theMmiLevels:
+                myRow.append('%.2f' % theMmiLevels[myMmi])
+            else:
+                myRow.append(0.00)
+        # TODO translate to eng and then internationalise
+        myImpactRow = [TableCell(self.tr('Impact'), header=True),
+                        self.tr('Lemah'),
+                        self.tr('Lemah'),
+                        self.tr('Agak Lemah'),
+                        self.tr('Sedang'),
+                        self.tr('Kuat'),
+                        self.tr('Sangat Kuat'),
+                        self.tr('Keras'),
+                        self.tr('Sangat Keras')]
+        myTableBody = []
+        myTableBody.append(TableRow(myHeader, header=True))
+        myTableBody.append(myRow)
+        myTableBody.append(myImpactRow)
+        myTable = Table(myTableBody)
+        myPath = self.writeHtmlTable(theFileName='impacts.html',
+                            theTable=myTable)
+        return myPath
 
     def calculateFatalities(self,
                             thePopulationRasterPath=None,
@@ -1396,14 +1475,17 @@ class ShakeEvent:
                 :func:`mmiToRasterData` for information about default
                 behaviour.
         Returns:
-            str - the path to the computed impact file.
+            str: the path to the computed impact file.
                 The class members self.impactFile and self.fatalityCounts
                 will be populated.
                 self.fatalityCounts is a dict containing fatality counts for
                 the shake events. Keys for the dict will be MMI classes (I-X)
                 and values will be fatalities for that class.
+            str: Path to the html report showing a table of mortalities per
+                mmi interval.
         Raises:
             None
+
         """
         if thePopulationRasterPath is None or (
             not os.path.isfile(thePopulationRasterPath) and
@@ -1429,7 +1511,12 @@ class ShakeEvent:
         myFunction = safe_get_plugins(myFunctionId)[0][myFunctionId]
 
         myResult = safe_calculate_impact(myLayers, myFunction)
-        myMmiLevels = myResult.keywords['fatalaties_per_mmi']
+        try:
+            myMmiLevels = myResult.keywords['fatalites_per_mmi']
+        except:
+            LOGGER.exception('fatalities_per_mmi key not found in:\n%s' %
+                            myResult.keywords)
+            raise
         # Copy the impact layer into our extract dir.
         myTifPath = os.path.join(shakemapExtractDir(),
                                  self.eventId,
@@ -1447,8 +1534,10 @@ class ShakeEvent:
 
         self.impactFile = myTifPath
         self.impactKeywordsFile = myKeywordsPath
-        self.fatalityCounts = myResult.keywords
-        return self.impactFile, myMmiLevels
+        self.fatalityCounts = myMmiLevels
+
+        myImpactTablePath = self.fatalitiesTable(myMmiLevels)
+        return self.impactFile, myImpactTablePath
 
     def clipLayers(self, theShakeRasterPath, thePopulationRasterPath):
         """Clip population (exposure) layer to dimensions of shake data.
@@ -1549,20 +1638,20 @@ class ShakeEvent:
     def _getPopulationPath(self):
         """Helper to determine population raster spath.
 
+        The following priority will be used to determine the path:
+            1) the class attribute self.populationRasterPath
+                will be checked and if not None it will be used.
+            2) the environment variable 'SAFE_POPULATION_PATH' will be
+               checked if set it will be used.
+            4) A hard coded path of
+               :file:`/fixtures/exposure/population.tif` will be appended
+               to os.path.abspath(os.path.curdir)
+            5) A hard coded path of
+               :file:`/usr/local/share/inasafe/exposure/population.tif`
+               will be used.
+
         Args:
-            thePopulationPath: str optional path to the population raster.
-                If not passed as a parameter, the following priority will be
-                used to determine the path:
-                1) the class attribute self.populationRasterPath
-                    will be checked and if not None it will be used.
-                2) the environment variable 'SAFE_POPULATION_PATH' will be
-                   checked if set it will be used.
-                4) A hard coded path of
-                   :file:`/fixtures/exposure/population.tif` will be appended
-                   to os.path.abspath(os.path.curdir)
-                5) A hard coded path of
-                   :file:`/usr/local/share/inasafe/exposure/population.tif`
-                   will be used.
+            None
         Returns:
             str - path to a population raster file.
         Raises:
@@ -1584,6 +1673,42 @@ class ShakeEvent:
             return myLocalPath
         else:
             raise FileNotFoundError('Population file could not be found')
+
+    def renderMap(self, theForceFlag=False):
+        """This is the 'do it all' method to render a pdf.
+
+        Args:
+            theForceFlag bool - (Optional). Whether to force the regeneration
+                of contour product. Defaults to False.
+
+        Returns:
+            str - path to rendered pdf.
+
+        Raises:
+            Propogates any exceptions.
+        """
+        myMmiShapeFile = self.mmiDataToShapefile(theForceFlag=theForceFlag)
+        logging.info('Created: %s', myMmiShapeFile)
+        #for myAlgorithm in ['average', 'invdist', 'nearest']:
+        for myAlgorithm in ['nearest']:
+            myContoursFile = self.mmiDataToContours(theForceFlag=theForceFlag,
+                                           theAlgorithm=myAlgorithm)
+            logging.info('Created: %s', myContoursFile)
+        try:
+            myCitiesShapeFile = self.citiesToShapefile(
+                                            theForceFlag=theForceFlag)
+            logging.info('Created: %s', myCitiesShapeFile)
+            mySearchBoxFile = self.citySearchBoxesToShapefile(
+                                            theForceFlag=theForceFlag)
+            logging.info('Created: %s', mySearchBoxFile)
+            _, myCitiesHtmlPath = self.impactedCitiesTable()
+            logging.info('Created: %s', myCitiesHtmlPath)
+        except:
+            logging.exception('No nearby cities found!')
+
+        _, myFatalitiesHtmlPath = self.calculateFatalities()
+        logging.info('Created: %s', myFatalitiesHtmlPath)
+
 
     def __str__(self):
         """The unicode representation for an event object's state.

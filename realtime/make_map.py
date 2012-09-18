@@ -65,24 +65,6 @@ logging.info('-------------------------------------------')
 
 # Always regenerate the products
 myForceFlag = True
-# Make contours
-#for myAlgorithm in ['average', 'invdist', 'nearest']:
-for myAlgorithm in ['nearest']:
-    myFile = myShakeEvent.mmiDataToContours(theForceFlag=myForceFlag,
-                                   theAlgorithm=myAlgorithm)
-    logging.info('Created: %s', myFile)
-try:
-    myFile = myShakeEvent.citiesToShapefile(theForceFlag=myForceFlag)
-    logging.info('Created: %s', myFile)
-    myFile = myShakeEvent.citySearchBoxesToShapefile(theForceFlag=myForceFlag)
-    logging.info('Created: %s', myFile)
-    _, myPath = myShakeEvent.impactedCitiesTable()
-    logging.info('Created: %s', myPath)
-except:
-    logging.exception('No nearby cities found!')
-myFile = myShakeEvent.mmiDataToShapefile(theForceFlag=myForceFlag)
-logging.info('Created: %s', myFile)
-
-myShakeEvent.calculateFatalities()
+myShakeEvent.renderMap(myForceFlag)
 
 logging.info('-------------------------------------------')

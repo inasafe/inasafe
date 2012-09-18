@@ -7,7 +7,8 @@ SOURCES = __init__.py \
           keywords_dialog.py \
           options_dialog.py \
           plugin.py \
-          utilities.py
+          utilities.py \
+          ../realtime/shake_event.py
 
 FORMS = dock_base.ui \
         help_base.ui \
