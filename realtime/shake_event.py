@@ -715,7 +715,6 @@ class ShakeEvent:
                        'IX', 'X', 'XI', 'XII']
         return myRomanList[int(round(theMMIValue))]
 
-
     def mmiColour(self, theMMIValue):
         """Return the colour for an mmi value.
 
@@ -728,8 +727,8 @@ class ShakeEvent:
         """
 
         myRGBList = ['#FFFFFF', '#209fff', '#00cfff', '#55ffff', '#aaffff',
-                         '#fff000', '#ffa800', '#ff7000', '#ff0000', '#D00', '#800',
-                         '#400']
+                     '#fff000', '#ffa800', '#ff7000', '#ff0000', '#D00',
+                     '#800', '#400']
         myRGB = myRGBList[int(theMMIValue)]
         return myRGB
 
@@ -844,9 +843,8 @@ class ShakeEvent:
         myFileName = 'mmi-cities'
         myMemoryLayer = self.localCitiesMemoryLayer()
         return self.memoryLayerToShapefile(theFileName=myFileName,
-                                           theMemoryLayer= myMemoryLayer,
+                                           theMemoryLayer=myMemoryLayer,
                                            theForceFlag=theForceFlag)
-
 
     def citySearchBoxesToShapefile(self, theForceFlag=False):
         """Write a cities memory layer to a shapefile.
@@ -1171,7 +1169,6 @@ class ShakeEvent:
 
         return myMemoryLayer
 
-
     def citySearchBoxMemoryLayer(self, theForceFlag=False):
         """Return the search boxes used to search for cities as a memory layer.
 
@@ -1190,7 +1187,9 @@ class ShakeEvent:
         if self.searchBoxes is None or theForceFlag:
             self.localCitiesMemoryLayer()
         # Now store the selection in a temporary memory layer
-        myMemoryLayer = QgsVectorLayer('Polygon', 'City Search Boxes', 'memory')
+        myMemoryLayer = QgsVectorLayer('Polygon',
+                                       'City Search Boxes',
+                                       'memory')
         myMemoryProvider = myMemoryLayer.dataProvider()
         # add field defs
         myMemoryProvider.addAttributes([
@@ -1224,7 +1223,7 @@ class ShakeEvent:
         return myMemoryLayer
 
     def sortedImpactedCities(self, theCount=5):
-        """Return an data structure with place, mmi, pop sorted by mmi then pop.
+        """Return a data structure with place, mmi, pop sorted by mmi then pop.
 
         Args:
             theCount: int optional limit to how many rows should be returned.
@@ -1340,7 +1339,7 @@ class ShakeEvent:
         for myRowData in myTableData:
             myIntensity = myRowData['roman']
             myName = myRowData['name']
-            myPopulation = int(round(myRowData['population']/1000))
+            myPopulation = int(round(myRowData['population'] / 1000))
             myColour = self.mmiColour(myRowData['mmi'])
             myColourBox = ('<div style="width: 16px; height: 16px;'
                            'background-color: %s"></div>' % myColour)

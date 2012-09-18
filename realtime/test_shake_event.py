@@ -255,8 +255,9 @@ searchBoxes: None
                                 8: 0.0,
                                 9: 0.0}
 
-        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myMmiFatalities, myExpectedFatalities)
-        assert myMmiFatalities==myExpectedFatalities, myMessage
+        myMessage = 'Got:\n%s\nExpected:\n%s\n' % (
+                    myMmiFatalities, myExpectedFatalities)
+        assert myMmiFatalities == myExpectedFatalities, myMessage
 
     def testBoundsToRect(self):
         """Test that we can calculate the event bounds properly"""
@@ -275,7 +276,7 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
 
-        myValues = range(1,9)
+        myValues = range(1, 9)
         myExpectedResult = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
         myResult = []
         for myValue in myValues:
@@ -289,7 +290,7 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
 
-        myValues = range(0,12)
+        myValues = range(0, 12)
         myExpectedResult = ['#FFFFFF',
                             '#209fff',
                             '#00cfff',
