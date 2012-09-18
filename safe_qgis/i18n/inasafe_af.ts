@@ -43,27 +43,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="318"/>
+        <location filename="utilities.py" line="453"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="294"/>
+        <location filename="utilities.py" line="429"/>
         <source>Problem:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="290"/>
+        <location filename="utilities.py" line="425"/>
         <source>Error:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="298"/>
+        <location filename="utilities.py" line="433"/>
         <source>Click for Diagnostic Information:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="279"/>
+        <location filename="utilities.py" line="414"/>
         <source>No details provided</source>
         <translation type="unfinished"></translation>
     </message>
@@ -676,7 +676,7 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="286"/>
+        <location filename="plugin.py" line="296"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>

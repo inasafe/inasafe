@@ -450,6 +450,28 @@ class TablesTest(unittest.TestCase):
         self.html += str(table)
         self.writeHtml('table_column_alignment')
 
+    def test_column(self):
+        """Test to retrieve all element in a column.
+        """
+        table_body = []
+        header = TableRow(['header1', 'header2', 'header3', 'header4'],
+                          header=True)
+        table_body.append(header)
+        table_body.append(TableRow([1, 2, 3, 4]))
+        table_body.append(TableRow(['a', 'b', 'c', 'd']))
+        table_body.append(TableRow(['x', 'y', 'z', 't']))
+        myTable = Table(table_body)
+        expected_result1 = ['header1', 1, 'a', 'x']
+        expected_result2 = [2, 'b', 'y']
+        real_result1 = myTable.column(0, True)
+        real_result2 = myTable.column(1)
+        myMessage1 = "Expected %s but got %s" % (expected_result1,
+                                                real_result1)
+        myMessage2 = "Expected %s but got %s" % (expected_result2,
+                                                 real_result2)
+        assert expected_result1 == real_result1, myMessage1
+        assert expected_result2 == real_result2, myMessage2
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TablesTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
