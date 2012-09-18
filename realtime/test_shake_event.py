@@ -285,9 +285,18 @@ searchBoxes: None
         myShakeEvent = myShakeData.shakeEvent()
 
         myValues = range(0,12)
-        myExpectedResult = ['#FFFFFF', '#BFCCFF', '#99F', '#8FF', '#7df894',
-         '#FF0', '#FD0', '#ff9100', '#F00', '#D00', '#800',
-         '#400']
+        myExpectedResult = ['#FFFFFF',
+                            '#209fff',
+                            '#00cfff',
+                            '#55ffff',
+                            '#aaffff',
+                            '#fff000',
+                            '#ffa800',
+                            '#ff7000',
+                            '#ff0000',
+                            '#D00',
+                            '#800',
+                            '#400']
         myResult = []
         for myValue in myValues:
             myResult.append(myShakeEvent.mmiColour(myValue))
@@ -325,9 +334,10 @@ searchBoxes: None
         myResult = len(myTable)
         myMessage = ('Got:\n%s\nExpected:\n%s\nFor rendered table:\n%s' %
                     (myResult, myExpectedResult, myTable))
-        assert myTable == myExpectedResult, myMessage
+        assert myResult == myExpectedResult, myMessage
 
-        myExpectedPath = '/tmp/inasafe/realtime/shakemaps-extracted/20120916223752/affected-cities.html'
+        myExpectedPath = ('/tmp/inasafe/realtime/shakemaps-extracted/'
+                         '20120726022003/affected-cities.html')
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myPath, myExpectedPath)
         assert myPath == myExpectedPath, myMessage
 
