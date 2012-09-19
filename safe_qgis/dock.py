@@ -38,7 +38,8 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
                                       getOptimalExtent,
                                       getBufferedExtent,
-                                      internationalisedNames)
+                                      internationalisedNames,
+                                      getSafeImpactFunctions)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -52,6 +53,8 @@ from safe_qgis.utilities import (htmlHeader,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion)
+from safe_qgis.configurable_impact_functions_dialog import (
+                                        ConfigurableImpactFunctionsDialog)
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -372,10 +375,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised.
 
-    """
-        # Add any other logic you mught like here...
-        del theIndex
+        """
+        # Add any other logic you might like here...
+        #del theIndex
+        myFunctionId = self.getFunctionId(theIndex)
+        myFunction = getSafeImpactFunctions(myFunctionId)
         self.setOkButtonStatus()
+        if hasattr(myFunction, 'parameters'):
+            self.functionParams = myFunction.parameters
+        else:
+            self.functionParams = {}
+        self.setToolFunctionOptionsButton(self.functionParams)
 
     def setOkButtonStatus(self):
         """Helper function to set the ok button status if the
@@ -392,6 +402,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myButton.setEnabled(myFlag)
         if myMessage is not '':
             self.displayHtml(myMessage)
+
+    def setToolFunctionOptionsButton(self, functionParams):
+        """Helper function to set the tool function button 
+        status if there is function parameters to configure
+        then enable it, otherwise disable it.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        #check if functionParams intialized
+        if len(functionParams) == 0:
+            self.toolFunctionOptions.setEnabled = False
+        else:
+            self.toolFunctionOptions.setEnabled = True
+
+    def on_toolFunctionOptions_clicked(self):
+        ConfigurableImpactFunctionsDialog.buildFormFromImpactFunctionsParameter(self, self.functionParams)
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset
