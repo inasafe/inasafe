@@ -25,8 +25,9 @@ from safe_qgis.safe_interface import (getOptimalExtent,
                                    readKeywordsFromFile,
                                    readSafeLayer)
 from safe_qgis.exceptions import (KeywordNotFoundException,
-                               InsufficientOverlapException,
-                               InvalidBoundingBoxException)
+                               InsufficientOverlapException
+                               )
+from safe.common.exceptions import BoundingBoxError
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 
 
@@ -137,7 +138,7 @@ class SafeInterfaceTest(unittest.TestCase):
         # Try with wrong input data
         try:
             getOptimalExtent(haz_metadata, exp_metadata, view_port)
-        except InvalidBoundingBoxException:
+        except BoundingBoxError:
             #good this was expected
             pass
         except InsufficientOverlapException, e:
@@ -149,7 +150,7 @@ class SafeInterfaceTest(unittest.TestCase):
 
         try:
             getOptimalExtent(None, None, view_port)
-        except InvalidBoundingBoxException, e:
+        except BoundingBoxError, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'cannot be None' in str(e), myMessage
         else:
@@ -158,7 +159,7 @@ class SafeInterfaceTest(unittest.TestCase):
 
         try:
             getOptimalExtent('aoeush', 'oeuuoe', view_port)
-        except InvalidBoundingBoxException, e:
+        except BoundingBoxError, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
             assert 'Instead i got "aoeush"' in str(e), myMessage
         else:

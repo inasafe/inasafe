@@ -1527,7 +1527,7 @@ class Test_IO(unittest.TestCase):
         # Deal with invalid boxes
         try:
             bbox_intersection(bbox1, [53, 2, 40, 4])
-        except VerificationError:
+        except BoundingBoxError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1535,7 +1535,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection(bbox1, [50, 7, 53, 4])
-        except VerificationError:
+        except BoundingBoxError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1543,7 +1543,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection(bbox1, 'blko ho skrle')
-        except VerificationError:
+        except BoundingBoxError:
             pass
         else:
             msg = 'Should have raised exception'

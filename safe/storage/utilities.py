@@ -10,8 +10,7 @@ from osgeo import ogr
 
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
-
-from safe_qgis.exceptions import InvalidBoundingBoxException
+from safe.common.exceptions import BoundingBoxError
 
 
 # Default attribute to assign to vector layers
@@ -471,22 +470,22 @@ def bbox_intersection(*args):
         msg = ('Bounding box expected to be a list of the '
                'form [W, S, E, N]. '
                'Instead i got "%s"' % str(a))
-        print(a)
+
         try:
             box = list(a)
         except:
             raise Exception(msg)
 
         if not len(box) == 4:
-            raise InvalidBoundingBoxException(msg)
+            raise BoundingBoxError(msg)
 
         msg = 'Western boundary must be less than eastern. I got %s' % box
         if not box[0] < box[2]:
-            raise InvalidBoundingBoxException(msg)
+            raise BoundingBoxError(msg)
 
         msg = 'Southern boundary must be less than northern. I got %s' % box
         if not box[1] < box[3]:
-            raise InvalidBoundingBoxException(msg)
+            raise BoundingBoxError(msg)
 
         # Compute intersection
 

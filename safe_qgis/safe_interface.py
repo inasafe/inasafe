@@ -49,8 +49,9 @@ from PyQt4.QtCore import QCoreApplication
 from safe_qgis.exceptions import (KeywordNotFoundException,
                                StyleInfoNotFoundException,
                                InvalidParameterException,
-                               InsufficientOverlapException,
-                               InvalidBoundingBoxException)
+                               InsufficientOverlapException
+                               )
+from safe.common.exceptions import BoundingBoxError
 
 
 def tr(theText):
@@ -135,7 +136,7 @@ def getOptimalExtent(theHazardGeoExtent,
                    (theHazardGeoExtent, theExposureGeoExtent))
 
     if (theHazardGeoExtent is None) or (theExposureGeoExtent is None):
-        raise InvalidBoundingBoxException(myMessage)
+        raise BoundingBoxError(myMessage)
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
