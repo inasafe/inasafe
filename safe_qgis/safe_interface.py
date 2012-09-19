@@ -88,7 +88,7 @@ def verify(theStatement, theMessage=None):
 
 def getOptimalExtent(theHazardGeoExtent,
                      theExposureGeoExtent,
-                     theViewportGeoExtent = None):
+                     theViewportGeoExtent=None):
     """ A helper function to determine what the optimal extent is.
     Optimal extent should be considered as the intersection between
     the three inputs. The inasafe library will perform various checks
@@ -130,13 +130,9 @@ def getOptimalExtent(theHazardGeoExtent,
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
-    if theViewportGeoExtent is None:
-        myOptimalExtent = bbox_intersection(theHazardGeoExtent,
-                                        theExposureGeoExtent)
-    else:
-        myOptimalExtent = bbox_intersection(theHazardGeoExtent,
-            theExposureGeoExtent,
-            theViewportGeoExtent)
+    myOptimalExtent = bbox_intersection(theHazardGeoExtent,
+        theExposureGeoExtent,
+        theViewportGeoExtent)
 
     if myOptimalExtent is None:
         # Bounding boxes did not overlap
