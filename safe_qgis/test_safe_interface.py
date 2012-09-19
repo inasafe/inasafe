@@ -96,7 +96,7 @@ class SafeInterfaceTest(unittest.TestCase):
         assert numpy.allclose(bbox, ref_box, rtol=1.0e-12, atol=1.0e-12)
 
         #testing with viewport clipping disabled
-        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
+        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, None)
         assert numpy.allclose(bbox, ref_box, rtol=1.0e-12, atol=1.0e-12)
 
         view_port = [105.3000035,
