@@ -86,9 +86,25 @@ def verify(theStatement, theMessage=None):
         raise
 
 
+def isValidBoundingBox(bBox):
+    myMessage = tr('Invalid bounding box %s (%s). It must '
+                   'be a sequence of the '
+                   'form [west, south, east, '
+                   'north]' % (str(bBox),
+                               str(type(bBox))[1:-1]))
+    try:
+        list(bBox)
+    except:
+        raise InvalidBoundingBoxException(myMessage)
+    try:
+        verify(len(bBox) == 4, myMessage)
+    except VerificationError, e:
+        raise InvalidBoundingBoxException(str(e))
+
+
 def getOptimalExtent(theHazardGeoExtent,
                      theExposureGeoExtent,
-                     theViewportGeoExtent):
+                     theViewportGeoExtent = None):
     """ A helper function to determine what the optimal extent is.
     Optimal extent should be considered as the intersection between
     the three inputs. The inasafe library will perform various checks
@@ -110,7 +126,7 @@ def getOptimalExtent(theHazardGeoExtent,
            extents in the form [xmin, ymin, xmax, ymax]. It is assumed
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
-        * theViewPortGeoExtent - an array representing the viewport
+        * theViewPortGeoExtent (optional) - an array representing the viewport
            extents in the form [xmin, ymin, xmax, ymax]. It is assumed
            that the coordinates are in EPSG:4326 although currently
            no checks are made to enforce this.
@@ -129,29 +145,24 @@ def getOptimalExtent(theHazardGeoExtent,
     """
 
     # Check that inputs are valid
-    for x in [theHazardGeoExtent,
-              theExposureGeoExtent,
-              theViewportGeoExtent]:
-
-        # Err message
-        myMessage = tr('Invalid bounding box %s (%s). It must '
-                'be a sequence of the '
-               'form [west, south, east, north]' % (str(x),
-                                                    str(type(x))[1:-1]))
-        try:
-            list(x)
-        except:
-            raise InvalidBoundingBoxException(myMessage)
-        try:
-            verify(len(x) == 4, myMessage)
-        except VerificationError, e:
-            raise InvalidBoundingBoxException(str(e))
+    try:
+        isValidBoundingBox(theHazardGeoExtent)
+        isValidBoundingBox(theExposureGeoExtent)
+        if theViewportGeoExtent is not None:
+            isValidBoundingBox(theViewportGeoExtent)
+    except:
+        raise
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
-    myOptimalExtent = bbox_intersection(theHazardGeoExtent,
-                                        theExposureGeoExtent,
-                                        theViewportGeoExtent)
+    if theViewportGeoExtent is None:
+        myOptimalExtent = bbox_intersection(theHazardGeoExtent,
+                                        theExposureGeoExtent)
+    else:
+        myOptimalExtent = bbox_intersection(theHazardGeoExtent,
+            theExposureGeoExtent,
+            theViewportGeoExtent)
+
     if myOptimalExtent is None:
         # Bounding boxes did not overlap
         myMessage = tr('Bounding boxes of hazard data, exposure data '
