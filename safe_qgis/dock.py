@@ -731,8 +731,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         QtCore.QObject.connect(self.runner,
-                           QtCore.SIGNAL('done()'),
-                           self.completed)
+                               QtCore.SIGNAL('done()'),
+                               self.completed)
         QtGui.qApp.setOverrideCursor(
                 QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
