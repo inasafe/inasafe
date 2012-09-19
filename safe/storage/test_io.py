@@ -2061,6 +2061,6 @@ class Test_IO(unittest.TestCase):
         # More...
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test_bounding_box')
+    suite = unittest.makeSuite(Test_IO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
