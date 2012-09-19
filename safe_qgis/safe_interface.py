@@ -86,22 +86,6 @@ def verify(theStatement, theMessage=None):
         raise
 
 
-def isValidBoundingBox(bBox):
-    myMessage = tr('Invalid bounding box %s (%s). It must '
-                   'be a sequence of the '
-                   'form [west, south, east, '
-                   'north]' % (str(bBox),
-                               str(type(bBox))[1:-1]))
-    try:
-        list(bBox)
-    except:
-        raise InvalidBoundingBoxException(myMessage)
-    try:
-        verify(len(bBox) == 4, myMessage)
-    except VerificationError, e:
-        raise InvalidBoundingBoxException(str(e))
-
-
 def getOptimalExtent(theHazardGeoExtent,
                      theExposureGeoExtent,
                      theViewportGeoExtent = None):
@@ -143,15 +127,6 @@ def getOptimalExtent(theHazardGeoExtent,
     Raises:
         Any exceptions raised by the InaSAFE library will be propogated.
     """
-
-    # Check that inputs are valid
-    try:
-        isValidBoundingBox(theHazardGeoExtent)
-        isValidBoundingBox(theExposureGeoExtent)
-        if theViewportGeoExtent is not None:
-            isValidBoundingBox(theViewportGeoExtent)
-    except:
-        raise
 
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326

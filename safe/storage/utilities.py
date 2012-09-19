@@ -462,6 +462,9 @@ def bbox_intersection(*args):
 
     result = [-180, -90, 180, 90]
     for a in args:
+        if a is None:
+            continue
+
         msg = ('Bounding box expected to be a list of the '
                'form [W, S, E, N]. '
                'Instead i got "%s"' % str(a))

@@ -1477,6 +1477,10 @@ class Test_IO(unittest.TestCase):
         # Test inclusion
         assert numpy.allclose(bbox_intersection(west_java, jakarta), jakarta)
 
+        # Ignore Bounding Boxes that are None
+        assert numpy.allclose(bbox_intersection(west_java, jakarta, None),
+            jakarta)
+
         # Realistic ones
         bbox1 = [94.972335, -11.009721, 141.014, 6.073612333333]
         bbox2 = [105.3, -8.5, 110.0, -5.5]
@@ -2057,6 +2061,6 @@ class Test_IO(unittest.TestCase):
         # More...
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test')
+    suite = unittest.makeSuite(Test_IO, 'test_bounding_box')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
