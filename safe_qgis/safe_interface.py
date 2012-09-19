@@ -128,6 +128,15 @@ def getOptimalExtent(theHazardGeoExtent,
         Any exceptions raised by the InaSAFE library will be propogated.
     """
 
+    #
+    myMessage = tr('theHazardGeoExtent or theExposureGeoExtent cannot be None.'
+                   'Found: /ntheHazardGeoExtent: %s '
+                    '/ntheExposureGeoExtent: %s' %
+                   (theHazardGeoExtent, theExposureGeoExtent))
+
+    if (theHazardGeoExtent is None) or (theExposureGeoExtent is None):
+        raise InvalidBoundingBoxException(myMessage)
+
     # .. note:: The bbox_intersection function below assumes that
     #           all inputs are in EPSG:4326
     myOptimalExtent = bbox_intersection(theHazardGeoExtent,
