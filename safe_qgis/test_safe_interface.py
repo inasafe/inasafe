@@ -89,21 +89,37 @@ class SafeInterfaceTest(unittest.TestCase):
                               rtol=1.0e-12, atol=1.0e-12)
 
         # First, do some examples that produce valid results
-        ref_res = [105.3000035, -8.3749995, 110.2914705, -5.5667785]
+        ref_box = [105.3000035, -8.3749995, 110.2914705, -5.5667785]
         view_port = [94.972335, -11.009721, 141.014002, 6.073612]
 
         bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
+        assert numpy.allclose(bbox, ref_box, rtol=1.0e-12, atol=1.0e-12)
 
+        #testing with viewport clipping disabled
         bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        assert numpy.allclose(bbox, ref_res, rtol=1.0e-12, atol=1.0e-12)
+        assert numpy.allclose(bbox, ref_box, rtol=1.0e-12, atol=1.0e-12)
 
         view_port = [105.3000035,
                      -8.3749994999999995,
                      110.2914705,
                      -5.5667784999999999]
         bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
-        assert numpy.allclose(bbox, ref_res,
+        assert numpy.allclose(bbox, ref_box,
+                              rtol=1.0e-12, atol=1.0e-12)
+
+        # Very small viewport fully inside other layers
+        view_port = [106.0, -6.0, 108.0, -5.8]
+        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
+
+        assert numpy.allclose(bbox, view_port,
+                              rtol=1.0e-12, atol=1.0e-12)
+
+        # viewport that intersects hazard layer
+        view_port = [107.0, -6.0, 112.0, -3.0]
+        ref_box = [107, -6, 110.2914705, -5.5667785]
+
+        bbox = getOptimalExtent(hazard_bbox, exposure_bbox, view_port)
+        assert numpy.allclose(bbox, ref_box,
                               rtol=1.0e-12, atol=1.0e-12)
 
         # Then one where boxes don't overlap
@@ -135,7 +151,7 @@ class SafeInterfaceTest(unittest.TestCase):
             getOptimalExtent(None, None, view_port)
         except InvalidBoundingBoxException, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'Invalid' in str(e), myMessage
+            assert 'cannot be None' in str(e), myMessage
         else:
             myMessage = ('Wrong input data should have raised an exception')
             raise Exception(myMessage)
@@ -144,7 +160,7 @@ class SafeInterfaceTest(unittest.TestCase):
             getOptimalExtent('aoeush', 'oeuuoe', view_port)
         except InvalidBoundingBoxException, e:
             myMessage = 'Did not find expected error message in %s' % str(e)
-            assert 'Invalid' in str(e), myMessage
+            assert 'Instead i got "aoeush"' in str(e), myMessage
         else:
             myMessage = ('Wrong input data should have raised an exception')
             raise Exception(myMessage)
