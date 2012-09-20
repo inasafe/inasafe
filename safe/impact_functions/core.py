@@ -668,7 +668,7 @@ def get_plugins_as_table2(dict_filter=None):
                 else:
                     myValue = dict_req.get(myKey, not_found_value)
 
-                if myFilter != [] and myValue != not_found_value:
+                if myFilter != []:
                     for myKeyword in myFilter:
                         if type(myValue) == type(str()):
                             if myValue == myKeyword:
@@ -699,7 +699,7 @@ def get_plugins_as_table2(dict_filter=None):
                     myValue = pretty_string(dict_req.get(myKey,
                                                 not_found_value))
                     row.append(myValue)
-                table_body.append(TableRow(row, ))
+                table_body.append(TableRow(row))
 
     cw = 100 / 7
     table_col_width = [str(cw) + '%', str(cw) + '%', str(cw) + '%',

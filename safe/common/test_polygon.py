@@ -1357,9 +1357,10 @@ class Test_Polygon(unittest.TestCase):
                                [2., 4.]])
 
         # Polygon 4, line 2
-        #assert numpy.allclose(lines_covered[4][2][0],
-        #                      [[0., 0.],
-        #                       [5., 5.]])
+        # This one will fail if we ignore points_on_line check
+        assert numpy.allclose(lines_covered[4][2][0],
+                              [[0., 0.],
+                               [5., 5.]])
 
         # Polygon 4, line 7
         assert numpy.allclose(lines_covered[4][7][0],
