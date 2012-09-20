@@ -718,7 +718,7 @@ class ShakeEvent(QObject):
         Raises:
             None
         """
-        myRomanList = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
+        myRomanList = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII',
                        'IX', 'X', 'XI', 'XII']
         return myRomanList[int(round(theMMIValue))]
 
@@ -1399,8 +1399,6 @@ class ShakeEvent(QObject):
             myTableBody.append(myRow)
 
         myTable = Table(myTableBody, header_row=myHeader)
-        myTable.caption = self.tr('Impacted Cities')
-
         # Also make an html file on disk
         myPath = self.writeHtmlTable(theFileName='affected-cities.html',
                                      theTable=myTable)
@@ -1430,7 +1428,7 @@ class ShakeEvent(QObject):
                               header=True)]
         myRow = [TableCell(self.tr('Fatalities (x 1000)'),
                            header=True)]
-        for myMmi in range(1, 9):
+        for myMmi in range(2, 10):
             myHeader.append(TableCell(self.romanize(myMmi),
                                       cell_class='mmi-%s' % myMmi,
                                       header=True))

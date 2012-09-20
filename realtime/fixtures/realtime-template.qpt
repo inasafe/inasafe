@@ -1,8 +1,8 @@
 <Composer title="Realtime" visible="1">
  <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="1">
-  <ComposerScaleBar segmentMillimeters="3.65235" numMapUnitsPerScaleBarUnit="1" numSegments="3" height="2" alignment="0" labelBarSpace="3" outlineWidth="1" units="0" numSegmentsLeft="0" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="1" boxContentSpace="1" numUnitsPerSegment="4">
+  <ComposerScaleBar segmentMillimeters="9.01994" numMapUnitsPerScaleBarUnit="1" numSegments="5" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="0" numSegmentsLeft="2" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="1" boxContentSpace="1" numUnitsPerSegment="10">
    <BrushColor red="0" blue="0" green="0"/>
-   <ComposerItem width="25.9571" x="8.97491" y="228.792" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.67785" id="scalebar" positionLock="false">
+   <ComposerItem width="70.1196" x="130.173" y="117.509" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.67785" id="scalebar" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -50,7 +50,7 @@
      </layer>
     </symbol>
    </overviewFrame>
-   <Extent ymin="-17.1044" xmin="80.6083" ymax="12.4656" xmax="153.986"/>
+   <Extent ymin="-20.8305" xmin="82.2643" ymax="22.7196" xmax="155.642"/>
    <LayerSet>
     <Layer>population20120911162940535</Layer>
     <Layer>blue_marble_topo_jan20120718154124441</Layer>
@@ -58,7 +58,7 @@
    <Grid gridStyle="1" crossLength="0" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1" penWidth="0" penColorGreen="0">
     <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
    </Grid>
-   <ComposerItem width="67" x="55.9268" y="219.881" rotation="0" height="27" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.67785" id="overview-map" positionLock="false">
+   <ComposerItem width="66.186" x="132.107" y="140.713" rotation="0" height="39.2819" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.67785" id="overview-map" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -92,12 +92,12 @@
      </layer>
     </symbol>
    </overviewFrame>
-   <Extent ymin="-14.2778" xmin="110.817" ymax="-7.35746" xmax="117.241"/>
+   <Extent ymin="-15.5534" xmin="110.798" ymax="-8.0249" xmax="118.326"/>
    <LayerSet/>
    <Grid gridStyle="1" crossLength="1" penColorRed="172" penColorBlue="172" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="172">
-    <Annotation rightDirection="0" bottomDirection="1" format="2" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
+    <Annotation rightDirection="0" bottomDirection="1" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
    </Grid>
-   <ComposerItem width="112.939" x="7.66165" y="78.5595" rotation="0" height="121.665" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="2.67785" id="main-map" positionLock="false">
+   <ComposerItem width="100" x="7.66165" y="78.5595" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="2.67785" id="main-map" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -139,8 +139,8 @@
    </ComposerFrame>
   </ComposerHtml>
   <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
-   <ComposerFrame sectionWidth="63.1103" sectionHeight="118.497" sectionX="0" sectionY="0">
-    <ComposerItem width="63.1103" x="138.17" y="114.899" rotation="0" height="118.497" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.67785" id="affected-cities" positionLock="false">
+   <ComposerFrame sectionWidth="181.862" sectionHeight="56.3885" sectionX="0" sectionY="0">
+    <ComposerItem width="181.862" x="12.6967" y="196.053" rotation="0" height="56.3885" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.67785" id="affected-cities" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>

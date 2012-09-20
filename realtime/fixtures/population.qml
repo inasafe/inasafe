@@ -1,7 +1,7 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
 <qgis version="1.9.0-Master" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
   <transparencyLevelInt>255</transparencyLevelInt>
-  <rasterrenderer opacity="0.596078" alphaBand="0" band="1" type="singlebandpseudocolor" invertColor="0">
+  <rasterrenderer opacity="0.788235" alphaBand="0" band="1" type="singlebandpseudocolor" invertColor="0">
     <rasterTransparency>
       <singleValuePixelList>
         <pixelListEntry min="0" max="0" percentTransparent="100"/>
