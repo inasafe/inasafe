@@ -65,6 +65,9 @@ __author__ = 'Philippe Lagadec'
 # 2012-06-22 SAFE fork - refactored to use more modern table semantics and
 #                        various other additions / changes to support SAFE
 #                        Tim Sutton
+# 2012-09-14 Add func: - add new function, column(int) for retrieve all element
+#                        in the specific column
+#                        Ismail Sunni
 
 #------------------------------------------------------------------------------
 #TODO:
@@ -413,6 +416,28 @@ class Table(object):
            this.
         """
         return self.__str__().replace('\n', '')
+
+    def column(self, col, header=False):
+        """Return a list contains all element in col-th column
+            Args:
+                * col = number columnn
+                * header = if False, doesn't include the header
+            Returns:
+                * list of string represent each element
+            Note:
+                If there is not column number col in a row, it will be
+                represent as empty string ''
+        """
+        retval = []
+        for myRow in self.rows:
+            if myRow.header and not header:
+                continue
+            if col < myRow.column_count():
+                retval.append(myRow.cells[col])
+            else:
+                retval.append('')
+
+        return retval
 
 
 class List (object):

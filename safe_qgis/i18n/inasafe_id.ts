@@ -38,7 +38,7 @@
         <translation>&lt;p&gt;Error ketika menjalankan perintah berikut:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Pesan Kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="318"/>
+        <location filename="utilities.py" line="453"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation>Lapisan input untuk mendapatkan resolusi WGS84 harus merupakan lapisan raster. Saya mendapatkan: %s</translation>
     </message>
@@ -48,22 +48,22 @@
         <translation>Tidak ada fitur termasuk dalam luasan klip. Cobalah panning / zoom ke area yang berisi data dan kemudian mencoba untuk menjalankan analisis Anda lagi.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="294"/>
+        <location filename="utilities.py" line="429"/>
         <source>Problem:</source>
         <translation>Permasalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="290"/>
+        <location filename="utilities.py" line="425"/>
         <source>Error:</source>
         <translation>Kesalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="298"/>
+        <location filename="utilities.py" line="433"/>
         <source>Click for Diagnostic Information:</source>
         <translation>Klik untuk informasi diagnostik:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="279"/>
+        <location filename="utilities.py" line="414"/>
         <source>No details provided</source>
         <translation>Tidak ada detil yang tersedia</translation>
     </message>
@@ -679,7 +679,7 @@ ke %s: %s</translation>
         <translation>Tampilkan/hilangkan widget InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="286"/>
+        <location filename="plugin.py" line="296"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>

@@ -560,6 +560,9 @@ def clip_lines_by_polygon(lines, polygon,
        closed: (optional) determine whether points on boundary should be
                regarded as belonging to the polygon (closed = True)
                or not (closed = False) - False is not recommended here
+               This parameter can also be None in which case it is undefined
+               whether a line on the boundary will fall inside or outside.
+               This will make the algorithm about 20% faster.
        check_input: Allows faster execution if set to False
 
     Output
@@ -936,7 +939,7 @@ def _clip_line_by_polygon(line,
                                                          polygon,
                                                          polygon_bbox,
                                                          check_input=False,
-                                                         closed=None)
+                                                         closed=closed)
 
             # Form segments and add to the right lists
             for i, idx in enumerate([inside, outside]):
@@ -1245,13 +1248,20 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     return points_covered
 
 
-def clip_lines_by_polygons(lines, polygons, check_input=True):
+def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
     """Clip multiple lines by multiple polygons
 
     Args:
         lines: Sequence of polylines: [[p0, p1, ...], [q0, q1, ...], ...]
                where pi and qi are point coordinates (x, y).
         polygons: list of polygons, each an array of vertices
+        closed: optional parameter to determine whether lines that fall on
+                an polygon boundary should be considered to be inside
+                (closed=True), outside (closed=False) or
+                undetermined (closed=None). The latter case will speed the
+                algorithm up but lines on boundaries may or may not be
+                deemed to fall inside the polygon and so will be
+                indeterministic
 
     Returns:
         lines_covered: List of polylines inside a polygon
