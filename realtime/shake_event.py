@@ -739,6 +739,57 @@ class ShakeEvent(QObject):
         myRGB = myRGBList[int(theMMIValue)]
         return myRGB
 
+    def mmiShaking(self, theMMIValue):
+        """Return the perceived shaking for an mmi value as translated string.
+
+        Args:
+            theMMIValue: float or int required.
+        Returns:
+             str: internationalised string representing perceived shaking
+             level e.g. weak, severe etc.
+        Raises:
+             None
+        """
+        myShakingDict = {
+            1: self.tr('Not felt'),
+            2: self.tr('Weak'),
+            3: self.tr('Light'),
+            4: self.tr('Light'),
+            5: self.tr('Moderate'),
+            6: self.tr('Strong'),
+            7: self.tr('Very strong'),
+            8: self.tr('Severe'),
+            9: self.tr('Violent'),
+            10: self.tr('Extreme'),
+        }
+        return myShakingDict[theMMIValue]
+
+    def mmiPotentialDamage(self, theMMIValue):
+        """Return the potential damage for an mmi value as translated string.
+
+        Args:
+            theMMIValue: float or int required.
+        Returns:
+            str: internationalised string representing potential damage
+            level e.g. Light, Moderate etc.
+        Raises:
+            None
+        """
+        myDamageDict = {
+            1: self.tr('None'),
+            2: self.tr('None'),
+            3: self.tr('None'),
+            4: self.tr('None'),
+            5: self.tr('Very light'),
+            6: self.tr('Light'),
+            7: self.tr('Moderate'),
+            8: self.tr('Mod/Heavy'),
+            9: self.tr('Heavy'),
+            10: self.tr('Very heavy')
+        }
+        return myDamageDict[theMMIValue]
+
+
     def setContourProperties(self, theFile):
         """
         Set the X, Y, RGB, ROMAN attributes of the contour layer.
@@ -1398,7 +1449,8 @@ class ShakeEvent(QObject):
             myRow = TableRow([myColourBox, myName, myPopulation, myIntensity])
             myTableBody.append(myRow)
 
-        myTable = Table(myTableBody, header_row=myHeader)
+        myTable = Table(myTableBody, header_row=myHeader,
+                        table_class='table table-striped table-condensed')
         # Also make an html file on disk
         myPath = self.writeHtmlTable(theFileName='affected-cities.html',
                                      theTable=myTable)
@@ -1425,31 +1477,26 @@ class ShakeEvent(QObject):
                 9: 0.0}
         """
         myHeader = [TableCell(self.tr('Intensity'),
-                              header=True)]
-        myRow = [TableCell(self.tr('Fatalities (x 1000)'),
-                           header=True)]
+                            header=True)]
+        myCountRow = [TableCell(self.tr('Fatalities (x 1000)'),
+                            header=True)]
+        myImpactRow = [TableCell(self.tr('Percieved Shaking'),
+                            header=True)]
         for myMmi in range(2, 10):
             myHeader.append(TableCell(self.romanize(myMmi),
                                       cell_class='mmi-%s' % myMmi,
                                       header=True))
             if myMmi in theMmiLevels:
-                myRow.append('%.2f' % theMmiLevels[myMmi])
+                myCountRow.append('%.2f' % theMmiLevels[myMmi])
             else:
-                myRow.append(0.00)
-        # TODO translate to eng and then internationalise
-        myImpactRow = [TableCell(self.tr('Impact'), header=True),
-                        self.tr('Lemah'),
-                        self.tr('Lemah'),
-                        self.tr('Agak Lemah'),
-                        self.tr('Sedang'),
-                        self.tr('Kuat'),
-                        self.tr('Sangat Kuat'),
-                        self.tr('Keras'),
-                        self.tr('Sangat Keras')]
+                myCountRow.append(0.00)
+
+            myImpactRow.append(TableCell(self.mmiShaking(myMmi)))
         myTableBody = []
-        myTableBody.append(myRow)
+        myTableBody.append(myCountRow)
         myTableBody.append(myImpactRow)
-        myTable = Table(myTableBody, header_row=myHeader)
+        myTable = Table(myTableBody, header_row=myHeader,
+                        table_class='table table-striped table-condensed')
         myPath = self.writeHtmlTable(theFileName='impacts.html',
                             theTable=myTable)
         return myPath
