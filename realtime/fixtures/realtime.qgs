@@ -4,10 +4,10 @@
     <mapcanvas>
         <units>degrees</units>
         <extent>
-            <xmin>110.797834</xmin>
-            <ymin>-12.872179</ymin>
-            <xmax>118.326325</xmax>
-            <ymax>-8.024899</ymax>
+            <xmin>116.183169</xmin>
+            <ymin>6.696835</ymin>
+            <xmax>116.936287</xmax>
+            <ymax>7.098597</ymax>
         </extent>
         <projections>1</projections>
         <destinationsrs>
@@ -24,27 +24,27 @@
         </destinationsrs>
     </mapcanvas>
     <legend updateDrawingOrder="false">
-        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Admin Boundaries" showFeatureCount="0">
+        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="gadm2" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="gadm220120907131545352" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Population" showFeatureCount="0">
+        <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="population" showFeatureCount="0">
             <filegroup open="false" hidden="false">
                 <legendlayerfile isInOverview="0" layerid="population20120911162940535" visible="1"/>
             </filegroup>
         </legendlayer>
-        <legendlayer drawingOrder="6" open="false" checked="Qt::Checked" name="Blue-marble-topo-jan" showFeatureCount="0">
+        <legendlayer drawingOrder="6" open="false" checked="Qt::Unchecked" name="Blue-marble-topo-jan" showFeatureCount="0">
             <filegroup open="false" hidden="false">
-                <legendlayerfile isInOverview="0" layerid="blue_marble_topo_jan20120718154124441" visible="1"/>
+                <legendlayerfile isInOverview="0" layerid="blue_marble_topo_jan20120718154124441" visible="0"/>
             </filegroup>
         </legendlayer>
     </legend>
     <Composer title="Realtime" visible="1">
         <Composition printResolution="300" paperWidth="210" snapGridOffsetX="0" snapGridResolution="0" snapGridOffsetY="0" snapping="0" numPages="1" paperHeight="297" printAsRaster="1">
-            <ComposerScaleBar segmentMillimeters="9.01994" numMapUnitsPerScaleBarUnit="1" numSegments="5" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="0" numSegmentsLeft="2" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="1" boxContentSpace="1" numUnitsPerSegment="10">
+            <ComposerScaleBar segmentMillimeters="14.427" numMapUnitsPerScaleBarUnit="1000" numSegments="3" height="2" alignment="1" labelBarSpace="3" outlineWidth="1" units="1" numSegmentsLeft="5" style="Single Box" unitLabel="Km" font="Ubuntu,12,-1,5,50,0,0,0,0,0" mapId="0" boxContentSpace="1" numUnitsPerSegment="100000">
                 <BrushColor red="0" blue="0" green="0"/>
-                <ComposerItem width="70.1196" x="130.173" y="117.509" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.67785" id="scalebar" positionLock="false">
+                <ComposerItem width="75.7079" x="120.904" y="107.473" rotation="0" height="11" frame="false" outlineWidth="0.3" zValue="11" lastValidViewScaleFactor="2.65436" id="scalebar" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -52,21 +52,21 @@
             <ComposerLabel valign="32" labelText="Epicenter coords with  N or S (LU = Lintang Utara or LS= Lintang Selatan). For longitude is only E (BT=Bujur Timur goo here." halign="1" margin="1">
                 <LabelFont description="Sans,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="194.684" x="8.08255" y="16.7115" rotation="0" height="10.1895" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.74832" id="location-info" positionLock="false">
+                <ComposerItem width="194.684" x="8.08255" y="40.7115" rotation="0" height="10.1895" frame="false" outlineWidth="0.3" zValue="10" lastValidViewScaleFactor="2.65436" id="location-info" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
-            <ComposerLegend symbolWidth="4" title="" boxSpace="2" titleFont="Verdana,16,-1,5,50,0,0,0,0,0" map="1" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" groupSpace="2" symbolSpace="0" symbolHeight="4" layerSpace="1" iconLabelSpace="2" wrapChar=" " itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0">
+            <ComposerLegend symbolWidth="4" title="Population" boxSpace="2" titleFont="Verdana,12,-1,5,75,0,0,0,0,0" map="1" groupFont="Verdana,14,-1,5,50,0,0,0,0,0" layerFont="Ubuntu,12,-1,5,75,0,0,0,0,0" groupSpace="2" symbolSpace="0" symbolHeight="4" layerSpace="1" iconLabelSpace="2" wrapChar=" " itemFont="Ubuntu,10,-1,5,50,0,0,0,0,0">
                 <Model autoUpdate="1">
-                    <LayerItem layerId="population20120911162940535" text="Population">
+                    <LayerItem layerId="population20120911162940535" text="">
                         <RasterClassificationItem layerId="population20120911162940535" color="#fafafa" text="0-10"/>
                         <RasterClassificationItem layerId="population20120911162940535" color="#bcbcbc" text="10-100"/>
                         <RasterClassificationItem layerId="population20120911162940535" color="#7f7f7f" text="100-1000"/>
                         <RasterClassificationItem layerId="population20120911162940535" color="#424242" text="1000-10000"/>
                     </LayerItem>
                 </Model>
-                <ComposerItem width="29" x="149.418" y="77.6287" rotation="0" height="30.5" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.67785" id="legend" positionLock="false">
+                <ComposerItem width="29" x="144.781" y="218.371" rotation="0" height="32.8" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.65436" id="legend" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -74,7 +74,7 @@
             <ComposerLabel valign="32" labelText="Perkiraan jumlah penduduk terpapar pada setiap tingkat getaran berbeda&#xa;" halign="4" margin="1">
                 <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="194.348" x="6.50655" y="29.5374" rotation="0" height="10.5022" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="2.74832" id="mmi-table-header" positionLock="false">
+                <ComposerItem width="194.348" x="6.50655" y="58.5374" rotation="0" height="10.5022" frame="false" outlineWidth="0.3" zValue="7" lastValidViewScaleFactor="2.65436" id="mmi-table-header" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -92,31 +92,31 @@
                         </layer>
                     </symbol>
                 </overviewFrame>
-                <Extent ymin="-20.8305" xmin="82.2643" ymax="22.7196" xmax="155.642"/>
+                <Extent ymin="-15.7222" xmin="92.2189" ymax="7.75867" xmax="165.597"/>
                 <LayerSet>
+                    <Layer>gadm220120907131545352</Layer>
                     <Layer>population20120911162940535</Layer>
-                    <Layer>blue_marble_topo_jan20120718154124441</Layer>
                 </LayerSet>
                 <Grid gridStyle="1" crossLength="0" penColorRed="0" penColorBlue="0" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="0" gridFrameWidth="0" show="1" penWidth="0" penColorGreen="0">
                     <Annotation rightDirection="0" bottomDirection="0" format="0" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="0" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="66.186" x="132.107" y="140.713" rotation="0" height="39.2819" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.67785" id="overview-map" positionLock="false">
+                <ComposerItem width="100" x="8" y="216.858" rotation="0" height="32" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.65436" id="overview-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerMap>
-            <ComposerLabel valign="32" labelText="Didukung oleh Australia-Indonesia Facility for Disaster Reduction dan Geoscience Australia." halign="1" margin="1">
-                <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0"/>
+            <ComposerLabel valign="32" labelText="Perkiraan dampak ini secara otomatis dihasilkan dan hanya mempertimbangkan penduduk dan kota yang terpengaruh oleh berbagai macam tingkat getaran tanahyang berbeda-beda. Perkiraan ini berdasarkan pada prediksi getaran tanah dari BMKG, data kepadatan penduduk dari BPS, informasi kota dari Geonamesdan perangkat lunak yang dikembangkan oleh BNPB. Keterbatasan pada perkiraan getaran tanah, data penduduk dan informasi kota akan menambah tingkatketidakpastian yang signifikan pada angka-angka yang ditampilkan di sini. Konsekuensinya, keputusan seharusnya tidak hanya berdasarkan pada informasi ini sajadan harus selalu diverifikasi dengan informasi lainnya." halign="1" margin="2">
+                <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="143.22" x="34.0388" y="284.513" rotation="0" height="6.42241" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="2.74832" id="credits" positionLock="false">
+                <ComposerItem width="192.925" x="7.13319" y="255.291" rotation="0" height="28.2586" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.65436" id="disclaimer" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
-            <ComposerLabel valign="32" labelText="Perkiraan dampak ini secara otomatis dihasilkan dan hanya mempertimbangkan penduduk dan kota yang terpengaruh oleh berbagai macam tingkat getaran tanahyang berbeda-beda. Perkiraan ini berdasarkan pada prediksi getaran tanah dari BMKG, data kepadatan penduduk dari BPS, informasi kota dari Geonamesdan perangkat lunak yang dikembangkan oleh BNPB. Keterbatasan pada perkiraan getaran tanah, data penduduk dan informasi kota akan menambah tingkatketidakpastian yang signifikan pada angka-angka yang ditampilkan di sini. Konsekuensinya, keputusan seharusnya tidak hanya berdasarkan pada informasi ini sajadan harus selalu diverifikasi dengan informasi lainnya." halign="1" margin="2">
-                <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0"/>
+            <ComposerLabel valign="32" labelText="Didukung oleh Australia-Indonesia Facility for Disaster Reduction dan Geoscience Australia." halign="1" margin="1">
+                <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="192.925" x="7.13319" y="255.291" rotation="0" height="28.2586" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.74832" id="disclaimer" positionLock="false">
+                <ComposerItem width="143.22" x="34.0388" y="284.513" rotation="0" height="6.42241" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="2.65436" id="credits" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -134,12 +134,12 @@
                         </layer>
                     </symbol>
                 </overviewFrame>
-                <Extent ymin="-15.5534" xmin="110.798" ymax="-8.0249" xmax="118.326"/>
+                <Extent ymin="-14.2778" xmin="110.817" ymax="-7.8538" xmax="117.241"/>
                 <LayerSet/>
                 <Grid gridStyle="1" crossLength="1" penColorRed="172" penColorBlue="172" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="172">
-                    <Annotation rightDirection="0" bottomDirection="1" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,10,-1,5,50,0,0,0,0,0" leftPosition="2" topDirection="0"/>
+                    <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
                 </Grid>
-                <ComposerItem width="100" x="7.66165" y="78.5595" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="2.67785" id="main-map" positionLock="false">
+                <ComposerItem width="100" x="8" y="108" rotation="0" height="100" frame="false" outlineWidth="0.3" zValue="4" lastValidViewScaleFactor="2.65436" id="main-map" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -147,26 +147,26 @@
             <ComposerLabel valign="32" labelText="Perkiraan Dampak Gempa" halign="1" margin="1">
                 <LabelFont description="Ubuntu,28,-1,5,75,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="128.587" x="39.4618" y="3" rotation="0" height="14.2277" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="3.04698" id="" positionLock="false">
+                <ComposerItem width="128.587" x="39.4618" y="14" rotation="0" height="14.2277" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="2.65436" id="main-title" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
-            <ComposerPicture pictureWidth="30" file="../../realtime/fixtures/bnpb_logo.png" pictureHeight="30" mapId="-1">
-                <ComposerItem width="30" x="6.97964" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.67785" id="" positionLock="false">
+            <ComposerPicture pictureWidth="30" file="./bmkg_logo.png" pictureHeight="30" mapId="-1">
+                <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.65436" id="right-logo" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerPicture>
-            <ComposerPicture pictureWidth="30" file="../../realtime/fixtures/bmkg_logo.png" pictureHeight="30" mapId="-1">
-                <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.67785" id="" positionLock="false">
+            <ComposerPicture pictureWidth="30" file="./bnpb_logo.png" pictureHeight="30" mapId="-1">
+                <ComposerItem width="30" x="6.97964" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.65436" id="logo-left" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerPicture>
-            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
-                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-                    <ComposerItem width="198.791" x="4.73016" y="40.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="2.67785" id="fatalities-table" positionLock="false">
+            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
+                <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
+                    <ComposerItem width="79.4918" x="117.919" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.65436" id="affected-cities" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -180,9 +180,9 @@
                     </ComposerItem>
                 </ComposerFrame>
             </ComposerHtml>
-            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
-                <ComposerFrame sectionWidth="181.862" sectionHeight="56.3885" sectionX="0" sectionY="0">
-                    <ComposerItem width="181.862" x="12.6967" y="196.053" rotation="0" height="56.3885" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="2.67785" id="affected-cities" positionLock="false">
+            <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
+                <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
+                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="2.65436" id="fatalities-table" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -217,12 +217,12 @@
             </rasterrenderer>
             <rasterresampler maxOversampling="2"/>
         </maplayer>
-        <maplayer minimumScale="0" maximumScale="1e+07" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="1">
+        <maplayer minimumScale="0" maximumScale="7.5e+07" geometry="Polygon" type="vector" hasScaleBasedVisibilityFlag="1">
             <id>gadm220120907131545352</id>
             <datasource>../../../../../gisdata/world/gadm/gadm2.shp</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>Admin Boundaries</layername>
+            <layername>gadm2</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -245,22 +245,6 @@
                             <prop k="color" v="190,102,25,49"/>
                             <prop k="color_border" v="0,0,0,49"/>
                             <prop k="offset" v="0,0"/>
-                            <prop k="style" v="no"/>
-                            <prop k="style_border" v="solid"/>
-                            <prop k="width_border" v="0.26"/>
-                        </layer>
-                        <layer pass="0" class="SimpleFill" locked="0">
-                            <prop k="color" v="113,147,171,49"/>
-                            <prop k="color_border" v="113,147,171,49"/>
-                            <prop k="offset" v="0,0"/>
-                            <prop k="style" v="no"/>
-                            <prop k="style_border" v="solid"/>
-                            <prop k="width_border" v="0.5"/>
-                        </layer>
-                        <layer pass="0" class="SimpleFill" locked="0">
-                            <prop k="color" v="0,0,255,49"/>
-                            <prop k="color_border" v="0,0,0,49"/>
-                            <prop k="offset" v="1,1"/>
                             <prop k="style" v="no"/>
                             <prop k="style_border" v="solid"/>
                             <prop k="width_border" v="0.26"/>
@@ -313,7 +297,7 @@
                 <property key="labeling/fontFamily" value="Ubuntu"/>
                 <property key="labeling/fontItalic" value="false"/>
                 <property key="labeling/fontLetterSpacing" value="0"/>
-                <property key="labeling/fontSize" value="8"/>
+                <property key="labeling/fontSize" value="7"/>
                 <property key="labeling/fontSizeInMapUnits" value="false"/>
                 <property key="labeling/fontStrikeout" value="false"/>
                 <property key="labeling/fontUnderline" value="false"/>
@@ -333,8 +317,8 @@
                 <property key="labeling/preserveRotation" value="true"/>
                 <property key="labeling/previewBkgrdColor" value="#ffffff"/>
                 <property key="labeling/priority" value="5"/>
-                <property key="labeling/scaleMax" value="0"/>
-                <property key="labeling/scaleMin" value="0"/>
+                <property key="labeling/scaleMax" value="20000000"/>
+                <property key="labeling/scaleMin" value="1"/>
                 <property key="labeling/textColorB" value="0"/>
                 <property key="labeling/textColorG" value="0"/>
                 <property key="labeling/textColorR" value="0"/>
@@ -423,7 +407,7 @@
             </edittypes>
             <editform>.</editform>
             <editforminit></editforminit>
-            <annotationform>.</annotationform>
+            <annotationform>../../../../../.qgis/project_templates</annotationform>
             <attributeactions/>
         </maplayer>
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
@@ -431,7 +415,7 @@
             <datasource>./exposure/population.tif</datasource>
             <title></title>
             <abstract></abstract>
-            <layername>Population</layername>
+            <layername>population</layername>
             <srs>
                 <spatialrefsys>
                     <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -447,20 +431,17 @@
             <transparencyLevelInt>255</transparencyLevelInt>
             <customproperties/>
             <provider>gdal</provider>
-            <rasterrenderer opacity="0.788235" alphaBand="0" band="1" type="singlebandpseudocolor" invertColor="0">
+            <rasterrenderer opacity="0.435294" alphaBand="-1" type="singlebandgray" invertColor="0" grayBand="1">
                 <rasterTransparency>
                     <singleValuePixelList>
                         <pixelListEntry min="0" max="0" percentTransparent="100"/>
                     </singleValuePixelList>
                 </rasterTransparency>
-                <rastershader>
-                    <colorrampshader colorRampType="INTERPOLATED">
-                        <item value="0" label="0-10" color="#fafafa"/>
-                        <item value="10" label="10-100" color="#bcbcbc"/>
-                        <item value="100" label="100-1000" color="#7f7f7f"/>
-                        <item value="1000" label="1000-10000" color="#424242"/>
-                    </colorrampshader>
-                </rastershader>
+                <contrastEnhancement>
+                    <minValue>0</minValue>
+                    <maxValue>8314.87</maxValue>
+                    <algorithm>1</algorithm>
+                </contrastEnhancement>
             </rasterrenderer>
             <rasterresampler maxOversampling="2"/>
         </maplayer>
