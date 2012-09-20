@@ -38,7 +38,9 @@ class Projection:
                             srs.ImportFromWkt,
                             srs.ImportFromEPSG,
                             srs.ImportFromESRI,
-                            srs.ImportFromMICoordSys,
+                            # FIXME (Ole): This one emits the warning:
+                            # Warning 5: Failed parsing CoordSys: 'Indonesia TM-3 zone 48.2'
+                            #srs.ImportFromMICoordSys,
                             srs.ImportFromPCI,
                             srs.ImportFromXML,
                             srs.ImportFromUSGS,
