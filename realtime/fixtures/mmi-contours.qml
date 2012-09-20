@@ -153,8 +153,8 @@
     <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/dataDefinedProperty0" value=""/>
     <property key="labeling/dataDefinedProperty1" value=""/>
-    <property key="labeling/dataDefinedProperty10" value="3"/>
-    <property key="labeling/dataDefinedProperty11" value="6"/>
+    <property key="labeling/dataDefinedProperty10" value=""/>
+    <property key="labeling/dataDefinedProperty11" value=""/>
     <property key="labeling/dataDefinedProperty12" value=""/>
     <property key="labeling/dataDefinedProperty13" value=""/>
     <property key="labeling/dataDefinedProperty14" value=""/>
@@ -170,7 +170,7 @@
     <property key="labeling/dataDefinedProperty6" value=""/>
     <property key="labeling/dataDefinedProperty7" value=""/>
     <property key="labeling/dataDefinedProperty8" value=""/>
-    <property key="labeling/dataDefinedProperty9" value="2"/>
+    <property key="labeling/dataDefinedProperty9" value=""/>
     <property key="labeling/decimals" value="0"/>
     <property key="labeling/displayAll" value="false"/>
     <property key="labeling/dist" value="0"/>

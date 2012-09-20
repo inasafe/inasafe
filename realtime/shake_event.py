@@ -1388,7 +1388,6 @@ class ShakeEvent(QObject):
                              self.tr('Affected (x 1000)'),
                              self.tr('Intensity')],
                             header=True)
-        myTableBody.append(myHeader)
         for myRowData in myTableData:
             myIntensity = myRowData['roman']
             myName = myRowData['name']
@@ -1399,7 +1398,7 @@ class ShakeEvent(QObject):
             myRow = TableRow([myColourBox, myName, myPopulation, myIntensity])
             myTableBody.append(myRow)
 
-        myTable = Table(myTableBody,)
+        myTable = Table(myTableBody, header_row=myHeader)
         myTable.caption = self.tr('Impacted Cities')
 
         # Also make an html file on disk
@@ -1450,10 +1449,9 @@ class ShakeEvent(QObject):
                         self.tr('Keras'),
                         self.tr('Sangat Keras')]
         myTableBody = []
-        myTableBody.append(TableRow(myHeader, header=True))
         myTableBody.append(myRow)
         myTableBody.append(myImpactRow)
-        myTable = Table(myTableBody)
+        myTable = Table(myTableBody, header_row=myHeader)
         myPath = self.writeHtmlTable(theFileName='impacts.html',
                             theTable=myTable)
         return myPath
