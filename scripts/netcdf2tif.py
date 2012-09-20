@@ -9,6 +9,7 @@ from Scientific.IO.NetCDF import NetCDFFile
 from safe.storage.raster import Raster
 from safe.storage.utilities import raster_geometry2geotransform
 
+
 def convert_netcdf2tif(filename, n):
     """Convert netcdf to tif aggregating firsts n bands
     """
@@ -37,7 +38,6 @@ def convert_netcdf2tif(filename, n):
     references = getattr(fid, 'references')
     conventions = getattr(fid, 'Conventions')
     coordinate_system = getattr(fid, 'coordinate_system')
-
 
     print 'Read from %s' % filename
     print 'Title: %s' % title
@@ -99,10 +99,10 @@ def convert_netcdf2tif(filename, n):
                keywords={'category': 'hazard',
                          'subcategory': 'flood',
                          'unit': 'm',
-                         'title': 'Hypothetical %d hour flood forecast in Jakarta' % n})
+                         'title': ('Hypothetical %d hour flood forecast '
+                                   'in Jakarta' % n)})
     R.write_to_file('flood_forecast_%d_hours.tif' % n)
-    print R
-
+    #print R
 
 
 def usage():
@@ -118,5 +118,3 @@ if __name__ == '__main__':
         N = sys.argv[2]
 
         convert_netcdf2tif(filename, N)
-
-
