@@ -102,6 +102,10 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             'inasafe/setHideExposureFlag', False).toBool()
         self.cbxHideExposure.setChecked(myFlag)
 
+        myFlag = mySettings.value(
+            'inasafe/clipToViewport', True).toBool()
+        self.cbxClipToViewport.setChecked(myFlag)
+
         myPath = mySettings.value(
                             'inasafe/keywordCachePath',
                             self.keywordIO.defaultKeywordDbPath()).toString()
@@ -126,6 +130,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.cbxZoomToImpact.isChecked())
         mySettings.setValue('inasafe/setHideExposureFlag',
                             self.cbxHideExposure.isChecked())
+        mySettings.setValue('inasafe/clipToViewport',
+                            self.cbxClipToViewport.isChecked())
         mySettings.setValue('inasafe/keywordCachePath',
                             self.leKeywordCachePath.text())
 
