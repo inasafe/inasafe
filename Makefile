@@ -214,7 +214,7 @@ run_data_audit:
 	@echo "-----------------------------------"
 	@echo "Audit of IP status for bundled data"
 	@echo "-----------------------------------"
-	@python scripts/data_IP_audit.py
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); python scripts/data_IP_audit.py
 
 pylint-count:
 	@echo
