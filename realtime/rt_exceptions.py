@@ -92,3 +92,7 @@ class ShapefileCreationError(Exception):
 class CityMemoryLayerCreationError(Exception):
     """Raised if an error occurs creating the cities memory layer"""
     pass
+
+class MapComposerError(Exception):
+    """Raised if a problem occurs rendering a map"""
+    pass

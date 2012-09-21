@@ -47,7 +47,8 @@ from qgis.core import (QgsPoint,
                        QgsVectorFileWriter,
                        QgsCoordinateReferenceSystem,
                        QgsProject,
-                       QgsComposition)
+                       QgsComposition,
+                       QgsMapLayerRegistry)
 #TODO refactor this into a utilitiy class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
 from safe.api import get_plugins as safe_get_plugins
@@ -65,7 +66,8 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            InvalidLayerError,
                            ShapefileCreationError,
                            CityMemoryLayerCreationError,
-                           FileNotFoundError)
+                           FileNotFoundError,
+                           MapComposerError)
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -1732,9 +1734,10 @@ class ShakeEvent(QObject):
         logging.info('Created: %s', myMmiShapeFile)
         #for myAlgorithm in ['average', 'invdist', 'nearest']:
         for myAlgorithm in ['nearest']:
-            myContoursFile = self.mmiDataToContours(theForceFlag=theForceFlag,
+            myContoursShapeFile = self.mmiDataToContours(
+                                           theForceFlag=theForceFlag,
                                            theAlgorithm=myAlgorithm)
-            logging.info('Created: %s', myContoursFile)
+            logging.info('Created: %s', myContoursShapeFile)
         try:
             myCitiesShapeFile = self.citiesToShapefile(
                                             theForceFlag=theForceFlag)
@@ -1765,11 +1768,43 @@ class ShakeEvent(QObject):
         myDocument.setContent(myTemplateContent)
 
         myComposition = QgsComposition(CANVAS.mapRenderer())
-        # you can use this to replace any string like this [key]
+
+        # You can use this to replace any string like this [key]
         # in the template with a new value. e.g. to replace
         # [date] pass a map like this {'date': '1 Jan 2012'}
-        mySubstitutionMap = {}
-        myComposition.loadFromTemplate(myDocument)
+        mySubstitutionMap = {'location-info': 'Foo bar'}
+        myComposition.loadFromTemplate(myDocument, mySubstitutionMap)
+
+        # Get the main map canvas on the composition and set
+        # its extents to the event.
+        myMap = myComposition.getComposerMapById(0)
+        if myMap is not None:
+            myMap.setNewExtent(self.extentWithCities)
+            myMap.renderModeUpdateCachedImage()
+        else:
+            LOGGER.exception('Map 0 could not be found in template')
+            raise MapComposerError
+
+        # Set the fatalities report up
+        myFatalitiesItem = myComposition.getComposerItemById('fatalities-table')
+        if myFatalitiesItem is None:
+            myMessage = 'fatalities-table composer item could not be found'
+            LOGGER.exception(myMessage)
+            raise MapComposerError(myMessage)
+        myFatalitiesHtml = myComposition.getComposerHtmlByItem(myFatalitiesItem)
+        if myFatalitiesHtml is None:
+            myMessage = 'Fatalities QgsComposerHtml could not be found'
+            LOGGER.exception(myMessage)
+            raise MapComposerError(myMessage)
+        myFatalitiesHtml.setUrl(QUrl(myFatalitiesHtmlPath))
+
+        # Load the contours and cities shapefile into the map
+        myContoursLayer = QgsVectorLayer(myContoursShapeFile,
+                                         'mmi-contours', "ogr")
+        myCitiesLayer = QgsVectorLayer(myCitiesShapeFile,
+                                       'mmi-contours', "ogr")
+        QgsMapLayerRegistry.instance().addMapLayers(
+                    [myContoursLayer, myCitiesLayer])
 
         myPdfPath = os.path.join(shakemapExtractDir(),
                          self.eventId,
