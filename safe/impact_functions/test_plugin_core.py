@@ -9,7 +9,6 @@ from core import get_admissible_plugins
 from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
-from core import get_plugins_as_table
 from utilities import pretty_string
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -194,29 +193,6 @@ class Test_plugin_core(unittest.TestCase):
         msg = ('Expected at least impact functions F1, F2 and F3 in %s'
                % str(P.keys()))
         assert 'F1' in P and 'F2' in P and 'F3' in P, msg
-
-    def test_get_plugins_as_table(self):
-        """Test get plugins as table"""
-        T = get_plugins_as_table()
-        S = T.toNewlineFreeString()
-        LOGGER.debug(S)
-        #f = file('/tmp/tbl.html', 'wt')
-        #f.write(S)
-        #f.close()
-        # Rather arbitrary way to see if the table has some data in it
-        # maybe there is a nicer way to test given that fn list can change? TS
-        assert len(S) > 1000
-
-        # Now test the table for a single nominated fn
-        T = get_plugins_as_table('F1')
-        S = T.toNewlineFreeString()
-        LOGGER.debug(S)
-        #f = file('/tmp/tbl.html', 'wt')
-        #f.write(S)
-        #f.close()
-        # Expecting that F1 test wont change and that the table produced for
-        # it is of a deterministic length
-        assert len(S) == 518
 
     def test_parse_requirement(self):
         """Test parse requirements of a function to dictionary."""
