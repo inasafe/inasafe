@@ -3,6 +3,7 @@
 This requires scientific python
 """
 
+import os
 import sys
 import numpy
 from Scientific.IO.NetCDF import NetCDFFile
@@ -16,6 +17,12 @@ def convert_netcdf2tif(filename, n):
 
     if not isinstance(filename, basestring):
         msg = 'Argument filename should be a string. I got %s' % filename
+        raise RuntimeError(msg)
+
+    basename, ext = os.path.splitext(filename)
+    msg = ('Expected NetCDF file with extension .nc - '
+           'Instead I got %s' % filename)
+    if ext != '.nc':
         raise RuntimeError(msg)
 
     try:
@@ -101,8 +108,8 @@ def convert_netcdf2tif(filename, n):
                          'unit': 'm',
                          'title': ('Hypothetical %d hour flood forecast '
                                    'in Jakarta' % n)})
-    R.write_to_file('flood_forecast_%d_hours.tif' % n)
-    #print R
+    R.write_to_file('%s_%d_hours.tif' % (basename, n))
+    print 'Success: %d hour forecast written to %s' % (n, R.filename)
 
 
 def usage():
