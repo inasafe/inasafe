@@ -72,5 +72,24 @@ template, and which you can modify.
     interpretive information and so on.
 * **credits** - A block of text for displaying credits on the map output.
 
+The template is provided as :file:`realtime/fixtures/realtime-template.qgs`
+and can be modified by opening the template using the QGIS map composer,
+making your changes and then overwriting the template. You should take care
+to test your template changes before deploying them to a live server, and
+after deploying them to a live server.
 
+QGIS Realtime Project
+---------------------
+
+The cartography provided in the realtime maps is loaded from the
+:file:`realtime/fixtures/realtime.qgs` QGIS project file. You can open this
+file using QGIS, change the layers and their symbology, and your changes
+will be reflected in the generated realtime shake report.
+
+There are however some caveats to this:
+
+* The overview map has locked layers
+* The main map should always have a population layer with grayscale legend
+  matching that provided in the original. If you do remove the population layer
+  you should also remove or update the population layer legend.
 
