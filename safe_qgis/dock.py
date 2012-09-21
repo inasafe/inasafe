@@ -160,6 +160,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             'inasafe/setHideExposureFlag', False).toBool()
         self.hideExposureFlag = myFlag
 
+        # whether to clip hazard and exposure layers to the viewport
+        myFlag = mySettings.value(
+            'inasafe/clipToViewport', True).toBool()
+        self.clipToViewport = myFlag
+
         self.getLayers()
 
     def connectLayerListener(self):
@@ -723,6 +728,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = getExceptionWithStacktrace(e, html=True,
                                                    context=myContext)
             self.displayHtml(myMessage)
+            return
 
         QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
@@ -977,9 +983,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
-            myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+            if self.clipToViewport:
+                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
                                            myExposureGeoExtent,
                                            myViewportGeoExtent)
+            else:
+                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                    myExposureGeoExtent)
+
         except InsufficientOverlapException, e:
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
