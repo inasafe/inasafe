@@ -34,7 +34,8 @@ from PyQt4.QtCore import (QCoreApplication,
                           QVariant,
                           QFileInfo,
                           QString,
-                          QStringList)
+                          QStringList,
+                          QUrl)
 from PyQt4.QtXml import QDomDocument
 from qgis.core import (QgsPoint,
                        QgsField,
@@ -1797,6 +1798,19 @@ class ShakeEvent(QObject):
             LOGGER.exception(myMessage)
             raise MapComposerError(myMessage)
         myFatalitiesHtml.setUrl(QUrl(myFatalitiesHtmlPath))
+
+        # Set the affected cities report up
+        myCitiesItem = myComposition.getComposerItemById('affected-cities')
+        if myCitiesItem is None:
+            myMessage = 'affected-cities composer item could not be found'
+            LOGGER.exception(myMessage)
+            raise MapComposerError(myMessage)
+        myCitiesHtml = myComposition.getComposerHtmlByItem(myCitiesItem)
+        if myCitiesHtml is None:
+            myMessage = 'Cities QgsComposerHtml could not be found'
+            LOGGER.exception(myMessage)
+            raise MapComposerError(myMessage)
+        myCitiesHtml.setUrl(QUrl(myCitiesHtmlPath))
 
         # Load the contours and cities shapefile into the map
         myContoursLayer = QgsVectorLayer(myContoursShapeFile,
