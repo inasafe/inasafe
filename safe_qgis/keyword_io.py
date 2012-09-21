@@ -28,7 +28,7 @@ from safe_qgis.exceptions import (HashNotFoundException,
 from safe_qgis.safe_interface import (verify,
                                readKeywordsFromFile,
                                writeKeywordsToFile)
-from safe_qgis.utilities import qgisVersion
+from safe_qgis.utilities import qgisVersion, logOnQgsMessageLog
 
 LOGGER = logging.getLogger('InaSAFE')
 

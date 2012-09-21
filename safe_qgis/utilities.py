@@ -520,7 +520,7 @@ def qgisVersion():
     return myVersion
 
 
-def copyInMemory(vLayer, copyName=''):
+def copyInMemory(vLayer, copyName='', clipTo=None, argsToKeep='all'):
     """Return a memory copy of a layer
 
     Input
@@ -554,16 +554,16 @@ def copyInMemory(vLayer, copyName=''):
     memProvider = memLayer.dataProvider()
 
     vProvider = vLayer.dataProvider()
-    allAttrs = vProvider.attributeIndexes()
-    allFields = vLayer.dataProvider().fields()
+    vAttrs = vProvider.attributeIndexes()
+    vFields = vProvider.fields()
 
     fields = []
-    for i in allFields:
-        fields.append(allFields[i])
+    for i in vFields:
+        fields.append(vFields[i])
 
     memProvider.addAttributes(fields)
 
-    vProvider.select(allAttrs)
+    vProvider.select(vAttrs)
     ft = QgsFeature()
     while vProvider.nextFeature(ft):
         memProvider.addFeatures([ft])

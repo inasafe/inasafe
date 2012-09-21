@@ -555,7 +555,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.exposureLayers.append(myLayer)
 
         #handle the cboAggregation combo
-        self.cboAggregation.insertItem(0, self.tr("No aggregation"))
+        self.cboAggregation.insertItem(0, self.tr('No aggregation'))
         self.cboAggregation.setCurrentIndex(0)
         if self.cboAggregation.count() <= 1:
             self.cboAggregation.setEnabled(False)
@@ -856,48 +856,76 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.displayHtml(myMessage)
 
     def _aggregateResults(self):
-        aggregationLayer = self.getAggregationLayer()
-        aggregationLayer = copyInMemory(
-            self.getAggregationLayer(),
-            self.tr('%1 aggregation results').arg(aggregationLayer.name())
-        )
+        impactLayer = self.runner.impactLayer()
+        fullAggregationLayer = self.getAggregationLayer()
+        clippedAggregationLayerPath = clipLayer(
+            fullAggregationLayer,
+            impactLayer.get_bounding_box(),
+            forceNoKeywords=True
+            )
 
-        logOnQgsMessageLog('Aggregating using ' + aggregationLayer.name())
-        myQgisImpactLayer = self.readImpactLayer(self.runner.impactLayer())
+        myQgisImpactLayer = self.readImpactLayer(impactLayer)
+        if not myQgisImpactLayer.isValid():
+            myMessage = self.tr('Error when reading %1').arg(myQgisImpactLayer)
+            raise Exception(myMessage)
+
+        lName=str(self.tr('%1 aggregated to %2')
+                .arg(myQgisImpactLayer.name())
+                .arg(fullAggregationLayer.name()))
+
+        self.aggregationLayer = QgsVectorLayer(
+            clippedAggregationLayerPath, lName, 'ogr')
+        logOnQgsMessageLog('Creating ' + self.aggregationLayer.name())
+        if not self.aggregationLayer.isValid():
+            myMessage = self.tr('Error when reading %1').arg(
+                self.aggregationLayer.lastError())
+            raise Exception(myMessage)
 
         if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
-            #TODO implement polygon to polygon aggregation (dissolve,
-            # line in polygon, point in polygon)
-            logOnQgsMessageLog('Vector aggregation not implemented yet')
-            return
+            self._aggregateResultsVector(myQgisImpactLayer)
         elif myQgisImpactLayer.type() == QgsMapLayer.RasterLayer:
-            logOnQgsMessageLog('Aggregating Zonal statistics')
-            prefix = "zonal_"
-            zonStat = QgsZonalStatistics(
-                aggregationLayer,
-                myQgisImpactLayer.dataProvider().dataSourceUri(),
-                prefix
-            )
-            progressDialog = QtGui.QProgressDialog(
-                self.tr("Calculating zonal statistics"),
-                self.tr("Abort..."),
-                0,
-                0
-            )
-            zonStat.calculateStatistics(progressDialog)
-            if progressDialog.wasCanceled():
-                QtGui.QMessageBox.error(self, self.tr("ZonalStats: Error"),
-                    self.tr(
-                        "You aborted aggregation, "
-                        "so there are no data for analysis. Exiting..."))
-            QgsMapLayerRegistry.instance().addMapLayer(aggregationLayer)
-            shape = memoryLayerToShapefile(
-                'name',
-                '/home/marco/tmp',
-                aggregationLayer
-            )
-#            QgsMapLayerRegistry.instance().addMapLayer(shape)
-            return
+            self._aggregateResultsRaster(myQgisImpactLayer)
+        else:
+            myMessage = self.tr('%1 is %2 but it should be either vector or '
+                                'raster').arg(myQgisImpactLayer.name())\
+                                .arg(myQgisImpactLayer.type())
+            raise Exception(myMessage)
+
+    def _aggregateResultsVector(self, myQgisImpactLayer):
+        #TODO implement polygon to polygon aggregation (dissolve,
+        # line in polygon, point in polygon)
+        logOnQgsMessageLog('Vector aggregation not implemented yet')
+        return
+
+
+    def _aggregateResultsRaster(self, myQgisImpactLayer):
+        prefix = 'zonal_'
+        zonStat = QgsZonalStatistics(
+            self.aggregationLayer,
+            myQgisImpactLayer.dataProvider().dataSourceUri(),
+            prefix
+        )
+        progressDialog = QtGui.QProgressDialog(
+            self.tr('Calculating zonal statistics'),
+            self.tr('Abort...'),
+            0,
+            0
+        )
+        zonStat.calculateStatistics(progressDialog)
+        if progressDialog.wasCanceled():
+            QtGui.QMessageBox.error(self, self.tr('ZonalStats: Error'),
+                self.tr(
+                    'You aborted aggregation, '
+                    'so there are no data for analysis. Exiting...'))
+        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
+        #            shape = memoryLayerToShapefile(
+        #                'name',
+        #                '/home/marco/tmp',
+        #                myQgisAggregationLayer
+        #            )
+        #            QgsMapLayerRegistry.instance().addMapLayer(shape)
+        return
+
 
     def _completed(self):
         """Helper function for slot activated when the process is done.
