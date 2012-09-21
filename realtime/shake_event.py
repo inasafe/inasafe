@@ -28,12 +28,14 @@ import ogr
 import gdal
 from gdalconst import GA_ReadOnly
 
+# TODO I think QCoreApplication is needed for tr() check hefore removing
 from PyQt4.QtCore import (QCoreApplication,
                           QObject,
                           QVariant,
                           QFileInfo,
                           QString,
                           QStringList)
+from PyQt4.QtXml import QDomDocument
 from qgis.core import (QgsPoint,
                        QgsField,
                        QgsFeature,
@@ -43,8 +45,11 @@ from qgis.core import (QgsPoint,
                        QgsRectangle,
                        QgsDataSourceURI,
                        QgsVectorFileWriter,
-                       QgsCoordinateReferenceSystem)
-
+                       QgsCoordinateReferenceSystem,
+                       QgsProject,
+                       QgsComposition)
+#TODO refactor this into a utilitiy class as it is no longer only used by test
+from safe_qgis.utilities_test import getQgisTestApp
 from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
@@ -64,7 +69,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
-
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 class ShakeEvent(QObject):
     """The ShakeEvent class encapsulates behaviour and data relating to an
@@ -1384,8 +1389,8 @@ class ShakeEvent(QObject):
                               self.eventId,
                               theFileName)
         myHtmlFile = file(myPath, 'wt')
-        myHeaderFile = os.path.join(self._fixturePath(), 'header.html')
-        myFooterFile = os.path.join(self._fixturePath(), 'footer.html')
+        myHeaderFile = os.path.join(dataDir(), 'header.html')
+        myFooterFile = os.path.join(dataDir(), 'footer.html')
         myHeaderFile = file(myHeaderFile, 'rt')
         myHeader = myHeaderFile.read()
         myHeaderFile.close()
@@ -1400,7 +1405,7 @@ class ShakeEvent(QObject):
         myDestination = os.path.join(shakemapExtractDir(),
                                      self.eventId,
                                      'bootstrap.css')
-        mySource = os.path.join(self._fixturePath(), 'bootstrap.css')
+        mySource = os.path.join(dataDir(), 'bootstrap.css')
         shutil.copyfile(mySource, myDestination)
 
         return myPath
@@ -1671,13 +1676,6 @@ class ShakeEvent(QObject):
 
         return myClippedHazardPath, myClippedExposurePath
 
-    def _fixturePath(self):
-        """Helper to get the path to the realtime fixtures dir."""
-        myFixturePath = os.path.join(os.path.abspath(os.path.curdir),
-                                     'realtime',
-                                     'fixtures')
-        return myFixturePath
-
     def _getPopulationPath(self):
         """Helper to determine population raster spath.
 
@@ -1701,7 +1699,7 @@ class ShakeEvent(QObject):
             FileNotFoundError
         """
         # When used via the scripts make_shakemap.sh
-        myFixturePath = os.path.join(self._fixturePath(),
+        myFixturePath = os.path.join(dataDir(),
                         'exposure',
                         'population.tif')
 
@@ -1751,6 +1749,32 @@ class ShakeEvent(QObject):
 
         _, myFatalitiesHtmlPath = self.calculateFatalities()
         logging.info('Created: %s', myFatalitiesHtmlPath)
+
+        # Load our project
+        myProjectPath = os.path.join(dataDir(), 'realtime.qgs')
+        QgsProject.instance().setFileName(myProjectPath)
+        QgsProject.instance().read()
+
+        myTemplatePath = os.path.join(dataDir(),
+                                     'realtime-template.qpt')
+        myTemplateFile = file(myTemplatePath, 'rt')
+        myTemplateContent = myTemplateFile.read()
+        myTemplateFile.close()
+
+        myDocument = QDomDocument()
+        myDocument.setContent(myTemplateContent)
+
+        myComposition = QgsComposition(CANVAS.mapRenderer())
+        # you can use this to replace any string like this [key]
+        # in the template with a new value. e.g. to replace
+        # [date] pass a map like this {'date': '1 Jan 2012'}
+        mySubstitutionMap = {}
+        myComposition.loadFromTemplate(myDocument)
+
+        myPdfPath = os.path.join(shakemapExtractDir(),
+                         self.eventId,
+                         '%s.pdf' % self.eventId)
+        myComposition.exportAsPDF(myPdfPath)
 
 
     def __str__(self):
