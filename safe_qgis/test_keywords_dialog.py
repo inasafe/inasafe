@@ -65,7 +65,7 @@ def copyMakePadangLayer():
     myFileName = unique_filename()
     # copy to temp file
     for ext in myExts:
-        mySourcePath = os.path.join(HAZDATA, mySourceFileName  + ext)
+        mySourcePath = os.path.join(HAZDATA, mySourceFileName + ext)
         myDestPath = os.path.join(HAZDATA, myFileName + ext)
         shutil.copy2(mySourcePath, myDestPath)
     # return a single predefined layer
