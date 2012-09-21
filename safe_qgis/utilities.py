@@ -543,14 +543,14 @@ def copyInMemory(vLayer, copyName=''):
         elif vType == QGis.Polygon:
             typeStr = 'Polygon'
         else:
-            raise memoryLayerCreationError('Layer is wheter Point or Line or '
+            raise memoryLayerCreationError('Layer is whether Point or Line or '
                                            'Polygon')
     else:
         raise memoryLayerCreationError('Layer is not a VectorLayer')
 
     crs = vLayer.crs().authid().toLower()
-    uri = typeStr + '?crs=' + crs + "&index=yes"
-    memLayer = QgsVectorLayer(uri, copyName, "memory")
+    uri = typeStr + '?crs=' + crs + '&index=yes'
+    memLayer = QgsVectorLayer(uri, copyName, 'memory')
     memProvider = memLayer.dataProvider()
 
     vProvider = vLayer.dataProvider()
