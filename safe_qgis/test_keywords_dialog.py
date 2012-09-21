@@ -21,6 +21,7 @@ import unittest
 import sys
 import os
 import shutil
+from safe.engine.core import unique_filename
 
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -58,26 +59,27 @@ def makePadangLayer():
 
 def copyMakePadangLayer():
     """Helper function that copies padang keyword for testing and return it."""
-    myFileName = 'Shakemap_Padang_2009'
+    mySourceFileName = 'Shakemap_Padang_2009'
     myExts = ['.asc', '.asc.aux.xml', '.keywords',
               '.lic', '.prj', '.qml', '.sld']
+    myFileName = unique_filename()
     # copy to temp file
     for ext in myExts:
-        mySourcePath = os.path.join(HAZDATA, myFileName + ext)
-        myDestPath = os.path.join(HAZDATA, "temp_" + myFileName + ext)
+        mySourcePath = os.path.join(HAZDATA, mySourceFileName + ext)
+        myDestPath = os.path.join(HAZDATA, myFileName + ext)
         shutil.copy2(mySourcePath, myDestPath)
     # return a single predefined layer
-    myFile = "temp_" + myFileName + '.asc'
+    myFile = myFileName + '.asc'
     myPath = os.path.join(HAZDATA, myFile)
     myTitle = readKeywordsFromFile(myPath, 'title')
     myLayer = QgsRasterLayer(myPath, myTitle)
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
-    return myLayer
+    return myLayer, myFileName
 
 
-def removeTempFile():
+def removeTempFile(myFileName='temp_Shakemap_Padang_2009'):
     """Helper function that removes temp file that created during test"""
-    myFileName = 'temp_Shakemap_Padang_2009'
+    #myFileName = 'temp_Shakemap_Padang_2009'
     myExts = ['.asc', '.asc.aux.xml', '.keywords',
               '.lic', '.prj', '.qml', '.sld']
     for ext in myExts:
@@ -399,6 +401,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_addKeywordWhenPressOkButton(self):
         """Test add keyword when ok button is pressed."""
+        #_, myFile = copyMakePadangLayer()
         copyMakePadangLayer()
         myDialog = KeywordsDialog(PARENT, IFACE)
 
@@ -409,7 +412,7 @@ class KeywordsDialogTest(unittest.TestCase):
         QTest.mouseClick(okButton, QtCore.Qt.LeftButton)
 
         # delete temp file
-        removeTempFile()
+        # removeTempFile(myFile)
 
         myExpectedResult = 'bar'
         myResult = myDialog.getValueForKey('foo')

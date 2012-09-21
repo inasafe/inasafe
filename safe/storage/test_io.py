@@ -121,18 +121,12 @@ class Test_IO(unittest.TestCase):
         for vectorname in ['test_buildings.shp',
                            'tsunami_building_exposure.shp',
                            'Padang_WGS84.shp',
-                           'nan_here.shp']:
+                           ]:
 
             filename = '%s/%s' % (TESTDATA, vectorname)
             layer = read_layer(filename)
             coords = numpy.array(layer.get_geometry())
             attributes = layer.get_data()
-
-            # Check NaN is read as NaN
-            if vectorname == 'nan_here.shp':
-                msg = 'It should be NaN but found %s' % attributes[00]['DEPTH']
-                assert numpy.isnan(attributes[00]['DEPTH']), msg
-                continue
 
             # Check basic data integrity
             N = len(layer)
@@ -727,9 +721,11 @@ class Test_IO(unittest.TestCase):
         # Write back to new (tif) file
         out_filename = unique_filename(suffix='.tif')
         R1.write_to_file(out_filename)
+        assert R1.filename == out_filename
 
         # Read again and check consistency
         R2 = read_layer(out_filename)
+        assert R2.filename == out_filename
 
         msg = ('Dimensions of written raster array do not match those '
                'of input raster file\n')
@@ -787,6 +783,7 @@ class Test_IO(unittest.TestCase):
 
             filename = '%s/%s' % (TESTDATA, rastername)
             R1 = read_layer(filename)
+            assert R1.filename == filename
 
             # Check consistency of raster
             A1 = R1.get_data()
@@ -817,6 +814,7 @@ class Test_IO(unittest.TestCase):
 
                 # Read again and check consistency
                 R2 = read_layer(out_filename)
+                assert R2.filename == out_filename
 
                 msg = ('Dimensions of written raster array do not match those '
                        'of input raster file\n')
@@ -1477,6 +1475,10 @@ class Test_IO(unittest.TestCase):
         # Test inclusion
         assert numpy.allclose(bbox_intersection(west_java, jakarta), jakarta)
 
+        # Ignore Bounding Boxes that are None
+        assert numpy.allclose(bbox_intersection(west_java, jakarta, None),
+            jakarta)
+
         # Realistic ones
         bbox1 = [94.972335, -11.009721, 141.014, 6.073612333333]
         bbox2 = [105.3, -8.5, 110.0, -5.5]
@@ -1523,7 +1525,7 @@ class Test_IO(unittest.TestCase):
         # Deal with invalid boxes
         try:
             bbox_intersection(bbox1, [53, 2, 40, 4])
-        except VerificationError:
+        except BoundingBoxError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1531,7 +1533,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection(bbox1, [50, 7, 53, 4])
-        except VerificationError:
+        except BoundingBoxError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1539,7 +1541,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection(bbox1, 'blko ho skrle')
-        except VerificationError:
+        except BoundingBoxError:
             pass
         else:
             msg = 'Should have raised exception'

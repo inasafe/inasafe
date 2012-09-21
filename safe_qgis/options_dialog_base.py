@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'options_dialog_base.ui'
 #
-# Created: Tue Aug 14 19:12:05 2012
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Wed Sep 19 10:03:02 2012
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -32,7 +32,7 @@ class Ui_OptionsDialogBase(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
         self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 465, 547))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 465, 575))
         self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
         self.gridLayout_2 = QtGui.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
@@ -47,14 +47,10 @@ class Ui_OptionsDialogBase(object):
         self.cbxZoomToImpact.setEnabled(True)
         self.cbxZoomToImpact.setObjectName(_fromUtf8("cbxZoomToImpact"))
         self.gridLayout_2.addWidget(self.cbxZoomToImpact, 2, 0, 1, 1)
-        self.cbxHideExposure = QtGui.QCheckBox(self.scrollAreaWidgetContents)
-        self.cbxHideExposure.setEnabled(True)
-        self.cbxHideExposure.setObjectName(_fromUtf8("cbxHideExposure"))
-        self.gridLayout_2.addWidget(self.cbxHideExposure, 3, 0, 1, 1)
         self.lblKeywordCache = QtGui.QLabel(self.scrollAreaWidgetContents)
         self.lblKeywordCache.setEnabled(True)
         self.lblKeywordCache.setObjectName(_fromUtf8("lblKeywordCache"))
-        self.gridLayout_2.addWidget(self.lblKeywordCache, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.lblKeywordCache, 5, 0, 1, 1)
         self.horizontalLayout_6 = QtGui.QHBoxLayout()
         self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
         self.leKeywordCachePath = QtGui.QLineEdit(self.scrollAreaWidgetContents)
@@ -65,7 +61,7 @@ class Ui_OptionsDialogBase(object):
         self.toolKeywordCachePath.setEnabled(True)
         self.toolKeywordCachePath.setObjectName(_fromUtf8("toolKeywordCachePath"))
         self.horizontalLayout_6.addWidget(self.toolKeywordCachePath)
-        self.gridLayout_2.addLayout(self.horizontalLayout_6, 5, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_6, 6, 0, 1, 1)
         self.grpNotImplemented = QtGui.QGroupBox(self.scrollAreaWidgetContents)
         self.grpNotImplemented.setObjectName(_fromUtf8("grpNotImplemented"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpNotImplemented)
@@ -145,12 +141,20 @@ class Ui_OptionsDialogBase(object):
         self.spinBox.setObjectName(_fromUtf8("spinBox"))
         self.horizontalLayout_5.addWidget(self.spinBox)
         self.gridLayout_3.addLayout(self.horizontalLayout_5, 9, 0, 1, 1)
-        self.gridLayout_2.addWidget(self.grpNotImplemented, 6, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.grpNotImplemented, 7, 0, 1, 1)
         self.cbxUseThread = QtGui.QCheckBox(self.scrollAreaWidgetContents)
         self.cbxUseThread.setObjectName(_fromUtf8("cbxUseThread"))
-        self.gridLayout_2.addWidget(self.cbxUseThread, 7, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.cbxUseThread, 8, 0, 1, 1)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem, 8, 0, 1, 1)
+        self.gridLayout_2.addItem(spacerItem, 9, 0, 1, 1)
+        self.cbxHideExposure = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.cbxHideExposure.setEnabled(True)
+        self.cbxHideExposure.setObjectName(_fromUtf8("cbxHideExposure"))
+        self.gridLayout_2.addWidget(self.cbxHideExposure, 3, 0, 1, 1)
+        self.cbxClipToViewport = QtGui.QCheckBox(self.scrollAreaWidgetContents)
+        self.cbxClipToViewport.setChecked(False)
+        self.cbxClipToViewport.setObjectName(_fromUtf8("cbxClipToViewport"))
+        self.gridLayout_2.addWidget(self.cbxClipToViewport, 4, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
 
@@ -177,7 +181,6 @@ class Ui_OptionsDialogBase(object):
         self.cbxVisibleLayersOnly.setText(QtGui.QApplication.translate("OptionsDialogBase", "Only show visible layers in InaSAFE dock", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxSetLayerNameFromTitle.setText(QtGui.QApplication.translate("OptionsDialogBase", "Set QGIS layer name from \'title\' in keywords", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxZoomToImpact.setText(QtGui.QApplication.translate("OptionsDialogBase", "Zoom to impact layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
-        self.cbxHideExposure.setText(QtGui.QApplication.translate("OptionsDialogBase", "Hide exposure layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
         self.lblKeywordCache.setText(QtGui.QApplication.translate("OptionsDialogBase", "Keyword cache for remote datasources", None, QtGui.QApplication.UnicodeUTF8))
         self.toolKeywordCachePath.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.grpNotImplemented.setTitle(QtGui.QApplication.translate("OptionsDialogBase", "Not yet implemented", None, QtGui.QApplication.UnicodeUTF8))
@@ -192,5 +195,7 @@ class Ui_OptionsDialogBase(object):
         self.toolButton_4.setText(QtGui.QApplication.translate("OptionsDialogBase", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setText(QtGui.QApplication.translate("OptionsDialogBase", "DPI (Maps and reports)", None, QtGui.QApplication.UnicodeUTF8))
         self.cbxUseThread.setText(QtGui.QApplication.translate("OptionsDialogBase", "Run analysis in a separate thread (experimental)", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxHideExposure.setText(QtGui.QApplication.translate("OptionsDialogBase", "Hide exposure layer on scenario estimate completion", None, QtGui.QApplication.UnicodeUTF8))
+        self.cbxClipToViewport.setText(QtGui.QApplication.translate("OptionsDialogBase", "Clip datasets to visible extent before analysis", None, QtGui.QApplication.UnicodeUTF8))
 
 import resources_rc
