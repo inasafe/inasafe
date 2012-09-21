@@ -727,9 +727,11 @@ class Test_IO(unittest.TestCase):
         # Write back to new (tif) file
         out_filename = unique_filename(suffix='.tif')
         R1.write_to_file(out_filename)
+        assert R1.filename == out_filename
 
         # Read again and check consistency
         R2 = read_layer(out_filename)
+        assert R2.filename == out_filename
 
         msg = ('Dimensions of written raster array do not match those '
                'of input raster file\n')
@@ -787,6 +789,7 @@ class Test_IO(unittest.TestCase):
 
             filename = '%s/%s' % (TESTDATA, rastername)
             R1 = read_layer(filename)
+            assert R1.filename == filename
 
             # Check consistency of raster
             A1 = R1.get_data()
@@ -817,6 +820,7 @@ class Test_IO(unittest.TestCase):
 
                 # Read again and check consistency
                 R2 = read_layer(out_filename)
+                assert R2.filename == out_filename
 
                 msg = ('Dimensions of written raster array do not match those '
                        'of input raster file\n')

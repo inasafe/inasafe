@@ -241,6 +241,8 @@ class Raster(Layer):
                    'format %s' % (filename, file_format))
             raise WriteLayerError(msg)
 
+        self.filename = filename
+
         # Write metada
         fid.SetProjection(str(self.projection))
         fid.SetGeoTransform(self.geotransform)
