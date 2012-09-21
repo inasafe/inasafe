@@ -37,6 +37,7 @@ from utilities import points_along_line
 from utilities import geometrytype2string
 
 LOGGER = logging.getLogger('InaSAFE')
+_pseudo_inf = float(999999999999999999999999)
 
 
 class Vector(Layer):
@@ -437,6 +438,8 @@ class Vector(Layer):
                 #              (https://github.com/AIFDR/riab/issues/66)
                 #feature_type = feature.GetFieldDefnRef(j).GetType()
                 fields[name] = feature.GetField(j)
+                if fields[name] == _pseudo_inf:
+                    fields[name] = float('nan')
                 #print 'Field', name, feature_type, j, fields[name]
 
             data.append(fields)
@@ -611,6 +614,8 @@ class Vector(Layer):
                         val = float(val)
                     elif val is None:
                         val = ''
+                    if val != val:
+                        val = _pseudo_inf
 
                     feature.SetField(actual_field_name, val)
 

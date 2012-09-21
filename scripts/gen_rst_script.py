@@ -89,12 +89,11 @@ def create_text_module(module_name):
     return return_text
 
 
-def python_file_siever(files):
+def python_file_siever(files, excluded_files=['__init__.py']):
     """Return list of python file from files, except it is an excluded file.
     """
 
     python_files = []
-    excluded_files = ['__init__.py']
     for fl in files:
         if fl.endswith('.py') and not fl in excluded_files:
             python_files.append(fl)
