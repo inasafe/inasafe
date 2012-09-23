@@ -213,7 +213,7 @@ searchBoxes: None
                 myString += ("%d: %s\n" % (myKey, myValue.toString()))
             myString += '------------------\n'
         LOGGER.debug('Mem table:\n %s' % myString)
-        myExpectedLength = 877
+        myExpectedLength = 870
         myLength = len(myString)
         myMessage = 'Expected: %s Got %s' % (myExpectedLength, myLength)
         self.assertEquals(myExpectedLength, myLength, myMessage)
@@ -283,7 +283,7 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
 
-        myValues = range(1, 9)
+        myValues = range(2, 10)
         myExpectedResult = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
         myResult = []
         for myValue in myValues:
@@ -323,15 +323,15 @@ searchBoxes: None
         myShakeEvent = myShakeData.shakeEvent()
         myTable = myShakeEvent.sortedImpactedCities()
         myExpectedResult = [
-            {'roman': 'III', 'mmi': 1.909999966621399,
+            {'roman': 'II', 'mmi': 1.909999966621399,
              'name': 'Tondano', 'population': 33317},
-            {'roman': 'III', 'mmi': 1.809999942779541,
+            {'roman': 'II', 'mmi': 1.809999942779541,
              'name': 'Manado', 'population': 451893},
-            {'roman': 'III', 'mmi': 1.75,
+            {'roman': 'II', 'mmi': 1.75,
              'name': 'Provinsi Sulawesi Utara', 'population': 2146600},
-            {'roman': 'III', 'mmi': 1.690000057220459,
+            {'roman': 'II', 'mmi': 1.690000057220459,
              'name': 'Tomohon', 'population': 27624},
-            {'roman': 'III', 'mmi': 1.5299999713897705,
+            {'roman': 'II', 'mmi': 1.5299999713897705,
              'name': 'Luwuk', 'population': 47778}]
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myTable, myExpectedResult)
         assert myTable == myExpectedResult, myMessage
@@ -342,7 +342,7 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
         myTable, myPath = myShakeEvent.impactedCitiesTable()
-        myExpectedResult = 938
+        myExpectedResult = 921
         myTable = myTable.toNewlineFreeString()
         myResult = len(myTable)
         myMessage = ('Got:\n%s\nExpected:\n%s\nFor rendered table:\n%s' %
