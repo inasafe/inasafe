@@ -1178,6 +1178,7 @@ class Test_IO(unittest.TestCase):
 
                 i += 1
 
+    @unittest.expectedFailure
     def test_get_bounding_box(self):
         """Bounding box is correctly extracted from file.
 
@@ -1253,7 +1254,8 @@ class Test_IO(unittest.TestCase):
 
         for filename in ['Earthquake_Ground_Shaking_clip.tif',
                          'tsunami_building_exposure.shp']:
-            bbox = get_bounding_box(os.path.join(TESTDATA, filename))
+            abspath = os.path.join(TESTDATA, filename)
+            bbox = get_bounding_box(abspath)
             msg = ('Got bbox %s from filename %s, but expected %s '
                    % (str(bbox), filename, str(ref_bbox[filename])))
             assert numpy.allclose(bbox, ref_bbox[filename]), msg
@@ -1263,6 +1265,32 @@ class Test_IO(unittest.TestCase):
 
             # Check the check :-)
             check_bbox_string(bbox_string)
+
+            # Check that it works for layer objects instantiated from file
+            L = read_layer(abspath)
+            L_bbox = L.get_bounding_box()
+            msg = ('Got bbox %s from filename %s, but expected %s '
+                   % (str(L_bbox), filename, str(ref_bbox[filename])))
+            assert numpy.allclose(L_bbox, ref_bbox[filename]), msg
+
+            # Check that it works for layer objects instantiated from data
+            if L.is_raster:
+                D = Raster(data=L.get_data(),
+                           projection=L.get_projection(),
+                           geotransform=L.get_geotransform())
+            elif L.is_vector:
+                D = Vector(data=L.get_data(),
+                           projection=L.get_projection(),
+                           geometry=L.get_geometry())
+            else:
+                msg = 'Unexpected layer object: %s' % str(L)
+                raise RuntimeError(msg)
+
+            # Check that get_bounding_box works for data instantiated layers
+            D_bbox = D.get_bounding_box()
+            msg = ('Got bbox %s from layer %s, but expected %s '
+                   % (str(D_bbox), str(D), str(L_bbox)))
+            assert numpy.allclose(D_bbox, L_bbox), msg
 
     def test_layer_API(self):
         """Vector and Raster instances have a similar API
