@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inasafe-realtime.iml" afterPath="$PROJECT_DIR$/.idea/inasafe-realtime.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/testrunner.xml" afterPath="$PROJECT_DIR$/.idea/testrunner.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/fixtures/realtime-template.qpt" afterPath="$PROJECT_DIR$/realtime/fixtures/realtime-template.qpt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_event.py" afterPath="$PROJECT_DIR$/realtime/test_shake_event.py" />
     </list>
     <ignored path="inasafe-realtime.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,19 +27,19 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf>
-          <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1476" column="40" selection-start="60459" selection-end="60459" vertical-scroll-proportion="0.0">
+                <state line="1202" column="8" selection-start="48849" selection-end="48849" vertical-scroll-proportion="0.09009009">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="shake_data.py" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/realtime/shake_data.py">
+          <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="35" column="34" selection-start="1233" selection-end="1233" vertical-scroll-proportion="0.0">
+                <state line="344" column="58" selection-start="14255" selection-end="14274" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -60,10 +54,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
+          <file leaf-file-name="shake_data.py" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/realtime/shake_data.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="376" column="17" selection-start="15564" selection-end="15564" vertical-scroll-proportion="0.6693364">
+                <state line="35" column="34" selection-start="1233" selection-end="1233" vertical-scroll-proportion="0.0">
                   <folding />
                 </state>
               </provider>
@@ -76,7 +70,7 @@
           <file leaf-file-name="shake_event.py" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1790" column="29" selection-start="74068" selection-end="74068" vertical-scroll-proportion="0.017162472">
+                <state line="1915" column="67" selection-start="79502" selection-end="79502" vertical-scroll-proportion="0.6774775">
                   <folding />
                 </state>
               </provider>
@@ -177,14 +171,45 @@
         </subPane>
       </pane>
       <pane id="ProjectPane">
-        <subPane />
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="realtime" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
       </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="preferences.sourceCode.Python" />
+    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PythonSdkConfigurable" />
     <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../inasafe-master" />
@@ -205,7 +230,7 @@
       <recent name="$PROJECT_DIR$/common" />
     </key>
   </component>
-  <component name="RunManager" selected="Python's test.Nosetests in TestShakeEvent.testFatalitiesTable">
+  <component name="RunManager" selected="Python's test.Nosetests in TestShakeEvent.testBearingToCardinal">
     <configuration default="false" name="shake_event" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -224,64 +249,12 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="Nosetests in TestShakeEvent.testRomanize" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="" value="" />
-        <env name="LD_LIBDARY_PATH" value="/usr/local/qgis-master/lib" />
-        <env name="QGISPATH" value="/usr/local/qgis-master" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-realtime" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
-      <option name="CLASS_NAME" value="TestShakeEvent" />
-      <option name="METHOD_NAME" value="testRomanize" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Nosetests in TestShakeEvent.testMmiColour" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="" value="" />
-        <env name="LD_LIBDARY_PATH" value="/usr/local/qgis-master/lib" />
-        <env name="QGISPATH" value="/usr/local/qgis-master" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-realtime" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
-      <option name="CLASS_NAME" value="TestShakeEvent" />
-      <option name="METHOD_NAME" value="testMmiColour" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
     <configuration default="false" name="Nosetests in TestShakeEvent.testSortedImpactedCities" type="tests" factoryName="Nosetests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="" value="" />
-        <env name="LD_LIBDARY_PATH" value="/usr/local/qgis-master/lib" />
+        <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-master/lib" />
         <env name="QGISPATH" value="/usr/local/qgis-master" />
       </envs>
       <option name="SDK_HOME" value="" />
@@ -307,7 +280,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="" value="" />
-        <env name="LD_LIBDARY_PATH" value="/usr/local/qgis-master/lib" />
+        <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-master/lib" />
         <env name="QGISPATH" value="/usr/local/qgis-master" />
       </envs>
       <option name="SDK_HOME" value="" />
@@ -318,6 +291,58 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
       <option name="CLASS_NAME" value="TestShakeEvent" />
       <option name="METHOD_NAME" value="testFatalitiesTable" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Nosetests in TestShakeEvent.testEventInfoString" type="tests" factoryName="Nosetests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="" value="" />
+        <env name="QGISPATH" value="/usr/local/qgis-master" />
+        <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-master/lib" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-realtime" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
+      <option name="CLASS_NAME" value="TestShakeEvent" />
+      <option name="METHOD_NAME" value="testEventInfoString" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Nosetests in TestShakeEvent.testBearingToCardinal" type="tests" factoryName="Nosetests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="" value="" />
+        <env name="QGISPATH" value="/usr/local/qgis-master" />
+        <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-master/lib" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/realtime" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-realtime" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
+      <option name="CLASS_NAME" value="TestShakeEvent" />
+      <option name="METHOD_NAME" value="testBearingToCardinal" />
       <option name="FOLDER_NAME" value="" />
       <option name="TEST_TYPE" value="TEST_METHOD" />
       <option name="PATTERN" value="" />
@@ -486,29 +511,29 @@
     </configuration>
     <list size="16">
       <item index="0" class="java.lang.String" itemvalue="Python.make_map" />
-      <item index="1" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
-      <item index="2" class="java.lang.String" itemvalue="Python docs.InaSAFE Docs" />
-      <item index="3" class="java.lang.String" itemvalue="Python's test.NoseTest VectorTest" />
-      <item index="4" class="java.lang.String" itemvalue="Python's test.testEventToShapefile" />
-      <item index="5" class="java.lang.String" itemvalue="Python's test.testEventToContours" />
-      <item index="6" class="java.lang.String" itemvalue="Python's test.NoseTests Gui Only" />
-      <item index="7" class="java.lang.String" itemvalue="Python's test.testEventCityShp" />
-      <item index="8" class="java.lang.String" itemvalue="Python's test.testEventCalculateFatalities" />
-      <item index="9" class="java.lang.String" itemvalue="Python's test.Test Shake Event" />
-      <item index="10" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent" />
-      <item index="11" class="java.lang.String" itemvalue="Python.shake_event" />
-      <item index="12" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testRomanize" />
-      <item index="13" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testMmiColour" />
-      <item index="14" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testSortedImpactedCities" />
-      <item index="15" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testFatalitiesTable" />
+      <item index="1" class="java.lang.String" itemvalue="Python.shake_event" />
+      <item index="2" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
+      <item index="3" class="java.lang.String" itemvalue="Python docs.InaSAFE Docs" />
+      <item index="4" class="java.lang.String" itemvalue="Python's test.NoseTest VectorTest" />
+      <item index="5" class="java.lang.String" itemvalue="Python's test.testEventToShapefile" />
+      <item index="6" class="java.lang.String" itemvalue="Python's test.testEventToContours" />
+      <item index="7" class="java.lang.String" itemvalue="Python's test.NoseTests Gui Only" />
+      <item index="8" class="java.lang.String" itemvalue="Python's test.testEventCityShp" />
+      <item index="9" class="java.lang.String" itemvalue="Python's test.testEventCalculateFatalities" />
+      <item index="10" class="java.lang.String" itemvalue="Python's test.Test Shake Event" />
+      <item index="11" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent" />
+      <item index="12" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testSortedImpactedCities" />
+      <item index="13" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testFatalitiesTable" />
+      <item index="14" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testEventInfoString" />
+      <item index="15" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testBearingToCardinal" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testFatalitiesTable" />
-        <item index="1" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testSortedImpactedCities" />
-        <item index="2" class="java.lang.String" itemvalue="Python.shake_event" />
-        <item index="3" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testMmiColour" />
-        <item index="4" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testRomanize" />
+        <item index="0" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testBearingToCardinal" />
+        <item index="1" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testEventInfoString" />
+        <item index="2" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testFatalitiesTable" />
+        <item index="3" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testSortedImpactedCities" />
+        <item index="4" class="java.lang.String" itemvalue="Python.shake_event" />
       </list>
     </recent_temporary>
   </component>
@@ -571,12 +596,12 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20962566" sideWeight="0.3481153" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20962566" sideWeight="0.64412415" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21229947" sideWeight="0.23170732" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21229947" sideWeight="0.4068736" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.3963964" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" x="494" y="299" width="1246" height="672" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22613065" sideWeight="0.5341426" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.44707206" sideWeight="0.46054628" order="2" side_tool="false" content_ui="tabs" x="0" y="117" width="1874" height="822" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35365853" sideWeight="0.46054628" order="2" side_tool="false" content_ui="tabs" x="0" y="117" width="1874" height="822" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -658,18 +683,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/realtime/fixtures/footer.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="16" selection-end="16" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe/common/tables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="290" column="8" selection-start="11604" selection-end="11604" vertical-scroll-proportion="3.9165702" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/realtime/shake_data.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="35" column="34" selection-start="1233" selection-end="1233" vertical-scroll-proportion="0.0">
@@ -738,16 +751,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="uml://Python/realtime.shake_event.ShakeEvent">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>Python</ID>
+          <OriginalElement>realtime.shake_event.ShakeEvent</OriginalElement>
+          <nodes>
+            <node x="" y="">realtime.shake_event.ShakeEvent</node>
+            <node x="" y="">PyQt4.QtCore.QObject</node>
+          </nodes>
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="0.3263969171483622" x="502.0" y="1208.0" />
+          <SelectedNodes />
+          <Categories>
+            <Category>Fields</Category>
+            <Category>Methods</Category>
+            <Category>Inner Classes</Category>
+          </Categories>
+          <SCOPE>All</SCOPE>
+        </state>
+      </provider>
+    </entry>
+    <entry file="uml://AlchemyModelDependency/#inasafe-realtime">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>AlchemyModelDependency</ID>
+          <OriginalElement>#inasafe-realtime</OriginalElement>
+          <nodes />
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="1.0" x="368.0" y="424.0" />
+          <SelectedNodes />
+          <Categories />
+          <SCOPE>All</SCOPE>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="376" column="17" selection-start="15564" selection-end="15564" vertical-scroll-proportion="0.6693364">
+        <state line="344" column="58" selection-start="14255" selection-end="14274" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1790" column="29" selection-start="74068" selection-end="74068" vertical-scroll-proportion="0.017162472">
+        <state line="1915" column="67" selection-start="79502" selection-end="79502" vertical-scroll-proportion="0.6774775">
           <folding />
         </state>
       </provider>
