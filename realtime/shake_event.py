@@ -35,7 +35,10 @@ from PyQt4.QtCore import (QCoreApplication,
                           QFileInfo,
                           QString,
                           QStringList,
-                          QUrl)
+                          QUrl,
+                          QSize,
+                          Qt
+                          )
 from PyQt4.QtXml import QDomDocument
 from qgis.core import (QgsPoint,
                        QgsField,
@@ -1833,6 +1836,12 @@ class ShakeEvent(QObject):
         myImage.save(myImagePath)
 
         # Save a thumbnail
+        myThumbnailImagePath = os.path.join(shakemapExtractDir(),
+            self.eventId,
+            '%s-thumb.png' % self.eventId)
+        mySize = QSize(200, 200)
+        myThumbnailImage = myImage.scaled(mySize, Qt.KeepAspectRatioByExpanding)
+        myThumbnailImage.save(myThumbnailImagePath)
 
 
     def __str__(self):

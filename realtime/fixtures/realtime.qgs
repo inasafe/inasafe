@@ -4,9 +4,9 @@
     <mapcanvas>
         <units>degrees</units>
         <extent>
-            <xmin>95.943995</xmin>
+            <xmin>95.319910</xmin>
             <ymin>-2.210000</ymin>
-            <xmax>101.216005</xmax>
+            <xmax>101.840090</xmax>
             <ymax>1.990000</ymax>
         </extent>
         <projections>1</projections>
@@ -255,7 +255,7 @@
                         </VectorClassificationItemNg>
                     </LayerItem>
                 </Model>
-                <ComposerItem width="48" x="144.781" y="218.371" rotation="0" height="117.3" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.65436" id="legend" positionLock="false">
+                <ComposerItem width="48" x="144.781" y="218.371" rotation="0" height="116.9" frame="false" outlineWidth="0.3" zValue="9" lastValidViewScaleFactor="2.65436" id="legend" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -294,18 +294,18 @@
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerMap>
-            <ComposerLabel valign="32" labelText="Didukung oleh Australia-Indonesia Facility for Disaster Reduction dan Geoscience Australia." halign="1" margin="1">
-                <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0"/>
-                <FontColor red="0" blue="0" green="0"/>
-                <ComposerItem width="143.22" x="34.0388" y="284.513" rotation="0" height="6.42241" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="2.65436" id="credits" positionLock="false">
-                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-                </ComposerItem>
-            </ComposerLabel>
             <ComposerLabel valign="32" labelText="Perkiraan dampak ini secara otomatis dihasilkan dan hanya mempertimbangkan penduduk dan kota yang terpengaruh oleh berbagai macam tingkat getaran tanahyang berbeda-beda. Perkiraan ini berdasarkan pada prediksi getaran tanah dari BMKG, data kepadatan penduduk dari BPS, informasi kota dari Geonamesdan perangkat lunak yang dikembangkan oleh BNPB. Keterbatasan pada perkiraan getaran tanah, data penduduk dan informasi kota akan menambah tingkatketidakpastian yang signifikan pada angka-angka yang ditampilkan di sini. Konsekuensinya, keputusan seharusnya tidak hanya berdasarkan pada informasi ini sajadan harus selalu diverifikasi dengan informasi lainnya." halign="1" margin="2">
                 <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0"/>
                 <FontColor red="0" blue="0" green="0"/>
                 <ComposerItem width="192.925" x="7.13319" y="255.291" rotation="0" height="28.2586" frame="true" outlineWidth="0.3" zValue="6" lastValidViewScaleFactor="2.65436" id="disclaimer" positionLock="false">
+                    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+                    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+                </ComposerItem>
+            </ComposerLabel>
+            <ComposerLabel valign="32" labelText="Didukung oleh Australia-Indonesia Facility for Disaster Reduction dan Geoscience Australia." halign="1" margin="1">
+                <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0"/>
+                <FontColor red="0" blue="0" green="0"/>
+                <ComposerItem width="143.22" x="34.0388" y="284.513" rotation="0" height="6.42241" frame="false" outlineWidth="0.1" zValue="6" lastValidViewScaleFactor="2.65436" id="credits" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -323,7 +323,7 @@
                         </layer>
                     </symbol>
                 </overviewFrame>
-                <Extent ymin="-3.28201" xmin="95.944" ymax="1.99" xmax="101.216"/>
+                <Extent ymin="-3.28201" xmin="95.944" ymax="1.98999" xmax="101.216"/>
                 <LayerSet/>
                 <Grid gridStyle="1" crossLength="1" penColorRed="172" penColorBlue="172" intervalX="1" offsetX="0" intervalY="1" offsetY="0" gridFrameStyle="1" gridFrameWidth="1.5" show="1" penWidth="0" penColorGreen="172">
                     <Annotation rightDirection="1" bottomDirection="0" format="1" topPosition="2" precision="0" leftDirection="0" rightPosition="1" bottomPosition="1" frameDistance="1" show="1" font="Ubuntu,8,-1,5,75,1,0,0,0,0" leftPosition="2" topDirection="0"/>
@@ -341,14 +341,14 @@
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerLabel>
-            <ComposerPicture pictureWidth="30" file="./bnpb_logo.png" pictureHeight="30" mapId="-1">
-                <ComposerItem width="30" x="6.97964" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.65436" id="logo-left" positionLock="false">
+            <ComposerPicture pictureWidth="30" file="./bmkg_logo.png" pictureHeight="30" mapId="-1">
+                <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.65436" id="right-logo" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
             </ComposerPicture>
-            <ComposerPicture pictureWidth="30" file="./bmkg_logo.png" pictureHeight="30" mapId="-1">
-                <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.65436" id="right-logo" positionLock="false">
+            <ComposerPicture pictureWidth="30" file="./bnpb_logo.png" pictureHeight="30" mapId="-1">
+                <ComposerItem width="30" x="6.97964" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="1" lastValidViewScaleFactor="2.65436" id="logo-left" positionLock="false">
                     <FrameColor alpha="255" red="0" blue="0" green="0"/>
                     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                 </ComposerItem>
@@ -371,7 +371,7 @@
             </ComposerHtml>
             <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
                 <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="2.6745" id="fatalities-table" positionLock="false">
+                    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="15" lastValidViewScaleFactor="1.44966" id="fatalities-table" positionLock="false">
                         <FrameColor alpha="255" red="0" blue="0" green="0"/>
                         <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
                     </ComposerItem>
@@ -382,7 +382,7 @@
     <projectlayers layercount="5">
         <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
             <id>blue_marble_topo_jan20120718154124441</id>
-            <datasource>../../../../../../gisdata/world/blue-marble-mbtiles/blue-marble-topo-jan.mbtiles</datasource>
+            <datasource>../../../../../gisdata/world/blue-marble-mbtiles/blue-marble-topo-jan.mbtiles</datasource>
             <title></title>
             <abstract></abstract>
             <layername>Blue-marble-topo-jan</layername>
