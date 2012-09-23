@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Functionality related to shake events.**
@@ -1337,7 +1338,9 @@ class ShakeEvent(QObject):
         myMmiIndex = myLayerProvider.fieldNameIndex('mmi')
         myPopulationIndex = myLayerProvider.fieldNameIndex('population')
         myRomanIndex = myLayerProvider.fieldNameIndex('roman')
-        # Should not need this to be repeated here but not working without it
+
+        # Should not need this NEXT line to be repeated here but not working
+        # without it!
         myLayerProvider = myLayer.dataProvider()
         myIndexes = myLayerProvider.attributeIndexes()
 
@@ -1371,6 +1374,8 @@ class ShakeEvent(QObject):
                                     -d['population'],
                                     d['name'],
                                     d['roman']))
+        # TODO: Assumption that place names are unique is bad....
+        self.mostAffectedCity =
         return mySortedCities
 
     def writeHtmlTable(self, theFileName, theTable):
@@ -1777,8 +1782,15 @@ class ShakeEvent(QObject):
         # You can use this to replace any string like this [key]
         # in the template with a new value. e.g. to replace
         # [date] pass a map like this {'date': '1 Jan 2012'}
-        mySubstitutionMap = {'location-info': self.eventInfo()}
-        myComposition.loadFromTemplate(myDocument, mySubstitutionMap)
+        myLocationInfo = self.eventInfo().replace(unichr(176),'')
+        LOGGER.debug(myLocationInfo)
+        mySubstitutionMap = {'location-info': myLocationInfo}
+        myResult = myComposition.loadFromTemplate(myDocument,
+                                                  mySubstitutionMap)
+        if not myResult:
+            LOGGER.exception('Error loading template %s with keywords\n %s',
+                             myTemplatePath, mySubstitutionMap)
+            raise MapComposerError
 
         # Get the main map canvas on the composition and set
         # its extents to the event.
@@ -1846,10 +1858,45 @@ class ShakeEvent(QObject):
         myThumbnailImage = myImage.scaled(mySize, Qt.KeepAspectRatioByExpanding)
         myThumbnailImage.save(myThumbnailImagePath)
 
+
+    def bearingToCardinal(self, theBearing):
+        """Given a bearing in degrees return it as compass units e.g. SSE.
+
+        Args: theBearing float (required)
+
+        Returns: str Compass bearing derived from theBearing or None if
+            theBearing is None or can not be resolved to a float.
+
+        Raises: None
+
+        .. note:: This method is heavily based on http://hoegners.de/Maxi/geo/
+           which is licensed under the GPL V3.
+        """
+
+        try:
+            myBearing = float(theBearing)
+        except:
+            return None
+
+        myDirectionList = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S",
+                           "SSW","SW","WSW","W","WNW","NW","NNW"]
+
+        myDirectionsCount = len(myDirectionList)
+        myDirectionsInterval = 360./myDirectionsCount
+        myIndex = int(round(theBearing / myDirectionsInterval))
+        myIndex %= myDirectionsCount
+        return myDirectionList[myIndex]
+
     def eventInfo(self):
         """Get a short paragraph describing the event."""
+
+        #Format the lat lon from ddegrees to dms
         myPoint = QgsPoint(self.longitude, self.latitude)
         myCoordinates = myPoint.toDegreesMinutesSeconds(2)
+        myTokens = myCoordinates.split(',')
+        myLongitude = myTokens[0]
+        myLatitude = myTokens[1]
+
         myString = (('M %(mmi)s %(date)s %(time)s %(version)s '
                     '%(latitude-name)s: %(latitude-value)s %(longitude-name)s:'
                      '%(longitude-value)s %(depth-name)s: %(depth)s %('
@@ -1864,16 +1911,16 @@ class ShakeEvent(QObject):
                                              self.second),
                        'version': get_version(),
                        'latitude-name': self.tr('Latitude'),
-                       'latitude-value': self.latitude,
+                       'latitude-value': '', # myLatitude, #causes error
                        'longitude-name': self.tr('Longitude'),
-                       'longitude-value': self.longitude,
+                       'longitude-value': '', # myLongitude, #error
                        'depth-name': self.tr('Depth'),
                        'depth': '%s %s' % (self.depth, self.tr('Km')),
                        'located-label': self.tr('Located'),
                        'distance': 'XXXXX',
                        'bearing-degrees': 'XXXXX',
                        'bearing-compass': 'XXXXX',
-                       'place-name': myCoordinates
+                       'place-name': 'XXXXX'
                      } )
         return myString
 

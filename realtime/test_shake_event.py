@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Shake Event Test Cases.**
@@ -379,11 +380,45 @@ searchBoxes: None
         myShakeId = '20120726022003'
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
-        myExpectedResult = ''
+        myDegreeSymbol = unichr(176)
+        myExpectedResult = ('M 5.0 26-7-2012 2:15:35 0.5.0.dev20120923195432 '
+                            'Latitude: -0.21 Longitude:124.45 Depth: 11.0 Km '
+                            'Located XXXXX, XXXXX XXXXX 124%s27\'0.00"E,'
+                            '0%s12\'36.00"S' % (myDegreeSymbol, myDegreeSymbol))
+
         myResult = myShakeEvent.eventInfo()
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
-                     (myResult, myExpectedResult, myTable))
+                     (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
+
+    def testBearingToCardinal(self):
+        """Test we can convert a bearing to a cardinal direction."""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+
+        # Ints should work
+        myExpectedResult = 'SSE'
+        myResult = myShakeEvent.bearingToCardinal(160)
+        myMessage = ('Got:\n%s\nExpected:\n%s\n' %
+                     (myResult, myExpectedResult))
+        assert myResult == myExpectedResult, myMessage
+
+        # Floats should work
+        myExpectedResult = 'SW'
+        myResult = myShakeEvent.bearingToCardinal(225.4)
+        myMessage = ('Got:\n%s\nExpected:\n%s\n' %
+                     (myResult, myExpectedResult))
+        assert myResult == myExpectedResult, myMessage
+
+
+        # non numeric data as input should return None
+        myExpectedResult = None
+        myResult = myShakeEvent.bearingToCardinal('foo')
+        myMessage = ('Got:\n%s\nExpected:\n%s\n' %
+                     (myResult, myExpectedResult))
+        assert myResult == myExpectedResult, myMessage
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
