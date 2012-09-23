@@ -1819,11 +1819,20 @@ class ShakeEvent(QObject):
                                        'mmi-contours', "ogr")
         QgsMapLayerRegistry.instance().addMapLayers(
                     [myContoursLayer, myCitiesLayer])
-
+        # Save a pdf.
         myPdfPath = os.path.join(shakemapExtractDir(),
                          self.eventId,
                          '%s.pdf' % self.eventId)
         myComposition.exportAsPDF(myPdfPath)
+        # Save a png
+        myImagePath = os.path.join(shakemapExtractDir(),
+            self.eventId,
+            '%s.png' % self.eventId)
+        myPageNumber = 0
+        myImage = myComposition.printPageAsRaster(myPageNumber)
+        myImage.save(myImagePath)
+
+        # Save a thumbnail
 
 
     def __str__(self):
