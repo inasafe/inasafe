@@ -55,6 +55,7 @@ from qgis.core import (QgsPoint,
                        QgsMapLayerRegistry)
 #TODO refactor this into a utilitiy class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
+from safe.common.version import get_version
 from safe.api import get_plugins as safe_get_plugins
 from safe.api import read_layer as safe_read_layer
 from safe.api import calculate_impact as safe_calculate_impact
@@ -76,6 +77,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+
 
 class ShakeEvent(QObject):
     """The ShakeEvent class encapsulates behaviour and data relating to an
@@ -799,7 +801,6 @@ class ShakeEvent(QObject):
             10: self.tr('Very heavy')
         }
         return myDamageDict[theMMIValue]
-
 
     def setContourProperties(self, theFile):
         """
@@ -1776,7 +1777,7 @@ class ShakeEvent(QObject):
         # You can use this to replace any string like this [key]
         # in the template with a new value. e.g. to replace
         # [date] pass a map like this {'date': '1 Jan 2012'}
-        mySubstitutionMap = {'location-info': 'Foo bar'}
+        mySubstitutionMap = {'location-info': self.eventInfo()}
         myComposition.loadFromTemplate(myDocument, mySubstitutionMap)
 
         # Get the main map canvas on the composition and set
@@ -1786,11 +1787,13 @@ class ShakeEvent(QObject):
             myMap.setNewExtent(self.extentWithCities)
             myMap.renderModeUpdateCachedImage()
         else:
-            LOGGER.exception('Map 0 could not be found in template')
+            LOGGER.exception('Map 0 could not be found in template %s',
+                             myTemplatePath)
             raise MapComposerError
 
         # Set the fatalities report up
-        myFatalitiesItem = myComposition.getComposerItemById('fatalities-table')
+        myFatalitiesItem = myComposition.getComposerItemById(
+            'fatalities-table')
         if myFatalitiesItem is None:
             myMessage = 'fatalities-table composer item could not be found'
             LOGGER.exception(myMessage)
@@ -1843,6 +1846,36 @@ class ShakeEvent(QObject):
         myThumbnailImage = myImage.scaled(mySize, Qt.KeepAspectRatioByExpanding)
         myThumbnailImage.save(myThumbnailImagePath)
 
+    def eventInfo(self):
+        """Get a short paragraph describing the event."""
+        myPoint = QgsPoint(self.longitude, self.latitude)
+        myCoordinates = myPoint.toDegreesMinutesSeconds(2)
+        myString = (('M %(mmi)s %(date)s %(time)s %(version)s '
+                    '%(latitude-name)s: %(latitude-value)s %(longitude-name)s:'
+                     '%(longitude-value)s %(depth-name)s: %(depth)s %('
+                     'located-label)s %(distance)s, %(bearing-degrees)s '
+                     '%(bearing-compass)s %(place-name)s')
+                    % {'mmi': self.magnitude,
+                       'date': '%s-%s-%s' % (self.day,
+                                             self.month,
+                                             self.year),
+                       'time': '%s:%s:%s' % (self.hour,
+                                             self.minute,
+                                             self.second),
+                       'version': get_version(),
+                       'latitude-name': self.tr('Latitude'),
+                       'latitude-value': self.latitude,
+                       'longitude-name': self.tr('Longitude'),
+                       'longitude-value': self.longitude,
+                       'depth-name': self.tr('Depth'),
+                       'depth': '%s %s' % (self.depth, self.tr('Km')),
+                       'located-label': self.tr('Located'),
+                       'distance': 'XXXXX',
+                       'bearing-degrees': 'XXXXX',
+                       'bearing-compass': 'XXXXX',
+                       'place-name': myCoordinates
+                     } )
+        return myString
 
     def __str__(self):
         """The unicode representation for an event object's state.
@@ -1889,7 +1922,7 @@ class ShakeEvent(QObject):
                      'extentWithCities: %(extentWithCities)s\n'
                      'zoomFactor: %(zoomFactor)s\n'
                      'searchBoxes: %(searchBoxes)s\n'
-                        ) %
+                     ) %
                     {
                         'latitude': self.latitude,
                         'longitude': self.longitude,

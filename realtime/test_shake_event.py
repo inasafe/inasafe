@@ -374,6 +374,17 @@ searchBoxes: None
                     (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
 
+    def testEventInfoString(self):
+        """Test we can get a location info string nicely,"""
+        myShakeId = '20120726022003'
+        myShakeData = ShakeData(myShakeId)
+        myShakeEvent = myShakeData.shakeEvent()
+        myExpectedResult = ''
+        myResult = myShakeEvent.eventInfo()
+        myMessage = ('Got:\n%s\nExpected:\n%s\n' %
+                     (myResult, myExpectedResult, myTable))
+        assert myResult == myExpectedResult, myMessage
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
     runner = unittest.TextTestRunner(verbosity=2)

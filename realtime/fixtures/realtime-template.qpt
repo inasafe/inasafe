@@ -97,7 +97,7 @@
    </ComposerItem>
   </ComposerLabel>
   <ComposerPicture pictureWidth="30" file="./bmkg_logo.png" pictureHeight="30" mapId="-1">
-   <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="2.65436" id="right-logo" positionLock="false">
+   <ComposerItem width="30" x="170.196" y="7.38232" rotation="0" height="30" frame="false" outlineWidth="0.3" zValue="3" lastValidViewScaleFactor="3.08054" id="right-logo" positionLock="false">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
@@ -301,9 +301,9 @@
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerLegend>
-  <ComposerHtml resizeMode="0" url="">
-   <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
-    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="2.67785" id="" positionLock="false">
+  <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
+   <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
+    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.08054" id="fatalities-table" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
@@ -311,15 +311,15 @@
   </ComposerHtml>
   <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/affected-cities.html">
    <ComposerFrame sectionWidth="79.4918" sectionHeight="81.3817" sectionX="0" sectionY="0">
-    <ComposerItem width="79.4918" x="117.919" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="2.65436" id="affected-cities" positionLock="false">
+    <ComposerItem width="79.4918" x="117.919" y="127.699" rotation="0" height="81.3817" frame="false" outlineWidth="0.3" zValue="13" lastValidViewScaleFactor="3.08054" id="affected-cities" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
    </ComposerFrame>
   </ComposerHtml>
-  <ComposerHtml resizeMode="0" url="file:///tmp/inasafe/realtime/shakemaps-extracted/20120918134658/impacts.html">
-   <ComposerFrame sectionWidth="198.791" sectionHeight="34.2984" sectionX="0" sectionY="0">
-    <ComposerItem width="198.791" x="4.73016" y="69.3883" rotation="0" height="34.2984" frame="false" outlineWidth="0.3" zValue="14" lastValidViewScaleFactor="3.08054" id="fatalities-table" positionLock="false">
+  <ComposerHtml resizeMode="0" url="">
+   <ComposerFrame sectionWidth="0" sectionHeight="0" sectionX="0" sectionY="0">
+    <ComposerItem width="0" x="151.747" y="179.212" rotation="0" height="0" frame="false" outlineWidth="0.3" zValue="12" lastValidViewScaleFactor="3.08054" id="" positionLock="false">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     </ComposerItem>
