@@ -47,7 +47,8 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
                                       getOptimalExtent,
                                       getBufferedExtent,
-                                      internationalisedNames)
+                                      internationalisedNames,
+                                      writeKeywordsToFile)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -868,7 +869,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def _aggregateResults(self):
         impactLayer = self.runner.impactLayer()
-        self.aggregationLayer = self.getAggregationLayer()
 
         myQgisImpactLayer = self.readImpactLayer(impactLayer)
         if not myQgisImpactLayer.isValid():
@@ -886,11 +886,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         self.aggregationLayer = QgsVectorLayer(
             clippedAggregationLayerPath, lName, 'ogr')
-        logOnQgsMessageLog('Creating ' + self.aggregationLayer.name())
         if not self.aggregationLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(
                 self.aggregationLayer.lastError())
             raise Exception(myMessage)
+
+        writeKeywordsToFile(clippedAggregationLayerPath, {'title': lName})
 
         if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
             self._aggregateResultsVector(myQgisImpactLayer)
@@ -927,13 +928,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr(
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
-#        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
-        #            shape = memoryLayerToShapefile(
-        #                'name',
-        #                '/home/marco/tmp',
-        #                myQgisAggregationLayer
-        #            )
-        #            QgsMapLayerRegistry.instance().addMapLayer(shape)
+        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
         return
 
     def _checkAggregationAttribute(self):
