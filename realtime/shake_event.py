@@ -1136,16 +1136,18 @@ class ShakeEvent(QObject):
                     '%s times.' % (myMinimumCityCount, myAttemptsLimit))
         # Setup field indexes of our input and out datasets
         myCities = []
+        myLayerIdIndex = myLayerProvider.fieldNameIndex('id')
         myLayerPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
         myLayerPopulationIndex = myLayerProvider.fieldNameIndex('population')
-        myPlaceNameIndex = 0
-        myPopulationIndex = 1
-        myMmiIndex = 2
-        myDistanceIndex = 3
-        myDirectionToIndex = 4
-        myDirectionFromIndex = 5
-        myRomanIndex = 6
-        myColourIndex = 7
+        myIdIndex = 0
+        myPlaceNameIndex = 1
+        myPopulationIndex = 2
+        myMmiIndex = 3
+        myDistanceIndex = 4
+        myDirectionToIndex = 5
+        myDirectionFromIndex = 6
+        myRomanIndex = 7
+        myColourIndex = 8
 
         # For measuring distance and direction from each city to epicenter
         myEpicenter = QgsPoint(self.longitude, self.latitude)
@@ -1162,6 +1164,7 @@ class ShakeEvent(QObject):
             # calculate the distance and direction from this point
             # to and from the epicenter
             myAttributes = myFeature.attributeMap()
+            myId = str(myAttributes[myLayerIdIndex].toString())
             myPoint = myFeature.geometry().asPoint()
             myDistance = myPoint.sqrDist(myEpicenter)
             myDirectionTo = myPoint.azimuth(myEpicenter)
@@ -1186,6 +1189,7 @@ class ShakeEvent(QObject):
                          (myMmi, myPoint.toString()))
 
             myAttributeMap = {
+                myIdIndex: myId,
                 myPlaceNameIndex: myPlaceName,
                 myPopulationIndex: myPopulation,
                 myMmiIndex: QVariant(myMmi),
@@ -1215,6 +1219,7 @@ class ShakeEvent(QObject):
         myMemoryProvider = myMemoryLayer.dataProvider()
         # add field defs
         myMemoryProvider.addAttributes([
+            QgsField('id', QVariant.Int),
             QgsField('name', QVariant.String),
             QgsField('population', QVariant.Int),
             QgsField('mmi', QVariant.Double),
@@ -1330,15 +1335,22 @@ class ShakeEvent(QObject):
          {'mmi': 10, 'name': 'c', 'pop': 14},
          {'mmi': 10, 'name': 'b', 'pop': 10}]
 
+        .. note:: self.mostAffectedCity will also be populated with
+            the dictionary of details for the most affected city.
+
         """
         myLayer = self.localCitiesMemoryLayer()
         myLayerProvider = myLayer.dataProvider()
         myCities = []
+
+        myIdIndex = myLayerProvider.fieldNameIndex('id')
         myPlaceNameIndex = myLayerProvider.fieldNameIndex('name')
         myMmiIndex = myLayerProvider.fieldNameIndex('mmi')
         myPopulationIndex = myLayerProvider.fieldNameIndex('population')
         myRomanIndex = myLayerProvider.fieldNameIndex('roman')
-
+        myDirectionToIndex = myLayerProvider.fieldNameIndex('dir_to')
+        myDirectionFromIndex = myLayerProvider.fieldNameIndex('dir_from')
+        myDistanceToIndex = myLayerProvider.fieldNameIndex('dist_to')
         # Should not need this NEXT line to be repeated here but not working
         # without it!
         myLayerProvider = myLayer.dataProvider()
@@ -1356,16 +1368,24 @@ class ShakeEvent(QObject):
             # calculate the distance and direction from this point
             # to and from the epicenter
             myAttributes = myFeature.attributeMap()
+            myId = myAttributes[myIdIndex].toInt()[0]
             myPlaceName = str(myAttributes[myPlaceNameIndex].toString())
             # TODO: figure out why it gets a tuple back instead of just a
             # float. For now [0] at end gets the tupe[0] element which is float
             myMmi = myAttributes[myMmiIndex].toFloat()[0]
             myPopulation = myAttributes[myPopulationIndex].toInt()[0]
             myRoman = str(myAttributes[myRomanIndex].toString())
-            myCity = {'name': myPlaceName,
+            myDirectionTo = myAttributes[myDirectionToIndex].toFloat()[0]
+            myDirectionFrom = myAttributes[myDirectionFromIndex].toFloat()[0]
+            myDistanceTo = myAttributes[myDistanceToIndex].toFloat()[0]
+            myCity = {'id': myId,
+                      'name': myPlaceName,
                       'mmi': myMmi,
                       'population': myPopulation,
-                      'roman': myRoman}
+                      'roman': myRoman,
+                      'dist_to': myDistanceTo,
+                      'dir_to': myDirectionTo,
+                      'dir_from': myDirectionFrom}
             myCities.append(myCity)
         #LOGGER.exception(myCities)
         mySortedCities = sorted(myCities,
@@ -1373,9 +1393,16 @@ class ShakeEvent(QObject):
                                     -d['mmi'],
                                     -d['population'],
                                     d['name'],
-                                    d['roman']))
+                                    d['roman'],
+                                    d['dist_to'],
+                                    d['dir_to'],
+                                    d['dir_from'],
+                                    d['id']))
         # TODO: Assumption that place names are unique is bad....
-        self.mostAffectedCity =
+        if len(mySortedCities) > 0:
+            self.mostAffectedCity = mySortedCities[0]
+        else:
+            self.mostAffectedCity = None
         return mySortedCities
 
     def writeHtmlTable(self, theFileName, theTable):
@@ -1896,6 +1923,8 @@ class ShakeEvent(QObject):
         myTokens = myCoordinates.split(',')
         myLongitude = myTokens[0]
         myLatitude = myTokens[1]
+        myDirection = self.mostAffectedCity['dir_to']
+        myDistance = self.mostAffectedCity['dist_to']
 
         myString = (('M %(mmi)s %(date)s %(time)s %(version)s '
                     '%(latitude-name)s: %(latitude-value)s %(longitude-name)s:'
@@ -1917,12 +1946,27 @@ class ShakeEvent(QObject):
                        'depth-name': self.tr('Depth'),
                        'depth': '%s %s' % (self.depth, self.tr('Km')),
                        'located-label': self.tr('Located'),
-                       'distance': 'XXXXX',
-                       'bearing-degrees': 'XXXXX',
-                       'bearing-compass': 'XXXXX',
-                       'place-name': 'XXXXX'
+                       'distance': myDistance,
+                       'bearing-degrees': myDirection,
+                       'bearing-compass': self.bearingToCardinal(myDirection),
+                       'place-name': self.mostAffectedCity
                      } )
         return myString
+
+    def getCityById(self, theId):
+        """A helper to get the info of an affected city given it's id.
+
+        Args:
+            theId: int mandatory, the id number of the city to retrieve.
+
+        Returns:
+            dict: various properties for the given city including distance
+                from the epicenter and direction to and from the epicenter.
+
+        Raises:
+            None
+        """
+
 
     def __str__(self):
         """The unicode representation for an event object's state.
