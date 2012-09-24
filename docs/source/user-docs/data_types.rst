@@ -8,7 +8,7 @@ through a common interpolation library. This essentially allows values from
 one data set to be assigned to another independent of their types.
 Given two layers H and E, say, the call::
 
-  I = H.interpolate(E)
+  I = assign_hazard_values_to_exposure_data(H, E)
 
 will produce a new layer with all values from H transferred to E in a manner
 appropriate for the data types of H and E. Generally, existing values in
@@ -20,18 +20,24 @@ in each case.
 
 .. table::
 
-  +-----------------+------------+----------+------+--------------------------+
-  |   H             |            |     E    |      |                          |
-  +=================+============+==========+=======+=========================+
-  |                 | Raster     | Polygon  | Line  | Point                   |
-  +-----------------+------------+----------+-------+-------------------------+
-  | Raster          | Resampled  | Centroid | Belum | Bilinear Interpolation  |
-  +-----------------+------------+----------+-------+-------------------------+
-  | Polygon         |     No     |  No      | Belum | Clip and tag            |
-  +-----------------+------------+----------+-------+-------------------------+
-  | Line            | Not applicable                                          |
-  +-----------------+------------+----------+-------+-------------------------+
-  | Point           | Not applicable                                          |
-  +-----------------+------------+----------+-------+-------------------------+
+  +---------+---------+---------------------------------------------------------------+--------------+
+  | H       | E       |  Methodology                                                  | Return value |
+  +=========+=========+===============================================================+==============+
+  | Polygon | Point   | Clip points to polygon and assign all attributes              | Point        |
+  +---------+---------+---------------------------------------------------------------+--------------+
+  | Polygon | Line    | Clip segments to polygon and assign all attributes (slow)     | Line         |
+  +---------+---------+---------------------------------------------------------------+--------------+
+  | Polygon | Polygon |                                                               | N/A          |
+  +---------+---------+---------------------------------------------------------------+--------------+
+  | Polygon | Raster  | Convert to points and use Polygon-Point algorithm             | Point        |
+  +---------+---------+---------------------------------------------------------------+--------------+
+  | Raster  | Point   | Bilinear or piecewise constant interpolation                  | Point        |
+  +---------+---------+---------------------------------------------------------------+--------------+
+  | Raster  | Line    |                                                               | N/A          |
+  +---------+---------+---------------------------------------------------------------+--------------+
+  | Raster  | Polygon | Convert to centroids and use Raster-Point algorithm           | Polygon      |
+  +---------+---------+---------------------------------------------------------------+--------------+
+  | Raster  | Raster  | Check that rasters are aligned and return E                   | Raster       +
+  +---------+---------+---------------------------------------------------------------+--------------+
 
 
