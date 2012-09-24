@@ -15,7 +15,7 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
 from safe_qgis.utilities_test import unitTestDataPath
 from safe_qgis.utilities_test import (loadLayer, getQgisTestApp)
 from safe_qgis.exceptions import StyleError
-from safe.common.exceptions import VerificationError
+from safe.common.exceptions import BoundingBoxError
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -160,9 +160,9 @@ class UtilitiesTest(unittest.TestCase):
         """
         try:
             bbox_intersection('aoeu', 'oaeu', [])
-        except VerificationError, e:
+        except BoundingBoxError, e:
             myMessage = getExceptionWithStacktrace(e, html=False)
-            assert 'VerificationError : Western' in myMessage, myMessage
+            assert 'BoundingBoxError : Western' in myMessage, myMessage
 
     def test_issue230(self):
         """Verify that we give informative errors when style is not correct

@@ -37,6 +37,9 @@ The following options are available on the :guilabel:`Options Dialog`:
   option will cause QGIS to turn off the exposure layer used when InaSAFE
   completes the current analysis. You can re-enable the layer visibility
   again by checking its checkbox in the legend.
+* :guilabel:`Hide exposure layer on scenario estimate completion` : This
+  option will cause QGIS to clip hazard and exposure layers to the currently
+  visible extent on the map canvas.
 * :guilabel:`Keyword cache for remote datasources` : This option is used to
   determine where keywords are stored for datasets where it is not possible
   to write them into a .keywords file. See :doc:`keywords` for more information

@@ -89,12 +89,11 @@ def create_text_module(module_name):
     return return_text
 
 
-def python_file_siever(files):
+def python_file_siever(files, excluded_files=['__init__.py']):
     """Return list of python file from files, except it is an excluded file.
     """
 
     python_files = []
-    excluded_files = ['__init__.py']
     for fl in files:
         if fl.endswith('.py') and not fl in excluded_files:
             python_files.append(fl)
@@ -130,7 +129,6 @@ def generate_rst(dir_path, doc_path=insafe_dir_path + os.sep + _docs_dir):
     """
 
     dir_path_head = os.path.split(dir_path)[0]
-    dir_path_tail = os.path.split(dir_path)[1]
     len_dir_path = len(dir_path_head) + 1
 
     for path, dirs, files in os.walk(dir_path):

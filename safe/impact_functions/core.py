@@ -523,59 +523,6 @@ def get_admissible_plugins(keywords=None):  # , name=None):
     return admissible_plugins
 
 
-def get_plugins_as_table(name=None):
-    """Retrieve a table listing all plugins and their requirements.
-
-       Or just a single plugin if name is passed.
-
-       Args: name str optional name of a specific plugin.
-
-       Returns: table instance containing plugin descriptive data
-
-       Raises: None
-    """
-
-    table_body = []
-    header = TableRow([_('Title'), _('ID'), _('Requirements')],
-                      header=True)
-    table_body.append(header)
-
-    plugins_dict = dict([(pretty_function_name(p), p)
-                         for p in FunctionProvider.plugins])
-
-    if name is not None:
-        if isinstance(name, basestring):
-            # Add the names
-            plugins_dict.update(dict([(p.__name__, p)
-                                      for p in FunctionProvider.plugins]))
-
-            msg = ('No plugin named "%s" was found. '
-                   'List of available plugins is: %s'
-                   % (name, ', '.join(plugins_dict.keys())))
-            if name not in plugins_dict:
-                raise RuntimeError(msg)
-
-            plugins_dict = {name: plugins_dict[name]}
-        else:
-            msg = ('get_plugins expects either no parameters or a string '
-                   'with the name of the plugin, you passed: '
-                   '%s which is a %s' % (name, type(name)))
-            raise Exception(msg)
-    # Now loop through the plugins adding them to the table
-    for key, func in plugins_dict.iteritems():
-        for requirement in requirements_collect(func):
-            row = []
-            row.append(TableCell(get_function_title(func), header=True))
-            row.append(key)
-            row.append(requirement)
-            table_body.append(TableRow(row))
-
-    table = Table(table_body)
-    table.caption = _('Available Impact Functions')
-
-    return table
-
-
 def parse_single_requirement(requirement):
     '''Parse single requirement from impact function's doc to category,
         subcategory, layertype, datatype, unit, and disabled.'''
@@ -602,7 +549,7 @@ def parse_single_requirement(requirement):
     return retval
 
 
-def get_plugins_as_table2(dict_filter=None):
+def get_plugins_as_table(dict_filter=None):
     """Retrieve a table listing all plugins and their requirements.
 
        Or just a single plugin if name is passed.
