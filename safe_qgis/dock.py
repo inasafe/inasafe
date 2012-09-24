@@ -754,6 +754,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             return
 
+        #check and generate keywords for the aggregation layer
+        self.aggregationLayer = self.getAggregationLayer()
+        logOnQgsMessageLog(self.aggregationLayer)
+        if self.aggregationLayer is not None:
+            self._checkAggregationAttribute()
+
         try:
             self.setupCalculator()
         except InsufficientOverlapException, e:
@@ -863,20 +869,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def _aggregateResults(self):
         impactLayer = self.runner.impactLayer()
-        fullAggregationLayer = self.getAggregationLayer()
+        self.aggregationLayer = self.getAggregationLayer()
 
         myQgisImpactLayer = self.readImpactLayer(impactLayer)
         if not myQgisImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQgisImpactLayer)
             raise Exception(myMessage)
 
-        self._checkAggregationAttribute(fullAggregationLayer)
         lName=str(self.tr('%1 aggregated to %2')
                 .arg(myQgisImpactLayer.name())
-                .arg(fullAggregationLayer.name()))
+                .arg(self.aggregationLayer.name()))
 
         clippedAggregationLayerPath = clipLayer(
-            fullAggregationLayer,
+            self.aggregationLayer,
             impactLayer.get_bounding_box()
         )
 
@@ -932,11 +937,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #            QgsMapLayerRegistry.instance().addMapLayer(shape)
         return
 
-    def _checkAggregationAttribute(self, myLayer):
-        myKeywordFilePath = os.path.splitext(str(myLayer.source()))[0]
+    def _checkAggregationAttribute(self):
+
+        myKeywordFilePath = os.path.splitext(str(self.aggregationLayer.source()))[0]
         myKeywordFilePath += '.keywords'
         if not os.path.isfile(myKeywordFilePath):
-            self._promptForAggregationAttribute(myLayer, myKeywordFilePath,
+            self._promptForAggregationAttribute(self.aggregationLayer, myKeywordFilePath,
                 None)
         else:
             keywords = read_keywords(myKeywordFilePath)
@@ -949,7 +955,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     raise
                 return myValue
             else:
-                self._promptForAggregationAttribute(myLayer,
+                self._promptForAggregationAttribute(self.aggregationLayer,
                     myKeywordFilePath, keywords)
 
     def _promptForAggregationAttribute(self, myLayer, myKeywordFilePath,
