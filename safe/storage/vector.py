@@ -438,6 +438,14 @@ class Vector(Layer):
                 #              (https://github.com/AIFDR/riab/issues/66)
                 #feature_type = feature.GetFieldDefnRef(j).GetType()
                 fields[name] = feature.GetField(j)
+
+                    # We do this because there is NaN problem on windows
+                    # NaN value must be converted to _pseudo_in to solve the
+                    # problem. But, when InaSAFE read the file, it'll be
+                    # converted back to NaN value, so that NaN in InaSAFE is a
+                    # numpy.nan
+                    # please check https://github.com/AIFDR/inasafe/issues/269
+                    # for more information
                 if fields[name] == _pseudo_inf:
                     fields[name] = float('nan')
                 #print 'Field', name, feature_type, j, fields[name]
@@ -614,6 +622,14 @@ class Vector(Layer):
                         val = float(val)
                     elif val is None:
                         val = ''
+
+                    # We do this because there is NaN problem on windows
+                    # NaN value must be converted to _pseudo_in to solve the
+                    # problem. But, when InaSAFE read the file, it'll be
+                    # converted back to NaN value, so that NaN in InaSAFE is a
+                    # numpy.nan
+                    # please check https://github.com/AIFDR/inasafe/issues/269
+                    # for more information
                     if val != val:
                         val = _pseudo_inf
 
