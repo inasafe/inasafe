@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inasafe-realtime.iml" afterPath="$PROJECT_DIR$/.idea/inasafe-realtime.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/Test_Shake_Event.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Test_Shake_Event.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_event.py" afterPath="$PROJECT_DIR$/realtime/test_shake_event.py" />
     </list>
     <ignored path="inasafe-realtime.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -16,6 +15,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/inasafe-dev$Test_Shake_Event.coverage" NAME="Test Shake Event Coverage Results" MODIFIED="1348516525250" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -27,14 +29,17 @@
     <favorites_list name="inasafe-realtime" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
+    <splitter split-orientation="horizontal" split-proportion="0.4582192">
       <split-first>
         <leaf>
-          <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1139" column="63" selection-start="46162" selection-end="46162" vertical-scroll-proportion="0.22482014">
-                  <folding />
+                <state line="1147" column="63" selection-start="46423" selection-end="46423" vertical-scroll-proportion="0.0">
+                  <folding>
+                    <marker date="1348516648114" expanded="true" signature="3035:85539" placeholder="..." />
+                    <marker date="1348516648114" expanded="true" signature="72867:78797" placeholder="..." />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -57,10 +62,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="377" column="8" selection-start="15579" selection-end="15579" vertical-scroll-proportion="0.0">
+                <state line="326" column="12" selection-start="13334" selection-end="13608" vertical-scroll-proportion="0.43846154">
                   <folding />
                 </state>
               </provider>
@@ -73,10 +78,8 @@
           <file leaf-file-name="shake_event.py" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1888" column="68" selection-start="78817" selection-end="78817" vertical-scroll-proportion="0.8185484">
-                  <folding>
-                    <marker date="1348514246418" expanded="true" signature="72888:78748" placeholder="..." />
-                  </folding>
+                <state line="2020" column="4" selection-start="83667" selection-end="83667" vertical-scroll-proportion="0.7453416">
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -235,7 +238,7 @@
       <recent name="$PROJECT_DIR$/common" />
     </key>
   </component>
-  <component name="RunManager" selected="Python's test.Nosetests in TestShakeEvent.testEventInfoString">
+  <component name="RunManager" selected="Python's test.Test Shake Event">
     <configuration default="false" name="shake_event" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -594,24 +597,25 @@
     <frame x="-1" y="27" width="1922" height="1054" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2" sideWeight="0.6474501" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21925133" sideWeight="0.38691795" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21925133" sideWeight="0.25277162" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21925133" sideWeight="0.22616407" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21925133" sideWeight="0.4135255" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.3963964" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" x="494" y="299" width="1246" height="672" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22613065" sideWeight="0.5341426" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35254988" sideWeight="0.46054628" order="2" side_tool="false" content_ui="tabs" x="0" y="117" width="1874" height="822" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277027" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.49358973" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.48504272" order="10" side_tool="false" content_ui="tabs" />
     </layout>
@@ -676,7 +680,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/safe_qgis/utilities.py</url>
-          <line>235</line>
+          <line>226</line>
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -766,17 +770,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="377" column="8" selection-start="15579" selection-end="15579" vertical-scroll-proportion="0.0">
+        <state line="326" column="12" selection-start="13334" selection-end="13608" vertical-scroll-proportion="0.43846154">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1888" column="68" selection-start="78817" selection-end="78817" vertical-scroll-proportion="0.8185484">
-          <folding>
-            <marker date="1348514246418" expanded="true" signature="72888:78748" placeholder="..." />
-          </folding>
+        <state line="2020" column="4" selection-start="83667" selection-end="83667" vertical-scroll-proportion="0.7453416">
+          <folding />
         </state>
       </provider>
     </entry>

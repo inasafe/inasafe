@@ -6,6 +6,7 @@
       <env name="QGIS_DEBUG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
       <env name="QGIS_LOG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
       <env name="QGISPATH" value="/usr/local/qgis-master" />
+      <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-master/lib" />
       <env name="QGIS_DEBUG" value="0" />
     </envs>
     <option name="SDK_HOME" value="" />
@@ -22,7 +23,9 @@
     <option name="USE_PATTERN" value="false" />
     <option name="PARAMS" value="" />
     <option name="USE_PARAM" value="false" />
+    <RunnerSettings RunnerId="PythonCover" />
     <RunnerSettings RunnerId="PythonRunner" />
+    <ConfigurationWrapper RunnerId="PythonCover" />
     <ConfigurationWrapper RunnerId="PythonRunner" />
     <method />
   </configuration>
