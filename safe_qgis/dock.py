@@ -64,8 +64,6 @@ from safe_qgis.utilities import (htmlHeader,
                                  qgisVersion,
                                  copyInMemory,
                                  memoryLayerToShapefile)
-
-
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -837,6 +835,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.saveState()
         # Hide hour glass
         self.hideBusy()
+
 
     def aggregateResults(self):
         if self.cboAggregation.currentText() == self.tr(
