@@ -121,8 +121,7 @@ def write_keywords(keywords, filename, sublayer=None):
 
     Args:
         * keywords: Dictionary of keyword, value pairs
-              filename: Name of keywords file. Extension expected to be
-              .keywords
+        * filename: Name of keywords file. Extension expected to be .keywords
         * sublayer: str Optional sublayer applicable only to multilayer formats
              such as sqlite or netcdf which can potentially hold more than
              one layer. The string should map to the layer group as per the
