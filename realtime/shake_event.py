@@ -138,7 +138,15 @@ class ShakeEvent(QObject):
         # The search boxes used to find extentWithCities
         # Stored in the form [{'city_count': int, 'geometry': QgsRectangle()}]
         self.searchBoxes = None
-        # Stored as a dict with dir_to, dist_to,  dist_from etc
+        # Stored as a dict with dir_to, dist_to,  dist_from etc e.g.
+        #{'dir_from': 16.94407844543457,
+        #'dir_to': -163.05592346191406,
+        #'roman': 'II',
+        #'dist_to': 2.504295825958252,
+        #'mmi': 1.909999966621399,
+        #'name': 'Tondano',
+        #'id': 57,
+        #'population': 33317}
         self.mostAffectedCity = None
         self.parseGridXml()
 
@@ -1310,16 +1318,14 @@ class ShakeEvent(QObject):
             list: An list of dicts containing the sorted cities and their
                 attributes. See below for example output.
 
-                [{'roman': 'III', 'mmi': 1.909999966621399,
-                  'name': 'Tondano', 'population': 33317},
-                  {'roman': 'III', 'mmi': 1.809999942779541,
-                  'name': 'Manado', 'population': 451893},
-                  {'roman': 'III', 'mmi': 1.75,
-                  'name': 'Provinsi Sulawesi Utara', 'population': 2146600},
-                  {'roman': 'III', 'mmi': 1.690000057220459,
-                  'name': 'Tomohon', 'population': 27624},
-                  {'roman': 'III', 'mmi': 1.5299999713897705,
-                  'name': 'Luwuk', 'population': 47778}]
+                [{'dir_from': 16.94407844543457,
+                 'dir_to': -163.05592346191406,
+                 'roman': 'II',
+                 'dist_to': 2.504295825958252,
+                 'mmi': 1.909999966621399,
+                 'name': 'Tondano',
+                 'id': 57,
+                 'population': 33317}]
         Raises:
             None
 

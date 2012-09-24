@@ -214,7 +214,7 @@ searchBoxes: None
                 myString += ("%d: %s\n" % (myKey, myValue.toString()))
             myString += '------------------\n'
         LOGGER.debug('Mem table:\n %s' % myString)
-        myExpectedLength = 870
+        myExpectedLength = 916
         myLength = len(myString)
         myMessage = 'Expected: %s Got %s' % (myExpectedLength, myLength)
         self.assertEquals(myExpectedLength, myLength, myMessage)
@@ -254,8 +254,8 @@ searchBoxes: None
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myFatalitiesHtml, myExpectedResult)
         assert myFatalitiesHtml == myExpectedResult, myMessage
 
-        myExpectedFatalities = {2: 0.47386375223673427,
-                                3: 0.024892573693488258,
+        myExpectedFatalities = {2: 0.47581343895471434,
+                                3: 0.023297814118407856,
                                 4: 0.0,
                                 5: 0.0,
                                 6: 0.0,
@@ -324,16 +324,46 @@ searchBoxes: None
         myShakeEvent = myShakeData.shakeEvent()
         myTable = myShakeEvent.sortedImpactedCities()
         myExpectedResult = [
-            {'roman': 'II', 'mmi': 1.909999966621399,
-             'name': 'Tondano', 'population': 33317},
-            {'roman': 'II', 'mmi': 1.809999942779541,
-             'name': 'Manado', 'population': 451893},
-            {'roman': 'II', 'mmi': 1.75,
-             'name': 'Provinsi Sulawesi Utara', 'population': 2146600},
-            {'roman': 'II', 'mmi': 1.690000057220459,
-             'name': 'Tomohon', 'population': 27624},
-            {'roman': 'II', 'mmi': 1.5299999713897705,
-             'name': 'Luwuk', 'population': 47778}]
+            {'dir_from': 16.94407844543457,
+             'dir_to': -163.05592346191406,
+             'roman': 'II',
+             'dist_to': 2.504295825958252,
+             'mmi': 1.909999966621399,
+             'name': 'Tondano',
+             'id': 57,
+             'population': 33317},
+            {'dir_from': 13.119078636169434,
+             'dir_to': -166.88092041015625,
+             'roman': 'II',
+             'dist_to': 3.036229133605957,
+             'mmi': 1.809999942779541,
+             'name': 'Manado',
+             'id': 207,
+             'population': 451893},
+            {'dir_from': 14.711240768432617,
+             'dir_to': -165.28875732421875,
+             'roman': 'II',
+             'dist_to': 2.2785418033599854,
+             'mmi': 1.75,
+             'name': 'Provinsi Sulawesi Utara',
+             'id': 87,
+             'population': 2146600},
+            {'dir_from': 14.14267635345459,
+             'dir_to': -165.85733032226562,
+             'roman': 'II',
+             'dist_to': 2.5372657775878906,
+             'mmi': 1.690000057220459,
+             'name': 'Tomohon',
+             'id': 58,
+             'population': 27624},
+            {'dir_from': -114.04046630859375,
+             'dir_to': 65.95953369140625,
+             'roman': 'II',
+             'dist_to': 3.3138768672943115,
+             'mmi': 1.5299999713897705,
+             'name': 'Luwuk',
+             'id': 215,
+             'population': 47778}]
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myTable, myExpectedResult)
         assert myTable == myExpectedResult, myMessage
 
@@ -381,11 +411,10 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
         myDegreeSymbol = unichr(176)
-        myExpectedResult = ('M 5.0 26-7-2012 2:15:35 0.5.0.dev20120923195432 '
-                            'Latitude: -0.21 Longitude:124.45 Depth: 11.0 Km '
-                            'Located XXXXX, XXXXX XXXXX 124%s27\'0.00"E,'
-                            '0%s12\'36.00"S' % (myDegreeSymbol, myDegreeSymbol))
-
+        myExpectedResult = ('M 5.0 26-7-2012 2:15:35 0.5.0.dev20120924192850 '
+                            'Latitude:  Longitude: Depth: 11.0 Km Located '
+                            '2.504296, -163.055923462 SSW Tondano')
+        # % (myDegreeSymbol, myDegreeSymbol))
         myResult = myShakeEvent.eventInfo()
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
