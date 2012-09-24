@@ -695,3 +695,25 @@ def get_unique_values():
     for key in dict_retval.iterkeys():
         dict_retval[key] = list(dict_retval[key])
     return dict_retval
+
+
+def get_plugin_description(plugin_name):
+    """Get descripition of a impact function.
+
+        Args:
+            * plugin_name = (string) name of plugin
+
+        Returns:
+            * If plugin_name is a valid plugin name, return its description
+            else, return error message.
+        """
+    not_found_message = (('You want to search impact function : %s but it is\
+                        not exist') % (plugin_name))
+    plugins_dict = dict([(pretty_function_name(p), p)
+                        for p in FunctionProvider.plugins])
+
+    if plugin_name in plugins_dict.itervalues():
+        pass
+    else:
+        return not_found_message
+

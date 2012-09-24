@@ -99,8 +99,8 @@ pycallgraph safe/common/test_polygon.py
 See also
 http://stackoverflow.com/questions/582336/how-can-you-profile-a-python-script
 
-Why I got 1e+24 (or another big number) instead of NaN when I saved vector files?
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Why do I got 1e+24 (or another big number) instead of NaN when I saved vector files?
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 InaSAFE needs to convert NaN to 1e+24 or more specifically 24 digits of 9
 because NaN is not intepreted correclty on Windows. You can read more
