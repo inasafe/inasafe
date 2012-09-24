@@ -825,7 +825,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Hide hour glass
         self.hideBusy()
 
-
     def aggregateResults(self):
         if self.cboAggregation.currentText() == self.tr(
             'No aggregation'):
@@ -872,30 +871,31 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
         elif myQgisImpactLayer.type() == QgsMapLayer.RasterLayer:
             logOnQgsMessageLog('Aggregating Zonal statistics')
-            prefix = "zonal_"
+            prefix = 'zonal_'
             zonStat = QgsZonalStatistics(
                 aggregationLayer,
                 myQgisImpactLayer.dataProvider().dataSourceUri(),
                 prefix
             )
             progressDialog = QtGui.QProgressDialog(
-                self.tr("Calculating zonal statistics"),
-                self.tr("Abort..."),
+                self.tr('Calculating zonal statistics'),
+                self.tr('Abort...'),
                 0,
                 0
             )
             zonStat.calculateStatistics(progressDialog)
             if progressDialog.wasCanceled():
-                QtGui.QMessageBox.error(self, self.tr("ZonalStats: Error"),
+                QtGui.QMessageBox.error(
+                    self,
+                    self.tr('ZonalStats: Error'),
                     self.tr(
-                        "You aborted aggregation, "
-                        "so there are no data for analysis. Exiting..."))
+                        'You aborted aggregation, '
+                        'so there are no data for analysis. Exiting...'))
             QgsMapLayerRegistry.instance().addMapLayer(aggregationLayer)
             shape = memoryLayerToShapefile(
                 'name',
                 '/home/marco/tmp',
-                aggregationLayer
-            )
+                aggregationLayer)
 #            QgsMapLayerRegistry.instance().addMapLayer(shape)
             return
 
