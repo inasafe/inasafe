@@ -138,7 +138,8 @@ class ShakeEvent(QObject):
         # The search boxes used to find extentWithCities
         # Stored in the form [{'city_count': int, 'geometry': QgsRectangle()}]
         self.searchBoxes = None
-
+        # Stored as a dict with dir_to, dist_to,  dist_from etc
+        self.mostAffectedCity = None
         self.parseGridXml()
 
     def gridFilePath(self):
@@ -1136,7 +1137,7 @@ class ShakeEvent(QObject):
                     '%s times.' % (myMinimumCityCount, myAttemptsLimit))
         # Setup field indexes of our input and out datasets
         myCities = []
-        myLayerIdIndex = myLayerProvider.fieldNameIndex('id')
+        myLayerIdIndex = myLayerProvider.fieldNameIndex('PK_UID')
         myLayerPlaceNameIndex = myLayerProvider.fieldNameIndex('asciiname')
         myLayerPopulationIndex = myLayerProvider.fieldNameIndex('population')
         myIdIndex = 0
@@ -1869,6 +1870,7 @@ class ShakeEvent(QObject):
                          self.eventId,
                          '%s.pdf' % self.eventId)
         myComposition.exportAsPDF(myPdfPath)
+        LOGGER.info('Generated PDF: %s' % myPdfPath)
         # Save a png
         myImagePath = os.path.join(shakemapExtractDir(),
             self.eventId,
@@ -1876,7 +1878,7 @@ class ShakeEvent(QObject):
         myPageNumber = 0
         myImage = myComposition.printPageAsRaster(myPageNumber)
         myImage.save(myImagePath)
-
+        LOGGER.info('Generated Image: %s' % myImagePath)
         # Save a thumbnail
         myThumbnailImagePath = os.path.join(shakemapExtractDir(),
             self.eventId,
@@ -1884,7 +1886,7 @@ class ShakeEvent(QObject):
         mySize = QSize(200, 200)
         myThumbnailImage = myImage.scaled(mySize, Qt.KeepAspectRatioByExpanding)
         myThumbnailImage.save(myThumbnailImagePath)
-
+        LOGGER.info('Generated Thumbnail: %s' % myThumbnailImagePath)
 
     def bearingToCardinal(self, theBearing):
         """Given a bearing in degrees return it as compass units e.g. SSE.
@@ -1923,13 +1925,17 @@ class ShakeEvent(QObject):
         myTokens = myCoordinates.split(',')
         myLongitude = myTokens[0]
         myLatitude = myTokens[1]
+        if self.mostAffectedCity is None:
+            self.sortedImpactedCities()
         myDirection = self.mostAffectedCity['dir_to']
         myDistance = self.mostAffectedCity['dist_to']
+        myName = self.mostAffectedCity['name']
+        myBearing = self.bearingToCardinal(myDirection)
 
         myString = (('M %(mmi)s %(date)s %(time)s %(version)s '
                     '%(latitude-name)s: %(latitude-value)s %(longitude-name)s:'
                      '%(longitude-value)s %(depth-name)s: %(depth)s %('
-                     'located-label)s %(distance)s, %(bearing-degrees)s '
+                     'located-label)s %(distance)2f, %(bearing-degrees)s '
                      '%(bearing-compass)s %(place-name)s')
                     % {'mmi': self.magnitude,
                        'date': '%s-%s-%s' % (self.day,
@@ -1948,8 +1954,8 @@ class ShakeEvent(QObject):
                        'located-label': self.tr('Located'),
                        'distance': myDistance,
                        'bearing-degrees': myDirection,
-                       'bearing-compass': self.bearingToCardinal(myDirection),
-                       'place-name': self.mostAffectedCity
+                       'bearing-compass': myBearing,
+                       'place-name': myName
                      } )
         return myString
 
