@@ -860,8 +860,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         fullAggregationLayer = self.getAggregationLayer()
         clippedAggregationLayerPath = clipLayer(
             fullAggregationLayer,
-            impactLayer.get_bounding_box(),
-            forceNoKeywords=True
+            impactLayer.get_bounding_box()
             )
 
         myQgisImpactLayer = self.readImpactLayer(impactLayer)

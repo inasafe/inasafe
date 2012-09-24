@@ -61,8 +61,7 @@ def tr(theText):
     return QCoreApplication.translate(myContext, theText)
 
 
-def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
-              forceNoKeywords=False):
+def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
     """Clip a Hazard or Exposure layer to the extents provided.
 
     .. note:: Will delegate to clipVectorLayer or clipRasterLayer as needed.
@@ -91,16 +90,14 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
     """
     if theLayer.type() == QgsMapLayer.VectorLayer:
         return _clipVectorLayer(theLayer, theExtent,
-                                theExtraKeywords=theExtraKeywords,
-                                forceNoKeywords=forceNoKeywords)
+                                theExtraKeywords=theExtraKeywords)
     else:
         return _clipRasterLayer(theLayer, theExtent, theCellSize,
                                 theExtraKeywords=theExtraKeywords)
 
 
 def _clipVectorLayer(theLayer, theExtent,
-                     theExtraKeywords=None,
-                     forceNoKeywords=False):
+                     theExtraKeywords=None):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. The layer must be a
     vector layer or an exception will be thrown.
@@ -210,10 +207,9 @@ def _clipVectorLayer(theLayer, theExtent,
                        'and then try to run your analysis again.')
         raise NoFeaturesInExtentException(myMessage)
 
-    if not forceNoKeywords:
-        myKeywordIO = KeywordIO()
-        myKeywordIO.copyKeywords(theLayer, myFilename,
-                      theExtraKeywords=theExtraKeywords)
+    myKeywordIO = KeywordIO()
+    myKeywordIO.copyKeywords(theLayer, myFilename,
+                  theExtraKeywords=theExtraKeywords)
 
     return myFilename  # Filename of created file
 
