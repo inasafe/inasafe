@@ -53,7 +53,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-    QgsMessageLog.logMessage(msg, tag, level)
+    QgsMessageLog.logMessage(str(msg), tag, level)
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):

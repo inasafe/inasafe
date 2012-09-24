@@ -22,9 +22,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 __type__ = 'alpha'  # beta, final etc will be shown in dock title
 
 import numpy
+import os
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 from safe_qgis.dock_base import Ui_DockBase
+from safe_qgis.aggregation_attribute_dialog_base import\
+    Ui_AggregationAttributeDialogBase
+
 from safe_qgis.help import Help
 from safe_qgis.utilities import getExceptionWithStacktrace, \
     getWGS84resolution, logOnQgsMessageLog
@@ -52,6 +56,7 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
+from safe.api import write_keywords, read_keywords
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
@@ -59,6 +64,8 @@ from safe_qgis.utilities import (htmlHeader,
                                  qgisVersion,
                                  copyInMemory,
                                  memoryLayerToShapefile)
+
+
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -825,7 +832,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Hide hour glass
         self.hideBusy()
 
-
     def aggregateResults(self):
         if self.cboAggregation.currentText() == self.tr(
             'No aggregation'):
@@ -858,19 +864,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def _aggregateResults(self):
         impactLayer = self.runner.impactLayer()
         fullAggregationLayer = self.getAggregationLayer()
-        clippedAggregationLayerPath = clipLayer(
-            fullAggregationLayer,
-            impactLayer.get_bounding_box()
-            )
 
         myQgisImpactLayer = self.readImpactLayer(impactLayer)
         if not myQgisImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQgisImpactLayer)
             raise Exception(myMessage)
 
+        self._checkAggregationAttribute(fullAggregationLayer)
         lName=str(self.tr('%1 aggregated to %2')
                 .arg(myQgisImpactLayer.name())
                 .arg(fullAggregationLayer.name()))
+
+        clippedAggregationLayerPath = clipLayer(
+            fullAggregationLayer,
+            impactLayer.get_bounding_box()
+        )
 
         self.aggregationLayer = QgsVectorLayer(
             clippedAggregationLayerPath, lName, 'ogr')
@@ -896,9 +904,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         logOnQgsMessageLog('Vector aggregation not implemented yet')
         return
 
-
     def _aggregateResultsRaster(self, myQgisImpactLayer):
-        prefix = 'zonal_'
+        prefix = 'aggr_'
         zonStat = QgsZonalStatistics(
             self.aggregationLayer,
             myQgisImpactLayer.dataProvider().dataSourceUri(),
@@ -916,7 +923,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr(
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
-        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
+#        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
         #            shape = memoryLayerToShapefile(
         #                'name',
         #                '/home/marco/tmp',
@@ -924,6 +931,63 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #            )
         #            QgsMapLayerRegistry.instance().addMapLayer(shape)
         return
+
+    def _checkAggregationAttribute(self, myLayer):
+        myKeywordFilePath = os.path.splitext(str(myLayer.source()))[0]
+        myKeywordFilePath += '.keywords'
+        if not os.path.isfile(myKeywordFilePath):
+            self._promptForAggregationAttribute(myLayer, myKeywordFilePath,
+                None)
+        else:
+            keywords = read_keywords(myKeywordFilePath)
+            logOnQgsMessageLog(keywords)
+
+            if 'aggregation attribute' in keywords:
+                try:
+                    myValue = keywords['aggregation attribute']
+                except:
+                    raise
+                return myValue
+            else:
+                self._promptForAggregationAttribute(myLayer,
+                    myKeywordFilePath, keywords)
+
+    def _promptForAggregationAttribute(self, myLayer, myKeywordFilePath,
+                                       myKeywords):
+        if myKeywords is None:
+            myKeywords = dict()
+
+        #open a AggregationAttributeDialog
+        dialog = QtGui.QDialog()
+        #remove all windows hints to avoid allowing for cancelling the dialog
+        dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
+        dialogGui = Ui_AggregationAttributeDialogBase()
+        dialogGui.setupUi(dialog)
+        dialogGui.buttonBox.button(QtGui.QDialogButtonBox.Cancel).setHidden(
+            True)
+        dialogGui.cboAggregationAttributes.clear()
+
+        vProvider = myLayer.dataProvider()
+        vFields = vProvider.fields()
+
+        for i in vFields:
+            # show only int or string fields to be chosen as aggregation
+            # attribute other possible would be float
+            if vFields[i].type() in [QtCore.QVariant.Int, QtCore.QVariant.String]:
+                dialogGui.cboAggregationAttributes.addItem(vFields[i].name())
+
+        dialogGui.cboAggregationAttributes.setCurrentIndex(0)
+        self.disableBusyCursor()
+
+        if dialog.exec_() == QtGui.QDialog.Accepted:
+            self.enableBusyCursor()
+            myKeywords['aggregation attribute'] = dialogGui\
+            .cboAggregationAttributes.currentText()
+            write_keywords(myKeywords, myKeywordFilePath)
+        else:
+            self.enableBusyCursor()
+            myMessage = self.tr('You have to select an aggregation attribute')
+            raise InvalidParameterException()
 
 
     def _completed(self):
