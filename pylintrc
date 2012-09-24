@@ -6,6 +6,15 @@
 # it should appear only once).
 disable=R,I,W0142,W0201,W0212,W0231,W0232,W0403,W0511,E1103,E1101,C0103,C0111,C0302
 
+# Note W0404 should only be disabled on Ole's  home computer running pylint
+# version
+#disable=R,I,W0142,W0201,W0212,W0231,W0232,W0403,W0404,W0511,E1103,E1101,C0103,C0111,C0302
+#pylint 0.23.0,
+#astng 0.21.1, common 0.55.0
+#Python 2.7.1+ (r271:86832, Apr 11 2011, 18:05:24)
+#[GCC 4.5.2]
+
+
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
 # multiple time.
