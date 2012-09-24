@@ -755,9 +755,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         #check and generate keywords for the aggregation layer
         self.aggregationLayer = self.getAggregationLayer()
-        logOnQgsMessageLog(self.aggregationLayer)
         if self.aggregationLayer is not None:
-            self._checkAggregationAttribute()
+            self.aggregationAttribute = self._checkAggregationAttribute()
 
         try:
             self.setupCalculator()
@@ -891,6 +890,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.aggregationLayer.lastError())
             raise Exception(myMessage)
 
+
+        #delete unwanted fields
+        vProvider = self.aggregationLayer.dataProvider()
+        vFields = vProvider.fields()
+        toDel = []
+
+        for i in vFields:
+            if vFields[i].name() != self.aggregationAttribute:
+                toDel.append(i)
+        try:
+            vProvider.deleteAttributes(toDel)
+        except:
+            myMessage = self.tr('Could not remove the unneded fields')
+            logOnQgsMessageLog(myMessage)
+        del toDel, vProvider, vFields
+
         writeKeywordsToFile(clippedAggregationLayerPath, {'title': lName})
 
         if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
@@ -940,17 +955,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 None)
         else:
             keywords = read_keywords(myKeywordFilePath)
-            logOnQgsMessageLog(keywords)
 
             if 'aggregation attribute' in keywords:
                 try:
                     myValue = keywords['aggregation attribute']
                 except:
                     raise
-                return myValue
+
             else:
-                self._promptForAggregationAttribute(self.aggregationLayer,
-                    myKeywordFilePath, keywords)
+                myValue = self._promptForAggregationAttribute(self
+                .aggregationLayer, myKeywordFilePath, keywords)
+            return myValue
 
     def _promptForAggregationAttribute(self, myLayer, myKeywordFilePath,
                                        myKeywords):
@@ -981,9 +996,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         if dialog.exec_() == QtGui.QDialog.Accepted:
             self.enableBusyCursor()
-            myKeywords['aggregation attribute'] = dialogGui\
-            .cboAggregationAttributes.currentText()
+            aggrAttribute = dialogGui.cboAggregationAttributes.currentText()
+            myKeywords['aggregation attribute'] = aggrAttribute
             write_keywords(myKeywords, myKeywordFilePath)
+            return aggrAttribute
         else:
             self.enableBusyCursor()
             myMessage = self.tr('You have to select an aggregation attribute')
