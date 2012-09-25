@@ -20,6 +20,10 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
     :param requires category=='exposure' and \
                     subcategory=='population' and \
                     layertype=='raster'
+    :citation citation1
+    :citation citation2 \
+                next citation2
+    :detail The Detail
     """
 
     title = _('be impacted')
