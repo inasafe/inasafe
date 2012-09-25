@@ -140,7 +140,7 @@
     <message>
         <location filename="dock.py" line="1071"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
-        <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
+        <translation>Kita resampling dan menjepit lapisan terpapar untuk mencocokkan perpotongan lapisan ancaman dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="dock.py" line="1300"/>
