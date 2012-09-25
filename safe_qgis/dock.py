@@ -580,15 +580,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return
 
     def _toggleCboAggregation(self):
+        """Helper function to toggle the aggregation combo depending on the
+        current dock status
+
+        Args:
+           None.
+        Returns:
+           None
+        Raises:
+           no
+        """
         #FIXME (MB) remove hazardlayer and exposure layer type check when
         # vector aggregation is supported
         selectedHazardLayer = self.getHazardLayer()
         selectedExposureLayer = self.getExposureLayer()
 
         if self.cboAggregation.count() > 1 and\
-           selectedHazardLayer is not None  and\
+           selectedHazardLayer is not None and\
            selectedExposureLayer is not None and\
-           selectedHazardLayer.type() == QgsMapLayer.RasterLayer  and\
+           selectedHazardLayer.type() == QgsMapLayer.RasterLayer and\
            selectedExposureLayer.type() == QgsMapLayer.RasterLayer:
             self.cboAggregation.setEnabled(True)
         else:
@@ -768,8 +778,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             return
 
-        myTitle = self.tr('Aggregating results...')
-        myMessage = self.tr('This may take a little while')
+        myTitle = self.tr('Waiting for aggregation attribute selection...')
+        myMessage = self.tr('Please select which attribute you want to'
+                            ' use as ID for the aggregated results')
         myProgress = 1
 
         self.showBusy(myTitle, myMessage, myProgress)
@@ -856,7 +867,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Hide hour glass
         self.hideBusy()
 
-
     def aggregateResults(self):
         if self.cboAggregation.currentText() == self.tr(
             'No aggregation'):
@@ -894,7 +904,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('Error when reading %1').arg(myQgisImpactLayer)
             raise Exception(myMessage)
 
-        lName=str(self.tr('%1 aggregated to %2')
+        lName = str(self.tr('%1 aggregated to %2')
                 .arg(myQgisImpactLayer.name())
                 .arg(self.aggregationLayer.name()))
 
@@ -909,7 +919,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('Error when reading %1').arg(
                 self.aggregationLayer.lastError())
             raise Exception(myMessage)
-
 
         #delete unwanted fields
         vProvider = self.aggregationLayer.dataProvider()
@@ -968,11 +977,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def _checkAggregationAttribute(self):
 
-        myKeywordFilePath = os.path.splitext(str(self.aggregationLayer.source()))[0]
+        myKeywordFilePath =\
+            os.path.splitext(str(self.aggregationLayer.source()))[0]
         myKeywordFilePath += '.keywords'
         if not os.path.isfile(myKeywordFilePath):
-            self._promptForAggregationAttribute(self.aggregationLayer, myKeywordFilePath,
-                None)
+            self._promptForAggregationAttribute(self.aggregationLayer,
+                myKeywordFilePath, None)
         else:
             keywords = read_keywords(myKeywordFilePath)
 
@@ -1008,7 +1018,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         for i in vFields:
             # show only int or string fields to be chosen as aggregation
             # attribute other possible would be float
-            if vFields[i].type() in [QtCore.QVariant.Int, QtCore.QVariant.String]:
+            if vFields[i].type() in \
+               [QtCore.QVariant.Int, QtCore.QVariant.String]:
                 dialogGui.cboAggregationAttributes.addItem(vFields[i].name())
 
         dialogGui.cboAggregationAttributes.setCurrentIndex(0)
@@ -1024,7 +1035,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.enableBusyCursor()
             myMessage = self.tr('You have to select an aggregation attribute')
             raise InvalidParameterException()
-
 
     def _completed(self):
         """Helper function for slot activated when the process is done.
