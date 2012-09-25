@@ -47,10 +47,9 @@ from safe.common.utilities import temp_dir, unique_filename
 # InaSAFE GUI specific functionality
 from PyQt4.QtCore import QCoreApplication
 from safe_qgis.exceptions import (KeywordNotFoundException,
-                               StyleInfoNotFoundException,
-                               InvalidParameterException,
-                               InsufficientOverlapException
-                               )
+                                  StyleInfoNotFoundException,
+                                  InvalidParameterException,
+                                  InsufficientOverlapException)
 from safe.common.exceptions import BoundingBoxError
 
 

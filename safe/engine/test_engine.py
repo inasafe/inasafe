@@ -2331,7 +2331,8 @@ class Test_Engine(unittest.TestCase):
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   attribute_name=None)
-        #print 'Using 2704 individual polygons took %f seconds' % (time.time() - t0)
+        #print ('Using 2704 individual polygons took %f seconds'
+        #       % (time.time() - t0))
         #I.write_to_file('flood_prone_roads_jakarta_individual.shp')
 
         # Check against correctness verified in QGIS
@@ -2344,12 +2345,13 @@ class Test_Engine(unittest.TestCase):
 
     test_polygon_to_roads_interpolation_jakarta_flood_example.slow = True
 
-    def Xtest_polygon_to_roads_interpolation_jakarta_flood_example_merged(self):
+    def Xtest_polygon_to_roads_interpolation_jakarta_flood_merged(self):
         """Roads can be tagged with values from flood polygons
 
         This is a test for road interpolation (issue #55)
 
-        # The dataset is: 59 merged complex polygons and 18574 complex line features
+        # The dataset is: 59 merged complex polygons and 18574
+        # complex line features
         """
 
         # Name file names for hazard level and exposure
@@ -2358,8 +2360,8 @@ class Test_Engine(unittest.TestCase):
 
         # Read all input data
         H = read_layer(hazard_filename)  # Polygons
-        H_attributes = H.get_data()
-        H_geometries = H.get_geometry()
+        #H_attributes = H.get_data()
+        #H_geometries = H.get_geometry()
         assert len(H) == 59
 
         E = read_layer(exposure_filename)
@@ -2414,7 +2416,7 @@ class Test_Engine(unittest.TestCase):
         assert I_attributes[198]['polygon_id'] == 235
         assert I_attributes[198]['parent_line_id'] == 333
 
-    #test_polygon_to_roads_interpolation_jakarta_flood_example_merged.slow = True
+    #test_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
 
     def Xtest_line_interpolation_from_polygons_one_attribute(self):
         """Line interpolation using one polygon works with attribute
@@ -2849,7 +2851,7 @@ if __name__ == '__main__':
     #                            '_flood_example'))
     #suite = unittest.makeSuite(Test_Engine,
     #                           ('test_polygon_to_roads_interpolation'
-    #                            '_jakarta_flood_example_merged'))
+    #                            '_jakarta_flood_merged'))
     suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
