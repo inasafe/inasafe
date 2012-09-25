@@ -63,7 +63,7 @@ test-translations:
 translation-stats:
 	@echo
 	@echo "----------------------"
-	@echo "Translation statistics - for more info see http://inasafe.readthedocs.org/en/latest/developer-docs/i18n.html"
+	@echo "Translation statistics - for more info see http://inasafe.org/developer-docs/i18n.html"
 	@echo "----------------------"
 	@echo
 	@echo "Gettext translations (*.po):"
