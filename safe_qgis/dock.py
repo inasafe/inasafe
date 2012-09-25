@@ -30,8 +30,9 @@ from safe_qgis.aggregation_attribute_dialog_base import\
     Ui_AggregationAttributeDialogBase
 
 from safe_qgis.help import Help
-from safe_qgis.utilities import getExceptionWithStacktrace, \
-    getWGS84resolution, logOnQgsMessageLog
+from safe_qgis.utilities import (getExceptionWithStacktrace,
+                                getWGS84resolution,
+                                logOnQgsMessageLog)
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
@@ -595,11 +596,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         selectedHazardLayer = self.getHazardLayer()
         selectedExposureLayer = self.getExposureLayer()
 
-        if self.cboAggregation.count() > 1 and\
-           selectedHazardLayer is not None and\
-           selectedExposureLayer is not None and\
-           selectedHazardLayer.type() == QgsMapLayer.RasterLayer and\
-           selectedExposureLayer.type() == QgsMapLayer.RasterLayer:
+        if (self.cboAggregation.count() > 1 and
+           selectedHazardLayer is not None and
+           selectedExposureLayer is not None and
+           selectedHazardLayer.type() == QgsMapLayer.RasterLayer and
+           selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
             self.cboAggregation.setEnabled(True)
         else:
             self.cboAggregation.setEnabled(False)
@@ -729,7 +730,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def getAggregationLayer(self):
         """Obtain the name of the path to the aggregation file from the
-        userrole of the QtCombo for aggregation."""
+        userrole of the QtCombo for aggregation.
+
+        Args: None
+
+        Returns:
+            - None if no aggregation is selected or cboAggregation is
+        disabled
+            - else a polygon layer
+        """
 
         myNoSelectionValue = 0
         myIndex = self.cboAggregation.currentIndex()
@@ -778,16 +787,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             return
 
-        myTitle = self.tr('Waiting for aggregation attribute selection...')
-        myMessage = self.tr('Please select which attribute you want to'
-                            ' use as ID for the aggregated results')
-        myProgress = 1
-
-        self.showBusy(myTitle, myMessage, myProgress)
         #check and generate keywords for the aggregation layer
         self.aggregationLayer = self.getAggregationLayer()
         if self.aggregationLayer is not None:
-            self.aggregationAttribute = self._checkAggregationAttribute()
+            try:
+                self.aggregationAttribute = self._checkAggregationAttribute()
+            except Exception, e:
+                QtGui.qApp.restoreOverrideCursor()
+                self.hideBusy()
+                myMessage = self.tr('An exception occurred when reading '
+                                    'aggregation attribute.')
+                myMessage = getExceptionWithStacktrace(e,
+                    html=True,
+                    context=myMessage)
+                self.displayHtml(myMessage)
+                return
 
         try:
             self.setupCalculator()
@@ -815,7 +829,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.aggregateResults)
+                               self.startPostprocessing)
         QtGui.qApp.setOverrideCursor(
                 QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
@@ -867,36 +881,58 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Hide hour glass
         self.hideBusy()
 
-    def aggregateResults(self):
-        if self.cboAggregation.currentText() == self.tr(
-            'No aggregation'):
-            self.completed()
-        else:
-            myTitle = self.tr('Aggregating results...')
-            myMessage = self.tr('This may take a little while - we are '
-                                ' aggregating the hazards by %1').arg(
-                                self.cboAggregation.currentText())
-            myProgress = 88
+    def startPostprocessing(self):
+        """
+        Called on self.runner SIGNAL('done()') starts all postprocessing steps
+        Args: None
 
-            try:
-                self.showBusy(myTitle, myMessage, myProgress)
-                self._aggregateResults()
-                QtGui.qApp.restoreOverrideCursor()
-                self.completed()
-                # .. todo :: Disconnect done slot/signal
-            except Exception, e:  # pylint: disable=W0703
+        Returns: None
+        """
+        if self.aggregationLayer is not None:
+            self.aggregateResults(88)
+        self.completed()
 
-                # FIXME (Ole): This branch is not covered by the tests
-                QtGui.qApp.restoreOverrideCursor()
-                self.hideBusy()
-                myContext = self.tr(
-                    'An exception occurred when aggregating '
-                    'the results')
-                myMessage = getExceptionWithStacktrace(e, html=True,
-                    context=myContext)
-                self.displayHtml(myMessage)
+    def aggregateResults(self, progress):
+        """
+        Aggregation postprocessing step, this delas with the gui stuff and
+        calls _aggregateResults to do the actual aggregation work
+        Args: progress %to show in the progressbar
+
+        Returns: None
+        """
+        myTitle = self.tr('Aggregating results...')
+        myMessage = self.tr('This may take a little while - we are '
+                            ' aggregating the hazards by %1').arg(
+                            self.cboAggregation.currentText())
+        myProgress = progress
+
+        try:
+            self.showBusy(myTitle, myMessage, myProgress)
+            self._aggregateResults()
+            QtGui.qApp.restoreOverrideCursor()
+        except Exception, e:  # pylint: disable=W0703
+            # FIXME (Ole): This branch is not covered by the tests
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myContext = self.tr(
+                'An exception occurred when aggregating '
+                'the results')
+            myMessage = getExceptionWithStacktrace(e, html=True,
+                context=myContext)
+            self.displayHtml(myMessage)
 
     def _aggregateResults(self):
+        """
+        Performs Aggregation postprocessing step by
+         - creating a copy of the dataset clipped by the impactlayer bounding
+          box
+         - stripping all attributes beside the aggregation attribute
+         - delegating to the appropriate aggregator for raster and vectors
+
+        Args: None
+
+        Returns: None
+        """
         impactLayer = self.runner.impactLayer()
 
         myQgisImpactLayer = self.readImpactLayer(impactLayer)
@@ -943,17 +979,32 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self._aggregateResultsRaster(myQgisImpactLayer)
         else:
             myMessage = self.tr('%1 is %2 but it should be either vector or '
-                                'raster').arg(myQgisImpactLayer.name())\
-                                .arg(myQgisImpactLayer.type())
+                                'raster').arg(myQgisImpactLayer.name()).arg(
+                                myQgisImpactLayer.type())
             raise Exception(myMessage)
 
     def _aggregateResultsVector(self, myQgisImpactLayer):
+        """
+        Performs Aggregation postprocessing step on vectorial impact layers
+        Args:
+            * myQgisImpactLayer a valid QgsRasterLayer
+
+        Returns: None
+        """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
         logOnQgsMessageLog('Vector aggregation not implemented yet')
         return
 
     def _aggregateResultsRaster(self, myQgisImpactLayer):
+        """
+        Performs Aggregation postprocessing step on raster impact layers by
+        calling QgsZonalStatistics
+        Args:
+            * myQgisImpactLayer a valid QgsVectorLayer
+
+        Returns: None
+        """
         prefix = 'aggr_'
         zonStat = QgsZonalStatistics(
             self.aggregationLayer,
@@ -976,7 +1027,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return
 
     def _checkAggregationAttribute(self):
+        """checks if the aggregation layer has a aggregation attribute
+        keyword. If not it calls _promptForAggregationAttribute to prompt for
+         an input
 
+        Args: None
+
+        Returns: the value of the aggregation attribute keyword
+
+        Raises: Propogates any error
+        """
         myKeywordFilePath =\
             os.path.splitext(str(self.aggregationLayer.source()))[0]
         myKeywordFilePath += '.keywords'
@@ -991,7 +1051,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myValue = keywords['aggregation attribute']
                 except:
                     raise
-
             else:
                 myValue = self._promptForAggregationAttribute(self
                 .aggregationLayer, myKeywordFilePath, keywords)
@@ -999,42 +1058,79 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def _promptForAggregationAttribute(self, myLayer, myKeywordFilePath,
                                        myKeywords):
+        """prompt user for a decision on which attribute has to be the key
+        attribute for the aggregated data and writes the keywords file
+        This could be swapped to a call to the keyword editor
+
+        Args: None
+
+        Returns: the value of the aggregation attribute keyword. None if no
+        usable attribute has been found
+
+        Raises: Propogates any error
+        """
         if myKeywords is None:
             myKeywords = dict()
 
-        #open a AggregationAttributeDialog
-        dialog = QtGui.QDialog()
-        #remove all windows hints to avoid allowing for cancelling the dialog
-        dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
-        dialogGui = Ui_AggregationAttributeDialogBase()
-        dialogGui.setupUi(dialog)
-        dialogGui.buttonBox.button(QtGui.QDialogButtonBox.Cancel).setHidden(
-            True)
-        dialogGui.cboAggregationAttributes.clear()
-
         vProvider = myLayer.dataProvider()
         vFields = vProvider.fields()
-
+        fields = []
         for i in vFields:
             # show only int or string fields to be chosen as aggregation
             # attribute other possible would be float
-            if vFields[i].type() in \
-               [QtCore.QVariant.Int, QtCore.QVariant.String]:
-                dialogGui.cboAggregationAttributes.addItem(vFields[i].name())
+            if vFields[i].type() in [
+               QtCore.QVariant.Int, QtCore.QVariant.String]:
+                fields.append(vFields[i].name())
 
-        dialogGui.cboAggregationAttributes.setCurrentIndex(0)
-        self.disableBusyCursor()
+        #there is no usable attribute, use None
+        if len(fields) == 0:
+            aggrAttribute = None
+            logOnQgsMessageLog(
+                'there is no usable attribute, use None')
+        #there is only one usable attribute, use it
+        elif len(fields) == 1:
+            aggrAttribute = fields[0]
+            logOnQgsMessageLog('there is only one usable attribute, '
+                               'use it: ' + str(aggrAttribute))
+        #there are multiple usable attribute, prompt for an answer
+        elif len(fields) > 1:
+            myTitle = self.tr(
+                'Waiting for aggregation attribute selection...')
+            myMessage = self.tr('Please select which attribute you want to'
+                                ' use as ID for the aggregated results')
+            myProgress = 1
+            self.showBusy(myTitle, myMessage, myProgress)
 
-        if dialog.exec_() == QtGui.QDialog.Accepted:
-            self.enableBusyCursor()
-            aggrAttribute = dialogGui.cboAggregationAttributes.currentText()
-            myKeywords['aggregation attribute'] = aggrAttribute
-            write_keywords(myKeywords, myKeywordFilePath)
-            return aggrAttribute
-        else:
-            self.enableBusyCursor()
-            myMessage = self.tr('You have to select an aggregation attribute')
-            raise InvalidParameterException()
+            #open a AggregationAttributeDialog
+            dialog = QtGui.QDialog()
+            #remove all windows hints to avoid allowing for cancelling the
+            # dialog
+            dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
+            dialogGui = Ui_AggregationAttributeDialogBase()
+            dialogGui.setupUi(dialog)
+            dialogGui.buttonBox.button(
+                QtGui.QDialogButtonBox.Cancel).setHidden(True)
+            cboAggr = dialogGui.cboAggregationAttributes
+            cboAggr.clear()
+            cboAggr.addItems(fields)
+            cboAggr.setCurrentIndex(0)
+            self.disableBusyCursor()
+
+            if dialog.exec_() == QtGui.QDialog.Accepted:
+                aggrAttribute = cboAggr.currentText()
+                logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
+                                   ' as aggregation attribute')
+            else:
+                #the user cancelled, use the first attribute as default
+                aggrAttribute = fields[0]
+#                myMessage = self.tr(
+#                    'You have to select an aggregation attribute')
+#                raise InvalidParameterException(myMessage)
+
+        self.enableBusyCursor()
+        myKeywords['aggregation attribute'] = aggrAttribute
+        write_keywords(myKeywords, myKeywordFilePath)
+        return aggrAttribute
 
     def _completed(self):
         """Helper function for slot activated when the process is done.
@@ -1172,7 +1268,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.runner:
             QtCore.QObject.disconnect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.aggregateResults)
+                               self.startPostprocessing)
             self.runner = None
 
         self.grpQuestion.setEnabled(True)
