@@ -697,23 +697,42 @@ def get_unique_values():
     return dict_retval
 
 
-def get_plugin_description(plugin_name):
+def doc_collect(func):
+    """Collect doc of a impact function func.
+
+    This function retrieves all documentation and put them in a dictionary
+
+        Args:
+            * func = name of the function
+
+        Returns:
+            * String of the description
+    """
+    description = ''
+    if hasattr(func, '__doc__') and func.__doc__:
+        required_cmd = ':desc'
+
+        # Get the doc string of the function
+        docstr = func.__doc__
+        
+    return description
+
+
+def get_plugin_dict_doc(plugin_name):
     """Get descripition of a impact function.
 
         Args:
             * plugin_name = (string) name of plugin
 
         Returns:
-            * If plugin_name is a valid plugin name, return its description
-            else, return error message.
+            * If plugin_name is a valid plugin name, return its dictionary
+            contains all attribut in the doc_string, else return None
         """
-    not_found_message = (('You want to search impact function : %s but it is\
-                        not exist') % (plugin_name))
+    retval = {}
     plugins_dict = dict([(pretty_function_name(p), p)
                         for p in FunctionProvider.plugins])
 
     if plugin_name in plugins_dict.itervalues():
         pass
     else:
-        return not_found_message
-
+        return retval
