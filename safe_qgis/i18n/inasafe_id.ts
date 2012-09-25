@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
@@ -38,7 +39,7 @@
         <translation>&lt;p&gt;Error ketika menjalankan perintah berikut:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Pesan Kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="453"/>
+        <location filename="utilities.py" line="444"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation>Lapisan input untuk mendapatkan resolusi WGS84 harus merupakan lapisan raster. Saya mendapatkan: %s</translation>
     </message>
@@ -48,22 +49,22 @@
         <translation>Tidak ada fitur termasuk dalam luasan klip. Cobalah panning / zoom ke area yang berisi data dan kemudian mencoba untuk menjalankan analisis Anda lagi.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="429"/>
+        <location filename="utilities.py" line="420"/>
         <source>Problem:</source>
         <translation>Permasalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="425"/>
+        <location filename="utilities.py" line="416"/>
         <source>Error:</source>
         <translation>Kesalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="433"/>
+        <location filename="utilities.py" line="424"/>
         <source>Click for Diagnostic Information:</source>
         <translation>Klik untuk informasi diagnostik:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="414"/>
+        <location filename="utilities.py" line="405"/>
         <source>No details provided</source>
         <translation>Tidak ada detil yang tersedia</translation>
     </message>
@@ -71,23 +72,23 @@
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="639"/>
+        <location filename="dock.py" line="644"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation>Lapisan dampak &quot;%s&quot; yang dimuat tidak benar</translation>
     </message>
     <message>
-        <location filename="dock.py" line="804"/>
+        <location filename="dock.py" line="810"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation>Tidak ada lapisan dampak yang dihitung. Pesan kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="842"/>
+        <location filename="dock.py" line="848"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation>Lapisan dampak %s bukan lapisan vektor atau raster</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1289"/>
+        <location filename="dock.py" line="1300"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Dokumen PDF (*.pdf)</translation>
     </message>
@@ -97,137 +98,137 @@
         <translation>InaSAFE %s %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="735"/>
+        <location filename="dock.py" line="741"/>
         <source>Calculating impact...</source>
         <translation>Menghitung dampak...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="736"/>
+        <location filename="dock.py" line="742"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation>Ini mungkin memerlukan sedikit waktu - kita menghitung daerah yang akan terkena dampak bahaya dan menulis hasilnya ke layer baru.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="794"/>
+        <location filename="dock.py" line="800"/>
         <source>Loading results...</source>
         <translation>Sedang memuat hasil-hasil...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="795"/>
+        <location filename="dock.py" line="801"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
         <translation>Analisa dampak telah selesai - sedang memuat hasil ke QGIS...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="884"/>
+        <location filename="dock.py" line="890"/>
         <source>Analyzing this question...</source>
         <translation>Sedang menganalisa pertanyaan...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1050"/>
+        <location filename="dock.py" line="1061"/>
         <source>Preparing hazard data...</source>
         <translation>Sedang mempersiapkan data bahaya...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1051"/>
+        <location filename="dock.py" line="1062"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit hazardlayer untuk mencocokkan perpotongan dari exposurelayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1059"/>
+        <location filename="dock.py" line="1070"/>
         <source>Preparing exposure data...</source>
         <translation>Sedang mempersiapkan data terpapar...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1060"/>
+        <location filename="dock.py" line="1071"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1289"/>
+        <location filename="dock.py" line="1300"/>
         <source>Write to PDF</source>
         <translation>Menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1308"/>
+        <location filename="dock.py" line="1319"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1295"/>
+        <location filename="dock.py" line="1306"/>
         <source>Generating your map as a PDF document...</source>
         <translation>Sedang menghasilkan peta anda sebagai dokumen PDF...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1300"/>
+        <location filename="dock.py" line="1311"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation>Dokumen PDF telah dibuat .... membuka menggunakan peninjau standar PDF pada system.FIle pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1308"/>
+        <location filename="dock.py" line="1319"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation>Proses selesai.File pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1203"/>
+        <location filename="dock.py" line="1214"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai lapisan dampak atau lapisan bahaya dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="984"/>
+        <location filename="dock.py" line="995"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Details: %6&lt;/p&gt;</source>
         <translation>Tidak ada cukup tumpang-tindih antara lapisan input dan atau lapisan dan tampilan peta yang aktif. Silahkan memilih dua lapisan yang saling tumpang-tindih dan perbesar atau geser ke lapisan tersebut. Detil yang lebih lengkap adalah sebagai berikut::&lt;/p&gt;&lt;p&gt;Gagal memberikan cakupan optimal:&lt;/p&gt;&lt;p&gt;Ancaman: %1&lt;/p&gt;&lt;p&gt;Terpapar: %2&lt;/p&gt;&lt;p&gt;Cakupan tampilan peta geografis yang aktif: %3&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis ancaman: %4&lt;/p&gt;&lt;p&gt;Cakupan wilayah geografis terpapar: %5&lt;/p&gt;&lt;p&gt;Detil: %6&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="dock.py" line="268"/>
+        <location filename="dock.py" line="273"/>
         <source>To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
         <translation>Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik tombol&lt;em&gt; jalankan&lt;/em&gt; di bawah ini.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="274"/>
+        <location filename="dock.py" line="279"/>
         <source>Getting started:</source>
         <translation>Memulai:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="290"/>
+        <location filename="dock.py" line="295"/>
         <source>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function.</source>
         <translation>Tidak ada fungsi yang tersedia untuk input yang anda masukan. Cobalah untuk memilih kombinasi input yang berbeda. Silahkan mengacu pada panduan pengguna &lt;FIXME: add link&gt; untuk lebih jelasnya mengenai input yang benar untuk fungsi risiko yang diberikan.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="296"/>
+        <location filename="dock.py" line="301"/>
         <source>No valid functions:</source>
         <translation>Tidak ada fungsi yang valid:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="299"/>
+        <location filename="dock.py" line="304"/>
         <source>Hazard keywords:</source>
         <translation>Kata kunci ancaman:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="302"/>
+        <location filename="dock.py" line="307"/>
         <source>Exposure keywords:</source>
         <translation>Kata kunci terpapar:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="310"/>
+        <location filename="dock.py" line="315"/>
         <source>You can now proceed to run your model by clicking the &lt;em&gt;Run&lt;/em&gt; button.</source>
-        <translation>Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt;Hitung.</translation>
+        <translation>Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="312"/>
+        <location filename="dock.py" line="317"/>
         <source>Ready</source>
         <translation>Siap</translation>
     </message>
     <message>
-        <location filename="dock.py" line="709"/>
+        <location filename="dock.py" line="714"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation>Terjadi pengecualian ketika mempersiapkan kalkulator dampak.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="755"/>
+        <location filename="dock.py" line="761"/>
         <source>An exception occurred when starting the model.</source>
         <translation>Terjadi pengecualian ketika memulai model.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="721"/>
+        <location filename="dock.py" line="726"/>
         <source>An exception occurred when setting up the  model runner.</source>
         <translation>Terjadi pengecualian ketika memulai mempersiapkan model pelari.</translation>
     </message>
@@ -578,12 +579,12 @@ ke %s: %s</translation>
         <translation>InaSAFE %s Opsi-opsi</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="161"/>
+        <location filename="options_dialog.py" line="167"/>
         <source>Set keyword cache file</source>
         <translation>Mengatur file cache kata kunci</translation>
     </message>
     <message>
-        <location filename="options_dialog.py" line="161"/>
+        <location filename="options_dialog.py" line="167"/>
         <source>Sqlite DB File (*.db)</source>
         <translation>Sqlite DB File (*.db)</translation>
     </message>
@@ -606,52 +607,52 @@ ke %s: %s</translation>
         <translation>Mengatur nama lapisan QGIS dari &apos;judul&apos; kata-kata kunci</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="89"/>
+        <location filename="options_dialog_base.ui" line="79"/>
         <source>Keyword cache for remote datasources</source>
         <translation>Chace Kata Kunci untuk sumber data remote</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="248"/>
+        <location filename="options_dialog_base.ui" line="238"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="117"/>
+        <location filename="options_dialog_base.ui" line="107"/>
         <source>Not yet implemented</source>
         <translation>Belum diiplementasi</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="126"/>
+        <location filename="options_dialog_base.ui" line="116"/>
         <source>Bubble exposure and hazard layers to top when selected</source>
         <translation>Gelembung paparan dan lapisan bahaya ke atas saat dipilih</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="136"/>
+        <location filename="options_dialog_base.ui" line="126"/>
         <source>Location for results</source>
         <translation>Lokasi untuk hasil-hasil</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="167"/>
+        <location filename="options_dialog_base.ui" line="157"/>
         <source>Report template</source>
         <translation>Template laporan</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="198"/>
+        <location filename="options_dialog_base.ui" line="188"/>
         <source>Logo for maps (must be x x y) </source>
         <translation>Logo untuk peta-peta (harus dalam x x y) </translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="229"/>
+        <location filename="options_dialog_base.ui" line="219"/>
         <source>Organisation name (for maps, reports etc.)</source>
         <translation>Nama organisasi (untuk peta, laporan-laporan dll.)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="262"/>
+        <location filename="options_dialog_base.ui" line="252"/>
         <source>DPI (Maps and reports)</source>
         <translation>DPI (Peta-peta dan laporan-laporan)</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="281"/>
+        <location filename="options_dialog_base.ui" line="271"/>
         <source>Run analysis in a separate thread (experimental)</source>
         <translation>Jalankan analisis dalam thread terpisah (percobaan)</translation>
     </message>
@@ -661,9 +662,14 @@ ke %s: %s</translation>
         <translation>Zoom ke lapisan dampak pada penyelesaian skenario estimasi</translation>
     </message>
     <message>
-        <location filename="options_dialog_base.ui" line="79"/>
+        <location filename="options_dialog_base.ui" line="294"/>
         <source>Hide exposure layer on scenario estimate completion</source>
         <translation>Sembunyikan lapisan paparan pada penyelesaian skenario estimasi</translation>
+    </message>
+    <message>
+        <location filename="options_dialog_base.ui" line="301"/>
+        <source>Clip datasets to visible extent before analysis</source>
+        <translation>Potong dataset sampai cakupan yang terlihat sebelum melakukan analisis</translation>
     </message>
 </context>
 <context>
