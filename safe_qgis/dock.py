@@ -352,6 +352,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Add any other logic you might like here...
         del theIndex
         self.getFunctions()
+        self._toggleCboAggregation()
         self.setOkButtonStatus()
 
     def on_cboExposure_currentIndexChanged(self, theIndex):
@@ -373,6 +374,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Add any other logic you mught like here...
         del theIndex
         self.getFunctions()
+        self._toggleCboAggregation()
         self.setOkButtonStatus()
 
     def on_cboFunction_currentIndexChanged(self, theIndex):
@@ -393,6 +395,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     """
         # Add any other logic you mught like here...
         del theIndex
+        self._toggleCboAggregation()
         self.setOkButtonStatus()
 
     def setOkButtonStatus(self):
@@ -563,10 +566,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #handle the cboAggregation combo
         self.cboAggregation.insertItem(0, self.tr('No aggregation'))
         self.cboAggregation.setCurrentIndex(0)
-        if self.cboAggregation.count() <= 1:
-            self.cboAggregation.setEnabled(False)
-        else:
-            self.cboAggregation.setEnabled(True)
+        self._toggleCboAggregation()
 
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
@@ -578,6 +578,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.blockSignals(False)
         self.getAggregationLayer()
         return
+
+    def _toggleCboAggregation(self):
+        #FIXME (MB) remove hazardlayer and exposure layer type check when
+        # vector aggregation is supported
+        selectedHazardLayer = self.getHazardLayer()
+        selectedExposureLayer = self.getExposureLayer()
+
+        if self.cboAggregation.count() > 1 and\
+           selectedHazardLayer is not None  and\
+           selectedExposureLayer is not None and\
+           selectedHazardLayer.type() == QgsMapLayer.RasterLayer  and\
+           selectedExposureLayer.type() == QgsMapLayer.RasterLayer:
+            self.cboAggregation.setEnabled(True)
+        else:
+            self.cboAggregation.setEnabled(False)
 
     def getFunctions(self):
         """Helper function to obtain a list of impact functions from
@@ -753,6 +768,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.hideBusy()
             return
 
+        myTitle = self.tr('Aggregating results...')
+        myMessage = self.tr('This may take a little while')
+        myProgress = 1
+
+        self.showBusy(myTitle, myMessage, myProgress)
         #check and generate keywords for the aggregation layer
         self.aggregationLayer = self.getAggregationLayer()
         if self.aggregationLayer is not None:
@@ -1216,20 +1236,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
                    'and / or the layers and the viewport. Please select '
-                   'two overlapping layers and zoom or pan to them. Full '
-                   'details follow:</p>'
+                   'two overlapping layers and zoom or pan to them or disable'
+                   ' viewport clipping in the options dialog'
+                   '. Full details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
                    '<p>Hazard: %1</p>'
                    '<p>Exposure: %2</p>'
                    '<p>Viewport Geo Extent: %3</p>'
                    '<p>Hazard Geo Extent: %4</p>'
                    '<p>Exposure Geo Extent: %5</p>'
-                   '<p>Details: %6</p>').arg(
+                   '<p>Viewport clipping enabled: %6</p>'
+                   '<p>Details: %7</p>').arg(
                         myHazardLayer.source()).arg(
                         myExposureLayer.source()).arg(
                         QtCore.QString(str(myViewportGeoExtent))).arg(
                         QtCore.QString(str(myHazardGeoExtent))).arg(
                         QtCore.QString(str(myExposureGeoExtent))).arg(
+                        QtCore.QString(str(self.clipToViewport))).arg(
                         str(e))
             raise Exception(myMessage)
 
