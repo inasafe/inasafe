@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-25 08:49+0700\n"
+"POT-Creation-Date: 2012-09-25 09:05+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -617,6 +617,7 @@ msgstr "Berdasarkan Perka 2 BNPB - 2012"
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:94
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
 #: safe/impact_functions/core.py:640 safe/impact_functions/core.py:587
+#: safe/impact_functions/core.py:587
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:94
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
 msgid "Category"
@@ -1105,8 +1106,9 @@ msgstr "Penduduk yang mungkin perlu dievakuasi"
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:137
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:154
 #: safe/impact_functions/inundation/flood_population_evacuation.py:164
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:122
 #: safe/impact_functions/generic/categorised_hazard_population.py:138
+#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:122
+#: safe/impact_functions/generic/categorised_hazard_population.py:137
 #: safe/impact_functions/inundation/flood_population_evacuation.py:164
 msgid "Population Density"
 msgstr "Kepadatan Penduduk"
@@ -1131,8 +1133,9 @@ msgstr "Kepadatan Penduduk"
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:143
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:160
 #: safe/impact_functions/inundation/flood_population_evacuation.py:170
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:128
 #: safe/impact_functions/generic/categorised_hazard_population.py:144
+#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:128
+#: safe/impact_functions/generic/categorised_hazard_population.py:143
 #: safe/impact_functions/inundation/flood_population_evacuation.py:170
 #, python-format
 msgid "Population which %s"
@@ -1226,8 +1229,9 @@ msgstr "Bangunan terendam"
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:140
 #: safe/impact_functions/inundation/flood_population_evacuation.py:132
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:139
-#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:113
 #: safe/impact_functions/generic/categorised_hazard_population.py:119
+#: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:113
+#: safe/impact_functions/generic/categorised_hazard_population.py:118
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:139
 #: safe/impact_functions/inundation/flood_population_evacuation.py:132
 #, python-format
@@ -2339,6 +2343,7 @@ msgstr "UNTUK MENCOBA SAJA"
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:150
 #: safe/impact_functions/inundation/flood_population_evacuation.py:160
 #: safe/impact_functions/generic/categorised_hazard_population.py:134
+#: safe/impact_functions/generic/categorised_hazard_population.py:133
 #: safe/impact_functions/inundation/flood_population_evacuation.py:160
 #, python-format
 msgid "Low [%i people/cell]"
@@ -2355,6 +2360,7 @@ msgstr "Rendah [%i orang/sel]"
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:151
 #: safe/impact_functions/inundation/flood_population_evacuation.py:161
 #: safe/impact_functions/generic/categorised_hazard_population.py:135
+#: safe/impact_functions/generic/categorised_hazard_population.py:134
 #: safe/impact_functions/inundation/flood_population_evacuation.py:161
 #, python-format
 msgid "Medium [%i people/cell]"
@@ -2371,6 +2377,7 @@ msgstr "Sedang [%i orang/sel]"
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_population_evacuation.py:152
 #: safe/impact_functions/inundation/flood_population_evacuation.py:162
 #: safe/impact_functions/generic/categorised_hazard_population.py:136
+#: safe/impact_functions/generic/categorised_hazard_population.py:135
 #: safe/impact_functions/inundation/flood_population_evacuation.py:162
 #, python-format
 msgid "High [%i people/cell]"
@@ -2456,6 +2463,7 @@ msgstr "Tsunami di Padang (Mw 8.8)"
 #: safe/impact_functions/generic/categorised_hazard_population.py:25
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:25
 #: safe/impact_functions/generic/categorised_hazard_population.py:26
+#: safe/impact_functions/generic/categorised_hazard_population.py:25
 msgid "be impacted"
 msgstr "terdampak"
 
@@ -2463,6 +2471,7 @@ msgstr "terdampak"
 #: safe/impact_functions/generic/categorised_hazard_population.py:92
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:92
 #: safe/impact_functions/generic/categorised_hazard_population.py:93
+#: safe/impact_functions/generic/categorised_hazard_population.py:92
 msgid "People impacted "
 msgstr "Orang yang terdampak"
 
@@ -2470,6 +2479,7 @@ msgstr "Orang yang terdampak"
 #: safe/impact_functions/generic/categorised_hazard_population.py:95
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:95
 #: safe/impact_functions/generic/categorised_hazard_population.py:96
+#: safe/impact_functions/generic/categorised_hazard_population.py:95
 msgid "People in high hazard area "
 msgstr "Orang-orang di daerah bahaya tinggi"
 
@@ -2477,6 +2487,7 @@ msgstr "Orang-orang di daerah bahaya tinggi"
 #: safe/impact_functions/generic/categorised_hazard_population.py:98
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:98
 #: safe/impact_functions/generic/categorised_hazard_population.py:99
+#: safe/impact_functions/generic/categorised_hazard_population.py:98
 msgid "People in medium hazard area "
 msgstr "Orang-orang di daerah bahaya sedang"
 
@@ -2484,6 +2495,7 @@ msgstr "Orang-orang di daerah bahaya sedang"
 #: safe/impact_functions/generic/categorised_hazard_population.py:101
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:101
 #: safe/impact_functions/generic/categorised_hazard_population.py:102
+#: safe/impact_functions/generic/categorised_hazard_population.py:101
 msgid "People in low hazard area"
 msgstr "Orang-orang di daerah bahaya rendah"
 
@@ -2491,6 +2503,7 @@ msgstr "Orang-orang di daerah bahaya rendah"
 #: safe/impact_functions/generic/categorised_hazard_population.py:116
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:116
 #: safe/impact_functions/generic/categorised_hazard_population.py:117
+#: safe/impact_functions/generic/categorised_hazard_population.py:116
 msgid "Map shows population density in high or medium hazard area"
 msgstr ""
 "Peta menunjukkan kepadatan penduduk di daerah bahaya tinggi atau sedang"
@@ -2499,6 +2512,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_population.py:122
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:122
 #: safe/impact_functions/generic/categorised_hazard_population.py:123
+#: safe/impact_functions/generic/categorised_hazard_population.py:122
 msgid "People in high hazard areas"
 msgstr "Orang-orang di daerah bahaya tinggi"
 
@@ -2572,14 +2586,14 @@ msgstr "Penduduk terkena dampak daerah rawan banjir"
 #: safe/impact_functions/core.py:526 safe/impact_functions/core.py:538
 #: scripts/inasafe-dev/safe/impact_functions/core.py:538
 #: safe/impact_functions/core.py:539 safe/impact_functions/core.py:640
-#: safe/impact_functions/core.py:587
+#: safe/impact_functions/core.py:587 safe/impact_functions/core.py:587
 msgid "Title"
 msgstr "Judul"
 
 #: safe/impact_functions/core.py:526 safe/impact_functions/core.py:538
 #: scripts/inasafe-dev/safe/impact_functions/core.py:538
 #: safe/impact_functions/core.py:539 safe/impact_functions/core.py:640
-#: safe/impact_functions/core.py:587
+#: safe/impact_functions/core.py:587 safe/impact_functions/core.py:587
 msgid "ID"
 msgstr "ID"
 
@@ -2592,7 +2606,7 @@ msgstr "Persyaratan"
 #: safe/impact_functions/core.py:560 safe/impact_functions/core.py:572
 #: scripts/inasafe-dev/safe/impact_functions/core.py:572
 #: safe/impact_functions/core.py:574 safe/impact_functions/core.py:709
-#: safe/impact_functions/core.py:656
+#: safe/impact_functions/core.py:656 safe/impact_functions/core.py:656
 msgid "Available Impact Functions"
 msgstr "Tersedia Dampak Fungsi"
 
@@ -2622,11 +2636,12 @@ msgstr "Tersedia Dampak Fungsi"
 #: safe/impact_functions/inundation/flood_population_evacuation.py:131
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:230
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:138
+#: safe/impact_functions/generic/categorised_hazard_population.py:116
 #: safe/impact_functions/earthquake/earthquake_impact_on_women.py:140
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:230
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:132
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:101
-#: safe/impact_functions/generic/categorised_hazard_population.py:116
+#: safe/impact_functions/generic/categorised_hazard_population.py:115
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:209
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:138
 #: safe/impact_functions/inundation/flood_population_evacuation.py:131
@@ -2826,17 +2841,21 @@ msgstr ""
 
 # upa is the correct translation for 'sub', but it's not ver y popular
 #: safe/impact_functions/core.py:641 safe/impact_functions/core.py:588
+#: safe/impact_functions/core.py:588
 msgid "Sub Category"
 msgstr "Upa kategori"
 
 #: safe/impact_functions/core.py:641 safe/impact_functions/core.py:588
+#: safe/impact_functions/core.py:588
 msgid "Layer type"
 msgstr "Tipe-lapisan"
 
 #: safe/impact_functions/core.py:641 safe/impact_functions/core.py:588
+#: safe/impact_functions/core.py:588
 msgid "Data type"
 msgstr "Jenis data"
 
 #: safe/impact_functions/core.py:642 safe/impact_functions/core.py:589
+#: safe/impact_functions/core.py:589
 msgid "Unit"
 msgstr "Satuan"

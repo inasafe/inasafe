@@ -669,7 +669,7 @@ ke %s: %s</translation>
     <message>
         <location filename="options_dialog_base.ui" line="301"/>
         <source>Clip datasets to visible extent before analysis</source>
-        <translation>Potong dataset sampai cakupan yang terlihat sebelum dilakukan analisis</translation>
+        <translation>Potong dataset sampai cakupan yang terlihat sebelum melakukan analisis</translation>
     </message>
 </context>
 <context>
