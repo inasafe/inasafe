@@ -9,8 +9,7 @@ from safe.common.tables import Table, TableRow
 
 
 class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
-    """Plugin for impact of population as derived by catergorised hazard\
-    traalalalalalaall
+    """Plugin for impact of population as derived by catergorised hazard
 
     :author AIFDR
     :rating 2
