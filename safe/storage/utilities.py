@@ -6,6 +6,7 @@ import re
 import copy
 import numpy
 import math
+from ast import literal_eval
 from osgeo import ogr
 
 from safe.common.numerics import ensure_numeric
@@ -282,9 +283,9 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
                 blocks[current_block] = keywords
             if first_keywords is None and len(keywords) > 0:
                 first_keywords = keywords
-            # now set up for a new block
+            # Now set up for a new block
             current_block = text[1:-1]
-            # reset the keywords each time we encounter a new block
+            # Reset the keywords each time we encounter a new block
             # until we know we are on the desired one
             keywords = {}
             continue
@@ -300,7 +301,13 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
             key = text[:idx]
 
             # Take value as everything after the first ':'
-            val = text[idx + 1:].strip()
+            textval = text[idx + 1:].strip()
+            try:
+                # Take care of python structures like
+                # booleans, None, lists, dicts etc
+                val = literal_eval(textval)
+            except (ValueError, SyntaxError):
+                val = textval
 
         # Add entry to dictionary
         keywords[key] = val
