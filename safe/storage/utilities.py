@@ -267,6 +267,7 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
     first_keywords = None
     for line in fid.readlines():
         # Remove trailing (but not preceeding!) whitespace
+        # FIXME: Can be removed altogether
         text = line.rstrip()
 
         # Ignore blank lines

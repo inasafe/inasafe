@@ -361,8 +361,8 @@ def get_thresholds(layer):
     """
 
     if 'thresholds' in layer.keywords:
-        s = layer.keywords['thresholds']
-        thresholds = [float(x) for x in s.split(',')]
+        t_list = layer.keywords['thresholds']
+        thresholds = [float(x) for x in t_list]
         thresholds.sort()
     else:
         thresholds = []
