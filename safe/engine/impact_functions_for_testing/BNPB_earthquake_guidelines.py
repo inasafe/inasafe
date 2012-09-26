@@ -36,7 +36,7 @@ class EarthquakeGuidelinesFunction(FunctionProvider):
                     unit=='MMI'
 
     :param requires category=='exposure' and \
-                    subcategory.startswith('building') and \
+                    subcategory in ['building', 'structure'] and \
                     layertype=='vector'
     """
 

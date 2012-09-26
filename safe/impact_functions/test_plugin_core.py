@@ -10,7 +10,7 @@ from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
 from utilities import pretty_string
-from safe.impact_functions.core import get_dict_doc_func
+# from safe.impact_functions.core import get_dict_doc_func
 
 LOGGER = logging.getLogger('InaSAFE')
 
