@@ -168,7 +168,7 @@ Here is a log of the options we set for the Jenkins job:
 
        export PYTHONPATH=/usr/local/qgis1.8/share/qgis/python/
        export LD_LIBRARY_PATH=/usr/local/qgis1.8/lib
-       export QGISPATH=/usr/local/qgis1.8/
+       export QGIS_PREFIX_PATH=/usr/local/qgis1.8/
 
        # Make sure data dir is current and synced it its git clone
        scripts/update-test-data.sh

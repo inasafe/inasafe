@@ -254,8 +254,8 @@ searchBoxes: None
         myMessage = 'Got:\n%s\nExpected:\n%s\n' % (myFatalitiesHtml, myExpectedResult)
         assert myFatalitiesHtml == myExpectedResult, myMessage
 
-        myExpectedFatalities = {2: 0.47581343895471434,
-                                3: 0.023297814118407856,
+        myExpectedFatalities = {2: 0.47386375223673427,
+                                3: 0.024892573693488258,
                                 4: 0.0,
                                 5: 0.0,
                                 6: 0.0,
@@ -411,7 +411,7 @@ searchBoxes: None
         myShakeData = ShakeData(myShakeId)
         myShakeEvent = myShakeData.shakeEvent()
         myDegreeSymbol = unichr(176)
-        myExpectedResult = ('M 5.0 26-7-2012 2:15:35 0.5.0.dev20120924192850 '
+        myExpectedResult = ('M 5.0 26-7-2012 2:15:35 '
                             'Latitude:  Longitude: Depth: 11.0 Km Located '
                             '2.504296, -163.055923462 SSW Tondano')
         # % (myDegreeSymbol, myDegreeSymbol))

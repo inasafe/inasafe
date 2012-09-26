@@ -84,11 +84,11 @@ QGIS installed in a non-standard location
 .........................................
 
 For running unit tests that need QGIS, you may need to adjust *PYTHONPATH* and
-*QGISPATH* if QGIS is running in a non standard location. For example with
+*QGIS_PREFIX_PATH* if QGIS is running in a non standard location. For example with
 QGIS built from source into /usr/local (and python bindings global install
 option disabled), you could run these commands (or add them to your ~/.bashrc)::
 
-   export QGISPATH=/usr/local
+   export QGIS_PREFIX_PATH=/usr/local
    export PYTHONPATH=$PYTHONPATH:/usr/local/share/qgis/python/
 
 .. note:: The above can be set within Eclipse's project properties if you are

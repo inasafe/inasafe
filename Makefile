@@ -154,7 +154,7 @@ realtime_test_suite:
 	#Noisy version - uncomment if you want to see all qgis stdout
 	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 	#Quiet version
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH):/usr/local/qgis-master/share/qgis/python;export LD_LIBRARY_PATH=/usr/local/qgis-master/lib;export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;export QGISPATH=/usr/local/qgis-master;nosetests -v --with-id --with-coverage --cover-package=realtime realtime 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH):/usr/local/qgis-master/share/qgis/python;export LD_LIBRARY_PATH=/usr/local/qgis-master/lib;export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;export QGIS_PREFIX_PATH=/usr/local/qgis-master;nosetests -v --with-id --with-coverage --cover-package=realtime realtime 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
 
 # Get test data

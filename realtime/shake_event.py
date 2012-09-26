@@ -1818,7 +1818,8 @@ class ShakeEvent(QObject):
         # [date] pass a map like this {'date': '1 Jan 2012'}
         myLocationInfo = self.eventInfo().replace(unichr(176),'')
         LOGGER.debug(myLocationInfo)
-        mySubstitutionMap = {'location-info': myLocationInfo}
+        mySubstitutionMap = {'location-info': myLocationInfo,
+                             'version': self.version()}
         myResult = myComposition.loadFromTemplate(myDocument,
                                                   mySubstitutionMap)
         if not myResult:
@@ -1938,7 +1939,7 @@ class ShakeEvent(QObject):
         myName = self.mostAffectedCity['name']
         myBearing = self.bearingToCardinal(myDirection)
 
-        myString = (('M %(mmi)s %(date)s %(time)s %(version)s '
+        myString = (('M %(mmi)s %(date)s %(time)s '
                     '%(latitude-name)s: %(latitude-value)s %(longitude-name)s:'
                      '%(longitude-value)s %(depth-name)s: %(depth)s %('
                      'located-label)s %(distance)2f, %(bearing-degrees)s '
@@ -1950,7 +1951,6 @@ class ShakeEvent(QObject):
                        'time': '%s:%s:%s' % (self.hour,
                                              self.minute,
                                              self.second),
-                       'version': get_version(),
                        'latitude-name': self.tr('Latitude'),
                        'latitude-value': '', # myLatitude, #causes error
                        'longitude-name': self.tr('Longitude'),
@@ -1964,6 +1964,15 @@ class ShakeEvent(QObject):
                        'place-name': myName
                      } )
         return myString
+
+    def version(self):
+        """Return a string showing the version of Inasafe.
+
+        Args: None
+
+        Returns: str
+        """
+        return self.tr('Version: %s' % get_version())
 
     def getCityById(self, theId):
         """A helper to get the info of an affected city given it's id.

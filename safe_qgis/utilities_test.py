@@ -3,6 +3,9 @@
 
 import os
 import sys
+import hashlib
+import logging
+
 from PyQt4 import QtGui, QtCore
 from qgis.core import (QgsApplication,
                       QgsVectorLayer,
@@ -15,7 +18,9 @@ from qgis_interface import QgisInterface
 # For testing and demoing
 from safe.common.testing import TESTDATA
 from safe_qgis.safe_interface import readKeywordsFromFile
-import hashlib
+
+LOGGER = logging.getLogger('InaSAFE-Realtime')
+
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
 CANVAS = None
@@ -60,29 +65,26 @@ def hashForFile(theFilename):
 def getQgisTestApp():
     """ Start one QGis application to test agaist
 
-    Input
-        NIL
+    Args:
+        None
 
-    Output
-        handle to qgis app
+    Returns:
+        QGISAPP, CANVAS, IFACE, PARENT tuple
 
-
-    If QGis is already running the handle to that app will be returned
+    If QGIS is already running the handle to that app will be returned
     """
 
     global QGISAPP  # pylint: disable=W0603
 
     if QGISAPP is None:
+        # Note: QGIS_PREFIX_PATH is evaluated in QgsApplication -
+        # no need to mess with it here.
         myGuiFlag = True  # All test will run qgis in safe_qgis mode
         QGISAPP = QgsApplication(sys.argv, myGuiFlag)
-        if 'QGISPATH' in os.environ:
-            myPath = os.environ['QGISPATH']
-            myUseDefaultPathFlag = True
-            QGISAPP.setPrefixPath(myPath, myUseDefaultPathFlag)
 
         QGISAPP.initQgis()
-        s = QGISAPP.showSettings()
-        print s
+        mySettings = QGISAPP.showSettings()
+        LOGGER.debug(mySettings)
 
     global PARENT  # pylint: disable=W0603
     if PARENT is None:
