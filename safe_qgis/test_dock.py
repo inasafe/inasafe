@@ -496,12 +496,11 @@ class DockTest(unittest.TestCase):
         myRunButton = DOCK.pbnRunStop
         myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp',
                       'kabupaten_jakarta_singlepart_1_good_attr.shp',
-                      'kabupaten_jakarta_singlepart_3_good_attr.shp'
-                    ]
-        #add additional layers
+                      'kabupaten_jakarta_singlepart_3_good_attr.shp']
+        # Add additional layers
         loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
 
-        # with aggregation attribute defined in .keyword using
+        # With aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta like in 2007',
@@ -516,7 +515,7 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
 
-        # with no good aggregation attribute using
+        # With no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta like in 2007',
@@ -527,6 +526,7 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+
         myMessage = ('The aggregation should be None. Found: %s' %
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
@@ -1256,8 +1256,6 @@ class DockTest(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-    suite = unittest.makeSuite(DockTest,
-                        'test_runCateogrizedHazardBuildingImpact')
-
+    #suite = unittest.makeSuite(DockTest, 'test_checkAggregationAttribute')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
