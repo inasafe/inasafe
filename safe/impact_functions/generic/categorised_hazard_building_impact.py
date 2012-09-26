@@ -19,7 +19,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
                     layertype=='raster'
 
     :param requires category=='exposure' and \
-                    subcategory in ['building', 'structure'] and \
+                    subcategory=='structure' and \
                     layertype=='vector'
     :citation citation1
     :citation citation2 \
