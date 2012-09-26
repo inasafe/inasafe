@@ -58,7 +58,7 @@ class TsunamiBuildingLossFunction(FunctionProvider):
                     subcategory.startswith('tsunami') and \
                     layertype=='raster'
     :param requires category=='exposure' and \
-                    subcategory.startswith('building') and \
+                    subcategory=='structure' and \
                     layertype=='vector' and \
                     nothing=='never'
     """

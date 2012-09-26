@@ -226,7 +226,7 @@ class SafeInterfaceTest(unittest.TestCase):
         myKeywords = readKeywordsFromFile(self.vectorPath)
         assert myKeywords == {'category': 'exposure',
                               'datatype': 'itb',
-                              'subcategory': 'building'}
+                              'subcategory': 'structure'}
 
         #  tsunami example (one layer is UTM)
         myKeywords = readKeywordsFromFile(self.rasterTsunamiPath)

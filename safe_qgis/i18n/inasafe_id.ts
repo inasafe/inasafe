@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="id_ID">
+<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -105,7 +104,7 @@
     <message>
         <location filename="dock.py" line="742"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
-        <translation>Ini mungkin memerlukan sedikit waktu - kita menghitung daerah yang akan terkena dampak bahaya dan menulis hasilnya ke layer baru.</translation>
+        <translation>Ini mungkin memerlukan sedikit waktu - kita sedang menghitung daerah yang akan terkena dampak bahaya dan menulis hasilnya ke layer baru.</translation>
     </message>
     <message>
         <location filename="dock.py" line="800"/>
@@ -130,7 +129,7 @@
     <message>
         <location filename="dock.py" line="1062"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
-        <translation>Kita resampling dan menjepit hazardlayer untuk mencocokkan perpotongan dari exposurelayer dan luasan tampilan aktif.</translation>
+        <translation>Kita resampling dan menjepit lapisan ancaman untuk mencocokkan perpotongan dari lapisan terpapar dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="dock.py" line="1070"/>
@@ -140,7 +139,7 @@
     <message>
         <location filename="dock.py" line="1071"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
-        <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
+        <translation>Kita resampling dan menjepit lapisan terpapar untuk mencocokkan perpotongan lapisan ancaman dan luasan tampilan aktif.</translation>
     </message>
     <message>
         <location filename="dock.py" line="1300"/>
@@ -180,7 +179,7 @@
     <message>
         <location filename="dock.py" line="273"/>
         <source>To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
-        <translation>Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik tombol&lt;em&gt; jalankan&lt;/em&gt; di bawah ini.</translation>
+        <translation>Untuk menggunakan peralatan ini, anda perlu menambahkan beberapa lapisan ke proyek QGIS anda. Pastikan bahwa itu memiliki paling tidak satu &lt;em&gt; lapisan &lt;/em&gt;ancaman (seperti gempabumi MMI) dan satu &lt;em&gt; lapisan &lt;/em&gt; terpapar (seperti tempat tinggal). Ketika anda siap, klik tombol&lt;em&gt; Hitung&lt;/em&gt; di bawah ini.</translation>
     </message>
     <message>
         <location filename="dock.py" line="279"/>
@@ -210,7 +209,7 @@
     <message>
         <location filename="dock.py" line="315"/>
         <source>You can now proceed to run your model by clicking the &lt;em&gt;Run&lt;/em&gt; button.</source>
-        <translation>Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik &lt;em&gt; tombol&lt;/em&gt; Hitung.</translation>
+        <translation>Sekarang anda dapat memproses untuk menjalankan model anda dengan mengklik tombol &lt;em&gt;Hitung&lt;/em&gt;.</translation>
     </message>
     <message>
         <location filename="dock.py" line="317"/>
@@ -548,7 +547,7 @@ ke %s: %s</translation>
     <message>
         <location filename="keywords_dialog_base.ui" line="205"/>
         <source>Key</source>
-        <translation>kunci</translation>
+        <translation>Kunci</translation>
     </message>
     <message>
         <location filename="keywords_dialog_base.ui" line="34"/>

@@ -47,7 +47,7 @@ class KeywordIOTest(unittest.TestCase):
                                        'subcategory': 'building'}
         self.expectedVectorKeywords = {'category': 'exposure',
                                        'datatype': 'itb',
-                                       'subcategory': 'building'}
+                                       'subcategory': 'structure'}
         self.expectedRasterKeywords = {'category': 'hazard',
                                        'subcategory': 'earthquake',
                                        'unit': 'MMI',

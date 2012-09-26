@@ -1589,7 +1589,7 @@ class Test_Engine(unittest.TestCase):
         # Verify interpolated values with test result
         count = 0
         for i in range(N):
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category is not None:
                 count += 1
 
@@ -1669,7 +1669,7 @@ class Test_Engine(unittest.TestCase):
                 counts['Not ' + DEFAULT_ATTRIBUTE] += 1
 
             # Count items in each specific category
-            category = attrs['Catergory']  # The typo is as the data
+            category = attrs['Category']
             if category not in counts:
                 counts[category] = 0
             counts[category] += 1
@@ -1757,11 +1757,10 @@ class Test_Engine(unittest.TestCase):
         # Test interpolation function
         #I = H.interpolate(E, layer_name='depth',
         #                  # Spelling is as in test data
-        #                  attribute_name='Catergory')
+        #                  attribute_name='Category')
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
-                                                  # Spelling is as in test data
-                                                  attribute_name='Catergory')
+                                                  attribute_name='Category')
 
         #I.write_to_file('MM_res.shp')
 
@@ -1774,7 +1773,7 @@ class Test_Engine(unittest.TestCase):
         I_names = I.get_attribute_names()
         E_names = E.get_attribute_names()
 
-        name = 'Catergory'
+        name = 'Category'
         msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
         assert name in I_names, msg
 
@@ -1787,7 +1786,7 @@ class Test_Engine(unittest.TestCase):
         # Verify interpolated values with test result
         counts = {}
         for i in range(N):
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category not in counts:
                 counts[category] = 0
 
@@ -2016,7 +2015,7 @@ class Test_Engine(unittest.TestCase):
                 counts['Not ' + DEFAULT_ATTRIBUTE] += 1
 
             # Check specific attribute
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category is not None:
                 assert category.lower() in ['high', 'very high']
                 count += 1
@@ -2129,7 +2128,7 @@ class Test_Engine(unittest.TestCase):
                 counts['Not ' + DEFAULT_ATTRIBUTE] += 1
 
             # Check specific attribute
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category is not None:
                 msg = 'category = %s' % category
                 assert category.lower() in ['low', 'medium',
@@ -2155,13 +2154,13 @@ class Test_Engine(unittest.TestCase):
         assert I_attributes[40]['parent_line_id'] == 54
 
         assert I_attributes[76]['highway'] == 'secondary'
-        assert I_attributes[76]['Catergory'] == 'High'
+        assert I_attributes[76]['Category'] == 'High'
         assert I_attributes[76]['osm_id'] == 69370718
         assert I_attributes[76]['polygon_id'] == 374
         assert I_attributes[76]['parent_line_id'] == 1
 
         assert I_attributes[85]['highway'] == 'secondary'
-        assert I_attributes[85]['Catergory'] == 'Very High'
+        assert I_attributes[85]['Category'] == 'Very High'
         assert I_attributes[85]['osm_id'] == 69371482
         assert I_attributes[85]['polygon_id'] == 453
         assert I_attributes[85]['parent_line_id'] == 133
@@ -2449,8 +2448,7 @@ class Test_Engine(unittest.TestCase):
         # Test interpolation function
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
-                                                  # Spelling is as in test data
-                                                  attribute_name='Catergory')
+                                                  attribute_name='Category')
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -2471,7 +2469,7 @@ class Test_Engine(unittest.TestCase):
         I_names = I.get_attribute_names()
         E_names = E.get_attribute_names()
 
-        name = 'Catergory'
+        name = 'Category'
         msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
         assert name in I_names, msg
 
@@ -2484,7 +2482,7 @@ class Test_Engine(unittest.TestCase):
         for i in range(N):
 
             # Check specific attribute
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category not in counts:
                 counts[category] = 0
 
