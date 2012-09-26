@@ -546,6 +546,8 @@ class DockTest(unittest.TestCase):
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         myMessage = ('The aggregation should be TEST_INT. Found: %s' %
                      (DOCK.aggregationAttribute))
+        #TODO (MB) automate the selection of the second attribute in gui
+
         self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
 
         # with no good aggregation attribute using
