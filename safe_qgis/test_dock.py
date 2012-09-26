@@ -440,7 +440,8 @@ class DockTest(unittest.TestCase):
     def test_cboAggregationToggle(self):
         #TODO (MB) ole please check the data I used is correct
         """Aggregation Combobox toggles on and off as expected."""
-
+        self.tearDown()
+        self.setUp()
         #raster hazard
         #raster exposure
         myResult, myMessage = setupScenario(
@@ -496,11 +497,13 @@ class DockTest(unittest.TestCase):
         myRunButton = DOCK.pbnRunStop
         myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp',
                       'kabupaten_jakarta_singlepart_1_good_attr.shp',
-                      'kabupaten_jakarta_singlepart_3_good_attr.shp']
-        # Add additional layers
+                      'kabupaten_jakarta_singlepart_3_good_attr.shp',
+                      'kabupaten_jakarta_singlepart_with_None_keyword.shp'
+                    ]
+        #add additional layers
         loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
 
-        # With aggregation attribute defined in .keyword using
+        # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta like in 2007',
@@ -514,22 +517,6 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
-
-        # With no good aggregation attribute using
-        # kabupaten_jakarta_singlepart_0_good_attr.shp
-        myResult, myMessage = setupScenario(
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart 0 good attr')
-        assert myResult, myMessage
-        # Press RUN
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-
-        myMessage = ('The aggregation should be None. Found: %s' %
-                     (DOCK.aggregationAttribute))
-        assert DOCK.aggregationAttribute is None, myMessage
 
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
@@ -560,6 +547,40 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation should be TEST_INT. Found: %s' %
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
+
+        # with no good aggregation attribute using
+        # kabupaten_jakarta_singlepart_0_good_attr.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart 0 good attr')
+        assert myResult, myMessage
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('The aggregation should be None. Found: %s\nNOTICE: this '
+                     'failure is expected until '\
+                     'readKeywords supports literal eval' %
+                     (DOCK.aggregationAttribute))
+        assert DOCK.aggregationAttribute is None, myMessage
+
+        # with None aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart_with_None_keyword.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart with None keyword')
+        assert myResult, myMessage
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('The aggregation should be None. Found: %s\nNOTICE: this '
+                     'failure is expected until '\
+                     'readKeywords supports literal eval' %
+                     (DOCK.aggregationAttribute))
+        assert DOCK.aggregationAttribute is None, myMessage
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
@@ -1256,6 +1277,8 @@ class DockTest(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-    #suite = unittest.makeSuite(DockTest, 'test_checkAggregationAttribute')
+    suite = unittest.makeSuite(DockTest,
+                        'test_cboAggregationToggle')
+
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
