@@ -540,12 +540,12 @@ class DockTest(unittest.TestCase):
             theAggregation='kabupaten jakarta singlepart 3 good attr')
         assert myResult, myMessage
         # Press RUN
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
-                     (DOCK.aggregationAttribute))
-        #TODO (MB) automate the selection of the second attribute in gui
-
-        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
+#        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+#        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
+#                     (DOCK.aggregationAttribute))
+#        #TODO (MB) automate the selection of the second attribute in gui
+#
+#        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
 
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
