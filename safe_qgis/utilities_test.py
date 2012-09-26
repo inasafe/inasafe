@@ -11,7 +11,8 @@ from qgis.core import (QgsApplication,
                       QgsVectorLayer,
                       QgsRasterLayer,
                       QgsRectangle,
-                      QgsCoordinateReferenceSystem)
+                      QgsCoordinateReferenceSystem,
+                      QgsMapRenderer)
 from qgis.gui import QgsMapCanvas
 from qgis_interface import QgisInterface
 
