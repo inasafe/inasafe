@@ -496,12 +496,13 @@ class DockTest(unittest.TestCase):
         myRunButton = DOCK.pbnRunStop
         myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp',
                       'kabupaten_jakarta_singlepart_1_good_attr.shp',
-                      'kabupaten_jakarta_singlepart_3_good_attr.shp'
+                      'kabupaten_jakarta_singlepart_3_good_attr.shp',
+                      'kabupaten_jakarta_singlepart_with_None_keyword.shp'
                     ]
         #add additional layers
         loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
 
-        # with aggregation attribute defined in .keyword using
+        # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta like in 2007',
@@ -515,6 +516,21 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
+
+        # with None aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart_with_None_keyword.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart with None keyword')
+        assert myResult, myMessage
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('The aggregation should be None. Found: %s' %
+                     (DOCK.aggregationAttribute))
+        assert DOCK.aggregationAttribute is None, myMessage
 
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
