@@ -53,7 +53,8 @@ from qgis.core import (QgsPoint,
                        QgsCoordinateReferenceSystem,
                        QgsProject,
                        QgsComposition,
-                       QgsMapLayerRegistry)
+                       QgsMapLayerRegistry,
+                       QgsMapRenderer)
 #TODO refactor this into a utilitiy class as it is no longer only used by test
 from safe_qgis.utilities_test import getQgisTestApp
 from safe.common.version import get_version
@@ -1811,7 +1812,11 @@ class ShakeEvent(QObject):
         myDocument = QDomDocument()
         myDocument.setContent(myTemplateContent)
 
-        myComposition = QgsComposition(CANVAS.mapRenderer())
+        # Set up the map renderer that will be assigend to the composition
+        myMapRenderer = QgsMapRenderer()
+        myMapRenderer.setProjectionsEnabled(False)
+        # Now set up the composition
+        myComposition = QgsComposition(myMapRenderer)
 
         # You can use this to replace any string like this [key]
         # in the template with a new value. e.g. to replace
@@ -1872,6 +1877,13 @@ class ShakeEvent(QObject):
                                        'mmi-contours', "ogr")
         QgsMapLayerRegistry.instance().addMapLayers(
                     [myContoursLayer, myCitiesLayer])
+
+        # Now add out layers to the renderer so they appear in the print out
+        myLayerStringList = QStringList()
+        myLayerStringList.append(myContoursLayer.id())
+        myLayerStringList.append(myCitiesLayer.id())
+        myMapRenderer.setLayerSet(myLayerStringList)
+
         # Save a pdf.
         myPdfPath = os.path.join(shakemapExtractDir(),
                          self.eventId,
@@ -1928,10 +1940,17 @@ class ShakeEvent(QObject):
 
         #Format the lat lon from ddegrees to dms
         myPoint = QgsPoint(self.longitude, self.latitude)
-        myCoordinates = myPoint.toDegreesMinutesSeconds(2)
-        myTokens = myCoordinates.split(',')
-        myLongitude = myTokens[0]
-        myLatitude = myTokens[1]
+        myCoordinates = str(myPoint.toDegreesMinutesSeconds(2).toAscii())
+        myCoordinates = myCoordinates.replace('xb027','u00B0')
+        #myString = QString()
+        #myString.toUtf8()
+        #myCoordinates.
+        myTokens = str(myCoordinates).split(',')
+        myLongitude = myTokens[0].encode('string_escape')
+        myLatitude = myTokens[1].encode('string_escape')
+
+        LOGGER.debug(myLongitude)
+        LOGGER.debug(myLatitude)
         if self.mostAffectedCity is None:
             self.sortedImpactedCities()
         myDirection = self.mostAffectedCity['dir_to']

@@ -18,6 +18,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from ftplib import FTP
 import urllib2
+import logging
+
+# The logger is intialised in utils.py by init
+LOGGER = logging.getLogger('InaSAFE-Realtime')
 
 
 class FtpClient:
@@ -93,11 +97,12 @@ class FtpClient:
         Raises:
           None
         """
+        LOGGER.debug('Getting ftp listing for %s', self.baseUrl)
         myUrl = 'ftp://%s' % self.baseUrl
         myRequest = urllib2.Request(myUrl)
         try:
             myFileId = urllib2.urlopen(myRequest, timeout=60)
-        except Exception, e:
+        except urllib2.URLError, e:
             print e.reason
             raise
 
@@ -169,6 +174,7 @@ class FtpClient:
          Raises:
              None
         """
+        LOGGER.debug('Getting ftp file: %s', theFilePath)
         myUrl = 'ftp://%s/%s' % (self.baseUrl, theUrlPath)
         myRequest = urllib2.Request(myUrl)
         try:
@@ -176,8 +182,8 @@ class FtpClient:
             myFile = file(theFilePath, 'wb')
             myFile.write(myUrlHandle.read())
             myFile.close()
-        except Exception, e:
-            print e.reason
+        except urllib2.URLError, e:
+            LOGGER.exception('Bad Url or Timeout')
             raise
 
     def _getFileUsingFtpLib(self, theUrlPath, theFilePath):
