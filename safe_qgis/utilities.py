@@ -520,7 +520,7 @@ def qgisVersion():
     return myVersion
 
 
-def copyInMemory(vLayer, copyName='', clipTo=None, argsToKeep='all'):
+def copyInMemory(vLayer, copyName=''):
     """Return a memory copy of a layer
 
     Input

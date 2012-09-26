@@ -66,8 +66,9 @@ from safe_qgis.utilities import (htmlHeader,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion,
-                                 copyInMemory,
-                                 memoryLayerToShapefile)
+                                 )
+
+
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -1046,7 +1047,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
-        logOnQgsMessageLog('Vector aggregation not implemented yet')
+        logOnQgsMessageLog('Vector aggregation not implemented yet. Called on'
+                           ' %s' % myQgisImpactLayer.name() )
         return
 
     def _aggregateResultsRaster(self, myQgisImpactLayer):
@@ -1137,14 +1139,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 name = str(feat.id())
             else:
                 name = attrMap[nameFieldIndex].toString()
-            sum = attrMap[sumFieldIndex].toString()
+            aggrSum = attrMap[sumFieldIndex].toString()
 
             myHTML += ('    <tr>'
                         '      <td>'
                         + name +
                         '      </td>'
                         '      <td>'
-                        + sum +
+                        + aggrSum +
                         '      </td>'
                         '    </tr>')
         #close table
@@ -1163,8 +1165,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Raises: Propogates any error
         """
-        myKeywordFilePath =\
-            os.path.splitext(str(self.aggregationLayer.source()))[0]
+        myKeywordFilePath = os.path.splitext(str(
+            self.aggregationLayer.source()))[0]
         myKeywordFilePath += '.keywords'
         if not os.path.isfile(myKeywordFilePath):
             self._promptForAggregationAttribute(self.aggregationLayer,
