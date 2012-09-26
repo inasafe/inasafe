@@ -438,10 +438,7 @@ class DockTest(unittest.TestCase):
         self.assertEquals(currentLayers, myLayerList, myMessage)
 
     def test_cboAggregationToggle(self):
-        #TODO (MB) ole please check the data I used is correct
         """Aggregation Combobox toggles on and off as expected."""
-        self.tearDown()
-        self.setUp()
         #raster hazard
         #raster exposure
         myResult, myMessage = setupScenario(
@@ -561,9 +558,7 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        myMessage = ('The aggregation should be None. Found: %s\nNOTICE: this '
-                     'failure is expected until '\
-                     'readKeywords supports literal eval' %
+        myMessage = ('The aggregation should be None. Found: %s' %
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
 
@@ -578,9 +573,7 @@ class DockTest(unittest.TestCase):
         assert myResult, myMessage
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        myMessage = ('The aggregation should be None. Found: %s\nNOTICE: this '
-                     'failure is expected until '\
-                     'readKeywords supports literal eval' %
+        myMessage = ('The aggregation should be None. Found: %s' %
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
 
