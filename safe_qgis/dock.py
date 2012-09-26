@@ -1075,7 +1075,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr(
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
-        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
+#        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
         return
 
     def _parseAggregationResults(self):
