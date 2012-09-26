@@ -108,7 +108,7 @@ Enable the following plugins:
 * Jenkins Cobertura Plugin
 * Jenkins Gravatar plugin
 * Jenkins SSH Slaves plugin
-
+* xvfb
 
 
 Lock down access
@@ -151,6 +151,7 @@ Here is a log of the options we set for the Jenkins job:
 * Check :guilabel:`Enable project-based security` then add an entry for
   **Anonymous** with :kbd:`Job: Read` and :kbd:`Job Discover` permissions
   only. This will allow anonymous read-only access to the project.
+* :guilabel:`Xvfb` set to ticked.
 * :guilabel:`GitHub project` set to :kbd:`https://github.com/AIFDR/inasafe/`
 * :guilabel:`Source Code Management` check :guilabel:`Git` and set to
   :kbd:`git@github.com:AIFDR/inasafe.git`
