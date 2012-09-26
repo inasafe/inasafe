@@ -39,7 +39,9 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
-                       QGis
+                       QGis,
+                       QgsFeature,
+                       QgsRectangle
                        )
 from qgis.analysis import (QgsZonalStatistics
                            )
@@ -58,7 +60,7 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
-from safe.api import write_keywords, read_keywords
+from safe.api import write_keywords, read_keywords, ReadLayerError
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
@@ -126,6 +128,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
+        self._aggregationPrefix = 'aggr_'
+
+        self.initPostprocessingOutput()
 
         myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -596,6 +601,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         selectedHazardLayer = self.getHazardLayer()
         selectedExposureLayer = self.getExposureLayer()
 
+        #more than 1 because No aggregation is always there
         if (self.cboAggregation.count() > 1 and
            selectedHazardLayer is not None and
            selectedExposureLayer is not None and
@@ -749,6 +755,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
+    def getAggregationFieldNameCount(self):
+        return self._aggregationPrefix + 'count'
+
+    def getAggregationFieldNameMean(self):
+        return self._aggregationPrefix + 'mean'
+
+    def getAggregationFieldNameSum(self):
+        return self._aggregationPrefix + 'sum'
+
     def setupCalculator(self):
         """Initialise the ImpactCalculator based on the current
         state of the ui.
@@ -793,9 +808,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             try:
                 self.aggregationAttribute = self._checkAggregationAttribute()
             except Exception, e:
+                # FIXME (MB): This branch is not covered by the tests
                 QtGui.qApp.restoreOverrideCursor()
                 self.hideBusy()
-                myMessage = self.tr('An exception occurred when reading '
+                myMessage = self.tr('An exception occurred when reading the '
                                     'aggregation attribute.')
                 myMessage = getExceptionWithStacktrace(e,
                     html=True,
@@ -891,6 +907,42 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.aggregationLayer is not None:
             self.aggregateResults(88)
         self.completed()
+        self.initPostprocessingOutput()
+
+    def initPostprocessingOutput(self):
+        """
+        initializes and clears self.postprocessingOutput. needs to run at the
+         end of startPostprocessing
+
+        Returns: None
+        """
+
+        #FIXME (MB) maybe this could be a {} to allow having a parseable
+        # structure where each postprocessor adds a
+        # postprocessorname:'report string' pair
+        self.postprocessingOutput = []
+
+    def addPostprocessingOutput(self, output):
+        """
+        adds text to the postprocessingOutput
+
+        Args:
+            * output: the output from a postprocessor to add to the global
+            output. It should be valid HTML but no checks are enforced.
+
+        Returns: None
+        """
+        self.postprocessingOutput.append(str(output))
+
+    def getPostprocessingOutput(self):
+        """
+        gets the of the postprocessingOutput
+
+        Args: None
+
+        Returns: a string concatenation of the list elements
+        """
+        return ' '.join(self.postprocessingOutput)
 
     def aggregateResults(self, progress):
         """
@@ -909,6 +961,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             self.showBusy(myTitle, myMessage, myProgress)
             self._aggregateResults()
+            self._parseAggregationResults()
             QtGui.qApp.restoreOverrideCursor()
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
@@ -938,7 +991,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myQgisImpactLayer = self.readImpactLayer(impactLayer)
         if not myQgisImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQgisImpactLayer)
-            raise Exception(myMessage)
+            raise ReadLayerError(myMessage)
 
         lName = str(self.tr('%1 aggregated to %2')
                 .arg(myQgisImpactLayer.name())
@@ -954,7 +1007,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if not self.aggregationLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(
                 self.aggregationLayer.lastError())
-            raise Exception(myMessage)
+            raise ReadLayerError(myMessage)
 
         #delete unwanted fields
         vProvider = self.aggregationLayer.dataProvider()
@@ -981,7 +1034,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('%1 is %2 but it should be either vector or '
                                 'raster').arg(myQgisImpactLayer.name()).arg(
                                 myQgisImpactLayer.type())
-            raise Exception(myMessage)
+            raise ReadLayerError(myMessage)
 
     def _aggregateResultsVector(self, myQgisImpactLayer):
         """
@@ -1005,11 +1058,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
         """
-        prefix = 'aggr_'
         zonStat = QgsZonalStatistics(
             self.aggregationLayer,
             myQgisImpactLayer.dataProvider().dataSourceUri(),
-            prefix
+            self._aggregationPrefix
         )
         progressDialog = QtGui.QProgressDialog(
             self.tr('Calculating zonal statistics'),
@@ -1025,6 +1077,80 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'so there are no data for analysis. Exiting...'))
         QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
         return
+
+    def _parseAggregationResults(self):
+        if self.aggregationAttribute is None:
+            aggrAttrTitle = self.tr('Aggregation unit')
+        else:
+            aggrAttrTitle = self.aggregationAttribute
+
+        #open table
+        myHTML = (  '<table class="table table-striped condensed">'
+                    '  <tbody>'
+                    '    <tr>'
+                    '       <td colspan="100%">'
+                    '         <strong>'
+                    +self.aggregationLayer.name() +
+                    '         </strong>'
+                    '       </td>'
+                    '    </tr>'
+                    '    <tr>'
+                    '      <th width="35%">'
+                    + aggrAttrTitle +
+                    '      </th>'
+                    '      <th>'
+                    + self.tr('Sum') +
+                    '      </th>'
+                    '    </tr>')
+        #fill table
+        provider = self.aggregationLayer.dataProvider()
+        allAttrs = provider.attributeIndexes()
+        # start data retreival: fetch no geometry and all attributes for each
+        # feature
+        provider.select(allAttrs, QgsRectangle(), False)
+
+        try:
+            nameFieldIndex = self.aggregationLayer.fieldNameIndex(
+                self.aggregationAttribute)
+        except:
+            nameFieldIndex = None
+        try:
+            sumFieldIndex = self.aggregationLayer.fieldNameIndex(
+            self.getAggregationFieldNameSum())
+        except ReadLayerError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An exception occurred when reading the'
+                                'aggregation data. %1 not found in %2')\
+            .arg(self.getAggregationFieldNameSum())\
+            .arg(self.aggregationLayer.name())
+            myMessage = getExceptionWithStacktrace(e,
+                html=True,
+                context=myMessage)
+            self.displayHtml(myMessage)
+            return
+
+        feat = QgsFeature()
+        while provider.nextFeature(feat):
+            attrMap = feat.attributeMap()
+            if nameFieldIndex is None:
+                name = str(feat.id())
+            else:
+                name = attrMap[nameFieldIndex].toString()
+            sum = attrMap[sumFieldIndex].toString()
+
+            myHTML += ( '    <tr>'
+                        '      <td>'
+                        + name +
+                        '      </td>'
+                        '      <td>'
+                        + sum +
+                        '      </td>'
+                        '    </tr>')
+        #close table
+        myHTML += ( '  </tbody>'
+                    '</table>')
+        self.addPostprocessingOutput(myHTML)
 
     def _checkAggregationAttribute(self):
         """checks if the aggregation layer has a aggregation attribute
@@ -1067,7 +1193,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: the value of the aggregation attribute keyword. None if no
         usable attribute has been found
 
-        Raises: Propogates any error
+        Raises: Propagates any error
         """
         if myKeywords is None:
             myKeywords = dict()
@@ -1152,6 +1278,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.showBusy(myTitle, myMessage, myProgress)
 
         myMessage = self.runner.result()
+        # FIXME (Ole): This branch is not covered by the tests
         myEngineImpactLayer = self.runner.impactLayer()
 
         if myEngineImpactLayer is None:
@@ -1168,6 +1295,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Load impact layer into QGIS
         myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+
+        myKeywords = self.keywordIO.readKeywords(myQgisImpactLayer)
+        #write postprocessing report to keyword
+        myKeywords['postprocessing_report'] = self.getPostprocessingOutput()
+        self.keywordIO.writeKeywords(myQgisImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
@@ -1195,7 +1327,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             myMessage = self.tr('Impact layer %s was neither a raster or a '
                    'vector layer' % myQgisImpactLayer.source())
-            raise Exception(myMessage)
+            raise ReadLayerError(myMessage)
         # Add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
         # then zoom to it
@@ -1206,6 +1338,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myLegend = self.iface.legendInterface()
             myLegend.setLayerVisible(myExposureLayer, False)
         self.restoreState()
+
+        #append postprocessing report
+        myReport += self.getPostprocessingOutput()
+
         # Return text to display in report pane
         return myReport
 
@@ -1339,6 +1475,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myExposureGeoExtent)
 
         except InsufficientOverlapException, e:
+            # FIXME (MB): This branch is not covered by the tests
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
                    'and / or the layers and the viewport. Please select '
@@ -1360,7 +1497,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         QtCore.QString(str(myExposureGeoExtent))).arg(
                         QtCore.QString(str(self.clipToViewport))).arg(
                         str(e))
-            raise Exception(myMessage)
+            raise InsufficientOverlapException(myMessage)
 
         # Next work out the ideal spatial resolution for rasters
         # in the analysis. If layers are not native WGS84, we estimate
@@ -1537,7 +1674,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myKeywords = self.keywordIO.readKeywords(theLayer)
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
+                    if 'postprocessing_report' in myKeywords:
+                        myReport += myKeywords['postprocessing_report']
                     self.pbnPrint.setEnabled(True)
+
                 else:
                     self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
