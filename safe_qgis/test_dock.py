@@ -152,7 +152,7 @@ def combosToString(ui):
 
 
 def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
-                  theOkButtonFlag=True):
+                  theOkButtonFlag=True, theAggregation=None):
     """Helper function to set the gui state to a given scenario.
 
     Args:
@@ -162,6 +162,8 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
         theFunctionId - (Required) the impact function id that should be used.
         theOkButtonFlag - (Optional) Whether the ok button should be enabled
           after this scenario is set up.
+        theAggregationLayer - (Optional) which layer should be used for
+        aggregation
 
     We require both theFunction and theFunctionId because safe allows for
     multiple functions with the same name but different id's so we need to be
@@ -196,6 +198,14 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
         if myIndex == -1:
             return False, myMessage
         DOCK.cboFunction.setCurrentIndex(myIndex)
+
+    if theAggregation is not None:
+        myIndex = DOCK.cboAggregation.findText(theAggregation)
+        myMessage = ('\Aggregation layer Not Found: %s\n Combo State:\n%s' %
+                     (theAggregation, combosToString(DOCK)))
+        if myIndex == -1:
+            return False, myMessage
+        DOCK.cboAggregation.setCurrentIndex(myIndex)
 
     # Check that layers and impact function are correct
     myDict = getUiState(DOCK)
@@ -256,10 +266,15 @@ def loadStandardLayers():
                   join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
                   join(EXPDATA, 'DKI_buildings.shp'),
                   join(HAZDATA, 'jakarta_flood_category_123.asc'),
-                  join(TESTDATA, 'roads_Maumere.shp')]
+                  join(TESTDATA, 'roads_Maumere.shp'),
+                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')
+                  ]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
-    assert myHazardLayerCount + myExposureLayerCount == len(myFileList)
+    #FIXME (MB) -1 is untill we add the aggregation category because of
+    # kabupaten_jakarta_singlepart not being either hayard nor exposure layer
+    assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
+
     return myHazardLayerCount, myExposureLayerCount
 
 
@@ -403,9 +418,9 @@ class DockTest(unittest.TestCase):
         self.assertEqual(DOCK.cboAggregation.currentText(), DOCK.tr(
             'No aggregation'), myMessage)
 
-        self.assertEqual(DOCK.cboAggregation.isEnabled(), False,
-            'The aggregation combobox should be disabled when the project has'
-            ' no layer.')
+        assert not DOCK.cboAggregation.isEnabled(),\
+        'The aggregation combobox should be disabled when the project has no' \
+        ' layer.'
 
     def test_cboAggregationLoadedProject(self):
 
@@ -413,6 +428,7 @@ class DockTest(unittest.TestCase):
                        DOCK.tr('A flood in Jakarta in RW areas identified as '
                                'flood prone'),
                        DOCK.tr('DKI buildings'),
+                       DOCK.tr('kabupaten jakarta singlepart'),
                        DOCK.tr('OSM Building Polygons')]
         currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(DOCK
         .cboAggregation.count())]
@@ -420,6 +436,130 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation combobox should have:\n %s \nFound: %s'
                      % (myLayerList, currentLayers))
         self.assertEquals(currentLayers, myLayerList, myMessage)
+
+    def test_cboAggregationToggle(self):
+        #TODO (MB) ole please check the data I used is correct
+        """Aggregation Combobox toggles on and off as expected."""
+
+        #raster hazard
+        #raster exposure
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function')
+        assert myResult, myMessage
+
+        assert DOCK.cboAggregation.isEnabled(), 'The aggregation combobox ' \
+                'should be enabled when hazard and exposure layer are raster'
+
+        #vector hazard
+        #raster exposure
+        myResult, myMessage = setupScenario(
+            theHazard=('A flood in Jakarta in RW areas identified'
+                       ' as flood prone'),
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function Vector Hazard')
+        assert myResult, myMessage
+
+        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
+            'combobox should be disabled when hazard layer is vectorial'
+
+        #raster hazard
+        #vector exposure
+        myResult, myMessage = setupScenario(
+            theHazard='Tsunami Max Inundation',
+            theExposure='Tsunami Building Exposure',
+            theFunction='Be temporarily closed',
+            theFunctionId='Flood Building Impact Function')
+        assert myResult, myMessage
+
+        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
+                'combobox should be disabled when exposure layer is vectorial'
+
+        #vector hazard
+        #vector exposure
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta in RW areas identified'
+                      ' as flood prone',
+            theExposure='DKI buildings',
+            theFunction='Be temporarily closed',
+            theFunctionId='Flood Building Impact Function')
+        assert myResult, myMessage
+
+        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
+                'combobox should be disabled when hazard and exposure layer' \
+                ' are vectorial'
+
+    def test_checkAggregationAttribute(self):
+        myRunButton = DOCK.pbnRunStop
+        myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp',
+                      'kabupaten_jakarta_singlepart_1_good_attr.shp',
+                      'kabupaten_jakarta_singlepart_3_good_attr.shp'
+                    ]
+        #add additional layers
+        loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
+
+        # with aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart')
+        assert myResult, myMessage
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
+                     (DOCK.aggregationAttribute))
+        self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
+
+        # with no good aggregation attribute using
+        # kabupaten_jakarta_singlepart_0_good_attr.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart 0 good attr')
+        assert myResult, myMessage
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('The aggregation should be None. Found: %s' %
+                     (DOCK.aggregationAttribute))
+        assert DOCK.aggregationAttribute is None, myMessage
+
+        # with 1 good aggregation attribute using
+        # kabupaten_jakarta_singlepart_1_good_attr.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart 1 good attr')
+        assert myResult, myMessage
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
+                     (DOCK.aggregationAttribute))
+        self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
+
+        # with 3 good aggregation attribute using
+        # kabupaten_jakarta_singlepart_3_good_attr.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart 3 good attr')
+        assert myResult, myMessage
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
+                     (DOCK.aggregationAttribute))
+        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
