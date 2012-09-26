@@ -1085,12 +1085,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             aggrAttrTitle = self.aggregationAttribute
 
         #open table
-        myHTML = (  '<table class="table table-striped condensed">'
+        myHTML = ('<table class="table table-striped condensed">'
                     '  <tbody>'
                     '    <tr>'
                     '       <td colspan="100%">'
                     '         <strong>'
-                    +self.aggregationLayer.name() +
+                    + self.aggregationLayer.name() +
                     '         </strong>'
                     '       </td>'
                     '    </tr>'
@@ -1139,7 +1139,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 name = attrMap[nameFieldIndex].toString()
             sum = attrMap[sumFieldIndex].toString()
 
-            myHTML += ( '    <tr>'
+            myHTML += ('    <tr>'
                         '      <td>'
                         + name +
                         '      </td>'
@@ -1148,8 +1148,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         '      </td>'
                         '    </tr>')
         #close table
-        myHTML += ( '  </tbody>'
-                    '</table>')
+        myHTML += ('  </tbody>'
+                   '</table>')
         self.addPostprocessingOutput(myHTML)
 
     def _checkAggregationAttribute(self):
