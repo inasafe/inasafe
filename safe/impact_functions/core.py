@@ -719,8 +719,7 @@ def get_dict_doc_func(func):
               'param_req': [],
               'detail': '',
               'citation': [],
-              'limitaion': ''
-              }
+              'limitaion': ''}
 
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])

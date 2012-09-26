@@ -912,3 +912,20 @@ def points_along_line(line, delta):
         points.extend(pts)
     C = numpy.array(points)
     return C
+
+
+def combine_polygon_and_point_layers(layers):
+    """Combine polygon and point layers
+
+    Args:
+        layers: List of vector layers of type polygon or point
+
+    Returns:
+        One point layer with all input point layers and centroids from all
+        input polygon layers.
+    Raises:
+        IneSAFEError in case a0ttribute names are not the same.
+    """
+
+    # This is to implement issue #276
+    print layers
