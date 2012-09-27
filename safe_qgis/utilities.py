@@ -51,6 +51,7 @@ import safe_qgis.resources  # pylint: disable=W0611
 LOGGER = logging.getLogger('InaSAFE')
 
 try:
+    #available from qgis 1.8
     from qgis.core import QgsMessageLog
 
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
@@ -58,6 +59,7 @@ try:
 except:
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         print (str(msg), tag, level)
+
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary
@@ -546,8 +548,8 @@ def qgisVersion():
 #        elif vType == QGis.Polygon:
 #            typeStr = 'Polygon'
 #        else:
-#            raise memoryLayerCreationError('Layer is whether Point or Line or '
-#                                           'Polygon')
+#            raise memoryLayerCreationError('Layer is whether Point or '
+#                                           'Line or Polygon')
 #    else:
 #        raise memoryLayerCreationError('Layer is not a VectorLayer')
 #
@@ -587,11 +589,11 @@ def qgisVersion():
 #    """Write a memory layer to a shapefile.
 #
 #    .. note:: The file will be saved into the theFilePath dir  If a qml
-#        matching theFileName.qml can be found it will automatically copied over
-#        to the output dir.
+#        matching theFileName.qml can be found it will automatically copied
+#        over to the output dir.
 #        Any existing shp by the same name will be
-#        overridden if theForceFlag is True, otherwise the existing file will be
-#        returned.
+#        overridden if theForceFlag is True, otherwise the existing file will
+#        be returned.
 #
 #    Args:
 #        theFileName: str filename excluding path and ext. e.g. 'mmi-cities'
