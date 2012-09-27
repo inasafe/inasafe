@@ -530,20 +530,16 @@ class Raster(Layer):
 
                 resolution = keywords['resolution']
                 try:
-                    # FIXME (Ole): It seams float never
-                    # raises an exception. I am sure it used to,
-                    # this has to be rewritten more explicitly
                     res = float(resolution)
-                except ValueError:
-                    # Assume resolution is a string of the form:
+                except TypeError:
+                    # Assume resolution is a tuple of the form:
                     # (0.00045228819716044, 0.00045228819716044)
 
                     msg = ('Unknown format for resolution keyword: %s'
-                           % resolution)
-                    verify((resolution.startswith('(') and
-                            resolution.endswith(')')), msg)
+                           % str(resolution))
+                    verify(isinstance(resolution, tuple), msg)
 
-                    dx, dy = [float(s) for s in resolution[1:-1].split(',')]
+                    dx, dy = [float(s) for s in resolution]
                     if not isotropic:
                         res = (dx, dy)
                     else:

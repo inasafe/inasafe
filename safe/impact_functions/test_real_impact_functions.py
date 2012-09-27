@@ -43,7 +43,7 @@ class Test_real_plugins(unittest.TestCase):
         # This one should get 2 earthquake building impact functions
         D1 = {'category': 'hazard', 'subcategory': 'earthquake', 'unit': 'MMI'}
         D2 = {'category': 'exposure', 'datatype': 'itb',
-              'subcategory': 'building'}
+              'subcategory': 'structure'}
 
         # Add layertype
         D1['layertype'] = 'raster'
@@ -79,7 +79,7 @@ class Test_real_plugins(unittest.TestCase):
         #assert 'Flood Road Impact Function' in P
 
         D1 = {'category': 'hazard', 'subcategory': 'tsunami'}
-        D2 = {'category': 'exposure', 'subcategory': 'building'}
+        D2 = {'category': 'exposure', 'subcategory': 'structure'}
 
         # Add layertype
         #D1['layertype'] = 'raster'  # Not required for flood building impact

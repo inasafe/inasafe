@@ -111,3 +111,13 @@ class InvalidBoundingBoxException(Exception):
 class StyleError(Exception):
     """An exception relating to reading / generating GIS styles"""
     pass
+
+
+class ShapefileCreationError(Exception):
+    """Raised if an error occurs creating the cities file"""
+    pass
+
+
+class memoryLayerCreationError(Exception):
+    """Raised if an error occurs creating the cities file"""
+    pass

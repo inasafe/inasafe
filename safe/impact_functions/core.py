@@ -12,7 +12,7 @@ import keyword as python_keywords
 from safe.common.polygon import inside_polygon
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableCell, TableRow
-from utilities import pretty_string
+from utilities import pretty_string, remove_double_spaces
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -361,8 +361,8 @@ def get_thresholds(layer):
     """
 
     if 'thresholds' in layer.keywords:
-        s = layer.keywords['thresholds']
-        thresholds = [float(x) for x in s.split(',')]
+        t_list = layer.keywords['thresholds']
+        thresholds = [float(x) for x in t_list]
         thresholds.sort()
     else:
         thresholds = []
@@ -695,3 +695,65 @@ def get_unique_values():
     for key in dict_retval.iterkeys():
         dict_retval[key] = list(dict_retval[key])
     return dict_retval
+
+
+def get_dict_doc_func(func):
+    """Collect all doc string of func and return a beatiuful format of them
+    in a dictionary format.
+
+        Args:
+            * func : name of function
+        Returns:
+            * Dictionary contains:
+                synopsis : string (first line)
+                author : string (identified by :author)
+                rating : integer (identified by :rating)
+                param_req : list of param (identified by :param requires)
+                detail : detail description (identified by :detail)
+                citation : list of citation in string (identified by :citation)
+                limitation : string (identified by :limitation)
+    """
+    retval = {'synopsis': '',
+              'author': '',
+              'rating': '',
+              'param_req': [],
+              'detail': '',
+              'citation': [],
+              'limitaion': ''}
+
+    plugins_dict = dict([(pretty_function_name(p), p)
+                         for p in FunctionProvider.plugins])
+    if func not in plugins_dict.keys():
+        return retval
+    else:
+        func = plugins_dict[func]
+
+    author_tag = ':author'
+    rating_tag = ':rating'
+    param_req_tag = ':param requires'
+    detail_tag = ':detail'
+    citation_tag = ':citation'
+    limitation_tag = ':limitation'
+
+    if hasattr(func, '__doc__') and func.__doc__:
+        doc_str = func.__doc__
+        for line in doc_str.split('\n'):
+            doc_line = remove_double_spaces(line)
+            doc_line = doc_line.strip()
+
+            if doc_line.startswith(author_tag):
+                retval['author'] = doc_line[len(author_tag) + 1:]
+            elif doc_line.startswith(rating_tag):
+                retval['rating'] = int(doc_line[len(rating_tag) + 1:])
+            elif doc_line.startswith(detail_tag):
+                retval['detail'] = doc_line[len(detail_tag) + 1:]
+            elif doc_line.startswith(limitation_tag):
+                retval['limitation'] = doc_line[len(limitation_tag) + 1:]
+            elif doc_line.startswith(param_req_tag):
+                retval['param_req'].append(doc_line[len(param_req_tag) + 1:])
+            elif doc_line.startswith(citation_tag):
+                retval['citation'].append(doc_line[len(citation_tag) + 1:])
+
+        retval['synopsis'] = remove_double_spaces(doc_str.split('\n')[0])
+
+    return retval

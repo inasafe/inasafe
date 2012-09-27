@@ -21,12 +21,11 @@ import os
 import numpy
 import unittest
 from safe_qgis.safe_interface import (getOptimalExtent,
-                                   availableFunctions,
-                                   readKeywordsFromFile,
-                                   readSafeLayer)
+                                      availableFunctions,
+                                      readKeywordsFromFile,
+                                      readSafeLayer)
 from safe_qgis.exceptions import (KeywordNotFoundException,
-                               InsufficientOverlapException
-                               )
+                                  InsufficientOverlapException)
 from safe.common.exceptions import BoundingBoxError
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA
 
@@ -42,7 +41,7 @@ class SafeInterfaceTest(unittest.TestCase):
         self.rasterTsunamiPath = os.path.join(TESTDATA,
                                 'tsunami_max_inundation_depth_utm56s.tif')
         self.rasterExposurePath = os.path.join(TESTDATA,
-                                             'tsunami_building_exposure.shp')
+                                               'tsunami_building_exposure.shp')
 
         self.rasterPopulationPath = os.path.join(EXPDATA, 'glp10ag.asc')
 
@@ -227,7 +226,7 @@ class SafeInterfaceTest(unittest.TestCase):
         myKeywords = readKeywordsFromFile(self.vectorPath)
         assert myKeywords == {'category': 'exposure',
                               'datatype': 'itb',
-                              'subcategory': 'building'}
+                              'subcategory': 'structure'}
 
         #  tsunami example (one layer is UTM)
         myKeywords = readKeywordsFromFile(self.rasterTsunamiPath)

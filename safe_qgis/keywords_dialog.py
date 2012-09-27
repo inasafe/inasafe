@@ -677,6 +677,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """
         myTempKey = theItem.text().split(':')[0]
         myTempValue = theItem.text().split(':')[1]
+        if myTempKey == 'category':
+            return
         if self.radUserDefined.isChecked():
             self.leKey.setText(myTempKey)
             self.leValue.setText(myTempValue)

@@ -420,6 +420,20 @@ class Test_IO(unittest.TestCase):
         v = Vector(geometry=test_data, geometry_type=2)
         assert v == v_ref
 
+        # Check that one single polygon works
+        P = numpy.array([[106.7922547, -6.2297884],
+                         [106.7924589, -6.2298087],
+                         [106.7924538, -6.2299127],
+                         [106.7922547, -6.2298899],
+                         [106.7922547, -6.2297884]])
+        v = Vector(geometry=[P])
+        assert v.is_polygon_data
+        assert len(v) == 1
+
+        v = Vector(geometry=[P], geometry_type='polygon')
+        assert v.is_polygon_data
+        assert len(v) == 1
+
     def test_attribute_types(self):
         """Different attribute types are handled correctly in vector data
         """
@@ -1332,10 +1346,19 @@ class Test_IO(unittest.TestCase):
                     'subcategory': 'flood',
                     'layer': None,
                     'kw': 'with:colon',
-                    'number': 31,
                     'with spaces': 'trailing_ws ',
-                    'trailing_ws ': 13.42,
-                    ' preceding_ws': ' mixed spaces '}
+                    ' preceding_ws': ' mixed spaces ',
+                    'number': 31,
+                    'a_float ': 13.42,
+                    'a_tuple': (1, 4, 'a'),
+                    'a_list': [2, 5, 'b'],
+                    'a_dict': {'I': 'love', 'cheese': 'cake', 'number': 5},
+                    'a_nested_thing': [2, {'k': 17.8}, 'b', (1, 2)],
+                    'an_expression': '37 + 5',  # Evaluate to '37 + 5', not 42
+                    # Potentially dangerous - e.g. if calling rm
+                    'dangerous': '__import__("os").system("ls -l")',
+                    'yes': True,
+                    'no': False}
 
         write_keywords(keywords, kwd_filename)
         msg = 'Keywords file %s was not created' % kwd_filename
@@ -1373,14 +1396,31 @@ class Test_IO(unittest.TestCase):
 
         # Check keyword values
         for key in keywords:
-            refval = str(keywords[key]).strip()
-            newval = x[key]
+            refval = keywords[key]  # Expected value
+            newval = x[key]  # Value from keywords file
 
+            # Catch all - comparing string reprentations
             msg = ('Expected value "%s" was not read from "%s". '
                    'I got "%s"' % (refval, kwd_filename, newval))
-            assert refval == newval, msg
+            assert str(refval).strip() == str(newval), msg
 
-        # Check catching of wrong extension
+            # Check None
+            if refval is None:
+                assert newval is None
+
+            # Check Booleans - explicitly
+            if refval is True:
+                assert newval is True
+
+            if refval is False:
+                assert newval is False
+
+            # Check equality of python structures
+            if not isinstance(refval, basestring):
+                msg = 'Expected %s but got %s' % (refval, newval)
+                assert newval == refval, msg
+
+        # Check catching wrong extensions
         kwd_filename = unique_filename(suffix='.xxxx')
         try:
             write_keywords(keywords, kwd_filename)

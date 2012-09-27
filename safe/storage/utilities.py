@@ -6,6 +6,7 @@ import re
 import copy
 import numpy
 import math
+from ast import literal_eval
 from osgeo import ogr
 
 from safe.common.numerics import ensure_numeric
@@ -121,8 +122,7 @@ def write_keywords(keywords, filename, sublayer=None):
 
     Args:
         * keywords: Dictionary of keyword, value pairs
-              filename: Name of keywords file. Extension expected to be
-              .keywords
+        * filename: Name of keywords file. Extension expected to be .keywords
         * sublayer: str Optional sublayer applicable only to multilayer formats
              such as sqlite or netcdf which can potentially hold more than
              one layer. The string should map to the layer group as per the
@@ -267,6 +267,7 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
     first_keywords = None
     for line in fid.readlines():
         # Remove trailing (but not preceeding!) whitespace
+        # FIXME: Can be removed altogether
         text = line.rstrip()
 
         # Ignore blank lines
@@ -283,9 +284,9 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
                 blocks[current_block] = keywords
             if first_keywords is None and len(keywords) > 0:
                 first_keywords = keywords
-            # now set up for a new block
+            # Now set up for a new block
             current_block = text[1:-1]
-            # reset the keywords each time we encounter a new block
+            # Reset the keywords each time we encounter a new block
             # until we know we are on the desired one
             keywords = {}
             continue
@@ -301,7 +302,13 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
             key = text[:idx]
 
             # Take value as everything after the first ':'
-            val = text[idx + 1:].strip()
+            textval = text[idx + 1:].strip()
+            try:
+                # Take care of python structures like
+                # booleans, None, lists, dicts etc
+                val = literal_eval(textval)
+            except (ValueError, SyntaxError):
+                val = textval
 
         # Add entry to dictionary
         keywords[key] = val
@@ -479,12 +486,14 @@ def bbox_intersection(*args):
         if not len(box) == 4:
             raise BoundingBoxError(msg)
 
-        msg = 'Western boundary must be less than eastern. I got %s' % box
-        if not box[0] < box[2]:
+        msg = ('Western boundary must be less than or equal to eastern. '
+               'I got %s' % box)
+        if not box[0] <= box[2]:
             raise BoundingBoxError(msg)
 
-        msg = 'Southern boundary must be less than northern. I got %s' % box
-        if not box[1] < box[3]:
+        msg = ('Southern boundary must be less than or equal to northern. '
+               'I got %s' % box)
+        if not box[1] <= box[3]:
             raise BoundingBoxError(msg)
 
         # Compute intersection
@@ -498,7 +507,7 @@ def bbox_intersection(*args):
             result[i] = min(result[i], box[i])
 
     # Check validity and return
-    if result[0] < result[2] and result[1] < result[3]:
+    if result[0] <= result[2] and result[1] <= result[3]:
         return result
     else:
         return None
@@ -912,3 +921,20 @@ def points_along_line(line, delta):
         points.extend(pts)
     C = numpy.array(points)
     return C
+
+
+def combine_polygon_and_point_layers(layers):
+    """Combine polygon and point layers
+
+    Args:
+        layers: List of vector layers of type polygon or point
+
+    Returns:
+        One point layer with all input point layers and centroids from all
+        input polygon layers.
+    Raises:
+        IneSAFEError in case a0ttribute names are not the same.
+    """
+
+    # This is to implement issue #276
+    print layers

@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Mon Sep 10 09:38:52 2012
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Thu Sep 27 07:49:10 2012
+#      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -21,23 +21,28 @@ class Ui_DockBase(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         DockBase.setWindowIcon(icon)
+        DockBase.setWindowTitle(QtGui.QApplication.translate("DockBase", "InaSAFE", None, QtGui.QApplication.UnicodeUTF8))
         self.dockWidgetContents = QtGui.QWidget()
         self.dockWidgetContents.setObjectName(_fromUtf8("dockWidgetContents"))
         self.gridLayout = QtGui.QGridLayout(self.dockWidgetContents)
         self.gridLayout.setContentsMargins(3, 0, 3, 3)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.grpQuestion = QtGui.QGroupBox(self.dockWidgetContents)
+        self.grpQuestion.setTitle(QtGui.QApplication.translate("DockBase", "Questions", None, QtGui.QApplication.UnicodeUTF8))
         self.grpQuestion.setObjectName(_fromUtf8("grpQuestion"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpQuestion)
         self.gridLayout_3.setContentsMargins(0, 6, 0, 0)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
         self.label_6 = QtGui.QLabel(self.grpQuestion)
+        self.label_6.setText(QtGui.QApplication.translate("DockBase", "In the event of", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setObjectName(_fromUtf8("label_6"))
         self.gridLayout_3.addWidget(self.label_6, 0, 0, 1, 1)
         self.label_7 = QtGui.QLabel(self.grpQuestion)
+        self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
         self.label_7.setObjectName(_fromUtf8("label_7"))
         self.gridLayout_3.addWidget(self.label_7, 2, 0, 1, 1)
         self.label_8 = QtGui.QLabel(self.grpQuestion)
+        self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
         self.label_8.setObjectName(_fromUtf8("label_8"))
         self.gridLayout_3.addWidget(self.label_8, 5, 0, 1, 1)
         self.cboFunction = QtGui.QComboBox(self.grpQuestion)
@@ -52,8 +57,16 @@ class Ui_DockBase(object):
         self.cboHazard.setInsertPolicy(QtGui.QComboBox.InsertAlphabetically)
         self.cboHazard.setObjectName(_fromUtf8("cboHazard"))
         self.gridLayout_3.addWidget(self.cboHazard, 1, 0, 1, 1)
+        self.label_2 = QtGui.QLabel(self.grpQuestion)
+        self.label_2.setText(QtGui.QApplication.translate("DockBase", "Aggregate results by", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.gridLayout_3.addWidget(self.label_2, 7, 0, 1, 1)
+        self.cboAggregation = QtGui.QComboBox(self.grpQuestion)
+        self.cboAggregation.setObjectName(_fromUtf8("cboAggregation"))
+        self.gridLayout_3.addWidget(self.cboAggregation, 8, 0, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 0, 0, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(self.dockWidgetContents)
+        self.groupBox_2.setTitle(QtGui.QApplication.translate("DockBase", "Results", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.groupBox_2)
         self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
@@ -79,6 +92,7 @@ class Ui_DockBase(object):
         font.setBold(True)
         font.setWeight(75)
         self.label_3.setFont(font)
+        self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.verticalLayout.addWidget(self.label_3)
@@ -107,16 +121,19 @@ class Ui_DockBase(object):
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.pbnHelp = QtGui.QPushButton(self.dockWidgetContents)
+        self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnHelp.setObjectName(_fromUtf8("pbnHelp"))
         self.horizontalLayout.addWidget(self.pbnHelp)
         spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
         self.pbnPrint = QtGui.QPushButton(self.dockWidgetContents)
+        self.pbnPrint.setText(QtGui.QApplication.translate("DockBase", "Print...", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnPrint.setObjectName(_fromUtf8("pbnPrint"))
         self.horizontalLayout.addWidget(self.pbnPrint)
         spacerItem3 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem3)
         self.pbnRunStop = QtGui.QPushButton(self.dockWidgetContents)
+        self.pbnRunStop.setText(QtGui.QApplication.translate("DockBase", "Run", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnRunStop.setObjectName(_fromUtf8("pbnRunStop"))
         self.horizontalLayout.addWidget(self.pbnRunStop)
         self.gridLayout.addLayout(self.horizontalLayout, 4, 0, 1, 1)
@@ -134,16 +151,8 @@ class Ui_DockBase(object):
         DockBase.setTabOrder(self.pbnRunStop, self.pbnHelp)
 
     def retranslateUi(self, DockBase):
-        DockBase.setWindowTitle(QtGui.QApplication.translate("DockBase", "InaSAFE", None, QtGui.QApplication.UnicodeUTF8))
-        self.grpQuestion.setTitle(QtGui.QApplication.translate("DockBase", "Questions", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_6.setText(QtGui.QApplication.translate("DockBase", "In the event of", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_7.setText(QtGui.QApplication.translate("DockBase", "How many", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_2.setTitle(QtGui.QApplication.translate("DockBase", "Results", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnPrint.setText(QtGui.QApplication.translate("DockBase", "Print...", None, QtGui.QApplication.UnicodeUTF8))
-        self.pbnRunStop.setText(QtGui.QApplication.translate("DockBase", "Run", None, QtGui.QApplication.UnicodeUTF8))
+        pass
 
 from PyQt4 import QtWebKit
+import resources_rc
 import resources_rc

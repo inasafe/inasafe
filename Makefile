@@ -63,7 +63,7 @@ test-translations:
 translation-stats:
 	@echo
 	@echo "----------------------"
-	@echo "Translation statistics - for more info see http://inasafe.readthedocs.org/en/latest/developer-docs/i18n.html"
+	@echo "Translation statistics - for more info see http://inasafe.org/developer-docs/i18n.html"
 	@echo "----------------------"
 	@echo
 	@echo "Gettext translations (*.po):"
@@ -114,7 +114,7 @@ pep8:
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . || true
 
 # Run entire test suite
-test_suite: compile
+test_suite: compile testdata
 	@echo
 	@echo "---------------------"
 	@echo "Regression Test Suite"
@@ -166,7 +166,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 15f70d17c6cacd4c6a6c256c537729e0bda5ca03 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 8a6551776845ba052a1cc855c1b3348cc280a18e 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:

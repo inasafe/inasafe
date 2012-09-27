@@ -10,6 +10,7 @@ from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
 from utilities import pretty_string
+# from safe.impact_functions.core import get_dict_doc_func
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -212,7 +213,7 @@ class Test_plugin_core(unittest.TestCase):
         assert parsed_req == expected_req, myMessage
 
     def test_pretty_string(self):
-        """Test return prettu string from list or string."""
+        """Test return pretty string from list or string."""
         myStr = 'Aloha'
         mylist = ['a', 'b', 'c']
         expectedStr = 'Aloha'
@@ -228,6 +229,15 @@ class Test_plugin_core(unittest.TestCase):
         T = get_plugins_as_table()
         S = T.toNewlineFreeString()
         LOGGER.debug(S)
+
+    #==========================================================================
+    # def test_get_dict_doc_func(self):
+    #    """Test get doc string in dictionary format."""
+    #    func = 'Catergorised Hazard Population Impact Function'
+    #    dict_doc = get_dict_doc_func(func)
+    #    print dict_doc
+    #    assert dict_doc['author'] == 'AIFDR', 'XX' + dict_doc['author'] + 'XX'
+    #==========================================================================
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')
