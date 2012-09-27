@@ -25,6 +25,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
 
     title = _('be affected')
     target_field = 'population'
+    category_title = 'KRB'
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -69,7 +70,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
         new_attributes = H.get_data()
-        category_title = 'Category'
+        
         categories = {}
         for attr in new_attributes:
             attr[self.target_field] = 0
