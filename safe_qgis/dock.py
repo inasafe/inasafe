@@ -997,7 +997,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         clippedAggregationLayerPath = clipLayer(
             self.aggregationLayer,
-            impactLayer.get_bounding_box(), explodeMultipart= False)
+            impactLayer.get_bounding_box(), explodeMultipart=False)
 
         self.aggregationLayer = QgsVectorLayer(
             clippedAggregationLayerPath, lName, 'ogr')
