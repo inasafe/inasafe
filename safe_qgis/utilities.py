@@ -22,8 +22,6 @@ import sys
 import traceback
 import logging
 import math
-import os
-import shutil
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
@@ -38,11 +36,8 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency,
-                       QgsVectorLayer,
-                       QgsFeature,
-                       QgsVectorFileWriter)
-from safe_qgis.exceptions import StyleError, ShapefileCreationError, \
-    memoryLayerCreationError
+                       )
+from safe_qgis.exceptions import StyleError, MethodUnavailableError
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
@@ -56,7 +51,7 @@ try:
 
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         QgsMessageLog.logMessage(str(msg), tag, level)
-except:
+except MethodUnavailableError:
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         print (str(msg), tag, level)
 
