@@ -48,7 +48,7 @@ from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion)
 
-from unittest import  expectedFailure
+from unittest import expectedFailure
 
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 # Retired impact function for characterisation (Ole)
@@ -269,8 +269,7 @@ def loadStandardLayers():
                   join(EXPDATA, 'DKI_buildings.shp'),
                   join(HAZDATA, 'jakarta_flood_category_123.asc'),
                   join(TESTDATA, 'roads_Maumere.shp'),
-                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')
-                  ]
+                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
     #FIXME (MB) -1 is untill we add the aggregation category because of
@@ -498,8 +497,7 @@ class DockTest(unittest.TestCase):
         myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp',
                       'kabupaten_jakarta_singlepart_1_good_attr.shp',
                       'kabupaten_jakarta_singlepart_3_good_attr.shp',
-                      'kabupaten_jakarta_singlepart_with_None_keyword.shp'
-                    ]
+                      'kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
         loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
 

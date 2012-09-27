@@ -10,6 +10,7 @@ from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.common.utilities import ugettext as _
 from safe.common.numerics import ensure_numeric
+from safe.common.geodesy import Point
 from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.common.polygon import (inside_polygon,
                                  clip_lines_by_polygons, clip_grid_by_polygons)
@@ -590,3 +591,24 @@ def interpolate_raster_raster(source, target):
     else:
         # Rasters are aligned, no need to interpolate
         return target
+
+
+# FIXME (Ole): Not sure this is the place for this function
+def make_circular_polygon(center, radius):
+    """Create circula polygon in geographic coordinates
+
+    Args:
+        center: list of longitude, latitude
+        radius: desired approximate radius in meters
+    Returns
+        Vector polygon layer representing circle in WGS84
+    """
+
+    # FIXME (Ole): Input checks here
+    p = Point(longitude=center[0], latitude=center[1])
+    C = p.generate_circle(radius)
+    Z = Vector(geometry=[C],  # List with one element containing the polygon
+               data=[{'Radius': radius}],
+               geometry_type='polygon')
+
+    return Z

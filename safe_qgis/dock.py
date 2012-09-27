@@ -31,8 +31,8 @@ from safe_qgis.aggregation_attribute_dialog_base import\
 
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                getWGS84resolution,
-                                logOnQgsMessageLog)
+                                 getWGS84resolution,
+                                 logOnQgsMessageLog)
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
@@ -41,10 +41,8 @@ from qgis.core import (QgsMapLayer,
                        QgsCoordinateTransform,
                        QGis,
                        QgsFeature,
-                       QgsRectangle
-                       )
-from qgis.analysis import (QgsZonalStatistics
-                           )
+                       QgsRectangle)
+from qgis.analysis import QgsZonalStatistics
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
@@ -65,8 +63,7 @@ from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
                                  setRasterStyle,
-                                 qgisVersion,
-                                 )
+                                 qgisVersion)
 
 
 # Don't remove this even if it is flagged as unused by your ide
@@ -808,7 +805,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.aggregationLayer is not None:
             try:
                 self.aggregationAttribute = self._checkAggregationAttribute()
-            except Exception, e:
+            except Exception, e:  # pylint: disable=W0703
                 # FIXME (MB): This branch is not covered by the tests
                 QtGui.qApp.restoreOverrideCursor()
                 self.hideBusy()
@@ -1000,8 +997,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         clippedAggregationLayerPath = clipLayer(
             self.aggregationLayer,
-            impactLayer.get_bounding_box()
-        )
+            impactLayer.get_bounding_box())
 
         self.aggregationLayer = QgsVectorLayer(
             clippedAggregationLayerPath, lName, 'ogr')
@@ -1020,7 +1016,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 toDel.append(i)
         try:
             vProvider.deleteAttributes(toDel)
-        except:
+        # FIXME (Ole): Disable pylint check for the moment
+        # Need to work out what exceptions we will catch here, though.
+        except:  # pylint: disable=W0702
             myMessage = self.tr('Could not remove the unneded fields')
             logOnQgsMessageLog(myMessage)
         del toDel, vProvider, vFields
@@ -1048,7 +1046,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
         logOnQgsMessageLog('Vector aggregation not implemented yet. Called on'
-                           ' %s' % myQgisImpactLayer.name() )
+                           ' %s' % myQgisImpactLayer.name())
         return
 
     def _aggregateResultsRaster(self, myQgisImpactLayer):
@@ -1063,14 +1061,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         zonStat = QgsZonalStatistics(
             self.aggregationLayer,
             myQgisImpactLayer.dataProvider().dataSourceUri(),
-            self._aggregationPrefix
-        )
+            self._aggregationPrefix)
         progressDialog = QtGui.QProgressDialog(
             self.tr('Calculating zonal statistics'),
             self.tr('Abort...'),
             0,
-            0
-        )
+            0)
         zonStat.calculateStatistics(progressDialog)
         if progressDialog.wasCanceled():
             QtGui.QMessageBox.error(self, self.tr('ZonalStats: Error'),
@@ -1114,7 +1110,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             nameFieldIndex = self.aggregationLayer.fieldNameIndex(
                 self.aggregationAttribute)
-        except:
+        # FIXME (Ole): Disable pylint check for the moment
+        # Need to work out what exceptions we will catch here, though.
+        except:  # pylint: disable=W0702
             nameFieldIndex = None
         try:
             sumFieldIndex = self.aggregationLayer.fieldNameIndex(
@@ -1140,6 +1138,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 name = attrMap[nameFieldIndex].toString()
             aggrSum = attrMap[sumFieldIndex].toString()
+            aggrSum = str(int(round(float(aggrSum))))
 
             myHTML += ('    <tr>'
                         '      <td>'
@@ -1470,8 +1469,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # We will convert it to a QgsRectangle afterwards.
             if self.clipToViewport:
                 myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                                           myExposureGeoExtent,
-                                           myViewportGeoExtent)
+                                               myExposureGeoExtent,
+                                               myViewportGeoExtent)
             else:
                 myGeoExtent = getOptimalExtent(myHazardGeoExtent,
                     myExposureGeoExtent)
@@ -1542,6 +1541,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Hazard layer is vector
 
             # FIXME (Ole): Check that it is a polygon layer
+
+            # FIXME (Ole): This should say something like this (issue #285)
+            #if myHazardLayer.geometry() == QgsMapLayer.Point:
+            #    myGeoExtent = myExposureGeoExtent
             pass
 
         # Make sure that we have EPSG:4326 versions of the input layers
@@ -1562,9 +1565,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             'layer and the current view extents.')
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
-        myClippedExposurePath = clipLayer(myExposureLayer,
-                                        myGeoExtent, myCellSize,
-                                        theExtraKeywords=extraExposureKeywords)
+        myClippedExposurePath = clipLayer(
+            myExposureLayer,
+            myGeoExtent, myCellSize,
+            theExtraKeywords=extraExposureKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 
