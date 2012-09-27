@@ -420,6 +420,20 @@ class Test_IO(unittest.TestCase):
         v = Vector(geometry=test_data, geometry_type=2)
         assert v == v_ref
 
+        # Check that one single polygon works
+        P = numpy.array([[106.7922547, -6.2297884],
+                         [106.7924589, -6.2298087],
+                         [106.7924538, -6.2299127],
+                         [106.7922547, -6.2298899],
+                         [106.7922547, -6.2297884]])
+        v = Vector(geometry=[P])
+        assert v.is_polygon_data
+        assert len(v) == 1
+
+        v = Vector(geometry=[P], geometry_type='polygon')
+        assert v.is_polygon_data
+        assert len(v) == 1
+
     def test_attribute_types(self):
         """Different attribute types are handled correctly in vector data
         """
