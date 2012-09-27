@@ -103,8 +103,12 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         self.cbxHideExposure.setChecked(myFlag)
 
         myFlag = mySettings.value(
-            'inasafe/clipToViewport', True).toBool()
+                            'inasafe/clipToViewport', True).toBool()
         self.cbxClipToViewport.setChecked(myFlag)
+
+        myFlag = mySettings.value(
+                            'inasafe/showPostProcessingLayers', False).toBool()
+        self.cbxShowPostprocessingLayers.setChecked(myFlag)
 
         myPath = mySettings.value(
                             'inasafe/keywordCachePath',
@@ -132,6 +136,8 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             self.cbxHideExposure.isChecked())
         mySettings.setValue('inasafe/clipToViewport',
                             self.cbxClipToViewport.isChecked())
+        mySettings.setValue('inasafe/showPostProcessingLayers',
+            self.cbxShowPostprocessingLayers.isChecked())
         mySettings.setValue('inasafe/keywordCachePath',
                             self.leKeywordCachePath.text())
 

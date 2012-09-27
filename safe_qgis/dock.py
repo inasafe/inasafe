@@ -182,8 +182,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to clip hazard and exposure layers to the viewport
         myFlag = mySettings.value(
-            'inasafe/clipToViewport', True).toBool()
+                            'inasafe/clipToViewport', True).toBool()
         self.clipToViewport = myFlag
+
+        # whether to show or not postprocessing generated layers
+        myFlag = mySettings.value(
+                            'inasafe/showPostProcessingLayers', False).toBool()
+        self.showPostProcessingLayers = myFlag
 
         self.getLayers()
 
@@ -698,6 +703,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFilename = myEngineImpactLayer.get_filename()
         myName = myEngineImpactLayer.get_name()
 
+        myQgisLayer = None
         # Read layer
         if myEngineImpactLayer.is_vector:
             myQgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
@@ -1077,7 +1083,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr(
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
-#        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
+        if self.showPostProcessingLayers:
+            QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
         return
 
     def _parseAggregationResults(self):
