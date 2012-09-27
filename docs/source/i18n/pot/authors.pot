@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-03 11:12\n"
+"POT-Creation-Date: 2012-09-26 14:39\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,52 +16,52 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ..\..\authors.rst:4
+#: ../../authors.rst:4
 # 2f387e14f3a34e2fb9b7bef96eb42567
 msgid "Authors, Contributors and Funders"
 msgstr ""
 
-#: ..\..\authors.rst:6
+#: ../../authors.rst:6
 # fb4e0b9ba3004e14a26d732b936fb988
 msgid "Authors ordered by date of first contribution:"
 msgstr ""
 
-#: ..\..\authors.rst:8
+#: ../../authors.rst:8
 # a98586614a1840ca8bbe1aba84ac3a40
 msgid "Ole Nielsen <ole.nielsen@aifdr.org>"
 msgstr ""
 
-#: ..\..\authors.rst:9
+#: ../../authors.rst:9
 # 81baef5f83514374ac24026b71972b75
 msgid "Tim Sutton <tim@linfiniti.com>"
 msgstr ""
 
-#: ..\..\authors.rst:11
+#: ../../authors.rst:11
 # 685bf543395645ca912bd522562bfa32
 msgid "Other contributors who have provided input, testing, translations etc."
 msgstr ""
 
-#: ..\..\authors.rst:13
+#: ../../authors.rst:13
 # a41e816eb8dc422d94c931866896b024
 msgid "Trevor Dhu <Trevor.Dhu@ausaid.gov.au>"
 msgstr ""
 
-#: ..\..\authors.rst:14
+#: ../../authors.rst:14
 # 01334e9a42e64b42ad7e45e70bc8510a
 msgid "Krisy Van Putten <Kristy.VanPutten@ausaid.gov.au>"
 msgstr ""
 
-#: ..\..\authors.rst:15
+#: ../../authors.rst:15
 # 2fc253b4e4094e29884baa4540b35b67
 msgid "I Made Anombawa <anom1403@gmail.com>"
 msgstr ""
 
-#: ..\..\authors.rst:17
+#: ../../authors.rst:17
 # b46d5040f6c84d7d954503a01c063483
 msgid "The development of InaSAFE has been supported by the Indonesian Disaster Management Agency (BNPB) and AusAID, through the Australia-Indonesia Facility for Disaster Reduction, as well as the World Bank and the Global Facility for Disaster Reduction and Recovery."
 msgstr ""
 
-#: ..\..\authors.rst:22
+#: ../../authors.rst:22
 # bbf204d974e24d18846117df5778f08f
 msgid "InaSAFE is built as a plugin for the open source plugin for `Quantum GIS <http://qgis.org>`."
 msgstr ""
