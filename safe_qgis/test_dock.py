@@ -48,7 +48,7 @@ from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion)
 
-from unittest import  expectedFailure
+from unittest import expectedFailure
 
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 # Retired impact function for characterisation (Ole)
