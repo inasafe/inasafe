@@ -1141,6 +1141,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 name = attrMap[nameFieldIndex].toString()
             aggrSum = attrMap[sumFieldIndex].toString()
+            aggrSum = str(int(round(float(aggrSum))))
 
             myHTML += ('    <tr>'
                         '      <td>'
