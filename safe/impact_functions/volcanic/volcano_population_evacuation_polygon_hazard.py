@@ -63,6 +63,10 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
         if not H.is_polygon_data:
             raise Exception(msg)
 
+        category_title = self.category_title
+        if not category_title in H.get_attribute_names():
+            category_title = 'Radius'
+
         # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(H, E,
                                              attribute_name='population')
@@ -70,7 +74,6 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
         new_attributes = H.get_data()
-        
         categories = {}
         for attr in new_attributes:
             attr[self.target_field] = 0
@@ -118,8 +121,10 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
                                header=True),
                       TableRow([_('Category'), _('Total')],
                                header=True)]
-        for name, pop in categories.iteritems():
-            table_body.append(TableRow([name, int(pop)]))
+
+        if category_title != 'Radius':
+            for name, pop in categories.iteritems():
+                table_body.append(TableRow([name, int(pop)]))
 
         table_body.append(TableRow(_('Map shows population affected in '
                                      'each of volcano hazard polygons.')))

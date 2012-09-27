@@ -486,12 +486,14 @@ def bbox_intersection(*args):
         if not len(box) == 4:
             raise BoundingBoxError(msg)
 
-        msg = 'Western boundary must be less than eastern. I got %s' % box
-        if not box[0] < box[2]:
+        msg = ('Western boundary must be less than or equal to eastern. '
+               'I got %s' % box)
+        if not box[0] <= box[2]:
             raise BoundingBoxError(msg)
 
-        msg = 'Southern boundary must be less than northern. I got %s' % box
-        if not box[1] < box[3]:
+        msg = ('Southern boundary must be less than or equal to northern. '
+               'I got %s' % box)
+        if not box[1] <= box[3]:
             raise BoundingBoxError(msg)
 
         # Compute intersection
@@ -505,7 +507,7 @@ def bbox_intersection(*args):
             result[i] = min(result[i], box[i])
 
     # Check validity and return
-    if result[0] < result[2] and result[1] < result[3]:
+    if result[0] <= result[2] and result[1] <= result[3]:
         return result
     else:
         return None
