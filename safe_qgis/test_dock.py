@@ -1272,8 +1272,8 @@ class DockTest(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-    suite = unittest.makeSuite(DockTest,
-                        'test_cboAggregationToggle')
+    #suite = unittest.makeSuite(DockTest,
+    #                    'test_cboAggregationToggle')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
