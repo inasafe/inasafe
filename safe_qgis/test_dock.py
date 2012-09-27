@@ -48,7 +48,7 @@ from safe_qgis.dock import Dock
 from safe_qgis.utilities import (setRasterStyle,
                           qgisVersion)
 
-from unittest import  expectedFailure
+from unittest import expectedFailure
 
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 # Retired impact function for characterisation (Ole)
@@ -360,6 +360,7 @@ class DockTest(unittest.TestCase):
         DOCK.setLayerNameFromTitleFlag = False
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
+        DOCK.showPostProcessingLayers = False
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -579,6 +580,53 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation should be None. Found: %s' %
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
+
+    def test_checkPostProcessingLayersVisibility(self):
+        myRunButton = DOCK.pbnRunStop
+
+        # with KAB_NAME aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart')
+        assert myResult, myMessage
+
+        myLayerList = [DOCK.tr('Padang_WGS84'),
+                        DOCK.tr('People'),
+                        DOCK.tr('An earthquake in Padang like in 2009'),
+                        DOCK.tr('Tsunami Max Inundation'),
+                        DOCK.tr('Tsunami Building Exposure'),
+                        DOCK.tr('A flood in Jakarta like in 2007'),
+                        DOCK.tr('Penduduk Jakarta'),
+                        DOCK.tr('An earthquake in Yogyakarta like in 2006'),
+                        DOCK.tr('A flood in Jakarta in RW areas identified as flood prone'),
+                        DOCK.tr('OSM Building Polygons'),
+                        DOCK.tr('DKI buildings'),
+                        DOCK.tr('Flood in Jakarta'),
+                        DOCK.tr('roads_Maumere'),
+                        DOCK.tr('kabupaten jakarta singlepart')]
+
+                       # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        currentLayers = [l.name() for l in CANVAS.layers()]
+        myMessage = ('The legend should have:\n %s \nFound: %s'
+                     % (myLayerList, currentLayers))
+        myLayerList.append(DOCK.tr('Population which Need evacuation'))
+        self.assertEquals(currentLayers, myLayerList, myMessage)
+
+        DOCK.showPostProcessingLayers = True
+        # LAYER List should have i additional layers,
+        myLayerList.append(DOCK.tr('Population which Need evacuation '
+                                'aggregated to kabupaten jakarta singlepart'))
+
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        currentLayers = [l.name() for l in CANVAS.layers()]
+        myMessage = ('The legend should have:\n %s \nFound: %s'
+                     % (myLayerList, currentLayers))
+        self.assertEquals(currentLayers, myLayerList, myMessage)
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
@@ -1276,7 +1324,7 @@ class DockTest(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     suite = unittest.makeSuite(DockTest,
-                        'test_cboAggregationToggle')
+                        'test_checkPostProcessingLayersVisibility')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
