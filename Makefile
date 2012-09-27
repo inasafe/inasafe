@@ -256,9 +256,7 @@ jenkins-test: testdata
 	@echo "----------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"
 	@echo "----------------------------------"
-	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
-		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis || :
 
 jenkins-pyflakes:
 	@echo
