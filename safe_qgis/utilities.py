@@ -38,7 +38,6 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency,
-                       QgsMessageLog,
                        QgsVectorLayer,
                        QgsFeature,
                        QgsVectorFileWriter)
@@ -51,10 +50,14 @@ import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
+try:
+    from qgis.core import QgsMessageLog
 
-def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-    QgsMessageLog.logMessage(str(msg), tag, level)
-
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        QgsMessageLog.logMessage(str(msg), tag, level)
+except:
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        print (str(msg), tag, level)
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary
