@@ -997,8 +997,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         clippedAggregationLayerPath = clipLayer(
             self.aggregationLayer,
-            impactLayer.get_bounding_box()
-        )
+            impactLayer.get_bounding_box())
 
         self.aggregationLayer = QgsVectorLayer(
             clippedAggregationLayerPath, lName, 'ogr')
@@ -1062,14 +1061,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         zonStat = QgsZonalStatistics(
             self.aggregationLayer,
             myQgisImpactLayer.dataProvider().dataSourceUri(),
-            self._aggregationPrefix
-        )
+            self._aggregationPrefix)
         progressDialog = QtGui.QProgressDialog(
             self.tr('Calculating zonal statistics'),
             self.tr('Abort...'),
             0,
-            0
-        )
+            0)
         zonStat.calculateStatistics(progressDialog)
         if progressDialog.wasCanceled():
             QtGui.QMessageBox.error(self, self.tr('ZonalStats: Error'),
@@ -1472,8 +1469,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # We will convert it to a QgsRectangle afterwards.
             if self.clipToViewport:
                 myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                                           myExposureGeoExtent,
-                                           myViewportGeoExtent)
+                                               myExposureGeoExtent,
+                                               myViewportGeoExtent)
             else:
                 myGeoExtent = getOptimalExtent(myHazardGeoExtent,
                     myExposureGeoExtent)
@@ -1544,6 +1541,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Hazard layer is vector
 
             # FIXME (Ole): Check that it is a polygon layer
+
+            # FIXME (Ole): This should say something like this (issue #285)
+            #if myHazardLayer.geometry() == QgsMapLayer.Point:
+            #    myGeoExtent = myExposureGeoExtent
             pass
 
         # Make sure that we have EPSG:4326 versions of the input layers
@@ -1564,9 +1565,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             'layer and the current view extents.')
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
-        myClippedExposurePath = clipLayer(myExposureLayer,
-                                        myGeoExtent, myCellSize,
-                                        theExtraKeywords=extraExposureKeywords)
+        myClippedExposurePath = clipLayer(
+            myExposureLayer,
+            myGeoExtent, myCellSize,
+            theExtraKeywords=extraExposureKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 
