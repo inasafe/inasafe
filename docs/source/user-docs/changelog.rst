@@ -20,6 +20,8 @@ Changelog for version 0.5.0
 * More DRR actions added to impact function reports (such as how will warnings
   be disseminated, how will we reach stranded people etc.)
 * Volcanic (zonal hazard) impact assessments on building and population
+* New function table view that lists all the available impact functions and allows
+  them to be filtered by different criteria.
 * Lots of small improvements to error reporting, GUI, translations and code quality.
 
 Changelog for version 0.4.1
