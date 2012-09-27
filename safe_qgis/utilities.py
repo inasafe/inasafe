@@ -22,8 +22,6 @@ import sys
 import traceback
 import logging
 import math
-import os
-import shutil
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
@@ -38,12 +36,8 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency,
-                       QgsMessageLog,
-                       QgsVectorLayer,
-                       QgsFeature,
-                       QgsVectorFileWriter)
-from safe_qgis.exceptions import StyleError, ShapefileCreationError, \
-    memoryLayerCreationError
+                       )
+from safe_qgis.exceptions import StyleError, MethodUnavailableError
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
@@ -51,9 +45,15 @@ import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
+try:
+    #available from qgis 1.8
+    from qgis.core import QgsMessageLog
 
-def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-    QgsMessageLog.logMessage(str(msg), tag, level)
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        QgsMessageLog.logMessage(str(msg), tag, level)
+except MethodUnavailableError:
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        print (str(msg), tag, level)
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
@@ -520,146 +520,146 @@ def qgisVersion():
     return myVersion
 
 
-def copyInMemory(vLayer, copyName=''):
-    """Return a memory copy of a layer
+#def copyInMemory(vLayer, copyName=''):
+#    """Return a memory copy of a layer
+#
+#    Input
+#        origLayer: layer
+#        copyName: the name of the copy
+#    Output
+#        memory copy of a layer
+#
+#    """
+#
+#    if copyName is '':
+#        copyName = vLayer.name() + ' TMP'
+#
+#    if vLayer.type() == QgsMapLayer.VectorLayer:
+#        vType = vLayer.geometryType()
+#        if vType == QGis.Point:
+#            typeStr = 'Point'
+#        elif vType == QGis.Line:
+#            typeStr = 'Line'
+#        elif vType == QGis.Polygon:
+#            typeStr = 'Polygon'
+#        else:
+#            raise memoryLayerCreationError('Layer is whether Point or '
+#                                           'Line or Polygon')
+#    else:
+#        raise memoryLayerCreationError('Layer is not a VectorLayer')
+#
+#    crs = vLayer.crs().authid().toLower()
+#    uri = typeStr + '?crs=' + crs + '&index=yes'
+#    memLayer = QgsVectorLayer(uri, copyName, 'memory')
+#    memProvider = memLayer.dataProvider()
+#
+#    vProvider = vLayer.dataProvider()
+#    vAttrs = vProvider.attributeIndexes()
+#    vFields = vProvider.fields()
+#
+#    fields = []
+#    for i in vFields:
+#        fields.append(vFields[i])
+#
+#    memProvider.addAttributes(fields)
+#
+#    vProvider.select(vAttrs)
+#    ft = QgsFeature()
+#    while vProvider.nextFeature(ft):
+#        memProvider.addFeatures([ft])
+#
+#    # Next two lines a workaround for a QGIS bug (lte 1.8)
+#    # preventing mem layer attributes being saved to shp.
+#    memLayer.startEditing()
+#    memLayer.commitChanges()
+#
+#    return memLayer
 
-    Input
-        origLayer: layer
-        copyName: the name of the copy
-    Output
-        memory copy of a layer
 
-    """
-
-    if copyName is '':
-        copyName = vLayer.name() + ' TMP'
-
-    if vLayer.type() == QgsMapLayer.VectorLayer:
-        vType = vLayer.geometryType()
-        if vType == QGis.Point:
-            typeStr = 'Point'
-        elif vType == QGis.Line:
-            typeStr = 'Line'
-        elif vType == QGis.Polygon:
-            typeStr = 'Polygon'
-        else:
-            raise memoryLayerCreationError('Layer is whether Point or Line or '
-                                           'Polygon')
-    else:
-        raise memoryLayerCreationError('Layer is not a VectorLayer')
-
-    crs = vLayer.crs().authid().toLower()
-    uri = typeStr + '?crs=' + crs + '&index=yes'
-    memLayer = QgsVectorLayer(uri, copyName, 'memory')
-    memProvider = memLayer.dataProvider()
-
-    vProvider = vLayer.dataProvider()
-    vAttrs = vProvider.attributeIndexes()
-    vFields = vProvider.fields()
-
-    fields = []
-    for i in vFields:
-        fields.append(vFields[i])
-
-    memProvider.addAttributes(fields)
-
-    vProvider.select(vAttrs)
-    ft = QgsFeature()
-    while vProvider.nextFeature(ft):
-        memProvider.addFeatures([ft])
-
-    # Next two lines a workaround for a QGIS bug (lte 1.8)
-    # preventing mem layer attributes being saved to shp.
-    memLayer.startEditing()
-    memLayer.commitChanges()
-
-    return memLayer
-
-
-def memoryLayerToShapefile(theFileName,
-                           theFilePath,
-                           theMemoryLayer,
-                           theForceFlag=False,
-                           mySourceQmlPath=''):
-    """Write a memory layer to a shapefile.
-
-    .. note:: The file will be saved into the theFilePath dir  If a qml
-        matching theFileName.qml can be found it will automatically copied over
-        to the output dir.
-        Any existing shp by the same name will be
-        overridden if theForceFlag is True, otherwise the existing file will be
-        returned.
-
-    Args:
-        theFileName: str filename excluding path and ext. e.g. 'mmi-cities'
-        theMemoryLayer: QGIS memory layer instance.
-        theForceFlag: bool (Optional). Whether to force the overwrite
-            of any existing data. Defaults to False.
-        mySourceQmlPath: str (Optional). Copy the qml file
-        mySourceQmlPath/theFileName.qml to theFilePath.
-
-    Returns: str Path to the created shapefile
-
-    Raises: ShapefileCreationError
-    """
-    LOGGER.debug('memoryLayerToShapefile requested.')
-
-    LOGGER.debug(str(theMemoryLayer.dataProvider().attributeIndexes()))
-    if theMemoryLayer.featureCount() < 1:
-        raise ShapefileCreationError('Memory layer has no features')
-
-    myGeoCrs = QgsCoordinateReferenceSystem()
-    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-
-    myOutputFileBase = os.path.join(theFilePath,
-        '%s.' % theFileName)
-    myOutputFile = myOutputFileBase + 'shp'
-    if os.path.exists(myOutputFile) and theForceFlag is not True:
-        return myOutputFile
-    elif os.path.exists(myOutputFile):
-        try:
-            os.remove(myOutputFileBase + 'shp')
-            os.remove(myOutputFileBase + 'shx')
-            os.remove(myOutputFileBase + 'dbf')
-            os.remove(myOutputFileBase + 'prj')
-        except OSError:
-            LOGGER.exception('Old shape files not deleted'
-                             ' - this may indicate a file permissions issue.')
-
-    # Next two lines a workaround for a QGIS bug (lte 1.8)
-    # preventing mem layer attributes being saved to shp.
-    theMemoryLayer.startEditing()
-    theMemoryLayer.commitChanges()
-
-    LOGGER.debug('Writing mem layer to shp: %s' % myOutputFile)
-    # Explicitly giving all options, not really needed but nice for clarity
-    myErrorMessage = QtCore.QString()
-    myOptions = QtCore.QStringList()
-    myLayerOptions = QtCore.QStringList()
-    mySelectedOnlyFlag = False
-    mySkipAttributesFlag = False
-    myResult = QgsVectorFileWriter.writeAsVectorFormat(
-        theMemoryLayer,
-        myOutputFile,
-        'utf-8',
-        myGeoCrs,
-        "ESRI Shapefile",
-        mySelectedOnlyFlag,
-        myErrorMessage,
-        myOptions,
-        myLayerOptions,
-        mySkipAttributesFlag)
-
-    if myResult == QgsVectorFileWriter.NoError:
-        LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)
-    else:
-        raise ShapefileCreationError(
-            'Failed with error: %s' % myResult)
-
-    # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-    if mySourceQmlPath is not '':
-        myQmlPath = os.path.join(theFilePath, '%s.qml' % theFileName)
-        mySourceQml = os.path.join(mySourceQmlPath, '%s.qml' % theFileName)
-        shutil.copyfile(mySourceQml, myQmlPath)
-
-    return myOutputFile
+#def memoryLayerToShapefile(theFileName,
+#                           theFilePath,
+#                           theMemoryLayer,
+#                           theForceFlag=False,
+#                           mySourceQmlPath=''):
+#    """Write a memory layer to a shapefile.
+#
+#    .. note:: The file will be saved into the theFilePath dir  If a qml
+#        matching theFileName.qml can be found it will automatically copied
+#        over to the output dir.
+#        Any existing shp by the same name will be
+#        overridden if theForceFlag is True, otherwise the existing file will
+#        be returned.
+#
+#    Args:
+#        theFileName: str filename excluding path and ext. e.g. 'mmi-cities'
+#        theMemoryLayer: QGIS memory layer instance.
+#        theForceFlag: bool (Optional). Whether to force the overwrite
+#            of any existing data. Defaults to False.
+#        mySourceQmlPath: str (Optional). Copy the qml file
+#        mySourceQmlPath/theFileName.qml to theFilePath.
+#
+#    Returns: str Path to the created shapefile
+#
+#    Raises: ShapefileCreationError
+#    """
+#    LOGGER.debug('memoryLayerToShapefile requested.')
+#
+#    LOGGER.debug(str(theMemoryLayer.dataProvider().attributeIndexes()))
+#    if theMemoryLayer.featureCount() < 1:
+#        raise ShapefileCreationError('Memory layer has no features')
+#
+#    myGeoCrs = QgsCoordinateReferenceSystem()
+#    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+#
+#    myOutputFileBase = os.path.join(theFilePath,
+#        '%s.' % theFileName)
+#    myOutputFile = myOutputFileBase + 'shp'
+#    if os.path.exists(myOutputFile) and theForceFlag is not True:
+#        return myOutputFile
+#    elif os.path.exists(myOutputFile):
+#        try:
+#            os.remove(myOutputFileBase + 'shp')
+#            os.remove(myOutputFileBase + 'shx')
+#            os.remove(myOutputFileBase + 'dbf')
+#            os.remove(myOutputFileBase + 'prj')
+#        except OSError:
+#            LOGGER.exception('Old shape files not deleted'
+#                             ' - this may indicate a file permissions issue.')
+#
+#    # Next two lines a workaround for a QGIS bug (lte 1.8)
+#    # preventing mem layer attributes being saved to shp.
+#    theMemoryLayer.startEditing()
+#    theMemoryLayer.commitChanges()
+#
+#    LOGGER.debug('Writing mem layer to shp: %s' % myOutputFile)
+#    # Explicitly giving all options, not really needed but nice for clarity
+#    myErrorMessage = QtCore.QString()
+#    myOptions = QtCore.QStringList()
+#    myLayerOptions = QtCore.QStringList()
+#    mySelectedOnlyFlag = False
+#    mySkipAttributesFlag = False
+#    myResult = QgsVectorFileWriter.writeAsVectorFormat(
+#        theMemoryLayer,
+#        myOutputFile,
+#        'utf-8',
+#        myGeoCrs,
+#        "ESRI Shapefile",
+#        mySelectedOnlyFlag,
+#        myErrorMessage,
+#        myOptions,
+#        myLayerOptions,
+#        mySkipAttributesFlag)
+#
+#    if myResult == QgsVectorFileWriter.NoError:
+#        LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)
+#    else:
+#        raise ShapefileCreationError(
+#            'Failed with error: %s' % myResult)
+#
+#    # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
+#    if mySourceQmlPath is not '':
+#        myQmlPath = os.path.join(theFilePath, '%s.qml' % theFileName)
+#        mySourceQml = os.path.join(mySourceQmlPath, '%s.qml' % theFileName)
+#        shutil.copyfile(mySourceQml, myQmlPath)
+#
+#    return myOutputFile
