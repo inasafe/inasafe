@@ -1,0 +1,4194 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2012, BNPB/AIFDR/GFDRR
+# This file is distributed under the same license as the InaSAFE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: InaSAFE 0.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-27 13:02\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# a321350c01824f6a9e4911c9d84fb4c1
+#: ../../api-docs/index.rst:2
+msgid "InaSAFE's API documentation"
+msgstr ""
+
+# 2d95222653224ef69d7c7d421f75e403
+#: ../../api-docs/index.rst:4
+msgid ""
+"This is the API documentation for the InaSAFE project. You can find out more "
+"about the InaSAFE project by visiting `riskinabox.org<http://www.inasafe.org/"
+">`_."
+msgstr ""
+
+# ee2b2dafd24a4c079f1e74daf39be0ad
+#: ../../api-docs/index.rst:9
+msgid "Packages safe_qgis"
+msgstr ""
+
+# 2aa0369380c240ef9c31110aa4024471
+#: ../../api-docs/index.rst:17
+msgid "Unit Tests"
+msgstr ""
+
+# 32b5fff65b0f4ef19fa00117c40cd536
+#: ../../api-docs/index.rst:25
+msgid "Packages safe"
+msgstr ""
+
+# 8e60f88f05d94025a268a9affa977495
+#: ../../api-docs/safe.rst:2
+msgid "Package::safe"
+msgstr ""
+
+# 8df56f1e77c54ca98aa94c279c49a281
+#: ../../api-docs/safe/api.rst:2
+msgid "Module:  safe.api"
+msgstr ""
+
+# 38c1df11dadf4a74b054cce6c119c724
+# ce11190df7f1480181d3a27889e76593
+# d2ef1e267a824484a4b8b45e4b8bfecf
+# 1df87d48159248418b5f28f91ee31a84
+# ee6c2bd7e66948969666854dd786288c
+# fa26bcbc27a4407f9c555cc547f5bf66
+# 7683f414b97d41b8b531a6931bc66778
+# f260215ea6e04278ae6847fe95cdfdc3
+# 25cd9460bc5a4bebb3c57f2cd3bbd185
+# 1bb2ab0b499642d391ff49b9b2acb38a
+# 3bf1052d8c664867bbb85af6fef9d5b1
+# f800b1f5b82a42e7b48742da63fbb5f8
+# 012640f87b514da68e4e4e5b2211e163
+# a8e108386c11456ab7a711f747fb039f
+# 3c8b4bd94c1b492bb9eb92b29304cfa3
+# 06bbdb77a98b4cd38cc21f05d153c9b8
+# 5bd0ed31ab76407bbf447c96b9c041ad
+# 9cc6224341ff49378cd0d77e38fc800c
+# 1ce318a00cc042e298e143c0afda5cec
+# 270f6665a9004882a9243a987075b68d
+# 9197d936d6414972af92f494de17fc6a
+# 63736730d08d4c13b035a3e2d18b91c8
+# 0f4dc36d25bf434e88cefef0a3d30a3f
+# 14cac020636a48ef834e07e477215866
+# e9cf24728d714dec85914d0ff9ba4fc5
+# 22c92e0bb94045d094c3131c1d2aab34
+# b819c9151af241ecb6a00fb9484e9224
+# d96a5949bdc64e0496c5f38ed2f3d5d8
+# 6167f9edfd854aeca13ddc2efd5ea6c4
+# 77e8d69509d1486a81aec882485a8930
+# 27a60583b59248dc8b12ce0484962850
+# ffb62cefe61e4b249040054f64857c5c
+# 0f6071bf11cb4699b77c30d550b6ab3c
+# 36d949c351bd4784aec522cda1393bb7
+# 5a6d753fd4654492a09a1f570d500c3e
+# 82dfbc33954749ee9f9fd82ef6b6748c
+# 43987c45e1234881afec07466c39e1bc
+# a8f72e6d01254dfcb405e27ab8375505
+# f9d87e28dbb649c89bec7cf9c87418f8
+# 212fd7e0292045c6a6be2a056740b8a5
+# 200849ac2c5c4aab867023495e725920
+# 172ef730ed064200aa63afac1b37bd2c
+# 4f69c82d662b4adab0e35a3fbf4847a4
+# 31290b6e440844f6a84b97cf3c4851f4
+# 35a34890dbd54d0eb9d925f0fd4275bf
+# bea049ae4c9142b886efccaf09d33ade
+# 7f9f7b3de8d140ce84ad04bb17d59a84
+# 09a4d67513b045119a8ea978679b1e4e
+# 63e358c67e0c4f679fcefdfa8b8b29f5
+# 1fb89a549c694e60a0d3e1d23a309f4c
+# 8160a4e175334f2298a9bd9eef7c0e7a
+# 15784eba1c734fb08997360a0a37bfb4
+# f6902a6dfe154b69b44a3e90820cb317
+# d96a5e3269ba4b2bae60b0462c44ab0c
+# 5cea27c1ac4744f9ba47aa907397ef43
+# d5e183d66b6c48418203108b00f4e924
+# d75435c66adb466091996fc45eb7cc7b
+# 1fff69d4e0874aedad2838a65d54f457
+# bf91b48082cf4b05a83b0a4498e8115a
+# 4705b430e79c45d18d6897378393642e
+# 97318e32f2344a1a8079dc635406af2c
+# ae60f4a2c6c3404fa72146dace2a4f79
+# b5180b43344f448cb8ebe2116482de98
+# 083d2ee5b1aa41d6bc4f70d63d091d81
+# 7a6360052bfc4e8e87da80d37a2f19a8
+# 38e8e1670e3246f49c654ac3fc4624dd
+# 8908771397074b6aa58f1a671ea40b2f
+# 02d25afad050401895df8732ad2e95e6
+# e7c9aaf8709a4bc4b3fc97d2b0badc3e
+# a9684f7725534aa0944d8b72d08d418f
+# 0131a3c085c44f18ab70a74e17f185ec
+# 477192fe48074c2bbd4876b1c3f405de
+# d806c673fe3d4b829652d156b1850947
+# d81efac446dd4b79af085f9d3d839826
+# b662e54095804b9c9fa4df0a8d3ef677
+# 805c3652a46741d586cec8d2d6858c4f
+# 84bd876a3fbd438fad2dc5bc71790ebe
+# 2892515d233f4552812772240b6fd4d1
+# 388859abc72748b99ed52e1069b869f9
+# fa6cb2dbafdc48d59d248217a1bb0596
+# bfe72b390ba5462dacc565a65b7db9be
+# 00e2290285644e70881711b47e827aff
+# cee2a8f9666b404aa03366a890e6dd0b
+# ed9ee52e539a45fcb6d20f8612712295
+# 4c71cd5062fb49918cbb70dea40c08dd
+# eb81291ec7664e82868256409906004f
+# ff4e224139094d5a889e5e77883fac2f
+# 6e8ce6c6df1c46debb1a1200e14e8bd3
+# 61ab06b215fa431ebfd665211b513c14
+# e6e60e10d36c460997994c3d3e9c9d14
+# 94b35f35df7c4962b11ed158d455c3c9
+# aff34363efbd467e9bbaa88a6cb8e634
+# 22cee2c9d1e743688eec3c13ee9b75fe
+# ad8259330ddd462a812d37273e354c60
+# 6042cd8b80de4100b9cb608291ec0d8a
+# aa5dfaa9fb90419291e1c8a6ccce6f63
+# 42dcfbc560574acb9a8705d423fa1051
+# 51b3ccc39a1447ffa467b48fd13bf3d7
+# 16aaa5c4e16a45fa957c91007b350a9a
+# 28f9681da39147658cb51dcc8d5f5c6f
+# 604a68f878974ee2aa92fc277e65ebd6
+#: ../../api-docs/safe/api.rst:7
+#: ../../api-docs/safe/common/dynamic_translations.rst:7
+#: ../../api-docs/safe/common/exceptions.rst:7
+#: ../../api-docs/safe/common/interpolation1d.rst:7
+#: ../../api-docs/safe/common/interpolation2d.rst:7
+#: ../../api-docs/safe/common/numerics.rst:7
+#: ../../api-docs/safe/common/polygon.rst:7
+#: ../../api-docs/safe/common/tables.rst:7
+#: ../../api-docs/safe/common/test_interpolate.rst:7
+#: ../../api-docs/safe/common/test_numerics.rst:7
+#: ../../api-docs/safe/common/test_polygon.rst:7
+#: ../../api-docs/safe/common/test_tables.rst:7
+#: ../../api-docs/safe/common/testing.rst:7
+#: ../../api-docs/safe/common/utilities.rst:7
+#: ../../api-docs/safe/common/version.rst:7
+#: ../../api-docs/safe/engine/core.rst:7
+#: ../../api-docs/safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.rst:7
+#: ../../api-docs/safe/engine/impact_functions_for_testing/HKV_flood_study.rst:7
+#: ../../api-docs/safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.rst:7
+#: ../../api-docs/safe/engine/impact_functions_for_testing/allen_fatality_model.rst:7
+#: ../../api-docs/safe/engine/impact_functions_for_testing/empirical_fatality_model.rst:7
+#: ../../api-docs/safe/engine/impact_functions_for_testing/flood_road_impact.rst:7
+#: ../../api-docs/safe/engine/impact_functions_for_testing/general_ashload_impact.rst:7
+#: ../../api-docs/safe/engine/impact_functions_for_testing/unspecific_building_impact_model.rst:7
+#: ../../api-docs/safe/engine/interpolation.rst:7
+#: ../../api-docs/safe/engine/test_engine.rst:7
+#: ../../api-docs/safe/engine/utilities.rst:7
+#: ../../api-docs/safe/impact_functions/core.rst:7
+#: ../../api-docs/safe/impact_functions/earthquake/earthquake_impact_on_women.rst:7
+#: ../../api-docs/safe/impact_functions/earthquake/itb_building_impact_model.rst:7
+#: ../../api-docs/safe/impact_functions/earthquake/itb_earthquake_fatality_model.rst:7
+#: ../../api-docs/safe/impact_functions/earthquake/padang_building_impact_model.rst:7
+#: ../../api-docs/safe/impact_functions/experimental/BNPB_flood_building_impact.rst:7
+#: ../../api-docs/safe/impact_functions/experimental/ashload_population_impact.rst:7
+#: ../../api-docs/safe/impact_functions/experimental/flood_population_evacuation_worldbank_request.rst:7
+#: ../../api-docs/safe/impact_functions/experimental/general_volcanic_population_impact.rst:7
+#: ../../api-docs/safe/impact_functions/experimental/mappings.rst:7
+#: ../../api-docs/safe/impact_functions/experimental/tsunami_building_impact.rst:7
+#: ../../api-docs/safe/impact_functions/experimental/tsunami_population_impact.rst:7
+#: ../../api-docs/safe/impact_functions/generic/categorised_hazard_building_impact.rst:7
+#: ../../api-docs/safe/impact_functions/generic/categorised_hazard_population.rst:7
+#: ../../api-docs/safe/impact_functions/inundation/flood_OSM_building_impact.rst:7
+#: ../../api-docs/safe/impact_functions/inundation/flood_population_evacuation.rst:7
+#: ../../api-docs/safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.rst:7
+#: ../../api-docs/safe/impact_functions/mappings.rst:7
+#: ../../api-docs/safe/impact_functions/styles.rst:7
+#: ../../api-docs/safe/impact_functions/test_mappings.rst:7
+#: ../../api-docs/safe/impact_functions/test_plugin_core.rst:7
+#: ../../api-docs/safe/impact_functions/test_plugins.rst:7
+#: ../../api-docs/safe/impact_functions/test_real_impact_functions.rst:7
+#: ../../api-docs/safe/impact_functions/utilities.rst:7
+#: ../../api-docs/safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.rst:7
+#: ../../api-docs/safe/storage/clipping.rst:7
+#: ../../api-docs/safe/storage/core.rst:7
+#: ../../api-docs/safe/storage/interpolation.rst:7
+#: ../../api-docs/safe/storage/layer.rst:7
+#: ../../api-docs/safe/storage/projection.rst:7
+#: ../../api-docs/safe/storage/raster.rst:7
+#: ../../api-docs/safe/storage/test_clipping.rst:7
+#: ../../api-docs/safe/storage/test_io.rst:7
+#: ../../api-docs/safe/storage/test_utilities.rst:7
+#: ../../api-docs/safe/storage/test_vector.rst:7
+#: ../../api-docs/safe/storage/utilities.rst:7
+#: ../../api-docs/safe/storage/utilities_test.rst:7
+#: ../../api-docs/safe/storage/vector.rst:7
+#: ../../api-docs/safe_qgis/clipper.rst:7 ../../api-docs/safe_qgis/dock.rst:7
+#: ../../api-docs/safe_qgis/dock_base.rst:7
+#: ../../api-docs/safe_qgis/exceptions.rst:7
+#: ../../api-docs/safe_qgis/help.rst:7
+#: ../../api-docs/safe_qgis/help_base.rst:7
+#: ../../api-docs/safe_qgis/impact_calculator.rst:7
+#: ../../api-docs/safe_qgis/impact_calculator_thread.rst:7
+#: ../../api-docs/safe_qgis/impact_functions_doc.rst:7
+#: ../../api-docs/safe_qgis/impact_functions_doc_base.rst:7
+#: ../../api-docs/safe_qgis/keyword_io.rst:7
+#: ../../api-docs/safe_qgis/keywords_dialog.rst:7
+#: ../../api-docs/safe_qgis/keywords_dialog_base.rst:7
+#: ../../api-docs/safe_qgis/map.rst:7 ../../api-docs/safe_qgis/odict.rst:7
+#: ../../api-docs/safe_qgis/options_dialog.rst:7
+#: ../../api-docs/safe_qgis/options_dialog_base.rst:7
+#: ../../api-docs/safe_qgis/plugin.rst:7
+#: ../../api-docs/safe_qgis/qgis_interface.rst:7
+#: ../../api-docs/safe_qgis/resources.rst:7
+#: ../../api-docs/safe_qgis/resources_rc.rst:7
+#: ../../api-docs/safe_qgis/safe_interface.rst:7
+#: ../../api-docs/safe_qgis/utilities.rst:7
+#: ../../api-docs/safe_qgis/utilities_test.rst:7
+#: ../../api-docs/safe_qgis_tests/test_clipper.rst:7
+#: ../../api-docs/safe_qgis_tests/test_dock.rst:7
+#: ../../api-docs/safe_qgis_tests/test_help.rst:7
+#: ../../api-docs/safe_qgis_tests/test_impact_calculator.rst:7
+#: ../../api-docs/safe_qgis_tests/test_impact_functions_doc.rst:7
+#: ../../api-docs/safe_qgis_tests/test_keyword_io.rst:7
+#: ../../api-docs/safe_qgis_tests/test_keywords_dialog.rst:7
+#: ../../api-docs/safe_qgis_tests/test_map.rst:7
+#: ../../api-docs/safe_qgis_tests/test_plugin.rst:7
+#: ../../api-docs/safe_qgis_tests/test_qgis_environment.rst:7
+#: ../../api-docs/safe_qgis_tests/test_safe_interface.rst:7
+#: ../../api-docs/safe_qgis_tests/test_utilities.rst:7
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""
+
+# b25dcd2b00c74bafb8d8a64c68185522
+#: ../../api-docs/safe/common.rst:2
+msgid "Package::safe.common"
+msgstr ""
+
+# 4c10a82625c545488c8f36cafc76ac9f
+#: ../../api-docs/safe/common/dynamic_translations.rst:2
+msgid "Module:  safe.common.dynamic_translations"
+msgstr ""
+
+# 1e57d7485e764b0a8461286a7a0911e6
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:1
+msgid "Lookup table mapping layer titles to translatable strings"
+msgstr ""
+
+# e4218ff4c20f4ac48310902c60fe216f
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:3
+msgid ""
+"Layer titles are kept in the associated keywords files. However, these files "
+"are not seen by the internationalisation system and can therefore not be "
+"translated."
+msgstr ""
+
+# 72f8b017e85e46c4a61c29c0ebc87c4f
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:7
+msgid ""
+"To achieve this for selected titles, we maintain a lookup table of the form"
+msgstr ""
+
+# 5fc53c2757304502bb5fc847dd135721
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:9
+msgid "{string: translatable_string}"
+msgstr ""
+
+# 531366895bfb4a6f9f1d0ddd7631604d
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:11
+msgid ""
+"where string e.g. comes from the keywords file or attribute names/values in "
+"datasets and translatable_string is the string that will appear as the "
+"translated at runtime."
+msgstr ""
+
+# 6428945352d2470e9f65689458440bcf
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:15
+msgid "e.g (using a neutral symbol) {'title1': _('Jakarta 2007 flood')}"
+msgstr ""
+
+# f1ada362c72d4ca69e291bcc4bfb917b
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:18
+msgid "or (using existing title) {'Schools': _('Schools')}"
+msgstr ""
+
+# 45e0b8a69a5a44f3abcf089516a2ff7f
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:21
+msgid "or (attribute value) {'school': _('school')}"
+msgstr ""
+
+# 4d96f01f423948b4a95990f8876c8c4f
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:24
+msgid ""
+"With the underscore function, the specified string will be seen by the "
+"translation system and can appear in the supported languages as with other "
+"strings in SAFE."
+msgstr ""
+
+# 3f1430a20d244bb2a84fc06d65e3e6c7
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:28
+msgid ""
+"Note, this module does *not* provide translations! Rather it provides "
+"mappings between strings expected at runtime to strings seen by the existing "
+"translation systems."
+msgstr ""
+
+# 4e72173c031740088624f2f4bd8df0d4
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:32
+msgid "To use:"
+msgstr ""
+
+# a69c869edc1e4428a968aba1a355b394
+#: ../../../../safe/common/dynamic_translations.py:docstring of
+#: safe.common.dynamic_translations:34
+msgid "from dynamic_translations import names"
+msgstr ""
+
+# 1546a4dd219b4c4689cfdc6ce3fc2950
+#: ../../api-docs/safe/common/exceptions.rst:2
+msgid "Module:  safe.common.exceptions"
+msgstr ""
+
+# 984e84f2683841aaac82834ad397f941
+#: ../../../../safe/common/exceptions.py:docstring of safe.common.exceptions:1
+#: ../../../../safe_qgis/exceptions.py:docstring safe_qgis.exceptions:1
+msgid ""
+"InaSAFE Disaster risk assessment tool developed by AusAid - **Exception "
+"Classes.**"
+msgstr ""
+
+# 0c93f861ac2a4f8a855d9ad56831a556
+#: ../../../../safe/common/exceptions.py:docstring of safe.common.exceptions:4
+msgid "Custom exception classes for the SAFE library"
+msgstr ""
+
+# 52ab054bf46c42b4ab85b780a19c3c6a
+# c9f125b2a32e48c3b00d1e892d1650bb
+# f5ae7ecbf6f34965b5a0d45a5af5f704
+# dae45a93df294bb1b8c2bccce21ef95c
+# 4de6a350a20f47beabf75344598b60bc
+# a008e3266fee4b5aada5ded4ac6445ef
+# a0041667e219423c9f704ea4acb34e27
+#: ../../../../safe/common/exceptions.py:docstring of safe.common.exceptions:6
+#: ../../../../safe/common/test_tables.py:docstring safe.common.test_tables:4
+#: ../../../../safe_qgis/exceptions.py:docstring safe_qgis.exceptions:6
+msgid "Contact : ole.moller.nielsen@gmail.com"
+msgstr ""
+
+# bee298ced3634c7c9c25a780f2f07543
+# 01d544e8a18e4399984103fe59a4260e
+# 6b9545daf95c4f9b9a0db7df990e7648
+# f4fd746dce5b4ba5b4fdf2a3c1941066
+# ece8f59a2fb44f63a7d1c1cf87319561
+# 45370fda7be142c1bd606ef1bb48da09
+# c53de33a13724d189577d061c68c9374
+#: ../../../../safe/common/exceptions.py:docstring of safe.common.exceptions:8
+#: ../../../../safe/common/test_tables.py:docstring safe.common.test_tables:6
+#: ../../../../safe_qgis/exceptions.py:docstring safe_qgis.exceptions:8
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+
+# ad1728d905af4b198ca6a5dfcbd25fc9
+#: ../../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.BoundingBoxError:1
+msgid "For errors relating to bboxes"
+msgstr ""
+
+# 1b108ebd67da4ec1baedccfd66e85b8c
+#: ../../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.BoundsError:1
+msgid "For points falling outside interpolation grid"
+msgstr ""
+
+# b96659f96f584020b1e60e92f2b014a8
+#: ../../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.GetDataError:1
+msgid "When layer data cannot be obtained"
+msgstr ""
+
+# 5c817efd7b414f1b8d3766a4f1e3b26e
+#: ../../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.InaSAFEError:1
+msgid "Base class for all user defined execptions"
+msgstr ""
+
+# 363386d4365e4f129867db427dbcd1c6
+#: ../../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.PolygonInputError:1
+msgid "For invalid inputs to numeric polygon functions"
+msgstr ""
+
+# 4e7b6ab5da1047cbaac9ec74e9c5bfb1
+#: ../../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.ReadLayerError:1
+msgid "When a layer can't be read"
+msgstr ""
+
+# 31d30d21f5be4c11afab361d0fe07a3a
+#: ../../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.VerificationError:1
+msgid "Exception thrown by verify()"
+msgstr ""
+
+# b8c8fdffec86495ea89bc5a177d94e88
+#: ../../../../safe/common/exceptions.py:docstring of
+#: safe.common.exceptions.WriteLayerError:1
+msgid "When a layer can't be written"
+msgstr ""
+
+# d258b8255fc645db938114a5af3bb21a
+#: ../../api-docs/safe/common/interpolation1d.rst:2
+msgid "Module:  safe.common.interpolation1d"
+msgstr ""
+
+# 13a8b029e2344f3fba8442cb04d2d139
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d:1
+msgid "**Module for 1D interpolation**"
+msgstr ""
+
+# 13a87d1d21034411bbb96693e55eabc8
+# 704332d0f8bd417dbc0d454533597e99
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d:3
+#: ../../../../safe/common/interpolation2d.py:docstring
+#: safe.common.interpolation2d:3
+msgid "This module:"
+msgstr ""
+
+# 9ac77c0540414e57b641a01222369e8c
+# ee70b494b3f34c32bfe6863f57f5ddd9
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d:5
+#: ../../../../safe/common/interpolation2d.py:docstring
+#: safe.common.interpolation2d:5
+msgid ""
+"provides piecewise constant (nearest neighbour) and bilinear interpolation"
+msgstr ""
+
+# 889675fd3201447e83df9085b194668c
+# 6c8a7105d530465cbfdab295c32795be
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d:6
+#: ../../../../safe/common/interpolation2d.py:docstring
+#: safe.common.interpolation2d:6
+msgid "is fast (based on numpy vector operations)"
+msgstr ""
+
+# f1258ed00f82469f8a3c84e607b52da6
+# 35d80f36928440eaa96a45256825b84c
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d:7
+#: ../../../../safe/common/interpolation2d.py:docstring
+#: safe.common.interpolation2d:7
+msgid "depends only on numpy"
+msgstr ""
+
+# 00fc2ee46f9a443a86e787bd526403fe
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d:8
+msgid ""
+"guarantees that interpolated values never exceed the two nearest neighbours"
+msgstr ""
+
+# d2c62d7e269e43f18221d9861babc15b
+# f160309c0bc943feb91060df0d8e72bc
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d:9
+#: ../../../../safe/common/interpolation2d.py:docstring
+#: safe.common.interpolation2d:9
+msgid "handles missing values in domain sensibly using NaN"
+msgstr ""
+
+# 1df51646e31d42c59dadc7f8db069c4d
+# 7119aae3469a4eb889714b1bf47ef1f6
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d:10
+#: ../../../../safe/common/interpolation2d.py:docstring
+#: safe.common.interpolation2d:10
+msgid "is unit tested with a range of common and corner cases"
+msgstr ""
+
+# 62b9e9041e994389aebc82d10fc428d7
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d:12
+msgid ""
+"See interpolation2d.py for documentation of the mathematical derivation used."
+msgstr ""
+
+# ae448a3cf7834627860540fd695066c8
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.check_inputs:1
+msgid "Check inputs for interpolate1d function"
+msgstr ""
+
+# abc8eb2207774f47b765dd629e7d74e8
+# c24761a3901f44538d3d155a1dd8f048
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:1
+#: ../../../../safe/common/interpolation2d.py:docstring
+#: safe.common.interpolation2d.interpolate2d:1
+msgid "Fundamental 2D interpolation routine"
+msgstr ""
+
+# b86f7d1c68ab4ca9877f4d2508d3b836
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:4
+msgid "x: 1D array of x-coordinates on which to interpolate"
+msgstr ""
+
+# 9fa41781041841c7910d1e65d76aa269
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:5
+msgid "z: 1D array of values for each x"
+msgstr ""
+
+# 145a292b741b49c2b234b887564422ce
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:6
+msgid "points: 1D array of coordinates where interpolated values are sought"
+msgstr ""
+
+# 6452fb31c46b4dce8a8d27e841687ec2
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:8
+msgid ""
+"'constant' - piecewise constant nearest neighbour interpolation 'linear' - "
+"bilinear interpolation using the two"
+msgstr ""
+
+# eff56930efee458e909c269f5cbb6583
+# 84895c8841e64fe9996478207e4e48f8
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:10
+#: ../../../../safe/common/interpolation2d.py:docstring
+#: safe.common.interpolation2d.interpolate2d:12
+msgid "nearest neighbours (default)"
+msgstr ""
+
+# 08f4d958da4e4d1898affe71ac5b6224
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:12
+msgid ""
+"be raised when interpolated values are requested outside the domain of the "
+"input data. If False, nan is returned for those values"
+msgstr ""
+
+# 26573a3e24134050be5d002123639c12
+# 0067a0cb44354db4aa5db2cb3fc1a955
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:16
+#: ../../../../safe/common/interpolation2d.py:docstring
+#: safe.common.interpolation2d.interpolate2d:20
+msgid "1D array with same length as points with interpolated values"
+msgstr ""
+
+# 758427d5052045fcaeb340a2e11b6e7e
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:19
+msgid ""
+"Input coordinates x are assumed to be monotonically increasing, but need not "
+"be equidistantly spaced."
+msgstr ""
+
+# 80a180e30125405191e25113e98f2c73
+#: ../../../../safe/common/interpolation1d.py:docstring of
+#: safe.common.interpolation1d.interpolate1d:22
+msgid "z is assumed to have dimension M where M = len(x)."
+msgstr ""
+
+# 354b43b66469497ca399d85da31c4fc2
+#: ../../api-docs/safe/common/interpolation2d.rst:2
+msgid "Module:  safe.common.interpolation2d"
+msgstr ""
+
+# 76d08bc318fe4b808ff64ceae86fb15b
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:1
+msgid "**Module for 2D interpolation over a rectangular mesh**"
+msgstr ""
+
+# c7eb443cfaf14cc78899f128e293ee36
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:8
+msgid ""
+"guarantees that interpolated values never exceed the four nearest neighbours"
+msgstr ""
+
+# 957b41b668ea4f0da47cb53599a1421e
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d:12
+msgid ""
+"See end of this file for documentation of the mathematical derivation used."
+msgstr ""
+
+# 361e03fd50324ba7808fb34c3b72beec
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.check_inputs:1
+msgid "Check inputs for interpolate2d function"
+msgstr ""
+
+# c3ccc3eae59e4731afcdfee28f05b5bf
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:4
+msgid "x: 1D array of x-coordinates of the mesh on which to interpolate"
+msgstr ""
+
+# b51f171c96ac46f096072b8a1571a43c
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:5
+msgid "y: 1D array of y-coordinates of the mesh on which to interpolate"
+msgstr ""
+
+# 842badfc1f7142bbb1dd5d8ff89f5fa1
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:6
+msgid "Z: 2D array of values for each x, y pair"
+msgstr ""
+
+# e09ffa2c42194581b371a0e15c229e32
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:7
+msgid "points: Nx2 array of coordinates where interpolated values are sought"
+msgstr ""
+
+# 8f4c1c244d5947bca6859c94c8cf81b3
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:8
+msgid "mode: Determines the interpolation order. Options are"
+msgstr ""
+
+# 0b5ac0aab1bc44c09f40ad847e4a9cf6
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:10
+msgid "'constant' - piecewise constant nearest neighbour interpolation"
+msgstr ""
+
+# 32b96b04dd6741e0ba291e19c7260269
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:15
+msgid ""
+"will be raised when interpolated values are requested outside the domain of "
+"the input data. If False, nan is returned for those values"
+msgstr ""
+
+# 1757c473514945a9805fe06685d69af0
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:22
+msgid "Raises: Exception, BoundsError (see note about bounds_error)"
+msgstr ""
+
+# 325fec5b24d84403a7a9d5302bad9949
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:25
+msgid ""
+"Input coordinates x and y are assumed to be monotonically increasing, but "
+"need not be equidistantly spaced. No such assumption regarding ordering of "
+"points is made."
+msgstr ""
+
+# 9311b05de23b4b7abc3fd2250339665a
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:29
+msgid ""
+"Z is assumed to have dimension M x N, where M = len(x) and N = len(y). In "
+"other words it is assumed that the x values follow the first (vertical) axis "
+"downwards and y values the second (horizontal) axis from left to right."
+msgstr ""
+
+# 5f15668e5bfa49799c86b83bb2923014
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate2d:34
+msgid ""
+"If this routine is to be used for interpolation of raster grids where data "
+"is typically organised with longitudes (x) going from left to right and "
+"latitudes (y) from left to right then user interpolate_raster in this module"
+msgstr ""
+
+# abac867e82ad4b8384914dcda0ff548d
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate_raster:1
+msgid "2D interpolation of raster data"
+msgstr ""
+
+# 1b9308c656554ae7ac8e1b9bf2d04112
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate_raster:3
+msgid ""
+"It is assumed that data is organised in matrix Z as latitudes from bottom up "
+"along the first dimension and longitudes from west to east along the second "
+"dimension."
+msgstr ""
+
+# 986393ddb0e04d359d01c7746a30d42d
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate_raster:7
+msgid ""
+"Further it is assumed that x is the vector of longitudes and y the vector of "
+"latitudes."
+msgstr ""
+
+# ac3cd50cde784273b860d1ff40196482
+#: ../../../../safe/common/interpolation2d.py:docstring of
+#: safe.common.interpolation2d.interpolate_raster:10
+msgid "See interpolate2d for details of the interpolation routine"
+msgstr ""
+
+# 7f49958f89734962b0af51215f0ea48e
+#: ../../api-docs/safe/common/numerics.rst:2
+msgid "Module:  safe.common.numerics"
+msgstr ""
+
+# 129a6e3358dc4eb39e3950f6caafb022
+#: ../../../../safe/common/numerics.py:docstring of safe.common.numerics:1
+msgid "**Numerical tools**"
+msgstr ""
+
+# 8c4c28b832a04fbc81681f2ff25a52f8
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:1
+msgid "Generate all combinations of grid point coordinates from x and y axes"
+msgstr ""
+
+# 4e000ee60f614194ade275d0f7926fb1
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:4
+msgid "x: x coordinates (array)"
+msgstr ""
+
+# e110af1e10b24806b8da1c0099d88db9
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:5
+msgid "y: y coordinates (array)"
+msgstr ""
+
+# d445210f958b404d9909dffe61d10d8c
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:9
+msgid ""
+"grid points defined by x and y axes. The x coordinate will vary the fastest "
+"to match the way 2D numpy arrays are laid out by default ('C' order). That "
+"way, the x and y coordinates will match a corresponding 2D array A when "
+"flattened (A.flat[:] or A.reshape(-1))"
+msgstr ""
+
+# 87a781e212c248aba17931ad7df6d47c
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:16
+msgid "Example"
+msgstr ""
+
+# 8e38049e20bd441ab44bdea616270687
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:18
+msgid "x = [1, 2, 3] y = [10, 20]"
+msgstr ""
+
+# 429498ab5aee46b097e0275ea4ed5077
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.axes2points:22
+msgid "[2, 10], [3, 10], [1, 20], [2, 20], [3, 20]]"
+msgstr ""
+
+# a37659dacbad48c695a6856dcd04d4d7
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:1
+msgid "Ensure that sequence is a numeric array."
+msgstr ""
+
+# 2b11e358c9d24a89bbb7731294b6a6b2
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:5
+msgid "unaltered If not, an attempt is made to convert it to a numeric array"
+msgstr ""
+
+# 6db2fdff0a81457188855370203eae8d
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:9
+msgid "that a 0-dim array DOES NOT HAVE A LENGTH UNDER numpy."
+msgstr ""
+
+# 7c9c92bc3dd34efab8df06ae4e3c8747
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:10
+msgid "A: String.   Array of ASCII values (numpy can't handle this)"
+msgstr ""
+
+# d44cb580e73e4b26b6fc707e43a6bb1d
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:13
+msgid ""
+"If not, let numeric package decide. typecode will always be one of num."
+"float, num.int, etc."
+msgstr ""
+
+# 36eed2eeb8f24adb8caba662df969f96
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:17
+msgid ""
+"that numpy.array(A, dtype) will sometimes copy.  Use 'copy=False' to copy "
+"only when required."
+msgstr ""
+
+# 0c262166aa3d4ead9c1caff19ec3f0a1
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.ensure_numeric:20
+msgid "This function is necessary as array(A) can cause memory overflow."
+msgstr ""
+
+# 50c3baf7e50e46c2bb7ad8a9726c7e38
+#: ../../../../safe/common/numerics.py:docstring of safe.common.numerics.erf:1
+msgid "Approximation to ERF"
+msgstr ""
+
+# b2e7a8e7cd7243aab9ffa9e41e1b07f2
+#: ../../../../safe/common/numerics.py:docstring of safe.common.numerics.erf:4
+msgid ""
+"from: http://www.cs.princeton.edu/introcs/21function/ErrorFunction.java.html "
+"Implements the Gauss error function. erf(z) = 2 / sqrt(pi) * integral(exp(-"
+"t*t), t = 0..z)"
+msgstr ""
+
+# 7d5af221f19545f2a3751a28869b2110
+#: ../../../../safe/common/numerics.py:docstring of safe.common.numerics.erf:9
+msgid ""
+"Fractional error in math formula less than 1.2 * 10 ^ -7. although subject "
+"to catastrophic cancellation when z in very close to 0 from Chebyshev "
+"fitting formula for erf(z) from Numerical Recipes, 6.2"
+msgstr ""
+
+# 1e99fb1f8544449a896b6597c0f621be
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.erf:13
+msgid ""
+"Source: http://stackoverflow.com/questions/457408/ is-there-an-easily-"
+"available-implementation-of-erf-for-python"
+msgstr ""
+
+# 930f23f8c2784b049485e2f90fde23c1
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:1
+msgid "Convert geotransform to coordinate axes"
+msgstr ""
+
+# 99393b15e93340f3baa7e5757c05c0a3
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:6
+msgid "top left y, rotation, n-s pixel resolution)."
+msgstr ""
+
+# 6abfdda3dfa1435299cbd59a0f919ec7
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:7
+msgid "nx: Number of cells in the w-e direction"
+msgstr ""
+
+# 628f24cc31804d75b1f1a86f8c1b4640
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:8
+msgid "ny: Number of cells in the n-s direction"
+msgstr ""
+
+# 2fd4b226dc114d7799e5a49b7a02bacf
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:12
+msgid ""
+"Return two vectors (longitudes and latitudes) representing the grid defined "
+"by the geotransform."
+msgstr ""
+
+# a79439f96a7d494e8fdcbac523462e3b
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:15
+msgid ""
+"The values are offset by half a pixel size to correspond to pixel "
+"registration."
+msgstr ""
+
+# 0b7ab9fad4604f5cb768b4a66dd3fb63
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:18
+msgid ""
+"I.e. If the grid origin (top left corner) is (105, 10) and the resolution is "
+"1 degrees in each direction, then the vectors will take the form"
+msgstr ""
+
+# 76b58099aae545bc92767cde7dde9be1
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.geotransform2axes:22
+msgid ""
+"longitudes = [100.5, 101.5, ..., 109.5] latitudes = [0.5, 1.5, ..., 9.5]"
+msgstr ""
+
+# cb98b970c2894fa786ae18faac4f923e
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:1
+msgid "Convert grid data to point data"
+msgstr ""
+
+# 1ff00222f1b44d22ac69926d599a0200
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:4
+msgid "A: Array of pixel values"
+msgstr ""
+
+# 18826860e079419397e46d6cfb68c3f6
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:5
+msgid "x: Longitudes corresponding to columns in A (left->right)"
+msgstr ""
+
+# a236662e31ea49b6b74e49742e339450
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:6
+msgid "y: Latitudes corresponding to rows in A (top->bottom)"
+msgstr ""
+
+# ab2dd9af77bc4565bbdf700720ec575c
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:9
+msgid "P: Nx2 array of point coordinates"
+msgstr ""
+
+# 0cc7a8cfdd3544dfa06136668151c309
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.grid2points:10
+msgid "V: N array of point values"
+msgstr ""
+
+# 055ef5c9ed0b4c2bb372cd4ef6c46bd1
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:1
+msgid "Cumulative Log Normal Distribution Function"
+msgstr ""
+
+# 3ae9e62f8ab646a19c9b045da0939402
+# 7a553142fc904edc9b445caaec4b00c7
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:4 safe.common.numerics.normal_cdf:4
+msgid "x: scalar or array of real numbers"
+msgstr ""
+
+# f9a15baef9284478857283c01380c87a
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:5
+msgid "mu: Median (exp(mean of log(x)). Default 1"
+msgstr ""
+
+# a78fb8119d294c5f83b62db9f7e94458
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:6
+msgid "sigma: Log normal standard deviation. Default 1"
+msgstr ""
+
+# 278be9eb56f149edb8dbc8619d538438
+# 702f5b2b04904451bc937bb0e74272d2
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:9 safe.common.numerics.normal_cdf:9
+msgid "An approximation of the cdf of the normal"
+msgstr ""
+
+# e439a59b00ab420c9472045790be41c8
+# 2da6a02eba094e5f9f59ded37086f134
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:12 safe.common.numerics.normal_cdf:12
+msgid "CDF of the normal distribution is defined as"
+msgstr ""
+
+# 402bc9b3cf7641c2b9966b6b3c20131f
+# 790dbca094eb4d6eb664e56bac08b378
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:14 safe.common.numerics.normal_cdf:14
+msgid "rac12 [1 + erf( rac{x - \\mu}{\\sigma \\sqrt{2}})], x \\in \\R"
+msgstr ""
+
+# a18920a8b495424cb7d1250c9cb934f5
+# 1fbacf5a63c24b85bd8829606caa4187
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.lognormal_cdf:17 safe.common.numerics.normal_cdf:17
+msgid "Source: http://en.wikipedia.org/wiki/Normal_distribution"
+msgstr ""
+
+# 9e9d19139b1b4611aee3486128f317ce
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.nanallclose:1
+msgid "Numpy allclose function which allows NaN"
+msgstr ""
+
+# 7c42f4a166094e2dae09001feda2553d
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.nanallclose:4
+msgid "x, y: Either scalars or numpy arrays"
+msgstr ""
+
+# 69e88ed061784d5894f54ae3eca1dec1
+# 169cd2418f90440b9e872b27fa375a05
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.nanallclose:7
+#: ../../../../safe/common/polygon.py:docstring
+#: safe.common.polygon.point_on_line:14
+msgid "True or False"
+msgstr ""
+
+# 64396f61b2704a129564e59bfc0a3f3b
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.nanallclose:10
+msgid "Returns True if all non-nan elements pass."
+msgstr ""
+
+# 7beec235fece4cd5859565d39a32cf73
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.normal_cdf:1
+msgid "Cumulative Normal Distribution Function"
+msgstr ""
+
+# 74acf9af1e7d482bb709bededfc376f6
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.normal_cdf:5
+msgid "mu: Mean value. Default 0"
+msgstr ""
+
+# bccf27d5d8cb494f9e5237eefd46677f
+#: ../../../../safe/common/numerics.py:docstring of
+#: safe.common.numerics.normal_cdf:6
+msgid "sigma: Standard deviation. Default 1"
+msgstr ""
+
+# e2455a88a9df495da02f9f5c6118bb1e
+#: ../../api-docs/safe/common/polygon.rst:2
+msgid "Module:  safe.common.polygon"
+msgstr ""
+
+# f1ac7d92f8634e7880209ca128205f0b
+#: ../../../../safe/common/polygon.py:docstring of safe.common.polygon:1
+msgid "**Polygon, line and point algorithms.**"
+msgstr ""
+
+# 4152be4d2cbd4358bf7d2f9cbf969b76
+#: ../../../../safe/common/polygon.py:docstring of safe.common.polygon:5
+msgid ""
+"separate_points_by_polygon: Fundamental clipper intersection: Determine "
+"intersections of lines"
+msgstr ""
+
+# 7b397150bec8442c9cbf5683cc8aa642
+#: ../../../../safe/common/polygon.py:docstring of safe.common.polygon:9
+msgid ""
+"inside_polygon is_inside_polygon outside_polygon is_outside_polygon "
+"point_on_line"
+msgstr ""
+
+# 7592757cbbf94a00a343af30511c08f2
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_grid_by_polygons:1
+msgid "Clip raster grid by polygon"
+msgstr ""
+
+# defeb30c2e9641c99fd97b6a143cb280
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_grid_by_polygons:4
+msgid ""
+"A: MxN array of grid points geotransform: 6-tuple used to locate A "
+"geographically"
+msgstr ""
+
+# 2396c8c78fb641ccb75168ad31d82811
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_grid_by_polygons:7
+msgid "top left y, rotation, n-s pixel resolution)"
+msgstr ""
+
+# f5c73ecc12764a91b3d83c37c1923f80
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_grid_by_polygons:8
+msgid "polygons: list of polygons, each an array of vertices"
+msgstr ""
+
+# 9230f2afc7104ab6a75d53a6d1792c0c
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_grid_by_polygons:11
+msgid "points_covered: List of (points, values) - one per input polygon."
+msgstr ""
+
+# 5b45cc5b4e594c46bd3e41cd53f83879
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_grid_by_polygons:13
+msgid ""
+"Implementing algorithm suggested in https://github.com/AIFDR/inasafe/"
+"issues/91#issuecomment-7025120"
+msgstr ""
+
+# 392e4949241245cdbd6116c135069361
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_grid_by_polygons:17
+msgid ""
+"that each point represents the center of its grid cell. The required half "
+"cell shifts are taken care of by the function geotransform2axes"
+msgstr ""
+
+# 7a88ffba350c43788d2090754c6cd201
+# 826bdbe745de4e04a8cc7390198e00ab
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_grid_by_polygons:21
+#: safe.common.polygon.clip_lines_by_polygons:20
+msgid "If multiple polygons overlap, the one first encountered will be used"
+msgstr ""
+
+# ef45a919782c4c04b7ad9fe46bca6815
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:1
+msgid "Clip line segments by polygon"
+msgstr ""
+
+# b8b9d44b30884ecfb56ea19d0dfaae12
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:5
+msgid "the equivalent Nx2 numpy array"
+msgstr ""
+
+# 74a5806530f742f996f966903427b740
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:6
+msgid ""
+"polygon: list or Nx2 array of polygon vertices closed: (optional) determine "
+"whether points on boundary should be regarded as belonging to the polygon "
+"(closed = True) or not (closed = False) - False is not recommended here "
+"polygon_bbox: Provide bounding box around polygon if known."
+msgstr ""
+
+# dde878f2cf0d4980a7122efebc70ca27
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:11
+msgid "This is a small optimisation"
+msgstr ""
+
+# 7e54451b4e784db7a1dde5749c475fa0
+# e723bf47d4bf429e8cf85a2eaf0d2276
+# 221a5a60d39242dcadf577be728dc0e7
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:12
+#: safe.common.polygon.clip_lines_by_polygon:13
+#: safe.common.polygon.separate_points_by_polygon:13
+msgid "check_input: Allows faster execution if set to False"
+msgstr ""
+
+# c62fea7bc4f24e59b9c5f5b8be2d93cc
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:15
+msgid ""
+"inside_lines: Clipped lines that are inside polygon outside_lines: Clipped "
+"lines that are outside polygon"
+msgstr ""
+
+# 5beeded2426f4d6d8d54b95c9641c4ad
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:18
+msgid ""
+"Both outputs lines take the form of lists of Nx2 numpy arrays, i.e. each "
+"line is an array of multiple segments"
+msgstr ""
+
+# 533940994d2b464583d6396f9485944b
+# 7a0f0d7f59ac486fac90bf94699dd43d
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:21
+#: safe.common.polygon.separate_points_by_polygon:24
+msgid "Example:"
+msgstr ""
+
+# cbc057d48fc94dc18d5e30ae61eb27d4
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:23
+msgid "U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square"
+msgstr ""
+
+# dd9e2319758546bf8b0b383288db82c0
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:25
+msgid ""
+"# Simple horizontal fully intersecting line line = [[-1, 0.5], [2, 0.5]]"
+msgstr ""
+
+# 1bb45a724dd14fc78e77950214501e87
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:28
+msgid ""
+"inside_line_segments, outside_line_segments =             "
+"clip_line_by_polygon(line, polygon)"
+msgstr ""
+
+# ed9f05dd62ac4b84aa89a4690deff4cd
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:31
+msgid "[[[0, 0.5], [1, 0.5]]])"
+msgstr ""
+
+# 8dddaa9cf00041c784622bdb1bba7d6b
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:35
+msgid "[[1, 0.5], [2, 0.5]]])"
+msgstr ""
+
+# 5d40c0a2cb364d75ada1e8771b817fc9
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:38
+msgid "The assumptions listed in separate_points_by_polygon apply"
+msgstr ""
+
+# 26ee01971eec4d4da872c44e4af4a065
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_line_by_polygon:40
+msgid "Output line segments are listed as separate lines i.e. not joined"
+msgstr ""
+
+# 1999d1b47c2e4661bab84b74721e27a6
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygon:1
+msgid "Clip multiple lines by polygon"
+msgstr ""
+
+# c94213dccc984e2d964e02cf565e5196
+# 7fdc4707f8904cafa04a528b7b639dc1
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygon:5
+#: safe.common.polygon.clip_lines_by_polygons:5
+msgid "where pi and qi are point coordinates (x, y)."
+msgstr ""
+
+# fefa516bbd304623b064dc5d8b9159d3
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygon:6
+msgid ""
+"polygon: list or Nx2 array of polygon vertices closed: (optional) determine "
+"whether points on boundary should be"
+msgstr ""
+
+# 48c2e1d0ef204d7f8282c753c450d64d
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygon:8
+msgid ""
+"regarded as belonging to the polygon (closed = True) or not (closed = False) "
+"- False is not recommended here This parameter can also be None in which "
+"case it is undefined whether a line on the boundary will fall inside or "
+"outside. This will make the algorithm about 20% faster."
+msgstr ""
+
+# f6e530b5b73344ff9dc6c6e31d3b45cd
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygon:16
+msgid ""
+"inside_lines: Dictionary of lines that are inside polygon outside_lines: "
+"Dictionary of lines that are outside polygon"
+msgstr ""
+
+# d213a303404a4066a05608257b9ee382
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygon:19
+msgid ""
+"Elements in output dictionaries can be a list of multiple lines. One line is "
+"a numpy array of vertices."
+msgstr ""
+
+# 76d421dd47c54d6db0ef86a163002307
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygon:22
+msgid ""
+"Both output dictionaries use the indices of the original line as keys. This "
+"makes it possible to track which line the new clipped lines come from, if "
+"one e.g. wants to assign the original attribute values to clipped lines."
+msgstr ""
+
+# 7583460c70184d2aabe4d7a9c755fdc0
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygon:27
+msgid "This is a wrapper around clip_line_by_polygon"
+msgstr ""
+
+# f5e7c121bc394e7099396f15aa191a59
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygons:1
+msgid "Clip multiple lines by multiple polygons"
+msgstr ""
+
+# ec84281290c844a3bb796ab1d95b6ec2
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygons:6
+msgid ""
+"polygons: list of polygons, each an array of vertices closed: optional "
+"parameter to determine whether lines that fall on"
+msgstr ""
+
+# 9f2bbe18a52c44a78333ac2be6e4c96a
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygons:8
+msgid ""
+"an polygon boundary should be considered to be inside (closed=True), outside "
+"(closed=False) or undetermined (closed=None). The latter case will speed the "
+"algorithm up but lines on boundaries may or may not be deemed to fall inside "
+"the polygon and so will be indeterministic"
+msgstr ""
+
+# 63d0b54bcb3e4e74abe219b5b96b12d4
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.clip_lines_by_polygons:17
+msgid "one per input polygon."
+msgstr ""
+
+# 222818a87d2e40279533b5f38bd2f9ab
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.in_and_outside_polygon:1
+msgid "Separate a list of points into two sets inside and outside a polygon"
+msgstr ""
+
+# c0ed517dd15c45cfabb74de3e927566d
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.in_and_outside_polygon:4
+msgid ""
+"points: (tuple, list or array) of coordinates polygon: list or Nx2 array of "
+"polygon vertices closed: Set to True if points on boundary are considered"
+msgstr ""
+
+# 955177c4a2b54f6cbe02657ecf2bf2a4
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.in_and_outside_polygon:7
+msgid "to be 'inside' polygon"
+msgstr ""
+
+# 839e420a304e4455ab4f78bd54e8eb58
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.in_and_outside_polygon:10
+msgid ""
+"inside: Array of points inside the polygon outside: Array of points outside "
+"the polygon"
+msgstr ""
+
+# 3dbefabf43ab4f43ac0aa7cf25756e2b
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.in_and_outside_polygon:13
+msgid "See separate_points_by_polygon for more documentation"
+msgstr ""
+
+# 571666c167c34ab7934f77146a7f746b
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.inside_polygon:1
+msgid "Determine points inside a polygon"
+msgstr ""
+
+# 52fa22d45d2143a194562addfc9332d1
+# 04a111bbcccd443485a8eaf1a8b7baa9
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.inside_polygon:3 safe.common.polygon.outside_polygon:3
+msgid ""
+"Functions inside_polygon and outside_polygon have been defined in terms of "
+"separate_by_polygon which will put all inside indices in the first part of "
+"the indices array and outside indices in the last"
+msgstr ""
+
+# 6a9feb2abad24118b9faa37ac64762de
+# 892a23cf405441178fe871729a2c29aa
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.inside_polygon:7 safe.common.polygon.outside_polygon:7
+msgid "See separate_points_by_polygon for documentation"
+msgstr ""
+
+# f5275f836fb640589bc052b761a9bdb1
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.inside_polygon:9
+msgid ""
+"points and polygon can be a geospatial instance, a list or a numeric array"
+msgstr ""
+
+# 2d07d30884c64978803288f9a605cd16
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:1
+msgid "Returns intersecting point between two line segments."
+msgstr ""
+
+# 65f20fc682ea4e3691215d4d5846d9d7
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:3
+msgid ""
+"If the lines are parallel or coincide partly (i.e. share a common segment), "
+"they are considered to not intersect."
+msgstr ""
+
+# a5dbd3f7508a4955854204dac067100e
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:8
+msgid "[[x0, y0], [x1, y1]]"
+msgstr ""
+
+# ba609671129e4dd8acd827b02449a46d
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:11
+msgid ""
+"line[0, 0, :] = x2 line[0, 1, :] = y2 line[1, 0, :] = x3 line[1, 1, :] = y3"
+msgstr ""
+
+# 5de33af63d174b07b1ef29baab732853
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:18
+msgid ""
+"(in case of no intersection) If line1 consisted of just one line, None is "
+"returned for backwards compatibility"
+msgstr ""
+
+# 54e8683a4b37468780e59253726ba6f0
+# 92986a369621461e994986dd520ec33e
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:23 safe.common.polygon.point_on_line:16
+msgid "Notes"
+msgstr ""
+
+# 2a2bcac51acc4590a90e3330b12590b1
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:25
+msgid ""
+"A vectorised input line can be constructed either as list: line1 = [[[0, 24, "
+"0, 15],    # x2"
+msgstr ""
+
+# b0b092eb063e49bfa736e82310449e06
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:27
+msgid "[12, 0, 24, 0]],   # y2"
+msgstr ""
+
+# 573d6298373c45679ab5ae2fa0a6c3b1
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:29
+msgid "[0, 12, 12, 15]]]  # y3"
+msgstr ""
+
+# d87c6806341b4d84a1f29c85c63a836c
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:31
+msgid "or as an array"
+msgstr ""
+
+# ea0a17b575794c0492625d8d2c70dc78
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:33
+msgid ""
+"line1 = numpy.zeros(16).reshape(2, 2, 4)  # Four segments line1[0, 0, :] = "
+"[0, 24, 0, 15]   # x2 line1[0, 1, :] = [12, 0, 24, 0]   # y2 line1[1, 0, :] "
+"= [24, 0, 0, 5]    # x3 line1[1, 1, :] = [0, 12, 12, 15]  # y3"
+msgstr ""
+
+# bd4fb79b195146efa43b2ed65e79b5ae
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:40
+msgid "To select array of intersections from result, use the following idiom:"
+msgstr ""
+
+# 555b75464cbd45e38f52d03d28bfd31c
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.intersection:42
+msgid ""
+"value = intersection(line0, line1) mask = -numpy.isnan(value[:, 0]) v = value"
+"[mask]"
+msgstr ""
+
+# a924485e6bd248e385759afb7b0c37fc
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.is_inside_polygon:1
+msgid "Determine if one point is inside a polygon"
+msgstr ""
+
+# 9ab7c8c2fcd64b99a52a36fae82ce7d8
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.is_inside_polygon:3
+msgid "See inside_polygon for more details"
+msgstr ""
+
+# b7638437ef0f448a9a90ddba44ad1af6
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.is_outside_polygon:1
+msgid "Determine if one point is outside a polygon"
+msgstr ""
+
+# 411fcd8dfa2149a4b5e83d13891d2949
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.is_outside_polygon:3
+msgid "See outside_polygon for more details"
+msgstr ""
+
+# d7a6e873c78244309ab69fe034e36df9
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.join_line_segments:1
+msgid "Join adjacent line segments"
+msgstr ""
+
+# 0abdc4d131954642a59ec215409415cc
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.join_line_segments:4
+msgid ""
+"segments: List of distinct line segments [[p0, p1], [p2, p3], ...] rtol, "
+"atol: Optional tolerances passed on to numpy.allclose"
+msgstr ""
+
+# 5173def0a82e442a9262416c840b41e7
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.join_line_segments:8
+msgid ""
+"list of Nx2 numpy arrays each corresponding to a continuous line formed from "
+"consecutive segments"
+msgstr ""
+
+# d3765cc0d6d4469486821309f005fa46
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.line_dictionary_to_geometry:1
+msgid "Convert dictionary of lines to list of Nx2 arrays"
+msgstr ""
+
+# ae76099bbfcc4f7eba8832c5ea28ae38
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.line_dictionary_to_geometry:4
+msgid "D: Dictionary of lines e.g. as produced by clip_lines_by_polygon"
+msgstr ""
+
+# 17f370164b8f4a71ad542b4e1e3591f4
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.line_dictionary_to_geometry:7
+msgid "List of Nx2 arrays suitable as geometry input to class Vector"
+msgstr ""
+
+# cf99734f7c7042c986559ff1dbcce486
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.outside_polygon:1
+msgid "Determine points outside a polygon"
+msgstr ""
+
+# 593f988234414d82946e05e4482de5cf
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.point_on_line:1
+msgid "Determine if a point is on a line segment"
+msgstr ""
+
+# 125f38c6e1fe442d98a3ef5bd88a6d02
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.point_on_line:5
+msgid "one point given by sequence [x, y]"
+msgstr ""
+
+# 74ab6e81cda64dd9a231fc8ecbb4b597
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.point_on_line:6
+msgid "multiple points given by list of points or Nx2 array"
+msgstr ""
+
+# 1e3e070f0ac24954878b874d2e47514a
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.point_on_line:8
+msgid ""
+"the equivalent 2x2 numeric array with each row corresponding to a point."
+msgstr ""
+
+# 050f6d9462fd4b52948f11ddb84cb291
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.point_on_line:10
+msgid ""
+"rtol: Relative error for how close a point must be to be accepted atol: "
+"Absolute error for how close a point must be to be accepted"
+msgstr ""
+
+# 4dd9ba05c5b44f0cb712b18aaf73d410
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.point_on_line:18
+msgid ""
+"Line can be degenerate and function still works to discern coinciding points "
+"from non-coinciding."
+msgstr ""
+
+# 05bf3431a3f444a1ab56eb41a1471f07
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.point_on_line:21
+msgid "Tolerances rtol and atol are used with numpy.allclose()"
+msgstr ""
+
+# 16089f0ce09e4935a6984c1e7f4fda6e
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.polygon2segments:1
+msgid "Convert polygon to segments structure suitable for use in intersection"
+msgstr ""
+
+# 27b5b9f3c7ca4fa78622868d9c25c107
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.polygon2segments:4
+msgid "polygon: Nx2 array of polygon vertices"
+msgstr ""
+
+# e8a0ff2e29884a1c9061f8c07f9b71e0
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.polygon2segments:7
+msgid ""
+"A collection of line segments (x0, y0) -> (x1, y1) vectorised following the "
+"format"
+msgstr ""
+
+# 8ba68fcc42ed4cf09d5b9414293d6be0
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.polygon2segments:9
+msgid ""
+"line[0, 0, :] = x0 line[0, 1, :] = y0 line[1, 0, :] = x1 line[1, 1, :] = y1"
+msgstr ""
+
+# c794cb3cdb4c46e28c11a529cdcb2461
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.populate_polygon:1
+msgid "Populate given polygon with uniformly distributed points."
+msgstr ""
+
+# fbd50ba0134e4e26b38a2f128f59038a
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.populate_polygon:4
+msgid ""
+"polygon - list of vertices of polygon number_of_points - (optional) number "
+"of points seed - seed for random number generator (default=None) exclude - "
+"list of polygons (inside main polygon) from where points"
+msgstr ""
+
+# f08121545fb645f196129e05b0849024
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.populate_polygon:8
+msgid "should be excluded"
+msgstr ""
+
+# ad183eb61b184c66a49d457f8c132ae9
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.populate_polygon:11
+msgid "points - list of points inside polygon"
+msgstr ""
+
+# f0188b888ef940ecb1a314b277b05d4b
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.populate_polygon:14
+msgid ""
+"populate_polygon( [[0,0], [1,0], [1,1], [0,1]], 5 ) will return five "
+"randomly selected points inside the unit square"
+msgstr ""
+
+# 20e6a32cae4c4415b8fff5f78c812a6f
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:1
+msgid "Determine whether points are inside or outside a polygon."
+msgstr ""
+
+# 031534e5ea264b2685096fbef80ac3cd
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:4
+msgid "points: Tuple of (x, y) coordinates, or list of tuples"
+msgstr ""
+
+# e9fce99fefea47d0bb5bbd526f743803
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:5
+msgid "polygon: list or Nx2 array of polygon vertices"
+msgstr ""
+
+# 393cb21a6f7c4f98b50057387039cae2
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:6
+msgid "polygon_bbox: (optional) bounding box for polygon"
+msgstr ""
+
+# a8c559b8e1b5449b8699854212421e7d
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:8
+msgid ""
+"regarded as belonging to the polygon (closed = True) or not (closed = "
+"False). If None, boundary is left undefined, i.e. some points on boundary "
+"may be deemed to be inside while others may be deemed to be outside. This "
+"options makes the code faster."
+msgstr ""
+
+# 2599cebe46b541f09d33d25e755d6555
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:14
+msgid "use_numpy: Use the fast numpy implementation"
+msgstr ""
+
+# 39efc3aaa02c4a34b9b256ce9aaec2b0
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:18
+msgid "falling inside the polygon"
+msgstr ""
+
+# 8e145015f509444c87a3b72233bf0328
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:20
+msgid "falling outside the polygon"
+msgstr ""
+
+# 4b31ade1a2d94f58a0a472ea49f0c1f6
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:22
+msgid "Raises: A generic Exception is raised for unexpected input."
+msgstr ""
+
+# 1e8b8455eff2447ebc1d44d2dc6030f3
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:26
+msgid ""
+"U = [[0,0], [1,0], [1,1], [0,1]]  # Unit square separate_points_by_polygon"
+"( [[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)"
+msgstr ""
+
+# 37e49490027c425ea1004c5301d8a1ce
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:29
+msgid ""
+"will return the indices [0, 2, 1] and count == 2 as only the first and the "
+"last point are inside the unit square"
+msgstr ""
+
+# 40e2de3b720c4b31a2d3678a4aa55e95
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:33
+msgid ""
+"The vertices may be listed clockwise or counterclockwise and the first point "
+"may optionally be repeated. Polygons do not need to be convex. Polygons can "
+"have holes in them and points inside a hole is regarded as being outside the "
+"polygon."
+msgstr ""
+
+# d357d443a6154990996343cca07297ca
+#: ../../../../safe/common/polygon.py:docstring of
+#: safe.common.polygon.separate_points_by_polygon:39
+msgid ""
+"Algorithm is based on work by Darel Finley, http://www.alienryderflex.com/"
+"polygon/"
+msgstr ""
+
+# 3ef39eea56904d11b4fa0dcbf016f90b
+#: ../../api-docs/safe/common/tables.rst:2
+msgid "Module:  safe.common.tables"
+msgstr ""
+
+# 5b98f868499e4a81acb5ad89187c0e69
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables:1
+msgid "tables.py - v0.04 2009-07-28 Philippe Lagadec"
+msgstr ""
+
+# 420b93a15b6141e88da8757140c4f033
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables:3
+msgid ""
+"This module provides a few classes to easily generate HTML code such as "
+"tables and lists."
+msgstr ""
+
+# 8b84806ce1624b12bebc676a76c8181c
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables:6
+msgid "Project website: http://www.decalage.info/python/html"
+msgstr ""
+
+# ab01e6b5f4cd469eb90c65bc99722b31
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables:9
+msgid "http://www.cecill.info"
+msgstr ""
+
+# 8078858ea792435a8c377b416883eab6
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.List:1
+msgid ""
+"a List object is used to create an ordered or unordered list in HTML. (UL/OL "
+"tag)"
+msgstr ""
+
+# 3c2cb7c3de1f4c73b5fb9f5b6008c9f7
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.List:4
+msgid ""
+"Attributes: - lines: list, tuple or any iterable, containing one string for "
+"each line - ordered: bool, choice between an ordered (OL) or unordered list "
+"(UL) - attribs: dict, additional attributes for the OL/UL tag"
+msgstr ""
+
+# 7f00d820d6a14f1f8c4adac01c35cc5d
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.List:9
+msgid "Reference: http://www.w3.org/tr/html4/struct/lists.html"
+msgstr ""
+
+# 0ad4c5a714dd4fc8943aba555a4c8c93
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:1
+msgid "a Table object is used to create a HTML table. (table tag)"
+msgstr ""
+
+# 1909f318efaf47bd8b1aa604d85c3902
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:3
+msgid ""
+"Attributes: - rows: list, tuple or any iterable, containing one iterable or "
+"TableRow"
+msgstr ""
+
+# 1e20ee7fd8ad482f94b919819c8cac09
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:5
+msgid "object for each row"
+msgstr ""
+
+# 452a5ed6e30640d1945d2ee591acdd1d
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:6
+msgid ""
+"header_row: list, tuple or any iterable, containing the header row (optional)"
+msgstr ""
+
+# 492fc7b435eb42ef908f8c4a11822a79
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:8
+msgid "class: str, CSS class to use. Defaults to DEFAULT_TABLE_CLASS"
+msgstr ""
+
+# bc030b8e896e466ead943b89a3a55815
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:9
+msgid "caption: str, caption for the table"
+msgstr ""
+
+# e80289128ab841d6b193bfa14e2f9b29
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:10
+msgid "border: str or int, border width"
+msgstr ""
+
+# a280c08a12f045d1b48e81ec339a82f9
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:11
+msgid "style: str, table style in CSS syntax (thin black borders by default)"
+msgstr ""
+
+# 928cacbf42c84cfa9ad988c838f86b24
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:12
+msgid "width: str, width of the table on the page"
+msgstr ""
+
+# a64a418ecc2848cc80f2a18ba5b4343a
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:13
+msgid "attribs: dict, additional attributes for the table tag"
+msgstr ""
+
+# 5466ea9a004e437d85d836246c2ee86d
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:14
+msgid "col_width: list or tuple defining width for each column"
+msgstr ""
+
+# 9fd693e019df4bbe8692729e1d963682
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:15
+msgid "col_align: list or tuple defining horizontal alignment for each column"
+msgstr ""
+
+# 4e201720c6174776afbc4355177b2ecd
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:16
+msgid "col_char: list or tuple defining alignment character for each column"
+msgstr ""
+
+# 5491e31c0948430583f75e3e47ce890d
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:17
+msgid "col_charoff: list or tuple defining charoff attribute for each column"
+msgstr ""
+
+# 4712b0ba44944d189bb112a0b6358d55
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:18
+msgid "col_valign: list or tuple defining vertical alignment for each column"
+msgstr ""
+
+# d4f34876e76449aaabd34441ece11ee3
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:19
+msgid "col_styles: list or tuple of HTML styles for each column"
+msgstr ""
+
+# aa9acec81ee046c2b5777c443e5e51a0
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.Table:21
+msgid "Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.1"
+msgstr ""
+
+# ff33470b74a840818b4ac2eb460e9bb7
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:1
+msgid "Return a list contains all element in col-th column Args:"
+msgstr ""
+
+# c0dd754d8f6246b7b51715f687458842
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:3
+msgid "col = number columnn"
+msgstr ""
+
+# 7e2a815bc81e46468b71dd8fb3a772d3
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:4
+msgid "header = if False, doesn't include the header"
+msgstr ""
+
+# cdfa113aeb894d419c613597cffb0713
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:6
+msgid "list of string represent each element"
+msgstr ""
+
+# f306c1bc6b214635bfe2733db0cba527
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.column:8
+msgid ""
+"If there is not column number col in a row, it will be represent as empty "
+"string ''"
+msgstr ""
+
+# a27ea8e3ebf742999451099e882b09f4
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.toNewlineFreeString:1
+msgid "Return a string representation of the table which contains no newlines."
+msgstr ""
+
+# af10b23d6929462c98b1f2dd21a84b3d
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.Table.toNewlineFreeString:4
+msgid "any preformatted <pre> blocks will be adversely affected by this."
+msgstr ""
+
+# 0f7ca9c189e145c7a32c12204008272a
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:1
+msgid "a TableCell object is used to create a cell in a HTML table. (td or th)"
+msgstr ""
+
+# 051da20769864b4f8a49f2ef29ad6bd7
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:3
+msgid ""
+"Attributes: - text: text in the cell (may contain HTML tags). May be any "
+"object which"
+msgstr ""
+
+# 2a2624b085d742e7a99bceff822fc610
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:5
+msgid "can be converted to a string using str()."
+msgstr ""
+
+# 650208536305416aa7b0fdf034e6b4a6
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:6
+msgid ""
+"header: bool, false for a normal data cell (td), true for a header cell (th)"
+msgstr ""
+
+# cc5483b51c5b468ba49acfda35022fdc
+# 82b20e00f5e74aa7bc6f5ae774f1b517
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:8 safe.common.tables.TableRow:8
+msgid "bgcolor: str, background color"
+msgstr ""
+
+# de719c71fd074caf8303ee121ee9e660
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:9
+msgid "width: str, width"
+msgstr ""
+
+# b3a5ba9bcbe0413a9b9d0c1f6ec4f879
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:10
+msgid ""
+"align: str, horizontal alignement (left, center, right, justify or char)"
+msgstr ""
+
+# 86e1ef42cb04407cbb8d89613feb31c8
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:11
+msgid "char: str, alignment character, decimal point if not specified"
+msgstr ""
+
+# 41357cb50a474589ab66f5ec9dd6aa46
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:12
+msgid "charoff: str, see HTML specs"
+msgstr ""
+
+# adfb25d38764482fb89465ad455d2024
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:13
+msgid "valign: str, vertical alignment (top|middle|bottom|baseline)"
+msgstr ""
+
+# 8a2182f498aa4211a59e72083ab43705
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:14
+msgid "style: str, CSS style"
+msgstr ""
+
+# f0a69321e46646968f9529e62865c960
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:15
+msgid "attribs: dict, additional attributes for the td/th tag"
+msgstr ""
+
+# 7e0b5156e90c42338997611db39083af
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableCell:17
+msgid "Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.6"
+msgstr ""
+
+# 8a6341c2cebf47bd93ca82678a6e0a02
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow:1
+msgid "a TableRow object is used to create a row in a HTML table. (tr tag)"
+msgstr ""
+
+# a8d2cf4328c941f09ab9ac685e6d4f9d
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow:3
+msgid ""
+"Attributes: - cells: list, tuple or any iterable, containing one string or "
+"TableCell"
+msgstr ""
+
+# 2c4405fba3cb4806bd1a639d2756e833
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow:5
+msgid "object for each cell"
+msgstr ""
+
+# 880b9a1396274e8ba20fe1ded97e5a53
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow:6
+msgid ""
+"header: bool, true for a header row (th), false for a normal data row (td)"
+msgstr ""
+
+# f3ccef77d68f427e91a6fcdfa253651d
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow:9
+msgid ""
+"col_align, col_valign, col_char, col_charoff, col_styles: see Table class"
+msgstr ""
+
+# 65645fe3118f4dc6bac200fc874e3c32
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow:10
+msgid "attribs: dict, additional attributes for the tr tag"
+msgstr ""
+
+# 1a0c87850ed747358d1cbe486487eea9
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow:12
+msgid "Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.5"
+msgstr ""
+
+# ca4dbe9877e74cfcbc3f1dd52bd95748
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow.apply_properties:1
+msgid "Apply properties to the row"
+msgstr ""
+
+# 18cdf55391314223b5d92c01448c8ec6
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.TableRow.column_count:1
+msgid "Return the number of columns in this row"
+msgstr ""
+
+# 2befd72a66444f47a6f7a83ff0180a4d
+#: ../../../../safe/common/tables.py:docstring of
+#: safe.common.tables.htmllist:1
+msgid "return HTML code for a list as a string. See List class for parameters."
+msgstr ""
+
+# aafd94fed0c2473492cdeba023cc667d
+#: ../../../../safe/common/tables.py:docstring of safe.common.tables.table:1
+msgid ""
+"return HTML code for a table as a string. See Table class for parameters."
+msgstr ""
+
+# 7eb141d54560416f8031196791b4d7de
+#: ../../api-docs/safe/common/test_interpolate.rst:2
+msgid "Module:  safe.common.test_interpolate"
+msgstr ""
+
+# a57f36e86633424b8b75c2e5a73e9881
+#: ../../../../safe/common/test_interpolate.py:docstring of
+#: safe.common.test_interpolate.linear_function:1
+msgid "Auxiliary function for use with interpolation test"
+msgstr ""
+
+# 23895c84c08f4920a2cf2002daa1cd0d
+#: ../../api-docs/safe/common/test_numerics.rst:2
+msgid "Module:  safe.common.test_numerics"
+msgstr ""
+
+# b07e89b6b3a543f69511833a9142d639
+#: ../../api-docs/safe/common/test_polygon.rst:2
+msgid "Module:  safe.common.test_polygon"
+msgstr ""
+
+# d24000fb871a4a6ca2deed1a00982224
+#: ../../api-docs/safe/common/test_tables.rst:2
+msgid "Module:  safe.common.test_tables"
+msgstr ""
+
+# 6f635d7b81e84ed3b7ebb4f433c7ee00
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables:2
+msgid "**Table Tests implementation.**"
+msgstr ""
+
+# 681dd0ca5af64505811b832fea86fd98
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest:1
+msgid "Test the SAFE Table"
+msgstr ""
+
+# ebe584bc689b43558ffe925c882bd2aa
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.setUp:1
+msgid "Fixture run before all tests"
+msgstr ""
+
+# d3a54ff644e643c9a814d2779d9fd4cb
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tearDown:1
+msgid "Fixture run after each test"
+msgstr ""
+
+# e0866f12736a4011a3d6c61084eb66bb
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_cell_header:1
+msgid "Test we can make a cell as a <th> element"
+msgstr ""
+
+# 4b77409e322446a986f50927156d38c9
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_cell_link:1
+msgid "Test cell links work"
+msgstr ""
+
+# 20456e9564b1402b89383a52329632e2
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_col_span:1
+msgid "Testing column spanning"
+msgstr ""
+
+# cde94b30dcbe40dca721d6b7ebb54ead
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_column:1
+msgid "Test to retrieve all element in a column."
+msgstr ""
+
+# 41709b63eb4043548953a3e53e8d7105
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_nested_table_in_cell:1
+msgid "Test nested table in cell"
+msgstr ""
+
+# e640a4b696b54742959fe3e6c36635b0
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_row_from_string:1
+msgid "Test row from string - it should span to the table width too"
+msgstr ""
+
+# d6acfaf779a04e45818598b6c4c00101
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_row_span:1
+msgid "Testing row spanning"
+msgstr ""
+
+# 0bc207dd9f534c7983f8b31c664caef9
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_simple_table:1
+msgid "Test simple table creation"
+msgstr ""
+
+# 03f3156f4e28436e8881b0619c960f5c
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_by_rows:1
+msgid "Test table from infividual rows"
+msgstr ""
+
+# 4673d29f618c40c7afd148e97e4e1329
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_caption:1
+msgid "Test table caption"
+msgstr ""
+
+# f9e7df86e6604597ad69edb7b16fe89c
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_cells:1
+msgid "Test table from individual cells"
+msgstr ""
+
+# be2bd26fda0e4fa9a388e45f52c2cbe3
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_from_string:1
+msgid "Test table from string - should be a single cell in a single row"
+msgstr ""
+
+# e70798bbc19e45b4a0efab3fb4223e76
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_with_colalign:1
+msgid "Table columns can be right justified"
+msgstr ""
+
+# 52fb050e8db442898680e1c3dc00b811
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.test_table_with_header:1
+msgid "Test html render of a table with header row(s)."
+msgstr ""
+
+# d89904611afd4cb0a0accc036b6115b2
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tmpDir:1
+msgid "Helper to get os temp dir."
+msgstr ""
+
+# cc63a2e8b4dd48418dbc93472419a9f2
+# 5eb1f3dd2c8946de9061122918665bab
+# fa39b1169bed4b729fe8b815b390561d
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tmpDir:3
+#: ../../../../safe/common/utilities.py:docstring
+#: safe.common.utilities.setup_logger:3
+#: ../../../../safe/impact_functions/core.py:docstring
+#: safe.impact_functions.core.get_unique_values:4
+msgid "Args: None"
+msgstr ""
+
+# ae88002154cf4a04bafef463a59553d2
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tmpDir:5
+msgid "Returns: str Absolute filesystem path to temp dir."
+msgstr ""
+
+# 99a1b0d79c054d35ad0dc015a9ddb8c9
+# 6b4d0da332174fc6a7c5e6c866da61cf
+# 65f016c1d72045798fc6c4ce23747216
+# 2b104d872086429eb5a269b58b3e13b7
+# a2cfd3f6ad3b4b6db16e79004cb22eac
+#: ../../../../safe/common/test_tables.py:docstring of
+#: safe.common.test_tables.TablesTest.tmpDir:7
+#: ../../../../safe/common/utilities.py:docstring
+#: safe.common.utilities.setup_logger:7
+#: ../../../../safe/impact_functions/core.py:docstring
+#: safe.impact_functions.core.get_plugins_as_table:19
+#: ../../../../safe/impact_functions/utilities.py:docstring
+#: safe.impact_functions.utilities.admissible_plugins_to_str:10
+#: safe.impact_functions.utilities.keywords_to_str:10
+msgid "Raises: None"
+msgstr ""
+
+# 24bfd4c068c94b709c11c084475df716
+#: ../../api-docs/safe/common/testing.rst:2
+msgid "Module:  safe.common.testing"
+msgstr ""
+
+# 2f207b75d14c4f94b61c647a72c9c7eb
+#: ../../../../safe/common/testing.py:docstring of safe.common.testing:1
+msgid "Common functionality used by regression tests"
+msgstr ""
+
+# 2ef9a8574d8b4b40855600c4b26b3202
+#: ../../../../safe/common/testing.py:docstring of
+#: safe.common.testing.combine_coordinates:1
+msgid "Make list of all combinations of points for x and y coordinates"
+msgstr ""
+
+# 13caf8252c264905a1ad3d8ba278d7e2
+#: ../../api-docs/safe/common/utilities.rst:2
+msgid "Module:  safe.common.utilities"
+msgstr ""
+
+# 6cb7d0ed42064adaab672eeed09bbeae
+#: ../../../../safe/common/utilities.py:docstring of safe.common.utilities:1
+msgid "Utilities for InaSAFE"
+msgstr ""
+
+# a2415e7e3573455eb52f5b513b0b5403
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.setup_logger:1
+msgid "Run once when the module is loaded and enable logging"
+msgstr ""
+
+# 918b8fe73fd3496796db0d2e8b31e877
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.setup_logger:5
+msgid "Returns: None"
+msgstr ""
+
+# 92d3eec3e9714bc2a893f088c9defd4c
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.setup_logger:9
+msgid ""
+"Borrowed heavily from this: http://docs.python.org/howto/logging-cookbook."
+"html"
+msgstr ""
+
+# f9bf69d8ba9f41c7b9d04524c9fe784b
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.setup_logger:12
+msgid "Use this to first initialise the logger (see safe/__init__.py)::"
+msgstr ""
+
+# 15d9086dc8a244ad9de24a2a32c1a672
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.setup_logger:17
+msgid ""
+"You would typically only need to do the above once ever as the safe modle is "
+"initialised early and will set up the logger globally so it is available to "
+"all packages / subpackages as shown below."
+msgstr ""
+
+# 68d0caad3a7c452f93a36fa7a60e652a
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.setup_logger:22
+msgid ""
+"In a module that wants to do logging then use this example as a guide to get "
+"the initialised logger instance::"
+msgstr ""
+
+# 252ef83d5eb5457bb21ce77857b78238
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.setup_logger:29
+msgid "Now to log a message do::"
+msgstr ""
+
+# ff4d455f4dbb4ac39e917d461a0408ec
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.setup_logger:33
+msgid ""
+"The file logs are written to the inasafe user tmp dir e.g.: /tmp/"
+"inasafe/23-08-2012/timlinux/logs/inasafe.log"
+msgstr ""
+
+# 312265209aa74f65bb483a1097d43e86
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:1
+msgid "Obtain the temporary working directory for the operating system."
+msgstr ""
+
+# aa7d04860b0b4763b62661dfc630a37a
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:3
+msgid ""
+"An inasafe subdirectory will automatically be created under this and if "
+"specified, a user subdirectory under that."
+msgstr ""
+
+# 70586a4b735841cabb33377c77eabbdb
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:6
+msgid ""
+"You can use this together with unique_filename to create a file in a "
+"temporary directory under the inasafe workspace. e.g."
+msgstr ""
+
+# ce46c852896846938ada12f2a3855e03
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:9
+msgid ""
+"tmpdir = temp_dir('testing') tmpfile = unique_filename(dir=tmpdir) print "
+"tmpfile /tmp/inasafe/23-08-2012/timlinux/work/testing/tmpMRpF_C"
+msgstr ""
+
+# c87c2416212649e0aa338f93bd5c8caa
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:16
+msgid "subirectory to be created e.g. /tmp/inasafe/foo/"
+msgstr ""
+
+# e1d7c3259cf4484a9a1e86d90d03ea84
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:19
+msgid "Path to the output clipped layer (placed in the system temp dir)."
+msgstr ""
+
+# 9e2dcaf333804e71ab99d7ad100c5817
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.temp_dir:22
+msgid "Any errors from the underlying system calls."
+msgstr ""
+
+# 421b6e40dc724e40b1b4f741d51df9b5
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.ugettext:1
+msgid "Translation support"
+msgstr ""
+
+# cc8b53d7931e46b280f6e2699ecfa4a4
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:1
+msgid "Create new filename guaranteed not to exist previously"
+msgstr ""
+
+# f5b6602949074bb2a91d26d6c7d10cdd
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:3
+msgid "Use mkstemp to create the file, then remove it and return the name"
+msgstr ""
+
+# 64390ad4966d466f8d4b44ef6321f78f
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:5
+msgid ""
+"If dir is specified, the tempfile will be created in the path specified "
+"otherwise the file will be created in a directory following this scheme:"
+msgstr ""
+
+# b5cbbda704294ac799458538b2b09dfc
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:8
+msgid ":file:`/tmp/inasafe/<dd-mm-yyyy>/<user>/impacts'"
+msgstr ""
+
+# 6ae071aeabca478288af678893ed8c7c
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:10
+msgid "See http://docs.python.org/library/tempfile.html for details."
+msgstr ""
+
+# a77a72393bba48db8286e1b70a4fb4b1
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:12
+msgid "Example usage:"
+msgstr ""
+
+# 856c4e587c004dceb7e1d5ecdc627956
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:14
+msgid ""
+"tempdir = temp_dir(sub_dir='test') filename = unique_filename(suffix='."
+"keywords', dir=tempdir) print filename /tmp/inasafe/23-08-2012/timlinux/test/"
+"tmpyeO5VR.keywords"
+msgstr ""
+
+# d483550d96384f8aa9e4293d6bf5a298
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:19
+msgid "Or with no preferred subdir, a default subdir of 'impacts' is used:"
+msgstr ""
+
+# 6d9f8ed3d2994b31bdbfa10897ddc622
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.unique_filename:21
+msgid ""
+"filename = unique_filename(suffix='.shp') print filename /tmp/"
+"inasafe/23-08-2012/timlinux/impacts/tmpoOAmOi.shp"
+msgstr ""
+
+# 0c11c493af26493caa4755567ced238e
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.verify:1
+msgid "Verification of logical statement similar to assertions Input"
+msgstr ""
+
+# 174362d523e14a27a70f00443df2a40d
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.verify:3
+msgid ""
+"statement: expression message: error message in case statement evaluates as "
+"False"
+msgstr ""
+
+# 1c96cc67f794425b9e2038e6f29ea1dd
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.verify:7
+msgid "None"
+msgstr ""
+
+# f01dd86b864d4b4eb2adb1044a1587ce
+#: ../../../../safe/common/utilities.py:docstring of
+#: safe.common.utilities.verify:9
+msgid "VerificationError in case statement evaluates to False"
+msgstr ""
+
+# 03dd7d7c5d504f0cbfb393f84ae1d141
+#: ../../api-docs/safe/common/version.rst:2
+msgid "Module:  safe.common.version"
+msgstr ""
+
+# 04a45adf1cbe48edb107538b36b81260
+#: ../../../../safe/common/version.py:docstring of
+#: safe.common.version.get_git_changeset:1
+msgid "Returns a numeric identifier of the latest git changeset."
+msgstr ""
+
+# dd543864fec14b658cdcd741cd286799
+#: ../../../../safe/common/version.py:docstring of
+#: safe.common.version.get_git_changeset:3
+msgid ""
+"The result is the UTC timestamp of the changeset in YYYYMMDDHHMMSS format. "
+"This value isn't guaranteed to be unique, but collisions are very unlikely, "
+"so it's sufficient for generating the development version numbers."
+msgstr ""
+
+# 9dab33eacfe04d64945a97cfdfa9b86f
+#: ../../../../safe/common/version.py:docstring of
+#: safe.common.version.get_version:1
+msgid "Returns a PEP 386-compliant version number from VERSION."
+msgstr ""
+
+# bac4348567e04bd9919d816e7c81ffd3
+#: ../../api-docs/safe/engine.rst:2
+msgid "Package::safe.engine"
+msgstr ""
+
+# 0ac0ebad6c314850a3e651b45d6b9076
+#: ../../api-docs/safe/engine/core.rst:2
+msgid "Module:  safe.engine.core"
+msgstr ""
+
+# e0721691052648f992f9f8280ed9cc40
+#: ../../api-docs/safe/engine/impact_functions_for_testing.rst:2
+msgid "Package::safe.engine.impact_functions_for_testing"
+msgstr ""
+
+# e3876a3d04994de6b0bf12f9010bbe50
+#: ../../api-docs/safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.rst:2
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing.BNPB_earthquake_guidelines"
+msgstr ""
+
+# a5ec745884c34a89b5171e791c0bda2f
+#: ../../api-docs/safe/engine/impact_functions_for_testing/HKV_flood_study.rst:2
+msgid "Module:  safe.engine.impact_functions_for_testing.HKV_flood_study"
+msgstr ""
+
+# 78dfc48f0c804a18a89d5b18621aeac1
+#: ../../api-docs/safe/engine/impact_functions_for_testing/NEXIS_building_impact_model.rst:2
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing.NEXIS_building_impact_model"
+msgstr ""
+
+# 5b9e7d71334d4e6ba1b916c6a544b333
+#: ../../api-docs/safe/engine/impact_functions_for_testing/allen_fatality_model.rst:2
+msgid "Module:  safe.engine.impact_functions_for_testing.allen_fatality_model"
+msgstr ""
+
+# 37d3aec17e064348a502e15a684ddda1
+#: ../../api-docs/safe/engine/impact_functions_for_testing/empirical_fatality_model.rst:2
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing.empirical_fatality_model"
+msgstr ""
+
+# fdee2cf201a843328a4f0bcefdfab494
+#: ../../api-docs/safe/engine/impact_functions_for_testing/flood_road_impact.rst:2
+msgid "Module:  safe.engine.impact_functions_for_testing.flood_road_impact"
+msgstr ""
+
+# e10956163bbc4961862e2934f4bc261c
+#: ../../api-docs/safe/engine/impact_functions_for_testing/general_ashload_impact.rst:2
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing.general_ashload_impact"
+msgstr ""
+
+# 51c4736d85e542ca8f61487755f2ad0b
+#: ../../api-docs/safe/engine/impact_functions_for_testing/unspecific_building_impact_model.rst:2
+msgid ""
+"Module:  safe.engine.impact_functions_for_testing."
+"unspecific_building_impact_model"
+msgstr ""
+
+# 999fd2cfbdce4ab290c8dd258c76310f
+#: ../../api-docs/safe/engine/interpolation.rst:2
+msgid "Module:  safe.engine.interpolation"
+msgstr ""
+
+# 5a03e1264ac64416a5568c0d03ba6371
+#: ../../api-docs/safe/engine/test_engine.rst:2
+msgid "Module:  safe.engine.test_engine"
+msgstr ""
+
+# b722f7cd7c334ace8101477a7193c1f5
+#: ../../api-docs/safe/engine/utilities.rst:2
+msgid "Module:  safe.engine.utilities"
+msgstr ""
+
+# c1b99f0bb9534f2e98ce6364ab824b9f
+#: ../../../../safe/engine/utilities.py:docstring of safe.engine.utilities:1
+msgid "Miscellaneous utility functions for Risk-in-a-Box (riab_core)"
+msgstr ""
+
+# 4f0d17c6206546f599491bf9067e7178
+#: ../../api-docs/safe/impact_functions.rst:2
+msgid "Package::safe.impact_functions"
+msgstr ""
+
+# 822609c7db92488fb2361ad8f275a039
+#: ../../api-docs/safe/impact_functions/core.rst:2
+msgid "Module:  safe.impact_functions.core"
+msgstr ""
+
+# beb3dba4833b4909b67b298039b25de1
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core:1
+msgid "Function to manage self-registering plugins"
+msgstr ""
+
+# ab3fbe294e5842078156928d8e6c6c59
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core:3
+msgid "The design is based on http://effbot.org/zone/metaclass-plugins.htm"
+msgstr ""
+
+# 67e8613998a247e9ad1b16a733c6463d
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core:5
+msgid ""
+"To register the plugin, the module must be imported by the Python process "
+"using it."
+msgstr ""
+
+# d4b98868916b460581fc33bf27372462
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:1
+msgid "Mount point for plugins which refer to actions that can be performed."
+msgstr ""
+
+# 60d06d43db7b4599a264d27fe41de146
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:3
+msgid ""
+"Plugins implementing this reference should provide the following method:"
+msgstr ""
+
+# 70fdd0d983b740e6aed85a416758f509
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:5
+msgid "run(layers)"
+msgstr ""
+
+# 28b525ecd0e14b6194e86c03db70c98b
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:8
+msgid "layers"
+msgstr ""
+
+# 28d67ce0dfe645c284f6a75dcb4e5acb
+# f7b03c6bc8404b11994d5e9606e95f9c
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:8
+#: safe.impact_functions.core.FunctionProvider:9
+msgid "A list of layers"
+msgstr ""
+
+# c3846f565df54f958cb156cbbfa45b77
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.FunctionProvider:9
+msgid "result"
+msgstr ""
+
+# 38671394b8f24873b7b5a5df0bf48d31
+# 95b38f8afb6d44beadc95ff67deadeb0
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:1
+#: safe.impact_functions.core.aggregate_point_data:1
+msgid "Clip data to boundaries and aggregate their values for each."
+msgstr ""
+
+# 4779aa9bc6684879924b193cc64b75c2
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:4
+msgid ""
+"data: Point or Raster dataset boundaries: Polygon dataset attribute_name: "
+"Name of attribute to aggrate over."
+msgstr ""
+
+# 5728b3d5fe524733af6e77d76e712fad
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:7
+msgid "This is only applicable for vector data"
+msgstr ""
+
+# 410cdcf8ae144495ba19a72d216939c4
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:8
+msgid "aggregation_function: Function to apply ('count' or 'sum')"
+msgstr ""
+
+# c87927032dbc489dac334c58d69c93c5
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate:11
+msgid "Dictionary of {boundary_name: aggregated value}"
+msgstr ""
+
+# 742a6288028145fda4f3c3baa21d4ae2
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate_point_data:4
+msgid ""
+"data: Point dataset boundaries: Polygon dataset attribute_name: Name of "
+"attribute to aggrate over. aggregation_function: Function to apply ('count' "
+"or 'sum')"
+msgstr ""
+
+# 43d4a6e937aa45738502a76f99e0bb11
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate_point_data:10
+msgid "List of aggregated values for each polygon."
+msgstr ""
+
+# b8fcb8f50df346b78df64889689d3cd7
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate_point_data:13
+msgid ""
+"Aggregated values depend on aggregation function: 'sum': Sum of values for "
+"attribute_name 'count': Dictionary with counts of occurences of each value"
+msgstr ""
+
+# e603bcd5de524e55bddc429756066f43
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.aggregate_point_data:16
+msgid "of attribute_name"
+msgstr ""
+
+# 8ce98dccdc2b453fa4c886c38dd524cb
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.compatible_layers:1
+msgid "Fetches all the layers that match the plugin requirements."
+msgstr ""
+
+# 82dea84828754e4dbd98471b91dac84e
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.compatible_layers:4
+msgid ""
+"func: ? (FIXME(Ole): Ted, can you fill in here? layer_descriptor: Layer "
+"names and meta data (keywords, type, etc)"
+msgstr ""
+
+# b0337f43c73b41378c36f58abb966721
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.compatible_layers:8
+msgid "Array of compatible layers, can be an empty list."
+msgstr ""
+
+# d1cbe86479e3486883506c6270b64847
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.extract_layers:1
+msgid "Extract layers with specified keyword/value pair"
+msgstr ""
+
+# 3d982981509c403599004b92ae116239
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:1
+msgid "Get plugins that match specified keywords"
+msgstr ""
+
+# 7c90f3f7484d4a068b04ec91759bae7e
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:5
+msgid ""
+"layer keywords of the form {'category': 'hazard', 'subcategory': "
+"'flood', ...}"
+msgstr ""
+
+# 07983d31f29c43518b017e5566557a23
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:8
+msgid "If None or empty all plugins are returned"
+msgstr ""
+
+# b3701b56798743af90de73763d5db963
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:9
+msgid ""
+"#        name: Optional impact function name (or part of function name) "
+"#              used to further filter the result. #              If None all "
+"names are considered to match"
+msgstr ""
+
+# f5ad8ed963a0472f870a0899ceef6a1c
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_admissible_plugins:14
+msgid "Dictionary of impact functions ({name: class})"
+msgstr ""
+
+# f239fb05467842c08b17629c3c38eece
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_dict_doc_func:1
+msgid ""
+"Collect all doc string of func and return a beatiuful format of them in a "
+"dictionary format."
+msgstr ""
+
+# 7488d65735974eaba8f06b87a317b055
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_dict_doc_func:5
+msgid "func : name of function"
+msgstr ""
+
+# 193e10e11b824a1780875e6879651a69
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_dict_doc_func:8
+msgid ""
+"synopsis : string (first line) author : string (identified by :author) "
+"rating : integer (identified by :rating) param_req : list of param "
+"(identified by :param requires) detail : detail description (identified by :"
+"detail) citation : list of citation in string (identified by :citation) "
+"limitation : string (identified by :limitation)"
+msgstr ""
+
+# e9b6917f1f304ca28de5d1db8b21b312
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_exposure_layer:1
+msgid "Get exposure layer from list of layers"
+msgstr ""
+
+# e8dd3c1fe414475e84ee6ec4fa2704ab
+# b0ce75b305974f1ebd78d771b9551278
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_exposure_layer:3
+#: safe.impact_functions.core.get_hazard_layer:3
+msgid ""
+"If there are more than one, only the first is returned. Use "
+"get_hazard_layers if more are expected and needed"
+msgstr ""
+
+# 51555f0cb85141cd898cfdea52363d4d
+# 669c36fff92141a499000b23410f59de
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_exposure_layer:6
+#: safe.impact_functions.core.get_hazard_layer:6
+msgid "If no layers fit the description None is returned"
+msgstr ""
+
+# 13794bafadee4dec9ad4d3e8e0eb946d
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_exposure_layers:1
+msgid "Get list of layers that have category=='exposure'"
+msgstr ""
+
+# df23fb5e9eac499a9a83aa3820d558e3
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_function_title:1
+msgid "Get title for impact function"
+msgstr ""
+
+# 2a950fb4bb9b480fa4b864a84a6201f5
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_function_title:4
+msgid "func: Impact function class"
+msgstr ""
+
+# f373dd9192194a898069f7e7ac763f3d
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_function_title:7
+msgid ""
+"it's title if available as an attribute in the class description, otherwise "
+"what is returned by the function pretty_function_name."
+msgstr ""
+
+# eae265d79d234570a628132c1dcc08ca
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_hazard_layer:1
+msgid "Get hazard layer from list of layers"
+msgstr ""
+
+# 7f125e34e9eb43d5a72d8e56ac0c519b
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_hazard_layers:1
+msgid "Get list of layers that have category=='hazard'"
+msgstr ""
+
+# ebbac0dc07fb4c1389a0610e744f7503
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugin:1
+msgid "Get plugin that matches given name"
+msgstr ""
+
+# 37f95bc6deaf4c928d126b96fbb9034e
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugin:3
+msgid ""
+"This is just a wrapper around get_plugins to simplify the overly complicated "
+"way of extracting the function"
+msgstr ""
+
+# 24c5027afa68447d90ef220656a5f564
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins:1
+msgid "Retrieve a list of plugins that match the name you pass"
+msgstr ""
+
+# 87fa922a24a64268ba01f981750f58f8
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins:3
+msgid "Or all of them if no name is passed."
+msgstr ""
+
+# 255fc6a64fc84b45955b7b4364d0686b
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:1
+msgid "Retrieve a table listing all plugins and their requirements."
+msgstr ""
+
+# fe41b6cca5974475b42c224fe48396e7
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:3
+msgid "Or just a single plugin if name is passed."
+msgstr ""
+
+# 2527b9a84b304673a41806069d6e8bbf
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:7
+msgid "id = list_id"
+msgstr ""
+
+# 3a935aba3d69442388d976706f299528
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:8
+msgid "title = list_title"
+msgstr ""
+
+# 1c7a089dc6b64335b6e2420857b35d0c
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:9
+msgid "category : list_category"
+msgstr ""
+
+# 4a5302c6893c42e48682410f9c56ab77
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:10
+msgid "subcategory : list_subcategory"
+msgstr ""
+
+# eab04b8544e141b3922a530c0dd7f1be
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:11
+msgid "layertype : list_layertype"
+msgstr ""
+
+# 0b4eaf804f2d42b59e689e0309f029b3
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:12
+msgid "datatype : list_datatype"
+msgstr ""
+
+# 76b0d3b587e649cdbf518e2e4de051f7
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:13
+msgid "unit: list_unit"
+msgstr ""
+
+# e5f33477b7544ebda87696a49712d65c
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:14
+msgid "disabled : list_disabled # not included"
+msgstr ""
+
+# 37288bb4d80c4f82a53cb97e796639ff
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_plugins_as_table:17
+msgid "table contains plugins match with dict_filter"
+msgstr ""
+
+# ec6c76f5958c4ad1839b0602b6d29f8d
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_question:1
+msgid "Rephrase the question asked"
+msgstr ""
+
+# f0f95df9fa9d40669a63aa0667d74243
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_question:4
+msgid "hazard_title: string exposure_title: string func: impact function class"
+msgstr ""
+
+# ae469870faa941cdb6d96f7a7707b04c
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_thresholds:1
+msgid "Extract thresholds form layer keywords if present"
+msgstr ""
+
+# 3c6abdfcec2b4649b005ee3906755c3a
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_unique_values:1
+msgid ""
+"Get unique possible value for each column in impact functions doc table."
+msgstr ""
+
+# 628d1e392d824ad2a0ea7b9e78697dca
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.get_unique_values:7
+msgid "Dictionary contains list unique value for each column"
+msgstr ""
+
+# 893f3fd9e4794b14ba7c49a78ffb9886
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.parse_single_requirement:1
+msgid ""
+"Parse single requirement from impact function's doc to category, "
+"subcategory, layertype, datatype, unit, and disabled."
+msgstr ""
+
+# 1aa267793ca945afa9d4a5f6efb8d7f1
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.pretty_function_name:1
+msgid ""
+"Return a human readable name for the function if the function has a func."
+"plugin_name use this otherwise turn underscores to spaces and Caps to spaces"
+msgstr ""
+
+# f9328f439cdf41878d644ca9d9a486c7
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirement_check:1
+msgid ""
+"Checks a dictionary params against the requirements defined in require_str. "
+"Require_str must be a valid python expression and evaluate to True or False"
+msgstr ""
+
+# f596ae2692034d33b6cc0452ef315128
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:1
+msgid "Collect the requirements from the plugin function doc"
+msgstr ""
+
+# a7623217436449e4935dc9d90497c4a6
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:4
+msgid ":param requires <valid python expression>"
+msgstr ""
+
+# 46bb75355d0740c7baffe9983bad0fdf
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:5
+msgid ""
+"The layer keywords are put into the local name space each requires should be "
+"on a new line a '' at the end of a line will be a continuation"
+msgstr ""
+
+# 5e96013f33e44cdc835be1f0daf05206
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:9
+msgid "returns a (possibly empty) list of Python expressions"
+msgstr ""
+
+# ed0d5ba078f4402abc398294cad3b2e7
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_collect:11
+msgid ""
+"Example of valid requirements expression :param requires category=='hazard' "
+"and                     subcategory in ['flood', 'tsunami'] "
+"and                     layertype=='raster' and                     unit=='m'"
+msgstr ""
+
+# f11ae02d1f3f40b69dd866bd7d9b8869
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_met:1
+msgid "Checks the plugin can run with a given layer."
+msgstr ""
+
+# 8a46f9bb8fe240fba27f233fac1a765d
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_met:3
+msgid "Based on the requirements specified in the doc string."
+msgstr ""
+
+# 7fa58c37ff6948ad8cf47cb197344796
+#: ../../../../safe/impact_functions/core.py:docstring of
+#: safe.impact_functions.core.requirements_met:6
+msgid ""
+"True:  if there are no requirements or they are all met. False: if it has "
+"requirements and none of them are met."
+msgstr ""
+
+# 95faa4694e9a4c9ba6747f8bf985cf52
+#: ../../api-docs/safe/impact_functions/earthquake.rst:2
+msgid "Package::safe.impact_functions.earthquake"
+msgstr ""
+
+# b2915aa9ff564aa299891ca476f3e9f5
+#: ../../api-docs/safe/impact_functions/earthquake/earthquake_impact_on_women.rst:2
+msgid "Module:  safe.impact_functions.earthquake.earthquake_impact_on_women"
+msgstr ""
+
+# 9a2a7bbbe3f8418db5d26768703b91db
+#: ../../api-docs/safe/impact_functions/earthquake/itb_building_impact_model.rst:2
+msgid "Module:  safe.impact_functions.earthquake.itb_building_impact_model"
+msgstr ""
+
+# 76f48da5ce464dfeba80fb498de26f52
+#: ../../api-docs/safe/impact_functions/earthquake/itb_earthquake_fatality_model.rst:2
+msgid "Module:  safe.impact_functions.earthquake.itb_earthquake_fatality_model"
+msgstr ""
+
+# 6a4c243c8b464be796855e8b8316bd11
+#: ../../api-docs/safe/impact_functions/earthquake/padang_building_impact_model.rst:2
+msgid "Module:  safe.impact_functions.earthquake.padang_building_impact_model"
+msgstr ""
+
+# 427739092104415dba743df0dcc194ae
+#: ../../api-docs/safe/impact_functions/experimental.rst:2
+msgid "Package::safe.impact_functions.experimental"
+msgstr ""
+
+# 31e50ff9fb0046fbae80da7be9b9c03a
+#: ../../api-docs/safe/impact_functions/experimental/BNPB_flood_building_impact.rst:2
+msgid "Module:  safe.impact_functions.experimental.BNPB_flood_building_impact"
+msgstr ""
+
+# fe982a815a8f4dc6892735120036ef76
+#: ../../api-docs/safe/impact_functions/experimental/ashload_population_impact.rst:2
+msgid "Module:  safe.impact_functions.experimental.ashload_population_impact"
+msgstr ""
+
+# 9d8dc55f8eb74fe687b2bfbd5c30aa99
+#: ../../api-docs/safe/impact_functions/experimental/flood_population_evacuation_worldbank_request.rst:2
+msgid ""
+"Module:  safe.impact_functions.experimental."
+"flood_population_evacuation_worldbank_request"
+msgstr ""
+
+# e56d9cece0cd4bc7bef3c7d5496eb2d9
+#: ../../api-docs/safe/impact_functions/experimental/general_volcanic_population_impact.rst:2
+msgid ""
+"Module:  safe.impact_functions.experimental."
+"general_volcanic_population_impact"
+msgstr ""
+
+# 3afb94dce9ca40628e206b81b16587f2
+#: ../../api-docs/safe/impact_functions/experimental/mappings.rst:2
+msgid "Module:  safe.impact_functions.experimental.mappings"
+msgstr ""
+
+# bffd9b2bd6a44730b2cf25adc22d3cb8
+#: ../../api-docs/safe/impact_functions/experimental/tsunami_building_impact.rst:2
+msgid "Module:  safe.impact_functions.experimental.tsunami_building_impact"
+msgstr ""
+
+# 87accf1cd3c044748bdeac93b48e6429
+#: ../../api-docs/safe/impact_functions/experimental/tsunami_population_impact.rst:2
+msgid "Module:  safe.impact_functions.experimental.tsunami_population_impact"
+msgstr ""
+
+# 9ba17b799d074c189383e367e4cdff0b
+#: ../../api-docs/safe/impact_functions/generic.rst:2
+msgid "Package::safe.impact_functions.generic"
+msgstr ""
+
+# 2ed4ee34ffef424ba8c167323c76f187
+#: ../../api-docs/safe/impact_functions/generic/categorised_hazard_building_impact.rst:2
+msgid ""
+"Module:  safe.impact_functions.generic.categorised_hazard_building_impact"
+msgstr ""
+
+# 10f4607e8bea415d8075762e23ded1ff
+#: ../../api-docs/safe/impact_functions/generic/categorised_hazard_population.rst:2
+msgid "Module:  safe.impact_functions.generic.categorised_hazard_population"
+msgstr ""
+
+# 2295212d297447c090fc8f7986db4882
+#: ../../api-docs/safe/impact_functions/inundation.rst:2
+msgid "Package::safe.impact_functions.inundation"
+msgstr ""
+
+# 3c37f4e3ad2343a8aeb6911fa109ee2b
+#: ../../api-docs/safe/impact_functions/inundation/flood_OSM_building_impact.rst:2
+msgid "Module:  safe.impact_functions.inundation.flood_OSM_building_impact"
+msgstr ""
+
+# 291ed51710fc4198963553f469d69626
+#: ../../api-docs/safe/impact_functions/inundation/flood_population_evacuation.rst:2
+msgid "Module:  safe.impact_functions.inundation.flood_population_evacuation"
+msgstr ""
+
+# ec596120e38a42f181fe518f91c705b7
+#: ../../api-docs/safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.rst:2
+msgid ""
+"Module:  safe.impact_functions.inundation."
+"flood_population_evacuation_polygon_hazard"
+msgstr ""
+
+# 574fe5cb23d648d38152fce1ff75c707
+#: ../../api-docs/safe/impact_functions/mappings.rst:2
+msgid "Module:  safe.impact_functions.mappings"
+msgstr ""
+
+# 8520e1016f884d39ad4d834869e27f0f
+#: ../../api-docs/safe/impact_functions/styles.rst:2
+msgid "Module:  safe.impact_functions.styles"
+msgstr ""
+
+# ce002bf2912549e080f328ba0b71e402
+#: ../../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:1
+msgid "Library of styles that can be used by impact functions"
+msgstr ""
+
+# 22c86142ee684862aa7b8f9b92a14d97
+#: ../../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:3
+msgid "E.g."
+msgstr ""
+
+# dec856d0c8af4d9297a07e9c85bd35ae
+#: ../../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:5
+msgid ""
+"from impact_functions.styles import flood_population_style as style_info "
+"from impact_functions.core import get_function_title"
+msgstr ""
+
+# 297ee1923e154a41ae3735aeae0778bf
+#: ../../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:8
+msgid "# Create raster object with this style and return R = Raster(I,"
+msgstr ""
+
+# 235137a9fc574a38aa8c2f528424ce79
+#: ../../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:10
+msgid ""
+"projection=inundation.get_projection(), geotransform=inundation."
+"get_geotransform(), name='Penduduk yang %s' % (get_function_title(self)), "
+"keywords={'impact_summary': impact_summary}, style_info=style_info)"
+msgstr ""
+
+# 00d6a4bbb7d848a08c11ece0e6f0c134
+#: ../../../../safe/impact_functions/styles.py:docstring of
+#: safe.impact_functions.styles:15
+msgid "return R"
+msgstr ""
+
+# 05cefff450164d6fba159fdeb7dc7c25
+#: ../../api-docs/safe/impact_functions/tephra.rst:2
+msgid "Package::safe.impact_functions.tephra"
+msgstr ""
+
+# d414d922838c43db826f742a3c97005c
+#: ../../api-docs/safe/impact_functions/test_mappings.rst:2
+msgid "Module:  safe.impact_functions.test_mappings"
+msgstr ""
+
+# e494bef0cd16458480dbafd10b6899e5
+#: ../../api-docs/safe/impact_functions/test_plugin_core.rst:2
+msgid "Module:  safe.impact_functions.test_plugin_core"
+msgstr ""
+
+# ff4bd00d7240437e97878e1e2c7a29f3
+# 16b70f38314a4e33874fc469b4f90514
+# 27903570c0d84585bb75b3510b63a7d9
+# 0d79290980ae4b02bcf75a7f7781f042
+# 33d6e8331f11496a9d5883b8887b1a97
+# d99b006c33a24140a89ddcc673fd5a2b
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.BasicFunction:1
+#: safe.impact_functions.test_plugin_core.F1:1
+#: safe.impact_functions.test_plugin_core.F2:1
+#: safe.impact_functions.test_plugin_core.F3:1
+#: safe.impact_functions.test_plugin_core.F4:1
+#: safe.impact_functions.test_plugin_core.SyntaxErrorFunction:1
+msgid "Risk plugin for testing"
+msgstr ""
+
+# d88561c6d24847d6af9bcdc4bbfe3196
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.BasicFunction:3
+msgid ""
+":author Allen :rating 1 :param requires category==\"test_cat1\" :param "
+"requires unit==\"MMI\""
+msgstr ""
+
+# b77fae486e4c4e1aa39695e896f4d02b
+# 2a96836dbe7a45dd887100d72a3e1cbc
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F1:3
+#: safe.impact_functions.test_plugin_core.F2:3
+msgid ""
+":param requires category=='test_cat1' and                     subcategory."
+"startswith('flood') and                     layertype=='raster' "
+"and                     unit=='m'"
+msgstr ""
+
+# 11fe9cce782c4ae8afef1051d000edaf
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F1:5
+msgid ""
+":param requires category=='test_cat2' and                     subcategory."
+"startswith('population') and                     layertype=='raster' "
+"and                     datatype=='population'"
+msgstr ""
+
+# 84c7af63b5fe4feb89cfc094d015b1c5
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F2:5
+msgid ""
+":param requires category=='test_cat2' and                     subcategory."
+"startswith('building')"
+msgstr ""
+
+# e9de4df255ab44bc896b10261dcd21c4
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F3:3
+msgid ""
+":param requires category=='test_cat1' :param requires category=='test_cat2'"
+msgstr ""
+
+# 3c8e08d8451d4f0d8c21d9979afd72a0
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F4:3
+msgid ""
+":param requires category=='hazard' and                     subcategory in "
+"['flood', 'tsunami']"
+msgstr ""
+
+# 6233fc0542ae42c3ab319fec1beaabec
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.F4:5
+msgid ""
+":param requires category=='exposure' and                     subcategory in "
+"['building', 'structure'] and                     layertype=='vector'"
+msgstr ""
+
+# 8ff7c4b05e4244c8b3adbc0905ffb64e
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.SyntaxErrorFunction:3
+msgid ""
+":author Allen :rating 1 :param requires category==\"test_cat1\" :param "
+"requires unit=\"MMI\"  # Note the error should be =="
+msgstr ""
+
+# 0b9b7eb413964f1a9ca0c6ad76702fc7
+# 4bf27434e094414aa479586507df2118
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core:1
+#: ../../../../safe/impact_functions/test_real_impact_functions.py:docstring
+#: safe.impact_functions.test_real_impact_functions.Test_real_plugins:1
+msgid "Tests of Risiko calculations"
+msgstr ""
+
+# 6aff9dbd9bd449db9564d96279492425
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_basic_plugin_requirements:1
+msgid "Basic plugin requirements collection"
+msgstr ""
+
+# 25418e55024449cf80cf3fa8f0ebbc61
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_basic_plugin_requirements_met:1
+msgid "Basic plugin requirements met"
+msgstr ""
+
+# 0f38f5055fef425a8bd0769a18db5147
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_basic_requirements_check:1
+msgid "Basic plugin requirements check"
+msgstr ""
+
+# 2b21f60211494cfc857475700cf30b52
+# b3e3ceb4cfed4f9ba7645e5f521d511f
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_filtering_of_impact_functions:1
+#: ../../../../safe/impact_functions/test_real_impact_functions.py:docstring
+#: safe.impact_functions.test_real_impact_functions.Test_real_plugins.test_filtering_of_impact_functions:1
+msgid "Impact functions are filtered correctly"
+msgstr ""
+
+# c7381e8c31ea4f90b5e16045f823fb47
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_get_plugins_as_table:1
+msgid "Test get plugins as table with filtering."
+msgstr ""
+
+# e5771319b880419fb47c074311843d41
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_keywords_error:1
+msgid "Handling of reserved python keywords"
+msgstr ""
+
+# eb6f31a597d3422298a0a8e0d08bd8a4
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_parse_requirement:1
+msgid "Test parse requirements of a function to dictionary."
+msgstr ""
+
+# 6e2d86ba0f334cd8b0b66aebc6f43fd0
+#: ../../../../safe/impact_functions/test_plugin_core.py:docstring of
+#: safe.impact_functions.test_plugin_core.Test_plugin_core.test_pretty_string:1
+msgid "Test return pretty string from list or string."
+msgstr ""
+
+# c1ef2ec3e3b64a3b96cd6c98ba77b844
+#: ../../api-docs/safe/impact_functions/test_plugins.rst:2
+msgid "Module:  safe.impact_functions.test_plugins"
+msgstr ""
+
+# 59e9bd1c24fc4b50aefbab33185e7ae4
+#: ../../api-docs/safe/impact_functions/test_real_impact_functions.rst:2
+msgid "Module:  safe.impact_functions.test_real_impact_functions"
+msgstr ""
+
+# c9bd63b9da1d46878c50c51ebbc490c8
+#: ../../../../safe/impact_functions/test_real_impact_functions.py:docstring
+#: of safe.impact_functions.test_real_impact_functions:1
+msgid "Works with real library impact functions rather than test examples"
+msgstr ""
+
+# f3ecb6b990e8459b89cf7a9a2097729b
+#: ../../api-docs/safe/impact_functions/utilities.rst:2
+msgid "Module:  safe.impact_functions.utilities"
+msgstr ""
+
+# 2851c671813a4985a05a00a16191dada
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities:1
+msgid ""
+"Module to create damage curves from point data and additional logging utils "
+"relevant to impact_functions."
+msgstr ""
+
+# a89ce2fce562432290e58c69870e7130
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.Damage_curve:1
+msgid "Class for implementation of damage curves based on point data"
+msgstr ""
+
+# 3e3ad18e251f4216afed3eaabcc6ee6c
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.admissible_plugins_to_str:1
+msgid "A helper to write the admissible plugin list to a string."
+msgstr ""
+
+# 40bdf0b6334f49ce9f6c0965297d769a
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.admissible_plugins_to_str:3
+msgid ""
+"Intended for use with the LOGGER so that admissible plugins can be pretty "
+"printed to the logs."
+msgstr ""
+
+# e0f633e124554ebd9e6b2156b822b335
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.admissible_plugins_to_str:6
+msgid "Args: plugin_list str (required). A list of plugins"
+msgstr ""
+
+# 93d7f89dfb514fc0843d79c2f78c713f
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.admissible_plugins_to_str:8
+msgid "Returns: A string representing the plugin list with nice formatting."
+msgstr ""
+
+# 5c0a6780722244f5a26904563adb6127
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.keywords_to_str:1
+msgid "Pretty print keywords dict or list of dicts to a string."
+msgstr ""
+
+# 655409143c6a42cab4f47c8e774a5b41
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.keywords_to_str:3
+msgid ""
+"Intended for use with the LOGGER so that keywords can be pretty printed to "
+"the logs."
+msgstr ""
+
+# 2a14123fdb3642acaa866f58acbb4511
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.keywords_to_str:6
+msgid "Args: keywords dict or list (required). A list or dict of keywords."
+msgstr ""
+
+# 89eb6c3f21c04854a682f0f763ed133c
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.keywords_to_str:8
+msgid "Returns: A string representing the keyword list with nice formatting."
+msgstr ""
+
+# 3f05da72f62d47c5ae8a5b97faab4247
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.pretty_string:1
+msgid ""
+"A helper function that return a pretty string according to the args Args:"
+msgstr ""
+
+# 46a38832441e40299484887733da40c5
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.pretty_string:3
+msgid "myArs = string or list"
+msgstr ""
+
+# a0857c91b1f4499a872782213966ffdc
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.pretty_string:6
+msgid "if myArgs is list return each element as string separated by ','"
+msgstr ""
+
+# 8ddf36542fd9413680152174b6ab4a3e
+#: ../../../../safe/impact_functions/utilities.py:docstring of
+#: safe.impact_functions.utilities.remove_double_spaces:1
+msgid ""
+"Remove double spaces from a string. Return the string without any dobule "
+"spaces"
+msgstr ""
+
+# 7a5d7741f54b47b2a2f69afbff46f595
+#: ../../api-docs/safe/impact_functions/volcanic.rst:2
+msgid "Package::safe.impact_functions.volcanic"
+msgstr ""
+
+# f0243b4a7b204dcc836603cf630e82bf
+#: ../../api-docs/safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.rst:2
+msgid ""
+"Module:  safe.impact_functions.volcanic."
+"volcano_population_evacuation_polygon_hazard"
+msgstr ""
+
+# 61dab34e252a44db9207c8ff0c578ace
+#: ../../api-docs/safe/storage.rst:2
+msgid "Package::safe.storage"
+msgstr ""
+
+# 5b4b946c92814aee9a12637bb75da548
+#: ../../api-docs/safe/storage/clipping.rst:2
+msgid "Module:  safe.storage.clipping"
+msgstr ""
+
+# d4b87769b1374948925a7b743270aafc
+#: ../../../../safe/storage/clipping.py:docstring of safe.storage.clipping:1
+msgid "Raster clipping by polygons"
+msgstr ""
+
+# a170c19b8cfc480f8c4b08f62ccd068e
+#: ../../../../safe/storage/clipping.py:docstring of
+#: safe.storage.clipping.clip_raster_by_polygons:1
+msgid "Separate raster grid points by polygons"
+msgstr ""
+
+# 974e110dae01431391a2ffda0d2bea58
+#: ../../../../safe/storage/clipping.py:docstring of
+#: safe.storage.clipping.clip_raster_by_polygons:4
+msgid "R: Raster layer"
+msgstr ""
+
+# c3fbc072d5604a4b8fa050b5c81c22d8
+#: ../../../../safe/storage/clipping.py:docstring of
+#: safe.storage.clipping.clip_raster_by_polygons:5
+msgid "P: Polygon layer"
+msgstr ""
+
+# 3ec6f281a1a74d5293e053be3647c46a
+#: ../../../../safe/storage/clipping.py:docstring of
+#: safe.storage.clipping.clip_raster_by_polygons:9
+msgid "One item for each polygon"
+msgstr ""
+
+# 686657c29c714a24b9d9600370236480
+#: ../../api-docs/safe/storage/core.rst:2
+msgid "Module:  safe.storage.core"
+msgstr ""
+
+# 152b95e2065a40d59b0b3118129723f6
+#: ../../api-docs/safe/storage/interpolation.rst:2
+msgid "Module:  safe.storage.interpolation"
+msgstr ""
+
+# 5b4f6445514442aeaf22e57a72aeb6d6
+#: ../../api-docs/safe/storage/layer.rst:2
+msgid "Module:  safe.storage.layer"
+msgstr ""
+
+# 7d350cda33f14296968adec3d2bcb91b
+#: ../../api-docs/safe/storage/projection.rst:2
+msgid "Module:  safe.storage.projection"
+msgstr ""
+
+# 7f8d37d42efb49f5ae3e6e617bdf10de
+#: ../../api-docs/safe/storage/raster.rst:2
+msgid "Module:  safe.storage.raster"
+msgstr ""
+
+# 82343faa9f4f4dec9b95e57fa487c67a
+#: ../../api-docs/safe/storage/test_clipping.rst:2
+msgid "Module:  safe.storage.test_clipping"
+msgstr ""
+
+# 4a4d5e4e95d34614badc50a3ec4c9ef0
+#: ../../api-docs/safe/storage/test_io.rst:2
+msgid "Module:  safe.storage.test_io"
+msgstr ""
+
+# 5457331fab914b398db8511a87674160
+#: ../../api-docs/safe/storage/test_utilities.rst:2
+msgid "Module:  safe.storage.test_utilities"
+msgstr ""
+
+# 14dee1b10659454e870b8711af9e4ecb
+#: ../../api-docs/safe/storage/test_vector.rst:2
+msgid "Module:  safe.storage.test_vector"
+msgstr ""
+
+# eda9021aaf0649b99a5eabeead40f28f
+#: ../../api-docs/safe/storage/utilities.rst:2
+msgid "Module:  safe.storage.utilities"
+msgstr ""
+
+# 1d5584a133764249b27e8fb677004970
+#: ../../api-docs/safe/storage/utilities_test.rst:2
+msgid "Module:  safe.storage.utilities_test"
+msgstr ""
+
+# 053c73703e7f42c29d9d46e0f934cfce
+#: ../../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test:1
+msgid "**Utilities to to support test suite**"
+msgstr ""
+
+# 4e0593c7e193492883bd2b0463c68c0f
+#: ../../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test.same_API:1
+msgid "Check that public methods of X and Y are the same."
+msgstr ""
+
+# 22ad0fefd57c449ab40a977c372be158
+#: ../../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test.same_API:4
+msgid "X, Y: Python objects"
+msgstr ""
+
+# 77d99461cc3b48b587a7867bc124edb9
+#: ../../../../safe/storage/utilities_test.py:docstring of
+#: safe.storage.utilities_test.same_API:5
+msgid "exclude: List of names to exclude from comparison or None"
+msgstr ""
+
+# a4e4fdbefcdb4bce91411843fb878d5d
+#: ../../api-docs/safe/storage/vector.rst:2
+msgid "Module:  safe.storage.vector"
+msgstr ""
+
+# 75bec0519d034117948865cc4d77f805
+#: ../../api-docs/safe_qgis.rst:2
+msgid "Package::safe_qgis"
+msgstr ""
+
+# 690b5d666794472596e37cbfc678c188
+#: ../../api-docs/safe_qgis/clipper.rst:2
+msgid "Module:  safe_qgis.clipper"
+msgstr ""
+
+# 4b47e55e5fdd47e6b043ba9bdec32be6
+#: ../../api-docs/safe_qgis/dock.rst:2
+msgid "Module:  safe_qgis.dock"
+msgstr ""
+
+# 020ee549c86c48e2a721a6cf409c65fd
+#: ../../api-docs/safe_qgis/dock_base.rst:2
+msgid "Module:  safe_qgis.dock_base"
+msgstr ""
+
+# dd6fd203d4964f738141551692e7fb10
+#: ../../api-docs/safe_qgis/exceptions.rst:2
+msgid "Module:  safe_qgis.exceptions"
+msgstr ""
+
+# 7c6813a3344c4b37b23fe01263743db4
+#: ../../../../safe_qgis/exceptions.py:docstring of safe_qgis.exceptions:4
+msgid "Custom exception classes for the IS application."
+msgstr ""
+
+# 2f8be2d0103d40c58a7627aca446c4d1
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.HashNotFoundException:1
+msgid "Custom exception for when a no keyword hash can be found."
+msgstr ""
+
+# 4ab4d22232f748e9b4d242ae74dac75e
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InsufficientOverlapException:1
+msgid ""
+"An exception raised if an error occurs during extent calculation because the "
+"bounding boxes do not overlap."
+msgstr ""
+
+# 5812341a3f5c4de8a01921ddeeefbf4f
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InsufficientParametersException:1
+msgid "Custom exception for when insufficient parameters have been set."
+msgstr ""
+
+# a25cad235cbe4fcf9ef17e424cf029da
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InvalidBoundingBoxException:1
+msgid ""
+"An exception raised if an error occurs during extent calculation because one "
+"of the extents is invalid."
+msgstr ""
+
+# 4a8cde0724464fea8209b9d7672d10f2
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InvalidKVPException:1
+msgid ""
+"An exception raised when a key value pair is invalid - for example if the "
+"key of value is None or an empty string."
+msgstr ""
+
+# b0adafa984ca4781a39aacda35651ac2
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InvalidParameterException:1
+msgid "Custom exception for when an invalid parameter is passed to a function."
+msgstr ""
+
+# 562cea01ea5040dfbee7a86c7d4269f4
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.InvalidProjectionException:1
+msgid "An exception raised if a layer needs to be reprojected."
+msgstr ""
+
+# 5d37cbddf44740e0bb77e9502527bc2d
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.KeywordNotFoundException:1
+msgid "Custom exception for when a no keyword can be found."
+msgstr ""
+
+# 471307c4672f400290c866f3a5e2933e
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.LegendLayerException:1
+msgid ""
+"An exception raised when trying to create a legend from a QgsMapLayer that "
+"does not have suitable characteristics to allow a legend to be created from "
+"it."
+msgstr ""
+
+# d8b4a331db1f4974bec0bf458953bd62
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.NoFeaturesInExtentException:1
+msgid ""
+"An exception that gets thrown when no features are within the extent being "
+"clipped."
+msgstr ""
+
+# 71594cabcd994057bb0a14be84ec7095
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.NoFunctionsFoundException:1
+msgid ""
+"Custom exception for when a no impact calculation functions can be found."
+msgstr ""
+
+# 97163f23023a4e39a9080c73af418c7b
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.QgisPathException:1
+msgid "Custom exception for when qgispath.txt could not be read."
+msgstr ""
+
+# 0f686f101fbd45ce96dd3b1ac02de6e9
+# 71d6ac77c1e24a02a961f611dcb1d779
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.ShapefileCreationError:1
+#: safe_qgis.exceptions.memoryLayerCreationError:1
+msgid "Raised if an error occurs creating the cities file"
+msgstr ""
+
+# b96775513bd84883810d8d0ef2e377a2
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.StyleError:1
+msgid "An exception relating to reading / generating GIS styles"
+msgstr ""
+
+# 825ebdc6b08148a5941af97e53c7214c
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.StyleInfoNotFoundException:1
+msgid "Custom exception for when a no styleInfo can be found."
+msgstr ""
+
+# 5d2d6c2db98e40c5a2c54b478ab87d12
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.TestNotImplementedException:1
+msgid "Custom exception for when a test exists only as a stub."
+msgstr ""
+
+# 39995bc376b546a1bbb9f46c682b5d36
+#: ../../../../safe_qgis/exceptions.py:docstring of
+#: safe_qgis.exceptions.TranslationLoadException:1
+msgid "Custom exception handler for whe translation file fails to load."
+msgstr ""
+
+# f79f234440af4ac3b49ba57d997dce74
+#: ../../api-docs/safe_qgis/help.rst:2
+msgid "Module:  safe_qgis.help"
+msgstr ""
+
+# cc13416d977347e1a348d11482dc00cb
+#: ../../api-docs/safe_qgis/help_base.rst:2
+msgid "Module:  safe_qgis.help_base"
+msgstr ""
+
+# 38833cf35eeb4dbfada1ed9d7cb0ae24
+#: ../../api-docs/safe_qgis/impact_calculator.rst:2
+msgid "Module:  safe_qgis.impact_calculator"
+msgstr ""
+
+# 4d1e7277b0a4488b94b72ac78f411016
+#: ../../api-docs/safe_qgis/impact_calculator_thread.rst:2
+msgid "Module:  safe_qgis.impact_calculator_thread"
+msgstr ""
+
+# ce39c282a2db4943aa1b22cc46b7d3dc
+#: ../../api-docs/safe_qgis/impact_functions_doc.rst:2
+msgid "Module:  safe_qgis.impact_functions_doc"
+msgstr ""
+
+# cf9455b6660f45c5b18aa97963d4e1ff
+#: ../../api-docs/safe_qgis/impact_functions_doc_base.rst:2
+msgid "Module:  safe_qgis.impact_functions_doc_base"
+msgstr ""
+
+# ef83cefc22b646aea89ebd4e3554e6a3
+#: ../../api-docs/safe_qgis/keyword_io.rst:2
+msgid "Module:  safe_qgis.keyword_io"
+msgstr ""
+
+# 16c8f50b5d574d458826fdd3effdebaf
+#: ../../api-docs/safe_qgis/keywords_dialog.rst:2
+msgid "Module:  safe_qgis.keywords_dialog"
+msgstr ""
+
+# c6a9192420c540a1b5a8f3a7b32d4e92
+#: ../../api-docs/safe_qgis/keywords_dialog_base.rst:2
+msgid "Module:  safe_qgis.keywords_dialog_base"
+msgstr ""
+
+# da922267e6744128be4b2369c14d8536
+#: ../../api-docs/safe_qgis/map.rst:2
+msgid "Module:  safe_qgis.map"
+msgstr ""
+
+# 3ba5ccab7898466da60021407fc3e40b
+#: ../../api-docs/safe_qgis/odict.rst:2
+msgid "Module:  safe_qgis.odict"
+msgstr ""
+
+# c26e85b414784e41af686ef3b28bdfa0
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict:1
+msgid "A dict that keeps keys in insertion order"
+msgstr ""
+
+# 5c73e51491614982bfc3ca6e3c01a3f2
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict.OrderedDict:1
+msgid "A class of dictionary that keeps the insertion order of keys."
+msgstr ""
+
+# 4bd5530e55e440dbb0432a7f126c29c6
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict.OrderedDict:3
+msgid ""
+"All appropriate methods return keys, items, or values in an ordered way."
+msgstr ""
+
+# b5f4867a520743a4a79e377dff6e2038
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict.OrderedDict:5
+msgid ""
+"All normal dictionary methods are available. Update and comparison is "
+"restricted to other OrderedDict objects."
+msgstr ""
+
+# a4cb24100fae44f5984346f0ea073ce2
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict.OrderedDict:8
+msgid ""
+"Various sequence methods are available, including the ability to explicitly "
+"mutate the key ordering."
+msgstr ""
+
+# a33bcc9a15cb436ba1330b8a48c73f7b
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict.OrderedDict:11
+msgid "__contains__ tests:"
+msgstr ""
+
+# 7117f106213a409aa9f5cbbb81bd1c81
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict.OrderedDict:19
+msgid "__getitem__ tests:"
+msgstr ""
+
+# a724496a00c04c18a6639a27c782af96
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict.OrderedDict:27
+msgid "__len__ tests:"
+msgstr ""
+
+# 228b999956454c50a82f4ba1441e7eef
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict.OrderedDict:34
+msgid "get tests:"
+msgstr ""
+
+# 3b5b2275e26f4dc0a921990eac25d150
+#: ../../../../safe_qgis/odict.py:docstring of safe_qgis.odict.OrderedDict:46
+msgid "has_key tests:"
+msgstr ""
+
+# 2954c9af6f2143b9ba8f9e3c0bbbf9c0
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.index:1
+msgid "Return the position of the specified key in the OrderedDict."
+msgstr ""
+
+# f87b15ef137e427b90c58c3ae7e4da8f
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.insert:1
+msgid "Takes ``index``, ``key``, and ``value`` as arguments."
+msgstr ""
+
+# 4706ff110ab24a18b138c09af6fe4ce1
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.insert:3
+msgid ""
+"Sets ``key`` to ``value``, so that ``key`` is at position ``index`` in the "
+"OrderedDict."
+msgstr ""
+
+# e87e5b32506b47bc9f1a707debc34fb6
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.items:1
+msgid ""
+"``items`` returns a list of tuples representing all the  ``(key, value)`` "
+"pairs in the dictionary."
+msgstr ""
+
+# 4dc5ade4888c46108b65a73ef82c2dc8
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.keys:1
+msgid "Return a list of keys in the ``OrderedDict``."
+msgstr ""
+
+# b47eff423c6b45edb391c25065b17d87
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.pop:1
+msgid "No dict.pop in Python 2.2, gotta reimplement it"
+msgstr ""
+
+# 4d21f4e2168d40258fc82ec52a0f658a
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.popitem:1
+msgid ""
+"Delete and return an item specified by index, not a random one as in dict. "
+"The index is -1 by default (the last item)."
+msgstr ""
+
+# bec321e7dc2944b7bc2f56795da804ca
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.rename:1
+msgid "Rename the key for a given value, without modifying sequence order."
+msgstr ""
+
+# a02de9cbe02d4ec885ff571e01ed4b4e
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.rename:3
+msgid ""
+"For the case where new_key already exists this raise an exception, since if "
+"new_key exists, it is ambiguous as to what happens to the associated values, "
+"and the position of new_key in the sequence."
+msgstr ""
+
+# 09442f1777a7418397b3c78f279a2ee5
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.reverse:1
+msgid "Reverse the order of the OrderedDict."
+msgstr ""
+
+# 23fa06ba51f74c278e34a81ce997442f
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.setitems:1
+msgid "This method allows you to set the items in the dict."
+msgstr ""
+
+# 316f9e82d7234b37ba85ec5e061ff169
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.setitems:3
+msgid ""
+"It takes a list of tuples - of the same sort returned by the ``items`` "
+"method."
+msgstr ""
+
+# 6e6311796d4f4cfaa04e8a1146f2bb5e
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.setkeys:1
+msgid ""
+"``setkeys`` all ows you to pass in a new list of keys which will replace the "
+"current set. This must contain the same set of keys, but need not be in the "
+"same order."
+msgstr ""
+
+# 73fc97313f694c5cb235fefdb8866745
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.setkeys:5
+msgid ""
+"If you pass in new keys that don't match, a ``KeyError`` will be raised."
+msgstr ""
+
+# 2f3d008fd5f3445bacd2786d54589aa0
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.setvalues:1
+msgid ""
+"You can pass in a list of values, which will replace the current list. The "
+"value list must be the same len as the OrderedDict."
+msgstr ""
+
+# 96b697e53e864926b387bbda83f217e7
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.setvalues:4
+msgid "(Or a ``ValueError`` is raised.)"
+msgstr ""
+
+# 16777adb2471474c97f0f7897ce811c9
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.sort:1
+msgid "Sort the key order in the OrderedDict."
+msgstr ""
+
+# 2a1d6f1edcdd4ad3a779f7fd66041061
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.sort:3
+msgid ""
+"This method takes the same arguments as the ``list.sort`` method on your "
+"version of Python."
+msgstr ""
+
+# d09c8ed7f46841aca086377c20d33c64
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.update:1
+msgid "Update from another OrderedDict or sequence of (key, value) pairs"
+msgstr ""
+
+# 06234474a36145c28a03b45a86862938
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.values:1
+msgid "Return a list of all the values in the OrderedDict."
+msgstr ""
+
+# b37d46af26c04d95af023fba52acab7d
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.OrderedDict.values:3
+msgid ""
+"Optionally you can pass in a list of values, which will replace the current "
+"list. The value list must be the same len as the OrderedDict."
+msgstr ""
+
+# b4ca974368bf441f9e58a59d45208822
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.SequenceOrderedDict:1
+msgid ""
+"Experimental version of OrderedDict that has a custom object for ``keys``, "
+"``values``, and ``items``."
+msgstr ""
+
+# afdd117bd6c243fdabb75763f3a900f1
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.SequenceOrderedDict:4
+msgid ""
+"These are callable sequence objects that work as methods, or can be "
+"manipulated directly as sequences."
+msgstr ""
+
+# 2cdd198349844da198242db22519326a
+#: ../../../../safe_qgis/odict.py:docstring of
+#: safe_qgis.odict.SequenceOrderedDict:7
+msgid "Test for ``keys``, ``items`` and ``values``."
+msgstr ""
+
+# 5fd5fb8d484d4a68b5227b0b958e7e0d
+#: ../../api-docs/safe_qgis/options_dialog.rst:2
+msgid "Module:  safe_qgis.options_dialog"
+msgstr ""
+
+# b755d38a5ea041e3921d571a9d815cca
+#: ../../api-docs/safe_qgis/options_dialog_base.rst:2
+msgid "Module:  safe_qgis.options_dialog_base"
+msgstr ""
+
+# 203034355ade4fe4aaefb44082dc5c40
+#: ../../api-docs/safe_qgis/plugin.rst:2
+msgid "Module:  safe_qgis.plugin"
+msgstr ""
+
+# 519f5ba6ac8f464b8d9228e484930d58
+#: ../../api-docs/safe_qgis/qgis_interface.rst:2
+msgid "Module:  safe_qgis.qgis_interface"
+msgstr ""
+
+# 7e94119e23c94845b672180826420774
+#: ../../api-docs/safe_qgis/resources.rst:2
+msgid "Module:  safe_qgis.resources"
+msgstr ""
+
+# c3dc1dc615df42549be0033f356d5764
+#: ../../api-docs/safe_qgis/resources_rc.rst:2
+msgid "Module:  safe_qgis.resources_rc"
+msgstr ""
+
+# 946ba31e44a34cab8b299ee5b038f71c
+#: ../../api-docs/safe_qgis/safe_interface.rst:2
+msgid "Module:  safe_qgis.safe_interface"
+msgstr ""
+
+# ffd0c3f498c146e9a368234fcb757e47
+#: ../../api-docs/safe_qgis/utilities.rst:2
+msgid "Module:  safe_qgis.utilities"
+msgstr ""
+
+# 98dfc32697174bdc83fe1db5a922d641
+#: ../../api-docs/safe_qgis/utilities_test.rst:2
+msgid "Module:  safe_qgis.utilities_test"
+msgstr ""
+
+# b473b5e4cf4e4ea1804aeae1c701c879
+#: ../../api-docs/safe_qgis_tests.rst:2
+msgid "Package::safe_qgis_tests"
+msgstr ""
+
+# ce55d016b53848dc862485b2188d3e4c
+#: ../../api-docs/safe_qgis_tests/test_clipper.rst:2
+msgid "Module:  safe_qgis.test_clipper"
+msgstr ""
+
+# f37fb1851afa45379bed34bb7497496f
+#: ../../api-docs/safe_qgis_tests/test_dock.rst:2
+msgid "Module:  safe_qgis.test_dock"
+msgstr ""
+
+# d511e1914ddb4bffb5c5825b3f58ef9d
+#: ../../api-docs/safe_qgis_tests/test_help.rst:2
+msgid "Module:  safe_qgis.test_help"
+msgstr ""
+
+# 853898ec0eb5426d9053f632939a0ac1
+#: ../../api-docs/safe_qgis_tests/test_impact_calculator.rst:2
+msgid "Module:  safe_qgis.test_impact_calculator"
+msgstr ""
+
+# bd3f1b2d9f274848bd65f033cbb88878
+#: ../../api-docs/safe_qgis_tests/test_impact_functions_doc.rst:2
+msgid "Module:  safe_qgis.test_impact_functions_doc"
+msgstr ""
+
+# 3242cb945efd41b483971cbc61825d2e
+#: ../../api-docs/safe_qgis_tests/test_keyword_io.rst:2
+msgid "Module:  safe_qgis.test_keyword_io"
+msgstr ""
+
+# cd1d1c670f6c4b588b2d446e20d2cb12
+#: ../../api-docs/safe_qgis_tests/test_keywords_dialog.rst:2
+msgid "Module:  safe_qgis.test_keywords_dialog"
+msgstr ""
+
+# f5b775bb12ab420da75cb8e045bc6436
+#: ../../api-docs/safe_qgis_tests/test_map.rst:2
+msgid "Module:  safe_qgis.test_map"
+msgstr ""
+
+# 256ba2817d20439896bcce1279ec60fe
+#: ../../api-docs/safe_qgis_tests/test_plugin.rst:2
+msgid "Module:  safe_qgis.test_plugin"
+msgstr ""
+
+# 0fcce685a84442ababcaad0e1de061fb
+#: ../../api-docs/safe_qgis_tests/test_qgis_environment.rst:2
+msgid "Module:  safe_qgis.test_qgis_environment"
+msgstr ""
+
+# 914ba24d6fa848bbb83c3d3c9218bc05
+#: ../../api-docs/safe_qgis_tests/test_safe_interface.rst:2
+msgid "Module:  safe_qgis.test_safe_interface"
+msgstr ""
+
+# 9b4ce2be002a4ccaa6e31453e68f79ea
+#: ../../api-docs/safe_qgis_tests/test_utilities.rst:2
+msgid "Module:  safe_qgis.test_utilities"
+msgstr ""
