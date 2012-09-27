@@ -7,10 +7,12 @@ This section of the documention describes how to use the |project_name| system.
    :maxdepth: 2
 
    install
+   screenshots
    dock
    keywords
    options
    impact_functions
+   inasafe_projects
    data_types
    using-qgis
    faq

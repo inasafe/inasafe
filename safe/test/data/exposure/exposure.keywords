@@ -1,0 +1,6 @@
+[buildings_osm_4326]
+datatype: osm
+category: exposure
+subcategory: structure
+purpose: dki
+title: buildings_osm_4326

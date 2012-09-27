@@ -10,7 +10,7 @@ Branching guide
 
 |project_name| follows the following simple branching model:
 
-.. figure::  ../../release-workflow.png
+.. figure:: ../_static/release-workflow.png
    :align:   center
 
 

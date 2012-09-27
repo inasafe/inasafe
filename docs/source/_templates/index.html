@@ -67,41 +67,47 @@ more realistic and useful the InaSAFE scenario will be.</p>
 <p>InaSAFE was conceived and initially developed by the Indonesia’s National
 Disaster Management Agency (BNPB), the Australian Agency for International
 Development (AusAID) and the World Bank.</p>
-<p>You can find out more about the InaSAFE project by visiting
-<a class="reference external" href="http://www.inasafe.org/">www.inasafe.org</a>.</p>
+
 <div class="figure align-center">
-<img alt="_images/screenshot.jpg" src="_images/screenshot.jpg" />
+  <img alt="screenshot.jpg" src="_static/screenshot1-small.jpg" />
 </div>
-<p>A completed assement using the QGIS InaSAFE plugin, with an example of
-the print ready pdf output the plugin produces.</p>
+<p>A completed assement using the QGIS InaSAFE plugin, in this scenario
+analysing flood risk in Jakarta, Indonesia.  </p>
+
 <div class="figure align-center">
-<img alt="_images/screenshot2.jpg" src="_images/screenshot2.jpg" />
+  <img alt="screenshot1.jpg" src="_static/screenshot-small.jpg" />
 </div>
-<p>Vulnerable building footprints shown in red.</p>
+<p>Padang (Indonesia) earthquake scenario with OSM building footprints likely
+to undergo damage shown in red.</p>
+
+<div class="figure align-center">
+  <img alt="screenshot2.jpg" src="_static/screenshot2-small.jpg" />
+</div>
+<p>Maumere (Indonesia) tsunami inundation scenario. Areas shaded in red would
+experience the greatest inundation in this scenario.
+</p>
 </div>
 <div class="section" id="open-source">
 <h2>Open Source<a class="headerlink" href="#open-source" title="Permalink to this headline">¶</a></h2>
 <p>The latest source code is available at
 <a class="reference external" href="https://github.com/AIFDR/inasafe">https://github.com/AIFDR/inasafe</a>
-(must open in new window using right click) which contains modules for risk
-calculations, gis functionality and functions for impact modelling.</p>
+ which contains modules for risk calculations, gis functionality and functions for impact modelling.</p>
 </div>
 
 <div class="section" id="limitations">
 <h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
-<p>InaSAFE is a very new project. The current code development started
+<p>InaSAFE is still a new project. The current code development started
 in earnest in March 2011 and there is still much to be done.
 However, we work on the philosophy that stakeholders should have access
 to the development and source code from the very beginning and invite
 comments, suggestions and contributions.</p>
 
-<p>As such, InaSAFE currently has some major limitations, including</p>
+<p>As such, InaSAFE currently has some limitations, including</p>
 
 <ul>
-  <li>Hazard layers must be provided as raster data</li>
-  <li>Exposure data must be either raster data or vector data but only
-   point, line and polygon types are supported.</li>
-  <li>All data must be provided in WGS84 geographic coordinates</li>
+  <li>Exposure data in the form of roads (or any other line feature) is not supported.</li>
+  <li>Polygon area analysis (such as land use) is not supported.</li>
+  <li>Population density data must be provided in WGS84 geographic coordinates</li>
   <li>Neither AIFDR nor GFDRR take any responsibility for the correctness of
    outputs from InaSAFE or decisions derived as a consequence</li>
 </ul>
@@ -113,11 +119,12 @@ title="Permalink to this headline">¶</a></h2>
 <p>The development of InaSAFE has been supported by the Indonesian Disaster
 Management Agency (BNPB) and AusAID, through the Australia-Indonesia Facility
 for Disaster Reduction, as well as the World Bank and the Global Facility for
-Disaster Reduction and Recovery. InaSAFE is a plugin built for the open 
-source <a href="http://qgis.org">Quantum GIS</a> application.</p> 
+Disaster Reduction and Recovery. InaSAFE is a plugin built for the open
+source <a href="http://qgis.org">Quantum GIS</a> application.</p>
 </div>
 
 
 
 
 {% endblock %}
+>>>>>>> e43356c6dc437a0ce90c1f4e82dbc9d8c432bdc2

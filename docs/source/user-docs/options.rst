@@ -8,12 +8,12 @@ options dialog can be launched by clicking on the InaSAFE plugin toolbar's
 options icon (as shown below) or by doing :menuselection:`Plugins --> InaSAFE
 --> InaSAFE Options`.
 
-.. figure:: ../../inasafe-options-icon.png
+.. figure:: ../_static/inasafe-options-icon.png
    :align:   center
 
 Then the dialog will appear, looking something like this:
 
-.. figure:: ../../inasafe-options-dialog.png
+.. figure:: ../_static/inasafe-options-dialog.png
    :align:   center
 
 .. note:: You can click on the :guilabel:`Help` button at any time and it 
@@ -37,6 +37,9 @@ The following options are available on the :guilabel:`Options Dialog`:
   option will cause QGIS to turn off the exposure layer used when InaSAFE
   completes the current analysis. You can re-enable the layer visibility
   again by checking its checkbox in the legend.
+* :guilabel:`Hide exposure layer on scenario estimate completion` : This
+  option will cause QGIS to clip hazard and exposure layers to the currently
+  visible extent on the map canvas.
 * :guilabel:`Keyword cache for remote datasources` : This option is used to
   determine where keywords are stored for datasets where it is not possible
   to write them into a .keywords file. See :doc:`keywords` for more information

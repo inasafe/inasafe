@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Sphinx_HTML.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/developer-docs/jenkins_ci.rst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/index.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/index.rst" />
+    <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe/storage/vector.py" afterPath="$PROJECT_DIR$/safe/storage/vector.py" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -17,30 +13,109 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/inasafe-dev$Nosetests_in_test_vector.coverage" NAME="Nosetests in test_vector Coverage Results" MODIFIED="1345545273681" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/safe/storage" />
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
   <component name="DaemonCodeAnalyzer">
     <disable_hints />
   </component>
+  <component name="DatabaseView">
+    <flatten value="false" />
+    <groupTables value="false" />
+  </component>
   <component name="FavoritesManager">
     <favorites_list name="inasafe-dev" />
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.rst" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/index.rst">
+      <file leaf-file-name="keywords_dialog.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/keywords_dialog.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="11" selection-start="634" selection-end="634" vertical-scroll-proportion="0.0">
+            <state line="107" column="8" selection-start="4649" selection-end="4649" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="jenkins_ci.rst" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/jenkins_ci.rst">
+      <file leaf-file-name="keyword_io.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/keyword_io.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="224" column="0" selection-start="7425" selection-end="7425" vertical-scroll-proportion="0.6666667">
+            <state line="494" column="34" selection-start="18272" selection-end="18272" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="safe_interface.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/safe_interface.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="253" column="0" selection-start="8601" selection-end="8601" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utilities.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe/storage/utilities.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="345" column="57" selection-start="11334" selection-end="11334" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="vector.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/safe/storage/vector.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="338" column="0" selection-start="12241" selection-end="12241" vertical-scroll-proportion="0.5307068">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_vector.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe/storage/test_vector.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="42" column="22" selection-start="1407" selection-end="1413" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_keyword_io.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/test_keyword_io.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="169" column="0" selection-start="8154" selection-end="8154" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="exceptions.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe/common/exceptions.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="62" column="0" selection-start="1413" selection-end="1413" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="api.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe/api.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="26" column="40" selection-start="1046" selection-end="1046" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dock.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="504" column="16" selection-start="18447" selection-end="18447" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -59,29 +134,30 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/gui/is_options_dialog.py" />
-        <option value="$PROJECT_DIR$/gui/is_keywords_dialog.py" />
-        <option value="$PROJECT_DIR$/gui/is_safe_interface.py" />
-        <option value="$PROJECT_DIR$/gui/test_is_map.py" />
-        <option value="$PROJECT_DIR$/gui/is_dock.py" />
-        <option value="$PROJECT_DIR$/gui/test_is_help.py" />
-        <option value="$PROJECT_DIR$/gui/is_impact_calculator.py" />
-        <option value="$PROJECT_DIR$/gui/is_impact_calculator_thread.py" />
-        <option value="$PROJECT_DIR$/gui/test_is_utilities.py" />
-        <option value="$PROJECT_DIR$/gui/utilities_test.py" />
-        <option value="$PROJECT_DIR$/pylint.log" />
-        <option value="$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst" />
-        <option value="$PROJECT_DIR$/../../../../../web/sac/sac_catalogue/docs/sphinx/coding_standards.rst" />
-        <option value="$PROJECT_DIR$/../../../../../web/farminfo/farminfo/docs/source/jenkins-setup.rst" />
-        <option value="$PROJECT_DIR$/docs/source/developer-docs/index.rst" />
-        <option value="$PROJECT_DIR$/docs/source/developer-docs/jenkins_ci.rst" />
+        <option value="$PROJECT_DIR$/safe_qgis/impact_calculator_thread.py" />
+        <option value="$PROJECT_DIR$/scrapbook.py" />
+        <option value="$PROJECT_DIR$/safe/engine/test_engine.py" />
+        <option value="$PROJECT_DIR$/safe/common/exceptions.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/dock.py" />
+        <option value="$PROJECT_DIR$/safe/storage/test_utilities.py" />
+        <option value="$PROJECT_DIR$/docs/source/developer-docs/maintaining_documentation.rst" />
+        <option value="$PROJECT_DIR$/extras/data_audit_wrapper.py" />
+        <option value="$PROJECT_DIR$/safe/storage/utilities.py" />
+        <option value="$PROJECT_DIR$/safe/api.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/safe_interface.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/test_keyword_io.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/keyword_io.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/keywords_dialog.py" />
+        <option value="$PROJECT_DIR$/safe/storage/test_vector.py" />
+        <option value="$PROJECT_DIR$/safe/storage/vector.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1920" />
+    <option name="y" value="41" />
     <option name="width" value="1920" />
-    <option name="height" value="1080" />
+    <option name="height" value="1039" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -90,7 +166,7 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="2" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
@@ -109,102 +185,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="&lt; Python 2.7.3 (/usr/bin/python2.7) &gt;" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NamedLibraryElementNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="docs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="docs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="source" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inasafe-dev" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="docs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="source" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="developer-docs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -215,16 +195,132 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="safe_qgis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="safe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="safe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="storage" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="safe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impact_functions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inasafe-dev" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="safe" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PythonSdkConfigurable" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="preferences.externalTools" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../web/farminfo/farminfo/docs/source" />
+    <property name="last_opened_file_path" value="/tmp" />
+    <property name="options.splitter.details.proportions" value="0.31698564" />
     <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -236,26 +332,34 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/safe/test/data/other" />
+      <recent name="$PROJECT_DIR$/docs/source/api-docs/safe/common" />
+      <recent name="$PROJECT_DIR$/docs/source/api-docs/safe_qgis_tests" />
+      <recent name="$PROJECT_DIR$/docs/source/api-docs/safe" />
       <recent name="$PROJECT_DIR$/common" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/safe/storage" />
+      <recent name="$PROJECT_DIR$/docs/source/api-docs" />
+      <recent name="$PROJECT_DIR$/docs/source/api-docs/safe/storage" />
+      <recent name="$PROJECT_DIR$/safe/common" />
+    </key>
   </component>
-  <component name="RunManager" selected="Python docs.Sphinx HTML">
-    <configuration default="false" name="Nosetests in test_is_impact_calculator" type="tests" factoryName="Nosetests" temporary="true">
+  <component name="RunManager" selected="Python's test.Nosetests in KeywordIOTest.test_getSubLayer">
+    <configuration default="false" name="Nosetests in Test_Engine.test_interpolation_tsunami" type="tests" factoryName="Nosetests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="QGISPATH" value="/usr/local/qgis1.8" />
-      </envs>
+      <envs />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gui" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/safe/engine" />
       <option name="IS_MODULE_SDK" value="true" />
       <module name="inasafe-dev" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui/test_is_impact_calculator.py" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/safe/engine/test_engine.py" />
+      <option name="CLASS_NAME" value="Test_Engine" />
+      <option name="METHOD_NAME" value="test_interpolation_tsunami" />
       <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
       <option name="PARAMS" value="" />
@@ -264,70 +368,22 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="Nosetests in test_is_safe_interface" type="tests" factoryName="Nosetests" temporary="true">
+    <configuration default="false" name="Nosetests in KeywordIOTest.test_getSubLayerForDatasource" type="tests" factoryName="Nosetests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="QGISPATH" value="/usr/local/qgis1.8" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gui" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/safe_qgis" />
       <option name="IS_MODULE_SDK" value="true" />
       <module name="inasafe-dev" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui/test_is_safe_interface.py" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/safe_qgis/test_keyword_io.py" />
+      <option name="CLASS_NAME" value="KeywordIOTest" />
+      <option name="METHOD_NAME" value="test_getSubLayerForDatasource" />
       <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Nosetests in test_is_keyword_io" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="QGISPATH" value="/usr/local/qgis1.8" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gui" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui/test_is_keyword_io.py" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="Nosetests in test_is_clipper" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="QGISPATH" value="/usr/local/qgis1.8" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gui" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui/test_is_clipper.py" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
       <option name="PARAMS" value="" />
@@ -338,18 +394,18 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="Nosetests in test_is_utilities" type="tests" factoryName="Nosetests" temporary="true">
+    <configuration default="false" name="Nosetests in test_keyword_io" type="tests" factoryName="Nosetests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="QGISPATH" value="/usr/local/qgis1.8" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gui" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/safe_qgis" />
       <option name="IS_MODULE_SDK" value="true" />
       <module name="inasafe-dev" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gui/test_is_utilities.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/safe_qgis/test_keyword_io.py" />
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="FOLDER_NAME" value="" />
@@ -358,10 +414,54 @@
       <option name="USE_PATTERN" value="false" />
       <option name="PARAMS" value="" />
       <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PyDebugRunner" />
       <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PyDebugRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Nosetests in CommonUtilitiesTest.test_read_sublayer_names" type="tests" factoryName="Nosetests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/safe/storage" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/safe/storage/test_utilities.py" />
+      <option name="CLASS_NAME" value="CommonUtilitiesTest" />
+      <option name="METHOD_NAME" value="test_read_sublayer_names" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Nosetests in KeywordIOTest.test_getSubLayer" type="tests" factoryName="Nosetests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="QGISPATH" value="/usr/local/qgis1.8" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/safe_qgis" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/safe_qgis/test_keyword_io.py" />
+      <option name="CLASS_NAME" value="KeywordIOTest" />
+      <option name="METHOD_NAME" value="test_getSubLayer" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PyDebugRunner" />
+      <ConfigurationWrapper RunnerId="PyDebugRunner" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Nosetests">
@@ -384,22 +484,6 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="docs" factoryName="Docutils task">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <module name="inasafe-dev" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="docutils_input_file" value="" />
-      <option name="docutils_output_file" value="" />
-      <option name="docutils_params" value="" />
-      <option name="docutils_task" value="" />
-      <option name="docutils_open_in_browser" value="false" />
-      <method />
-    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -416,6 +500,22 @@
       <option name="MULTIPROCESS" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="docs" factoryName="Docutils task">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method />
+    </configuration>
     <configuration default="true" type="docs" factoryName="Sphinx task">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -430,6 +530,38 @@
       <option name="docutils_params" value="" />
       <option name="docutils_task" value="" />
       <option name="docutils_open_in_browser" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PyRemoteDebugConfigurationType" factoryName="Python Remote Debug">
+      <module name="" />
+      <option name="PORT" value="0" />
+      <option name="HOST" value="null" />
+      <PyPathMappingSettings>
+        <option name="pathMappings">
+          <list />
+        </option>
+      </PyPathMappingSettings>
+      <option name="REDIRECT_OUTPUT" value="true" />
+      <option name="SUSPEND_AFTER_CONNECT" value="true" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -450,15 +582,62 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
-    <list size="8">
-      <item index="0" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
-      <item index="1" class="java.lang.String" itemvalue="Python's test.NoseTests" />
-      <item index="2" class="java.lang.String" itemvalue="Python's test.NoseTests Gui Only" />
-      <item index="3" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_impact_calculator" />
-      <item index="4" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_safe_interface" />
-      <item index="5" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_keyword_io" />
-      <item index="6" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_clipper" />
-      <item index="7" class="java.lang.String" itemvalue="Python's test.Nosetests in test_is_utilities" />
+    <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
+      <JSDebuggerConfigurationSettings>
+        <option name="engineId" value="embedded" />
+        <option name="fileUrl" />
+      </JSDebuggerConfigurationSettings>
+      <method />
+    </configuration>
+    <configuration default="false" name="Flood Polygon Hazard Test" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="QGISPATH" value="/usr/local/qgis1.8" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/bin/python2.7" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/safe_qgis" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/safe_qgis/test_dock.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="MULTIPROCESS" value="true" />
+      <RunnerSettings RunnerId="PyDebugRunner" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PyDebugRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Remote Debug Server" type="PyRemoteDebugConfigurationType" factoryName="Python Remote Debug">
+      <module name="" />
+      <option name="PORT" value="53100" />
+      <option name="HOST" value="localhost" />
+      <PyPathMappingSettings>
+        <option name="pathMappings">
+          <list />
+        </option>
+      </PyPathMappingSettings>
+      <option name="REDIRECT_OUTPUT" value="true" />
+      <option name="SUSPEND_AFTER_CONNECT" value="true" />
+      <RunnerSettings RunnerId="PyRemoteDebugRunner" />
+      <ConfigurationWrapper RunnerId="PyRemoteDebugRunner" />
+      <method />
+    </configuration>
+    <list size="12">
+      <item index="0" class="java.lang.String" itemvalue="Python.Flood Polygon Hazard Test" />
+      <item index="1" class="java.lang.String" itemvalue="Python Remote Debug.Remote Debug Server" />
+      <item index="2" class="java.lang.String" itemvalue="Python docs.InaSAFE Docs" />
+      <item index="3" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
+      <item index="4" class="java.lang.String" itemvalue="Python's test.NoseTests Realtime" />
+      <item index="5" class="java.lang.String" itemvalue="Python's test.NoseTests SAFE_QGIS" />
+      <item index="6" class="java.lang.String" itemvalue="Python's test.NoseTest VectorTest" />
+      <item index="7" class="java.lang.String" itemvalue="Python's test.Nosetests in Test_Engine.test_interpolation_tsunami" />
+      <item index="8" class="java.lang.String" itemvalue="Python's test.Nosetests in KeywordIOTest.test_getSubLayerForDatasource" />
+      <item index="9" class="java.lang.String" itemvalue="Python's test.Nosetests in test_keyword_io" />
+      <item index="10" class="java.lang.String" itemvalue="Python's test.Nosetests in CommonUtilitiesTest.test_read_sublayer_names" />
+      <item index="11" class="java.lang.String" itemvalue="Python's test.Nosetests in KeywordIOTest.test_getSubLayer" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -510,29 +689,62 @@
       <created>1342512383828</created>
       <updated>1342512383828</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fix inconsistencies in md5 hash comparison by opening files in binary mode. I have commented out all old hashes and they should be re-added per platform as/if needed, though I am hoping we can have one canonical md5 hash for all systems now.">
+      <created>1344914166275</created>
+      <updated>1344914166275</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Reinstated platform hashes for xvfb">
+      <created>1344915082572</created>
+      <updated>1344915082572</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Added link to complete list of pylint codes">
+      <created>1345602748009</created>
+      <updated>1345602748009</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1920" height="1080" extended-state="0" />
+    <frame x="1920" y="41" width="1920" height="1039" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32959402" sideWeight="0.6105611" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.36933047" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16773504" sideWeight="0.66233766" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39935064" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18623266" sideWeight="0.4313063" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18623266" sideWeight="0.5608108" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27364865" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.51121795" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33766234" sideWeight="0.4722222" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.48504272" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5929648" sideWeight="0.5273141" order="11" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.5910112" sideWeight="0.4673748" order="2" side_tool="false" content_ui="tabs" x="217" y="178" width="1477" height="799" />
+      <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3255814" sideWeight="0.48504272" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.49358973" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3355856" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32869378" sideWeight="0.49358973" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977018" sideWeight="0.59955996" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -575,7 +787,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pep8 fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added link to complete list of pylint codes" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -594,114 +806,129 @@
     <MESSAGE value="Added accessors to expose private members" />
     <MESSAGE value="Python lint fixes. On advice from lint implemented much nicer exception handling for bbox calculator." />
     <MESSAGE value="Pep8 fixes" />
+    <MESSAGE value="Fix inconsistencies in md5 hash comparison by opening files in binary mode. I have commented out all old hashes and they should be re-added per platform as/if needed, though I am hoping we can have one canonical md5 hash for all systems now." />
+    <MESSAGE value="Reinstated platform hashes for xvfb" />
+    <MESSAGE value="Added link to complete list of pylint codes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/gui/utilities_test.py</url>
-          <line>142</line>
+          <url>file://$PROJECT_DIR$/safe_qgis/keyword_io.py</url>
+          <line>109</line>
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/gui/is_safe_interface.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="65" selection-start="1468" selection-end="1468" vertical-scroll-proportion="0.16722408" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/test_is_help.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="0" selection-start="785" selection-end="785" vertical-scroll-proportion="0.35117057" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/is_dock.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="41" selection-start="1952" selection-end="1952" vertical-scroll-proportion="0.8026756" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/is_impact_calculator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="1050" selection-end="1050" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python2.7/unittest/case.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="327" column="0" selection-start="10816" selection-end="10816" vertical-scroll-proportion="0.3326572" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pylint.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="341" column="1" selection-start="33401" selection-end="33472" vertical-scroll-proportion="0.8812217">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/is_plugin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="28" selection-start="614" selection-end="614" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/is_impact_calculator_thread.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="38" selection-start="1819" selection-end="1819" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/utilities_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="0" selection-start="4371" selection-end="4371" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gui/test_is_utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="0" selection-start="1720" selection-end="1720" vertical-scroll-proportion="0.016722407">
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../../web/sac/sac_catalogue/docs/sphinx/coding_standards.rst">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="150" column="11" selection-start="4994" selection-end="4994" vertical-scroll-proportion="0.69899666">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/faq.rst">
+    <entry file="file://$PROJECT_DIR$/safe/impact_functions/utilities.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../../../web/farminfo/farminfo/docs/source/jenkins-setup.rst">
+    <entry file="file://$PROJECT_DIR$/safe/impact_functions/core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="217" column="0" selection-start="7065" selection-end="8489" vertical-scroll-proportion="-3.3333333">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/coding_standards.rst">
+    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/maintaining_documentation.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="0" selection-start="1336" selection-end="1336" vertical-scroll-proportion="0.46837607">
+        <state line="212" column="47" selection-start="7227" selection-end="7227" vertical-scroll-proportion="0.95596755">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/index.rst">
+    <entry file="file://$PROJECT_DIR$/extras/data_audit_wrapper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="11" selection-start="634" selection-end="634" vertical-scroll-proportion="0.0">
+        <state line="25" column="48" selection-start="701" selection-end="701" vertical-scroll-proportion="0.55040556">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/jenkins_ci.rst">
+    <entry file="file://$PROJECT_DIR$/safe_qgis/test_utilities.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="224" column="0" selection-start="7425" selection-end="7425" vertical-scroll-proportion="0.6666667">
+        <state line="224" column="0" selection-start="9664" selection-end="9664" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/plugin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="332" column="0" selection-start="12541" selection-end="12541" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/keywords_dialog.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="8" selection-start="4649" selection-end="4649" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/keyword_io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="494" column="34" selection-start="18272" selection-end="18272" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/safe_interface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="253" column="0" selection-start="8601" selection-end="8601" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe/storage/test_vector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="22" selection-start="1407" selection-end="1413" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/test_keyword_io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="169" column="0" selection-start="8154" selection-end="8154" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe/common/exceptions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="0" selection-start="1413" selection-end="1413" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="40" selection-start="1046" selection-end="1046" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="504" column="16" selection-start="18447" selection-end="18447" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe/storage/utilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="345" column="57" selection-start="11334" selection-end="11334" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe/storage/vector.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="338" column="0" selection-start="12241" selection-end="12241" vertical-scroll-proportion="0.5307068">
           <folding />
         </state>
       </provider>

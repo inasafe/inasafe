@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: InaSAFE 0.4.0\n"
+"Project-Id-Version: InaSAFE 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-26 14:39\n"
+"POT-Creation-Date: 2012-09-27 13:06\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -349,87 +349,151 @@ msgid "will produce a new layer with all values from H transferred to E in a man
 msgstr ""
 
 #: ../../user-docs/data_types.rst:18
+# a1e33f309b2c410d8b4d07e6069d626d
+msgid "The function takes a number of optional keyword arguments that pertain to certain type combinations. They are"
+msgstr ""
+
+#: ../../user-docs/data_types.rst:20
+# 1b7755672c31485e9e520eecca6bc8a9
+msgid "layer_name: Optional name of returned layer. If None (default) the name of the exposure layer is used."
+msgstr ""
+
+#: ../../user-docs/data_types.rst:21
+# cf7d44b3477445fda571d9a05f1cda84
+msgid "attribute_name:"
+msgstr ""
+
+#: ../../user-docs/data_types.rst:23
+# 2f38f3ca3ebb4aa4b9795281ccf6cdec
+msgid "If hazard layer is of type raster, this is the name for new attribute in the result containing the hazard level. If None (default) the name of hazard is used"
+msgstr ""
+
+#: ../../user-docs/data_types.rst:25
+# ac63f8beb56b4b91b5a471e5d12ff7a2
+msgid "If hazard layer is of type vector, it is the name of the attribute to transfer from the hazard layer into the result. If None (default) all attributes are transferred."
+msgstr ""
+
+#: ../../user-docs/data_types.rst:27
+# ee2620ffa10c41b49b1efa624a5d266c
+msgid "mode: Interpolation mode for raster to point interpolation only. Options are 'linear' (default) or 'constant'"
+msgstr ""
+
+#: ../../user-docs/data_types.rst:30
 # 575699544f6149f6aa555ec26b73641a
 msgid "The following table shows allowed combinations and what interpolation means in each case."
 msgstr ""
 
-#: ../../user-docs/data_types.rst:24
+#: ../../user-docs/data_types.rst:36
 # 5e1cfac6a18948e3ac73cefa4b206761
 msgid "H"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:24
+#: ../../user-docs/data_types.rst:36
 # c90aaa0c585946d6b0e18e5ead634427
 msgid "E"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:26
-#: ../../user-docs/data_types.rst:28
-# 7f57f613cbff4e6c8433d2b356554310
-# 1fb9e340d41649d0bb6fafbffa6b740b
-msgid "Raster"
+#: ../../user-docs/data_types.rst:36
+# 47b7e2c0af9746ec996bd228c5818059
+msgid "Methodology"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:26
-#: ../../user-docs/data_types.rst:30
+#: ../../user-docs/data_types.rst:36
+# f87ff29ca4bc470e846a5446b2152133
+msgid "Return value"
+msgstr ""
+
+#: ../../user-docs/data_types.rst:38
+#: ../../user-docs/data_types.rst:40
+#: ../../user-docs/data_types.rst:42
+#: ../../user-docs/data_types.rst:42
+#: ../../user-docs/data_types.rst:44
+#: ../../user-docs/data_types.rst:50
+#: ../../user-docs/data_types.rst:50
 # 41573c90e3be427ea78a573b15df09bb
-# c1ad581b95b2457bba5fcf00432de504
+# 41573c90e3be427ea78a573b15df09bb
+# 41573c90e3be427ea78a573b15df09bb
+# 41573c90e3be427ea78a573b15df09bb
+# 41573c90e3be427ea78a573b15df09bb
+# 41573c90e3be427ea78a573b15df09bb
+# 41573c90e3be427ea78a573b15df09bb
 msgid "Polygon"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:26
-#: ../../user-docs/data_types.rst:32
-# 40d26c03403a42d381e51691574e907d
-# 7366d80b58c7452aa9686dda7c31747b
-msgid "Line"
-msgstr ""
-
-#: ../../user-docs/data_types.rst:26
-#: ../../user-docs/data_types.rst:34
+#: ../../user-docs/data_types.rst:38
+#: ../../user-docs/data_types.rst:38
+#: ../../user-docs/data_types.rst:44
+#: ../../user-docs/data_types.rst:46
+#: ../../user-docs/data_types.rst:46
 # a21a61fdaf4247c5aaf119a7774c9c02
-# 399b3776f9b04954ad7567700cfa9eaf
+# a21a61fdaf4247c5aaf119a7774c9c02
+# a21a61fdaf4247c5aaf119a7774c9c02
+# a21a61fdaf4247c5aaf119a7774c9c02
+# a21a61fdaf4247c5aaf119a7774c9c02
 msgid "Point"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:28
-# 3e20923c892a42d7a0f84e2bc40fd800
-msgid "Resampled"
+#: ../../user-docs/data_types.rst:38
+# 92e085bf05fe4d8ca3d1a4e69f6c49b0
+msgid "Clip points to polygon and assign all attributes"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:28
-# 406e4c615e7a4d93907e0ca5007cda02
-msgid "Centroid"
+#: ../../user-docs/data_types.rst:40
+#: ../../user-docs/data_types.rst:40
+#: ../../user-docs/data_types.rst:48
+# 40d26c03403a42d381e51691574e907d
+# 7366d80b58c7452aa9686dda7c31747b
+# 40d26c03403a42d381e51691574e907d
+msgid "Line"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:28
-#: ../../user-docs/data_types.rst:30
-# 2092cbc759364e02abcec616cfc623a3
-# 56cb26d840d147669395d291122d36da
-msgid "Belum"
+#: ../../user-docs/data_types.rst:40
+# bf9b1fa5d8984996892d873a2057df31
+msgid "Clip segments to polygon and assign all attributes (slow)"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:28
-# 2934df16d3df40f9b261c6f4b5f0849a
-msgid "Bilinear Interpolation"
+#: ../../user-docs/data_types.rst:42
+#: ../../user-docs/data_types.rst:48
+# b0977555de7f402d8f9d85ba81fe28a2
+# 58ed22806c424006b4351cf8124615b9
+msgid "N/A"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:30
-#: ../../user-docs/data_types.rst:30
-# e4c6a77eccb744b7bf0e034500eacda4
-# e3ea24579cd64b29bf8e48f4f99f321d
-msgid "No"
+#: ../../user-docs/data_types.rst:44
+#: ../../user-docs/data_types.rst:46
+#: ../../user-docs/data_types.rst:48
+#: ../../user-docs/data_types.rst:50
+#: ../../user-docs/data_types.rst:52
+#: ../../user-docs/data_types.rst:52
+#: ../../user-docs/data_types.rst:52
+# 7f57f613cbff4e6c8433d2b356554310
+# 7f57f613cbff4e6c8433d2b356554310
+# 7f57f613cbff4e6c8433d2b356554310
+# 7f57f613cbff4e6c8433d2b356554310
+# 7f57f613cbff4e6c8433d2b356554310
+# 7f57f613cbff4e6c8433d2b356554310
+# 7f57f613cbff4e6c8433d2b356554310
+msgid "Raster"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:30
-# a95c8baebd1c473ba50fcf3d60cea485
-msgid "Clip and tag"
+#: ../../user-docs/data_types.rst:44
+# b01e149a8fc548d1a8dc22b582d2db78
+msgid "Convert to points and use Polygon-Point algorithm"
 msgstr ""
 
-#: ../../user-docs/data_types.rst:32
-#: ../../user-docs/data_types.rst:34
-# eb30bc7c3a15410da88d969298aa2001
-# 5415eb23de7544679eb6c9fe8c842fd3
-msgid "Not applicable"
+#: ../../user-docs/data_types.rst:46
+# 61bfb20b94514a00a2352e4a22d7b7dc
+msgid "Bilinear or piecewise constant interpolation"
+msgstr ""
+
+#: ../../user-docs/data_types.rst:50
+# 9de7fc482bef4f649a69a8611070fa48
+msgid "Convert to centroids and use Raster-Point algorithm"
+msgstr ""
+
+#: ../../user-docs/data_types.rst:52
+# 481e6da5fe6b421a8d3b9f5849db0eeb
+msgid "Check that rasters are aligned and return E"
 msgstr ""
 
 #: ../../user-docs/dock.rst:3
@@ -780,6 +844,16 @@ msgstr ""
 #: ../../user-docs/impact_functions.rst:6
 # bdb219c5265d4a5780f4a487014e1d18
 msgid "This document explains the purpose of impact functions and lists the different available impact function and the requirements each has to be used effectively."
+msgstr ""
+
+#: ../../user-docs/inasafe_projects.rst:4
+# 8a81dce67f70493889288ed8751e206f
+msgid "Demo projects"
+msgstr ""
+
+#: ../../user-docs/inasafe_projects.rst:6
+# a947637453104331a44d35d34b594cc7
+msgid "InaSAFE comes with bundled demonstration data and a collection of QGIS projects that demonstrate different use cases::"
 msgstr ""
 
 #: ../../user-docs/index.rst:2
@@ -1443,7 +1517,7 @@ msgstr ""
 
 #: ../../user-docs/known_issues.rst:16
 # 321f01a1baed4336897ea9bdf157f395
-msgid "Currently if you open the help documentation for InaSAFE, not styling is applied and images may not show, so it looks rather plain. We are working to fix this in a future release. See also ticket `#123 <https://github.com/AIFDR/inasafe/issues/163>`_"
+msgid "Currently if you open the help documentation for InaSAFE, not styling is applied and images may not show, so it looks rather plain. We are working to fix this in a future release. See also ticket `#163 <https://github.com/AIFDR/inasafe/issues/163>`_"
 msgstr ""
 
 #: ../../user-docs/options.rst:3
@@ -1492,33 +1566,43 @@ msgid ":guilabel:`Hide exposure layer on scenario estimate completion` : This op
 msgstr ""
 
 #: ../../user-docs/options.rst:40
+# cbe90faccc5e4be391594b58e692c188
+msgid ":guilabel:`Hide exposure layer on scenario estimate completion` : This option will cause QGIS to clip hazard and exposure layers to the currently visible extent on the map canvas."
+msgstr ""
+
+#: ../../user-docs/options.rst:43
 # 8d2f3296482d4b32ad554a6ae731a01d
 msgid ":guilabel:`Keyword cache for remote datasources` : This option is used to determine where keywords are stored for datasets where it is not possible to write them into a .keywords file. See :doc:`keywords` for more information on the keywords system."
 msgstr ""
 
-#: ../../user-docs/options.rst:44
+#: ../../user-docs/options.rst:47
 # 888ea1ffd99e4cffb4bc525aacf11585
 msgid ":guilabel:`Run analysis in separate thread (experimental)` : This option cause the analysis to be run in its own thread."
 msgstr ""
 
-#: ../../user-docs/options.rst:47
+#: ../../user-docs/options.rst:50
 # 33b1e2a0eb15425f8524280f8685e013
 msgid "It is not recommended to use the threaded implementation at this time. For this reason it is disabled by default."
 msgstr ""
 
-#: ../../user-docs/options.rst:50
+#: ../../user-docs/options.rst:53
 # 1329d6c6516440f48cf03afae27290dc
 msgid "Pressing :guilabel:`Cancel` at any time will close the options dialog and any changes made will **not** be applied."
 msgstr ""
 
-#: ../../user-docs/options.rst:53
+#: ../../user-docs/options.rst:56
 # 9ef8683d961a41c29a082fc2c0e24070
 msgid "Pressing :guilabel:`Ok` at any time will close the options dialog and any changes made **will** be applied immediately."
 msgstr ""
 
-#: ../../user-docs/options.rst:56
+#: ../../user-docs/options.rst:59
 # e1bf4b71f55843129f6fe795629d988a
 msgid "The exact button order shown on this dialog may differ depending on your operating system or desktop environment."
+msgstr ""
+
+#: ../../user-docs/screenshots.rst:2
+# 1403ee7f8dfd40eaad6802a0035852fa
+msgid "InaSAFE Screenshots"
 msgstr ""
 
 #: ../../user-docs/using-qgis.rst:3

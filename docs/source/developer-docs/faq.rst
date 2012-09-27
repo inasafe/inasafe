@@ -1,4 +1,3 @@
-
 Frequently Asked Questions
 ==========================
 
@@ -83,4 +82,33 @@ The deployment of version tagged files is automated by using the
 :file:`scripts\release.sh` script.
 
 
+How do you profile code?
+::::::::::::::::::::::::
 
+sudo apt-get install python-profiler 
+python -m cProfile -s time safe/common/test_polygon.py
+
+and 
+
+sudo easy_install pycallgraph
+sudo apt-get install graphviz
+pycallgraph safe/common/test_polygon.py
+
+
+
+See also
+http://stackoverflow.com/questions/582336/how-can-you-profile-a-python-script
+
+Why do I got 1e+24 (or another big number) instead of NaN when I saved vector files?
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+InaSAFE needs to convert NaN to 1e+24 or more specifically 24 digits of 9
+because NaN is not intepreted correclty on Windows. You can read more
+information about it on http://trac.osgeo.org/gdal/ticket/4799 or in Github
+issue `#269 <https://github.com/AIFDR/inasafe/issues/269>`_.
+
+But don't worry, when InaSAFE read vector file, it will convert the 1e+24 back
+to NaN. So, any computation inside InaSAFE will treat NaN as NaN in numpy.
+
+.. note:: You'll need to convert the 1e+24 to NaN value manually if you want to use
+   it without InaSAFE.

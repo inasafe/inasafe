@@ -74,7 +74,7 @@ the riab.py setupI18n method)::
 
         Args:
            thePreferredLocale - optional parameter which if set
-           will override any other way of determining locale.
+               will override any other way of determining locale.
         Returns:
            None.
         Raises:
@@ -96,7 +96,7 @@ following steps are required:
   named after the module. For example, for the gui/riab.py module we would
   create :file:`docs/source/api-docs/gui/riab.rst` (note the .rst extension).
   See below for an example of its contents
-* Add the new file to the API docs master index 
+* Add the new file to the API docs master index
   (:file:`docs/source/api-docs/index.rst`).
   The .rst extension is not needed or desired when adding to the index list.
 * Regenerate the documentation using the :command:`make docs` command from
@@ -108,13 +108,13 @@ following steps are required:
 
 An example of the contents of a module's API .rst if provided below::
 
-   Module: riab
-   ============
-   This page contains the documentation for the  InaSAFE code **riab**
-   module.
+    Module:  safe.common.polygon
+    ============================
 
-   .. automodule:: gui.riab
-      :members:
+    .. automodule:: safe.common.polygon
+          :members:
+
+This module forms part of the `InaSAFE <http://inasafe.org>`_ tool.
 
 A couple of things should be noted here:
 
@@ -153,3 +153,60 @@ Where the 'keywords' parameter indicates the user-docs/\*.rst document that
 should be opened when the help button is clicked. The general style and
 approach used in existing documentation should inform your documentation
 process so that all the documentation is constent.
+
+Publishing the documentation to GitHub Pages
+--------------------------------------------
+
+Initially we have used http://readthedocs.org to host our site (and the pages
+you are reading now). However they don't support internationalisation and
+there are various other issues with it, so we opted to move our content into
+gh-pages. To use this, the site is stored in a special branch.
+
+Initial gh-pages setup
+......................
+
+In order to set up the gh-pages branch this is the procedure followed.
+
+.. note:: This is a once-off process you do not need to repeat it, it is
+   here for reference purposes only.
+
+Enable gh-pages in the gh project
+`admin page <https://github.com/AIFDR/inasafe/admin>`_. On your local system
+do something like this::
+
+   git clone file:///home/timlinux/dev/python/inasafe-dev \
+       inasafe-github-pages
+   cd inasafe-github-pages
+   cp ../inasafe-dev/.git/config .git/config
+   git pull
+   git symbolic-ref HEAD refs/heads/gh-pages
+   rm .git/index
+   git clean -fdx
+   cp -r ../inasafe-dev/docs/build/html .
+   cd html/
+   touch .nojekyll
+   git add .
+   git commit -a -m "First commit of docs"
+   git push origin gh-pages
+
+Now wait ten minutes or so and the pages should be visble here at
+http://aifdr.github.com/inasafe/
+
+See also: http://help.github.com/articles/creating-project-pages-manually
+
+Updating the site
+^^^^^^^^^^^^^^^^^
+
+Deployment of the site requires the following steps:
+
+* Update the documentation as needed
+* Commit/push to master
+* Run scripts/update_website.sh
+* Apidoc are build automatically, this might update/create/remove some files. If it is the case, the script will ask you if you wish to commit those changes to master. Normally you should.
+* Wait approximately 10 minutes
+
+After this the changes should be visible here http://aifdr.github.com/inasafe/
+and http://inasafe.org.
+
+Also see http://github.com/AIFDR/inasafe/issues/257 for further details of
+how the documentation publishing process works.

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: InaSAFE 0.4.0\n"
+"Project-Id-Version: InaSAFE 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-26 14:39\n"
+"POT-Creation-Date: 2012-09-27 13:06\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,252 +58,397 @@ msgstr ""
 
 #: ../../developer-docs/coding_standards.rst:12
 # 73a17d5d3da349e0a3087c8ca86ac524
-msgid "Coding must follow a style guide. In case of Python it is `pep8 <http://www.python.org/dev/peps/pep-0008>`_ and using the command line tool pep8 (or :samp:`make pep8`) to enforce this"
+msgid "Coding must follow a style guide. In case of Python it is `pep8 <http://www.python.org/dev/peps/pep-0008>`_ and using the command line tool pep8 (or :samp:`make pep8`) to enforce this. The pep8 checks E121-E128 have been disabled until pep8 version 1.3 becomes widely available."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:15
+#: ../../developer-docs/coding_standards.rst:16
 # 5d7433ffa96c4d6e81c8c3ea1e726262
 msgid "`Python documentation guide <http://www.python.org/dev/peps/pep-0257>`_"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:16
+#: ../../developer-docs/coding_standards.rst:17
+# 41f47e7bb78b40219b9d312c296116ed
+msgid "Comments should be complete sentences. If a comment is a phrase or sentence, its first word should be capitalized, unless it is an identifier that begins with a lower case letter (never alter the case of identifiers!). Comments should start with a # and a single space."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:18
 # e75bd1572a674d7f9f4a16789e27b45e
 msgid "Adherence to regression/unit testing wherever possible (:samp:`make test`)"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:17
+#: ../../developer-docs/coding_standards.rst:19
 # 9776e90c3c4d4b85979380fe934d82c0
 msgid "Use of github for revision control, issue tracking and management"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:18
+#: ../../developer-docs/coding_standards.rst:20
 # b75bae2c19014d978f57b69f98eed106
 msgid "Simple deployment procedure - all dependencies must be delivered with the plugin installer for QGIS or exist in standard QGIS installs."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:20
+#: ../../developer-docs/coding_standards.rst:22
 # 52388484bb9a4b3f96d2545a715bef67
 msgid "Develop in the spirit of XP/Agile, i.e. frequent releases, continuous integration and iterative development. The master branch should always be assumed to represent a working demo with all tests passing."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:23
+#: ../../developer-docs/coding_standards.rst:25
 # 084cfe13556f4f73b3c40e3c0dfac57d
 msgid "All strings should be internationalisation enabled. Please see :doc:`i18n` for details."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:25
+#: ../../developer-docs/coding_standards.rst:27
 # 47521f8e4aab427aadf7d9d76ce75683
-msgid "All code should pass lint validation. You can test this using the make target ``make jenkins-lint``. In some cases you may wish to override a line or group of lines so that they are not validated by lint. You can do this by adding either::"
+msgid "Code must pass a pylint validation (http://www.logilab.org/card/pylint_manual#what-is-pylint). You can test this using the make target ``make pylint``. In some cases you may wish to override a line or group of lines so that they are not validated by lint. You can do this by adding either::"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:32
+#: ../../developer-docs/coding_standards.rst:34
 # 0a1cd48f437743a7b89bc1e0823e986d
 msgid "or::"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:39
-# 7f745ba1cb6c447894aab8b0de4f2df6
-msgid "The relevant id (W1234) is provided on the output of the above mentioned lint command's output."
+#: ../../developer-docs/coding_standards.rst:41
+# 992b80974036495d914bf2d675d91ee5
+msgid "The relevant id (W1234) is provided on the output of the above mentioned lint command's output. A complete list of codes is available at http://pylint-messages.wikidot.com/all-codes."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:42
+#: ../../developer-docs/coding_standards.rst:45
+# eb36331fd9184824bc7b04b642438e59
+msgid "You can globally ignore messages by adding them to :file:`pylintrc` in the :samp:`[MESSAGES CONTROL]` section."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:48
+# 9241140352cb40eaa49968aa7d4150d7
+msgid "The following pylint messages have been thus globally excluded from the check. For a discussion of these see also github issue https://github.com/AIFDR/inasafe/issues/245."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:52
+# b8c983e5c29343b4bfb3536071830e11
+msgid "variables. We may bring some back later."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:53
+# 44bf37c806384f8a9c9e303efb036671
+msgid "All type I: Information only"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:54
+# 9de5cc10fcc94191abf3a8b4abbd34b9
+msgid "W0142: Allow the Python feature F(*args, **kwargs)"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:55
+# 198f9df5fe094ea3a4be9612ace96149
+msgid "W0201: Allow definition of class attributes outside the constructor."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:56
+# 7f825550da4247d4ae79f63879d37afa
+msgid "W0212: Allow access to protected members (e.g. _show_system_info)"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:57
+# 306dd737d6a946019e757e335d5b96fe
+msgid "W0231: Allow classes without constructors."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:58
+# bf2d50a05f0a4e74ae75de7faebfe403
+msgid "W0232: Un-instantiated classes is a feature used in this project."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:59
+# 5330b7691b454ed29cfb01af2730fbef
+msgid "W0403: Relative imports are OK for modules that live in the same dir"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:60
+# d18b47c871304d7fa0aff2560b8396d4
+msgid "W0511: Appearance of TODO and FIXME is not a sign of poor quality"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:61
+# 9350fb0612184b419d57f3e96a9e8025
+msgid "E1101: Disable check for missing attributes."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:62
+# 0e26f9f874d94a67b52fe73b590d0292
+msgid "E1103: This one does not understand numpy variables."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:63
+# a1e7a0942579408483399525c5001a2c
+msgid "C0103: Allow mathematical variables such as x0 or A."
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:64
+# a06a0972945343009e7306c7a724c42d
+msgid "C0111: Allow missing docstrings in some cases"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:65
+# 1d35a770ba4643cdab3f9e861f46861e
+msgid "C0302: No restriction on the number of lines per module"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:67
+# 8843cff3ec0a4817adea8172f9e46c70
+msgid "It is of course possible to run all pylint checks on any part of the code if desired: E.g pylint safe/storage/raster.py"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:70
 # 9e5d3ee9acd8432d8e8f5469e5a8395d
 msgid "Each source file should include a standard header containing copyright, authorship and version metadata as shown in the exampled below."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:45
+#: ../../developer-docs/coding_standards.rst:73
 # 594c99b32a994f2d82fef9e45a62f0db
 msgid "**Example standard header**::"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:67
+#: ../../developer-docs/coding_standards.rst:90
 # 903a7930dc11405eb0dcf94f7d6cd8ef
 msgid "Please see :ref:`faq-revision-label` for details on how the revision tag is replaced with the SHA1 for the file when the release packages are made."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:74
+#: ../../developer-docs/coding_standards.rst:95
+# cf7380d8d1b340b19caf60faf9a1b264
+msgid "Doc strings"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:97
+# 44fdf737de94493ea9966b6d39fc30e8
+msgid "All code should be self documenting. We used the following style for documenting functions and class methods::"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:117
+# 880101a1bde04ada98801c2f3243d5f2
+msgid "Various other sphinx markup elements may be used in the docstrings too. For more information see also: http://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html"
+msgstr ""
+
+#: ../../developer-docs/coding_standards.rst:125
 # 42ff11e23ea3448795913c4c53fb180a
 msgid "Human Interface Guidelines"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:76
+#: ../../developer-docs/coding_standards.rst:127
 # 799463e39f3e43d28f5036b1f3b91999
 msgid "For consistency of user experience, the user interfaces created in Risk in a Box should adhere to the QGIS Human Interface Guidelines (HIG) which are listed here for your convenience:"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:80
+#: ../../developer-docs/coding_standards.rst:131
 # c2606db0907241048298fe9316c1be52
 msgid "Group related elements using group boxes: Try to identify elements that can be grouped together and then use group boxes with a label to identify the topic of that group.  Avoid using group boxes with only a single widget / item inside."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:84
+#: ../../developer-docs/coding_standards.rst:135
 # dbe657d0fc1043e4a20fe6377b3752a2
 msgid "Capitalise first letter only in labels: Labels (and group box labels) should be written as a phrase with leading capital letter, and all remaing words written with lower case first letters"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:87
+#: ../../developer-docs/coding_standards.rst:138
 # befe85c0860048c1a43702594ff11dc0
 msgid "Do not end labels for widgets or group boxes with a colon: Adding a colon causes visual noise and does not impart additional meaning, so don't use them. An exception to this rule is when you have two labels next to each other e.g.: Label1 [Plugin Path:] Label2 [/path/to/plugins]"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:91
+#: ../../developer-docs/coding_standards.rst:142
 # f22e556d9d95467691a5a624744ba872
 msgid "Keep harmful actions away from harmless ones: If you have actions for 'delete', 'remove' etc, try to impose adequate space between the harmful action and innocuous actions so that the users is less likely to inadvertantly click on the harmful action."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:95
+#: ../../developer-docs/coding_standards.rst:146
 # a98e47a8b743428c8aae8bc0f5b4bed1
 msgid "Always use a QButtonBox for 'OK', 'Cancel' etc buttons: Using a button box will ensure that the order of 'OK' and 'Cancel' etc, buttons is consistent with the operating system / locale / desktop environment that the user is using."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:99
+#: ../../developer-docs/coding_standards.rst:150
 # 9376fada842d4e28b8535e1fbced23b4
 msgid "Tabs should not be nested. If you use tabs, follow the style of the tabs used in QgsVectorLayerProperties / QgsProjectProperties etc. i.e. tabs at top with icons at 22x22."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:102
+#: ../../developer-docs/coding_standards.rst:153
 # 4747951887f7441fbe4386e410883f11
 msgid "Widget stacks should be avoided if at all possible. They cause problems with layouts and inexplicable (to the user) resizing of dialogs to accommodate widgets that are not visible."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:105
+#: ../../developer-docs/coding_standards.rst:156
 # 8d39d6fa2dd84e27a13e3c6b63bcfdae
 msgid "Try to avoid technical terms and rather use a laymans equivalent e.g. use the word 'Transparency' rather than 'Alpha Channel' (contrived example), 'Text' instead of 'String' and so on."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:108
-# 8cb7cfc1d5214d0c985174b4dfefc5d0
-msgid "Use consistent iconography. If you need an icon or icon elements, please contact Robert Szczepanek on the mailing list for assistance."
-msgstr ""
-
-#: ../../developer-docs/coding_standards.rst:110
+#: ../../developer-docs/coding_standards.rst:159
 # 687a0b5edf79477e970d0ac8a9e9054d
 msgid "Place long lists of widgets into scroll boxes. No dialog should exceed 580 pixels in height and 1000 pixels in width."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:112
+#: ../../developer-docs/coding_standards.rst:161
 # 4b83daf15cd44ac5884a6d11e4eb6ffa
 msgid "Separate advanced options from basic ones. Novice users should be able to quickly access the items needed for basic activities without needing to concern themselves with complexity of advanced features. Advanced features should either be located below a dividing line, or placed onto a separate tab."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:116
+#: ../../developer-docs/coding_standards.rst:165
 # f9895f1ab4944022bc16629679f0d6ba
 msgid "Don't add options for the sake of having lots of options. Strive to keep the user interface minimalistic and use sensible defaults."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:118
+#: ../../developer-docs/coding_standards.rst:167
 # 6d08482e24aa4e17b1ef16f01a0e0a08
 msgid "If clicking a button will spawn a new dialog, an ellipsis (...) should be suffixed to the button text."
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:123
+#: ../../developer-docs/coding_standards.rst:173
 # cf7380d8d1b340b19caf60faf9a1b264
 msgid "Code statistics"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:125
+#: ../../developer-docs/coding_standards.rst:175
 # 95961a640a6a464fbc3be374b4081133
 msgid "https://www.ohloh.net/p/inasafe/analyses/latest"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:126
+#: ../../developer-docs/coding_standards.rst:176
 # 04289481bd854d1ba5412b536c354145
 msgid "https://github.com/AIFDR/inasafe/network"
 msgstr ""
 
-#: ../../developer-docs/coding_standards.rst:127
+#: ../../developer-docs/coding_standards.rst:177
 # 1cf485b990594dcda9ee4ff2379cb6ab
 msgid "https://github.com/AIFDR/inasafe/graphs"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:3
+#: ../../developer-docs/faq.rst:2
 # bb71e0a212c64166b4c717be54340f9c
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:7
+#: ../../developer-docs/faq.rst:6
 # acd5ef0d2c084952aa2650abafb803a6
 msgid "How does the documentation work?"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:9
+#: ../../developer-docs/faq.rst:8
 # ed70a93c2d5b4a758eae64adb296f189
 msgid "The |project_name| documentation files are written using the RST format (`quickreference guide <http://docutils.sourceforge.net/docs/user/rst/quickref.html>`_) and stored with the source code in github::"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:16
+#: ../../developer-docs/faq.rst:15
 # 3d14ae2890db4560ad5900ae2977b8f3
 msgid "HTML files generated using Sphinx (http://sphinx.pocoo.org) by running https://github.com/AIFDR/inasafe/blob/master/docs/Makefile. These files are accessible through both the file browser and the help button available in |project_name|"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:20
+#: ../../developer-docs/faq.rst:19
 # 1044bcd6b6c349fdb1b0941266f985ed
 msgid "The web site http://readthedocs.org/docs/inasafe which automatically reads the RST files from github to update its content. The steps to achieve this are"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:24
+#: ../../developer-docs/faq.rst:23
 # 0faa34cdb45c45b085d3a687e803bee1
 msgid "Register the project on the dashboard at ReadTheDocs (http://readthedocs.org/dashboard/inasafe/edit). In particular, this form points to the github repository where the RST files reside."
 msgstr ""
 
-#: ../../developer-docs/faq.rst:28
+#: ../../developer-docs/faq.rst:27
 # 673897e4c28e47d4948be3850b53ffb5
 msgid "Either manually build the project by clicking 'Build latest version' on http://readthedocs.org/dashboard/inasafe/ or by activating the service hook for ReadTheDocs at github: https://github.com/AIFDR/inasafe/admin/hooks"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:35
+#: ../../developer-docs/faq.rst:34
 # 70126c13b85f4970885bde2663ad4efc
 msgid "How do I replace a string across multiple files"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:37
+#: ../../developer-docs/faq.rst:36
 # 40f43f79d58b4a04bec3523ee1959a3d
 msgid "To replace string layer_type, say, with layertype across all python files in project, do::"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:42
+#: ../../developer-docs/faq.rst:41
 # 7c60d736e1a7456d93a7d133297af2b6
 msgid "Alternative you can install the 'rpl' command line tool::"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:46
+#: ../../developer-docs/faq.rst:45
 # 726f3e3acd964162bce859e5e7d9543f
 msgid "Using rpl is much simpler, just do::"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:51
+#: ../../developer-docs/faq.rst:50
 # d9aafa1ff29e4348ae0dd62c94cea039
 msgid "For details on the find command see `this article <http://rushi.wordpress.com/2008/08/05/find-replace-across-multiple-files-in-linux/>`_."
 msgstr ""
 
-#: ../../developer-docs/faq.rst:56
+#: ../../developer-docs/faq.rst:55
 # bd194131196a4937bf9209e2e2c7045b
 msgid "How did you embed the git version SHA1 into each .py file?"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:58
+#: ../../developer-docs/faq.rst:57
 # 954a3ab60e8b4f43afd8576865686a09
 msgid "The format was derived using the `git log format tag <http://schacon.github.com/git/git-log.html>`_. It is stored in the source of each python as::"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:63
+#: ../../developer-docs/faq.rst:62
 # ba3ad7407d6046e19cd26133d366c346
 msgid "'%H' being the format tag for the SHA1. The __revision__ is **not** updated with each commit. Rather is is registered with git for replacement when using git-archive by doing this::"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:70
+#: ../../developer-docs/faq.rst:69
 # 089cb61e0198414285ae5cf439d59d06
 msgid "The above only needs to be done once and then all python files with format substitutions will be replaced when running git-archive. The actual substition takes place at the time that a git archive is generated (git archive creates a copy of the repo with all repository metadata stripped out). For example::"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:77
+#: ../../developer-docs/faq.rst:76
 # 339ebc2b44b34c67bd5d2361a032998b
 msgid "You can verify SHA1 replacement has been made by doing::"
 msgstr ""
 
-#: ../../developer-docs/faq.rst:82
+#: ../../developer-docs/faq.rst:81
 # 52bbe3f5fad341f58a463f69268c8fb7
 msgid "The deployment of version tagged files is automated by using the :file:`scripts\\release.sh` script."
+msgstr ""
+
+#: ../../developer-docs/faq.rst:86
+# bee64d404d7b442bb74a1e2379d0422c
+msgid "How do you profile code?"
+msgstr ""
+
+#: ../../developer-docs/faq.rst:88
+# 75ca968b0689471087d54b8d3472ec82
+msgid "sudo apt-get install python-profiler python -m cProfile -s time safe/common/test_polygon.py"
+msgstr ""
+
+#: ../../developer-docs/faq.rst:91
+# 95db81c2ec2649d685bec6436f8e3d16
+msgid "and"
+msgstr ""
+
+#: ../../developer-docs/faq.rst:93
+# fef22cd79367452db772682c740c2d16
+msgid "sudo easy_install pycallgraph sudo apt-get install graphviz pycallgraph safe/common/test_polygon.py"
+msgstr ""
+
+#: ../../developer-docs/faq.rst:99
+# 330aab59d19648d3976b86c74c21f521
+msgid "See also http://stackoverflow.com/questions/582336/how-can-you-profile-a-python-script"
+msgstr ""
+
+#: ../../developer-docs/faq.rst:103
+# d526bd86929d438e9955bca5a3db7ad5
+msgid "Why do I got 1e+24 (or another big number) instead of NaN when I saved vector files?"
+msgstr ""
+
+#: ../../developer-docs/faq.rst:105
+# 8ca9ba7f495c4614936c1ebcb0a7bbcb
+msgid "InaSAFE needs to convert NaN to 1e+24 or more specifically 24 digits of 9 because NaN is not intepreted correclty on Windows. You can read more information about it on http://trac.osgeo.org/gdal/ticket/4799 or in Github issue `#269 <https://github.com/AIFDR/inasafe/issues/269>`_."
+msgstr ""
+
+#: ../../developer-docs/faq.rst:110
+# 9718d0c110d7429693301ea11aa7da99
+msgid "But don't worry, when InaSAFE read vector file, it will convert the 1e+24 back to NaN. So, any computation inside InaSAFE will treat NaN as NaN in numpy."
+msgstr ""
+
+#: ../../developer-docs/faq.rst:113
+# 69ec8de13ef24050ba3c9a32ac48ceb3
+msgid "You'll need to convert the 1e+24 to NaN value manually if you want to use it without InaSAFE."
 msgstr ""
 
 #: ../../developer-docs/i18n.rst:3
@@ -391,324 +536,324 @@ msgstr ""
 msgid "Import the gettext helper e.g::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:47
+#: ../../developer-docs/i18n.rst:48
 # b1f7e9cea394417096c4f999f3db84d2
 msgid "All strings should be wrapped using the _ helper e.g::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:51
+#: ../../developer-docs/i18n.rst:52
 # d9d60605a82c40969f6ff80cbdb4f0cb
 msgid "The library will use at run-time the :samp:`LANG` environment variable which should be set to the iso code e.g. 'id' for 'Indonesia' of the Locale you wish to use. This is done automatically for you by the QGIS Plugin, but if you are using the riab library in another context, be sure to set it before using any libary functions if you want them to return translated strings e.g.::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:62
+#: ../../developer-docs/i18n.rst:63
 # e3b29f6e3234459285a3da9e5c4f65d5
 msgid "Translation of strings that appear at runtime"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:64
+#: ../../developer-docs/i18n.rst:65
 # e2448f34f8b84ea99c13b23139b2b115
 msgid "This applies e.g. to titles of layers or attribute names in data."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:66
+#: ../../developer-docs/i18n.rst:67
 # b3aff90703814e639dd128e44ad1100c
 msgid "The translation system works by scanning the Python code for strings marked as described above. However, it has know way of knowing about titles of layers or names that appear in datasets processed by InaSAFE. However, if such names are known a priori they can be made visible to the translation system as follows:"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:68
+#: ../../developer-docs/i18n.rst:69
 # bd5f1ed890704943a14355b0fde68e59
 msgid "Edit the file::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:72
+#: ../../developer-docs/i18n.rst:73
 # d6c66a419059443182304e4b8e573759
 msgid "and add the name to the dictionary \"names\". E.g. :samp:`'college' = _('college')`"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:73
+#: ../../developer-docs/i18n.rst:74
 # bb744eb4aaef40bd9f33a449a60b2ccd
 msgid "Update the translation strings as described in the section below"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:74
+#: ../../developer-docs/i18n.rst:75
 # 2565efebdd2847af93a996421abfd403
 msgid "Make impact functions refer to the dynamic translations e.g. as in this example::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:83
+#: ../../developer-docs/i18n.rst:84
 # 8fe5827469a34dbc81ffa80f2ec9e282
 msgid "Make translations"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:85
+#: ../../developer-docs/i18n.rst:86
 # 2f5690f4ece5481eb0afcf346d9669d1
 msgid "When new strings have been added as described above the procedure to translate them is (example is given for LANG=id):"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:87
+#: ../../developer-docs/i18n.rst:88
 # bc66b2a8d5904bcab473e63b62eed10c
 msgid "run :samp:`make update-translation-strings` to collect all strings marked for translation"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:88
+#: ../../developer-docs/i18n.rst:89
 # ad31738c0ebf4a4fa575b62301951cd3
 msgid "Using either an editor or the tool Qt Linguist provide translations in the files"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:90
-# 26d4c9ff98e04503968357845a2c64ca
-msgid "i18n/id/LC_MESSAGES/inasafe.po"
-msgstr ""
-
 #: ../../developer-docs/i18n.rst:91
-# 2ef7920c870848d0bfad04212cb7bf00
-msgid "gui/i18n/inasafe_id.ts"
+# 26d4c9ff98e04503968357845a2c64ca
+msgid "safe/i18n/id/LC_MESSAGES/inasafe.po"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:93
+#: ../../developer-docs/i18n.rst:92
+# 2ef7920c870848d0bfad04212cb7bf00
+msgid "safe_qgis/i18n/inasafe_id.ts"
+msgstr ""
+
+#: ../../developer-docs/i18n.rst:94
 # 94b5811db91d473fb55ad36f859ce996
 msgid "run :samp:`make compile-translation-strings` to make the translations available to InaSAFE"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:97
+#: ../../developer-docs/i18n.rst:98
 # 4d08f1019e8944d993f28ab3a39178a7
 msgid "QGIS Plugin"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:99
+#: ../../developer-docs/i18n.rst:100
 # 0dfc61eb4a0b4bdda563121a0487f087
 msgid "The QGIS Plugin uses QtLinguist. this free, open source application can be downloaded and used to translate the Qt translation files."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:104
-#: ../../developer-docs/i18n.rst:194
+#: ../../developer-docs/i18n.rst:105
+#: ../../developer-docs/i18n.rst:195
 # 87097221a8de46c782443638fef5fd88
 # ebc973ef84504f57869251a274052920
 msgid "Preparing for a release"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:106
-#: ../../developer-docs/i18n.rst:196
+#: ../../developer-docs/i18n.rst:107
+#: ../../developer-docs/i18n.rst:197
 # 1dbb04a69d394f9c884190486f2aa0ce
 # efefcb7905fe46669caf182deb2063f9
 msgid "As developer, before a release you should do:"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:108
-#: ../../developer-docs/i18n.rst:198
+#: ../../developer-docs/i18n.rst:109
+#: ../../developer-docs/i18n.rst:199
 # e885f93630984daeb00b926adc6e11b6
 # eeb4d963e01148aa8adbcc4a368e2ef5
 msgid "run :samp:`make update-translation-strings` to update the translation files"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:109
+#: ../../developer-docs/i18n.rst:110
 # d4758562e8794f3ebabbdcff1d27acd3
 msgid "distribute the .ts files under :samp:`gui/i18n` to the translators"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:110
+#: ../../developer-docs/i18n.rst:111
 # fa326411d0434bf287d8c414a848171c
 msgid "instruct them to open the .ts file for their locale with QtLinguist"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:111
-#: ../../developer-docs/i18n.rst:202
+#: ../../developer-docs/i18n.rst:112
+#: ../../developer-docs/i18n.rst:203
 # f0f683e346054804afe0d9a9d5bb06ee
 # f9d74f2ab82c4487a18629d792d7bc26
 msgid "commit the returned file from the translator when all strings have been translated"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:113
+#: ../../developer-docs/i18n.rst:114
 # 59613cce47a64b5e98537639879ef2b1
 msgid "run :samp:`make compile-translation-strings` to create binary loadable translations"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:115
+#: ../../developer-docs/i18n.rst:116
 # d4a9991e64f64ebc89f8ae227dd951d1
 msgid "ensure the .qm files are distributed with the release (the .ts files do not need to be released)"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:119
+#: ../../developer-docs/i18n.rst:120
 # 32d7e4014bc64551b87ab878be0beabb
 msgid "Translators should take heed - when refreshing the .ts file in QtLinguist, the file *must be closed* (:menuselection:`File --> Close`) and then reopened. Simply loading doing (:menuselection:`File --> Open`) and choosing the same file you already have in the workspace will not refresh the workspace with any new changes that appeared on disk."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:126
-#: ../../developer-docs/i18n.rst:216
+#: ../../developer-docs/i18n.rst:127
+#: ../../developer-docs/i18n.rst:217
 # 4b19bd11668042949fc80c3bdd4d7182
 # e78a412f3c9640539c33221ea19adcae
 msgid "*make update-translation-strings* is non destructive. That is, you can safely run it as many times as you like, new strings will be added to it, deprecated strings will be left in place and already translated strings will remain translated."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:133
-#: ../../developer-docs/i18n.rst:224
+#: ../../developer-docs/i18n.rst:134
+#: ../../developer-docs/i18n.rst:225
 # 959af80883c04dde8e827b874821cbb6
 # 8ba6418f301e4d92b5c769e8ab85492f
 msgid "Adding a new language"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:135
+#: ../../developer-docs/i18n.rst:136
 # ef09e51b320f437c9e866c2b4a47ec8b
 msgid "To add a new language, edit the :samp:`gui/riab.pro` file and append the new locale to the bottom of the file. For example, to add South African english as a new locale, change this::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:141
+#: ../../developer-docs/i18n.rst:142
 # 533867c9665147b3995e852df0c2e8bf
 msgid "to this::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:146
+#: ../../developer-docs/i18n.rst:147
 # 3f2a4ef483514e5987d0825d5cd628b7
 msgid "Save and close the .pro file. Next run :samp:`make update-translation-strings` to generate the new .ts file under gui/i18n. Don't forget to :samp:`git add` the new file and place it under version control."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:151
+#: ../../developer-docs/i18n.rst:152
 # b0ecde7f84744a7a82563e6dc268a601
 msgid "InaSAFE Library Translations"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:154
+#: ../../developer-docs/i18n.rst:155
 # 413a53eec6ab46d39526270ee8e3e0fe
 msgid "Low level gettext usage"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:156
+#: ../../developer-docs/i18n.rst:157
 # 43a891a789da4ca8b635721c9ac7fe65
 msgid "Translation is done using gettext."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:158
+#: ../../developer-docs/i18n.rst:159
 # ff59b8f056734776bb2e2e30929ecfb9
 msgid "Create the initial .po file::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:162
+#: ../../developer-docs/i18n.rst:163
 # 362250aa954d49dcb796abe7b84cf143
 msgid "After you create the initial .pot, you need to specify the characterset and encoding for that file (by editing it with a text editor). For example::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:169
+#: ../../developer-docs/i18n.rst:170
 # 124a9478281041d38eb061f796f99f66
 msgid "If you add strings to the file, update the .pot file by adding -j option::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:173
+#: ../../developer-docs/i18n.rst:174
 # eff17c42f38544babefcb118bfaa1fd2
 msgid "Next, you can make the .po files available to translators. Recent versions of QtLinguist support translations of .po files, so you can use a similar process to that described in the gui section above."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:177
+#: ../../developer-docs/i18n.rst:178
 # f7209c81537c49faac9debf01914447b
 msgid "When the .po file has been updated, it should be committed to the git repository (e.g. via a pull request from the user's repository clone, or by emailing the .po file to a developer). After receiving an updated .po file, it should be compiled to a :samp:`.mo` file (which is a binary representation of the strings)::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:185
+#: ../../developer-docs/i18n.rst:186
 # ff52ae8b4111499a881bcf8b4dd27260
 msgid "The :samp:`msgfmt` command accepts one or more input files which can be merged into a single :samp:`.mo`."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:188
+#: ../../developer-docs/i18n.rst:189
 # c46e723ab74b4567bb65fcef8aa2fe1f
 msgid "These functions are wrapped as make scripts so you should not need to use them on a day to day basis."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:199
+#: ../../developer-docs/i18n.rst:200
 # b5b99a7626624a019ee89db8e9d61693
 msgid "distribute the .po files under :samp:`i18n/<locale>/LC_MESSAGES/riab.po` to the translators"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:201
+#: ../../developer-docs/i18n.rst:202
 # 2a7170f65f724e4ba86f4535919d7fc9
 msgid "instruct them to open the .po file for their locale with QtLinguist"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:204
+#: ../../developer-docs/i18n.rst:205
 # 0830f403d1fa4ddf87796c1316c474f0
 msgid "run :samp:`make compile-translation-strings` to create binary loadable translations (.mo files)"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:206
+#: ../../developer-docs/i18n.rst:207
 # 6417ab4a794548598eeefabe5eb0edf3
 msgid "ensure the .mo files are distributed with the release (the .po files do not need to be released)"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:210
+#: ../../developer-docs/i18n.rst:211
 # b80df1d044c845f7871f9a03e8496482
 msgid "Translators should take heed - when refreshing the .po file in QtLinguist, the file *must be closed* (:menuselection:`File --> Close`) and then reopened. Simply loading doing (:menuselection:`File --< Open`) and choosing the same file you already have in the workspace will not refresh the workspace with any new changes that appeared on disk."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:226
+#: ../../developer-docs/i18n.rst:227
 # de932d2be4094b4da0a330d3b940bcf1
 msgid "To add a new language, edit the :samp:`Makefile` file and append the new locale to the bottom of the file. For example, to add South African english as a new locale, change this section::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:232
+#: ../../developer-docs/i18n.rst:233
 # 9c4b070c95604b1eb33748c35cf8f373
 msgid "copy one of the existing stanzas e.g.::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:238
+#: ../../developer-docs/i18n.rst:239
 # 7aabcbc9c48a437097cbed5ab0ee8f82
 msgid "Save and close the Makefile file. Next you need to create the initial translation stringlist for that locale by creating a locale directory and running the command above without the :samp:`-j` (j is for 'join' which merges old content with new, avoiding destroying previous translated strings). So for example you would run from the command line::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:249
+#: ../../developer-docs/i18n.rst:250
 # 5960708e4b6e45b29d21b4c7a92ee2dc
 msgid "The above adding a hypothetical new translation for South African English. After the inital creation of your .po files using the above commands, you can update them anytime the strings in the library have been changed by doing::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:255
+#: ../../developer-docs/i18n.rst:256
 # 96606f61492d48f496c8eddc1dd95631
 msgid "to generate the updated .po file under i18n/en_ZA/LC_MESSAGES. Don't forget to :samp:`git add` the new directory and file and place them under version control."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:258
+#: ../../developer-docs/i18n.rst:259
 # ca76a931ecd345658345b7c2493b363d
 msgid "To convert the .po file to a binary .mo file (which is used at runtime for the actual translation), follow the :ref:`library-release-label` section above."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:262
+#: ../../developer-docs/i18n.rst:263
 # 8950279716a046318c3040d0fd907626
 msgid "Adding a new source file for translation"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:264
+#: ../../developer-docs/i18n.rst:265
 # 0215863327384fb7af3cbb0c7c9093be
 msgid "To add a new source file, edit the :samp:`Makefile` file and append the new sourcefile to the bottom of the file list in the :samp:`update-translation-strings` section. For example::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:272
+#: ../../developer-docs/i18n.rst:273
 # 8e89e238c3eb43cbb0f12bdfe0f2a223
 msgid "Would become::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:279
+#: ../../developer-docs/i18n.rst:280
 # 26431feb81ea413fa0741f702ad97a94
 msgid "The above adding the impact_function *flood_population_fatality* to the list of translatable source files. Now run::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:284
+#: ../../developer-docs/i18n.rst:285
 # 197f3d8bc63d478e9972379ed28f2e9a
 msgid "to generate the updated .po file and make it available to translators. When the translated file is returned, convert the .po file to a binary .mo file (which is used at runtime for the actual translation), then follow the :ref:`library-release-label` section above."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:290
+#: ../../developer-docs/i18n.rst:291
 # 03079886836f43c9b352bac504c24020
 msgid "Sphinx Translation"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:292
+#: ../../developer-docs/i18n.rst:293
 # b71244c1c620413a9e09cc67a3f54c57
 msgid "Generic documentation on how to translate sphinx documentation is available `here <http://sphinx.pocoo.org/latest/intl.html>`-."
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:295
+#: ../../developer-docs/i18n.rst:296
 # 73bf0de5ab1e49ddb36daffd639600ec
 msgid "Initial notes on the process::"
 msgstr ""
 
-#: ../../developer-docs/i18n.rst:300
+#: ../../developer-docs/i18n.rst:301
 # 27ce8122db3943849b9c247bd0a9ab93
 msgid "Which will create pot files which can be found under build/locale. Note that this make target needs to be tweaked so that it builds a unique directory for each supported locale."
 msgstr ""
@@ -746,6 +891,106 @@ msgstr ""
 #: ../../developer-docs/index.rst:12
 # f1645738ae1c4161908f28875fd011e8
 msgid "Developer Documentation Contents:"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:2
+# 83fbcd5066d246b4a8c013869c3d7cf2
+msgid "IRC Notes for InaSAFE"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:4
+# 65bc164248664535a1dcb03004fcc2ba
+msgid "The IRC channel is #inasafe on freenode."
+msgstr ""
+
+#: ../../developer-docs/irc.rst:6
+# 0baf281debcd4918af617d0730b4b86c
+msgid "The channel is logged, you can read the logs at http://irclogs.geoapt.com/inasafe/."
+msgstr ""
+
+#: ../../developer-docs/irc.rst:8
+# 88d305f4b8bb424b80225d45198a5629
+msgid "Tim (timlinux) has ops and has registered the channel::"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:13
+# 51995df6742d4c4185d99fca6c711753
+msgid "To obtain ops after logging off do::"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:18
+# 64ff2eca262a4385b2dce928aeea3502
+msgid "To give others op status in the channel do::"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:22
+# 1ca4ae0411884e718a531d324d08d56b
+msgid "There is a github hook enabled 'IRC\" https://github.com/AIFDR/inasafe/admin/hooks with the following settings:"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:25
+# b6d64e66c20144fab5c820728f911f42
+msgid "**server** : irc.freenode.net"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:26
+# 96ce03a6374c4b16b306be3345210d42
+msgid "**port** : 6667"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:27
+# c9a26daf20924146832076ac1d510968
+msgid "**room** : inasafe"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:28
+# d09477dea0414fefaa5e3b50543b090a
+msgid "**nick** : gh-inasafe"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:29
+# b37844664d624d4eb779dcb9c3563d1d
+msgid "**branch regexes** : (leave blank)"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:30
+# 691b1d29eff44f3a96f2a4df52b677bc
+msgid "**password** : (leave blank)"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:31
+# ed3a6169b83347649d68bcd466592f99
+msgid "**ssl** : no"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:32
+# 1e102c046d6e472c86eb2554acf5f021
+msgid "**message without join** : yes"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:33
+# d36143ea2cf84b92b794a8b3febd9b2c
+msgid "**no colors** : no"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:34
+# 00239da6dbcc49a495860aa2d4be5828
+msgid "**Long URL** : yes"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:35
+# 8b65a87d95764ae9bba32abe04047398
+msgid "**Notice** : yes"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:36
+# 5bed15e4aca84ec29c51756f969bb6c6
+msgid "**Active** : yes"
+msgstr ""
+
+#: ../../developer-docs/irc.rst:38
+# 1050b6ab8cc140029f8f1172444f4fc6
+msgid "Also you need to do a mode change on the chanserv channel to enable outsider messages::"
 msgstr ""
 
 #: ../../developer-docs/jenkins_ci.rst:3
@@ -1015,12 +1260,12 @@ msgstr ""
 
 #: ../../developer-docs/jenkins_ci.rst:147
 # a581e1e74f14405196f913ef6fffb058
-msgid "Here is a log of the options we set for the Jenkins job::"
+msgid "Here is a log of the options we set for the Jenkins job:"
 msgstr ""
 
-#: ../../developer-docs/jenkins_ci.rst:150
-# 7c7be2a1172844f885db5edb3e5375d0
-msgid "project name!)."
+#: ../../developer-docs/jenkins_ci.rst:149
+# 76a6a7111e9a458a873b15abbe42df19
+msgid ":guilabel:`Project Name` set to :kbd:`InaSAFE` (don't use spaces for the project name!)."
 msgstr ""
 
 #: ../../developer-docs/jenkins_ci.rst:151
@@ -1054,7 +1299,7 @@ msgid ":guilabel:`Build Triggers` set to :kbd:`Build when a change is pushed to 
 msgstr ""
 
 #: ../../developer-docs/jenkins_ci.rst:164
-# cec6d4c8ded645848c97092628374520
+# 91ddb9915a634090a74703895a3360c4
 msgid "**Build Actions**"
 msgstr ""
 
@@ -1074,7 +1319,7 @@ msgid ":guilabel:`Add build step` set to :kbd:`play a sound` and choose a sound 
 msgstr ""
 
 #: ../../developer-docs/jenkins_ci.rst:190
-# 0e4c9cddb8614a27a22b94975b07e6f6
+# c0d3789e3df84be7a9f19848e638eedf
 msgid "**Post-build Actions**"
 msgstr ""
 
@@ -1340,6 +1585,11 @@ msgstr ""
 msgid "An example of the contents of a module's API .rst if provided below::"
 msgstr ""
 
+#: ../../developer-docs/maintaining_documentation.rst:117
+# 172d83443e224029a015505746965ce4
+msgid "This module forms part of the `InaSAFE <http://inasafe.org>`_ tool."
+msgstr ""
+
 #: ../../developer-docs/maintaining_documentation.rst:119
 # 8b9f773ea78c405296068719118b1b6c
 msgid "A couple of things should be noted here:"
@@ -1385,6 +1635,86 @@ msgstr ""
 msgid "Where the 'keywords' parameter indicates the user-docs/\\*.rst document that should be opened when the help button is clicked. The general style and approach used in existing documentation should inform your documentation process so that all the documentation is constent."
 msgstr ""
 
+#: ../../developer-docs/maintaining_documentation.rst:158
+# e9385ba83b204379a9424b2f8619fcbc
+msgid "Publishing the documentation to GitHub Pages"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:160
+# 58b28eb8d5514cc3b6dc4b9e9f1751d8
+msgid "Initially we have used http://readthedocs.org to host our site (and the pages you are reading now). However they don't support internationalisation and there are various other issues with it, so we opted to move our content into gh-pages. To use this, the site is stored in a special branch."
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:166
+# 51450bc4d81046cc8a3716fee2d17b9e
+msgid "Initial gh-pages setup"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:168
+# 0e0bec29c97a404fba15aaa0e2b91b0d
+msgid "In order to set up the gh-pages branch this is the procedure followed."
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:170
+# 92887fffe63d40d6ab9ebc91e59fd0de
+msgid "This is a once-off process you do not need to repeat it, it is here for reference purposes only."
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:173
+# 7be74ceb01fe44caaaf99573fa5a259e
+msgid "Enable gh-pages in the gh project `admin page <https://github.com/AIFDR/inasafe/admin>`_. On your local system do something like this::"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:192
+# 374e255982254f0a8381743406769c59
+msgid "Now wait ten minutes or so and the pages should be visble here at http://aifdr.github.com/inasafe/"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:195
+# 8ab19ccf4e65415386443f7cc3352cd9
+msgid "See also: http://help.github.com/articles/creating-project-pages-manually"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:200
+# 79a6d68ddade47b595d1bddddc010268
+msgid "Deployment of the site requires the following steps:"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:202
+# a46f2fd13eaa490b91e01a6aa31114d3
+msgid "Update the documentation as needed"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:203
+# 0a0ff261207f4663a935bec396d9ddfd
+msgid "Commit/push to master"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:204
+# c51bc29389bb4c03a5b2305fc4063c93
+msgid "Run scripts/update_website.sh"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:205
+# 54fc41e145804da58c05834d3eb163fe
+msgid "Apidoc are build automatically, this might update/create/remove some files. If it is the case, the script will ask you if you wish to commit those changes to master. Normally you should."
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:206
+# 427cc9b5e4eb4b2cb7b43a18d9a4fb41
+msgid "Wait approximately 10 minutes"
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:208
+# 99112343ef4940e6a089b56d7510b1a5
+msgid "After this the changes should be visible here http://aifdr.github.com/inasafe/ and http://inasafe.org."
+msgstr ""
+
+#: ../../developer-docs/maintaining_documentation.rst:211
+# 40fa5644ea3d4ba48ee411d339f3fd38
+msgid "Also see http://github.com/AIFDR/inasafe/issues/257 for further details of how the documentation publishing process works."
+msgstr ""
+
 #: ../../developer-docs/platform_linux.rst:3
 # 7611f7e8801f4752a64aa2f74cdf07a1
 msgid "Development under Gnu/Linux"
@@ -1427,418 +1757,420 @@ msgstr ""
 
 #: ../../developer-docs/platform_linux.rst:25
 # 25988dbb3a4642d19b02cfcfd0faa59e
-msgid "This will run all the regression tests and also highlight any code issues. Note that first time the tests are run they will pull 250MB of test data from our subversion repository (If asked for a password just hit Enter). See further notes on running tests below."
+msgid "This will run all the regression tests and also highlight any code issues. Note that first time the tests are run they will pull 250MB of test data from our git repository. See further notes on running tests below."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:30
+#: ../../developer-docs/platform_linux.rst:29
 # 0de4469d1cfb42bf91c662b0e941d4e8
 msgid "To run the plugin start QGIS and enable it from the :menuselection:`Plugins --> Manage Plugins` menu."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:33
+#: ../../developer-docs/platform_linux.rst:32
 # 5fa8135c70d24740927b8fc666a4cb26
 msgid "If this doesn't work see section towards the end of this document about dependencies and try to do a manual install."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:37
+#: ../../developer-docs/platform_linux.rst:36
 # ca73911ef317457a8578e0e00529c2ff
 msgid "Manual Installation Guide - Linux (Debian based)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:40
+#: ../../developer-docs/platform_linux.rst:39
 # fde0faf9222242aca2a00ffe46e50b31
 msgid "Dependencies"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:42
+#: ../../developer-docs/platform_linux.rst:41
 # c073466d68b8448f81719dab9898c9a4
 msgid "The Graphical User Interface components are built using `PyQt4 <http://www.riverbankcomputing.co.uk/software/pyqt/intro>`_ and the QGIS plugin API (useful resources: `the QGIS Python Cookbook <http://qgis.org/pyqgis-cookbook/>`_ and `the QGIS C++ API documentation <http://qgis.org/api/>`_).  As such it is helpful if you are familiar with these technologies (python, Qt4, PyQt4, QGIS). In addition, the following are needed on your machine in order to work effectively with the code base:"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:50
+#: ../../developer-docs/platform_linux.rst:49
 # c26182bd54f542f2a8fafa764f207d5d
 msgid "git"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:51
-# f63e9eec323e4c4c8f46bcc74fe361d0
-msgid "subversion"
+#: ../../developer-docs/platform_linux.rst:50
+# 8be4acb53054476a8f8904acfeca0885
+msgid "rsync"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:52
+#: ../../developer-docs/platform_linux.rst:51
 # 39bcc1ddd9904cd8b63dfc0367c086d2
 msgid "pep8"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:53
+#: ../../developer-docs/platform_linux.rst:52
 # 1c7c7009012541c38c71222f6652081f
 msgid "nosetests (with coverage plugin)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:54
+#: ../../developer-docs/platform_linux.rst:53
 # bad1439d6d194e0785faf9992562f9f3
 msgid "python-numpy (for numerical computations)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:55
+#: ../../developer-docs/platform_linux.rst:54
 # 5980000a8f814cea9eea145c7cc6d51b
 msgid "python-gdal (python bindings to underlying gis functionality)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:56
+#: ../../developer-docs/platform_linux.rst:55
 # 5c808804cdcf441292a6646bfff6b2c5
 msgid "python-sphinx (compilation of documents)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:57
+#: ../../developer-docs/platform_linux.rst:56
 # 686910380a3245dd860ce5275f2e7f3f
 msgid "cloud-sptheme (sphinx theme)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:58
+#: ../../developer-docs/platform_linux.rst:57
 # fb85037f8d0b4ea08a55cfc4cf7dba99
 msgid "pyqt4-dev-tools (compiling ui and resources)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:59
+#: ../../developer-docs/platform_linux.rst:58
 # ddbeddc3b4c743e4998cb00d9ed9c9c0
 msgid "qt4-doc (qt4 API documentation)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:60
+#: ../../developer-docs/platform_linux.rst:59
 # 6a59458deb554c978613c50b1d9aadfe
 msgid "pyflakes (test for bad coding style like unused imports / vars)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:61
+#: ../../developer-docs/platform_linux.rst:60
 # e60dc6d7592e4486870872df9f8f23bc
 msgid "python-nosexcover and python-coverage (code coverage reporting)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:63
+#: ../../developer-docs/platform_linux.rst:62
 # ca9fa3799fe64ee7affe6a06bbcb7923
 msgid "On an ubuntu system you can install these requirements using apt::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:69
+#: ../../developer-docs/platform_linux.rst:68
 # a2a42e0906814b4885b6e44b91aa9e1c
 msgid "In some cases these dependencies may already be on your system via installation process you followed for QGIS."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:73
+#: ../../developer-docs/platform_linux.rst:72
 # f6f28479806a49afbc571b8364b2ce7f
 msgid "Cloning the source code from git"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:75
+#: ../../developer-docs/platform_linux.rst:74
 # 0b795dc7af9b4081b25f4eea447822c2
 msgid "To develop on the plugin, you first need to copy it to your local system. If you are a developer, the simplest way to do that is go to `~/.qgis/python/plugins` and clone inasafe from our GitHub repository page like this::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:85
+#: ../../developer-docs/platform_linux.rst:84
 # fe973a9f8dd54f9da6ce82f03036049f
 msgid "QGIS installed in a non-standard location"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:87
+#: ../../developer-docs/platform_linux.rst:86
 # f36265903bda4353ac50fa67c7121afb
 msgid "For running unit tests that need QGIS, you may need to adjust *PYTHONPATH* and *QGISPATH* if QGIS is running in a non standard location. For example with QGIS built from source into /usr/local (and python bindings global install option disabled), you could run these commands (or add them to your ~/.bashrc)::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:95
+#: ../../developer-docs/platform_linux.rst:94
 # 5c17154cdbab48f1a836086c30a6a2b6
 msgid "The above can be set within Eclipse's project properties if you are running your tests using the PyDev IDE environment."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:100
+#: ../../developer-docs/platform_linux.rst:99
 # a16cce4a58954954aef578b246147d23
 msgid "Adding inasafe to your python path:"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:102
+#: ../../developer-docs/platform_linux.rst:101
 # 1bff3063f82c477e9a264a7ffabc89c2
 msgid "Lastly, you should add the inasafe plugin folder to your PYTHONPATH so that package and module paths can be resolved correctly. E.g::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:107
+#: ../../developer-docs/platform_linux.rst:106
 # a4e9762776724bc4b31878fd2d2602c3
 msgid "Once again you could add this to your .bashrc or set it in Eclipse for convenience if needed."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:113
+#: ../../developer-docs/platform_linux.rst:112
 # 4dddc08525c441acad1956ed64d625c1
 msgid "Running tests"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:115
+#: ../../developer-docs/platform_linux.rst:114
 # 954c20d4c3e04716a34b3755ff28f339
 msgid "You can run all tests (which includes code coverage reports and other diagnostics) by doing this within the inasafe plugin folder::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:120
+#: ../../developer-docs/platform_linux.rst:119
 # dd283fa6b5194fea9840a3b799d44ca0
 msgid "You can also run individual tests using nose. For example to run the riabclipper test you would do::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:126
+#: ../../developer-docs/platform_linux.rst:125
 # 4aa6208df22d4d149f3ab730fa1b56a6
 msgid "Achievements"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:128
+#: ../../developer-docs/platform_linux.rst:127
 # bb34d952b080416bb9be9c84945c6b11
 msgid "This is optional and thus not hard coded into the makefile."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:131
+#: ../../developer-docs/platform_linux.rst:130
 # 094270070e224deba25fcaac332d7e6c
 msgid "Optionally you can enable nose achievments which is a motivational tool that gives you little achievement awards based on your test results::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:135
+#: ../../developer-docs/platform_linux.rst:134
 # a447671eb4b34c03ad391ea92c34b72d
 msgid "sudo pip install git+git://github.com/exogen/nose-achievements.git"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:137
+#: ../../developer-docs/platform_linux.rst:136
 # e11981e47fe648a8a1b463ea07c81207
 msgid "Now create this file in the root of your inasafe git checkout :file:`setup.cfg`::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:143
+#: ../../developer-docs/platform_linux.rst:142
 # 545b7bbf51854f4b85bfbec165988768
 msgid "When you run tests occasionally achievements will be displayed to you at the end of the test run. See the achievements home page at http://exogen.github.com/nose-achievements/."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:148
+#: ../../developer-docs/platform_linux.rst:147
 # d6d86809db5e493ba853cc8909c3b155
 msgid "Developing using Eclipse (Linux)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:149
-#: ../../developer-docs/platform_windows.rst:360
+#: ../../developer-docs/platform_linux.rst:148
+#: ../../developer-docs/platform_windows.rst:370
 # 6421848ef9364611a9f07ae347074fa7
 # f1b00eee4cd346698fe78e76631a1adc
 msgid "This is optional - you can use any environment you like for editing python, or even a simple text editor."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:153
-#: ../../developer-docs/platform_windows.rst:363
+#: ../../developer-docs/platform_linux.rst:152
+#: ../../developer-docs/platform_windows.rst:373
 # 4e3de7bbfe2c4bdc8e09969ea4497040
 # 4e588328a68e4eeab2d93d9130c72ff1
 msgid "If you wish to use an IDE for development, please refer to `this article <http://linfiniti.com/2011/12/remote-debugging-qgis-python-plugins-with-pydev/>`_ for detailed information on how to get the basic Eclipse with PyDev setup."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:158
-#: ../../developer-docs/platform_windows.rst:409
+#: ../../developer-docs/platform_linux.rst:157
+#: ../../developer-docs/platform_windows.rst:422
 # 047429d526a74978af1ee5f8e63a97de
 # bfbe719eacea478480684d94ce187464
 msgid "Creating a project"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:160
-#: ../../developer-docs/platform_windows.rst:411
+#: ../../developer-docs/platform_linux.rst:159
+#: ../../developer-docs/platform_windows.rst:424
 # 301953e417734b23a40a0174f547e4ab
 # 1b45ef76d9514412aaa73811c92d9c74
 msgid "The procedure for doing this is to do: :menuselection:`File --> New --> Project...` and then from the resulting dialog do :menuselection:`PyDev --> PyDev Project`."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:164
-#: ../../developer-docs/platform_windows.rst:415
+#: ../../developer-docs/platform_linux.rst:163
+#: ../../developer-docs/platform_windows.rst:428
 # bf21f979c74249609348746744b7175e
 # 719701b4ef274dfeb7c40436df87f741
 msgid "In the resulting project dialog, set the following details:"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:166
-#: ../../developer-docs/platform_windows.rst:417
+#: ../../developer-docs/platform_linux.rst:165
+#: ../../developer-docs/platform_windows.rst:430
 # 402d4a05d7d4411e850ad2ddd0cf3d11
 # 74fd157de0fd44d4a082b908c5d4bf73
 msgid ":guilabel:`Project name:` : :kbd:`inasafe`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:167
-#: ../../developer-docs/platform_windows.rst:418
+#: ../../developer-docs/platform_linux.rst:166
+#: ../../developer-docs/platform_windows.rst:431
 # 1cede8a2ea544ad59ae5f982d6c2d74c
 # e1ad113b26f64b00bd9b997ca2183945
 msgid ":guilabel:`Use default` : :kbd:`uncheck`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:168
+#: ../../developer-docs/platform_linux.rst:167
 # c9a6bcc58c394f199a80d4cdd21c1910
 msgid ":guilabel (linux):`Directory` : :kbd:`/home/<your user name/.qgis/python/plugins/inasafe/`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:169
+#: ../../developer-docs/platform_linux.rst:168
 # a200fe893d5d42d896e19814fd9b6433
 msgid ":guilabel (windows):`Directory` : :kbd:`/home/<your user name/.qgis/python/plugins/inasafe/`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:170
-#: ../../developer-docs/platform_windows.rst:421
+#: ../../developer-docs/platform_linux.rst:169
+#: ../../developer-docs/platform_windows.rst:434
 # b5c6eb5252d043ca996e5c31fe529eac
 # e925643597b54c3bb7edf9facae974a7
 msgid ":guilabel:`Choose project type` : :kbd:`Python`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:171
+#: ../../developer-docs/platform_linux.rst:170
+#: ../../developer-docs/platform_windows.rst:435
 # bb4e891197214dc999a2574357ab6de2
+# 0191529a631d489888ab98bda3030f77
 msgid ":guilabel:`Grammar Version` : :kbd:`2.7`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:172
-#: ../../developer-docs/platform_windows.rst:423
+#: ../../developer-docs/platform_linux.rst:171
+#: ../../developer-docs/platform_windows.rst:436
 # 35cb6909fa124c47af56823211472e1d
 # ca7dbb607fbe4390a39aa580cc90709b
 msgid ":guilabel:`Add project directory to PYTHONPATH?` : :kbd:`check`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:174
-#: ../../developer-docs/platform_windows.rst:428
+#: ../../developer-docs/platform_linux.rst:173
+#: ../../developer-docs/platform_windows.rst:441
 # ebdb17982d1849edbec07c81bb5d2c3b
 # 867e70f4b2ea411998766c601518f7b2
 msgid "At this point you should should click the link entitled 'Please configure an interpreter in related preferences before continuing.' And on the resulting dialog do:"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:177
-#: ../../developer-docs/platform_windows.rst:431
+#: ../../developer-docs/platform_linux.rst:176
+#: ../../developer-docs/platform_windows.rst:444
 # c7b243107d2048f98884050cd40e4edc
 # 9e50c04f1ead4c4b94f4fe4c43c21a50
 msgid ":guilabel:`Python Interpreters: New...` : :kbd:`click this button`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:179
-#: ../../developer-docs/platform_windows.rst:433
+#: ../../developer-docs/platform_linux.rst:178
+#: ../../developer-docs/platform_windows.rst:446
 # 8c59a53e49bb4adab53d99528f449bc7
 # 8f7c36efaea34b4e8022d1f1f725407d
 msgid "In the dialog that appears do:"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:181
+#: ../../developer-docs/platform_linux.rst:180
 # 31f975f642e447278adfb37713b06c75
 msgid ":guilabel:`Interpreter Name` : :kbd:`System Python 2.7`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:182
+#: ../../developer-docs/platform_linux.rst:181
 # 07c94204a43b48b897df70c262da16b0
 msgid ":guilabel:`Interpreter Executable` : :kbd:`/usr/bin/python`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:183
-#: ../../developer-docs/platform_linux.rst:192
-#: ../../developer-docs/platform_windows.rst:438
-#: ../../developer-docs/platform_windows.rst:464
+#: ../../developer-docs/platform_linux.rst:182
+#: ../../developer-docs/platform_linux.rst:191
+#: ../../developer-docs/platform_windows.rst:451
+#: ../../developer-docs/platform_windows.rst:478
 # 2318aab584e441a9a05369340517a9bf
 # f3608b4c63b24b0286b473d6d6137713
 # 2f3cff17dc854e30ad451a4a05f10d74
-# 992ea3e666224d79af71ee7250dbb80c
+# 2f3cff17dc854e30ad451a4a05f10d74
 msgid ":guilabel:`OK Button` : :kbd:`click this button`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:185
-#: ../../developer-docs/platform_windows.rst:441
+#: ../../developer-docs/platform_linux.rst:184
+#: ../../developer-docs/platform_windows.rst:454
 # 3ee9e79c04e9460fb517db98ac4938c9
 # 182e6aebbc4e4e1c97d7325c5219b0c4
 msgid "Another dialog will appear. Tick the first entry in the list that points to your::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:190
+#: ../../developer-docs/platform_linux.rst:189
 # e39cc427ff2d4309942ede43b40f6e11
 msgid "(or simply click the 'Select All' button)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:194
+#: ../../developer-docs/platform_linux.rst:193
 # e584f6ce7d2747a6812ee05983c3b1d4
 msgid "You will be returned to the Python Interpreters list and should see an entry for System Python 2.7 listed there. Now do in the *Libraries* tab:"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:197
-#: ../../developer-docs/platform_windows.rst:478
+#: ../../developer-docs/platform_linux.rst:196
+#: ../../developer-docs/platform_windows.rst:497
 # 4970acc006844ec6907a0c88128f1770
 # 41af545f59274428b1536e7bf10e04e7
 msgid ":guilabel:`Finish` : :kbd:`click this button`"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:200
-#: ../../developer-docs/platform_windows.rst:481
+#: ../../developer-docs/platform_linux.rst:199
+#: ../../developer-docs/platform_windows.rst:501
 # 6d2233a938d04b428c02ac348a53f0c1
 # f1c2492b55ab452a8fec26a481e218f1
 msgid "Remote Debugging with Eclipse"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:202
+#: ../../developer-docs/platform_linux.rst:201
 # e467a7e080d44690afa9cc7596e31f48
 msgid "For remote debugging, you should add pydevd to your PYTHONPATH before starting *QGIS* for example (you will need to adjust these paths to match your system)::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:209
+#: ../../developer-docs/platform_linux.rst:208
 # 65d3e89f32c94585a12a340aa6b4fbbd
 msgid "If you are running with remote debugging enabled, be sure to start the PyDev debug server first before launching the Risk-in-a-box QGIS plugin otherwise QGIS will likely crash when it can't find the debug server."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:213
+#: ../../developer-docs/platform_linux.rst:212
 # 9a2e0497fc7540cea5521b014d169b77
 msgid "You will need to ensure that the PYTHONPATH containing your pydev package folder is set before you launch QGIS - for example by adding the above line to your ~/.bashrc or by making a small batch file containing the above export and then sourcing the file before launching QGIS e.g.::"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:222
-#: ../../developer-docs/platform_windows.rst:520
+#: ../../developer-docs/platform_linux.rst:221
+#: ../../developer-docs/platform_windows.rst:540
 # 33c51105ef674120a3a10bcf5ef1a910
 # 1adb3f0f74cf485eb4124cc3f2380c63
 msgid "Running Unit tests from the IDE"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:224
-#: ../../developer-docs/platform_windows.rst:525
+#: ../../developer-docs/platform_linux.rst:223
+#: ../../developer-docs/platform_windows.rst:545
 # c2a6356f69824b4e90490658d6211a76
 # 977143a9c8dc41c886384854b022f6a2
 msgid "Python has very good integrated support for unit testing. The first thing you should do after setting up the IDE project is to run the tests. You can run tests in the following ways:"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:228
-#: ../../developer-docs/platform_windows.rst:529
+#: ../../developer-docs/platform_linux.rst:227
+#: ../../developer-docs/platform_windows.rst:549
 # 697f1bfbfaaf4003a02c32bd4189de08
 # 7e372b1013264f2b9a657f76bb1fd43d
 msgid "For the entire inasafe package"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:229
-#: ../../developer-docs/platform_windows.rst:530
+#: ../../developer-docs/platform_linux.rst:228
+#: ../../developer-docs/platform_windows.rst:550
 # b654d38183a5472ea9c9bdbed7bca954
 # 83aa85a111f641a190a03afd5ee764bb
 msgid "For individual sub packages (e.g. engine, gui, storage, impact_functions)"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:230
-#: ../../developer-docs/platform_windows.rst:531
+#: ../../developer-docs/platform_linux.rst:229
+#: ../../developer-docs/platform_windows.rst:551
 # 4e4daa354f57458f9b0f3fc0ad34626c
 # 160334e9788046978ace7f469475f09e
 msgid "for an individual test module within a package"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:231
-#: ../../developer-docs/platform_windows.rst:532
+#: ../../developer-docs/platform_linux.rst:230
+#: ../../developer-docs/platform_windows.rst:552
 # 60fe43887e72401f9006718d8f493b1a
 # 41b05344824f41c991a6fe1009ec6c87
 msgid "for an class within a test module"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:232
-#: ../../developer-docs/platform_windows.rst:533
+#: ../../developer-docs/platform_linux.rst:231
+#: ../../developer-docs/platform_windows.rst:553
 # 0d91d87d6d6e4587b590af9faaefd951
 # 247a541523914516a236f9c68c8dc874
 msgid "for an individual method within a test class"
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:234
-#: ../../developer-docs/platform_windows.rst:535
+#: ../../developer-docs/platform_linux.rst:233
+#: ../../developer-docs/platform_windows.rst:555
 # 5fb6250ddf804e98a454a2094c5c9743
 # 95c5861b56c94b4fa04c439d1b721489
 msgid "You can view these individual entities by browsing and expanding nodes in the project panel in the left of the IDE."
 msgstr ""
 
-#: ../../developer-docs/platform_linux.rst:237
-#: ../../developer-docs/platform_windows.rst:538
+#: ../../developer-docs/platform_linux.rst:236
+#: ../../developer-docs/platform_windows.rst:558
 # 6f1794f1b64a453c89eab0d57346f21f
 # 54ff8154473946ea984a79128618eb76
 msgid "If you run the test suite for the entire inasafe package, it will mistakenly treat the sphinx documentation conf.py (docs.source.conf) as a test and fail for that test. This is 'normal' and can be ignored."
@@ -1880,433 +2212,442 @@ msgid "Once the file is downloaded, run it and respond to the installer prompts 
 msgstr ""
 
 #: ../../developer-docs/platform_windows.rst:74
-# 58855b367a364e399e65e4055eb3b0e9
-msgid "Install an SVN client"
-msgstr ""
-
-#: ../../developer-docs/platform_windows.rst:76
-# 46d4d19ff6d24d17959c143c1f5f7e74
-msgid "The test data for |project_name| is hosted on an svn server, so to obtain it you first need to install an SVN client. Start by downloading `this installer <http://sourceforge.net/projects/win32svn/files/latest/download>`_ (it is about 4.8mb to download)."
-msgstr ""
-
-#: ../../developer-docs/platform_windows.rst:81
-# 1a93d58850374da8a2741a042216e57e
-msgid "Now run the installer, accepting the defaults options throughout."
-msgstr ""
-
-#: ../../developer-docs/platform_windows.rst:84
 # ba530b1e93334434816ed2b108e47b6a
 msgid "Check out the code and the test data"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:86
+#: ../../developer-docs/platform_windows.rst:76
 # 78668fc88b0a479596cbb883309c16de
 msgid "In this section we actually check out the source code and the test data using the tools we installed above."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:90
+#: ../../developer-docs/platform_windows.rst:80
 # 517f0c5db2ba482dbaedbab8deda91fc
 msgid "Clone the code repository"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:92
+#: ../../developer-docs/platform_windows.rst:82
 # a46e2eb375ec44a0a08aa090073d05fe
 msgid "First open a GIT bash prompt as illustrated below:"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:98
+#: ../../developer-docs/platform_windows.rst:88
 # 61c4fc1c6b0b474780996a74faf3cd23
-msgid "The repository can now be closed by issuing the commands listed below.::"
+msgid "The repository can now be cloned by issuing the commands listed below.::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:108
+#: ../../developer-docs/platform_windows.rst:98
+#: ../../developer-docs/platform_windows.rst:128
+# 6794d8b0356e4f229a9370aad1239631
 # 6794d8b0356e4f229a9370aad1239631
 msgid "The items in angle brackets above should be replaced with your personal details as required."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:111
+#: ../../developer-docs/platform_windows.rst:101
+#: ../../developer-docs/platform_windows.rst:131
+# 7c87eee2ebf84320952d592dfa3d9a1d
 # 7c87eee2ebf84320952d592dfa3d9a1d
 msgid "When the final command above runs, you should see something like this in the console when the clone process is completed::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:124
+#: ../../developer-docs/platform_windows.rst:114
 # 3965e2c6b6e8494489904b9a408083ae
 msgid "Checkout the test data"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:126
-# b63e4168a686413bb713395680b3cb94
-msgid "To check out the test data from svn, first open a command prompt ( :menuselection:`Start --> Run...` then type :kbd:`cmd.exe` and press enter). Now navigate to the plugins directory and check out the svn repository by typing the commands as listed below::"
+#: ../../developer-docs/platform_windows.rst:116
+# 14c97d488a9146119785fa5e13ae90c8
+msgid "To check out the test data from git, first open a GIT bash prompt as illustrated below:"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:134
-# 54b0630928454162b7edbfdcecb08be9
-msgid "You will be prompted for a username and password for svn - press enter (so that it reprompts for the username) and set the username to ``anonymous`` and just ``press enter`` for the password."
+#: ../../developer-docs/platform_windows.rst:122
+# 61c4fc1c6b0b474780996a74faf3cd23
+msgid "The repository can now be cloned by issuing the commands listed below. (Already completed in previous step)::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:139
+#: ../../developer-docs/platform_windows.rst:143
 # 4481c4bc264241e7847c37477f182340
 msgid "Install QGIS"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:141
+#: ../../developer-docs/platform_windows.rst:145
 # b5684deda37a40ec888503894876d43d
 msgid "Download the latest QGIS 'standalone' installer from http://download.qgis.org and install it by running the installation wizard and accepting the defaults throughout."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:145
+#: ../../developer-docs/platform_windows.rst:149
 # 9d2fd28f094f425a8dc2290f75e722ab
-msgid "After opening QGIS (:menuselection:`Start --> All Programs --> Quantum GIS Wroclaw --> Quantum GIS`) you need to enable the plugin from the plugin menu by doing :menuselection:`Plugins --> Manage Plugins` and then search for the |project_name| plugin in the list and enable it."
+msgid "After opening QGIS (:menuselection:`Start --> All Programs --> Quantum GIS Lisboa --> Quantum GIS Desktop (1.8.0)`) you need to enable the plugin from the plugin menu by doing :menuselection:`Plugins --> Manage Plugins` and then search for the |project_name| plugin in the list and enable it."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:150
+#: ../../developer-docs/platform_windows.rst:154
 # 03304e9226f74f0c98de920d5d5c3051
 msgid "Windows Caveats"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:152
+#: ../../developer-docs/platform_windows.rst:156
 # efa80b83f90e4fbcb8b2a74a9db3c79c
 msgid "Our primary development platform is Linux (specifically Ubuntu Linux). Some features of the development environment - particularly the **Make** tools do not run on Windows. Some helper scripts have been written to substitute for make but they do not have feature parity with the make scripts."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:161
+#: ../../developer-docs/platform_windows.rst:165
 # 1a33b94ba5684f278d29208e72fdb579
 msgid "Command line environment setup"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:164
+#: ../../developer-docs/platform_windows.rst:168
 # 212e46aaf2da4e388891ba17b5d7b82c
 msgid "Create a shell launcher"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:166
+#: ../../developer-docs/platform_windows.rst:170
 # 56026fdfa0c947faad5dd0029ed2f62d
 msgid "A command line environment is useful for running unit tests and for developing and testing standalone scripts written to use the |project_name| libraries."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:169
+#: ../../developer-docs/platform_windows.rst:173
 # 2a3c043e578f4ec784ee00aa6b43a272
 msgid "We will create a custom shell launcher that will give you a python shell environment using the python that comes bundled with QGIS, and that sets various paths and evironment variables so everything works as expected. Save the following listing in <QGIS Install Dir>/bin/python-shell.bat::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:190
+#: ../../developer-docs/platform_windows.rst:194
 # 2eb7ed65c71648beb07a37449220acf6
 msgid "The QGISPATH environment variable should be unquoted!."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:192
+#: ../../developer-docs/platform_windows.rst:196
 # aabc1c0154294b6b8eddf71af254935f
-msgid "You may need to replace PROGRA~2 above with PROGRA~1 if you are on 32bit windows."
+msgid "You may need to replace PROGRA~1 above with PROGRA~2 if you are on 64bit windows."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:195
+#: ../../developer-docs/platform_windows.rst:199
+# 85a4d094006d45bea0fb8f186ccf741b
+msgid "This script is for QGIS 1.8. You may need to do some adjustment if you are using another version of QGIS"
+msgstr ""
+
+#: ../../developer-docs/platform_windows.rst:201
 # 8ea239ec58e24e73bec34423b8412ae6
 msgid "For easy access to this shell launcher, right click on the qgis-shell.bat script and (without releasing your initial right click) drag with the file onto your start / windows button in the bottom left corner of the screen."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:200
+#: ../../developer-docs/platform_windows.rst:206
 # c33fa8e3829b409fb5f0bc35569f7056
 msgid "Verifying your system path"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:202
+#: ../../developer-docs/platform_windows.rst:208
 # 11d40c0e4e0a47ee943ce5d78f13ced2
 msgid "To verify your path, launch your python shell (by clicking the python-shell.bat) and then start a python shell. Now enter the follow simple script::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:209
+#: ../../developer-docs/platform_windows.rst:215
 # 07f8a7d6dc44401aa7eaf3395344e3db
 msgid "Which should produce output like this::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:225
+#: ../../developer-docs/platform_windows.rst:233
 # 48417a1994864ef89f3f53ec74b7be5b
 msgid "It is particularly the second and third lines that you need to have in place so that the QGIS libs can found. Now dow a simple test to see if you can import the QGIS libs::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:232
+#: ../../developer-docs/platform_windows.rst:240
 # e3da096160a7449a930e85cedf97a8d1
 msgid "Assuming you get no error messages, you have a functional python command line environment which you can use to test QGIS functionality with."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:236
+#: ../../developer-docs/platform_windows.rst:244
 # 97b9ff0589084951bbd75ec2c6429553
 msgid "Nose testing tools"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:241
+#: ../../developer-docs/platform_windows.rst:249
 # 2eb57171c5ea4b29b21402f1b6c3ca2f
 msgid "Installing pip"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:243
+#: ../../developer-docs/platform_windows.rst:251
 # 48e172b76d0543e2883ba264e6dd412c
 msgid "We need to install easy_install so that we can install pip so that we can install nosetests and other python tools. Under windows you need to run a little script to install easy_install and then use easy_install to install pypi. Download the script on `this page <http://pypi.python.org/pypi/setuptools#windows>`_ called ez_setup.py and save it somewhere familiar e.g. :samp:`c:\\temp`."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:250
+#: ../../developer-docs/platform_windows.rst:258
+# 4d86f9d4820f45abb451b2570395c06d
+msgid "If you use windows 32bit, do not download the .exe file as said on `the page <http://pypi.python.org/pypi/setuptools#windows>`_, but just download the ez_setup.py"
+msgstr ""
+
+#: ../../developer-docs/platform_windows.rst:261
 # 8b6e99a204f2423f9db663bc5b6fa274
 msgid "Next launch the shell (python-shell.bat as described in :ref:`windows-commandline_setup`) **as administrator** (by right clicking the file and choosing run as administrator). Then from the command line, launch :command:`ez_setup.py` by typing this::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:257
+#: ../../developer-docs/platform_windows.rst:268
 # e1a693f1bb224cc4a68ab14edbc26bb3
 msgid "You will need to launch the shell as administrator whenever you need to install python packages by pypi."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:260
+#: ../../developer-docs/platform_windows.rst:271
 # 69e67735b3614a78a5e6b1c5bd6b54d3
 msgid "Now in the same shell, use easy setup to install pip (make sure you have added the QGIS scripts dir to your shell launcher's - which should be the case if you have followed the notes in :ref:`windows-commandline_setup`)::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:266
+#: ../../developer-docs/platform_windows.rst:277
 # 10fb75a32b10419994633716a2556cee
 msgid "If the installation goes successfully, you should see output like this::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:293
+#: ../../developer-docs/platform_windows.rst:304
 # 77ea28bd4dd74c3e83a09667060690c7
 msgid "Installing nose"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:295
+#: ../../developer-docs/platform_windows.rst:306
 # 847e95f1bc6847c7980066fc54ce841f
 msgid "`Nose <http://somethingaboutorange.com/mrl/projects/nose/>`_ is a tool for automation of running python unit tests. With nose you can run a whole batch of tests in one go. With the nosecover plugin you can also generate coverage reports which will indicate how many lines of your code actually have been tested."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:302
+#: ../../developer-docs/platform_windows.rst:313
 # 9bf491b6b54944b8afe14c6ca7dd9e8f
-msgid "To install these tools, launch your python prompt as administrator and then do:"
+msgid "To install these tools, launch your python prompt as administrator and then do::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:304
-# 5e4b3ed22a5e47fa9992fd09885618da
-msgid "pip install nose nose-cov"
-msgstr ""
-
-#: ../../developer-docs/platform_windows.rst:308
+#: ../../developer-docs/platform_windows.rst:318
 # 80df55ea8eca4a6b918d00623109e75b
 msgid "Running tests using nose"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:310
+#: ../../developer-docs/platform_windows.rst:320
 # 6cf2df2b0cd4463aaf754807c20269b1
-msgid "Once they are installed, you can run the nose tests from windows by going to the plugin directory (in your python-shell.bat shell session) and running::"
+msgid "Once they are installed, you can run the nose tests from windows by going to the plugin directory/inasafe-dev folder (in your python-shell.bat shell session) and running::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:317
+#: ../../developer-docs/platform_windows.rst:327
 # ea5e6210983c417494e30c0d2459e07e
 msgid "Building sphinx documentation"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:319
+#: ../../developer-docs/platform_windows.rst:329
 # 01b4121309ec4ff69b2c6e15a512d0d7
 msgid "`Sphinx <http://sphinx.pocoo.org>`_ is a tool for building documentation that has been written in the ReSTructured text markup language (a simple wiki like format). You can build the sphinx documentation under windows using a helper script provided in the docs directory of the |project_name| source directory, but first you need to actually install sphinx."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:326
+#: ../../developer-docs/platform_windows.rst:336
 # 9698a49054fe46f6bd8c59cfd87e1e3f
 msgid "Installing sphinx"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:328
+#: ../../developer-docs/platform_windows.rst:338
 # cb757f7ac3d249ae86cadeb714d5290b
 msgid "Launch your QGIS python shell environment (see :ref:`windows-pip-setup`) as administrator and then run the following command::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:333
+#: ../../developer-docs/platform_windows.rst:343
 # c3a4ec5ec19d45f0bcd17f2fa8e77c2d
 msgid "The cloud-sptheme package installs the sphinx theme we are using."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:337
+#: ../../developer-docs/platform_windows.rst:347
 # fe05361f96204b2baae2c27b7201361f
 msgid "Building the documentation"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:339
+#: ../../developer-docs/platform_windows.rst:349
 # 2b63c7debdf24a2ab5e9fd42bf34c277
-msgid "To build the documentation, open a QGIS python shell (no need to be admin) and go into your inasafe\\docs directory. Now run the following command::"
+msgid "To build the documentation, open a QGIS python shell (no need to be admin) and go into your inasafe-dev/docs directory. Now run the following command::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:344
+#: ../../developer-docs/platform_windows.rst:354
 # c6fa24eecfe04cf2a1bcf12b53f6ad53
 msgid "Only the html make target has been tested. To use other make targets you may need to perform further system administrative tasks."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:348
+#: ../../developer-docs/platform_windows.rst:358
 # b3d5de4eba8047be9e3b1b33dc8f2d23
 msgid "Viewing the documentation"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:350
+#: ../../developer-docs/platform_windows.rst:360
 # c04524ae18304d86a60aa3dfbcf7ba3a
 msgid "The documentation can be viewed from withing QGIS by clicking the :guilabel:`help` button on the |project_name| dock panel, or you can view it in your browser by opening a url similar to this one::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:358
+#: ../../developer-docs/platform_windows.rst:368
 # c9c6f0b1481147efa4af13327e329804
 msgid "Developing using Eclipse (Windows)"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:368
+#: ../../developer-docs/platform_windows.rst:378
 # ae859770222e4696953d5074786f7b84
 msgid "Installing Eclipse"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:370
+#: ../../developer-docs/platform_windows.rst:380
 # 9a1754923d5e47359716ab36df440c0b
 msgid "You can download and install eclipse by getting the latest installer at `eclipse.org <http://eclipse.org>`_. Just run the installer accepting all defaults."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:375
+#: ../../developer-docs/platform_windows.rst:385
 # a1d330b28d6a405582839798877a00b9
 msgid "Installing PyDev"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:377
+#: ../../developer-docs/platform_windows.rst:387
 # 867af32e32d1424db508c88fa13fb087
 msgid "With Eclipse running, click  on :menuselection:`Help --> Eclipse Marketplace` and from the resulting dialog that appears, type :kbd:`PyDev` into the search box and then click :guilabel:`Go`. On the search results page, choose PyDev and click the :guilabel:`Install` button next to it. Agree to the license terms and accept the aptana certificate, then restart Eclipse as requested."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:384
+#: ../../developer-docs/platform_windows.rst:394
 # 7a32a096c6304f8c97986c3af0bb33dc
 msgid "Custom Eclipse Launcher"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:386
+#: ../../developer-docs/platform_windows.rst:396
 # 88ef8deb519d40568276cda56ebea9a4
 msgid "You need to create a custom Eclipse launcher in order to use Eclipse PyDev. The process is similar to :ref:`windows-commandline_setup` in that you need to create a custom batch file that launches eclipse only after the osgeo4w environment has been imported. Here are the typical contexts of the file::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:404
+#: ../../developer-docs/platform_windows.rst:414
+# c02d8a10d90946ab92a80bb1e0830593
+msgid "Use the path where your eclipse was extracted. Also note that PROGRA~2 may be PROGRA~1 in 32bit windows."
+msgstr ""
+
+#: ../../developer-docs/platform_windows.rst:417
 # 4e3cb04c988c40d6a99dd56ef85336cb
 msgid "Save this file under <QGIS Install Dir>/bin/python-shell.bat and then right-drag it from explorer to your Windows start button to create an easily accessible shortcut to eclipse."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:419
+#: ../../developer-docs/platform_windows.rst:432
 # 93b7acdcc33546048ffff722a0b74d7b
 msgid ":guilabel (windows):`Directory` : :kbd:`C:\\\\Users\\\\<user>\\\\.qgis\\\\python\\\\plugins\\\\inasafe\\\\`"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:422
-# 0191529a631d489888ab98bda3030f77
-msgid ":guilabel:`Grammar Version` : :kbd:`2.5`"
-msgstr ""
-
-#: ../../developer-docs/platform_windows.rst:425
+#: ../../developer-docs/platform_windows.rst:438
 # 6e58a394aa8447f780eb1ea5e9aef6ef
-msgid "The python shipped with QGIS for windows is version 2.5 so you should avoid using any additions to the python spec introduced in later versions."
+msgid "The python shipped with QGIS for windows is version 2.7 so you should avoid using any additions to the python spec introduced in later versions."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:435
+#: ../../developer-docs/platform_windows.rst:448
 # ca7e741da76541ab8e7bb9ab4925a483
-msgid ":guilabel:`Interpreter Name` : :kbd:`QGIS Python 2.5`"
+msgid ":guilabel:`Interpreter Name` : :kbd:`QGIS Python 2.7`"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:436
+#: ../../developer-docs/platform_windows.rst:449
 # 4d9b3c56a5be4ac8b98c20dc6916f8d1
-msgid ":guilabel:`Interpreter Executable` : :kbd:`C:\\Program Files (x86)\\Quantum GIS Wroclaw\\bin\\python.exe`"
+msgid ":guilabel:`Interpreter Executable` : :kbd:`C:\\\\Program Files (x86)\\\\Quantum GIS Lisboa\\\\bin\\\\python.exe`"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:446
+#: ../../developer-docs/platform_windows.rst:460
 # 15a5b02b8f434237b0a8a904c033e1b9
 msgid "The resulting list of python paths should look something like this::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:460
+#: ../../developer-docs/platform_windows.rst:474
 # 0f5ac40fa87a4df88157841d44944699
 msgid "Click on the :guilabel:`New folder` button and add the QGIS python dir::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:466
+#: ../../developer-docs/platform_windows.rst:480
 # ffbef65505254306be3d5372ab2cfcc4
-msgid "You will be returned to the Python Interpreters list and should see an entry for **QGIS Python 2.5** listed there. Now do in the **Environment** tab:"
+msgid "You will be returned to the Python Interpreters list and should see an entry for **QGIS Python 2.7** listed there. Now do in the **Environment** tab:"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:469
+#: ../../developer-docs/platform_windows.rst:483
 # d9a4ff346a4d47158883611e8a20bfa9
 msgid ":guilabel:`New`"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:471
+#: ../../developer-docs/platform_windows.rst:485
 # 60a55294c0ad4d05b619279d7963d4b6
 msgid "In the dialog that appears"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:473
+#: ../../developer-docs/platform_windows.rst:487
 # 58429e4fc73d4ea3adea52031253289b
-msgid ":guilabel:`Name` : :kbd:`QGISPATH` :guilabel:`Value` : :kbd:`C:\\PROGRA~2\\QUANTU~1\\apps\\qgis`"
+msgid ":guilabel:`Name` : :kbd:`QGISPATH` :guilabel:`Value` : :kbd:`C:\\\\PROGRA~1\\\\QUANTU~1\\\\apps\\\\qgis`"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:476
+#: ../../developer-docs/platform_windows.rst:490
 # 38b7867db56a4c748a24d0ddfdeb3f06
 msgid "Then click ok to close the environment variable editor."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:483
+#: ../../developer-docs/platform_windows.rst:492
+# 41af545f59274428b1536e7bf10e04e7
+msgid ":guilabel:`Ok` : :kbd:`click this button`"
+msgstr ""
+
+#: ../../developer-docs/platform_windows.rst:494
+# 38b7867db56a4c748a24d0ddfdeb3f06
+msgid "Then click finsih to finish the new project dialog ."
+msgstr ""
+
+#: ../../developer-docs/platform_windows.rst:503
 # 93b5936d0a1640cb826476af33889ffa
 msgid "For remote debugging, you should add pydevd to your PYTHONPATH before starting *QGIS*. Under Windows, the best way to do this is to add the following line to :command:`qgis.bat` under C:\\Program Files (x86)\\Quantum GIS Wroclaw\\bin::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:492
+#: ../../developer-docs/platform_windows.rst:512
 # d9f979cb1854415897c164e249a10b5d
 msgid "(1) You need to add a settrace() line at the point in your code where you would like to initiate remote debugging. After that, you can insert eclipse debugger breakpoints as per normal."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:496
+#: ../../developer-docs/platform_windows.rst:516
 # 4f23df6d8c6b46b48772aa118be1acb9
 msgid "(2) If you are running with remote debugging enabled, be sure to start the PyDev debug server first before launching the Risk-in-a-box QGIS plugin otherwise QGIS will likely crash when it can't find the debug server."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:500
+#: ../../developer-docs/platform_windows.rst:520
 # da476a3ae4234746b895cfbf05a2a474
 msgid "(3) Place the above PYTHONPATH command before the final line that launches QGIS!"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:503
+#: ../../developer-docs/platform_windows.rst:523
 # 47e64ebd0e3844d8a7bbc8fe924a6fe5
 msgid "(4) The exact path used will vary on your system - check in your eclipse plugins folder for \"org.python.pydev.debug_<some date> to identify the correct path."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:507
+#: ../../developer-docs/platform_windows.rst:527
 # 267523d618c84935acbf206ef6a38e28
 msgid "To initiate a remote debugging session, add the settrace() directive to your source file and then start the python remote debugging service from the PyDev debug perspective. Then launch QGIS (or your command line application) and use the application until the settrace line is encountered. QGIS will appear to freeze - this is normal. Now switch to Eclipse and you should see the settrace line has been highlighted in green and you can step through the code using standard Eclipse debugging tools (done most easily from the debugging perspective)."
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:516
+#: ../../developer-docs/platform_windows.rst:536
 # a4ff786fc97f46fe975e2a555bc3696d
 msgid "Always remove or comment out settrace() when are done debugging!"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:523
+#: ../../developer-docs/platform_windows.rst:543
 # 8b5f7ce4dfac452183122a023fc01002
 msgid "Using PyDev's build in test runner"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:543
+#: ../../developer-docs/platform_windows.rst:563
 # 849507f49c904a2d9cc466a63d210273
 msgid "Setting PyDev to use the Nose test runner"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:545
+#: ../../developer-docs/platform_windows.rst:565
 # 715c6ae9ba884f0590718f26978eb5b8
 msgid "You can also configure Eclipse to run the tests using nose (which is recommended). To do this first do:"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:548
+#: ../../developer-docs/platform_windows.rst:568
 # eb45015c9a81460c9d77934209b66095
 msgid ":menuselection:`Window --> Preferences --> PyDev -- PyUnit`"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:550
+#: ../../developer-docs/platform_windows.rst:570
 # 73b41765ebac4b9bb2965c284d6d9151
 msgid "Now set :guilabel:`TestRunner` to :kbd:`Nosetests` and set the following options::"
 msgstr ""
 
-#: ../../developer-docs/platform_windows.rst:555
+#: ../../developer-docs/platform_windows.rst:575
 # 16e953978ddf4d0cb3443a1554b74dc2
 msgid "As with using Pydev's built in test runner, you can also run any module, class etc. while using the nose test runner by right clicking on the item in the PyDev package explorer."
+msgstr ""
+
+#: ../../developer-docs/platform_windows.rst:579
+# dea5951d4e8e455d87f8a2fd3aeb4497
+msgid "Actually, we can run the test runner until this step. But, we got a problem, so you need to install python in your windows machine."
 msgstr ""
 
 #: ../../developer-docs/preparing_a_release.rst:3

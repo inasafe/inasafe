@@ -22,4 +22,11 @@ pyflakes.log
 result.txt
 keywords.db
 coverage.xml
-_build
+.DS_Store
+docs/_build
+setup.cfg
+run_qgis.sh
+.achievements
+.idea/runConfigurations/NoseTests_Realtime.xml
+docs/source/_build
+docs/source/i18n/pot/.doctrees
