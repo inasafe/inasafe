@@ -25,7 +25,7 @@ Selecting an impact function
 
 Impact functions are bundled with the InaSAFE software. The graphical user interface
 (provided as a plugin for QGIS will offer a list of impact functions that can be 
-used based on the layers you have loaded and their :doc:`keywords`.
+used based on the layers you have loaded and their :doc:`keywords <keywords>`.
 
 Exploring impact functions
 --------------------------
@@ -57,6 +57,6 @@ avenues you can follow:
 
 * You can develop it yourself or with the aid of a programmer who has a good understanding
   of the python programming language.
-* You can file a ticket on our `https://github.com/AIFDR/inasafe/issues <issue tracking system>`_, 
+* You can file a ticket on our `issue tracking system <https://github.com/AIFDR/inasafe/issues>`_, 
   and if time and resources allow we will implement it for you.
 
