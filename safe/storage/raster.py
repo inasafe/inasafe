@@ -254,7 +254,9 @@ class Raster(Layer):
         write_keywords(self.keywords, basename + '.keywords')
 
     def get_data(self, nan=True, scaling=None, copy=False,
-                 rtol=1.0e-2, atol=1.0e-6):
+                 # FIXME (Ole): I reckon these are way to high
+                 # See issue #228
+                 rtol=5.0e-2, atol=1.0e-4):
         """Get raster data as numeric array
 
         Args:
@@ -504,7 +506,7 @@ class Raster(Layer):
     def get_resolution(self, isotropic=False, native=False,
                        # FIXME (Ole): I reckon these are way to high
                        # See issue #228
-                       rtol=5.0e-2, atol=1.0e-6):
+                       rtol=5.0e-2, atol=1.0e-4):
         """Get raster resolution as a 2-tuple (resx, resy)
 
         Args:
