@@ -25,6 +25,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
 
     title = _('be affected')
     target_field = 'population'
+    category_title = 'KRB'
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -62,18 +63,22 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
         if not H.is_polygon_data:
             raise Exception(msg)
 
+        if not self.category_title in H.get_attribute_names():
+            self.category_title = 'Radius'
+        category_title = self.category_title
+
         # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name='population')
+                                                  attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
         new_attributes = H.get_data()
-        category_title = 'Category'
+
         categories = {}
         for attr in new_attributes:
             attr[self.target_field] = 0
-            cat = attr[category_title]
+            cat = attr[self.category_title]
             categories[cat] = 0
 
         # Count affected population per polygon and total
@@ -87,7 +92,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
             new_attributes[poly_id][self.target_field] += pop
 
             # Update population count for each category
-            cat = new_attributes[poly_id][category_title]
+            cat = new_attributes[poly_id][self.category_title]
             categories[cat] += pop
 
             # Update total
@@ -117,8 +122,10 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
                                header=True),
                       TableRow([_('Category'), _('Total')],
                                header=True)]
-        for name, pop in categories.iteritems():
-            table_body.append(TableRow([name, int(pop)]))
+
+        if category_title != 'Radius':
+            for name, pop in categories.iteritems():
+                table_body.append(TableRow([name, int(pop)]))
 
         table_body.append(TableRow(_('Map shows population affected in '
                                      'each of volcano hazard polygons.')))

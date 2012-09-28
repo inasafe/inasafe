@@ -269,8 +269,7 @@ def loadStandardLayers():
                   join(EXPDATA, 'DKI_buildings.shp'),
                   join(HAZDATA, 'jakarta_flood_category_123.asc'),
                   join(TESTDATA, 'roads_Maumere.shp'),
-                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')
-                  ]
+                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
     #FIXME (MB) -1 is untill we add the aggregation category because of
@@ -360,7 +359,6 @@ class DockTest(unittest.TestCase):
         DOCK.setLayerNameFromTitleFlag = False
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
-        DOCK.showPostProcessingLayers = False
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -499,8 +497,7 @@ class DockTest(unittest.TestCase):
         myFileList = ['kabupaten_jakarta_singlepart_0_good_attr.shp',
                       'kabupaten_jakarta_singlepart_1_good_attr.shp',
                       'kabupaten_jakarta_singlepart_3_good_attr.shp',
-                      'kabupaten_jakarta_singlepart_with_None_keyword.shp'
-                    ]
+                      'kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
         loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
 
@@ -580,55 +577,6 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation should be None. Found: %s' %
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
-
-    #FIXME remove X
-    def Xtest_checkPostProcessingLayersVisibility(self):
-        myRunButton = DOCK.pbnRunStop
-
-        # with KAB_NAME aggregation attribute defined in .keyword using
-        # kabupaten_jakarta_singlepart.shp
-        myResult, myMessage = setupScenario(
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart')
-        assert myResult, myMessage
-
-        #FIXME order?
-        myLayerList = [str(DOCK.tr('Padang_WGS84')),
-                        str(DOCK.tr('People')),
-                        str(DOCK.tr('An earthquake in Padang like in 2009')),
-                        str( DOCK.tr('Tsunami Max Inundation')),
-                        str(DOCK.tr('Tsunami Building Exposure')),
-                        str(DOCK.tr('A flood in Jakarta like in 2007')),
-                        str(DOCK.tr('Penduduk Jakarta')),
-                        str(DOCK.tr('An earthquake in Yogyakarta like in 2006')),
-                        str(DOCK.tr('A flood in Jakarta in RW areas identified as flood prone')),
-                        str(DOCK.tr('OSM Building Polygons')),
-                        str(DOCK.tr('DKI buildings')),
-                        str(DOCK.tr('Flood in Jakarta')),
-                        str(DOCK.tr('roads_Maumere')),
-                        str(DOCK.tr('kabupaten jakarta singlepart')),
-                        str(DOCK.tr('Population which Need evacuation'))]
-
-                       # Press RUN
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        currentLayers = canvasList().split('\n')
-        myMessage = ('The legend should have:\n %s \nFound: %s'
-                     % (myLayerList, currentLayers))
-        self.assertEquals(currentLayers, myLayerList, myMessage)
-
-        DOCK.showPostProcessingLayers = True
-        # LAYER List should have i additional layers,
-
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        currentLayers = canvasList().split('\n')
-        myLayerList.append(str(DOCK.tr('Population which Need evacuation '
-                                'aggregated to kabupaten jakarta singlepart')))
-        myMessage = ('The legend should have:\n %s \nFound: %s'
-                     % (myLayerList, currentLayers))
-        self.assertEquals(currentLayers, myLayerList, myMessage)
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
@@ -1325,8 +1273,8 @@ class DockTest(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-    suite = unittest.makeSuite(DockTest,
-                        'test_checkPostProcessingLayersVisibility')
+    #suite = unittest.makeSuite(DockTest,
+    #                    'test_cboAggregationToggle')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

@@ -22,8 +22,6 @@ import sys
 import traceback
 import logging
 import math
-import os
-import shutil
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
@@ -38,12 +36,8 @@ from qgis.core import (QGis,
                        QgsSymbolLayerV2Registry,
                        QgsColorRampShader,
                        QgsRasterTransparency,
-                       QgsMessageLog,
-                       QgsVectorLayer,
-                       QgsFeature,
-                       QgsVectorFileWriter)
-from safe_qgis.exceptions import StyleError, ShapefileCreationError, \
-    memoryLayerCreationError
+                       )
+from safe_qgis.exceptions import StyleError, MethodUnavailableError
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
@@ -51,9 +45,16 @@ import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
+try:
+    #available from qgis 1.8
+    from qgis.core import QgsMessageLog
 
-def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-    QgsMessageLog.logMessage(str(msg), tag, level)
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        QgsMessageLog.logMessage(str(msg), tag, level)
+except MethodUnavailableError:
+
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        print (str(msg), tag, level)
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
@@ -543,8 +544,8 @@ def qgisVersion():
 #        elif vType == QGis.Polygon:
 #            typeStr = 'Polygon'
 #        else:
-#            raise memoryLayerCreationError('Layer is whether Point or Line or '
-#                                           'Polygon')
+#            raise memoryLayerCreationError('Layer is whether Point or '
+#                                           'Line or Polygon')
 #    else:
 #        raise memoryLayerCreationError('Layer is not a VectorLayer')
 #
@@ -584,11 +585,11 @@ def qgisVersion():
 #    """Write a memory layer to a shapefile.
 #
 #    .. note:: The file will be saved into the theFilePath dir  If a qml
-#        matching theFileName.qml can be found it will automatically copied over
-#        to the output dir.
+#        matching theFileName.qml can be found it will automatically copied
+#        over to the output dir.
 #        Any existing shp by the same name will be
-#        overridden if theForceFlag is True, otherwise the existing file will be
-#        returned.
+#        overridden if theForceFlag is True, otherwise the existing file will
+#        be returned.
 #
 #    Args:
 #        theFileName: str filename excluding path and ext. e.g. 'mmi-cities'

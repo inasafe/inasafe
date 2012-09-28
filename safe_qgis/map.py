@@ -507,7 +507,7 @@ class Map():
                              myItalicsFlag)
         myLabel = QgsComposerLabel(self.composition)
         myLabel.setFont(myFont)
-        myHeading = self.tr('InaSAFE - Indonesian Scenario Assessment'
+        myHeading = self.tr('InaSAFE - Indonesia Scenario Assessment'
                             ' for Emergencies')
         myLabel.setText(myHeading)
         myLabel.adjustSizeToText()
