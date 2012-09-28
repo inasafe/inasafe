@@ -72,16 +72,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # english to the keywords file. The keys will be written as user data
         # in the combo entries.
         # .. seealso:: http://www.voidspace.org.uk/python/odict.html
-        self.standardExposureList = OrderedDict([('population [density]',
-                                      self.tr('population [density]')),
-                                     ('population [count]',
-                                      self.tr('population [count]')),
-                                     ('building',
-                                      self.tr('building')),
-                                     ('building [osm]',
-                                      self.tr('building [osm]')),
-                                     ('building [sigab]',
-                                      self.tr('building [sigab]')),
+        self.standardExposureList = OrderedDict([('population',
+                                      self.tr('population')),
+                                     ('structure',
+                                      self.tr('structure')),
                                      ('roads',
                                       self.tr('roads'))])
         self.standardHazardList = OrderedDict([('earthquake [MMI]',
@@ -97,8 +91,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                      ('flood [wet/dry]',
                                       self.tr('flood [wet/dry]')),
                                      ('flood [feet]', self.tr('flood [feet]')),
-                                     ('tephra [kg2/m2',
-                                      self.tr('tephra [kg2/m2]'))])
+                                     ('tephra [kg2/m2]',
+                                      self.tr('tephra [kg2/m2]')),
+                                      ('volcano',
+                                      self.tr('volcano'))])
         self.standardPostprocessingList = OrderedDict([('aggregation',
                                     self.tr('aggregation'))])
         # Save reference to the QGIS interface and parent

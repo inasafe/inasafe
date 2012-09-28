@@ -3,67 +3,67 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="clipper.py" line="287"/>
+        <location filename="clipper.py" line="297"/>
         <source>Layer or Extent passed to clip is None.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="130"/>
+        <location filename="clipper.py" line="136"/>
         <source>Expected a vector layer but received a %s.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="156"/>
+        <location filename="clipper.py" line="162"/>
         <source>Could not obtain data provider from layer &quot;%s&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="181"/>
+        <location filename="clipper.py" line="187"/>
         <source>Error when creating shapefile: &lt;br&gt;Filename:%s&lt;br&gt;Error: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="205"/>
+        <location filename="clipper.py" line="215"/>
         <source>No features fall within the clip extents. Try panning / zooming to an area containing data and then try to run your analysis again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="291"/>
+        <location filename="clipper.py" line="301"/>
         <source>Expected a raster layer but received a %s.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="299"/>
+        <location filename="clipper.py" line="309"/>
         <source>Input file to be clipped &quot;%s&quot; does not have the expected keywords file %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="366"/>
+        <location filename="clipper.py" line="376"/>
         <source>&lt;p&gt;Error while executing the following shell command:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="455"/>
+        <location filename="utilities.py" line="456"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="431"/>
+        <location filename="utilities.py" line="432"/>
         <source>Problem:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="427"/>
+        <location filename="utilities.py" line="428"/>
         <source>Error:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="435"/>
+        <location filename="utilities.py" line="436"/>
         <source>Click for Diagnostic Information:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="416"/>
+        <location filename="utilities.py" line="417"/>
         <source>No details provided</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,18 +76,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1288"/>
+        <location filename="dock.py" line="1286"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1331"/>
+        <location filename="dock.py" line="1329"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1799"/>
+        <location filename="dock.py" line="1803"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -107,67 +107,67 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1277"/>
+        <location filename="dock.py" line="1275"/>
         <source>Loading results...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1278"/>
+        <location filename="dock.py" line="1276"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1377"/>
+        <location filename="dock.py" line="1375"/>
         <source>Analyzing this question...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1551"/>
+        <location filename="dock.py" line="1553"/>
         <source>Preparing hazard data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1552"/>
+        <location filename="dock.py" line="1554"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1560"/>
+        <location filename="dock.py" line="1562"/>
         <source>Preparing exposure data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1561"/>
+        <location filename="dock.py" line="1563"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1799"/>
+        <location filename="dock.py" line="1803"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1818"/>
+        <location filename="dock.py" line="1821"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1805"/>
+        <location filename="dock.py" line="1808"/>
         <source>Generating your map as a PDF document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1810"/>
+        <location filename="dock.py" line="1813"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1818"/>
+        <location filename="dock.py" line="1821"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1707"/>
+        <location filename="dock.py" line="1710"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -252,7 +252,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1006"/>
+        <location filename="dock.py" line="1005"/>
         <source>Error when reading %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -262,62 +262,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1023"/>
+        <location filename="dock.py" line="1022"/>
         <source>Could not remove the unneded fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1034"/>
+        <location filename="dock.py" line="1033"/>
         <source>%1 is %2 but it should be either vector or raster</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1067"/>
+        <location filename="dock.py" line="1065"/>
         <source>Calculating zonal statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1067"/>
+        <location filename="dock.py" line="1065"/>
         <source>Abort...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1075"/>
+        <location filename="dock.py" line="1072"/>
         <source>ZonalStats: Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1075"/>
+        <location filename="dock.py" line="1072"/>
         <source>You aborted aggregation, so there are no data for analysis. Exiting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1084"/>
+        <location filename="dock.py" line="1081"/>
         <source>Aggregation unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1089"/>
+        <location filename="dock.py" line="1086"/>
         <source>Sum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1126"/>
+        <location filename="dock.py" line="1123"/>
         <source>An exception occurred when reading theaggregation data. %1 not found in %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1226"/>
+        <location filename="dock.py" line="1224"/>
         <source>Waiting for aggregation attribute selection...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1228"/>
+        <location filename="dock.py" line="1226"/>
         <source>Please select which attribute you want to use as ID for the aggregated results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1482"/>
+        <location filename="dock.py" line="1480"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them or disable viewport clipping in the options dialog. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Viewport clipping enabled: %6&lt;/p&gt;&lt;p&gt;Details: %7&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -454,86 +454,61 @@ to%s: %s</source>
     <name>KeywordsDialog</name>
     <message>
         <location filename="keywords_dialog.py" line="75"/>
-        <source>population [density]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="keywords_dialog.py" line="75"/>
-        <source>population [count]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="keywords_dialog.py" line="75"/>
-        <source>building</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="keywords_dialog.py" line="75"/>
-        <source>building [osm]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="keywords_dialog.py" line="75"/>
-        <source>building [sigab]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="keywords_dialog.py" line="75"/>
         <source>roads</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="87"/>
+        <location filename="keywords_dialog.py" line="81"/>
         <source>tsunami [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="87"/>
+        <location filename="keywords_dialog.py" line="81"/>
         <source>tsunami [wet/dry]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="87"/>
+        <location filename="keywords_dialog.py" line="81"/>
         <source>tsunami [feet]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="87"/>
+        <location filename="keywords_dialog.py" line="81"/>
         <source>flood [m]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="87"/>
+        <location filename="keywords_dialog.py" line="81"/>
         <source>flood [wet/dry]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="87"/>
+        <location filename="keywords_dialog.py" line="81"/>
         <source>flood [feet]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="87"/>
+        <location filename="keywords_dialog.py" line="81"/>
         <source>tephra [kg2/m2]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="150"/>
+        <location filename="keywords_dialog.py" line="148"/>
         <source>Hide advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="152"/>
+        <location filename="keywords_dialog.py" line="150"/>
         <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="589"/>
+        <location filename="keywords_dialog.py" line="620"/>
         <source>Not Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="371"/>
+        <location filename="keywords_dialog.py" line="385"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -543,19 +518,39 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="87"/>
+        <location filename="keywords_dialog.py" line="81"/>
         <source>earthquake [MMI]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="646"/>
+        <location filename="keywords_dialog.py" line="677"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="646"/>
+        <location filename="keywords_dialog.py" line="677"/>
         <source>InaSAFE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keywords_dialog.py" line="75"/>
+        <source>population</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keywords_dialog.py" line="98"/>
+        <source>aggregation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keywords_dialog.py" line="75"/>
+        <source>structure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keywords_dialog.py" line="81"/>
+        <source>volcano</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -602,63 +597,68 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="84"/>
+        <location filename="keywords_dialog_base.ui" line="91"/>
         <source>Subcategory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="94"/>
+        <location filename="keywords_dialog_base.ui" line="101"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="104"/>
+        <location filename="keywords_dialog_base.ui" line="111"/>
         <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="114"/>
+        <location filename="keywords_dialog_base.ui" line="121"/>
         <source>Advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="122"/>
+        <location filename="keywords_dialog_base.ui" line="129"/>
         <source>Predefined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="129"/>
+        <location filename="keywords_dialog_base.ui" line="136"/>
         <source>User defined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="147"/>
+        <location filename="keywords_dialog_base.ui" line="154"/>
         <source>Keyword</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="218"/>
+        <location filename="keywords_dialog_base.ui" line="225"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="231"/>
+        <location filename="keywords_dialog_base.ui" line="238"/>
         <source>Add to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="205"/>
+        <location filename="keywords_dialog_base.ui" line="212"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="241"/>
+        <location filename="keywords_dialog_base.ui" line="248"/>
         <source>Current keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="277"/>
+        <location filename="keywords_dialog_base.ui" line="284"/>
         <source>Remove selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keywords_dialog_base.ui" line="82"/>
+        <source>Postprocessing</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
