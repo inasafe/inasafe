@@ -65,7 +65,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
 
         if not self.category_title in H.get_attribute_names():
             self.category_title = 'Radius'
-	category_title = self.category_title
+        category_title = self.category_title
 
         # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(H, E,
