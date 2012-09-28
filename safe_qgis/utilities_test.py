@@ -81,7 +81,7 @@ def getQgisTestApp():
         myGuiFlag = True  # All test will run qgis in safe_qgis mode
         QGISAPP = QgsApplication(sys.argv, myGuiFlag)
 
-	# Note: This block is not needed for  QGIS > 1.8 which will 
+        # Note: This block is not needed for  QGIS > 1.8 which will
         # automatically check the QGIS_PREFIX_PATH var
         if 'QGIS_PREFIX_PATH' in os.environ:
             myPath = os.environ['QGIS_PREFIX_PATH']
