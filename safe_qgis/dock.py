@@ -1799,11 +1799,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        myMap = Map(self.iface)
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
-                            temp_dir(),
+                            temp_dir() + os.sep + myMap.getMapTitle() + '.pdf',
                             self.tr('Pdf File (*.pdf)'))
-        myMap = Map(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())
         self.showBusy(self.tr('Map Creator'),
                       self.tr('Generating your map as a PDF document...'),
