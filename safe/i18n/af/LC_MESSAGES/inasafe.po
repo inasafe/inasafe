@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 09:10+0700\n"
+"POT-Creation-Date: 2012-09-28 14:42+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,13 +94,14 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:139
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:118
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
 #: safe/engine/impact_functions_for_testing/BNPB_earthquake_guidelines.py:129
 #: safe/impact_functions/earthquake/itb_building_impact_model.py:182
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:124
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:139
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:118
 #: safe/impact_functions/inundation/flood_population_evacuation.py:111
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
 msgid "Total"
 msgstr ""
 
@@ -710,9 +711,10 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
 #: safe/impact_functions/core.py:640 safe/impact_functions/core.py:587
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:100
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
 #: safe/impact_functions/core.py:587
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:100
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:118
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
 msgid "Category"
 msgstr ""
 
@@ -1063,10 +1065,11 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:106
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:115
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:113
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:120
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:90
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:113
 #: safe/impact_functions/inundation/flood_population_evacuation.py:106
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:115
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:120
 msgid "People needing evacuation"
 msgstr ""
 
@@ -2550,7 +2553,8 @@ msgstr ""
 #: safe/storage/interpolation.py:66 safe/storage/interpolation.py:240
 #: scripts/inasafe-dev/safe/storage/interpolation.py:240
 #: safe/storage/interpolation.py:277 safe/storage/interpolation.py:246
-#: safe/engine/interpolation.py:392 safe/engine/interpolation.py:392
+#: safe/engine/interpolation.py:392 safe/engine/interpolation.py:393
+#: safe/engine/interpolation.py:393
 #, python-format
 msgid ""
 "Could not interpolate from raster layer %(raster)s to vector layer "
@@ -2808,8 +2812,9 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:168
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:174
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:173
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:175
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:173
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:168
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:175
 msgid "Population Count"
 msgstr ""
 
@@ -2881,6 +2886,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_population.py:116
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:107
 #: safe/impact_functions/generic/categorised_hazard_population.py:119
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:142
 #: safe/impact_functions/earthquake/earthquake_impact_on_women.py:140
 #: safe/impact_functions/earthquake/itb_earthquake_fatality_model.py:230
 #: safe/impact_functions/earthquake/padang_building_impact_model.py:132
@@ -2889,7 +2895,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:209
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:138
 #: safe/impact_functions/inundation/flood_population_evacuation.py:131
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:135
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:142
 msgid "Notes"
 msgstr ""
 
@@ -2933,8 +2939,9 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:157
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:163
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:162
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:164
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:162
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:157
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:164
 msgid "0"
 msgstr ""
 
@@ -2943,8 +2950,9 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:159
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:165
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:164
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:166
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:164
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:159
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:166
 #, python-format
 msgid "%i - %i"
 msgstr ""
@@ -2973,28 +2981,33 @@ msgid "be affected"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:130
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:130
 msgid "Map shows population affected in each of volcano hazard polygons."
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:136
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:136
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:143
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:143
 #, python-format
 msgid "Total population %i in view port"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:137
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:137
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:144
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:144
 msgid "People need evacuation if they are within the volcanic hazard zones."
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:140
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:140
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:147
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:147
 msgid "People affected by volcanic hazard zone"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:174
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:174
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
 msgid "Population affected by volcanic hazard zone"
 msgstr ""
 
