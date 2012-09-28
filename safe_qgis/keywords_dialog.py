@@ -99,6 +99,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                      ('flood [feet]', self.tr('flood [feet]')),
                                      ('tephra [kg2/m2',
                                       self.tr('tephra [kg2/m2]'))])
+        self.standardPostprocessingList = OrderedDict([('aggregation',
+                                    self.tr('aggregation'))])
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -182,6 +184,22 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if not theFlag:
             return
         self.setCategory('exposure')
+        self.updateControlsFromList()
+
+    # prevents actions being handled twice
+    @pyqtSignature('bool')
+    def on_radPostprocessing_toggled(self, theFlag):
+        """Automatic slot executed when the hazard radio is toggled on.
+
+        Args:
+           theFlag - boolean indicating the new checked state of the button
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        if not theFlag:
+            return
+        self.setCategory('postprocessing')
         self.updateControlsFromList()
 
     # prevents actions being handled twice
@@ -396,7 +414,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if self.getValueForKey('category') == myCategory:
             #nothing to do, go home
             return True
-        if myCategory not in ['hazard', 'exposure']:
+        if myCategory not in ['hazard', 'exposure', 'postprocessing']:
             # .. todo:: report an error to the user
             return False
         # Special case when category changes, we start on a new slate!
@@ -415,7 +433,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             myList = self.standardHazardList
             self.setSubcategoryList(myList)
 
-        else:
+        elif myCategory == 'exposure':
             self.reset()
             self.radExposure.blockSignals(True)
             self.radExposure.setChecked(True)
@@ -424,6 +442,16 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.removeItemByKey('unit')
             self.addListEntry('category', 'exposure')
             myList = self.standardExposureList
+            self.setSubcategoryList(myList)
+
+        else:
+            self.reset()
+            self.radPostprocessing.blockSignals(True)
+            self.radPostprocessing.setChecked(True)
+            self.radPostprocessing.blockSignals(False)
+            self.removeItemByKey('subcategory')
+            self.addListEntry('category', 'postprocessing')
+            myList = self.standardPostprocessingList
             self.setSubcategoryList(myList)
 
         return True
@@ -578,7 +606,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             else:
                 self.setSubcategoryList(self.standardExposureList,
                                         self.tr('Not Set'))
-        else:
+        elif self.radHazard.isChecked():
             if mySubcategory is not None and myUnits is not None:
                 self.setSubcategoryList(self.standardHazardList,
                                      mySubcategory + ' [' + myUnits + ']')
@@ -587,6 +615,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                         mySubcategory)
             else:
                 self.setSubcategoryList(self.standardHazardList,
+                                        self.tr('Not Set'))
+        else:
+            if mySubcategory is not None:
+                self.setSubcategoryList(self.standardPostprocessingList,
+                                        mySubcategory)
+            else:
+                self.setSubcategoryList(self.standardPostprocessingList,
                                         self.tr('Not Set'))
 
     # prevents actions being handled twice

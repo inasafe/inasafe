@@ -76,6 +76,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QRadioButton" name="radPostprocessing">
+          <property name="text">
+           <string>Postprocessing</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item row="2" column="0">
@@ -295,7 +302,6 @@
  </widget>
  <tabstops>
   <tabstop>radHazard</tabstop>
-  <tabstop>radExposure</tabstop>
   <tabstop>pbnAdvanced</tabstop>
   <tabstop>radPredefined</tabstop>
   <tabstop>cboKeyword</tabstop>
