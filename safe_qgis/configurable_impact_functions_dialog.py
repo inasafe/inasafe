@@ -46,6 +46,10 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog, Ui_configurableImpactFunc
            no exceptions explicitly raised
         '''
         QtGui.QDialog.__init__(self, theParent)
+        self.setupUi(self)
+        # Connect up the buttons.
+        self.ui.saveButton.clicked.connect(self.accept)
+        self.ui.cancelButton.clicked.connect(self.reject)
         
     def buildFormFromImpactFunctionsParameter(self, theFunction, params):
         #create dict of keys
@@ -59,11 +63,12 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog, Ui_configurableImpactFunc
         self.show()
 
     def _addFormItem(self, key, data):
+        self.formLayoutWidget
         label = QtGui.QLabel(self.formLayoutWidget)
         label.setObjectName(_fromUtf8(key + "Label"))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters, QtGui.QFormLayout.LabelRole, label)
         lineEdit = QtGui.QLineEdit(self.formLayoutWidget)
-        lineEdit.setText(data)
+        lineEdit.setText(str(data))
         lineEdit.setObjectName(_fromUtf8(key + "LineEdit"))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters, QtGui.QFormLayout.FieldRole, lineEdit)
         self.formItemCounters += 1
