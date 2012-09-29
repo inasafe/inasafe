@@ -414,6 +414,11 @@ def getSafeImpactFunctions(theFunction=None):
         Any exceptions are propogated
     """
     try:
+        f = open('conf_lalala1','wt')
+        print >>f, 'thefunction: ' + theFunction 
+        asciii = makeAscii(theFunction)
+        print >>f, 'ascii of theFunction: ' + asciii
+        f.close()
         return safe_get_plugins(makeAscii(theFunction))
     except:
         raise

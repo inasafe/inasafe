@@ -360,6 +360,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.getFunctions()
         self.setOkButtonStatus()
 
+    @pyqtSlot(QtCore.QString)
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
@@ -377,15 +378,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         """
         # Add any other logic you might like here...
-        #del theIndex
-        myFunctionId = self.getFunctionId(theIndex)
-        myFunction = getSafeImpactFunctions(myFunctionId)
+        f = open('conf_lalala', 'wt')
+        print >>f, "hello"
+        if not theIndex.isNull or not theIndex == '':
+            #del theIndex
+            print >>f, type(theIndex)
+            print >>f, theIndex
+            myFunctionID = self.getFunctionID()
+            print >>f, myFunctionID
+            myFunctions = getSafeImpactFunctions(myFunctionID)
+            print >>f, myFunctions
+            self.myFunction = myFunctions[0][myFunctionID]
+            print >>f, self.myFunction
+            self.functionParams = None
+            if hasattr(self.myFunction, 'parameters'):
+                self.functionParams = self.myFunction.parameters
+                print >>f, self.functionParams
+                self.setToolFunctionOptionsButton()
+        print >>f, "bubye!"
+        f.close()
         self.setOkButtonStatus()
-        if hasattr(myFunction, 'parameters'):
-            self.functionParams = myFunction.parameters
-        else:
-            self.functionParams = {}
-        self.setToolFunctionOptionsButton(self.functionParams)
+
 
     def setOkButtonStatus(self):
         """Helper function to set the ok button status if the
@@ -403,7 +416,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myMessage is not '':
             self.displayHtml(myMessage)
 
-    def setToolFunctionOptionsButton(self, functionParams):
+    def setToolFunctionOptionsButton(self):
         """Helper function to set the tool function button 
         status if there is function parameters to configure
         then enable it, otherwise disable it.
@@ -415,13 +428,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised."""
         #check if functionParams intialized
-        if len(functionParams) == 0:
-            self.toolFunctionOptions.setEnabled = False
+        f = open('conf_func', 'wt')
+        if self.functionParams is None:
+            self.toolFunctionOptions.setEnabled(False)
+            print >>f, "false!"
         else:
-            self.toolFunctionOptions.setEnabled = True
+            self.toolFunctionOptions.setEnabled(True)
+            print >>f, "true!"
+        f.close()
 
     def on_toolFunctionOptions_clicked(self):
-        ConfigurableImpactFunctionsDialog.buildFormFromImpactFunctionsParameter(self, self.functionParams)
+        conf = ConfigurableImpactFunctionsDialog()
+        conf.buildFormFromImpactFunctionsParameter(self.myFunction,
+                                                   self.functionParams)
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset

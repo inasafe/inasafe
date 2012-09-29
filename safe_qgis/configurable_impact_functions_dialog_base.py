@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'configurable_impact_functions_dialog_base.ui'
 #
-# Created: Mon Sep 17 16:07:09 2012
+# Created: Tue Sep 25 16:15:59 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -21,7 +21,7 @@ class Ui_configurableImpactFunctionsDialogBase(object):
         self.editableImpactFunctionsButtonBox = QtGui.QDialogButtonBox(configurableImpactFunctionsDialogBase)
         self.editableImpactFunctionsButtonBox.setGeometry(QtCore.QRect(30, 350, 541, 32))
         self.editableImpactFunctionsButtonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.editableImpactFunctionsButtonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
+        self.editableImpactFunctionsButtonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Save)
         self.editableImpactFunctionsButtonBox.setObjectName(_fromUtf8("editableImpactFunctionsButtonBox"))
         self.formLayoutWidget = QtGui.QWidget(configurableImpactFunctionsDialogBase)
         self.formLayoutWidget.setGeometry(QtCore.QRect(10, 10, 561, 331))

@@ -22,6 +22,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import (QtGui, QtCore, QtWebKit,)
 from configurable_impact_functions_dialog_base import Ui_configurableImpactFunctionsDialogBase
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
+
 class ConfigurableImpactFunctionsDialog(QtGui.QDialog, Ui_configurableImpactFunctionsDialogBase):
     '''ConfigurableImpactFunctions Dialog for InaSAFE.
     '''
@@ -42,5 +47,23 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog, Ui_configurableImpactFunc
         '''
         QtGui.QDialog.__init__(self, theParent)
         
-    def buildFormFromImpactFunctionsParameter(self, params):
-        pass
+    def buildFormFromImpactFunctionsParameter(self, theFunction, params):
+        #create dict of keys
+        #build the gui from params
+        #if save set it to the function based on dict of keys
+        #otherwise neglect it
+        self.formItemCounters = 0
+        keys = params.keys()
+        for key in keys:
+            self._addFormItem(key, params[key])
+        self.show()
+
+    def _addFormItem(self, key, data):
+        label = QtGui.QLabel(self.formLayoutWidget)
+        label.setObjectName(_fromUtf8(key + "Label"))
+        self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters, QtGui.QFormLayout.LabelRole, label)
+        lineEdit = QtGui.QLineEdit(self.formLayoutWidget)
+        lineEdit.setText(data)
+        lineEdit.setObjectName(_fromUtf8(key + "LineEdit"))
+        self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters, QtGui.QFormLayout.FieldRole, lineEdit)
+        self.formItemCounters += 1
