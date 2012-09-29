@@ -1589,7 +1589,7 @@ class Test_Engine(unittest.TestCase):
         # Verify interpolated values with test result
         count = 0
         for i in range(N):
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category is not None:
                 count += 1
 
@@ -1669,7 +1669,7 @@ class Test_Engine(unittest.TestCase):
                 counts['Not ' + DEFAULT_ATTRIBUTE] += 1
 
             # Count items in each specific category
-            category = attrs['Catergory']  # The typo is as the data
+            category = attrs['Category']
             if category not in counts:
                 counts[category] = 0
             counts[category] += 1
@@ -1757,11 +1757,10 @@ class Test_Engine(unittest.TestCase):
         # Test interpolation function
         #I = H.interpolate(E, layer_name='depth',
         #                  # Spelling is as in test data
-        #                  attribute_name='Catergory')
+        #                  attribute_name='Category')
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
-                                                  # Spelling is as in test data
-                                                  attribute_name='Catergory')
+                                                  attribute_name='Category')
 
         #I.write_to_file('MM_res.shp')
 
@@ -1774,7 +1773,7 @@ class Test_Engine(unittest.TestCase):
         I_names = I.get_attribute_names()
         E_names = E.get_attribute_names()
 
-        name = 'Catergory'
+        name = 'Category'
         msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
         assert name in I_names, msg
 
@@ -1787,7 +1786,7 @@ class Test_Engine(unittest.TestCase):
         # Verify interpolated values with test result
         counts = {}
         for i in range(N):
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category not in counts:
                 counts[category] = 0
 
@@ -2016,7 +2015,7 @@ class Test_Engine(unittest.TestCase):
                 counts['Not ' + DEFAULT_ATTRIBUTE] += 1
 
             # Check specific attribute
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category is not None:
                 assert category.lower() in ['high', 'very high']
                 count += 1
@@ -2129,7 +2128,7 @@ class Test_Engine(unittest.TestCase):
                 counts['Not ' + DEFAULT_ATTRIBUTE] += 1
 
             # Check specific attribute
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category is not None:
                 msg = 'category = %s' % category
                 assert category.lower() in ['low', 'medium',
@@ -2155,13 +2154,13 @@ class Test_Engine(unittest.TestCase):
         assert I_attributes[40]['parent_line_id'] == 54
 
         assert I_attributes[76]['highway'] == 'secondary'
-        assert I_attributes[76]['Catergory'] == 'High'
+        assert I_attributes[76]['Category'] == 'High'
         assert I_attributes[76]['osm_id'] == 69370718
         assert I_attributes[76]['polygon_id'] == 374
         assert I_attributes[76]['parent_line_id'] == 1
 
         assert I_attributes[85]['highway'] == 'secondary'
-        assert I_attributes[85]['Catergory'] == 'Very High'
+        assert I_attributes[85]['Category'] == 'Very High'
         assert I_attributes[85]['osm_id'] == 69371482
         assert I_attributes[85]['polygon_id'] == 453
         assert I_attributes[85]['parent_line_id'] == 133
@@ -2261,7 +2260,7 @@ class Test_Engine(unittest.TestCase):
 
         This is a test for road interpolation (issue #55)
 
-        # The dataset is: 2704 complex polygonsand 18574 complex line features
+        # The dataset is: 2704 complex polygons and 18574 complex line features
         """
 
         # Name file names for hazard level and exposure
@@ -2331,8 +2330,9 @@ class Test_Engine(unittest.TestCase):
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   attribute_name=None)
-        #print 'That took %f seconds' % (time.time() - t0)
-        #I.write_to_file('flood_prone_roads_jakarta.shp')
+        #print ('Using 2704 individual polygons took %f seconds'
+        #       % (time.time() - t0))
+        #I.write_to_file('flood_prone_roads_jakarta_individual.shp')
 
         # Check against correctness verified in QGIS
         I_attributes = I.get_data()
@@ -2343,6 +2343,79 @@ class Test_Engine(unittest.TestCase):
         assert I_attributes[198]['parent_line_id'] == 333
 
     test_polygon_to_roads_interpolation_jakarta_flood_example.slow = True
+
+    def Xtest_polygon_to_roads_interpolation_jakarta_flood_merged(self):
+        """Roads can be tagged with values from flood polygons
+
+        This is a test for road interpolation (issue #55)
+
+        # The dataset is: 59 merged complex polygons and 18574
+        # complex line features
+        """
+
+        # Name file names for hazard level and exposure
+        hazard_filename = ('%s/Jakarta_RW_2007_flood_Dissolve.shp' % TESTDATA)
+        exposure_filename = ('%s/jakarta_roads.shp' % EXPDATA)
+
+        # Read all input data
+        H = read_layer(hazard_filename)  # Polygons
+        #H_attributes = H.get_data()
+        #H_geometries = H.get_geometry()
+        assert len(H) == 59
+
+        E = read_layer(exposure_filename)
+        E_geometries = E.get_geometry()
+        E_attributes = E.get_data()
+        assert len(E) == 18574
+
+        # Get statistics of road types
+        road_types = {}
+        E_attributes = E.get_data()
+        for i in range(len(E)):
+            roadtype = E_attributes[i]['TYPE']
+            if roadtype in road_types:
+                road_types[roadtype] += 1
+            else:
+                road_types[roadtype] = 0
+
+        #for att in road_types:
+        #    print att, road_types[att]
+        assert road_types['residential'] == 14853
+
+        # Remove residental roads
+        cut_attributes = []
+        cut_geometries = []
+        for i in range(len(E)):
+            val = E_attributes[i]['TYPE']
+            if val != 'residential':
+                cut_attributes.append(E_attributes[i])
+                cut_geometries.append(E_geometries[i])
+
+        # Cut even further for the purpose of testing
+        E = Vector(data=cut_attributes[:-1:5],
+                   geometry=cut_geometries[:-1:5],
+                   projection=E.get_projection(),
+                   geometry_type=E.geometry_type)
+        assert len(E) == 744
+
+        # Test interpolation function
+        #import time
+        #t0 = time.time()
+        I = assign_hazard_values_to_exposure_data(H, E,
+                                                  layer_name='depth',
+                                                  attribute_name=None)
+        #print 'Using merged polygon took %f seconds' % (time.time() - t0)
+        #I.write_to_file('flood_prone_roads_jakarta_merged.shp')
+
+        # Check against correctness verified in QGIS
+        I_attributes = I.get_data()
+        assert I_attributes[198]['TYPE'] == 'secondary'
+        assert I_attributes[198]['NAME'] == 'Lingkar Mega Kuningan'
+        assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
+        assert I_attributes[198]['polygon_id'] == 235
+        assert I_attributes[198]['parent_line_id'] == 333
+
+    #test_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
 
     def Xtest_line_interpolation_from_polygons_one_attribute(self):
         """Line interpolation using one polygon works with attribute
@@ -2375,8 +2448,7 @@ class Test_Engine(unittest.TestCase):
         # Test interpolation function
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
-                                                  # Spelling is as in test data
-                                                  attribute_name='Catergory')
+                                                  attribute_name='Category')
 
         I_geometry = I.get_geometry()
         I_attributes = I.get_data()
@@ -2397,7 +2469,7 @@ class Test_Engine(unittest.TestCase):
         I_names = I.get_attribute_names()
         E_names = E.get_attribute_names()
 
-        name = 'Catergory'
+        name = 'Category'
         msg = 'Did not find hazard name "%s" in %s' % (name, I_names)
         assert name in I_names, msg
 
@@ -2410,7 +2482,7 @@ class Test_Engine(unittest.TestCase):
         for i in range(N):
 
             # Check specific attribute
-            category = I_attributes[i]['Catergory']  # The typo is as the data
+            category = I_attributes[i]['Category']
             if category not in counts:
                 counts[category] = 0
 
@@ -2775,6 +2847,9 @@ if __name__ == '__main__':
     #suite = unittest.makeSuite(Test_Engine,
     #                           ('test_polygon_to_roads_interpolation'
     #                            '_flood_example'))
+    #suite = unittest.makeSuite(Test_Engine,
+    #                           ('test_polygon_to_roads_interpolation'
+    #                            '_jakarta_flood_merged'))
     suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

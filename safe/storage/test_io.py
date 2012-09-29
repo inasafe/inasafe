@@ -121,18 +121,12 @@ class Test_IO(unittest.TestCase):
         for vectorname in ['test_buildings.shp',
                            'tsunami_building_exposure.shp',
                            'Padang_WGS84.shp',
-                           'nan_here.shp']:
+                           ]:
 
             filename = '%s/%s' % (TESTDATA, vectorname)
             layer = read_layer(filename)
             coords = numpy.array(layer.get_geometry())
             attributes = layer.get_data()
-
-            # Check NaN is read as NaN
-            if vectorname == 'nan_here.shp':
-                msg = 'It should be NaN but found %s' % attributes[00]['DEPTH']
-                assert numpy.isnan(attributes[00]['DEPTH']), msg
-                continue
 
             # Check basic data integrity
             N = len(layer)
@@ -425,6 +419,20 @@ class Test_IO(unittest.TestCase):
 
         v = Vector(geometry=test_data, geometry_type=2)
         assert v == v_ref
+
+        # Check that one single polygon works
+        P = numpy.array([[106.7922547, -6.2297884],
+                         [106.7924589, -6.2298087],
+                         [106.7924538, -6.2299127],
+                         [106.7922547, -6.2298899],
+                         [106.7922547, -6.2297884]])
+        v = Vector(geometry=[P])
+        assert v.is_polygon_data
+        assert len(v) == 1
+
+        v = Vector(geometry=[P], geometry_type='polygon')
+        assert v.is_polygon_data
+        assert len(v) == 1
 
     def test_attribute_types(self):
         """Different attribute types are handled correctly in vector data
@@ -727,9 +735,11 @@ class Test_IO(unittest.TestCase):
         # Write back to new (tif) file
         out_filename = unique_filename(suffix='.tif')
         R1.write_to_file(out_filename)
+        assert R1.filename == out_filename
 
         # Read again and check consistency
         R2 = read_layer(out_filename)
+        assert R2.filename == out_filename
 
         msg = ('Dimensions of written raster array do not match those '
                'of input raster file\n')
@@ -787,6 +797,7 @@ class Test_IO(unittest.TestCase):
 
             filename = '%s/%s' % (TESTDATA, rastername)
             R1 = read_layer(filename)
+            assert R1.filename == filename
 
             # Check consistency of raster
             A1 = R1.get_data()
@@ -817,6 +828,7 @@ class Test_IO(unittest.TestCase):
 
                 # Read again and check consistency
                 R2 = read_layer(out_filename)
+                assert R2.filename == out_filename
 
                 msg = ('Dimensions of written raster array do not match those '
                        'of input raster file\n')
@@ -1180,6 +1192,7 @@ class Test_IO(unittest.TestCase):
 
                 i += 1
 
+    @unittest.expectedFailure
     def test_get_bounding_box(self):
         """Bounding box is correctly extracted from file.
 
@@ -1255,7 +1268,8 @@ class Test_IO(unittest.TestCase):
 
         for filename in ['Earthquake_Ground_Shaking_clip.tif',
                          'tsunami_building_exposure.shp']:
-            bbox = get_bounding_box(os.path.join(TESTDATA, filename))
+            abspath = os.path.join(TESTDATA, filename)
+            bbox = get_bounding_box(abspath)
             msg = ('Got bbox %s from filename %s, but expected %s '
                    % (str(bbox), filename, str(ref_bbox[filename])))
             assert numpy.allclose(bbox, ref_bbox[filename]), msg
@@ -1265,6 +1279,32 @@ class Test_IO(unittest.TestCase):
 
             # Check the check :-)
             check_bbox_string(bbox_string)
+
+            # Check that it works for layer objects instantiated from file
+            L = read_layer(abspath)
+            L_bbox = L.get_bounding_box()
+            msg = ('Got bbox %s from filename %s, but expected %s '
+                   % (str(L_bbox), filename, str(ref_bbox[filename])))
+            assert numpy.allclose(L_bbox, ref_bbox[filename]), msg
+
+            # Check that it works for layer objects instantiated from data
+            if L.is_raster:
+                D = Raster(data=L.get_data(),
+                           projection=L.get_projection(),
+                           geotransform=L.get_geotransform())
+            elif L.is_vector:
+                D = Vector(data=L.get_data(),
+                           projection=L.get_projection(),
+                           geometry=L.get_geometry())
+            else:
+                msg = 'Unexpected layer object: %s' % str(L)
+                raise RuntimeError(msg)
+
+            # Check that get_bounding_box works for data instantiated layers
+            D_bbox = D.get_bounding_box()
+            msg = ('Got bbox %s from layer %s, but expected %s '
+                   % (str(D_bbox), str(D), str(L_bbox)))
+            assert numpy.allclose(D_bbox, L_bbox), msg
 
     def test_layer_API(self):
         """Vector and Raster instances have a similar API
@@ -1306,10 +1346,19 @@ class Test_IO(unittest.TestCase):
                     'subcategory': 'flood',
                     'layer': None,
                     'kw': 'with:colon',
-                    'number': 31,
                     'with spaces': 'trailing_ws ',
-                    'trailing_ws ': 13.42,
-                    ' preceding_ws': ' mixed spaces '}
+                    ' preceding_ws': ' mixed spaces ',
+                    'number': 31,
+                    'a_float ': 13.42,
+                    'a_tuple': (1, 4, 'a'),
+                    'a_list': [2, 5, 'b'],
+                    'a_dict': {'I': 'love', 'cheese': 'cake', 'number': 5},
+                    'a_nested_thing': [2, {'k': 17.8}, 'b', (1, 2)],
+                    'an_expression': '37 + 5',  # Evaluate to '37 + 5', not 42
+                    # Potentially dangerous - e.g. if calling rm
+                    'dangerous': '__import__("os").system("ls -l")',
+                    'yes': True,
+                    'no': False}
 
         write_keywords(keywords, kwd_filename)
         msg = 'Keywords file %s was not created' % kwd_filename
@@ -1347,14 +1396,31 @@ class Test_IO(unittest.TestCase):
 
         # Check keyword values
         for key in keywords:
-            refval = str(keywords[key]).strip()
-            newval = x[key]
+            refval = keywords[key]  # Expected value
+            newval = x[key]  # Value from keywords file
 
+            # Catch all - comparing string reprentations
             msg = ('Expected value "%s" was not read from "%s". '
                    'I got "%s"' % (refval, kwd_filename, newval))
-            assert refval == newval, msg
+            assert str(refval).strip() == str(newval), msg
 
-        # Check catching of wrong extension
+            # Check None
+            if refval is None:
+                assert newval is None
+
+            # Check Booleans - explicitly
+            if refval is True:
+                assert newval is True
+
+            if refval is False:
+                assert newval is False
+
+            # Check equality of python structures
+            if not isinstance(refval, basestring):
+                msg = 'Expected %s but got %s' % (refval, newval)
+                assert newval == refval, msg
+
+        # Check catching wrong extensions
         kwd_filename = unique_filename(suffix='.xxxx')
         try:
             write_keywords(keywords, kwd_filename)
@@ -1477,6 +1543,10 @@ class Test_IO(unittest.TestCase):
         # Test inclusion
         assert numpy.allclose(bbox_intersection(west_java, jakarta), jakarta)
 
+        # Ignore Bounding Boxes that are None
+        assert numpy.allclose(bbox_intersection(west_java, jakarta, None),
+            jakarta)
+
         # Realistic ones
         bbox1 = [94.972335, -11.009721, 141.014, 6.073612333333]
         bbox2 = [105.3, -8.5, 110.0, -5.5]
@@ -1523,7 +1593,7 @@ class Test_IO(unittest.TestCase):
         # Deal with invalid boxes
         try:
             bbox_intersection(bbox1, [53, 2, 40, 4])
-        except VerificationError:
+        except BoundingBoxError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1531,7 +1601,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection(bbox1, [50, 7, 53, 4])
-        except VerificationError:
+        except BoundingBoxError:
             pass
         else:
             msg = 'Should have raised exception'
@@ -1539,7 +1609,7 @@ class Test_IO(unittest.TestCase):
 
         try:
             bbox_intersection(bbox1, 'blko ho skrle')
-        except VerificationError:
+        except BoundingBoxError:
             pass
         else:
             msg = 'Should have raised exception'

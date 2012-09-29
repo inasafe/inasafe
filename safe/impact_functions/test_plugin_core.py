@@ -9,8 +9,8 @@ from core import get_admissible_plugins
 from core import get_function_title
 from core import get_plugins_as_table
 from core import parse_single_requirement
-from core import get_plugins_as_table2
 from utilities import pretty_string
+# from safe.impact_functions.core import get_dict_doc_func
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -195,29 +195,6 @@ class Test_plugin_core(unittest.TestCase):
                % str(P.keys()))
         assert 'F1' in P and 'F2' in P and 'F3' in P, msg
 
-    def test_get_plugins_as_table(self):
-        """Test get plugins as table"""
-        T = get_plugins_as_table()
-        S = T.toNewlineFreeString()
-        LOGGER.debug(S)
-        #f = file('/tmp/tbl.html', 'wt')
-        #f.write(S)
-        #f.close()
-        # Rather arbitrary way to see if the table has some data in it
-        # maybe there is a nicer way to test given that fn list can change? TS
-        assert len(S) > 1000
-
-        # Now test the table for a single nominated fn
-        T = get_plugins_as_table('F1')
-        S = T.toNewlineFreeString()
-        LOGGER.debug(S)
-        #f = file('/tmp/tbl.html', 'wt')
-        #f.write(S)
-        #f.close()
-        # Expecting that F1 test wont change and that the table produced for
-        # it is of a deterministic length
-        assert len(S) == 518
-
     def test_parse_requirement(self):
         """Test parse requirements of a function to dictionary."""
         myRequirement = requirements_collect(F4)[0]
@@ -236,7 +213,7 @@ class Test_plugin_core(unittest.TestCase):
         assert parsed_req == expected_req, myMessage
 
     def test_pretty_string(self):
-        """Test return prettu string from list or string."""
+        """Test return pretty string from list or string."""
         myStr = 'Aloha'
         mylist = ['a', 'b', 'c']
         expectedStr = 'Aloha'
@@ -247,11 +224,20 @@ class Test_plugin_core(unittest.TestCase):
         myMessage = 'Get %s should be % s' % (realStr2, expectedStr2)
         assert expectedStr2 == realStr2, myMessage
 
-    def test_get_plugins_as_table2(self):
+    def test_get_plugins_as_table(self):
         """Test get plugins as table with filtering."""
-        T = get_plugins_as_table2()
+        T = get_plugins_as_table()
         S = T.toNewlineFreeString()
         LOGGER.debug(S)
+
+    #==========================================================================
+    # def test_get_dict_doc_func(self):
+    #    """Test get doc string in dictionary format."""
+    #    func = 'Catergorised Hazard Population Impact Function'
+    #    dict_doc = get_dict_doc_func(func)
+    #    print dict_doc
+    #    assert dict_doc['author'] == 'AIFDR', 'XX' + dict_doc['author'] + 'XX'
+    #==========================================================================
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_plugin_core, 'test')

@@ -11,7 +11,7 @@ class EarthquakeBuildingDamageFunction(FunctionProvider):
                     subcategory.startswith('earthquake') and \
                     layertype=='raster'
     :param requires category=='exposure' and \
-                    subcategory.startswith('building')
+                    subcategory=='structure'
     """
 
     plugin_name = 'Earthquake Building Damage Function'

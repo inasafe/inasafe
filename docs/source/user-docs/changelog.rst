@@ -3,6 +3,27 @@
 Whats new?
 ==========
 
+Changelog for version 0.5.0
+---------------------------
+
+* Better documentation. See http://inasafe.org/contents.html
+* Ability to combine polygon hazard  (such as flood prone areas) with
+  population density (see attached screenshot).
+* Option to use entire intersection of hazard and exposure instead of clipping
+  to the somewhat arbitrary viewport (the training revealed that this was a bit
+  confusing)
+* Aggregation of raster impact layers by arbitrary polygon layers (such as
+  kelurahan boundaries)
+* Limited support for runtime configuration of impact functions (e.g. by
+  changing thresholds). This is an interim measure while the team is working on
+  a GUI to manipulate impact functions more generally.
+* More DRR actions added to impact function reports (such as how will warnings
+  be disseminated, how will we reach stranded people etc.)
+* Volcanic (zonal hazard) impact assessments on building and population
+* New function table view that lists all the available impact functions and allows
+  them to be filtered by different criteria.
+* Lots of small improvements to error reporting, GUI, translations and code quality.
+
 Changelog for version 0.4.1
 ...........................
 

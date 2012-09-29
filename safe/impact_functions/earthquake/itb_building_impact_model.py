@@ -76,7 +76,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
                     disabled=='True'
 
     :param requires category=='exposure' and \
-                    subcategory in ['building', 'structure'] and \
+                    subcategory=='structure' and \
                     layertype=='vector' and \
                     datatype in ['osm', 'itb', 'sigab']
     """
