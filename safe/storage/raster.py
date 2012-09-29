@@ -241,6 +241,8 @@ class Raster(Layer):
                    'format %s' % (filename, file_format))
             raise WriteLayerError(msg)
 
+        self.filename = filename
+
         # Write metada
         fid.SetProjection(str(self.projection))
         fid.SetGeoTransform(self.geotransform)
@@ -252,7 +254,9 @@ class Raster(Layer):
         write_keywords(self.keywords, basename + '.keywords')
 
     def get_data(self, nan=True, scaling=None, copy=False,
-                 rtol=1.0e-2, atol=1.0e-6):
+                 # FIXME (Ole): I reckon these are way to high
+                 # See issue #228
+                 rtol=5.0e-2, atol=1.0e-4):
         """Get raster data as numeric array
 
         Args:
@@ -500,7 +504,9 @@ class Raster(Layer):
         return geotransform2bbox(self.geotransform, self.columns, self.rows)
 
     def get_resolution(self, isotropic=False, native=False,
-                       rtol=1.0e-4, atol=1.0e-8):
+                       # FIXME (Ole): I reckon these are way to high
+                       # See issue #228
+                       rtol=5.0e-2, atol=1.0e-4):
         """Get raster resolution as a 2-tuple (resx, resy)
 
         Args:
@@ -528,20 +534,16 @@ class Raster(Layer):
 
                 resolution = keywords['resolution']
                 try:
-                    # FIXME (Ole): It seams float never
-                    # raises an exception. I am sure it used to,
-                    # this has to be rewritten more explicitly
                     res = float(resolution)
-                except ValueError:
-                    # Assume resolution is a string of the form:
+                except TypeError:
+                    # Assume resolution is a tuple of the form:
                     # (0.00045228819716044, 0.00045228819716044)
 
                     msg = ('Unknown format for resolution keyword: %s'
-                           % resolution)
-                    verify((resolution.startswith('(') and
-                            resolution.endswith(')')), msg)
+                           % str(resolution))
+                    verify(isinstance(resolution, tuple), msg)
 
-                    dx, dy = [float(s) for s in resolution[1:-1].split(',')]
+                    dx, dy = [float(s) for s in resolution]
                     if not isotropic:
                         res = (dx, dy)
                     else:

@@ -257,11 +257,11 @@ class Map():
                           theMax=myValue,
                           theLabel=myLabel)
                 myLastValue = myValue
-            else:
-                #TODO implement QGIS2.0 variant
-                #In master branch, use QgsRasterRenderer::rasterRenderer() to
-                # get/set how a raster is displayed.
-                pass
+        else:
+            #TODO implement QGIS2.0 variant
+            #In master branch, use QgsRasterRenderer::rasterRenderer() to
+            # get/set how a raster is displayed.
+            pass
         return self.legend
 
     def addSymbolToLegend(self,
@@ -507,7 +507,7 @@ class Map():
                              myItalicsFlag)
         myLabel = QgsComposerLabel(self.composition)
         myLabel.setFont(myFont)
-        myHeading = self.tr('InaSAFE - Indonesian Scenario Assessment'
+        myHeading = self.tr('InaSAFE - Indonesia Scenario Assessment'
                             ' for Emergencies')
         myLabel.setText(myHeading)
         myLabel.adjustSizeToText()

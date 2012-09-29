@@ -63,7 +63,7 @@ test-translations:
 translation-stats:
 	@echo
 	@echo "----------------------"
-	@echo "Translation statistics - for more info see http://inasafe.readthedocs.org/en/latest/developer-docs/i18n.html"
+	@echo "Translation statistics - for more info see http://inasafe.org/developer-docs/i18n.html"
 	@echo "----------------------"
 	@echo
 	@echo "Gettext translations (*.po):"
@@ -114,7 +114,7 @@ pep8:
 	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . || true
 
 # Run entire test suite
-test_suite: compile
+test_suite: compile testdata
 	@echo
 	@echo "---------------------"
 	@echo "Regression Test Suite"
@@ -152,7 +152,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "You should update the hash to check out a specific data version"
 	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 63370a454a0530ceabf0e5500e8f7f65e33267bb 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 8a6551776845ba052a1cc855c1b3348cc280a18e 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -256,9 +256,7 @@ jenkins-test: testdata
 	@echo "----------------------------------"
 	@echo "Regresssion Test Suite for Jenkins"
 	@echo "----------------------------------"
-	# xvfb-run --server-args="-screen 0, 1024x768x24" make check
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
-		nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis || :
 
 jenkins-pyflakes:
 	@echo

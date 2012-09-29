@@ -15,7 +15,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     subcategory in ['flood', 'tsunami']
 
     :param requires category=='exposure' and \
-                    subcategory in ['building', 'structure'] and \
+                    subcategory=='structure' and \
                     layertype=='vector'
     """
 

@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
-
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Wed Sep 12 15:02:17 2012
+# Created: Sat Sep 29 13:17:12 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -71,6 +69,12 @@ class Ui_DockBase(object):
         self.toolFunctionOptions.setIconSize(QtCore.QSize(48, 48))
         self.toolFunctionOptions.setObjectName(_fromUtf8("toolFunctionOptions"))
         self.gridLayout_3.addWidget(self.toolFunctionOptions, 6, 1, 1, 1)
+        self.label_2 = QtGui.QLabel(self.grpQuestion)
+        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.gridLayout_3.addWidget(self.label_2, 7, 0, 1, 1)
+        self.cboAggregation = QtGui.QComboBox(self.grpQuestion)
+        self.cboAggregation.setObjectName(_fromUtf8("cboAggregation"))
+        self.gridLayout_3.addWidget(self.cboAggregation, 8, 0, 1, 1)
         self.gridLayout.addWidget(self.grpQuestion, 0, 0, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(self.dockWidgetContents)
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
@@ -160,6 +164,7 @@ class Ui_DockBase(object):
         self.label_8.setText(QtGui.QApplication.translate("DockBase", "&Might", None, QtGui.QApplication.UnicodeUTF8))
         self.toolFunctionOptions.setToolTip(QtGui.QApplication.translate("DockBase", "Configure Impact Function Parameter", None, QtGui.QApplication.UnicodeUTF8))
         self.toolFunctionOptions.setText(QtGui.QApplication.translate("DockBase", "...", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("DockBase", "Aggregate results by", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("DockBase", "Results", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("DockBase", "Supported by:", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnHelp.setText(QtGui.QApplication.translate("DockBase", "Help", None, QtGui.QApplication.UnicodeUTF8))

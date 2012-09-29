@@ -22,24 +22,35 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 __type__ = 'alpha'  # beta, final etc will be shown in dock title
 
 import numpy
+import os
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 from safe_qgis.dock_base import Ui_DockBase
+from safe_qgis.aggregation_attribute_dialog_base import\
+    Ui_AggregationAttributeDialogBase
+
 from safe_qgis.help import Help
-from safe_qgis.utilities import getExceptionWithStacktrace, getWGS84resolution
+from safe_qgis.utilities import (getExceptionWithStacktrace,
+                                 getWGS84resolution,
+                                 logOnQgsMessageLog)
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
-                       QgsCoordinateTransform)
+                       QgsCoordinateTransform,
+                       QGis,
+                       QgsFeature,
+                       QgsRectangle)
+from qgis.analysis import QgsZonalStatistics
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
                                       getOptimalExtent,
                                       getBufferedExtent,
                                       internationalisedNames,
-                                      getSafeImpactFunctions)
+                                      getSafeImpactFunctions,
+                                      writeKeywordsToFile)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -48,13 +59,14 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
+from safe.api import write_keywords, read_keywords, ReadLayerError
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion)
-from safe_qgis.configurable_impact_functions_dialog import (
-                                        ConfigurableImpactFunctionsDialog)
+from safe_qgis.configurable_impact_functions_dialog import\
+   ConfigurableImpactFunctionsDialog
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -115,6 +127,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.exposureLayers = None  # array of all exposure layers
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
+        self._aggregationPrefix = 'aggr_'
+
+        self.initPostprocessingOutput()
 
         myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -162,6 +177,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFlag = mySettings.value(
                             'inasafe/setHideExposureFlag', False).toBool()
         self.hideExposureFlag = myFlag
+
+        # whether to clip hazard and exposure layers to the viewport
+        myFlag = mySettings.value(
+            'inasafe/clipToViewport', True).toBool()
+        self.clipToViewport = myFlag
 
         self.getLayers()
 
@@ -337,6 +357,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Add any other logic you might like here...
         del theIndex
         self.getFunctions()
+        self._toggleCboAggregation()
         self.setOkButtonStatus()
 
     def on_cboExposure_currentIndexChanged(self, theIndex):
@@ -358,6 +379,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Add any other logic you mught like here...
         del theIndex
         self.getFunctions()
+        self._toggleCboAggregation()
         self.setOkButtonStatus()
 
     @pyqtSlot(QtCore.QString)
@@ -397,6 +419,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.setToolFunctionOptionsButton()
         print >>f, "bubye!"
         f.close()
+        self._toggleCboAggregation()
         self.setOkButtonStatus()
 
 
@@ -505,11 +528,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def getLayers(self):
         """Helper function to obtain a list of layers currently loaded in QGIS.
 
-        On invocation, this method will populate cboHazard and
-        cboExposure on the dialog with a list of available layers. Only
-        **singleband raster** layers will be added to the hazard layer list,
-        and only **point vector** layers will be added to the exposure layer
-        list.
+        On invocation, this method will populate cboHazard,
+        cboExposure and cboAggregate on the dialog with a list of available
+        layers.
+        Only **singleband raster** layers will be added to the hazard layer
+        list,only **point vector** layers will be added to the exposure layer
+        list and Only **polygon vector** layers will be added to the aggregate
+        list
 
         Args:
            None.
@@ -523,8 +548,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.saveState()
         self.cboHazard.clear()
         self.cboExposure.clear()
+        self.cboAggregation.clear()
         self.hazardLayers = []
         self.exposureLayers = []
+        self.aggregationLayers = []
         # Map registry may be invalid if QGIS is shutting down
         myRegistry = None
         # pylint: disable=W0702
@@ -563,6 +590,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             if myTitle and self.setLayerNameFromTitleFlag:
                 myLayer.setLayerName(myTitle)
 
+            #check if layer is a vector polygon layer
+            layer = myRegistry.mapLayer(mySource)
+            if (layer.type() == QgsMapLayer.VectorLayer) and (
+                layer.geometryType() == QGis.Polygon):
+                self.addComboItemInOrder(self.cboAggregation, myTitle,
+                    mySource)
+                self.aggregationLayers.append(myLayer)
+
             # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
@@ -579,6 +614,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.addComboItemInOrder(self.cboExposure, myTitle, mySource)
                 self.exposureLayers.append(myLayer)
 
+        #handle the cboAggregation combo
+        self.cboAggregation.insertItem(0, self.tr('No aggregation'))
+        self.cboAggregation.setCurrentIndex(0)
+        self._toggleCboAggregation()
+
         # Now populate the functions list based on the layers loaded
         self.getFunctions()
         self.restoreState()
@@ -587,7 +627,34 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connectLayerListener()
         self.blockSignals(False)
+        self.getAggregationLayer()
         return
+
+    def _toggleCboAggregation(self):
+        """Helper function to toggle the aggregation combo depending on the
+        current dock status
+
+        Args:
+           None.
+        Returns:
+           None
+        Raises:
+           no
+        """
+        #FIXME (MB) remove hazardlayer and exposure layer type check when
+        # vector aggregation is supported
+        selectedHazardLayer = self.getHazardLayer()
+        selectedExposureLayer = self.getExposureLayer()
+
+        #more than 1 because No aggregation is always there
+        if (self.cboAggregation.count() > 1 and
+           selectedHazardLayer is not None and
+           selectedExposureLayer is not None and
+           selectedHazardLayer.type() == QgsMapLayer.RasterLayer and
+           selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
+            self.cboAggregation.setEnabled(True)
+        else:
+            self.cboAggregation.setEnabled(False)
 
     def getFunctions(self):
         """Helper function to obtain a list of impact functions from
@@ -712,6 +779,36 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
+    def getAggregationLayer(self):
+        """Obtain the name of the path to the aggregation file from the
+        userrole of the QtCombo for aggregation.
+
+        Args: None
+
+        Returns:
+            - None if no aggregation is selected or cboAggregation is
+        disabled
+            - else a polygon layer
+        """
+
+        myNoSelectionValue = 0
+        myIndex = self.cboAggregation.currentIndex()
+        if myIndex <= myNoSelectionValue:
+            return None
+        myLayerId = self.cboAggregation.itemData(myIndex,
+            QtCore.Qt.UserRole).toString()
+        myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
+        return myLayer
+
+    def getAggregationFieldNameCount(self):
+        return self._aggregationPrefix + 'count'
+
+    def getAggregationFieldNameMean(self):
+        return self._aggregationPrefix + 'mean'
+
+    def getAggregationFieldNameSum(self):
+        return self._aggregationPrefix + 'sum'
+
     def setupCalculator(self):
         """Initialise the ImpactCalculator based on the current
         state of the ui.
@@ -740,7 +837,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def accept(self):
         """Execute analysis when ok button is clicked."""
         #.. todo:: FIXME (Tim) We may have to implement some polling logic
-        # because the putton click accept() function and the updating
+        # because the button click accept() function and the updating
         # of the web view after model completion are asynchronous (when
         # threading mode is enabled especially)
         self.showBusy()
@@ -749,6 +846,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.displayHtml(myMessage)
             self.hideBusy()
             return
+
+        #check and generate keywords for the aggregation layer
+        self.aggregationLayer = self.getAggregationLayer()
+        if self.aggregationLayer is not None:
+            try:
+                self.aggregationAttribute = self._checkAggregationAttribute()
+            except Exception, e:  # pylint: disable=W0703
+                # FIXME (MB): This branch is not covered by the tests
+                QtGui.qApp.restoreOverrideCursor()
+                self.hideBusy()
+                myMessage = self.tr('An exception occurred when reading the '
+                                    'aggregation attribute.')
+                myMessage = getExceptionWithStacktrace(e,
+                    html=True,
+                    context=myMessage)
+                self.displayHtml(myMessage)
+                return
 
         try:
             self.setupCalculator()
@@ -772,10 +886,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = getExceptionWithStacktrace(e, html=True,
                                                    context=myContext)
             self.displayHtml(myMessage)
+            return
 
         QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.completed)
+                               self.startPostprocessing)
         QtGui.qApp.setOverrideCursor(
                 QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
@@ -827,6 +942,370 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Hide hour glass
         self.hideBusy()
 
+    def startPostprocessing(self):
+        """
+        Called on self.runner SIGNAL('done()') starts all postprocessing steps
+        Args: None
+
+        Returns: None
+        """
+        if self.aggregationLayer is not None:
+            self.aggregateResults(88)
+        self.completed()
+        self.initPostprocessingOutput()
+
+    def initPostprocessingOutput(self):
+        """
+        initializes and clears self.postprocessingOutput. needs to run at the
+         end of startPostprocessing
+
+        Returns: None
+        """
+
+        #FIXME (MB) maybe this could be a {} to allow having a parseable
+        # structure where each postprocessor adds a
+        # postprocessorname:'report string' pair
+        self.postprocessingOutput = []
+
+    def addPostprocessingOutput(self, output):
+        """
+        adds text to the postprocessingOutput
+
+        Args:
+            * output: the output from a postprocessor to add to the global
+            output. It should be valid HTML but no checks are enforced.
+
+        Returns: None
+        """
+        self.postprocessingOutput.append(str(output))
+
+    def getPostprocessingOutput(self):
+        """
+        gets the of the postprocessingOutput
+
+        Args: None
+
+        Returns: a string concatenation of the list elements
+        """
+        return ' '.join(self.postprocessingOutput)
+
+    def aggregateResults(self, progress):
+        """
+        Aggregation postprocessing step, this delas with the gui stuff and
+        calls _aggregateResults to do the actual aggregation work
+        Args: progress %to show in the progressbar
+
+        Returns: None
+        """
+        myTitle = self.tr('Aggregating results...')
+        myMessage = self.tr('This may take a little while - we are '
+                            ' aggregating the hazards by %1').arg(
+                            self.cboAggregation.currentText())
+        myProgress = progress
+
+        try:
+            self.showBusy(myTitle, myMessage, myProgress)
+            self._aggregateResults()
+            self._parseAggregationResults()
+            QtGui.qApp.restoreOverrideCursor()
+        except Exception, e:  # pylint: disable=W0703
+            # FIXME (Ole): This branch is not covered by the tests
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myContext = self.tr(
+                'An exception occurred when aggregating '
+                'the results')
+            myMessage = getExceptionWithStacktrace(e, html=True,
+                context=myContext)
+            self.displayHtml(myMessage)
+
+    def _aggregateResults(self):
+        """
+        Performs Aggregation postprocessing step by
+         - creating a copy of the dataset clipped by the impactlayer bounding
+          box
+         - stripping all attributes beside the aggregation attribute
+         - delegating to the appropriate aggregator for raster and vectors
+
+        Args: None
+
+        Returns: None
+        """
+        impactLayer = self.runner.impactLayer()
+
+        myQgisImpactLayer = self.readImpactLayer(impactLayer)
+        if not myQgisImpactLayer.isValid():
+            myMessage = self.tr('Error when reading %1').arg(myQgisImpactLayer)
+            raise ReadLayerError(myMessage)
+
+        lName = str(self.tr('%1 aggregated to %2')
+                .arg(myQgisImpactLayer.name())
+                .arg(self.aggregationLayer.name()))
+
+        clippedAggregationLayerPath = clipLayer(
+            self.aggregationLayer,
+            impactLayer.get_bounding_box(), explodeMultipart=False)
+
+        self.aggregationLayer = QgsVectorLayer(
+            clippedAggregationLayerPath, lName, 'ogr')
+        if not self.aggregationLayer.isValid():
+            myMessage = self.tr('Error when reading %1').arg(
+                self.aggregationLayer.lastError())
+            raise ReadLayerError(myMessage)
+
+        #delete unwanted fields
+        vProvider = self.aggregationLayer.dataProvider()
+        vFields = vProvider.fields()
+        toDel = []
+
+        for i in vFields:
+            if vFields[i].name() != self.aggregationAttribute:
+                toDel.append(i)
+        try:
+            vProvider.deleteAttributes(toDel)
+        # FIXME (Ole): Disable pylint check for the moment
+        # Need to work out what exceptions we will catch here, though.
+        except:  # pylint: disable=W0702
+            myMessage = self.tr('Could not remove the unneded fields')
+            logOnQgsMessageLog(myMessage)
+        del toDel, vProvider, vFields
+
+        writeKeywordsToFile(clippedAggregationLayerPath, {'title': lName})
+
+        if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
+            self._aggregateResultsVector(myQgisImpactLayer)
+        elif myQgisImpactLayer.type() == QgsMapLayer.RasterLayer:
+            self._aggregateResultsRaster(myQgisImpactLayer)
+        else:
+            myMessage = self.tr('%1 is %2 but it should be either vector or '
+                                'raster').arg(myQgisImpactLayer.name()).arg(
+                                myQgisImpactLayer.type())
+            raise ReadLayerError(myMessage)
+
+    def _aggregateResultsVector(self, myQgisImpactLayer):
+        """
+        Performs Aggregation postprocessing step on vectorial impact layers
+        Args:
+            * myQgisImpactLayer a valid QgsRasterLayer
+
+        Returns: None
+        """
+        #TODO implement polygon to polygon aggregation (dissolve,
+        # line in polygon, point in polygon)
+        logOnQgsMessageLog('Vector aggregation not implemented yet. Called on'
+                           ' %s' % myQgisImpactLayer.name())
+        return
+
+    def _aggregateResultsRaster(self, myQgisImpactLayer):
+        """
+        Performs Aggregation postprocessing step on raster impact layers by
+        calling QgsZonalStatistics
+        Args:
+            * myQgisImpactLayer a valid QgsVectorLayer
+
+        Returns: None
+        """
+        zonStat = QgsZonalStatistics(
+            self.aggregationLayer,
+            myQgisImpactLayer.dataProvider().dataSourceUri(),
+            self._aggregationPrefix)
+        progressDialog = QtGui.QProgressDialog(
+            self.tr('Calculating zonal statistics'),
+            self.tr('Abort...'),
+            0,
+            0)
+        zonStat.calculateStatistics(progressDialog)
+        if progressDialog.wasCanceled():
+            QtGui.QMessageBox.error(self, self.tr('ZonalStats: Error'),
+                self.tr(
+                    'You aborted aggregation, '
+                    'so there are no data for analysis. Exiting...'))
+#        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
+        return
+
+    def _parseAggregationResults(self):
+        if self.aggregationAttribute is None:
+            aggrAttrTitle = self.tr('Aggregation unit')
+        else:
+            aggrAttrTitle = self.aggregationAttribute
+
+        #open table
+        myHTML = ('<table class="table table-striped condensed">'
+                    '  <tbody>'
+                    '    <tr>'
+                    '       <td colspan="100%">'
+                    '         <strong>'
+                    + self.aggregationLayer.name() +
+                    '         </strong>'
+                    '       </td>'
+                    '    </tr>'
+                    '    <tr>'
+                    '      <th width="35%">'
+                    + aggrAttrTitle +
+                    '      </th>'
+                    '      <th>'
+                    + self.tr('Sum') +
+                    '      </th>'
+                    '    </tr>')
+        #fill table
+        provider = self.aggregationLayer.dataProvider()
+        allAttrs = provider.attributeIndexes()
+        # start data retreival: fetch no geometry and all attributes for each
+        # feature
+        provider.select(allAttrs, QgsRectangle(), False)
+
+        try:
+            nameFieldIndex = self.aggregationLayer.fieldNameIndex(
+                self.aggregationAttribute)
+        # FIXME (Ole): Disable pylint check for the moment
+        # Need to work out what exceptions we will catch here, though.
+        except:  # pylint: disable=W0702
+            nameFieldIndex = None
+        try:
+            sumFieldIndex = self.aggregationLayer.fieldNameIndex(
+            self.getAggregationFieldNameSum())
+        except ReadLayerError, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An exception occurred when reading the'
+                                'aggregation data. %1 not found in %2')\
+            .arg(self.getAggregationFieldNameSum())\
+            .arg(self.aggregationLayer.name())
+            myMessage = getExceptionWithStacktrace(e,
+                html=True,
+                context=myMessage)
+            self.displayHtml(myMessage)
+            return
+
+        feat = QgsFeature()
+        while provider.nextFeature(feat):
+            attrMap = feat.attributeMap()
+            if nameFieldIndex is None:
+                name = str(feat.id())
+            else:
+                name = attrMap[nameFieldIndex].toString()
+            aggrSum = attrMap[sumFieldIndex].toString()
+            aggrSum = str(int(round(float(aggrSum))))
+
+            myHTML += ('    <tr>'
+                        '      <td>'
+                        + name +
+                        '      </td>'
+                        '      <td>'
+                        + aggrSum +
+                        '      </td>'
+                        '    </tr>')
+        #close table
+        myHTML += ('  </tbody>'
+                   '</table>')
+        self.addPostprocessingOutput(myHTML)
+
+    def _checkAggregationAttribute(self):
+        """checks if the aggregation layer has a aggregation attribute
+        keyword. If not it calls _promptForAggregationAttribute to prompt for
+         an input
+
+        Args: None
+
+        Returns: the value of the aggregation attribute keyword
+
+        Raises: Propogates any error
+        """
+        myKeywordFilePath = os.path.splitext(str(
+            self.aggregationLayer.source()))[0]
+        myKeywordFilePath += '.keywords'
+        if not os.path.isfile(myKeywordFilePath):
+            self._promptForAggregationAttribute(self.aggregationLayer,
+                myKeywordFilePath, None)
+        else:
+            keywords = read_keywords(myKeywordFilePath)
+
+            if 'aggregation attribute' in keywords:
+                try:
+                    myValue = keywords['aggregation attribute']
+                except:
+                    raise
+            else:
+                myValue = self._promptForAggregationAttribute(self
+                .aggregationLayer, myKeywordFilePath, keywords)
+            return myValue
+
+    def _promptForAggregationAttribute(self, myLayer, myKeywordFilePath,
+                                       myKeywords):
+        """prompt user for a decision on which attribute has to be the key
+        attribute for the aggregated data and writes the keywords file
+        This could be swapped to a call to the keyword editor
+
+        Args: None
+
+        Returns: the value of the aggregation attribute keyword. None if no
+        usable attribute has been found
+
+        Raises: Propagates any error
+        """
+        if myKeywords is None:
+            myKeywords = dict()
+
+        vProvider = myLayer.dataProvider()
+        vFields = vProvider.fields()
+        fields = []
+        for i in vFields:
+            # show only int or string fields to be chosen as aggregation
+            # attribute other possible would be float
+            if vFields[i].type() in [
+               QtCore.QVariant.Int, QtCore.QVariant.String]:
+                fields.append(vFields[i].name())
+
+        #there is no usable attribute, use None
+        if len(fields) == 0:
+            aggrAttribute = None
+            logOnQgsMessageLog(
+                'there is no usable attribute, use None')
+        #there is only one usable attribute, use it
+        elif len(fields) == 1:
+            aggrAttribute = fields[0]
+            logOnQgsMessageLog('there is only one usable attribute, '
+                               'use it: ' + str(aggrAttribute))
+        #there are multiple usable attribute, prompt for an answer
+        elif len(fields) > 1:
+            myTitle = self.tr(
+                'Waiting for aggregation attribute selection...')
+            myMessage = self.tr('Please select which attribute you want to'
+                                ' use as ID for the aggregated results')
+            myProgress = 1
+            self.showBusy(myTitle, myMessage, myProgress)
+
+            #open a AggregationAttributeDialog
+            dialog = QtGui.QDialog()
+            #remove all windows hints to avoid allowing for cancelling the
+            # dialog
+            dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
+            dialogGui = Ui_AggregationAttributeDialogBase()
+            dialogGui.setupUi(dialog)
+            dialogGui.buttonBox.button(
+                QtGui.QDialogButtonBox.Cancel).setHidden(True)
+            cboAggr = dialogGui.cboAggregationAttributes
+            cboAggr.clear()
+            cboAggr.addItems(fields)
+            cboAggr.setCurrentIndex(0)
+            self.disableBusyCursor()
+
+            if dialog.exec_() == QtGui.QDialog.Accepted:
+                aggrAttribute = cboAggr.currentText()
+                logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
+                                   ' as aggregation attribute')
+            else:
+                #the user cancelled, use the first attribute as default
+                aggrAttribute = fields[0]
+#                myMessage = self.tr(
+#                    'You have to select an aggregation attribute')
+#                raise InvalidParameterException(myMessage)
+
+        self.enableBusyCursor()
+        myKeywords['aggregation attribute'] = aggrAttribute
+        write_keywords(myKeywords, myKeywordFilePath)
+        return aggrAttribute
+
     def _completed(self):
         """Helper function for slot activated when the process is done.
 
@@ -847,6 +1326,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.showBusy(myTitle, myMessage, myProgress)
 
         myMessage = self.runner.result()
+        # FIXME (Ole): This branch is not covered by the tests
         myEngineImpactLayer = self.runner.impactLayer()
 
         if myEngineImpactLayer is None:
@@ -863,6 +1343,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # Load impact layer into QGIS
         myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+
+        myKeywords = self.keywordIO.readKeywords(myQgisImpactLayer)
+        #write postprocessing report to keyword
+        myKeywords['postprocessing_report'] = self.getPostprocessingOutput()
+        self.keywordIO.writeKeywords(myQgisImpactLayer, myKeywords)
 
         # Get tabular information from impact layer
         myReport = self.keywordIO.readKeywords(myQgisImpactLayer,
@@ -890,7 +1375,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             myMessage = self.tr('Impact layer %s was neither a raster or a '
                    'vector layer' % myQgisImpactLayer.source())
-            raise Exception(myMessage)
+            raise ReadLayerError(myMessage)
         # Add layer to QGIS
         QgsMapLayerRegistry.instance().addMapLayer(myQgisImpactLayer)
         # then zoom to it
@@ -901,6 +1386,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myLegend = self.iface.legendInterface()
             myLegend.setLayerVisible(myExposureLayer, False)
         self.restoreState()
+
+        #append postprocessing report
+        myReport += self.getPostprocessingOutput()
+
         # Return text to display in report pane
         return myReport
 
@@ -963,8 +1452,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.runner:
             QtCore.QObject.disconnect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.completed)
-            del self.runner
+                               self.startPostprocessing)
             self.runner = None
 
         self.grpQuestion.setEnabled(True)
@@ -1026,29 +1514,38 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             # Extent is returned as an array [xmin,ymin,xmax,ymax]
             # We will convert it to a QgsRectangle afterwards.
-            myGeoExtent = getOptimalExtent(myHazardGeoExtent,
-                                           myExposureGeoExtent,
-                                           myViewportGeoExtent)
+            if self.clipToViewport:
+                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                                               myExposureGeoExtent,
+                                               myViewportGeoExtent)
+            else:
+                myGeoExtent = getOptimalExtent(myHazardGeoExtent,
+                    myExposureGeoExtent)
+
         except InsufficientOverlapException, e:
+            # FIXME (MB): This branch is not covered by the tests
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
                    'and / or the layers and the viewport. Please select '
-                   'two overlapping layers and zoom or pan to them. Full '
-                   'details follow:</p>'
+                   'two overlapping layers and zoom or pan to them or disable'
+                   ' viewport clipping in the options dialog'
+                   '. Full details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
                    '<p>Hazard: %1</p>'
                    '<p>Exposure: %2</p>'
                    '<p>Viewport Geo Extent: %3</p>'
                    '<p>Hazard Geo Extent: %4</p>'
                    '<p>Exposure Geo Extent: %5</p>'
-                   '<p>Details: %6</p>').arg(
+                   '<p>Viewport clipping enabled: %6</p>'
+                   '<p>Details: %7</p>').arg(
                         myHazardLayer.source()).arg(
                         myExposureLayer.source()).arg(
                         QtCore.QString(str(myViewportGeoExtent))).arg(
                         QtCore.QString(str(myHazardGeoExtent))).arg(
                         QtCore.QString(str(myExposureGeoExtent))).arg(
+                        QtCore.QString(str(self.clipToViewport))).arg(
                         str(e))
-            raise Exception(myMessage)
+            raise InsufficientOverlapException(myMessage)
 
         # Next work out the ideal spatial resolution for rasters
         # in the analysis. If layers are not native WGS84, we estimate
@@ -1091,6 +1588,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # Hazard layer is vector
 
             # FIXME (Ole): Check that it is a polygon layer
+
+            # FIXME (Ole): This should say something like this (issue #285)
+            #if myHazardLayer.geometry() == QgsMapLayer.Point:
+            #    myGeoExtent = myExposureGeoExtent
             pass
 
         # Make sure that we have EPSG:4326 versions of the input layers
@@ -1111,9 +1612,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             'layer and the current view extents.')
         myProgress = 44
         self.showBusy(myTitle, myMessage, myProgress)
-        myClippedExposurePath = clipLayer(myExposureLayer,
-                                        myGeoExtent, myCellSize,
-                                        theExtraKeywords=extraExposureKeywords)
+        myClippedExposurePath = clipLayer(
+            myExposureLayer,
+            myGeoExtent, myCellSize,
+            theExtraKeywords=extraExposureKeywords)
 
         return myClippedHazardPath, myClippedExposurePath
 
@@ -1225,7 +1727,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myKeywords = self.keywordIO.readKeywords(theLayer)
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
+                    if 'postprocessing_report' in myKeywords:
+                        myReport += myKeywords['postprocessing_report']
                     self.pbnPrint.setEnabled(True)
+
                 else:
                     self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
@@ -1279,6 +1784,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myStateDict = {'hazard': self.cboHazard.currentText(),
                        'exposure': self.cboExposure.currentText(),
                        'function': self.cboFunction.currentText(),
+                       'aggregation': self.cboAggregation.currentText(),
                        'report':
                            self.wvResults.page().currentFrame().toHtml()}
         self.state = myStateDict
@@ -1304,6 +1810,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myItemText = self.cboHazard.itemText(myCount)
             if myItemText == self.state['hazard']:
                 self.cboHazard.setCurrentIndex(myCount)
+                break
+        for myCount in range(0, self.cboAggregation.count()):
+            myItemText = self.cboAggregation.itemText(myCount)
+            if myItemText == self.state['aggregation']:
+                self.cboAggregation.setCurrentIndex(myCount)
                 break
         self.restoreFunctionState(self.state['function'])
         self.wvResults.setHtml(self.state['report'])
@@ -1335,11 +1846,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        myMap = Map(self.iface)
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
-                            temp_dir(),
+                            temp_dir() + os.sep + myMap.getMapTitle() + '.pdf',
                             self.tr('Pdf File (*.pdf)'))
-        myMap = Map(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())
         self.showBusy(self.tr('Map Creator'),
                       self.tr('Generating your map as a PDF document...'),
@@ -1391,7 +1902,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         for myCount in range(0, mySize):
             myItemText = str(theCombo.itemText(myCount))
             # see if theItemText alphabetically precedes myItemText
-            if cmp(theItemText, myItemText) < 0:
+            if cmp(str(theItemText).lower(), myItemText.lower()) < 0:
                 theCombo.insertItem(myCount, theItemText, theItemData)
                 return
         #otherwise just add it to the end

@@ -95,3 +95,13 @@ def pretty_string(myArg):
         return ', '.join(myArg)
     else:
         return str(myArg)
+
+
+def remove_double_spaces(myStr):
+    '''Remove double spaces from a string. Return the string without any
+        dobule spaces
+    '''
+    while myStr.find('  ') != -1:
+        myStr = myStr.replace('  ', ' ')
+
+    return myStr

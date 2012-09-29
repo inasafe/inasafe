@@ -8,8 +8,8 @@ from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
 
 
-class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
-    """Plugin for impact of population as derived by catergorised hazard
+class CategorisedHazardPopulationImpactFunction(FunctionProvider):
+    """Plugin for impact of population as derived by categorised hazard
 
     :author AIFDR
     :rating 2
@@ -20,26 +20,30 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
     :param requires category=='exposure' and \
                     subcategory=='population' and \
                     layertype=='raster'
+    :citation citation1
+    :citation citation2 \
+                next citation2
+    :detail The Detail
     """
 
     title = _('be impacted')
 
     def run(self, layers):
-        """Plugin for impact of population as derived by catergorised hazard
+        """Plugin for impact of population as derived by categorised hazard
 
         Input
           layers: List of layers expected to contain
-              H: Raster layer of catergorised hazard
+              H: Raster layer of categorised hazard
               P: Raster layer of population data
 
-        Counts number of people exposed to each caterogry of the hazard
+        Counts number of people exposed to each category of the hazard
 
         Return
-          Map of population exposed to high catergory
-          Table with number of people in each catergory
+          Map of population exposed to high category
+          Table with number of people in each category
         """
 
-        # The 3 catergory
+        # The 3 category
         high_t = 1
         medium_t = 0.66
         low_t = 0.34
@@ -53,9 +57,9 @@ class CatergorisedHazardPopulationImpactFunction(FunctionProvider):
                                 self)
 
         # Extract data as numeric arrays
-        C = inundation.get_data(nan=0.0)  # Catergory
+        C = inundation.get_data(nan=0.0)  # Category
 
-        # Calculate impact as population exposed to each catergory
+        # Calculate impact as population exposed to each category
         P = population.get_data(nan=0.0, scaling=True)
         H = numpy.where(C == high_t, P, 0)
         M = numpy.where(C > medium_t, P, 0)

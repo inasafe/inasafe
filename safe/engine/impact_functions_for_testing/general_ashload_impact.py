@@ -18,7 +18,7 @@ class TephraBuildingImpactFunction(FunctionProvider):
                     unit=='kg/m^2'
 
     :param requires category=='exposure' and \
-                    subcategory.startswith('building') and \
+                    subcategory=='structure' and \
                     layertype=='vector'
     """
 

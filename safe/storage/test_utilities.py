@@ -27,11 +27,11 @@ SIMPLE_PATH = os.path.abspath(
 DKI_KEYWORDS = {'datatype': 'osm',
                 'category': 'exposure',
                 'title': 'buildings_osm_4326',
-                'subcategory': 'building',
+                'subcategory': 'structure',
                 'purpose': 'dki'}
 OSM_KEYWORDS = {'datatype': 'flood',
                 'category': 'hazard',
-                'subcategory': 'building',
+                'subcategory': 'structure',
                 'title': 'flood_osm_4326'}
 
 
