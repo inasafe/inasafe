@@ -677,6 +677,9 @@ class Test_IO(unittest.TestCase):
             for j in range(numlon):
                 A1[numlat - 1 - i, j] = linear_function(lon[j], lat[i])
 
+        # Throw in a nodata element
+        A1[2, 6] = numpy.nan
+
         # Upper left corner
         assert A1[0, 0] == 105.25
         assert A1[0, 0] == linear_function(lon[0], lat[4])
@@ -737,9 +740,15 @@ class Test_IO(unittest.TestCase):
         R1.write_to_file(out_filename)
         assert R1.filename == out_filename
 
+        # Check nodata in original layer
+        assert numpy.isnan(R1.get_nodata_value())
+
         # Read again and check consistency
         R2 = read_layer(out_filename)
         assert R2.filename == out_filename
+
+        # Check nodata in read layer
+        assert numpy.isnan(R2.get_nodata_value())
 
         msg = ('Dimensions of written raster array do not match those '
                'of input raster file\n')
@@ -753,11 +762,11 @@ class Test_IO(unittest.TestCase):
 
         A2 = R2.get_data()
 
-        assert numpy.allclose(numpy.min(A1), numpy.min(A2))
-        assert numpy.allclose(numpy.max(A1), numpy.max(A2))
+        assert numpy.allclose(numpy.nanmin(A1), numpy.nanmin(A2))
+        assert numpy.allclose(numpy.nanmax(A1), numpy.nanmax(A2))
 
         msg = 'Array values of written raster array were not as expected'
-        assert numpy.allclose(A1, A2), msg
+        assert nanallclose(A1, A2), msg
 
         msg = 'Geotransforms were different'
         assert R1.get_geotransform() == R2.get_geotransform(), msg
@@ -933,7 +942,7 @@ class Test_IO(unittest.TestCase):
     test_bad_ascii_data.slow = True
 
     def test_nodata_value(self):
-        """NODATA value is correctly recorded in GDAL
+        """NODATA value is correctly handled for GDAL layers
         """
 
         # Read files with -9999 as nominated nodata value
@@ -987,8 +996,8 @@ class Test_IO(unittest.TestCase):
                 except InaSAFEError:
                     pass
                 else:
-                    msg ('Illegal nan value %s should have raised '
-                         'exception' % illegal)
+                    msg = ('Illegal nan value %s should have raised '
+                           'exception' % illegal)
                     raise RuntimeError(msg)
 
     test_nodata_value.slow = True
@@ -2160,6 +2169,6 @@ class Test_IO(unittest.TestCase):
         # More...
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test_nodata_value')
+    suite = unittest.makeSuite(Test_IO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

@@ -79,7 +79,7 @@ class Raster(Layer):
         if isinstance(data, basestring):
             self.read_from_file(data)
         else:
-            # Assume that data is provided as an array
+            # Assume that data is provided as a numpy array
             # with extra keyword arguments supplying metadata
 
             self.data = numpy.array(data, dtype='d', copy=False)
@@ -89,6 +89,11 @@ class Raster(Layer):
             self.columns = data.shape[1]
 
             self.number_of_bands = 1
+
+            # We assume internal numpy layers are using nan correctly
+            # FIXME (Ole): If read from file is refactored to load the data
+            #              this should be taken care of there
+            self.nodata_value = numpy.nan
 
     def __str__(self):
         """Render as name and dimensions
@@ -217,6 +222,8 @@ class Raster(Layer):
 
         Args:
             * filename: filename with extension .tif
+
+        Gdal documentation at: http://www.gdal.org/classGDALRasterBand.html
         """
 
         # Check file format
@@ -252,6 +259,8 @@ class Raster(Layer):
 
         # Write data
         fid.GetRasterBand(1).WriteArray(A)
+        fid.GetRasterBand(1).SetNoDataValue(self.nodata_value)
+        fid = None  # Close
 
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
@@ -289,15 +298,12 @@ class Raster(Layer):
         if hasattr(self, 'data') and self.data is not None:
             # Return internal data grid
             if copy:
+
                 A = copy_module.deepcopy(self.data)
             else:
                 A = self.data
             verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
 
-            if not nan is True:
-                msg = ('Replacing nan values is not implemented for '
-                       'in memory layers ')
-                raise InaSAFEError(msg)
         else:
             # Read from raster file
             # FIXME: This can be slow so should be moved to read_from_file
@@ -316,6 +322,8 @@ class Raster(Layer):
         # Handle no data value
         # FIXME (Ole): This only pertains to data read from file
         # and should be moved to read_from_file.
+        nodata = self.get_nodata_value()
+
         # Must explicit comparison to False and True as nan can be a number
         # so 0 would evaluate to False and e.g. 1 to True.
         if nan is False:
@@ -335,7 +343,7 @@ class Raster(Layer):
                     raise InaSAFEError(msg)
 
             # Replace NODATA_VALUE with NaN array
-            nodata = self.get_nodata_value()
+            #print 'Replacing', nodata, 'with', NAN
             NaN = numpy.ones(A.shape, A.dtype) * NAN
             A = numpy.where(A == nodata, NaN, A)
 
@@ -459,12 +467,12 @@ class Raster(Layer):
 
         if hasattr(self, 'band'):
             nodata = self.band.GetNoDataValue()
-        else:
-            nodata = None
 
-        # Use common default in case nodata was not registered in raster file
-        if nodata is None:
-            nodata = -9999
+            # FIXME (Ole): Too hacky, but probably the reality
+            if nodata is None:
+                nodata = -9999
+        else:
+            nodata = self.nodata_value
 
         return nodata
 
