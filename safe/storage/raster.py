@@ -338,10 +338,8 @@ class Raster(Layer):
         elif scaling is True:
             # Calculate scaling based on resolution change
 
-            actual_res = self.get_resolution(isotropic=True,
-                                             rtol=rtol, atol=atol)
-            native_res = self.get_resolution(isotropic=True,
-                                             rtol=rtol, atol=atol, native=True)
+            actual_res = self.get_resolution(isotropic=True)
+            native_res = self.get_resolution(isotropic=True, native=True)
             #print
             #print 'Actual res', actual_res
             #print 'Native res', native_res
@@ -503,10 +501,7 @@ class Raster(Layer):
 
         return geotransform2bbox(self.geotransform, self.columns, self.rows)
 
-    def get_resolution(self, isotropic=False, native=False,
-                       # FIXME (Ole): I reckon these are way to high
-                       # See issue #228
-                       rtol=5.0e-2, atol=1.0e-4):
+    def get_resolution(self, isotropic=False, native=False):
         """Get raster resolution as a 2-tuple (resx, resy)
 
         Args:
@@ -514,15 +509,12 @@ class Raster(Layer):
                          If False return 2-tuple (dx, dy)
             * native: Optional flag. If True, return native resolution if
                                      available. Otherwise return actual.
-            * rtol, atol: Tolerances as to how much difference is accepted
-                          between dx and dy if isotropic is True.
         """
 
         # Get actual resolution first
         try:
             res = geotransform2resolution(self.geotransform,
-                                          isotropic=isotropic,
-                                          rtol=rtol, atol=atol)
+                                          isotropic=isotropic)
         except Exception, e:
             msg = ('Resolution for layer %s could not be obtained: %s '
                    % (self.get_name(), str(e)))
@@ -547,11 +539,7 @@ class Raster(Layer):
                     if not isotropic:
                         res = (dx, dy)
                     else:
-                        msg = ('Resolution of layer "%s" was not isotropic: '
-                               '[dx, dy] == %s' % (self.get_name(), res))
-                        verify(numpy.allclose(dx, dy,
-                                              rtol=1.0e-12, atol=1.0e-12), msg)
-                        res = dx
+                        res = (dx + dy) / 2
                 else:
                     if not isotropic:
                         res = (res, res)
