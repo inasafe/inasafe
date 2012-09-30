@@ -209,6 +209,9 @@ class Raster(Layer):
             msg = 'Could not read raster band from %s' % filename
             raise ReadLayerError(msg)
 
+        # FIXME (Ole): I think internal data array should be populated at
+        #              this point - then refactor get_data()
+
     def write_to_file(self, filename):
         """Save raster data to file
 
@@ -253,10 +256,7 @@ class Raster(Layer):
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
 
-    def get_data(self, nan=True, scaling=None, copy=False,
-                 # FIXME (Ole): I reckon these are way to high
-                 # See issue #228
-                 rtol=5.0e-2, atol=1.0e-4):
+    def get_data(self, nan=True, scaling=None, copy=False):
         """Get raster data as numeric array
 
         Args:
@@ -280,8 +280,6 @@ class Raster(Layer):
                        scalar value: If scaling takes a numerical scalar value,
                                      that will be use to scale the data
         * copy (optional): If present and True return copy
-        * rtol, atol: Tolerances as to how much difference is accepted
-                    between dx and dy when scaling is True.
 
         Note:
             Scaling does not currently work with projected layers.
@@ -289,13 +287,20 @@ class Raster(Layer):
         """
 
         if hasattr(self, 'data') and self.data is not None:
+            # Return internal data grid
             if copy:
                 A = copy_module.deepcopy(self.data)
             else:
                 A = self.data
             verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
+
+            if not nan is True:
+                msg = ('Replacing nan values is not implemented for '
+                       'in memory layers ')
+                raise InaSAFEError(msg)
         else:
             # Read from raster file
+            # FIXME: This can be slow so should be moved to read_from_file
             A = self.band.ReadAsArray()
 
             # Convert to double precision (issue #75)
@@ -309,16 +314,27 @@ class Raster(Layer):
             verify(N == self.columns, msg)
 
         # Handle no data value
+        # FIXME (Ole): This only pertains to data read from file
+        # and should be moved to read_from_file.
+        # Must explicit comparison to False and True as nan can be a number
+        # so 0 would evaluate to False and e.g. 1 to True.
         if nan is False:
+            # No change
             pass
         else:
+            # Nan value should be changed
             if nan is True:
-                NAN = numpy.nan
+                NAN = numpy.nan  # Use numpy's nan value
             else:
-                # E.g. if nan is a number
-                NAN = nan
+                try:
+                    # Use user specified number
+                    NAN = float(nan)
+                except (ValueError, TypeError):
+                    msg = ('Argument nan must be either True, False or a '
+                           'number. I got "nan=%s"' % str(nan))
+                    raise InaSAFEError(msg)
 
-            # Replace NODATA_VALUE with NaN
+            # Replace NODATA_VALUE with NaN array
             nodata = self.get_nodata_value()
             NaN = numpy.ones(A.shape, A.dtype) * NAN
             A = numpy.where(A == nodata, NaN, A)

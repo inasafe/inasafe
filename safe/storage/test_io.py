@@ -35,7 +35,7 @@ from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _, unique_filename
 from safe.common.polygon import is_inside_polygon
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
-from safe.common.exceptions import VerificationError
+from safe.common.exceptions import VerificationError, InaSAFEError
 
 
 # Auxiliary function for raster test
@@ -957,6 +957,39 @@ class Test_IO(unittest.TestCase):
             msg = ('File %s should have registered nodata '
                    'value %i but it was %s' % (filename, Amin, nodata))
             assert nodata == Amin, msg
+
+            if filename.endswith('Earthquake_Ground_Shaking.asc'):
+                # Slow
+                continue
+
+            # Then try using numpy.nan
+            A = R.get_data(nan=True)
+
+            # Verify nodata value
+            Amin = numpy.nanmin(A.flat[:])
+            msg = ('True raster minimum must exceed -9999. '
+                   'We got %f for file %s' % (Amin, filename))
+            assert Amin > -9999, msg
+
+            # Then try with a number
+            A = R.get_data(nan=-100000)
+
+            # Verify nodata value
+            Amin = numpy.nanmin(A.flat[:])
+            msg = ('Raster must have -100000 as its minimum for this test. '
+                   'We got %f for file %s' % (Amin, filename))
+            assert Amin == -100000, msg
+
+            # Try with illegal nan values
+            for illegal in [{}, (), [], None, 'a', 'oeuu']:
+                try:
+                    R.get_data(nan=illegal)
+                except InaSAFEError:
+                    pass
+                else:
+                    msg ('Illegal nan value %s should have raised '
+                         'exception' % illegal)
+                    raise RuntimeError(msg)
 
     test_nodata_value.slow = True
 
@@ -2127,6 +2160,6 @@ class Test_IO(unittest.TestCase):
         # More...
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test')
+    suite = unittest.makeSuite(Test_IO, 'test_nodata_value')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
