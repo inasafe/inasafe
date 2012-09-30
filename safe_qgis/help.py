@@ -18,9 +18,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+import os
+import sys
 from PyQt4 import (QtGui, QtCore, QtWebKit)
 from help_base import Ui_HelpBase
-import os
 
 
 class Help(QtGui.QDialog):
@@ -54,7 +55,7 @@ class Help(QtGui.QDialog):
         self.showContexthelp()
 
     def showContexthelp(self):
-        """Load the help text into the wvResults widget"""
+        """Load the help text into the wvResults widget."""
         ROOT = os.path.dirname(__file__)
         myPath = os.path.abspath(os.path.join(ROOT, '..', 'docs', 'build',
                                             'html', 'user-docs',
@@ -67,10 +68,19 @@ class Help(QtGui.QDialog):
                                             self.context + '.html'))
             if os.path.isfile(myContextPath):
                 myPath = myContextPath
+
         if not os.path.isfile(myPath):
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'),
             (self.tr('Documentation could not be found at:\n'
                       '%s' % myPath)))
+
+        myUrl = QtCore.QUrl('file:///' + myPath)
+
+        if sys.platform == 'windowss':  # Windows
+            QtGui.QDesktopServices.openUrl(myUrl)
+            self.close()
+
+        #All other platfrms
         self.ui.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
-        self.ui.webView.setUrl(QtCore.QUrl('file:///' + myPath))
+        self.ui.webView.setUrl(myUrl)
