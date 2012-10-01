@@ -1348,8 +1348,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
-        if not self.helpDialog:
-            self.helpDialog = Help(self.iface.mainWindow(), 'dock')
+        if self.helpDialog:
+            del self.helpDialog
+        self.helpDialog = Help(theParent=self.iface.mainWindow(),
+                               theContext='dock')
         self.helpDialog.show()
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
