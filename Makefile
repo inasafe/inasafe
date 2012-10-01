@@ -43,6 +43,7 @@ docs: compile
 
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile
+	@scripts/pre_translate.sh $(LOCALES)
 	@echo "Checking current translation."
 	@scripts/update-strings.sh $(LOCALES)
 
@@ -52,6 +53,7 @@ compile-translation-strings: compile
 	$(foreach LOCALE, $(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
 	@#Compile qt messages binary
 	cd safe_qgis; lrelease inasafe.pro; cd ..
+	# For sphinx docs this step is done as part of make docs target
 
 test-translations:
 	@echo

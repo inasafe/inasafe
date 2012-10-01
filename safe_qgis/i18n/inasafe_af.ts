@@ -43,27 +43,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="456"/>
+        <location filename="utilities.py" line="444"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="432"/>
+        <location filename="utilities.py" line="420"/>
         <source>Problem:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="428"/>
+        <location filename="utilities.py" line="416"/>
         <source>Error:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="436"/>
+        <location filename="utilities.py" line="424"/>
         <source>Click for Diagnostic Information:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="utilities.py" line="417"/>
+        <location filename="utilities.py" line="405"/>
         <source>No details provided</source>
         <translation type="unfinished"></translation>
     </message>
@@ -87,7 +87,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1803"/>
+        <location filename="dock.py" line="1805"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -117,57 +117,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1375"/>
+        <location filename="dock.py" line="1377"/>
         <source>Analyzing this question...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1553"/>
+        <location filename="dock.py" line="1555"/>
         <source>Preparing hazard data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1554"/>
+        <location filename="dock.py" line="1556"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1562"/>
+        <location filename="dock.py" line="1564"/>
         <source>Preparing exposure data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1563"/>
+        <location filename="dock.py" line="1565"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1803"/>
+        <location filename="dock.py" line="1805"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1821"/>
+        <location filename="dock.py" line="1823"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1808"/>
+        <location filename="dock.py" line="1810"/>
         <source>Generating your map as a PDF document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1813"/>
+        <location filename="dock.py" line="1815"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1821"/>
+        <location filename="dock.py" line="1823"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1710"/>
+        <location filename="dock.py" line="1712"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -317,7 +317,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1480"/>
+        <location filename="dock.py" line="1482"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them or disable viewport clipping in the options dialog. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Viewport clipping enabled: %6&lt;/p&gt;&lt;p&gt;Details: %7&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -330,42 +330,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="55"/>
+        <location filename="dock_base.ui" line="62"/>
         <source>In the event of</source>
         <translation>In geval van</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="65"/>
+        <location filename="dock_base.ui" line="72"/>
         <source>How many</source>
         <translation>Hoe veel</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="75"/>
+        <location filename="dock_base.ui" line="82"/>
         <source>&amp;Might</source>
         <translation>&amp;Mag</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="119"/>
+        <location filename="dock_base.ui" line="161"/>
         <source>Results</source>
         <translation>Resultate</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="126"/>
+        <location filename="dock_base.ui" line="168"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="247"/>
+        <location filename="dock_base.ui" line="289"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="267"/>
+        <location filename="dock_base.ui" line="309"/>
         <source>Print...</source>
         <translation>Druk...</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="287"/>
+        <location filename="dock_base.ui" line="329"/>
         <source>Run</source>
         <translation>Begin</translation>
     </message>
@@ -375,13 +375,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="172"/>
+        <location filename="dock_base.ui" line="214"/>
         <source>Supported by:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="106"/>
+        <location filename="dock_base.ui" line="148"/>
         <source>Aggregate results by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="127"/>
+        <source>Configure Impact Function Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="130"/>
+        <source>...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -493,22 +503,22 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="148"/>
+        <location filename="keywords_dialog.py" line="149"/>
         <source>Hide advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="150"/>
+        <location filename="keywords_dialog.py" line="151"/>
         <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="620"/>
+        <location filename="keywords_dialog.py" line="621"/>
         <source>Not Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="385"/>
+        <location filename="keywords_dialog.py" line="386"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -523,13 +533,13 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="677"/>
+        <location filename="keywords_dialog.py" line="678"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="677"/>
+        <location filename="keywords_dialog.py" line="678"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -766,57 +776,57 @@ to%s: %s</source>
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="151"/>
+        <location filename="plugin.py" line="153"/>
         <source>Toggle InaSAFE Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="155"/>
+        <location filename="plugin.py" line="157"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="296"/>
+        <location filename="plugin.py" line="298"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="170"/>
+        <location filename="plugin.py" line="172"/>
         <source>Keyword Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="175"/>
+        <location filename="plugin.py" line="177"/>
         <source>Open the keywords editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="186"/>
+        <location filename="plugin.py" line="188"/>
         <source>Reset Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="191"/>
+        <location filename="plugin.py" line="193"/>
         <source>Reset the InaSAFE Dock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="203"/>
+        <location filename="plugin.py" line="205"/>
         <source>InaSAFE Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="208"/>
+        <location filename="plugin.py" line="210"/>
         <source>Open InaSAFE options dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="220"/>
+        <location filename="plugin.py" line="222"/>
         <source>InaSAFE Impact Functions Doc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="plugin.py" line="226"/>
+        <location filename="plugin.py" line="228"/>
         <source>Open InaSAFE impact functions doc</source>
         <translation type="unfinished"></translation>
     </message>

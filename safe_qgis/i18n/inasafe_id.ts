@@ -38,7 +38,7 @@
         <translation>&lt;p&gt;Error ketika menjalankan perintah berikut:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Pesan Kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="456"/>
+        <location filename="utilities.py" line="444"/>
         <source>Input layer to getWGS84resolution must be a raster layer. I got: %s</source>
         <translation>Lapisan input untuk mendapatkan resolusi WGS84 harus merupakan lapisan raster. Saya mendapatkan: %s</translation>
     </message>
@@ -48,22 +48,22 @@
         <translation>Tidak ada fitur termasuk dalam luasan klip. Cobalah panning / zoom ke area yang berisi data dan kemudian mencoba untuk menjalankan analisis Anda lagi.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="432"/>
+        <location filename="utilities.py" line="420"/>
         <source>Problem:</source>
         <translation>Permasalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="428"/>
+        <location filename="utilities.py" line="416"/>
         <source>Error:</source>
         <translation>Kesalahan:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="436"/>
+        <location filename="utilities.py" line="424"/>
         <source>Click for Diagnostic Information:</source>
         <translation>Klik untuk informasi diagnostik:</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="417"/>
+        <location filename="utilities.py" line="405"/>
         <source>No details provided</source>
         <translation>Tidak ada detil yang tersedia</translation>
     </message>
@@ -87,7 +87,7 @@
         <translation>Lapisan dampak %s bukan lapisan vektor atau raster</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1803"/>
+        <location filename="dock.py" line="1805"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Dokumen PDF (*.pdf)</translation>
     </message>
@@ -117,57 +117,57 @@
         <translation>Analisa dampak telah selesai - sedang memuat hasil ke QGIS...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1375"/>
+        <location filename="dock.py" line="1377"/>
         <source>Analyzing this question...</source>
         <translation>Sedang menganalisa pertanyaan...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1553"/>
+        <location filename="dock.py" line="1555"/>
         <source>Preparing hazard data...</source>
         <translation>Sedang mempersiapkan data bahaya...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1554"/>
+        <location filename="dock.py" line="1556"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit hazardlayer untuk mencocokkan perpotongan dari exposurelayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1562"/>
+        <location filename="dock.py" line="1564"/>
         <source>Preparing exposure data...</source>
         <translation>Sedang mempersiapkan data terpapar...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1563"/>
+        <location filename="dock.py" line="1565"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1803"/>
+        <location filename="dock.py" line="1805"/>
         <source>Write to PDF</source>
         <translation>Menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1821"/>
+        <location filename="dock.py" line="1823"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1808"/>
+        <location filename="dock.py" line="1810"/>
         <source>Generating your map as a PDF document...</source>
         <translation>Sedang menghasilkan peta anda sebagai dokumen PDF...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1813"/>
+        <location filename="dock.py" line="1815"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation>Dokumen PDF telah dibuat .... membuka menggunakan peninjau standar PDF pada system.FIle pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1821"/>
+        <location filename="dock.py" line="1823"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation>Proses selesai.File pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1710"/>
+        <location filename="dock.py" line="1712"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai lapisan dampak atau lapisan bahaya dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
     </message>
@@ -317,7 +317,7 @@
         <translation>Silahkan pilih atribut mana yang ingin digunakan sebagai ID untuk hasil agregasi</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1480"/>
+        <location filename="dock.py" line="1482"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them or disable viewport clipping in the options dialog. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Viewport clipping enabled: %6&lt;/p&gt;&lt;p&gt;Details: %7&lt;/p&gt;</source>
         <translation>&lt;p&gt;Tidak ada perpotongan yang cukup antara lapisan masukan dan / atau lapisan dan tampilan. Silahkan pilih dua buah lapisan yang berpotongan da perbesar atau geser ke mereka atau non aktifkan pemotongan berdasarkan tampilan pada dialog opsi. Berikut detail yang lebih lengkap:&lt;/p&gt;&lt;p&gt;Gagal untuk mendapatkan jangkauan optimal ketika diberikan:&lt;/p&gt;&lt;p&gt;Ancaman:%1&lt;/p&gt;&lt;p&gt;Paparan: %2&lt;/p&gt;Geo Extent Tampilan: %3&lt;/p&gt;&lt;p&gt;Geo Extent Ancaman: %4&lt;/p&gt;&lt;p&gt;Geo Extent Paparan: %5&lt;/p&gt;&lt;p&gt;Pemotongan berdasarkan tampilan: %6&lt;/p&lt;p&gt;Detail: %7&lt;/p&gt;</translation>
     </message>
@@ -330,37 +330,37 @@
         <translation>Pertanyaan</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="55"/>
+        <location filename="dock_base.ui" line="62"/>
         <source>In the event of</source>
         <translation>Apabila terjadi</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="65"/>
+        <location filename="dock_base.ui" line="72"/>
         <source>How many</source>
         <translation>Berapa banyak</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="75"/>
+        <location filename="dock_base.ui" line="82"/>
         <source>&amp;Might</source>
         <translation>Yang &amp;mungkin</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="119"/>
+        <location filename="dock_base.ui" line="161"/>
         <source>Results</source>
         <translation>Hasil</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="126"/>
+        <location filename="dock_base.ui" line="168"/>
         <source>about:blank</source>
         <translation>Perihal:kosong</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="247"/>
+        <location filename="dock_base.ui" line="289"/>
         <source>Help</source>
         <translation>Bantuan</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="287"/>
+        <location filename="dock_base.ui" line="329"/>
         <source>Run</source>
         <translation>Hitung</translation>
     </message>
@@ -370,19 +370,29 @@
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="267"/>
+        <location filename="dock_base.ui" line="309"/>
         <source>Print...</source>
         <translation>Cetak...</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="172"/>
+        <location filename="dock_base.ui" line="214"/>
         <source>Supported by:</source>
         <translation>Didukung oleh:</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="106"/>
+        <location filename="dock_base.ui" line="148"/>
         <source>Aggregate results by</source>
         <translation>Hasil agregrasi berdasarkan</translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="127"/>
+        <source>Configure Impact Function Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock_base.ui" line="130"/>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
     </message>
 </context>
 <context>
@@ -495,22 +505,22 @@ ke %s: %s</translation>
         <translation>tephra [kg2/m2]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="148"/>
+        <location filename="keywords_dialog.py" line="149"/>
         <source>Hide advanced editor</source>
         <translation>Sembunyikan editor lanjut</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="150"/>
+        <location filename="keywords_dialog.py" line="151"/>
         <source>Show advanced editor</source>
         <translation>Tampilkan editor lanjut</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="620"/>
+        <location filename="keywords_dialog.py" line="621"/>
         <source>Not Set</source>
         <translation>Tidak ditentukan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="385"/>
+        <location filename="keywords_dialog.py" line="386"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation>Tanda titik dua (:) tidak diijinkan, ganti dengan &quot;.&quot;</translation>
     </message>
@@ -525,14 +535,14 @@ ke %s: %s</translation>
         <translation>gempa bumi [MMI]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="677"/>
+        <location filename="keywords_dialog.py" line="678"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation>Terjadi kesalahan saat menyimpan kata-kata kunci:
 %s</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="677"/>
+        <location filename="keywords_dialog.py" line="678"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -769,57 +779,57 @@ ke %s: %s</translation>
 <context>
     <name>Plugin</name>
     <message>
-        <location filename="plugin.py" line="151"/>
+        <location filename="plugin.py" line="153"/>
         <source>Toggle InaSAFE Dock</source>
         <translation>Tombol untuk beralih ke InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="155"/>
+        <location filename="plugin.py" line="157"/>
         <source>Show/hide InaSAFE dock widget</source>
         <translation>Tampilkan/hilangkan widget InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="296"/>
+        <location filename="plugin.py" line="298"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="170"/>
+        <location filename="plugin.py" line="172"/>
         <source>Keyword Editor</source>
         <translation>Editor Kata Kunci</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="175"/>
+        <location filename="plugin.py" line="177"/>
         <source>Open the keywords editor</source>
         <translation>Buka editor kata kunci</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="186"/>
+        <location filename="plugin.py" line="188"/>
         <source>Reset Dock</source>
         <translation>Reset panel</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="191"/>
+        <location filename="plugin.py" line="193"/>
         <source>Reset the InaSAFE Dock</source>
         <translation>Reset panel InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="203"/>
+        <location filename="plugin.py" line="205"/>
         <source>InaSAFE Options</source>
         <translation>Opsi-opsi InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="208"/>
+        <location filename="plugin.py" line="210"/>
         <source>Open InaSAFE options dialog</source>
         <translation>Buka dialog opsi InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="220"/>
+        <location filename="plugin.py" line="222"/>
         <source>InaSAFE Impact Functions Doc</source>
         <translation>Dokumentasi Fungsi Dampak InaSAFE</translation>
     </message>
     <message>
-        <location filename="plugin.py" line="226"/>
+        <location filename="plugin.py" line="228"/>
         <source>Open InaSAFE impact functions doc</source>
         <translation>Buka dokumentasi fungsi dampak InaSAFE</translation>
     </message>
