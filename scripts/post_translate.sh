@@ -28,9 +28,9 @@ do
   done
 done
 
-# We need to flush the _build dir or the translations dont come through
+# We need to flush the build dir or the translations dont come through
 cd .. 
-rm -rf _build
+rm -rf build
 # Add english to the list and generated docs
 # TODO: Just extend $LOCALES rather for DRY
 LOCALES='en af id de'
@@ -45,15 +45,15 @@ do
   rm -rf $SOURCE/$STATIC
   cp -r $SOURCE/$STATIC_${LOCALE} $SOOURCE/$STATIC
   echo "Building HTML for locale '${LOCALE}'..."
-  sphinx-build -D language=${LOCALE} -b html $SOURCE _build/html/${LOCALE}
+  sphinx-build -D language=${LOCALE} -b html $SOURCE build/html/${LOCALE}
 
   # Compile the latex docs for that locale
-  sphinx-build -D language=${LOCALE} -b latex $SOURCE _build/latex/${LOCALE}
+  sphinx-build -D language=${LOCALE} -b latex $SOURCE build/latex/${LOCALE}
   # Compile the pdf docs for that locale
   # we use texi2pdf since latexpdf target is not available via 
   # sphinx-build which we need to use since we need to pass language flag
   pushd .
-  cd _build/latex/${LOCALE}/
+  cd build/latex/${LOCALE}/
   texi2pdf --quiet  InaSAFEManual.tex
   mv InaSAFEManual.pdf InaSAFEManual-${LOCALE}.pdf
   popd
