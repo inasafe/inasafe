@@ -212,7 +212,7 @@ latex_elements = {
 # (source start file, target name, title, author,
 # documentclass [howto/manual]).
 latex_documents = [('contents',
-                    'InaSAFE.tex',
+                    'InaSAFEManual.tex',
                     u'InaSAFE Documentation',
                     u'Ole Moeller Nielsen, Tim Sutton',
                     'manual')]

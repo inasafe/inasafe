@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-26 14:33\n"
+"POT-Creation-Date: 2012-10-01 14:09\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,47 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 # 2f387e14f3a34e2fb9b7bef96eb42567
-#: ../../authors.rst:4
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:4
 msgid "Authors, Contributors and Funders"
 msgstr ""
 
 # fb4e0b9ba3004e14a26d732b936fb988
-#: ../../authors.rst:6
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:6
 msgid "Authors ordered by date of first contribution:"
 msgstr ""
 
 # a98586614a1840ca8bbe1aba84ac3a40
-#: ../../authors.rst:8
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:8
 msgid "Ole Nielsen <ole.nielsen@aifdr.org>"
 msgstr ""
 
 # 81baef5f83514374ac24026b71972b75
-#: ../../authors.rst:9
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:9
 msgid "Tim Sutton <tim@linfiniti.com>"
 msgstr ""
 
 # 685bf543395645ca912bd522562bfa32
-#: ../../authors.rst:11
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:11
 msgid "Other contributors who have provided input, testing, translations etc."
 msgstr ""
 
 # a41e816eb8dc422d94c931866896b024
-#: ../../authors.rst:13
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:13
 msgid "Trevor Dhu <Trevor.Dhu@ausaid.gov.au>"
 msgstr ""
 
 # 01334e9a42e64b42ad7e45e70bc8510a
-#: ../../authors.rst:14
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:14
 msgid "Krisy Van Putten <Kristy.VanPutten@ausaid.gov.au>"
 msgstr ""
 
 # 2fc253b4e4094e29884baa4540b35b67
-#: ../../authors.rst:15
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:15
 msgid "I Made Anombawa <anom1403@gmail.com>"
 msgstr ""
 
 # b46d5040f6c84d7d954503a01c063483
-#: ../../authors.rst:17
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:17
 msgid ""
 "The development of InaSAFE has been supported by the Indonesian Disaster "
 "Management Agency (BNPB) and AusAID, through the Australia-Indonesia "
@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 
 # bbf204d974e24d18846117df5778f08f
-#: ../../authors.rst:22
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/authors.rst:22
 msgid ""
 "InaSAFE is built as a plugin for the open source plugin for `Quantum GIS "
 "<http://qgis.org>`."

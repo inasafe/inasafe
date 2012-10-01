@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 13:00\n"
+"POT-Creation-Date: 2012-10-01 14:09\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,13 +22,79 @@ msgstr ""
 msgid "Whats new?"
 msgstr ""
 
-# 88a9ec070ee74557ae9d549c30189a89
+# 5a7cd525bcf745f9958e655a89ca24d9
 #: ../../user-docs/changelog.rst:7
+msgid "Changelog for version 0.5.0"
+msgstr ""
+
+# a8e67c652d6d4f2aa0eac417ad3a96c9
+#: ../../user-docs/changelog.rst:9
+msgid "Better documentation. See http://inasafe.org/contents.html"
+msgstr ""
+
+# cd33c7082666453981d76ea7296c4169
+#: ../../user-docs/changelog.rst:10
+msgid ""
+"Ability to combine polygon hazard  (such as flood prone areas) with "
+"population density (see attached screenshot)."
+msgstr ""
+
+# b149623f97c548acb7bfbc86bca4ddfe
+#: ../../user-docs/changelog.rst:12
+msgid ""
+"Option to use entire intersection of hazard and exposure instead of clipping "
+"to the somewhat arbitrary viewport (the training revealed that this was a "
+"bit confusing)"
+msgstr ""
+
+# ef08832f43304f258d97b0e59fbbce61
+#: ../../user-docs/changelog.rst:15
+msgid ""
+"Aggregation of raster impact layers by arbitrary polygon layers (such as "
+"kelurahan boundaries)"
+msgstr ""
+
+# f96956d0be524ce48998cb36f40cfdcb
+#: ../../user-docs/changelog.rst:17
+msgid ""
+"Limited support for runtime configuration of impact functions (e.g. by "
+"changing thresholds). This is an interim measure while the team is working "
+"on a GUI to manipulate impact functions more generally."
+msgstr ""
+
+# ed84b5477e2a4f25a8a2a029f8813651
+#: ../../user-docs/changelog.rst:20
+msgid ""
+"More DRR actions added to impact function reports (such as how will warnings "
+"be disseminated, how will we reach stranded people etc.)"
+msgstr ""
+
+# 7f0d69ab410649049f6a19447d0d8151
+#: ../../user-docs/changelog.rst:22
+msgid "Volcanic (zonal hazard) impact assessments on building and population"
+msgstr ""
+
+# 958f390b0c88438b8a55d5af05b5156a
+#: ../../user-docs/changelog.rst:23
+msgid ""
+"New function table view that lists all the available impact functions and "
+"allows them to be filtered by different criteria."
+msgstr ""
+
+# eef0f5c6cf9e421d8398401de2f859fc
+#: ../../user-docs/changelog.rst:25
+msgid ""
+"Lots of small improvements to error reporting, GUI, translations and code "
+"quality."
+msgstr ""
+
+# 88a9ec070ee74557ae9d549c30189a89
+#: ../../user-docs/changelog.rst:28
 msgid "Changelog for version 0.4.1"
 msgstr ""
 
 # 6f514959a14d4de49dd02ce050226583
-#: ../../user-docs/changelog.rst:9
+#: ../../user-docs/changelog.rst:30
 msgid ""
 "This is a minor bugfix release with packaging and documentation related "
 "changes only so that InaSAFE can be deployed via the official QGIS "
@@ -36,232 +102,232 @@ msgid ""
 msgstr ""
 
 # ff071cfc9acc480bb15dfa3ad7b16cb7
-#: ../../user-docs/changelog.rst:11
+#: ../../user-docs/changelog.rst:32
 msgid "Added InaSAFE tutorial to sphinx documentation"
 msgstr ""
 
 # 3c408db05a694de086974353b959c15a
-#: ../../user-docs/changelog.rst:14
+#: ../../user-docs/changelog.rst:35
 msgid "Changelog for version 0.4.0"
 msgstr ""
 
 # 98347f8f766e4daf8111c9692d4bf3eb
-#: ../../user-docs/changelog.rst:15
+#: ../../user-docs/changelog.rst:36
 msgid ""
 "Ability to automatically handle multipart vector data: https://github.com/"
 "AIFDR/inasafe/issues/160"
 msgstr ""
 
 # e40b906e04114c008e719fd6b7cf1024
-#: ../../user-docs/changelog.rst:16
+#: ../../user-docs/changelog.rst:37
 msgid "Better error reporting:"
 msgstr ""
 
 # 86a8874cf93341f0974f7b6081448172
-#: ../../user-docs/changelog.rst:18
+#: ../../user-docs/changelog.rst:39
 msgid "https://github.com/AIFDR/inasafe/issues/170"
 msgstr ""
 
 # 9d69f467591249a5bc3888fafed112c0
-#: ../../user-docs/changelog.rst:19
+#: ../../user-docs/changelog.rst:40
 msgid "https://github.com/AIFDR/inasafe/issues/161"
 msgstr ""
 
 # 8422fa29211e40d3a6f86d13ede784cf
-#: ../../user-docs/changelog.rst:20
+#: ../../user-docs/changelog.rst:41
 msgid "https://github.com/AIFDR/inasafe/issues/157"
 msgstr ""
 
 # b7919b87d7a148698275b71f28d6f09f
-#: ../../user-docs/changelog.rst:22
+#: ../../user-docs/changelog.rst:43
 msgid "Bug fixing:"
 msgstr ""
 
 # 233a35c6cdf64bcb9ebf004a6c76b769
-#: ../../user-docs/changelog.rst:24
+#: ../../user-docs/changelog.rst:45
 msgid "https://github.com/AIFDR/inasafe/issues/159"
 msgstr ""
 
 # 0c56fb17be9b4065a3d21faaba5f0e29
-#: ../../user-docs/changelog.rst:25
+#: ../../user-docs/changelog.rst:46
 msgid "https://github.com/AIFDR/inasafe/issues/156"
 msgstr ""
 
 # e7416947d04c43deafa8671e8d24b619
-#: ../../user-docs/changelog.rst:26
+#: ../../user-docs/changelog.rst:47
 msgid "https://github.com/AIFDR/inasafe/issues/173"
 msgstr ""
 
 # 7fd4ad3ee78e48bf9da35963e961a644
-#: ../../user-docs/changelog.rst:27
+#: ../../user-docs/changelog.rst:48
 msgid "https://github.com/AIFDR/inasafe/issues/166"
 msgstr ""
 
 # f2dfe3c878f04a5394085190738ab1e6
-#: ../../user-docs/changelog.rst:28
+#: ../../user-docs/changelog.rst:49
 msgid "https://github.com/AIFDR/inasafe/issues/162"
 msgstr ""
 
 # d903ab3d59b645cf8f794460f4f45771
-#: ../../user-docs/changelog.rst:30
+#: ../../user-docs/changelog.rst:51
 msgid ""
 "InaSAFE APIs better defined: https://github.com/AIFDR/inasafe/issues/134"
 msgstr ""
 
 # 843d2ab223654c6594b702dc5ef05d2b
-#: ../../user-docs/changelog.rst:31
+#: ../../user-docs/changelog.rst:52
 msgid ""
 "Release procedure developed: https://github.com/AIFDR/inasafe/issues/109"
 msgstr ""
 
 # 483168dd98764d37b0dd1e11a9bab49f
-#: ../../user-docs/changelog.rst:32
+#: ../../user-docs/changelog.rst:53
 msgid ""
 "Added estimate of displaced people to earthquake fatality model: https://"
 "github.com/AIFDR/inasafe/commit/04f0e1d"
 msgstr ""
 
 # f16ecc39468544deac6878f447055fcb
-#: ../../user-docs/changelog.rst:33
+#: ../../user-docs/changelog.rst:54
 msgid "Achieved 100% translation for Bahasa Indonesia"
 msgstr ""
 
 # ae6a3f365620452f94897e35c6c5b2e0
-#: ../../user-docs/changelog.rst:34
+#: ../../user-docs/changelog.rst:55
 msgid ""
 "Made bundled test and demo data public with associated license information"
 msgstr ""
 
 # f3c900a6a73c4d43a9fa415c876ad9b3
-#: ../../user-docs/changelog.rst:35
+#: ../../user-docs/changelog.rst:56
 msgid "Added AusAid and World Bank logos to dock"
 msgstr ""
 
 # 076a0ded55ed4a03820e17bb1ef2ba55
-#: ../../user-docs/changelog.rst:36
+#: ../../user-docs/changelog.rst:57
 msgid "Fixed bug with flood population evacuation reporting units"
 msgstr ""
 
 # 5a7cd525bcf745f9958e655a89ca24d9
-#: ../../user-docs/changelog.rst:41
+#: ../../user-docs/changelog.rst:62
 msgid "Changelog for version 0.3.0"
 msgstr ""
 
 # 37e240aac7ef425ba03ddda19c14b696
-#: ../../user-docs/changelog.rst:42
+#: ../../user-docs/changelog.rst:63
 msgid ""
 "Documentation updates - extended guides for using the |project_name| dock "
 "and keyword editors."
 msgstr ""
 
 # dcc5f191cedf4f3c9a54f3d9fbd828f5
-#: ../../user-docs/changelog.rst:44
+#: ../../user-docs/changelog.rst:65
 msgid "Support for remote layers in keywords editor and scenario modelling"
 msgstr ""
 
 # 7ebbd09e229b4f8f9e7a69a00e91845d
-#: ../../user-docs/changelog.rst:45
+#: ../../user-docs/changelog.rst:66
 msgid "Added options dialog"
 msgstr ""
 
 # 4370794d11a044e4a805d5b09831c809
-#: ../../user-docs/changelog.rst:46
+#: ../../user-docs/changelog.rst:67
 msgid ""
 "Support for using all layers in hazard and exposure combos, not just visible "
 "ones (configurable in options dialog)"
 msgstr ""
 
 # bbe438fcda8c4c4e8c458443d7e93570
-#: ../../user-docs/changelog.rst:48
+#: ../../user-docs/changelog.rst:69
 msgid ""
 "Support for displaying keywords title in QGIS layer list (configurable in "
 "options dialog)"
 msgstr ""
 
 # 17465508c65f443f9329eff33c7b7e83
-#: ../../user-docs/changelog.rst:50
+#: ../../user-docs/changelog.rst:71
 msgid ""
 "When selecting a hazard or exposure layer, its keywords are now displayed in "
 "the results area."
 msgstr ""
 
 # 664ea03dd6794e4aaba70513c8a2913f
-#: ../../user-docs/changelog.rst:52
+#: ../../user-docs/changelog.rst:73
 msgid ""
 "Performance improvements when toggling layer visibility and adding and "
 "removing layers."
 msgstr ""
 
 # 99911e352e34477aaa3ed5c3d45bd90a
-#: ../../user-docs/changelog.rst:54
+#: ../../user-docs/changelog.rst:75
 msgid "Support for QGIS 1.8 when it is released"
 msgstr ""
 
 # 703181fbdda645db9ff5065cd9934c41
-#: ../../user-docs/changelog.rst:55
+#: ../../user-docs/changelog.rst:76
 msgid "Numerous other 'under the hood' bug fixes and improvements"
 msgstr ""
 
 # eacbce45ba8344709c9ab46a6638fdc3
-#: ../../user-docs/changelog.rst:56
+#: ../../user-docs/changelog.rst:77
 msgid "Migrated code base from RIAB to InaSAFE and restructured the code base"
 msgstr ""
 
 # e5885c5c8425489392b139ee309a6536
-#: ../../user-docs/changelog.rst:57
+#: ../../user-docs/changelog.rst:78
 msgid "Added additional tests"
 msgstr ""
 
 # 6dba3e843c274cff8247b94d9ed55dc2
 # c0db325ffe2c4fae99614450e52f635a
-#: ../../user-docs/changelog.rst:60 ../../user-docs/changelog.rst:75
+#: ../../user-docs/changelog.rst:81 ../../user-docs/changelog.rst:96
 msgid "Changelog for version 0.2.1:"
 msgstr ""
 
 # bf96f50400e14023b97d57a7eaeb9030
-#: ../../user-docs/changelog.rst:61
+#: ../../user-docs/changelog.rst:82
 msgid "Correct translation of 'run' in indonesian. Closes #128"
 msgstr ""
 
 # 0939116b57784c9c8562a729904dd59a
-#: ../../user-docs/changelog.rst:62
+#: ../../user-docs/changelog.rst:83
 msgid "Updated so that version number is shown in dock"
 msgstr ""
 
 # ea29a213fd854fcdbbcf093642ded574
-#: ../../user-docs/changelog.rst:63
+#: ../../user-docs/changelog.rst:84
 msgid "Removed generated file from polygon test"
 msgstr ""
 
 # 749b2f9d3e314cbb94c62e6db1c6be94
-#: ../../user-docs/changelog.rst:64
+#: ../../user-docs/changelog.rst:85
 msgid "Removed the -dev designation from branch releases"
 msgstr ""
 
 # 823512c508684e50906974fb1e600825
-#: ../../user-docs/changelog.rst:65
+#: ../../user-docs/changelog.rst:86
 msgid "Fix indent error causing noise to show in qgis plugin manager"
 msgstr ""
 
 # 5424f520239d4bb78bfb8dd8d6ec9566
-#: ../../user-docs/changelog.rst:66
+#: ../../user-docs/changelog.rst:87
 msgid "Fixed typo - BNPD to BNPB"
 msgstr ""
 
 # bb488b460cc443eab9b2a13de4956755
-#: ../../user-docs/changelog.rst:67
+#: ../../user-docs/changelog.rst:88
 msgid "Fixed bug where close button does not dispose of the help dialog"
 msgstr ""
 
 # ca2b39bfbe7c4ea59a56acec44f2f0bd
-#: ../../user-docs/changelog.rst:68
+#: ../../user-docs/changelog.rst:89
 msgid ""
 "Fixed an issue that prevented the use of earthquake functions when using "
 "keywords with lowercase mmi. Closes #142"
 msgstr ""
 
 # baccd926ffe0403198ea134c38843045
-#: ../../user-docs/changelog.rst:70
+#: ../../user-docs/changelog.rst:91
 msgid ""
 "Fix for mac clipping issues - the plugin should work on OSX now. Closes "
 "#141. Note that OSX users should upgrade to GDAL 1.9 available here: http://"
@@ -269,92 +335,92 @@ msgid ""
 msgstr ""
 
 # d0d7043a2a65441f8db062b19a675be6
-#: ../../user-docs/changelog.rst:77
+#: ../../user-docs/changelog.rst:98
 msgid "Map printing support"
 msgstr ""
 
 # e3f8cf191617484ba90ecc1c9df0b9d1
-#: ../../user-docs/changelog.rst:78
+#: ../../user-docs/changelog.rst:99
 msgid "Improved translation support and Indonesian translation updates"
 msgstr ""
 
 # 2be955087f2e4b239b020fa402ecfd7a
-#: ../../user-docs/changelog.rst:79
+#: ../../user-docs/changelog.rst:100
 msgid "Rebranded from Risk in a Box to InaSAFE"
 msgstr ""
 
 # 0ca9cb97aeb04c38a90c9345541aeb72
-#: ../../user-docs/changelog.rst:80
+#: ../../user-docs/changelog.rst:101
 msgid "Documentation updates and documented windows developer procedures"
 msgstr ""
 
 # aeda5f419bdf434f9f7e10f26ac3db08
-#: ../../user-docs/changelog.rst:81
+#: ../../user-docs/changelog.rst:102
 msgid "Support for generating documentation and running tests under Windows"
 msgstr ""
 
 # 2a7af28a34494f71908345b37a085044
-#: ../../user-docs/changelog.rst:82
+#: ../../user-docs/changelog.rst:103
 msgid "Scripts for semi-automatic packaging of a release"
 msgstr ""
 
 # 68d6d05076da42a192426366ca052d1c
-#: ../../user-docs/changelog.rst:83
+#: ../../user-docs/changelog.rst:104
 msgid "Improvements to Impact calculator algorithms"
 msgstr ""
 
 # ccec51883f7e48bcbc566d989acfeedf
-#: ../../user-docs/changelog.rst:86
+#: ../../user-docs/changelog.rst:107
 msgid "Changelog for version 0.1.0:"
 msgstr ""
 
 # 213cd874987644a48586eeb9151cd352
-#: ../../user-docs/changelog.rst:88
+#: ../../user-docs/changelog.rst:109
 msgid "First QGIS plugin implementation of |project_name|."
 msgstr ""
 
 # 3c4371ea045747b0a24ca89ac2290cf6
-#: ../../user-docs/changelog.rst:89
+#: ../../user-docs/changelog.rst:110
 msgid "Migrated calculation engine from Risiko project."
 msgstr ""
 
 # 2e2edf034854419d8dc70c3c9347391c
-#: ../../user-docs/changelog.rst:90
+#: ../../user-docs/changelog.rst:111
 msgid "Implemented support for polygon hazard layers."
 msgstr ""
 
 # ac1c777b11a641b084484a3a2be796a1
-#: ../../user-docs/changelog.rst:91
+#: ../../user-docs/changelog.rst:112
 msgid "Added dock widget for designing and executing a scenario model."
 msgstr ""
 
 # 2d7949ebca034d66af75995d32ba4dba
-#: ../../user-docs/changelog.rst:92
+#: ../../user-docs/changelog.rst:113
 msgid "Added the keyword editor for assigning metadata to input files."
 msgstr ""
 
 # 50b96109105947afa76d26783cddd096
-#: ../../user-docs/changelog.rst:93
+#: ../../user-docs/changelog.rst:114
 msgid "Added integrated context help tool."
 msgstr ""
 
 # cdd35d5db8054e309f08cc5ba4a72525
-#: ../../user-docs/changelog.rst:94
+#: ../../user-docs/changelog.rst:115
 msgid "Removed django specific dependencies from the InaSAFE libs."
 msgstr ""
 
 # 3c3189fda546476bb77eef258cb8f307
-#: ../../user-docs/changelog.rst:95
+#: ../../user-docs/changelog.rst:116
 msgid "removed dependency on SciPy"
 msgstr ""
 
 # d57f0197382e41569a56a5ab99bc2134
-#: ../../user-docs/changelog.rst:96
+#: ../../user-docs/changelog.rst:117
 msgid "Support for internationalisation."
 msgstr ""
 
 # d50ad41c3ec441e68a7a2b4f111eb264
-#: ../../user-docs/changelog.rst:97
+#: ../../user-docs/changelog.rst:118
 msgid "Comprehensive documentation system."
 msgstr ""
 
@@ -807,17 +873,17 @@ msgid ""
 msgstr ""
 
 # d65ba32a45554987afc0369c7682e328
-#: ../../user-docs/faq.rst:2
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:2
 msgid "Frequently Asked Questions"
 msgstr ""
 
 # 33b8e4cea1854c06aed710f89c7bcfd1
-#: ../../user-docs/faq.rst:7
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:7
 msgid "I found a bug, how should I report it?"
 msgstr ""
 
 # 8515a66c7afd481db8e247cb0c1929c0
-#: ../../user-docs/faq.rst:9
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:9
 msgid ""
 "We manage the project issues using a GitHub issue tracker. The `InaSAFE "
 "<https://github.com/AIFDR/inasafe/issues?"
@@ -828,12 +894,12 @@ msgid ""
 msgstr ""
 
 # f1951f80c7f84d7aaf737d4dfae02987
-#: ../../user-docs/faq.rst:16
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:16
 msgid "Why can't I find the plugin in the QGIS repositories?"
 msgstr ""
 
 # 93ac743340f641a28c8bba72c0024bcb
-#: ../../user-docs/faq.rst:18
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:18
 msgid ""
 "We do plan to publish the plugin at `plugins.qgis.org <http://plugins.qgis."
 "org/>`_ so that it can be effortlessly installed from within QGIS, we are "
@@ -842,22 +908,22 @@ msgid ""
 msgstr ""
 
 # 50e2ca6189c44058bebf00e382bfe35b
-#: ../../user-docs/faq.rst:24
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:24
 msgid "Do I need to pay to use |project_name|?"
 msgstr ""
 
 # f87d332c30a442ce92a1e2d95fbacccc
-#: ../../user-docs/faq.rst:26
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:26
 msgid "No, the software is completely Free and Open Source."
 msgstr ""
 
 # 86b5e2dde69d4004a0c518aeb49419e5
-#: ../../user-docs/faq.rst:29
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:29
 msgid "What license is |project_name| published under?"
 msgstr ""
 
 # b40f5161370e48bf94239aaa291e17a6
-#: ../../user-docs/faq.rst:31
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:31
 msgid ""
 "|project_name| is published under the GPL version 2 license, the full text "
 "of which is available at `www.gnu.org/licenses/gpl-2.0.txt <http://www.gnu."
@@ -865,19 +931,19 @@ msgid ""
 msgstr ""
 
 # 59ac0304c76a4aed972f6aed8696b749
-#: ../../user-docs/faq.rst:36
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:36
 msgid ""
 "Under the terms of the license of you may freely copy, share and modify the "
 "software, as long as you make it available under the same license."
 msgstr ""
 
 # 0b6230eef764414799bef6b032c22d48
-#: ../../user-docs/faq.rst:40
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:40
 msgid "How is the project funded?"
 msgstr ""
 
 # 60914db879064d63a8c21e9992d35aa8
-#: ../../user-docs/faq.rst:42
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:42
 msgid ""
 "The project is being developed 'for the good of humanity' and has been "
 "jointly developed by `BNPB <http://www.bnpb.go.id/>`_, `AusAid <http://www."
@@ -885,12 +951,12 @@ msgid ""
 msgstr ""
 
 # 50879009bd7e4fc7b1657ab7dd312a94
-#: ../../user-docs/faq.rst:48
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:48
 msgid "Could we request a new feature?"
 msgstr ""
 
 # 56cb9eab285b426e820ec9cc0af387e9
-#: ../../user-docs/faq.rst:50
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:50
 msgid ""
 "If you have a feature request, please use the `issue tracker <https://github."
 "com/AIFDR/inasafe/issues?direction=desc&sort=created&state=open>`_ to let us "
@@ -898,39 +964,39 @@ msgid ""
 msgstr ""
 
 # 18c09fdf12bf4afc8e28cc48608da895
-#: ../../user-docs/faq.rst:56
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:56
 msgid "How do I rename a shape file and all the helper files?"
 msgstr ""
 
 # e3f44f613b0240b49ebc1caaf6d97fa9
-#: ../../user-docs/faq.rst:58
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:58
 msgid ""
 "Use the rename command. rename [ -v ] [ -n ] [ -f ] perlexpr [ files ]. For "
 "example::"
 msgstr ""
 
 # 842769938a734124aa7cc54dfcb71b93
-#: ../../user-docs/faq.rst:64
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:64
 msgid "How do I reproject a spatial data file to WGS84 geographic coordinates"
 msgstr ""
 
 # 42a09d38901347aaa8574580c46e9193
-#: ../../user-docs/faq.rst:66
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:66
 msgid "For raster data, use gdalwarp, for example::"
 msgstr ""
 
 # 6c69770993924716b942ff65274ee7dd
-#: ../../user-docs/faq.rst:70
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:70
 msgid "For vector data use ogr2ogr. For example from TM-3 zone 48.2::"
 msgstr ""
 
 # a38d5674adcf4716b045cef09e3d26df
-#: ../../user-docs/faq.rst:75
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:75
 msgid "How do I get Open Street Map building data into |project_name|?"
 msgstr ""
 
 # f1cd146151194b1ca136c74a7746ebf4
-#: ../../user-docs/faq.rst:77
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:77
 msgid ""
 "For Indonesia, you can download latest collections at `data.kompetisiosm.org "
 "<http://data.kompetisiosm.org>`_. or you can add our Open Street Map "
@@ -938,31 +1004,31 @@ msgid ""
 msgstr ""
 
 # 900f9c7123e34864b66964ca515f2eb2
-#: ../../user-docs/faq.rst:81
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:81
 msgid ""
 "Add PostGIS layer with host=203.77.224.77, database=osm, username=aifdr, "
 "port 5432, SSL mode=disable"
 msgstr ""
 
 # 74c5d468662946cba666a7e257a00462
-#: ../../user-docs/faq.rst:83
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:83
 msgid "Select view named vw_planet_osm_polygon"
 msgstr ""
 
 # 2246744d330748e79a5049a6ad043f07
-#: ../../user-docs/faq.rst:85
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:85
 msgid ""
 "# * Build query: upper(geometrytype(\"way\")) IN ('POLYGON','MULTIPOLYGON') "
 "AND BUILDING != ''"
 msgstr ""
 
 # 276c4629ad9c4f56b59f3ae7c4fecbbc
-#: ../../user-docs/faq.rst:88
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:88
 msgid "How do I take screen capture e.g. for use in a presentation?"
 msgstr ""
 
 # 814a1719222b4a44ba88aa7559d69429
-#: ../../user-docs/faq.rst:90
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:90
 msgid ""
 "On Ubuntu, get the packages gtk-recordmydesktop and mencoder Record using "
 "recordmydesktop (start and stop icon in the top bar) Convert to other "
@@ -970,17 +1036,17 @@ msgid ""
 msgstr ""
 
 # f86e058581ae401597f20274f47b7fbb
-#: ../../user-docs/faq.rst:97
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/faq.rst:97
 msgid "or::"
 msgstr ""
 
 # 8867ed6ff293413197afa495f2efcf03
-#: ../../user-docs/impact_functions.rst:4
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/impact_functions.rst:4
 msgid "Impact Functions"
 msgstr ""
 
 # bdb219c5265d4a5780f4a487014e1d18
-#: ../../user-docs/impact_functions.rst:6
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/impact_functions.rst:6
 msgid ""
 "This document explains the purpose of impact functions and lists the "
 "different available impact function and the requirements each has to be used "
@@ -1782,17 +1848,17 @@ msgid ""
 msgstr ""
 
 # 6922666ad5db422b8ff4e8edb35bcd9f
-#: ../../user-docs/known_issues.rst:2
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/known_issues.rst:2
 msgid "Known Issues"
 msgstr ""
 
 # aac7847fe68c47c19b596dad249e21fc
-#: ../../user-docs/known_issues.rst:7
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/known_issues.rst:7
 msgid "Population density grids must be in geographic coordinates"
 msgstr ""
 
 # 2dedcfcbf3c048f9ac4d108be70ad7aa
-#: ../../user-docs/known_issues.rst:9
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/known_issues.rst:9
 msgid ""
 "Currently, if population density grids are projected they won't be scaled "
 "correctly if resampled. See also ticket `#123 <https://github.com/AIFDR/"
@@ -1800,12 +1866,12 @@ msgid ""
 msgstr ""
 
 # c707d3c2d6a2401f952759397c36d465
-#: ../../user-docs/known_issues.rst:14
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/known_issues.rst:14
 msgid "Help documentation has no style under windows"
 msgstr ""
 
 # 321f01a1baed4336897ea9bdf157f395
-#: ../../user-docs/known_issues.rst:16
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/known_issues.rst:16
 msgid ""
 "Currently if you open the help documentation for InaSAFE, not styling is "
 "applied and images may not show, so it looks rather plain. We are working to "
@@ -1939,12 +2005,12 @@ msgid "InaSAFE Screenshots"
 msgstr ""
 
 # 2be2a6a7bc594d6ba8f6e4a17cea4c16
-#: ../../user-docs/using-qgis.rst:3
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:3
 msgid "Using QGIS"
 msgstr ""
 
 # 5c6965567d1f4cc7a2f698f4ce72c8b4
-#: ../../user-docs/using-qgis.rst:5
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:5
 msgid ""
 "|project_name| uses `Quantum GIS (QGIS) <http://qgis.org>`_ - as the "
 "platform on which to provide its functionality. QGIS itself has good "
@@ -1954,14 +2020,14 @@ msgid ""
 msgstr ""
 
 # f75ff0d9e064456ba63eb382fdbe45bb
-#: ../../user-docs/using-qgis.rst:11
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:11
 msgid ""
 "There are three good resources to get you up to speed with using GIS in "
 "general and QGIS in particular:"
 msgstr ""
 
 # 732ae355d7654d0fb4b4dea3ed44f35f
-#: ../../user-docs/using-qgis.rst:14
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:14
 msgid ""
 "The `Gentle Introduction to GIS <http://linfiniti.com/dla>`_ by Linfiniti "
 "Consulting - it is a free electronic book that introduces the concepts of "
@@ -1969,7 +2035,7 @@ msgid ""
 msgstr ""
 
 # 6dc6b1c2ad4546fc908bc445b3481c78
-#: ../../user-docs/using-qgis.rst:17
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:17
 msgid ""
 "The `QGIS User Manual <http://qgis.org/en/documentation/manuals.html>`_ - "
 "also an electronic book that serves as a reference guide to the QGIS Desktop "
@@ -1977,39 +2043,39 @@ msgid ""
 msgstr ""
 
 # 53ec24ca8f0a42e9ac125208ea8661aa
-#: ../../user-docs/using-qgis.rst:20
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:20
 msgid ""
 "The `QGIS Training Manual <http://manual.linfiniti.com>`_ by Linfiniti "
 "Consulting that provides a detailed training guide on QGIS and PostGIS."
 msgstr ""
 
 # 92878268724f464abe32c9791cf60031
-#: ../../user-docs/using-qgis.rst:24
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:24
 msgid "Things to cover (suggested by Trias Aditya)"
 msgstr ""
 
 # 6069c0d0fa6342d391f71a7ad41ba2a5
-#: ../../user-docs/using-qgis.rst:26
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:26
 msgid "access to statistics data"
 msgstr ""
 
 # 79a2e875b0554d31b2d8e4b28d0ea421
-#: ../../user-docs/using-qgis.rst:27
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:27
 msgid "access to WFS (for exposure data)"
 msgstr ""
 
 # 576a52b7463246279e52e7d3e95fb8f0
-#: ../../user-docs/using-qgis.rst:28
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:28
 msgid "access to WMS (for background data)"
 msgstr ""
 
 # f32e5f5f758744d698cdda606a22d7a9
-#: ../../user-docs/using-qgis.rst:29
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:29
 msgid "you have got an idea to access WCS (e.g. hazard, elevation data etc)"
 msgstr ""
 
 # 747513d455be4b21b5c49dcf13733e80
-#: ../../user-docs/using-qgis.rst:30
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/user-docs/using-qgis.rst:30
 msgid ""
 "map the projected impact into graphical charts (this will be my favourites "
 "then...)"

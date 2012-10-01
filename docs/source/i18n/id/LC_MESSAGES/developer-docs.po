@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: InaSAFE 0.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 13:00\n"
+"POT-Creation-Date: 2012-10-01 14:09\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 # dd9eb45d952c4492b739efc777c2a0e9
-#: ../../developer-docs/bug_reporting.rst:3
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/bug_reporting.rst:3
 msgid "Reporting bugs and getting help"
 msgstr ""
 
 # 808b89f8c8ed45c1aef22344585b71f5
-#: ../../developer-docs/bug_reporting.rst:5
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/bug_reporting.rst:5
 msgid ""
 "We are very open to ideas, suggestions and patches to improve this software "
 "- it is open source after all! If you experience an issue you can report it "
@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 
 # 53783790ba8f4b6985ff3882c610a78b
-#: ../../developer-docs/bug_reporting.rst:8
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/bug_reporting.rst:8
 msgid "Issue tracker: https://github.com/AIFDR/inasafe/issues"
 msgstr ""
 
@@ -1258,12 +1258,12 @@ msgid ""
 msgstr ""
 
 # 92c4df502f894eb48c1129811ff1a2f5
-#: ../../developer-docs/jenkins_ci.rst:3
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:3
 msgid "Continuous Integration Testing with Jenkins"
 msgstr ""
 
 # bcb0a158fb404c09bbf2fa2c97881780
-#: ../../developer-docs/jenkins_ci.rst:5
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:5
 msgid ""
 "This documentation is Copyright Linfiniti Consulting CC. June 2012 and has "
 "been included here to provide provenance, and adapted for the InaSAFE "
@@ -1271,13 +1271,13 @@ msgid ""
 msgstr ""
 
 # b0f9a24b59794f45aac1e2314b921524
-#: ../../developer-docs/jenkins_ci.rst:9
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:9
 msgid ""
 "`Jenkins <http://jenkins-ci.org/>`_ is an automated build and test server."
 msgstr ""
 
 # 50602b6c1ed84f719a1ac90b179b2f40
-#: ../../developer-docs/jenkins_ci.rst:11
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:11
 msgid ""
 "These notes are a port of notes kept during setup of Jenkins for some django "
 "projects and were written after the fact. As such, they need to be proof "
@@ -1285,43 +1285,43 @@ msgid ""
 msgstr ""
 
 # acea3fd5cb8b408595423d6575c5e8d4
-#: ../../developer-docs/jenkins_ci.rst:16
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:16
 msgid "Installation procedure - Jenkins server"
 msgstr ""
 
 # b64bc00f543c43cb944978c574c0515a
-#: ../../developer-docs/jenkins_ci.rst:18
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:18
 msgid ""
 "The install procedure is described at http://pkg.jenkins-ci.org/debian/."
 msgstr ""
 
 # 428246c46a294fcb8c9f0c1ac57acec8
-#: ../../developer-docs/jenkins_ci.rst:20
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:20
 msgid "To start, do this::"
 msgstr ""
 
 # ce49b4f7bc664bca9d8326634366854d
-#: ../../developer-docs/jenkins_ci.rst:24
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:24
 msgid "Now add this to your :file:`/etc/apt/sources.list`::"
 msgstr ""
 
 # 5e6dd85c40c54dbca0091e1499d1491b
-#: ../../developer-docs/jenkins_ci.rst:28
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:28
 msgid "Now do::"
 msgstr ""
 
 # c4a82a6146044957a6feae4bc3a5b52d
-#: ../../developer-docs/jenkins_ci.rst:35
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:35
 msgid "DNS and Reverse Proxy"
 msgstr ""
 
 # baa0a8cd579543eabc4823edd8f5b52b
-#: ../../developer-docs/jenkins_ci.rst:37
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:37
 msgid "I set up the following subdomain http://jenkins.linfiniti.com"
 msgstr ""
 
 # e52859db537645c4994fa1008eebc9ef
-#: ../../developer-docs/jenkins_ci.rst:39
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:39
 msgid ""
 "Now create a virtual host on the server's apache installation to reverse "
 "proxy by creating this file: :file:`/etc/apache2/sites-available/3-jenkins."
@@ -1329,164 +1329,164 @@ msgid ""
 msgstr ""
 
 # 69ea46e9012e46ceb167c7b2996b208a
-#: ../../developer-docs/jenkins_ci.rst:69
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:69
 msgid "Now enable this vhost::"
 msgstr ""
 
 # 1741ca4909274d848a26936ea0047d1f
-#: ../../developer-docs/jenkins_ci.rst:75
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:75
 msgid "Configure the server"
 msgstr ""
 
 # e9e26cb66a9b4e6490074ab8963d72c8
-#: ../../developer-docs/jenkins_ci.rst:77
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:77
 msgid "Go to http://jenkins.linfiniti.com and log in as an admin user."
 msgstr ""
 
 # 3e01582dc64448caadf7596eb72b4413
-#: ../../developer-docs/jenkins_ci.rst:80
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:80
 msgid "Enable Plugins"
 msgstr ""
 
 # 38eb32eeedc74d79bc6ad977b9ba3304
-#: ../../developer-docs/jenkins_ci.rst:82
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:82
 msgid ""
 ":menuselection:`Jenkins --> Manage Jenkins --> Manage Plugins` or go to "
 "http://jenkins.linfiniti.com/pluginManager/."
 msgstr ""
 
 # 6d345b2c5f434ac382c982ecb45a3c07
-#: ../../developer-docs/jenkins_ci.rst:85
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:85
 msgid "Enable the following plugins:"
 msgstr ""
 
 # 150d5a82b7874738bc217a9089359dfb
-#: ../../developer-docs/jenkins_ci.rst:87
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:87
 msgid "External Monitor Job Type Plugin"
 msgstr ""
 
 # a05b29f35b3d4eeb892f6d8372c8c47d
-#: ../../developer-docs/jenkins_ci.rst:88
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:88
 msgid "LDAP Plugin"
 msgstr ""
 
 # b53f0a92de71440fa7bb51f51e76a3ec
-#: ../../developer-docs/jenkins_ci.rst:89
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:89
 msgid "pam-auth"
 msgstr ""
 
 # 181bd528c107432eb5167d8e61c8bef0
-#: ../../developer-docs/jenkins_ci.rst:90
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:90
 msgid "javadoc"
 msgstr ""
 
 # 7b01f732116a4f84a3871c1213abd855
-#: ../../developer-docs/jenkins_ci.rst:91
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:91
 msgid "ant"
 msgstr ""
 
 # 6f396bab5e4747219501489e0f9d1e3e
-#: ../../developer-docs/jenkins_ci.rst:92
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:92
 msgid "Jenkins Subversion Plug-in"
 msgstr ""
 
 # c216e0f81b184aa381786f928d425f1a
-#: ../../developer-docs/jenkins_ci.rst:93
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:93
 msgid "Jenkins GIT plugin"
 msgstr ""
 
 # fb8f07f58f684dfb85c8fae0dbd48c70
-#: ../../developer-docs/jenkins_ci.rst:94
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:94
 msgid "Maven Integration plugin"
 msgstr ""
 
 # 7c434198b4e14dbc93b34f46653b0f26
-#: ../../developer-docs/jenkins_ci.rst:95
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:95
 msgid "Jenkins SLOCCount Plug-in"
 msgstr ""
 
 # 76697fd182bf4d0792d877be4197109a
-#: ../../developer-docs/jenkins_ci.rst:96
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:96
 msgid "Jenkins Sounds plugin"
 msgstr ""
 
 # 28d0dc8640144d87b7f9852ac6da56e8
-#: ../../developer-docs/jenkins_ci.rst:97
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:97
 msgid "Jenkins Translation Assistance plugin"
 msgstr ""
 
 # 1fe03550b98a436fa8342b386fd8c933
-#: ../../developer-docs/jenkins_ci.rst:98
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:98
 msgid "ruby-runtime"
 msgstr ""
 
 # 289c83a4bce14f3d85205aae5380c293
-#: ../../developer-docs/jenkins_ci.rst:99
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:99
 msgid "Jenkins CVS Plug-in"
 msgstr ""
 
 # 2e9b017720bd4708b9fba5ea2107923a
-#: ../../developer-docs/jenkins_ci.rst:100
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:100
 msgid "Coverage/Complexity Scatter Plot PlugIn"
 msgstr ""
 
 # 39059f3c3d9841b894326e51f7812003
-#: ../../developer-docs/jenkins_ci.rst:101
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:101
 msgid "Status Monitor Plugin"
 msgstr ""
 
 # a6dc9d9ebf9e4f9f86258270c392b310
-#: ../../developer-docs/jenkins_ci.rst:102
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:102
 msgid "Git Parameter Plug-In"
 msgstr ""
 
 # bf331dec7f4d4312b57d8d18e7ef15ce
-#: ../../developer-docs/jenkins_ci.rst:103
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:103
 msgid "github-api"
 msgstr ""
 
 # b45eb13e5ad34025995fee2037abe548
-#: ../../developer-docs/jenkins_ci.rst:104
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:104
 msgid "GitHub plugin"
 msgstr ""
 
 # 3866d4e2b8d341e688c5da6b363611d1
-#: ../../developer-docs/jenkins_ci.rst:105
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:105
 msgid "Jenkins Violations plugin"
 msgstr ""
 
 # 732297f0871b463e9e272264e8b0e802
-#: ../../developer-docs/jenkins_ci.rst:106
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:106
 msgid "git-notes Plugin"
 msgstr ""
 
 # a437c3da7b8c4aff9ea3beb87540273e
-#: ../../developer-docs/jenkins_ci.rst:107
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:107
 msgid "Twitter plugin"
 msgstr ""
 
 # b86ea1f5b27e46268485df8303b9a9d3
-#: ../../developer-docs/jenkins_ci.rst:108
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:108
 msgid "Jenkins Cobertura Plugin"
 msgstr ""
 
 # 2c9eaa2364a04ada888af34bb239676b
-#: ../../developer-docs/jenkins_ci.rst:109
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:109
 msgid "Jenkins Gravatar plugin"
 msgstr ""
 
 # a6545db94ff94cb28aa456e085f5f4b1
-#: ../../developer-docs/jenkins_ci.rst:110
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:110
 msgid "Jenkins SSH Slaves plugin"
 msgstr ""
 
 # 2f4b9a411be6405293d2f8c49e4fb4f9
-#: ../../developer-docs/jenkins_ci.rst:115
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:115
 msgid "Lock down access"
 msgstr ""
 
 # f599f8f6295b443cb6409163408ff04d
-#: ../../developer-docs/jenkins_ci.rst:117
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:117
 msgid ""
 "We are hosting private repositories on the server so we want to make "
 "everything private. To do that we do: :menuselection:`Jenkins --> Manage "
@@ -1495,14 +1495,14 @@ msgid ""
 msgstr ""
 
 # dd20c5bb7b3b4d49967844f14f151cbb
-#: ../../developer-docs/jenkins_ci.rst:122
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:122
 msgid ""
 "Under :guilabel:`Access control - Security Realm`, check :guilabel:"
 "`Jenkins's own user database`."
 msgstr ""
 
 # f5f93c2eee8e47e0a1163c10fa4de828
-#: ../../developer-docs/jenkins_ci.rst:125
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:125
 msgid ""
 "Under :guilabel:`Authorization` check :guilabel:`Project-based Matrix "
 "Authorization Strategy`, then add your admin users only here, giving them "
@@ -1511,58 +1511,58 @@ msgid ""
 msgstr ""
 
 # 37e52c9bd88440b0b650f8dec25ff603
-#: ../../developer-docs/jenkins_ci.rst:132
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:132
 msgid "Other Configuration options"
 msgstr ""
 
 # fa391cad7894420db262137bbfa7f696
-#: ../../developer-docs/jenkins_ci.rst:134
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:134
 msgid ":guilabel:`Jenkins URL` set to :kbd:`http://jenkins.linfiniti.com/`"
 msgstr ""
 
 # 9541709388b94df0b2674861d7c6ab4a
-#: ../../developer-docs/jenkins_ci.rst:135
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:135
 msgid ""
 ":guilabel:`Sender E-mail Address` set to :kbd:`Linfiniti Jenkins "
 "<jenkins@linfiniti.com>`"
 msgstr ""
 
 # d20e106d83bd432a83d6d2cdc1c23076
-#: ../../developer-docs/jenkins_ci.rst:136
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:136
 msgid ":guilabel:`GitHub Web Hook` set to :kbd:`Manually manage hook URLs`"
 msgstr ""
 
 # 3c3f9fcd158e448ea86dd5f6c65ca230
-#: ../../developer-docs/jenkins_ci.rst:140
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:140
 msgid "Creating the Jenkins Farminfo Job"
 msgstr ""
 
 # 85fe3ada60aa47eea08ed9b68d56517e
-#: ../../developer-docs/jenkins_ci.rst:142
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:142
 msgid "Create a new Job (project):"
 msgstr ""
 
 # e0c5d830ab684b4fa3972e778d8f194b
-#: ../../developer-docs/jenkins_ci.rst:144
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:144
 msgid ""
 ":menuselection:`Jenkins --> New Job` or go to http://jenkins.linfiniti.com/"
 "view/All/newJob."
 msgstr ""
 
 # a581e1e74f14405196f913ef6fffb058
-#: ../../developer-docs/jenkins_ci.rst:147
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:147
 msgid "Here is a log of the options we set for the Jenkins job:"
 msgstr ""
 
 # 76a6a7111e9a458a873b15abbe42df19
-#: ../../developer-docs/jenkins_ci.rst:149
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:149
 msgid ""
 ":guilabel:`Project Name` set to :kbd:`InaSAFE` (don't use spaces for the "
 "project name!)."
 msgstr ""
 
 # d6dce83b311d435fa351829f49c002b0
-#: ../../developer-docs/jenkins_ci.rst:151
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:151
 msgid ""
 "Check :guilabel:`Enable project-based security` then add an entry for "
 "**Anonymous** with :kbd:`Job: Read` and :kbd:`Job Discover` permissions "
@@ -1570,30 +1570,30 @@ msgid ""
 msgstr ""
 
 # 1ec9342ba0b64fc49192c754b9d34eaa
-#: ../../developer-docs/jenkins_ci.rst:154
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:154
 msgid ""
 ":guilabel:`GitHub project` set to :kbd:`https://github.com/AIFDR/inasafe/`"
 msgstr ""
 
 # a87d411b366940d9b2f9dc5d39810579
-#: ../../developer-docs/jenkins_ci.rst:155
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:155
 msgid ""
 ":guilabel:`Source Code Management` check :guilabel:`Git` and set to :kbd:"
 "`git@github.com:AIFDR/inasafe.git`"
 msgstr ""
 
 # eb5a024d1cde45a18e4fd97af16a988c
-#: ../../developer-docs/jenkins_ci.rst:157
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:157
 msgid ":guilabel:`Branch Specifier (blank for default)` set to :kbd:`master`"
 msgstr ""
 
 # 1396888b10174c0994002d2652baf8d0
-#: ../../developer-docs/jenkins_ci.rst:158
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:158
 msgid ":guilabel:`Repository browser` set to :kbd:`auto`"
 msgstr ""
 
 # 3309f7c2df854d0887ff2b936918191a
-#: ../../developer-docs/jenkins_ci.rst:159
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:159
 msgid ""
 ":guilabel:`Build Triggers` set to :kbd:`Build when a change is pushed to "
 "GitHub` - this will cause the project to build every time a new commit is "
@@ -1602,43 +1602,43 @@ msgid ""
 msgstr ""
 
 # cec6d4c8ded645848c97092628374520
-#: ../../developer-docs/jenkins_ci.rst:164
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:164
 msgid "**Build Actions**"
 msgstr ""
 
 # 1b824a29655b4c26a9c96db4ad9b34d2
-#: ../../developer-docs/jenkins_ci.rst:166
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:166
 msgid ""
 ":guilabel:`Build` add an :kbd:`Execute Shell` step and set the script as "
 "follows::"
 msgstr ""
 
 # 2282cd2bd3bd4a77a18a775619df1c87
-#: ../../developer-docs/jenkins_ci.rst:183
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:183
 msgid ""
 "In this server instance we are using a hand built QGIS. The initial 3 export "
 "lines may not be needed if you are using a package build QGIS installation."
 msgstr ""
 
 # 86a93e2c78f04f9681b8b8847060c509
-#: ../../developer-docs/jenkins_ci.rst:187
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:187
 msgid ""
 ":guilabel:`Add build step` set to :kbd:`play a sound` and choose a sound "
 "which will play when the build completes (optional)"
 msgstr ""
 
 # 0e4c9cddb8614a27a22b94975b07e6f6
-#: ../../developer-docs/jenkins_ci.rst:190
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:190
 msgid "**Post-build Actions**"
 msgstr ""
 
 # 360a3bf318f04e409b6577c66545c589
-#: ../../developer-docs/jenkins_ci.rst:192
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:192
 msgid "Add the following actions and settings:"
 msgstr ""
 
 # efc477689c6f41ea8cdf0eb4f3e0c0b4
-#: ../../developer-docs/jenkins_ci.rst:194
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:194
 msgid ""
 ":guilabel:`Publish Cobertura Coverage Report` set :guilabel:`Cobertura xml "
 "report pattern` to :kbd:`coverage.xml`. For the rest take the defaults or "
@@ -1646,7 +1646,7 @@ msgid ""
 msgstr ""
 
 # 307e5a60ca17466d989b4c1b8b6fbf43
-#: ../../developer-docs/jenkins_ci.rst:198
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:198
 msgid ""
 "to :kbd:`nosetests.xml`. I also disabled :guilabel:`Retain long standard "
 "output/error` (you can enable it temporarily while debugging server side "
@@ -1654,24 +1654,24 @@ msgid ""
 msgstr ""
 
 # a487192db9d3401b992d60a8f556b51f
-#: ../../developer-docs/jenkins_ci.rst:201
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:201
 msgid ""
 ":guilabel:`Publish SLOCCount analysis reports` set :guilabel:`SLOCcount "
 "reports` to :kbd:`sloccount.sc`"
 msgstr ""
 
 # 7072fc85a27d4861ae8c963895571c30
-#: ../../developer-docs/jenkins_ci.rst:204
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:204
 msgid ":guilabel:`pep8` to :kbd:`pep8.log`"
 msgstr ""
 
 # 5c37248ddb884df285b23a28a9754709
-#: ../../developer-docs/jenkins_ci.rst:205
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:205
 msgid ":guilabel:`pylint` to :kbd:`pylint.log`"
 msgstr ""
 
 # b82159a0462d45c69265bb136d177c45
-#: ../../developer-docs/jenkins_ci.rst:206
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:206
 msgid ""
 ":guilabel:`Email notification` set :guilabel:`Recipients` to :kbd:"
 "`tim@linfiniti.com`. Add any additional recipients as needed (space "
@@ -1681,63 +1681,63 @@ msgid ""
 msgstr ""
 
 # 500b2dc3966e4c1d8dcc6d5b47fc115b
-#: ../../developer-docs/jenkins_ci.rst:212
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:212
 msgid ":guilabel:`Jenkins Sounds` set :guilabel:`Failure` to :kbd:`argh(wave)`"
 msgstr ""
 
 # ee0d3a5e4e0540439f324ab654d15e10
-#: ../../developer-docs/jenkins_ci.rst:213
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:213
 msgid ""
 ":guilabel:`Jenkins Sounds` set :guilabel:`Success` to :kbd:`Yahoo.Yodel(wave)"
 "`"
 msgstr ""
 
 # 3237cdb748c144929d8910dda041f916
-#: ../../developer-docs/jenkins_ci.rst:214
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:214
 msgid ""
 ":guilabel:`Publish Coverage / Complexity Scatter Plot` check :guilabel:"
 "`Locate the graph at the topmost of Jenkins project page`"
 msgstr ""
 
 # 28daecac2e0a406ba10d68ecee47fb45
-#: ../../developer-docs/jenkins_ci.rst:216
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:216
 msgid ":guilabel:`Status Monitor` enable (this is optional)"
 msgstr ""
 
 # dd3a2c4092304f7bb2c097e058515451
-#: ../../developer-docs/jenkins_ci.rst:218
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:218
 msgid "Click :guilabel:`Save`"
 msgstr ""
 
 # 19a6b62e8d054571b700c4af2eca98f6
-#: ../../developer-docs/jenkins_ci.rst:221
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:221
 msgid "Server Configuration in the shell"
 msgstr ""
 
 # 4e472b2ec41647879b65852e015ace95
-#: ../../developer-docs/jenkins_ci.rst:223
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:223
 msgid "We need to do the following on the server as the jenkins user:"
 msgstr ""
 
 # da3aaa008fef4c3781aa0cb3c87b7f7d
-#: ../../developer-docs/jenkins_ci.rst:226
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:226
 msgid "Create an ssh key for Jenkins"
 msgstr ""
 
 # a3e4e11cffc943dea562e44964ed89b3
-#: ../../developer-docs/jenkins_ci.rst:228
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:228
 msgid ""
 "This key will be used to enable Jenkins access to private repos on GitHub. "
 "You only need to do this once on the server for each project::"
 msgstr ""
 
 # 1d9b131fafe4401ca3877e8c9472e8f3
-#: ../../developer-docs/jenkins_ci.rst:255
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:255
 msgid "Here's our key::"
 msgstr ""
 
 # d50b0ee3c3944765ae9c5cba12e83863
-#: ../../developer-docs/jenkins_ci.rst:265
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:265
 msgid ""
 "You need to create an ssh host alias so that when doing a git checkout, the "
 "correct keypair is used. Add this to the :file:`~/.ssh/config` of the "
@@ -1745,14 +1745,14 @@ msgid ""
 msgstr ""
 
 # 9ec843158a38417e8937c89ff6e344d9
-#: ../../developer-docs/jenkins_ci.rst:273
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:273
 msgid ""
 "Now go to https://github.com/AIFDR/inasafe/admin/keys and add the above key "
 "as a deploy key."
 msgstr ""
 
 # 8d18940aa0f04a0da59ae9965be9b5f9
-#: ../../developer-docs/jenkins_ci.rst:276
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:276
 msgid ""
 "Next we add the github key to the Jenkins user's allowed hosts. The easiest "
 "way to do this is just to make a temporary clone of the repo. Again this "
@@ -1761,22 +1761,22 @@ msgid ""
 msgstr ""
 
 # 37e5d571fb2d477bbd1f229075605e15
-#: ../../developer-docs/jenkins_ci.rst:280
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:280
 msgid "Back on the server::"
 msgstr ""
 
 # 3b227d8eeb204100a87c3aa4814743e5
-#: ../../developer-docs/jenkins_ci.rst:289
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:289
 msgid "Also you should set the Jenkins git user and email::"
 msgstr ""
 
 # f3248c77d3194bada30a462135e63787
-#: ../../developer-docs/jenkins_ci.rst:298
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:298
 msgid "Project setup"
 msgstr ""
 
 # 5c849fb8c0a445ebbb3bdd91ad98d5a8
-#: ../../developer-docs/jenkins_ci.rst:300
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:300
 msgid ""
 "Try to do an intial build. It will fail because we have to copy the InaSAFE "
 "test data into the job directory. Use the same procedure as above to add ad "
@@ -1784,22 +1784,22 @@ msgid ""
 msgstr ""
 
 # 996095e597604205b63a63a1e2687b7a
-#: ../../developer-docs/jenkins_ci.rst:308
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:308
 msgid "GitHub Hook Setup"
 msgstr ""
 
 # 216f35d3876748f888d923a2d8e05941
-#: ../../developer-docs/jenkins_ci.rst:310
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:310
 msgid "In GitHub hooks, enable Jenkins (GitHub plugin) and set the url to::"
 msgstr ""
 
 # 4761a598fe2141f6a785904a302912e8
-#: ../../developer-docs/jenkins_ci.rst:317
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:317
 msgid "Testing on Jenkins server"
 msgstr ""
 
 # 4a3d3cf936aa4efc996c2535f8e84edd
-#: ../../developer-docs/jenkins_ci.rst:319
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:319
 msgid ""
 "Simply commit something and push it to the server. Turn the speakers on on "
 "your desktop with the Jenkins page (http://jenkins.linfiniti.com) open and "
@@ -1808,42 +1808,42 @@ msgid ""
 msgstr ""
 
 # 267e70b2cb8c4193b03e5a56a57a3097
-#: ../../developer-docs/jenkins_ci.rst:325
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:325
 msgid "Further Reading"
 msgstr ""
 
 # 9dd0b7e2dcab4ba3a60a8cc4f9884cf6
-#: ../../developer-docs/jenkins_ci.rst:327
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:327
 msgid "Here are some useful resources we found while getting things set up."
 msgstr ""
 
 # 01be2419f7fc4cd89229d84167f8aec8
 # 6b09810344294c64b7994d233697d39e
-#: ../../developer-docs/jenkins_ci.rst:329
-#: ../../developer-docs/jenkins_ci.rst:331
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:329
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:331
 msgid ""
 "http://hustoknow.blogspot.com/2011/02/setting-up-django-nose-on-hudson.html"
 msgstr ""
 
 # 1d20460f9edb4b31b048495c85a1d5e5
-#: ../../developer-docs/jenkins_ci.rst:330
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:330
 msgid "http://www.alexconrad.org/2011/10/jenkins-and-python.html"
 msgstr ""
 
 # 85f762da801a4a3ba200eb1989632a3f
-#: ../../developer-docs/jenkins_ci.rst:332
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:332
 msgid "http://blog.jvc26.org/2011/06/13/jenkins-ci-and-django-howto"
 msgstr ""
 
 # bbb2b633072f415e95f4761fd387e96e
-#: ../../developer-docs/jenkins_ci.rst:333
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:333
 msgid ""
 "https://sites.google.com/site/kmmbvnr/home/django-jenkins-tutorial (probably "
 "the most usful article I found)"
 msgstr ""
 
 # a3986f7ad2b04289946ec44086ef9b9a
-#: ../../developer-docs/jenkins_ci.rst:335
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/jenkins_ci.rst:335
 msgid "http://blog.mathieu-leplatre.info/django-et-jenkins-fr.html (in French)"
 msgstr ""
 
@@ -4188,12 +4188,12 @@ msgid ""
 msgstr ""
 
 # 70f54e2ef97745e9b4e71313d4524b7e
-#: ../../developer-docs/todo.rst:2
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/todo.rst:2
 msgid "Todo List"
 msgstr ""
 
 # 14e6a9b3fefa46ce80456a10d9e521b1
-#: ../../developer-docs/todo.rst:6
+#: ../../../../../../../../rt/inasafe_takmid/docs/source/developer-docs/todo.rst:6
 msgid "Get this working..."
 msgstr ""
 

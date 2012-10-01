@@ -39,7 +39,7 @@ docs: compile
 	@echo "-------------------------------"
 	@echo "Compile documentation into html"
 	@echo "-------------------------------"
-	cd docs; make html >/dev/null; cd ..
+	scripts/post_translate.sh >/dev/null
 
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
 update-translation-strings: compile

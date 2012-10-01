@@ -1,4 +1,16 @@
 #!/bin/bash
+
+# Name of the dir containing static files
+STATIC=_static
+# Path to the documentation root relative to script execution dir
+DOCROOT=docs
+# Path from execution dir of this script to docs sources (could be just
+# '' depending on how your sphinx project is set up).
+SOURCE=source
+
+pushd .
+cd $DOCROOT/$SOURCE
+
 LOCALES='af id de'
 
 if [ $1 ]; then
@@ -17,8 +29,10 @@ do
 done
 
 # We need to flush the _build dir or the translations dont come through
+cd .. 
 rm -rf _build
-#Add english to the list and generated docs
+# Add english to the list and generated docs
+# TODO: Just extend $LOCALES rather for DRY
 LOCALES='en af id de'
 
 if [ $1 ]; then
@@ -28,20 +42,22 @@ fi
 for LOCALE in ${LOCALES}
 do
   # Compile the html docs for this locale
-  rm -rf _static
-  cp -r _static_${LOCALE} _static
+  rm -rf $SOURCE/$STATIC
+  cp -r $SOURCE/$STATIC_${LOCALE} $SOOURCE/$STATIC
   echo "Building HTML for locale '${LOCALE}'..."
-  sphinx-build -D language=${LOCALE} -b html . _build/html/${LOCALE}
+  sphinx-build -D language=${LOCALE} -b html $SOURCE _build/html/${LOCALE}
 
   # Compile the latex docs for that locale
-  sphinx-build -D language=${LOCALE} -b latex . _build/latex/${LOCALE}
+  sphinx-build -D language=${LOCALE} -b latex $SOURCE _build/latex/${LOCALE}
   # Compile the pdf docs for that locale
   # we use texi2pdf since latexpdf target is not available via 
   # sphinx-build which we need to use since we need to pass language flag
   pushd .
   cd _build/latex/${LOCALE}/
-  texi2pdf --quiet  LinfinitiQGISTrainingManual.tex
-  mv LinfinitiQGISTrainingManual.pdf LinfinitiQGISTrainingManual-${LOCALE}.pdf
+  texi2pdf --quiet  InaSAFEManual.tex
+  mv InaSAFEManual.pdf InaSAFEManual-${LOCALE}.pdf
   popd
-  rm -rf _static
+  rm -rf $STATIC
 done
+
+popd
