@@ -17,9 +17,7 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 import os
-import sys
 from PyQt4 import (QtGui, QtCore, QtWebKit)
 from help_base import Ui_HelpBase
 
@@ -76,7 +74,7 @@ class Help(QtGui.QDialog):
 
         myUrl = QtCore.QUrl('file:///' + myPath)
 
-        if sys.platform == 'windowss':  # Windows
+        if 'nt' in os.name:  # Windows
             QtGui.QDesktopServices.openUrl(myUrl)
             self.close()
 
