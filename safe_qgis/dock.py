@@ -997,7 +997,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         clippedAggregationLayerPath = clipLayer(
             self.aggregationLayer,
-            impactLayer.get_bounding_box())
+            impactLayer.get_bounding_box(), explodeMultipart=False)
 
         self.aggregationLayer = QgsVectorLayer(
             clippedAggregationLayerPath, lName, 'ogr')
@@ -1348,8 +1348,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
-        if not self.helpDialog:
-            self.helpDialog = Help(self.iface.mainWindow(), 'dock')
+        if self.helpDialog:
+            del self.helpDialog
+        self.helpDialog = Help(theParent=self.iface.mainWindow(),
+                               theContext='dock')
         self.helpDialog.show()
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
@@ -1799,11 +1801,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        myMap = Map(self.iface)
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
-                            temp_dir(),
+                            temp_dir() + os.sep + myMap.getMapTitle() + '.pdf',
                             self.tr('Pdf File (*.pdf)'))
-        myMap = Map(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())
         self.showBusy(self.tr('Map Creator'),
                       self.tr('Generating your map as a PDF document...'),

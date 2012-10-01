@@ -63,13 +63,13 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
         if not H.is_polygon_data:
             raise Exception(msg)
 
+        if not self.category_title in H.get_attribute_names():
+            self.category_title = 'Radius'
         category_title = self.category_title
-        if not category_title in H.get_attribute_names():
-            category_title = 'Radius'
 
         # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name='population')
+                                                  attribute_name='population')
 
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero

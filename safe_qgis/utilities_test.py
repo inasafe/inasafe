@@ -3,7 +3,11 @@
 
 import os
 import sys
+import hashlib
+import logging
+
 from PyQt4 import QtGui, QtCore
+
 from qgis.core import (QgsApplication,
                       QgsVectorLayer,
                       QgsRasterLayer,
@@ -15,9 +19,10 @@ from qgis_interface import QgisInterface
 # For testing and demoing
 from safe.common.testing import TESTDATA
 from safe_qgis.safe_interface import readKeywordsFromFile
-import hashlib
 
-QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
+LOGGER = logging.getLogger('InaSAFE')
+
+QGISAPP = None  # Static variable used to hold hand to running QGis app
 CANVAS = None
 PARENT = None
 IFACE = None
@@ -75,14 +80,18 @@ def getQgisTestApp():
     if QGISAPP is None:
         myGuiFlag = True  # All test will run qgis in safe_qgis mode
         QGISAPP = QgsApplication(sys.argv, myGuiFlag)
-        if 'QGISPATH' in os.environ:
-            myPath = os.environ['QGISPATH']
+
+        # Note: This block is not needed for  QGIS > 1.8 which will
+        # automatically check the QGIS_PREFIX_PATH var so it is here
+        # for backwards compatibility only
+        if 'QGIS_PREFIX_PATH' in os.environ:
+            myPath = os.environ['QGIS_PREFIX_PATH']
             myUseDefaultPathFlag = True
             QGISAPP.setPrefixPath(myPath, myUseDefaultPathFlag)
 
         QGISAPP.initQgis()
         s = QGISAPP.showSettings()
-        print s
+        LOGGER.debug(s)
 
     global PARENT  # pylint: disable=W0603
     if PARENT is None:
