@@ -1689,7 +1689,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 else:
                     self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
-                        myValue = myKeywords[myKeyword]
+                        myValue = str(myKeywords[myKeyword])
 
                         # Translate titles explicitly if possible
                         if myKeyword == 'title' and \
