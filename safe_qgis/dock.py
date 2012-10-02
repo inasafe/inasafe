@@ -1238,14 +1238,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             self.disableBusyCursor()
 
-            dialog = KeywordsDialog(self.iface.mainWindow(),
+            self.aggregationAttributeDialog = KeywordsDialog(self.iface.mainWindow(),
                 self.iface,
                 self,
                 self.aggregationLayer)
-            dialog.toggleAdvanced(True)
+            self.aggregationAttributeDialog.toggleAdvanced(True)
 
             aggrAttribute = fields[0]
-            if dialog.exec_() == QtGui.QDialog.Accepted:
+            if self.aggregationAttributeDialog.exec_() == QtGui.QDialog.Accepted:
                 keywords = read_keywords(myKeywordFilePath)
                 try:
                     aggrAttribute = keywords['aggregation attribute']
