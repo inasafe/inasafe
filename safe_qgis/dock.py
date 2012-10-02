@@ -127,6 +127,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
         self._aggregationPrefix = 'aggr_'
+        self.pbnPrint.setEnabled(False)
 
         self.initPostprocessingOutput()
 
