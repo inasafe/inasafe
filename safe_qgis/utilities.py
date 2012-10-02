@@ -508,16 +508,6 @@ def qgisVersion():
     myVersion = int(myVersion)
     return myVersion
 
-
-def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-    if qgisVersion() >= 10800:
-        #available from qgis 1.8
-        from qgis.core import QgsMessageLog
-        QgsMessageLog.logMessage(str(msg), tag, level)
-    else:
-        print (str(msg), tag, level)
-
-
 try:
     #available from qgis 1.8
     from qgis.core import QgsMessageLog
