@@ -518,6 +518,17 @@ def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         print (str(msg), tag, level)
 
 
+try:
+    #available from qgis 1.8
+    from qgis.core import QgsMessageLog
+except ImportError:
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        print (str(msg), tag, level)
+else:
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        QgsMessageLog.logMessage(str(msg), tag, level)
+
+
 #def copyInMemory(vLayer, copyName=''):
 #    """Return a memory copy of a layer
 #
