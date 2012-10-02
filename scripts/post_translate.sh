@@ -42,8 +42,9 @@ fi
 for LOCALE in ${LOCALES}
 do
   # Compile the html docs for this locale
+  #set -x
   rm -rf $SOURCE/$STATIC
-  cp -r $SOURCE/$STATIC_${LOCALE} $SOOURCE/$STATIC
+  cp -r $SOURCE/${STATIC}_${LOCALE} $SOURCE/$STATIC
   echo "Building HTML for locale '${LOCALE}'..."
   sphinx-build -D language=${LOCALE} -b html $SOURCE build/html/${LOCALE}
 
