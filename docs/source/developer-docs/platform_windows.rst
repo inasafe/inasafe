@@ -187,11 +187,11 @@ following listing in <QGIS Install Dir>/bin/python-shell.bat::
    
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\qgis\python;
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\Python27\Lib\site-packages
-   set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
+   set QGIS_PREFIX_PATH=%OSGEO4W_ROOT%\apps\qgis
    cd "%HOMEPATH%\.qgis\python\plugins\inasafe-dev"
    start "Quantum GIS Shell" /B "cmd.exe" %*
 
-.. note:: The QGISPATH environment variable should be unquoted!.
+.. note:: The QGIS_PREFIX_PATH environment variable should be unquoted!.
 
 .. note:: You may need to replace PROGRA~1 above with PROGRA~2 if you are
    on 64bit windows.
@@ -408,7 +408,7 @@ environment has been imported. Here are the typical contexts of the file::
    path %PATH%;%OSGEO4W_ROOT%\apps\qgis\bin;%OSGEO4W_ROOT%\apps\grass\grass-6.4.2\lib
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\qgis\python;
    set PYTHONPATH=%PYTHONPATH%;%OSGEO4W_ROOT%\apps\Python27\Lib\site-packages
-   set QGISPATH=%OSGEO4W_ROOT%\apps\qgis
+   set QGIS_PREFIX_PATH=%OSGEO4W_ROOT%\apps\qgis
    "C:\Progra~2\eclipse\eclipse.exe"
 
 .. note:: Use the path where your eclipse was extracted. Also note that PROGRA~2 may 
@@ -484,7 +484,7 @@ You will be returned to the Python Interpreters list and should see an entry for
 
 In the dialog that appears 
 
-:guilabel:`Name` : :kbd:`QGISPATH`
+:guilabel:`Name` : :kbd:`QGIS_PREFIX_PATH`
 :guilabel:`Value` : :kbd:`C:\\PROGRA~1\\QUANTU~1\\apps\\qgis`
 
 Then click ok to close the environment variable editor.
