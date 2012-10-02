@@ -531,24 +531,6 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
 
-        # with 3 good aggregation attribute using
-        # kabupaten_jakarta_singlepart_3_good_attr.shp
-        myResult, myMessage = setupScenario(
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart 3 good attr')
-        assert myResult, myMessage
-        # Press RUN
-#        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-#        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
-#                     (DOCK.aggregationAttribute))
-#        #TODO (MB) automate the selection of the second attribute in gui
-#        QTest.mouseClick(DOCK.aggregationAttributeDialog.buttonBox.button(QtGui.QDialogButtonBox.Ok),
-#            QtCore.Qt.LeftButton)
-#        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
-
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         myResult, myMessage = setupScenario(
@@ -578,6 +560,25 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation should be None. Found: %s' %
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
+
+        # with 3 good aggregation attribute using
+        # kabupaten_jakarta_singlepart_3_good_attr.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart 3 good attr')
+        assert myResult, myMessage
+        # Press RUN
+
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
+                     (DOCK.aggregationAttribute))
+        #TODO (MB) automate the selection of the second attribute in gui
+        QTest.mouseClick(DOCK.aggregationAttributeDialo.buttonBox.button(QtGui.QDialogButtonBox.Ok),
+            QtCore.Qt.LeftButton)
+        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
