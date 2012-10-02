@@ -26,7 +26,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from os.path import join
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry,
@@ -545,7 +545,8 @@ class DockTest(unittest.TestCase):
 #        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
 #                     (DOCK.aggregationAttribute))
 #        #TODO (MB) automate the selection of the second attribute in gui
-#
+#        QTest.mouseClick(DOCK.aggregationAttributeDialog.buttonBox.button(QtGui.QDialogButtonBox.Ok),
+#            QtCore.Qt.LeftButton)
 #        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
 
         # with no good aggregation attribute using
@@ -1273,8 +1274,8 @@ class DockTest(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-    #suite = unittest.makeSuite(DockTest,
-    #                    'test_cboAggregationToggle')
+    suite = unittest.makeSuite(DockTest,
+                        'test_checkAggregationAttribute')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
