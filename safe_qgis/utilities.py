@@ -45,6 +45,7 @@ import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary
 

@@ -176,6 +176,8 @@ class Plugin:
                                     'Open the keywords editor'))
         self.actionKeywordsDialog.setWhatsThis(self.tr(
                                     'Open the keywords editor'))
+        self.actionKeywordsDialog.setEnabled(False)
+
         QObject.connect(self.actionKeywordsDialog, SIGNAL('triggered()'),
                         self.showKeywordsEditor)
 
