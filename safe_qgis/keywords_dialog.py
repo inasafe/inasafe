@@ -125,8 +125,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
-        if not self.helpDialog:
-            self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
+        if self.helpDialog:
+            del self.helpDialog
+        self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
         self.helpDialog.show()
 
     # prevents actions being handled twice
