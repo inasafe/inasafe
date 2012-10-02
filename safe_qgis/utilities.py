@@ -37,10 +37,11 @@ from qgis.core import (QGis,
                        QgsColorRampShader,
                        QgsRasterTransparency,
                        )
-from safe_qgis.exceptions import StyleError, MethodUnavailableError
-#do not remove this even if it is marked as unused by your IDE
-#resources are used by htmlfooter and header the comment will mark it unused
-#for pylint
+from safe_qgis.exceptions import StyleError
+
+# Do not remove this even if it is marked as unused by your IDE
+# resources are used by htmlfooter and header the comment will mark it unused
+# for pylint
 import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
