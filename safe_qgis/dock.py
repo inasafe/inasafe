@@ -1236,8 +1236,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
             dialogGui = Ui_AggregationAttributeDialogBase()
             dialogGui.setupUi(dialog)
-            dialogGui.buttonBox.button(
-                QtGui.QDialogButtonBox.Cancel).setHidden(True)
             cboAggr = dialogGui.cboAggregationAttributes
             cboAggr.clear()
             cboAggr.addItems(fields)
