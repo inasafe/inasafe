@@ -274,8 +274,8 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
     """
     # check the source layer path is valid
     if not os.path.isfile(theLayerPath):
-        myMessage = tr('Cannot get keywords from a non-existant file.'
-               '%s does not exist.' % theLayerPath)
+        myMessage = tr('Cannot get keywords from a non-existent file.'
+                       '%s does not exist.' % theLayerPath)
         raise InvalidParameterException(myMessage)
 
     # check there really is a keywords file for this layer
@@ -286,7 +286,7 @@ def readKeywordsFromFile(theLayerPath, theKeyword=None):
         myMessage = tr('No keywords file found for %s' % wrappedPath)
         raise InvalidParameterException(myMessage)
 
-    #now get the requested keyword using the inasafe library
+    # now get the requested keyword using the inasafe library
     myDictionary = None
     try:
         myDictionary = read_keywords(myKeywordFilePath)
