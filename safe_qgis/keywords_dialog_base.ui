@@ -350,22 +350,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>pbnAdvanced</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>grpAdvanced</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>169</x>
-     <y>189</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>129</x>
-     <y>277</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>radPredefined</sender>
    <signal>toggled(bool)</signal>
    <receiver>framePredefined</receiver>

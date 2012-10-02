@@ -1178,13 +1178,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             'subcategory' in keywords and
             keywords['subcategory'] == 'aggregation' and
             'aggregation attribute' in keywords):
+            #keywords are already complete
             myValue = keywords['aggregation attribute']
         else:
+            #set the default values by writing to the keywords
             keywords['category'] = 'postprocessing'
             keywords['subcategory'] = 'aggregation'
             write_keywords(keywords, myKeywordFilePath)
 
+            #prompt uset for a choice
             myValue = self._promptForAggregationAttribute(myKeywordFilePath)
+            keywords['aggregation attribute'] = myValue
+            write_keywords(keywords, myKeywordFilePath)
+
         return myValue
 
     def _promptForAggregationAttribute(self, myKeywordFilePath):
@@ -1231,39 +1237,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             self.disableBusyCursor()
 
-            #FIXME
-            self.iface.mapCanvas().setCurrentLayer(self.aggregationLayer)
-            if self.iface.activeLayer() is None:
-                raise RuntimeError('Aggregation layer is not the active layer')
-
             dialog = KeywordsDialog(self.iface.mainWindow(),
                 self.iface,
-                self)
-            dialog.adjustSize()
-            dialog.grpAdvanced.setVisible(True)
-#            #open a AggregationAttributeDialog
-#            dialog = QtGui.QDialog()
-#            #remove all windows hints to avoid allowing for cancelling the
-#            # dialog
-#            dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
-#            dialogGui = Ui_AggregationAttributeDialogBase()
-#            dialogGui.setupUi(dialog)
-#            dialogGui.buttonBox.button(
-#                QtGui.QDialogButtonBox.Cancel).setHidden(True)
-#            cboAggr = dialogGui.cboAggregationAttributes
-#            cboAggr.clear()
-#            cboAggr.addItems(fields)
-#            cboAggr.setCurrentIndex(0)
-#            self.disableBusyCursor()
-            #FIXME
+                self,
+                self.aggregationLayer)
+            dialog.toggleAdvanced(True)
+
+            aggrAttribute = fields[0]
             if dialog.exec_() == QtGui.QDialog.Accepted:
                 keywords = read_keywords(myKeywordFilePath)
-                aggrAttribute = keywords['aggregation attribute']
-                logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
-                                   ' as aggregation attribute')
+                try:
+                    aggrAttribute = keywords['aggregation attribute']
+                    logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
+                                       ' as aggregation attribute')
+                except:
+                    logOnQgsMessageLog('User Accepted but did not select a value. Using default : '
+                                       + str(aggrAttribute) + ' as aggregation attribute')
             else:
                 #the user cancelled, use the first attribute as default
-                aggrAttribute = fields[0]
+                logOnQgsMessageLog('User cancelled, using default: ' + str(aggrAttribute) +
+                                   ' as aggregation attribute')
 
         self.enableBusyCursor()
         return aggrAttribute

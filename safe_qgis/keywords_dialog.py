@@ -44,7 +44,7 @@ import safe_qgis.resources  # pylint: disable=W0611
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
 
-    def __init__(self, parent, iface, theDock=None):
+    def __init__(self, parent, iface, theDock=None, theLayer=None):
         """Constructor for the dialog.
         .. note:: In QtDesigner the advanced editor's predefined keywords
            list should be shown in english always, so when adding entries to
@@ -119,7 +119,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.adjustSize()
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
-        self.layer = self.iface.activeLayer()
+        if theLayer is None:
+            self.layer = self.iface.activeLayer()
+        else:
+            self.layer = theLayer
         if self.layer:
             self.loadStateFromKeywords()
 
@@ -145,10 +148,14 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
+        self.toggleAdvanced(theFlag)
+
+    def toggleAdvanced(self, theFlag):
         if theFlag:
             self.pbnAdvanced.setText(self.tr('Hide advanced editor'))
         else:
             self.pbnAdvanced.setText(self.tr('Show advanced editor'))
+        self.grpAdvanced.setVisible(theFlag)
         self.adjustSize()
 
     # prevents actions being handled twice
@@ -680,7 +687,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                       '%s' % str(getExceptionWithStacktrace(e))))))
         if self.dock is not None:
             self.dock.getLayers()
-        self.close()
+        self.done(QtGui.QDialog.Accepted)
 
     def applyPendingChanges(self):
         """Apply any pending changes e.g. keywords entered without being added.
