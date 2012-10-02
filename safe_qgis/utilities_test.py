@@ -22,7 +22,7 @@ from safe_qgis.safe_interface import readKeywordsFromFile
 
 LOGGER = logging.getLogger('InaSAFE')
 
-QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
+QGISAPP = None  # Static variable used to hold hand to running QGis app
 CANVAS = None
 PARENT = None
 IFACE = None
@@ -82,7 +82,8 @@ def getQgisTestApp():
         QGISAPP = QgsApplication(sys.argv, myGuiFlag)
 
         # Note: This block is not needed for  QGIS > 1.8 which will
-        # automatically check the QGIS_PREFIX_PATH var
+        # automatically check the QGIS_PREFIX_PATH var so it is here
+        # for backwards compatibility only
         if 'QGIS_PREFIX_PATH' in os.environ:
             myPath = os.environ['QGIS_PREFIX_PATH']
             myUseDefaultPathFlag = True
