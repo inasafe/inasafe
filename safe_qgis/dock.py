@@ -26,8 +26,6 @@ import os
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 from safe_qgis.dock_base import Ui_DockBase
-from safe_qgis.aggregation_attribute_dialog_base import\
-    Ui_AggregationAttributeDialogBase
 
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
@@ -1238,25 +1236,29 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             self.disableBusyCursor()
 
-            self.aggregationAttributeDialog = KeywordsDialog(self.iface.mainWindow(),
+            self.aggregationAttributeDialog = KeywordsDialog(
+                self.iface.mainWindow(),
                 self.iface,
                 self,
                 self.aggregationLayer)
-            self.aggregationAttributeDialog.toggleAdvanced(True)
 
             aggrAttribute = fields[0]
-            if self.aggregationAttributeDialog.exec_() == QtGui.QDialog.Accepted:
+            if self.aggregationAttributeDialog.exec_() == \
+               QtGui.QDialog.Accepted:
                 keywords = read_keywords(myKeywordFilePath)
                 try:
                     aggrAttribute = keywords['aggregation attribute']
                     logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
                                        ' as aggregation attribute')
                 except:
-                    logOnQgsMessageLog('User Accepted but did not select a value. Using default : '
-                                       + str(aggrAttribute) + ' as aggregation attribute')
+                    logOnQgsMessageLog('User Accepted but did not select a '
+                                       'value. Using default : '
+                                       + str(aggrAttribute) +
+                                       ' as aggregation attribute')
             else:
                 #the user cancelled, use the first attribute as default
-                logOnQgsMessageLog('User cancelled, using default: ' + str(aggrAttribute) +
+                logOnQgsMessageLog('User cancelled, using default: '
+                                   + str(aggrAttribute) +
                                    ' as aggregation attribute')
 
         self.enableBusyCursor()

@@ -28,7 +28,7 @@ from odict import OrderedDict
 from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
-from safe_qgis.utilities import getExceptionWithStacktrace
+from safe_qgis.utilities import getExceptionWithStacktrace, logOnQgsMessageLog
 
 from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
@@ -125,6 +125,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.layer = theLayer
         if self.layer:
             self.loadStateFromKeywords()
+        self.showExtraWidgets()
 
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
@@ -132,6 +133,35 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             del self.helpDialog
         self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
         self.helpDialog.showMe()
+
+    def showExtraWidgets(self):
+        if (self.radPostprocessing.isChecked() and
+            self.cboSubcategory.currentText() == self.tr('aggregation')):
+            self.showAggregationAttribute(True)
+        else:
+            self.showAggregationAttribute(False)
+
+        self.adjustSize()
+
+    def showAggregationAttribute(self, theFlag):
+        cboAggr = self.cboAggregationAttribute
+        cboAggr.clear()
+        fields = []
+        if theFlag:
+            vProvider = self.layer.dataProvider()
+            vFields = vProvider.fields()
+            logOnQgsMessageLog(vFields)
+            for i in vFields:
+                # show only int or string fields to be chosen as aggregation
+                # attribute other possible would be float
+                if vFields[i].type() in [
+                    QtCore.QVariant.Int, QtCore.QVariant.String]:
+                    fields.append(vFields[i].name())
+            cboAggr.addItems(fields)
+            cboAggr.setCurrentIndex(0)
+
+        self.cboAggregationAttribute.setVisible(theFlag)
+        self.lblAggregationAttribute.setVisible(theFlag)
 
     # prevents actions being handled twice
     @pyqtSignature('bool')
@@ -225,6 +255,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myItem = self.cboSubcategory.itemData(
                             self.cboSubcategory.currentIndex()).toString()
         myText = str(myItem)
+
+        self.showExtraWidgets()
+
         if myText == self.tr('Not Set'):
             self.removeItemByKey('subcategory')
             return
