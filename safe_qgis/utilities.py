@@ -45,17 +45,6 @@ import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
-try:
-    #available from qgis 1.8
-    from qgis.core import QgsMessageLog
-
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        QgsMessageLog.logMessage(str(msg), tag, level)
-except MethodUnavailableError:
-
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        print (str(msg), tag, level)
-
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary
@@ -519,6 +508,26 @@ def qgisVersion():
         myVersion = unicode(QGis.qgisVersion)[0]
     myVersion = int(myVersion)
     return myVersion
+
+
+def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+    if qgisVersion() >= 10800:
+        #available from qgis 1.8
+        from qgis.core import QgsMessageLog
+        QgsMessageLog.logMessage(str(msg), tag, level)
+    else:
+        print (str(msg), tag, level)
+
+
+try:
+    #available from qgis 1.8
+    from qgis.core import QgsMessageLog
+except ImportError:
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        print (str(msg), tag, level)
+else:
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        QgsMessageLog.logMessage(str(msg), tag, level)
 
 
 #def copyInMemory(vLayer, copyName=''):
