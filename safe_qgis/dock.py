@@ -1351,7 +1351,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             del self.helpDialog
         self.helpDialog = Help(theParent=self.iface.mainWindow(),
                                theContext='dock')
-        self.helpDialog.show()
+        self.helpDialog.showMe()
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.
