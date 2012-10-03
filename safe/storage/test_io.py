@@ -227,7 +227,6 @@ class Test_IO(unittest.TestCase):
         L = read_layer(filename)
         print L.get_attribute_names()
 
-
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
         """
