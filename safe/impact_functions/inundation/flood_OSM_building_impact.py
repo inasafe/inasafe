@@ -11,6 +11,7 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
 
+    :author Ole Nielsen, Kristy van Putten
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami']
 
@@ -19,8 +20,24 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     layertype=='vector'
     """
 
+    # Function documentation
     target_field = 'INUNDATED'
     title = _('Be temporarily closed')
+    synopsis = _('To assess the impacts of inundation on building footprints\
+        originating from OpenStreetMap (OSM).')
+    actions = _('Provide details about where critical response areas are')
+    # citations must be a list
+    citations = _(['Hutchings, Field & Parks. Assessment of Flood impacts on\
+        buildings. Impact. Vol 66(2). 2012'])
+    detailed_desc = _('This is an area for free form text where a detailed\
+        description of the methodology used is given.')
+    permissible_haz_input = _('A raster layer where each cell represents flood\
+        dept, or a vector polygon layer where each polygon represents an\
+        inundated area. Optionally the user may nominate an attribute in the\
+        polygon layer that represents inundation depth.')
+    permissible_exp_input = _(' vector polygon layer extracted from OSM where\
+        each polygon represents the footprint of a building.')
+    limitation = _('Lorem ipsum limitation')
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)

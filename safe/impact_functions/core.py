@@ -719,7 +719,7 @@ def get_dict_doc_func(func):
               'param_req': [],
               'detail': '',
               'citation': [],
-              'limitaion': ''}
+              'limitation': ''}
 
     plugins_dict = dict([(pretty_function_name(p), p)
                          for p in FunctionProvider.plugins])
@@ -757,3 +757,75 @@ def get_dict_doc_func(func):
         retval['synopsis'] = remove_double_spaces(doc_str.split('\n')[0])
 
     return retval
+
+
+def get_documentation(func):
+    """Collect documentaion of a impact function and return it as a dictionary
+
+        Args:
+            * func : name of function
+        Returns:
+            * Dictionary contains:
+                author : string (identified by :author)
+                synopsis : string (first line)
+                rating : integer (identified by :rating)
+                param_req : list of param (identified by :param requires)
+                detail : detail description (function properties)
+                citation : list of citation in string (function properties)
+                limitation : string (function properties)
+    """
+    retval = {'title': '',
+              'synopsis': '',
+              'author': '',
+              'rating': '',
+              'param_req': [],
+              'detailed_desc': '',
+              'citations': [],
+              'limitation': ''}
+
+    plugins_dict = dict([(pretty_function_name(p), p)
+                         for p in FunctionProvider.plugins])
+    if func not in plugins_dict.keys():
+        return retval
+    else:
+        func = plugins_dict[func]
+
+    author_tag = ':author'
+    rating_tag = ':rating'
+
+    # attributes
+    synopsis = 'synopsis'
+    actions = 'actions'
+    # citations must be a list
+    citations = 'citations'
+    detailed_desc = 'detailed_desc'
+    permissible_haz_input = 'permissible_haz_input'
+    permissible_exp_input = 'permissible_exp_input'
+    limitation = 'limitation'
+
+    if hasattr(func, '__doc__') and func.__doc__:
+        doc_str = func.__doc__
+        for line in doc_str.split('\n'):
+            doc_line = remove_double_spaces(line)
+            doc_line = doc_line.strip()
+
+            if doc_line.startswith(author_tag):
+                retval['author'] = doc_line[len(author_tag) + 1:]
+            elif doc_line.startswith(rating_tag):
+                retval['rating'] = int(doc_line[len(rating_tag) + 1:])
+    retval['title'] = get_function_title(func)
+
+    if hasattr(func, synopsis):
+        retval[synopsis] = func.synopsis
+    if hasattr(func, actions):
+        retval[actions] = func.actions
+    if hasattr(func, citations):
+        retval[citations] = func.citations
+    if hasattr(func, detailed_desc):
+        retval[detailed_desc] = func.detailed_desc
+    if hasattr(func, permissible_haz_input):
+        retval[permissible_haz_input] = func.permissible_haz_input
+    if hasattr(func, permissible_exp_input):
+        retval[permissible_exp_input] = func.permissible_exp_input
+    if hasattr(func, limitation):
+        retval[limitation] = func.limitation
