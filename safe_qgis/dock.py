@@ -26,8 +26,6 @@ import os
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 from safe_qgis.dock_base import Ui_DockBase
-from safe_qgis.aggregation_attribute_dialog_base import\
-    Ui_AggregationAttributeDialogBase
 
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
@@ -67,6 +65,9 @@ from safe_qgis.utilities import (htmlHeader,
                                  qgisVersion)
 from safe_qgis.configurable_impact_functions_dialog import\
    ConfigurableImpactFunctionsDialog
+
+from safe_qgis.keywords_dialog import KeywordsDialog
+
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -1210,24 +1211,33 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myKeywordFilePath = os.path.splitext(str(
             self.aggregationLayer.source()))[0]
         myKeywordFilePath += '.keywords'
-        if not os.path.isfile(myKeywordFilePath):
-            self._promptForAggregationAttribute(self.aggregationLayer,
-                myKeywordFilePath, None)
-        else:
+
+        try:
             keywords = read_keywords(myKeywordFilePath)
+        except:
+            keywords = dict()
 
-            if 'aggregation attribute' in keywords:
-                try:
-                    myValue = keywords['aggregation attribute']
-                except:
-                    raise
-            else:
-                myValue = self._promptForAggregationAttribute(self
-                .aggregationLayer, myKeywordFilePath, keywords)
-            return myValue
+        if ('category' in keywords and
+            keywords['category'] == 'postprocessing' and
+            'subcategory' in keywords and
+            keywords['subcategory'] == 'aggregation' and
+            'aggregation attribute' in keywords):
+            #keywords are already complete
+            myValue = keywords['aggregation attribute']
+        else:
+            #set the default values by writing to the keywords
+            keywords['category'] = 'postprocessing'
+            keywords['subcategory'] = 'aggregation'
+            write_keywords(keywords, myKeywordFilePath)
 
-    def _promptForAggregationAttribute(self, myLayer, myKeywordFilePath,
-                                       myKeywords):
+            #prompt uset for a choice
+            myValue = self._promptForAggregationAttribute(myKeywordFilePath)
+            keywords['aggregation attribute'] = myValue
+            write_keywords(keywords, myKeywordFilePath)
+
+        return myValue
+
+    def _promptForAggregationAttribute(self, myKeywordFilePath):
         """prompt user for a decision on which attribute has to be the key
         attribute for the aggregated data and writes the keywords file
         This could be swapped to a call to the keyword editor
@@ -1239,10 +1249,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Raises: Propagates any error
         """
-        if myKeywords is None:
-            myKeywords = dict()
 
-        vProvider = myLayer.dataProvider()
+        vProvider = self.aggregationLayer.dataProvider()
         vFields = vProvider.fields()
         fields = []
         for i in vFields:
@@ -1271,33 +1279,34 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myProgress = 1
             self.showBusy(myTitle, myMessage, myProgress)
 
-            #open a AggregationAttributeDialog
-            dialog = QtGui.QDialog()
-            #remove all windows hints to avoid allowing for cancelling the
-            # dialog
-            dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
-            dialogGui = Ui_AggregationAttributeDialogBase()
-            dialogGui.setupUi(dialog)
-            cboAggr = dialogGui.cboAggregationAttributes
-            cboAggr.clear()
-            cboAggr.addItems(fields)
-            cboAggr.setCurrentIndex(0)
             self.disableBusyCursor()
 
-            if dialog.exec_() == QtGui.QDialog.Accepted:
-                aggrAttribute = cboAggr.currentText()
-                logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
-                                   ' as aggregation attribute')
+            self.aggregationAttributeDialog = KeywordsDialog(
+                self.iface.mainWindow(),
+                self.iface,
+                self,
+                self.aggregationLayer)
+
+            aggrAttribute = fields[0]
+            if self.aggregationAttributeDialog.exec_() == \
+               QtGui.QDialog.Accepted:
+                keywords = read_keywords(myKeywordFilePath)
+                try:
+                    aggrAttribute = keywords['aggregation attribute']
+                    logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
+                                       ' as aggregation attribute')
+                except:
+                    logOnQgsMessageLog('User Accepted but did not select a '
+                                       'value. Using default : '
+                                       + str(aggrAttribute) +
+                                       ' as aggregation attribute')
             else:
                 #the user cancelled, use the first attribute as default
-                aggrAttribute = fields[0]
-#                myMessage = self.tr(
-#                    'You have to select an aggregation attribute')
-#                raise InvalidParameterException(myMessage)
+                logOnQgsMessageLog('User cancelled, using default: '
+                                   + str(aggrAttribute) +
+                                   ' as aggregation attribute')
 
         self.enableBusyCursor()
-        myKeywords['aggregation attribute'] = aggrAttribute
-        write_keywords(myKeywords, myKeywordFilePath)
         return aggrAttribute
 
     def _completed(self):

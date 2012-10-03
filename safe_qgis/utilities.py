@@ -514,11 +514,9 @@ try:
     # Available from qgis 1.8
     from qgis.core import QgsMessageLog  # pylint: disable=E0611
 except ImportError:
-
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         print (str(msg), tag, level)
 else:
-
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         QgsMessageLog.logMessage(str(msg), tag, level)
 
