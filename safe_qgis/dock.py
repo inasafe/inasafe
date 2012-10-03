@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -127,6 +127,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
         self._aggregationPrefix = 'aggr_'
+        self.pbnPrint.setEnabled(False)
 
         self.initPostprocessingOutput()
 
@@ -1242,8 +1243,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
             dialogGui = Ui_AggregationAttributeDialogBase()
             dialogGui.setupUi(dialog)
-            dialogGui.buttonBox.button(
-                QtGui.QDialogButtonBox.Cancel).setHidden(True)
             cboAggr = dialogGui.cboAggregationAttributes
             cboAggr.clear()
             cboAggr.addItems(fields)
@@ -1359,7 +1358,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             del self.helpDialog
         self.helpDialog = Help(theParent=self.iface.mainWindow(),
                                theContext='dock')
-        self.helpDialog.show()
+        self.helpDialog.showMe()
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.
@@ -1696,7 +1695,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 else:
                     self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
-                        myValue = myKeywords[myKeyword]
+                        myValue = str(myKeywords[myKeyword])
 
                         # Translate titles explicitly if possible
                         if myKeyword == 'title' and \
