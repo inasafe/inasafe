@@ -49,6 +49,7 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getOptimalExtent,
                                       getBufferedExtent,
                                       internationalisedNames,
+                                      getSafeImpactFunctions,
                                       writeKeywordsToFile)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
@@ -64,8 +65,8 @@ from safe_qgis.utilities import (htmlHeader,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion)
-
-
+from safe_qgis.configurable_impact_functions_dialog import\
+   ConfigurableImpactFunctionsDialog
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -404,7 +405,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     """
         # Add any other logic you mught like here...
-        del theIndex
+        if not theIndex.isNull or not theIndex == '':
+            myFunctionID = self.getFunctionID()
+
+            myFunctions = getSafeImpactFunctions(myFunctionID)
+            self.myFunction = myFunctions[0][myFunctionID]
+            self.functionParams = None
+            if hasattr(self.myFunction, 'parameters'):
+                self.functionParams = self.myFunction.parameters
+                self.setToolFunctionOptionsButton()
+        else:
+            del theIndex
         self._toggleCboAggregation()
         self.setOkButtonStatus()
 
@@ -423,6 +434,33 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myButton.setEnabled(myFlag)
         if myMessage is not '':
             self.displayHtml(myMessage)
+
+    def setToolFunctionOptionsButton(self):
+        """Helper function to set the tool function button
+        status if there is function parameters to configure
+        then enable it, otherwise disable it.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        #check if functionParams intialized
+        f = open('conf_func', 'wt')
+        if self.functionParams is None:
+            self.toolFunctionOptions.setEnabled(False)
+            print >>f, "false!"
+        else:
+            self.toolFunctionOptions.setEnabled(True)
+            print >>f, "true!"
+        f.close()
+
+    def on_toolFunctionOptions_clicked(self):
+        conf = ConfigurableImpactFunctionsDialog(self)
+        conf.buildFormFromImpactFunctionsParameter(self.myFunction,
+                                                   self.functionParams)
+        conf.showNormal()
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset
