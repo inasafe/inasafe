@@ -532,20 +532,20 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
 
+        #TODO: MOVE to test_keywords_dialog.py
         # with 3 good aggregation attribute using
         # kabupaten_jakarta_singlepart_3_good_attr.shp
-        myResult, myMessage = setupScenario(
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart 3 good attr')
-        assert myResult, myMessage
-        # Press RUN
+#        myResult, myMessage = setupScenario(
+#            theHazard='A flood in Jakarta like in 2007',
+#            theExposure='People',
+#            theFunction='Need evacuation',
+#            theFunctionId='Flood Evacuation Function',
+#            theAggregation='kabupaten jakarta singlepart 3 good attr')
+#        assert myResult, myMessage
+#        # Press RUN
 #        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
 #        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
 #                     (DOCK.aggregationAttribute))
-#        #TODO (MB) automate the selection of the second attribute in gui
 #
 #        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
 
