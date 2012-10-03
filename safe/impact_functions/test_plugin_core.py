@@ -238,7 +238,7 @@ class Test_plugin_core(unittest.TestCase):
                 % (dict_doc['title']))
         myMsg += str(dict_doc)
         for key, value in dict_doc.iteritems():
-            print key, value
+            print key + ':\t' + str(value)
         assert dict_doc['title'] == 'Be temporarily closed', myMsg
 
 if __name__ == '__main__':

@@ -774,11 +774,11 @@ def get_documentation(func):
                 citation : list of citation in string (function properties)
                 limitation : string (function properties)
     """
-    retval = {'title': '',
+    retval = {'unique_identifier': func,
+              'title': '',
               'synopsis': '',
               'author': '',
               'rating': '0',
-              'param_req': [],
               'detailed_desc': '',
               'citations': [],
               'limitation': ''}
@@ -832,5 +832,4 @@ def get_documentation(func):
                                                 func.permissible_exp_input)
     if hasattr(func, limitation):
         retval[limitation] = remove_double_spaces(func.limitation)
-
     return retval
