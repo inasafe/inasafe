@@ -150,18 +150,33 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if theFlag:
             vProvider = self.layer.dataProvider()
             vFields = vProvider.fields()
-            logOnQgsMessageLog(vFields)
+            currentKeyword = self.getValueForKey('aggregation attribute')
+            selectedIndex = 0
+            i = 0
             for i in vFields:
                 # show only int or string fields to be chosen as aggregation
                 # attribute other possible would be float
                 if vFields[i].type() in [
                     QtCore.QVariant.Int, QtCore.QVariant.String]:
-                    fields.append(vFields[i].name())
+                    curentFieldName = vFields[i].name()
+                    fields.append(curentFieldName)
+                    if currentKeyword == curentFieldName:
+                        selectedIndex = i
+                    i += 1
+
             cboAggr.addItems(fields)
-            cboAggr.setCurrentIndex(0)
+            cboAggr.setCurrentIndex(selectedIndex)
 
         self.cboAggregationAttribute.setVisible(theFlag)
         self.lblAggregationAttribute.setVisible(theFlag)
+
+        # prevents actions being handled twice
+
+    @pyqtSignature('int')
+    def on_cboAggregationAttribute_currentIndexChanged(self, theIndex=None):
+        del theIndex
+        self.addListEntry('aggregation attribute',
+        self.cboAggregationAttribute.currentText())
 
     # prevents actions being handled twice
     @pyqtSignature('bool')
@@ -232,6 +247,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if not theFlag:
+            self.removeItemByKey('aggregation attribute')
             return
         self.setCategory('postprocessing')
         self.updateControlsFromList()
@@ -441,7 +457,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """Set the category radio button based on theCategory.
 
         Args:
-           theCategory - a string which must be either 'hazard' or 'exposure'.
+           theCategory - a string which must be either 'hazard' or 'exposure'
+            or 'postprocessing'.
         Returns:
            False if the radio button could not be updated
         Raises:
