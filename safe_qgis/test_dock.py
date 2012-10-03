@@ -438,7 +438,8 @@ class DockTest(unittest.TestCase):
                      % (myLayerList, currentLayers))
         self.assertEquals(currentLayers, myLayerList, myMessage)
 
-    #FIXME (MB) this is actually wrong
+    #FIXME (MB) this is actually wrong, when calling the test directly it works
+    # in nosetest it fails at the second assert
     @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
@@ -451,6 +452,7 @@ class DockTest(unittest.TestCase):
             theFunctionId='Flood Evacuation Function')
         assert myResult, myMessage
 
+        #in nose test it fails here
         assert DOCK.cboAggregation.isEnabled(), 'The aggregation combobox ' \
                 'should be enabled when hazard and exposure layer are raster'
 
