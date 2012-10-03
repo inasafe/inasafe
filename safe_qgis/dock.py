@@ -388,6 +388,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self._toggleCboAggregation()
         self.setOkButtonStatus()
 
+    @pyqtSlot(QtCore.QString)
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
@@ -447,14 +448,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised."""
         #check if functionParams intialized
-        f = open('conf_func', 'wt')
         if self.functionParams is None:
             self.toolFunctionOptions.setEnabled(False)
-            print >>f, "false!"
         else:
             self.toolFunctionOptions.setEnabled(True)
-            print >>f, "true!"
-        f.close()
 
     def on_toolFunctionOptions_clicked(self):
         conf = ConfigurableImpactFunctionsDialog(self)
