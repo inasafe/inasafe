@@ -579,8 +579,11 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
 
-    #FIXME remove X
-    def Xtest_checkPostProcessingLayersVisibility(self):
+    # FIXME (MB) CANVAS.layers() doesn't include the generated layers such as
+    # the impactlayer and the postprocessing generated layers
+    # see https://github.com/AIFDR/inasafe/issues/306
+    @expectedFailure
+    def test_checkPostProcessingLayersVisibility(self):
         myRunButton = DOCK.pbnRunStop
 
         # with KAB_NAME aggregation attribute defined in .keyword using
@@ -593,38 +596,37 @@ class DockTest(unittest.TestCase):
             theAggregation='kabupaten jakarta singlepart')
         assert myResult, myMessage
 
-        #FIXME order?
         myLayerList = [str(DOCK.tr('Padang_WGS84')),
-                        str(DOCK.tr('People')),
-                        str(DOCK.tr('An earthquake in Padang like in 2009')),
-                        str( DOCK.tr('Tsunami Max Inundation')),
-                        str(DOCK.tr('Tsunami Building Exposure')),
-                        str(DOCK.tr('A flood in Jakarta like in 2007')),
-                        str(DOCK.tr('Penduduk Jakarta')),
-                        str(DOCK.tr('An earthquake in Yogyakarta like in 2006')),
-                        str(DOCK.tr('A flood in Jakarta in RW areas identified as flood prone')),
-                        str(DOCK.tr('OSM Building Polygons')),
-                        str(DOCK.tr('DKI buildings')),
-                        str(DOCK.tr('Flood in Jakarta')),
-                        str(DOCK.tr('roads_Maumere')),
-                        str(DOCK.tr('kabupaten jakarta singlepart')),
-                        str(DOCK.tr('Population which Need evacuation'))]
-
-                       # Press RUN
+                    str(DOCK.tr('People')),
+                    str(DOCK.tr('An earthquake in Padang like in 2009')),
+                    str(DOCK.tr('Tsunami Max Inundation')),
+                    str(DOCK.tr('Tsunami Building Exposure')),
+                    str(DOCK.tr('A flood in Jakarta like in 2007')),
+                    str(DOCK.tr('Penduduk Jakarta')),
+                    str(DOCK.tr('An earthquake in Yogyakarta like in 2006')),
+                    str(DOCK.tr('A flood in Jakarta in RW areas identified as '
+                                'flood prone')),
+                    str(DOCK.tr('OSM Building Polygons')),
+                    str(DOCK.tr('DKI buildings')),
+                    str(DOCK.tr('Flood in Jakarta')),
+                    str(DOCK.tr('roads_Maumere')),
+                    str(DOCK.tr('kabupaten jakarta singlepart')),
+                    str(DOCK.tr('Population which Need evacuation'))]
+        # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        currentLayers = canvasList().split('\n')
+        currentLayers = [str(c.name()) for c in CANVAS.layers()]
         myMessage = ('The legend should have:\n %s \nFound: %s'
                      % (myLayerList, currentLayers))
         self.assertEquals(currentLayers, myLayerList, myMessage)
 
         DOCK.showPostProcessingLayers = True
-        # LAYER List should have i additional layers,
+        # LAYER List should have i additional layers
+        myLayerList.append(str(DOCK.tr('Population which Need evacuation '
+                            'aggregated to kabupaten jakarta singlepart')))
 
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        currentLayers = canvasList().split('\n')
-        myLayerList.append(str(DOCK.tr('Population which Need evacuation '
-                                'aggregated to kabupaten jakarta singlepart')))
-        myMessage = ('The legend should have:\n %s \nFound: %s'
+        currentLayers = [str(c.name()) for c in CANVAS.layers()]
+        myMessage = ('The legend should have:\n %s \nFound:\n %s'
                      % (myLayerList, currentLayers))
         self.assertEquals(currentLayers, myLayerList, myMessage)
 
@@ -1324,7 +1326,7 @@ class DockTest(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     suite = unittest.makeSuite(DockTest,
-                        'test_cboAggregationToggle')
+                        'test_checkPostProcessingLayersVisibility')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
