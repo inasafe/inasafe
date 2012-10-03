@@ -22,7 +22,7 @@ from safe_qgis.safe_interface import readKeywordsFromFile
 
 LOGGER = logging.getLogger('InaSAFE')
 
-QGISAPP = None  # Static variable used to hold hand to running QGis app
+QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
 CANVAS = None
 PARENT = None
 IFACE = None
