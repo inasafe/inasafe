@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -67,7 +67,6 @@ from safe_qgis.utilities import (htmlHeader,
                                  qgisVersion)
 from safe_qgis.configurable_impact_functions_dialog import\
    ConfigurableImpactFunctionsDialog
-
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -129,6 +128,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
         self._aggregationPrefix = 'aggr_'
+        self.pbnPrint.setEnabled(False)
 
         self.initPostprocessingOutput()
 
@@ -181,8 +181,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to clip hazard and exposure layers to the viewport
         myFlag = mySettings.value(
-            'inasafe/clipToViewport', True).toBool()
+                            'inasafe/clipToViewport', True).toBool()
         self.clipToViewport = myFlag
+
+        # whether to show or not postprocessing generated layers
+        myFlag = mySettings.value(
+                            'inasafe/showPostProcessingLayers', False).toBool()
+        self.showPostProcessingLayers = myFlag
 
         self.getLayers()
 
@@ -383,8 +388,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self._toggleCboAggregation()
         self.setOkButtonStatus()
 
-
-    @pyqtSlot(QtCore.QString)
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
@@ -400,30 +403,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
            no exceptions explicitly raised.
 
-        """
-        # Add any other logic you might like here...
-        f = open('conf_lalala', 'wt')
-        print >>f, "hello"
+    """
+        # Add any other logic you mught like here...
         if not theIndex.isNull or not theIndex == '':
-            #del theIndex
-            print >>f, type(theIndex)
-            print >>f, theIndex
             myFunctionID = self.getFunctionID()
-            print >>f, myFunctionID
+
             myFunctions = getSafeImpactFunctions(myFunctionID)
-            print >>f, myFunctions
             self.myFunction = myFunctions[0][myFunctionID]
-            print >>f, self.myFunction
             self.functionParams = None
             if hasattr(self.myFunction, 'parameters'):
                 self.functionParams = self.myFunction.parameters
-                print >>f, self.functionParams
                 self.setToolFunctionOptionsButton()
-        print >>f, "bubye!"
-        f.close()
+        else:
+            del theIndex
         self._toggleCboAggregation()
         self.setOkButtonStatus()
-
 
     def setOkButtonStatus(self):
         """Helper function to set the ok button status if the
@@ -441,9 +435,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myMessage is not '':
             self.displayHtml(myMessage)
 
-
     def setToolFunctionOptionsButton(self):
-        """Helper function to set the tool function button 
+        """Helper function to set the tool function button
         status if there is function parameters to configure
         then enable it, otherwise disable it.
 
@@ -463,13 +456,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print >>f, "true!"
         f.close()
 
-
     def on_toolFunctionOptions_clicked(self):
         conf = ConfigurableImpactFunctionsDialog(self)
         conf.buildFormFromImpactFunctionsParameter(self.myFunction,
                                                    self.functionParams)
         conf.showNormal()
-
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset
@@ -748,6 +739,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFilename = myEngineImpactLayer.get_filename()
         myName = myEngineImpactLayer.get_name()
 
+        myQgisLayer = None
         # Read layer
         if myEngineImpactLayer.is_vector:
             myQgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
@@ -1126,7 +1118,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr(
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
-#        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
+        if self.showPostProcessingLayers:
+            QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
         return
 
     def _parseAggregationResults(self):
@@ -1288,8 +1281,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
             dialogGui = Ui_AggregationAttributeDialogBase()
             dialogGui.setupUi(dialog)
-            dialogGui.buttonBox.button(
-                QtGui.QDialogButtonBox.Cancel).setHidden(True)
             cboAggr = dialogGui.cboAggregationAttributes
             cboAggr.clear()
             cboAggr.addItems(fields)
@@ -1401,9 +1392,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
-        if not self.helpDialog:
-            self.helpDialog = Help(self.iface.mainWindow(), 'dock')
-        self.helpDialog.show()
+        if self.helpDialog:
+            del self.helpDialog
+        self.helpDialog = Help(theParent=self.iface.mainWindow(),
+                               theContext='dock')
+        self.helpDialog.showMe()
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.
@@ -1740,7 +1733,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 else:
                     self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
-                        myValue = myKeywords[myKeyword]
+                        myValue = str(myKeywords[myKeyword])
 
                         # Translate titles explicitly if possible
                         if myKeyword == 'title' and \

@@ -37,24 +37,14 @@ from qgis.core import (QGis,
                        QgsColorRampShader,
                        QgsRasterTransparency,
                        )
-from safe_qgis.exceptions import StyleError, MethodUnavailableError
-#do not remove this even if it is marked as unused by your IDE
-#resources are used by htmlfooter and header the comment will mark it unused
-#for pylint
+from safe_qgis.exceptions import StyleError
+
+# Do not remove this even if it is marked as unused by your IDE
+# resources are used by htmlfooter and header the comment will mark it unused
+# for pylint
 import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
-
-try:
-    #available from qgis 1.8
-    from qgis.core import QgsMessageLog
-
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        QgsMessageLog.logMessage(str(msg), tag, level)
-except MethodUnavailableError:
-
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        print (str(msg), tag, level)
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
@@ -127,7 +117,7 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
         myRegistry = QgsSymbolLayerV2Registry.instance()
         if myGeometryType == QGis.Point:
             myMetadata = myRegistry.symbolLayerMetadata('SimpleMarker')
-            # note that you can get a list of available layer properties
+            # Note that you can get a list of available layer properties
             # that you can set by doing e.g.
             # QgsSimpleMarkerSymbolLayerV2.properties()
             mySymbolLayer = myMetadata.createSymbolLayer({'color_border':
@@ -140,7 +130,7 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
                                                           myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         else:
-            # for lines we do nothing special as the property setting
+            # For lines we do nothing special as the property setting
             # below should give us what we require.
             pass
 
@@ -519,6 +509,18 @@ def qgisVersion():
         myVersion = unicode(QGis.qgisVersion)[0]
     myVersion = int(myVersion)
     return myVersion
+
+try:
+    # Available from qgis 1.8
+    from qgis.core import QgsMessageLog  # pylint: disable=E0611
+except ImportError:
+
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        print (str(msg), tag, level)
+else:
+
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        QgsMessageLog.logMessage(str(msg), tag, level)
 
 
 #def copyInMemory(vLayer, copyName=''):

@@ -80,8 +80,6 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         self.formItemCounters += 1
 
     def accept(self):
-        count = 0
-        f = open('conf_accept', 'wt')
         func = self.theFunction
         for key in self.keys:
             lineEdit = self.findChild(QtGui.QLineEdit,
@@ -89,7 +87,4 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
             lineEditText = lineEdit.text()
             convText = str(lineEditText)
             func.parameters[key] = ast.literal_eval(convText)
-            print >>f, lineEditText
-            count = count + 1
-        f.close()
         self.close()

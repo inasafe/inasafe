@@ -74,29 +74,27 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         # .. seealso:: http://www.voidspace.org.uk/python/odict.html
         self.standardExposureList = OrderedDict([('population',
                                       self.tr('population')),
-                                     ('structure',
-                                      self.tr('structure')),
-                                     ('roads',
-                                      self.tr('roads'))])
+                                     ('structure', self.tr('structure')),
+                                     ('roads', self.tr('roads')),
+                                     ('Not set', self.tr('Not Set'))])
         self.standardHazardList = OrderedDict([('earthquake [MMI]',
                                     self.tr('earthquake [MMI]')),
-                                     ('tsunami [m]',
-                                      self.tr('tsunami [m]')),
+                                     ('tsunami [m]', self.tr('tsunami [m]')),
                                      ('tsunami [wet/dry]',
                                       self.tr('tsunami [wet/dry]')),
                                      ('tsunami [feet]',
                                       self.tr('tsunami [feet]')),
-                                     ('flood [m]',
-                                      self.tr('flood [m]')),
+                                     ('flood [m]', self.tr('flood [m]')),
                                      ('flood [wet/dry]',
                                       self.tr('flood [wet/dry]')),
                                      ('flood [feet]', self.tr('flood [feet]')),
                                      ('tephra [kg2/m2]',
                                       self.tr('tephra [kg2/m2]')),
-                                      ('volcano',
-                                      self.tr('volcano'))])
+                                      ('volcano', self.tr('volcano')),
+                                     ('Not set', self.tr('Not Set'))])
         self.standardPostprocessingList = OrderedDict([('aggregation',
-                                    self.tr('aggregation'))])
+                                    self.tr('aggregation')),
+                                    ('Not set', self.tr('Not Set'))])
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -125,9 +123,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
-        if not self.helpDialog:
-            self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
-        self.helpDialog.show()
+        if self.helpDialog:
+            del self.helpDialog
+        self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
+        self.helpDialog.showMe()
 
     # prevents actions being handled twice
     @pyqtSignature('bool')

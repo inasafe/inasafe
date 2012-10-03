@@ -35,7 +35,7 @@ from safe.common.testing import GEOTRANSFORMS
 from safe.common.utilities import ugettext as _, unique_filename
 from safe.common.polygon import is_inside_polygon
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
-from safe.common.exceptions import VerificationError
+from safe.common.exceptions import VerificationError, InaSAFEError
 
 
 # Auxiliary function for raster test
@@ -217,6 +217,15 @@ class Test_IO(unittest.TestCase):
             assert numpy.allclose(lon, coords[:, 0])
 
     test_reading_and_writing_of_vector_point_data.slow = True
+
+    def Xtest_reading_and_writing_of_sqlite_vector_data(self):
+        """SQLite vector data can be read and written correctly
+        """
+
+        # First test that some error conditions are caught
+        filename = '%s/%s' % (TESTDATA, 'lembang_osm_20121003.sqlite')
+        L = read_layer(filename)
+        print L.get_attribute_names()
 
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
@@ -677,6 +686,9 @@ class Test_IO(unittest.TestCase):
             for j in range(numlon):
                 A1[numlat - 1 - i, j] = linear_function(lon[j], lat[i])
 
+        # Throw in a nodata element
+        A1[2, 6] = numpy.nan
+
         # Upper left corner
         assert A1[0, 0] == 105.25
         assert A1[0, 0] == linear_function(lon[0], lat[4])
@@ -737,9 +749,15 @@ class Test_IO(unittest.TestCase):
         R1.write_to_file(out_filename)
         assert R1.filename == out_filename
 
+        # Check nodata in original layer
+        assert numpy.isnan(R1.get_nodata_value())
+
         # Read again and check consistency
         R2 = read_layer(out_filename)
         assert R2.filename == out_filename
+
+        # Check nodata in read layer
+        assert numpy.isnan(R2.get_nodata_value())
 
         msg = ('Dimensions of written raster array do not match those '
                'of input raster file\n')
@@ -753,11 +771,11 @@ class Test_IO(unittest.TestCase):
 
         A2 = R2.get_data()
 
-        assert numpy.allclose(numpy.min(A1), numpy.min(A2))
-        assert numpy.allclose(numpy.max(A1), numpy.max(A2))
+        assert numpy.allclose(numpy.nanmin(A1), numpy.nanmin(A2))
+        assert numpy.allclose(numpy.nanmax(A1), numpy.nanmax(A2))
 
         msg = 'Array values of written raster array were not as expected'
-        assert numpy.allclose(A1, A2), msg
+        assert nanallclose(A1, A2), msg
 
         msg = 'Geotransforms were different'
         assert R1.get_geotransform() == R2.get_geotransform(), msg
@@ -933,7 +951,7 @@ class Test_IO(unittest.TestCase):
     test_bad_ascii_data.slow = True
 
     def test_nodata_value(self):
-        """NODATA value is correctly recorded in GDAL
+        """NODATA value is correctly handled for GDAL layers
         """
 
         # Read files with -9999 as nominated nodata value
@@ -957,6 +975,39 @@ class Test_IO(unittest.TestCase):
             msg = ('File %s should have registered nodata '
                    'value %i but it was %s' % (filename, Amin, nodata))
             assert nodata == Amin, msg
+
+            if filename.endswith('Earthquake_Ground_Shaking.asc'):
+                # Slow
+                continue
+
+            # Then try using numpy.nan
+            A = R.get_data(nan=True)
+
+            # Verify nodata value
+            Amin = numpy.nanmin(A.flat[:])
+            msg = ('True raster minimum must exceed -9999. '
+                   'We got %f for file %s' % (Amin, filename))
+            assert Amin > -9999, msg
+
+            # Then try with a number
+            A = R.get_data(nan=-100000)
+
+            # Verify nodata value
+            Amin = numpy.nanmin(A.flat[:])
+            msg = ('Raster must have -100000 as its minimum for this test. '
+                   'We got %f for file %s' % (Amin, filename))
+            assert Amin == -100000, msg
+
+            # Try with illegal nan values
+            for illegal in [{}, (), [], None, 'a', 'oeuu']:
+                try:
+                    R.get_data(nan=illegal)
+                except InaSAFEError:
+                    pass
+                else:
+                    msg = ('Illegal nan value %s should have raised '
+                           'exception' % illegal)
+                    raise RuntimeError(msg)
 
     test_nodata_value.slow = True
 
@@ -2127,6 +2178,7 @@ class Test_IO(unittest.TestCase):
         # More...
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test')
+    suite = unittest.makeSuite(Test_IO,
+                            'test_reading_and_writing_of_sqlite_vector_data')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

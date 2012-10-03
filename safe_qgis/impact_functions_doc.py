@@ -169,9 +169,10 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
 
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
-        if not self.helpDialog:
-            self.helpDialog = Help(self, 'impact_functions')
-        self.helpDialog.show()
+        if self.helpDialog:
+            del self.helpDialog
+        self.helpDialog = Help(self, 'impact_functions')
+        self.helpDialog.showMe()
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""
