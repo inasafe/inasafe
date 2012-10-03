@@ -777,7 +777,7 @@ def get_documentation(func):
     retval = {'title': '',
               'synopsis': '',
               'author': '',
-              'rating': '',
+              'rating': '0',
               'param_req': [],
               'detailed_desc': '',
               'citations': [],
@@ -810,22 +810,27 @@ def get_documentation(func):
             doc_line = doc_line.strip()
 
             if doc_line.startswith(author_tag):
-                retval['author'] = doc_line[len(author_tag) + 1:]
+                retval['author'] = remove_double_spaces(
+                                        doc_line[len(author_tag) + 1:])
             elif doc_line.startswith(rating_tag):
                 retval['rating'] = int(doc_line[len(rating_tag) + 1:])
     retval['title'] = get_function_title(func)
 
     if hasattr(func, synopsis):
-        retval[synopsis] = func.synopsis
+        retval[synopsis] = remove_double_spaces(func.synopsis)
     if hasattr(func, actions):
-        retval[actions] = func.actions
+        retval[actions] = remove_double_spaces(func.actions)
     if hasattr(func, citations):
-        retval[citations] = func.citations
+        retval[citations] = remove_double_spaces(func.citations)
     if hasattr(func, detailed_desc):
-        retval[detailed_desc] = func.detailed_desc
+        retval[detailed_desc] = remove_double_spaces(func.detailed_desc)
     if hasattr(func, permissible_haz_input):
-        retval[permissible_haz_input] = func.permissible_haz_input
+        retval[permissible_haz_input] = remove_double_spaces(
+                                                func.permissible_haz_input)
     if hasattr(func, permissible_exp_input):
-        retval[permissible_exp_input] = func.permissible_exp_input
+        retval[permissible_exp_input] = remove_double_spaces(
+                                                func.permissible_exp_input)
     if hasattr(func, limitation):
-        retval[limitation] = func.limitation
+        retval[limitation] = remove_double_spaces(func.limitation)
+
+    return retval

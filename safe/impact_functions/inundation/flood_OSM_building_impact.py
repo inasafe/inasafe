@@ -12,6 +12,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """Inundation impact on building data
 
     :author Ole Nielsen, Kristy van Putten
+    # this rating below is only for testing a function, not the real one
+    :rating 0
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami']
 
@@ -27,15 +29,15 @@ class FloodBuildingImpactFunction(FunctionProvider):
         originating from OpenStreetMap (OSM).')
     actions = _('Provide details about where critical response areas are')
     # citations must be a list
-    citations = _(['Hutchings, Field & Parks. Assessment of Flood impacts on\
-        buildings. Impact. Vol 66(2). 2012'])
+    citations = _('Hutchings, Field & Parks. Assessment of Flood impacts on\
+        buildings. Impact. Vol 66(2). 2012')
     detailed_desc = _('This is an area for free form text where a detailed\
         description of the methodology used is given.')
     permissible_haz_input = _('A raster layer where each cell represents flood\
         dept, or a vector polygon layer where each polygon represents an\
         inundated area. Optionally the user may nominate an attribute in the\
         polygon layer that represents inundation depth.')
-    permissible_exp_input = _(' vector polygon layer extracted from OSM where\
+    permissible_exp_input = _('vector polygon layer extracted from OSM where\
         each polygon represents the footprint of a building.')
     limitation = _('Lorem ipsum limitation')
 
