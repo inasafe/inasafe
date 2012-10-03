@@ -79,7 +79,7 @@ class Raster(Layer):
         if isinstance(data, basestring):
             self.read_from_file(data)
         else:
-            # Assume that data is provided as an array
+            # Assume that data is provided as a numpy array
             # with extra keyword arguments supplying metadata
 
             self.data = numpy.array(data, dtype='d', copy=False)
@@ -89,6 +89,11 @@ class Raster(Layer):
             self.columns = data.shape[1]
 
             self.number_of_bands = 1
+
+            # We assume internal numpy layers are using nan correctly
+            # FIXME (Ole): If read from file is refactored to load the data
+            #              this should be taken care of there
+            self.nodata_value = numpy.nan
 
     def __str__(self):
         """Render as name and dimensions
@@ -209,11 +214,16 @@ class Raster(Layer):
             msg = 'Could not read raster band from %s' % filename
             raise ReadLayerError(msg)
 
+        # FIXME (Ole): I think internal data array should be populated at
+        #              this point - then refactor get_data()
+
     def write_to_file(self, filename):
         """Save raster data to file
 
         Args:
             * filename: filename with extension .tif
+
+        Gdal documentation at: http://www.gdal.org/classGDALRasterBand.html
         """
 
         # Check file format
@@ -249,12 +259,13 @@ class Raster(Layer):
 
         # Write data
         fid.GetRasterBand(1).WriteArray(A)
+        fid.GetRasterBand(1).SetNoDataValue(self.nodata_value)
+        fid = None  # Close
 
         # Write keywords if any
         write_keywords(self.keywords, basename + '.keywords')
 
-    def get_data(self, nan=True, scaling=None, copy=False,
-                 rtol=1.0e-2, atol=1.0e-6):
+    def get_data(self, nan=True, scaling=None, copy=False):
         """Get raster data as numeric array
 
         Args:
@@ -278,8 +289,6 @@ class Raster(Layer):
                        scalar value: If scaling takes a numerical scalar value,
                                      that will be use to scale the data
         * copy (optional): If present and True return copy
-        * rtol, atol: Tolerances as to how much difference is accepted
-                    between dx and dy when scaling is True.
 
         Note:
             Scaling does not currently work with projected layers.
@@ -287,13 +296,17 @@ class Raster(Layer):
         """
 
         if hasattr(self, 'data') and self.data is not None:
+            # Return internal data grid
             if copy:
+
                 A = copy_module.deepcopy(self.data)
             else:
                 A = self.data
             verify(A.shape[0] == self.rows and A.shape[1] == self.columns)
+
         else:
             # Read from raster file
+            # FIXME: This can be slow so should be moved to read_from_file
             A = self.band.ReadAsArray()
 
             # Convert to double precision (issue #75)
@@ -307,17 +320,30 @@ class Raster(Layer):
             verify(N == self.columns, msg)
 
         # Handle no data value
+        # FIXME (Ole): This only pertains to data read from file
+        # and should be moved to read_from_file.
+        nodata = self.get_nodata_value()
+
+        # Must explicit comparison to False and True as nan can be a number
+        # so 0 would evaluate to False and e.g. 1 to True.
         if nan is False:
+            # No change
             pass
         else:
+            # Nan value should be changed
             if nan is True:
-                NAN = numpy.nan
+                NAN = numpy.nan  # Use numpy's nan value
             else:
-                # E.g. if nan is a number
-                NAN = nan
+                try:
+                    # Use user specified number
+                    NAN = float(nan)
+                except (ValueError, TypeError):
+                    msg = ('Argument nan must be either True, False or a '
+                           'number. I got "nan=%s"' % str(nan))
+                    raise InaSAFEError(msg)
 
-            # Replace NODATA_VALUE with NaN
-            nodata = self.get_nodata_value()
+            # Replace NODATA_VALUE with NaN array
+            #print 'Replacing', nodata, 'with', NAN
             NaN = numpy.ones(A.shape, A.dtype) * NAN
             A = numpy.where(A == nodata, NaN, A)
 
@@ -336,10 +362,8 @@ class Raster(Layer):
         elif scaling is True:
             # Calculate scaling based on resolution change
 
-            actual_res = self.get_resolution(isotropic=True,
-                                             rtol=rtol, atol=atol)
-            native_res = self.get_resolution(isotropic=True,
-                                             rtol=rtol, atol=atol, native=True)
+            actual_res = self.get_resolution(isotropic=True)
+            native_res = self.get_resolution(isotropic=True, native=True)
             #print
             #print 'Actual res', actual_res
             #print 'Native res', native_res
@@ -443,12 +467,12 @@ class Raster(Layer):
 
         if hasattr(self, 'band'):
             nodata = self.band.GetNoDataValue()
-        else:
-            nodata = None
 
-        # Use common default in case nodata was not registered in raster file
-        if nodata is None:
-            nodata = -9999
+            # FIXME (Ole): Too hacky, but probably the reality
+            if nodata is None:
+                nodata = -9999
+        else:
+            nodata = self.nodata_value
 
         return nodata
 
@@ -501,8 +525,7 @@ class Raster(Layer):
 
         return geotransform2bbox(self.geotransform, self.columns, self.rows)
 
-    def get_resolution(self, isotropic=False, native=False,
-                       rtol=1.0e-4, atol=1.0e-8):
+    def get_resolution(self, isotropic=False, native=False):
         """Get raster resolution as a 2-tuple (resx, resy)
 
         Args:
@@ -510,15 +533,12 @@ class Raster(Layer):
                          If False return 2-tuple (dx, dy)
             * native: Optional flag. If True, return native resolution if
                                      available. Otherwise return actual.
-            * rtol, atol: Tolerances as to how much difference is accepted
-                          between dx and dy if isotropic is True.
         """
 
         # Get actual resolution first
         try:
             res = geotransform2resolution(self.geotransform,
-                                          isotropic=isotropic,
-                                          rtol=rtol, atol=atol)
+                                          isotropic=isotropic)
         except Exception, e:
             msg = ('Resolution for layer %s could not be obtained: %s '
                    % (self.get_name(), str(e)))
@@ -543,11 +563,7 @@ class Raster(Layer):
                     if not isotropic:
                         res = (dx, dy)
                     else:
-                        msg = ('Resolution of layer "%s" was not isotropic: '
-                               '[dx, dy] == %s' % (self.get_name(), res))
-                        verify(numpy.allclose(dx, dy,
-                                              rtol=1.0e-12, atol=1.0e-12), msg)
-                        res = dx
+                        res = (dx + dy) / 2
                 else:
                     if not isotropic:
                         res = (res, res)

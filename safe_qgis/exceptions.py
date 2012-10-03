@@ -113,11 +113,17 @@ class StyleError(Exception):
     pass
 
 
-class ShapefileCreationError(Exception):
-    """Raised if an error occurs creating the cities file"""
-    pass
+#class ShapefileCreationError(Exception):
+#    """Raised if an error occurs creating the cities file"""
+#    pass
+#
+#
+#class memoryLayerCreationError(Exception):
+#    """Raised if an error occurs creating the cities file"""
+#    pass
 
 
-class memoryLayerCreationError(Exception):
-    """Raised if an error occurs creating the cities file"""
+class MethodUnavailableError(Exception):
+    """Raised if the requested import cannot be performed dur to qgis being
+    to old"""
     pass

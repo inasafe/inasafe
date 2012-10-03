@@ -14,12 +14,12 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'alpha'  # beta, final etc will be shown in dock title
+__type__ = 'final'  # beta, final etc will be shown in dock title
 
 import numpy
 import os
@@ -128,6 +128,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.readSettings()  # getLayers called by this
         self.setOkButtonStatus()
         self._aggregationPrefix = 'aggr_'
+        self.pbnPrint.setEnabled(False)
 
         self.initPostprocessingOutput()
 
@@ -999,7 +1000,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         clippedAggregationLayerPath = clipLayer(
             self.aggregationLayer,
-            impactLayer.get_bounding_box())
+            impactLayer.get_bounding_box(), explodeMultipart=False)
 
         self.aggregationLayer = QgsVectorLayer(
             clippedAggregationLayerPath, lName, 'ogr')
@@ -1237,8 +1238,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             dialog.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
             dialogGui = Ui_AggregationAttributeDialogBase()
             dialogGui.setupUi(dialog)
-            dialogGui.buttonBox.button(
-                QtGui.QDialogButtonBox.Cancel).setHidden(True)
             cboAggr = dialogGui.cboAggregationAttributes
             cboAggr.clear()
             cboAggr.addItems(fields)
@@ -1350,9 +1349,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     def showHelp(self):
         """Load the help text into the wvResults widget"""
-        if not self.helpDialog:
-            self.helpDialog = Help(self.iface.mainWindow(), 'dock')
-        self.helpDialog.show()
+        if self.helpDialog:
+            del self.helpDialog
+        self.helpDialog = Help(theParent=self.iface.mainWindow(),
+                               theContext='dock')
+        self.helpDialog.showMe()
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.
@@ -1669,7 +1670,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 else:
                     self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
-                        myValue = myKeywords[myKeyword]
+                        myValue = str(myKeywords[myKeyword])
 
                         # Translate titles explicitly if possible
                         if myKeyword == 'title' and \
@@ -1781,11 +1782,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        myMap = Map(self.iface)
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
-                            temp_dir(),
+                            temp_dir() + os.sep + myMap.getMapTitle() + '.pdf',
                             self.tr('Pdf File (*.pdf)'))
-        myMap = Map(self.iface)
         myMap.setImpactLayer(self.iface.activeLayer())
         self.showBusy(self.tr('Map Creator'),
                       self.tr('Generating your map as a PDF document...'),

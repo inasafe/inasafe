@@ -61,7 +61,8 @@ def tr(theText):
     return QCoreApplication.translate(myContext, theText)
 
 
-def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
+def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None,
+              explodeMultipart=True):
     """Clip a Hazard or Exposure layer to the extents provided.
 
     .. note:: Will delegate to clipVectorLayer or clipRasterLayer as needed.
@@ -79,6 +80,8 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
               used.
         * theExtraKeywords - Optional keywords dictionary to be added to
                           output layer
+        * explodeMultipart - a bool describing if to convert multipart
+        features into singleparts
 
     Returns:
         Path to the output clipped layer (placed in the inasafe temp dir).
@@ -91,14 +94,15 @@ def clipLayer(theLayer, theExtent, theCellSize=None, theExtraKeywords=None):
     """
     if theLayer.type() == QgsMapLayer.VectorLayer:
         return _clipVectorLayer(theLayer, theExtent,
-                                theExtraKeywords=theExtraKeywords)
+            theExtraKeywords=theExtraKeywords,
+            explodeMultipart=explodeMultipart)
     else:
         return _clipRasterLayer(theLayer, theExtent, theCellSize,
-                                theExtraKeywords=theExtraKeywords)
+            theExtraKeywords=theExtraKeywords)
 
 
 def _clipVectorLayer(theLayer, theExtent,
-                     theExtraKeywords=None):
+                     theExtraKeywords=None, explodeMultipart=True):
     """Clip a Hazard or Exposure layer to the
     extents of the current view frame. The layer must be a
     vector layer or an exception will be thrown.
@@ -114,6 +118,8 @@ def _clipVectorLayer(theLayer, theExtent,
            no checks are made to enforce this.
         * theExtraKeywords - any additional keywords over and above the
           original keywords that should be associated with the cliplayer.
+        * explodeMultipart - a bool describing if to convert multipart
+        features into singleparts
 
     Returns:
         Path to the output clipped layer (placed in the
@@ -129,11 +135,11 @@ def _clipVectorLayer(theLayer, theExtent,
 
     if theLayer.type() != QgsMapLayer.VectorLayer:
         myMessage = tr('Expected a vector layer but received a %s.' %
-                str(theLayer.type()))
+                       str(theLayer.type()))
         raise InvalidParameterException(myMessage)
 
     myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
-                                            temp_dir())
+        temp_dir())
 
     # Ensure the file is deleted before we try to write to it
     # fixes windows specific issue where you get a message like this
@@ -148,14 +154,14 @@ def _clipVectorLayer(theLayer, theExtent,
     myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     myXForm = QgsCoordinateTransform(myGeoCrs, theLayer.crs())
     myRect = QgsRectangle(theExtent[0], theExtent[1],
-                          theExtent[2], theExtent[3])
+        theExtent[2], theExtent[3])
     myProjectedExtent = myXForm.transformBoundingBox(myRect)
 
     # Get vector layer
     myProvider = theLayer.dataProvider()
     if myProvider is None:
         myMessage = tr('Could not obtain data provider from '
-               'layer "%s"' % theLayer.source())
+                       'layer "%s"' % theLayer.source())
         raise Exception(myMessage)
 
     # get the layer field list, select by our extent then write to disk
@@ -166,22 +172,22 @@ def _clipVectorLayer(theLayer, theExtent,
     myFetchGeometryFlag = True
     myUseIntersectFlag = True
     myProvider.select(myAttributes,
-                      myProjectedExtent,
-                      myFetchGeometryFlag,
-                      myUseIntersectFlag)
+        myProjectedExtent,
+        myFetchGeometryFlag,
+        myUseIntersectFlag)
 
     myFieldList = myProvider.fields()
 
     myWriter = QgsVectorFileWriter(myFilename,
-                                   'UTF-8',
-                                   myFieldList,
-                                   theLayer.wkbType(),
-                                   myGeoCrs,
-                                   'ESRI Shapefile')
+        'UTF-8',
+        myFieldList,
+        theLayer.wkbType(),
+        myGeoCrs,
+        'ESRI Shapefile')
     if myWriter.hasError() != QgsVectorFileWriter.NoError:
         myMessage = tr('Error when creating shapefile: <br>Filename:'
-               '%s<br>Error: %s' %
-            (myFilename, myWriter.hasError()))
+                       '%s<br>Error: %s' %
+                       (myFilename, myWriter.hasError()))
         raise Exception(myMessage)
 
     # Reverse the coordinate xform now so that we can convert
@@ -193,8 +199,12 @@ def _clipVectorLayer(theLayer, theExtent,
     while myProvider.nextFeature(myFeature):
         myGeometry = myFeature.geometry()
         # Loop through the parts adding them to the output file
-        # we ALWAYS write out single part features
-        myGeometryList = explodeMultiPartGeometry(myGeometry)
+        # we write out single part features unless explodeMultipart is False
+        if explodeMultipart:
+            myGeometryList = explodeMultiPartGeometry(myGeometry)
+        else:
+            myGeometryList = [myGeometry]
+
         for myPart in myGeometryList:
             myPart.transform(myXForm)
             myFeature.setGeometry(myPart)
@@ -210,7 +220,7 @@ def _clipVectorLayer(theLayer, theExtent,
 
     myKeywordIO = KeywordIO()
     myKeywordIO.copyKeywords(theLayer, myFilename,
-                  theExtraKeywords=theExtraKeywords)
+        theExtraKeywords=theExtraKeywords)
 
     return myFilename  # Filename of created file
 

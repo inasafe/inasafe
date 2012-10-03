@@ -20,8 +20,7 @@ from qgis_interface import QgisInterface
 from safe.common.testing import TESTDATA
 from safe_qgis.safe_interface import readKeywordsFromFile
 
-LOGGER = logging.getLogger('InaSAFE-Realtime')
-
+LOGGER = logging.getLogger('InaSAFE')
 
 QGISAPP = None  # Static vainasafele used to hold hand to running QGis app
 CANVAS = None
@@ -66,26 +65,33 @@ def hashForFile(theFilename):
 def getQgisTestApp():
     """ Start one QGis application to test agaist
 
-    Args:
-        None
+    Input
+        NIL
 
-    Returns:
-        QGISAPP, CANVAS, IFACE, PARENT tuple
+    Output
+        handle to qgis app
 
-    If QGIS is already running the handle to that app will be returned
+
+    If QGis is already running the handle to that app will be returned
     """
 
     global QGISAPP  # pylint: disable=W0603
 
     if QGISAPP is None:
-        # Note: QGIS_PREFIX_PATH is evaluated in QgsApplication -
-        # no need to mess with it here.
         myGuiFlag = True  # All test will run qgis in safe_qgis mode
         QGISAPP = QgsApplication(sys.argv, myGuiFlag)
 
+        # Note: This block is not needed for  QGIS > 1.8 which will
+        # automatically check the QGIS_PREFIX_PATH var so it is here
+        # for backwards compatibility only
+        if 'QGIS_PREFIX_PATH' in os.environ:
+            myPath = os.environ['QGIS_PREFIX_PATH']
+            myUseDefaultPathFlag = True
+            QGISAPP.setPrefixPath(myPath, myUseDefaultPathFlag)
+
         QGISAPP.initQgis()
-        mySettings = QGISAPP.showSettings()
-        LOGGER.debug(mySettings)
+        s = QGISAPP.showSettings()
+        LOGGER.debug(s)
 
     global PARENT  # pylint: disable=W0603
     if PARENT is None:

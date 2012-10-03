@@ -17,10 +17,10 @@ __date__ = '20/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
+import os
 from PyQt4 import (QtGui, QtCore, QtWebKit)
 from safe_qgis.help_base import Ui_HelpBase
-import os
+
 
 
 class Help(QtGui.QDialog):

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
-# Created: Tue Aug 14 19:12:05 2012
+# Created: Fri Sep 28 11:04:31 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -50,6 +50,9 @@ class Ui_KeywordsDialogBase(object):
         self.radExposure.setChecked(True)
         self.radExposure.setObjectName(_fromUtf8("radExposure"))
         self.horizontalLayout_3.addWidget(self.radExposure)
+        self.radPostprocessing = QtGui.QRadioButton(self.grpSimple)
+        self.radPostprocessing.setObjectName(_fromUtf8("radPostprocessing"))
+        self.horizontalLayout_3.addWidget(self.radPostprocessing)
         self.gridLayout_3.addLayout(self.horizontalLayout_3, 1, 1, 1, 1)
         self.label_2 = QtGui.QLabel(self.grpSimple)
         self.label_2.setObjectName(_fromUtf8("label_2"))
@@ -164,8 +167,7 @@ class Ui_KeywordsDialogBase(object):
         QtCore.QObject.connect(self.radUserDefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.frameUserDefined.setVisible)
         QtCore.QObject.connect(self.radUserDefined, QtCore.SIGNAL(_fromUtf8("toggled(bool)")), self.framePredefined.setHidden)
         QtCore.QMetaObject.connectSlotsByName(KeywordsDialogBase)
-        KeywordsDialogBase.setTabOrder(self.radHazard, self.radExposure)
-        KeywordsDialogBase.setTabOrder(self.radExposure, self.pbnAdvanced)
+        KeywordsDialogBase.setTabOrder(self.radHazard, self.pbnAdvanced)
         KeywordsDialogBase.setTabOrder(self.pbnAdvanced, self.radPredefined)
         KeywordsDialogBase.setTabOrder(self.radPredefined, self.cboKeyword)
         KeywordsDialogBase.setTabOrder(self.cboKeyword, self.pbnAddToList1)
@@ -185,6 +187,7 @@ class Ui_KeywordsDialogBase(object):
         self.radHazard.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Hazard", None, QtGui.QApplication.UnicodeUTF8))
         self.radExposure.setToolTip(QtGui.QApplication.translate("KeywordsDialogBase", "Where people and property are situated.", None, QtGui.QApplication.UnicodeUTF8))
         self.radExposure.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Exposure", None, QtGui.QApplication.UnicodeUTF8))
+        self.radPostprocessing.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Postprocessing", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Subcategory", None, QtGui.QApplication.UnicodeUTF8))
         self.cboSubcategory.setToolTip(QtGui.QApplication.translate("KeywordsDialogBase", "A subcategory represents the type of hazard.", None, QtGui.QApplication.UnicodeUTF8))
         self.pbnAdvanced.setText(QtGui.QApplication.translate("KeywordsDialogBase", "Show advanced editor", None, QtGui.QApplication.UnicodeUTF8))

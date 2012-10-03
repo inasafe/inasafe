@@ -31,6 +31,7 @@ from PyQt4.QtCore import (QObject,
                           QVariant)
 from PyQt4.QtGui import QAction, QIcon, QApplication
 from safe_qgis.exceptions import TranslationLoadException
+from safe.common import utilities
 
 
 # See if we can import pydev - see development docs for details
@@ -72,6 +73,7 @@ class Plugin:
         self.translator = None
         self.setupI18n()
         #print self.tr('InaSAFE')
+        utilities.setup_logger()
 
     def setupI18n(self, thePreferredLocale=None):
         """Setup internationalisation for the plugin.
@@ -174,6 +176,8 @@ class Plugin:
                                     'Open the keywords editor'))
         self.actionKeywordsDialog.setWhatsThis(self.tr(
                                     'Open the keywords editor'))
+        self.actionKeywordsDialog.setEnabled(False)
+
         QObject.connect(self.actionKeywordsDialog, SIGNAL('triggered()'),
                         self.showKeywordsEditor)
 
