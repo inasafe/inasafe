@@ -21,7 +21,7 @@ import sys
 import logging
 from zipfile import BadZipfile
 
-from shake_data import ShakeData
+from realtime.shake_data import ShakeData
 from ftp_client import FtpClient
 from safe_qgis.utilities_test import getQgisTestApp
 from realtime.utils import setupLogger
