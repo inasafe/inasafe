@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -47,6 +47,7 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getOptimalExtent,
                                       getBufferedExtent,
                                       internationalisedNames,
+                                      getSafeImpactFunctions,
                                       writeKeywordsToFile)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
@@ -62,8 +63,11 @@ from safe_qgis.utilities import (htmlHeader,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion)
+from safe_qgis.configurable_impact_functions_dialog import\
+   ConfigurableImpactFunctionsDialog
 
 from safe_qgis.keywords_dialog import KeywordsDialog
+
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -178,8 +182,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to clip hazard and exposure layers to the viewport
         myFlag = mySettings.value(
-            'inasafe/clipToViewport', True).toBool()
+                            'inasafe/clipToViewport', True).toBool()
         self.clipToViewport = myFlag
+
+        # whether to show or not postprocessing generated layers
+        myFlag = mySettings.value(
+                            'inasafe/showPostProcessingLayers', False).toBool()
+        self.showPostProcessingLayers = myFlag
 
         self.getLayers()
 
@@ -380,6 +389,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self._toggleCboAggregation()
         self.setOkButtonStatus()
 
+    @pyqtSlot(QtCore.QString)
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
@@ -397,7 +407,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
     """
         # Add any other logic you mught like here...
-        del theIndex
+        if not theIndex.isNull or not theIndex == '':
+            myFunctionID = self.getFunctionID()
+
+            myFunctions = getSafeImpactFunctions(myFunctionID)
+            self.myFunction = myFunctions[0][myFunctionID]
+            self.functionParams = None
+            if hasattr(self.myFunction, 'parameters'):
+                self.functionParams = self.myFunction.parameters
+                self.setToolFunctionOptionsButton()
+        else:
+            del theIndex
         self._toggleCboAggregation()
         self.setOkButtonStatus()
 
@@ -416,6 +436,29 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myButton.setEnabled(myFlag)
         if myMessage is not '':
             self.displayHtml(myMessage)
+
+    def setToolFunctionOptionsButton(self):
+        """Helper function to set the tool function button
+        status if there is function parameters to configure
+        then enable it, otherwise disable it.
+
+        Args:
+           None.
+        Returns:
+           None.
+        Raises:
+           no exceptions explicitly raised."""
+        #check if functionParams intialized
+        if self.functionParams is None:
+            self.toolFunctionOptions.setEnabled(False)
+        else:
+            self.toolFunctionOptions.setEnabled(True)
+
+    def on_toolFunctionOptions_clicked(self):
+        conf = ConfigurableImpactFunctionsDialog(self)
+        conf.buildFormFromImpactFunctionsParameter(self.myFunction,
+                                                   self.functionParams)
+        conf.showNormal()
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset
@@ -694,6 +737,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFilename = myEngineImpactLayer.get_filename()
         myName = myEngineImpactLayer.get_name()
 
+        myQgisLayer = None
         # Read layer
         if myEngineImpactLayer.is_vector:
             myQgisLayer = QgsVectorLayer(myFilename, myName, 'ogr')
@@ -1072,7 +1116,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.tr(
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
-#        QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
+        if self.showPostProcessingLayers:
+            QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
         return
 
     def _parseAggregationResults(self):

@@ -6,9 +6,9 @@ echo "$0 packagename.modulename [/path/to/qgis]"
 echo "e.g."
 echo "$0 safe_qgis.test_utilities /usr/local"
 qgispath=${2-'/usr/local/'}
-echo "Setting QGISPATH to $qgispath..."
-export QGISPATH=$qgispath
-export PYTHONPATH=$QGISPATH/share/qgis/python/:`pwd`:$PYTHONPATH
+echo "Setting QGIS_PREFIX_PATH to $qgispath..."
+export QGIS_PREFIX_PATH=$qgispath
+export PYTHONPATH=$QGIS_PREFIX_PATH/share/qgis/python/:`pwd`:$PYTHONPATH
 export QGIS_DEBUG=0;
 export QGIS_LOG_FILE=/dev/null;
 export QGIS_DEBUG_FILE=/dev/null;

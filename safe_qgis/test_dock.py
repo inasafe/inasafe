@@ -26,7 +26,7 @@ pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from os.path import join
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry,
@@ -359,6 +359,7 @@ class DockTest(unittest.TestCase):
         DOCK.setLayerNameFromTitleFlag = False
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
+        DOCK.showPostProcessingLayers = False
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -437,7 +438,8 @@ class DockTest(unittest.TestCase):
                      % (myLayerList, currentLayers))
         self.assertEquals(currentLayers, myLayerList, myMessage)
 
-    #FIXME (MB) this is actually wrong
+    #FIXME (MB) this is actually wrong, when calling the test directly it works
+    # in nosetest it fails at the second assert
     @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
@@ -450,6 +452,7 @@ class DockTest(unittest.TestCase):
             theFunctionId='Flood Evacuation Function')
         assert myResult, myMessage
 
+        #in nose test it fails here
         assert DOCK.cboAggregation.isEnabled(), 'The aggregation combobox ' \
                 'should be enabled when hazard and exposure layer are raster'
 
@@ -531,6 +534,23 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
 
+        #TODO: MOVE to test_keywords_dialog.py
+        # with 3 good aggregation attribute using
+        # kabupaten_jakarta_singlepart_3_good_attr.shp
+#        myResult, myMessage = setupScenario(
+#            theHazard='A flood in Jakarta like in 2007',
+#            theExposure='People',
+#            theFunction='Need evacuation',
+#            theFunctionId='Flood Evacuation Function',
+#            theAggregation='kabupaten jakarta singlepart 3 good attr')
+#        assert myResult, myMessage
+#        # Press RUN
+#        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+#        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
+#                     (DOCK.aggregationAttribute))
+#
+#        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
+
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         myResult, myMessage = setupScenario(
@@ -561,24 +581,56 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
 
-        # with 3 good aggregation attribute using
-        # kabupaten_jakarta_singlepart_3_good_attr.shp
+    # FIXME (MB) CANVAS.layers() doesn't include the generated layers such as
+    # the impactlayer and the postprocessing generated layers
+    # see https://github.com/AIFDR/inasafe/issues/306
+    @expectedFailure
+    def test_checkPostProcessingLayersVisibility(self):
+        myRunButton = DOCK.pbnRunStop
+
+        # with KAB_NAME aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart 3 good attr')
+            theAggregation='kabupaten jakarta singlepart')
         assert myResult, myMessage
+
+        myLayerList = [str(DOCK.tr('Padang_WGS84')),
+                    str(DOCK.tr('People')),
+                    str(DOCK.tr('An earthquake in Padang like in 2009')),
+                    str(DOCK.tr('Tsunami Max Inundation')),
+                    str(DOCK.tr('Tsunami Building Exposure')),
+                    str(DOCK.tr('A flood in Jakarta like in 2007')),
+                    str(DOCK.tr('Penduduk Jakarta')),
+                    str(DOCK.tr('An earthquake in Yogyakarta like in 2006')),
+                    str(DOCK.tr('A flood in Jakarta in RW areas identified as '
+                                'flood prone')),
+                    str(DOCK.tr('OSM Building Polygons')),
+                    str(DOCK.tr('DKI buildings')),
+                    str(DOCK.tr('Flood in Jakarta')),
+                    str(DOCK.tr('roads_Maumere')),
+                    str(DOCK.tr('kabupaten jakarta singlepart')),
+                    str(DOCK.tr('Population which Need evacuation'))]
         # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        currentLayers = [str(c.name()) for c in CANVAS.layers()]
+        myMessage = ('The legend should have:\n %s \nFound: %s'
+                     % (myLayerList, currentLayers))
+        self.assertEquals(currentLayers, myLayerList, myMessage)
+
+        DOCK.showPostProcessingLayers = True
+        # LAYER List should have i additional layers
+        myLayerList.append(str(DOCK.tr('Population which Need evacuation '
+                            'aggregated to kabupaten jakarta singlepart')))
 
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
-                     (DOCK.aggregationAttribute))
-        #TODO (MB) automate the selection of the second attribute in gui
-        QTest.mouseClick(DOCK.aggregationAttributeDialo.buttonBox.button(QtGui.QDialogButtonBox.Ok),
-            QtCore.Qt.LeftButton)
-        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
+        currentLayers = [str(c.name()) for c in CANVAS.layers()]
+        myMessage = ('The legend should have:\n %s \nFound:\n %s'
+                     % (myLayerList, currentLayers))
+        self.assertEquals(currentLayers, myLayerList, myMessage)
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
