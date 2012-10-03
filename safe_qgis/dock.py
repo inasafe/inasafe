@@ -383,6 +383,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self._toggleCboAggregation()
         self.setOkButtonStatus()
 
+
     @pyqtSlot(QtCore.QString)
     def on_cboFunction_currentIndexChanged(self, theIndex):
         """Automatic slot executed when the Function combo is changed
@@ -440,6 +441,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if myMessage is not '':
             self.displayHtml(myMessage)
 
+
     def setToolFunctionOptionsButton(self):
         """Helper function to set the tool function button 
         status if there is function parameters to configure
@@ -461,10 +463,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             print >>f, "true!"
         f.close()
 
+
     def on_toolFunctionOptions_clicked(self):
-        conf = ConfigurableImpactFunctionsDialog()
+        conf = ConfigurableImpactFunctionsDialog(self)
         conf.buildFormFromImpactFunctionsParameter(self.myFunction,
                                                    self.functionParams)
+        conf.showNormal()
+
 
     def canvasLayersetChanged(self):
         """A helper slot to update the dock combos if the canvas layerset
