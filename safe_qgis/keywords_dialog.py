@@ -76,7 +76,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                       self.tr('population')),
                                      ('structure', self.tr('structure')),
                                      ('roads', self.tr('roads')),
-                                     ('Not set', self.tr('Not Set'))])
+                                     ('Not Set', self.tr('Not Set'))])
         self.standardHazardList = OrderedDict([('earthquake [MMI]',
                                     self.tr('earthquake [MMI]')),
                                      ('tsunami [m]', self.tr('tsunami [m]')),
@@ -91,10 +91,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                      ('tephra [kg2/m2]',
                                       self.tr('tephra [kg2/m2]')),
                                       ('volcano', self.tr('volcano')),
-                                     ('Not set', self.tr('Not Set'))])
+                                     ('Not Set', self.tr('Not Set'))])
         self.standardPostprocessingList = OrderedDict([('aggregation',
                                     self.tr('aggregation')),
-                                    ('Not set', self.tr('Not Set'))])
+                                    ('Not Set', self.tr('Not Set'))])
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -216,7 +216,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myItem = self.cboSubcategory.itemData(
                             self.cboSubcategory.currentIndex()).toString()
         myText = str(myItem)
-        if myText == self.tr('Not Set'):
+        # I found that myText is 'Not Set' for every language
+        if myText == self.tr('Not Set') or myText == 'Not Set':
             self.removeItemByKey('subcategory')
             return
         myTokens = myText.split(' ')
@@ -228,6 +229,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         # Some subcategories e.g. roads have no units or datatype
         if len(myTokens) == 1:
+            return
+        if myTokens[1].find('[') < 0:
             return
         myCategory = self.getValueForKey('category')
         if 'hazard' == myCategory:
