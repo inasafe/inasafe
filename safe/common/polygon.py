@@ -133,7 +133,8 @@ def separate_points_by_polygon(points, polygon,
             raise PolygonInputError(msg)
 
     # Get polygon extents to rule out segments that
-    # are outside its bounding box
+    # are outside its bounding box. This is a very important
+    # optimisation
     if polygon_bbox is None:
         minpx = min(polygon[:, 0])
         maxpx = max(polygon[:, 0])

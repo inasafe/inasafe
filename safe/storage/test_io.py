@@ -218,6 +218,16 @@ class Test_IO(unittest.TestCase):
 
     test_reading_and_writing_of_vector_point_data.slow = True
 
+    def test_reading_and_writing_of_sqlite_vector_data(self):
+        """SQLite vector data can be read and written correctly
+        """
+
+        # First test that some error conditions are caught
+        filename = '%s/%s' % (TESTDATA, 'lembang_osm_20121003.sqlite')
+        L = read_layer(filename)
+        print L.get_attribute_names()
+
+
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
         """
@@ -2169,6 +2179,6 @@ class Test_IO(unittest.TestCase):
         # More...
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test')
+    suite = unittest.makeSuite(Test_IO, 'test_reading_and_writing_of_sqlite_vector_data')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
