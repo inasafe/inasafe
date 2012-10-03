@@ -24,10 +24,10 @@ from PyQt4.QtCore import QSettings
 from qgis.core import QgsMapLayer
 
 from safe_qgis.exceptions import (HashNotFoundException,
-                                    KeywordNotFoundException)
+                                  KeywordNotFoundException)
 from safe_qgis.safe_interface import (verify,
-                               readKeywordsFromFile,
-                               writeKeywordsToFile)
+                                      readKeywordsFromFile,
+                                      writeKeywordsToFile)
 from safe_qgis.utilities import qgisVersion
 
 LOGGER = logging.getLogger('InaSAFE')

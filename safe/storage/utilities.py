@@ -370,8 +370,7 @@ def geotransform2bbox(geotransform, columns, rows):
     return [minx, miny, maxx, maxy]
 
 
-def geotransform2resolution(geotransform, isotropic=False,
-                            rtol=1.0e-6, atol=1.0e-8):
+def geotransform2resolution(geotransform, isotropic=False):
     """Convert geotransform to resolution
 
     Args:
@@ -379,31 +378,19 @@ def geotransform2resolution(geotransform, isotropic=False,
                         (top left x, w-e pixel resolution, rotation,
                         top left y, rotation, n-s pixel resolution).
                         See e.g. http://www.gdal.org/gdal_tutorial.html
-        * isotropic: If True, verify that dx == dy and return dx
-                     If False (default) return 2-tuple (dx, dy)
-        * rtol, atol: Used to control how close dx and dy must be
-                      to quality for isotropic. These are passed on to
-                      numpy.allclose for comparison.
+        * isotropic: If True, return the average (dx + dy) / 2
 
     Returns:
         * resolution: grid spacing (resx, resy) in (positive) decimal
                       degrees ordered as longitude first, then latitude.
-                      or resx (if isotropic is True)
+                      or (resx + resy) / 2 (if isotropic is True)
     """
 
     resx = geotransform[1]   # w-e pixel resolution
     resy = -geotransform[5]  # n-s pixel resolution (always negative)
 
     if isotropic:
-        msg = ('Resolution requested with '
-               'isotropic=True, but '
-               'resolutions in the horizontal and vertical '
-               'are different: resx = %.12f, resy = %.12f. '
-               % (resx, resy))
-        verify(numpy.allclose(resx, resy,
-                              rtol=rtol, atol=atol), msg)
-
-        return resx
+        return (resx + resy) / 2
     else:
         return resx, resy
 

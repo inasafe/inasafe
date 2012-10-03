@@ -100,3 +100,10 @@ class Help(QtGui.QDialog):
         self.ui.webView.settings().setAttribute(
             QtWebKit.QWebSettings.DeveloperExtrasEnabled, True)
         self.ui.webView.setUrl(myUrl)
+
+    def showMe(self):
+        """Show help dialog when not on Windows"""
+        if 'nt' in os.name:  # Windows
+            pass
+        else:
+            self.show()
