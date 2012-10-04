@@ -1393,6 +1393,33 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #append postprocessing report
         myReport += self.getPostprocessingOutput()
 
+        # append properties of the result layer
+        exludedKeys = ['impact_summary',
+                       'postprocessing_report',
+                       'impact_table']
+        myReport += ('<table class="table table-striped condensed'
+                        ' bordered-table">')
+        for myKeyword in myKeywords:
+            if myKeyword in exludedKeys:
+                continue
+            myValue = str(myKeywords[myKeyword])
+
+        # Translate titles explicitly if possible
+            if myKeyword == 'title' and \
+                    myValue in internationalisedNames:
+                myValue = internationalisedNames[myValue]
+
+            # Add this keyword to report
+            myReport += ('<tr>'
+                            # FIXME (Ole): Not sure if this will work
+                            # with translations
+                            '<th>' + self.tr(myKeyword.capitalize())
+                            + '</th>'
+                            '</tr>'
+                            '<tr>'
+                            '<td>' + myValue + '</td>'
+                            '</tr>')
+        myReport += '</table>'
         # Return text to display in report pane
         return myReport
 
@@ -1730,10 +1757,38 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if theLayer is not None:
             try:
                 myKeywords = self.keywordIO.readKeywords(theLayer)
+                f = open('atos.txt', 'wt')
+
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
                     if 'postprocessing_report' in myKeywords:
                         myReport += myKeywords['postprocessing_report']
+                    exludedKeys = ['impact_summary',
+                                  'postprocessing_report',
+                                  'impact_table']
+                    myReport += ('<table class="table table-striped condensed'
+                        ' bordered-table">')
+                    for myKeyword in myKeywords:
+                        if myKeyword in exludedKeys:
+                            continue
+                        myValue = str(myKeywords[myKeyword])
+
+                        # Translate titles explicitly if possible
+                        if myKeyword == 'title' and \
+                                myValue in internationalisedNames:
+                            myValue = internationalisedNames[myValue]
+
+                        # Add this keyword to report
+                        myReport += ('<tr>'
+                                     # FIXME (Ole): Not sure if this will work
+                                     # with translations
+                                       '<th>' + self.tr(myKeyword.capitalize())
+                                       + '</th>'
+                                     '</tr>'
+                                     '<tr>'
+                                       '<td>' + myValue + '</td>'
+                                     '</tr>')
+                    myReport += '</table>'
                     self.pbnPrint.setEnabled(True)
 
                 else:
@@ -1774,6 +1829,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myReport += getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
+
+            f.write(myReport)
+            f.close()
 
     def saveState(self):
         """Save the current state of the ui to an internal class member
