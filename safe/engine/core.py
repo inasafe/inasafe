@@ -9,6 +9,9 @@ from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
 from safe.common.utilities import unique_filename, verify
 from utilities import REQUIRED_KEYWORDS
+from datetime import datetime
+from socket import gethostname
+import getpass
 
 # The LOGGER is intialised in utilities.py by init
 import logging
@@ -44,8 +47,28 @@ def calculate_impact(layers, impact_fcn):
     # Get an instance of the passed impact_fcn
     impact_function = impact_fcn()
 
+    # start time
+    start_time = datetime.now()
     # Pass input layers to plugin
     F = impact_function.run(layers)
+
+    # end time
+    end_time = datetime.now()
+    # elapsed time
+    elapsed_time = end_time - start_time
+    elapsed_time_sec = elapsed_time.total_seconds()
+    # get current time stamp
+    # need to change : to _ because : is forbidden in keywords
+    time_stamp = end_time.isoformat('_')
+    # get user
+    user = getpass.getuser().replace(' ', '_')
+    # get host
+    host_name = gethostname()
+
+    F.keywords['elapsed_time'] = elapsed_time_sec
+    F.keywords['time_stamp'] = time_stamp
+    F.keywords['host_name'] = host_name
+    F.keywords['user'] = user
 
     msg = 'Impact function %s returned None' % str(impact_function)
     verify(F is not None, msg)
