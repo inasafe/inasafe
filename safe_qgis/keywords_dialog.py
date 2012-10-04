@@ -432,6 +432,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if theValue is None or theValue == '':
             return
 
+        # make sure that both key and value is string
+        theKey = str(theKey)
+        theValue = str(theValue)
         myMessage = ''
         if ':' in theKey:
             theKey = theKey.replace(':', '.')
