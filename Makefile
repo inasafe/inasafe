@@ -148,11 +148,11 @@ gui_test_suite: compile testdata
 # commit rights. See issue https://github.com/AIFDR/inasafe/issues/232
 testdata:
 	@echo
-	@echo "-----------------------------------------------------------"
+	@echo "------------------------------------------------------------"
 	@echo "Updating inasafe_data - public test and demo data repository"
-	@echo "You should update the hash to check out a specific data version"
-	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh 1163e0d19ad82e67ac4c28b2a099a8919cf1149e 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@echo "Update the hash to check out a specific data version        "
+	@echo "------------------------------------------------------------"
+	@scripts/update-test-data.sh 565ada1ab60e0b643e7d27effc4585b27da4525a 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
