@@ -44,7 +44,7 @@ import safe_qgis.resources  # pylint: disable=W0611
 class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     """Dialog implementation class for the Risk In A Box keywords editor."""
 
-    def __init__(self, parent, iface, theDock=None):
+    def __init__(self, parent, iface, theDock=None, theLayer=None):
         """Constructor for the dialog.
         .. note:: In QtDesigner the advanced editor's predefined keywords
            list should be shown in english always, so when adding entries to
@@ -76,7 +76,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                       self.tr('population')),
                                      ('structure', self.tr('structure')),
                                      ('roads', self.tr('roads')),
-                                     ('Not set', self.tr('Not Set'))])
+                                     ('Not Set', self.tr('Not Set'))])
         self.standardHazardList = OrderedDict([('earthquake [MMI]',
                                     self.tr('earthquake [MMI]')),
                                      ('tsunami [m]', self.tr('tsunami [m]')),
@@ -91,10 +91,10 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                      ('tephra [kg2/m2]',
                                       self.tr('tephra [kg2/m2]')),
                                       ('volcano', self.tr('volcano')),
-                                     ('Not set', self.tr('Not Set'))])
+                                     ('Not Set', self.tr('Not Set'))])
         self.standardPostprocessingList = OrderedDict([('aggregation',
                                     self.tr('aggregation')),
-                                    ('Not set', self.tr('Not Set'))])
+                                    ('Not Set', self.tr('Not Set'))])
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -117,9 +117,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.adjustSize()
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
-        self.layer = self.iface.activeLayer()
+        if theLayer is None:
+            self.layer = self.iface.activeLayer()
+        else:
+            self.layer = theLayer
         if self.layer:
             self.loadStateFromKeywords()
+        self.showExtraWidgets()
 
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
@@ -127,6 +131,50 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             del self.helpDialog
         self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
         self.helpDialog.showMe()
+
+    def showExtraWidgets(self):
+        if (self.radPostprocessing.isChecked() and
+            self.cboSubcategory.currentText() == self.tr('aggregation')):
+            self.showAggregationAttribute(True)
+        else:
+            self.showAggregationAttribute(False)
+
+        self.adjustSize()
+
+    def showAggregationAttribute(self, theFlag):
+        cboAggr = self.cboAggregationAttribute
+        cboAggr.clear()
+        fields = []
+        if theFlag:
+            vProvider = self.layer.dataProvider()
+            vFields = vProvider.fields()
+            currentKeyword = self.getValueForKey('aggregation attribute')
+            selectedIndex = 0
+            i = 0
+            for i in vFields:
+                # show only int or string fields to be chosen as aggregation
+                # attribute other possible would be float
+                if vFields[i].type() in [
+                    QtCore.QVariant.Int, QtCore.QVariant.String]:
+                    curentFieldName = vFields[i].name()
+                    fields.append(curentFieldName)
+                    if currentKeyword == curentFieldName:
+                        selectedIndex = i
+                    i += 1
+
+            cboAggr.addItems(fields)
+            cboAggr.setCurrentIndex(selectedIndex)
+
+        self.cboAggregationAttribute.setVisible(theFlag)
+        self.lblAggregationAttribute.setVisible(theFlag)
+
+        # prevents actions being handled twice
+
+    @pyqtSignature('int')
+    def on_cboAggregationAttribute_currentIndexChanged(self, theIndex=None):
+        del theIndex
+        self.addListEntry('aggregation attribute',
+        self.cboAggregationAttribute.currentText())
 
     # prevents actions being handled twice
     @pyqtSignature('bool')
@@ -143,10 +191,14 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            None.
         Raises:
            no exceptions explicitly raised."""
+        self.toggleAdvanced(theFlag)
+
+    def toggleAdvanced(self, theFlag):
         if theFlag:
             self.pbnAdvanced.setText(self.tr('Hide advanced editor'))
         else:
             self.pbnAdvanced.setText(self.tr('Show advanced editor'))
+        self.grpAdvanced.setVisible(theFlag)
         self.adjustSize()
 
     # prevents actions being handled twice
@@ -193,6 +245,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if not theFlag:
+            self.removeItemByKey('aggregation attribute')
             return
         self.setCategory('postprocessing')
         self.updateControlsFromList()
@@ -216,7 +269,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myItem = self.cboSubcategory.itemData(
                             self.cboSubcategory.currentIndex()).toString()
         myText = str(myItem)
-        if myText == self.tr('Not Set'):
+        self.showExtraWidgets()
+        # I found that myText is 'Not Set' for every language
+        if myText == self.tr('Not Set') or myText == 'Not Set':
             self.removeItemByKey('subcategory')
             return
         myTokens = myText.split(' ')
@@ -228,6 +283,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         # Some subcategories e.g. roads have no units or datatype
         if len(myTokens) == 1:
+            return
+        if myTokens[1].find('[') < 0:
             return
         myCategory = self.getValueForKey('category')
         if 'hazard' == myCategory:
@@ -399,7 +456,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         """Set the category radio button based on theCategory.
 
         Args:
-           theCategory - a string which must be either 'hazard' or 'exposure'.
+           theCategory - a string which must be either 'hazard' or 'exposure'
+            or 'postprocessing'.
         Returns:
            False if the radio button could not be updated
         Raises:
@@ -678,7 +736,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                       '%s' % str(getExceptionWithStacktrace(e))))))
         if self.dock is not None:
             self.dock.getLayers()
-        self.close()
+        self.done(QtGui.QDialog.Accepted)
 
     def applyPendingChanges(self):
         """Apply any pending changes e.g. keywords entered without being added.
