@@ -6,9 +6,6 @@ from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
 from safe.common.dynamic_translations import names as internationalised_values
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from datetime import datetime
-from socket import gethostname
-import getpass
 
 
 class FloodBuildingImpactFunction(FunctionProvider):
@@ -48,8 +45,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
         """Flood impact to buildings (e.g. from Open Street Map)
         """
 
-        # start time
-        start_time = datetime.now()
         threshold = 1.0  # Flood threshold [m]
 
         # Extract data
@@ -250,19 +245,6 @@ class FloodBuildingImpactFunction(FunctionProvider):
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
 
-        # end time
-        end_time = datetime.now()
-        # elapsed time
-        elapsed_time = end_time - start_time
-        elapsed_time_sec = elapsed_time.total_seconds()
-        # get current time stamp
-        # need to change : to _ because : is forbidden in keywords
-        time_stamp = end_time.isoformat(' ').replace(':', '_')
-        # get user
-        user = getpass.getuser().replace(' ', '_')
-        # get host
-        host_name = gethostname()
-
         # Create vector layer and return
         V = Vector(data=attributes,
                    projection=I.get_projection(),
@@ -270,10 +252,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                    name=_('Estimated buildings affected'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
-                             'map_title': map_title,
-                             'elapsed_time': elapsed_time_sec,
-                             'time_stamp': time_stamp,
-                             'user': user,
-                             'host_name': host_name},
+                             'map_title': map_title
+                             },
                    style_info=style_info)
         return V
