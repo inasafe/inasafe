@@ -71,253 +71,253 @@
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="715"/>
+        <location filename="dock.py" line="751"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1292"/>
+        <location filename="dock.py" line="1336"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1335"/>
+        <location filename="dock.py" line="1379"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1811"/>
+        <location filename="dock.py" line="1855"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="109"/>
+        <location filename="dock.py" line="111"/>
         <source>InaSAFE %s %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="859"/>
+        <location filename="dock.py" line="895"/>
         <source>Calculating impact...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="860"/>
+        <location filename="dock.py" line="896"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1281"/>
+        <location filename="dock.py" line="1325"/>
         <source>Loading results...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1282"/>
+        <location filename="dock.py" line="1326"/>
         <source>The impact assessment is complete - loading the results into QGIS now...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1383"/>
+        <location filename="dock.py" line="1427"/>
         <source>Analyzing this question...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1561"/>
+        <location filename="dock.py" line="1605"/>
         <source>Preparing hazard data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1562"/>
+        <location filename="dock.py" line="1606"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1570"/>
+        <location filename="dock.py" line="1614"/>
         <source>Preparing exposure data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1571"/>
+        <location filename="dock.py" line="1615"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1811"/>
+        <location filename="dock.py" line="1855"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1829"/>
+        <location filename="dock.py" line="1873"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1816"/>
+        <location filename="dock.py" line="1860"/>
         <source>Generating your map as a PDF document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1821"/>
+        <location filename="dock.py" line="1865"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1829"/>
+        <location filename="dock.py" line="1873"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1718"/>
+        <location filename="dock.py" line="1762"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="296"/>
+        <location filename="dock.py" line="298"/>
         <source>To use this tool you need to add some layers to your QGIS project. Ensure that at least one &lt;em&gt;hazard&lt;/em&gt; layer (e.g. earthquake MMI) and one &lt;em&gt;exposure&lt;/em&gt; layer (e.g. dwellings) re available. When you are ready, click the &lt;em&gt;run&lt;/em&gt; button below.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="302"/>
+        <location filename="dock.py" line="304"/>
         <source>Getting started:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="318"/>
+        <location filename="dock.py" line="320"/>
         <source>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual &lt;FIXME: add link&gt; for details on what constitute valid inputs for a given risk function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="324"/>
+        <location filename="dock.py" line="326"/>
         <source>No valid functions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="327"/>
+        <location filename="dock.py" line="329"/>
         <source>Hazard keywords:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="330"/>
+        <location filename="dock.py" line="332"/>
         <source>Exposure keywords:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="338"/>
+        <location filename="dock.py" line="340"/>
         <source>You can now proceed to run your model by clicking the &lt;em&gt;Run&lt;/em&gt; button.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="340"/>
+        <location filename="dock.py" line="342"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="832"/>
+        <location filename="dock.py" line="868"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="879"/>
+        <location filename="dock.py" line="915"/>
         <source>An exception occurred when starting the model.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="844"/>
+        <location filename="dock.py" line="880"/>
         <source>An exception occurred when setting up the  model runner.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="577"/>
+        <location filename="dock.py" line="613"/>
         <source>No aggregation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="819"/>
+        <location filename="dock.py" line="855"/>
         <source>An exception occurred when reading the aggregation attribute.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="960"/>
+        <location filename="dock.py" line="996"/>
         <source>Aggregating results...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="961"/>
+        <location filename="dock.py" line="997"/>
         <source>This may take a little while - we are  aggregating the hazards by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="975"/>
+        <location filename="dock.py" line="1011"/>
         <source>An exception occurred when aggregating the results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1012"/>
+        <location filename="dock.py" line="1048"/>
         <source>Error when reading %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1001"/>
+        <location filename="dock.py" line="1037"/>
         <source>%1 aggregated to %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1029"/>
+        <location filename="dock.py" line="1065"/>
         <source>Could not remove the unneded fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1040"/>
+        <location filename="dock.py" line="1076"/>
         <source>%1 is %2 but it should be either vector or raster</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1072"/>
+        <location filename="dock.py" line="1108"/>
         <source>Calculating zonal statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1072"/>
+        <location filename="dock.py" line="1108"/>
         <source>Abort...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1079"/>
+        <location filename="dock.py" line="1115"/>
         <source>ZonalStats: Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1079"/>
+        <location filename="dock.py" line="1115"/>
         <source>You aborted aggregation, so there are no data for analysis. Exiting...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1089"/>
+        <location filename="dock.py" line="1125"/>
         <source>Aggregation unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1094"/>
+        <location filename="dock.py" line="1130"/>
         <source>Sum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1131"/>
+        <location filename="dock.py" line="1167"/>
         <source>An exception occurred when reading theaggregation data. %1 not found in %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1232"/>
+        <location filename="dock.py" line="1275"/>
         <source>Waiting for aggregation attribute selection...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1234"/>
+        <location filename="dock.py" line="1277"/>
         <source>Please select which attribute you want to use as ID for the aggregated results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1488"/>
+        <location filename="dock.py" line="1532"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them or disable viewport clipping in the options dialog. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Viewport clipping enabled: %6&lt;/p&gt;&lt;p&gt;Details: %7&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -503,22 +503,22 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="147"/>
+        <location filename="keywords_dialog.py" line="198"/>
         <source>Hide advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="149"/>
+        <location filename="keywords_dialog.py" line="200"/>
         <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="621"/>
+        <location filename="keywords_dialog.py" line="677"/>
         <source>Not Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="386"/>
+        <location filename="keywords_dialog.py" line="441"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -533,13 +533,13 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="678"/>
+        <location filename="keywords_dialog.py" line="734"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="678"/>
+        <location filename="keywords_dialog.py" line="734"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -549,7 +549,7 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="95"/>
+        <location filename="keywords_dialog.py" line="136"/>
         <source>aggregation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -572,103 +572,108 @@ to%s: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="34"/>
+        <location filename="keywords_dialog_base.ui" line="24"/>
         <source>Quick edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="40"/>
+        <location filename="keywords_dialog_base.ui" line="37"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="50"/>
+        <location filename="keywords_dialog_base.ui" line="54"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="59"/>
+        <location filename="keywords_dialog_base.ui" line="66"/>
         <source>A hazard is a situation that poses a level of threat to life, health, property, or environment. (Wikipedia)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="62"/>
+        <location filename="keywords_dialog_base.ui" line="69"/>
         <source>Hazard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="69"/>
+        <location filename="keywords_dialog_base.ui" line="76"/>
         <source>Where people and property are situated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="72"/>
+        <location filename="keywords_dialog_base.ui" line="79"/>
         <source>Exposure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="91"/>
+        <location filename="keywords_dialog_base.ui" line="44"/>
         <source>Subcategory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="101"/>
+        <location filename="keywords_dialog_base.ui" line="30"/>
         <source>A subcategory represents the type of hazard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="111"/>
+        <location filename="keywords_dialog_base.ui" line="114"/>
         <source>Show advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="121"/>
+        <location filename="keywords_dialog_base.ui" line="144"/>
         <source>Advanced editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="129"/>
+        <location filename="keywords_dialog_base.ui" line="152"/>
         <source>Predefined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="136"/>
+        <location filename="keywords_dialog_base.ui" line="159"/>
         <source>User defined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="154"/>
+        <location filename="keywords_dialog_base.ui" line="177"/>
         <source>Keyword</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="225"/>
+        <location filename="keywords_dialog_base.ui" line="248"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="238"/>
+        <location filename="keywords_dialog_base.ui" line="261"/>
         <source>Add to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="212"/>
+        <location filename="keywords_dialog_base.ui" line="235"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="248"/>
+        <location filename="keywords_dialog_base.ui" line="271"/>
         <source>Current keywords</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="284"/>
+        <location filename="keywords_dialog_base.ui" line="307"/>
         <source>Remove selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="keywords_dialog_base.ui" line="82"/>
+        <location filename="keywords_dialog_base.ui" line="89"/>
         <source>Postprocessing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="keywords_dialog_base.ui" line="104"/>
+        <source>Attribute</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
