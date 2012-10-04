@@ -1214,7 +1214,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             keywords = read_keywords(myKeywordFilePath)
-        except:
+        except:  # FIXME: Which exceptions?
             keywords = dict()
 
         if ('category' in keywords and
@@ -1295,13 +1295,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     aggrAttribute = keywords['aggregation attribute']
                     logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
                                        ' as aggregation attribute')
-                except:
+                except:  # FIXME: Which exceptions?
                     logOnQgsMessageLog('User Accepted but did not select a '
                                        'value. Using default : '
                                        + str(aggrAttribute) +
                                        ' as aggregation attribute')
             else:
-                #the user cancelled, use the first attribute as default
+                # The user cancelled, use the first attribute as default
                 logOnQgsMessageLog('User cancelled, using default: '
                                    + str(aggrAttribute) +
                                    ' as aggregation attribute')
@@ -1328,8 +1328,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 99
         self.showBusy(myTitle, myMessage, myProgress)
 
-        # FIXME (Ole): Marco and Ole saw a situation where self.runner was None.
-        # Could not reproduced, but maybe an idea to put an error message in that case
+        # FIXME (Ole): Marco and Ole saw situation where self.runner was None.
+        # Could not be reproduced, but maybe an idea to put an error
+        # message in that case
         myMessage = self.runner.result()
 
         # FIXME (Ole): This branch is not covered by the tests
