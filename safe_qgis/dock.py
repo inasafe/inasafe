@@ -1328,7 +1328,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myProgress = 99
         self.showBusy(myTitle, myMessage, myProgress)
 
+        # FIXME (Ole): Marco and Ole saw a situation where self.runner was None.
+        # Could not reproduced, but maybe an idea to put an error message in that case
         myMessage = self.runner.result()
+
         # FIXME (Ole): This branch is not covered by the tests
         myEngineImpactLayer = self.runner.impactLayer()
 
