@@ -1757,7 +1757,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if theLayer is not None:
             try:
                 myKeywords = self.keywordIO.readKeywords(theLayer)
-                f = open('atos.txt', 'wt')
 
                 if 'impact_summary' in myKeywords:
                     myReport = myKeywords['impact_summary']
@@ -1829,9 +1828,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myReport += getExceptionWithStacktrace(e, html=True)
             if myReport is not None:
                 self.displayHtml(myReport)
-
-            f.write(myReport)
-            f.close()
 
     def saveState(self):
         """Save the current state of the ui to an internal class member

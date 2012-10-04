@@ -87,7 +87,7 @@
         <translation>Lapisan dampak %s bukan lapisan vektor atau raster</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1855"/>
+        <location filename="dock.py" line="1913"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Dokumen PDF (*.pdf)</translation>
     </message>
@@ -117,57 +117,57 @@
         <translation>Analisa dampak telah selesai - sedang memuat hasil ke QGIS...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1427"/>
+        <location filename="dock.py" line="1454"/>
         <source>Analyzing this question...</source>
         <translation>Sedang menganalisa pertanyaan...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1605"/>
+        <location filename="dock.py" line="1632"/>
         <source>Preparing hazard data...</source>
         <translation>Sedang mempersiapkan data bahaya...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1606"/>
+        <location filename="dock.py" line="1633"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit hazardlayer untuk mencocokkan perpotongan dari exposurelayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1614"/>
+        <location filename="dock.py" line="1641"/>
         <source>Preparing exposure data...</source>
         <translation>Sedang mempersiapkan data terpapar...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1615"/>
+        <location filename="dock.py" line="1642"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1855"/>
+        <location filename="dock.py" line="1913"/>
         <source>Write to PDF</source>
         <translation>Menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1873"/>
+        <location filename="dock.py" line="1931"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1860"/>
+        <location filename="dock.py" line="1918"/>
         <source>Generating your map as a PDF document...</source>
         <translation>Sedang menghasilkan peta anda sebagai dokumen PDF...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1865"/>
+        <location filename="dock.py" line="1923"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation>Dokumen PDF telah dibuat .... membuka menggunakan peninjau standar PDF pada system.FIle pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1873"/>
+        <location filename="dock.py" line="1931"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation>Proses selesai.File pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1762"/>
+        <location filename="dock.py" line="1817"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai lapisan dampak atau lapisan bahaya dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
     </message>
@@ -317,7 +317,7 @@
         <translation>Silahkan pilih atribut mana yang ingin digunakan sebagai ID untuk hasil agregasi</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1532"/>
+        <location filename="dock.py" line="1559"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them or disable viewport clipping in the options dialog. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Viewport clipping enabled: %6&lt;/p&gt;&lt;p&gt;Details: %7&lt;/p&gt;</source>
         <translation>&lt;p&gt;Tidak ada perpotongan yang cukup antara lapisan masukan dan / atau lapisan dan tampilan. Silahkan pilih dua buah lapisan yang berpotongan da perbesar atau geser ke mereka atau non aktifkan pemotongan berdasarkan tampilan pada dialog opsi. Berikut detail yang lebih lengkap:&lt;/p&gt;&lt;p&gt;Gagal untuk mendapatkan jangkauan optimal ketika diberikan:&lt;/p&gt;&lt;p&gt;Ancaman:%1&lt;/p&gt;&lt;p&gt;Paparan: %2&lt;/p&gt;Geo Extent Tampilan: %3&lt;/p&gt;&lt;p&gt;Geo Extent Ancaman: %4&lt;/p&gt;&lt;p&gt;Geo Extent Paparan: %5&lt;/p&gt;&lt;p&gt;Pemotongan berdasarkan tampilan: %6&lt;/p&lt;p&gt;Detail: %7&lt;/p&gt;</translation>
     </message>
@@ -515,12 +515,12 @@ ke %s: %s</translation>
         <translation>Tampilkan editor lanjut</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="677"/>
+        <location filename="keywords_dialog.py" line="680"/>
         <source>Not Set</source>
         <translation>Tidak ditentukan</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="441"/>
+        <location filename="keywords_dialog.py" line="444"/>
         <source>Colons are not allowed, replaced with &quot;.&quot;</source>
         <translation>Tanda titik dua (:) tidak diijinkan, ganti dengan &quot;.&quot;</translation>
     </message>
@@ -535,14 +535,14 @@ ke %s: %s</translation>
         <translation>gempa bumi [MMI]</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="734"/>
+        <location filename="keywords_dialog.py" line="737"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation>Terjadi kesalahan saat menyimpan kata-kata kunci:
 %s</translation>
     </message>
     <message>
-        <location filename="keywords_dialog.py" line="734"/>
+        <location filename="keywords_dialog.py" line="737"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
