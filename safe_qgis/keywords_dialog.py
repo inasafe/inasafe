@@ -445,7 +445,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.lblMessage.setText(myMessage)
             self.lblMessage.show()
         myItem = QtGui.QListWidgetItem(theKey + ':' + theValue)
-        # we are going to replace, so remove it if it exists already
+        # We are going to replace, so remove it if it exists already
         self.removeItemByKey(theKey)
         myData = theKey + '|' + theValue
         myItem.setData(QtCore.Qt.UserRole, myData)
@@ -622,7 +622,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             myKeywords.pop('category')
 
         for myKey in myKeywords.iterkeys():
-            self.addListEntry(myKey, myKeywords[myKey])
+            self.addListEntry(myKey, str(myKeywords[myKey]))
         # now make the rest of the safe_qgis reflect the list entries
         self.updateControlsFromList()
 

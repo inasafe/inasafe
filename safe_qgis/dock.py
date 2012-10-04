@@ -1739,7 +1739,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 else:
                     self.pbnPrint.setEnabled(False)
                     for myKeyword in myKeywords:
-                        myValue = str(myKeywords[myKeyword])
+                        myValue = myKeywords[myKeyword]
 
                         # Translate titles explicitly if possible
                         if myKeyword == 'title' and \
@@ -1754,7 +1754,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                        + '</th>'
                                      '</tr>'
                                      '<tr>'
-                                       '<td>' + myValue + '</td>'
+                                       '<td>' + str(myValue) + '</td>'
                                      '</tr>')
                     myReport += '</table>'
             except (KeywordNotFoundException, HashNotFoundException,
