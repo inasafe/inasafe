@@ -415,7 +415,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.functionParams = None
             if hasattr(self.myFunction, 'parameters'):
                 self.functionParams = self.myFunction.parameters
-                self.setToolFunctionOptionsButton()
+
+            self.setToolFunctionOptionsButton()
         else:
             del theIndex
         self._toggleCboAggregation()
@@ -448,7 +449,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        #check if functionParams intialized
+        # Check if functionParams intialized
         if self.functionParams is None:
             self.toolFunctionOptions.setEnabled(False)
         else:
@@ -1214,7 +1215,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             keywords = read_keywords(myKeywordFilePath)
-        except:  # FIXME: Which exceptions?
+        except Exception:  # FIXME: Which exceptions?
             keywords = dict()
 
         if ('category' in keywords and
@@ -1295,7 +1296,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     aggrAttribute = keywords['aggregation attribute']
                     logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
                                        ' as aggregation attribute')
-                except:  # FIXME: Which exceptions?
+                except Exception:  # FIXME: Which exceptions?
                     logOnQgsMessageLog('User Accepted but did not select a '
                                        'value. Using default : '
                                        + str(aggrAttribute) +
