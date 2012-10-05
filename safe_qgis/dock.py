@@ -1398,27 +1398,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myReport += self.getPostprocessingOutput()
 
         # append properties of the result layer
-        includedKeys = ['time_stamp',
-                       'elapsed_time']
         myReport += ('<table class="table table-striped condensed'
                         ' bordered-table">')
-        for myKeyword in myKeywords:
-            if myKeyword not in includedKeys:
-                continue
-            myValue = str(myKeywords[myKeyword])
-
-            # Add this keyword to report
-            myReport += ('<tr>'
-                            # FIXME (Ole): Not sure if this will work
-                            # with translations
-                            '<th>' + self.tr(myKeyword.capitalize())
-                            + '</th>'
-                            '</tr>'
-                            '<tr>'
-                            '<td>' + myValue + '</td>'
-                            '</tr>')
+        # Add this keyword to report
+        myReport += ('<tr>'
+                        '<th>' + self.tr('Time stamp')
+                        + '</th>'
+                        '</tr>'
+                        '<tr>'
+                        '<td>' + str(myKeywords['time_stamp']) + '</td>'
+                        '</tr>')
+        myReport += ('<tr>'
+                        '<th>' + self.tr('Elapsed time')
+                        + '</th>'
+                        '</tr>'
+                        '<tr>'
+                        '<td>' + str(myKeywords['elapsed_time'])
+                        + ' ' + self.tr('seconds') + '</td>'
+                        '</tr>')
         myReport += '</table>'
-        # Return text to display in report pane
+        # Return text to display in report panel
         return myReport
 
     def showHelp(self):
@@ -1760,25 +1759,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myReport = myKeywords['impact_summary']
                     if 'postprocessing_report' in myKeywords:
                         myReport += myKeywords['postprocessing_report']
-                    includedKeys = ['time_stamp',
-                       'elapsed_time']
+                            # append properties of the result layer
                     myReport += ('<table class="table table-striped condensed'
-                        ' bordered-table">')
-                    for myKeyword in myKeywords:
-                        if myKeyword not in includedKeys:
-                            continue
-                        myValue = str(myKeywords[myKeyword])
-
-                        # Add this keyword to report
-                        myReport += ('<tr>'
-                                     # FIXME (Ole): Not sure if this will work
-                                     # with translations
-                                       '<th>' + self.tr(myKeyword.capitalize())
-                                       + '</th>'
-                                     '</tr>'
-                                     '<tr>'
-                                       '<td>' + myValue + '</td>'
-                                     '</tr>')
+                                    ' bordered-table">')
+                    # Add this keyword to report
+                    myReport += ('<tr>'
+                            '<th>' + self.tr('Time stamp')
+                            + '</th>'
+                            '</tr>'
+                            '<tr>'
+                            '<td>' + str(myKeywords['time_stamp']) + '</td>'
+                            '</tr>')
+                    myReport += ('<tr>'
+                            '<th>' + self.tr('Elapsed time')
+                            + '</th>'
+                            '</tr>'
+                            '<tr>'
+                            '<td>' + str(myKeywords['elapsed_time'])
+                            + ' ' + self.tr('seconds') + '</td>'
+                            '</tr>')
                     myReport += '</table>'
                     self.pbnPrint.setEnabled(True)
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id_ID" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="id_ID">
 <context>
     <name>@default</name>
     <message>
-        <location filename="clipper.py" line="297"/>
+        <location filename="clipper.py" line="300"/>
         <source>Layer or Extent passed to clip is None.</source>
         <translation>Tidak ada Lapisan atau cakupan wilayah untuk dipotong.</translation>
     </message>
@@ -13,27 +14,27 @@
         <translation>Yang diharapkan berupa lapisan vektor akan tetapi yang diterima %s.</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="162"/>
+        <location filename="clipper.py" line="164"/>
         <source>Could not obtain data provider from layer &quot;%s&quot;</source>
         <translation>Tidak dapat mendapatkan penyedia data pada lapisan &quot;%s&quot;</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="187"/>
+        <location filename="clipper.py" line="190"/>
         <source>Error when creating shapefile: &lt;br&gt;Filename:%s&lt;br&gt;Error: %s</source>
         <translation>Gagal ketika membuat shapefile: &lt;br&gt;Nama arsip:%s&lt;br&gt;Kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="301"/>
+        <location filename="clipper.py" line="304"/>
         <source>Expected a raster layer but received a %s.</source>
         <translation>Yang diharapkan berupa lapisan raster akan tetapi yang diterima %s.</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="309"/>
+        <location filename="clipper.py" line="312"/>
         <source>Input file to be clipped &quot;%s&quot; does not have the expected keywords file %s</source>
         <translation>Arsip input yang akan di potong &quot;%s&quot; tidak memiliki arsip kata kunci seperti yang diharapkan %s</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="376"/>
+        <location filename="clipper.py" line="379"/>
         <source>&lt;p&gt;Error while executing the following shell command:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</source>
         <translation>&lt;p&gt;Error ketika menjalankan perintah berikut:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Pesan Kesalahan: %s</translation>
     </message>
@@ -43,7 +44,7 @@
         <translation>Lapisan input untuk mendapatkan resolusi WGS84 harus merupakan lapisan raster. Saya mendapatkan: %s</translation>
     </message>
     <message>
-        <location filename="clipper.py" line="215"/>
+        <location filename="clipper.py" line="218"/>
         <source>No features fall within the clip extents. Try panning / zooming to an area containing data and then try to run your analysis again.</source>
         <translation>Tidak ada fitur termasuk dalam luasan klip. Cobalah panning / zoom ke area yang berisi data dan kemudian mencoba untuk menjalankan analisis Anda lagi.</translation>
     </message>
@@ -76,18 +77,18 @@
         <translation>Lapisan dampak &quot;%s&quot; yang dimuat tidak benar</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1336"/>
+        <location filename="dock.py" line="1340"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation>Tidak ada lapisan dampak yang dihitung. Pesan kesalahan: %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1379"/>
+        <location filename="dock.py" line="1383"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation>Lapisan dampak %s bukan lapisan vektor atau raster</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1913"/>
+        <location filename="dock.py" line="1900"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Dokumen PDF (*.pdf)</translation>
     </message>
@@ -117,57 +118,57 @@
         <translation>Analisa dampak telah selesai - sedang memuat hasil ke QGIS...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1454"/>
+        <location filename="dock.py" line="1451"/>
         <source>Analyzing this question...</source>
         <translation>Sedang menganalisa pertanyaan...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1632"/>
+        <location filename="dock.py" line="1629"/>
         <source>Preparing hazard data...</source>
         <translation>Sedang mempersiapkan data bahaya...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1633"/>
+        <location filename="dock.py" line="1630"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit hazardlayer untuk mencocokkan perpotongan dari exposurelayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1641"/>
+        <location filename="dock.py" line="1638"/>
         <source>Preparing exposure data...</source>
         <translation>Sedang mempersiapkan data terpapar...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1642"/>
+        <location filename="dock.py" line="1639"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation>Kita resampling dan menjepit exposurelayer untuk mencocokkan persimpangan hazardlayer dan luasan tampilan aktif.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1913"/>
+        <location filename="dock.py" line="1900"/>
         <source>Write to PDF</source>
         <translation>Menulis ke pdf</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1931"/>
+        <location filename="dock.py" line="1918"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1918"/>
+        <location filename="dock.py" line="1905"/>
         <source>Generating your map as a PDF document...</source>
         <translation>Sedang menghasilkan peta anda sebagai dokumen PDF...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1923"/>
+        <location filename="dock.py" line="1910"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation>Dokumen PDF telah dibuat .... membuka menggunakan peninjau standar PDF pada system.FIle pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1931"/>
+        <location filename="dock.py" line="1918"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation>Proses selesai.File pdf yang dihasilkan disimpan sebagai:% s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1817"/>
+        <location filename="dock.py" line="1807"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation>Tidak ada kata kunci yang telah didefinisikan untuk lapisan ini. Jika Anda ingin menggunakannya sebagai lapisan dampak atau lapisan bahaya dalam skenario, silahkan menggunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan mengklik &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot; &lt;img width=&quot;16&quot; height=&quot;16&quot;&gt; ikon pada toolbar, atau memilih Plugins -&gt; InaSAFE -&gt; Editor Kata Kunci dari menu.</translation>
     </message>
@@ -317,9 +318,24 @@
         <translation>Silahkan pilih atribut mana yang ingin digunakan sebagai ID untuk hasil agregasi</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1559"/>
+        <location filename="dock.py" line="1556"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them or disable viewport clipping in the options dialog. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Viewport clipping enabled: %6&lt;/p&gt;&lt;p&gt;Details: %7&lt;/p&gt;</source>
         <translation>&lt;p&gt;Tidak ada perpotongan yang cukup antara lapisan masukan dan / atau lapisan dan tampilan. Silahkan pilih dua buah lapisan yang berpotongan da perbesar atau geser ke mereka atau non aktifkan pemotongan berdasarkan tampilan pada dialog opsi. Berikut detail yang lebih lengkap:&lt;/p&gt;&lt;p&gt;Gagal untuk mendapatkan jangkauan optimal ketika diberikan:&lt;/p&gt;&lt;p&gt;Ancaman:%1&lt;/p&gt;&lt;p&gt;Paparan: %2&lt;/p&gt;Geo Extent Tampilan: %3&lt;/p&gt;&lt;p&gt;Geo Extent Ancaman: %4&lt;/p&gt;&lt;p&gt;Geo Extent Paparan: %5&lt;/p&gt;&lt;p&gt;Pemotongan berdasarkan tampilan: %6&lt;/p&lt;p&gt;Detail: %7&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1766"/>
+        <source>Time stamp</source>
+        <translation>Waktu dibuat</translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1773"/>
+        <source>Elapsed time</source>
+        <translation>Waktu yang dihabiskan</translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1773"/>
+        <source>seconds</source>
+        <translation>detik</translation>
     </message>
 </context>
 <context>

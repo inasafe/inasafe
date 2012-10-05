@@ -3,7 +3,7 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="clipper.py" line="297"/>
+        <location filename="clipper.py" line="300"/>
         <source>Layer or Extent passed to clip is None.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13,32 +13,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="162"/>
+        <location filename="clipper.py" line="164"/>
         <source>Could not obtain data provider from layer &quot;%s&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="187"/>
+        <location filename="clipper.py" line="190"/>
         <source>Error when creating shapefile: &lt;br&gt;Filename:%s&lt;br&gt;Error: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="215"/>
+        <location filename="clipper.py" line="218"/>
         <source>No features fall within the clip extents. Try panning / zooming to an area containing data and then try to run your analysis again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="301"/>
+        <location filename="clipper.py" line="304"/>
         <source>Expected a raster layer but received a %s.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="309"/>
+        <location filename="clipper.py" line="312"/>
         <source>Input file to be clipped &quot;%s&quot; does not have the expected keywords file %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="clipper.py" line="376"/>
+        <location filename="clipper.py" line="379"/>
         <source>&lt;p&gt;Error while executing the following shell command:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,18 +76,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1336"/>
+        <location filename="dock.py" line="1340"/>
         <source>No impact layer was calculated. Error message: %s
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1379"/>
+        <location filename="dock.py" line="1383"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1913"/>
+        <location filename="dock.py" line="1900"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -117,57 +117,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1454"/>
+        <location filename="dock.py" line="1451"/>
         <source>Analyzing this question...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1632"/>
+        <location filename="dock.py" line="1629"/>
         <source>Preparing hazard data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1633"/>
+        <location filename="dock.py" line="1630"/>
         <source>We are resampling and clipping the hazardlayer to match the intersection of the exposurelayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1641"/>
+        <location filename="dock.py" line="1638"/>
         <source>Preparing exposure data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1642"/>
+        <location filename="dock.py" line="1639"/>
         <source>We are resampling and clipping the exposurelayer to match the intersection of the hazardlayer and the current view extents.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1913"/>
+        <location filename="dock.py" line="1900"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1931"/>
+        <location filename="dock.py" line="1918"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1918"/>
+        <location filename="dock.py" line="1905"/>
         <source>Generating your map as a PDF document...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1923"/>
+        <location filename="dock.py" line="1910"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1931"/>
+        <location filename="dock.py" line="1918"/>
         <source>Processing complete.The generated pdf is saved as: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1817"/>
+        <location filename="dock.py" line="1807"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the &lt;img src=&quot;qrc:/plugins/inasafe/keywords.png&quot;  width=&quot;16&quot; height=&quot;16&quot;&gt; icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menus.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -317,8 +317,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1559"/>
+        <location filename="dock.py" line="1556"/>
         <source>&lt;p&gt;There was insufficient overlap between the input layers and / or the layers and the viewport. Please select two overlapping layers and zoom or pan to them or disable viewport clipping in the options dialog. Full details follow:&lt;/p&gt;&lt;p&gt;Failed to obtain the optimal extent given:&lt;/p&gt;&lt;p&gt;Hazard: %1&lt;/p&gt;&lt;p&gt;Exposure: %2&lt;/p&gt;&lt;p&gt;Viewport Geo Extent: %3&lt;/p&gt;&lt;p&gt;Hazard Geo Extent: %4&lt;/p&gt;&lt;p&gt;Exposure Geo Extent: %5&lt;/p&gt;&lt;p&gt;Viewport clipping enabled: %6&lt;/p&gt;&lt;p&gt;Details: %7&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1766"/>
+        <source>Time stamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1773"/>
+        <source>Elapsed time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1773"/>
+        <source>seconds</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
