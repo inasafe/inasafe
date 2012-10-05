@@ -27,6 +27,7 @@ class FloodEvacuationFunction(FunctionProvider):
     """
 
     title = _('Need evacuation')
+    parameters = {'thresholds': [0.3, 0.5, 1.0]}
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -54,10 +55,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
-        thresholds = get_thresholds(inundation)
-        if len(thresholds) == 0:
-            # Default threshold
-            thresholds = [1.0]
+        thresholds = self.parameters['thresholds']
 
         verify(isinstance(thresholds, list),
                'Expected thresholds to be a list. Got %s' % str(thresholds))
