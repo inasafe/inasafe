@@ -26,6 +26,7 @@ from safe.common.exceptions import GetDataError, InaSAFEError
 
 from layer import Layer
 from projection import Projection
+from geometry import Polygon
 from utilities import DRIVER_MAP, TYPE_MAP
 from utilities import read_keywords
 from utilities import write_keywords
@@ -35,10 +36,11 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
-from utilities import Polygon
+from utilities import get_ringdata
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(999999999999999999999999)
+
 
 class Vector(Layer):
     """Class for abstraction of vector data.
@@ -352,9 +354,6 @@ class Vector(Layer):
 
         layer.ResetReading()
 
-        # Get number of features
-        # N = layer.GetFeatureCount()
-
         # Extract coordinates and attributes for all features
         geometry = []
         data = []
@@ -370,36 +369,25 @@ class Vector(Layer):
                 if self.is_point_data:
                     geometry.append((G.GetX(), G.GetY()))
                 elif self.is_line_data:
-                    M = G.GetPointCount()
-                    coordinates = []
-                    for j in range(M):
-                        coordinates.append((G.GetX(j), G.GetY(j)))
-
-                    # Record entire line as an Mx2 numpy array
-                    geometry.append(numpy.array(coordinates,
-                                                dtype='d',
-                                                copy=False))
+                    ring = get_ringdata(G)
+                    geometry.append(ring)
                 elif self.is_polygon_data:
                     # Get outer ring, then inner rings
                     # http://osgeo-org.1560.n6.nabble.com/
                     # gdal-dev-Polygon-topology-td3745761.html
                     number_of_rings = G.GetGeometryCount()
-                    if number_of_rings > 1:
-                        print
-                        print 'N', number_of_rings
+                    # FIXME (Ole): Work in progress to get inner rings
+                    #if number_of_rings > 1:
+                    #    #for i in range(number_of_rings - 1):
+                    #    #    inner_ring =
+                    #    print
+                    #    print 'N', number_of_rings
                     #print dir(G), type(G), G.__class__
 
                     # Get outer ring
                     outer_ring = G.GetGeometryRef(0)
-                    M = outer_ring.GetPointCount()
-                    coordinates = []
-                    for j in range(M):
-                        coordinates.append((outer_ring.GetX(j), outer_ring.GetY(j)))
-
-                    # Record entire polygon ring as an Mx2 numpy array
-                    geometry.append(numpy.array(coordinates,
-                                                dtype='d',
-                                                copy=False))
+                    ring = get_ringdata(outer_ring)
+                    geometry.append(ring)
                 elif self.is_multi_polygon_data:
                     msg = ('Got geometry type Multipolygon (%s) for filename '
                            '%s which is not yet supported. Only point, line '
@@ -410,24 +398,6 @@ class Vector(Layer):
                            'use the resulting dataset.'
                            % (ogr.wkbMultiPolygon, filename))
                     raise ReadLayerError(msg)
-
-                #    # FIXME: Unpact multiple polygons to simple polygons
-                #    # For hints on how to unpack see
-#http://osgeo-org.1803224.n2.nabble.com/
-#gdal-dev-Shapefile-Multipolygon-with-interior-rings-td5391090.html
-#http://osdir.com/ml/gdal-development-gis-osgeo/2010-12/msg00107.html
-
-                #    ring = G.GetGeometryRef(0)
-                #    M = ring.GetPointCount()
-                #    coordinates = []
-                #    for j in range(M):
-                #        coordinates.append((ring.GetX(j), ring.GetY(j)))
-
-                #    # Record entire polygon ring as an Mx2 numpy array
-                #    geometry.append(numpy.array(coordinates,
-                #                                dtype='d',
-                #                                copy=False))
-
                 else:
                     msg = ('Only point, line and polygon geometries are '
                            'supported. '

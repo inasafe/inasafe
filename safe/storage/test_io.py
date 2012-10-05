@@ -227,12 +227,12 @@ class Test_IO(unittest.TestCase):
         L = read_layer(filename)
         print L.get_attribute_names()
 
-    def test_donut_polygons(self):
+    def Xtest_donut_polygons(self):
         """Donut polygon can be read, interpreted and written correctly
         """
 
         # First test that some error conditions are caught
-        filename = '%s/%s' % (TESTDATA, 'volcano_hazard_example.shp')
+        filename = '%s/%s' % (TESTDATA, 'donut.shp')
         L = read_layer(filename)
         print L.get_attribute_names()
 
@@ -246,9 +246,9 @@ class Test_IO(unittest.TestCase):
         L.write_to_file(tmp_filename)
         print 'Written to', tmp_filename
 
-        msg = 'Geometry of polygon was not preserved after reading and re-writing'
+        msg = ('Geometry of polygon was not preserved after reading '
+               'and re-writing')
         assert read_layer(tmp_filename).get_geometry == L.get_geometry(), msg
-
 
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
@@ -2201,7 +2201,7 @@ class Test_IO(unittest.TestCase):
         # More...
 
 if __name__ == '__main__':
-    #suite = unittest.makeSuite(Test_IO, 'test')
-    suite = unittest.makeSuite(Test_IO, 'test_donut')
+    suite = unittest.makeSuite(Test_IO, 'test')
+    #suite = unittest.makeSuite(Test_IO, 'test_donut')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

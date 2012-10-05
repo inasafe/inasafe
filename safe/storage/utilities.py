@@ -926,23 +926,21 @@ def combine_polygon_and_point_layers(layers):
     # This is to implement issue #276
     print layers
 
-# Feature types
 
-class Feature_type:
-    """Common class for geospatial layers
+def get_ringdata(ring):
+    """Extract coordinates from OGR ring object
+
+    Args
+        * OGR ring object
+    Returns
+        * Nx2 numpy array of vertex coordinates (lon, lat)
     """
 
-    def __init__(self):
-        pass
+    N = ring.GetPointCount()
+    coordinates = []
+    for j in range(N):
+        coordinates.append((ring.GetX(j),
+                            ring.GetY(j)))
 
-
-class Polygon(Feature_type):
-    """Polygon feature type
-
-    Contains outer ring and optionally list of inner rings
-    """
-
-    def __init__(self):
-        pass
-
-
+    # Return ring as an Nx2 numpy array
+    return numpy.array(coordinates, dtype='d', copy=False)
