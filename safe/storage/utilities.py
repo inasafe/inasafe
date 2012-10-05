@@ -940,7 +940,6 @@ def get_ringdata(ring):
     A = numpy.zeros((N, 2), dtype='d')
 
     # FIXME (Ole): Is there any way to get the entire data vectors?
-    coordinates = []
     for j in range(N):
         A[j, :] = ring.GetX(j), ring.GetY(j)
 
