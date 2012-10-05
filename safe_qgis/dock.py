@@ -1398,20 +1398,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myReport += self.getPostprocessingOutput()
 
         # append properties of the result layer
-        exludedKeys = ['impact_summary',
-                       'postprocessing_report',
-                       'impact_table']
+        includedKeys = ['time_stamp',
+                       'elapsed_time']
         myReport += ('<table class="table table-striped condensed'
                         ' bordered-table">')
         for myKeyword in myKeywords:
-            if myKeyword in exludedKeys:
+            if myKeyword not in includedKeys:
                 continue
             myValue = str(myKeywords[myKeyword])
-
-        # Translate titles explicitly if possible
-            if myKeyword == 'title' and \
-                    myValue in internationalisedNames:
-                myValue = internationalisedNames[myValue]
 
             # Add this keyword to report
             myReport += ('<tr>'
@@ -1766,20 +1760,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myReport = myKeywords['impact_summary']
                     if 'postprocessing_report' in myKeywords:
                         myReport += myKeywords['postprocessing_report']
-                    exludedKeys = ['impact_summary',
-                                  'postprocessing_report',
-                                  'impact_table']
+                    includedKeys = ['time_stamp',
+                       'elapsed_time']
                     myReport += ('<table class="table table-striped condensed'
                         ' bordered-table">')
                     for myKeyword in myKeywords:
-                        if myKeyword in exludedKeys:
+                        if myKeyword not in includedKeys:
                             continue
                         myValue = str(myKeywords[myKeyword])
-
-                        # Translate titles explicitly if possible
-                        if myKeyword == 'title' and \
-                                myValue in internationalisedNames:
-                            myValue = internationalisedNames[myValue]
 
                         # Add this keyword to report
                         myReport += ('<tr>'

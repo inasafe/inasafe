@@ -66,7 +66,7 @@ def calculate_impact(layers, impact_fcn):
     host_name = gethostname()
 
     F.keywords['elapsed_time'] = elapsed_time_sec
-    F.keywords['time_stamp'] = time_stamp
+    F.keywords['time_stamp'] = time_stamp[:19]  # remove decimal part
     F.keywords['host_name'] = host_name
     F.keywords['user'] = user
 
