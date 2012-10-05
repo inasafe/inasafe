@@ -925,3 +925,24 @@ def combine_polygon_and_point_layers(layers):
 
     # This is to implement issue #276
     print layers
+
+# Feature types
+
+class Feature_type:
+    """Common class for geospatial layers
+    """
+
+    def __init__(self):
+        pass
+
+
+class Polygon(Feature_type):
+    """Polygon feature type
+
+    Contains outer ring and optionally list of inner rings
+    """
+
+    def __init__(self):
+        pass
+
+

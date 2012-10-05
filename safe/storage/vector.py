@@ -35,10 +35,10 @@ from utilities import array2wkt
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
+from utilities import Polygon
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(999999999999999999999999)
-
 
 class Vector(Layer):
     """Class for abstraction of vector data.
@@ -380,11 +380,21 @@ class Vector(Layer):
                                                 dtype='d',
                                                 copy=False))
                 elif self.is_polygon_data:
-                    ring = G.GetGeometryRef(0)
-                    M = ring.GetPointCount()
+                    # Get outer ring, then inner rings
+                    # http://osgeo-org.1560.n6.nabble.com/
+                    # gdal-dev-Polygon-topology-td3745761.html
+                    number_of_rings = G.GetGeometryCount()
+                    if number_of_rings > 1:
+                        print
+                        print 'N', number_of_rings
+                    #print dir(G), type(G), G.__class__
+
+                    # Get outer ring
+                    outer_ring = G.GetGeometryRef(0)
+                    M = outer_ring.GetPointCount()
                     coordinates = []
                     for j in range(M):
-                        coordinates.append((ring.GetX(j), ring.GetY(j)))
+                        coordinates.append((outer_ring.GetX(j), outer_ring.GetY(j)))
 
                     # Record entire polygon ring as an Mx2 numpy array
                     geometry.append(numpy.array(coordinates,
