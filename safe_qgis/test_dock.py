@@ -428,7 +428,7 @@ class DockTest(unittest.TestCase):
         myLayerList = [DOCK.tr('No aggregation'),
                        DOCK.tr('A flood in Jakarta in RW areas identified as '
                                'flood prone'),
-                       DOCK.tr('DKI buildings'),
+                       DOCK.tr('Essential buildings'),
                        DOCK.tr('kabupaten jakarta singlepart'),
                        DOCK.tr('OSM Building Polygons')]
         currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(DOCK
@@ -486,7 +486,7 @@ class DockTest(unittest.TestCase):
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta in RW areas identified'
                       ' as flood prone',
-            theExposure='DKI buildings',
+            theExposure='Essential buildings',
             theFunction='Be temporarily closed',
             theFunctionId='Flood Building Impact Function')
         assert myResult, myMessage
@@ -609,7 +609,7 @@ class DockTest(unittest.TestCase):
                     str(DOCK.tr('A flood in Jakarta in RW areas identified as '
                                 'flood prone')),
                     str(DOCK.tr('OSM Building Polygons')),
-                    str(DOCK.tr('DKI buildings')),
+                    str(DOCK.tr('Essential buildings')),
                     str(DOCK.tr('Flood in Jakarta')),
                     str(DOCK.tr('roads_Maumere')),
                     str(DOCK.tr('kabupaten jakarta singlepart')),
@@ -936,7 +936,7 @@ class DockTest(unittest.TestCase):
 
         myResult, myMessage = setupScenario(
             theHazard='Flood in Jakarta',
-            theExposure='DKI buildings',
+            theExposure='Essential buildings',
             theFunction='Be affected',
             theFunctionId='Categorised Hazard Building Impact Function')
         assert myResult, myMessage
