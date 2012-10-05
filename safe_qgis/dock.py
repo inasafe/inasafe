@@ -416,7 +416,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.functionParams = None
             if hasattr(self.myFunction, 'parameters'):
                 self.functionParams = self.myFunction.parameters
-                self.setToolFunctionOptionsButton()
+
+            self.setToolFunctionOptionsButton()
         else:
             del theIndex
         self._toggleCboAggregation()
@@ -449,7 +450,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
            None.
         Raises:
            no exceptions explicitly raised."""
-        #check if functionParams intialized
+        # Check if functionParams intialized
         if self.functionParams is None:
             self.toolFunctionOptions.setEnabled(False)
         else:
@@ -1215,7 +1216,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             keywords = read_keywords(myKeywordFilePath)
-        except:  # FIXME: Which exceptions?
+        except Exception:  # FIXME: Which exceptions?
             keywords = dict()
 
         if ('category' in keywords and
@@ -1297,7 +1298,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                     safe.defaults.AGGREGATION_ATTRIBUTE_KEY]
                     logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
                                        ' as aggregation attribute')
-                except:  # FIXME: Which exceptions?
+                except Exception:  # FIXME: Which exceptions?
                     logOnQgsMessageLog('User Accepted but did not select a '
                                        'value. Using default : '
                                        + str(aggrAttribute) +
@@ -1400,33 +1401,26 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myReport += self.getPostprocessingOutput()
 
         # append properties of the result layer
-        exludedKeys = ['impact_summary',
-                       'postprocessing_report',
-                       'impact_table']
         myReport += ('<table class="table table-striped condensed'
                         ' bordered-table">')
-        for myKeyword in myKeywords:
-            if myKeyword in exludedKeys:
-                continue
-            myValue = str(myKeywords[myKeyword])
-
-        # Translate titles explicitly if possible
-            if myKeyword == 'title' and \
-                    myValue in internationalisedNames:
-                myValue = internationalisedNames[myValue]
-
-            # Add this keyword to report
-            myReport += ('<tr>'
-                            # FIXME (Ole): Not sure if this will work
-                            # with translations
-                            '<th>' + self.tr(myKeyword.capitalize())
-                            + '</th>'
-                            '</tr>'
-                            '<tr>'
-                            '<td>' + myValue + '</td>'
-                            '</tr>')
+        # Add this keyword to report
+        myReport += ('<tr>'
+                        '<th>' + self.tr('Time stamp')
+                        + '</th>'
+                        '</tr>'
+                        '<tr>'
+                        '<td>' + str(myKeywords['time_stamp']) + '</td>'
+                        '</tr>')
+        myReport += ('<tr>'
+                        '<th>' + self.tr('Elapsed time')
+                        + '</th>'
+                        '</tr>'
+                        '<tr>'
+                        '<td>' + str(myKeywords['elapsed_time'])
+                        + ' ' + self.tr('seconds') + '</td>'
+                        '</tr>')
         myReport += '</table>'
-        # Return text to display in report pane
+        # Return text to display in report panel
         return myReport
 
     def showHelp(self):
@@ -1768,31 +1762,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myReport = myKeywords['impact_summary']
                     if 'postprocessing_report' in myKeywords:
                         myReport += myKeywords['postprocessing_report']
-                    exludedKeys = ['impact_summary',
-                                  'postprocessing_report',
-                                  'impact_table']
+                            # append properties of the result layer
                     myReport += ('<table class="table table-striped condensed'
-                        ' bordered-table">')
-                    for myKeyword in myKeywords:
-                        if myKeyword in exludedKeys:
-                            continue
-                        myValue = str(myKeywords[myKeyword])
-
-                        # Translate titles explicitly if possible
-                        if myKeyword == 'title' and \
-                                myValue in internationalisedNames:
-                            myValue = internationalisedNames[myValue]
-
-                        # Add this keyword to report
-                        myReport += ('<tr>'
-                                     # FIXME (Ole): Not sure if this will work
-                                     # with translations
-                                       '<th>' + self.tr(myKeyword.capitalize())
-                                       + '</th>'
-                                     '</tr>'
-                                     '<tr>'
-                                       '<td>' + myValue + '</td>'
-                                     '</tr>')
+                                    ' bordered-table">')
+                    # Add this keyword to report
+                    myReport += ('<tr>'
+                            '<th>' + self.tr('Time stamp')
+                            + '</th>'
+                            '</tr>'
+                            '<tr>'
+                            '<td>' + str(myKeywords['time_stamp']) + '</td>'
+                            '</tr>')
+                    myReport += ('<tr>'
+                            '<th>' + self.tr('Elapsed time')
+                            + '</th>'
+                            '</tr>'
+                            '<tr>'
+                            '<td>' + str(myKeywords['elapsed_time'])
+                            + ' ' + self.tr('seconds') + '</td>'
+                            '</tr>')
                     myReport += '</table>'
                     self.pbnPrint.setEnabled(True)
 

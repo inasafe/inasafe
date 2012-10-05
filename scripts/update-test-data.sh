@@ -25,7 +25,18 @@ fi
 pushd .
 cd ../inasafe_data
 git fetch
-git checkout $VERSION
+
+# Checkout desired version
+# Use unneccessary force because
+# local files might have been modified
+# and can block the checkout. Issue
+# https://github.com/AIFDR/inasafe/issues/313
+#
+# However this is dangerous as it will kill
+# any new file put under git in the detached branch.
+# More scary, any file added (but not committed or
+# not under git) under master will also disappear. Why?
+git checkout --force $VERSION
 EXITCODE=$?
 popd
 exit $EXITCODE
