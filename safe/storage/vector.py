@@ -391,15 +391,31 @@ class Vector(Layer):
                                                 dtype='d',
                                                 copy=False))
                 elif self.is_multi_polygon_data:
-                    msg = ('Got geometry type Multipolygon (%s) for filename '
-                           '%s which is not yet supported. Only point, line '
-                           'and polygon geometries are supported. However, '
-                           'you can use QGIS functionality to convert '
-                           'multipart vector data to singlepart (Vector -> '
-                           'Geometry Tools -> Multipart to Singleparts and '
-                           'use the resulting dataset.'
-                           % (ogr.wkbMultiPolygon, filename))
-                    raise ReadLayerError(msg)
+                    try:
+                        G = ogr.ForceToPolygon(G)
+                        # FIXME: reuse the code for polygon above
+                        ring = G.GetGeometryRef(0)
+                        M = ring.GetPointCount()
+                        coordinates = []
+                        for j in range(M):
+                            coordinates.append((ring.GetX(j), ring.GetY(j)))
+
+                        # Record entire polygon ring as an Mx2 numpy array
+                        geometry.append(numpy.array(coordinates,
+                                                    dtype='d',
+                                                    copy=False))
+#                    msg = ('Got geometry type Multipolygon (%s) for filename '
+#                            '%s which is not yet supported. Only point, line '
+#                           'and polygon geometries are supported. However, '
+#                           'you can use QGIS functionality to convert '
+#                           'multipart vector data to singlepart (Vector -> '
+#                           'Geometry Tools -> Multipart to Singleparts and '
+#                           'use the resulting dataset.'
+#                           % (ogr.wkbMultiPolygon, filename))
+                    except:
+                        msg = ('Got geometry type multipolygon (%s) when read '
+                               '%s and failed to ForceToPolygon')
+                        raise ReadLayerError(msg)
 
                 #    # FIXME: Unpact multiple polygons to simple polygons
                 #    # For hints on how to unpack see
@@ -451,7 +467,6 @@ class Vector(Layer):
                 #print 'Field', name, feature_type, j, fields[name]
 
             data.append(fields)
-
         # Store geometry coordinates as a compact numeric array
         self.geometry = geometry
         self.data = data
