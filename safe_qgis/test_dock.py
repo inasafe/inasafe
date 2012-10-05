@@ -426,8 +426,7 @@ class DockTest(unittest.TestCase):
     def test_cboAggregationLoadedProject(self):
 
         myLayerList = [DOCK.tr('No aggregation'),
-                       DOCK.tr('A flood in Jakarta in RW areas identified as '
-                               'flood prone'),
+                       DOCK.tr('A flood in Jakarta'),
                        DOCK.tr('Essential buildings'),
                        DOCK.tr('kabupaten jakarta singlepart'),
                        DOCK.tr('OSM Building Polygons')]
@@ -459,8 +458,7 @@ class DockTest(unittest.TestCase):
         #vector hazard
         #raster exposure
         myResult, myMessage = setupScenario(
-            theHazard=('A flood in Jakarta in RW areas identified'
-                       ' as flood prone'),
+            theHazard=('A flood in Jakarta'),
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function Vector Hazard')
@@ -484,8 +482,7 @@ class DockTest(unittest.TestCase):
         #vector hazard
         #vector exposure
         myResult, myMessage = setupScenario(
-            theHazard='A flood in Jakarta in RW areas identified'
-                      ' as flood prone',
+            theHazard='A flood in Jakarta',
             theExposure='Essential buildings',
             theFunction='Be temporarily closed',
             theFunctionId='Flood Building Impact Function')
@@ -606,8 +603,7 @@ class DockTest(unittest.TestCase):
                     str(DOCK.tr('A flood in Jakarta like in 2007')),
                     str(DOCK.tr('Penduduk Jakarta')),
                     str(DOCK.tr('An earthquake in Yogyakarta like in 2006')),
-                    str(DOCK.tr('A flood in Jakarta in RW areas identified as '
-                                'flood prone')),
+                    str(DOCK.tr('A flood in Jakarta')),
                     str(DOCK.tr('OSM Building Polygons')),
                     str(DOCK.tr('Essential buildings')),
                     str(DOCK.tr('Flood in Jakarta')),
@@ -910,8 +906,7 @@ class DockTest(unittest.TestCase):
            Uses population raster exposure layer"""
 
         myResult, myMessage = setupScenario(
-            theHazard=('A flood in Jakarta in RW areas identified'
-                      ' as flood prone'),
+            theHazard=('A flood in Jakarta'),
             theExposure='Penduduk Jakarta',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function Vector Hazard')
