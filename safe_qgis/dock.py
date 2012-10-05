@@ -67,6 +67,7 @@ from safe_qgis.configurable_impact_functions_dialog import\
    ConfigurableImpactFunctionsDialog
 
 from safe_qgis.keywords_dialog import KeywordsDialog
+import safe.defaults
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -1221,9 +1222,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             keywords['category'] == 'postprocessing' and
             'subcategory' in keywords and
             keywords['subcategory'] == 'aggregation' and
-            'aggregation attribute' in keywords):
+            safe.defaults.AGGREGATION_ATTRIBUTE_KEY in keywords):
             #keywords are already complete
-            myValue = keywords['aggregation attribute']
+            myValue = keywords[safe.defaults.AGGREGATION_ATTRIBUTE_KEY]
         else:
             #set the default values by writing to the keywords
             keywords['category'] = 'postprocessing'
@@ -1232,7 +1233,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             #prompt uset for a choice
             myValue = self._promptForAggregationAttribute(myKeywordFilePath)
-            keywords['aggregation attribute'] = myValue
+            keywords[safe.defaults.AGGREGATION_ATTRIBUTE_KEY] = myValue
             write_keywords(keywords, myKeywordFilePath)
 
         return myValue
@@ -1292,7 +1293,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                QtGui.QDialog.Accepted:
                 keywords = read_keywords(myKeywordFilePath)
                 try:
-                    aggrAttribute = keywords['aggregation attribute']
+                    aggrAttribute = keywords[
+                                    safe.defaults.AGGREGATION_ATTRIBUTE_KEY]
                     logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
                                        ' as aggregation attribute')
                 except:  # FIXME: Which exceptions?

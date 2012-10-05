@@ -34,6 +34,10 @@ from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
 from safe.common.exceptions import InaSAFEError
 
+import safe.defaults
+
+from safe_qgis.utilities import logOnQgsMessageLog
+
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -92,9 +96,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                       self.tr('tephra [kg2/m2]')),
                                       ('volcano', self.tr('volcano')),
                                      ('Not Set', self.tr('Not Set'))])
-        self.standardPostprocessingList = OrderedDict([('aggregation',
-                                    self.tr('aggregation')),
-                                    ('Not Set', self.tr('Not Set'))])
         # Save reference to the QGIS interface and parent
         self.iface = iface
         self.parent = parent
@@ -123,7 +124,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.layer = theLayer
         if self.layer:
             self.loadStateFromKeywords()
-        self.showExtraWidgets()
+
+        #add a reload from keywords button
+        myButton = self.buttonBox.addButton(self.tr('Reload'),
+            QtGui.QDialogButtonBox.ActionRole)
+        QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
+            self.loadStateFromKeywords)
 
     def showHelp(self):
         """Load the help text for the keywords safe_qgis"""
@@ -132,49 +138,139 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
         self.helpDialog.showMe()
 
-    def showExtraWidgets(self):
-        if (self.radPostprocessing.isChecked() and
-            self.cboSubcategory.currentText() == self.tr('aggregation')):
-            self.showAggregationAttribute(True)
-        else:
-            self.showAggregationAttribute(False)
-
+    def togglePostprocessingWidgets(self):
+        isPostprocessingOn = self.radPostprocessing.isChecked()
+        self.cboSubcategory.setVisible(not isPostprocessingOn)
+        self.lblSubcategory.setVisible(not isPostprocessingOn)
+        self.showAggregationAttribute(isPostprocessingOn)
+        self.showFemaleRatioAttribute(isPostprocessingOn)
+        self.showFemaleRatioDefault(isPostprocessingOn)
         self.adjustSize()
 
-    def showAggregationAttribute(self, theFlag):
-        cboAggr = self.cboAggregationAttribute
-        cboAggr.clear()
+    def getAttributeNames(self, allowedTypes, currentKeyword):
+        """iterates over self.layer and returns all the attribute names of
+           attributes that have int or string as field type and the position
+           of the currentKeyword in the attribute names list
+
+        Args:
+           * allowedTypes - a list of QVariants types that are acceptable for
+             the attribute. ex: [QtCore.QVariant.Int, QtCore.QVariant.String]
+           * currentKeyword - the currently stored keyword for the attribute
+
+        Returns:
+           * all the attribute names of attributes that have int or string as
+             field type
+           * the position of the currentKeyword in the attribute names list,
+             this is None if currentKeyword is not in the lis of attributes
+        Raises:
+           no exceptions explicitly raised
+        """
+        vProvider = self.layer.dataProvider()
+        vFields = vProvider.fields()
         fields = []
+        selectedIndex = None
+        i = 0
+        for f in vFields:
+            # show only int or string fields to be chosen as aggregation
+            # attribute other possible would be float
+            if vFields[f].type() in allowedTypes:
+                currentFieldName = vFields[f].name()
+                fields.append(currentFieldName)
+                if currentKeyword == currentFieldName:
+                    selectedIndex = i
+                i += 1
+        return fields, selectedIndex
+
+    def showAggregationAttribute(self, theFlag):
+        theBox = self.cboAggregationAttribute
+        theBox.clear()
         if theFlag:
-            vProvider = self.layer.dataProvider()
-            vFields = vProvider.fields()
-            currentKeyword = self.getValueForKey('aggregation attribute')
-            selectedIndex = 0
-            i = 0
-            for i in vFields:
-                # show only int or string fields to be chosen as aggregation
-                # attribute other possible would be float
-                if vFields[i].type() in [
-                    QtCore.QVariant.Int, QtCore.QVariant.String]:
-                    curentFieldName = vFields[i].name()
-                    fields.append(curentFieldName)
-                    if currentKeyword == curentFieldName:
-                        selectedIndex = i
-                    i += 1
+            currentKeyword = self.getValueForKey(
+                safe.defaults.AGGREGATION_ATTRIBUTE_KEY)
+            fields, attributePosition = self.getAttributeNames(
+                [QtCore.QVariant.Int, QtCore.QVariant.String],
+                currentKeyword)
+            theBox.addItems(fields)
+            if attributePosition is None:
+                theBox.setCurrentIndex(0)
+            else:
+                theBox.setCurrentIndex(attributePosition)
 
-            cboAggr.addItems(fields)
-            cboAggr.setCurrentIndex(selectedIndex)
-
-        self.cboAggregationAttribute.setVisible(theFlag)
+        theBox.setVisible(theFlag)
         self.lblAggregationAttribute.setVisible(theFlag)
 
-        # prevents actions being handled twice
+    def showFemaleRatioAttribute(self, theFlag):
+        theBox = self.cboFemaleRatioAttribute
+        theBox.clear()
+        if theFlag:
+            currentKeyword = self.getValueForKey(
+                safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY)
+            fields, attributePosition = self.getAttributeNames(
+                [QtCore.QVariant.Double],
+                currentKeyword)
+            fields.insert(0, self.tr('Use default'))
+            fields.insert(1, self.tr('Don\'t use'))
 
+            theBox.addItems(fields)
+            if currentKeyword == self.tr('Use default'):
+                theBox.setCurrentIndex(0)
+            elif currentKeyword == self.tr('Don\'t use'):
+                theBox.setCurrentIndex(1)
+            elif attributePosition is None:
+                # currentKeyword was not found in the attribute table.
+                # Use default
+                theBox.setCurrentIndex(0)
+            else:
+                # + 2 is because we add use defaults and don't use
+                theBox.setCurrentIndex(attributePosition + 2)
+
+        theBox.setVisible(theFlag)
+        self.lblFemaleRatioAttribute.setVisible(theFlag)
+
+    def showFemaleRatioDefault(self, theFlag):
+        theBox = self.dsbFemaleRatioDefault
+        if theFlag:
+            currentKeyword = self.getValueForKey(
+                safe.defaults.FEMALE_RATIO_DEFAULT_KEY)
+            if currentKeyword is None:
+                val = safe.defaults.DEFAULT_FEMALE_RATIO
+            else:
+                val = float(currentKeyword)
+            theBox.setValue(val)
+            #force update the keyword
+            theBox.emit(QtCore.SIGNAL('valueChanged'), val)
+
+        theBox.setVisible(theFlag)
+        self.lblFemaleRatioDefault.setVisible(theFlag)
+
+    # prevents actions being handled twice
     @pyqtSignature('int')
     def on_cboAggregationAttribute_currentIndexChanged(self, theIndex=None):
         del theIndex
-        self.addListEntry('aggregation attribute',
+        self.addListEntry(safe.defaults.AGGREGATION_ATTRIBUTE_KEY,
         self.cboAggregationAttribute.currentText())
+
+    # prevents actions being handled twice
+    @pyqtSignature('int')
+    def on_cboFemaleRatioAttribute_currentIndexChanged(self, theIndex=None):
+        del theIndex
+
+        text = self.cboFemaleRatioAttribute.currentText()
+        if text == self.tr('Use default'):
+            self.dsbFemaleRatioDefault.setEnabled(True)
+            self.addListEntry(safe.defaults.FEMALE_RATIO_DEFAULT_KEY,
+                self.dsbFemaleRatioDefault.value())
+
+        else:
+            self.dsbFemaleRatioDefault.setEnabled(False)
+            self.removeItemByKey(safe.defaults.FEMALE_RATIO_DEFAULT_KEY)
+
+        self.addListEntry(safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY, text)
+
+    # prevents actions being handled twice
+    @pyqtSignature('double')
+    def on_dsbFemaleRatioDefault_valueChanged(self, theValue):
+        self.addListEntry(safe.defaults.FEMALE_RATIO_DEFAULT_KEY, theValue)
 
     # prevents actions being handled twice
     @pyqtSignature('bool')
@@ -245,7 +341,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if not theFlag:
-            self.removeItemByKey('aggregation attribute')
+            self.removeItemByKey(safe.defaults.AGGREGATION_ATTRIBUTE_KEY)
+            self.removeItemByKey(safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY)
+            self.removeItemByKey(safe.defaults.FEMALE_RATIO_DEFAULT_KEY)
             return
         self.setCategory('postprocessing')
         self.updateControlsFromList()
@@ -269,7 +367,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myItem = self.cboSubcategory.itemData(
                             self.cboSubcategory.currentIndex()).toString()
         myText = str(myItem)
-        self.showExtraWidgets()
         # I found that myText is 'Not Set' for every language
         if myText == self.tr('Not Set') or myText == 'Not Set':
             self.removeItemByKey('subcategory')
@@ -507,8 +604,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.radPostprocessing.blockSignals(False)
             self.removeItemByKey('subcategory')
             self.addListEntry('category', 'postprocessing')
-            myList = self.standardPostprocessingList
-            self.setSubcategoryList(myList)
 
         return True
 
@@ -652,6 +747,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.lblLayerName.setText('')
 
+        #adapt gui if we are in postprocessing category
+        self.togglePostprocessingWidgets()
+
         if self.radExposure.isChecked():
             if mySubcategory is not None and myType is not None:
                 self.setSubcategoryList(self.standardExposureList,
@@ -671,13 +769,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                         mySubcategory)
             else:
                 self.setSubcategoryList(self.standardHazardList,
-                                        self.tr('Not Set'))
-        else:
-            if mySubcategory is not None:
-                self.setSubcategoryList(self.standardPostprocessingList,
-                                        mySubcategory)
-            else:
-                self.setSubcategoryList(self.standardPostprocessingList,
                                         self.tr('Not Set'))
 
     # prevents actions being handled twice
