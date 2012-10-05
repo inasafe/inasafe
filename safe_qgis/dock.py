@@ -1215,7 +1215,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             keywords = read_keywords(myKeywordFilePath)
-        except:  # FIXME: Which exceptions?
+        except Exception:  # FIXME: Which exceptions?
             keywords = dict()
 
         if ('category' in keywords and
@@ -1296,7 +1296,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     aggrAttribute = keywords['aggregation attribute']
                     logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
                                        ' as aggregation attribute')
-                except:  # FIXME: Which exceptions?
+                except Exception:  # FIXME: Which exceptions?
                     logOnQgsMessageLog('User Accepted but did not select a '
                                        'value. Using default : '
                                        + str(aggrAttribute) +
