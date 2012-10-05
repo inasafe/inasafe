@@ -267,14 +267,15 @@ def loadStandardLayers():
                   join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
                   join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
                   join(EXPDATA, 'DKI_buildings.shp'),
-                  join(HAZDATA, 'jakarta_flood_category_123.asc'),
                   join(TESTDATA, 'roads_Maumere.shp'),
-                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
+                  join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')
+                  ]
     myHazardLayerCount, myExposureLayerCount = loadLayers(myFileList,
                                                        theDataDirectory=None)
-    #FIXME (MB) -1 is untill we add the aggregation category because of
-    # kabupaten_jakarta_singlepart not being either hayard nor exposure layer
-    assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
+    #FIXME (MB) -1 is until we add the aggregation category because of
+    # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
+    if join(TESTDATA, 'kabupaten_jakarta_singlepart.shp') in myFileList:
+        assert myHazardLayerCount + myExposureLayerCount == len(myFileList) - 1
 
     return myHazardLayerCount, myExposureLayerCount
 
@@ -1270,6 +1271,20 @@ class DockTest(unittest.TestCase):
                                 myHtml,
                                 myExpectedString)
         assert myExpectedString in myHtml, myMessage
+
+    def test_issue317(self):
+        """Points near the edge of a raster hazard layer are interpolated OK"""
+
+        setCanvasCrs(GEOCRS, True)
+        setJakartaGeoExtent()
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='OSM Building Polygons',
+            theFunction='Be temporarily closed',
+            theFunctionId='Flood Building Impact Function')
+        DOCK.getFunctions()
+        assert myResult, myMessage
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
