@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>520</width>
-    <height>580</height>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,22 +18,19 @@
     <normaloff>:/plugins/inasafe/icon.png</normaloff>:/plugins/inasafe/icon.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <widget class="QLabel" name="lblLayerName">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0">
     <widget class="QGroupBox" name="grpSimple">
      <property name="title">
       <string>Quick edit</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="2" column="1">
+       <widget class="QComboBox" name="cboSubcategory">
+        <property name="toolTip">
+         <string>A subcategory represents the type of hazard.</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="lblTitle">
         <property name="text">
@@ -41,8 +38,15 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="leTitle"/>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Subcategory</string>
+        </property>
+        <property name="buddy">
+         <cstring>cboSubcategory</cstring>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="lblCategory">
@@ -50,6 +54,9 @@
          <string>Category</string>
         </property>
        </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="leTitle"/>
       </item>
       <item row="1" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -85,20 +92,16 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Subcategory</string>
-        </property>
-        <property name="buddy">
-         <cstring>cboSubcategory</cstring>
-        </property>
-       </widget>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="cboAggregationAttribute"/>
       </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="cboSubcategory">
-        <property name="toolTip">
-         <string>A subcategory represents the type of hazard.</string>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lblAggregationAttribute">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Attribute</string>
         </property>
        </widget>
       </item>
@@ -111,6 +114,26 @@
       <string>Show advanced editor</string>
      </property>
      <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lblLayerName">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="wordWrap">
       <bool>true</bool>
      </property>
     </widget>
@@ -288,16 +311,6 @@
      </layout>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <tabstops>
@@ -350,18 +363,34 @@
    </hints>
   </connection>
   <connection>
-   <sender>pbnAdvanced</sender>
+   <sender>radPredefined</sender>
    <signal>toggled(bool)</signal>
-   <receiver>grpAdvanced</receiver>
-   <slot>setVisible(bool)</slot>
+   <receiver>frameUserDefined</receiver>
+   <slot>setHidden(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>169</x>
-     <y>189</y>
+     <x>126</x>
+     <y>243</y>
     </hint>
     <hint type="destinationlabel">
-     <x>129</x>
-     <y>277</y>
+     <x>101</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radUserDefined</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>framePredefined</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>331</x>
+     <y>243</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>56</x>
+     <y>262</y>
     </hint>
    </hints>
   </connection>
@@ -382,22 +411,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>radPredefined</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>frameUserDefined</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>126</x>
-     <y>243</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>101</x>
-     <y>343</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>radUserDefined</sender>
    <signal>toggled(bool)</signal>
    <receiver>frameUserDefined</receiver>
@@ -410,22 +423,6 @@
     <hint type="destinationlabel">
      <x>140</x>
      <y>343</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radUserDefined</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>framePredefined</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>331</x>
-     <y>243</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>56</x>
-     <y>262</y>
     </hint>
    </hints>
   </connection>

@@ -515,10 +515,12 @@ try:
     from qgis.core import QgsMessageLog  # pylint: disable=E0611
 except ImportError:
 
+    # Define vanilla version
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         print (str(msg), tag, level)
 else:
 
+    # Use QGIS message log from versions >= 1.8
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         QgsMessageLog.logMessage(str(msg), tag, level)
 
