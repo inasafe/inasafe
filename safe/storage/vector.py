@@ -134,9 +134,14 @@ class Vector(Layer):
 
             msg = 'Geometry must be a sequence'
             verify(is_sequence(geometry), msg)
-            self.geometry = geometry
 
             self.geometry_type = get_geometry_type(geometry, geometry_type)
+
+            # In case input is a polygon, convert to object structure
+            if self.is_polygon_data:
+                self.geometry = [Polygon(outer_ring=x) for x in geometry]
+            else:
+                self.geometry = geometry
 
             if data is None:
                 # Generate default attribute as OGR will do that anyway
@@ -387,7 +392,7 @@ class Vector(Layer):
                     # Get outer ring
                     outer_ring = G.GetGeometryRef(0)
                     ring = get_ringdata(outer_ring)
-                    geometry.append(ring)
+                    geometry.append(Polygon(outer_ring=ring))
                 elif self.is_multi_polygon_data:
                     msg = ('Got geometry type Multipolygon (%s) for filename '
                            '%s which is not yet supported. Only point, line '
@@ -706,7 +711,7 @@ class Vector(Layer):
         """
         return geometrytype2string(self.geometry_type)
 
-    def get_geometry(self, copy=False):
+    def get_geometry(self, copy=False, inner_rings=False):
         """Return geometry for vector layer.
 
         Depending on the feature type, geometry is
@@ -717,12 +722,25 @@ class Vector(Layer):
         line              list of arrays of coordinates
         polygon           list of arrays of coordinates
 
+
+        Optional boolean argument inner_rings apply only to polygons
+        If False, only the outer ring will be returned.
+        If True a list of inner rings will be return for each feature.
+
         """
 
         if copy:
-            return copy_module.deepcopy(self.geometry)
+            geometry = copy_module.deepcopy(self.geometry)
         else:
-            return self.geometry
+            geometry = self.geometry
+
+        if self.is_polygon_data:
+            if inner_rings:
+                pass
+            else:
+                geometry = [p.outer_ring for p in geometry]
+
+        return geometry
 
     def get_bounding_box(self):
         """Get bounding box coordinates for vector layer.
