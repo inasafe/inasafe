@@ -1041,28 +1041,20 @@ def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
        will return five randomly selected points inside the unit square
     """
 
-    # Find outer extent of polygon
-    max_x = min_x = polygon[0][0]
-    max_y = min_y = polygon[0][1]
-    for point in polygon[1:]:
-        x = point[0]
-        if x > max_x:
-            max_x = x
-        if x < min_x:
-            min_x = x
+    polygon = ensure_numeric(polygon)
 
-        y = point[1]
-        if y > max_y:
-            max_y = y
-        if y < min_y:
-            min_y = y
+    # Find outer extent of polygon
+    minpx = min(polygon[:, 0])
+    maxpx = max(polygon[:, 0])
+    minpy = min(polygon[:, 1])
+    maxpy = max(polygon[:, 1])
 
     # Generate random points until enough are in polygon
     seed_function(seed)
     points = []
     while len(points) < number_of_points:
-        x = uniform(min_x, max_x)
-        y = uniform(min_y, max_y)
+        x = uniform(minpx, maxpx)
+        y = uniform(minpy, maxpy)
 
         append = False
         if is_inside_polygon([x, y], polygon):
