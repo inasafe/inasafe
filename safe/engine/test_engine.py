@@ -722,7 +722,7 @@ class Test_Engine(unittest.TestCase):
         # Characterisation tests (values verified using QGIS)
         # In internal polygon
         attributes = P.get_data()[6]
-        geometry = P.get_geometry()[6]
+        #geometry = P.get_geometry()[6]
         assert attributes['KRB'] == 'Kawasan Rawan Bencana III'
         assert attributes['polygon_id'] == 8
 
@@ -2903,6 +2903,6 @@ if __name__ == '__main__':
     #suite = unittest.makeSuite(Test_Engine,
     #                           ('test_polygon_to_roads_interpolation'
     #                            '_jakarta_flood_merged'))
-    suite = unittest.makeSuite(Test_Engine, 'test_polygon_hazard_with_holes_and_raster_exposure')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
