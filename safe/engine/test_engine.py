@@ -680,6 +680,59 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(attributes[23]['grid_value'], 50.0377)
         assert attributes[23]['polygon_id'] == 3
 
+    def test_polygon_hazard_with_holes_and_raster_exposure(self):
+        """Rasters can be clipped by polygons (with holes)
+
+        This is using population data which really is too coarse,
+        but enough to prove the point
+        """
+
+        # Name input files
+        polyhazard = join(TESTDATA, 'donut.shp')
+        population = join(EXPDATA, 'glp10ag.asc')
+
+        # Get layers using API
+        H = read_layer(polyhazard)
+        E = read_layer(population)
+
+        N = len(H)
+        assert N == 10
+
+        # Run and test the fundamental clipping routine
+        #import time
+        #t0 = time.time()
+        res = clip_grid_by_polygons(E.get_data(),
+                                    E.get_geotransform(),
+                                    H.get_geometry())
+        #print 'Engine took %i seconds' % (time.time() - t0)
+
+        assert len(res) == N
+
+        # Characterisation test
+        assert H.get_data()[9]['KRB'] == 'Kawasan Rawan Bencana II'
+
+        # Then run and test the high level interpolation function
+        #t0 = time.time()
+        P = interpolate_polygon_raster(H, E,
+                                       layer_name='poly2raster_test',
+                                       attribute_name='grid_value')
+        #print 'High level function took %i seconds' % (time.time() - t0)
+        #P.write_to_file('polygon_raster_interpolation_example_holes.shp')
+
+        # Characterisation tests (values verified using QGIS)
+        # In internal polygon
+        attributes = P.get_data()[6]
+        geometry = P.get_geometry()[6]
+        assert attributes['KRB'] == 'Kawasan Rawan Bencana III'
+        assert attributes['polygon_id'] == 8
+
+        # In polygon ring
+        attributes = P.get_data()[8]
+        geometry = P.get_geometry()[8]
+        assert attributes['KRB'] == 'Kawasan Rawan Bencana II'
+        assert attributes['polygon_id'] == 9
+
+
     def test_flood_building_impact_function(self):
         """Flood building impact function works
 
@@ -2850,6 +2903,6 @@ if __name__ == '__main__':
     #suite = unittest.makeSuite(Test_Engine,
     #                           ('test_polygon_to_roads_interpolation'
     #                            '_jakarta_flood_merged'))
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine, 'test_polygon_hazard_with_holes_and_raster_exposure')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

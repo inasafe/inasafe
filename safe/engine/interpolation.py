@@ -456,7 +456,7 @@ def interpolate_polygon_points(source, target,
     original_geometry = target.get_geometry()  # Geometry for returned data
 
     # Extract polygon features
-    geom = source.get_geometry()
+    geom = source.get_geometry(as_geometry_objects=True)
     data = source.get_data()
     verify(len(geom) == len(data))
 
@@ -488,7 +488,8 @@ def interpolate_polygon_points(source, target,
         poly_attr[DEFAULT_ATTRIBUTE] = True
 
         # Clip data points by polygons and add polygon attributes
-        indices = inside_polygon(points, polygon)
+        indices = inside_polygon(points, polygon.outer_ring,
+                                 holes=polygon.inner_rings)
         for k in indices:
             for key in poly_attr:
                 # Assign attributes from polygon to points
