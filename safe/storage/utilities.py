@@ -674,6 +674,7 @@ def is_sequence(x):
     else:
         return True
 
+
 def array2ring(A):
     """Convert coordinates to linear_ring
 
@@ -710,6 +711,7 @@ def array2ring(A):
 
     return linearRing
 
+
 def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
     """Compares to linear rings as numpy arrays
 
@@ -723,7 +725,6 @@ def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
         linear rings being seen as equal irrespective of whether ther are
         organised in clock wise or counter clock wise order
     """
-
 
     x = ensure_numeric(x, numpy.float)
     y = ensure_numeric(y, numpy.float)
@@ -739,7 +740,6 @@ def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
         return True
     else:
         return False
-
 
 
 # FIXME (Ole): We can retire this messy function now

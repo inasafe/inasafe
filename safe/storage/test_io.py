@@ -431,7 +431,6 @@ class Test_IO(unittest.TestCase):
         assert v_file.is_polygon_data
         assert v_file.geometry_type == 3
 
-
         # Self intersecting polygon (in this case order will be flipped)
         P = numpy.array([[106.79, -6.23],
                          [106.80, -6.24],
@@ -510,7 +509,6 @@ class Test_IO(unittest.TestCase):
                      numpy.array([[122.25, -8.63],
                                   [122.24, -8.633],
                                   [122.23, -8.64]])]
-
 
         # Point data
         v_ref = Vector(geometry=test_data[0])
@@ -595,21 +593,24 @@ class Test_IO(unittest.TestCase):
         # Do it again but with (closed) inner rings as well
 
         # Define inner rings (counter clock wise)
-        inner_rings = [[numpy.array([[106.77827, -6.2252],   # 2 rings for feature 0
-                                     [106.77775, -6.22378],
-                                     [106.78, -6.22311],
-                                     [106.78017, -6.22530],
-                                     [106.77827, -6.2252]])[::-1],
-                        numpy.array([[106.78652, -6.23215],
-                                     [106.78642, -6.23075],
-                                     [106.78746, -6.23143],
-                                     [106.78831, -6.23307],
-                                     [106.78652, -6.23215]])[::-1]],
-                       [numpy.array([[106.73709, -6.22752],  # 1 ring for feature 1
-                                     [106.73911, -6.22585],
-                                     [106.74265, -6.22814],
-                                     [106.73971, -6.22926],
-                                     [106.73709, -6.22752]])[::-1]]]
+        inner_rings = [
+            # 2 rings for feature 0
+            [numpy.array([[106.77827, -6.2252],
+                          [106.77775, -6.22378],
+                          [106.78, -6.22311],
+                          [106.78017, -6.22530],
+                          [106.77827, -6.2252]])[::-1],
+             numpy.array([[106.78652, -6.23215],
+                          [106.78642, -6.23075],
+                          [106.78746, -6.23143],
+                          [106.78831, -6.23307],
+                          [106.78652, -6.23215]])[::-1]],
+            # 1 ring for feature 1
+            [numpy.array([[106.73709, -6.22752],
+                          [106.73911, -6.22585],
+                          [106.74265, -6.22814],
+                          [106.73971, -6.22926],
+                          [106.73709, -6.22752]])[::-1]]]
 
         polygons = []
         for i, outer_ring in enumerate(outer_rings):
@@ -649,7 +650,6 @@ class Test_IO(unittest.TestCase):
 
             for j, ring in enumerate(inner_rings[i]):
                 assert numpy.allclose(ring, g.inner_rings[j])
-
 
     def test_attribute_types(self):
         """Different attribute types are handled correctly in vector data

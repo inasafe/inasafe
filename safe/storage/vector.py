@@ -142,7 +142,7 @@ class Vector(Layer):
             else:
                 self.geometry_type = get_geometry_type(geometry, geometry_type)
 
-                # In case input is a list of simple polygon arrays, convert to object structure
+                # Convert to objects if input is a list of simple arrays
                 if self.is_polygon_data:
                     self.geometry = [Polygon(outer_ring=x) for x in geometry]
                 else:
@@ -691,7 +691,6 @@ class Vector(Layer):
         else:
             geometry = self.get_geometry(copy=True)
 
-
         return Vector(data=self.get_data(copy=True),
                       geometry=geometry,
                       projection=self.get_projection(),
@@ -776,11 +775,9 @@ class Vector(Layer):
         line              list of arrays of coordinates
         polygon           list of arrays of coordinates
 
-
-        Optional boolean argument as_geometry_objects will change the return value to a
-        list of geometry objects rather than a list of arrays. This currently only applies to
-        polygon geometries
-
+        Optional boolean argument as_geometry_objects will change the return
+        value to a list of geometry objects rather than a list of arrays.
+        This currently only applies to polygon geometries
         """
 
         if copy:
