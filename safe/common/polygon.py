@@ -474,7 +474,7 @@ def is_inside_polygon(point, polygon, closed=True):
         return False
 
 
-def inside_polygon(points, polygon, closed=True):
+def inside_polygon(points, polygon, closed=True, holes=None):
     """Determine points inside a polygon
 
        Functions inside_polygon and outside_polygon have been defined in
@@ -485,11 +485,28 @@ def inside_polygon(points, polygon, closed=True):
 
        points and polygon can be a geospatial instance,
        a list or a numeric array
+
+       holes: list of polygons representing holes. Points inside either of these are not considered
+       inside_polygon
     """
 
+    # Get indices in main polygon
     indices, _ = separate_points_by_polygon(points, polygon,
                                             closed=closed,
                                             check_input=True)
+
+    # But remove those that are outside holes
+    if holes is not None:
+        msg = ('Argument holes must be a list of polygons, '
+               'I got %s' % holes)
+        assert isinstance(holes, list), msg
+
+        for hole in holes:
+            _, out_hole = separate_points_by_polygon(points[indices],
+                                                     hole,
+                                                     closed=not closed,
+                                                     check_input=True)
+            indices = indices[out_hole]
 
     # Return indices of points inside polygon
     return indices
