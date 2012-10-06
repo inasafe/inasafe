@@ -569,7 +569,7 @@ class Test_IO(unittest.TestCase):
         """Polygons with inner rings can be written and read
         """
 
-        # Define two (closed) outer rings
+        # Define two (closed) outer rings - clock wise direction
         outer_rings = [numpy.array([[106.79, -6.233],
                                     [106.80, -6.24],
                                     [106.78, -6.23],
@@ -593,21 +593,23 @@ class Test_IO(unittest.TestCase):
         assert v_file.is_polygon_data
 
         # Do it again but with (closed) inner rings as well
+
+        # Define inner rings (counter clock wise)
         inner_rings = [[numpy.array([[106.77827, -6.2252],   # 2 rings for feature 0
                                      [106.77775, -6.22378],
                                      [106.78, -6.22311],
                                      [106.78017, -6.22530],
-                                     [106.77827, -6.2252]]),
+                                     [106.77827, -6.2252]])[::-1],
                         numpy.array([[106.78652, -6.23215],
                                      [106.78642, -6.23075],
                                      [106.78746, -6.23143],
                                      [106.78831, -6.23307],
-                                     [106.78652, -6.23215]])],
+                                     [106.78652, -6.23215]])[::-1]],
                        [numpy.array([[106.73709, -6.22752],  # 1 ring for feature 1
                                      [106.73911, -6.22585],
                                      [106.74265, -6.22814],
                                      [106.73971, -6.22926],
-                                     [106.73709, -6.22752]])]]
+                                     [106.73709, -6.22752]])[::-1]]]
 
         polygons = []
         for i, outer_ring in enumerate(outer_rings):
@@ -631,7 +633,7 @@ class Test_IO(unittest.TestCase):
 
         # Write to file and read again
         v_ref.write_to_file(tmp_filename)
-        print 'With inner rings, written to ', tmp_filename
+        #print 'With inner rings, written to ', tmp_filename
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_file.is_polygon_data
@@ -2384,7 +2386,6 @@ class Test_IO(unittest.TestCase):
         # More...
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_IO, 'test_polygons_with_inner_rings')
     suite = unittest.makeSuite(Test_IO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

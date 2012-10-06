@@ -37,6 +37,7 @@ from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
 from utilities import get_ringdata
+from utilities import rings_equal
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(999999999999999999999999)
@@ -223,8 +224,13 @@ class Vector(Layer):
             return False
 
         # Check geometry
-        geom0 = self.get_geometry()
-        geom1 = other.get_geometry()
+        if self.is_polygon_data:
+            geom0 = self.get_geometry(as_geometry_objects=True)
+            geom1 = other.get_geometry(as_geometry_objects=True)
+        else:
+            geom0 = self.get_geometry()
+            geom1 = other.get_geometry()
+
         if len(geom0) != len(geom1):
             return False
 
@@ -232,17 +238,31 @@ class Vector(Layer):
             if not numpy.allclose(geom0, geom1,
                                   rtol=rtol, atol=atol):
                 return False
-        else:
-            # Line or Polygon data
+        elif self.is_line_data:
+            # Check vertices of each line
             for i in range(len(geom0)):
 
-                # Allow for reversal of order (OGR always stores clockwise)
-
-                if not (numpy.allclose(geom0[i], geom1[i],
-                                       rtol=rtol, atol=atol) or
-                        numpy.allclose(geom0[i], geom1[i][::-1],
-                                       rtol=rtol, atol=atol)):
+                if not rings_equal(geom0[i], geom1[i], rtol=rtol, atol=atol):
                     return False
+
+        elif self.is_polygon_data:
+            # Check vertices of outer and inner rings
+            for i in range(len(geom0)):
+
+                x = geom0[i].outer_ring
+                y = geom1[i].outer_ring
+                if not rings_equal(x, y, rtol=rtol, atol=atol):
+                    return False
+
+                for j, ring0 in enumerate(geom0[i].inner_rings):
+                    ring1 = geom1[i].inner_rings[j]
+                    if not rings_equal(ring0, ring1, rtol=rtol, atol=atol):
+                        return False
+
+        else:
+            msg = ('== not implemented for geometry type: %s'
+                   % self.geometry_type)
+            raise InaSAFEError(msg)
 
         # Check keys for attribute values
         x = self.get_data()
@@ -390,19 +410,21 @@ class Vector(Layer):
                     # http://osgeo-org.1560.n6.nabble.com/
                     # gdal-dev-Polygon-topology-td3745761.html
                     number_of_rings = G.GetGeometryCount()
-                    # FIXME (Ole): Work in progress to get inner rings
-                    #if number_of_rings > 1:
-                    #    #for i in range(number_of_rings - 1):
-                    #    #    inner_ring =
-                    #    print
-                    #    print 'N', number_of_rings
-                    #print dir(G), type(G), G.__class__
 
                     # Get outer ring
-                    outer_ring = G.GetGeometryRef(0)
-                    ring = get_ringdata(outer_ring)
+                    outer_ring = get_ringdata(G.GetGeometryRef(0))
 
-                    geometry.append(Polygon(outer_ring=ring))
+                    # Get inner rings if any
+                    inner_rings = []
+                    if number_of_rings > 1:
+                        for i in range(1, number_of_rings):
+                            inner_ring = get_ringdata(G.GetGeometryRef(i))
+                            inner_rings.append(inner_ring)
+
+                    # Append Polygon instance to geometry list
+                    geometry.append(Polygon(outer_ring=outer_ring,
+                                            inner_rings=inner_rings))
+
                 elif self.is_multi_polygon_data:
                     msg = ('Got geometry type Multipolygon (%s) for filename '
                            '%s which is not yet supported. Only point, line '
@@ -664,8 +686,14 @@ class Vector(Layer):
         This copy will be equal to self in the sense defined by __eq__
         """
 
+        if self.is_polygon_data:
+            geometry = self.get_geometry(copy=True, as_geometry_objects=True)
+        else:
+            geometry = self.get_geometry(copy=True)
+
+
         return Vector(data=self.get_data(copy=True),
-                      geometry=self.get_geometry(copy=True),
+                      geometry=geometry,
                       projection=self.get_projection(),
                       keywords=self.get_keywords())
 

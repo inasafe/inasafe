@@ -693,7 +693,7 @@ def array2ring(A):
     except Exception, e:
         msg = ('Array (%s) could not be converted to numeric array. '
                'I got type %s. Error message: %s'
-               % (geom_type, str(type(A)), e))
+               % (A, str(type(A)), e))
         raise Exception(msg)
 
     msg = 'Array must be a 2d array of vertices. I got %s' % (str(A.shape))
@@ -709,11 +709,40 @@ def array2ring(A):
         linearRing.AddPoint(A[i, 0], A[i, 1])
 
     return linearRing
-    #polygon = osgeo.ogr.Geometry(osgeo.ogr.wkbPolygon)
-    #polygon.AddGeometry(linearRing)
+
+def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
+    """Compares to linear rings as numpy arrays
+
+    Args
+        * x, y: Nx2 numpy arrays
+
+    Returns:
+        * True if x == y or x' == y (up to the specified tolerance)
+
+        where x' is x reversed in the first dimension. This corresponds to
+        linear rings being seen as equal irrespective of whether ther are
+        organised in clock wise or counter clock wise order
+    """
+
+
+    x = ensure_numeric(x, numpy.float)
+    y = ensure_numeric(y, numpy.float)
+
+    msg = 'Arrays must a 2d arrays of vertices. I got %s and %s' % (x, y)
+    verify(len(x.shape) == 2 and len(y.shape) == 2, msg)
+
+    msg = 'Arrays must have two columns. I got %s and %s' % (x, y)
+    verify(x.shape[1] == 2 and y.shape[1] == 2, msg)
+
+    if (numpy.allclose(x, y, rtol=rtol, atol=atol) or
+        numpy.allclose(x, y[::-1], rtol=rtol, atol=atol)):
+        return True
+    else:
+        return False
 
 
 
+# FIXME (Ole): We can retire this messy function now
 def array2wkt(A, geom_type='POLYGON'):
     """Convert coordinates to wkt format
 
