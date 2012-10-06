@@ -228,28 +228,25 @@ class Test_IO(unittest.TestCase):
         L = read_layer(filename)
         print L.get_attribute_names()
 
-    def Xtest_donut_polygons(self):
+    def test_donut_polygons(self):
         """Donut polygon can be read, interpreted and written correctly
         """
 
-        # First test that some error conditions are caught
+        # Read real polygon with holes
         filename = '%s/%s' % (TESTDATA, 'donut.shp')
         L = read_layer(filename)
-        print L.get_attribute_names()
-
-        print len(L.get_data())
-
-        #print L.get_geometry()
-        print len(L.get_geometry())
 
         # Write this new object, read it again and check
         tmp_filename = unique_filename(suffix='.shp')
         L.write_to_file(tmp_filename)
-        print 'Written to', tmp_filename
 
+        # Read back
+        R = read_layer(tmp_filename)
         msg = ('Geometry of polygon was not preserved after reading '
                'and re-writing')
-        assert read_layer(tmp_filename).get_geometry == L.get_geometry(), msg
+
+        # Check
+        assert R == L, msg
 
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
