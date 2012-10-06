@@ -11,12 +11,11 @@ from safe.storage.core import read_layer
 from safe.storage.clipping import clip_raster_by_polygons
 from safe.storage.geometry import Polygon
 from safe.common.utilities import unique_filename
-from safe.common.numerics import ensure_numeric
 
-def generate_random_points_in_bbox(polygon,  N, seed=None):
+
+def generate_random_points_in_bbox(polygon, N, seed=None):
     """Generate random points in polygon bounding box
     """
-
 
     # Find outer extent of polygon
     minpx = min(polygon[:, 0])
@@ -27,7 +26,7 @@ def generate_random_points_in_bbox(polygon,  N, seed=None):
     seed_function(seed)
 
     points = []
-    for i in range(N):
+    for _ in range(N):
         x = uniform(minpx, maxpx)
         y = uniform(minpy, maxpy)
         points.append([x, y])
@@ -204,7 +203,6 @@ class Test_Clipping(unittest.TestCase):
 
     test_clip_raster_by_polygons.slow = True
 
-
     def test_clip_points_by_polygons_with_holes0(self):
         """Points can be clipped by polygons with holes
         """
@@ -270,7 +268,6 @@ class Test_Clipping(unittest.TestCase):
             tmp_filename = unique_filename(suffix='.shp')
             pts.write_to_file(tmp_filename)
             print 'Clipped points written to %s' % tmp_filename
-
 
     def test_clip_points_by_polygons_with_holes_real(self):
         """Points can be clipped by polygons with holes (real data)

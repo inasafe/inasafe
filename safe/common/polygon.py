@@ -29,7 +29,7 @@ from random import uniform, seed as seed_function
 
 from safe.common.numerics import ensure_numeric
 from safe.common.numerics import grid2points, geotransform2axes
-from safe.common.exceptions import PolygonInputError
+from safe.common.exceptions import PolygonInputError, InaSAFEError
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -486,8 +486,8 @@ def inside_polygon(points, polygon, closed=True, holes=None):
        points and polygon can be a geospatial instance,
        a list or a numeric array
 
-       holes: list of polygons representing holes. Points inside either of these are not considered
-       inside_polygon
+       holes: list of polygons representing holes. Points inside either of
+       these are not considered inside_polygon
     """
 
     # Get indices in main polygon
@@ -499,7 +499,8 @@ def inside_polygon(points, polygon, closed=True, holes=None):
     if holes is not None:
         msg = ('Argument holes must be a list of polygons, '
                'I got %s' % holes)
-        assert isinstance(holes, list), msg
+        if not isinstance(holes, list):
+            raise InaSAFEError(msg)
 
         for hole in holes:
             _, out_hole = separate_points_by_polygon(points[indices],
