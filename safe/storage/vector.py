@@ -231,8 +231,13 @@ class Vector(Layer):
         else:
             # Line or Polygon data
             for i in range(len(geom0)):
-                if not numpy.allclose(geom0[i], geom1[i],
-                                      rtol=rtol, atol=atol):
+
+                # Allow for reversal of order (OGR always stores clockwise)
+
+                if not (numpy.allclose(geom0[i], geom1[i],
+                                       rtol=rtol, atol=atol) or
+                        numpy.allclose(geom0[i], geom1[i][::-1],
+                                       rtol=rtol, atol=atol)):
                     return False
 
         # Check keys for attribute values
@@ -392,6 +397,7 @@ class Vector(Layer):
                     # Get outer ring
                     outer_ring = G.GetGeometryRef(0)
                     ring = get_ringdata(outer_ring)
+
                     geometry.append(Polygon(outer_ring=ring))
                 elif self.is_multi_polygon_data:
                     msg = ('Got geometry type Multipolygon (%s) for filename '
