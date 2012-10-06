@@ -590,17 +590,23 @@ class Vector(Layer):
                 geom.SetPoint_2D(0, x, y)
             elif self.is_line_data:
                 # FIXME (Ole): Change this to use array2ring instead!
+                #geom = ogr.Geometry(ogr.wkbLineString)
+                #linear_ring = array2ring(geometry[i])
+                #geom.AddGeometry(linear_ring)
+
                 wkt = array2wkt(geometry[i], geom_type='LINESTRING')
                 geom = ogr.CreateGeometryFromWkt(wkt)
             elif self.is_polygon_data:
-                #wkt = array2wkt(geometry[i].outer_ring, geom_type='POLYGON')
-                #geom = ogr.CreateGeometryFromWkt(wkt)
+                # Create polygon geometry
+                geom = ogr.Geometry(ogr.wkbPolygon)
 
+                # Add outer ring
                 linear_ring = array2ring(geometry[i].outer_ring)
-                polygon = ogr.Geometry(ogr.wkbPolygon)
-                polygon.AddGeometry(linear_ring)
+                geom.AddGeometry(linear_ring)
 
-                geom = polygon
+                # Add inner rings if any
+                for A in geometry[i].inner_rings:
+                    geom.AddGeometry(array2ring(A))
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
                 raise WriteLayerError(msg)
