@@ -2,6 +2,8 @@ import unittest
 import numpy
 
 from safe.storage.vector import Vector
+from safe.storage.raster import Raster
+from safe.storage.geometry import Polygon
 from safe.common.polygon import (separate_points_by_polygon,
                                  is_inside_polygon,
                                  is_outside_polygon,
@@ -14,6 +16,7 @@ from safe.common.polygon import (separate_points_by_polygon,
                                  intersection,
                                  join_line_segments,
                                  clip_line_by_polygon,
+                                 clip_grid_by_polygons,
                                  populate_polygon,
                                  generate_random_points_in_bbox,
                                  PolygonInputError,
@@ -544,6 +547,70 @@ class Test_Polygon(unittest.TestCase):
         else:
             msg = 'Should have raised PolygonInputError'
             raise Exception(msg)
+
+    def test_clip_grid_by_polygon(self):
+        """Regular grids can be clipped by polygons (with holes)
+        """
+        # Define an outer ring
+        outer_ring = numpy.array([[106.79, -6.233],
+                                  [106.80, -6.24],
+                                  [106.78, -6.23],
+                                  [106.77, -6.21],
+                                  [106.79, -6.233]])
+
+        # Define inner rings
+        inner_rings = [numpy.array([[106.77827, -6.2252],
+                                    [106.77775, -6.22378],
+                                    [106.78, -6.22311],
+                                    [106.78017, -6.22530],
+                                    [106.77827, -6.2252]]),
+                       numpy.array([[106.78652, -6.23215],
+                                    [106.78642, -6.23075],
+                                    [106.78746, -6.23143],
+                                    [106.78831, -6.23307],
+                                    [106.78652, -6.23215]])]
+
+        # Make a grid
+        N = 10
+        A = numpy.arange(N * N).reshape((N, N))
+        # Longitudes
+        minx = min(outer_ring[:, 0])
+        maxx = max(outer_ring[:, 0])
+        dx = (maxx - minx) / N
+
+        # Latitudes
+        miny = min(outer_ring[:, 1])
+        maxy = max(outer_ring[:, 1])
+        dy = -(maxy - miny) / N
+
+        #top left x, w-e pixel res, rot, top left y, rot, n-s pixel res
+        #(lon_ul, dlon, 0, lat_ul, 0, dlat)
+        geotransform = (minx, dx, 0, maxy, 0, dy)
+
+        res = clip_grid_by_polygons(A, geotransform,
+                                    [outer_ring],
+                                    inner_rings=[inner_rings])
+        points = res[0][0]
+        values = res[0][1]
+        values = [{'val': float(x)} for x in values]
+
+        # Check correctness (from QGIS inspection)
+        assert numpy.allclose(points[0], [106.7745, -6.2175])
+        assert numpy.allclose(points[3], [106.7805, -6.2235])
+        assert numpy.allclose(points[9], [106.7865, -6.2325])
+        assert values[0]['val'] == 21
+        assert values[3]['val'] == 43
+        assert values[9]['val'] == 75
+
+        # Optionally store output for inspection with QGIS (this one is nice)
+        if False:
+            R = Raster(A, geotransform=geotransform)
+            R.write_to_file('test_raster.tif')
+            P = Vector(geometry=[Polygon(outer_ring=outer_ring,
+                                         inner_rings=inner_rings)])
+            P.write_to_file('test_polygon.shp')
+            Vector(geometry=points,
+                   data=values).write_to_file('test_points.shp')
 
     def test_populate_polygon(self):
         """Polygon can be populated by random points

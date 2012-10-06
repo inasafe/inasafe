@@ -11,7 +11,7 @@ from osgeo import ogr
 
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
-from safe.common.exceptions import BoundingBoxError
+from safe.common.exceptions import BoundingBoxError, InaSAFEError
 
 
 # Default attribute to assign to vector layers
@@ -332,6 +332,46 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
             return blocks[sublayer]
     else:
         return first_keywords
+
+
+def check_geotransform(geotransform):
+    """Check that geotransform is valid
+
+    Args
+        * geotransform: GDAL geotransform (6-tuple).
+        (top left x, w-e pixel resolution, rotation,
+        top left y, rotation, n-s pixel resolution).
+        See e.g. http://www.gdal.org/gdal_tutorial.html
+    """
+
+    msg = ('Supplied geotransform must be a tuple with '
+           '6 numbers. I got %s' % str(geotransform))
+    verify(len(geotransform) == 6, msg)
+
+    for x in geotransform:
+        try:
+            float(x)
+        except TypeError:
+            raise InaSAFEError(msg)
+
+    # Check longitude
+    msg = ('Element in 0 (first) geotransform must be a valid '
+           'longitude. I got %s' % geotransform[0])
+    verify(-180 <= geotransform[0] <= 180, msg)
+
+    # Check latitude
+    msg = ('Element 3 (fourth) in geotransform must be a valid '
+           'latitude. I got %s' % geotransform[3])
+    verify(-90 <= geotransform[3] <= 90, msg)
+
+    # Check cell size
+    msg = ('Element 1 (second) in geotransform must be a positive '
+           'number. I got %s' % geotransform[1])
+    verify(geotransform[1] > 0, msg)
+
+    msg = ('Element 5 (sixth) in geotransform must be a negative '
+           'number. I got %s' % geotransform[1])
+    verify(geotransform[5] < 0, msg)
 
 
 def geotransform2bbox(geotransform, columns, rows):

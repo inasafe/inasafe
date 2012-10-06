@@ -1245,8 +1245,7 @@ def intersection(line0, line1):
 # Main functions for polygon clipping
 # FIXME (Ole): Both can be rigged to return points or lines
 # outside any polygon by adding that as the entry in the list returned
-#FIXME: Need to include holes!!!!!!!!!!!
-def clip_grid_by_polygons(A, geotransform, polygons):
+def clip_grid_by_polygons(A, geotransform, polygons, inner_rings=None):
     """Clip raster grid by polygon
 
     Input
@@ -1255,6 +1254,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
                       (top left x, w-e pixel resolution, rotation,
                        top left y, rotation, n-s pixel resolution)
         polygons: list of polygons, each an array of vertices
+        inner_rings: list of list of holes - each an array of vertices
 
     Output
         points_covered: List of (points, values) - one per input polygon.
@@ -1280,11 +1280,16 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     remaining_points = points
     remaining_values = values
 
-    for polygon in polygons:
+    for i, polygon in enumerate(polygons):
         #print 'Remaining points', len(remaining_points)
 
+        if inner_rings is None:
+            holes = None
+        else:
+            holes = inner_rings[i]
         inside, outside = in_and_outside_polygon(remaining_points,
                                                  polygon,
+                                                 holes=holes,
                                                  closed=True,
                                                  check_input=False)
         # Add features inside this polygon

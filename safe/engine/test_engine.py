@@ -603,8 +603,8 @@ class Test_Engine(unittest.TestCase):
 
         # Run underlying clipping routine
         res0 = clip_grid_by_polygons(E.get_data(),
-                                    E.get_geotransform(),
-                                    H.get_geometry())
+                                     E.get_geotransform(),
+                                     H.get_geometry())
         assert len(res0) == N
 
         # Run higher level interpolation routine
@@ -713,7 +713,6 @@ class Test_Engine(unittest.TestCase):
 
         # Then run and test the high level interpolation function
         #t0 = time.time()
-        print 'calling interpolate'
         P = interpolate_polygon_raster(H, E,
                                        layer_name='poly2raster_test',
                                        attribute_name='grid_value')
@@ -2911,6 +2910,6 @@ if __name__ == '__main__':
     #suite = unittest.makeSuite(Test_Engine,
     #                           ('test_polygon_to_roads_interpolation'
     #                            '_jakarta_flood_merged'))
-    suite = unittest.makeSuite(Test_Engine, 'test_polygon_hazard_with_holes_and_raster_exposure')
+    suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
