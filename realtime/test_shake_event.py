@@ -413,8 +413,8 @@ searchBoxes: None
         myDegreeSymbol = unichr(176)
         myExpectedResult = ('M 5.0 26-7-2012 2:15:35 '
                             'Latitude:  Longitude: Depth: 11.0 Km Located '
-                            '2.504296, -163.055923462 SSW Tondano')
-        # % (myDegreeSymbol, myDegreeSymbol))
+                            '2%s 50\' 46", -16%s 3\' 05" SSW Tondano'
+                            % (myDegreeSymbol, myDegreeSymbol))
         myResult = myShakeEvent.eventInfo()
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))

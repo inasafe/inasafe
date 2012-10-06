@@ -84,7 +84,8 @@ class ITBFatalityFunction(FunctionProvider):
                       displacement_rate={1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0,
                                          7: 0.1, 8: 0.5, 9: 0.75, 10: 1.0},
                       # Threshold below which layer should be transparent
-                      tolerance=0.01)
+                      tolerance=0.01,
+                      calculate_displaced_people=True)
     title = _('Die')
 
     def run(self, layers):
@@ -209,10 +210,13 @@ class ITBFatalityFunction(FunctionProvider):
         table_body.append(TableRow([_('Number of fatalities'), s],
                                    header=True))
 
-        # Add total estimate of people displaced
-        s = str(int(displaced)).rjust(10)
-        table_body.append(TableRow([_('Number of people displaced'), s],
-                                   header=True))
+        if self.parameters['calculate_displaced_people']:
+            # Add total estimate of people displaced
+            s = str(int(displaced)).rjust(10)
+            table_body.append(TableRow([_('Number of people displaced'), s],
+                                       header=True))
+        else:
+            displaced = 0
 
         # Add estimate of total population in area
         s = str(int(total)).rjust(10)

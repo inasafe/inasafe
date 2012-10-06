@@ -111,7 +111,7 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py . || true
 
 # Run entire test suite
 test_suite: compile testdata
@@ -143,30 +143,16 @@ gui_test_suite: compile testdata
 	#Quiet version
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
 
-# Run realtime test suite only
-realtime_test_suite:
-	@echo
-	@echo "-------------------"
-	@echo "Realtime Test Suite"
-	@echo "-------------------"
-
-	@# Preceding dash means that make will continue in case of errors
-	#Noisy version - uncomment if you want to see all qgis stdout
-	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
-	#Quiet version
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH):/usr/local/qgis-master/share/qgis/python;export LD_LIBRARY_PATH=/usr/local/qgis-master/lib;export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;export QGIS_PREFIX_PATH=/usr/local/qgis-master;nosetests -v --with-id --with-coverage --cover-package=realtime realtime 3>&1 1>&2 2>&3 3>&- | grep -v "^Object::" || true
-
-
 # Get test data
 # FIXME (Ole): Need to attempt cloning this r/w for those with
 # commit rights. See issue https://github.com/AIFDR/inasafe/issues/232
 testdata:
 	@echo
-	@echo "-----------------------------------------------------------"
+	@echo "------------------------------------------------------------"
 	@echo "Updating inasafe_data - public test and demo data repository"
-	@echo "You should update the hash to check out a specific data version"
-	@echo "-----------------------------------------------------------"
-	@scripts/update-test-data.sh e550ec0edae9e6cb6bc3653e76a357dd0af559af 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@echo "Update the hash to check out a specific data version        "
+	@echo "------------------------------------------------------------"
+	@scripts/update-test-data.sh 5a56e3dd619c1d18bd21738d56b6f2d9cf81338e 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -298,22 +284,11 @@ jenkins-pylint:
 	@echo " with 'F0401' being the warning code."
 	@echo "----------------------------------"
 	rm -f pylint.log
-	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis realtime > pylint.log || :
+	pylint --output-format=parseable --reports=y --rcfile=pylintrc -i y safe safe_qgis > pylint.log || :
 
 jenkins-pep8:
 	@echo
 	@echo "-----------------------------"
 	@echo "PEP8 issue check for Jenkins"
 	@echo "-----------------------------"
-	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py . > pep8.log || :
-
-
-jenkins-realtime-test:
-	@echo
-	@echo "---------------------------------------------------------------"
-	@echo "Regresssion Test Suite for Jenkins (Realtime module only)"
-	@echo "if you are going to run more than "
-	@echo "one InaSAFE Jenkins job, you should run each on a different"
-	@echo "display by changing the :100 option below to a different number"
-	@echo "---------------------------------------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime || :
+	@pep8 --repeat --ignore=E203 --exclude docs,odict.py,keywords_dialog_base.py,dock_base.py,options_dialog_base.py,resources.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,impact_functions_doc_base.py,configurable_impact_functions_dialog_base.py . > pep8.log || :
