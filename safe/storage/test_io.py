@@ -28,6 +28,7 @@ from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
+from geometry import Polygon
 from safe.common.numerics import nanallclose
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
@@ -608,10 +609,44 @@ class Test_IO(unittest.TestCase):
                                      [106.73971, -6.22926],
                                      [106.73709, -6.22752]])]]
 
-        v_ref = Vector(geometry=outer_rings)
+        polygons = []
+        for i, outer_ring in enumerate(outer_rings):
+            p = Polygon(outer_ring=outer_ring, inner_rings=inner_rings[i])
+            polygons.append(p)
+
+        v_ref = Vector(geometry=polygons)
         assert v_ref.is_polygon_data
 
+        # Check data from Vector object
+        geometry = v_ref.get_geometry(as_geometry_objects=True)
+        for i, g in enumerate(geometry):
+            assert numpy.allclose(g.outer_ring, outer_rings[i])
+            if i == 0:
+                assert len(g.inner_rings) == 2
+            else:
+                assert len(g.inner_rings) == 1
 
+            for j, ring in enumerate(inner_rings[i]):
+                assert numpy.allclose(ring, g.inner_rings[j])
+
+        # Write to file and read again
+        v_ref.write_to_file(tmp_filename)
+        print 'With inner rings, written to ', tmp_filename
+        v_file = read_layer(tmp_filename)
+        assert v_file == v_ref
+        assert v_file.is_polygon_data
+
+        # Check data from file
+        geometry = v_file.get_geometry(as_geometry_objects=True)
+        for i, g in enumerate(geometry):
+            assert numpy.allclose(g.outer_ring, outer_rings[i])
+            if i == 0:
+                assert len(g.inner_rings) == 2
+            else:
+                assert len(g.inner_rings) == 1
+
+            for j, ring in enumerate(inner_rings[i]):
+                assert numpy.allclose(ring, g.inner_rings[j])
 
 
     def test_attribute_types(self):
@@ -2350,5 +2385,6 @@ class Test_IO(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test_polygons_with_inner_rings')
+    suite = unittest.makeSuite(Test_IO, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

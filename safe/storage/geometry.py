@@ -23,3 +23,8 @@ class Polygon(Geometry):
         if inner_rings is None:
             inner_rings = []
         self.inner_rings = inner_rings
+
+    def __repr__(self):
+        s = 'Polygon(%s, inner_rings=%s' % (self.outer_ring,
+                                            self.inner_rings)
+        return s

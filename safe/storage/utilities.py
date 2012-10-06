@@ -594,7 +594,7 @@ def get_geometry_type(geometry, geometry_type):
 
     Returns:
         * geometry_type: Either ogr.wkbPoint, ogr.wkbLineString or
-                        ogr.wkbPolygon
+                         ogr.wkbPolygon
 
     Note:
         If geometry type cannot be determined an Exception is raised.
@@ -673,6 +673,45 @@ def is_sequence(x):
         return False
     else:
         return True
+
+def array2ring(A):
+    """Convert coordinates to linear_ring
+
+    Args:
+        * A: Nx2 Array of coordinates representing either a polygon or a line.
+             A can be either a numpy array or a list of coordinates.
+
+    Returns:
+        * ring: OGR linear_ring
+
+    Note:
+    Based on http://www.packtpub.com/article/working-geospatial-data-python
+    """
+
+    try:
+        A = ensure_numeric(A, numpy.float)
+    except Exception, e:
+        msg = ('Array (%s) could not be converted to numeric array. '
+               'I got type %s. Error message: %s'
+               % (geom_type, str(type(A)), e))
+        raise Exception(msg)
+
+    msg = 'Array must be a 2d array of vertices. I got %s' % (str(A.shape))
+    verify(len(A.shape) == 2, msg)
+
+    msg = 'A array must have two columns. I got %s' % (str(A.shape[0]))
+    verify(A.shape[1] == 2, msg)
+
+    N = A.shape[0]  # Number of vertices
+
+    linearRing = ogr.Geometry(ogr.wkbLinearRing)
+    for i in range(N):
+        linearRing.AddPoint(A[i, 0], A[i, 1])
+
+    return linearRing
+    #polygon = osgeo.ogr.Geometry(osgeo.ogr.wkbPolygon)
+    #polygon.AddGeometry(linearRing)
+
 
 
 def array2wkt(A, geom_type='POLYGON'):

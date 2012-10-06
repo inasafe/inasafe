@@ -32,7 +32,7 @@ from utilities import read_keywords
 from utilities import write_keywords
 from utilities import get_geometry_type
 from utilities import is_sequence
-from utilities import array2wkt
+from utilities import array2wkt, array2ring
 from utilities import calculate_polygon_centroid
 from utilities import points_along_line
 from utilities import geometrytype2string
@@ -135,13 +135,17 @@ class Vector(Layer):
             msg = 'Geometry must be a sequence'
             verify(is_sequence(geometry), msg)
 
-            self.geometry_type = get_geometry_type(geometry, geometry_type)
-
-            # In case input is a polygon, convert to object structure
-            if self.is_polygon_data:
-                self.geometry = [Polygon(outer_ring=x) for x in geometry]
-            else:
+            if isinstance(geometry[0], Polygon):
+                self.geometry_type = ogr.wkbPolygon
                 self.geometry = geometry
+            else:
+                self.geometry_type = get_geometry_type(geometry, geometry_type)
+
+                # In case input is a list of simple polygon arrays, convert to object structure
+                if self.is_polygon_data:
+                    self.geometry = [Polygon(outer_ring=x) for x in geometry]
+                else:
+                    self.geometry = geometry
 
             if data is None:
                 # Generate default attribute as OGR will do that anyway
@@ -488,7 +492,10 @@ class Vector(Layer):
             layername = sublayer
 
         # Get vector data
-        geometry = self.get_geometry()
+        if self.is_polygon_data:
+            geometry = self.get_geometry(as_geometry_objects=True)
+        else:
+            geometry = self.get_geometry()
         data = self.get_data()
 
         N = len(geometry)
@@ -581,12 +588,19 @@ class Vector(Layer):
                 x = float(geometry[i][0])
                 y = float(geometry[i][1])
                 geom.SetPoint_2D(0, x, y)
-            elif self.is_polygon_data:
-                wkt = array2wkt(geometry[i], geom_type='POLYGON')
-                geom = ogr.CreateGeometryFromWkt(wkt)
             elif self.is_line_data:
+                # FIXME (Ole): Change this to use array2ring instead!
                 wkt = array2wkt(geometry[i], geom_type='LINESTRING')
                 geom = ogr.CreateGeometryFromWkt(wkt)
+            elif self.is_polygon_data:
+                #wkt = array2wkt(geometry[i].outer_ring, geom_type='POLYGON')
+                #geom = ogr.CreateGeometryFromWkt(wkt)
+
+                linear_ring = array2ring(geometry[i].outer_ring)
+                polygon = ogr.Geometry(ogr.wkbPolygon)
+                polygon.AddGeometry(linear_ring)
+
+                geom = polygon
             else:
                 msg = 'Geometry type %s not implemented' % self.geometry_type
                 raise WriteLayerError(msg)
@@ -717,7 +731,7 @@ class Vector(Layer):
         """
         return geometrytype2string(self.geometry_type)
 
-    def get_geometry(self, copy=False, inner_rings=False):
+    def get_geometry(self, copy=False, as_geometry_objects=False):
         """Return geometry for vector layer.
 
         Depending on the feature type, geometry is
@@ -729,9 +743,9 @@ class Vector(Layer):
         polygon           list of arrays of coordinates
 
 
-        Optional boolean argument inner_rings apply only to polygons
-        If False, only the outer ring will be returned.
-        If True a list of inner rings will be return for each feature.
+        Optional boolean argument as_geometry_objects will change the return value to a
+        list of geometry objects rather than a list of arrays. This currently only applies to
+        polygon geometries
 
         """
 
@@ -741,10 +755,13 @@ class Vector(Layer):
             geometry = self.geometry
 
         if self.is_polygon_data:
-            if inner_rings:
-                pass
-            else:
+            if not as_geometry_objects:
                 geometry = [p.outer_ring for p in geometry]
+        else:
+            if as_geometry_objects:
+                msg = ('Argument as_geometry_objects can currently '
+                       'be True only for polygon data')
+                raise InaSAFEError(msg)
 
         return geometry
 
