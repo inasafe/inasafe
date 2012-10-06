@@ -564,45 +564,55 @@ class Test_IO(unittest.TestCase):
         v = Vector(geometry=test_data, geometry_type=3)
         assert v == v_ref
 
-
     def test_polygons_with_inner_rings(self):
         """Polygons with inner rings can be written and read
         """
 
-        # So far the admissible classes are Point, Line and Polygon
-
+        # Define two (closed) outer rings
         outer_rings = [numpy.array([[106.79, -6.233],
                                     [106.80, -6.24],
                                     [106.78, -6.23],
-                                    [106.77, -6.21]]),
+                                    [106.77, -6.21],
+                                    [106.79, -6.233]]),
                        numpy.array([[106.76, -6.23],
                                     [106.72, -6.23],
                                     [106.72, -6.22],
-                                    [106.72, -6.21]])]
+                                    [106.72, -6.21],
+                                    [106.76, -6.23]])]
 
         tmp_filename = unique_filename(suffix='.shp')
 
-        # Do outer rings first (use default geometry type)
+        # Do outer rings first (use default geometry type polygon)
         v_ref = Vector(geometry=outer_rings)
         assert v_ref.is_polygon_data
 
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
-        print 'written to', tmp_filename
-        for i in range(len(v_ref)):
-            x = v_ref.get_geometry()[i]
-            y = v_file.get_geometry()[i]
-            msg = 'Read geometry %s, but expected %s' % (y, x)
-            assert numpy.allclose(x, y), msg
-
         assert v_file == v_ref
-        assert v_ref == v_file
         assert v_file.is_polygon_data
 
-        # Explicit assignment of geometry type
-        v = Vector(geometry=outer_rings, geometry_type='polygon')
-        assert v == v_ref
-        assert v.is_polygon_data
+        # Do it again but with (closed) inner rings as well
+        inner_rings = [[numpy.array([[106.77827, -6.2252],   # 2 rings for feature 0
+                                     [106.77775, -6.22378],
+                                     [106.78, -6.22311],
+                                     [106.78017, -6.22530],
+                                     [106.77827, -6.2252]]),
+                        numpy.array([[106.78652, -6.23215],
+                                     [106.78642, -6.23075],
+                                     [106.78746, -6.23143],
+                                     [106.78831, -6.23307],
+                                     [106.78652, -6.23215]])],
+                       [numpy.array([[106.73709, -6.22752],  # 1 ring for feature 1
+                                     [106.73911, -6.22585],
+                                     [106.74265, -6.22814],
+                                     [106.73971, -6.22926],
+                                     [106.73709, -6.22752]])]]
+
+        v_ref = Vector(geometry=outer_rings)
+        assert v_ref.is_polygon_data
+
+
+
 
     def test_attribute_types(self):
         """Different attribute types are handled correctly in vector data
@@ -2340,7 +2350,5 @@ class Test_IO(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_IO, 'test_polygons_with_inner_rings')
-    #suite = unittest.makeSuite(Test_IO, 'test_vector_class_geometry_types')
-    #suite = unittest.makeSuite(Test_IO, 'test_ordering')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
