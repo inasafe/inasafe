@@ -15,6 +15,7 @@ from safe.common.polygon import (separate_points_by_polygon,
                                  join_line_segments,
                                  clip_line_by_polygon,
                                  populate_polygon,
+                                 generate_random_points_in_bbox,
                                  PolygonInputError,
                                  line_dictionary_to_geometry)
 from safe.common.testing import test_polygon, test_lines
@@ -846,6 +847,57 @@ class Test_Polygon(unittest.TestCase):
         inside, outside = in_and_outside_polygon(points, polygon)
         assert numpy.alltrue(inside == [1, 3])
         assert numpy.alltrue(outside == [0, 2, 4, 5])
+
+    def test_clip_points_by_polygons_with_holes(self):
+        """Points can be separated by polygons with holes
+        """
+
+        # Define an outer ring
+        outer_ring = numpy.array([[106.79, -6.233],
+                                  [106.80, -6.24],
+                                  [106.78, -6.23],
+                                  [106.77, -6.21],
+                                  [106.79, -6.233]])
+
+        # Define inner rings
+        inner_rings = [numpy.array([[106.77827, -6.2252],
+                                    [106.77775, -6.22378],
+                                    [106.78, -6.22311],
+                                    [106.78017, -6.22530],
+                                    [106.77827, -6.2252]]),
+                       numpy.array([[106.78652, -6.23215],
+                                    [106.78642, -6.23075],
+                                    [106.78746, -6.23143],
+                                    [106.78831, -6.23307],
+                                    [106.78652, -6.23215]])]
+
+        # Make some test points
+        points = generate_random_points_in_bbox(outer_ring, 1000, seed=13)
+
+        # Clip to outer ring, excluding holes
+        inside, outside = in_and_outside_polygon(points, outer_ring,
+                                                 holes=inner_rings)
+
+        # Check wrapper functions
+        assert numpy.all(inside == inside_polygon(points, outer_ring,
+                                                  holes=inner_rings))
+        assert numpy.all(outside == outside_polygon(points, outer_ring,
+                                                    holes=inner_rings))
+
+        # Verify that each point is where it should
+        for point in points[inside, :]:
+            # Must be inside outer ring
+            assert is_inside_polygon(point, outer_ring)
+
+            # But not in any of the inner rings
+            assert not is_inside_polygon(point, inner_rings[0])
+            assert not is_inside_polygon(point, inner_rings[1])
+
+        for point in points[outside, :]:
+            # Must be either outside outer ring or inside a hole
+            assert (is_outside_polygon(point, outer_ring) or
+                    is_inside_polygon(point, inner_rings[0]) or
+                    is_inside_polygon(point, inner_rings[1]))
 
     def test_intersection1(self):
         """Intersection of two simple lines works

@@ -1,37 +1,16 @@
 import unittest
 import numpy
-from random import uniform, seed as seed_function
 from os.path import join
 
 from safe.common.testing import TESTDATA
 from safe.common.polygon import (is_inside_polygon, inside_polygon,
-                                 populate_polygon)
+                                 populate_polygon,
+                                 generate_random_points_in_bbox)
 from safe.storage.vector import Vector
 from safe.storage.core import read_layer
 from safe.storage.clipping import clip_raster_by_polygons
 from safe.storage.geometry import Polygon
 from safe.common.utilities import unique_filename
-
-
-def generate_random_points_in_bbox(polygon, N, seed=None):
-    """Generate random points in polygon bounding box
-    """
-
-    # Find outer extent of polygon
-    minpx = min(polygon[:, 0])
-    maxpx = max(polygon[:, 0])
-    minpy = min(polygon[:, 1])
-    maxpy = max(polygon[:, 1])
-
-    seed_function(seed)
-
-    points = []
-    for _ in range(N):
-        x = uniform(minpx, maxpx)
-        y = uniform(minpy, maxpy)
-        points.append([x, y])
-
-    return numpy.array(points)
 
 
 # FIXME (Ole): Move this along with contents of clipping.py to

@@ -460,6 +460,56 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8,
         return result
 
 
+def in_and_outside_polygon(points, polygon,
+                           closed=True,
+                           holes=None,
+                           check_input=True):
+    """Separate a list of points into two sets inside and outside a polygon
+
+    Input
+        points: (tuple, list or array) of coordinates
+        polygon: list or Nx2 array of polygon vertices
+        closed: Set to True if points on boundary are considered
+                to be 'inside' polygon
+        holes: list of polygons representing holes. Points inside either of
+               these are considered outside polygon
+
+    Output
+        inside: Indices of points inside the polygon
+        outside: Indices of points outside the polygon
+
+    See separate_points_by_polygon for more documentation
+    """
+
+    # Get separation by outer_ring
+    inside, outside = separate_points_by_polygon(points, polygon,
+                                                 closed=closed,
+                                                 check_input=check_input)
+
+    # Take care of holes
+    if holes is not None:
+        msg = ('Argument holes must be a list of polygons, '
+               'I got %s' % holes)
+        if not isinstance(holes, list):
+            raise InaSAFEError(msg)
+
+        for hole in holes:
+            in_hole, out_hole = separate_points_by_polygon(points[inside],
+                                                           hole,
+                                                           closed=not closed,
+                                                           check_input=True)
+
+            in_hole = inside[in_hole]  # Inside hole
+            inside = inside[out_hole]  # Inside outer_ring but outside hole
+
+            # Add holde indices to outside
+            outside = numpy.concatenate((outside, in_hole))
+
+        outside.sort()
+
+    return inside, outside
+
+
 def is_inside_polygon(point, polygon, closed=True):
     """Determine if one point is inside a polygon
 
@@ -474,7 +524,8 @@ def is_inside_polygon(point, polygon, closed=True):
         return False
 
 
-def inside_polygon(points, polygon, closed=True, holes=None):
+def inside_polygon(points, polygon, closed=True, holes=None,
+                   check_input=True):
     """Determine points inside a polygon
 
        Functions inside_polygon and outside_polygon have been defined in
@@ -490,24 +541,10 @@ def inside_polygon(points, polygon, closed=True, holes=None):
        these are not considered inside_polygon
     """
 
-    # Get indices in main polygon
-    indices, _ = separate_points_by_polygon(points, polygon,
-                                            closed=closed,
-                                            check_input=True)
-
-    # But remove those that are outside holes
-    if holes is not None:
-        msg = ('Argument holes must be a list of polygons, '
-               'I got %s' % holes)
-        if not isinstance(holes, list):
-            raise InaSAFEError(msg)
-
-        for hole in holes:
-            _, out_hole = separate_points_by_polygon(points[indices],
-                                                     hole,
-                                                     closed=not closed,
-                                                     check_input=True)
-            indices = indices[out_hole]
+    indices, _ = in_and_outside_polygon(points, polygon,
+                                        closed=closed,
+                                        holes=holes,
+                                        check_input=check_input)
 
     # Return indices of points inside polygon
     return indices
@@ -527,7 +564,8 @@ def is_outside_polygon(point, polygon, closed=True):
         return False
 
 
-def outside_polygon(points, polygon, closed=True):
+def outside_polygon(points, polygon, closed=True,
+                    holes=None, check_input=True):
     """Determine points outside a polygon
 
        Functions inside_polygon and outside_polygon have been defined in
@@ -537,34 +575,13 @@ def outside_polygon(points, polygon, closed=True):
        See separate_points_by_polygon for documentation
     """
 
-    _, indices = separate_points_by_polygon(points, polygon,
-                                            closed=closed,
-                                            check_input=True)
+    _, indices = in_and_outside_polygon(points, polygon,
+                                        closed=closed,
+                                        holes=holes,
+                                        check_input=check_input)
 
     # Return indices of points outside polygon
     return indices
-
-
-def in_and_outside_polygon(points, polygon, closed=True):
-    """Separate a list of points into two sets inside and outside a polygon
-
-    Input
-        points: (tuple, list or array) of coordinates
-        polygon: list or Nx2 array of polygon vertices
-        closed: Set to True if points on boundary are considered
-                to be 'inside' polygon
-
-    Output
-        inside: Array of points inside the polygon
-        outside: Array of points outside the polygon
-
-    See separate_points_by_polygon for more documentation
-    """
-
-    inside, outside = separate_points_by_polygon(points, polygon,
-                                                 closed=closed,
-                                                 check_input=True)
-    return inside, outside
 
 
 def clip_lines_by_polygon(lines, polygon,
@@ -1039,8 +1056,29 @@ def line_dictionary_to_geometry(D):
 
 
 #--------------------------------------------------
-# Helper function to generate points inside polygon
+# Helper functions to generate points inside polygon
 #--------------------------------------------------
+def generate_random_points_in_bbox(polygon, N, seed=None):
+    """Generate random points in polygon bounding box
+    """
+
+    # Find outer extent of polygon
+    minpx = min(polygon[:, 0])
+    maxpx = max(polygon[:, 0])
+    minpy = min(polygon[:, 1])
+    maxpy = max(polygon[:, 1])
+
+    seed_function(seed)
+
+    points = []
+    for _ in range(N):
+        x = uniform(minpx, maxpx)
+        y = uniform(minpy, maxpy)
+        points.append([x, y])
+
+    return numpy.array(points)
+
+
 def populate_polygon(polygon, number_of_points, seed=None, exclude=None):
     """Populate given polygon with uniformly distributed points.
 
@@ -1207,6 +1245,7 @@ def intersection(line0, line1):
 # Main functions for polygon clipping
 # FIXME (Ole): Both can be rigged to return points or lines
 # outside any polygon by adding that as the entry in the list returned
+#FIXME: Need to include holes!!!!!!!!!!!
 def clip_grid_by_polygons(A, geotransform, polygons):
     """Clip raster grid by polygon
 
@@ -1244,10 +1283,10 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     for polygon in polygons:
         #print 'Remaining points', len(remaining_points)
 
-        inside, outside = separate_points_by_polygon(remaining_points,
-                                                     polygon,
-                                                     closed=True,
-                                                     check_input=False)
+        inside, outside = in_and_outside_polygon(remaining_points,
+                                                 polygon,
+                                                 closed=True,
+                                                 check_input=False)
         # Add features inside this polygon
         points_covered.append((remaining_points[inside],
                                remaining_values[inside]))
