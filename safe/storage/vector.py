@@ -136,7 +136,7 @@ class Vector(Layer):
             msg = 'Geometry must be a sequence'
             verify(is_sequence(geometry), msg)
 
-            if isinstance(geometry[0], Polygon):
+            if len(geometry) > 0 and isinstance(geometry[0], Polygon):
                 self.geometry_type = ogr.wkbPolygon
                 self.geometry = geometry
             else:
