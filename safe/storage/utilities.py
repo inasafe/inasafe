@@ -11,7 +11,7 @@ from osgeo import ogr
 
 from safe.common.numerics import ensure_numeric
 from safe.common.utilities import verify
-from safe.common.exceptions import BoundingBoxError
+from safe.common.exceptions import BoundingBoxError, InaSAFEError
 
 
 # Default attribute to assign to vector layers
@@ -334,6 +334,46 @@ def read_keywords(filename, sublayer=None, all_blocks=False):
         return first_keywords
 
 
+def check_geotransform(geotransform):
+    """Check that geotransform is valid
+
+    Args
+        * geotransform: GDAL geotransform (6-tuple).
+        (top left x, w-e pixel resolution, rotation,
+        top left y, rotation, n-s pixel resolution).
+        See e.g. http://www.gdal.org/gdal_tutorial.html
+    """
+
+    msg = ('Supplied geotransform must be a tuple with '
+           '6 numbers. I got %s' % str(geotransform))
+    verify(len(geotransform) == 6, msg)
+
+    for x in geotransform:
+        try:
+            float(x)
+        except TypeError:
+            raise InaSAFEError(msg)
+
+    # Check longitude
+    msg = ('Element in 0 (first) geotransform must be a valid '
+           'longitude. I got %s' % geotransform[0])
+    verify(-180 <= geotransform[0] <= 180, msg)
+
+    # Check latitude
+    msg = ('Element 3 (fourth) in geotransform must be a valid '
+           'latitude. I got %s' % geotransform[3])
+    verify(-90 <= geotransform[3] <= 90, msg)
+
+    # Check cell size
+    msg = ('Element 1 (second) in geotransform must be a positive '
+           'number. I got %s' % geotransform[1])
+    verify(geotransform[1] > 0, msg)
+
+    msg = ('Element 5 (sixth) in geotransform must be a negative '
+           'number. I got %s' % geotransform[1])
+    verify(geotransform[5] < 0, msg)
+
+
 def geotransform2bbox(geotransform, columns, rows):
     """Convert geotransform to bounding box
 
@@ -594,7 +634,7 @@ def get_geometry_type(geometry, geometry_type):
 
     Returns:
         * geometry_type: Either ogr.wkbPoint, ogr.wkbLineString or
-                        ogr.wkbPolygon
+                         ogr.wkbPolygon
 
     Note:
         If geometry type cannot be determined an Exception is raised.
@@ -675,6 +715,74 @@ def is_sequence(x):
         return True
 
 
+def array2ring(A):
+    """Convert coordinates to linear_ring
+
+    Args:
+        * A: Nx2 Array of coordinates representing either a polygon or a line.
+             A can be either a numpy array or a list of coordinates.
+
+    Returns:
+        * ring: OGR linear_ring
+
+    Note:
+    Based on http://www.packtpub.com/article/working-geospatial-data-python
+    """
+
+    try:
+        A = ensure_numeric(A, numpy.float)
+    except Exception, e:
+        msg = ('Array (%s) could not be converted to numeric array. '
+               'I got type %s. Error message: %s'
+               % (A, str(type(A)), e))
+        raise Exception(msg)
+
+    msg = 'Array must be a 2d array of vertices. I got %s' % (str(A.shape))
+    verify(len(A.shape) == 2, msg)
+
+    msg = 'A array must have two columns. I got %s' % (str(A.shape[0]))
+    verify(A.shape[1] == 2, msg)
+
+    N = A.shape[0]  # Number of vertices
+
+    linearRing = ogr.Geometry(ogr.wkbLinearRing)
+    for i in range(N):
+        linearRing.AddPoint(A[i, 0], A[i, 1])
+
+    return linearRing
+
+
+def rings_equal(x, y, rtol=1.0e-6, atol=1.0e-8):
+    """Compares to linear rings as numpy arrays
+
+    Args
+        * x, y: Nx2 numpy arrays
+
+    Returns:
+        * True if x == y or x' == y (up to the specified tolerance)
+
+        where x' is x reversed in the first dimension. This corresponds to
+        linear rings being seen as equal irrespective of whether ther are
+        organised in clock wise or counter clock wise order
+    """
+
+    x = ensure_numeric(x, numpy.float)
+    y = ensure_numeric(y, numpy.float)
+
+    msg = 'Arrays must a 2d arrays of vertices. I got %s and %s' % (x, y)
+    verify(len(x.shape) == 2 and len(y.shape) == 2, msg)
+
+    msg = 'Arrays must have two columns. I got %s and %s' % (x, y)
+    verify(x.shape[1] == 2 and y.shape[1] == 2, msg)
+
+    if (numpy.allclose(x, y, rtol=rtol, atol=atol) or
+        numpy.allclose(x, y[::-1], rtol=rtol, atol=atol)):
+        return True
+    else:
+        return False
+
+
+# FIXME (Ole): We can retire this messy function now
 def array2wkt(A, geom_type='POLYGON'):
     """Convert coordinates to wkt format
 
@@ -925,3 +1033,23 @@ def combine_polygon_and_point_layers(layers):
 
     # This is to implement issue #276
     print layers
+
+
+def get_ringdata(ring):
+    """Extract coordinates from OGR ring object
+
+    Args
+        * OGR ring object
+    Returns
+        * Nx2 numpy array of vertex coordinates (lon, lat)
+    """
+
+    N = ring.GetPointCount()
+    A = numpy.zeros((N, 2), dtype='d')
+
+    # FIXME (Ole): Is there any way to get the entire data vectors?
+    for j in range(N):
+        A[j, :] = ring.GetX(j), ring.GetY(j)
+
+    # Return ring as an Nx2 numpy array
+    return A
