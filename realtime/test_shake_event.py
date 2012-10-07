@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from qgis.core import QgsFeature
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '2/08/2012'
@@ -24,6 +22,8 @@ import os
 import shutil
 import unittest
 import logging
+import PyQt4
+from qgis.core import QgsFeature
 from safe_qgis.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir, shakemapZipDir
 from shake_event import ShakeEvent
@@ -387,14 +387,40 @@ searchBoxes: None
                     (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
 
+    def testEventInfoDict(self):
+        """Test we can get a dictionary of location info nicely."""
+        myShakeId = '20120726022003'
+        myShakeEvent = ShakeEvent(myShakeId)
+        myResult = myShakeEvent.eventDict()
+        myExpectedDict = {'distance': '2.50',
+                          'direction-relation': PyQt4.QtCore.QString(u'of'),
+                          'depth-name': PyQt4.QtCore.QString(u'Depth'),
+                          'place-name': 'Tondano',
+                          'distance-unit': PyQt4.QtCore.QString(u'km'),
+                          'depth-unit': PyQt4.QtCore.QString(u'km'),
+                          'latitude-value': PyQt4.QtCore.QString(
+                              u'0\xb012\'36.00"S'),
+                          'longitude-name': PyQt4.QtCore.QString(u'Longitude'),
+                          'longitude-value': PyQt4.QtCore.QString(
+                              u'124\xb027\'0.00"E'), 'bearing-compass': 'SSW',
+                          'latitude-name': PyQt4.QtCore.QString(u'Latitude'),
+                          'depth': 11.0, 'mmi': 5.0, 'time': '2:15:35',
+                          'date': '26-7-2012',
+                          'located-label': PyQt4.QtCore.QString(u'Located'),
+                          'bearing-degrees': -163.05592346191406,
+                          'bearing-text': PyQt4.QtCore.QString(u'bearing')}
+        myMessage = ('Got:\n%s\nExpected:\n%s\n' %
+             (myResult, myExpectedDict))
+        assert myResult == myExpectedDict, myMessage
+
     def testEventInfoString(self):
-        """Test we can get a location info string nicely,"""
+        """Test we can get a location info string nicely."""
         myShakeId = '20120726022003'
         myShakeEvent = ShakeEvent(myShakeId)
         myDegreeSymbol = unichr(176)
         myExpectedResult = ('M 5.0 26-7-2012 2:15:35 Latitude: 0%s12\'36.00"S '
-                            'Longitude:124%s27\'0.00"E Depth: 11.0 Km Located '
-                            '2.504296, -163.055923462 SSW Tondano'
+                            'Longitude: 124%s27\'0.00"E '
+                            'Depth: 11.0km Located 2.50km SSW of Tondano'
                             % (myDegreeSymbol, myDegreeSymbol))
         myResult = myShakeEvent.eventInfo()
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %

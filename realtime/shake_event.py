@@ -75,7 +75,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
                            MapComposerError)
-from realtime.shake_data import ShakeData
+from shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -86,7 +86,9 @@ class ShakeEvent(QObject):
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magnitude etc."""
 
-    def __init__(self, theEventId=None, thePopulationRasterPath=None):
+    def __init__(self, theEventId=None,
+                 thePopulationRasterPath=None,
+                 theForceFlag=False):
         """Constructor for the shake event class.
 
         Args:
@@ -101,9 +103,8 @@ class ShakeEvent(QObject):
                 that will be used if you want to calculate the impact. This
                 is optional because there are various ways this can be
                 specified before calling :func:`calculateFatalities`.
-            e.g.
-
-            /tmp/inasafe/realtime/shakemaps-extracted/20120726022003/grid.xml
+            theForceFlag: bool Whether to force retrieval of the dataset from
+                the ftp server.
 
         Returns: Instance
 
@@ -111,7 +112,7 @@ class ShakeEvent(QObject):
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
-        self.data = ShakeData(theEventId)
+        self.data = ShakeData(theEventId, theForceFlag)
         self.data.extract()
         self.latitude = None
         self.longitude = None
@@ -1943,7 +1944,42 @@ class ShakeEvent(QObject):
         return myDirectionList[myIndex]
 
     def eventInfo(self):
-        """Get a short paragraph describing the event."""
+        """Get a short paragraph describing the event.
+
+        Args:
+            None
+
+        Returns:
+            str: A string describing the event e.g.
+                'M 5.0 26-7-2012 2:15:35 Latitude: 0°12'36.00"S
+                 Longitude: 124°27'0.00"E Depth: 11.0km
+                 Located 2.50km SSW of Tondano'
+        Raises:
+            None
+        """
+        myDict = self.eventDict()
+        myString = ('M %(mmi)s %(date)s %(time)s '
+                    '%(latitude-name)s: %(latitude-value)s '
+                    '%(longitude-name)s: %(longitude-value)s '
+                    '%(depth-name)s: %(depth)s%(depth-unit)s '
+                    '%(located-label)s %(distance)s%(distance-unit)s '
+                    '%(bearing-compass)s '
+                    '%(direction-relation)s %(place-name)s'
+                   ) % myDict
+        return myString
+
+    def eventDict(self):
+        """Get a dict of key value pairs that describe the event.
+
+        Args:
+
+        Returns:
+            dict: key-value pairs describing the event.
+
+        Raises:
+            propagates any exceptions
+
+        """
 
         #Format the lat lon from ddegrees to dms
         myPoint = QgsPoint(self.longitude, self.latitude)
@@ -1951,7 +1987,9 @@ class ShakeEvent(QObject):
         myTokens = myCoordinates.split(',')
         myLongitude = myTokens[0]
         myLatitude = myTokens[1]
-
+        myKmText = self.tr('km')
+        myDirectionalityText = self.tr('of')
+        myBearingText = self.tr('bearing')
         LOGGER.debug(myLongitude)
         LOGGER.debug(myLatitude)
         if self.mostAffectedCity is None:
@@ -1961,31 +1999,30 @@ class ShakeEvent(QObject):
         myName = self.mostAffectedCity['name']
         myBearing = self.bearingToCardinal(myDirection)
 
-        myString = (('M %(mmi)s %(date)s %(time)s '
-                    '%(latitude-name)s: %(latitude-value)s %(longitude-name)s:'
-                     '%(longitude-value)s %(depth-name)s: %(depth)s %('
-                     'located-label)s %(distance)2f, %(bearing-degrees)s '
-                     '%(bearing-compass)s %(place-name)s')
-                    % {'mmi': self.magnitude,
-                       'date': '%s-%s-%s' % (self.day,
-                                             self.month,
-                                             self.year),
-                       'time': '%s:%s:%s' % (self.hour,
-                                             self.minute,
-                                             self.second),
-                       'latitude-name': self.tr('Latitude'),
-                       'latitude-value': myLatitude, #causes error
-                       'longitude-name': self.tr('Longitude'),
-                       'longitude-value': myLongitude, #error
-                       'depth-name': self.tr('Depth'),
-                       'depth': '%s %s' % (self.depth, self.tr('Km')),
-                       'located-label': self.tr('Located'),
-                       'distance': myDistance,
-                       'bearing-degrees': myDirection,
-                       'bearing-compass': myBearing,
-                       'place-name': myName
-                     } )
-        return myString
+        myDict = {'mmi': self.magnitude,
+         'date': '%s-%s-%s' % (self.day,
+                               self.month,
+                               self.year),
+         'time': '%s:%s:%s' % (self.hour,
+                               self.minute,
+                               self.second),
+         'latitude-name': self.tr('Latitude'),
+         'latitude-value': myLatitude,
+         'longitude-name': self.tr('Longitude'),
+         'longitude-value': myLongitude,
+         'depth-name': self.tr('Depth'),
+         'depth': self.depth,
+         'depth-unit': myKmText,
+         'located-label': self.tr('Located'),
+         'distance': '%.2f' % myDistance,
+         'distance-unit': myKmText,
+         'direction-relation': myDirectionalityText,
+         'bearing-degrees': myDirection,
+         'bearing-compass': myBearing,
+         'bearing-text': myBearingText,
+         'place-name': myName
+        }
+        return myDict
 
     def version(self):
         """Return a string showing the version of Inasafe.
