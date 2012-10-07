@@ -550,6 +550,7 @@ def inside_polygon(points, polygon, closed=True, holes=None,
     return indices
 
 
+# FIXME (Ole): This also needs to fixed as per issue #324
 def is_outside_polygon(point, polygon, closed=True):
     """Determine if one point is outside a polygon
 
@@ -573,6 +574,9 @@ def outside_polygon(points, polygon, closed=True,
        the first part of the indices array and outside indices in the last
 
        See separate_points_by_polygon for documentation
+
+       holes: list of polygons representing holes. Points inside either of
+              these are considered outside polygon
     """
 
     _, indices = in_and_outside_polygon(points, polygon,

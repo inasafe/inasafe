@@ -106,6 +106,10 @@ class Vector(Layer):
 
             Each polygon or line feature take the form of an Nx2 array
             representing vertices where line segments are joined.
+
+            If polygons have holes, their geometry must be passed in as a
+            list of polygon geometry objects
+            (as defined in module geometry.py)
         """
 
         # Invoke common layer constructor
