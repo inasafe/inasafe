@@ -75,6 +75,7 @@ from rt_exceptions import (GridXmlFileNotFoundError,
                            CityMemoryLayerCreationError,
                            FileNotFoundError,
                            MapComposerError)
+from realtime.shake_data import ShakeData
 
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -85,13 +86,17 @@ class ShakeEvent(QObject):
     """The ShakeEvent class encapsulates behaviour and data relating to an
     earthquake, including epicenter, magnitude etc."""
 
-    def __init__(self, theEventId, thePopulationRasterPath=None):
+    def __init__(self, theEventId=None, thePopulationRasterPath=None):
         """Constructor for the shake event class.
 
         Args:
-            theEventId - (Mandatory) Id of the event. Will be used to
-                determine the path to an grid.xml file that
-                will be used to intialise the state of the ShakeEvent instance.
+            theEventId - (Optional) Id of the event. Will be used to
+                fetch the ShakeData for this event (either from cache or from
+                ftp server as required). The grid.xml file in the unpacked
+                event will be used to intialise the state of the ShakeEvent
+                instance.
+                If no event id is supplied, the most recent event recorded
+                on the server will be used.
             thePopulationRasterPath - (Optional)path to the population raster
                 that will be used if you want to calculate the impact. This
                 is optional because there are various ways this can be
@@ -106,9 +111,11 @@ class ShakeEvent(QObject):
         """
         # We inherit from QObject for translation support
         QObject.__init__(self)
+        self.data = ShakeData(theEventId)
+        self.data.extract()
         self.latitude = None
         self.longitude = None
-        self.eventId = theEventId
+        self.eventId = self.data.eventId
         self.magnitude = None
         self.depth = None
         self.description = None
@@ -1940,14 +1947,10 @@ class ShakeEvent(QObject):
 
         #Format the lat lon from ddegrees to dms
         myPoint = QgsPoint(self.longitude, self.latitude)
-        myCoordinates = str(myPoint.toDegreesMinutesSeconds(2).toAscii())
-        myCoordinates = myCoordinates.replace('xb027','u00B0')
-        #myString = QString()
-        #myString.toUtf8()
-        #myCoordinates.
-        myTokens = str(myCoordinates).split(',')
-        myLongitude = myTokens[0].encode('string_escape')
-        myLatitude = myTokens[1].encode('string_escape')
+        myCoordinates = myPoint.toDegreesMinutesSeconds(2)
+        myTokens = myCoordinates.split(',')
+        myLongitude = myTokens[0]
+        myLatitude = myTokens[1]
 
         LOGGER.debug(myLongitude)
         LOGGER.debug(myLatitude)
@@ -1971,9 +1974,9 @@ class ShakeEvent(QObject):
                                              self.minute,
                                              self.second),
                        'latitude-name': self.tr('Latitude'),
-                       'latitude-value': '', # myLatitude, #causes error
+                       'latitude-value': myLatitude, #causes error
                        'longitude-name': self.tr('Longitude'),
-                       'longitude-value': '', # myLongitude, #error
+                       'longitude-value': myLongitude, #error
                        'depth-name': self.tr('Depth'),
                        'depth': '%s %s' % (self.depth, self.tr('Km')),
                        'located-label': self.tr('Located'),

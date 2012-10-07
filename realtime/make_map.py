@@ -21,7 +21,6 @@ import sys
 import logging
 from zipfile import BadZipfile
 
-from realtime.shake_data import ShakeData
 from ftp_client import FtpClient
 from safe_qgis.utilities_test import getQgisTestApp
 from realtime.utils import setupLogger
@@ -48,8 +47,6 @@ else:
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 # Used cached data where available
 myForceFlag = False
-# Get the latest dataset
-myShakeData = ShakeData(myEventId)
 # Extract the event
 try:
     myShakeEvent = myShakeData.shakeEvent(theForceFlag=myForceFlag)

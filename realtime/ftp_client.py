@@ -16,7 +16,6 @@ __date__ = '19/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from ftplib import FTP
 import urllib2
 import logging
 
@@ -29,8 +28,7 @@ class FtpClient:
         from an FTP server"""
     def __init__(self,
                  theBaseUrl='118.97.83.243',
-                 thePasvMode=True,
-                 theBackend='urllib2'):
+                 thePasvMode=True):
         """Constructor for the FtpClient class
 
         Args:
@@ -38,8 +36,6 @@ class FtpClient:
               it will default to ftp://118.97.83.243/
             * thePasvMode - (Optional) whether passive connections should be
               made. Defaults to True.
-            * theBackend - (Optional). Which ftp backend to use. Defaults to
-              urllib2
 
         Returns:
             None
@@ -50,41 +46,11 @@ class FtpClient:
         """
         self.baseUrl = theBaseUrl
         self.pasv = thePasvMode
-        self.backend = theBackend
 
-    def availableBackends(self):
-        """Return a tuple of the available ftp backends that can be used.
+    def getListing(self, theExtention='zip'):
+        """Get a listing of the available files.
 
-        Args: None
-
-        Returns: A list of strings, each representing the name of a usable
-           backend.
-
-        Raises: None
-        """
-        return 'urllib2', 'ftplib'
-
-    def getListing(self):
-        """
-        Get a listing of available files from the ftp server
         Adapted from Ole's original shake library.
-
-        Args:
-            None
-
-        Returns:
-            A sorted list of files urls, with the newest files occurring at the
-            end of the list.
-        Raises:
-        """
-
-        if 'ftplib' in self.backend:
-            return self._getListingUsingFtpLib()
-        else:
-            return self._getListingUsingUrlLib2()
-
-    def _getListingUsingUrlLib2(self, theExtension='zip'):
-        """Get a listing of the available files using the urllib2 library.
 
         Args:
           theExtension - (Optional) Filename suffix to filter the listing by.
@@ -109,59 +75,27 @@ class FtpClient:
         myList = []
         for myLine in myFileId.readlines():
             myFields = myLine.strip().split()
-            if myFields[-1].endswith('.%s' % theExtension):
+            if myFields[-1].endswith('.%s' % theExtention):
                 myList.append(myUrl + '/' + myFields[-1])
 
         return myList
 
-    def _getListingUsingFtpLib(self):
-        """Get a listing of the available files using the ftp library.
-
-        Args: None
-
-        Returns: A string containing the list of files available in the
-        root directory of the baseUrl.
-
-        Raises: None
-        """
-        myUrl = 'ftp://%s' % self.baseUrl
-        myFtp = FTP(self.baseUrl)
-        myFtp.set_pasv(self.pasv)
-        myFtp.login()
-        myLines = []
-        myFtp.retrlines('LIST', myLines.append)
-        myFtp.quit()
-        myFinalList = []
-        for myLine in myLines:
-            myTidiedEntry = myLine.strip().split()[-1]
-            myTidiedEntry = myUrl + '/' + myTidiedEntry
-            if 'zip' in myTidiedEntry:
-                myFinalList.append(myTidiedEntry)
-        return myFinalList
-
-    def getFile(self, theUrlPath, theFilePath):
-        """
-        Get a file from the ftp server using the active backend.
+    def ftpUrlForFile(self, theUrlPath):
+        """Get a file from the ftp server.
 
         Args:
             * theUrlPath - (Mandatory) The path (relative to the ftp root)
               from which the file should be retrieved.
-            * theFilePath - (Mandatory). The path on the filesystem to which
-              the file should be saved.
-
         Returns:
-            The path to the downloaded file.
-
+            str - An ftp url e.g. ftp://118.97.83.243/20120726022003.inp.zip
         Raises:
             None
         """
-        if 'ftplib' in self.backend:
-            return self._getFileUsingFtpLib(theUrlPath, theFilePath)
-        else:
-            return self._getFileUsingUrlLib2(theUrlPath, theFilePath)
+        return 'ftp://%s/%s' % (self.baseUrl, theUrlPath)
 
-    def _getFileUsingUrlLib2(self, theUrlPath, theFilePath):
-        """Get a file from the ftp server using the urllib2 backend.
+
+    def getFile(self, theUrlPath, theFilePath):
+        """Get a file from the ftp server.
 
          Args:
             * theUrlPath - (Mandatory) The path (relative to the ftp root)
@@ -175,7 +109,7 @@ class FtpClient:
              None
         """
         LOGGER.debug('Getting ftp file: %s', theFilePath)
-        myUrl = 'ftp://%s/%s' % (self.baseUrl, theUrlPath)
+        myUrl = self.ftpUrlForFile(theUrlPath)
         myRequest = urllib2.Request(myUrl)
         try:
             myUrlHandle = urllib2.urlopen(myRequest, timeout=60)
@@ -186,24 +120,46 @@ class FtpClient:
             LOGGER.exception('Bad Url or Timeout')
             raise
 
-    def _getFileUsingFtpLib(self, theUrlPath, theFilePath):
-        """Get a file from the ftp server using the ftplib backend.
+    def hasFile(self, theFile):
+        """Check if a file is on the ftp server.
 
          Args:
-            * theUrlPath - (Mandatory) The path (relative to the ftp root)
-              from which the file should be retrieved.
-            * theFilePath - (Mandatory). The path on the filesystem to which
-              the file should be saved.
-
+            * theFile - (Mandatory) The paths (relative to the ftp
+                root) to be checked. e.g. '20120726022003.inp.zip',
          Returns:
-             The path to the downloaded file.
+             bool True if the file exists on the server, otherwise False.
 
          Raises:
              None
         """
-        myUrl = 'ftp://%s/%s' % (self.baseUrl, theUrlPath)
-        myFtp = FTP(myUrl)
-        myFtp.set_pasv(self.pasv)
-        myFtp.login()
-        myFtp.retrbinary('RETR %s' % theUrlPath, open(theFilePath, 'wb').write)
-        myFtp.quit()
+        LOGGER.debug('Checking for ftp file: %s', theFile)
+        myList = self.getListing()
+        myUrl = self.ftpUrlForFile(theFile)
+        return myUrl in myList
+
+    def hasFiles(self, theFiles):
+        """Check if a list files is on the ftp server.
+
+        .. seealso: func:`hasFile`
+
+        Args:
+            * theFiles: [str, ...] (Mandatory) The paths (relative to the ftp
+                root) to be checked. e.g. ['20120726022003.inp.zip',
+                '20120726022003.inp.zip']
+        Returns:
+            bool True if **all** files exists on the server, otherwise False.
+
+        Raises:
+            None
+        """
+        LOGGER.debug('Checking for ftp file: %s', theFiles)
+        # Note we don't delegate to hasFile as we want to limit network IO
+        myList = self.getListing()
+        for myFile in theFiles:
+            myUrl = self.ftpUrlForFile(myFile)
+            if not myUrl in myList:
+                LOGGER.debug('** %s NOT found on server**' % myUrl)
+                return False
+            LOGGER.debug('%s found on server' % myUrl)
+        return True
+

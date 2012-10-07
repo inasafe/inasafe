@@ -26,7 +26,6 @@ import unittest
 import logging
 from safe_qgis.utilities_test import getQgisTestApp
 from utils import shakemapExtractDir, shakemapZipDir
-from shake_data import ShakeData
 from shake_event import ShakeEvent
 # The logger is intialised in utils.py by init
 LOGGER = logging.getLogger('InaSAFE-Realtime')
@@ -57,8 +56,6 @@ class TestShakeEvent(unittest.TestCase):
         myExpectedPath = os.path.join(shakemapExtractDir(),
                                       myShakeId,
                                       'grid.xml')
-        myShakeData = ShakeData(myShakeId)
-        myShakeData.extract()
         myShakeEvent = ShakeEvent(myShakeId)
         myPath = myShakeEvent.gridFilePath()
         self.assertEquals(myExpectedPath, myPath)
@@ -66,8 +63,7 @@ class TestShakeEvent(unittest.TestCase):
     def test_eventParser(self):
         """Test eventFilePath works (using cached data)"""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         self.assertEquals(26, myShakeEvent.day)
         self.assertEquals(7, myShakeEvent.month)
         self.assertEquals(2012, myShakeEvent.year)
@@ -93,8 +89,7 @@ class TestShakeEvent(unittest.TestCase):
     def test_eventGridToCsv(self):
         """Test grid data can be written to csv"""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myPath = myShakeEvent.mmiDataToDelimitedFile(theForceFlag=True)
         myFile = file(myPath, 'rt')
         myString = myFile.readlines()
@@ -104,8 +99,7 @@ class TestShakeEvent(unittest.TestCase):
     def testEventToRaster(self):
         """Check we can convert the shake event to a raster"""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myExpectedState = """latitude: -0.21
 longitude: 124.45
 eventId: 20120726022003
@@ -148,8 +142,7 @@ searchBoxes: None
     def testEventToShapefile(self):
         """Check we can convert the shake event to a raster"""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myPath = myShakeEvent.mmiDataToShapefile(theForceFlag=True)
         assert os.path.exists(myPath)
         myExpectedQml = myPath.replace('shp', 'qml')
@@ -158,9 +151,9 @@ searchBoxes: None
 
     def checkFeatureCount(self, thePath, theCount):
         myDataSource = ogr.Open(thePath)
-        myBasename = os.path.splitext(os.path.basename(thePath))[0]
+        myBaseName = os.path.splitext(os.path.basename(thePath))[0]
         # do a little query to make sure we got some results...
-        mySQL = 'select * from \'%s\' order by MMI asc' % myBasename
+        mySQL = 'select * from \'%s\' order by MMI asc' % myBaseName
         #print mySQL
         myLayer = myDataSource.ExecuteSQL(mySQL)
         myCount = myLayer.GetFeatureCount()
@@ -175,8 +168,7 @@ searchBoxes: None
     def testEventToContours(self):
         """Check we can extract contours from the event"""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myPath = myShakeEvent.mmiDataToContours(theForceFlag=True,
                                                 theAlgorithm='invdist')
         assert self.checkFeatureCount(myPath, 16)
@@ -195,8 +187,7 @@ searchBoxes: None
     def testLocalCities(self):
         """Test that we can retrieve the cities local to the event"""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         # Get teh mem layer
         myCitiesLayer = myShakeEvent.localCitiesMemoryLayer()
         myProvider = myCitiesLayer.dataProvider()
@@ -222,16 +213,14 @@ searchBoxes: None
     def testCitiesToShape(self):
         """Test that we can retrieve the cities local to the event"""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myPath = myShakeEvent.citiesToShapefile()
         assert os.path.exists(myPath)
 
     def testCitiesSearchBoxesToShape(self):
         """Test that we can retrieve the search boxes used to find cities."""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myPath = myShakeEvent.citySearchBoxesToShapefile()
         assert os.path.exists(myPath)
 
@@ -239,8 +228,7 @@ searchBoxes: None
         """Test that we can calculate fatalities."""
         LOGGER.debug(QGISAPP.showSettings())
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myResult, myFatalitiesHtml = myShakeEvent.calculateFatalities()
 
         myExpectedResult = ('/tmp/inasafe/realtime/shakemaps-extracted'
@@ -270,8 +258,7 @@ searchBoxes: None
     def testBoundsToRect(self):
         """Test that we can calculate the event bounds properly"""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myBounds = myShakeEvent.boundsToRectangle().toString()
         myExpectedResult = ('122.4500000000000028,-2.2100000000000000 : '
                            '126.4500000000000028,1.7900000000000000')
@@ -281,8 +268,7 @@ searchBoxes: None
     def testRomanize(self):
         """Test we can convert MMI values to float."""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
 
         myValues = range(2, 10)
         myExpectedResult = ['II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
@@ -295,8 +281,7 @@ searchBoxes: None
     def testMmiColour(self):
         """Test that we can get a colour given an mmi number."""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
 
         myValues = range(0, 12)
         myExpectedResult = ['#FFFFFF',
@@ -320,8 +305,7 @@ searchBoxes: None
     def testSortedImpactedCities(self):
         """Test getting impacted cities sorted by mmi then population."""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myTable = myShakeEvent.sortedImpactedCities()
         myExpectedResult = [
             {'dir_from': 16.94407844543457,
@@ -370,8 +354,7 @@ searchBoxes: None
     def testImpactedCitiesTable(self):
         """Test getting impacted cities table."""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myTable, myPath = myShakeEvent.impactedCitiesTable()
         myExpectedResult = 921
         myTable = myTable.toNewlineFreeString()
@@ -388,8 +371,7 @@ searchBoxes: None
     def testFatalitiesTable(self):
         """Test rendering a fatalities table."""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myDict = {2: 0.47386375223673427,
          3: 0.024892573693488258,
          4: 0.0,
@@ -408,12 +390,11 @@ searchBoxes: None
     def testEventInfoString(self):
         """Test we can get a location info string nicely,"""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
         myDegreeSymbol = unichr(176)
-        myExpectedResult = ('M 5.0 26-7-2012 2:15:35 '
-                            'Latitude:  Longitude: Depth: 11.0 Km Located '
-                            '2%s 50\' 46", -16%s 3\' 05" SSW Tondano'
+        myExpectedResult = ('M 5.0 26-7-2012 2:15:35 Latitude: 0%s12\'36.00"S '
+                            'Longitude:124%s27\'0.00"E Depth: 11.0 Km Located '
+                            '2.504296, -163.055923462 SSW Tondano'
                             % (myDegreeSymbol, myDegreeSymbol))
         myResult = myShakeEvent.eventInfo()
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
@@ -423,8 +404,7 @@ searchBoxes: None
     def testBearingToCardinal(self):
         """Test we can convert a bearing to a cardinal direction."""
         myShakeId = '20120726022003'
-        myShakeData = ShakeData(myShakeId)
-        myShakeEvent = myShakeData.shakeEvent()
+        myShakeEvent = ShakeEvent(myShakeId)
 
         # Ints should work
         myExpectedResult = 'SSE'
@@ -447,8 +427,6 @@ searchBoxes: None
         myMessage = ('Got:\n%s\nExpected:\n%s\n' %
                      (myResult, myExpectedResult))
         assert myResult == myExpectedResult, myMessage
-
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestShakeEvent, 'testLocalCities')
