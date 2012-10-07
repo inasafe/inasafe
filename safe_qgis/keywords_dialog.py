@@ -36,7 +36,6 @@ from safe.common.exceptions import InaSAFEError
 
 import safe.defaults
 
-
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
@@ -185,7 +184,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
     def showAggregationAttribute(self, theFlag):
         theBox = self.cboAggregationAttribute
+        theBox.blockSignals(True)
         theBox.clear()
+        theBox.blockSignals(False)
         if theFlag:
             currentKeyword = self.getValueForKey(
                 safe.defaults.AGGREGATION_ATTRIBUTE_KEY)
@@ -203,7 +204,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
     def showFemaleRatioAttribute(self, theFlag):
         theBox = self.cboFemaleRatioAttribute
+        theBox.blockSignals(True)
         theBox.clear()
+        theBox.blockSignals(False)
         if theFlag:
             currentKeyword = self.getValueForKey(
                 safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY)
@@ -722,6 +725,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
 
         for myKey in myKeywords.iterkeys():
             self.addListEntry(myKey, str(myKeywords[myKey]))
+
         # now make the rest of the safe_qgis reflect the list entries
         self.updateControlsFromList()
 
