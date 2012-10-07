@@ -36,7 +36,6 @@ from safe.common.exceptions import InaSAFEError
 
 import safe.defaults
 
-from safe_qgis.utilities import logOnQgsMessageLog
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -115,6 +114,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
         self.radPredefined.setChecked(True)
+        self.dsbFemaleRatioDefault.blockSignals(True)
+        self.dsbFemaleRatioDefault.setValue(safe.defaults.DEFAULT_FEMALE_RATIO)
+        self.dsbFemaleRatioDefault.blockSignals(False)
         self.adjustSize()
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
@@ -228,12 +230,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     def showFemaleRatioDefault(self, theFlag):
         theBox = self.dsbFemaleRatioDefault
         if theFlag:
-            currentKeyword = self.getValueForKey(
+            currentValue = self.getValueForKey(
                 safe.defaults.FEMALE_RATIO_DEFAULT_KEY)
-            if currentKeyword is None:
+            if currentValue is None:
                 val = safe.defaults.DEFAULT_FEMALE_RATIO
             else:
-                val = float(currentKeyword)
+                val = float(currentValue)
             theBox.setValue(val)
 
         theBox.setVisible(theFlag)
