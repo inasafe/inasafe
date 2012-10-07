@@ -210,7 +210,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                 currentKeyword)
             fields.insert(0, self.tr('Use default'))
             fields.insert(1, self.tr('Don\'t use'))
-
             theBox.addItems(fields)
             if currentKeyword == self.tr('Use default'):
                 theBox.setCurrentIndex(0)
@@ -223,7 +222,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             else:
                 # + 2 is because we add use defaults and don't use
                 theBox.setCurrentIndex(attributePosition + 2)
-
         theBox.setVisible(theFlag)
         self.lblFemaleRatioAttribute.setVisible(theFlag)
 
@@ -237,8 +235,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             else:
                 val = float(currentKeyword)
             theBox.setValue(val)
-            #force update the keyword
-            theBox.emit(QtCore.SIGNAL('valueChanged'), val)
 
         theBox.setVisible(theFlag)
         self.lblFemaleRatioDefault.setVisible(theFlag)
@@ -254,23 +250,26 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     @pyqtSignature('int')
     def on_cboFemaleRatioAttribute_currentIndexChanged(self, theIndex=None):
         del theIndex
-
         text = self.cboFemaleRatioAttribute.currentText()
         if text == self.tr('Use default'):
             self.dsbFemaleRatioDefault.setEnabled(True)
-            self.addListEntry(safe.defaults.FEMALE_RATIO_DEFAULT_KEY,
-                self.dsbFemaleRatioDefault.value())
-
+            currentDefault = self.getValueForKey(
+                safe.defaults.FEMALE_RATIO_DEFAULT_KEY)
+            if currentDefault is None:
+                self.addListEntry(safe.defaults.FEMALE_RATIO_DEFAULT_KEY,
+                                self.dsbFemaleRatioDefault.value())
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
             self.removeItemByKey(safe.defaults.FEMALE_RATIO_DEFAULT_KEY)
-
         self.addListEntry(safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY, text)
 
     # prevents actions being handled twice
     @pyqtSignature('double')
     def on_dsbFemaleRatioDefault_valueChanged(self, theValue):
-        self.addListEntry(safe.defaults.FEMALE_RATIO_DEFAULT_KEY, theValue)
+        theBox = self.dsbFemaleRatioDefault
+        if theBox.isEnabled():
+            self.addListEntry(safe.defaults.FEMALE_RATIO_DEFAULT_KEY,
+                theBox.value())
 
     # prevents actions being handled twice
     @pyqtSignature('bool')
@@ -390,7 +389,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if 'exposure' == myCategory:
             myDataType = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('datatype', myDataType)
-
     # prevents actions being handled twice
     def setSubcategoryList(self, theEntries, theSelectedItem=None):
         """Helper to populate the subcategory list based on category context.
