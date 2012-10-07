@@ -124,6 +124,20 @@ class ShakeData:
             raise EventIdError('Latest Event Id could not be obtained')
         self.eventId = myEventId
 
+    def checkEventIsOnServer(self, myInpFileName, myOutFileName):
+        """Check the event associated with this instance exists on the server.
+
+        Args: None
+
+        Returns: True if valid, False if not
+
+        Raises: NetworkError
+        """
+        myFtpClient = FtpClient()
+        myList = myFtpClient.getListing()
+        if myInpFileName in myList and myOutFileName in myList:
+            return True
+
     def validateEvent(self):
         """Check that the event associated with this instance exists either
         in the local event cache, or on the remote ftp site.
@@ -148,10 +162,8 @@ class ShakeData:
         else:
             LOGGER.debug('%s is not cached' % myInpFileName)
             LOGGER.debug('%s is not cached' % myOutFileName)
-        myFtpClient = FtpClient()
-        myList = myFtpClient.getListing()
-        if (myInpFileName in myList and myOutFileName in myList):
-            return True
+
+        return self.checkEventIsOnServer(myInpFileName, myOutFileName)
 
     def _fetchFile(self, theEventFile):
         """Private helper to fetch a file from the ftp site.
