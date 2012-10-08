@@ -683,13 +683,12 @@ class Test_Engine(unittest.TestCase):
     def test_polygon_hazard_with_holes_and_raster_exposure(self):
         """Rasters can be clipped by polygons (with holes)
 
-        This is using population data which really is too coarse,
-        but enough to prove the point
+        This is testing that a collection of polygons - some with holes -
+        can correctly clip and tag raster points.
         """
 
         # Name input files
         polyhazard = join(TESTDATA, 'donut.shp')
-        #population = join(EXPDATA, 'glp10ag.asc')
         population = join(EXPDATA, 'population_indonesia_2010_BNPB_BPS.asc')
 
         # Get layers using API
@@ -699,24 +698,15 @@ class Test_Engine(unittest.TestCase):
         N = len(H)
         assert N == 10
 
-        # Run and test the fundamental clipping routine
-        #import time
-        #t0 = time.time()
-        #res = clip_grid_by_polygons(E.get_data(),
-        #                            E.get_geotransform(),
-        #                            H.get_geometry())
-        #print 'Engine took %i seconds' % (time.time() - t0)
-        #assert len(res) == N
-
         # Characterisation test
         assert H.get_data()[9]['KRB'] == 'Kawasan Rawan Bencana II'
 
         # Then run and test the high level interpolation function
-        #t0 = time.time()
         P = interpolate_polygon_raster(H, E,
                                        layer_name='poly2raster_test',
                                        attribute_name='grid_value')
-        #print 'High level function took %i seconds' % (time.time() - t0)
+
+        # Possibly write result to file for visual inspection, e.g. with QGIS
         #P.write_to_file('polygon_raster_interpolation_example_holes.shp')
 
         # Characterisation tests (values verified using QGIS)

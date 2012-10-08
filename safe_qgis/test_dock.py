@@ -27,6 +27,7 @@ from os.path import join
 pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
+from os.path import join
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsRasterLayer,
@@ -61,12 +62,14 @@ from safe.engine.impact_functions_for_testing import HKV_flood_study
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # pylint: enable=W0611
 
-QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
 
+QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = Dock(IFACE)
+
 YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
 PADANG2009_title = 'An earthquake in Padang like in 2009'
+
 
 def getUiState(ui):
     """Get state of the 3 combos on the DOCK ui. This method is purely for
@@ -100,10 +103,8 @@ def canvasList():
     """Return a string representing the list of canvas layers (in correct
     order) but formatted with line breaks between each entry."""
     myListString = ''
-    myCounter = 1
     for myLayer in CANVAS.layers():
-        myListString += '%s - %s\n' % (myCounter, str(myLayer.name()))
-        myCounter += 1
+        myListString += str(myLayer.name()) + '\n'
     return myListString
 
 
@@ -151,7 +152,8 @@ def combosToString(ui):
 
 
 def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
-                  theOkButtonFlag=True, theAggregation=None):
+                  theOkButtonFlag=True, theAggregation=None,
+                  theAggregationEnabledFlag=None):
     """Helper function to set the gui state to a given scenario.
 
     Args:
@@ -206,6 +208,12 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
             return False, myMessage
         DOCK.cboAggregation.setCurrentIndex(myIndex)
 
+    if theAggregationEnabledFlag is not None:
+        if DOCK.cboAggregation.isEnabled() != theAggregationEnabledFlag:
+            myMessage = 'The aggregation combobox should be %s' %\
+                        ('enabled' if theAggregationEnabledFlag else 'disabled')
+            return False, myMessage
+
     # Check that layers and impact function are correct
     myDict = getUiState(DOCK)
 
@@ -237,6 +245,9 @@ def populatemyDock():
     loadStandardLayers()
     DOCK.cboHazard.setCurrentIndex(0)
     DOCK.cboExposure.setCurrentIndex(0)
+    #QTest.mouseClick(myHazardItem, Qt.LeftButton)
+    #QTest.mouseClick(myExposureItem, Qt.LeftButton)
+
 
 def loadStandardLayers():
     """Helper function to load standard layers into the dialog."""
@@ -310,17 +321,41 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
     return myHazardLayerCount, myExposureLayerCount
 
 
+#def loadLayer(theLayerFile):
+#    """Helper to load and return a single QGIS layer"""
+#    # Extract basename and absolute path
+#    myBaseName, myExt = os.path.splitext(theLayerFile)
+#    myPath = os.path.join(TESTDATA, theLayerFile)
+#    myKeywordPath = myPath[:-4] + '.keywords'
+#    # Determine if layer is hazard or exposure
+#    myKeywords = read_keywords(myKeywordPath)
+#    myType = 'undefined'
+#    if 'category' in myKeywords:
+#        myType = myKeywords['category']
+#    myMessage = 'Could not read %s' % myKeywordPath
+#    assert myKeywords is not None, myMessage#
+#
+#    # Create QGis Layer Instance
+#    if myExt in ['.asc', '.tif']:
+#        myLayer = QgsRasterLayer(myPath, myBaseName)
+#    elif myExt in ['.shp']:
+#        myLayer = QgsVectorLayer(myPath, myBaseName, 'ogr')
+#    else:
+#        myMessage = 'File %s had illegal extension' % myPath
+#        raise Exception(myMessage)#
+#
+#    myMessage = 'Layer "%s" is not valid' % str(myLayer.source())
+#    assert myLayer.isValid(), myMessage
+#    return myLayer, myType
+
+
 class DockTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
     def setUp(self):
         """Fixture run before all tests"""
         DOCK.showOnlyVisibleLayersFlag = True
-        for myLayer in QgsMapLayerRegistry.instance().mapLayers():
-            QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
-        logging.debug('Layer Count: %s' % len(CANVAS.layers()))
         loadStandardLayers()
-        logging.debug('Layer Count: %s' % len(CANVAS.layers()))
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         DOCK.cboFunction.setCurrentIndex(0)
@@ -376,7 +411,7 @@ class DockTest(unittest.TestCase):
         # Now check OK IS enabled on a populated DOCK
         populatemyDock()
         myFlag = DOCK.validate()
-        myMessage = ('Validation expected to pass on a '
+        myMessage = ('Validation expected to pass on a ' +
                      'populated DOCK with selections.')
         assert myFlag, myMessage
 
@@ -390,8 +425,8 @@ class DockTest(unittest.TestCase):
         self.assertEqual(DOCK.cboAggregation.currentText(), DOCK.tr(
             'No aggregation'), myMessage)
 
-        assert not DOCK.cboAggregation.isEnabled(), ('The aggregation '
-            'combobox should be disabled when the project has no layer.')
+        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
+            'combobox should be disabled when the project has no layer.'
 
     def test_cboAggregationLoadedProject(self):
 
@@ -409,7 +444,7 @@ class DockTest(unittest.TestCase):
 
     #FIXME (MB) this is actually wrong, when calling the test directly it works
     # in nosetest it fails at the second assert
-    @expectedFailure
+#    @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
         #raster hazard
@@ -418,12 +453,10 @@ class DockTest(unittest.TestCase):
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function')
+            theFunctionId='Flood Evacuation Function',
+            theAggregationEnabledFlag=True)
+        myMessage += ' when the when hazard and exposure layer are raster'
         assert myResult, myMessage
-
-        #in nose test it fails here
-        assert DOCK.cboAggregation.isEnabled(), ('The aggregation combobox '
-                'should be enabled when hazard and exposure layer are raster')
 
         #vector hazard
         #raster exposure
@@ -431,11 +464,10 @@ class DockTest(unittest.TestCase):
             theHazard=('A flood in Jakarta'),
             theExposure='People',
             theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function Vector Hazard')
+            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is vector and exposure is raster'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), ('The aggregation '
-            'combobox should be disabled when hazard layer is vectorial')
 
         #raster hazard
         #vector exposure
@@ -443,11 +475,10 @@ class DockTest(unittest.TestCase):
             theHazard='Tsunami Max Inundation',
             theExposure='Tsunami Building Exposure',
             theFunction='Be temporarily closed',
-            theFunctionId='Flood Building Impact Function')
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is raster and exposure is vector'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), ('The aggregation '
-                'combobox should be disabled when exposure layer is vectorial')
 
         #vector hazard
         #vector exposure
@@ -455,12 +486,10 @@ class DockTest(unittest.TestCase):
             theHazard='A flood in Jakarta',
             theExposure='Essential buildings',
             theFunction='Be temporarily closed',
-            theFunctionId='Flood Building Impact Function')
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard and exposure layer are vector'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), ('The aggregation '
-                'combobox should be disabled when hazard and exposure layer '
-                'are vectorial')
 
     def test_checkAggregationAttribute(self):
         myRunButton = DOCK.pbnRunStop
@@ -501,6 +530,23 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
 
+        #TODO: MOVE to test_keywords_dialog.py
+        # with 3 good aggregation attribute using
+        # kabupaten_jakarta_singlepart_3_good_attr.shp
+#        myResult, myMessage = setupScenario(
+#            theHazard='A flood in Jakarta like in 2007',
+#            theExposure='People',
+#            theFunction='Need evacuation',
+#            theFunctionId='Flood Evacuation Function',
+#            theAggregation='kabupaten jakarta singlepart 3 good attr')
+#        assert myResult, myMessage
+#        # Press RUN
+#        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+#        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
+#                     (DOCK.aggregationAttribute))
+#
+#        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
+
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         myResult, myMessage = setupScenario(
@@ -534,12 +580,12 @@ class DockTest(unittest.TestCase):
     # FIXME (MB) CANVAS.layers() doesn't include the generated layers such as
     # the impactlayer and the postprocessing generated layers
     # see https://github.com/AIFDR/inasafe/issues/306
-    #    @expectedFailure
+    @expectedFailure
     def test_checkPostProcessingLayersVisibility(self):
-        """Check post processing intermediate layer visibility options.
-        # with KAB_NAME aggregation attribute defined in .keyword using
-        # kabupaten_jakarta_singlepart.shp"""
         myRunButton = DOCK.pbnRunStop
+
+        # with KAB_NAME aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
@@ -547,33 +593,56 @@ class DockTest(unittest.TestCase):
             theFunctionId='Flood Evacuation Function',
             theAggregation='kabupaten jakarta singlepart')
         assert myResult, myMessage
-        myBeforeCount = len(CANVAS.layers())
+
+        myLayerList = [str(DOCK.tr('Padang_WGS84')),
+                    str(DOCK.tr('People')),
+                    str(DOCK.tr('An earthquake in Padang like in 2009')),
+                    str(DOCK.tr('Tsunami Max Inundation')),
+                    str(DOCK.tr('Tsunami Building Exposure')),
+                    str(DOCK.tr('A flood in Jakarta like in 2007')),
+                    str(DOCK.tr('Penduduk Jakarta')),
+                    str(DOCK.tr('An earthquake in Yogyakarta like in 2006')),
+                    str(DOCK.tr('A flood in Jakarta')),
+                    str(DOCK.tr('OSM Building Polygons')),
+                    str(DOCK.tr('Essential buildings')),
+                    str(DOCK.tr('Flood in Jakarta')),
+                    str(DOCK.tr('roads_Maumere')),
+                    str(DOCK.tr('kabupaten jakarta singlepart')),
+                    str(DOCK.tr('Population which Need evacuation'))]
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        myAfterCount = len(CANVAS.layers())
-        myMessage = ('The legend should have:\n %s \nFound:\n %s'
-                     % (myBeforeCount + 1, myAfterCount))
-        assert myBeforeCount + 1 == myAfterCount, myMessage
+        currentLayers = [str(c.name()) for c in CANVAS.layers()]
+        myMessage = ('The legend should have:\n %s \nFound: %s'
+                     % (myLayerList, currentLayers))
+        self.assertEquals(currentLayers, myLayerList, myMessage)
 
-        # Now check that running in show post processing layers mode works
-
-        myBeforeCount = len(CANVAS.layers())
         DOCK.showPostProcessingLayers = True
-        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        myAfterCount = len(CANVAS.layers())
+        # LAYER List should have i additional layers
+        myLayerList.append(str(DOCK.tr('Population which Need evacuation '
+                            'aggregated to kabupaten jakarta singlepart')))
 
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        currentLayers = [str(c.name()) for c in CANVAS.layers()]
         myMessage = ('The legend should have:\n %s \nFound:\n %s'
-                     % (myBeforeCount + 2, myAfterCount))
-        assert myBeforeCount + 2 == myAfterCount, myMessage
+                     % (myLayerList, currentLayers))
+        self.assertEquals(currentLayers, myLayerList, myMessage)
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
+
+        # Push OK with the left mouse button
 
         myButton = DOCK.pbnRunStop
         setCanvasCrs(GEOCRS, True)
         setPadangGeoExtent()
         myMessage = 'Run button was not enabled'
         assert myButton.isEnabled(), myMessage
+
+        #QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Down)
+        #QTest.keyClick(DOCK.cboHazard, QtCore.Qt.Key_Enter)
+        #
+        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Down)
+        #QTest.keyClick(DOCK.cboExposure, QtCore.Qt.Key_Enter)
 
         # Hazard layer
         myIndex = DOCK.cboHazard.findText(PADANG2009_title)
@@ -778,6 +847,7 @@ class DockTest(unittest.TestCase):
         """Flood function runs in GUI with Jakarta data
            Raster on raster based function runs as expected."""
 
+        # Push OK with the left mouse button
         myButton = DOCK.pbnRunStop
 
         myMessage = 'Run button was not enabled'
@@ -886,8 +956,8 @@ class DockTest(unittest.TestCase):
 
         # Push OK with the left mouse button
 
-        logging.debug('--------------------')
-        logging.debug(combosToString(DOCK))
+        print '--------------------'
+        print combosToString(DOCK)
 
         myResult, myMessage = setupScenario(
             theHazard=('A flood in Jakarta like in 2007'),
@@ -907,8 +977,9 @@ class DockTest(unittest.TestCase):
         myEngineImpactLayer = myRunner.impactLayer()
         myQgisImpactLayer = DOCK.readImpactLayer(myEngineImpactLayer)
         myStyle = myEngineImpactLayer.get_style_info()
+        #print myStyle
         setRasterStyle(myQgisImpactLayer, myStyle)
-        # simple test for now - we could test explicitly for style state
+        # simple test for now - we could test explicity for style state
         # later if needed.
         myMessage = ('Raster layer was not assigned a ColorRampShader'
                      ' as expected.')
@@ -919,10 +990,12 @@ class DockTest(unittest.TestCase):
                      'classes as expected.')
         myTransparencyList = (myQgisImpactLayer.rasterTransparency().
                 transparentSingleValuePixelList())
-        assert (len(myTransparencyList) > 0), myMessage
+        #print "Transparency list:" + str(myTransparencyList)
+        assert (len(myTransparencyList) > 0)
 
     def test_Issue47(self):
-        """Issue47: Problem if hazard & exposure in different CRS to viewport.
+        """Issue47: Problem when hazard & exposure data are in different
+        proj to viewport.
         See https://github.com/AIFDR/inasafe/issues/47"""
 
         myResult, myMessage = setupScenario(
@@ -1003,7 +1076,7 @@ class DockTest(unittest.TestCase):
         """Test issue #71 in github - cbo changes should update ok button."""
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
-        logging.debug('Using QGIS: %s' % qgisVersion())
+        print 'Using QGIS: %s' % qgisVersion()
         self.tearDown()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run
@@ -1122,7 +1195,7 @@ class DockTest(unittest.TestCase):
                                   'multipart_polygons_osm_4326.shp')
                 # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
-        logging.info('Using QGIS: %s' % qgisVersion())
+        print 'Using QGIS: %s' % qgisVersion()
         self.tearDown()
         myButton = DOCK.pbnRunStop
         # First part of scenario should have enabled run

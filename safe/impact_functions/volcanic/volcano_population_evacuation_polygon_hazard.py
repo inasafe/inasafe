@@ -177,7 +177,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
         # Create vector layer and return
         V = Vector(data=new_attributes,
                    projection=H.get_projection(),
-                   geometry=H.get_geometry(),
+                   geometry=H.get_geometry(as_geometry_objects=True),
                    name=_('Population affected by volcanic hazard zone'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,

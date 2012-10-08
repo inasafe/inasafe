@@ -3,6 +3,11 @@
 .. tip:: Provides functionality for manipulation of vector data. The data can
    be in-memory or file based.
 
+Resources for understanding vector data formats and the OGR library:
+Treatise on vector data model: http://www.esri.com/news/arcuser/0401/topo.html
+OGR C++ reference: http://www.gdal.org/ogr
+
+
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
