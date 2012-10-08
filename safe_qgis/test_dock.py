@@ -154,7 +154,8 @@ def combosToString(ui):
 
 
 def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
-                  theOkButtonFlag=True, theAggregation=None):
+                  theOkButtonFlag=True, theAggregation=None,
+                  theAggregationEnabledFlag=None):
     """Helper function to set the gui state to a given scenario.
 
     Args:
@@ -208,6 +209,12 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
         if myIndex == -1:
             return False, myMessage
         DOCK.cboAggregation.setCurrentIndex(myIndex)
+
+    if theAggregationEnabledFlag is not None:
+        if DOCK.cboAggregation.isEnabled() != theAggregationEnabledFlag:
+            myMessage = 'The aggregation combobox should be %s' %\
+                        ('enabled' if theAggregationEnabledFlag else 'disabled')
+            return False, myMessage
 
     # Check that layers and impact function are correct
     myDict = getUiState(DOCK)
@@ -439,7 +446,7 @@ class DockTest(unittest.TestCase):
 
     #FIXME (MB) this is actually wrong, when calling the test directly it works
     # in nosetest it fails at the second assert
-    @expectedFailure
+#    @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
         #raster hazard
@@ -448,12 +455,10 @@ class DockTest(unittest.TestCase):
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function')
+            theFunctionId='Flood Evacuation Function',
+            theAggregationEnabledFlag=True)
+        myMessage += ' when the when hazard and exposure layer are raster'
         assert myResult, myMessage
-
-        #in nose test it fails here
-        assert DOCK.cboAggregation.isEnabled(), 'The aggregation combobox ' \
-                'should be enabled when hazard and exposure layer are raster'
 
         #vector hazard
         #raster exposure
@@ -461,11 +466,10 @@ class DockTest(unittest.TestCase):
             theHazard=('A flood in Jakarta'),
             theExposure='People',
             theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function Vector Hazard')
+            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is vector and exposure is raster'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-            'combobox should be disabled when hazard layer is vectorial'
 
         #raster hazard
         #vector exposure
@@ -473,11 +477,10 @@ class DockTest(unittest.TestCase):
             theHazard='Tsunami Max Inundation',
             theExposure='Tsunami Building Exposure',
             theFunction='Be temporarily closed',
-            theFunctionId='Flood Building Impact Function')
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is raster and exposure is vector'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-                'combobox should be disabled when exposure layer is vectorial'
 
         #vector hazard
         #vector exposure
@@ -485,12 +488,11 @@ class DockTest(unittest.TestCase):
             theHazard='A flood in Jakarta',
             theExposure='Essential buildings',
             theFunction='Be temporarily closed',
-            theFunctionId='Flood Building Impact Function')
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard and exposure layer are vector'
         assert myResult, myMessage
 
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-                'combobox should be disabled when hazard and exposure layer' \
-                ' are vectorial'
 
     def test_checkAggregationAttribute(self):
         myRunButton = DOCK.pbnRunStop
@@ -1323,7 +1325,7 @@ class DockTest(unittest.TestCase):
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
     suite = unittest.makeSuite(DockTest,
-                        'test_checkAggregationAttribute')
+                        'test_cboAggregationToggle')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
