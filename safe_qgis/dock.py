@@ -845,8 +845,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         #check and generate keywords for the aggregation layer
-        self.aggregationLayer = self.getAggregationLayer()
-        if self.aggregationLayer is not None:
+        self.postprocessingLayer = self.getAggregationLayer()
+        if self.postprocessingLayer is not None:
             try:
                 self.aggregationAttribute = self._checkAggregationAttribute()
             except Exception, e:  # pylint: disable=W0703
@@ -946,7 +946,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
         """
-        if self.aggregationLayer is not None:
+        if self.postprocessingLayer is not None:
             self.aggregateResults(88)
         self.completed()
         self.initPostprocessingOutput()
@@ -1037,21 +1037,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         lName = str(self.tr('%1 aggregated to %2')
                 .arg(myQgisImpactLayer.name())
-                .arg(self.aggregationLayer.name()))
+                .arg(self.postprocessingLayer.name()))
 
         clippedAggregationLayerPath = clipLayer(
-            self.aggregationLayer,
+            self.postprocessingLayer,
             impactLayer.get_bounding_box(), explodeMultipart=False)
 
-        self.aggregationLayer = QgsVectorLayer(
+        self.postprocessingLayer = QgsVectorLayer(
             clippedAggregationLayerPath, lName, 'ogr')
-        if not self.aggregationLayer.isValid():
+        if not self.postprocessingLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(
-                self.aggregationLayer.lastError())
+                self.postprocessingLayer.lastError())
             raise ReadLayerError(myMessage)
 
         #delete unwanted fields
-        vProvider = self.aggregationLayer.dataProvider()
+        vProvider = self.postprocessingLayer.dataProvider()
         vFields = vProvider.fields()
         toDel = []
 
@@ -1103,7 +1103,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: None
         """
         zonStat = QgsZonalStatistics(
-            self.aggregationLayer,
+            self.postprocessingLayer,
             myQgisImpactLayer.dataProvider().dataSourceUri(),
             self._aggregationPrefix)
         progressDialog = QtGui.QProgressDialog(
@@ -1118,7 +1118,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
         if self.showPostProcessingLayers:
-            QgsMapLayerRegistry.instance().addMapLayer(self.aggregationLayer)
+            QgsMapLayerRegistry.instance().addMapLayer(self.postprocessingLayer)
         return
 
     def _parseAggregationResults(self):
@@ -1133,7 +1133,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     '    <tr>'
                     '       <td colspan="100%">'
                     '         <strong>'
-                    + self.aggregationLayer.name() +
+                    + self.postprocessingLayer.name() +
                     '         </strong>'
                     '       </td>'
                     '    </tr>'
@@ -1146,21 +1146,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     '      </th>'
                     '    </tr>')
         #fill table
-        provider = self.aggregationLayer.dataProvider()
+        provider = self.postprocessingLayer.dataProvider()
         allAttrs = provider.attributeIndexes()
         # start data retreival: fetch no geometry and all attributes for each
         # feature
         provider.select(allAttrs, QgsRectangle(), False)
 
         try:
-            nameFieldIndex = self.aggregationLayer.fieldNameIndex(
+            nameFieldIndex = self.postprocessingLayer.fieldNameIndex(
                 self.aggregationAttribute)
         # FIXME (Ole): Disable pylint check for the moment
         # Need to work out what exceptions we will catch here, though.
         except:  # pylint: disable=W0702
             nameFieldIndex = None
         try:
-            sumFieldIndex = self.aggregationLayer.fieldNameIndex(
+            sumFieldIndex = self.postprocessingLayer.fieldNameIndex(
             self.getAggregationFieldNameSum())
         except ReadLayerError, e:
             QtGui.qApp.restoreOverrideCursor()
@@ -1168,7 +1168,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myMessage = self.tr('An exception occurred when reading the'
                                 'aggregation data. %1 not found in %2')\
             .arg(self.getAggregationFieldNameSum())\
-            .arg(self.aggregationLayer.name())
+            .arg(self.postprocessingLayer.name())
             myMessage = getExceptionWithStacktrace(e,
                 html=True,
                 context=myMessage)
@@ -1210,7 +1210,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises: Propogates any error
         """
         myKeywordFilePath = os.path.splitext(str(
-            self.aggregationLayer.source()))[0]
+            self.postprocessingLayer.source()))[0]
         myKeywordFilePath += '.keywords'
 
         try:
@@ -1251,7 +1251,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Raises: Propagates any error
         """
 
-        vProvider = self.aggregationLayer.dataProvider()
+        vProvider = self.postprocessingLayer.dataProvider()
         vFields = vProvider.fields()
         fields = []
         for i in vFields:
@@ -1286,7 +1286,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.iface.mainWindow(),
                 self.iface,
                 self,
-                self.aggregationLayer)
+                self.postprocessingLayer)
 
             aggrAttribute = fields[0]
             if self.aggregationAttributeDialog.exec_() == \
