@@ -525,6 +525,18 @@ else:
         QgsMessageLog.logMessage(str(msg), tag, level)
 
 
+def isLayerPolygonal(layer):
+    """tell if a qgis layer is vectorial and d its geometries polygons
+   Args:
+       the layer
+    Returns:
+        bool - true if the layer contains polygons
+    Raises:
+       None
+    """
+    return (layer.type() == QgsMapLayer.VectorLayer) and (
+        layer.geometryType() == QGis.Polygon)
+
 #def copyInMemory(vLayer, copyName=''):
 #    """Return a memory copy of a layer
 #

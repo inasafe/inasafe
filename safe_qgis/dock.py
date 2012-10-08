@@ -30,14 +30,14 @@ from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  getWGS84resolution,
-                                 logOnQgsMessageLog)
+                                 logOnQgsMessageLog,
+                                 isLayerPolygonal)
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
-                       QGis,
                        QgsFeature,
                        QgsRectangle)
 from qgis.analysis import QgsZonalStatistics
@@ -589,8 +589,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             #check if layer is a vector polygon layer
             layer = myRegistry.mapLayer(mySource)
-            if (layer.type() == QgsMapLayer.VectorLayer) and (
-                layer.geometryType() == QGis.Polygon):
+            if isLayerPolygonal(layer):
                 self.addComboItemInOrder(self.cboAggregation, myTitle,
                     mySource)
                 self.aggregationLayers.append(myLayer)
