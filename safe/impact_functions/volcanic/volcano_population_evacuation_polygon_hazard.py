@@ -26,6 +26,9 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
     title = _('be affected')
     target_field = 'population'
     category_title = 'KRB'
+    category_names = ['Kawasan Rawan Bencana III',
+                      'Kawasan Rawan Bencana II',
+                      'Kawasan Rawan Bencana I']
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -64,8 +67,9 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
             raise Exception(msg)
 
         if not self.category_title in H.get_attribute_names():
-            self.category_title = 'Radius'
-        category_title = self.category_title
+            msg = ('Hazard data %s did not contain expected '
+                   'attribute %s ' % (H.get_name(), self.category_title))
+            raise InaSAFEError(msg)
 
         # Run interpolation function for polygon2raster
         P = assign_hazard_values_to_exposure_data(H, E,
@@ -120,12 +124,14 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
                       TableRow([_('People needing evacuation'),
                                 '%i' % evacuated],
                                header=True),
-                      TableRow([_('Category'), _('Total')],
+                      TableRow([_('Category'), _('Total'), _('Cumulative')],
                                header=True)]
 
-        if category_title != 'Radius':
-            for name, pop in categories.iteritems():
-                table_body.append(TableRow([name, int(pop)]))
+        cum = 0
+        for name in self.category_names:
+            pop = categories[name]
+            cum += pop
+            table_body.append(TableRow([name, int(pop), int(cum)]))
 
         table_body.append(TableRow(_('Map shows population affected in '
                                      'each of volcano hazard polygons.')))
