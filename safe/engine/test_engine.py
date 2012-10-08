@@ -603,8 +603,8 @@ class Test_Engine(unittest.TestCase):
 
         # Run underlying clipping routine
         res0 = clip_grid_by_polygons(E.get_data(),
-                                    E.get_geotransform(),
-                                    H.get_geometry())
+                                     E.get_geotransform(),
+                                     H.get_geometry())
         assert len(res0) == N
 
         # Run higher level interpolation routine
@@ -679,6 +679,66 @@ class Test_Engine(unittest.TestCase):
         assert numpy.allclose(attributes[23]['number'], -50)
         assert numpy.allclose(attributes[23]['grid_value'], 50.0377)
         assert attributes[23]['polygon_id'] == 3
+
+    def test_polygon_hazard_with_holes_and_raster_exposure(self):
+        """Rasters can be clipped by polygons (with holes)
+
+        This is using population data which really is too coarse,
+        but enough to prove the point
+        """
+
+        # Name input files
+        polyhazard = join(TESTDATA, 'donut.shp')
+        #population = join(EXPDATA, 'glp10ag.asc')
+        population = join(EXPDATA, 'population_indonesia_2010_BNPB_BPS.asc')
+
+        # Get layers using API
+        H = read_layer(polyhazard)
+        E = read_layer(population)
+
+        N = len(H)
+        assert N == 10
+
+        # Run and test the fundamental clipping routine
+        #import time
+        #t0 = time.time()
+        #res = clip_grid_by_polygons(E.get_data(),
+        #                            E.get_geotransform(),
+        #                            H.get_geometry())
+        #print 'Engine took %i seconds' % (time.time() - t0)
+        #assert len(res) == N
+
+        # Characterisation test
+        assert H.get_data()[9]['KRB'] == 'Kawasan Rawan Bencana II'
+
+        # Then run and test the high level interpolation function
+        #t0 = time.time()
+        P = interpolate_polygon_raster(H, E,
+                                       layer_name='poly2raster_test',
+                                       attribute_name='grid_value')
+        #print 'High level function took %i seconds' % (time.time() - t0)
+        #P.write_to_file('polygon_raster_interpolation_example_holes.shp')
+
+        # Characterisation tests (values verified using QGIS)
+        # In internal polygon
+        attributes = P.get_data()[43]
+        #geometry = P.get_geometry()[43]
+        assert attributes['KRB'] == 'Kawasan Rawan Bencana III'
+        assert attributes['polygon_id'] == 8
+
+        # In polygon ring
+        attributes = P.get_data()[222]
+        #geometry = P.get_geometry()[222]
+        assert attributes['KRB'] == 'Kawasan Rawan Bencana II'
+        assert attributes['polygon_id'] == 9
+
+        # In one of the outer polygons
+        attributes = P.get_data()[26]
+        #geometry = P.get_geometry()[26]
+        assert attributes['KRB'] == 'Kawasan Rawan Bencana I'
+        assert attributes['polygon_id'] == 7
+
+    test_polygon_hazard_with_holes_and_raster_exposure.slow = True
 
     def test_flood_building_impact_function(self):
         """Flood building impact function works

@@ -137,8 +137,10 @@ def _clipVectorLayer(theLayer, theExtent,
                        str(theLayer.type()))
         raise InvalidParameterException(myMessage)
 
+    #myHandle, myFilename = tempfile.mkstemp('.sqlite', 'clip_',
+    #    temp_dir())
     myHandle, myFilename = tempfile.mkstemp('.shp', 'clip_',
-        temp_dir())
+                                            temp_dir())
 
     # Ensure the file is deleted before we try to write to it
     # fixes windows specific issue where you get a message like this
@@ -163,7 +165,7 @@ def _clipVectorLayer(theLayer, theExtent,
                        'layer "%s"' % theLayer.source())
         raise Exception(myMessage)
 
-    # get the layer field list, select by our extent then write to disk
+    # Get the layer field list, select by our extent then write to disk
     # .. todo:: FIXME - for different geometry types we should implement
     #    different clipping behaviour e.g. reject polygons that
     #    intersect the edge of the bbox. Tim
@@ -182,6 +184,7 @@ def _clipVectorLayer(theLayer, theExtent,
         myFieldList,
         theLayer.wkbType(),
         myGeoCrs,
+        #'SQLite')  # FIXME (Ole): This works but is far too slow
         'ESRI Shapefile')
     if myWriter.hasError() != QgsVectorFileWriter.NoError:
         myMessage = tr('Error when creating shapefile: <br>Filename:'

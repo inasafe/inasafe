@@ -37,13 +37,23 @@ from qgis.core import (QGis,
                        QgsColorRampShader,
                        QgsRasterTransparency,
                        )
-from safe_qgis.exceptions import StyleError, MethodUnavailableError
+from safe_qgis.exceptions import StyleError
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
 import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
+
+try:
+    #available from qgis 1.8
+    from qgis.core import QgsMessageLog
+
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        QgsMessageLog.logMessage(str(msg), tag, level)
+except MethodUnavailableError:
+    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
+        print (str(msg), tag, level)
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
@@ -510,12 +520,16 @@ def qgisVersion():
     return myVersion
 
 try:
-    #available from qgis 1.8
-    from qgis.core import QgsMessageLog
+    # Available from qgis 1.8
+    from qgis.core import QgsMessageLog  # pylint: disable=E0611
 except ImportError:
+
+    # Define vanilla version
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         print (str(msg), tag, level)
 else:
+
+    # Use QGIS message log from versions >= 1.8
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         QgsMessageLog.logMessage(str(msg), tag, level)
 

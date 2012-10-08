@@ -359,6 +359,7 @@ class DockTest(unittest.TestCase):
         DOCK.setLayerNameFromTitleFlag = False
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
+        DOCK.showPostProcessingLayers = False
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -425,9 +426,8 @@ class DockTest(unittest.TestCase):
     def test_cboAggregationLoadedProject(self):
 
         myLayerList = [DOCK.tr('No aggregation'),
-                       DOCK.tr('A flood in Jakarta in RW areas identified as '
-                               'flood prone'),
-                       DOCK.tr('DKI buildings'),
+                       DOCK.tr('A flood in Jakarta'),
+                       DOCK.tr('Essential buildings'),
                        DOCK.tr('kabupaten jakarta singlepart'),
                        DOCK.tr('OSM Building Polygons')]
         currentLayers = [DOCK.cboAggregation.itemText(i) for i in range(DOCK
@@ -437,7 +437,8 @@ class DockTest(unittest.TestCase):
                      % (myLayerList, currentLayers))
         self.assertEquals(currentLayers, myLayerList, myMessage)
 
-    #FIXME (MB) this is actually wrong
+    #FIXME (MB) this is actually wrong, when calling the test directly it works
+    # in nosetest it fails at the second assert
     @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
@@ -450,14 +451,14 @@ class DockTest(unittest.TestCase):
             theFunctionId='Flood Evacuation Function')
         assert myResult, myMessage
 
+        #in nose test it fails here
         assert DOCK.cboAggregation.isEnabled(), 'The aggregation combobox ' \
                 'should be enabled when hazard and exposure layer are raster'
 
         #vector hazard
         #raster exposure
         myResult, myMessage = setupScenario(
-            theHazard=('A flood in Jakarta in RW areas identified'
-                       ' as flood prone'),
+            theHazard=('A flood in Jakarta'),
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function Vector Hazard')
@@ -481,9 +482,8 @@ class DockTest(unittest.TestCase):
         #vector hazard
         #vector exposure
         myResult, myMessage = setupScenario(
-            theHazard='A flood in Jakarta in RW areas identified'
-                      ' as flood prone',
-            theExposure='DKI buildings',
+            theHazard='A flood in Jakarta',
+            theExposure='Essential buildings',
             theFunction='Be temporarily closed',
             theFunctionId='Flood Building Impact Function')
         assert myResult, myMessage
@@ -531,20 +531,20 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
 
+        #TODO: MOVE to test_keywords_dialog.py
         # with 3 good aggregation attribute using
         # kabupaten_jakarta_singlepart_3_good_attr.shp
-        myResult, myMessage = setupScenario(
-            theHazard='A flood in Jakarta like in 2007',
-            theExposure='People',
-            theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart 3 good attr')
-        assert myResult, myMessage
-        # Press RUN
+#        myResult, myMessage = setupScenario(
+#            theHazard='A flood in Jakarta like in 2007',
+#            theExposure='People',
+#            theFunction='Need evacuation',
+#            theFunctionId='Flood Evacuation Function',
+#            theAggregation='kabupaten jakarta singlepart 3 good attr')
+#        assert myResult, myMessage
+#        # Press RUN
 #        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
 #        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
 #                     (DOCK.aggregationAttribute))
-#        #TODO (MB) automate the selection of the second attribute in gui
 #
 #        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
 
@@ -577,6 +577,56 @@ class DockTest(unittest.TestCase):
         myMessage = ('The aggregation should be None. Found: %s' %
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
+
+    # FIXME (MB) CANVAS.layers() doesn't include the generated layers such as
+    # the impactlayer and the postprocessing generated layers
+    # see https://github.com/AIFDR/inasafe/issues/306
+    @expectedFailure
+    def test_checkPostProcessingLayersVisibility(self):
+        myRunButton = DOCK.pbnRunStop
+
+        # with KAB_NAME aggregation attribute defined in .keyword using
+        # kabupaten_jakarta_singlepart.shp
+        myResult, myMessage = setupScenario(
+            theHazard='A flood in Jakarta like in 2007',
+            theExposure='People',
+            theFunction='Need evacuation',
+            theFunctionId='Flood Evacuation Function',
+            theAggregation='kabupaten jakarta singlepart')
+        assert myResult, myMessage
+
+        myLayerList = [str(DOCK.tr('Padang_WGS84')),
+                    str(DOCK.tr('People')),
+                    str(DOCK.tr('An earthquake in Padang like in 2009')),
+                    str(DOCK.tr('Tsunami Max Inundation')),
+                    str(DOCK.tr('Tsunami Building Exposure')),
+                    str(DOCK.tr('A flood in Jakarta like in 2007')),
+                    str(DOCK.tr('Penduduk Jakarta')),
+                    str(DOCK.tr('An earthquake in Yogyakarta like in 2006')),
+                    str(DOCK.tr('A flood in Jakarta')),
+                    str(DOCK.tr('OSM Building Polygons')),
+                    str(DOCK.tr('Essential buildings')),
+                    str(DOCK.tr('Flood in Jakarta')),
+                    str(DOCK.tr('roads_Maumere')),
+                    str(DOCK.tr('kabupaten jakarta singlepart')),
+                    str(DOCK.tr('Population which Need evacuation'))]
+        # Press RUN
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        currentLayers = [str(c.name()) for c in CANVAS.layers()]
+        myMessage = ('The legend should have:\n %s \nFound: %s'
+                     % (myLayerList, currentLayers))
+        self.assertEquals(currentLayers, myLayerList, myMessage)
+
+        DOCK.showPostProcessingLayers = True
+        # LAYER List should have i additional layers
+        myLayerList.append(str(DOCK.tr('Population which Need evacuation '
+                            'aggregated to kabupaten jakarta singlepart')))
+
+        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
+        currentLayers = [str(c.name()) for c in CANVAS.layers()]
+        myMessage = ('The legend should have:\n %s \nFound:\n %s'
+                     % (myLayerList, currentLayers))
+        self.assertEquals(currentLayers, myLayerList, myMessage)
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
@@ -856,8 +906,7 @@ class DockTest(unittest.TestCase):
            Uses population raster exposure layer"""
 
         myResult, myMessage = setupScenario(
-            theHazard=('A flood in Jakarta in RW areas identified'
-                      ' as flood prone'),
+            theHazard=('A flood in Jakarta'),
             theExposure='Penduduk Jakarta',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function Vector Hazard')
@@ -882,7 +931,7 @@ class DockTest(unittest.TestCase):
 
         myResult, myMessage = setupScenario(
             theHazard='Flood in Jakarta',
-            theExposure='DKI buildings',
+            theExposure='Essential buildings',
             theFunction='Be affected',
             theFunctionId='Categorised Hazard Building Impact Function')
         assert myResult, myMessage
@@ -1273,8 +1322,8 @@ class DockTest(unittest.TestCase):
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-    #suite = unittest.makeSuite(DockTest,
-    #                    'test_cboAggregationToggle')
+    suite = unittest.makeSuite(DockTest,
+                        'test_checkAggregationAttribute')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
