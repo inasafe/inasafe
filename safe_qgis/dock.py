@@ -611,7 +611,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.exposureLayers.append(myLayer)
 
         #handle the cboAggregation combo
-        self.cboAggregation.insertItem(0, self.tr('No aggregation'))
+        self.cboAggregation.insertItem(0, self.tr('Entire area'))
         self.cboAggregation.setCurrentIndex(0)
         self._toggleCboAggregation()
 
