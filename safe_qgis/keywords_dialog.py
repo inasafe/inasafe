@@ -28,7 +28,8 @@ from odict import OrderedDict
 from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
-from safe_qgis.utilities import getExceptionWithStacktrace
+from safe_qgis.utilities import (getExceptionWithStacktrace,
+                                 isLayerPolygonal)
 
 from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
@@ -116,7 +117,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.dsbFemaleRatioDefault.blockSignals(True)
         self.dsbFemaleRatioDefault.setValue(safe.defaults.DEFAULT_FEMALE_RATIO)
         self.dsbFemaleRatioDefault.blockSignals(False)
-        self.adjustSize()
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
         if theLayer is None:
@@ -124,6 +124,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.layer = theLayer
         if self.layer:
+            if not isLayerPolygonal(self.layer):
+                self.radPostprocessing.setEnabled(False)
             self.loadStateFromKeywords()
 
         #add a reload from keywords button
@@ -146,7 +148,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.showAggregationAttribute(isPostprocessingOn)
         self.showFemaleRatioAttribute(isPostprocessingOn)
         self.showFemaleRatioDefault(isPostprocessingOn)
-        self.adjustSize()
 
     def getAttributeNames(self, allowedTypes, currentKeyword):
         """iterates over self.layer and returns all the attribute names of
@@ -271,6 +272,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     # prevents actions being handled twice
     @pyqtSignature('double')
     def on_dsbFemaleRatioDefault_valueChanged(self, theValue):
+        del theValue
         theBox = self.dsbFemaleRatioDefault
         if theBox.isEnabled():
             self.addListEntry(safe.defaults.FEMALE_RATIO_DEFAULT_KEY,
@@ -395,6 +397,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             myDataType = myTokens[1].replace('[', '').replace(']', '')
             self.addListEntry('datatype', myDataType)
     # prevents actions being handled twice
+
     def setSubcategoryList(self, theEntries, theSelectedItem=None):
         """Helper to populate the subcategory list based on category context.
 
@@ -717,7 +720,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         myLayerName = self.layer.name()
         if 'title' not in myKeywords:
             self.leTitle.setText(myLayerName)
-        self.lblLayerName.setText(myLayerName)
+        self.lblLayerName.setText(self.tr('Keywords for %s' % myLayerName))
         #if we have a category key, unpack it first so radio button etc get set
         if 'category' in myKeywords:
             self.setCategory(myKeywords['category'])
@@ -747,7 +750,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             self.leTitle.setText(myTitle)
         elif self.layer is not None:
             myLayerName = self.layer.name()
-            self.lblLayerName.setText(myLayerName)
+            self.lblLayerName.setText(self.tr('Keywords for %s' % myLayerName))
         else:
             self.lblLayerName.setText('')
 
@@ -774,6 +777,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
             else:
                 self.setSubcategoryList(self.standardHazardList,
                                         self.tr('Not Set'))
+        self.adjustSize()
 
     # prevents actions being handled twice
     @pyqtSignature('QString')
