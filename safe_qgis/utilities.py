@@ -18,6 +18,7 @@ __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import os
 import sys
 import traceback
 import logging
@@ -38,6 +39,7 @@ from qgis.core import (QGis,
                        QgsRasterTransparency,
                        )
 from safe_qgis.exceptions import StyleError
+from safe_interface import temp_dir
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
@@ -603,10 +605,11 @@ def setup_logger():
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
-    myEmailHandler.setFormatter(myFormatter)
+    #myEmailHandler.setFormatter(myFormatter)
     # add the handlers to the logger
     myLogger.addHandler(myFileHandler)
     myLogger.addHandler(myConsoleHandler)
+    #myLogger.addHandler(myEmailHandler)
     myLogger.info('Safe Logger Module Loaded')
     myLogger.info('----------------------')
     myLogger.info('CWD: %s' % os.path.abspath(os.path.curdir))
