@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.1'
@@ -48,7 +47,9 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getBufferedExtent,
                                       internationalisedNames,
                                       getSafeImpactFunctions,
-                                      writeKeywordsToFile)
+                                      writeKeywordsToFile,
+                                      tempDir,
+                                      ReadLayerError)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -57,7 +58,6 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
-from safe.api import write_keywords, read_keywords, ReadLayerError
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
@@ -845,21 +845,41 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         #check and generate keywords for the aggregation layer
-        self.postprocessingLayer = self.getAggregationLayer()
-        if self.postprocessingLayer is not None:
-            try:
-                self.aggregationAttribute = self._checkAggregationAttribute()
-            except Exception, e:  # pylint: disable=W0703
-                # FIXME (MB): This branch is not covered by the tests
-                QtGui.qApp.restoreOverrideCursor()
-                self.hideBusy()
+        self.postprocessingLayer = self.getPostprocessingLayer()
+
+        if self.postprocessingLayer is None:
+#            crs = self.getExposureLayer().crs().authid().toLower()
+#            uri = 'Polygon' + '?crs=' + crs + '&index=yes'
+#            myLayer = QgsVectorLayer(uri, 'tmpPostprocessingLayer', 'memory')
+
+            myFile = 'mock_entire_area.shp'
+            myPath = tempDir('postprocessing')
+            myPath = os.path.join(myPath, myFile)
+            print myPath
+            #FIXME (MB) path and except
+            myLayer = QgsVectorLayer('/home/marco/dev/qgis-plugins/inasafe_data/tmp/mock_entire_area.shp', 'tmpPostprocessingLayer', 'ogr')
+            if not myLayer.isValid():
                 myMessage = self.tr('An exception occurred when reading the '
-                                    'aggregation attribute.')
-                myMessage = getExceptionWithStacktrace(e,
-                    html=True,
-                    context=myMessage)
-                self.displayHtml(myMessage)
-                return
+                                    'postprocessing mock layer.')
+                raise ReadLayerError(myMessage)
+
+            self.postprocessingLayer = myLayer
+            self.keywordIO.writeKeywords(self.postprocessingLayer,
+                {safe.defaults.AGGREGATION_ATTRIBUTE_KEY:
+                     self.tr('Don\'t use')})
+        try:
+            self.aggregationAttribute = self._checkAggregationAttribute()
+        except Exception, e:
+            # FIXME (MB): This branch is not covered by the tests
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myMessage = self.tr('An exception occurred when reading the '
+                                'postprocessing attributes.')
+            myMessage = getExceptionWithStacktrace(e,
+                html=True,
+                context=myMessage)
+            self.displayHtml(myMessage)
+            return
 
         try:
             self.setupCalculator()
@@ -1118,7 +1138,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'You aborted aggregation, '
                     'so there are no data for analysis. Exiting...'))
         if self.showPostProcessingLayers:
-            QgsMapLayerRegistry.instance().addMapLayer(self.postprocessingLayer)
+            QgsMapLayerRegistry.instance().addMapLayer(
+                self.postprocessingLayer)
         return
 
     def _parseAggregationResults(self):
@@ -1209,36 +1230,27 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Raises: Propogates any error
         """
-        myKeywordFilePath = os.path.splitext(str(
-            self.postprocessingLayer.source()))[0]
-        myKeywordFilePath += '.keywords'
 
         try:
-            keywords = read_keywords(myKeywordFilePath)
-        except Exception:  # FIXME: Which exceptions?
+            keywords = self.keywordIO.readKeywords(self.postprocessingLayer)
+        except Exception:
             keywords = dict()
-
         if ('category' in keywords and
             keywords['category'] == 'postprocessing' and
-            'subcategory' in keywords and
-            keywords['subcategory'] == 'aggregation' and
             safe.defaults.AGGREGATION_ATTRIBUTE_KEY in keywords):
             #keywords are already complete
             myValue = keywords[safe.defaults.AGGREGATION_ATTRIBUTE_KEY]
         else:
             #set the default values by writing to the keywords
             keywords['category'] = 'postprocessing'
-            keywords['subcategory'] = 'aggregation'
-            write_keywords(keywords, myKeywordFilePath)
+            self.keywordIO.writeKeywords(self.postprocessingLayer, keywords)
 
             #prompt uset for a choice
-            myValue = self._promptForAggregationAttribute(myKeywordFilePath)
-            keywords[safe.defaults.AGGREGATION_ATTRIBUTE_KEY] = myValue
-            write_keywords(keywords, myKeywordFilePath)
+            myValue = self._promptForAggregationAttribute()
 
         return myValue
 
-    def _promptForAggregationAttribute(self, myKeywordFilePath):
+    def _promptForAggregationAttribute(self):
         """prompt user for a decision on which attribute has to be the key
         attribute for the aggregated data and writes the keywords file
         This could be swapped to a call to the keyword editor
@@ -1291,13 +1303,14 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             aggrAttribute = fields[0]
             if self.aggregationAttributeDialog.exec_() == \
                QtGui.QDialog.Accepted:
-                keywords = read_keywords(myKeywordFilePath)
+                keywords = self.keywordIO.readKeywords(
+                    self.postprocessingLayer)
                 try:
                     aggrAttribute = keywords[
                                     safe.defaults.AGGREGATION_ATTRIBUTE_KEY]
                     logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
                                        ' as aggregation attribute')
-                except Exception:  # FIXME: Which exceptions?
+                except HashNotFoundException:
                     logOnQgsMessageLog('User Accepted but did not select a '
                                        'value. Using default : '
                                        + str(aggrAttribute) +
@@ -1901,7 +1914,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myMap = Map(self.iface)
         myFilename = QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
-                            temp_dir() + os.sep + myMap.getMapTitle() + '.pdf',
+                            tempDir() + os.sep + myMap.getMapTitle() + '.pdf',
                             self.tr('Pdf File (*.pdf)'))
         myMap.setImpactLayer(self.iface.activeLayer())
         self.showBusy(self.tr('Map Creator'),
