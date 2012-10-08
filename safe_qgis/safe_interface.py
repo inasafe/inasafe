@@ -38,6 +38,8 @@ from safe.api import (buffered_bounding_box,
                       verify as verify_util,
                       VerificationError)
 
+from safe.api import temp_dir as tempDir
+
 from safe.api import (calculate_impact as safe_calculate_impact,
                       internationalisedNames)
 
@@ -50,7 +52,7 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   StyleInfoNotFoundException,
                                   InvalidParameterException,
                                   InsufficientOverlapException)
-from safe.common.exceptions import BoundingBoxError
+from safe.common.exceptions import BoundingBoxError, ReadLayerError
 
 
 def tr(theText):
