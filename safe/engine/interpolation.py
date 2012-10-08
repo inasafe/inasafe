@@ -303,11 +303,17 @@ def interpolate_polygon_raster(source, target,
     verify(source.is_polygon_data)
 
     # Run underlying clipping algorithm
-    polygon_geometry = source.get_geometry()
+    polygon_geometry = source.get_geometry(as_geometry_objects=True)
+
+    # FIXME (Ole): Perhaps refactor so that polygon_geometry can
+    # be passed in directly
+    outer_rings = [p.outer_ring for p in polygon_geometry]
+    inner_rings = [p.inner_rings for p in polygon_geometry]
     polygon_attributes = source.get_data()
     res = clip_grid_by_polygons(target.get_data(),
                                 target.get_geotransform(),
-                                polygon_geometry)
+                                outer_rings,
+                                inner_rings=inner_rings)
 
     # Create one new point layer with interpolated attributes
     new_geometry = []
@@ -456,7 +462,7 @@ def interpolate_polygon_points(source, target,
     original_geometry = target.get_geometry()  # Geometry for returned data
 
     # Extract polygon features
-    geom = source.get_geometry()
+    geom = source.get_geometry(as_geometry_objects=True)
     data = source.get_data()
     verify(len(geom) == len(data))
 
@@ -488,7 +494,8 @@ def interpolate_polygon_points(source, target,
         poly_attr[DEFAULT_ATTRIBUTE] = True
 
         # Clip data points by polygons and add polygon attributes
-        indices = inside_polygon(points, polygon)
+        indices = inside_polygon(points, polygon.outer_ring,
+                                 holes=polygon.inner_rings)
         for k in indices:
             for key in poly_attr:
                 # Assign attributes from polygon to points
