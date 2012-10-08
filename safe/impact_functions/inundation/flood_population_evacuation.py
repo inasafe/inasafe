@@ -1,8 +1,7 @@
 import numpy
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
-from safe.impact_functions.core import (get_question, get_function_title,
-                                        get_thresholds)
+from safe.impact_functions.core import get_question, get_function_title
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.common.utilities import ugettext as _
@@ -27,6 +26,7 @@ class FloodEvacuationFunction(FunctionProvider):
     """
 
     title = _('Need evacuation')
+    parameters = {'thresholds': [0.3, 0.5, 1.0]}
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -54,10 +54,7 @@ class FloodEvacuationFunction(FunctionProvider):
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
-        thresholds = get_thresholds(inundation)
-        if len(thresholds) == 0:
-            # Default threshold
-            thresholds = [1.0]
+        thresholds = self.parameters['thresholds']
 
         verify(isinstance(thresholds, list),
                'Expected thresholds to be a list. Got %s' % str(thresholds))

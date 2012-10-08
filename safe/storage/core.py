@@ -24,7 +24,7 @@ def read_layer(filename):
     _, ext = os.path.splitext(filename)
     if ext in ['.asc', '.tif', '.nc']:
         return Raster(filename)
-    elif ext in ['.shp', '.gml']:
+    elif ext in ['.shp', '.sqlite']:
         return Vector(filename)
     else:
         msg = ('Could not read %s. '

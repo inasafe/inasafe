@@ -28,6 +28,7 @@ from core import get_bounding_box
 from core import bboxlist2string, bboxstring2list
 from core import check_bbox_string
 from utilities_test import same_API
+from geometry import Polygon
 from safe.common.numerics import nanallclose
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
@@ -218,6 +219,35 @@ class Test_IO(unittest.TestCase):
 
     test_reading_and_writing_of_vector_point_data.slow = True
 
+    def Xtest_reading_and_writing_of_sqlite_vector_data(self):
+        """SQLite vector data can be read and written correctly
+        """
+
+        # First test that some error conditions are caught
+        filename = '%s/%s' % (TESTDATA, 'lembang_osm_20121003.sqlite')
+        L = read_layer(filename)
+        print L.get_attribute_names()
+
+    def test_donut_polygons(self):
+        """Donut polygon can be read, interpreted and written correctly
+        """
+
+        # Read real polygon with holes
+        filename = '%s/%s' % (TESTDATA, 'donut.shp')
+        L = read_layer(filename)
+
+        # Write this new object, read it again and check
+        tmp_filename = unique_filename(suffix='.shp')
+        L.write_to_file(tmp_filename)
+
+        # Read back
+        R = read_layer(tmp_filename)
+        msg = ('Geometry of polygon was not preserved after reading '
+               'and re-writing')
+
+        # Check
+        assert R == L, msg
+
     def test_analysis_of_vector_data_top_N(self):
         """Analysis of vector data - get top N of an attribute
         """
@@ -349,12 +379,111 @@ class Test_IO(unittest.TestCase):
         assert not V_tmp == V_ref
         assert V_tmp != V_ref
 
+    def test_ordering_polygon_vertices(self):
+        """Ordering of polygon vertices is preserved when writing and reading
+        """
+
+        # So far the admissible classes are Point, Line and Polygon
+        tmp_filename = unique_filename(suffix='.shp')
+
+        # Simple polygon (in clock wise order)
+        P = numpy.array([[106.79, -6.23],
+                         [106.80, -6.24],
+                         [106.78, -6.23],
+                         [106.77, -6.21]])
+
+        v_ref = Vector(geometry=[P], geometry_type='polygon')
+        v_ref.write_to_file(tmp_filename)
+        print 'Written to', tmp_filename
+        v_file = read_layer(tmp_filename)
+        for i in range(len(v_ref)):
+            x = v_ref.get_geometry()[i]
+            y = v_file.get_geometry()[i]
+            msg = 'Read geometry %s, but expected %s' % (y, x)
+            assert numpy.allclose(x, y), msg
+
+        assert v_file == v_ref
+        assert v_ref == v_file
+        assert v_file.is_polygon_data
+        assert v_file.geometry_type == 3
+
+        # Reversed order (OGR will swap back to clockwise)
+        P = numpy.array([[106.77, -6.21],
+                         [106.78, -6.23],
+                         [106.80, -6.24],
+                         [106.79, -6.23]])
+
+        v_ref = Vector(geometry=[P], geometry_type='polygon')
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        for i in range(len(v_ref)):
+            x = v_ref.get_geometry()[i]
+            x = x[::-1, :]  # Flip Up-Down to get order clockwise
+            y = v_file.get_geometry()[i]
+            msg = 'Read geometry %s, but expected %s' % (y, x)
+            assert numpy.allclose(x, y), msg
+
+        assert v_file == v_ref
+        assert v_ref == v_file
+        assert v_file.is_polygon_data
+        assert v_file.geometry_type == 3
+
+        # Self intersecting polygon (in this case order will be flipped)
+        P = numpy.array([[106.79, -6.23],
+                         [106.80, -6.24],
+                         [106.78, -6.23],
+                         [106.79, -6.22],
+                         [106.77, -6.21]])
+
+        v_ref = Vector(geometry=[P], geometry_type='polygon')
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        for i in range(len(v_ref)):
+            x = v_ref.get_geometry()[i]
+            x = x[::-1, :]  # Flip Up-Down to get order clockwise
+            y = v_file.get_geometry()[i]
+            msg = 'Read geometry %s, but expected %s' % (y, x)
+            assert numpy.allclose(x, y), msg
+
+        assert v_file == v_ref
+        assert v_ref == v_file
+        assert v_file.is_polygon_data
+        assert v_file.geometry_type == 3
+
     def test_vector_class_geometry_types(self):
         """Admissible geometry types work in vector class
         """
 
         # So far the admissible classes are Point, Line and Polygon
+        tmp_filename = unique_filename(suffix='.shp')
 
+        # Check that one single polygon works
+        P = numpy.array([[106.79, -6.23],
+                         [106.80, -6.24],
+                         [106.78, -6.23],
+                         [106.77, -6.21]])
+        v = Vector(geometry=[P])
+        assert v.is_polygon_data
+        assert len(v) == 1
+
+        v_ref = Vector(geometry=[P], geometry_type='polygon')
+        assert v_ref.is_polygon_data
+        assert len(v_ref) == 1
+
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        for i in range(len(v_ref)):
+            x = v_ref.get_geometry()[i]
+            y = v_file.get_geometry()[i]
+            msg = 'Read geometry %s, but expected %s' % (y, x)
+            assert numpy.allclose(x, y), msg
+
+        assert v_file == v_ref
+        assert v_ref == v_file
+        assert v_file.is_polygon_data
+        assert v_file.geometry_type == 3
+
+        # Then a more complex dataset
         test_data = [numpy.array([[122.226889, -8.625599],
                                   [122.227299, -8.624500],
                                   [122.227409, -8.624221],
@@ -365,13 +494,24 @@ class Test_IO(unittest.TestCase):
                                   [122.231021, -8.626557]]),
                      numpy.array([[122.247938, -8.632926],
                                   [122.247940, -8.633560],
-                                  [122.247390, -8.636220]])]
+                                  [122.247390, -8.636220]]),
+                     numpy.array([[122.22, -8.6256],
+                                  [122.23, -8.6245],
+                                  [122.24, -8.6242],
+                                  [122.22, -8.6240]]),
+                     numpy.array([[122.24, -8.63],
+                                  [122.23, -8.63],
+                                  [122.23, -8.62],
+                                  [122.23, -8.61]]),
+                     numpy.array([[122.25, -8.63],
+                                  [122.24, -8.633],
+                                  [122.23, -8.64]])]
+
         # Point data
         v_ref = Vector(geometry=test_data[0])
         assert v_ref.is_point_data
         assert v_ref.geometry_type == 1
 
-        tmp_filename = unique_filename(suffix='.shp')
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
@@ -386,6 +526,21 @@ class Test_IO(unittest.TestCase):
         v = Vector(geometry=test_data[0], geometry_type=1)
         assert v.is_point_data
         assert v_ref == v
+
+        # Line data
+        v_ref = Vector(geometry=test_data, geometry_type='line')
+        assert v_ref.is_line_data
+        assert v_ref.geometry_type == 2
+
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        assert v_file == v_ref
+        assert v_ref == v_file
+        assert v_file.is_line_data
+        assert v_file.geometry_type == 2
+
+        v = Vector(geometry=test_data, geometry_type=2)
+        assert v == v_ref
 
         # Polygon data
         v_ref = Vector(geometry=test_data)
@@ -405,34 +560,93 @@ class Test_IO(unittest.TestCase):
         v = Vector(geometry=test_data, geometry_type=3)
         assert v == v_ref
 
-        # Line data
-        v_ref = Vector(geometry=test_data, geometry_type='line')
-        assert v_ref.is_line_data
-        assert v_ref.geometry_type == 2
+    def test_polygons_with_inner_rings(self):
+        """Polygons with inner rings can be written and read
+        """
+
+        # Define two (closed) outer rings - clock wise direction
+        outer_rings = [numpy.array([[106.79, -6.233],
+                                    [106.80, -6.24],
+                                    [106.78, -6.23],
+                                    [106.77, -6.21],
+                                    [106.79, -6.233]]),
+                       numpy.array([[106.76, -6.23],
+                                    [106.72, -6.23],
+                                    [106.72, -6.22],
+                                    [106.72, -6.21],
+                                    [106.76, -6.23]])]
+
+        tmp_filename = unique_filename(suffix='.shp')
+
+        # Do outer rings first (use default geometry type polygon)
+        v_ref = Vector(geometry=outer_rings)
+        assert v_ref.is_polygon_data
 
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
-        assert v_ref == v_file
-        assert v_file.is_line_data
-        assert v_file.geometry_type == 2
+        assert v_file.is_polygon_data
 
-        v = Vector(geometry=test_data, geometry_type=2)
-        assert v == v_ref
+        # Do it again but with (closed) inner rings as well
 
-        # Check that one single polygon works
-        P = numpy.array([[106.7922547, -6.2297884],
-                         [106.7924589, -6.2298087],
-                         [106.7924538, -6.2299127],
-                         [106.7922547, -6.2298899],
-                         [106.7922547, -6.2297884]])
-        v = Vector(geometry=[P])
-        assert v.is_polygon_data
-        assert len(v) == 1
+        # Define inner rings (counter clock wise)
+        inner_rings = [
+            # 2 rings for feature 0
+            [numpy.array([[106.77827, -6.2252],
+                          [106.77775, -6.22378],
+                          [106.78, -6.22311],
+                          [106.78017, -6.22530],
+                          [106.77827, -6.2252]])[::-1],
+             numpy.array([[106.78652, -6.23215],
+                          [106.78642, -6.23075],
+                          [106.78746, -6.23143],
+                          [106.78831, -6.23307],
+                          [106.78652, -6.23215]])[::-1]],
+            # 1 ring for feature 1
+            [numpy.array([[106.73709, -6.22752],
+                          [106.73911, -6.22585],
+                          [106.74265, -6.22814],
+                          [106.73971, -6.22926],
+                          [106.73709, -6.22752]])[::-1]]]
 
-        v = Vector(geometry=[P], geometry_type='polygon')
-        assert v.is_polygon_data
-        assert len(v) == 1
+        polygons = []
+        for i, outer_ring in enumerate(outer_rings):
+            p = Polygon(outer_ring=outer_ring, inner_rings=inner_rings[i])
+            polygons.append(p)
+
+        v_ref = Vector(geometry=polygons)
+        assert v_ref.is_polygon_data
+
+        # Check data from Vector object
+        geometry = v_ref.get_geometry(as_geometry_objects=True)
+        for i, g in enumerate(geometry):
+            assert numpy.allclose(g.outer_ring, outer_rings[i])
+            if i == 0:
+                assert len(g.inner_rings) == 2
+            else:
+                assert len(g.inner_rings) == 1
+
+            for j, ring in enumerate(inner_rings[i]):
+                assert numpy.allclose(ring, g.inner_rings[j])
+
+        # Write to file and read again
+        v_ref.write_to_file(tmp_filename)
+        #print 'With inner rings, written to ', tmp_filename
+        v_file = read_layer(tmp_filename)
+        assert v_file == v_ref
+        assert v_file.is_polygon_data
+
+        # Check data from file
+        geometry = v_file.get_geometry(as_geometry_objects=True)
+        for i, g in enumerate(geometry):
+            assert numpy.allclose(g.outer_ring, outer_rings[i])
+            if i == 0:
+                assert len(g.inner_rings) == 2
+            else:
+                assert len(g.inner_rings) == 1
+
+            for j, ring in enumerate(inner_rings[i]):
+                assert numpy.allclose(ring, g.inner_rings[j])
 
     def test_attribute_types(self):
         """Different attribute types are handled correctly in vector data
