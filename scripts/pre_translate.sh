@@ -1,11 +1,11 @@
 #!/bin/bash
-# Name of the dir containing static files
-STATIC=_static
 # Path to the documentation root relative to script execution dir
 DOCROOT=docs
 # Path from execution dir of this script to docs sources (could be just
 # '' depending on how your sphinx project is set up).
 SOURCE=source
+# Name of the dir containing static files
+STATIC=_static
 
 pushd .
 cd $DOCROOT/$SOURCE
