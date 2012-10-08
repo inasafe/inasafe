@@ -4,7 +4,7 @@
 import unittest
 
 from safe.storage.core import read_layer
-from safe.common.testing import TESTDATA
+from safe.common.testing import EXPDATA
 from safe.impact_functions.mappings import osm2padang, osm2bnpb
 
 
@@ -15,8 +15,8 @@ class Test_mappings(unittest.TestCase):
         """
 
         #hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
-        exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
-                             % TESTDATA)
+        exposure_filename = ('%s/jakarta_OSM_building.shp'
+                             % EXPDATA)
 
         # Calculate impact using API
         E = read_layer(exposure_filename)
@@ -28,8 +28,8 @@ class Test_mappings(unittest.TestCase):
 
             vclass = int(Emap.get_data('VCLASS', i))
 
-            levels = feature['levels']
-            structure = feature['structure']
+            levels = feature['building_l']
+            structure = feature['building_s']
             msg = ('Unexpected VCLASS %i. '
                    'I have levels == %s and structure == %s.'
                    % (vclass, levels, structure))
@@ -77,8 +77,8 @@ class Test_mappings(unittest.TestCase):
         """
 
         #hazard_filename = '%s/Shakemap_Padang_2009.asc' % HAZDATA
-        exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
-                             % TESTDATA)
+        exposure_filename = ('%s/jakarta_OSM_building.shp'
+                             % EXPDATA)
 
         # Calculate impact using API
         E = read_layer(exposure_filename)
@@ -95,8 +95,8 @@ class Test_mappings(unittest.TestCase):
                 #import sys; sys.exit()
                 pass
 
-            levels = feature['levels']
-            structure = feature['structure']
+            levels = feature['building_l']
+            structure = feature['building_s']
             msg = ('Unexpected VCLASS %s. '
                    'I have levels == %s and structure == %s.'
                    % (vclass, levels, structure))
@@ -134,6 +134,6 @@ class Test_mappings(unittest.TestCase):
     test_osm2bnpb.slow = True
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(Test_mappings, 'test')
+    suite = unittest.makeSuite(Test_mappings, 'test_osm2bnpb')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
