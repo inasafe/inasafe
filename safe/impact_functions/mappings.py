@@ -47,7 +47,7 @@ def osm2padang(E):
     """
 
     # Input check
-    required = ['levels', 'structure']
+    required = ['building_l', 'building_s']
     actual = E.get_attribute_names()
     msg = ('Input data to osm2padang must have attributes %s. '
            'It has %s' % (str(required), str(actual)))
@@ -63,8 +63,8 @@ def osm2padang(E):
     count = 0
     # pylint: enable=W0612
     for i in range(N):
-        levels = E.get_data('levels', i)
-        structure = E.get_data('structure', i)
+        levels = E.get_data('building_l', i)
+        structure = E.get_data('building_s', i)
         if levels is None or structure is None:
             vulnerability_class = 2
             count += 1
@@ -224,7 +224,7 @@ def osm2bnpb(E, target_attribute='VCLASS'):
     """
 
     # Input check
-    required = ['levels', 'structure']
+    required = ['building_l', 'building_s']
     actual = E.get_attribute_names()
     msg = ('Input data to osm2bnpb must have attributes %s. '
            'It has %s' % (str(required), str(actual)))
@@ -240,8 +240,8 @@ def osm2bnpb(E, target_attribute='VCLASS'):
     count = 0
     # pylint: enable=W0612
     for i in range(N):
-        levels = E.get_data('levels', i)
-        structure = E.get_data('structure', i)
+        levels = E.get_data('building_l', i)
+        structure = E.get_data('building_s', i)
         if levels is None or structure is None:
             vulnerability_class = 'URM'
             count += 1

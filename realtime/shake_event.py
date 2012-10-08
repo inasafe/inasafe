@@ -1829,10 +1829,11 @@ class ShakeEvent(QObject):
         # You can use this to replace any string like this [key]
         # in the template with a new value. e.g. to replace
         # [date] pass a map like this {'date': '1 Jan 2012'}
-        myLocationInfo = self.eventInfo().replace(unichr(176),'')
+        myLocationInfo = self.eventInfo()
         LOGGER.debug(myLocationInfo)
         mySubstitutionMap = {'location-info': myLocationInfo,
                              'version': self.version()}
+        mySubstitutionMap.update(self.eventDict())
         myResult = myComposition.loadFromTemplate(myDocument,
                                                   mySubstitutionMap)
         if not myResult:
@@ -1981,7 +1982,7 @@ class ShakeEvent(QObject):
 
         """
 
-        #Format the lat lon from ddegrees to dms
+        #Format the lat lon from decimal degrees to dms
         myPoint = QgsPoint(self.longitude, self.latitude)
         myCoordinates = myPoint.toDegreesMinutesSeconds(2)
         myTokens = myCoordinates.split(',')

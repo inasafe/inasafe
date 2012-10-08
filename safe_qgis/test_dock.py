@@ -20,15 +20,18 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
+import logging
 
+from os.path import join
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
 sys.path.append(pardir)
 
 from os.path import join
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsRasterLayer,
+                       QgsVectorLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
 from qgis.gui import QgsMapCanvasLayer
@@ -59,12 +62,7 @@ from safe.engine.impact_functions_for_testing import HKV_flood_study
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # pylint: enable=W0611
 
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError, e:
-    print 'Debugging was disabled'
+LOGGER = logging.getLogger('InaSAFE')
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = Dock(IFACE)
@@ -154,7 +152,8 @@ def combosToString(ui):
 
 
 def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
-                  theOkButtonFlag=True, theAggregation=None):
+                  theOkButtonFlag=True, theAggregation=None,
+                  theAggregationEnabledFlag=None):
     """Helper function to set the gui state to a given scenario.
 
     Args:
@@ -208,6 +207,12 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
         if myIndex == -1:
             return False, myMessage
         DOCK.cboAggregation.setCurrentIndex(myIndex)
+
+    if theAggregationEnabledFlag is not None:
+        if DOCK.cboAggregation.isEnabled() != theAggregationEnabledFlag:
+            myMessage = 'The aggregation combobox should be %s' %\
+                        ('enabled' if theAggregationEnabledFlag else 'disabled')
+            return False, myMessage
 
     # Check that layers and impact function are correct
     myDict = getUiState(DOCK)
@@ -439,7 +444,7 @@ class DockTest(unittest.TestCase):
 
     #FIXME (MB) this is actually wrong, when calling the test directly it works
     # in nosetest it fails at the second assert
-    @expectedFailure
+#    @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
         #raster hazard
@@ -448,12 +453,10 @@ class DockTest(unittest.TestCase):
             theHazard='A flood in Jakarta like in 2007',
             theExposure='People',
             theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function')
+            theFunctionId='Flood Evacuation Function',
+            theAggregationEnabledFlag=True)
+        myMessage += ' when the when hazard and exposure layer are raster'
         assert myResult, myMessage
-
-        #in nose test it fails here
-        assert DOCK.cboAggregation.isEnabled(), 'The aggregation combobox ' \
-                'should be enabled when hazard and exposure layer are raster'
 
         #vector hazard
         #raster exposure
@@ -461,11 +464,10 @@ class DockTest(unittest.TestCase):
             theHazard=('A flood in Jakarta'),
             theExposure='People',
             theFunction='Need evacuation',
-            theFunctionId='Flood Evacuation Function Vector Hazard')
+            theFunctionId='Flood Evacuation Function Vector Hazard',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is vector and exposure is raster'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-            'combobox should be disabled when hazard layer is vectorial'
 
         #raster hazard
         #vector exposure
@@ -473,11 +475,10 @@ class DockTest(unittest.TestCase):
             theHazard='Tsunami Max Inundation',
             theExposure='Tsunami Building Exposure',
             theFunction='Be temporarily closed',
-            theFunctionId='Flood Building Impact Function')
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard is raster and exposure is vector'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-                'combobox should be disabled when exposure layer is vectorial'
 
         #vector hazard
         #vector exposure
@@ -485,12 +486,10 @@ class DockTest(unittest.TestCase):
             theHazard='A flood in Jakarta',
             theExposure='Essential buildings',
             theFunction='Be temporarily closed',
-            theFunctionId='Flood Building Impact Function')
+            theFunctionId='Flood Building Impact Function',
+            theAggregationEnabledFlag=False)
+        myMessage += ' when the when hazard and exposure layer are vector'
         assert myResult, myMessage
-
-        assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
-                'combobox should be disabled when hazard and exposure layer' \
-                ' are vectorial'
 
     def test_checkAggregationAttribute(self):
         myRunButton = DOCK.pbnRunStop
@@ -1320,10 +1319,22 @@ class DockTest(unittest.TestCase):
                                 myExpectedString)
         assert myExpectedString in myHtml, myMessage
 
+    def test_newLayersShowInCanvas(self):
+        """Check that when we add a layer we can see it in the canvas list."""
+        logging.info("Canvas list before: %s" % canvasList())
+        myBeforeCount = len(CANVAS.layers())
+        myPath = join(TESTDATA, 'polygon_0.shp')
+        myLayer = QgsVectorLayer(myPath, 'foo', 'ogr')
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+        myAfterCount = len(CANVAS.layers())
+        logging.info("Canvas list after: %s" % canvasList())
+        myMessage = ('Layer was not added to canvas (%s before, %s after)' %
+                     (myBeforeCount, myAfterCount))
+        assert myBeforeCount == myAfterCount-1, myMessage
+        QgsMapLayerRegistry.instance().removeMapLayer(myLayer.id())
+
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-    suite = unittest.makeSuite(DockTest,
-                        'test_checkAggregationAttribute')
-
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

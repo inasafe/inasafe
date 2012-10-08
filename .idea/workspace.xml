@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Python lint fixes.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/ftp_client.py" afterPath="$PROJECT_DIR$/realtime/ftp_client.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/make_map.py" afterPath="$PROJECT_DIR$/realtime/make_map.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_data.py" afterPath="$PROJECT_DIR$/realtime/shake_data.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/fixtures/realtime.qgs" afterPath="$PROJECT_DIR$/realtime/fixtures/realtime.qgs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/shake_event.py" afterPath="$PROJECT_DIR$/realtime/shake_event.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_ftp_client.py" afterPath="$PROJECT_DIR$/realtime/test_ftp_client.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_data.py" afterPath="$PROJECT_DIR$/realtime/test_shake_data.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/realtime/test_shake_event.py" afterPath="$PROJECT_DIR$/realtime/test_shake_event.py" />
     </list>
     <ignored path="inasafe-realtime.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,10 +30,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="shake_event.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="shake_event.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1978" column="42" selection-start="82358" selection-end="82358" vertical-scroll-proportion="0.0">
+            <state line="773" column="8" selection-start="31557" selection-end="31557" vertical-scroll-proportion="0.23737374">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utilities.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="374" column="0" selection-start="15238" selection-end="15238" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="realtime.log" pinned="false" current="false" current-in-tab="false">
+        <entry file="file:///tmp/inasafe/realtime/logs/realtime.log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="316" column="0" selection-start="30195" selection-end="30195" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -46,7 +60,7 @@
       <file leaf-file-name="make_map.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/realtime/make_map.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="19" selection-start="1533" selection-end="1533" vertical-scroll-proportion="0.0">
+            <state line="52" column="24" selection-start="1627" selection-end="1627" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -55,52 +69,16 @@
       <file leaf-file-name="shake_data.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/realtime/shake_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="135" column="33" selection-start="4692" selection-end="4692" vertical-scroll-proportion="-1.338983">
+            <state line="204" column="0" selection-start="6713" selection-end="6713" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ftp_client.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/ftp_client.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="162" column="53" selection-start="5220" selection-end="5220" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_ftp_client.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/test_ftp_client.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="49" selection-start="2530" selection-end="2530" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_shake_data.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/realtime/test_shake_data.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="155" column="46" selection-start="6867" selection-end="6877" vertical-scroll-proportion="-1.338983">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_shake_event.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="test_shake_event.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="394" column="66" selection-start="15963" selection-end="15963" vertical-scroll-proportion="0.54647887">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utilities_test.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/utilities_test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="99" column="21" selection-start="2918" selection-end="2918" vertical-scroll-proportion="0.0">
+            <state line="25" column="32" selection-start="740" selection-end="740" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -128,13 +106,13 @@
         <option value="$PROJECT_DIR$/Makefile" />
         <option value="$PROJECT_DIR$/safe_qgis/utilities_test.py" />
         <option value="$PROJECT_DIR$/../../cpp/Quantum-GIS/tests/src/python/test_qgscomposition.py" />
-        <option value="$PROJECT_DIR$/realtime/make_map.py" />
         <option value="$PROJECT_DIR$/realtime/test_shake_data.py" />
         <option value="$PROJECT_DIR$/realtime/test_ftp_client.py" />
         <option value="$PROJECT_DIR$/realtime/ftp_client.py" />
         <option value="$PROJECT_DIR$/realtime/shake_data.py" />
-        <option value="$PROJECT_DIR$/realtime/shake_event.py" />
         <option value="$PROJECT_DIR$/realtime/test_shake_event.py" />
+        <option value="$PROJECT_DIR$/realtime/make_map.py" />
+        <option value="$PROJECT_DIR$/realtime/shake_event.py" />
       </list>
     </option>
   </component>
@@ -219,13 +197,13 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="editor.preferences.import" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
+    <property name="last_opened_file_path" value="/tmp/inasafe/realtime/logs" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -240,36 +218,7 @@
       <recent name="$PROJECT_DIR$/common" />
     </key>
   </component>
-  <component name="RunManager" selected="Python's test.Nosetests in TestShakeEvent.testEventInfoString">
-    <configuration default="false" name="Nosetests in TestShakeEvent.testEventInfoString" type="tests" factoryName="Nosetests" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="QGIS_DEBUG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
-        <env name="QGIS_PREFIX_PATH" value="/usr/local/qgis-master" />
-        <env name="QGIS_LOG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
-        <env name="PYTHONPATH" value="PYTHONPATH:/usr/local/qgis-master/share/qgis/python" />
-        <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-master/lib" />
-        <env name="QGIS_DEBUG" value="0" />
-      </envs>
-      <option name="SDK_HOME" value="/usr/bin/python2.7" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <module name="inasafe-realtime" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
-      <option name="CLASS_NAME" value="TestShakeEvent" />
-      <option name="METHOD_NAME" value="testEventInfoString" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.make_map">
     <configuration default="false" name="Nosetests in /home/timlinux/dev/python/inasafe-realtime/realtime" type="tests" factoryName="Nosetests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -386,6 +335,35 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
+    <configuration default="false" name="Nosetests in TestShakeEvent.testEventInfoDict" type="tests" factoryName="Nosetests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="QGIS_DEBUG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
+        <env name="QGIS_PREFIX_PATH" value="/usr/local/qgis-master" />
+        <env name="QGIS_LOG_FILE" value="/tmp/inasafe/realtime/logs/qgis.log" />
+        <env name="PYTHONPATH" value="PYTHONPATH:/usr/local/qgis-master/share/qgis/python" />
+        <env name="LD_LIBRARY_PATH" value="/usr/local/qgis-master/lib" />
+        <env name="QGIS_DEBUG" value="0" />
+      </envs>
+      <option name="SDK_HOME" value="/usr/bin/python2.7" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-realtime" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/realtime/test_shake_event.py" />
+      <option name="CLASS_NAME" value="TestShakeEvent" />
+      <option name="METHOD_NAME" value="testEventInfoDict" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
     <configuration default="true" type="tests" factoryName="Nosetests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -413,22 +391,6 @@
       <option name="USE_PARAM" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="docs" factoryName="Docutils task">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <module name="inasafe-realtime" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="docutils_input_file" value="" />
-      <option name="docutils_output_file" value="" />
-      <option name="docutils_params" value="" />
-      <option name="docutils_task" value="" />
-      <option name="docutils_open_in_browser" value="false" />
-      <method />
-    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -443,6 +405,22 @@
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
       <option name="MULTIPROCESS" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Docutils task">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <module name="inasafe-realtime" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="docs" factoryName="Sphinx task">
@@ -540,11 +518,11 @@
       <item index="2" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
       <item index="3" class="java.lang.String" itemvalue="Python docs.InaSAFE Docs" />
       <item index="4" class="java.lang.String" itemvalue="Python's test.Test ShakeEventInfo" />
-      <item index="5" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testEventInfoString" />
-      <item index="6" class="java.lang.String" itemvalue="Python's test.Nosetests in /home/timlinux/dev/python/inasafe-realtime/realtime" />
-      <item index="7" class="java.lang.String" itemvalue="Python's test.Nosetests in test_shake_data" />
-      <item index="8" class="java.lang.String" itemvalue="Python's test.Nosetests in test_ftp_client" />
-      <item index="9" class="java.lang.String" itemvalue="Python's test.Nosetests in test_shake_event" />
+      <item index="5" class="java.lang.String" itemvalue="Python's test.Nosetests in /home/timlinux/dev/python/inasafe-realtime/realtime" />
+      <item index="6" class="java.lang.String" itemvalue="Python's test.Nosetests in test_shake_data" />
+      <item index="7" class="java.lang.String" itemvalue="Python's test.Nosetests in test_ftp_client" />
+      <item index="8" class="java.lang.String" itemvalue="Python's test.Nosetests in test_shake_event" />
+      <item index="9" class="java.lang.String" itemvalue="Python's test.Nosetests in TestShakeEvent.testEventInfoDict" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -606,19 +584,19 @@
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32636657" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24743778" sideWeight="0.33118972" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24743778" sideWeight="0.31028938" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24743778" sideWeight="0.7057878" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24743778" sideWeight="0.2829582" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39389068" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" x="120" y="96" width="1246" height="672" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22145145" sideWeight="0.64829105" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22508039" sideWeight="0.5341426" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34726688" sideWeight="0.46054628" order="2" side_tool="false" content_ui="tabs" x="0" y="117" width="1874" height="822" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34726688" sideWeight="0.46054628" order="2" side_tool="false" content_ui="tabs" x="0" y="117" width="1874" height="822" />
       <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.48504272" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32636657" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.49358973" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2" sideWeight="0.6474501" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -687,22 +665,13 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/safe_qgis/utilities.py</url>
-          <line>374</line>
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/realtime/shake_data.py</url>
-          <line>204</line>
+          <url>file://$PROJECT_DIR$/realtime/shake_event.py</url>
+          <line>1096</line>
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/safe_qgis/clipper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="52" selection-start="1530" selection-end="1530" vertical-scroll-proportion="-0.14101058" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Makefile">
       <provider selected="true" editor-type-id="text-editor">
         <state line="156" column="234" selection-start="7004" selection-end="7004" vertical-scroll-proportion="0.29350105" />
@@ -711,13 +680,6 @@
     <entry file="file://$PROJECT_DIR$/safe_qgis/test_utilities.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.3754716" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
@@ -745,23 +707,9 @@
         <state line="99" column="21" selection-start="2918" selection-end="2918" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/make_map.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="19" selection-start="1533" selection-end="1533" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/realtime/test_shake_data.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="155" column="46" selection-start="6867" selection-end="6877" vertical-scroll-proportion="-1.338983">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/test_ftp_client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="49" selection-start="2530" selection-end="2530" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -773,23 +721,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/shake_data.py">
+    <entry file="file://$PROJECT_DIR$/realtime/test_ftp_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="135" column="33" selection-start="4692" selection-end="4692" vertical-scroll-proportion="-1.338983">
+        <state line="64" column="49" selection-start="2530" selection-end="2530" vertical-scroll-proportion="0.7380952">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
+    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1978" column="42" selection-start="82358" selection-end="82358" vertical-scroll-proportion="0.0">
+        <state line="374" column="0" selection-start="15238" selection-end="15238" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///tmp/inasafe/realtime/logs/realtime.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="316" column="0" selection-start="30195" selection-end="30195" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/realtime/make_map.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="24" selection-start="1627" selection-end="1627" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/realtime/shake_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="204" column="0" selection-start="6713" selection-end="6713" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/realtime/test_shake_event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="394" column="66" selection-start="15963" selection-end="15963" vertical-scroll-proportion="0.54647887">
+        <state line="25" column="32" selection-start="740" selection-end="740" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/realtime/shake_event.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="773" column="8" selection-start="31557" selection-end="31557" vertical-scroll-proportion="0.23737374">
           <folding />
         </state>
       </provider>
