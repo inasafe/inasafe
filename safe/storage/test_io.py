@@ -2321,10 +2321,14 @@ class Test_IO(unittest.TestCase):
             read_layer(hazard_filename)
         except ReadLayerError, e:
             msg = 'Wrong error message: %s' % e
-            assert 'convert multipart' in str(e), msg
-        else:
-            msg = 'Multipart polygon should have raised exception'
-            raise Exception(msg)
+            assert 'convert multipart' not in str(e), msg
+        # I (Sunni) added function for forcing multipolygon to be
+        # single polygon. So it will not raise any exception
+        #======================================================================
+        # else:
+        #    msg = 'Multipart polygon should not have raised exception'
+        #    raise Exception(msg)
+        #======================================================================
 
     def test_projection_comparisons(self):
         """Projection information can be correctly compared
