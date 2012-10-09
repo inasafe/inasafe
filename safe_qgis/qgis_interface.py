@@ -24,10 +24,11 @@ __copyright__ = ('Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
                  'Copyright (c) 2011 German Carrillo, '
                  'geotux_tuxman@linuxmail.org')
 
-
+import logging
 from PyQt4.QtCore import QObject, SIGNAL, pyqtSlot
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapCanvasLayer
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class QgisInterface(QObject):
@@ -43,6 +44,7 @@ class QgisInterface(QObject):
         self.canvas = canvas
         # Set up slots so we can mimick the behaviour of QGIS when layers
         # are added.
+        LOGGER.debug('Initialising canvas...')
         QObject.connect(QgsMapLayerRegistry.instance(),
                         SIGNAL('layersAdded(QList<QgsMapLayer *>)'),
                         self.addLayers)
@@ -66,15 +68,18 @@ class QgisInterface(QObject):
         Raises:
             None
         """
-        print '*****************************'
+        #LOGGER.debug('addLayers called on qgis_interface')
+        #LOGGER.debug('Number of layers being added: %s' % len(theLayers))
+        #LOGGER.debug('Layer Count Before: %s' % len(self.canvas.layers()))
         myLayers = self.canvas.layers()
         myCanvasLayers = []
         for myLayer in myLayers:
             myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
         for myLayer in theLayers:
             myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-        print 'Canvas Layer Count: %s' % len(self.canvas.layers())
+
         self.canvas.setLayerSet(myCanvasLayers)
+        #LOGGER.debug('Layer Count After: %s' % len(self.canvas.layers()))
 
     @pyqtSlot('QgsMapLayer')
     def addLayer(self, theLayer):
@@ -83,6 +88,9 @@ class QgisInterface(QObject):
 
         .. note: The QgsInterface api does not include this method, it is added
                  here as a helper to facilitate testing.
+
+        .. note: The addLayer method was deprecated in QGIS 1.8 so you should
+                 not need this method much.
 
         Args:
             theLayers: list<QgsMapLayer> list of map layers that were added
@@ -93,13 +101,16 @@ class QgisInterface(QObject):
         Raises:
             None
         """
-        print '*****************************'
+        #LOGGER.debug('addLayer called on qgis_interface')
+        #LOGGER.debug('Layer being added: %s' % theLayer.name())
+        #LOGGER.debug('Layer Count Before: %s' % len(self.canvas.layers()))
         myLayers = self.canvas.layers()
         myCanvasLayers = []
         for myLayer in myLayers:
             myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
         myCanvasLayers.append(QgsMapCanvasLayer(theLayer))
         self.canvas.setLayerSet(myCanvasLayers)
+        #LOGGER.debug('Layer Count After: %s' % len(self.canvas.layers()))
 
     # ---------------- API Mock for QgsInterface follows -------------------
 

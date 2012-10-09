@@ -55,7 +55,7 @@ try:
         QgsMessageLog.logMessage(str(msg), tag, level)
 except MethodUnavailableError:
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        print (str(msg), tag, level)
+        LOGGER.debug(str(msg), tag, level)
 
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
