@@ -44,7 +44,7 @@
     </property>
    </layout>
   </widget>
-  <widget class="QWebView" name="webViewConfImpFuncDesc">
+  <widget class="QLabel" name="impFuncConfLabel">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -53,20 +53,17 @@
      <height>61</height>
     </rect>
    </property>
-   <property name="url">
-    <url>
-     <string>about:blank</string>
-    </url>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

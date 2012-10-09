@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'configurable_impact_functions_dialog_base.ui'
 #
-# Created: Fri Oct  5 16:37:50 2012
+# Created: Tue Oct  9 14:50:16 2012
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -30,10 +30,11 @@ class Ui_configurableImpactFunctionsDialogBase(object):
         self.editableImpactFunctionsFormLayout.setFieldGrowthPolicy(QtGui.QFormLayout.AllNonFixedFieldsGrow)
         self.editableImpactFunctionsFormLayout.setMargin(0)
         self.editableImpactFunctionsFormLayout.setObjectName(_fromUtf8("editableImpactFunctionsFormLayout"))
-        self.webViewConfImpFuncDesc = QtWebKit.QWebView(configurableImpactFunctionsDialogBase)
-        self.webViewConfImpFuncDesc.setGeometry(QtCore.QRect(10, 10, 561, 61))
-        self.webViewConfImpFuncDesc.setUrl(QtCore.QUrl(_fromUtf8("about:blank")))
-        self.webViewConfImpFuncDesc.setObjectName(_fromUtf8("webViewConfImpFuncDesc"))
+        self.impFuncConfLabel = QtGui.QLabel(configurableImpactFunctionsDialogBase)
+        self.impFuncConfLabel.setGeometry(QtCore.QRect(10, 10, 561, 61))
+        self.impFuncConfLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.impFuncConfLabel.setWordWrap(True)
+        self.impFuncConfLabel.setObjectName(_fromUtf8("impFuncConfLabel"))
 
         self.retranslateUi(configurableImpactFunctionsDialogBase)
         QtCore.QObject.connect(self.editableImpactFunctionsButtonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), configurableImpactFunctionsDialogBase.accept)
@@ -42,5 +43,5 @@ class Ui_configurableImpactFunctionsDialogBase(object):
 
     def retranslateUi(self, configurableImpactFunctionsDialogBase):
         configurableImpactFunctionsDialogBase.setWindowTitle(QtGui.QApplication.translate("configurableImpactFunctionsDialogBase", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
+        self.impFuncConfLabel.setText(QtGui.QApplication.translate("configurableImpactFunctionsDialogBase", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
 
-from PyQt4 import QtWebKit
