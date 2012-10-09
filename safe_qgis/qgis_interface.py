@@ -100,7 +100,7 @@ class QgisInterface(QObject):
         Raises:
             None
         """
-        pass    
+        pass
 
     # ---------------- API Mock for QgsInterface follows -------------------
 

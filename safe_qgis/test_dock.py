@@ -1284,7 +1284,7 @@ class DockTest(unittest.TestCase):
         LOGGER.info("Canvas list after:\n%s" % canvasList())
         myMessage = ('Layer was not added to canvas (%s before, %s after)' %
                      (myBeforeCount, myAfterCount))
-        assert myBeforeCount == myAfterCount- 1, myMessage
+        assert myBeforeCount == myAfterCount - 1, myMessage
         QgsMapLayerRegistry.instance().removeMapLayer(myLayer.id())
 
 if __name__ == '__main__':

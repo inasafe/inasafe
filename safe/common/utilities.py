@@ -4,11 +4,6 @@ import os
 import gettext
 from datetime import date
 import getpass
-
-# FIXME (Ole): For some reason this module doesn't work without this
-# pylint: disable=W0404
-import logging.handlers
-# pylint: enable=W0404
 from tempfile import mkstemp
 
 from safe.common.exceptions import VerificationError

@@ -50,6 +50,7 @@ import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary
 
@@ -513,20 +514,6 @@ def qgisVersion():
     myVersion = int(myVersion)
     return myVersion
 
-try:
-    # Available from qgis 1.8
-    from qgis.core import QgsMessageLog  # pylint: disable=E0611
-except ImportError:
-
-    # Define vanilla version
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        print (str(msg), tag, level)
-else:
-
-    # Use QGIS message log from versions >= 1.8
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        QgsMessageLog.logMessage(str(msg), tag, level)
-
 
 # TODO: move this to its own file? TS
 class QgsLogHandler(logging.Handler):
@@ -555,6 +542,7 @@ class QgsLogHandler(logging.Handler):
 
         except MethodUnavailableError:
             pass
+
 
 def setup_logger():
     """Run once when the module is loaded and enable logging
@@ -624,7 +612,6 @@ def setup_logger():
     #                                      myRecipientAddresses,
     #                                      mySubject)
     #myEmailHandler.setLevel(logging.ERROR)
-
 
     # create formatter and add it to the handlers
     myFormatter = logging.Formatter(
