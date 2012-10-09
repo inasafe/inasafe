@@ -267,6 +267,32 @@ class Test_Polygon(unittest.TestCase):
         assert numpy.allclose(inside, [0, 1, 2])
         assert numpy.allclose(outside, [3, 4])
 
+    def test_separate_points_by_polygon_empty_points(self):
+        """Separate points by polygon ok when no points in bbox
+        """
+
+        # This is from a real example that failed
+        polygon = numpy.array([[ 109.82203092,   -7.22977256],
+                               [ 109.82224507,   -7.22986774],
+                               [ 109.8225544,    -7.22974876],
+                               [ 109.82272096,   -7.229606  ],
+                               [ 109.82283994,   -7.22929667],
+                               [ 109.82283994,   -7.22884457],
+                               [ 109.82272096,   -7.22860662],
+                               [ 109.82248302,   -7.22841627],
+                               [ 109.82241163,   -7.22822591],
+                               [ 109.82224507,   -7.22822591],
+                               [ 109.8221023,    -7.22841627],
+                               [ 109.82191195,   -7.22860662],
+                               [ 109.82179297,   -7.2287256 ],
+                               [ 109.82169779,   -7.22882077],
+                               [ 109.82172159,   -7.22917769],
+                               [ 109.82176918,   -7.22932046],
+                               [ 109.82188815,   -7.22953461],
+                               [ 109.82203092,   -7.22977256]])
+        points = numpy.zeros((0, 2))
+        inside, outside = separate_points_by_polygon(points, polygon)
+
     def test_outside_polygon(self):
         """Points are classified as either outside polygon or not
         """
