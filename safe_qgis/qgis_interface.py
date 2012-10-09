@@ -83,7 +83,6 @@ class QgisInterface(QObject):
 
     @pyqtSlot('QgsMapLayer')
     def addLayer(self, theLayer):
-        return
         """Handle a layer being added to the registry so it shows up in canvas.
 
         .. note: The QgsInterface api does not include this method, it is added
@@ -101,16 +100,7 @@ class QgisInterface(QObject):
         Raises:
             None
         """
-        #LOGGER.debug('addLayer called on qgis_interface')
-        #LOGGER.debug('Layer being added: %s' % theLayer.name())
-        #LOGGER.debug('Layer Count Before: %s' % len(self.canvas.layers()))
-        myLayers = self.canvas.layers()
-        myCanvasLayers = []
-        for myLayer in myLayers:
-            myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
-        myCanvasLayers.append(QgsMapCanvasLayer(theLayer))
-        self.canvas.setLayerSet(myCanvasLayers)
-        #LOGGER.debug('Layer Count After: %s' % len(self.canvas.layers()))
+        pass    
 
     # ---------------- API Mock for QgsInterface follows -------------------
 

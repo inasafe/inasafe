@@ -26,6 +26,7 @@ import math
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
+
 from qgis.core import (QGis,
                        QgsRasterLayer,
                        QgsMapLayer,
@@ -38,25 +39,16 @@ from qgis.core import (QGis,
                        QgsColorRampShader,
                        QgsRasterTransparency,
                        )
-from safe_qgis.exceptions import StyleError
+
 from safe_interface import temp_dir
+from safe_qgis.exceptions import StyleError, MethodUnavailableError
+
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
 import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
-
-try:
-    #available from qgis 1.8
-    from qgis.core import QgsMessageLog
-
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        QgsMessageLog.logMessage(str(msg), tag, level)
-except MethodUnavailableError:
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        LOGGER.debug(str(msg), tag, level)
-
 
 def setVectorStyle(theQgisVectorLayer, theStyle):
     """Set QGIS vector style based on InaSAFE style dictionary
@@ -536,6 +528,34 @@ else:
         QgsMessageLog.logMessage(str(msg), tag, level)
 
 
+# TODO: move this to its own file? TS
+class QgsLogHandler(logging.Handler):
+    """A logging handler that will log messages to the QGIS logging console."""
+
+    def __init__(self, level=logging.NOTSET):
+        logging.Handler.__init__(self)
+
+    def emit(self, theRecord):
+        """Try to log the message to QGIS if available, otherwise do nothing.
+
+        Args:
+            theRecord: logging record containing whatever info needs to be
+                logged.
+        Returns:
+            None
+        Raises:
+            None
+        """
+        try:
+            #available from qgis 1.8
+            from qgis.core import QgsMessageLog
+            # Check logging.LogRecord properties for lots of other goodies
+            # like line number etc. you can get from the log message.
+            QgsMessageLog.logMessage(theRecord.getMessage(), 'InaSAFE', 0)
+
+        except MethodUnavailableError:
+            pass
+
 def setup_logger():
     """Run once when the module is loaded and enable logging
 
@@ -588,6 +608,9 @@ def setup_logger():
     myConsoleHandler = logging.StreamHandler()
     myConsoleHandler.setLevel(logging.ERROR)
 
+    myQgisHandler = QgsLogHandler()
+    myFileHandler.setLevel(logging.DEBUG)
+
     # TODO: User opt in before we enable email based logging.
     # Email handler for errors
     #myEmailServer = 'localhost'
@@ -601,16 +624,22 @@ def setup_logger():
     #                                      myRecipientAddresses,
     #                                      mySubject)
     #myEmailHandler.setLevel(logging.ERROR)
+
+
     # create formatter and add it to the handlers
     myFormatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
     #myEmailHandler.setFormatter(myFormatter)
+    myQgisHandler.setFormatter(myFormatter)
+
     # add the handlers to the logger
     myLogger.addHandler(myFileHandler)
     myLogger.addHandler(myConsoleHandler)
     #myLogger.addHandler(myEmailHandler)
+    myLogger.addHandler(myQgisHandler)
+
     myLogger.info('Safe Logger Module Loaded')
     myLogger.info('----------------------')
     myLogger.info('CWD: %s' % os.path.abspath(os.path.curdir))

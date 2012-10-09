@@ -2,7 +2,6 @@
 """
 import os
 import gettext
-import logging
 from datetime import date
 import getpass
 

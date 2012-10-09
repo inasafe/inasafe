@@ -72,14 +72,6 @@ from safe_qgis.keywords_dialog import KeywordsDialog
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
 
-#see if we can import pydev - see development docs for details
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
-
 
 class Dock(QtGui.QDockWidget, Ui_DockBase):
     """Dock implementation class for the Risk In A Box plugin."""
@@ -1224,8 +1216,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             keywords = read_keywords(myKeywordFilePath)
-        except Exception:  # FIXME: Which exceptions?
+        # pylint: disable=W0703
+        except Exception:
             keywords = dict()
+        # pylint: disable=W0703
 
         if ('category' in keywords and
             keywords['category'] == 'postprocessing' and
@@ -1305,11 +1299,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     aggrAttribute = keywords['aggregation attribute']
                     logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
                                        ' as aggregation attribute')
-                except Exception:  # FIXME: Which exceptions?
+                # pylint: disable=W0703
+                except Exception:
                     logOnQgsMessageLog('User Accepted but did not select a '
                                        'value. Using default : '
                                        + str(aggrAttribute) +
                                        ' as aggregation attribute')
+                # pylint: disable=W0703
             else:
                 # The user cancelled, use the first attribute as default
                 logOnQgsMessageLog('User cancelled, using default: '
