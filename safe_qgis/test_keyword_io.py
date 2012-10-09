@@ -144,7 +144,7 @@ class KeywordIOTest(unittest.TestCase):
         """Can we append file keywords with the generic readKeywords
         method """
         myLaver, myFile = copyMakePadangLayer()
-        myAddKeywords = {'category': 'exposure', 'test':'TEST'}
+        myAddKeywords = {'category': 'exposure', 'test': 'TEST'}
 
         self.keywordIO.appendKeywords(myLaver, myAddKeywords)
         myExpectedKeywords = {'category': 'exposure', 'test': 'TEST',
