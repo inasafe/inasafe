@@ -149,7 +149,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.showFemaleRatioAttribute(isPostprocessingOn)
         self.showFemaleRatioDefault(isPostprocessingOn)
 
-    def getAttributeNames(self, allowedTypes, currentKeyword):
+    def getAttributeNames(self, allowedTypes, currentKeyword=None):
         """iterates over self.layer and returns all the attribute names of
            attributes that have int or string as field type and the position
            of the currentKeyword in the attribute names list
