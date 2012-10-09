@@ -14,12 +14,12 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'oz@tanoshiistudio.com'
 __version__ = '0.5.0'
 __revision__ = '$Format:%H$'
-__date__ = '17/09/2012'
+__date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import ast
-from PyQt4 import (QtGui, QtCore)
+from PyQt4 import (QtGui, QtCore, QtWebKit)
 from configurable_impact_functions_dialog_base import (
             Ui_configurableImpactFunctionsDialogBase)
 
@@ -48,6 +48,10 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         """
         QtGui.QDialog.__init__(self, theParent)
         self.setupUi(self)
+        self.setWindowTitle(QtGui.QApplication.translate(
+                    "configurableImpactFunctionsDialogBase",
+                    "InaSAFE 0.5.0 Configure Impact Function Parameters",
+                    None, QtGui.QApplication.UnicodeUTF8))
 
     def buildFormFromImpactFunctionsParameter(self, theFunction, params):
         """we build a form from impact functions parameter
@@ -79,7 +83,28 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
                                         QtGui.QFormLayout.FieldRole, lineEdit)
         self.formItemCounters += 1
 
+    def setDialogInfo(self, theFunctionID):
+        myText = ''
+        impactFunctionName = theFunctionID
+        myText += ('This form enables you to configure ' +
+        'impact function: ' + impactFunctionName +
+        '. Below, these are parameters that you can modify as you desire.'
+        )
+        label = self.impFuncConfLabel
+        label.setText(myText)
+        #self.displayHtml(QtCore.QString(str(myHTML)))
+
     def accept(self):
+        """Override the default accept function
+
+        .. note:: see http://tinyurl.com/pyqt-differences
+
+        Args:
+           theFunction - theFunction to be modified
+           params - parameters to be edited
+        Returns:
+           not applicable
+        """
         func = self.theFunction
         for key in self.keys:
             lineEdit = self.findChild(QtGui.QLineEdit,
