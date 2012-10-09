@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-09 11:13+0700\n"
+"POT-Creation-Date: 2012-10-09 11:40+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -819,7 +819,6 @@ msgstr ""
 #: impact_functions/inundation/flood_OSM_building_impact.py:22
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:22
 #: scripts/inasafe-dev/safe/impact_functions/inundation/flood_OSM_building_impact.py:22
-#: safe/impact_functions/inundation/flood_OSM_building_impact.py:23
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:23
 msgid "Be temporarily closed"
 msgstr ""
@@ -2739,7 +2738,6 @@ msgstr ""
 #: scripts/inasafe-dev/safe/impact_functions/generic/categorised_hazard_population.py:25
 #: safe/impact_functions/generic/categorised_hazard_population.py:26
 #: safe/impact_functions/generic/categorised_hazard_population.py:29
-#: safe/impact_functions/generic/categorised_hazard_population.py:29
 msgid "be impacted"
 msgstr ""
 
@@ -3001,6 +2999,7 @@ msgstr ""
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:24
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:30
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:30
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
 msgid "Be affected"
 msgstr ""
 
@@ -3016,7 +3015,6 @@ msgstr ""
 msgid "Categorised hazard impact on buildings"
 msgstr ""
 
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
 msgid "be affected"
 msgstr ""
@@ -3164,4 +3162,12 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:143
 #, python-format
 msgid "Total population %i in the viewable area"
+msgstr ""
+
+#: safe/impact_functions/generic/categorised_hazard_population.py:29
+msgid "Be impacted"
+msgstr ""
+
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:23
+msgid "Be flooded"
 msgstr ""
