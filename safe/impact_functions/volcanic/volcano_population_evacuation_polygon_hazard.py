@@ -146,7 +146,8 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(_('Notes'), header=True),
-                           _('Total population %i in view port') % total,
+                           _('Total population %i in the viewable area')
+                           % total,
                            _('People need evacuation if they are within the '
                              'volcanic hazard zones.')])
         impact_summary = Table(table_body).toNewlineFreeString()
