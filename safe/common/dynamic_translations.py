@@ -117,6 +117,7 @@ names = {'title1': _('DKI buildings'),       # Bangunan DKI
          'Industrial areas Jakarta': _('Industrial areas Jakarta'),
          'Commercial areas Jakarta': _('Commercial areas Jakarta'),
          'Hospitals Jakarta': _('Hospitals Jakarta'),
+         'An eruption': _('An eruption'),
 
          # Data attribute value start here
          'office': _('office'),
