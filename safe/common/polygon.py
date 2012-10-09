@@ -132,6 +132,10 @@ def separate_points_by_polygon(points, polygon,
         if points.shape[1] != 2:
             raise PolygonInputError(msg)
 
+    # If there are no points return two 0-vectors
+    if points.shape[0] == 0:
+        return numpy.arange(0), numpy.arange(0)
+
     # Get polygon extents to rule out segments that
     # are outside its bounding box. This is a very important
     # optimisation

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-09 11:40+0700\n"
+"POT-Creation-Date: 2012-10-09 13:10+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,7 +102,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:139
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:118
 #: safe/impact_functions/inundation/flood_population_evacuation.py:108
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
 msgid "Total"
 msgstr ""
 
@@ -715,7 +715,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
 #: safe/impact_functions/core.py:587
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:100
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
 msgid "Category"
 msgstr ""
 
@@ -1071,7 +1071,7 @@ msgstr ""
 #: extras/retired_impact_functions/flood_population_evacuation_worldbank_request.py:90
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:113
 #: safe/impact_functions/inundation/flood_population_evacuation.py:103
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:120
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:124
 msgid "People needing evacuation"
 msgstr ""
 
@@ -1928,7 +1928,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:121
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:121
 #: safe/common/dynamic_translations.py:122
-#: safe/common/dynamic_translations.py:122
+#: safe/common/dynamic_translations.py:123
 msgid "office"
 msgstr ""
 
@@ -1940,7 +1940,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:122
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:122
 #: safe/common/dynamic_translations.py:123
-#: safe/common/dynamic_translations.py:123
+#: safe/common/dynamic_translations.py:124
 msgid "clinic"
 msgstr ""
 
@@ -1952,7 +1952,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:123
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:123
 #: safe/common/dynamic_translations.py:124
-#: safe/common/dynamic_translations.py:124
+#: safe/common/dynamic_translations.py:125
 msgid "terrace"
 msgstr ""
 
@@ -1964,7 +1964,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:124
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:124
 #: safe/common/dynamic_translations.py:125
-#: safe/common/dynamic_translations.py:125
+#: safe/common/dynamic_translations.py:126
 msgid "police"
 msgstr ""
 
@@ -1976,7 +1976,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:125
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:125
 #: safe/common/dynamic_translations.py:126
-#: safe/common/dynamic_translations.py:126
+#: safe/common/dynamic_translations.py:127
 msgid "residential"
 msgstr ""
 
@@ -1988,7 +1988,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:126
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:126
 #: safe/common/dynamic_translations.py:127
-#: safe/common/dynamic_translations.py:127
+#: safe/common/dynamic_translations.py:128
 msgid "kindergarten"
 msgstr ""
 
@@ -2000,7 +2000,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:127
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:127
 #: safe/common/dynamic_translations.py:128
-#: safe/common/dynamic_translations.py:128
+#: safe/common/dynamic_translations.py:129
 msgid "bank"
 msgstr ""
 
@@ -2012,7 +2012,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:128
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:128
 #: safe/common/dynamic_translations.py:129
-#: safe/common/dynamic_translations.py:129
+#: safe/common/dynamic_translations.py:130
 msgid "place of worship"
 msgstr ""
 
@@ -2024,7 +2024,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:129
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:129
 #: safe/common/dynamic_translations.py:130
-#: safe/common/dynamic_translations.py:130
+#: safe/common/dynamic_translations.py:131
 msgid "school"
 msgstr ""
 
@@ -2036,7 +2036,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:130
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:130
 #: safe/common/dynamic_translations.py:131
-#: safe/common/dynamic_translations.py:131
+#: safe/common/dynamic_translations.py:132
 msgid "university"
 msgstr ""
 
@@ -2048,7 +2048,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:131
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:131
 #: safe/common/dynamic_translations.py:132
-#: safe/common/dynamic_translations.py:132
+#: safe/common/dynamic_translations.py:133
 msgid "apartments"
 msgstr ""
 
@@ -2060,7 +2060,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:132
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:132
 #: safe/common/dynamic_translations.py:133
-#: safe/common/dynamic_translations.py:133
+#: safe/common/dynamic_translations.py:134
 msgid "college"
 msgstr ""
 
@@ -2072,7 +2072,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:133
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:133
 #: safe/common/dynamic_translations.py:134
-#: safe/common/dynamic_translations.py:134
+#: safe/common/dynamic_translations.py:135
 msgid "commercial"
 msgstr ""
 
@@ -2084,7 +2084,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:134
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:134
 #: safe/common/dynamic_translations.py:135
-#: safe/common/dynamic_translations.py:135
+#: safe/common/dynamic_translations.py:136
 msgid "hospital"
 msgstr ""
 
@@ -2096,7 +2096,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:135
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:135
 #: safe/common/dynamic_translations.py:136
-#: safe/common/dynamic_translations.py:136
+#: safe/common/dynamic_translations.py:137
 msgid "industrial"
 msgstr ""
 
@@ -2108,7 +2108,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:136
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:136
 #: safe/common/dynamic_translations.py:137
-#: safe/common/dynamic_translations.py:137
+#: safe/common/dynamic_translations.py:138
 msgid "civic"
 msgstr ""
 
@@ -2120,7 +2120,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:137
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:137
 #: safe/common/dynamic_translations.py:138
-#: safe/common/dynamic_translations.py:138
+#: safe/common/dynamic_translations.py:139
 msgid "church"
 msgstr ""
 
@@ -2132,7 +2132,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:138
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:138
 #: safe/common/dynamic_translations.py:139
-#: safe/common/dynamic_translations.py:139
+#: safe/common/dynamic_translations.py:140
 msgid "hotel"
 msgstr ""
 
@@ -2144,7 +2144,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:139
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:139
 #: safe/common/dynamic_translations.py:140
-#: safe/common/dynamic_translations.py:140
+#: safe/common/dynamic_translations.py:141
 msgid "public building"
 msgstr ""
 
@@ -2156,7 +2156,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:140
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:140
 #: safe/common/dynamic_translations.py:141
-#: safe/common/dynamic_translations.py:141
+#: safe/common/dynamic_translations.py:142
 msgid "other"
 msgstr ""
 
@@ -2168,7 +2168,7 @@ msgstr ""
 #: safe/common/dynamic_translations.py:141
 #: scripts/inasafe-dev/safe/common/dynamic_translations.py:141
 #: safe/common/dynamic_translations.py:142
-#: safe/common/dynamic_translations.py:142
+#: safe/common/dynamic_translations.py:143
 msgid "fire station"
 msgstr ""
 
@@ -2846,7 +2846,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:175
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:176
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:173
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:176
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
 msgid "Population Count"
 msgstr ""
 
@@ -2929,7 +2929,7 @@ msgstr ""
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:209
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:138
 #: safe/impact_functions/inundation/flood_population_evacuation.py:128
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:142
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:148
 msgid "Notes"
 msgstr ""
 
@@ -2979,7 +2979,7 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:164
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:165
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:162
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:165
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:171
 msgid "0"
 msgstr ""
 
@@ -2991,13 +2991,14 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:166
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:167
 #: safe/impact_functions/inundation/flood_population_evacuation_polygon_hazard.py:164
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:167
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:173
 #, python-format
 msgid "%i - %i"
 msgstr ""
 
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:24
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:30
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
 #: safe/impact_functions/generic/categorised_hazard_building_impact.py:30
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:26
 msgid "Be affected"
@@ -3021,7 +3022,7 @@ msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:123
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:130
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:130
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:136
 msgid "Map shows population affected in each of volcano hazard polygons."
 msgstr ""
 
@@ -3034,21 +3035,21 @@ msgstr ""
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:137
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:144
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:145
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:145
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:151
 msgid "People need evacuation if they are within the volcanic hazard zones."
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:140
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:147
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:148
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:148
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:154
 msgid "People affected by volcanic hazard zone"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:174
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:181
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:182
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:188
 msgid "Population affected by volcanic hazard zone"
 msgstr ""
 
@@ -3159,15 +3160,25 @@ msgid "Total population %i in in the viewable area"
 msgstr ""
 
 #: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:143
-#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:143
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:149
 #, python-format
 msgid "Total population %i in the viewable area"
 msgstr ""
 
 #: safe/impact_functions/generic/categorised_hazard_population.py:29
+#: safe/impact_functions/generic/categorised_hazard_population.py:29
 msgid "Be impacted"
 msgstr ""
 
 #: safe/impact_functions/inundation/flood_OSM_building_impact.py:23
+#: safe/impact_functions/inundation/flood_OSM_building_impact.py:23
 msgid "Be flooded"
+msgstr ""
+
+#: safe/common/dynamic_translations.py:120
+msgid "An eruption"
+msgstr ""
+
+#: safe/impact_functions/volcanic/volcano_population_evacuation_polygon_hazard.py:127
+msgid "Cumulative"
 msgstr ""

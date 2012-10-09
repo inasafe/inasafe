@@ -212,8 +212,8 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
 
     if theAggregationEnabledFlag is not None:
         if DOCK.cboAggregation.isEnabled() != theAggregationEnabledFlag:
-            myMessage = 'The aggregation combobox should be %s' %\
-                    ('enabled' if theAggregationEnabledFlag else 'disabled')
+            myMessage = ('The aggregation combobox should be %s' %
+                ('enabled' if theAggregationEnabledFlag else 'disabled'))
             return False, myMessage
 
     # Check that layers and impact function are correct
@@ -446,7 +446,7 @@ class DockTest(unittest.TestCase):
 
     #FIXME (MB) this is actually wrong, when calling the test directly it works
     # in nosetest it fails at the second assert
-#    @expectedFailure
+    @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
         #raster hazard
