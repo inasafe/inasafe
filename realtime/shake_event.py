@@ -1834,6 +1834,7 @@ class ShakeEvent(QObject):
         mySubstitutionMap = {'location-info': myLocationInfo,
                              'version': self.version()}
         mySubstitutionMap.update(self.eventDict())
+        LOGGER.debug(mySubstitutionMap)
         myResult = myComposition.loadFromTemplate(myDocument,
                                                   mySubstitutionMap)
         if not myResult:
@@ -1888,10 +1889,15 @@ class ShakeEvent(QObject):
                     [myContoursLayer, myCitiesLayer])
 
         # Now add out layers to the renderer so they appear in the print out
-        myLayerStringList = QStringList()
-        myLayerStringList.append(myContoursLayer.id())
-        myLayerStringList.append(myCitiesLayer.id())
-        myMapRenderer.setLayerSet(myLayerStringList)
+        myLayers = CANVAS.layers()
+        myLayerList = []
+        for myLayer in myLayers:
+            myLayerList.append(myLayer.id())
+        
+        myLayerList.append(myContoursLayer.id())
+        myLayerList.append(myCitiesLayer.id())
+        myMapRenderer.setLayerSet(myLayerList)
+        LOGGER.info(str(myLayerList))
 
         # Save a pdf.
         myPdfPath = os.path.join(shakemapExtractDir(),
@@ -2000,7 +2006,7 @@ class ShakeEvent(QObject):
         myName = self.mostAffectedCity['name']
         myBearing = self.bearingToCardinal(myDirection)
 
-        myDict = {'mmi': self.magnitude,
+        myDict = {'mmi': '%s' % self.magnitude,
          'date': '%s-%s-%s' % (self.day,
                                self.month,
                                self.year),
@@ -2008,18 +2014,18 @@ class ShakeEvent(QObject):
                                self.minute,
                                self.second),
          'latitude-name': self.tr('Latitude'),
-         'latitude-value': myLatitude,
+         'latitude-value': '%s' % myLatitude,
          'longitude-name': self.tr('Longitude'),
-         'longitude-value': myLongitude,
+         'longitude-value': '%s' % myLongitude,
          'depth-name': self.tr('Depth'),
-         'depth': self.depth,
+         'depth': '%s' % self.depth,
          'depth-unit': myKmText,
          'located-label': self.tr('Located'),
          'distance': '%.2f' % myDistance,
          'distance-unit': myKmText,
          'direction-relation': myDirectionalityText,
-         'bearing-degrees': myDirection,
-         'bearing-compass': myBearing,
+         'bearing-degrees': '%s' % myDirection,
+         'bearing-compass': '%s' % myBearing,
          'bearing-text': myBearingText,
          'place-name': myName
         }
