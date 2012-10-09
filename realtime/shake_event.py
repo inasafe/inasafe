@@ -1889,7 +1889,7 @@ class ShakeEvent(QObject):
                     [myContoursLayer, myCitiesLayer])
 
         # Now add out layers to the renderer so they appear in the print out
-        myLayers = CANVAS.layers()
+        myLayers = reversed(CANVAS.layers())
         myLayerList = []
         for myLayer in myLayers:
             myLayerList.append(myLayer.id())
