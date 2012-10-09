@@ -401,8 +401,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
 
-        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
-
         Args:
            None.
 
@@ -410,9 +408,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
            None.
 
         Raises:
-           no exceptions explicitly raised.
-
-    """
+           no exceptions explicitly raised."""
         # Add any other logic you mught like here...
         if not theIndex.isNull or not theIndex == '':
             myFunctionID = self.getFunctionID()
@@ -462,8 +458,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             self.toolFunctionOptions.setEnabled(True)
 
+    @pyqtSlot()
     def on_toolFunctionOptions_clicked(self):
+        """Automatic slot executed when the tool button for configuring
+        impact functions is clicked (when available) to open the dialog
+
+        Args:
+           None.
+
+        Returns:
+           None.
+
+        Raises:
+           no exceptions explicitly raised."""
         conf = ConfigurableImpactFunctionsDialog(self)
+        conf.setDialogInfo(self.getFunctionID())
         conf.buildFormFromImpactFunctionsParameter(self.myFunction,
                                                    self.functionParams)
         conf.showNormal()
@@ -1577,17 +1586,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # FIXME (MB): This branch is not covered by the tests
             myMessage = self.tr('<p>There '
                    'was insufficient overlap between the input layers '
-                   'and / or the layers and the viewport. Please select '
+                   'and / or the layers and the viewable area. Please select '
                    'two overlapping layers and zoom or pan to them or disable'
-                   ' viewport clipping in the options dialog'
+                   ' viewable area clipping in the options dialog'
                    '. Full details follow:</p>'
                    '<p>Failed to obtain the optimal extent given:</p>'
                    '<p>Hazard: %1</p>'
                    '<p>Exposure: %2</p>'
-                   '<p>Viewport Geo Extent: %3</p>'
+                   '<p>Viewable area Geo Extent: %3</p>'
                    '<p>Hazard Geo Extent: %4</p>'
                    '<p>Exposure Geo Extent: %5</p>'
-                   '<p>Viewport clipping enabled: %6</p>'
+                   '<p>Viewable area clipping enabled: %6</p>'
                    '<p>Details: %7</p>').arg(
                         myHazardLayer.source()).arg(
                         myExposureLayer.source()).arg(

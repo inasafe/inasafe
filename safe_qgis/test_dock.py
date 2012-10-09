@@ -212,8 +212,8 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
 
     if theAggregationEnabledFlag is not None:
         if DOCK.cboAggregation.isEnabled() != theAggregationEnabledFlag:
-            myMessage = 'The aggregation combobox should be %s' %\
-                        ('enabled' if theAggregationEnabledFlag else 'disabled')
+            myMessage = ('The aggregation combobox should be %s' %
+                ('enabled' if theAggregationEnabledFlag else 'disabled'))
             return False, myMessage
 
     # Check that layers and impact function are correct
@@ -446,7 +446,7 @@ class DockTest(unittest.TestCase):
 
     #FIXME (MB) this is actually wrong, when calling the test directly it works
     # in nosetest it fails at the second assert
-#    @expectedFailure
+    @expectedFailure
     def test_cboAggregationToggle(self):
         """Aggregation Combobox toggles on and off as expected."""
         #raster hazard
@@ -492,7 +492,6 @@ class DockTest(unittest.TestCase):
             theAggregationEnabledFlag=False)
         myMessage += ' when the when hazard and exposure layer are vector'
         assert myResult, myMessage
-
 
     def test_checkAggregationAttribute(self):
         myRunButton = DOCK.pbnRunStop
@@ -818,7 +817,7 @@ class DockTest(unittest.TestCase):
         myResult, myMessage = setupScenario(
             theHazard='Tsunami Max Inundation',
             theExposure='Tsunami Building Exposure',
-            theFunction='Be temporarily closed',
+            theFunction='Be flooded',
             theFunctionId='Flood Building Impact Function')
         assert myResult, myMessage
 
@@ -1227,7 +1226,7 @@ class DockTest(unittest.TestCase):
         myResult, myMessage = setupScenario(
             theHazard='multipart_polygons_osm_4326',
             theExposure='buildings_osm_4326',
-            theFunction='Be temporarily closed',
+            theFunction='Be flooded',
             theFunctionId='Flood Building Impact Function')
         assert myResult, myMessage
 
