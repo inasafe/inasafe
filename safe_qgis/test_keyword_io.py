@@ -17,6 +17,8 @@ from safe.common.testing import HAZDATA, TESTDATA
 from safe_qgis.utilities_test import (getQgisTestApp, loadLayer)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.exceptions import HashNotFoundException
+from safe_qgis.test_keywords_dialog import copyMakePadangLayer
+
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
 # Don't change this, not even formatting, you will break tests!
@@ -136,6 +138,22 @@ class KeywordIOTest(unittest.TestCase):
         mySource = self.fileVectorLayer.source()
         myMessage = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
                     myKeywords, myExpectedKeywords, mySource)
+        assert myKeywords == myExpectedKeywords, myMessage
+
+    def test_appendKeywords(self):
+        """Can we append file keywords with the generic readKeywords
+        method """
+        myLaver, myFile = copyMakePadangLayer()
+        myAddKeywords = {'category': 'exposure', 'test':'TEST'}
+
+        self.keywordIO.appendKeywords(myLaver, myAddKeywords)
+        myExpectedKeywords = {'category': 'exposure', 'test': 'TEST',
+                              'subcategory': 'earthquake', 'unit': 'MMI',
+                              'title': 'An earthquake in Padang like in 2009'}
+        myKeywords = self.keywordIO.readKeywords(myLaver)
+
+        myMessage = 'Got: %s\n\nExpected %s\n' % (
+            myKeywords, myExpectedKeywords)
         assert myKeywords == myExpectedKeywords, myMessage
 
     def test_readDBKeywords(self):
