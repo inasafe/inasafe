@@ -249,11 +249,15 @@ class Plugin:
         self.dockWidget = Dock(self.iface)
         self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockWidget)
         myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
+        f = open('atos.txt', 'wt')
+        f.write(str(myLegendTab))
+
         if myLegendTab:
+            f.write('if')
             self.iface.mainWindow().tabifyDockWidget(
                                             myLegendTab, self.dockWidget)
             self.dockWidget.raise_()
-
+        f.close()
         #
         # Hook up a slot for when the current layer is changed
         #
