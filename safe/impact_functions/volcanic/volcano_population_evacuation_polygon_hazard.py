@@ -23,7 +23,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
                     datatype=='density'
     """
 
-    title = _('be affected')
+    title = _('Be affected')
     target_field = 'population'
     category_title = 'KRB'
 
@@ -140,7 +140,8 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(_('Notes'), header=True),
-                           _('Total population %i in view port') % total,
+                           _('Total population %i in the viewable area')
+                           % total,
                            _('People need evacuation if they are within the '
                              'volcanic hazard zones.')])
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -177,7 +178,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
         # Create vector layer and return
         V = Vector(data=new_attributes,
                    projection=H.get_projection(),
-                   geometry=H.get_geometry(),
+                   geometry=H.get_geometry(as_geometry_objects=True),
                    name=_('Population affected by volcanic hazard zone'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,

@@ -19,7 +19,8 @@ from projection import Projection
 from utilities import DRIVER_MAP
 from utilities import read_keywords
 from utilities import write_keywords
-from utilities import geotransform2bbox, geotransform2resolution
+from utilities import (geotransform2bbox, geotransform2resolution,
+                       check_geotransform)
 
 
 class Raster(Layer):
@@ -83,6 +84,8 @@ class Raster(Layer):
             # with extra keyword arguments supplying metadata
 
             self.data = numpy.array(data, dtype='d', copy=False)
+
+            check_geotransform(geotransform)
             self.geotransform = geotransform
 
             self.rows = data.shape[0]
@@ -231,7 +234,7 @@ class Raster(Layer):
 
         msg = ('Invalid file type for file %s. Only extension '
                'tif allowed.' % filename)
-        verify(extension in ['.tif', '.asc'], msg)
+        verify(extension in ['.tif'], msg)
         file_format = DRIVER_MAP[extension]
 
         # Get raster data
