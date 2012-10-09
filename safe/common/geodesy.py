@@ -201,4 +201,7 @@ class Point:
 
             P.append([p.longitude, p.latitude])
 
+        # Close polygon
+        P.append(P[0])
+
         return numpy.array(P)
