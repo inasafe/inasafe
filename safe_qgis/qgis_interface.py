@@ -74,6 +74,7 @@ class QgisInterface(QObject):
         for myLayer in theLayers:
             myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
         print 'Canvas Layer Count: %s' % len(self.canvas.layers())
+        print str(myLayers)
         self.canvas.setLayerSet(myCanvasLayers)
 
     @pyqtSlot('QgsMapLayer')
