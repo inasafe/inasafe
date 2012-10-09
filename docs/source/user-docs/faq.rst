@@ -104,6 +104,6 @@ How do I convert a vector hazard layer to a raster layer?
 
 For vector to raster conversion, use gdal_rasterize utility, for example::
 
-   gdal_rasterize -a <attributeN_name> -l <source>.shp <destination>.tif
+   gdal_rasterize -a <attribute_name> -l <source>.shp <destination>.tif
 
 
