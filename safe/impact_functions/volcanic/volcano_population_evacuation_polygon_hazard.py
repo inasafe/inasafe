@@ -6,7 +6,7 @@ from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as _
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-
+from safe.common.exceptions import InaSAFEError
 
 class VolcanoFunctionVectorHazard(FunctionProvider):
     """Risk plugin for flood evacuation
