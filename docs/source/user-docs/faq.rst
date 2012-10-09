@@ -99,3 +99,11 @@ or::
    mencoder -idx yogya_analysis-6.ogv -ovc lavc -oac lavc -lavcopts \
    vcodec=wmv2 -of lavf -o yogya_analysis.wmv
 
+How do I convert a vector hazard layer to a raster layer?
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+For vector to raster conversion, use gdal_rasterize utility, for example::
+
+   gdal_rasterize -a <attribute_name> -l <source>.shp <destination>.tif
+
+
