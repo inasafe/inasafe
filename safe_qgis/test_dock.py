@@ -213,7 +213,7 @@ def setupScenario(theHazard, theExposure, theFunction, theFunctionId,
     if theAggregationEnabledFlag is not None:
         if DOCK.cboAggregation.isEnabled() != theAggregationEnabledFlag:
             myMessage = 'The aggregation combobox should be %s' %\
-                        ('enabled' if theAggregationEnabledFlag else 'disabled')
+                    ('enabled' if theAggregationEnabledFlag else 'disabled')
             return False, myMessage
 
     # Check that layers and impact function are correct
@@ -492,7 +492,6 @@ class DockTest(unittest.TestCase):
             theAggregationEnabledFlag=False)
         myMessage += ' when the when hazard and exposure layer are vector'
         assert myResult, myMessage
-
 
     def test_checkAggregationAttribute(self):
         myRunButton = DOCK.pbnRunStop
