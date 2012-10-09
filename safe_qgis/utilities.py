@@ -535,6 +535,7 @@ else:
     def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
         QgsMessageLog.logMessage(str(msg), tag, level)
 
+
 def setup_logger():
     """Run once when the module is loaded and enable logging
 

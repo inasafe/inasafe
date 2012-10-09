@@ -44,6 +44,7 @@ def ugettext(s):
                             path, languages=[lang], fallback=True)
     return t.ugettext(s)
 
+
 def temp_dir(sub_dir='work'):
     """Obtain the temporary working directory for the operating system.
 

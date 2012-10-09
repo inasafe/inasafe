@@ -288,7 +288,7 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
     """Helper function to load layers as defined in a python list."""
     # First unload any layers that may already be loaded
     if theClearFlag:
-        QgsMapLayerRegistry.instance().removeAllMapLayers ()
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
 
     # Now go ahead and load our layers
     myExposureLayerCount = 0
@@ -1283,7 +1283,7 @@ class DockTest(unittest.TestCase):
         LOGGER.info("Canvas list after:\n%s" % canvasList())
         myMessage = ('Layer was not added to canvas (%s before, %s after)' %
                      (myBeforeCount, myAfterCount))
-        assert myBeforeCount == myAfterCount-1, myMessage
+        assert myBeforeCount == myAfterCount- 1, myMessage
         QgsMapLayerRegistry.instance().removeMapLayer(myLayer.id())
 
 if __name__ == '__main__':
