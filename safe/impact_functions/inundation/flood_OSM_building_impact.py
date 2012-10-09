@@ -20,7 +20,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'INUNDATED'
-    title = _('Be temporarily closed')
+    title = _('Be flooded')
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)

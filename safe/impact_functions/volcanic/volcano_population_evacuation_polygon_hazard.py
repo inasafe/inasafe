@@ -23,7 +23,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
                     datatype=='density'
     """
 
-    title = _('be affected')
+    title = _('Be affected')
     target_field = 'population'
     category_title = 'KRB'
 

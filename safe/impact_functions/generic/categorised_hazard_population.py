@@ -26,7 +26,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     :detail The Detail
     """
 
-    title = _('be impacted')
+    title = _('Be impacted')
 
     def run(self, layers):
         """Plugin for impact of population as derived by categorised hazard
