@@ -394,8 +394,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """Automatic slot executed when the Function combo is changed
         so that we can see if the ok button should be enabled.
 
-        .. note:: Don't use the @pyqtSlot() decorator for autoslots!
-
         Args:
            None.
 
@@ -403,9 +401,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
            None.
 
         Raises:
-           no exceptions explicitly raised.
-
-    """
+           no exceptions explicitly raised."""
         # Add any other logic you mught like here...
         if not theIndex.isNull or not theIndex == '':
             myFunctionID = self.getFunctionID()
@@ -455,8 +451,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             self.toolFunctionOptions.setEnabled(True)
 
+    @pyqtSlot()
     def on_toolFunctionOptions_clicked(self):
+        """Automatic slot executed when the tool button for configuring
+        impact functions is clicked (when available) to open the dialog
+
+        Args:
+           None.
+
+        Returns:
+           None.
+
+        Raises:
+           no exceptions explicitly raised."""
         conf = ConfigurableImpactFunctionsDialog(self)
+        conf.setDialogInfo(self.getFunctionID())
         conf.buildFormFromImpactFunctionsParameter(self.myFunction,
                                                    self.functionParams)
         conf.showNormal()
