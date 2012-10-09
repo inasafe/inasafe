@@ -129,6 +129,22 @@ class KeywordIO(QObject):
         except:
             raise
 
+    def appendKeywords(self, theLayer, theKeywords):
+        """Write keywords for a datasource.
+
+        Args:
+            * theLayer - A QGIS QgsMapLayer instance.
+            * theKeywords - a dict containing all the keywords to be added
+              for the layer.
+        Returns:
+            None.
+        Raises:
+            None
+        """
+        myKeywords = self.readKeywords(theLayer)
+        myKeywords.update(theKeywords)
+        self.writeKeywords(theLayer, myKeywords)
+
     def copyKeywords(self, theSourceLayer,
                      theDestinationFile, theExtraKeywords=None):
         """Helper to copy the keywords file from a source dataset
