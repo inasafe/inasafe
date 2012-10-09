@@ -366,7 +366,7 @@ class DockTest(unittest.TestCase):
         DOCK.setLayerNameFromTitleFlag = False
         DOCK.zoomToImpactFlag = False
         DOCK.hideExposureFlag = False
-        DOCK.showPostProcessingLayers = False
+        DOCK.showPostProcLayers = False
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -619,7 +619,7 @@ class DockTest(unittest.TestCase):
                      % (myLayerList, currentLayers))
         self.assertEquals(currentLayers, myLayerList, myMessage)
 
-        DOCK.showPostProcessingLayers = True
+        DOCK.showPostProcLayers = True
         # LAYER List should have i additional layers
         myLayerList.append(str(DOCK.tr('Population which Need evacuation '
                             'aggregated to kabupaten jakarta singlepart')))
