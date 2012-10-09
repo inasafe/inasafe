@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/safe_qgis/test_dock.py" line="321" />
+    <bookmark url="file://$PROJECT_DIR$/safe_qgis/test_dock.py" line="331" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/testrunner.xml" afterPath="$PROJECT_DIR$/.idea/testrunner.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/__init__.py" afterPath="$PROJECT_DIR$/safe_qgis/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/plugin.py" afterPath="$PROJECT_DIR$/safe_qgis/plugin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/qgis_interface.py" afterPath="$PROJECT_DIR$/safe_qgis/qgis_interface.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/test_dock.py" afterPath="$PROJECT_DIR$/safe_qgis/test_dock.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/utilities.py" afterPath="$PROJECT_DIR$/safe_qgis/utilities.py" />
     </list>
     <ignored path="inasafe-dev.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,28 +36,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="test_dock.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="test_dock.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/safe_qgis/test_dock.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="556" column="9" selection-start="22805" selection-end="22805" vertical-scroll-proportion="0.07772021">
+            <state line="1275" column="16" selection-start="53242" selection-end="53242" vertical-scroll-proportion="-0.91525424">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plugin.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/plugin.py">
+      <file leaf-file-name="utilities.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="56" selection-start="5318" selection-end="5318" vertical-scroll-proportion="0.0">
+            <state line="553" column="72" selection-start="21221" selection-end="21221" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="qgis_interface.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="test_keyword_io.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/test_keyword_io.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="144" column="18" selection-start="6757" selection-end="6757" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="qgis_interface.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/safe_qgis/qgis_interface.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="81" column="9" selection-start="2900" selection-end="2900" vertical-scroll-proportion="0.0">
+            <state line="102" column="12" selection-start="3555" selection-end="3555" vertical-scroll-proportion="0.61563516">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dock.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="1302" column="33" selection-start="49010" selection-end="49010" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -73,15 +85,6 @@
         <entry file="file://$PROJECT_DIR$/safe_qgis/clipper.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="382" column="8" selection-start="14627" selection-end="14667" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utilities.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="0" selection-start="1908" selection-end="1908" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -102,20 +105,20 @@
       <list>
         <option value="$PROJECT_DIR$/safe/api.py" />
         <option value="$PROJECT_DIR$/safe_qgis/safe_interface.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/test_keyword_io.py" />
         <option value="$PROJECT_DIR$/safe_qgis/keyword_io.py" />
         <option value="$PROJECT_DIR$/safe_qgis/keywords_dialog.py" />
         <option value="$PROJECT_DIR$/safe/storage/test_vector.py" />
         <option value="$PROJECT_DIR$/safe/storage/vector.py" />
         <option value="$PROJECT_DIR$/safe_qgis/utilities_test.py" />
         <option value="$PROJECT_DIR$/safe_qgis/help.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/dock.py" />
-        <option value="$PROJECT_DIR$/safe/common/utilities.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/utilities.py" />
         <option value="$PROJECT_DIR$/safe_qgis/__init__.py" />
         <option value="$PROJECT_DIR$/safe_qgis/plugin.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/qgis_interface.py" />
+        <option value="$PROJECT_DIR$/safe/common/utilities.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/test_keyword_io.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/dock.py" />
         <option value="$PROJECT_DIR$/safe_qgis/test_dock.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/utilities.py" />
+        <option value="$PROJECT_DIR$/safe_qgis/qgis_interface.py" />
       </list>
     </option>
   </component>
@@ -230,7 +233,7 @@
       <recent name="$PROJECT_DIR$/safe/common" />
     </key>
   </component>
-  <component name="RunManager" selected="Python's test.Unittests in DockTest.test_checkPostProcessingLayersVisibility">
+  <component name="RunManager" selected="Python's test.Unittests in DockTest.test_newLayersShowInCanvas">
     <configuration default="false" name="Unittests in DockTest.test_checkPostProcessingLayersVisibility" type="tests" factoryName="Unittests" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -291,6 +294,29 @@
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/safe_qgis/test_dock.py" />
       <option name="CLASS_NAME" value="DockTest" />
       <option name="METHOD_NAME" value="test_newLayersShowInCanvas" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittests in DockTest.test_cboAggregationLoadedProject" type="tests" factoryName="Unittests" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="QGISPATH" value="/usr/local/qgis1.8" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/safe_qgis" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="inasafe-dev" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/safe_qgis/test_dock.py" />
+      <option name="CLASS_NAME" value="DockTest" />
+      <option name="METHOD_NAME" value="test_cboAggregationLoadedProject" />
       <option name="FOLDER_NAME" value="" />
       <option name="TEST_TYPE" value="TEST_METHOD" />
       <option name="PATTERN" value="" />
@@ -446,7 +472,7 @@
       <ConfigurationWrapper RunnerId="PyRemoteDebugRunner" />
       <method />
     </configuration>
-    <list size="10">
+    <list size="11">
       <item index="0" class="java.lang.String" itemvalue="Python Remote Debug.Remote Debug Server" />
       <item index="1" class="java.lang.String" itemvalue="Python docs.InaSAFE Docs" />
       <item index="2" class="java.lang.String" itemvalue="Python docs.Sphinx HTML" />
@@ -457,11 +483,14 @@
       <item index="7" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest.test_checkPostProcessingLayersVisibility" />
       <item index="8" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest" />
       <item index="9" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest.test_newLayersShowInCanvas" />
+      <item index="10" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest.test_cboAggregationLoadedProject" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest.test_checkPostProcessingLayersVisibility" />
-        <item index="1" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest.test_newLayersShowInCanvas" />
+      <list size="4">
+        <item index="0" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest.test_newLayersShowInCanvas" />
+        <item index="1" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest.test_cboAggregationLoadedProject" />
+        <item index="2" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest" />
+        <item index="3" class="java.lang.String" itemvalue="Python's test.Unittests in DockTest.test_checkPostProcessingLayersVisibility" />
       </list>
     </recent_temporary>
   </component>
@@ -554,18 +583,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="26" width="1368" height="743" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33440515" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33440515" sideWeight="0.49786323" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24670571" sideWeight="0.27170417" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24670571" sideWeight="0.6141479" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23748103" sideWeight="0.56113905" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34083602" sideWeight="0.6655983" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16115262" sideWeight="0.21922246" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3858521" sideWeight="0.53001463" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44051448" sideWeight="0.46486092" order="2" side_tool="false" content_ui="tabs" x="217" y="178" width="1477" height="799" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43886098" sideWeight="0.46486092" order="2" side_tool="false" content_ui="tabs" x="217" y="178" width="1477" height="799" />
       <window_info id="Pomodoro" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3255814" sideWeight="0.48504272" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -643,11 +672,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/safe_qgis/test_keyword_io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="169" column="0" selection-start="8155" selection-end="8155" vertical-scroll-proportion="0.5202109" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/map.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1139" column="30" selection-start="45248" selection-end="45253" vertical-scroll-proportion="0.0" />
@@ -677,35 +701,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe/common/utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="40" selection-start="1666" selection-end="1666" vertical-scroll-proportion="0.765324" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/utilities_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="133" column="4" selection-start="3928" selection-end="3928" vertical-scroll-proportion="-1.5619335">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/plugin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="56" selection-start="5318" selection-end="5318" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/clipper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="382" column="8" selection-start="14627" selection-end="14667" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="0" selection-start="1908" selection-end="1908" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -717,20 +715,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/qgis_interface.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="9" selection-start="2900" selection-end="2900" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1333" column="25" selection-start="50309" selection-end="50309" vertical-scroll-proportion="0.2823834">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/impact_calculator_thread.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="106" column="27" selection-start="3542" selection-end="3549" vertical-scroll-proportion="0.13471502">
@@ -738,9 +722,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/plugin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="147" column="61" selection-start="5428" selection-end="5428" vertical-scroll-proportion="0.653125">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe/common/utilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="14" selection-start="53" selection-end="53" vertical-scroll-proportion="0.100175746">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/test_keyword_io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="144" column="18" selection-start="6757" selection-end="6757" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/dock.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1302" column="33" selection-start="49010" selection-end="49010" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/clipper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="382" column="8" selection-start="14627" selection-end="14667" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/test_dock.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="556" column="9" selection-start="22805" selection-end="22805" vertical-scroll-proportion="0.07772021">
+        <state line="1275" column="16" selection-start="53242" selection-end="53242" vertical-scroll-proportion="-0.91525424">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="553" column="72" selection-start="21221" selection-end="21221" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/qgis_interface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="102" column="12" selection-start="3555" selection-end="3555" vertical-scroll-proportion="0.61563516">
           <folding />
         </state>
       </provider>
