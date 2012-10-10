@@ -656,10 +656,8 @@ def setupLogger():
             mySentryHandler.setLevel(logging.ERROR)
             if addLoggingHanderOnce(myLogger, mySentryHandler):
                 myLogger.debug('Sentry logging enabled')
-        except:
-            myLogger.exception('Sentry logging disabled')
-            print e.message
-            pass
+        except ImportError:
+            myLogger.debug('Sentry logging disabled')
 
     #Set formatters
     myFileHandler.setFormatter(myFormatter)
