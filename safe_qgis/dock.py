@@ -23,9 +23,10 @@ __type__ = 'alpha'  # beta, final etc will be shown in dock title
 import os
 import numpy
 import logging
+import uuid
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSlot
+from PyQt4.QtCore import pyqtSlot, QVariant
 from safe_qgis.dock_base import Ui_DockBase
 
 from safe_qgis.help import Help
@@ -40,7 +41,8 @@ from qgis.core import (QgsMapLayer,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
                        QgsFeature,
-                       QgsRectangle)
+                       QgsRectangle,
+                       QgsField)
 from qgis.analysis import QgsZonalStatistics
 
 # TODO: Rather impor via safe_interface.py TS
@@ -835,21 +837,24 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocLayer = self.getPostprocLayer()
         self.doAggregation = True
         if self.postprocLayer is None:
+            #generate on the fly a memory layer to be used in postprocessing
             self.doAggregation = False
-#            crs = self.getExposureLayer().crs().authid().toLower()
-#            uri = 'Polygon' + '?crs=' + crs + '&index=yes'
-#            myLayer = QgsVectorLayer(uri, 'tmpPostprocessingLayer', 'memory')
+            crs = self.getExposureLayer().crs().authid().toLower()
+            myUUID = str(uuid.uuid4())
+            uri = 'Polygon' + '?crs=' + crs + '&index=yes&uuid=' + myUUID
+            myName = 'tmpPostprocessingLayer'
+            myLayer = QgsVectorLayer(uri, myName, 'memory')
+            LOGGER.debug('created' + myLayer.name())
 
-            myFile = 'mock_entire_area.shp'
-            myPath = tempDir('postprocessing')
-            myPath = os.path.join(myPath, myFile)
-            print myPath
-            #FIXME (MB) path and except
-            myLayer = QgsVectorLayer('/home/marco/dev/qgis-plugins/inasafe_data/tmp/mock_entire_area.shp', 'tmpPostprocessingLayer', 'ogr')
             if not myLayer.isValid():
-                myMessage = self.tr('An exception occurred when reading the '
-                                    'postprocessing mock layer.')
-                raise ReadLayerError(myMessage)
+                myMessage = self.tr('An exception occurred when creating the '
+                                    'Entire area layer.')
+                self.displayHtml(myMessage)
+                return
+            myProvider = myLayer.dataProvider()
+            myLayer.startEditing()
+            myProvider.addAttributes([QgsField("name", QVariant.String)])
+            myLayer.commitChanges()
 
             self.postprocLayer = myLayer
         self._checkPostprocAttributes()
@@ -1224,6 +1229,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #discussed with tim,in this case its ok to be generic
         except Exception:  # pylint: disable=W0703
             myKeywords = dict()
+
+        #myKeywords are already complete
         if ('category' in myKeywords and
             myKeywords['category'] == 'postprocessing' and
             self.defaults['AGGREGATION_ATTRIBUTE_KEY'] in myKeywords and
@@ -1234,8 +1241,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.defaults['FEMALE_RATIO_DEFAULT_KEY'] in myKeywords
                 )
             ):
-            #myKeywords are already complete
             return
+        #some keywords are needed
         else:
             #set the default values by writing to the myKeywords
             myKeywords['category'] = 'postprocessing'
