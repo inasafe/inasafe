@@ -24,6 +24,7 @@ from PyQt4.QtCore import pyqtSignature
 from safe_qgis.options_dialog_base import Ui_OptionsDialogBase
 from safe_qgis.help import Help
 from safe_qgis.keyword_io import KeywordIO
+from safe.defaults import DEFAULT_FEMALE_RATIO
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -110,6 +111,10 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
                             'inasafe/showPostProcLayers', False).toBool()
         self.cbxShowPostprocessingLayers.setChecked(myFlag)
 
+        myRatio = mySettings.value(
+            'inasafe/defaultFemaleRatio', DEFAULT_FEMALE_RATIO).toDouble()
+        self.dsbFemaleRatioDefault.setValue(myRatio[0])
+
         myPath = mySettings.value(
                             'inasafe/keywordCachePath',
                             self.keywordIO.defaultKeywordDbPath()).toString()
@@ -137,7 +142,9 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         mySettings.setValue('inasafe/clipToViewport',
                             self.cbxClipToViewport.isChecked())
         mySettings.setValue('inasafe/showPostProcLayers',
-            self.cbxShowPostprocessingLayers.isChecked())
+                            self.cbxShowPostprocessingLayers.isChecked())
+        mySettings.setValue('inasafe/defaultFemaleRatio',
+                            self.dsbFemaleRatioDefault.value())
         mySettings.setValue('inasafe/keywordCachePath',
                             self.leKeywordCachePath.text())
 
