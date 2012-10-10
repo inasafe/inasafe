@@ -193,8 +193,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to show or not postprocessing generated layers
         myFlag = mySettings.value(
-                            'inasafe/showPostProcessingLayers', False).toBool()
-        self.showPostProcessingLayers = myFlag
+                            'inasafe/showPostProcLayers', False).toBool()
+        self.showPostProcLayers = myFlag
 
         self.getLayers()
 
@@ -837,7 +837,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocLayer = self.getPostprocLayer()
         self.doAggregation = True
         if self.postprocLayer is None:
-            #generate on the fly a memory layer to be used in postprocessing
+            # generate on the fly a memory layer to be used in postprocessing
+            # this is needed because we always want a vectoril layer to store
+            # information
             self.doAggregation = False
             crs = self.getExposureLayer().crs().authid().toLower()
             myUUID = str(uuid.uuid4())
@@ -858,26 +860,28 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             self.postprocLayer = myLayer
         self._checkPostprocAttributes()
-        self.postprocAttributes = {}
 
+        #attributes that will not be deleted from the postprocessing layer
+        self.postprocAttributes = {}
         if self.doAggregation:
             self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']
             ] = (self.keywordIO.readKeywords(self.postprocLayer,
-                    self.defaults['AGGR_ATTR_KEY']))
+                self.defaults['AGGR_ATTR_KEY']))
         else:
             self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']
-                ] = None
+            ] = None
 
         myFemRatioAttr = self.keywordIO.readKeywords(
             self.postprocLayer, self.defaults['FEM_RATIO_ATTR_KEY'])
         if (myFemRatioAttr == self.tr('Don\'t use') or
             myFemRatioAttr == self.tr('Use default')):
             self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']
-                ] = None
+            ] = None
         else:
             self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']
-                ] = myFemRatioAttr
+            ] = myFemRatioAttr
 
+        #start the analysis
         try:
             self.setupCalculator()
         except InsufficientOverlapException, e:
@@ -963,8 +967,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
         """
-        if self.postprocLayer is not None:
-            self.aggregateResults(88)
+        if self.doAggregation:
+            try:
+                myProgress = 88
+                self.aggregateResults(myProgress)
+            except Exception, e:
+                QtGui.qApp.restoreOverrideCursor()
+                self.hideBusy()
+                myContext = self.tr(
+                    'An exception occurred when aggregating the results')
+                myMessage = getExceptionWithStacktrace(e, html=True,
+                    context=myContext)
+                self.displayHtml(myMessage)
+                return
         self.completed()
         self.initPostprocOutput()
 
@@ -1017,21 +1032,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                             self.cboAggregation.currentText())
         myProgress = progress
 
-        try:
-            self.showBusy(myTitle, myMessage, myProgress)
-            self._aggregateResults()
-            self._parseAggregationResults()
-            QtGui.qApp.restoreOverrideCursor()
-        except Exception, e:  # pylint: disable=W0703
-            # FIXME (Ole): This branch is not covered by the tests
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myContext = self.tr(
-                'An exception occurred when aggregating '
-                'the results')
-            myMessage = getExceptionWithStacktrace(e, html=True,
-                context=myContext)
-            self.displayHtml(myMessage)
+        self.showBusy(myTitle, myMessage, myProgress)
+        self._aggregateResults()
+        self._parseAggregationResults()
+        QtGui.qApp.restoreOverrideCursor()
+
 
     def _aggregateResults(self):
         """
@@ -1046,16 +1051,16 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: None
         """
         impactLayer = self.runner.impactLayer()
-
         myQgisImpactLayer = self.readImpactLayer(impactLayer)
         if not myQgisImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQgisImpactLayer)
             raise ReadLayerError(myMessage)
-
         lName = str(self.tr('%1 aggregated to %2')
                 .arg(myQgisImpactLayer.name())
                 .arg(self.postprocLayer.name()))
 
+        # in case aggregation layer is larger than the impact layer let's
+        # trimm it down to  avoid extra calculations
         clippedAggregationLayerPath = clipLayer(
             self.postprocLayer,
             impactLayer.get_bounding_box(), explodeMultipart=False)
@@ -1067,14 +1072,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.postprocLayer.lastError())
             raise ReadLayerError(myMessage)
 
-        #delete unwanted fields
+            #delete unwanted fields
         vProvider = self.postprocLayer.dataProvider()
         vFields = vProvider.fields()
         toDel = []
-
         for i in vFields:
-            if vFields[i].name() != self.aggregationAttribute:
+            if vFields[i].name() != self.postprocAttributes[
+                                    self.defaults['AGGR_ATTR_KEY']]:
                 toDel.append(i)
+        LOGGER.debug('Removing this attributes: ' + str(toDel))
         try:
             vProvider.deleteAttributes(toDel)
         # FIXME (Ole): Disable pylint check for the moment
@@ -1082,10 +1088,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except:  # pylint: disable=W0702
             myMessage = self.tr('Could not remove the unneded fields')
             LOGGER.debug(myMessage)
-        del toDel, vProvider, vFields
 
+        del toDel, vProvider, vFields
         writeKeywordsToFile(clippedAggregationLayerPath, {'title': lName})
 
+        #call the correct aggregator
         if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
             self._aggregateResultsVector(myQgisImpactLayer)
         elif myQgisImpactLayer.type() == QgsMapLayer.RasterLayer:
@@ -1140,10 +1147,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return
 
     def _parseAggregationResults(self):
-        if self.aggregationAttribute is None:
+        myAttribute = self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']]
+        if myAttribute is None:
             aggrAttrTitle = self.tr('Aggregation unit')
         else:
-            aggrAttrTitle = self.aggregationAttribute
+            aggrAttrTitle = myAttribute
 
         #open table
         myHTML = ('<table class="table table-striped condensed">'
@@ -1171,7 +1179,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         provider.select(allAttrs, QgsRectangle(), False)
 
         nameFieldIndex = self.postprocLayer.fieldNameIndex(
-                self.aggregationAttribute)
+            myAttribute)
 
         try:
             sumFieldIndex = self.postprocLayer.fieldNameIndex(
@@ -1327,6 +1335,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.showBusy(myTitle, myMessage, myProgress)
 
         # FIXME (Ole): Marco and Ole saw situation where self.runner was None.
+        # Should be fixed (MB) was a previous exception not bubbling
         # Could not be reproduced, but maybe an idea to put an error
         # message in that case
         myMessage = self.runner.result()

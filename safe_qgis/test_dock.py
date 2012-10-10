@@ -36,6 +36,7 @@ from qgis.core import (QgsRasterLayer,
                        QgsRectangle)
 
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
+from safe.defaults import AGGR_ATTR_KEY
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.utilities_test import (getQgisTestApp,
                                 setCanvasCrs,
@@ -500,7 +501,7 @@ class DockTest(unittest.TestCase):
                       'kabupaten_jakarta_singlepart_with_None_keyword.shp']
         #add additional layers
         loadLayers(myFileList, theClearFlag=False, theDataDirectory=TESTDATA)
-
+        myAttribute = DOCK.postprocAttributes[AGGR_ATTR_KEY]
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         myResult, myMessage = setupScenario(
@@ -513,8 +514,8 @@ class DockTest(unittest.TestCase):
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
-                     (DOCK.aggregationAttribute))
-        self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
+                     (myAttribute))
+        self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
 
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
@@ -528,25 +529,8 @@ class DockTest(unittest.TestCase):
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         myMessage = ('The aggregation should be KAB_NAME. Found: %s' %
-                     (DOCK.aggregationAttribute))
-        self.assertEqual(DOCK.aggregationAttribute, 'KAB_NAME', myMessage)
-
-        #TODO: MOVE to test_keywords_dialog.py
-        # with 3 good aggregation attribute using
-        # kabupaten_jakarta_singlepart_3_good_attr.shp
-#        myResult, myMessage = setupScenario(
-#            theHazard='A flood in Jakarta like in 2007',
-#            theExposure='People',
-#            theFunction='Need evacuation',
-#            theFunctionId='Flood Evacuation Function',
-#            theAggregation='kabupaten jakarta singlepart 3 good attr')
-#        assert myResult, myMessage
-#        # Press RUN
-#        QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-#        myMessage = ('The aggregation should be TEST_INT. Found: %s' %
-#                     (DOCK.aggregationAttribute))
-#
-#        self.assertEqual(DOCK.aggregationAttribute, 'TEST_INT', myMessage)
+                     (myAttribute))
+        self.assertEqual(myAttribute, 'KAB_NAME', myMessage)
 
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
@@ -560,8 +544,8 @@ class DockTest(unittest.TestCase):
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         myMessage = ('The aggregation should be None. Found: %s' %
-                     (DOCK.aggregationAttribute))
-        assert DOCK.aggregationAttribute is None, myMessage
+                     (myAttribute))
+        assert myAttribute is None, myMessage
 
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
@@ -575,8 +559,8 @@ class DockTest(unittest.TestCase):
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
         myMessage = ('The aggregation should be None. Found: %s' %
-                     (DOCK.aggregationAttribute))
-        assert DOCK.aggregationAttribute is None, myMessage
+                     (myAttribute))
+        assert myAttribute is None, myMessage
 
     def test_checkPostProcessingLayersVisibility(self):
         myRunButton = DOCK.pbnRunStop
@@ -607,7 +591,7 @@ class DockTest(unittest.TestCase):
 
         # Now run again showing intermediate layers
 
-        DOCK.showPostProcessingLayers = True
+        DOCK.showPostProcLayers = True
         myBeforeCount = len(CANVAS.layers())
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
