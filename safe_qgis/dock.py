@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.1'
@@ -32,7 +31,6 @@ from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  getWGS84resolution,
-                                 logOnQgsMessageLog,
                                  isLayerPolygonal,
                                  getLayerAttributeNames)
 from qgis.core import (QgsMapLayer,
@@ -41,13 +39,11 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
-                       QGis,
                        QgsFeature,
                        QgsRectangle)
 from qgis.analysis import QgsZonalStatistics
 
 # TODO: Rather impor via safe_interface.py TS
-from safe.api import write_keywords, read_keywords, ReadLayerError
 
 from safe_qgis.dock_base import Ui_DockBase
 from safe_qgis.help import Help
@@ -886,19 +882,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 raise ReadLayerError(myMessage)
 
             self.postprocLayer = myLayer
-        try:
-            self._checkPostprocAttributes()
-        except Exception, e:
-            # FIXME (MB): This branch is not covered by the tests
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr('An exception occurred when reading the '
-                                'postprocessing attributes.')
-            myMessage = getExceptionWithStacktrace(e,
-                html=True,
-                context=myMessage)
-            self.displayHtml(myMessage)
-            return
+        self._checkPostprocAttributes()
 
         self.postprocAttributes = {}
         if self.doAggregation:
@@ -1266,7 +1250,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         try:
             myKeywords = self.keywordIO.readKeywords(self.postprocLayer)
         #discussed with tim,in this case its ok to be generic
-        except Exception, e:  # pylint: disable=W0703
+        except Exception:  # pylint: disable=W0703
             myKeywords = dict()
         if ('category' in myKeywords and
             myKeywords['category'] == 'postprocessing' and
