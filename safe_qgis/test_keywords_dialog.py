@@ -202,7 +202,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the postprocessing radio did not add an '
                      'aggregation attribute to the keywords list.')
         assert myDialog.getValueForKey(
-            myDefaults['AGGREGATION_ATTR_KEY']) == 'KAB_NAME', myMessage
+            myDefaults['AGGR_ATTR_KEY']) == 'KAB_NAME', myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'female ratio attribute to the keywords list.')

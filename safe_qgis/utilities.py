@@ -750,8 +750,8 @@ def getDefaults():
         safe.defaults.FEMALE_RATIO_DEFAULT_KEY
     myDefaults['FEMALE_RATIO_ATTR_KEY'] = \
         safe.defaults.FEMALE_RATIO_ATTR_KEY
-    myDefaults['AGGREGATION_ATTR_KEY'] = \
-        safe.defaults.AGGREGATION_ATTR_KEY
+    myDefaults['AGGR_ATTR_KEY'] = \
+        safe.defaults.AGGR_ATTR_KEY
 
     return myDefaults
 

@@ -157,7 +157,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox.blockSignals(False)
         if theFlag:
             currentKeyword = self.getValueForKey(
-                self.defaults['AGGREGATION_ATTR_KEY'])
+                self.defaults['AGGR_ATTR_KEY'])
             fields, attributePosition = getLayerAttributeNames(self.layer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String],
                 currentKeyword)
@@ -216,7 +216,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     @pyqtSignature('int')
     def on_cboAggregationAttribute_currentIndexChanged(self, theIndex=None):
         del theIndex
-        self.addListEntry(self.defaults['AGGREGATION_ATTR_KEY'],
+        self.addListEntry(self.defaults['AGGR_ATTR_KEY'],
         self.cboAggregationAttribute.currentText())
 
     # prevents actions being handled twice
@@ -314,7 +314,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if not theFlag:
-            self.removeItemByKey(self.defaults['AGGREGATION_ATTR_KEY'])
+            self.removeItemByKey(self.defaults['AGGR_ATTR_KEY'])
             self.removeItemByKey(self.defaults['FEMALE_RATIO_ATTR_KEY'])
             self.removeItemByKey(self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
             return
