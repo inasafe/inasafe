@@ -640,7 +640,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connectLayerListener()
         self.blockSignals(False)
-        self.getAggregationLayer()
+        self.getPostprocLayer()
         return
 
     def _toggleCboAggregation(self):
@@ -793,7 +793,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
-    def getAggregationLayer(self):
+    def getPostprocLayer(self):
         """Obtain the name of the path to the aggregation file from the
         userrole of the QtCombo for aggregation.
 
