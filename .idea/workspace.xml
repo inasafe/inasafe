@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6815cb5a-e0e1-41b6-b799-f6f1722d6a68" name="Default" comment="Added link to complete list of pylint codes">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/docs/source/developer-docs/logging.rst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/docs/source/developer-docs/index.rst" afterPath="$PROJECT_DIR$/docs/source/developer-docs/index.rst" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/safe_qgis/utilities.py" afterPath="$PROJECT_DIR$/safe_qgis/utilities.py" />
     </list>
     <ignored path="inasafe-dev.iws" />
@@ -66,19 +64,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="utilities.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="utilities.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="658" column="26" selection-start="25126" selection-end="25126" vertical-scroll-proportion="0.0">
+            <state line="568" column="0" selection-start="21531" selection-end="21531" vertical-scroll-proportion="0.3877551">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="logging.rst" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="logging.rst" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/logging.rst">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="108" column="3" selection-start="3731" selection-end="3731" vertical-scroll-proportion="-0.07042254">
+            <state line="118" column="0" selection-start="4225" selection-end="4225" vertical-scroll-proportion="-2.881356">
               <folding />
             </state>
           </provider>
@@ -138,8 +136,8 @@
         <option value="$PROJECT_DIR$/safe_qgis/dock.py" />
         <option value="$PROJECT_DIR$/safe_qgis/test_dock.py" />
         <option value="$PROJECT_DIR$/safe_qgis/qgis_interface.py" />
-        <option value="$PROJECT_DIR$/safe_qgis/utilities.py" />
         <option value="$PROJECT_DIR$/docs/source/developer-docs/logging.rst" />
+        <option value="$PROJECT_DIR$/safe_qgis/utilities.py" />
       </list>
     </option>
   </component>
@@ -824,13 +822,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="658" column="26" selection-start="25126" selection-end="25126" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/safe_qgis/test_keyword_io.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="144" column="18" selection-start="6757" selection-end="6757" vertical-scroll-proportion="0.0">
@@ -854,7 +845,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/developer-docs/logging.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="108" column="3" selection-start="3731" selection-end="3731" vertical-scroll-proportion="-0.07042254">
+        <state line="118" column="0" selection-start="4225" selection-end="4225" vertical-scroll-proportion="-2.881356">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/safe_qgis/utilities.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="568" column="0" selection-start="21531" selection-end="21531" vertical-scroll-proportion="0.3877551">
           <folding />
         </state>
       </provider>

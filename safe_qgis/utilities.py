@@ -543,6 +543,7 @@ class QgsLogHandler(logging.Handler):
         except MethodUnavailableError:
             pass
 
+
 def addLoggingHanderOnce(theLogger, theHandler):
     """A helper to add a handler to a logger, ensuring there are no duplicates.
 
@@ -564,6 +565,7 @@ def addLoggingHanderOnce(theLogger, theHandler):
 
     theLogger.addHandler(theHandler)
     return True
+
 
 def setupLogger():
     """Run once when the module is loaded and enable logging
