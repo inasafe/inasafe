@@ -25,6 +25,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 DEFAULT_FEMALE_RATIO = 0.50
 
 #Keywords key names
-FEMALE_RATIO_ATTR_KEY = 'female ratio attribute'
+FEM_RATIO_ATTR_KEY = 'female ratio attribute'
 FEMALE_RATIO_DEFAULT_KEY = 'female ratio default'
 AGGR_ATTR_KEY = 'aggregation attribute'

@@ -177,7 +177,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox.blockSignals(False)
         if theFlag:
             currentKeyword = self.getValueForKey(
-                self.defaults['FEMALE_RATIO_ATTR_KEY'])
+                self.defaults['FEM_RATIO_ATTR_KEY'])
             fields, attributePosition = getLayerAttributeNames(self.layer,
                 [QtCore.QVariant.Double],
                 currentKeyword)
@@ -234,7 +234,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
             self.removeItemByKey(self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
-        self.addListEntry(self.defaults['FEMALE_RATIO_ATTR_KEY'], text)
+        self.addListEntry(self.defaults['FEM_RATIO_ATTR_KEY'], text)
 
     # prevents actions being handled twice
     @pyqtSignature('double')
@@ -315,7 +315,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
            no exceptions explicitly raised."""
         if not theFlag:
             self.removeItemByKey(self.defaults['AGGR_ATTR_KEY'])
-            self.removeItemByKey(self.defaults['FEMALE_RATIO_ATTR_KEY'])
+            self.removeItemByKey(self.defaults['FEM_RATIO_ATTR_KEY'])
             self.removeItemByKey(self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
             return
         self.setCategory('postprocessing')

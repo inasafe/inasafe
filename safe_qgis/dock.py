@@ -869,13 +869,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 ] = None
 
         myFemRatioAttr = self.keywordIO.readKeywords(
-            self.postprocLayer, self.defaults['FEMALE_RATIO_ATTR_KEY'])
+            self.postprocLayer, self.defaults['FEM_RATIO_ATTR_KEY'])
         if (myFemRatioAttr == self.tr('Don\'t use') or
             myFemRatioAttr == self.tr('Use default')):
-            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTR_KEY']
+            self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']
                 ] = None
         else:
-            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTR_KEY']
+            self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']
                 ] = myFemRatioAttr
 
         try:
@@ -1234,9 +1234,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if ('category' in myKeywords and
             myKeywords['category'] == 'postprocessing' and
             self.defaults['AGGR_ATTR_KEY'] in myKeywords and
-            self.defaults['FEMALE_RATIO_ATTR_KEY'] in myKeywords and
+            self.defaults['FEM_RATIO_ATTR_KEY'] in myKeywords and
             (
-                self.defaults['FEMALE_RATIO_ATTR_KEY'] != self.tr(
+                self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr(
                     'Use default') or
                 self.defaults['FEMALE_RATIO_DEFAULT_KEY'] in myKeywords
                 )
@@ -1250,7 +1250,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.postprocLayer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String])
             myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttrs[0]
-            myKeywords[self.defaults['FEMALE_RATIO_ATTR_KEY']] = \
+            myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = \
                 self.tr('Use default')
             myKeywords[self.defaults['FEMALE_RATIO_DEFAULT_KEY']] = \
                 self.defaults['DEFAULT_FEMALE_RATIO']

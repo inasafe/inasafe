@@ -302,7 +302,7 @@ class UtilitiesTest(unittest.TestCase):
         myExpectedDefaults = {
             'DEFAULT_FEMALE_RATIO': 0.50,
             'FEMALE_RATIO_DEFAULT_KEY': 'female ratio default',
-            'FEMALE_RATIO_ATTR_KEY': 'female ratio attribute',
+            'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
             'AGGR_ATTR_KEY': 'aggregation attribute'
         }
         myDefaults = getDefaults()

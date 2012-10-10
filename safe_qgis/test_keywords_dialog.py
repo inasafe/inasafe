@@ -208,7 +208,7 @@ class KeywordsDialogTest(unittest.TestCase):
                      'female ratio attribute to the keywords list.')
 
         assert myDialog.getValueForKey(
-            myDefaults['FEMALE_RATIO_ATTR_KEY']) == \
+            myDefaults['FEM_RATIO_ATTR_KEY']) == \
                myDialog.tr('Use default'), myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
@@ -238,7 +238,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not add it to the keywords list.')
         assert myDialog.getValueForKey(
-            myDefaults['FEMALE_RATIO_ATTR_KEY']) ==\
+            myDefaults['FEM_RATIO_ATTR_KEY']) ==\
                myDialog.tr('Don\'t use'), myMessage
 
         myMessage = ('Toggling the female ratio attribute combo to'
@@ -260,7 +260,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not add it to the keywords list.')
         assert myDialog.getValueForKey(
-            myDefaults['FEMALE_RATIO_ATTR_KEY']) == 'TEST_REAL', myMessage
+            myDefaults['FEM_RATIO_ATTR_KEY']) == 'TEST_REAL', myMessage
 
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not disable dsbFemaleRatioDefault.')
