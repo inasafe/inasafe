@@ -31,7 +31,7 @@ logger will typically be assigned to a module variable :samp:`LOGGER`.
 To actually use the logger in your module you need to do something like this::
 
     import logging
-    LOGGER - logging.getLogger('InaSAFE')
+    LOGGER = logging.getLogger('InaSAFE')
 
     # And then in your class / method:
     LOGGER.debug('Hello world')
@@ -43,7 +43,7 @@ It is recommended to log exceptions as per the following example::
 
     try:
         1/0
-    except Exception, e:
+    except Exception:
         LOGGER.exception('Something went terribly wrong')
 
 The exception log type will cause the full traceback, the exception message
@@ -78,7 +78,7 @@ on the local client. On ubuntu you can install it by doing::
 To prevent user's unwittingly sending exception reports, it is required to
 first set an environment variable before starting QGIS / running tests::
 
-    export INASAFE_SENTRY-1
+    export INASAFE_SENTRY=1
 
 .. note:: The sentry logger is set to only log exceptions.
 
@@ -86,7 +86,7 @@ Here is an example session which will install raven, enable sentry and then
 launch QGIS::
 
     sudo pip install raven
-    export INASAFE_SENTRY-1
+    export INASAFE_SENTRY=1
     /usr/local/bin/qgis
 
 QGIS Log Messages
