@@ -116,7 +116,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.pbnAdvanced.toggle()
         self.radPredefined.setChecked(True)
         self.dsbFemaleRatioDefault.blockSignals(True)
-        self.dsbFemaleRatioDefault.setValue(self.defaults['DEFAULT_FEMALE_RATIO'])
+        self.dsbFemaleRatioDefault.setValue(self.defaults[
+                                            'DEFAULT_FEMALE_RATIO'])
         self.dsbFemaleRatioDefault.blockSignals(False)
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)

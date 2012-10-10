@@ -856,20 +856,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocAttributes = {}
 
         if self.doAggregation:
-            self.postprocAttributes[self.defaults['AGGREGATION_ATTRIBUTE_KEY']] = (
-                self.keywordIO.readKeywords(self.postprocLayer,
+            self.postprocAttributes[self.defaults['AGGREGATION_ATTRIBUTE_KEY']
+            ] = (self.keywordIO.readKeywords(self.postprocLayer,
                     self.defaults['AGGREGATION_ATTRIBUTE_KEY']))
         else:
-            self.postprocAttributes[self.defaults['AGGREGATION_ATTRIBUTE_KEY']] = None
+            self.postprocAttributes[self.defaults['AGGREGATION_ATTRIBUTE_KEY']
+                ] = None
 
         myFemRatioAttr = self.keywordIO.readKeywords(
             self.postprocLayer, self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'])
         if (myFemRatioAttr == self.tr('Don\'t use') or
             myFemRatioAttr == self.tr('Use default')):
-            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']] = None
+            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']
+                ] = None
         else:
-            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']] = \
-            myFemRatioAttr
+            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']
+                ] = myFemRatioAttr
 
         try:
             self.setupCalculator()
@@ -1227,7 +1229,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.defaults['AGGREGATION_ATTRIBUTE_KEY'] in myKeywords and
             self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'] in myKeywords and
             (
-                self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'] != self.tr('Use default') or
+                self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'] != self.tr(
+                    'Use default') or
                 self.defaults['FEMALE_RATIO_DEFAULT_KEY'] in myKeywords
                 )
             ):
@@ -1240,8 +1243,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.postprocLayer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String])
             myKeywords[self.defaults['AGGREGATION_ATTRIBUTE_KEY']] = myAttrs[0]
-            myKeywords[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']] = self.tr('Use default')
-            myKeywords[self.defaults['FEMALE_RATIO_DEFAULT_KEY']] = self.defaults['DEFAULT_FEMALE_RATIO']
+            myKeywords[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']] = \
+                self.tr('Use default')
+            myKeywords[self.defaults['FEMALE_RATIO_DEFAULT_KEY']] = \
+                self.defaults['DEFAULT_FEMALE_RATIO']
             self.keywordIO.writeKeywords(self.postprocLayer, myKeywords)
 
             if self.doAggregation:

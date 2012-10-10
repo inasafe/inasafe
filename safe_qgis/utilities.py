@@ -633,6 +633,7 @@ def setup_logger():
     myLogger.info('----------------------')
     myLogger.info('CWD: %s' % os.path.abspath(os.path.curdir))
 
+
 def isLayerPolygonal(theLayer):
     """tell if a qgis theLayer is vectorial and d its geometries polygons
    Args:
@@ -684,6 +685,7 @@ def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
         return myFields, mySelectedIndex
     else:
         return None, None
+
 
 def getDefaults():
     """returns a dictionary of defaults values to be used
