@@ -25,7 +25,8 @@ sudo apt-get install -y git rsync pep8 python-nose python-coverage python-numpy\
      pyqt4-dev-tools python-pip libqt4-dev pyflakes python-nosexcover
 echo "Installing sphinx from pip because at least 1.1 is needed for i18n support"
 echo "Installing specific pylint version (0.25) for cross host comparison"
-sudo pip install sphinx pylint==0.25.2
+echo "Installing raven for remote exception logging to http://sentry.linfiniti.com"
+sudo pip install sphinx pylint==0.25.2 raven
 # For code metrics / line counts
 sudo apt-get install sloccount
 # For gettext translation, translation statistics

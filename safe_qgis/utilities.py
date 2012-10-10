@@ -544,7 +544,30 @@ class QgsLogHandler(logging.Handler):
             pass
 
 
-def setup_logger():
+def addLoggingHanderOnce(theLogger, theHandler):
+    """A helper to add a handler to a logger, ensuring there are no duplicates.
+
+    Args:
+        * theLogger: logging.logger instance
+        * theHandler: logging.Handler instance to be added. It will not be
+            added if an instance of that Handler subclass already exists.
+
+    Returns:
+        bool: True if the logging handler was added
+
+    Raises:
+        None
+    """
+    myClassName = theHandler.__class__.__name__
+    for myHandler in theLogger.handlers:
+        if myHandler.__class__.__name__ == myClassName:
+            return False
+
+    theLogger.addHandler(theHandler)
+    return True
+
+
+def setupLogger():
     """Run once when the module is loaded and enable logging
 
     Args: None
@@ -583,6 +606,10 @@ def setup_logger():
     """
     myLogger = logging.getLogger('InaSAFE')
     myLogger.setLevel(logging.DEBUG)
+    myDefaultHanderLevel = logging.DEBUG
+    # create formatter that will be added to the handlers
+    myFormatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     # create syslog handler which logs even debug messages
     # (ariel): Make this log to /var/log/safe.log instead of
     #               /var/log/syslog
@@ -591,13 +618,13 @@ def setup_logger():
     myTempDir = temp_dir('logs')
     myFilename = os.path.join(myTempDir, 'inasafe.log')
     myFileHandler = logging.FileHandler(myFilename)
-    myFileHandler.setLevel(logging.DEBUG)
+    myFileHandler.setLevel(myDefaultHanderLevel)
     # create console handler with a higher log level
     myConsoleHandler = logging.StreamHandler()
     myConsoleHandler.setLevel(logging.ERROR)
 
     myQgisHandler = QgsLogHandler()
-    myFileHandler.setLevel(logging.DEBUG)
+    myFileHandler.setLevel(myDefaultHanderLevel)
 
     # TODO: User opt in before we enable email based logging.
     # Email handler for errors
@@ -613,23 +640,38 @@ def setup_logger():
     #                                      mySubject)
     #myEmailHandler.setLevel(logging.ERROR)
 
-    # create formatter and add it to the handlers
-    myFormatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    # Sentry handler - this is optional hence the localised import
+    # It will only log if pip install raven. If raven is available
+    # logging messages will be sent to http://sentry.linfiniti.com
+    # We will log exceptions only there. Only if you have the env var
+    # 'INSAFE_SENTRY=1' present (value can be anything) will this be enabled.
+    if 'INASAFE_SENTRY' in os.environ:
+        try:
+            from raven.handlers.logging import SentryHandler
+            from raven import Client
+
+            myClient = Client('http://5aee75e47c6740af842b3ef138d3ad33:16160af'
+                              'd794847b98a34e1fde0ed5a8d@sentry.linfiniti.com/'
+                              '4')
+            mySentryHandler = SentryHandler(myClient)
+            mySentryHandler.setFormatter(myFormatter)
+            mySentryHandler.setLevel(logging.ERROR)
+            if addLoggingHanderOnce(myLogger, mySentryHandler):
+                myLogger.debug('Sentry logging enabled')
+        except ImportError:
+            myLogger.debug('Sentry logging disabled')
+
+    #Set formatters
     myFileHandler.setFormatter(myFormatter)
     myConsoleHandler.setFormatter(myFormatter)
     #myEmailHandler.setFormatter(myFormatter)
     myQgisHandler.setFormatter(myFormatter)
 
     # add the handlers to the logger
-    myLogger.addHandler(myFileHandler)
-    myLogger.addHandler(myConsoleHandler)
-    #myLogger.addHandler(myEmailHandler)
-    myLogger.addHandler(myQgisHandler)
-
-    myLogger.info('Safe Logger Module Loaded')
-    myLogger.info('----------------------')
-    myLogger.info('CWD: %s' % os.path.abspath(os.path.curdir))
+    addLoggingHanderOnce(myLogger, myFileHandler)
+    addLoggingHanderOnce(myLogger, myConsoleHandler)
+    #addLoggingHanderOnce(myLogger, myEmailHandler)
+    addLoggingHanderOnce(myLogger, myQgisHandler)
 
 #def copyInMemory(vLayer, copyName=''):
 #    """Return a memory copy of a layer

@@ -64,7 +64,7 @@ class Plugin:
         self.translator = None
         self.setupI18n()
         #print self.tr('InaSAFE')
-        utilities.setup_logger()
+        utilities.setupLogger()
 
     def setupI18n(self, thePreferredLocale=None):
         """Setup internationalisation for the plugin.
