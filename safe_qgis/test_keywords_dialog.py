@@ -38,6 +38,7 @@ from safe_qgis.odict import OrderedDict
 from safe_qgis.utilities_test import (getQgisTestApp, unitTestDataPath)
 from safe_qgis.safe_interface import readKeywordsFromFile
 from safe_qgis.keywords_dialog import KeywordsDialog
+from safe_qgis.exceptions import KeywordNotFoundException
 
 
 # For testing and demoing
@@ -79,11 +80,27 @@ def copyMakePadangLayer():
     return myLayer, myFileName
 
 
-def makeVectorLayer():
+def makePolygonLayer():
     """Helper function that returns a single predefined layer"""
     myFile = 'kabupaten_jakarta_singlepart_3_good_attr.shp'
     myPath = os.path.join(TESTDATA, myFile)
-    myTitle = readKeywordsFromFile(myPath, 'title')
+    try:
+        myTitle = readKeywordsFromFile(myPath, 'title')
+    except KeywordNotFoundException:
+        myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
+    myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
+    QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+    return myLayer
+
+
+def makePointLayer():
+    """Helper function that returns a single predefined layer"""
+    myFile = 'test_buildings.shp'
+    myPath = os.path.join(TESTDATA, myFile)
+    try:
+        myTitle = readKeywordsFromFile(myPath, 'title')
+    except KeywordNotFoundException:
+        myTitle = 'kabupaten_jakarta_singlepart_3_good_attr'
     myLayer = QgsVectorLayer(myPath, myTitle, 'ogr')
     QgsMapLayerRegistry.instance().addMapLayer(myLayer)
     return myLayer
@@ -170,7 +187,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_on_radPostprocessing_toggled(self):
         """Test hazard radio button toggle behaviour works"""
-        layer = makeVectorLayer()
+        layer = makePolygonLayer()
         myDialog = KeywordsDialog(PARENT, IFACE, theLayer=layer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
@@ -201,7 +218,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_on_dsbFemaleRatioDefault_valueChanged(self):
         """Test hazard radio button toggle behaviour works"""
-        layer = makeVectorLayer()
+        layer = makePolygonLayer()
         myDialog = KeywordsDialog(PARENT, IFACE, theLayer=layer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
