@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Wed Oct  3 17:56:22 2012
+# Created: Wed Oct 10 11:46:28 2012
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -76,7 +76,7 @@ class Ui_DockBase(object):
         self.gridLayout_3.addWidget(self.label_2, 7, 0, 1, 1)
         self.cboAggregation = QtGui.QComboBox(self.grpQuestion)
         self.cboAggregation.setObjectName(_fromUtf8("cboAggregation"))
-        self.gridLayout_3.addWidget(self.cboAggregation, 8, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.cboAggregation, 8, 0, 1, 2)
         self.gridLayout.addWidget(self.grpQuestion, 0, 0, 1, 1)
         self.groupBox_2 = QtGui.QGroupBox(self.dockWidgetContents)
         self.groupBox_2.setObjectName(_fromUtf8("groupBox_2"))
