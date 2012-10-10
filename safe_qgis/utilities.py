@@ -525,17 +525,57 @@ else:
         QgsMessageLog.logMessage(str(msg), tag, level)
 
 
-def isLayerPolygonal(layer):
-    """tell if a qgis layer is vectorial and d its geometries polygons
+def isLayerPolygonal(theLayer):
+    """tell if a qgis theLayer is vectorial and d its geometries polygons
    Args:
-       the layer
+       the theLayer
     Returns:
-        bool - true if the layer contains polygons
+        bool - true if the theLayer contains polygons
     Raises:
        None
     """
-    return (layer.type() == QgsMapLayer.VectorLayer) and (
-        layer.geometryType() == QGis.Polygon)
+    return (theLayer.type() == QgsMapLayer.VectorLayer) and (
+        theLayer.geometryType() == QGis.Polygon)
+
+
+def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
+    """iterates over self.layer and returns all the attribute names of
+       attributes that have int or string as field type and the position
+       of the theCurrentKeyword in the attribute names list
+
+    Args:
+       * theAllowedTypes: list(Qvariant) - a list of QVariants types that are
+            acceptable for the attribute.
+            e.g.: [QtCore.QVariant.Int, QtCore.QVariant.String]
+       * theCurrentKeyword - the currently stored keyword for the attribute
+
+    Returns:
+       * all the attribute names of attributes that have int or string as
+            field type
+       * the position of the theCurrentKeyword in the attribute names list,
+            this is None if theCurrentKeyword is not in the lis of attributes
+    Raises:
+       no exceptions explicitly raised
+    """
+
+    if theLayer.type() == QgsMapLayer.VectorLayer:
+        myProvider = theLayer.dataProvider()
+        myProvider = myProvider.fields()
+        myFields = []
+        mySelectedIndex = None
+        i = 0
+        for f in myProvider:
+            # show only int or string myFields to be chosen as aggregation
+            # attribute other possible would be float
+            if myProvider[f].type() in theAllowedTypes:
+                myCurrentFieldName = myProvider[f].name()
+                myFields.append(myCurrentFieldName)
+                if theCurrentKeyword == myCurrentFieldName:
+                    mySelectedIndex = i
+                i += 1
+        return myFields, mySelectedIndex
+    else:
+        return None, None
 
 #def copyInMemory(vLayer, copyName=''):
 #    """Return a memory copy of a layer

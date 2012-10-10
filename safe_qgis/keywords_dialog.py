@@ -29,7 +29,8 @@ from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                 isLayerPolygonal)
+                                 isLayerPolygonal,
+                                 getLayerAttributeNames)
 
 from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
@@ -149,40 +150,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.showFemaleRatioAttribute(isPostprocessingOn)
         self.showFemaleRatioDefault(isPostprocessingOn)
 
-    def getAttributeNames(self, allowedTypes, currentKeyword=None):
-        """iterates over self.layer and returns all the attribute names of
-           attributes that have int or string as field type and the position
-           of the currentKeyword in the attribute names list
-
-        Args:
-           * allowedTypes - a list of QVariants types that are acceptable for
-             the attribute. ex: [QtCore.QVariant.Int, QtCore.QVariant.String]
-           * currentKeyword - the currently stored keyword for the attribute
-
-        Returns:
-           * all the attribute names of attributes that have int or string as
-             field type
-           * the position of the currentKeyword in the attribute names list,
-             this is None if currentKeyword is not in the lis of attributes
-        Raises:
-           no exceptions explicitly raised
-        """
-        vProvider = self.layer.dataProvider()
-        vFields = vProvider.fields()
-        fields = []
-        selectedIndex = None
-        i = 0
-        for f in vFields:
-            # show only int or string fields to be chosen as aggregation
-            # attribute other possible would be float
-            if vFields[f].type() in allowedTypes:
-                currentFieldName = vFields[f].name()
-                fields.append(currentFieldName)
-                if currentKeyword == currentFieldName:
-                    selectedIndex = i
-                i += 1
-        return fields, selectedIndex
-
     def showAggregationAttribute(self, theFlag):
         theBox = self.cboAggregationAttribute
         theBox.blockSignals(True)
@@ -191,7 +158,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if theFlag:
             currentKeyword = self.getValueForKey(
                 safe.defaults.AGGREGATION_ATTRIBUTE_KEY)
-            fields, attributePosition = self.getAttributeNames(
+            fields, attributePosition = getLayerAttributeNames(self.layer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String],
                 currentKeyword)
             theBox.addItems(fields)
@@ -211,7 +178,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if theFlag:
             currentKeyword = self.getValueForKey(
                 safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY)
-            fields, attributePosition = self.getAttributeNames(
+            fields, attributePosition = getLayerAttributeNames(self.layer,
                 [QtCore.QVariant.Double],
                 currentKeyword)
             fields.insert(0, self.tr('Use default'))

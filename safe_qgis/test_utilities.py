@@ -2,6 +2,8 @@ import unittest
 import sys
 import os
 
+from PyQt4.QtCore import QVariant
+
 # Add parent directory to path to make test aware of other modules
 # We should be able to remove this now that we use env vars. TS
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -11,11 +13,16 @@ from safe.api import bbox_intersection
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                               setVectorStyle,
                               setRasterStyle,
-                              qgisVersion)
+                              qgisVersion,
+                              isLayerPolygonal,
+                              getLayerAttributeNames)
 from safe_qgis.utilities_test import unitTestDataPath
 from safe_qgis.utilities_test import (loadLayer, getQgisTestApp)
 from safe_qgis.exceptions import StyleError
 from safe.common.exceptions import BoundingBoxError
+from safe_qgis.test_keywords_dialog import (makePolygonLayer,
+                                            makePadangLayer,
+                                            makePointLayer)
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -236,6 +243,60 @@ class UtilitiesTest(unittest.TestCase):
         myVersion = qgisVersion()
         myMessage = 'Got version %s of QGIS, but at least 107000 is needed'
         assert myVersion > 10700, myMessage
+
+    def test_getLayerAttributeNames(self):
+        """Test we can get the correct attributes back"""
+        myLayer = makePolygonLayer()
+
+        #with good attribute name
+        myAttrs, myPos = getLayerAttributeNames(myLayer,
+            [QVariant.Int, QVariant.String],
+            'TEST_STRIN'
+        )
+        myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
+        myExpectedPos = 2
+        myMessage = 'myExpectedAttrs, got %s, expected %s' % (
+            myAttrs, myExpectedAttrs)
+        assert (myAttrs == myExpectedAttrs), myMessage
+        myMessage = 'myExpectedPos, got %s, expected %s' % (
+            myPos, myExpectedPos)
+        assert (myPos == myExpectedPos), myMessage
+
+        #with inexistent attribute name
+        myAttrs, myPos = getLayerAttributeNames(myLayer,
+            [QVariant.Int, QVariant.String],
+            'MISSING_ATTR')
+        myExpectedAttrs = ['KAB_NAME', 'TEST_INT', 'TEST_STRIN']
+        myExpectedPos = None
+        myMessage = 'myExpectedAttrs, got %s, expected %s' % (
+            myAttrs, myExpectedAttrs)
+        assert (myAttrs == myExpectedAttrs), myMessage
+        myMessage = 'myExpectedPos, got %s, expected %s' % (
+            myPos, myExpectedPos)
+        assert (myPos == myExpectedPos), myMessage
+
+        #with raster layer
+        myLayer = makePadangLayer()
+        myAttrs, myPos = getLayerAttributeNames(myLayer, [], '')
+        myMessage = 'Should return None, None for raster layer, got %s, %s' % (
+            myAttrs, myPos)
+        assert (myAttrs is None and myPos is None), myMessage
+
+    def test_isLayerPolygonal(self):
+        """Test we can get the correct attributes back"""
+        myLayer = makePolygonLayer()
+        myMessage = 'isLayerPolygonal, %s layer should be polygonal' % myLayer
+        assert isLayerPolygonal(myLayer), myMessage
+
+        myLayer = makePointLayer()
+        myMessage = '%s layer should be polygonal' % myLayer
+        assert not isLayerPolygonal(myLayer), myMessage
+
+        myLayer = makePadangLayer()
+        myMessage = ('%s raster layer should not be polygonal'
+                    % myLayer)
+        assert not isLayerPolygonal(myLayer), myMessage
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')
