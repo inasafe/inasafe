@@ -37,14 +37,10 @@ from dynamic_translations import names
 
 """
 
-# FIXME (Ole): This approach can be generalised to any strings that are not
-#              statically declared such as attribute values.
-#              So, we should merge the two dictionaries and just have one
-#              with strings that need to be recognised by the translation
-#              tools.
-#              Also rename this module to something more fitting, such as
-#              dynamic_translations.py
-#              See issue #168
+# FIXME (Ole): Simplify to just maintain one list of strings and have
+#              this module automatically generate the _() versions:
+# for s in strings:
+#     names[s] = '_(%s)' % s
 
 from safe.common.utilities import ugettext as _
 
@@ -118,6 +114,8 @@ names = {'title1': _('DKI buildings'),       # Bangunan DKI
          'Commercial areas Jakarta': _('Commercial areas Jakarta'),
          'Hospitals Jakarta': _('Hospitals Jakarta'),
          'An eruption': _('An eruption'),
+         'A volcano eruption': _('An volcano eruption'),
+         'A volcano alert': _('An volcano alert'),
 
          # Data attribute value start here
          'office': _('office'),
