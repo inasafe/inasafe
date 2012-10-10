@@ -31,6 +31,7 @@ sys.path.append(pardir)
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsRasterLayer,
+                       QgsVectorLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
 
