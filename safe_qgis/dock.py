@@ -861,21 +861,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.postprocAttributes = {}
 
         if self.doAggregation:
-            self.postprocAttributes[self.defaults['AGGREGATION_ATTRIBUTE_KEY']
+            self.postprocAttributes[self.defaults['AGGREGATION_ATTR_KEY']
             ] = (self.keywordIO.readKeywords(self.postprocLayer,
-                    self.defaults['AGGREGATION_ATTRIBUTE_KEY']))
+                    self.defaults['AGGREGATION_ATTR_KEY']))
         else:
-            self.postprocAttributes[self.defaults['AGGREGATION_ATTRIBUTE_KEY']
+            self.postprocAttributes[self.defaults['AGGREGATION_ATTR_KEY']
                 ] = None
 
         myFemRatioAttr = self.keywordIO.readKeywords(
-            self.postprocLayer, self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'])
+            self.postprocLayer, self.defaults['FEMALE_RATIO_ATTR_KEY'])
         if (myFemRatioAttr == self.tr('Don\'t use') or
             myFemRatioAttr == self.tr('Use default')):
-            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']
+            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTR_KEY']
                 ] = None
         else:
-            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']
+            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTR_KEY']
                 ] = myFemRatioAttr
 
         try:
@@ -1233,10 +1233,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #myKeywords are already complete
         if ('category' in myKeywords and
             myKeywords['category'] == 'postprocessing' and
-            self.defaults['AGGREGATION_ATTRIBUTE_KEY'] in myKeywords and
-            self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'] in myKeywords and
+            self.defaults['AGGREGATION_ATTR_KEY'] in myKeywords and
+            self.defaults['FEMALE_RATIO_ATTR_KEY'] in myKeywords and
             (
-                self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'] != self.tr(
+                self.defaults['FEMALE_RATIO_ATTR_KEY'] != self.tr(
                     'Use default') or
                 self.defaults['FEMALE_RATIO_DEFAULT_KEY'] in myKeywords
                 )
@@ -1249,8 +1249,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myAttrs, _ = getLayerAttributeNames(
                 self.postprocLayer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String])
-            myKeywords[self.defaults['AGGREGATION_ATTRIBUTE_KEY']] = myAttrs[0]
-            myKeywords[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']] = \
+            myKeywords[self.defaults['AGGREGATION_ATTR_KEY']] = myAttrs[0]
+            myKeywords[self.defaults['FEMALE_RATIO_ATTR_KEY']] = \
                 self.tr('Use default')
             myKeywords[self.defaults['FEMALE_RATIO_DEFAULT_KEY']] = \
                 self.defaults['DEFAULT_FEMALE_RATIO']

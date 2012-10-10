@@ -748,10 +748,10 @@ def getDefaults():
         ).toDouble()[0]
     myDefaults['FEMALE_RATIO_DEFAULT_KEY'] = \
         safe.defaults.FEMALE_RATIO_DEFAULT_KEY
-    myDefaults['FEMALE_RATIO_ATTRIBUTE_KEY'] = \
-        safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY
-    myDefaults['AGGREGATION_ATTRIBUTE_KEY'] = \
-        safe.defaults.AGGREGATION_ATTRIBUTE_KEY
+    myDefaults['FEMALE_RATIO_ATTR_KEY'] = \
+        safe.defaults.FEMALE_RATIO_ATTR_KEY
+    myDefaults['AGGREGATION_ATTR_KEY'] = \
+        safe.defaults.AGGREGATION_ATTR_KEY
 
     return myDefaults
 

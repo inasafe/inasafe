@@ -157,7 +157,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox.blockSignals(False)
         if theFlag:
             currentKeyword = self.getValueForKey(
-                self.defaults['AGGREGATION_ATTRIBUTE_KEY'])
+                self.defaults['AGGREGATION_ATTR_KEY'])
             fields, attributePosition = getLayerAttributeNames(self.layer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String],
                 currentKeyword)
@@ -177,7 +177,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox.blockSignals(False)
         if theFlag:
             currentKeyword = self.getValueForKey(
-                self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'])
+                self.defaults['FEMALE_RATIO_ATTR_KEY'])
             fields, attributePosition = getLayerAttributeNames(self.layer,
                 [QtCore.QVariant.Double],
                 currentKeyword)
@@ -216,7 +216,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     @pyqtSignature('int')
     def on_cboAggregationAttribute_currentIndexChanged(self, theIndex=None):
         del theIndex
-        self.addListEntry(self.defaults['AGGREGATION_ATTRIBUTE_KEY'],
+        self.addListEntry(self.defaults['AGGREGATION_ATTR_KEY'],
         self.cboAggregationAttribute.currentText())
 
     # prevents actions being handled twice
@@ -234,7 +234,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
             self.removeItemByKey(self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
-        self.addListEntry(self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'], text)
+        self.addListEntry(self.defaults['FEMALE_RATIO_ATTR_KEY'], text)
 
     # prevents actions being handled twice
     @pyqtSignature('double')
@@ -314,8 +314,8 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if not theFlag:
-            self.removeItemByKey(self.defaults['AGGREGATION_ATTRIBUTE_KEY'])
-            self.removeItemByKey(self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'])
+            self.removeItemByKey(self.defaults['AGGREGATION_ATTR_KEY'])
+            self.removeItemByKey(self.defaults['FEMALE_RATIO_ATTR_KEY'])
             self.removeItemByKey(self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
             return
         self.setCategory('postprocessing')
