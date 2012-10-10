@@ -419,19 +419,19 @@ class DockTest(unittest.TestCase):
     def test_cboAggregationEmptyProject(self):
         """Aggregation combo changes properly according on no loaded layers"""
         self.tearDown()
-        myMessage = ('The aggregation combobox should have only the "No '
-                     'aggregation" item when the project has no layer. Found:'
+        myMessage = ('The aggregation combobox should have only the "Entire '
+                     'area" item when the project has no layer. Found:'
                      ' %s' % (DOCK.cboAggregation.currentText()))
 
         self.assertEqual(DOCK.cboAggregation.currentText(), DOCK.tr(
-            'No aggregation'), myMessage)
+            'Entire area'), myMessage)
 
         assert not DOCK.cboAggregation.isEnabled(), 'The aggregation ' \
             'combobox should be disabled when the project has no layer.'
 
     def test_cboAggregationLoadedProject(self):
         """Aggregation combo changes properly according loaded layers"""
-        myLayerList = [DOCK.tr('No aggregation'),
+        myLayerList = [DOCK.tr('Entire area'),
                        DOCK.tr('A flood in Jakarta'),
                        DOCK.tr('Essential buildings'),
                        DOCK.tr('kabupaten jakarta singlepart'),
