@@ -35,15 +35,16 @@ from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry)
 
 from safe_qgis.odict import OrderedDict
-from safe_qgis.utilities_test import (getQgisTestApp, unitTestDataPath)
+from safe_qgis.utilities_test import (getQgisTestApp,
+                                      unitTestDataPath)
 from safe_qgis.safe_interface import readKeywordsFromFile
 from safe_qgis.keywords_dialog import KeywordsDialog
 from safe_qgis.exceptions import KeywordNotFoundException
+from safe_qgis.utilities import getDefaults
 
 
 # For testing and demoing
 from safe.common.testing import HAZDATA, TESTDATA
-import safe.defaults
 
 # Get QGis app handle
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -187,8 +188,9 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def test_on_radPostprocessing_toggled(self):
         """Test hazard radio button toggle behaviour works"""
-        layer = makePolygonLayer()
-        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=layer)
+        myLayer = makePolygonLayer()
+        myDefaults = getDefaults()
+        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -200,26 +202,27 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the postprocessing radio did not add an '
                      'aggregation attribute to the keywords list.')
         assert myDialog.getValueForKey(
-            safe.defaults.AGGREGATION_ATTRIBUTE_KEY) == 'KAB_NAME', myMessage
+            myDefaults['AGGREGATION_ATTRIBUTE_KEY']) == 'KAB_NAME', myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'female ratio attribute to the keywords list.')
 
         assert myDialog.getValueForKey(
-            safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY) == \
+            myDefaults['FEMALE_RATIO_ATTRIBUTE_KEY']) == \
                myDialog.tr('Use default'), myMessage
 
         myMessage = ('Toggling the postprocessing radio did not add a '
                      'female ratio default value to the keywords list.'
                     )
         assert float(myDialog.getValueForKey(
-            safe.defaults.FEMALE_RATIO_DEFAULT_KEY)) == \
-               safe.defaults.DEFAULT_FEMALE_RATIO, myMessage
+            myDefaults['FEMALE_RATIO_DEFAULT_KEY'])) == \
+               myDefaults['DEFAULT_FEMALE_RATIO'], myMessage
 
     def test_on_dsbFemaleRatioDefault_valueChanged(self):
         """Test hazard radio button toggle behaviour works"""
-        layer = makePolygonLayer()
-        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=layer)
+        myLayer = makePolygonLayer()
+        myDefaults = getDefaults()
+        myDialog = KeywordsDialog(PARENT, IFACE, theLayer=myLayer)
         myButton = myDialog.radPostprocessing
         myButton.setChecked(False)
         QTest.mouseClick(myButton, QtCore.Qt.LeftButton)
@@ -235,7 +238,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not add it to the keywords list.')
         assert myDialog.getValueForKey(
-            safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY) ==\
+            myDefaults['FEMALE_RATIO_ATTRIBUTE_KEY']) ==\
                myDialog.tr('Don\'t use'), myMessage
 
         myMessage = ('Toggling the female ratio attribute combo to'
@@ -245,7 +248,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to'
                      ' "Don\'t use" did not remove the keyword.')
-        assert (myDialog.getValueForKey(safe.defaults.DEFAULT_FEMALE_RATIO) is
+        assert (myDialog.getValueForKey(myDefaults['DEFAULT_FEMALE_RATIO']) is
             None), myMessage
 
         #set to TEST_REAL
@@ -257,7 +260,7 @@ class KeywordsDialogTest(unittest.TestCase):
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not add it to the keywords list.')
         assert myDialog.getValueForKey(
-            safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY) == 'TEST_REAL', myMessage
+            myDefaults['FEMALE_RATIO_ATTRIBUTE_KEY']) == 'TEST_REAL', myMessage
 
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not disable dsbFemaleRatioDefault.')
@@ -266,7 +269,7 @@ class KeywordsDialogTest(unittest.TestCase):
 
         myMessage = ('Toggling the female ratio attribute combo to "TEST_REAL"'
                      ' did not remove the keyword.')
-        assert (myDialog.getValueForKey(safe.defaults.DEFAULT_FEMALE_RATIO) is
+        assert (myDialog.getValueForKey(myDefaults['DEFAULT_FEMALE_RATIO']) is
                 None), myMessage
 
     def Xtest_on_radExposure_toggled(self):

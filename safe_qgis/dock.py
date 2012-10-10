@@ -71,16 +71,11 @@ from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
                                  setRasterStyle,
-                                 qgisVersion)
+                                 qgisVersion,
+                                 getDefaults)
 from safe_qgis.configurable_impact_functions_dialog import (
    ConfigurableImpactFunctionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
-
-#Keywords key names
-from safe.defaults import DEFAULT_FEMALE_RATIO
-from safe.defaults import FEMALE_RATIO_ATTRIBUTE_KEY
-from safe.defaults import FEMALE_RATIO_DEFAULT_KEY
-from safe.defaults import AGGREGATION_ATTRIBUTE_KEY
 
 
 # Don't remove this even if it is flagged as unused by your ide
@@ -643,32 +638,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.getPostprocLayer()
         return
 
-    def _toggleCboAggregation(self):
-        """Helper function to toggle the aggregation combo depending on the
-        current dock status
-
-        Args:
-           None.
-        Returns:
-           None
-        Raises:
-           no
-        """
-        #FIXME (MB) remove hazardlayer and exposure layer type check when
-        # vector aggregation is supported
-        selectedHazardLayer = self.getHazardLayer()
-        selectedExposureLayer = self.getExposureLayer()
-
-        #more than 1 because No aggregation is always there
-        if (self.cboAggregation.count() > 1 and
-           selectedHazardLayer is not None and
-           selectedExposureLayer is not None and
-           selectedHazardLayer.type() == QgsMapLayer.RasterLayer and
-           selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
-            self.cboAggregation.setEnabled(True)
-        else:
-            self.cboAggregation.setEnabled(False)
-
     def getFunctions(self):
         """Helper function to obtain a list of impact functions from
         the impact calculator.
@@ -862,6 +831,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             return
 
         #check and generate keywords for the aggregation layer
+        self.defaults = getDefaults()
         self.postprocLayer = self.getPostprocLayer()
         self.doAggregation = True
         if self.postprocLayer is None:
@@ -883,22 +853,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             self.postprocLayer = myLayer
         self._checkPostprocAttributes()
-
         self.postprocAttributes = {}
+
         if self.doAggregation:
-            self.postprocAttributes[AGGREGATION_ATTRIBUTE_KEY] = (
+            self.postprocAttributes[self.defaults['AGGREGATION_ATTRIBUTE_KEY']] = (
                 self.keywordIO.readKeywords(self.postprocLayer,
-                    AGGREGATION_ATTRIBUTE_KEY))
+                    self.defaults['AGGREGATION_ATTRIBUTE_KEY']))
         else:
-            self.postprocAttributes[AGGREGATION_ATTRIBUTE_KEY] = None
+            self.postprocAttributes[self.defaults['AGGREGATION_ATTRIBUTE_KEY']] = None
 
         myFemRatioAttr = self.keywordIO.readKeywords(
-            self.postprocLayer, FEMALE_RATIO_ATTRIBUTE_KEY)
+            self.postprocLayer, self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'])
         if (myFemRatioAttr == self.tr('Don\'t use') or
             myFemRatioAttr == self.tr('Use default')):
-            self.postprocAttributes[FEMALE_RATIO_ATTRIBUTE_KEY] = None
+            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']] = None
         else:
-            self.postprocAttributes[FEMALE_RATIO_ATTRIBUTE_KEY] = \
+            self.postprocAttributes[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']] = \
             myFemRatioAttr
 
         try:
@@ -1254,11 +1224,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myKeywords = dict()
         if ('category' in myKeywords and
             myKeywords['category'] == 'postprocessing' and
-            AGGREGATION_ATTRIBUTE_KEY in myKeywords and
-            FEMALE_RATIO_ATTRIBUTE_KEY in myKeywords and
+            self.defaults['AGGREGATION_ATTRIBUTE_KEY'] in myKeywords and
+            self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'] in myKeywords and
             (
-                FEMALE_RATIO_ATTRIBUTE_KEY != self.tr('Use default') or
-                FEMALE_RATIO_DEFAULT_KEY in myKeywords
+                self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'] != self.tr('Use default') or
+                self.defaults['FEMALE_RATIO_DEFAULT_KEY'] in myKeywords
                 )
             ):
             #myKeywords are already complete
@@ -1269,9 +1239,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myAttrs, _ = getLayerAttributeNames(
                 self.postprocLayer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String])
-            myKeywords[AGGREGATION_ATTRIBUTE_KEY] = myAttrs[0]
-            myKeywords[FEMALE_RATIO_ATTRIBUTE_KEY] = self.tr('Use default')
-            myKeywords[FEMALE_RATIO_DEFAULT_KEY] = DEFAULT_FEMALE_RATIO
+            myKeywords[self.defaults['AGGREGATION_ATTRIBUTE_KEY']] = myAttrs[0]
+            myKeywords[self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY']] = self.tr('Use default')
+            myKeywords[self.defaults['FEMALE_RATIO_DEFAULT_KEY']] = self.defaults['DEFAULT_FEMALE_RATIO']
             self.keywordIO.writeKeywords(self.postprocLayer, myKeywords)
 
             if self.doAggregation:
@@ -1298,6 +1268,32 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myDialog.exec_()
 
                 self.enableBusyCursor()
+
+    def _toggleCboAggregation(self):
+        """Helper function to toggle the aggregation combo depending on the
+        current dock status
+
+        Args:
+           None.
+        Returns:
+           None
+        Raises:
+           no
+        """
+        #FIXME (MB) remove hazardlayer and exposure layer type check when
+        # vector aggregation is supported
+        selectedHazardLayer = self.getHazardLayer()
+        selectedExposureLayer = self.getExposureLayer()
+
+        #more than 1 because No aggregation is always there
+        if (self.cboAggregation.count() > 1 and
+            selectedHazardLayer is not None and
+            selectedExposureLayer is not None and
+            selectedHazardLayer.type() == QgsMapLayer.RasterLayer and
+            selectedExposureLayer.type() == QgsMapLayer.RasterLayer):
+            self.cboAggregation.setEnabled(True)
+        else:
+            self.cboAggregation.setEnabled(False)
 
     def _completed(self):
         """Helper function for slot activated when the process is done.

@@ -43,6 +43,8 @@ from qgis.core import (QGis,
 from safe_interface import temp_dir
 from safe_qgis.exceptions import StyleError, MethodUnavailableError
 
+import safe.defaults
+
 #do not remove this even if it is marked as unused by your IDE
 #resources are used by htmlfooter and header the comment will mark it unused
 #for pylint
@@ -682,6 +684,33 @@ def getLayerAttributeNames(theLayer, theAllowedTypes, theCurrentKeyword=None):
         return myFields, mySelectedIndex
     else:
         return None, None
+
+def getDefaults():
+    """returns a dictionary of defaults values to be used
+
+    Args:
+       * None
+
+    Returns:
+       * A dictionary of defaults values to be used
+    Raises:
+       no exceptions explicitly raised
+    """
+    mySettings = QtCore.QSettings()
+    myDefaults = {}
+
+    myDefaults['DEFAULT_FEMALE_RATIO'] = mySettings.value(
+        'inasafe/defaultFemaleRatio', safe.defaults.DEFAULT_FEMALE_RATIO
+        ).toDouble()[0]
+    myDefaults['FEMALE_RATIO_DEFAULT_KEY'] = \
+        safe.defaults.FEMALE_RATIO_DEFAULT_KEY
+    myDefaults['FEMALE_RATIO_ATTRIBUTE_KEY'] = \
+        safe.defaults.FEMALE_RATIO_ATTRIBUTE_KEY
+    myDefaults['AGGREGATION_ATTRIBUTE_KEY'] = \
+        safe.defaults.AGGREGATION_ATTRIBUTE_KEY
+
+    return myDefaults
+
 
 #def copyInMemory(vLayer, copyName=''):
 #    """Return a memory copy of a layer

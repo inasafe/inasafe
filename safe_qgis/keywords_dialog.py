@@ -30,15 +30,12 @@ from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  isLayerPolygonal,
-                                 getLayerAttributeNames)
+                                 getLayerAttributeNames,
+                                 getDefaults)
 
 from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
 from safe.common.exceptions import InaSAFEError
-from safe.defaults import  (AGGREGATION_ATTRIBUTE_KEY,
-                            FEMALE_RATIO_ATTRIBUTE_KEY,
-                            FEMALE_RATIO_DEFAULT_KEY,
-                            DEFAULT_FEMALE_RATIO)
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -114,11 +111,12 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
                                self.showHelp)
 
         # set some inital ui state:
+        self.defaults = getDefaults()
         self.pbnAdvanced.setChecked(True)
         self.pbnAdvanced.toggle()
         self.radPredefined.setChecked(True)
         self.dsbFemaleRatioDefault.blockSignals(True)
-        self.dsbFemaleRatioDefault.setValue(DEFAULT_FEMALE_RATIO)
+        self.dsbFemaleRatioDefault.setValue(self.defaults['DEFAULT_FEMALE_RATIO'])
         self.dsbFemaleRatioDefault.blockSignals(False)
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
@@ -159,7 +157,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox.blockSignals(False)
         if theFlag:
             currentKeyword = self.getValueForKey(
-                AGGREGATION_ATTRIBUTE_KEY)
+                self.defaults['AGGREGATION_ATTRIBUTE_KEY'])
             fields, attributePosition = getLayerAttributeNames(self.layer,
                 [QtCore.QVariant.Int, QtCore.QVariant.String],
                 currentKeyword)
@@ -179,7 +177,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox.blockSignals(False)
         if theFlag:
             currentKeyword = self.getValueForKey(
-                FEMALE_RATIO_ATTRIBUTE_KEY)
+                self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'])
             fields, attributePosition = getLayerAttributeNames(self.layer,
                 [QtCore.QVariant.Double],
                 currentKeyword)
@@ -204,9 +202,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox = self.dsbFemaleRatioDefault
         if theFlag:
             currentValue = self.getValueForKey(
-                FEMALE_RATIO_DEFAULT_KEY)
+                self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
             if currentValue is None:
-                val = DEFAULT_FEMALE_RATIO
+                val = self.defaults['DEFAULT_FEMALE_RATIO']
             else:
                 val = float(currentValue)
             theBox.setValue(val)
@@ -218,7 +216,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
     @pyqtSignature('int')
     def on_cboAggregationAttribute_currentIndexChanged(self, theIndex=None):
         del theIndex
-        self.addListEntry(AGGREGATION_ATTRIBUTE_KEY,
+        self.addListEntry(self.defaults['AGGREGATION_ATTRIBUTE_KEY'],
         self.cboAggregationAttribute.currentText())
 
     # prevents actions being handled twice
@@ -229,14 +227,14 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if text == self.tr('Use default'):
             self.dsbFemaleRatioDefault.setEnabled(True)
             currentDefault = self.getValueForKey(
-                FEMALE_RATIO_DEFAULT_KEY)
+                self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
             if currentDefault is None:
-                self.addListEntry(FEMALE_RATIO_DEFAULT_KEY,
+                self.addListEntry(self.defaults['FEMALE_RATIO_DEFAULT_KEY'],
                                 self.dsbFemaleRatioDefault.value())
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
-            self.removeItemByKey(FEMALE_RATIO_DEFAULT_KEY)
-        self.addListEntry(FEMALE_RATIO_ATTRIBUTE_KEY, text)
+            self.removeItemByKey(self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
+        self.addListEntry(self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'], text)
 
     # prevents actions being handled twice
     @pyqtSignature('double')
@@ -244,7 +242,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         del theValue
         theBox = self.dsbFemaleRatioDefault
         if theBox.isEnabled():
-            self.addListEntry(FEMALE_RATIO_DEFAULT_KEY,
+            self.addListEntry(self.defaults['FEMALE_RATIO_DEFAULT_KEY'],
                 theBox.value())
 
     # prevents actions being handled twice
@@ -316,9 +314,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         Raises:
            no exceptions explicitly raised."""
         if not theFlag:
-            self.removeItemByKey(AGGREGATION_ATTRIBUTE_KEY)
-            self.removeItemByKey(FEMALE_RATIO_ATTRIBUTE_KEY)
-            self.removeItemByKey(FEMALE_RATIO_DEFAULT_KEY)
+            self.removeItemByKey(self.defaults['AGGREGATION_ATTRIBUTE_KEY'])
+            self.removeItemByKey(self.defaults['FEMALE_RATIO_ATTRIBUTE_KEY'])
+            self.removeItemByKey(self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
             return
         self.setCategory('postprocessing')
         self.updateControlsFromList()
