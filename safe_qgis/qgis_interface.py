@@ -24,9 +24,11 @@ __copyright__ = ('Copyright (c) 2010 by Ivan Mincik, ivan.mincik@gista.sk and '
                  'Copyright (c) 2011 German Carrillo, '
                  'geotux_tuxman@linuxmail.org')
 
-
-from PyQt4.QtCore import QObject
+import logging
+from PyQt4.QtCore import QObject, SIGNAL, pyqtSlot
 from qgis.core import QgsMapLayerRegistry
+from qgis.gui import QgsMapCanvasLayer
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class QgisInterface(QObject):
@@ -40,6 +42,67 @@ class QgisInterface(QObject):
         """Constructor"""
         QObject.__init__(self)
         self.canvas = canvas
+        # Set up slots so we can mimick the behaviour of QGIS when layers
+        # are added.
+        LOGGER.debug('Initialising canvas...')
+        QObject.connect(QgsMapLayerRegistry.instance(),
+                        SIGNAL('layersAdded(QList<QgsMapLayer *>)'),
+                        self.addLayers)
+        QObject.connect(QgsMapLayerRegistry.instance(),
+                        SIGNAL('layerWasAdded(QgsMapLayer *)'),
+                        self.addLayer)
+
+    @pyqtSlot('QStringList')
+    def addLayers(self, theLayers):
+        """Handle layers being added to the registry so they show up in canvas.
+
+        .. note: The QgsInterface api does not include this method, it is added
+                 here as a helper to facilitate testing.
+
+        Args:
+            theLayers: list<QgsMapLayer> list of map layers that were added
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
+        #LOGGER.debug('addLayers called on qgis_interface')
+        #LOGGER.debug('Number of layers being added: %s' % len(theLayers))
+        #LOGGER.debug('Layer Count Before: %s' % len(self.canvas.layers()))
+        myLayers = self.canvas.layers()
+        myCanvasLayers = []
+        for myLayer in myLayers:
+            myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
+        for myLayer in theLayers:
+            myCanvasLayers.append(QgsMapCanvasLayer(myLayer))
+
+        self.canvas.setLayerSet(myCanvasLayers)
+        #LOGGER.debug('Layer Count After: %s' % len(self.canvas.layers()))
+
+    @pyqtSlot('QgsMapLayer')
+    def addLayer(self, theLayer):
+        """Handle a layer being added to the registry so it shows up in canvas.
+
+        .. note: The QgsInterface api does not include this method, it is added
+                 here as a helper to facilitate testing.
+
+        .. note: The addLayer method was deprecated in QGIS 1.8 so you should
+                 not need this method much.
+
+        Args:
+            theLayers: list<QgsMapLayer> list of map layers that were added
+
+        Returns:
+            None
+
+        Raises:
+            None
+        """
+        pass
+
+    # ---------------- API Mock for QgsInterface follows -------------------
 
     def zoomFull(self):
         """Zoom to the map full extent"""

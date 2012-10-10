@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe.common.utilities import temp_dir
 
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.1'
@@ -20,8 +21,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 __type__ = 'alpha'  # beta, final etc will be shown in dock title
 
-import numpy
 import os
+import numpy
+import logging
+
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
 from safe_qgis.dock_base import Ui_DockBase
@@ -38,9 +41,18 @@ from qgis.core import (QgsMapLayer,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
+                       QGis,
                        QgsFeature,
                        QgsRectangle)
 from qgis.analysis import QgsZonalStatistics
+
+# TODO: Rather impor via safe_interface.py TS
+from safe.api import write_keywords, read_keywords, ReadLayerError
+
+from safe_qgis.dock_base import Ui_DockBase
+from safe_qgis.help import Help
+from safe_qgis.utilities import (getExceptionWithStacktrace,
+                                 getWGS84resolution)
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
@@ -64,9 +76,8 @@ from safe_qgis.utilities import (htmlHeader,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion)
-from safe_qgis.configurable_impact_functions_dialog import\
-   ConfigurableImpactFunctionsDialog
-
+from safe_qgis.configurable_impact_functions_dialog import (
+   ConfigurableImpactFunctionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
 #Keywords key names
@@ -80,13 +91,7 @@ from safe.defaults import AGGREGATION_ATTRIBUTE_KEY
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
 
-#see if we can import pydev - see development docs for details
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Dock(QtGui.QDockWidget, Ui_DockBase):
@@ -195,8 +200,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         # whether to show or not postprocessing generated layers
         myFlag = mySettings.value(
-                            'inasafe/showPostProcLayers', False).toBool()
-        self.showPostProcLayers = myFlag
+                            'inasafe/showPostProcessingLayers', False).toBool()
+        self.showPostProcessingLayers = myFlag
 
         self.getLayers()
 
@@ -639,7 +644,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # will be a lot of unneeded looping around as the signal is handled
         self.connectLayerListener()
         self.blockSignals(False)
-        self.getPostprocLayer()
+        self.getAggregationLayer()
         return
 
     def _toggleCboAggregation(self):
@@ -792,7 +797,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myLayer = QgsMapLayerRegistry.instance().mapLayer(myLayerId)
         return myLayer
 
-    def getPostprocLayer(self):
+    def getAggregationLayer(self):
         """Obtain the name of the path to the aggregation file from the
         userrole of the QtCombo for aggregation.
 
@@ -1115,7 +1120,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Need to work out what exceptions we will catch here, though.
         except:  # pylint: disable=W0702
             myMessage = self.tr('Could not remove the unneded fields')
-            logOnQgsMessageLog(myMessage)
+            LOGGER.debug(myMessage)
         del toDel, vProvider, vFields
 
         writeKeywordsToFile(clippedAggregationLayerPath, {'title': lName})
@@ -1140,7 +1145,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
-        logOnQgsMessageLog('Vector aggregation not implemented yet. Called on'
+        LOGGER.debug('Vector aggregation not implemented yet. Called on'
                            ' %s' % myQgisImpactLayer.name())
         return
 
@@ -1206,6 +1211,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         nameFieldIndex = self.postprocLayer.fieldNameIndex(
                 self.aggregationAttribute)
+
         try:
             sumFieldIndex = self.postprocLayer.fieldNameIndex(
             self.getAggregationFieldNameSum())

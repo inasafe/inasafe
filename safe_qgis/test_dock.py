@@ -20,17 +20,21 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
-
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
+import logging
+from unittest import expectedFailure
 
 from os.path import join
+# Add PARENT directory to path to make test aware of other modules
+pardir = os.path.abspath(join(os.path.dirname(__file__), '..'))
+sys.path.append(pardir)
+
 from PyQt4 import QtCore
 from PyQt4.QtTest import QTest
 from qgis.core import (QgsRasterLayer,
                        QgsMapLayerRegistry,
                        QgsRectangle)
+
+from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.utilities_test import (getQgisTestApp,
                                 setCanvasCrs,
@@ -50,7 +54,6 @@ from safe_qgis.utilities import (setRasterStyle,
 
 from unittest import expectedFailure
 
-from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
 # Retired impact function for characterisation (Ole)
 # So ignore unused import errors for these? (Tim)
 # pylint: disable=W0611
@@ -59,12 +62,7 @@ from safe.engine.impact_functions_for_testing import HKV_flood_study
 from safe.engine.impact_functions_for_testing import BNPB_earthquake_guidelines
 # pylint: enable=W0611
 
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError, e:
-    print 'Debugging was disabled'
+LOGGER = logging.getLogger('InaSAFE')
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 DOCK = Dock(IFACE)
@@ -290,8 +288,7 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
     """Helper function to load layers as defined in a python list."""
     # First unload any layers that may already be loaded
     if theClearFlag:
-        for myLayer in QgsMapLayerRegistry.instance().mapLayers():
-            QgsMapLayerRegistry.instance().removeMapLayer(myLayer)
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
 
     # Now go ahead and load our layers
     myExposureLayerCount = 0
@@ -306,7 +303,8 @@ def loadLayers(theLayerList, theClearFlag=True, theDataDirectory=TESTDATA):
             myHazardLayerCount += 1
         elif myType == 'exposure':
             myExposureLayerCount += 1
-        # Add layer to the registry (that QGis knows about)
+        # Add layer to the registry (that QGis knows about) a slot
+        # in qgis_interface will also ensure it gets added to the canvas
         QgsMapLayerRegistry.instance().addMapLayer(myLayer)
 
         # Create Map Canvas Layer Instance and add to list
@@ -579,10 +577,6 @@ class DockTest(unittest.TestCase):
                      (DOCK.aggregationAttribute))
         assert DOCK.aggregationAttribute is None, myMessage
 
-    # FIXME (MB) CANVAS.layers() doesn't include the generated layers such as
-    # the impactlayer and the postprocessing generated layers
-    # see https://github.com/AIFDR/inasafe/issues/306
-    @expectedFailure
     def test_checkPostProcessingLayersVisibility(self):
         myRunButton = DOCK.pbnRunStop
 
@@ -593,41 +587,35 @@ class DockTest(unittest.TestCase):
             theExposure='People',
             theFunction='Need evacuation',
             theFunctionId='Flood Evacuation Function',
-            theAggregation='kabupaten jakarta singlepart')
+            theAggregation='kabupaten jakarta singlepart',
+            theOkButtonFlag=True)
         assert myResult, myMessage
-
-        myLayerList = [str(DOCK.tr('Padang_WGS84')),
-                    str(DOCK.tr('People')),
-                    str(DOCK.tr('An earthquake in Padang like in 2009')),
-                    str(DOCK.tr('Tsunami Max Inundation')),
-                    str(DOCK.tr('Tsunami Building Exposure')),
-                    str(DOCK.tr('A flood in Jakarta like in 2007')),
-                    str(DOCK.tr('Penduduk Jakarta')),
-                    str(DOCK.tr('An earthquake in Yogyakarta like in 2006')),
-                    str(DOCK.tr('A flood in Jakarta')),
-                    str(DOCK.tr('OSM Building Polygons')),
-                    str(DOCK.tr('Essential buildings')),
-                    str(DOCK.tr('Flood in Jakarta')),
-                    str(DOCK.tr('roads_Maumere')),
-                    str(DOCK.tr('kabupaten jakarta singlepart')),
-                    str(DOCK.tr('Population which Need evacuation'))]
+        myBeforeCount = len(CANVAS.layers())
+        #LOGGER.info("Canvas list before:\n%s" % canvasList())
+        LOGGER.info("Registry list before:\n%s" %
+                    len(QgsMapLayerRegistry.instance().mapLayers()))
         # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        currentLayers = [str(c.name()) for c in CANVAS.layers()]
-        myMessage = ('The legend should have:\n %s \nFound: %s'
-                     % (myLayerList, currentLayers))
-        self.assertEquals(currentLayers, myLayerList, myMessage)
+        myAfterCount = len(CANVAS.layers())
+        LOGGER.info("Registry list after:\n%s" %
+                    len(QgsMapLayerRegistry.instance().mapLayers()))
+        #LOGGER.info("Canvas list after:\n%s" % canvasList())
+        myMessage = ('Expected %s items in canvas, got %s' %
+                     (myBeforeCount + 1, myAfterCount))
+        assert myBeforeCount + 1 == myAfterCount, myMessage
 
-        DOCK.showPostProcLayers = True
-        # LAYER List should have i additional layers
-        myLayerList.append(str(DOCK.tr('Population which Need evacuation '
-                            'aggregated to kabupaten jakarta singlepart')))
+        # Now run again showing intermediate layers
 
+        DOCK.showPostProcessingLayers = True
+        myBeforeCount = len(CANVAS.layers())
+        # Press RUN
         QTest.mouseClick(myRunButton, QtCore.Qt.LeftButton)
-        currentLayers = [str(c.name()) for c in CANVAS.layers()]
-        myMessage = ('The legend should have:\n %s \nFound:\n %s'
-                     % (myLayerList, currentLayers))
-        self.assertEquals(currentLayers, myLayerList, myMessage)
+        myAfterCount = len(CANVAS.layers())
+        LOGGER.info("Canvas list after:\n %s" % canvasList())
+        myMessage = ('Expected %s items in canvas, got %s' %
+                     (myBeforeCount + 2, myAfterCount))
+        # We expect two more since we enabled showing intermedate layers
+        assert myBeforeCount + 2 == myAfterCount, myMessage
 
     def test_runEarthQuakeGuidelinesFunction(self):
         """GUI runs with Shakemap 2009 and Padang Buildings"""
@@ -1321,10 +1309,22 @@ class DockTest(unittest.TestCase):
                                 myExpectedString)
         assert myExpectedString in myHtml, myMessage
 
+    def test_newLayersShowInCanvas(self):
+        """Check that when we add a layer we can see it in the canvas list."""
+        LOGGER.info("Canvas list before:\n%s" % canvasList())
+        myBeforeCount = len(CANVAS.layers())
+        myPath = join(TESTDATA, 'polygon_0.shp')
+        myLayer = QgsVectorLayer(myPath, 'foo', 'ogr')
+        QgsMapLayerRegistry.instance().addMapLayer(myLayer)
+        myAfterCount = len(CANVAS.layers())
+        LOGGER.info("Canvas list after:\n%s" % canvasList())
+        myMessage = ('Layer was not added to canvas (%s before, %s after)' %
+                     (myBeforeCount, myAfterCount))
+        assert myBeforeCount == myAfterCount - 1, myMessage
+        QgsMapLayerRegistry.instance().removeMapLayer(myLayer.id())
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(DockTest, 'test')
-    suite = unittest.makeSuite(DockTest,
-                        'test_cboAggregationToggle')
 
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

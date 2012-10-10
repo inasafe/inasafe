@@ -2,8 +2,13 @@
 
 # Form implementation generated from reading ui file 'keywords_dialog_base.ui'
 #
+<<<<<<< HEAD
 # Created: Mon Oct  8 16:09:51 2012
 #      by: PyQt4 UI code generator 4.9.3
+=======
+# Created: Tue Oct  9 16:24:56 2012
+#      by: PyQt4 UI code generator 4.9.1
+>>>>>>> origin/master
 #
 # WARNING! All changes made in this file will be lost!
 

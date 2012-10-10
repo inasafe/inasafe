@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import ast
-from PyQt4 import (QtGui, QtCore, QtWebKit)
+from PyQt4 import QtGui, QtCore
 from configurable_impact_functions_dialog_base import (
             Ui_configurableImpactFunctionsDialogBase)
 
