@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'oz@tanoshiistudio.com'
-__version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -29,6 +28,8 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 
+# FIXME (Tim and Ole): Change to ConfigurationDialog throughout
+#                      Maybe also change filename and Base name accordingly.
 class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
                 Ui_configurableImpactFunctionsDialogBase):
     """ConfigurableImpactFunctions Dialog for InaSAFE."""
@@ -48,10 +49,7 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         """
         QtGui.QDialog.__init__(self, theParent)
         self.setupUi(self)
-        self.setWindowTitle(QtGui.QApplication.translate(
-                    "configurableImpactFunctionsDialogBase",
-                    "InaSAFE 0.5.0 Configure Impact Function Parameters",
-                    None, QtGui.QApplication.UnicodeUTF8))
+        self.setWindowTitle(self.tr('Impact function configuration'))
 
     def buildFormFromImpactFunctionsParameter(self, theFunction, params):
         """we build a form from impact functions parameter
@@ -72,13 +70,13 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
 
     def _addFormItem(self, key, data):
         label = QtGui.QLabel(self.formLayoutWidget)
-        label.setObjectName(_fromUtf8(key + "Label"))
+        label.setObjectName(_fromUtf8(key + 'Label'))
         label.setText(key)
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
                                         QtGui.QFormLayout.LabelRole, label)
         lineEdit = QtGui.QLineEdit(self.formLayoutWidget)
         lineEdit.setText(str(data))
-        lineEdit.setObjectName(_fromUtf8(key + "LineEdit"))
+        lineEdit.setObjectName(_fromUtf8(key + 'LineEdit'))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
                                         QtGui.QFormLayout.FieldRole, lineEdit)
         self.formItemCounters += 1
@@ -86,10 +84,8 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
     def setDialogInfo(self, theFunctionID):
         myText = ''
         impactFunctionName = theFunctionID
-        myText += ('This form enables you to configure ' +
-        'impact function: ' + impactFunctionName +
-        '. Below, these are parameters that you can modify as you desire.'
-        )
+        myText += self.tr('Parameters for impact function "%1" that can be '
+                          'modified are:').arg(impactFunctionName)
         label = self.impFuncConfLabel
         label.setText(myText)
         #self.displayHtml(QtCore.QString(str(myHTML)))
@@ -108,7 +104,7 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         func = self.theFunction
         for key in self.keys:
             lineEdit = self.findChild(QtGui.QLineEdit,
-                                      _fromUtf8(key + "LineEdit"))
+                                      _fromUtf8(key + 'LineEdit'))
             lineEditText = lineEdit.text()
             convText = str(lineEditText)
             func.parameters[key] = ast.literal_eval(convText)

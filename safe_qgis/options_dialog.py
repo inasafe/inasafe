@@ -152,7 +152,6 @@ class OptionsDialog(QtGui.QDialog, Ui_OptionsDialogBase):
         """Load the help text for the options safe_qgis"""
         if not self.helpDialog:
             self.helpDialog = Help(self.iface.mainWindow(), 'options')
-        self.helpDialog.showMe()
 
     def accept(self):
         """Method invoked when ok button is clicked

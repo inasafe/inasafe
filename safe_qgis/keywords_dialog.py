@@ -141,7 +141,6 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if self.helpDialog:
             del self.helpDialog
         self.helpDialog = Help(self.iface.mainWindow(), 'keywords')
-        self.helpDialog.showMe()
 
     def togglePostprocessingWidgets(self):
         isPostprocessingOn = self.radPostprocessing.isChecked()
