@@ -300,8 +300,8 @@ class UtilitiesTest(unittest.TestCase):
 
     def test_getDefaults(self):
         myExpectedDefaults = {
-            'DEFAULT_FEMALE_RATIO': 0.50,
-            'FEMALE_RATIO_DEFAULT_KEY': 'female ratio default',
+            'FEM_RATIO_DEFAULT': 0.50,
+            'FEM_RATIO_DEFAULT_KEY': 'female ratio default',
             'FEM_RATIO_ATTR_KEY': 'female ratio attribute',
             'AGGR_ATTR_KEY': 'aggregation attribute'
         }

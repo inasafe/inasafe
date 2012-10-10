@@ -22,9 +22,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
 # total population: 1.01 male(s)/female (2011 est.)
-DEFAULT_FEMALE_RATIO = 0.50
+FEM_RATIO_DEFAULT = 0.50
 
 #Keywords key names
 FEM_RATIO_ATTR_KEY = 'female ratio attribute'
-FEMALE_RATIO_DEFAULT_KEY = 'female ratio default'
+FEM_RATIO_DEFAULT_KEY = 'female ratio default'
 AGGR_ATTR_KEY = 'aggregation attribute'

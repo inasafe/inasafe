@@ -1238,7 +1238,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             (
                 self.defaults['FEM_RATIO_ATTR_KEY'] != self.tr(
                     'Use default') or
-                self.defaults['FEMALE_RATIO_DEFAULT_KEY'] in myKeywords
+                self.defaults['FEM_RATIO_DEFAULT_KEY'] in myKeywords
                 )
             ):
             return
@@ -1252,8 +1252,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myKeywords[self.defaults['AGGR_ATTR_KEY']] = myAttrs[0]
             myKeywords[self.defaults['FEM_RATIO_ATTR_KEY']] = \
                 self.tr('Use default')
-            myKeywords[self.defaults['FEMALE_RATIO_DEFAULT_KEY']] = \
-                self.defaults['DEFAULT_FEMALE_RATIO']
+            myKeywords[self.defaults['FEM_RATIO_DEFAULT_KEY']] = \
+                self.defaults['FEM_RATIO_DEFAULT']
             self.keywordIO.writeKeywords(self.postprocLayer, myKeywords)
 
             if self.doAggregation:

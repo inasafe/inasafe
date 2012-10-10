@@ -743,11 +743,11 @@ def getDefaults():
     mySettings = QtCore.QSettings()
     myDefaults = {}
 
-    myDefaults['DEFAULT_FEMALE_RATIO'] = mySettings.value(
-        'inasafe/defaultFemaleRatio', safe.defaults.DEFAULT_FEMALE_RATIO
+    myDefaults['FEM_RATIO_DEFAULT'] = mySettings.value(
+        'inasafe/defaultFemaleRatio', safe.defaults.FEM_RATIO_DEFAULT
         ).toDouble()[0]
-    myDefaults['FEMALE_RATIO_DEFAULT_KEY'] = \
-        safe.defaults.FEMALE_RATIO_DEFAULT_KEY
+    myDefaults['FEM_RATIO_DEFAULT_KEY'] = \
+        safe.defaults.FEM_RATIO_DEFAULT_KEY
     myDefaults['FEM_RATIO_ATTR_KEY'] = \
         safe.defaults.FEM_RATIO_ATTR_KEY
     myDefaults['AGGR_ATTR_KEY'] = \

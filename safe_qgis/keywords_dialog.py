@@ -117,7 +117,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         self.radPredefined.setChecked(True)
         self.dsbFemaleRatioDefault.blockSignals(True)
         self.dsbFemaleRatioDefault.setValue(self.defaults[
-                                            'DEFAULT_FEMALE_RATIO'])
+                                            'FEM_RATIO_DEFAULT'])
         self.dsbFemaleRatioDefault.blockSignals(False)
         #myButton = self.buttonBox.button(QtGui.QDialogButtonBox.Ok)
         #myButton.setEnabled(False)
@@ -202,9 +202,9 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         theBox = self.dsbFemaleRatioDefault
         if theFlag:
             currentValue = self.getValueForKey(
-                self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
+                self.defaults['FEM_RATIO_DEFAULT_KEY'])
             if currentValue is None:
-                val = self.defaults['DEFAULT_FEMALE_RATIO']
+                val = self.defaults['FEM_RATIO_DEFAULT']
             else:
                 val = float(currentValue)
             theBox.setValue(val)
@@ -227,13 +227,13 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if text == self.tr('Use default'):
             self.dsbFemaleRatioDefault.setEnabled(True)
             currentDefault = self.getValueForKey(
-                self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
+                self.defaults['FEM_RATIO_DEFAULT_KEY'])
             if currentDefault is None:
-                self.addListEntry(self.defaults['FEMALE_RATIO_DEFAULT_KEY'],
+                self.addListEntry(self.defaults['FEM_RATIO_DEFAULT_KEY'],
                                 self.dsbFemaleRatioDefault.value())
         else:
             self.dsbFemaleRatioDefault.setEnabled(False)
-            self.removeItemByKey(self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
+            self.removeItemByKey(self.defaults['FEM_RATIO_DEFAULT_KEY'])
         self.addListEntry(self.defaults['FEM_RATIO_ATTR_KEY'], text)
 
     # prevents actions being handled twice
@@ -242,7 +242,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         del theValue
         theBox = self.dsbFemaleRatioDefault
         if theBox.isEnabled():
-            self.addListEntry(self.defaults['FEMALE_RATIO_DEFAULT_KEY'],
+            self.addListEntry(self.defaults['FEM_RATIO_DEFAULT_KEY'],
                 theBox.value())
 
     # prevents actions being handled twice
@@ -316,7 +316,7 @@ class KeywordsDialog(QtGui.QDialog, Ui_KeywordsDialogBase):
         if not theFlag:
             self.removeItemByKey(self.defaults['AGGR_ATTR_KEY'])
             self.removeItemByKey(self.defaults['FEM_RATIO_ATTR_KEY'])
-            self.removeItemByKey(self.defaults['FEMALE_RATIO_DEFAULT_KEY'])
+            self.removeItemByKey(self.defaults['FEM_RATIO_DEFAULT_KEY'])
             return
         self.setCategory('postprocessing')
         self.updateControlsFromList()
