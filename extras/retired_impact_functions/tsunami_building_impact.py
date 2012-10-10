@@ -1,7 +1,7 @@
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 
 # Largely superseded by flood impact functions, but keep as it
 # will be needed to test impact on roads from both raster and polygon

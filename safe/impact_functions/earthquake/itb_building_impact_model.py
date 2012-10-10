@@ -52,7 +52,6 @@ vul_curves = AutoVivification()
 # Non-Engineere dbuildings
 a = open(non_eng_filename).readlines()
 for item in a[1:]:
-    print item
     tmp = item.strip('\n').split(',')
     idx = tmp[0]  # structural type index
     vul_curves[idx]['median'] = float(tmp[5])
