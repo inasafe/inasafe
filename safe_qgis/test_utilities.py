@@ -23,6 +23,7 @@ from safe.common.exceptions import BoundingBoxError
 from safe_qgis.test_keywords_dialog import (makePolygonLayer,
                                             makePadangLayer,
                                             makePointLayer)
+from safe_qgis.utilities import getDefaults
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 
@@ -297,6 +298,17 @@ class UtilitiesTest(unittest.TestCase):
                     % myLayer)
         assert not isLayerPolygonal(myLayer), myMessage
 
+    def test_getDefaults(self):
+        myExpectedDefaults = {
+            'DEFAULT_FEMALE_RATIO': 0.50,
+            'FEMALE_RATIO_DEFAULT_KEY': 'female ratio default',
+            'FEMALE_RATIO_ATTRIBUTE_KEY': 'female ratio attribute',
+            'AGGREGATION_ATTRIBUTE_KEY': 'aggregation attribute'
+        }
+        myDefaults = getDefaults()
+        myMessage = 'Defaults: got %s, expected %s' % (
+            myDefaults, myExpectedDefaults)
+        assert (myDefaults == myExpectedDefaults), myMessage
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest, 'test')
