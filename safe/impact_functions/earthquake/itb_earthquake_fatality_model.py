@@ -2,7 +2,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
 
@@ -86,7 +86,7 @@ class ITBFatalityFunction(FunctionProvider):
                       # Threshold below which layer should be transparent
                       tolerance=0.01,
                       calculate_displaced_people=True)
-    title = _('Die')
+    title = tr('Die')
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model
@@ -187,9 +187,9 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Generate impact report
         table_body = [question]
-                      #TableRow([_('Groundshaking (MMI)'),
-                      #          _('# people impacted')],
-                      #          header=True)]
+                    #TableRow([tr('Groundshaking (MMI)'),
+                    #          tr('# people impacted')],
+                    #          header=True)]
 
         # Table of people exposed to each shake level
         # NOTE (Ole): I have commented this out for the time being.
@@ -207,38 +207,39 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Add total fatality estimate
         s = str(int(fatalities)).rjust(10)
-        table_body.append(TableRow([_('Number of fatalities'), s],
+        table_body.append(TableRow([tr('Number of fatalities'), s],
                                    header=True))
 
         if self.parameters['calculate_displaced_people']:
             # Add total estimate of people displaced
             s = str(int(displaced)).rjust(10)
-            table_body.append(TableRow([_('Number of people displaced'), s],
+            table_body.append(TableRow([tr('Number of people displaced'), s],
                                        header=True))
         else:
             displaced = 0
 
         # Add estimate of total population in area
         s = str(int(total)).rjust(10)
-        table_body.append(TableRow([_('Total number of people'), s],
+        table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
 
-        table_body.append(TableRow(_('Action Checklist:'), header=True))
+        table_body.append(TableRow(tr('Action Checklist:'), header=True))
         if fatalities > 0:
-            table_body.append(_('Are there enough victim identification units '
-                                'available for %i people?') % fatalities)
+            table_body.append(tr('Are there enough victim identification '
+                                 'units available for %i people?') %
+                                 fatalities)
         if displaced > 0:
-            table_body.append(_('Are there enough shelters available for %i '
+            table_body.append(tr('Are there enough shelters available for %i '
                                 'people?') % displaced)
 
-        table_body.append(TableRow(_('Notes'), header=True))
-        table_body.append(_('Fatality model is from '
+        table_body.append(TableRow(tr('Notes'), header=True))
+        table_body.append(tr('Fatality model is from '
                             'Institute of Teknologi Bandung 2012.'))
-        table_body.append(_('Population numbers rounded to nearest 1000.'))
+        table_body.append(tr('Population numbers rounded to nearest 1000.'))
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
-        map_title = _('Earthquake impact to population')
+        map_title = tr('Earthquake impact to population')
 
         # Create style info dynamically
         classes = numpy.linspace(numpy.nanmin(R.flat[:]),
@@ -246,17 +247,17 @@ class ITBFatalityFunction(FunctionProvider):
 
         style_classes = [dict(colour='#EEFFEE', quantity=classes[0],
                               transparency=100,
-                              label=_('%.2f people/cell') % classes[0]),
+                              label=tr('%.2f people/cell') % classes[0]),
                          dict(colour='#FFFF7F', quantity=classes[1],
                               transparency=30),
                          dict(colour='#E15500', quantity=classes[2],
                               transparency=30,
-                              label=_('%.2f people/cell') % classes[2]),
+                              label=tr('%.2f people/cell') % classes[2]),
                          dict(colour='#E4001B', quantity=classes[3],
                               transparency=30),
                          dict(colour='#730000', quantity=classes[4],
                               transparency=30,
-                              label=_('%.2f people/cell') % classes[4])]
+                              label=tr('%.2f people/cell') % classes[4])]
         style_info = dict(target_field=None,
                           style_classes=style_classes)
 
@@ -269,7 +270,7 @@ class ITBFatalityFunction(FunctionProvider):
                              'total_fatalities': fatalities,
                              'impact_table': impact_table,
                              'map_title': map_title},
-                   name=_('Estimated fatalities'),
+                   name=tr('Estimated fatalities'),
                    style_info=style_info)
 
         # Maybe return a shape file with contours instead

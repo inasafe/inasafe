@@ -16,19 +16,19 @@ return R
 
 """
 
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 
 # Flood population impact raster style
 style_classes = [dict(colour='#FFFFFF', quantity=2, transparency=100),
-                 dict(label=_('Low'), colour='#38A800', quantity=5,
+                 dict(label=tr('Low'), colour='#38A800', quantity=5,
                       transparency=0),
                  dict(colour='#79C900', quantity=10, transparency=0),
                  dict(colour='#CEED00', quantity=20, transparency=0),
-                 dict(label=_('Medium'), colour='#FFCC00', quantity=50,
+                 dict(label=tr('Medium'), colour='#FFCC00', quantity=50,
                       transparency=0),
                  dict(colour='#FF6600', quantity=100, transparency=0),
                  dict(colour='#FF0000', quantity=200, transparency=0),
-                 dict(label=_('High'), colour='#7A0000', quantity=300,
+                 dict(label=tr('High'), colour='#7A0000', quantity=300,
                       transparency=0)]
 flood_population_style = dict(target_field=None,
                               legend_title=None,
@@ -48,7 +48,7 @@ flood_population_style = dict(target_field=None,
 #                 dict(colour='#EE0000', quantity=61, transparency=0),
 #                 dict(colour='#AA0000', quantity=69, transparency=0),
 #                 dict(colour='#7A0000', quantity=78, transparency=0),
-#                 dict(label=_('High'), colour='#500000', quantity=100,
+#                 dict(label=tr('High'), colour='#500000', quantity=100,
 #                      transparency=0)]
 #earthquake_fatality_style = dict(target_field=None,
 #                                 style_classes=style_classes)
@@ -65,16 +65,16 @@ flood_population_style = dict(target_field=None,
 
 
 style_classes = [dict(colour='#EEFFEE', quantity=0.01, transparency=100,
-                      label=_('Low')),
+                      label=tr('Low')),
                  dict(colour='#38A800', quantity=1.05, transparency=0),
                  dict(colour='#79C900', quantity=2.08, transparency=0),
                  dict(colour='#CEED00', quantity=3.12, transparency=0),
                  dict(colour='#FFCC00', quantity=4.15, transparency=0,
-                      label=_('Mid')),
+                      label=tr('Mid')),
                  dict(colour='#FF6600', quantity=5.19, transparency=0),
                  dict(colour='#FF0000', quantity=6.22, transparency=0),
                  dict(colour='#7A0000', quantity=7.26, transparency=0),
                  dict(colour='#660000', quantity=8.30, transparency=0,
-                      label=_('High'))]
+                      label=tr('High'))]
 earthquake_fatality_style = dict(target_field=None,
                                  style_classes=style_classes)
