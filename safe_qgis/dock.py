@@ -30,7 +30,8 @@ from safe_qgis.help import Help
 from safe_qgis.utilities import (getExceptionWithStacktrace,
                                  getWGS84resolution,
                                  logOnQgsMessageLog,
-                                 isLayerPolygonal)
+                                 isLayerPolygonal,
+                                 getLayerAttributeNames)
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
@@ -908,7 +909,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myFemRatioAttr == self.tr('Use default')):
             self.postprocAttributes[FEMALE_RATIO_ATTRIBUTE_KEY] = None
         else:
-            self.postprocAttributes[FEMALE_RATIO_ATTRIBUTE_KEY] = myFemRatioAttr
+            self.postprocAttributes[FEMALE_RATIO_ATTRIBUTE_KEY] = \
+            myFemRatioAttr
 
         try:
             self.setupCalculator()
@@ -1274,71 +1276,38 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         else:
             #set the default values by writing to the myKeywords
             myKeywords['category'] = 'postprocessing'
+            myAttrs, _ = getLayerAttributeNames(
+                self.postprocLayer,
+                [QtCore.QVariant.Int, QtCore.QVariant.String])
+            myKeywords[AGGREGATION_ATTRIBUTE_KEY] = myAttrs[0]
             myKeywords[FEMALE_RATIO_ATTRIBUTE_KEY] = self.tr('Use default')
             myKeywords[FEMALE_RATIO_DEFAULT_KEY] = DEFAULT_FEMALE_RATIO
             self.keywordIO.writeKeywords(self.postprocLayer, myKeywords)
 
-            #prompt user for a choice
-            self._promptPostprocAttributes()
+            if self.doAggregation:
+                #prompt user for a choice
+                myTitle = self.tr(
+                    'Waiting for attribute selection...')
+                myMessage = self.tr('Please select which attribute you want to'
+                                    ' use as ID for the aggregated results')
+                myProgress = 1
+                self.showBusy(myTitle, myMessage, myProgress)
 
-    def _promptPostprocAttributes(self):
-        """prompt user for a decision on which attribute has to be the key
-        attribute for the aggregated data and writes the keywords file
+                self.disableBusyCursor()
 
-        Args: None
+                myDialog = KeywordsDialog(
+                    self.iface.mainWindow(),
+                    self.iface,
+                    self,
+                    self.postprocLayer)
 
-        Returns: None
+                #disable gui elements that should not be applicable for this
+                myDialog.radExposure.setEnabled(False)
+                myDialog.radHazard.setEnabled(False)
+                myDialog.pbnAdvanced.setEnabled(False)
+                myDialog.exec_()
 
-        Raises: Propagates any error
-        """
-
-        myTitle = self.tr(
-            'Waiting for attribute selection...')
-        myMessage = self.tr('Please select which attribute you want to'
-                            ' use as ID for the aggregated results')
-        myProgress = 1
-        self.showBusy(myTitle, myMessage, myProgress)
-
-        self.disableBusyCursor()
-
-        myDialog = KeywordsDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self,
-            self.postprocLayer)
-
-        #disable gui elements that should not be applicable for this
-        myDialog.radExposure.setEnabled(False)
-        myDialog.radHazard.setEnabled(False)
-        myDialog.pbnAdvanced.setEnabled(False)
-        if not self.doAggregation:
-            aggrCbo = myDialog.cboAggregationAttribute
-            aggrCbo.clear()
-            aggrCbo.addItem(self.tr('Entire area'))
-            aggrCbo.setEnabled(False)
-
-        if myDialog.exec_() == QtGui.QDialog.Accepted:
-            keywords = self.keywordIO.readKeywords(
-                self.postprocLayer)
-            try:
-                logOnQgsMessageLog('User selected: ' + str(keywords[
-                    AGGREGATION_ATTRIBUTE_KEY]) +' as aggregation attribute')
-            except HashNotFoundException:
-                logOnQgsMessageLog('User Accepted but did not select a '
-                                   'value. Using default : '
-                                   + keywords[AGGREGATION_ATTRIBUTE_KEY] +
-                                   ' as aggregation attribute')
-        else:
-            # The user cancelled, use the first attribute as default
-            myAttributes, _ = myDialog.getAttributeNames(
-                [QtCore.QVariant.Int, QtCore.QVariant.String])
-            myDefault = myAttributes[0]
-            logOnQgsMessageLog('User cancelled, using ' + myDefault +
-                               ' as aggregation attribute')
-            self.keywordIO.appendKeywords(self.postprocLayer, {
-                AGGREGATION_ATTRIBUTE_KEY:myDefault})
-
-        self.enableBusyCursor()
+                self.enableBusyCursor()
 
     def _completed(self):
         """Helper function for slot activated when the process is done.
