@@ -1360,17 +1360,17 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
     remaining_lines = lines
 
     # Clip lines to polygons
-    #for polygon in polygons:
-    for i, polygon in enumerate(polygons):
-        print ('Doing polygon %i (%i vertices) of %i with '
-               '%i lines' % (i, len(polygon),
-                             len(polygons),
-                             len(remaining_lines)))
+    for polygon in polygons:
+    #for i, polygon in enumerate(polygons):
+        #print ('Doing polygon %i (%i vertices) of %i with '
+        #       '%i lines' % (i, len(polygon),
+        #                     len(polygons),
+        #                     len(remaining_lines)))
         inside_lines, _ = clip_lines_by_polygon(remaining_lines,
                                                 polygon,
                                                 check_input=False)
-        print ('- %i segments were inside'
-               % len(line_dictionary_to_geometry(inside_lines)))
+        #print ('- %i segments were inside'
+        #       % len(line_dictionary_to_geometry(inside_lines)))
 
         # Record lines inside this polygon
         lines_covered.append(inside_lines)
