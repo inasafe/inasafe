@@ -33,7 +33,7 @@ from safe.common.numerics import nanallclose
 from safe.common.testing import TESTDATA, HAZDATA, EXPDATA, DATADIR
 from safe.common.testing import FEATURE_COUNTS
 from safe.common.testing import GEOTRANSFORMS
-from safe.common.utilities import ugettext as _, unique_filename
+from safe.common.utilities import ugettext as tr, unique_filename
 from safe.common.polygon import is_inside_polygon
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
 from safe.common.exceptions import VerificationError, InaSAFEError
@@ -2296,7 +2296,7 @@ class Test_IO(unittest.TestCase):
 
         #must be after above
         string1 = 'Hello!'
-        out1 = _(string1)
+        out1 = tr(string1)
         expected1 = 'Hello!'
         msg = 'Expected %s, got %s' % (expected1, out1)
         assert string1 == expected1, msg
@@ -2306,7 +2306,7 @@ class Test_IO(unittest.TestCase):
         os.environ['LC_ALL'] = 'id_ID.UTF-8'
 
         #must be after above
-        indoout1 = _(string1)  # translate as 'Hi'
+        indoout1 = tr(string1)  # translate as 'Hi'
         indoexpected1 = 'Hi!'
         msg = 'Expected %s, got %s' % (indoexpected1, indoout1)
         assert indoout1 == indoexpected1, msg

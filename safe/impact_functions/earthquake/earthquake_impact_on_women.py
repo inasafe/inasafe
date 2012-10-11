@@ -4,7 +4,7 @@ from safe.impact_functions.core import get_question
 from safe.impact_functions.styles import earthquake_fatality_style
 from safe.storage.raster import Raster
 from safe.common.tables import Table, TableRow
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 
 import numpy
 
@@ -36,7 +36,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
 
     """
 
-    title = _('Suffer because of gender')
+    title = tr('Suffer because of gender')
 
     def run(self, layers,
             x=0.62275231, y=8.03314466):  # , zeta=2.15):
@@ -116,35 +116,35 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
 
         # Add total fatality estimate
         s = str(int(fatalities)).rjust(10)
-        table_body.append(TableRow([_('Number of fatalities'), s],
+        table_body.append(TableRow([tr('Number of fatalities'), s],
                                    header=True))
 
         # Add total estimate of people displaced
         s = str(int(displaced)).rjust(10)
-        table_body.append(TableRow([_('Number of people displaced'), s],
+        table_body.append(TableRow([tr('Number of people displaced'), s],
                                    header=True))
         s = str(int(displaced_women)).rjust(10)
-        table_body.append(TableRow([_('Number of women displaced'), s],
+        table_body.append(TableRow([tr('Number of women displaced'), s],
                                    header=True))
         s = str(int(displaced_pregnant_women)).rjust(10)
-        table_body.append(TableRow([_('Number of pregnant women displaced'),
+        table_body.append(TableRow([tr('Number of pregnant women displaced'),
                                     s],
                                    header=True))
 
-        table_body.append(TableRow(_('Action Checklist:'), header=True))
-        table_body.append(_('Are enough shelters available for %i women?')
+        table_body.append(TableRow(tr('Action Checklist:'), header=True))
+        table_body.append(tr('Are enough shelters available for %i women?')
                           % displaced_women)
-        table_body.append(_('Are enough facilities available to assist %i '
+        table_body.append(tr('Are enough facilities available to assist %i '
                             'pregnant women?') % displaced_pregnant_women)
 
-        table_body.append(TableRow(_('Notes'), header=True))
+        table_body.append(TableRow(tr('Notes'), header=True))
 
-        table_body.append(_('Fatality model is from '
+        table_body.append(tr('Fatality model is from '
                             'Institute of Teknologi Bandung 2012.'))
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
-        map_title = _('Earthquake impact to population')
+        map_title = tr('Earthquake impact to population')
 
         # Create new layer and return
         L = Raster(R,
@@ -155,7 +155,7 @@ class EarthquakeWomenImpactFunction(FunctionProvider):
                              'total_fatalities': fatalities,
                              'impact_table': impact_table,
                              'map_title': map_title},
-                   name=_('Estimated fatalities'),
+                   name=tr('Estimated fatalities'),
                    style_info=earthquake_fatality_style)
 
         # Maybe return a shape file with contours instead

@@ -8,7 +8,7 @@ import numpy
 
 from safe.common.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.numerics import ensure_numeric
 from safe.common.geodesy import Point
 from safe.common.exceptions import InaSAFEError, BoundsError
@@ -397,7 +397,7 @@ def interpolate_raster_vector_points(source, target,
         values = interpolate_raster(longitudes, latitudes, A,
                                     coordinates, mode=mode)
     except (BoundsError, InaSAFEError), e:
-        msg = (_('Could not interpolate from raster layer %(raster)s to '
+        msg = (tr('Could not interpolate from raster layer %(raster)s to '
                  'vector layer %(vector)s. Error message: %(error)s')
                % {'raster': source.get_name(),
                   'vector': target.get_name(),
