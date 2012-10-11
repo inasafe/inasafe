@@ -127,3 +127,8 @@ class MethodUnavailableError(Exception):
     """Raised if the requested import cannot be performed dur to qgis being
     to old"""
     pass
+
+class PostprocessorError(Exception):
+    """Raised if the requested import cannot be performed dur to qgis being
+    to old"""
+    pass
