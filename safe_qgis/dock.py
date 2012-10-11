@@ -80,6 +80,8 @@ from safe_qgis.configurable_impact_functions_dialog import (
    ConfigurableImpactFunctionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
+from safe_qgis.postprocessors.gender_postprocessor import GenderPostprocessor
+
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -1185,11 +1187,17 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     '       </td>'
                     '    </tr>'
                     '    <tr>'
-                    '      <th width="35%">'
+                    '      <th width="25%">'
                     + aggrAttrTitle +
                     '      </th>'
                     '      <th>'
                     + self.tr('Sum') +
+                    '      </th>'
+                    '      <th>'
+                    'TOT FEM'
+                    '      </th>'
+                    '      <th>'
+                    'HYGENE PACKS'
                     '      </th>'
                     '    </tr>')
         #fill table
@@ -1212,28 +1220,38 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                                 'aggregation data. %1 not found in %2')\
             .arg(self.getAggregationFieldNameSum())\
             .arg(self.postprocLayer.name())
-            myMessage = getExceptionWithStacktrace(e,
-                html=True,
-                context=myMessage)
-            self.displayHtml(myMessage)
-            return
+            raise ReadLayerError(myMessage)
 
         feat = QgsFeature()
+        myPostrocessor = GenderPostprocessor()
         while provider.nextFeature(feat):
             attrMap = feat.attributeMap()
             if nameFieldIndex == -1:
                 name = str(feat.id())
             else:
                 name = attrMap[nameFieldIndex].toString()
-            aggrSum = attrMap[sumFieldIndex].toString()
-            aggrSum = str(int(round(float(aggrSum))))
 
+            aggrSum = attrMap[sumFieldIndex].toString()
+            aggrSum = int(round(float(aggrSum)))
+
+            #FIXME (MB) use the femaleratio
+            myPostrocessor.setup(aggrSum, 0.5)
+            myPostrocessor.process()
+            myResults = myPostrocessor.getResults()
+            myPostrocessor.clear()
             myHTML += ('    <tr>'
                         '      <td>'
                         + name +
                         '      </td>'
                         '      <td>'
-                        + aggrSum +
+                        + str(aggrSum) +
+                        '      </td>'
+                        '      <td>'
+                        + str(myResults[self.tr('Females count')]['value']) +
+                        '      </td>'
+                        '      <td>'
+                        + str(myResults[self.tr('Females weekly hygene packs')
+                              ]['value']) +
                         '      </td>'
                         '    </tr>')
         #close table
