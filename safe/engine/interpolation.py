@@ -266,7 +266,7 @@ def interpolate_polygon_vector(source, target,
         # that of the original polygon
         R = Vector(data=P.get_data(),
                    projection=P.get_projection(),
-                   geometry=X.get_geometry(),
+                   geometry=target.get_geometry(as_geometry_objects=True),
                    name=P.get_name())
     else:
         msg = ('Unknown datatype for polygon2vector interpolation: '
@@ -467,6 +467,10 @@ def interpolate_polygon_points(source, target,
     data = source.get_data()
     verify(len(geom) == len(data))
 
+    # Include polygon_id as attribute
+    attribute_names.append('polygon_id')
+    attribute_names.append(DEFAULT_ATTRIBUTE)
+
     # Augment point features with empty attributes from polygon
     for a in attributes:
         if attribute_name is None:
@@ -476,10 +480,12 @@ def interpolate_polygon_points(source, target,
         else:
             # Use only requested attribute
             # FIXME (Ole): Test for this is not finished
+            # BUT don't do it....Issue #251
             a[attribute_name] = None
 
         # Always create default attribute flagging if point was
         # inside any of the polygons
+        # FIXME (Ole): Remove as already appended.....
         a[DEFAULT_ATTRIBUTE] = None
 
     # Traverse polygons and assign attributes to points that fall inside
@@ -497,10 +503,12 @@ def interpolate_polygon_points(source, target,
         # Clip data points by polygons and add polygon attributes
         indices = inside_polygon(points, polygon.outer_ring,
                                  holes=polygon.inner_rings)
+
         for k in indices:
             for key in poly_attr:
                 # Assign attributes from polygon to points
                 attributes[k][key] = poly_attr[key]
+            attributes[k]['polygon_id'] = i  # Store id for associated polygon
 
     # Create new Vector instance and return
     V = Vector(data=attributes,
