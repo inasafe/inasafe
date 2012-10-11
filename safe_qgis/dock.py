@@ -37,11 +37,13 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
+                       QgsGeometry,
                        QgsMapLayerRegistry,
                        QgsCoordinateReferenceSystem,
                        QgsCoordinateTransform,
                        QgsFeature,
                        QgsRectangle,
+                       QgsPoint,
                        QgsField)
 from qgis.analysis import QgsZonalStatistics
 
@@ -58,7 +60,6 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getBufferedExtent,
                                       internationalisedNames,
                                       getSafeImpactFunctions,
-                                      writeKeywordsToFile,
                                       tempDir,
                                       ReadLayerError)
 from safe_qgis.keyword_io import KeywordIO
@@ -835,12 +836,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #check and generate keywords for the aggregation layer
         self.defaults = getDefaults()
         self.postprocLayer = self.getPostprocLayer()
-        self.doAggregation = True
+        self.doZonalAggregation = True
         if self.postprocLayer is None:
             # generate on the fly a memory layer to be used in postprocessing
             # this is needed because we always want a vectoril layer to store
             # information
-            self.doAggregation = False
+            self.doZonalAggregation = False
             crs = self.getExposureLayer().crs().authid().toLower()
             myUUID = str(uuid.uuid4())
             uri = 'Polygon' + '?crs=' + crs + '&index=yes&uuid=' + myUUID
@@ -855,21 +856,22 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 return
             myProvider = myLayer.dataProvider()
             myLayer.startEditing()
-            myProvider.addAttributes([QgsField("name", QVariant.String)])
+            myProvider.addAttributes([QgsField('name', QVariant.String)])
             myLayer.commitChanges()
 
             self.postprocLayer = myLayer
+            self.keywordIO.appendKeywords(self.postprocLayer, {self.defaults[
+                                                    'AGGR_ATTR_KEY']: 'name'})
+
+        # go check if our postprocessing layer has any keywords set and if not
+        # prompt for them
         self._checkPostprocAttributes()
 
         #attributes that will not be deleted from the postprocessing layer
         self.postprocAttributes = {}
-        if self.doAggregation:
-            self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']
-            ] = (self.keywordIO.readKeywords(self.postprocLayer,
-                self.defaults['AGGR_ATTR_KEY']))
-        else:
-            self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']
-            ] = None
+        self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']] = (
+            self.keywordIO.readKeywords(self.postprocLayer,
+                                        self.defaults['AGGR_ATTR_KEY']))
 
         myFemRatioAttr = self.keywordIO.readKeywords(
             self.postprocLayer, self.defaults['FEM_RATIO_ATTR_KEY'])
@@ -967,19 +969,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
         """
-        if self.doAggregation:
-            try:
-                myProgress = 88
-                self.aggregateResults(myProgress)
-            except Exception, e:
-                QtGui.qApp.restoreOverrideCursor()
-                self.hideBusy()
-                myContext = self.tr(
-                    'An exception occurred when aggregating the results')
-                myMessage = getExceptionWithStacktrace(e, html=True,
-                    context=myContext)
-                self.displayHtml(myMessage)
-                return
+        try:
+            myProgress = 88
+            self.aggregateResults(myProgress)
+        except Exception, e:
+            QtGui.qApp.restoreOverrideCursor()
+            self.hideBusy()
+            myContext = self.tr(
+                'An exception occurred when aggregating the results')
+            myMessage = getExceptionWithStacktrace(e, html=True,
+                context=myContext)
+            self.displayHtml(myMessage)
+            return
         self.completed()
         self.initPostprocOutput()
 
@@ -1051,6 +1052,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: None
         """
         impactLayer = self.runner.impactLayer()
+        impactLayerBB = impactLayer.get_bounding_box()
+        #[West, South, East, North]
+        if not self.doZonalAggregation:
+            self.postprocLayer.startEditing()
+            myProvider = self.postprocLayer.dataProvider()
+            # add a feature the size of the impact layer bounding box
+            myFeat = QgsFeature()
+            myFeat.setGeometry(QgsGeometry.fromRect(QgsRectangle(
+                QgsPoint(impactLayerBB[0], impactLayerBB[1]),
+                QgsPoint(impactLayerBB[2], impactLayerBB[3])
+            )))
+            myFeat.setAttributeMap({0: QVariant(self.tr('Entire area'))})
+            myProvider.addFeatures([myFeat])
+            self.postprocLayer.commitChanges()
+
         myQgisImpactLayer = self.readImpactLayer(impactLayer)
         if not myQgisImpactLayer.isValid():
             myMessage = self.tr('Error when reading %1').arg(myQgisImpactLayer)
@@ -1063,7 +1079,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # trimm it down to  avoid extra calculations
         clippedAggregationLayerPath = clipLayer(
             self.postprocLayer,
-            impactLayer.get_bounding_box(), explodeMultipart=False)
+            impactLayerBB, explodeMultipart=False)
 
         self.postprocLayer = QgsVectorLayer(
             clippedAggregationLayerPath, lName, 'ogr')
@@ -1073,24 +1089,29 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             raise ReadLayerError(myMessage)
 
             #delete unwanted fields
-        vProvider = self.postprocLayer.dataProvider()
-        vFields = vProvider.fields()
+        myProvider = self.postprocLayer.dataProvider()
+        myFields = myProvider.fields()
         toDel = []
-        for i in vFields:
-            if vFields[i].name() != self.postprocAttributes[
-                                    self.defaults['AGGR_ATTR_KEY']]:
-                toDel.append(i)
+        for i in myFields:
+            #FIXME (MB) all attr in self.postprocAttributes should be kept
+#            if myFields[i].name() != self.postprocAttributes[
+#                                    self.defaults['AGGR_ATTR_KEY']]:
+#                toDel.append(i)
+            pass
         LOGGER.debug('Removing this attributes: ' + str(toDel))
         try:
-            vProvider.deleteAttributes(toDel)
+            self.postprocLayer.startEditing()
+            myProvider.deleteAttributes(toDel)
+            self.postprocLayer.commitChanges()
         # FIXME (Ole): Disable pylint check for the moment
         # Need to work out what exceptions we will catch here, though.
         except:  # pylint: disable=W0702
             myMessage = self.tr('Could not remove the unneded fields')
             LOGGER.debug(myMessage)
+            raise
 
-        del toDel, vProvider, vFields
-        writeKeywordsToFile(clippedAggregationLayerPath, {'title': lName})
+        del toDel, myProvider, myFields
+        self.keywordIO.appendKeywords(self.postprocLayer, {'title': lName})
 
         #call the correct aggregator
         if myQgisImpactLayer.type() == QgsMapLayer.VectorLayer:
@@ -1264,7 +1285,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.defaults['FEM_RATIO_DEFAULT']
             self.keywordIO.writeKeywords(self.postprocLayer, myKeywords)
 
-            if self.doAggregation:
+            if self.doZonalAggregation:
                 #prompt user for a choice
                 myTitle = self.tr(
                     'Waiting for attribute selection...')
