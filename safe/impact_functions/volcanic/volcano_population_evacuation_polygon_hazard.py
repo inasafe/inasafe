@@ -28,7 +28,8 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
     title = _('Be affected')
     target_field = 'population'
 
-    parameters = dict(distances=[1000, 2000, 3000, 5000, 10000])
+    parameters = dict(distances=[1000, 2000, 3000, 5000, 10000],
+                      volcano_name='All')
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
@@ -179,7 +180,7 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
         # Define classes for legend for flooded population counts
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        population_counts = [x['population'] for x in new_attributes]
+        population_counts = [x[self.target_field] for x in new_attributes]
         cls = [0] + numpy.linspace(1,
                                    max(population_counts),
                                    len(colours)).tolist()
