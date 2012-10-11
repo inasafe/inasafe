@@ -128,6 +128,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self.runner = None
         self.helpDialog = None
         self.state = None
+        self.lastRunnedFunction = ''
         self.runInThreadFlag = False
         self.showOnlyVisibleLayersFlag = True
         self.setLayerNameFromTitleFlag = True
@@ -836,7 +837,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         #check and generate keywords for the aggregation layer
         self.defaults = getDefaults()
-        self.postprocLayer = self.getPostprocLayer()
+        self.initPostproc()
         self.doZonalAggregation = True
         if self.postprocLayer is None:
             # generate on the fly a memory layer to be used in postprocessing
@@ -969,7 +970,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
         """
-        self.initPostproc()
         try:
             myProgress = 88
             self.aggregateResults(myProgress)
@@ -996,9 +996,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # structure where each postprocessor adds a
         # postprocessorname:'report string' pair
         self.postprocOutput = []
-
-#        if self.postprocLayer is not None:
-#            self.keywordIO.clearKeywords(self.postprocLayer)
+        self.postprocLayer = self.getPostprocLayer()
+        myCurrentFunction = self.getFunctionID()
+        if (self.postprocLayer is not None and
+            self.lastRunnedFunction != myCurrentFunction):
+            self.keywordIO.clearKeywords(self.postprocLayer)
+        self.lastRunnedFunction = myCurrentFunction
 
     def addPostprocOutput(self, output):
         """
