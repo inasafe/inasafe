@@ -140,7 +140,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self._aggregationPrefix = 'aggr_'
         self.pbnPrint.setEnabled(False)
 
-        self.initPostprocOutput()
 
         myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
@@ -858,32 +857,31 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 return
             myProvider = myLayer.dataProvider()
             myLayer.startEditing()
-            myProvider.addAttributes([QgsField('name', QVariant.String)])
+            myAttrName = self.tr('Area')
+            myProvider.addAttributes([QgsField(myAttrName, QVariant.String)])
             myLayer.commitChanges()
 
             self.postprocLayer = myLayer
             self.keywordIO.appendKeywords(self.postprocLayer, {self.defaults[
-                                                    'AGGR_ATTR_KEY']: 'name'})
+                                                'AGGR_ATTR_KEY']: myAttrName})
 
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them
         self._checkPostprocAttributes()
 
-        #attributes that will not be deleted from the postprocessing layer
-        self.postprocAttributes = {}
+        # attributes that will not be deleted from the postprocessing layer
+        # attribute table
+        self.postprocAttributes = dict()
+
         self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']] = (
             self.keywordIO.readKeywords(self.postprocLayer,
                                         self.defaults['AGGR_ATTR_KEY']))
 
         myFemRatioAttr = self.keywordIO.readKeywords(
             self.postprocLayer, self.defaults['FEM_RATIO_ATTR_KEY'])
-        if (myFemRatioAttr == self.tr('Don\'t use') or
-            myFemRatioAttr == self.tr('Use default')):
-            self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']
-            ] = None
-        else:
-            self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']
-            ] = myFemRatioAttr
+        if (myFemRatioAttr != self.tr('Don\'t use') and
+            myFemRatioAttr != self.tr('Use default')):
+            self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']] = myFemRatioAttr
 
         #start the analysis
         try:
@@ -971,6 +969,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
         """
+        self.initPostproc()
         try:
             myProgress = 88
             self.aggregateResults(myProgress)
@@ -984,9 +983,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.displayHtml(myMessage)
             return
         self.completed()
-        self.initPostprocOutput()
 
-    def initPostprocOutput(self):
+    def initPostproc(self):
         """
         initializes and clears self.postprocOutput. needs to run at the
          end of startPostproc
@@ -998,6 +996,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # structure where each postprocessor adds a
         # postprocessorname:'report string' pair
         self.postprocOutput = []
+
+#        if self.postprocLayer is not None:
+#            self.keywordIO.clearKeywords(self.postprocLayer)
 
     def addPostprocOutput(self, output):
         """
@@ -1095,11 +1096,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         myFields = myProvider.fields()
         toDel = []
         for i in myFields:
-            #FIXME (MB) all attr in self.postprocAttributes should be kept
-#            if myFields[i].name() != self.postprocAttributes[
-#                                    self.defaults['AGGR_ATTR_KEY']]:
-#                toDel.append(i)
-            pass
+            if myFields[i].name() not in self.postprocAttributes.values():
+                toDel.append(i)
         LOGGER.debug('Removing this attributes: ' + str(toDel))
         try:
             self.postprocLayer.startEditing()
@@ -1207,35 +1205,41 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # feature
         provider.select(allAttrs, QgsRectangle(), False)
 
-        nameFieldIndex = self.postprocLayer.fieldNameIndex(
+        myNameFieldIndex = self.postprocLayer.fieldNameIndex(
             myAttribute)
 
-        try:
-            sumFieldIndex = self.postprocLayer.fieldNameIndex(
+        mySumFieldIndex = self.postprocLayer.fieldNameIndex(
             self.getAggregationFieldNameSum())
-        except ReadLayerError, e:
-            QtGui.qApp.restoreOverrideCursor()
-            self.hideBusy()
-            myMessage = self.tr('An exception occurred when reading the'
-                                'aggregation data. %1 not found in %2')\
-            .arg(self.getAggregationFieldNameSum())\
-            .arg(self.postprocLayer.name())
-            raise ReadLayerError(myMessage)
 
-        feat = QgsFeature()
+        myFemRatioIsVariable = False
+        try:
+            myFemRatioField = self.postprocAttributes[self.defaults[
+                                                 'FEM_RATIO_ATTR_KEY']]
+            myFemRatioFieldIndex = self.postprocLayer.fieldNameIndex(
+                myFemRatioField)
+            myFemRatioIsVariable = True
+
+        except KeyError:
+            myFemRatio = self.keywordIO.readKeywords(self.postprocLayer,
+                self.defaults['FEM_RATIO_DEFAULT_KEY'])
+
+
         myPostrocessor = GenderPostprocessor()
+        feat = QgsFeature()
         while provider.nextFeature(feat):
             attrMap = feat.attributeMap()
-            if nameFieldIndex == -1:
+            if myNameFieldIndex == -1:
                 name = str(feat.id())
             else:
-                name = attrMap[nameFieldIndex].toString()
+                name = attrMap[myNameFieldIndex].toString()
 
-            aggrSum = attrMap[sumFieldIndex].toString()
+            aggrSum = attrMap[mySumFieldIndex].toString()
             aggrSum = int(round(float(aggrSum)))
 
-            #FIXME (MB) use the femaleratio
-            myPostrocessor.setup(aggrSum, 0.5)
+            if myFemRatioIsVariable:
+                myFemRatio, _ = attrMap[myFemRatioFieldIndex].toDouble()
+
+            myPostrocessor.setup(aggrSum, myFemRatio)
             myPostrocessor.process()
             myResults = myPostrocessor.getResults()
             myPostrocessor.clear()
