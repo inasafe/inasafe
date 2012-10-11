@@ -41,6 +41,7 @@ from impact_functions_for_testing import HKV_flood_study
 from impact_functions_for_testing import BNPB_earthquake_guidelines
 from impact_functions_for_testing import general_ashload_impact
 from impact_functions_for_testing import flood_road_impact
+from impact_functions_for_testing import itb_fatality_model_org
 # pylint: enable=W0611
 
 
@@ -181,9 +182,11 @@ class Test_Engine(unittest.TestCase):
 
     test_earthquake_fatality_estimation_allen.slow = True
 
-    def test_ITB_earthquake_fatality_estimation(self):
+    def test_ITB_earthquake_fatality_estimation_org(self):
         """Fatalities from ground shaking can be computed correctly
            using the ITB fatality model (Test data from Hadi Ghasemi).
+
+           This function is using the original implementation
         """
 
         # Name file names for hazard level, exposure and expected fatalities
@@ -195,7 +198,7 @@ class Test_Engine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        plugin_name = 'I T B Fatality Function'
+        plugin_name = 'I T B Fatality Function Org'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name
@@ -225,7 +228,7 @@ class Test_Engine(unittest.TestCase):
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
         assert numpy.allclose(fatalities, expected_fatalities,
-        rtol=1.0e-5), msg
+                              rtol=1.0e-5), msg
 
         # Compare with reference data
         F = read_layer(fatality_filename)
@@ -240,10 +243,10 @@ class Test_Engine(unittest.TestCase):
         # Check for expected numbers (from Hadi Ghasemi) in keywords
         # NOTE: Commented out because function no longer needs to return
         # individual exposure numbers.
-        #for population_count in [2649040.0, 50273440.0, 7969610.0,
-        #                         19320620.0, 5211940.0]:
-        #    assert str(int(population_count / 1000)) in \
-        #        keywords['impact_summary']
+        for population_count in [2649040.0, 50273440.0, 7969610.0,
+                                 19320620.0, 5211940.0]:
+            assert str(int(population_count / 1000)) in \
+                keywords['impact_summary']
 
         # Check that aggregated number of fatilites is as expected
         all_numbers = int(numpy.sum([31.8937368131,
@@ -259,24 +262,12 @@ class Test_Engine(unittest.TestCase):
         msg = 'Did not find expected fatality value %i in summary' % x
         assert str(x) in keywords['impact_summary'], msg
 
-        # Characterisation test of formula for displaced people
-        # This may well change in the future
-        #print keywords['impact_summary']
-        exp_disp_val = '14366000'
-        msg = ('Did not find expected displacement value %s in summary'
-               % exp_disp_val)
-        assert exp_disp_val in keywords['impact_summary'], msg
-
-        # Individual check does not work anymore, because the function
-        # now only returns
-        # the aggregate number of fatalities
-        #for fatality_count in [31.8937368131, 2539.26369372,
-        #                       1688.72362573, 17174.9261705, 19436.834531]:
-        #    x = str(int(fatality_count))
-        #    summary = keywords['impact_summary']
-        #    msg = 'Expected %s in impact_summary: %s' % (x, summary)
-        #    print x in summary #, msg
-        #    #assert x in summary, msg
+        for fatality_count in [31.8937368131, 2539.26369372,
+                               1688.72362573, 17174.9261705, 19436.834531]:
+            x = str(int(fatality_count))
+            summary = keywords['impact_summary']
+            msg = 'Expected %s in impact_summary: %s' % (x, summary)
+            assert x in summary, msg
 
     def test_earthquake_fatality_estimation_ghasemi(self):
         """Fatalities from ground shaking can be computed correctly 2
