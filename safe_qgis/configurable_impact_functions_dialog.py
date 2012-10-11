@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import ast
+import sys
 from PyQt4 import QtGui, QtCore
 from configurable_impact_functions_dialog_base import (
             Ui_configurableImpactFunctionsDialogBase)
@@ -70,10 +71,12 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
 
     def _addFormItem(self, key, data):
         label = QtGui.QLabel(self.formLayoutWidget)
-        label.setObjectName(_fromUtf8(key + 'Label'))
-        label.setText(key)
-        self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
-                                        QtGui.QFormLayout.LabelRole, label)
+        label.setObjectName(_fromUtf8(key + "Label"))
+        tKey = key
+        tKey.replace('_', ' ')
+        tKey.capitalize()
+        label.setText(tKey)
+        label.setToolTip(type(data))
         lineEdit = QtGui.QLineEdit(self.formLayoutWidget)
         lineEdit.setText(str(data))
         lineEdit.setObjectName(_fromUtf8(key + 'LineEdit'))
@@ -88,7 +91,6 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
                           'modified are:').arg(impactFunctionName)
         label = self.impFuncConfLabel
         label.setText(myText)
-        #self.displayHtml(QtCore.QString(str(myHTML)))
 
     def accept(self):
         """Override the default accept function
@@ -101,11 +103,21 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         Returns:
            not applicable
         """
+        noError = False
         func = self.theFunction
         for key in self.keys:
-            lineEdit = self.findChild(QtGui.QLineEdit,
-                                      _fromUtf8(key + 'LineEdit'))
-            lineEditText = lineEdit.text()
-            convText = str(lineEditText)
-            func.parameters[key] = ast.literal_eval(convText)
-        self.close()
+            try:
+                lineEdit = self.findChild(QtGui.QLineEdit,
+                                          _fromUtf8(key + "LineEdit"))
+                lineEditText = lineEdit.text()
+                convText = str(lineEditText)
+                func.parameters[key] = ast.literal_eval(convText)
+            except ValueError:
+                text = ("Unexpected error: ValueError" +
+                ". Please consult Python language reference for correct " +
+                "format of data type.")
+                label = self.impFuncConfErrLabel
+                label.setText(text)
+                noError = True
+        if (not noError):
+            self.close()
