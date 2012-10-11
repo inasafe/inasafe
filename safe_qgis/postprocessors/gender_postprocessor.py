@@ -24,27 +24,26 @@ from safe_qgis.postprocessors.abstract_postprocessor import (
 
 class GenderPostprocessor(AbstractPostprocessor):
     def __init__(self):
-        AbstractPostprocessor.__init__()
+        AbstractPostprocessor.__init__(self)
         self.populationTotal = None
         self.femaleRatio = None
 
     def setup(self, thePopulationTotal, theFemaleRatio):
-        AbstractPostprocessor.setup()
+        AbstractPostprocessor.setup(self)
         if self.populationTotal is not None or self.femaleRatio is not None:
             self.raiseError('clear needs to be called before setup')
         self.populationTotal = thePopulationTotal
         self.femaleRatio = theFemaleRatio
 
     def process(self):
-        AbstractPostprocessor.process()
+        AbstractPostprocessor.process(self)
         if self.populationTotal is None or self.femaleRatio is None:
             self.raiseError('setup needs to be called before process')
         self._calculateFemales()
         self._calculateFemaleWeeklyHygenePacks()
-        self._clear()
 
     def clear(self):
-        AbstractPostprocessor.clear()
+        AbstractPostprocessor.clear(self)
         self.populationTotal = None
         self.femaleRatio = None
 
@@ -56,13 +55,15 @@ class GenderPostprocessor(AbstractPostprocessor):
     def _calculateFemales(self):
         myName = self.tr('Females count')
         myResult = self.populationTotal * self.femaleRatio
+        myResult = int(round(myResult))
         self._appendResult(myName, myResult)
 
     def _calculateFemaleWeeklyHygenePacks(self):
-        myName = self.tr('Females daily hygene packs')
+        myName = self.tr('Females weekly hygene packs')
         myMeta = {'description': 'Females hygene packs for weekly use'}
         #FIXME: (MB) include self.femaleRatio
         #weekly hygene packs =
         # affected pop * 0.3969 * week / intended day-of-use
         myResult = self.populationTotal * 0.3969 * (7 / 7)
+        myResult = int(round(myResult))
         self._appendResult(myName, myResult, myMeta)
