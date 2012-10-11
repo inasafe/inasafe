@@ -22,42 +22,55 @@ from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
 
 
-class GenderPostprocessor(AbstractPostprocessor):
+class AgePostprocessor(AbstractPostprocessor):
+    """
+    https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
+    Age structure:
+    0-14 years: 26.3% (male 944,987,919/female 884,268,378)
+    15-64 years: 65.9% (male 2,234,860,865/female 2,187,838,153)
+    65 years and over: 7.9% (male 227,164,176/female 289,048,221) (2011 est.)
+    """
+    YOUTH_RATIO = 0.263
+    ADULT_RATIO = 0.659
+    ELDERLY_RATIO = 0.079
+
     def __init__(self):
         AbstractPostprocessor.__init__(self)
         self.populationTotal = None
-        self.femaleRatio = None
 
-    def setup(self, thePopulationTotal, theFemaleRatio):
+    def setup(self, thePopulationTotal):
         AbstractPostprocessor.setup(self)
-        if self.populationTotal is not None or self.femaleRatio is not None:
+        if self.populationTotal is not None:
             self.raiseError('clear needs to be called before setup')
         self.populationTotal = thePopulationTotal
-        self.femaleRatio = theFemaleRatio
 
     def process(self):
         AbstractPostprocessor.process(self)
-        if self.populationTotal is None or self.femaleRatio is None:
+        if self.populationTotal is None:
             self.raiseError('setup needs to be called before process')
-        self._calculateFemales()
-        self._calculateFemaleWeeklyHygenePacks()
+        self._calculateYouth()
+        self._calculateAdult()
+        self._calculateElderly()
 
     def clear(self):
         AbstractPostprocessor.clear(self)
         self.populationTotal = None
-        self.femaleRatio = None
 
-    def _calculateFemales(self):
-        myName = self.tr('Females count')
-        myResult = self.populationTotal * self.femaleRatio
+    def _calculateYouth(self):
+        myName = self.tr('Youth count')
+        myResult = self.populationTotal * self.YOUTH_RATIO
         myResult = int(round(myResult))
         self._appendResult(myName, myResult)
 
-    def _calculateFemaleWeeklyHygenePacks(self):
-        myName = self.tr('Females weekly hygene packs')
-        myMeta = {'description': 'Females hygene packs for weekly use'}
-        #weekly hygene packs =
-        # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        myResult = self.populationTotal * self.femaleRatio * 0.7937 * (7 / 7)
+    def _calculateAdult(self):
+        myName = self.tr('Adult count')
+        myResult = self.populationTotal * self.ADULT_RATIO
         myResult = int(round(myResult))
-        self._appendResult(myName, myResult, myMeta)
+        self._appendResult(myName, myResult)
+
+    def _calculateElderly(self):
+        myName = self.tr('Elderly count')
+        myResult = self.populationTotal * self.ELDERLY_RATIO
+        myResult = int(round(myResult))
+        self._appendResult(myName, myResult)
+
