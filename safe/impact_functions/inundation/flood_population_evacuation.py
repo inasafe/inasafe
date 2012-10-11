@@ -26,7 +26,8 @@ class FloodEvacuationFunction(FunctionProvider):
     """
 
     title = tr('Need evacuation')
-    parameters = {'thresholds': [0.3, 0.5, 1.0]}
+    parameters = {'thresholds': [0.3, 0.5, 1.0],
+                  'postprocessors': ['Gender', 'Age']}
 
     def run(self, layers):
         """Risk plugin for flood population evacuation
