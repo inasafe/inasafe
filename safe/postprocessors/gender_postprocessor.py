@@ -18,7 +18,7 @@ __date__ = '10/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe_qgis.postprocessors.abstract_postprocessor import (
+from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
 
 

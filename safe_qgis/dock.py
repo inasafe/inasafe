@@ -80,7 +80,7 @@ from safe_qgis.configurable_impact_functions_dialog import (
    ConfigurableImpactFunctionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
-from safe_qgis.postprocessors.gender_postprocessor import GenderPostprocessor
+from safe.postprocessors.gender_postprocessor import GenderPostprocessor
 
 
 # Don't remove this even if it is flagged as unused by your ide
