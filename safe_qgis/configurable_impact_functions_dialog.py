@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import ast
 import sys
-from PyQt4 import (QtGui, QtCore, QtWebKit)
+from PyQt4 import (QtGui, QtCore)
 from configurable_impact_functions_dialog_base import (
             Ui_configurableImpactFunctionsDialogBase)
 
@@ -76,6 +76,7 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         tKey.replace('_', ' ')
         tKey.capitalize()
         label.setText(tKey)
+        label.setToolTip(type(data))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
                                         QtGui.QFormLayout.LabelRole, label)
         lineEdit = QtGui.QLineEdit(self.formLayoutWidget)
@@ -92,7 +93,6 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
                           'modified are:').arg(impactFunctionName)
         label = self.impFuncConfLabel
         label.setText(myText)
-        #self.displayHtml(QtCore.QString(str(myHTML)))
 
     def accept(self):
         """Override the default accept function
