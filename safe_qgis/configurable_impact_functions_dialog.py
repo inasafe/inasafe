@@ -77,6 +77,8 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         tKey.capitalize()
         label.setText(tKey)
         label.setToolTip(str(type(data)))
+        self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
+                                        QtGui.QFormLayout.LabelRole, label)
         lineEdit = QtGui.QLineEdit(self.formLayoutWidget)
         lineEdit.setText(str(data))
         lineEdit.setObjectName(_fromUtf8(key + 'LineEdit'))
