@@ -81,12 +81,12 @@ class ITBFatalityFunction(FunctionProvider):
 
     parameters = dict(x=0.62275231, y=8.03314466,  # Model coefficients
                       # Rates of people displaced for each MMI level
-                      displacement_rate={1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0,
-                                         7: 0.1, 8: 0.5, 9: 0.75, 10: 1.0},
+                      displacement_rate={1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
+                                         7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0},
                       # Threshold below which layer should be transparent
                       tolerance=0.01,
                       calculate_displaced_people=True)
-    title = tr('Die')
+    title = tr('Die or be displaced')
 
     def run(self, layers):
         """Indonesian Earthquake Fatality Model
@@ -118,7 +118,7 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Extract data grids
         H = intensity.get_data()   # Ground Shaking
-        P = population.get_data()  # Population Density
+        P = population.get_data(scaling=True)  # Population Density
 
         # Calculate population affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
@@ -149,6 +149,10 @@ class ITBFatalityFunction(FunctionProvider):
                 msg = 'mmi = %i, I = %s, Error msg: %s' % (mmi, str(I), str(e))
                 raise InaSAFEError(msg)
 
+            # Adjust displaced people to disregard fatalities.
+            # Set to zero if there are more fatalities than displaced.
+            D =  numpy.where(D > F, D - F, 0)
+
             # Sum up numbers for map
             R += F   # Fatalities
             #R += D   # Displaced
@@ -174,23 +178,8 @@ class ITBFatalityFunction(FunctionProvider):
         displaced = int(round(numpy.nansum(number_of_displaced.values())
                               / 1000)) * 1000
 
-        # Compute test number of people displaced
-        # FIXME (Ole): Just a temporary measure to check...
-        displaced_test = 0
-        for mmi in mmi_range:
-            displaced_test += displacement_rate[mmi] * number_of_exposed[mmi]
-        displaced_test = int(round(displaced_test / 1000)) * 1000
-
-        msg = 'Displaced = %i, test = %i' % (displaced, displaced_test)
-        if displaced != displaced_test:
-            raise Exception(msg)
-
         # Generate impact report
         table_body = [question]
-                    #TableRow([tr('Groundshaking (MMI)'),
-                    #          tr('# people impacted')],
-                    #          header=True)]
-
         # Table of people exposed to each shake level
         # NOTE (Ole): I have commented this out for the time being.
         # as not needed. However, had to modify unit test.
@@ -223,14 +212,59 @@ class ITBFatalityFunction(FunctionProvider):
         table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
 
+
+        # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
+        rice = displaced * 2.8
+        drinking_water = displaced * 17.5
+        water = displaced * 67
+        family_kits = displaced / 5
+        toilets = displaced / 20
+
+        # Generate impact report for the pdf map
+        table_body = [question,
+                      TableRow([tr('Fatalities'),
+                                '%i' % fatalities],
+                               header=True),
+                      TableRow([tr('People displaced'),
+                                '%i' % displaced],
+                               header=True),
+                      TableRow(tr('Map shows density estimate of '
+                                  'displaced population')),
+                      TableRow([tr('Needs per week'), tr('Total')],
+                               header=True),
+                      [tr('Rice [kg]'), int(rice)],
+                      [tr('Drinking Water [l]'), int(drinking_water)],
+                      [tr('Clean Water [l]'), int(water)],
+                      [tr('Family Kits'), int(family_kits)],
+                      [tr('Toilets'), int(toilets)]]
+        impact_table = Table(table_body).toNewlineFreeString()
+
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         if fatalities > 0:
             table_body.append(tr('Are there enough victim identification '
                                  'units available for %i people?') %
                                  fatalities)
         if displaced > 0:
-            table_body.append(tr('Are there enough shelters available for %i '
-                                'people?') % displaced)
+            table_body.append(tr('Are there enough shelters and relief items '
+                                 'available for %i people?') % displaced)
+            table_body.append(TableRow(tr('If yes, where are they located and '
+                                          'how will we distribute them?')))
+            table_body.append(TableRow(tr('If no, where can we obtain '
+                                          'additional relief items from and '
+                                          'how will we transport them?')))
+
+        # Extend impact report for on-screen display
+        table_body.extend([TableRow(tr('Notes'), header=True),
+                           tr('Total population: %i') % total,
+                           tr('People are considered to be displaced if '
+                              'they experience and survive a shake level'
+                              'of more than 5 on the MMI scale '),
+                           tr('Minimum needs are defined in BNPB '
+                             'regulation 7/2008')])
+
+        impact_summary = Table(table_body).toNewlineFreeString()
+        map_title = tr('People in need of evacuation')
+
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Fatality model is from '
@@ -270,7 +304,7 @@ class ITBFatalityFunction(FunctionProvider):
                              'total_fatalities': fatalities,
                              'impact_table': impact_table,
                              'map_title': map_title},
-                   name=tr('Estimated fatalities'),
+                   name=tr('Estimated displaced population'),
                    style_info=style_info)
 
         # Maybe return a shape file with contours instead
