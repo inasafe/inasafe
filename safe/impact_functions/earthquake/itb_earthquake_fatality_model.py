@@ -151,11 +151,10 @@ class ITBFatalityFunction(FunctionProvider):
 
             # Adjust displaced people to disregard fatalities.
             # Set to zero if there are more fatalities than displaced.
-            D =  numpy.where(D > F, D - F, 0)
+            D = numpy.where(D > F, D - F, 0)
 
             # Sum up numbers for map
-            R += F   # Fatalities
-            #R += D   # Displaced
+            R += D   # Displaced
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
@@ -212,7 +211,6 @@ class ITBFatalityFunction(FunctionProvider):
         table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
 
-
         # Calculate estimated needs based on BNPB Perka 7/2008 minimum bantuan
         rice = displaced * 2.8
         drinking_water = displaced * 17.5
@@ -264,7 +262,6 @@ class ITBFatalityFunction(FunctionProvider):
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in need of evacuation')
-
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Fatality model is from '

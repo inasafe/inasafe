@@ -4,7 +4,7 @@ from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
-from safe.common.dynamic_translations import names as internationalised_values
+#from safe.common.dynamic_translations import names as internationalised_values
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
@@ -27,8 +27,6 @@ class FloodRoadImpactFunction(FunctionProvider):
         """Flood impact to buildings (e.g. from Open Street Map)
         """
 
-        threshold = 1.0  # Flood threshold [m]
-
         # Extract data
         H = get_hazard_layer(layers)    # Depth
         E = get_exposure_layer(layers)  # Building locations
@@ -41,14 +39,13 @@ class FloodRoadImpactFunction(FunctionProvider):
         I = assign_hazard_values_to_exposure_data(H, E)
 
         # Extract relevant exposure data
-        attribute_names = I.get_attribute_names()
+        #attribute_names = I.get_attribute_names()
         attributes = I.get_data()
         N = len(I)
 
         # Calculate road impact
         count = 0
-        roads = {}
-        flooded_distance = 0
+        #flooded_distance = 0
         for i in range(N):
             # Use interpolated polygon attribute
             atts = attributes[i]
@@ -87,7 +84,7 @@ class FloodRoadImpactFunction(FunctionProvider):
                                header=True),
                       TableRow([tr('All'), count, N])]
         impact_summary = Table(table_body).toNewlineFreeString()
-        impact_table = impact_summary
+        #impact_table = impact_summary
         map_title = tr('Roads inundated')
 
         # Create style
