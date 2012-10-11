@@ -73,8 +73,8 @@ class ConfigurableImpactFunctionsDialog(QtGui.QDialog,
         label = QtGui.QLabel(self.formLayoutWidget)
         label.setObjectName(_fromUtf8(key + "Label"))
         tKey = key
-        tKey.replace('_', ' ')
-        tKey.capitalize()
+        tKey = tKey.replace('_', ' ')
+        tKey = tKey.capitalize()
         label.setText(tKey)
         label.setToolTip(str(type(data)))
         self.editableImpactFunctionsFormLayout.setWidget(self.formItemCounters,
