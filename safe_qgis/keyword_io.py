@@ -141,7 +141,10 @@ class KeywordIO(QObject):
         Raises:
             None
         """
-        myKeywords = self.readKeywords(theLayer)
+        try:
+            myKeywords = self.readKeywords(theLayer)
+        except HashNotFoundException:
+            myKeywords = {}
         myKeywords.update(theKeywords)
         self.writeKeywords(theLayer, myKeywords)
 
