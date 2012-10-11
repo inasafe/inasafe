@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import temp_dir
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __date__ = '10/01/2011'
@@ -21,10 +19,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import sys
 import os
+import logging
 
 # Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(pardir)
+#pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+#sys.path.append(pardir)
 
 from PyQt4 import QtGui
 from qgis.core import (QgsSymbol,
@@ -32,7 +31,7 @@ from qgis.core import (QgsSymbol,
                        QgsRectangle,
                        QgsComposerPicture)
 from qgis.gui import QgsMapCanvasLayer
-
+from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       assertHashForFile,
                                       hashForFile,
@@ -41,14 +40,8 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       setJakartaGeoExtent)
 from safe_qgis.map import Map
 
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
-
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class MapTest(unittest.TestCase):
@@ -61,8 +54,8 @@ class MapTest(unittest.TestCase):
 
     def test_inasafeMap(self):
         """Test making a pdf using the Map class."""
-        myLayer, myType = loadLayer('test_shakeimpact.shp')
-        del myType
+        LOGGER.info('Testing inasafeMap')
+        myLayer, _ = loadLayer('test_shakeimpact.shp')
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
         myMap = Map(IFACE)
@@ -70,25 +63,35 @@ class MapTest(unittest.TestCase):
         CANVAS.setExtent(myRect)
         CANVAS.refresh()
         myMap.setImpactLayer(myLayer)
-        myPath = os.path.join(temp_dir(), 'outCustom.pdf')
-        if os.path.exists(myPath):
-            os.remove(myPath)
+        myPath = unique_filename(prefix='map',
+                                 suffix='.qpt',
+                                 dir=temp_dir('test'))
         myMap.makePdf(myPath)
+        LOGGER.debug(myPath)
         assert os.path.exists(myPath)
-        # ,, note:: Template writing is experimental
-        myMap.writeTemplate(os.path.join(temp_dir(), 'template.qpt'))
+        # .. note:: Template writing is experimental
+        myPath = unique_filename(prefix='template',
+                                    suffix='.qpt',
+                                    dir=temp_dir('test'))
+        myMap.writeTemplate(myPath)
+        LOGGER.debug(myPath)
         #os.remove(myPath)
+        QGISAPP.exec_()
 
     def test_getLegend(self):
         """Getting a legend for a generic layer works."""
+        LOGGER.debug('test_getLegend called')
         myLayer, myType = loadLayer('test_shakeimpact.shp')
         del myType
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         assert myMap.layer is not None
         myLegend = myMap.getLegend()
-        myPath = os.path.join(temp_dir(), 'getLegend.png')
+        myPath = unique_filename(prefix='getLegend',
+                                 suffix='.png',
+                                 dir=temp_dir('test'))
         myLegend.save(myPath, 'PNG')
+        LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
@@ -102,6 +105,7 @@ class MapTest(unittest.TestCase):
                             '57da6f81b4a55507e1bed0b73423244b',  # wVistaSP2-32
                             '']
         assertHashesForFile(myExpectedHashes, myPath)
+        LOGGER.debug('test_getLegend done')
 
     def test_getVectorLegend(self):
         """Getting a legend for a vector layer works."""
@@ -110,8 +114,11 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getVectorLegend()
-        myPath = os.path.join(temp_dir(), 'getVectorLegend.png')
+        myPath = unique_filename(prefix='getVectorLegend',
+                                 suffix='.png',
+                                 dir=temp_dir('test'))
         myMap.legend.save(myPath, 'PNG')
+        LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
@@ -135,8 +142,11 @@ class MapTest(unittest.TestCase):
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myMap.getRasterLegend()
-        myPath = os.path.join(temp_dir(), 'getRasterLegend.png')
+        myPath = unique_filename(prefix='getRasterLegend',
+                                 suffix='.png',
+                                 dir=temp_dir('test'))
         myMap.legend.save(myPath, 'PNG')
+        LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
@@ -167,8 +177,11 @@ class MapTest(unittest.TestCase):
                                 theMax=2,
                                 theCategory=None,
                                 theLabel='Foo')
-        myPath = os.path.join(temp_dir(), 'addSymbolToLegend.png')
+        myPath = unique_filename(prefix='addSymblToLegend',
+                                 suffix='.png',
+                                 dir=temp_dir('test'))
         myMap.legend.save(myPath, 'PNG')
+        LOGGER.debug(myPath)
         myExpectedHash = '1234'
         assertHashForFile(myExpectedHash, myPath)
 
@@ -190,8 +203,11 @@ class MapTest(unittest.TestCase):
                                theMax=None,
                                theCategory=None,
                                theLabel='foo')
-        myPath = os.path.join(temp_dir(), 'addClassToLegend.png')
+        myPath = unique_filename(prefix='addClassToLegend',
+                                 suffix='.png',
+                                 dir=temp_dir('test'))
         myMap.legend.save(myPath, 'PNG')
+        LOGGER.debug(myPath)
         # As we have discovered, different versions of Qt and
         # OS platforms cause different output, so hashes are a list
         # of 'known good' renders.
@@ -256,8 +272,11 @@ class MapTest(unittest.TestCase):
                                     myPixmap.height(),
                                     myExpectedHeight)
         assert myPixmap.height() == myExpectedHeight
-        myPath = os.path.join(temp_dir(), 'renderImpactTable.png')
+        myPath = unique_filename(prefix='impactTable',
+                                 suffix='.png',
+                                 dir=temp_dir('test'))
         myPixmap.save(myPath, 'PNG')
+        LOGGER.debug(myPath)
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
 
@@ -265,19 +284,19 @@ class MapTest(unittest.TestCase):
         """Test that load template works"""
         #Use the template from our resources bundle
         myInPath = ':/plugins/inasafe/basic.qpt'
-        myLayer, myType = loadLayer('test_shakeimpact.shp')
-        del myType
+        myLayer, _ = loadLayer('test_shakeimpact.shp')
 
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
         myMap = Map(IFACE)
         setJakartaGeoExtent()
         myMap.setImpactLayer(myLayer)
-        myOutPath = os.path.join(temp_dir(), 'outTemplate.pdf')
-        if os.path.exists(myOutPath):
-            os.remove(myOutPath)
-        myMap.renderTemplate(myInPath, myOutPath)
-        assert os.path.exists(myOutPath)
+        myPath = unique_filename(prefix='outTemplate',
+                                    suffix='.pdf',
+                                    dir=temp_dir('test'))
+        LOGGER.debug(myPath)
+        myMap.renderTemplate(myInPath, myPath)
+        assert os.path.exists(myPath)
         #os.remove(myPath)
 
     def test_mmPointConversion(self):
@@ -299,8 +318,11 @@ class MapTest(unittest.TestCase):
         # sometimes spurious lines are drawn on the layout
         myMap = Map(IFACE)
         myMap.setupComposition()
-        myPdfPath = os.path.join(temp_dir(), 'outArtifactsTest.pdf')
-        myMap.setupPrinter(myPdfPath)
+        myPath = unique_filename(prefix='artifactsTest',
+                                    suffix='.pdf',
+                                    dir=temp_dir('test'))
+        myMap.setupPrinter(myPath)
+        LOGGER.debug(myPath)
 
         myPixmap = QtGui.QPixmap(10, 10)
         myPixmap.fill(QtGui.QColor(250, 250, 250))
@@ -324,7 +346,7 @@ class MapTest(unittest.TestCase):
 
         myMap.renderPrintout()
         myUnwantedHash = 'd05e9223d50baf8bb147475aa96d6ba3'
-        myHash = hashForFile(myPdfPath)
+        myHash = hashForFile(myPath)
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
         myMessage = 'Windows map render still draws with artifacts.'

@@ -441,34 +441,37 @@ class Map():
             None
         """
         LOGGER.debug('InaSAFE Map renderPrintout called')
-        myPainter = QtGui.QPainter(self.printer)
         self.composition.setPlotStyle(QgsComposition.Print)  # or preview
 
-        if self.composition.printAsRaster():
-            myWidth = (int)(self.pageDpi * self.pageWidth / 25.4)
-            myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
-            myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
-                                   QtGui.QImage.Format_ARGB32)
-            myImage.setDotsPerMeterX(self.pageDpi / 25.4 * 1000)
-            myImage.setDotsPerMeterY(self.pageDpi / 25.4 * 1000)
-            myImage.fill(0)
-            myImagePainter = QtGui.QPainter(myImage)
-            mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
-                                                   self.pageHeight)
-            myTargetArea = QtCore.QRectF(0, 0, myWidth, myHeight)
-            self.composition.render(myImagePainter, myTargetArea, mySourceArea)
-            myImagePainter.end()
-            myPainter.drawImage(myTargetArea, myImage, myTargetArea)
-        else:
-            #Each composer element will be rendered as its own layer in the pdf
-            myPaperRectMM = self.printer.pageRect(QtGui.QPrinter.Millimeter)
-            myPaperRectPx = self.printer.pageRect(QtGui.QPrinter.DevicePixel)
-            self.composition.render(myPainter, myPaperRectPx, myPaperRectMM)
+        # NOTE: we ignore self.composition.printAsRaster() and always rasterise
+        myWidth = (int)(self.pageDpi * self.pageWidth / 25.4)
+        myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
+        myImage = QtGui.QImage(QtCore.QSize(myWidth, myHeight),
+                               QtGui.QImage.Format_ARGB32)
+        myImage.setDotsPerMeterX(self.pageDpi / 25.4 * 1000)
+        myImage.setDotsPerMeterY(self.pageDpi / 25.4 * 1000)
+        myImage.fill(0)
+        myImagePainter = QtGui.QPainter(myImage)
+        mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
+                                               self.pageHeight)
+        myTargetArea = QtCore.QRectF(0, 0, myWidth, myHeight)
+        self.composition.render(myImagePainter, myTargetArea, mySourceArea)
+        myImagePainter.end()
+        myImageFile = unique_filename(suffix='.png',dir=temp_dir())
+        myImage.save(myImageFile)
 
-        myPainter.end()
+
+        myImageTag = ('<img src="%s"></img>' %
+                      QtCore.QUrl(myImageFile).toLocalFile())
+        LOGGER.info('Image tag is %s' % myImageTag)
+        #myPainter = QtGui.QPainter(self.printer)
+        #myPainter.drawImage(myTargetArea, myImage, myTargetArea)
+        #myPainter.end()
         # Now draw any additional tabular data
-        self.printer.newPage()
+        #self.printer.newPage()
         myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
+        # Put the map image before the table
+        myHtml = myImageTag + myHtml
         self.htmlToPrinter(myHtml)
 
 
@@ -1106,11 +1109,11 @@ class Map():
         #                       self.printWebPage())
         self.htmlPrintedFlag = False
 
-        #myFilePath = unique_filename(suffix='.html', dir=temp_dir())
-        #LOGGER.debug('Html written to %s' % myFilePath)
-        #myFile = file(myFilePath, 'wt')
-        #myFile.writelines(myHtml)
-        #myFile.close()
+        myFilePath = unique_filename(suffix='.html', dir=temp_dir())
+        LOGGER.debug('Html written to %s' % myFilePath)
+        myFile = file(myFilePath, 'wt')
+        myFile.writelines(myHtml)
+        myFile.close()
         #self.webView.load(QtCore.QUrl(myFilePath))
         self.webView.setHtml(myHtml)
         myTimeOut = 10
