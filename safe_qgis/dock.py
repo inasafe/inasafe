@@ -19,18 +19,15 @@ __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-__type__ = 'alpha'  # beta, final etc will be shown in dock title
+__type__ = 'final'  # beta, final etc will be shown in dock title
 
-import numpy
 import os
+import numpy
+import logging
+
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSlot
-from safe_qgis.dock_base import Ui_DockBase
 
-from safe_qgis.help import Help
-from safe_qgis.utilities import (getExceptionWithStacktrace,
-                                 getWGS84resolution,
-                                 logOnQgsMessageLog)
 from qgis.core import (QgsMapLayer,
                        QgsVectorLayer,
                        QgsRasterLayer,
@@ -41,6 +38,14 @@ from qgis.core import (QgsMapLayer,
                        QgsFeature,
                        QgsRectangle)
 from qgis.analysis import QgsZonalStatistics
+
+# TODO: Rather impor via safe_interface.py TS
+from safe.api import write_keywords, read_keywords, ReadLayerError
+
+from safe_qgis.dock_base import Ui_DockBase
+from safe_qgis.help import Help
+from safe_qgis.utilities import (getExceptionWithStacktrace,
+                                 getWGS84resolution)
 from safe_qgis.impact_calculator import ImpactCalculator
 from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
@@ -57,28 +62,20 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
-from safe.api import write_keywords, read_keywords, ReadLayerError
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
                                  setRasterStyle,
                                  qgisVersion)
-from safe_qgis.configurable_impact_functions_dialog import\
-   ConfigurableImpactFunctionsDialog
-
+from safe_qgis.configurable_impact_functions_dialog import (
+   ConfigurableImpactFunctionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources  # pylint: disable=W0611
 
-#see if we can import pydev - see development docs for details
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Dock(QtGui.QDockWidget, Ui_DockBase):
@@ -1073,7 +1070,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Need to work out what exceptions we will catch here, though.
         except:  # pylint: disable=W0702
             myMessage = self.tr('Could not remove the unneded fields')
-            logOnQgsMessageLog(myMessage)
+            LOGGER.debug(myMessage)
         del toDel, vProvider, vFields
 
         writeKeywordsToFile(clippedAggregationLayerPath, {'title': lName})
@@ -1098,7 +1095,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         """
         #TODO implement polygon to polygon aggregation (dissolve,
         # line in polygon, point in polygon)
-        logOnQgsMessageLog('Vector aggregation not implemented yet. Called on'
+        LOGGER.debug('Vector aggregation not implemented yet. Called on'
                            ' %s' % myQgisImpactLayer.name())
         return
 
@@ -1224,8 +1221,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         try:
             keywords = read_keywords(myKeywordFilePath)
-        except Exception:  # FIXME: Which exceptions?
+        # pylint: disable=W0703
+        except Exception:
             keywords = dict()
+        # pylint: disable=W0703
 
         if ('category' in keywords and
             keywords['category'] == 'postprocessing' and
@@ -1273,12 +1272,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #there is no usable attribute, use None
         if len(fields) == 0:
             aggrAttribute = None
-            logOnQgsMessageLog(
+            LOGGER.debug(
                 'there is no usable attribute, use None')
         #there is only one usable attribute, use it
         elif len(fields) == 1:
             aggrAttribute = fields[0]
-            logOnQgsMessageLog('there is only one usable attribute, '
+            LOGGER.debug('there is only one usable attribute, '
                                'use it: ' + str(aggrAttribute))
         #there are multiple usable attribute, prompt for an answer
         elif len(fields) > 1:
@@ -1303,16 +1302,18 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 keywords = read_keywords(myKeywordFilePath)
                 try:
                     aggrAttribute = keywords['aggregation attribute']
-                    logOnQgsMessageLog('User selected: ' + str(aggrAttribute) +
+                    LOGGER.debug('User selected: ' + str(aggrAttribute) +
                                        ' as aggregation attribute')
-                except Exception:  # FIXME: Which exceptions?
-                    logOnQgsMessageLog('User Accepted but did not select a '
+                # pylint: disable=W0703
+                except Exception:
+                    LOGGER.debug('User Accepted but did not select a '
                                        'value. Using default : '
                                        + str(aggrAttribute) +
                                        ' as aggregation attribute')
+                # pylint: disable=W0703
             else:
                 # The user cancelled, use the first attribute as default
-                logOnQgsMessageLog('User cancelled, using default: '
+                LOGGER.debug('User cancelled, using default: '
                                    + str(aggrAttribute) +
                                    ' as aggregation attribute')
 
@@ -1436,7 +1437,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             del self.helpDialog
         self.helpDialog = Help(theParent=self.iface.mainWindow(),
                                theContext='dock')
-        self.helpDialog.showMe()
 
     def showBusy(self, theTitle=None, theMessage=None, theProgress=0):
         """A helper function to indicate the plugin is processing.

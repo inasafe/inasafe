@@ -172,7 +172,6 @@ class ImpactFunctionsDoc(QtGui.QDialog, Ui_ImpactFunctionsDocBase):
         if self.helpDialog:
             del self.helpDialog
         self.helpDialog = Help(self, 'impact_functions')
-        self.helpDialog.showMe()
 
     def htmlHeader(self):
         """Get a standard html header for wrapping content in."""

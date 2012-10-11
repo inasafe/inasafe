@@ -18,6 +18,7 @@ __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import os
 import sys
 import traceback
 import logging
@@ -25,6 +26,7 @@ import math
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import QCoreApplication
+
 from qgis.core import (QGis,
                        QgsRasterLayer,
                        QgsMapLayer,
@@ -37,11 +39,13 @@ from qgis.core import (QGis,
                        QgsColorRampShader,
                        QgsRasterTransparency,
                        )
-from safe_qgis.exceptions import StyleError
 
-# Do not remove this even if it is marked as unused by your IDE
-# resources are used by htmlfooter and header the comment will mark it unused
-# for pylint
+from safe_interface import temp_dir
+from safe_qgis.exceptions import StyleError, MethodUnavailableError
+
+#do not remove this even if it is marked as unused by your IDE
+#resources are used by htmlfooter and header the comment will mark it unused
+#for pylint
 import safe_qgis.resources  # pylint: disable=W0611
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -117,7 +121,7 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
         myRegistry = QgsSymbolLayerV2Registry.instance()
         if myGeometryType == QGis.Point:
             myMetadata = myRegistry.symbolLayerMetadata('SimpleMarker')
-            # Note that you can get a list of available layer properties
+            # note that you can get a list of available layer properties
             # that you can set by doing e.g.
             # QgsSimpleMarkerSymbolLayerV2.properties()
             mySymbolLayer = myMetadata.createSymbolLayer({'color_border':
@@ -130,7 +134,7 @@ def setVectorStyle(theQgisVectorLayer, theStyle):
                                                           myColourString})
             mySymbol.changeSymbolLayer(0, mySymbolLayer)
         else:
-            # For lines we do nothing special as the property setting
+            # for lines we do nothing special as the property setting
             # below should give us what we require.
             pass
 
@@ -510,20 +514,164 @@ def qgisVersion():
     myVersion = int(myVersion)
     return myVersion
 
-try:
-    # Available from qgis 1.8
-    from qgis.core import QgsMessageLog  # pylint: disable=E0611
-except ImportError:
 
-    # Define vanilla version
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        print (str(msg), tag, level)
-else:
+# TODO: move this to its own file? TS
+class QgsLogHandler(logging.Handler):
+    """A logging handler that will log messages to the QGIS logging console."""
 
-    # Use QGIS message log from versions >= 1.8
-    def logOnQgsMessageLog(msg, tag='inaSAFE', level=0):
-        QgsMessageLog.logMessage(str(msg), tag, level)
+    def __init__(self, level=logging.NOTSET):
+        logging.Handler.__init__(self)
 
+    def emit(self, theRecord):
+        """Try to log the message to QGIS if available, otherwise do nothing.
+
+        Args:
+            theRecord: logging record containing whatever info needs to be
+                logged.
+        Returns:
+            None
+        Raises:
+            None
+        """
+        try:
+            #available from qgis 1.8
+            from qgis.core import QgsMessageLog
+            # Check logging.LogRecord properties for lots of other goodies
+            # like line number etc. you can get from the log message.
+            QgsMessageLog.logMessage(theRecord.getMessage(), 'InaSAFE', 0)
+
+        except MethodUnavailableError:
+            pass
+
+
+def addLoggingHanderOnce(theLogger, theHandler):
+    """A helper to add a handler to a logger, ensuring there are no duplicates.
+
+    Args:
+        * theLogger: logging.logger instance
+        * theHandler: logging.Handler instance to be added. It will not be
+            added if an instance of that Handler subclass already exists.
+
+    Returns:
+        bool: True if the logging handler was added
+
+    Raises:
+        None
+    """
+    myClassName = theHandler.__class__.__name__
+    for myHandler in theLogger.handlers:
+        if myHandler.__class__.__name__ == myClassName:
+            return False
+
+    theLogger.addHandler(theHandler)
+    return True
+
+
+def setupLogger():
+    """Run once when the module is loaded and enable logging
+
+    Args: None
+
+    Returns: None
+
+    Raises: None
+
+    Borrowed heavily from this:
+    http://docs.python.org/howto/logging-cookbook.html
+
+    Use this to first initialise the logger (see safe/__init__.py)::
+
+       from safe_qgis import utilities
+       utilities.setupLogger()
+
+    You would typically only need to do the above once ever as the
+    safe modle is initialised early and will set up the logger
+    globally so it is available to all packages / subpackages as
+    shown below.
+
+    In a module that wants to do logging then use this example as
+    a guide to get the initialised logger instance::
+
+       # The LOGGER is intialised in utilities.py by init
+       import logging
+       LOGGER = logging.getLogger('InaSAFE')
+
+    Now to log a message do::
+
+       LOGGER.debug('Some debug message')
+
+    .. note:: The file logs are written to the inasafe user tmp dir e.g.:
+       /tmp/inasafe/23-08-2012/timlinux/logs/inasafe.log
+
+    """
+    myLogger = logging.getLogger('InaSAFE')
+    myLogger.setLevel(logging.DEBUG)
+    myDefaultHanderLevel = logging.DEBUG
+    # create formatter that will be added to the handlers
+    myFormatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    # create syslog handler which logs even debug messages
+    # (ariel): Make this log to /var/log/safe.log instead of
+    #               /var/log/syslog
+    # (Tim) Ole and I discussed this - we prefer to log into the
+    # user's temporary working directory.
+    myTempDir = temp_dir('logs')
+    myFilename = os.path.join(myTempDir, 'inasafe.log')
+    myFileHandler = logging.FileHandler(myFilename)
+    myFileHandler.setLevel(myDefaultHanderLevel)
+    # create console handler with a higher log level
+    myConsoleHandler = logging.StreamHandler()
+    myConsoleHandler.setLevel(logging.ERROR)
+
+    myQgisHandler = QgsLogHandler()
+    myFileHandler.setLevel(myDefaultHanderLevel)
+
+    # TODO: User opt in before we enable email based logging.
+    # Email handler for errors
+    #myEmailServer = 'localhost'
+    #myEmailServerPort = 25
+    #mySenderAddress = 'logs@inasafe.org'
+    #myRecipientAddresses = ['tim@linfiniti.com']
+    #mySubject = 'Error'
+    #myEmailHandler = logging.handlers.SMTPHandler(
+    #    (myEmailServer, myEmailServerPort),
+    #                                      mySenderAddress,
+    #                                      myRecipientAddresses,
+    #                                      mySubject)
+    #myEmailHandler.setLevel(logging.ERROR)
+
+    # Sentry handler - this is optional hence the localised import
+    # It will only log if pip install raven. If raven is available
+    # logging messages will be sent to http://sentry.linfiniti.com
+    # We will log exceptions only there. Only if you have the env var
+    # 'INSAFE_SENTRY=1' present (value can be anything) will this be enabled.
+    if 'INASAFE_SENTRY' in os.environ:
+        try:
+            from raven.handlers.logging import SentryHandler
+            from raven import Client
+
+            myClient = Client('http://5aee75e47c6740af842b3ef138d3ad33:16160af'
+                              'd794847b98a34e1fde0ed5a8d@sentry.linfiniti.com/'
+                              '4')
+            mySentryHandler = SentryHandler(myClient)
+            mySentryHandler.setFormatter(myFormatter)
+            mySentryHandler.setLevel(logging.ERROR)
+            if addLoggingHanderOnce(myLogger, mySentryHandler):
+                myLogger.debug('Sentry logging enabled')
+        except ImportError:
+            myLogger.debug('Sentry logging disabled')
+
+    #Set formatters
+    myFileHandler.setFormatter(myFormatter)
+    myConsoleHandler.setFormatter(myFormatter)
+    #myEmailHandler.setFormatter(myFormatter)
+    myQgisHandler.setFormatter(myFormatter)
+
+    # add the handlers to the logger
+    addLoggingHanderOnce(myLogger, myFileHandler)
+    addLoggingHanderOnce(myLogger, myConsoleHandler)
+    #addLoggingHanderOnce(myLogger, myEmailHandler)
+    addLoggingHanderOnce(myLogger, myQgisHandler)
 
 #def copyInMemory(vLayer, copyName=''):
 #    """Return a memory copy of a layer

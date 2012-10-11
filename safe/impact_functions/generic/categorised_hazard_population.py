@@ -4,7 +4,7 @@ from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question, get_function_title
 from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 
 
@@ -26,7 +26,7 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
     :detail The Detail
     """
 
-    title = _('Be impacted')
+    title = tr('Be impacted')
 
     def run(self, layers):
         """Plugin for impact of population as derived by categorised hazard
@@ -93,37 +93,37 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
 
         # Generate impact report for the pdf map
         table_body = [question,
-                      TableRow([_('People impacted '),
+                      TableRow([tr('People impacted '),
                                 '%i' % total_impact],
                                header=True),
-                      TableRow([_('People in high hazard area '),
+                      TableRow([tr('People in high hazard area '),
                                 '%i' % high],
                                header=True),
-                      TableRow([_('People in medium hazard area '),
+                      TableRow([tr('People in medium hazard area '),
                                 '%i' % medium],
                                header=True),
-                      TableRow([_('People in low hazard area'),
+                      TableRow([tr('People in low hazard area'),
                                 '%i' % low],
                                header=True)]
 
-##                    TableRow([_('Needs per week'), _('Total')],
+##                    TableRow([tr('Needs per week'), tr('Total')],
 ##                               header=True),
-##                      [_('Rice [kg]'), int(rice)],
-##                      [_('Drinking Water [l]'), int(drinking_water)],
-##                      [_('Clean Water [l]'), int(water)],
-##                      [_('Family Kits'), int(family_kits)],
-##                      [_('Toilets'), int(toilets)]]
+##                      [tr('Rice [kg]'), int(rice)],
+##                      [tr('Drinking Water [l]'), int(drinking_water)],
+##                      [tr('Clean Water [l]'), int(water)],
+##                      [tr('Family Kits'), int(family_kits)],
+##                      [tr('Toilets'), int(toilets)]]
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
-        table_body.extend([TableRow(_('Notes'), header=True),
-                           _('Map shows population density in high or medium '
+        table_body.extend([TableRow(tr('Notes'), header=True),
+                           tr('Map shows population density in high or medium '
                              'hazard area'),
-                           _('Total population: %i') % total])
-##                           _('Minimum needs are defined in BNPB '
+                           tr('Total population: %i') % total])
+##                           tr('Minimum needs are defined in BNPB '
 ##                             'regulation 7/2008')])
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = _('People in high hazard areas')
+        map_title = tr('People in high hazard areas')
 
         # Generare 8 equidistant classes across the range of flooded population
         # 8 is the number of classes in the predefined flood population style
@@ -134,17 +134,17 @@ class CategorisedHazardPopulationImpactFunction(FunctionProvider):
         # Modify labels in existing flood style to show quantities
         style_classes = style_info['style_classes']
 
-        style_classes[1]['label'] = _('Low [%i people/cell]') % classes[1]
-        style_classes[4]['label'] = _('Medium [%i people/cell]') % classes[4]
-        style_classes[7]['label'] = _('High [%i people/cell]') % classes[7]
+        style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
+        style_classes[4]['label'] = tr('Medium [%i people/cell]') % classes[4]
+        style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
 
-        style_info['legend_title'] = _('Population Density')
+        style_info['legend_title'] = tr('Population Density')
 
         # Create raster object and return
         R = Raster(M,
                    projection=inundation.get_projection(),
                    geotransform=inundation.get_geotransform(),
-                   name=_('Population which %s') % get_function_title(self),
+                   name=tr('Population which %s') % get_function_title(self),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},

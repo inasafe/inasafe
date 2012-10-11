@@ -17,6 +17,7 @@ Developer Documentation Contents:
    platform_linux
    platform_windows
    coding_standards
+   logging
    i18n
    version_control
    maintaining_documentation

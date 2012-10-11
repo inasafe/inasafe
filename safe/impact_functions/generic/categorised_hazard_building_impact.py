@@ -2,7 +2,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
@@ -27,7 +27,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'ICLASS'
-    title = _('Be affected')
+    title = tr('Be affected')
 
     def run(self, layers):
         """Impact plugin for hazard impact
@@ -97,28 +97,28 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         # Create impact report
         # Generate impact summary
         table_body = [question,
-                      TableRow([_('Category'), _('Affected')],
+                      TableRow([tr('Category'), tr('Affected')],
                                header=True),
-                      TableRow([_('High'), count2]),
-                      TableRow([_('Medium'), count1]),
-                      TableRow([_('Low'), count0]),
-                      TableRow([_('All'), N])]
+                      TableRow([tr('High'), count2]),
+                      TableRow([tr('Medium'), count1]),
+                      TableRow([tr('Low'), count0]),
+                      TableRow([tr('All'), N])]
 
-        table_body.append(TableRow(_('Notes'), header=True))
-        table_body.append(_('Categorised hazard has only 3'
+        table_body.append(TableRow(tr('Notes'), header=True))
+        table_body.append(tr('Categorised hazard has only 3'
                             ' classes, high, medium and low.'))
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
-        map_title = _('Categorised hazard impact on buildings')
+        map_title = tr('Categorised hazard impact on buildings')
 
         #FIXME it would be great to do categorized rather than grduated
         # Create style
-        style_classes = [dict(label=_('Low'), min=1, max=1,
+        style_classes = [dict(label=tr('Low'), min=1, max=1,
                               colour='#1EFC7C', transparency=0, size=1),
-                         dict(label=_('Medium'), min=2, max=2,
+                         dict(label=tr('Medium'), min=2, max=2,
                               colour='#FFA500', transparency=0, size=1),
-                         dict(label=_('High'), min=3, max=3,
+                         dict(label=tr('High'), min=3, max=3,
                               colour='#F31A1C', transparency=0, size=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
