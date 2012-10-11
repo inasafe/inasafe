@@ -23,7 +23,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.numerics import lognormal_cdf
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.mappings import osm2padang, sigab2padang
@@ -56,7 +56,7 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
                     datatype in ['osm', 'itb', 'sigab']
     """
 
-    title = _('Be damaged depending on building type')
+    title = tr('Be damaged depending on building type')
 
     def run(self, layers):
         """Risk plugin for Padang building survey
@@ -121,33 +121,33 @@ class PadangEarthquakeBuildingDamageFunction(FunctionProvider):
 
         # Generate impact report
         table_body = [question,
-                      TableRow([_('Buildings'), _('Total')],
+                      TableRow([tr('Buildings'), tr('Total')],
                                header=True),
-                      TableRow([_('All'), N]),
-                      TableRow([_('No damage'), count_none]),
-                      TableRow([_('Low damage'), count_low]),
-                      TableRow([_('Medium damage'), count_medium]),
-                      TableRow([_('High damage'), count_high])]
+                      TableRow([tr('All'), N]),
+                      TableRow([tr('No damage'), count_none]),
+                      TableRow([tr('Low damage'), count_low]),
+                      TableRow([tr('Medium damage'), count_medium]),
+                      TableRow([tr('High damage'), count_high])]
 
-        table_body.append(TableRow(_('Notes'), header=True))
-        table_body.append(_('Levels of impact are defined by post 2009 '
+        table_body.append(TableRow(tr('Notes'), header=True))
+        table_body.append(tr('Levels of impact are defined by post 2009 '
                             'Padang earthquake survey conducted by Geoscience '
                             'Australia and Institute of Teknologi Bandung.'))
-        table_body.append(_('Unreinforced masonry is assumed where no '
+        table_body.append(tr('Unreinforced masonry is assumed where no '
                             'structural information is available.'))
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
-        map_title = _('Earthquake damage to buildings')
+        map_title = tr('Earthquake damage to buildings')
 
         # Create style
-        style_classes = [dict(label=_('No damage'), min=0, max=10,
+        style_classes = [dict(label=tr('No damage'), min=0, max=10,
                               colour='#00ff00', transparency=1),
-                         dict(label=_('Low damage'), min=10, max=33,
+                         dict(label=tr('Low damage'), min=10, max=33,
                               colour='#ffff00', transparency=1),
-                         dict(label=_('Medium damage'), min=33, max=66,
+                         dict(label=tr('Medium damage'), min=33, max=66,
                               colour='#ffaa00', transparency=1),
-                         dict(label=_('High damage'), min=66, max=100,
+                         dict(label=tr('High damage'), min=66, max=100,
                               colour='#ff0000', transparency=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)

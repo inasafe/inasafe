@@ -28,7 +28,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.storage.vector import Vector
 from safe.common.numerics import lognormal_cdf
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.utilities import verify
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
@@ -81,7 +81,7 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
                     datatype in ['osm', 'itb', 'sigab']
     """
 
-    title = _('Be damaged depending on building type')
+    title = tr('Be damaged depending on building type')
 
     def run(self, layers):
         """Risk plugin for Padang building survey
@@ -179,33 +179,33 @@ class ITBEarthquakeBuildingDamageFunction(FunctionProvider):
                     '   <tr><td>%s (10-33%%)&#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s (33-66%%)&#58;</td><td>%i</td></tr>'
                     '   <tr><td>%s (66-100%%)&#58;</td><td>%i</td></tr>'
-                    '</table></font>' % (_('Buildings'), _('Total'),
-                                    _('All'), N,
-                                    _('No damage'), count0,
-                                    _('Low damage'), count10,
-                                    _('Medium damage'), count25,
-                                    _('High damage'), count50))
+                    '</table></font>' % (tr('Buildings'), tr('Total'),
+                                    tr('All'), N,
+                                    tr('No damage'), count0,
+                                    tr('Low damage'), count10,
+                                    tr('Medium damage'), count25,
+                                    tr('High damage'), count50))
         impact_summary += '<br>'  # Blank separation row
-        impact_summary += '<b>' + _('Assumption') + '&#58;</b><br>'
+        impact_summary += '<b>' + tr('Assumption') + '&#58;</b><br>'
         # This is the proper text:
-        #_('Levels of impact are defined by post 2009 '
+        #tr('Levels of impact are defined by post 2009 '
         #  'Padang earthquake survey conducted by Geoscience '
         #  'Australia and Institute of Teknologi Bandung.'))
-        #_('Unreinforced masonry is assumed where no '
+        #tr('Unreinforced masonry is assumed where no '
         #  'structural information is available.'))
-        impact_summary += _('Levels of impact are defined by post 2009 '
+        impact_summary += tr('Levels of impact are defined by post 2009 '
                             'Padang earthquake survey conducted by Geoscience '
                             'Australia and Institute of Teknologi Bandung.')
-        impact_summary += _('Unreinforced masonry is assumed where no '
+        impact_summary += tr('Unreinforced masonry is assumed where no '
                             'structural information is available.')
         # Create style
-        style_classes = [dict(label=_('No damage'), min=0, max=10,
+        style_classes = [dict(label=tr('No damage'), min=0, max=10,
                               colour='#00ff00', transparency=1),
-                         dict(label=_('Low damage'), min=10, max=33,
+                         dict(label=tr('Low damage'), min=10, max=33,
                               colour='#ffff00', transparency=1),
-                         dict(label=_('Medium damage'), min=33, max=66,
+                         dict(label=tr('Medium damage'), min=33, max=66,
                               colour='#ffaa00', transparency=1),
-                         dict(label=_('High damage'), min=66, max=100,
+                         dict(label=tr('High damage'), min=66, max=100,
                               colour='#ff0000', transparency=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
