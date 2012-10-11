@@ -200,6 +200,18 @@ class KeywordIO(QObject):
                    (theSourceLayer.source(), myNewDestination, str(e)))
             raise Exception(myMessage)
         return
+
+    def clearKeywords(self, theLayer):
+        """convenience method to clear a files keywords
+
+        Args:
+            * theLayer - A QGIS QgsMapLayer instance.
+        Returns:
+            None.
+        Raises:
+            None
+        """
+        self.writeKeywords(theLayer, dict())
 # methods below here should be considered private
 
     def defaultKeywordDbPath(self):
