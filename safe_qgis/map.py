@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import temp_dir
-
 __author__ = 'tim@linfiniti.com'
 __version__ = '0.5.0'
 __revision__ = '$Format:%H$'
@@ -20,6 +18,8 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import time
+import logging
 
 from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
 from qgis.core import (QgsComposition,
@@ -33,7 +33,7 @@ from qgis.core import (QgsComposition,
                        QgsPoint,
                        QgsRectangle)
 from qgis.gui import QgsComposerView
-
+from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.exceptions import (LegendLayerException,
                                   KeywordNotFoundException)
 from safe_qgis.keyword_io import KeywordIO
@@ -41,14 +41,7 @@ from safe_qgis.utilities import htmlHeader, htmlFooter, qgisVersion
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
-
-try:
-    from pydevd import *  # pylint: disable=F0401
-    print 'Remote debugging is enabled.'
-    DEBUG = True
-except ImportError:
-    print 'Debugging was disabled'
-
+LOGGER = logging.getLogger('InaSAFE')
 
 class Map():
     """A class for creating a map."""
@@ -62,6 +55,7 @@ class Map():
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        LOGGER.debug('InaSAFE Map class initialised')
         self.iface = theIface
         self.layer = theIface.activeLayer()
         self.keywordIO = KeywordIO()
@@ -83,6 +77,8 @@ class Map():
         self.mapWidth = self.mapHeight
         self.disclaimer = self.tr('InaSAFE has been jointly developed by'
                                   ' BNPB, AusAid & the World Bank')
+        self.htmlPrintedFlag = False
+        self.webView = QtWebKit.QWebView()
 
     def tr(self, theString):
         """We implement this ourself since we do not inherit QObject.
@@ -178,6 +174,7 @@ class Map():
             return self.getVectorLegend()
         else:
             return self.getRasterLegend()
+
         return self.legend
 
     def getVectorLegend(self):
@@ -443,6 +440,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map renderPrintout called')
         myPainter = QtGui.QPainter(self.printer)
         self.composition.setPlotStyle(QgsComposition.Print)  # or preview
 
@@ -466,7 +464,14 @@ class Map():
             myPaperRectMM = self.printer.pageRect(QtGui.QPrinter.Millimeter)
             myPaperRectPx = self.printer.pageRect(QtGui.QPrinter.DevicePixel)
             self.composition.render(myPainter, myPaperRectPx, myPaperRectMM)
+
         myPainter.end()
+        # Now draw any additional tabular data
+        self.printer.newPage()
+        myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
+        self.htmlToPrinter(myHtml)
+
+
 
     def drawLogo(self, theTopOffset):
         """Add a picture containing the logo to the map top left corner
@@ -595,8 +600,8 @@ class Map():
         return myComposerMap
 
     def drawGraticuleMask(self, theTopOffset):
-        """A helper funtion to mask out graticule labels on the right side
-           by overpainting a white rectangle with white border on them.
+        """A helper function to mask out graticule labels on the right side
+           by over painting a white rectangle with white border on them.
 
         Args:
             theTopOffset - vertical offset at which the map should be drawn
@@ -889,7 +894,8 @@ class Map():
         myActualWidthPX = thePixmap.width()
         myScaleFactor = myDesiredWidthPX / myActualWidthPX
 
-        print myScaleFactor, myActualWidthPX, myDesiredWidthPX
+        LOGGER.debug('%s %s %s' % (
+            myScaleFactor, myActualWidthPX, myDesiredWidthPX))
         myTransform = QtGui.QTransform()
         myTransform.scale(myScaleFactor, myScaleFactor)
         myTransform.rotate(0.5)
@@ -1024,13 +1030,13 @@ class Map():
         """
         try:
             myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
-            return self.renderHtml(myHtml, 156)
+            return self.renderHtmlToPixmap(myHtml, 156)
         except KeywordNotFoundException:
             return None
         except Exception:
             return None
 
-    def renderHtml(self, theHtml, theWidthMM):
+    def renderHtmlToPixmap(self, theHtml, theWidthMM):
         """Render some HTML to a pixmap.
 
         Args:
@@ -1062,29 +1068,76 @@ class Map():
         myFooter = self.htmlFooter()
         myHtml = myHeader + theHtml + myFooter
         myFrame.setHtml(myHtml)
-        #file('/tmp/report.html', 'wt').write(myHtml).close()
-        #print '\n\n\nPage:\n', myFrame.toHtml()
-        #mySize = QtCore.QSize(600, 200)
+
         mySize = myFrame.contentsSize()
         mySize.setWidth(myWidthPx)
         myPage.setViewportSize(mySize)
-        # Disabled for now but please keep this as we may want to render using
-        # a QImage due to device constraints (eg. headless server)
-        myQImageFlag = False
-        if myQImageFlag:
-            myImage = QtGui.QImage(mySize, QtGui.QImage.Format_ARGB32)
-            myImage.fill(QtGui.QColor(255, 255, 255))
-            myPainter = QtGui.QPainter(myImage)
-            myFrame.render(myPainter)
-            myPainter.end()
-            return myImage
-        else:  # render with qpixmap rather
-            myPixmap = QtGui.QPixmap(mySize)
-            myPixmap.fill(QtGui.QColor(255, 255, 255))
-            myPainter = QtGui.QPainter(myPixmap)
-            myFrame.render(myPainter)
-            myPainter.end()
-            return myPixmap
+
+        myPixmap = QtGui.QPixmap(mySize)
+        myPixmap.fill(QtGui.QColor(255, 255, 255))
+        myPainter = QtGui.QPainter(myPixmap)
+        myFrame.render(myPainter)
+        myPainter.end()
+        return myPixmap
+
+    def htmlToPrinter(self, theHtml):
+        """Render an html snippet into the printer, paginating as needed.
+
+        Args:
+            theHtml: str A string containing an html snippet. It will have a
+                header and footer appended to it in order to make it a valid
+                html document. The header will also apply the bootstrap theme
+                to the document.
+        Returns:
+            None
+
+        Raises:
+            None
+        """
+        LOGGER.info('InaSAFE Map htmlToPrinter called')
+        myHeader = self.htmlHeader()
+        myFooter = self.htmlFooter()
+        myHtml = myHeader + theHtml + myFooter
+
+        self.webView.loadFinished.connect(self.printWebPage)
+
+        #QtCore.QObject.connect(self.webView,
+        #                       QtCore.SIGNAL("loadFinished(bool)"),
+        #                       self.printWebPage())
+        self.htmlPrintedFlag = False
+
+        #myFilePath = unique_filename(suffix='.html', dir=temp_dir())
+        #LOGGER.debug('Html written to %s' % myFilePath)
+        #myFile = file(myFilePath, 'wt')
+        #myFile.writelines(myHtml)
+        #myFile.close()
+        #self.webView.load(QtCore.QUrl(myFilePath))
+        self.webView.setHtml(myHtml)
+        myTimeOut = 10
+        myCounter = 0
+        mySleepPeriod = 1
+        while not self.htmlPrintedFlag and myCounter < myTimeOut:
+            # Block until the event loop is done printing the page
+            myCounter += 1
+            time.sleep(mySleepPeriod)
+        if not self.htmlPrintedFlag:
+            LOGGER.error('Failed to make a print out')
+        return self.htmlPrintedFlag
+
+    def printWebPage(self):
+        """Slot called when the page is loaded and ready for printing.
+
+        Args: None
+        Returns: None
+        Raises: None
+        """
+        self.htmlPrintedFlag = True
+        LOGGER.debug('printWebPage slot called')
+        self.webView.print_(self.printer)
+        QtCore.QObject.disconnect(self.webView,
+                               QtCore.SIGNAL("loadFinished(bool)"),
+                               self.printWebPage)
+
 
     def pointsToMM(self, thePoints):
         """Convert measurement in points to one in mm.
