@@ -76,7 +76,7 @@ class MapTest(unittest.TestCase):
         myMap.writeTemplate(myPath)
         LOGGER.debug(myPath)
         #os.remove(myPath)
-        QGISAPP.exec_()
+        #QGISAPP.exec_()
 
     def test_getLegend(self):
         """Getting a legend for a generic layer works."""

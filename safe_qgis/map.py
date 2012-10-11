@@ -157,6 +157,7 @@ class Map():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
+        LOGGER.debug('InaSAFE Map getLegend called')
         if self.layer is None:
             myMessage = self.tr('Unable to make a legend when map generator '
                                 'has no layer set.')
@@ -189,6 +190,7 @@ class Map():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
+        LOGGER.debug('InaSAFE Map getVectorLegend called')
         if not self.layer.isUsingRendererV2():
             myMessage = self.tr('A legend can only be generated for '
                                 'vector layers that use the "new symbology" '
@@ -237,6 +239,7 @@ class Map():
             An InvalidLegendLayer will be raised if a legend cannot be
             created from the layer.
         """
+        LOGGER.debug('InaSAFE Map getRasterLegend called')
         # test if QGIS 1.8.0 or older
         # see issue #259
         if qgisVersion() <= 10800:
@@ -289,6 +292,7 @@ class Map():
             Throws an exception if the class could not be added for
             some reason..
         """
+        LOGGER.debug('InaSAFE Map addSymbolToLegend called')
         myColour = theSymbol.color()
         self.addClassToLegend(myColour,
                               theMin=theMin,
@@ -321,6 +325,7 @@ class Map():
             Throws an exception if the class could not be added for
             some reason..
         """
+        LOGGER.debug('InaSAFE Map addClassToLegend called')
         self.extendLegend()
         myOffset = self.legend.height() - self.legendIncrement
         myPainter = QtGui.QPainter(self.legend)
@@ -362,6 +367,7 @@ class Map():
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        LOGGER.debug('InaSAFE Map extendLegend called')
         if self.legend is None:
             self.legend = QtGui.QPixmap(300, 80)
             self.legend.fill(QtGui.QColor(255, 255, 255))
@@ -398,6 +404,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map setupComposition called')
         myCanvas = self.iface.mapCanvas()
         myRenderer = myCanvas.mapRenderer()
         self.composition = QgsComposition(myRenderer)
@@ -419,6 +426,7 @@ class Map():
         #
         # Create a printer device (we are 'printing' to a pdf
         #
+        LOGGER.debug('InaSAFE Map setupPrinter called')
         self.printer = QtGui.QPrinter()
         self.printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
         self.printer.setOutputFileName(theFilename)
@@ -506,6 +514,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawTitle called')
         myFontSize = 14
         myFontWeight = QtGui.QFont.Bold
         myItalicsFlag = False
@@ -541,6 +550,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawMap called')
         myMapWidth = self.mapWidth
         myComposerMap = QgsComposerMap(self.composition,
                                        self.pageMargin,
@@ -613,6 +623,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawGraticuleMask called')
         myLeftOffset = self.pageMargin + self.mapWidth
         myRect = QgsComposerShape(myLeftOffset + 0.5,
                                   theTopOffset,
@@ -642,6 +653,7 @@ class Map():
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        LOGGER.debug('InaSAFE Map drawNativeScaleBar called')
         myScaleBar = QgsComposerScaleBar(self.composition)
         myScaleBar.setStyle('Numeric')  # optionally modify the style
         myScaleBar.setComposerMap(theComposerMap)
@@ -675,6 +687,7 @@ class Map():
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        LOGGER.debug('InaSAFE Map drawScaleBar called')
         myCanvas = self.iface.mapCanvas()
         myRenderer = myCanvas.mapRenderer()
         #
@@ -819,6 +832,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawImpactTitle called')
         myTitle = self.getMapTitle()
         if myTitle is None:
             myTitle = ''
@@ -857,6 +871,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawLegend called')
         self.getLegend()
         myPicture1 = QgsComposerPicture(self.composition)
         myLegendFile = os.path.join(temp_dir(), 'legend.png')
@@ -892,6 +907,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawPixmap called')
         myDesiredWidthMM = theWidthMM  # mm
         myDesiredWidthPX = self.mmToPoints(myDesiredWidthMM)
         myActualWidthPX = thePixmap.width()
@@ -918,6 +934,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawImpactTable called')
         # Draw the table
         myTable = QgsComposerPicture(self.composition)
         myImage = self.renderImpactTable()
@@ -946,6 +963,7 @@ class Map():
         Raises:
             None
         """
+        LOGGER.debug('InaSAFE Map drawDisclaimer called')
         myFontSize = 10
         myFontWeight = QtGui.QFont.Normal
         myItalicsFlag = True
@@ -980,6 +998,7 @@ class Map():
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        LOGGER.debug('InaSAFE Map makePdf called')
         self.setupComposition()
         self.setupPrinter(theFilename)
         # Keep track of our vertical positioning as we work our way down
@@ -1012,6 +1031,7 @@ class Map():
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        LOGGER.debug('InaSAFE Map getMapTitle called')
         try:
             myTitle = self.keywordIO.readKeywords(self.layer, 'map_title')
             return myTitle
@@ -1031,6 +1051,7 @@ class Map():
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        LOGGER.debug('InaSAFE Map renderImpactTable called')
         try:
             myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
             return self.renderHtmlToPixmap(myHtml, 156)
@@ -1053,6 +1074,7 @@ class Map():
         Raises:
             Any exceptions raised by the InaSAFE library will be propogated.
         """
+        LOGGER.debug('InaSAFE Map renderHtmlToPixmap called')
         # Using 150dpi as the baseline, work out a standard text size
         # multiplier so that page renders equally well at different print
         # resolutions.
