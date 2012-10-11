@@ -81,7 +81,7 @@ from safe_qgis.configurable_impact_functions_dialog import (
 from safe_qgis.keywords_dialog import KeywordsDialog
 
 from safe.postprocessors.gender_postprocessor import GenderPostprocessor
-
+from safe.postprocessors.age_postprocessor import AgePostprocessor
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -911,7 +911,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         QtCore.QObject.connect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.startPostproc)
+                               self.postprocess)
         QtGui.qApp.setOverrideCursor(
                 QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
@@ -963,7 +963,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # Hide hour glass
         self.hideBusy()
 
-    def startPostproc(self):
+    def postprocess(self):
         """
         Called on self.runner SIGNAL('done()') starts all postprocessing steps
         Args: None
@@ -971,8 +971,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: None
         """
         try:
+            myTitle = self.tr('Aggregating results...')
+            myMessage = self.tr('This may take a little while - we are '
+                                ' aggregating the hazards by %1').arg(
+                self.cboAggregation.currentText())
             myProgress = 88
-            self.aggregateResults(myProgress)
+            self.showBusy(myTitle, myMessage, myProgress)
+            self._aggregateResults()
+            self._startPostprocessors()
+            QtGui.qApp.restoreOverrideCursor()
         except Exception, e:
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
@@ -987,7 +994,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
     def initPostproc(self):
         """
         initializes and clears self.postprocOutput. needs to run at the
-         end of startPostproc
+         end of postprocess
 
         Returns: None
         """
@@ -997,7 +1004,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         # postprocessorname:'report string' pair
         self.postprocOutput = []
         self.postprocLayer = self.getPostprocLayer()
-        myCurrentFunction = self.getFunctionID()
+        myCurrentFunction = self.myFunction
         if (self.postprocLayer is not None and
             self.lastRunnedFunction != myCurrentFunction):
             self.keywordIO.clearKeywords(self.postprocLayer)
@@ -1024,26 +1031,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: a string concatenation of the list elements
         """
         return ' '.join(self.postprocOutput)
-
-    def aggregateResults(self, progress):
-        """
-        Aggregation postprocessing step, this delas with the gui stuff and
-        calls _aggregateResults to do the actual aggregation work
-        Args: progress %to show in the progressbar
-
-        Returns: None
-        """
-        myTitle = self.tr('Aggregating results...')
-        myMessage = self.tr('This may take a little while - we are '
-                            ' aggregating the hazards by %1').arg(
-                            self.cboAggregation.currentText())
-        myProgress = progress
-
-        self.showBusy(myTitle, myMessage, myProgress)
-        self._aggregateResults()
-        self._parseAggregationResults()
-        QtGui.qApp.restoreOverrideCursor()
-
 
     def _aggregateResults(self):
         """
@@ -1170,7 +1157,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 self.postprocLayer)
         return
 
-    def _parseAggregationResults(self):
+    def _startPostprocessors(self):
         myAttribute = self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']]
         if myAttribute is None:
             aggrAttrTitle = self.tr('Aggregation unit')
@@ -1183,7 +1170,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     '    <tr>'
                     '       <td colspan="100%">'
                     '         <strong>'
-                    + self.postprocLayer.name() +
+                    + self.tr('Detailed report') +
                     '         </strong>'
                     '       </td>'
                     '    </tr>'
@@ -1201,12 +1188,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     'HYGENE PACKS'
                     '      </th>'
                     '    </tr>')
-        #fill table
-        provider = self.postprocLayer.dataProvider()
-        allAttrs = provider.attributeIndexes()
-        # start data retreival: fetch no geometry and all attributes for each
-        # feature
-        provider.select(allAttrs, QgsRectangle(), False)
+
+        #instantiate postprocessors if they are requested by the function
+        myGenderPostprocessor = None
+        if 'Gender' in self.functionParams['postprocessors']:
+            myGenderPostprocessor = GenderPostprocessor()
+
+        myAgePostprocessor = None
+        if 'Age' in self.functionParams['postprocessors']:
+            myAgePostprocessor = AgePostprocessor()
 
         myNameFieldIndex = self.postprocLayer.fieldNameIndex(
             myAttribute)
@@ -1214,20 +1204,25 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         mySumFieldIndex = self.postprocLayer.fieldNameIndex(
             self.getAggregationFieldNameSum())
 
-        myFemRatioIsVariable = False
-        try:
-            myFemRatioField = self.postprocAttributes[self.defaults[
-                                                 'FEM_RATIO_ATTR_KEY']]
-            myFemRatioFieldIndex = self.postprocLayer.fieldNameIndex(
-                myFemRatioField)
-            myFemRatioIsVariable = True
+        if myGenderPostprocessor is not None:
+            myFemRatioIsVariable = False
+            try:
+                myFemRatioField = self.postprocAttributes[self.defaults[
+                                                     'FEM_RATIO_ATTR_KEY']]
+                myFemRatioFieldIndex = self.postprocLayer.fieldNameIndex(
+                    myFemRatioField)
+                myFemRatioIsVariable = True
 
-        except KeyError:
-            myFemRatio = self.keywordIO.readKeywords(self.postprocLayer,
-                self.defaults['FEM_RATIO_DEFAULT_KEY'])
+            except KeyError:
+                myFemRatio = self.keywordIO.readKeywords(self.postprocLayer,
+                    self.defaults['FEM_RATIO_DEFAULT_KEY'])
 
-
-        myPostrocessor = GenderPostprocessor()
+        #iterate features
+        provider = self.postprocLayer.dataProvider()
+        allAttrs = provider.attributeIndexes()
+        # start data retreival: fetch no geometry and all attributes for each
+        # feature
+        provider.select(allAttrs, QgsRectangle(), False)
         feat = QgsFeature()
         while provider.nextFeature(feat):
             attrMap = feat.attributeMap()
@@ -1239,13 +1234,23 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             aggrSum = attrMap[mySumFieldIndex].toString()
             aggrSum = int(round(float(aggrSum)))
 
-            if myFemRatioIsVariable:
-                myFemRatio, _ = attrMap[myFemRatioFieldIndex].toDouble()
+            if myGenderPostprocessor is not None:
+                if myFemRatioIsVariable:
+                    myFemRatio, _ = attrMap[myFemRatioFieldIndex].toDouble()
 
-            myPostrocessor.setup(aggrSum, myFemRatio)
-            myPostrocessor.process()
-            myResults = myPostrocessor.getResults()
-            myPostrocessor.clear()
+                myGenderPostprocessor.setup(aggrSum, myFemRatio)
+                myGenderPostprocessor.process()
+                myGenderResults = myGenderPostprocessor.getResults()
+                myGenderPostprocessor.clear()
+
+            if myAgePostprocessor is not None:
+                myAgePostprocessor.setup(aggrSum)
+                myAgePostprocessor.process()
+                myAgeResults = myAgePostprocessor.getResults()
+                myAgePostprocessor.clear()
+                LOGGER.debug(myAgeResults)
+
+            #FIXME hardcoded stuff assumes gender is on
             myHTML += ('    <tr>'
                         '      <td>'
                         + name +
@@ -1254,10 +1259,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         + str(aggrSum) +
                         '      </td>'
                         '      <td>'
-                        + str(myResults[self.tr('Females count')]['value']) +
+                        + str(myGenderResults[self.tr('Females count')]['value']) +
                         '      </td>'
                         '      <td>'
-                        + str(myResults[self.tr('Females weekly hygene packs')
+                        + str(myGenderResults[self.tr('Females weekly hygene packs')
                               ]['value']) +
                         '      </td>'
                         '    </tr>')
@@ -1533,7 +1538,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         if self.runner:
             QtCore.QObject.disconnect(self.runner,
                                QtCore.SIGNAL('done()'),
-                               self.startPostproc)
+                               self.postprocess)
             self.runner = None
 
         self.grpQuestion.setEnabled(True)
