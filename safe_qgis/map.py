@@ -37,7 +37,7 @@ from safe_qgis.exceptions import KeywordNotFoundException
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
 from safe_qgis.html_renderer import HtmlRenderer
-from safe_qgis.utilities import setupPrinter
+from safe_qgis.utilities import setupPrinter, pointsToMM, mmToPoints
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -620,8 +620,8 @@ class Map():
         myLegendFile = os.path.join(temp_dir(), 'legend.png')
         self.legend.save(myLegendFile, 'PNG')
         myPicture1.setPictureFile(myLegendFile)
-        myLegendHeight = self.pointsToMM(self.legend.height())
-        myLegendWidth = self.pointsToMM(self.legend.width())
+        myLegendHeight = pointsToMM(self.legend.height())
+        myLegendWidth = pointsToMM(self.legend.width())
         myPicture1.setItemPosition(self.pageMargin,
                                    theTopOffset,
                                    myLegendWidth,
@@ -652,7 +652,7 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map drawPixmap called')
         myDesiredWidthMM = theWidthMM  # mm
-        myDesiredWidthPX = self.mmToPoints(myDesiredWidthMM)
+        myDesiredWidthPX = mmToPoints(myDesiredWidthMM, self.pageDpi)
         myActualWidthPX = thePixmap.width()
         myScaleFactor = myDesiredWidthPX / myActualWidthPX
 

@@ -52,11 +52,14 @@ class HtmlRendererTest(unittest.TestCase):
         myHtml += '</table>'
         myPageDpi = 300
         myRenderer = HtmlRenderer(myPageDpi)
-        myPath = unique_filename(prefix='impactTable',
+        myPath = unique_filename(prefix='testHtmlTable',
                                  suffix='.pdf',
                                  dir=temp_dir('test'))
         LOGGER.debug(myPath)
-        myRenderer.htmlToPrinter(myHtml, myPath)
+        myPath = myRenderer.htmlToPrinter(myHtml, myPath)
+        assert myPath is not None
+        myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
+        assertHashForFile(myExpectedHash, myPath)
 
     def test_printImpactTable(self):
         """Test that we can render html from impact table keywords."""
@@ -67,7 +70,12 @@ class HtmlRendererTest(unittest.TestCase):
         assert myLayer.isValid(), myMessage
         myPageDpi = 300
         myHtmlRenderer = HtmlRenderer(myPageDpi)
-        myPath = myHtmlRenderer.printImpactTable(myLayer)
+        myPath = unique_filename(prefix='impactTable',
+                                 suffix='.pdf',
+                                 dir=temp_dir('test'))
+        myPath = myHtmlRenderer.printImpactTable(myLayer,
+                                                 theOutputFilePath=myPath)
+        assert myPath is not None
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
 

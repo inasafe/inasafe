@@ -36,6 +36,7 @@ from safe_qgis.utilities_test import (getQgisTestApp,
                                       hashForFile,
                                       loadLayer,
                                       setJakartaGeoExtent)
+from safe_qgis.utilities import setupPrinter
 from safe_qgis.map import Map
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
@@ -49,6 +50,9 @@ class MapTest(unittest.TestCase):
         myRegistry = QgsMapLayerRegistry.instance()
         myRegistry.removeAllMapLayers ()
 
+    def test_renderComposition(self):
+        """Test making a pdf of the map only."""
+        LOGGER.info('Testing renderComposition')
         myLayer, _ = loadLayer('test_shakeimpact.shp')
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
@@ -56,14 +60,8 @@ class MapTest(unittest.TestCase):
         myRect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
         CANVAS.setExtent(myRect)
         CANVAS.refresh()
-
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
-
-    def test_renderComposition(self):
-        """Test making a pdf of the map only."""
-        LOGGER.info('Testing renderComposition')
-
         myPath = myMap.renderComposition()
         LOGGER.debug(myPath)
         myMessage = 'Rendered output does not exist'
@@ -82,8 +80,7 @@ class MapTest(unittest.TestCase):
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""
-        myLayer, myType = loadLayer('test_floodimpact.tif')
-        del myType
+        myLayer, _ = loadLayer('test_floodimpact.tif')
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
         myTitle = myMap.getMapTitle()
@@ -96,10 +93,9 @@ class MapTest(unittest.TestCase):
         # TODO running OSM Buildngs with Pendudk Jakarta
         # wasthrowing an error when requesting map title
         # that this test wasnt replicating well
-        myLayer, myType = loadLayer('population_padang_1.asc')
-        del myType
+        myLayer, _ = loadLayer('population_padang_1.asc')
         myMap = Map(IFACE)
-        myMap.setImpactLayer(myLayer)
+        myMap.setImpactLayer(self.layer)
         myTitle = myMap.getMapTitle()
         myExpectedTitle = None
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
@@ -133,7 +129,7 @@ class MapTest(unittest.TestCase):
         myPath = unique_filename(prefix='artifactsTest',
                                     suffix='.pdf',
                                     dir=temp_dir('test'))
-        myMap.setupPrinter(myPath)
+        setupPrinter(myPath)
         LOGGER.debug(myPath)
 
         myPixmap = QtGui.QPixmap(10, 10)
@@ -156,7 +152,7 @@ class MapTest(unittest.TestCase):
             myWidthMM = 1
             myMap.drawPixmap(myPixmap, myWidthMM, i, i + 40)
 
-        myMap.renderCompleteReport()
+        myMap.renderComposition()
         myUnwantedHash = 'd05e9223d50baf8bb147475aa96d6ba3'
         myHash = hashForFile(myPath)
         # when this test no longer matches our broken render hash

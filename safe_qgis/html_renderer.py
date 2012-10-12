@@ -142,12 +142,15 @@ class HtmlRenderer():
         """Render an html snippet into the printer, paginating as needed.
 
         Args:
-            theHtml: str A string containing an html snippet. It will have a
+            * theHtml: str A string containing an html snippet. It will have a
                 header and footer appended to it in order to make it a valid
                 html document. The header will also apply the bootstrap theme
                 to the document.
+            * theOutputFilePath: str String containing a pdf file path that the
+                output will be written to.
         Returns:
-            None
+            str: The file path of the output pdf (which is the same as the
+                theOutputFilePath parameter if it was specified.
 
         Raises:
             None
@@ -157,17 +160,27 @@ class HtmlRenderer():
         myFooter = htmlFooter()
         myHtml = myHeader + theHtml + myFooter
         self.webView = QtWebKit.QWebView()
-        self.printer = setupPrinter(theOutputFilePath, )
+        if theOutputFilePath is None:
+            myFilePath = unique_filename(prefix='table',
+                                         suffix='.pdf',
+                                         dir=temp_dir())
+        else:
+            myFilePath = theOutputFilePath
 
+        self.printer = setupPrinter(myFilePath)
         self.webView.loadFinished.connect(self.printWebPage)
         self.htmlPrintedFlag = False
-        myFilePath = unique_filename(suffix='.html', dir=temp_dir())
-        LOGGER.debug('Html written to %s' % myFilePath)
-        myFile = file(myFilePath, 'wt')
+
+        # This is just for debugging
+        myHtmlFilePath = unique_filename(suffix='.html', dir=temp_dir())
+
+        LOGGER.debug('Html written to %s' % myHtmlFilePath)
+        myFile = file(myHtmlFilePath, 'wt')
         myFile.writelines(myHtml)
         myFile.close()
-        self.webView.load(QtCore.QUrl(myFilePath))
+        self.webView.load(QtCore.QUrl(myHtmlFilePath))
         #self.webView.setHtml(myHtml)
+        QtCore.QCoreApplication.processEvents()
         myTimeOut = 10
         myCounter = 0
         mySleepPeriod = 1
@@ -175,9 +188,12 @@ class HtmlRenderer():
             # Block until the event loop is done printing the page
             myCounter += 1
             time.sleep(mySleepPeriod)
+
         if not self.htmlPrintedFlag:
-            LOGGER.error('Failed to make a print out')
-        return self.htmlPrintedFlag
+            LOGGER.error('Failed to make a print out, forcing')
+            self.printWebPage()
+
+        return myFilePath
 
     def printWebPage(self):
         """Slot called when the page is loaded and ready for printing.
@@ -194,11 +210,19 @@ class HtmlRenderer():
                                   self.printWebPage)
 
     def printImpactTable(self, theLayer, theOutputFilePath=None):
-        """"""
+        """High level table generator to print layer keywords.
+
+        Args:
+            * theLayer: QgsMapLayer instance (required)
+
+        """
         myFilePath = theOutputFilePath
         if theOutputFilePath is None:
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
         myKeywordIO = KeywordIO()
         myHtml = myKeywordIO.readKeywords(theLayer, 'impact_table')
-        myFile = self.htmlToPrinter(myHtml, myFilePath)
-        return myFile
+        myFlag = self.htmlToPrinter(myHtml, myFilePath)
+        if not myFlag:
+            return None
+        else:
+            return myFilePath
