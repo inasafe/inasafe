@@ -80,8 +80,8 @@ from safe_qgis.configurable_impact_functions_dialog import (
    ConfigurableImpactFunctionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
-from safe.postprocessors.gender_postprocessor import GenderPostprocessor
-from safe.postprocessors.age_postprocessor import AgePostprocessor
+from safe.postprocessors import (AgePostprocessor,
+                                GenderPostprocessor)
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -1240,13 +1240,13 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
                 myGenderPostprocessor.setup(aggrSum, myFemRatio)
                 myGenderPostprocessor.process()
-                myGenderResults = myGenderPostprocessor.getResults()
+                myGenderResults = myGenderPostprocessor.results()
                 myGenderPostprocessor.clear()
 
             if myAgePostprocessor is not None:
                 myAgePostprocessor.setup(aggrSum)
                 myAgePostprocessor.process()
-                myAgeResults = myAgePostprocessor.getResults()
+                myAgeResults = myAgePostprocessor.results()
                 myAgePostprocessor.clear()
                 LOGGER.debug(myAgeResults)
 

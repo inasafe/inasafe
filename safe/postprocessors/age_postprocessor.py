@@ -41,36 +41,36 @@ class AgePostprocessor(AbstractPostprocessor):
     def setup(self, thePopulationTotal):
         AbstractPostprocessor.setup(self)
         if self.populationTotal is not None:
-            self.raiseError('clear needs to be called before setup')
+            self.raise_error('clear needs to be called before setup')
         self.populationTotal = thePopulationTotal
 
     def process(self):
         AbstractPostprocessor.process(self)
         if self.populationTotal is None:
-            self.raiseError('setup needs to be called before process')
-        self._calculateYouth()
-        self._calculateAdult()
-        self._calculateElderly()
+            self.raise_error('setup needs to be called before process')
+        self._calculate_youth()
+        self._calculate_adult()
+        self._calculate_elderly()
 
     def clear(self):
         AbstractPostprocessor.clear(self)
         self.populationTotal = None
 
-    def _calculateYouth(self):
+    def _calculate_youth(self):
         myName = self.tr('Youth count')
         myResult = self.populationTotal * self.YOUTH_RATIO
         myResult = int(round(myResult))
-        self._appendResult(myName, myResult)
+        self._append_result(myName, myResult)
 
-    def _calculateAdult(self):
+    def _calculate_adult(self):
         myName = self.tr('Adult count')
         myResult = self.populationTotal * self.ADULT_RATIO
         myResult = int(round(myResult))
-        self._appendResult(myName, myResult)
+        self._append_result(myName, myResult)
 
-    def _calculateElderly(self):
+    def _calculate_elderly(self):
         myName = self.tr('Elderly count')
         myResult = self.populationTotal * self.ELDERLY_RATIO
         myResult = int(round(myResult))
-        self._appendResult(myName, myResult)
+        self._append_result(myName, myResult)
 

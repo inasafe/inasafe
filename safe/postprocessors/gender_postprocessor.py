@@ -31,33 +31,33 @@ class GenderPostprocessor(AbstractPostprocessor):
     def setup(self, thePopulationTotal, theFemaleRatio):
         AbstractPostprocessor.setup(self)
         if self.populationTotal is not None or self.femaleRatio is not None:
-            self.raiseError('clear needs to be called before setup')
+            self.raise_error('clear needs to be called before setup')
         self.populationTotal = thePopulationTotal
         self.femaleRatio = theFemaleRatio
 
     def process(self):
         AbstractPostprocessor.process(self)
         if self.populationTotal is None or self.femaleRatio is None:
-            self.raiseError('setup needs to be called before process')
-        self._calculateFemales()
-        self._calculateFemaleWeeklyHygenePacks()
+            self.raise_error('setup needs to be called before process')
+        self._calculate_females()
+        self._calculate_female_weekly_hygene_packs()
 
     def clear(self):
         AbstractPostprocessor.clear(self)
         self.populationTotal = None
         self.femaleRatio = None
 
-    def _calculateFemales(self):
+    def _calculate_females(self):
         myName = self.tr('Females count')
         myResult = self.populationTotal * self.femaleRatio
         myResult = int(round(myResult))
-        self._appendResult(myName, myResult)
+        self._append_result(myName, myResult)
 
-    def _calculateFemaleWeeklyHygenePacks(self):
+    def _calculate_female_weekly_hygene_packs(self):
         myName = self.tr('Females weekly hygene packs')
         myMeta = {'description': 'Females hygene packs for weekly use'}
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
         myResult = self.populationTotal * self.femaleRatio * 0.7937 * (7 / 7)
         myResult = int(round(myResult))
-        self._appendResult(myName, myResult, myMeta)
+        self._append_result(myName, myResult, myMeta)

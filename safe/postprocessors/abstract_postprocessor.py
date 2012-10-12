@@ -18,9 +18,9 @@ __date__ = '10/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import QCoreApplication
 
-from safe_qgis.exceptions import PostprocessorError
+from safe.common.utilities import ugettext as tr # pylint: disable=W0611
+from safe.common.exceptions import PostprocessorError
 
 
 class AbstractPostprocessor():
@@ -29,36 +29,27 @@ class AbstractPostprocessor():
 
     def setup(self):
         if self.results is not None:
-            self.raiseError('clear needs to be called before setup')
+            self.raise_error('clear needs to be called before setup')
         self.results = {}
 
     def process(self):
         if self.results is None:
-            self.raiseError('setup needs to be called before process')
+            self.raise_error('setup needs to be called before process')
 
-    def getResults(self):
+    def results(self):
         return self.results
 
     def clear(self):
         self.results = None
 
-    def raiseError(self, theMessage=None):
+    def raise_error(self, theMessage=None):
         if theMessage is None:
             theMessage = 'Postprocessor error'
         raise PostprocessorError(theMessage)
 
-    def _appendResult(self, theName, theResult, theMetadata={}):
+    def _append_result(self, theName, theResult, theMetadata=None):
+        if theMetadata is None:
+            theMetadata = dict()
         self.results[theName] = {'value': theResult,
                                  'metadata': theMetadata}
 
-    def tr(self, theString):
-        """We implement this ourself since we do not inherit QObject.
-
-        Args:
-           theString - string for translation.
-        Returns:
-           Translated version of theString.
-        Raises:
-           no exceptions explicitly raised.
-        """
-        return QCoreApplication.translate('Plugin', theString)
