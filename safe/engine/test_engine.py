@@ -1038,8 +1038,6 @@ class Test_Engine(unittest.TestCase):
         # This was to debug this test failing under Windows
         I = interpolate_raster_vector_points(H, E)
         for feature in I.get_data():
-            print feature
-
             if (feature['LONGITUDE'] == 150.1787 and
                 feature['LATITUDE'] == -35.70413):
                 assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
