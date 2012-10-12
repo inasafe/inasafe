@@ -24,8 +24,8 @@ import logging
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from safe.common.utilities import verify
-from safe.common.dynamic_translations import names as internationalised_titles
+from safe.common.utilities import (verify,
+                                   ugettext as safe_tr)
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -354,8 +354,7 @@ class Vector(Layer):
             title = self.keywords['title']
 
             # Lookup internationalised title if available
-            if title in internationalised_titles:
-                title = internationalised_titles[title]
+            title = safe_tr(title)
 
             vectorname = title
         else:

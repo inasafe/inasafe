@@ -51,9 +51,9 @@ from safe_qgis.safe_interface import (availableFunctions,
                                       getFunctionTitle,
                                       getOptimalExtent,
                                       getBufferedExtent,
-                                      internationalisedNames,
                                       getSafeImpactFunctions,
-                                      writeKeywordsToFile)
+                                      writeKeywordsToFile,
+                                      safeTr)
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.clipper import clipLayer
 from safe_qgis.exceptions import (KeywordNotFoundException,
@@ -572,8 +572,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myLayer not in myCanvasLayers):
                 continue
 
-         # .. todo:: check raster is single band
-         #    store uuid in user property of list widget for layers
+        # .. todo:: check raster is single band
+        #    store uuid in user property of list widget for layers
 
             myName = myLayer.name()
             mySource = str(myLayer.id())
@@ -586,8 +586,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 myTitle = myName
             else:
                 # Lookup internationalised title if available
-                if myTitle in internationalisedNames:
-                    myTitle = internationalisedNames[myTitle]
+                myTitle = safeTr(myTitle)
             # Register title with layer
             if myTitle and self.setLayerNameFromTitleFlag:
                 myLayer.setLayerName(myTitle)
@@ -1272,8 +1271,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #there is no usable attribute, use None
         if len(fields) == 0:
             aggrAttribute = None
-            LOGGER.debug(
-                'there is no usable attribute, use None')
+            LOGGER.debug('there is no usable attribute, use None')
         #there is only one usable attribute, use it
         elif len(fields) == 1:
             aggrAttribute = fields[0]
@@ -1797,9 +1795,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                         myValue = myKeywords[myKeyword]
 
                         # Translate titles explicitly if possible
-                        if myKeyword == 'title' and \
-                                myValue in internationalisedNames:
-                            myValue = internationalisedNames[myValue]
+                        if myKeyword == 'title':
+                            myValue = safeTr(myValue)
 
                         # Add this keyword to report
                         myReport += ('<tr>'

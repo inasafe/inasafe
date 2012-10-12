@@ -32,8 +32,10 @@ from safe.impact_functions import get_admissible_plugins
 
 from safe.engine.core import calculate_impact
 
-from safe.common.dynamic_translations import names as internationalisedNames
 from safe.common.numerics import nanallclose
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
-from safe.common.utilities import VerificationError, temp_dir, unique_filename
+from safe.common.utilities import (VerificationError,
+                                   temp_dir,
+                                   unique_filename,
+                                   ugettext as safe_tr)
 # pylint: enable=W0611
