@@ -93,7 +93,6 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
             name_attribute = 'GUNUNG'  # As in e.g. BNPB hazard map
             attributes = H.get_data()
 
-
         # Get names of volcanos considered
         if name_attribute in H.get_attribute_names():
 
@@ -108,7 +107,6 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
             volcano_names = volcano_names[:-2]  # Strip trailing ', '
         else:
             volcano_names = tr('Not specified in data')
-
 
         if not category_title in H.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '

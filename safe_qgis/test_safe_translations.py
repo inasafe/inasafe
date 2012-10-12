@@ -24,10 +24,12 @@ from safe_interface import safeTr, getFunctionTitle, get_plugins
 class SafeTranslationsTest(unittest.TestCase):
 
     def setUp(self):
-        os.environ.__delitem__('LANG')
+        if 'LANG' in os.environ.iterkeys():
+            os.environ.__delitem__('LANG')
 
     def tearDown(self):
-        os.environ.__delitem__('LANG')
+        if 'LANG' in os.environ.iterkeys():
+            os.environ.__delitem__('LANG')
 
     def testDynamicTranslationFunctionTitle(self):
         """Test for dynamic translations for function title
