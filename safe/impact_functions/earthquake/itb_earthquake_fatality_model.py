@@ -179,19 +179,6 @@ class ITBFatalityFunction(FunctionProvider):
 
         # Generate impact report
         table_body = [question]
-        # Table of people exposed to each shake level
-        # NOTE (Ole): I have commented this out for the time being.
-        # as not needed. However, had to modify unit test.
-        #for mmi in mmi_range:
-        #    s = str(int(number_of_exposed[mmi])).rjust(10)
-        #    #print s, len(s)
-        #    row = TableRow([mmi, s],
-        #                   col_align=['right', 'right'])
-        #
-        #    # FIXME (Ole): Weirdly enough, the row object
-        #    # has align="right" in it, but it doesn't work
-        #    #print row
-        #    table_body.append(row)
 
         # Add total fatality estimate
         s = str(int(fatalities)).rjust(10)

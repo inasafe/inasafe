@@ -74,13 +74,13 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
 
             centers = H.get_geometry()
             attributes = H.get_data()
-            Z = make_circular_polygon(centers, radii, attributes=attributes)
-            Z.write_to_file('Marapi_evac_zone_%s.shp' % str(radii))  # To check
-            category_title = 'Radius'
-            H = Z
+            H = make_circular_polygon(centers, radii, attributes=attributes)
+            #H.write_to_file('Evac_zones_%s.shp' % str(radii))  # To check
 
-            #category_names = ['%s m' % x for x in radii]
+            category_title = 'Radius'
             category_names = radii
+
+            name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
         else:
             # Use hazard map
             category_title = 'KRB'
@@ -89,6 +89,26 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
             category_names = ['Kawasan Rawan Bencana III',
                               'Kawasan Rawan Bencana II',
                               'Kawasan Rawan Bencana I']
+
+            name_attribute = 'GUNUNG'  # As in e.g. BNPB hazard map
+            attributes = H.get_data()
+
+
+        # Get names of volcanos considered
+        if name_attribute in H.get_attribute_names():
+
+            D = {}
+            for att in H.get_data():
+                # Run through all polygons and get unique names
+                D[att[name_attribute]] = None
+
+            volcano_names = ''
+            for name in D:
+                volcano_names += '%s, ' % name
+            volcano_names = volcano_names[:-2]  # Strip trailing ', '
+        else:
+            volcano_names = tr('Not specified in data')
+
 
         if not category_title in H.get_attribute_names():
             msg = ('Hazard data %s did not contain expected '
@@ -135,37 +155,39 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
 ##        if evacuated > 1000:
 ##            evacuated = evacuated // 1000 * 1000
 
-##        # Calculate estimated needs based on BNPB Perka
-##        # 7/2008 minimum bantuan
-##        rice = evacuated * 2.8
-##        drinking_water = evacuated * 17.5
-##        water = evacuated * 67
-##        family_kits = evacuated / 5
-##        toilets = evacuated / 20
+        # Calculate estimated needs based on BNPB Perka
+        # 7/2008 minimum bantuan
+        rice = evacuated * 2.8
+        drinking_water = evacuated * 17.5
+        water = evacuated * 67
+        family_kits = evacuated / 5
+        toilets = evacuated / 20
 
         # Generate impact report for the pdf map
         table_body = [question,
+                      TableRow([tr('Volcanos considered'),
+                                '%s' % volcano_names],
+                               header=True),
                       TableRow([tr('People needing evacuation'),
                                 '%i' % evacuated],
                                header=True),
                       TableRow([tr('Category'), tr('Total'), tr('Cumulative')],
                                header=True)]
-
         cum = 0
         for name in category_names:
             pop = categories[name]
             cum += pop
             table_body.append(TableRow([name, int(pop), int(cum)]))
 
-        table_body.append(TableRow(tr('Map shows population affected in '
-                                     'each of volcano hazard polygons.')))
-##                      TableRow([tr('Needs per week'), tr('Total')],
-##                               header=True),
-##                      [tr('Rice [kg]'), int(rice)],
-##                      [tr('Drinking Water [l]'), int(drinking_water)],
-##                      [tr('Clean Water [l]'), int(water)],
-##                      [tr('Family Kits'), int(family_kits)],
-##                      [tr('Toilets'), int(toilets)]]
+        table_body.extend([TableRow(tr('Map shows population affected in '
+                                       'each of volcano hazard polygons.')),
+                           TableRow([tr('Needs per week'), tr('Total')],
+                                    header=True),
+                           [tr('Rice [kg]'), int(rice)],
+                           [tr('Drinking Water [l]'), int(drinking_water)],
+                           [tr('Clean Water [l]'), int(water)],
+                           [tr('Family Kits'), int(family_kits)],
+                           [tr('Toilets'), int(toilets)]])
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
