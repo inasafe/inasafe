@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'dock_base.ui'
 #
-# Created: Wed Oct  3 17:56:22 2012
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Thu Oct 11 17:11:14 2012
+#      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -27,6 +27,11 @@ class Ui_DockBase(object):
         self.gridLayout.setContentsMargins(3, 0, 3, 3)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.grpQuestion = QtGui.QGroupBox(self.dockWidgetContents)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.grpQuestion.sizePolicy().hasHeightForWidth())
+        self.grpQuestion.setSizePolicy(sizePolicy)
         self.grpQuestion.setObjectName(_fromUtf8("grpQuestion"))
         self.gridLayout_3 = QtGui.QGridLayout(self.grpQuestion)
         self.gridLayout_3.setContentsMargins(0, 6, 0, 0)
@@ -64,7 +69,8 @@ class Ui_DockBase(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.toolFunctionOptions.sizePolicy().hasHeightForWidth())
         self.toolFunctionOptions.setSizePolicy(sizePolicy)
-        self.toolFunctionOptions.setMinimumSize(QtCore.QSize(32, 32))
+        self.toolFunctionOptions.setMinimumSize(QtCore.QSize(35, 30))
+        self.toolFunctionOptions.setMaximumSize(QtCore.QSize(35, 30))
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/plugins/inasafe/edit.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.toolFunctionOptions.setIcon(icon1)
