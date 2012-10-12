@@ -18,8 +18,6 @@ __date__ = '10/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.common.utilities import ugettext as tr # pylint: disable=W0611
-
 from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
 
@@ -40,11 +38,11 @@ class AgePostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.__init__(self)
         self.population_total = None
 
-    def setup(self, population_total):
+    def setup(self, *args):
         AbstractPostprocessor.setup(self)
         if self.population_total is not None:
             self.raise_error('clear needs to be called before setup')
-        self.population_total = population_total
+        self.population_total = args[0]
 
     def process(self):
         AbstractPostprocessor.process(self)
@@ -59,20 +57,19 @@ class AgePostprocessor(AbstractPostprocessor):
         self.population_total = None
 
     def _calculate_youth(self):
-        myName = self.tr('Youth count')
+        myName = str(self.tr('Youth count'))
         myResult = self.population_total * self.YOUTH_RATIO
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_adult(self):
-        myName = self.tr('Adult count')
+        myName = str(self.tr('Adult count'))
         myResult = self.population_total * self.ADULT_RATIO
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_elderly(self):
-        myName = self.tr('Elderly count')
+        myName = str(self.tr('Elderly count'))
         myResult = self.population_total * self.ELDERLY_RATIO
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
-

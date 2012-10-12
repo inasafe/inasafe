@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from safe.common.utilities import ugettext as tr # pylint: disable=W0611
+from safe.common.utilities import ugettext as tr  # pylint: disable=W0611
 
 from safe.common.exceptions import PostprocessorError
 
@@ -28,7 +28,8 @@ class AbstractPostprocessor():
     def __init__(self):
         self._results = None
 
-    def setup(self):
+    def setup(self, *args):
+        del args
         if self._results is not None:
             self.raise_error('clear needs to be called before setup')
         self._results = {}
@@ -54,3 +55,5 @@ class AbstractPostprocessor():
         self._results[name] = {'value': result,
                                  'metadata': metadata}
 
+    def tr(self, message):
+        return tr(message)

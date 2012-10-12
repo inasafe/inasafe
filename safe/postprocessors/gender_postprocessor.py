@@ -17,7 +17,6 @@ __revision__ = '$Format:%H$'
 __date__ = '10/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-from safe.common.utilities import ugettext as tr # pylint: disable=W0611
 
 from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
@@ -29,12 +28,12 @@ class GenderPostprocessor(AbstractPostprocessor):
         self.population_total = None
         self.female_ratio = None
 
-    def setup(self, population_total, female_ratio):
+    def setup(self, *args):
         AbstractPostprocessor.setup(self)
         if self.population_total is not None or self.female_ratio is not None:
             self.raise_error('clear needs to be called before setup')
-        self.population_total = population_total
-        self.female_ratio = female_ratio
+        self.population_total = args[0]
+        self.female_ratio = args[1]
 
     def process(self):
         AbstractPostprocessor.process(self)
@@ -49,13 +48,13 @@ class GenderPostprocessor(AbstractPostprocessor):
         self.female_ratio = None
 
     def _calculate_females(self):
-        myName = self.tr('Females count')
+        myName = str(self.tr('Females count'))
         myResult = self.population_total * self.female_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_female_weekly_hygene_packs(self):
-        myName = self.tr('Females weekly hygene packs')
+        myName = str(self.tr('Females weekly hygene packs'))
         myMeta = {'description': 'Females hygene packs for weekly use'}
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
