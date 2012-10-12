@@ -175,6 +175,12 @@ class Vector(Layer):
                 verify(len(geometry) == len(data), msg)
 
             # Establish extent
+            if len(geometry) == 0:
+                # Degenerate layer
+                self.extent = [0, 0, 0, 0]
+                return
+
+            # Compute bounding box for each geometry type
             minx = miny = sys.maxint
             maxx = maxy = -minx
             if self.is_point_data:
