@@ -36,8 +36,8 @@ from qgis.gui import QgsComposerView
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.exceptions import KeywordNotFoundException
 from safe_qgis.keyword_io import KeywordIO
-from safe_qgis.utilities import htmlHeader, htmlFooter
 from safe_qgis.map_legend import MapLegend
+from safe_qgis.html_renderer import HtmlRenderer
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -54,14 +54,12 @@ class Map():
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         LOGGER.debug('InaSAFE Map class initialised')
         self.iface = theIface
         self.layer = theIface.activeLayer()
         self.keywordIO = KeywordIO()
-        self.header = None
-        self.footer = None
         self.printer = None
         self.composition = None
         self.legend = None
@@ -76,8 +74,6 @@ class Map():
         self.mapWidth = self.mapHeight
         self.disclaimer = self.tr('InaSAFE has been jointly developed by'
                                   ' BNPB, AusAid & the World Bank')
-        self.htmlPrintedFlag = False
-        self.webView = QtWebKit.QWebView()
 
     def tr(self, theString):
         """We implement this since we do not inherit QObject.
@@ -100,46 +96,9 @@ class Map():
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         self.layer = theLayer
-
-    def writeTemplate(self, theTemplateFilePath):
-        """Write the current composition as a template that can be
-        re-used in QGIS."""
-        myDocument = QtXml.QDomDocument()
-        myElement = myDocument.createElement('Composer')
-        myDocument.appendChild(myElement)
-        self.composition.writeXML(myElement, myDocument)
-        myXml = myDocument.toByteArray()
-        myFile = file(theTemplateFilePath, 'wb')
-        myFile.write(myXml)
-        myFile.close()
-
-    def renderTemplate(self, theTemplateFilePath, theOutputFilePath):
-        """Load a QgsComposer map from a template and render it
-
-        .. note:: THIS METHOD IS EXPERIMENTAL AND CURRENTLY NON FUNCTIONAL
-
-        Args:
-            theTemplateFilePath - path to the template that should be loaded.
-            theOutputFilePath - path for the output pdf
-        Returns:
-            None
-        Raises:
-            None
-        """
-        self.setupComposition()
-        self.setupPrinter(theOutputFilePath)
-        if self.composition:
-            myFile = QtCore.QFile(theTemplateFilePath)
-            myDocument = QtXml.QDomDocument()
-            myDocument.setContent(myFile, False)  # .. todo:: fix magic param
-            myNodeList = myDocument.elementsByTagName('Composer')
-            if myNodeList.size() > 0:
-                myElement = myNodeList.at(0).toElement()
-                self.composition.readXML(myElement, myDocument)
-        self.renderCompleteReport()
 
     def setupComposition(self):
         """Set up the composition ready for drawing elements onto it.
@@ -160,31 +119,6 @@ class Map():
         self.composition.setPrintResolution(self.pageDpi)
         self.composition.setPrintAsRaster(True)
 
-    def setupPrinter(self, theFilename):
-        """Create a QPrinter instance set up to print to an A4 portrait pdf
-
-        Args:
-            theFilename - filename for pdf generated using this printer
-        Returns:
-            None
-        Raises:
-            None
-        """
-        #
-        # Create a printer device (we are 'printing' to a pdf
-        #
-        LOGGER.debug('InaSAFE Map setupPrinter called')
-        self.printer = QtGui.QPrinter()
-        self.printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
-        self.printer.setOutputFileName(theFilename)
-        self.printer.setPaperSize(QtCore.QSizeF(self.pageWidth,
-                                             self.pageHeight),
-                                             QtGui.QPrinter.Millimeter)
-        self.printer.setFullPage(True)
-        self.printer.setColorMode(QtGui.QPrinter.Color)
-        myResolution = self.composition.printResolution()
-        self.printer.setResolution(myResolution)
-
     def composeMap(self):
         """Place all elements on the map ready for printing.
 
@@ -195,7 +129,7 @@ class Map():
             None
 
         Raises:
-            Any exceptions raised will be propogated.
+            Any exceptions raised will be propagated.
         """
         self.setupComposition()
         # Keep track of our vertical positioning as we work our way down
@@ -249,7 +183,7 @@ class Map():
                                       suffix='.png',
                                       dir=temp_dir())
         myImage.save(myImagePath)
-        return myImagePath
+        return myImagePath, myImage, myTargetArea
 
     def renderCompleteReport(self, theFilename):
         """Generate the printout for our final map + table composition.
@@ -269,27 +203,26 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map renderCompleteReport called')
         if theFilename is None:
-            myPath = unique_filename(prefix='composerTemplate',
-                                     suffix='.qpt',
-                                     dir=temp_dir('test'))
+            myPath = unique_filename(prefix='report',
+                                     suffix='.pdf',
+                                     dir=temp_dir('work'))
         else:
             myPath = theFilename
 
+        myTablePath = os.path.splitext(myPath)[0] + '_table.pdf'
+
         self.composeMap()
         self.setupPrinter(myPath)
-        myImagePath = self.renderComposition()
-        myImageTag = ('<img src="%s"></img>' %
-                      QtCore.QUrl(myImagePath).toLocalFile())
-        LOGGER.info('Image tag is %s' % myImageTag)
-        #myPainter = QtGui.QPainter(self.printer)
-        #myPainter.drawImage(myTargetArea, myImage, myTargetArea)
-        #myPainter.end()
+        myImage, myImagePath, myRectangle = self.renderComposition()
+        myPainter = QtGui.QPainter(self.printer)
+        myPainter.drawImage(myTargetArea, myImage, myTargetArea)
+        myPainter.end()
+
         # Now draw any additional tabular data
         #self.printer.newPage()
         if self.layer is not None:
             myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
             # Put the map image before the table
-            myHtml = myImageTag + myHtml
         self.htmlToPrinter(myHtml)
         return myPath
 
@@ -460,7 +393,7 @@ class Map():
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         LOGGER.debug('InaSAFE Map drawNativeScaleBar called')
         myScaleBar = QgsComposerScaleBar(self.composition)
@@ -494,7 +427,7 @@ class Map():
         Returns:
             None
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         LOGGER.debug('InaSAFE Map drawScaleBar called')
         myCanvas = self.iface.mapCanvas()
@@ -737,6 +670,9 @@ class Map():
     def drawImpactTable(self, theTopOffset):
         """Render the impact table.
 
+        If anything goes wrong, none will be returned, otherwise the table will
+        be rendered into the composition.
+
         Args:
             theTopOffset - vertical offset at which to begin drawing
         Returns:
@@ -747,7 +683,16 @@ class Map():
         LOGGER.debug('InaSAFE Map drawImpactTable called')
         # Draw the table
         myTable = QgsComposerPicture(self.composition)
-        myImage = self.renderImpactTable()
+        myHtmlRenderer = HtmlRenderer(self.pageDpi)
+        try:
+            myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
+            myWidth = 156
+            myImage = myHtmlRenderer.renderHtmlToPixmap(myHtml,
+                                                        theWidthMM=myWidth)
+        except KeywordNotFoundException:
+            return None
+        except Exception:
+            return None
         if myImage is not None:
             myTableFile = os.path.join(temp_dir(), 'table.png')
             myImage.save(myTableFile, 'PNG')
@@ -805,7 +750,7 @@ class Map():
         Returns:
             None on error, otherwise the title
         Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
+            Any exceptions raised by the InaSAFE library will be propagated.
         """
         LOGGER.debug('InaSAFE Map getMapTitle called')
         try:
@@ -815,170 +760,6 @@ class Map():
             return None
         except Exception:
             return None
-
-    def renderImpactTable(self):
-        """Render the table in the keywords if present. The table is an
-        html table with statistics for the impact layer.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        LOGGER.debug('InaSAFE Map renderImpactTable called')
-        try:
-            myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
-            return self.renderHtmlToPixmap(myHtml, 156)
-        except KeywordNotFoundException:
-            return None
-        except Exception:
-            return None
-
-    def renderHtmlToPixmap(self, theHtml, theWidthMM):
-        """Render some HTML to a pixmap.
-
-        Args:
-            * theHtml - HTML to be rendered. It is assumed that the html
-              is a snippet only, containing no body element - a standard
-              header and footer will be appended.
-            * theWidthMM- width of the table in mm - will be converted to
-              points based on the resolution of our page.
-        Returns:
-            A QPixmap
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        LOGGER.debug('InaSAFE Map renderHtmlToPixmap called')
-        # Using 150dpi as the baseline, work out a standard text size
-        # multiplier so that page renders equally well at different print
-        # resolutions.
-        myBaselineDpi = 150
-        myFactor = float(self.pageDpi) / myBaselineDpi
-        myWidthPx = self.mmToPoints(theWidthMM)
-        myPage = QtWebKit.QWebPage()
-        myFrame = myPage.mainFrame()
-        myFrame.setTextSizeMultiplier(myFactor)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Vertical,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-        myFrame.setScrollBarPolicy(QtCore.Qt.Horizontal,
-                                   QtCore.Qt.ScrollBarAlwaysOff)
-
-        myHeader = self.htmlHeader()
-        myFooter = self.htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
-        myFrame.setHtml(myHtml)
-
-        mySize = myFrame.contentsSize()
-        mySize.setWidth(myWidthPx)
-        myPage.setViewportSize(mySize)
-
-        myPixmap = QtGui.QPixmap(mySize)
-        myPixmap.fill(QtGui.QColor(255, 255, 255))
-        myPainter = QtGui.QPainter(myPixmap)
-        myFrame.render(myPainter)
-        myPainter.end()
-        return myPixmap
-
-    def htmlToPrinter(self, theHtml):
-        """Render an html snippet into the printer, paginating as needed.
-
-        Args:
-            theHtml: str A string containing an html snippet. It will have a
-                header and footer appended to it in order to make it a valid
-                html document. The header will also apply the bootstrap theme
-                to the document.
-        Returns:
-            None
-
-        Raises:
-            None
-        """
-        LOGGER.info('InaSAFE Map htmlToPrinter called')
-        myHeader = self.htmlHeader()
-        myFooter = self.htmlFooter()
-        myHtml = myHeader + theHtml + myFooter
-
-        self.webView.loadFinished.connect(self.printWebPage)
-
-        #QtCore.QObject.connect(self.webView,
-        #                       QtCore.SIGNAL("loadFinished(bool)"),
-        #                       self.printWebPage())
-        self.htmlPrintedFlag = False
-
-        myFilePath = unique_filename(suffix='.html', dir=temp_dir())
-        LOGGER.debug('Html written to %s' % myFilePath)
-        myFile = file(myFilePath, 'wt')
-        myFile.writelines(myHtml)
-        myFile.close()
-        #self.webView.load(QtCore.QUrl(myFilePath))
-        self.webView.setHtml(myHtml)
-        myTimeOut = 10
-        myCounter = 0
-        mySleepPeriod = 1
-        while not self.htmlPrintedFlag and myCounter < myTimeOut:
-            # Block until the event loop is done printing the page
-            myCounter += 1
-            time.sleep(mySleepPeriod)
-        if not self.htmlPrintedFlag:
-            LOGGER.error('Failed to make a print out')
-        return self.htmlPrintedFlag
-
-    def printWebPage(self):
-        """Slot called when the page is loaded and ready for printing.
-
-        Args: None
-        Returns: None
-        Raises: None
-        """
-        self.htmlPrintedFlag = True
-        LOGGER.debug('printWebPage slot called')
-        self.webView.print_(self.printer)
-        QtCore.QObject.disconnect(self.webView,
-                               QtCore.SIGNAL("loadFinished(bool)"),
-                               self.printWebPage)
-
-
-    def pointsToMM(self, thePoints):
-        """Convert measurement in points to one in mm.
-
-        Args:
-            thePoints - distance in pixels
-        Returns:
-            mm converted value
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        myInchAsMM = 25.4
-        myMM = (float(thePoints) / self.pageDpi) * myInchAsMM
-        return myMM
-
-    def mmToPoints(self, theMM):
-        """Convert measurement in points to one in mm.
-
-        Args:
-            theMM - distance in milimeters
-        Returns:
-            mm converted value
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        myInchAsMM = 25.4
-        myPoints = (theMM * self.pageDpi) / myInchAsMM
-        return myPoints
-
-    def htmlHeader(self):
-        """Get a standard html header for wrapping content in."""
-        if self.header is None:
-            self.header = htmlHeader()
-        return self.header
-
-    def htmlFooter(self):
-        """Get a standard html footer for wrapping content in."""
-        if self.footer is None:
-            self.footer = htmlFooter()
-        return self.footer
 
     def showComposer(self):
         """Show the composition in a composer view so the user can tweak it
@@ -993,3 +774,41 @@ class Map():
         """
         myView = QgsComposerView(self.iface.mainWindow())
         myView.show()
+
+
+    def writeTemplate(self, theTemplateFilePath):
+        """Write the current composition as a template that can be
+        re-used in QGIS."""
+        myDocument = QtXml.QDomDocument()
+        myElement = myDocument.createElement('Composer')
+        myDocument.appendChild(myElement)
+        self.composition.writeXML(myElement, myDocument)
+        myXml = myDocument.toByteArray()
+        myFile = file(theTemplateFilePath, 'wb')
+        myFile.write(myXml)
+        myFile.close()
+
+    def renderTemplate(self, theTemplateFilePath, theOutputFilePath):
+        """Load a QgsComposer map from a template and render it
+
+        .. note:: THIS METHOD IS EXPERIMENTAL AND CURRENTLY NON FUNCTIONAL
+
+        Args:
+            theTemplateFilePath - path to the template that should be loaded.
+            theOutputFilePath - path for the output pdf
+        Returns:
+            None
+        Raises:
+            None
+        """
+        self.setupComposition()
+        self.setupPrinter(theOutputFilePath)
+        if self.composition:
+            myFile = QtCore.QFile(theTemplateFilePath)
+            myDocument = QtXml.QDomDocument()
+            myDocument.setContent(myFile, False)  # .. todo:: fix magic param
+            myNodeList = myDocument.elementsByTagName('Composer')
+            if myNodeList.size() > 0:
+                myElement = myNodeList.at(0).toElement()
+                self.composition.readXML(myElement, myDocument)
+        self.renderCompleteReport()

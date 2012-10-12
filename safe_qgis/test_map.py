@@ -48,20 +48,23 @@ class MapTest(unittest.TestCase):
     def setUp(self):
         """Setup fixture run before each tests"""
         myRegistry = QgsMapLayerRegistry.instance()
-        for myLayer in myRegistry.mapLayers():
-            myRegistry.removeMapLayer(myLayer)
+        myRegistry.removeAllMapLayers ()
+
+        myLayer, _ = loadLayer('test_shakeimpact.shp')
+        myCanvasLayer = QgsMapCanvasLayer(myLayer)
+        CANVAS.setLayerSet([myCanvasLayer])
+
+        myRect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
+        CANVAS.setExtent(myRect)
+        CANVAS.refresh()
+
+        myMap = Map(IFACE)
+        myMap.setImpactLayer(myLayer)
 
     def test_renderComposition(self):
         """Test making a pdf of the map only."""
         LOGGER.info('Testing renderComposition')
-        myLayer, _ = loadLayer('test_shakeimpact.shp')
-        myCanvasLayer = QgsMapCanvasLayer(myLayer)
-        CANVAS.setLayerSet([myCanvasLayer])
-        myMap = Map(IFACE)
-        myRect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
-        CANVAS.setExtent(myRect)
-        CANVAS.refresh()
-        myMap.setImpactLayer(myLayer)
+
         myPath = myMap.renderComposition()
         LOGGER.debug(myPath)
         myMessage = 'Rendered output does not exist'
@@ -103,38 +106,6 @@ class MapTest(unittest.TestCase):
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
         assert myTitle == myExpectedTitle, myMessage
 
-
-    def Xtest_renderTable(self):
-        """Test that html renders nicely. Commented out for now until we work
-        out how to get webkit to do offscreen rendering nicely."""
-        myFilename = 'test_floodimpact.tif'
-        myLayer, myType = loadLayer(myFilename)
-        CANVAS.refresh()
-        del myType
-        myMessage = 'Layer is not valid: %s' % myFilename
-        assert myLayer.isValid(), myMessage
-        myMap = Map(IFACE)
-        myMap.setImpactLayer(myLayer)
-        myPixmap = myMap.renderImpactTable()
-        assert myPixmap is not None
-        myExpectedWidth = 500
-        myExpectedHeight = 300
-        myMessage = 'Invalid width - got %s expected %s' % (
-                                    myPixmap.width(),
-                                    myExpectedWidth)
-        assert myPixmap.width() == myExpectedWidth, myMessage
-        myMessage = 'Invalid height - got %s expected %s' % (
-                                    myPixmap.height(),
-                                    myExpectedHeight)
-        assert myPixmap.height() == myExpectedHeight
-        myPath = unique_filename(prefix='impactTable',
-                                 suffix='.png',
-                                 dir=temp_dir('test'))
-        myPixmap.save(myPath, 'PNG')
-        LOGGER.debug(myPath)
-        myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
-        assertHashForFile(myExpectedHash, myPath)
-
     @expectedFailure
     def test_renderTemplate(self):
         """Test that load template works"""
@@ -154,20 +125,6 @@ class MapTest(unittest.TestCase):
         myMap.renderTemplate(myInPath, myPath)
         assert os.path.exists(myPath)
         #os.remove(myPath)
-
-    def test_mmPointConversion(self):
-        """Test that conversions between pixel and page dimensions work."""
-        myMap = Map(IFACE)
-        myDpi = 300
-        myMap.pageDpi = myDpi
-        myPixels = 300
-        myMM = 25.4  # 1 inch
-        myResult = myMap.pointsToMM(myPixels)
-        myMessage = "Expected: %s\nGot: %s" % (myMM, myResult)
-        assert myResult == myMM, myMessage
-        myResult = myMap.mmToPoints(myMM)
-        myMessage = "Expected: %s\nGot: %s" % (myPixels, myResult)
-        assert myResult == myPixels, myMessage
 
     def test_windowsDrawingArtifacts(self):
         """Test that windows rendering does not make artifacts"""

@@ -673,146 +673,60 @@ def setupLogger():
     #addLoggingHanderOnce(myLogger, myEmailHandler)
     addLoggingHanderOnce(myLogger, myQgisHandler)
 
-#def copyInMemory(vLayer, copyName=''):
-#    """Return a memory copy of a layer
-#
-#    Input
-#        origLayer: layer
-#        copyName: the name of the copy
-#    Output
-#        memory copy of a layer
-#
-#    """
-#
-#    if copyName is '':
-#        copyName = vLayer.name() + ' TMP'
-#
-#    if vLayer.type() == QgsMapLayer.VectorLayer:
-#        vType = vLayer.geometryType()
-#        if vType == QGis.Point:
-#            typeStr = 'Point'
-#        elif vType == QGis.Line:
-#            typeStr = 'Line'
-#        elif vType == QGis.Polygon:
-#            typeStr = 'Polygon'
-#        else:
-#            raise memoryLayerCreationError('Layer is whether Point or '
-#                                           'Line or Polygon')
-#    else:
-#        raise memoryLayerCreationError('Layer is not a VectorLayer')
-#
-#    crs = vLayer.crs().authid().toLower()
-#    uri = typeStr + '?crs=' + crs + '&index=yes'
-#    memLayer = QgsVectorLayer(uri, copyName, 'memory')
-#    memProvider = memLayer.dataProvider()
-#
-#    vProvider = vLayer.dataProvider()
-#    vAttrs = vProvider.attributeIndexes()
-#    vFields = vProvider.fields()
-#
-#    fields = []
-#    for i in vFields:
-#        fields.append(vFields[i])
-#
-#    memProvider.addAttributes(fields)
-#
-#    vProvider.select(vAttrs)
-#    ft = QgsFeature()
-#    while vProvider.nextFeature(ft):
-#        memProvider.addFeatures([ft])
-#
-#    # Next two lines a workaround for a QGIS bug (lte 1.8)
-#    # preventing mem layer attributes being saved to shp.
-#    memLayer.startEditing()
-#    memLayer.commitChanges()
-#
-#    return memLayer
+def mmToPoints(theMM, theDpi):
+    """Convert measurement in points to one in mm.
 
+    Args:
+        * theMM: int - distance in millimeters
+        * theDpi: int - dots per inch in the print / display medium
+    Returns:
+        mm converted value
+    Raises:
+        Any exceptions raised by the InaSAFE library will be propagated.
+    """
+    myInchAsMM = 25.4
+    myPoints = (theMM * theDpi) / myInchAsMM
+    return myPoints
 
-#def memoryLayerToShapefile(theFileName,
-#                           theFilePath,
-#                           theMemoryLayer,
-#                           theForceFlag=False,
-#                           mySourceQmlPath=''):
-#    """Write a memory layer to a shapefile.
-#
-#    .. note:: The file will be saved into the theFilePath dir  If a qml
-#        matching theFileName.qml can be found it will automatically copied
-#        over to the output dir.
-#        Any existing shp by the same name will be
-#        overridden if theForceFlag is True, otherwise the existing file will
-#        be returned.
-#
-#    Args:
-#        theFileName: str filename excluding path and ext. e.g. 'mmi-cities'
-#        theMemoryLayer: QGIS memory layer instance.
-#        theForceFlag: bool (Optional). Whether to force the overwrite
-#            of any existing data. Defaults to False.
-#        mySourceQmlPath: str (Optional). Copy the qml file
-#        mySourceQmlPath/theFileName.qml to theFilePath.
-#
-#    Returns: str Path to the created shapefile
-#
-#    Raises: ShapefileCreationError
-#    """
-#    LOGGER.debug('memoryLayerToShapefile requested.')
-#
-#    LOGGER.debug(str(theMemoryLayer.dataProvider().attributeIndexes()))
-#    if theMemoryLayer.featureCount() < 1:
-#        raise ShapefileCreationError('Memory layer has no features')
-#
-#    myGeoCrs = QgsCoordinateReferenceSystem()
-#    myGeoCrs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-#
-#    myOutputFileBase = os.path.join(theFilePath,
-#        '%s.' % theFileName)
-#    myOutputFile = myOutputFileBase + 'shp'
-#    if os.path.exists(myOutputFile) and theForceFlag is not True:
-#        return myOutputFile
-#    elif os.path.exists(myOutputFile):
-#        try:
-#            os.remove(myOutputFileBase + 'shp')
-#            os.remove(myOutputFileBase + 'shx')
-#            os.remove(myOutputFileBase + 'dbf')
-#            os.remove(myOutputFileBase + 'prj')
-#        except OSError:
-#            LOGGER.exception('Old shape files not deleted'
-#                             ' - this may indicate a file permissions issue.')
-#
-#    # Next two lines a workaround for a QGIS bug (lte 1.8)
-#    # preventing mem layer attributes being saved to shp.
-#    theMemoryLayer.startEditing()
-#    theMemoryLayer.commitChanges()
-#
-#    LOGGER.debug('Writing mem layer to shp: %s' % myOutputFile)
-#    # Explicitly giving all options, not really needed but nice for clarity
-#    myErrorMessage = QtCore.QString()
-#    myOptions = QtCore.QStringList()
-#    myLayerOptions = QtCore.QStringList()
-#    mySelectedOnlyFlag = False
-#    mySkipAttributesFlag = False
-#    myResult = QgsVectorFileWriter.writeAsVectorFormat(
-#        theMemoryLayer,
-#        myOutputFile,
-#        'utf-8',
-#        myGeoCrs,
-#        "ESRI Shapefile",
-#        mySelectedOnlyFlag,
-#        myErrorMessage,
-#        myOptions,
-#        myLayerOptions,
-#        mySkipAttributesFlag)
-#
-#    if myResult == QgsVectorFileWriter.NoError:
-#        LOGGER.debug('Wrote mem layer to shp: %s' % myOutputFile)
-#    else:
-#        raise ShapefileCreationError(
-#            'Failed with error: %s' % myResult)
-#
-#    # Lastly copy over the standard qml (QGIS Style file) for the mmi.tif
-#    if mySourceQmlPath is not '':
-#        myQmlPath = os.path.join(theFilePath, '%s.qml' % theFileName)
-#        mySourceQml = os.path.join(mySourceQmlPath, '%s.qml' % theFileName)
-#        shutil.copyfile(mySourceQml, myQmlPath)
-#
-#    return myOutputFile
+def pointsToMM(thePoints, theDpi):
+    """Convert measurement in points to one in mm.
+
+    Args:
+        * thePoints: int - number of points in display / print medium
+        * theDpi: int - dots per inch in the print / display medium
+    Returns:
+        mm converted value
+    Raises:
+        Any exceptions raised by the InaSAFE library will be propagated.
+    """
+    myInchAsMM = 25.4
+    myMM = (float(thePoints) / theDpi) * myInchAsMM
+    return myMM
+
+def setupPrinter(theFilename,
+                 theResolution=300,
+                 thePageHeight=297,
+                 thePageWidth=210):
+    """Create a QPrinter instance defaulted to print to an A4 portrait pdf
+
+    Args:
+        theFilename - filename for pdf generated using this printer
+    Returns:
+        None
+    Raises:
+        None
+    """
+    #
+    # Create a printer device (we are 'printing' to a pdf
+    #
+    LOGGER.debug('InaSAFE Map setupPrinter called')
+    myPrinter = QtGui.QPrinter()
+    myPrinter.setOutputFormat(QtGui.QPrinter.PdfFormat)
+    myPrinter.setOutputFileName(theFilename)
+    myPrinter.setPaperSize(QtCore.QSizeF(thePageWidth, thePageHeight),
+                            QtGui.QPrinter.Millimeter)
+    myPrinter.setFullPage(True)
+    myPrinter.setColorMode(QtGui.QPrinter.Color)
+    myResolution = self.composition.printResolution()
+    myPrinter.setResolution(myResolution)
+    return myPrinter
