@@ -2,7 +2,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
-from safe.common.utilities import ugettext as _
+from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.common.dynamic_translations import names as internationalised_values
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
@@ -20,7 +20,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
     """
 
     target_field = 'INUNDATED'
-    title = _('Be flooded')
+    title = tr('Be flooded')
 
     def run(self, layers):
         """Flood impact to buildings (e.g. from Open Street Map)
@@ -80,7 +80,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     else:
                         x = res
             else:
-                msg = (_('Unknown hazard type %s. '
+                msg = (tr('Unknown hazard type %s. '
                          'Must be either "depth" or "floodprone"')
                        % hazard_attribute)
                 raise Exception(msg)
@@ -127,22 +127,22 @@ class FloodBuildingImpactFunction(FunctionProvider):
 
         # Generate csv file of results
 ##        fid = open('C:\dki_table_%s.csv' % H.get_name(), 'wb')
-##        fid.write('%s, %s, %s\n' % (_('Building type'),
-##                                    _('Temporarily closed'),
-##                                    _('Total')))
-##        fid.write('%s, %i, %i\n' % (_('All'), count, N))
+##        fid.write('%s, %s, %s\n' % (tr('Building type'),
+##                                    tr('Temporarily closed'),
+##                                    tr('Total')))
+##        fid.write('%s, %i, %i\n' % (tr('All'), count, N))
 
         # Generate simple impact report
         table_body = [question,
-                      TableRow([_('Building type'),
-                                _('Temporarily closed'),
-                                _('Total')],
+                      TableRow([tr('Building type'),
+                                tr('Temporarily closed'),
+                                tr('Total')],
                                header=True),
-                      TableRow([_('All'), count, N])]
+                      TableRow([tr('All'), count, N])]
 
-##        fid.write('%s, %s, %s\n' % (_('Building type'),
-##                                    _('Temporarily closed'),
-##                                    _('Total')))
+##        fid.write('%s, %s, %s\n' % (tr('Building type'),
+##                                    tr('Temporarily closed'),
+##                                    tr('Total')))
 
         school_closed = 0
         hospital_closed = 0
@@ -175,53 +175,53 @@ class FloodBuildingImpactFunction(FunctionProvider):
             # Sort alphabetically
             building_list.sort()
 
-            #table_body.append(TableRow([_('Building type'),
-            #                            _('Temporarily closed'),
-            #                            _('Total')], header=True))
-            table_body.append(TableRow(_('Breakdown by building type'),
+            #table_body.append(TableRow([tr('Building type'),
+            #                            tr('Temporarily closed'),
+            #                            tr('Total')], header=True))
+            table_body.append(TableRow(tr('Breakdown by building type'),
                                        header=True))
             for row in building_list:
                 s = TableRow(row)
                 table_body.append(s)
 
 ##        fid.close()
-        table_body.append(TableRow(_('Action Checklist:'), header=True))
-        table_body.append(TableRow(_('Are the critical facilities still '
+        table_body.append(TableRow(tr('Action Checklist:'), header=True))
+        table_body.append(TableRow(tr('Are the critical facilities still '
                                      'open?')))
-        table_body.append(TableRow(_('Which structures have warning capacity '
+        table_body.append(TableRow(tr('Which structures have warning capacity '
                                      '(eg. sirens, speakers, etc.)?')))
-        table_body.append(TableRow(_('Which buildings will be evacuation '
+        table_body.append(TableRow(tr('Which buildings will be evacuation '
                                      'centres?')))
-        table_body.append(TableRow(_('Where will we locate the operations '
+        table_body.append(TableRow(tr('Where will we locate the operations '
                                      'centre?')))
-        table_body.append(TableRow(_('Where will we locate warehouse and/or '
+        table_body.append(TableRow(tr('Where will we locate warehouse and/or '
                                      'distribution centres?')))
         if school_closed > 0:
-            table_body.append(TableRow(_('Where will the students from the %d '
-                                         'closed schools go to study?') %
+            table_body.append(TableRow(tr('Where will the students from the %d'
+                                         ' closed schools go to study?') %
                                          school_closed))
         if hospital_closed > 0:
-            table_body.append(TableRow(_('Where will the patients from the %d '
-                                         'closed hospitals go for treatment '
+            table_body.append(TableRow(tr('Where will the patients from the %d'
+                                         ' closed hospitals go for treatment '
                                          'and how will we transport them?') %
                                          hospital_closed))
 
-        table_body.append(TableRow(_('Notes'), header=True))
-        assumption = _('Buildings are said to be flooded when ')
+        table_body.append(TableRow(tr('Notes'), header=True))
+        assumption = tr('Buildings are said to be flooded when ')
         if hazard_attribute == 'depth':
-            assumption += _('flood levels exceed %.1f m') % threshold
+            assumption += tr('flood levels exceed %.1f m') % threshold
         else:
-            assumption += _('in areas marked as flood prone')
+            assumption += tr('in areas marked as flood prone')
         table_body.append(assumption)
 
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
-        map_title = _('Buildings inundated')
+        map_title = tr('Buildings inundated')
 
         # Create style
-        style_classes = [dict(label=_('Not Flooded'), min=0, max=0,
+        style_classes = [dict(label=tr('Not Flooded'), min=0, max=0,
                               colour='#1EFC7C', transparency=0, size=1),
-                         dict(label=_('Flooded'), min=1, max=1,
+                         dict(label=tr('Flooded'), min=1, max=1,
                               colour='#F31A1C', transparency=0, size=1)]
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes)
@@ -230,7 +230,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
         V = Vector(data=attributes,
                    projection=I.get_projection(),
                    geometry=I.get_geometry(),
-                   name=_('Estimated buildings affected'),
+                   name=tr('Estimated buildings affected'),
                    keywords={'impact_summary': impact_summary,
                              'impact_table': impact_table,
                              'map_title': map_title},

@@ -41,6 +41,7 @@ from impact_functions_for_testing import HKV_flood_study
 from impact_functions_for_testing import BNPB_earthquake_guidelines
 from impact_functions_for_testing import general_ashload_impact
 from impact_functions_for_testing import flood_road_impact
+from impact_functions_for_testing import itb_fatality_model_org
 # pylint: enable=W0611
 
 
@@ -189,13 +190,75 @@ class Test_Engine(unittest.TestCase):
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
         exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
-        fatality_filename = '%s/itb_test_fat.asc' % TESTDATA
+        #fatality_filename = '%s/itb_test_fat.asc' % TESTDATA
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
         plugin_name = 'I T B Fatality Function'
+        plugin_list = get_plugins(plugin_name)
+        assert len(plugin_list) == 1
+        assert plugin_list[0].keys()[0] == plugin_name
+
+        IF = plugin_list[0][plugin_name]
+
+        # Call calculation engine
+        impact_layer = calculate_impact(layers=[H, E],
+                                        impact_fcn=IF)
+        impact_filename = impact_layer.get_filename()
+
+        I = read_layer(impact_filename)
+        #calculated_result = I.get_data()
+        #print calculated_result.shape
+        keywords = I.get_keywords()
+#        print "keywords", keywords
+        population = float(keywords['total_population'])
+        fatalities = float(keywords['total_fatalities'])
+
+        # Check aggregated values
+        expected_population = int(round(85424650. / 1000)) * 1000
+        msg = ('Expected population was %f, I got %f'
+               % (expected_population, population))
+        assert population == expected_population, msg
+
+        expected_fatalities = int(round(40871.3028 / 1000)) * 1000
+        msg = ('Expected fatalities was %f, I got %f'
+               % (expected_fatalities, fatalities))
+        assert numpy.allclose(fatalities, expected_fatalities,
+                              rtol=1.0e-5), msg
+
+        # Check that aggregated number of fatilites is as expected
+        all_numbers = int(numpy.sum([31.8937368131,
+                                     2539.26369372,
+                                     1688.72362573,
+                                     17174.9261705,
+                                     19436.834531]))
+        msg = ('Aggregated number of fatalities not as expected: %i'
+               % all_numbers)
+        assert all_numbers == 40871, msg
+
+        x = int(round(float(all_numbers) / 1000)) * 1000
+        msg = 'Did not find expected fatality value %i in summary' % x
+        assert str(x) in keywords['impact_summary'], msg
+
+    def test_ITB_earthquake_fatality_estimation_org(self):
+        """Fatalities from ground shaking can be computed correctly
+           using the ITB fatality model (Test data from Hadi Ghasemi).
+
+           This function is using the original implementation
+        """
+
+        # Name file names for hazard level, exposure and expected fatalities
+        hazard_filename = '%s/itb_test_mmi.asc' % TESTDATA
+        exposure_filename = '%s/itb_test_pop.asc' % TESTDATA
+        fatality_filename = '%s/itb_test_fat.asc' % TESTDATA
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        plugin_name = 'I T B Fatality Function Org'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name
@@ -225,7 +288,7 @@ class Test_Engine(unittest.TestCase):
         msg = ('Expected fatalities was %f, I got %f'
                % (expected_fatalities, fatalities))
         assert numpy.allclose(fatalities, expected_fatalities,
-        rtol=1.0e-5), msg
+                              rtol=1.0e-5), msg
 
         # Compare with reference data
         F = read_layer(fatality_filename)
@@ -240,10 +303,10 @@ class Test_Engine(unittest.TestCase):
         # Check for expected numbers (from Hadi Ghasemi) in keywords
         # NOTE: Commented out because function no longer needs to return
         # individual exposure numbers.
-        #for population_count in [2649040.0, 50273440.0, 7969610.0,
-        #                         19320620.0, 5211940.0]:
-        #    assert str(int(population_count / 1000)) in \
-        #        keywords['impact_summary']
+        for population_count in [2649040.0, 50273440.0, 7969610.0,
+                                 19320620.0, 5211940.0]:
+            assert str(int(population_count / 1000)) in \
+                keywords['impact_summary']
 
         # Check that aggregated number of fatilites is as expected
         all_numbers = int(numpy.sum([31.8937368131,
@@ -259,24 +322,12 @@ class Test_Engine(unittest.TestCase):
         msg = 'Did not find expected fatality value %i in summary' % x
         assert str(x) in keywords['impact_summary'], msg
 
-        # Characterisation test of formula for displaced people
-        # This may well change in the future
-        #print keywords['impact_summary']
-        exp_disp_val = '14366000'
-        msg = ('Did not find expected displacement value %s in summary'
-               % exp_disp_val)
-        assert exp_disp_val in keywords['impact_summary'], msg
-
-        # Individual check does not work anymore, because the function
-        # now only returns
-        # the aggregate number of fatalities
-        #for fatality_count in [31.8937368131, 2539.26369372,
-        #                       1688.72362573, 17174.9261705, 19436.834531]:
-        #    x = str(int(fatality_count))
-        #    summary = keywords['impact_summary']
-        #    msg = 'Expected %s in impact_summary: %s' % (x, summary)
-        #    print x in summary #, msg
-        #    #assert x in summary, msg
+        for fatality_count in [31.8937368131, 2539.26369372,
+                               1688.72362573, 17174.9261705, 19436.834531]:
+            x = str(int(fatality_count))
+            summary = keywords['impact_summary']
+            msg = 'Expected %s in impact_summary: %s' % (x, summary)
+            assert x in summary, msg
 
     def test_earthquake_fatality_estimation_ghasemi(self):
         """Fatalities from ground shaking can be computed correctly 2
@@ -2394,7 +2445,7 @@ class Test_Engine(unittest.TestCase):
 
     test_polygon_to_roads_interpolation_jakarta_flood_example.slow = True
 
-    def Xtest_polygon_to_roads_interpolation_jakarta_flood_merged(self):
+    def test_polygon_to_roads_interpolation_jakarta_flood_merged(self):
         """Roads can be tagged with values from flood polygons
 
         This is a test for road interpolation (issue #55)
@@ -2404,18 +2455,19 @@ class Test_Engine(unittest.TestCase):
         """
 
         # Name file names for hazard level and exposure
-        hazard_filename = ('%s/Jakarta_RW_2007_flood_Dissolve.shp' % TESTDATA)
+        hazard_filename = ('%s/RW_2007_dissolve.shp' % TESTDATA)
         exposure_filename = ('%s/jakarta_roads.shp' % EXPDATA)
 
         # Read all input data
         H = read_layer(hazard_filename)  # Polygons
         #H_attributes = H.get_data()
         #H_geometries = H.get_geometry()
-        assert len(H) == 59
+        print len(H)
+        assert len(H) == 35
 
         E = read_layer(exposure_filename)
         E_geometries = E.get_geometry()
-        E_attributes = E.get_data()
+        #E_attributes = E.get_data()
         assert len(E) == 18574
 
         # Get statistics of road types
@@ -2449,23 +2501,25 @@ class Test_Engine(unittest.TestCase):
         assert len(E) == 744
 
         # Test interpolation function
-        #import time
-        #t0 = time.time()
+        import time
+        t0 = time.time()
+        print
+        print 'start'
         I = assign_hazard_values_to_exposure_data(H, E,
                                                   layer_name='depth',
                                                   attribute_name=None)
-        #print 'Using merged polygon took %f seconds' % (time.time() - t0)
-        #I.write_to_file('flood_prone_roads_jakarta_merged.shp')
+        print 'Using merged polygon took %f seconds' % (time.time() - t0)
+        I.write_to_file('flood_prone_roads_jakarta_merged.shp')
 
         # Check against correctness verified in QGIS
-        I_attributes = I.get_data()
-        assert I_attributes[198]['TYPE'] == 'secondary'
-        assert I_attributes[198]['NAME'] == 'Lingkar Mega Kuningan'
-        assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
-        assert I_attributes[198]['polygon_id'] == 235
-        assert I_attributes[198]['parent_line_id'] == 333
+        #I_attributes = I.get_data()
+        #assert I_attributes[198]['TYPE'] == 'secondary'
+        #assert I_attributes[198]['NAME'] == 'Lingkar Mega Kuningan'
+        #assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
+        #assert I_attributes[198]['polygon_id'] == 235
+        #assert I_attributes[198]['parent_line_id'] == 333
 
-    #test_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
+    test_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
 
     def Xtest_line_interpolation_from_polygons_one_attribute(self):
         """Line interpolation using one polygon works with attribute
@@ -2897,9 +2951,9 @@ if __name__ == '__main__':
     #suite = unittest.makeSuite(Test_Engine,
     #                           ('test_polygon_to_roads_interpolation'
     #                            '_flood_example'))
-    #suite = unittest.makeSuite(Test_Engine,
-    #                           ('test_polygon_to_roads_interpolation'
-    #                            '_jakarta_flood_merged'))
-    suite = unittest.makeSuite(Test_Engine, 'test')
+    suite = unittest.makeSuite(Test_Engine,
+                               ('test_polygon_to_roads_interpolation'
+                                '_jakarta_flood_merged'))
+    #suite = unittest.makeSuite(Test_Engine, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
