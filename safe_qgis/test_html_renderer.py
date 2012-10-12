@@ -35,6 +35,7 @@ class HtmlRendererTest(unittest.TestCase):
 
     def test_htmlToPrinter(self):
         """Test that we can render some html to a printer."""
+        LOGGER.debug('InaSAFE HtmlRenderer testing htmlToPrinter')
         myHtml = ('<table>'
                   '<thead>'
                   '<tr>'
@@ -57,34 +58,16 @@ class HtmlRendererTest(unittest.TestCase):
         LOGGER.debug(myPath)
         myRenderer.htmlToPrinter(myHtml, myPath)
 
-    def Xtest_renderTable(self):
-        """Test that html renders nicely. Commented out for now until we work
-    out how to get webkit to do offscreen rendering nicely."""
+    def test_printImpactTable(self):
+        """Test that we can render html from impact table keywords."""
+        LOGGER.debug('InaSAFE HtmlRenderer testing printImpactTable')
         myFilename = 'test_floodimpact.tif'
-        myLayer, myType = loadLayer(myFilename)
-        CANVAS.refresh()
-        del myType
+        myLayer, _ = loadLayer(myFilename)
         myMessage = 'Layer is not valid: %s' % myFilename
         assert myLayer.isValid(), myMessage
-        myMap = Map(IFACE)
-        myMap.setImpactLayer(myLayer)
-        myPixmap = myMap.renderImpactTable()
-        assert myPixmap is not None
-        myExpectedWidth = 500
-        myExpectedHeight = 300
-        myMessage = 'Invalid width - got %s expected %s' % (
-            myPixmap.width(),
-            myExpectedWidth)
-        assert myPixmap.width() == myExpectedWidth, myMessage
-        myMessage = 'Invalid height - got %s expected %s' % (
-            myPixmap.height(),
-            myExpectedHeight)
-        assert myPixmap.height() == myExpectedHeight
-        myPath = unique_filename(prefix='impactTable',
-                                 suffix='.png',
-                                 dir=temp_dir('test'))
-        myPixmap.save(myPath, 'PNG')
-        LOGGER.debug(myPath)
+        myPageDpi = 300
+        myHtmlRenderer = HtmlRenderer(myPageDpi)
+        myPath = myHtmlRenderer.printImpactTable(myLayer)
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
 

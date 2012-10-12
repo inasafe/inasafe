@@ -21,14 +21,13 @@ import os
 import time
 import logging
 
-from PyQt4 import QtCore, QtGui, QtWebKit, QtXml
+from PyQt4 import QtCore, QtGui, QtXml
 from qgis.core import (QgsComposition,
                        QgsComposerMap,
                        QgsComposerLabel,
                        QgsComposerPicture,
                        QgsComposerScaleBar,
                        QgsComposerShape,
-                       QgsMapLayer,
                        QgsDistanceArea,
                        QgsPoint,
                        QgsRectangle)
@@ -38,6 +37,7 @@ from safe_qgis.exceptions import KeywordNotFoundException
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
 from safe_qgis.html_renderer import HtmlRenderer
+from safe_qgis.utilities import setupPrinter
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
 import safe_qgis.resources     # pylint: disable=W0611
@@ -212,7 +212,7 @@ class Map():
         myTablePath = os.path.splitext(myPath)[0] + '_table.pdf'
 
         self.composeMap()
-        self.setupPrinter(myPath)
+        self.printer = setupPrinter(myPath)
         myImage, myImagePath, myRectangle = self.renderComposition()
         myPainter = QtGui.QPainter(self.printer)
         myPainter.drawImage(myTargetArea, myImage, myTargetArea)
@@ -802,7 +802,9 @@ class Map():
             None
         """
         self.setupComposition()
-        self.setupPrinter(theOutputFilePath)
+
+        myResolution = self.composition.printResolution()
+        self.printer = setupPrinter(theOutputFilePath, theR)
         if self.composition:
             myFile = QtCore.QFile(theTemplateFilePath)
             myDocument = QtXml.QDomDocument()

@@ -727,6 +727,5 @@ def setupPrinter(theFilename,
                             QtGui.QPrinter.Millimeter)
     myPrinter.setFullPage(True)
     myPrinter.setColorMode(QtGui.QPrinter.Color)
-    myResolution = self.composition.printResolution()
-    myPrinter.setResolution(myResolution)
+    myPrinter.setResolution(theResolution)
     return myPrinter

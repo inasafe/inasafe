@@ -32,7 +32,6 @@ from qgis.core import (QgsMapLayerRegistry,
 from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
-                                      assertHashForFile,
                                       assertHashesForFile,
                                       hashForFile,
                                       loadLayer,
