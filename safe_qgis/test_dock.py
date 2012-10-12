@@ -37,7 +37,6 @@ from qgis.core import (QgsRasterLayer,
                        QgsRectangle)
 
 from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA
-
 from safe_qgis.utilities_test import (getQgisTestApp,
                                 setCanvasCrs,
                                 setPadangGeoExtent,
@@ -318,6 +317,7 @@ class DockTest(unittest.TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
+        os.environ['LANG'] = 'en'
         DOCK.showOnlyVisibleLayersFlag = True
         loadStandardLayers()
         DOCK.cboHazard.setCurrentIndex(0)

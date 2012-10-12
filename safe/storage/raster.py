@@ -6,9 +6,9 @@ import numpy
 import copy as copy_module
 from osgeo import gdal
 
-from safe.common.utilities import verify
+from safe.common.utilities import (verify,
+                                   ugettext as safe_tr)
 from safe.common.numerics import nanallclose, geotransform2axes, grid2points
-from safe.common.dynamic_translations import names as internationalised_titles
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -186,8 +186,7 @@ class Raster(Layer):
             title = self.keywords['title']
 
             # Lookup internationalised title if available
-            if title in internationalised_titles:
-                title = internationalised_titles[title]
+            title = safe_tr(title)
 
             rastername = title
         else:

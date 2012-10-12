@@ -65,10 +65,13 @@ def get_function_title(func):
         otherwise what is returned by the function pretty_function_name.
     """
 
+    myTitle = None
     if hasattr(func, 'title'):
-        return func.title
+        myTitle = func.title
     else:
-        return pretty_function_name(func)
+        myTitle = pretty_function_name(func)
+
+    return tr(myTitle)
 
 
 def get_plugins(name=None):
