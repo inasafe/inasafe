@@ -28,6 +28,7 @@ from safe.common.utilities import (verify,
                                    ugettext as safe_tr)
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
+from safe.common.utilities import unique_filename
 
 from layer import Layer
 from projection import Projection
@@ -53,8 +54,8 @@ class Vector(Layer):
     """
 
     def __init__(self, data=None, projection=None, geometry=None,
-                 geometry_type=None, name='', keywords=None, style_info=None,
-                 sublayer=None):
+                 geometry_type=None, name=None, keywords=None,
+                 style_info=None, sublayer=None):
         """Initialise object with either geometry or filename
 
         Args:
@@ -72,8 +73,7 @@ class Vector(Layer):
                 Valid options are 'point', 'line', 'polygon' or
                 the ogr types: 1, 2, 3.
                 If None, a geometry_type will be inferred from the data.
-            * name: Optional name for layer.
-                Only used if geometry is provided as a numeric array.
+            * name: Optional name for layer. If None, basename is used.
             * keywords: Optional dictionary with keywords that describe the
                 layer. When the layer is stored, these keywords will
                 be written into an associated file with extension
@@ -174,7 +174,13 @@ class Vector(Layer):
                        'must be the same')
                 verify(len(geometry) == len(data), msg)
 
-            # FIXME: Need to establish extent here
+            # Write and read back again to
+            # * Check the integrity of given data
+            # * Ensure everything is the same as when a filename was specified.
+            #   This will e.g. establish extent
+            tmp_filename = unique_filename(suffix='.shp')
+            self.write_to_file(tmp_filename)
+            self.read_from_file(tmp_filename)
 
     def __str__(self):
         """Render as name, number of features, geometry type
@@ -340,6 +346,11 @@ class Vector(Layer):
         * danieljlewis.org/files/2010/09/basicpythonmap.pdf
         * http://invisibleroads.com/tutorials/gdal-shapefile-points-save.html
         * http://www.packtpub.com/article/geospatial-data-python-geometry
+
+        Limitation of the Shapefile are documented in
+        http://resources.esri.com/help/9.3/ArcGISDesktop/com/Gp_ToolRef/
+        geoprocessing_tool_reference/
+        geoprocessing_considerations_for_shapefile_output.htm
         """
 
         basename = os.path.splitext(filename)[0]
@@ -361,7 +372,8 @@ class Vector(Layer):
             # Use basename without leading directories as name
             vectorname = os.path.split(basename)[-1]
 
-        self.name = vectorname
+        if self.name is None:
+            self.name = vectorname
         self.filename = filename
         self.geometry_type = None  # In case there are no features
 

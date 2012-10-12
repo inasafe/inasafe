@@ -28,7 +28,7 @@ class Raster(Layer):
     """
 
     def __init__(self, data=None, projection=None, geotransform=None,
-                 name='', keywords=None, style_info=None):
+                 name=None, keywords=None, style_info=None):
         """Initialise object with either data or filename
 
         Args:
@@ -44,8 +44,7 @@ class Raster(Layer):
                              top left y, rotation, n-s pixel resolution).
                             See e.g. http://www.gdal.org/gdal_tutorial.html
                             Only used if data is provide as a numeric array,
-            * name: Optional name for layer.
-                    Only used if data is provide as a numeric array,
+            * name: Optional name for layer. If None, basename is used.
             * keywords: Optional dictionary with keywords that describe the
                         layer. When the layer is stored, these keywords will
                         be written into an associated file with extension
@@ -97,6 +96,8 @@ class Raster(Layer):
             # FIXME (Ole): If read from file is refactored to load the data
             #              this should be taken care of there
             self.nodata_value = numpy.nan
+
+            # FIXME(Ole): Store data here like we do with vector data
 
     def __str__(self):
         """Render as name and dimensions
@@ -192,7 +193,8 @@ class Raster(Layer):
             # Use basename without leading directories as name
             rastername = os.path.split(basename)[-1]
 
-        self.name = rastername
+        if self.name is None:
+            self.name = rastername
         self.filename = filename
 
         self.projection = Projection(self.fid.GetProjection())

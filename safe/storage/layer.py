@@ -9,7 +9,7 @@ class Layer:
     """Common class for geospatial layers
     """
 
-    def __init__(self, name='', projection=None,
+    def __init__(self, name=None, projection=None,
                  keywords=None, style_info=None,
                  sublayer=None):
         """Common constructor for all types of layers
@@ -18,9 +18,9 @@ class Layer:
         """
 
         # Name
-        msg = ('Specified name  must be a string. '
+        msg = ('Specified name  must be a string or None. '
                'I got %s with type %s' % (name, str(type(name))[1:-1]))
-        verify(isinstance(name, basestring), msg)
+        verify(isinstance(name, basestring) or name is None, msg)
         self.name = name
 
         # Projection

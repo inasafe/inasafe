@@ -43,7 +43,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
 
         # Interpolate hazard level to building locations
         H = assign_hazard_values_to_exposure_data(H, E,
-                                             attribute_name='hazard_level',
+                                             attribute_name='hazard_lev',
                                              mode='constant')
 
         # Extract relevant numerical data
@@ -61,7 +61,7 @@ class CategorisedHazardBuildingImpactFunction(FunctionProvider):
         building_impact = []
         for i in range(N):
             # Get category value
-            val = float(category[i]['hazard_level'])
+            val = float(category[i]['hazard_lev'])
 
             # Classify buildings according to value
 ##            if val >= 2.0 / 3:

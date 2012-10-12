@@ -95,7 +95,6 @@ class VolcanoFunctionVectorHazard(FunctionProvider):
 
         # Get names of volcanos considered
         if name_attribute in H.get_attribute_names():
-
             D = {}
             for att in H.get_data():
                 # Run through all polygons and get unique names
