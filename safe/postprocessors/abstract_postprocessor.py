@@ -20,36 +20,37 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from safe.common.utilities import ugettext as tr # pylint: disable=W0611
+
 from safe.common.exceptions import PostprocessorError
 
 
 class AbstractPostprocessor():
     def __init__(self):
-        self.results = None
+        self._results = None
 
     def setup(self):
-        if self.results is not None:
+        if self._results is not None:
             self.raise_error('clear needs to be called before setup')
-        self.results = {}
+        self._results = {}
 
     def process(self):
-        if self.results is None:
+        if self._results is None:
             self.raise_error('setup needs to be called before process')
 
     def results(self):
-        return self.results
+        return self._results
 
     def clear(self):
-        self.results = None
+        self._results = None
 
-    def raise_error(self, theMessage=None):
-        if theMessage is None:
-            theMessage = 'Postprocessor error'
-        raise PostprocessorError(theMessage)
+    def raise_error(self, message=None):
+        if message is None:
+            message = 'Postprocessor error'
+        raise PostprocessorError(message)
 
-    def _append_result(self, theName, theResult, theMetadata=None):
-        if theMetadata is None:
-            theMetadata = dict()
-        self.results[theName] = {'value': theResult,
-                                 'metadata': theMetadata}
+    def _append_result(self, name, result, metadata=None):
+        if metadata is None:
+            metadata = dict()
+        self._results[name] = {'value': result,
+                                 'metadata': metadata}
 

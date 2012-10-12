@@ -17,6 +17,7 @@ __revision__ = '$Format:%H$'
 __date__ = '10/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+from safe.common.utilities import ugettext as tr # pylint: disable=W0611
 
 from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
@@ -25,31 +26,31 @@ from safe.postprocessors.abstract_postprocessor import (
 class GenderPostprocessor(AbstractPostprocessor):
     def __init__(self):
         AbstractPostprocessor.__init__(self)
-        self.populationTotal = None
-        self.femaleRatio = None
+        self.population_total = None
+        self.female_ratio = None
 
-    def setup(self, thePopulationTotal, theFemaleRatio):
+    def setup(self, population_total, female_ratio):
         AbstractPostprocessor.setup(self)
-        if self.populationTotal is not None or self.femaleRatio is not None:
+        if self.population_total is not None or self.female_ratio is not None:
             self.raise_error('clear needs to be called before setup')
-        self.populationTotal = thePopulationTotal
-        self.femaleRatio = theFemaleRatio
+        self.population_total = population_total
+        self.female_ratio = female_ratio
 
     def process(self):
         AbstractPostprocessor.process(self)
-        if self.populationTotal is None or self.femaleRatio is None:
+        if self.population_total is None or self.female_ratio is None:
             self.raise_error('setup needs to be called before process')
         self._calculate_females()
         self._calculate_female_weekly_hygene_packs()
 
     def clear(self):
         AbstractPostprocessor.clear(self)
-        self.populationTotal = None
-        self.femaleRatio = None
+        self.population_total = None
+        self.female_ratio = None
 
     def _calculate_females(self):
         myName = self.tr('Females count')
-        myResult = self.populationTotal * self.femaleRatio
+        myResult = self.population_total * self.female_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
@@ -58,6 +59,6 @@ class GenderPostprocessor(AbstractPostprocessor):
         myMeta = {'description': 'Females hygene packs for weekly use'}
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        myResult = self.populationTotal * self.femaleRatio * 0.7937 * (7 / 7)
+        myResult = self.population_total * self.female_ratio * 0.7937 * (7 / 7)
         myResult = int(round(myResult))
         self._append_result(myName, myResult, myMeta)
