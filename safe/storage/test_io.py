@@ -62,12 +62,12 @@ class Test_IO(unittest.TestCase):
         """
 
         v = Vector(None)
-        assert v.get_name().startswith('')
+        assert v.get_name() is None
         assert v.is_inasafe_spatial_object
         assert str(v).startswith('Vector data')
 
         r = Raster(None)
-        assert r.get_name().startswith('')
+        assert r.get_name() is None
         assert r.is_inasafe_spatial_object
         assert str(r).startswith('Raster data')
 
@@ -273,7 +273,10 @@ class Test_IO(unittest.TestCase):
                 if vectorname == 'test_buildings.shp':
                     L = layer.get_topN(attribute='FLOOR_AREA', N=N)
                     assert len(L) == N
-                    assert L.get_projection() == layer.get_projection()
+
+                    msg = ('Got projection %s, expected %s' %
+                           (L.projection, layer.projection))
+                    assert L.projection == layer.projection, msg
                     #print [a['FLOOR_AREA'] for a in L.attributes]
                 elif vectorname == 'tsunami_building_exposure.shp':
                     L = layer.get_topN(attribute='STR_VALUE', N=N)
@@ -394,7 +397,6 @@ class Test_IO(unittest.TestCase):
 
         v_ref = Vector(geometry=[P], geometry_type='polygon')
         v_ref.write_to_file(tmp_filename)
-        print 'Written to', tmp_filename
         v_file = read_layer(tmp_filename)
         for i in range(len(v_ref)):
             x = v_ref.get_geometry()[i]
@@ -414,19 +416,12 @@ class Test_IO(unittest.TestCase):
                          [106.79, -6.23]])
 
         v_ref = Vector(geometry=[P], geometry_type='polygon')
-        v_ref.write_to_file(tmp_filename)
-        v_file = read_layer(tmp_filename)
-        for i in range(len(v_ref)):
-            x = v_ref.get_geometry()[i]
-            x = x[::-1, :]  # Flip Up-Down to get order clockwise
-            y = v_file.get_geometry()[i]
-            msg = 'Read geometry %s, but expected %s' % (y, x)
-            assert numpy.allclose(x, y), msg
-
-        assert v_file == v_ref
-        assert v_ref == v_file
-        assert v_file.is_polygon_data
-        assert v_file.geometry_type == 3
+        x = P[::-1, :]  # Flip Up-Down to get order clockwise
+        y = v_ref.get_geometry()[0]
+        msg = 'Read geometry %s, but expected %s' % (y, x)
+        assert numpy.allclose(x, y), msg
+        assert v_ref.is_polygon_data
+        assert v_ref.geometry_type == 3
 
         # Self intersecting polygon (in this case order will be flipped)
         P = numpy.array([[106.79, -6.23],
@@ -436,19 +431,13 @@ class Test_IO(unittest.TestCase):
                          [106.77, -6.21]])
 
         v_ref = Vector(geometry=[P], geometry_type='polygon')
-        v_ref.write_to_file(tmp_filename)
-        v_file = read_layer(tmp_filename)
-        for i in range(len(v_ref)):
-            x = v_ref.get_geometry()[i]
-            x = x[::-1, :]  # Flip Up-Down to get order clockwise
-            y = v_file.get_geometry()[i]
-            msg = 'Read geometry %s, but expected %s' % (y, x)
-            assert numpy.allclose(x, y), msg
+        x = P[::-1, :]  # Flip Up-Down to get order clockwise
+        y = v_ref.get_geometry()[0]
+        msg = 'Read geometry %s, but expected %s' % (y, x)
+        assert numpy.allclose(x, y), msg
 
-        assert v_file == v_ref
-        assert v_ref == v_file
-        assert v_file.is_polygon_data
-        assert v_file.geometry_type == 3
+        assert v_ref.is_polygon_data
+        assert v_ref.geometry_type == 3
 
     def test_vector_class_geometry_types(self):
         """Admissible geometry types work in vector class
@@ -1383,24 +1372,24 @@ class Test_IO(unittest.TestCase):
         attributes = V.get_data()
 
         # Store it for visual inspection e.g. with QGIS
-        out_filename = unique_filename(suffix='.shp')
-        V.write_to_file(out_filename)
+        #out_filename = unique_filename(suffix='.shp')
+        #V.write_to_file(out_filename)
         #print 'Written to ', out_filename
 
         # Check against cells that were verified manually using QGIS
-        assert numpy.allclose(geometry[5, :], [96.97137053, -5.34965715])
+        assert numpy.allclose(geometry[5], [96.97137053, -5.34965715])
         assert numpy.allclose(attributes[5]['value'], 3)
         assert numpy.allclose(attributes[5]['value'], A[1, 0])
 
-        assert numpy.allclose(geometry[11, :], [97.0021116, -5.38039821])
+        assert numpy.allclose(geometry[11], [97.0021116, -5.38039821])
         assert numpy.allclose(attributes[11]['value'], -50.6014, rtol=1.0e-6)
         assert numpy.allclose(attributes[11]['value'], A[2, 1], rtol=1.0e-6)
 
-        assert numpy.allclose(geometry[16, :], [97.0021116, -5.411139276])
+        assert numpy.allclose(geometry[16], [97.0021116, -5.411139276])
         assert numpy.allclose(attributes[16]['value'], -15, rtol=1.0e-6)
         assert numpy.allclose(attributes[16]['value'], A[3, 1], rtol=1.0e-6)
 
-        assert numpy.allclose(geometry[23, :], [97.06359372, -5.44188034])
+        assert numpy.allclose(geometry[23], [97.06359372, -5.44188034])
         assert numpy.isnan(attributes[23]['value'])
         assert numpy.isnan(A[4, 3])
 
@@ -1440,7 +1429,10 @@ class Test_IO(unittest.TestCase):
             for n, lon in enumerate(longitudes):  # The fastest varying dim
 
                 # Test location
-                assert numpy.allclose(geometry[i, :], [lon, lat])
+                x = geometry[i]
+                y = [lon, lat]
+                msg = 'Got %s but expected %s' % (x, y)
+                assert numpy.allclose(x, y), msg
 
                 # Test value
                 assert numpy.allclose(attributes[i]['value'],
@@ -1448,7 +1440,6 @@ class Test_IO(unittest.TestCase):
 
                 i += 1
 
-    @unittest.expectedFailure
     def test_get_bounding_box(self):
         """Bounding box is correctly extracted from file.
 
@@ -1694,7 +1685,14 @@ class Test_IO(unittest.TestCase):
                    keywords=keywords)
         assert keywords['impact_summary'] == V.get_impact_summary()
         for key, val in V.get_keywords().items():
-            assert keywords[key] == val
+            msg = ('Expected keywords[%s] to be "%s" but '
+                   'got "%s"' % (key, keywords[key], val))
+
+            if key in [' preceding_ws', 'with spaces']:
+                # Accept that surrounding whitespace may be stripped
+                assert keywords[key].strip() == val, msg
+            else:
+                assert keywords[key] == val, msg
 
     def test_empty_keywords_file(self):
         """Empty keywords can be handled

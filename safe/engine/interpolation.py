@@ -92,6 +92,16 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
         Raster-Raster:   Raster data
     """
 
+    # Make sure attribute name can be stored in a shapefile
+    if attribute_name is not None and len(attribute_name) > 10:
+        msg = ('Specfied attribute name "%s"\
+         has length = %i. '
+               'To fit into a shapefile it must be at most 10 characters '
+               'long. How about naming it "%s"?' % (attribute_name,
+                                                    len(attribute_name),
+                                                    attribute_name[:10]))
+        raise InaSAFEError(msg)
+
     layer_name, attribute_name = check_inputs(hazard, exposure,
                                               layer_name, attribute_name)
     # Raster-Vector
