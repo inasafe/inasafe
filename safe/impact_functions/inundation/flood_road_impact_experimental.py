@@ -8,7 +8,7 @@ from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
 
-class FloodRoadImpactFunction(FunctionProvider):
+class FloodRoadImpactFunctionExperimental(FunctionProvider):
     """Inundation impact on road data (experimental)
 
     :param requires category=='hazard' and \
