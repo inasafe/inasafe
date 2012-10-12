@@ -2277,7 +2277,7 @@ class Test_Engine(unittest.TestCase):
 
     test_line_interpolation_from_multiple_polygons.slow = True
 
-    def Xtest_polygon_to_roads_interpolation_flood_example(self):
+    def test_polygon_to_roads_interpolation_flood_example(self):
         """Roads can be tagged with values from flood polygons
 
         This is a test for road interpolation (issue #55)
@@ -2365,7 +2365,7 @@ class Test_Engine(unittest.TestCase):
 
     Xtest_polygon_to_roads_interpolation_flood_example.slow = True
 
-    def Xtest_polygon_to_roads_interpolation_jakarta_flood_example(self):
+    def Xtest_polygon_to_roads_interpolation_jakarta_flood_example1(self):
         """Roads can be tagged with values from flood polygons
 
         This is a test for road interpolation (issue #55)
@@ -2452,7 +2452,7 @@ class Test_Engine(unittest.TestCase):
         assert I_attributes[198]['polygon_id'] == 235
         assert I_attributes[198]['parent_line_id'] == 333
 
-    Xtest_polygon_to_roads_interpolation_jakarta_flood_example.slow = True
+    Xtest_polygon_to_roads_interpolation_jakarta_flood_example1.slow = True
 
     def Xtest_polygon_to_roads_interpolation_jakarta_flood_merged(self):
         """Roads can be tagged with values from flood polygons
