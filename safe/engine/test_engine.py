@@ -2363,7 +2363,7 @@ class Test_Engine(unittest.TestCase):
         #assert I_attributes[]['polygon_id'] ==
         #assert I_attributes[]['parent_line_id'] ==
 
-    Xtest_polygon_to_roads_interpolation_flood_example.slow = True
+    test_polygon_to_roads_interpolation_flood_example.slow = True
 
     def Xtest_polygon_to_roads_interpolation_jakarta_flood_example1(self):
         """Roads can be tagged with values from flood polygons
