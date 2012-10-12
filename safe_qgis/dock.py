@@ -1917,7 +1917,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                       self.tr('Generating your map as a PDF document...'),
                       theProgress=20)
         try:
-            myMap.makePdf(myFilename)
+            myMap.renderCompleteReport(myFilename)
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Your PDF was created....opening using '
                                   'the default PDF viewer on your system.'

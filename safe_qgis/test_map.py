@@ -33,6 +33,7 @@ from qgis.gui import QgsMapCanvasLayer
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       assertHashForFile,
+                                      assertHashesForFile,
                                       hashForFile,
                                       loadLayer,
                                       setJakartaGeoExtent)
@@ -50,9 +51,9 @@ class MapTest(unittest.TestCase):
         for myLayer in myRegistry.mapLayers():
             myRegistry.removeMapLayer(myLayer)
 
-    def test_inasafeMap(self):
-        """Test making a pdf using the Map class."""
-        LOGGER.info('Testing inasafeMap')
+    def test_renderComposition(self):
+        """Test making a pdf of the map only."""
+        LOGGER.info('Testing renderComposition')
         myLayer, _ = loadLayer('test_shakeimpact.shp')
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
@@ -61,19 +62,20 @@ class MapTest(unittest.TestCase):
         CANVAS.setExtent(myRect)
         CANVAS.refresh()
         myMap.setImpactLayer(myLayer)
-        myPath = unique_filename(prefix='map',
+        myPath = myMap.renderComposition()
+        LOGGER.debug(myPath)
+        myMessage = 'Rendered output does not exist'
+        assert os.path.exists(myPath), myMessage
+
+        # .. note:: Template writing is experimental
+        myPath = unique_filename(prefix='composerTemplate',
                                  suffix='.qpt',
                                  dir=temp_dir('test'))
-        myMap.makePdf(myPath)
-        LOGGER.debug(myPath)
-        assert os.path.exists(myPath)
-        # .. note:: Template writing is experimental
-        myPath = unique_filename(prefix='template',
-                                    suffix='.qpt',
-                                    dir=temp_dir('test'))
         myMap.writeTemplate(myPath)
         LOGGER.debug(myPath)
-        #os.remove(myPath)
+        myExpectedHashes = ['a7e58a5527cbe29ce056ee7b8e88cb6a',  # ub12.04-64
+                            '']
+        assertHashesForFile(myExpectedHashes, myPath)
         #QGISAPP.exec_()
 
     def test_getMapTitle(self):
@@ -100,6 +102,7 @@ class MapTest(unittest.TestCase):
         myExpectedTitle = None
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
         assert myTitle == myExpectedTitle, myMessage
+
 
     def Xtest_renderTable(self):
         """Test that html renders nicely. Commented out for now until we work
@@ -197,7 +200,7 @@ class MapTest(unittest.TestCase):
             myWidthMM = 1
             myMap.drawPixmap(myPixmap, myWidthMM, i, i + 40)
 
-        myMap.renderPrintout()
+        myMap.renderCompleteReport()
         myUnwantedHash = 'd05e9223d50baf8bb147475aa96d6ba3'
         myHash = hashForFile(myPath)
         # when this test no longer matches our broken render hash

@@ -139,7 +139,7 @@ class Map():
             if myNodeList.size() > 0:
                 myElement = myNodeList.at(0).toElement()
                 self.composition.readXML(myElement, myDocument)
-        self.renderPrintout()
+        self.renderCompleteReport()
 
     def setupComposition(self):
         """Set up the composition ready for drawing elements onto it.
@@ -155,7 +155,7 @@ class Map():
         myCanvas = self.iface.mapCanvas()
         myRenderer = myCanvas.mapRenderer()
         self.composition = QgsComposition(myRenderer)
-        self.composition.setPlotStyle(QgsComposition.Print)
+        self.composition.setPlotStyle(QgsComposition.Print) # or preview
         self.composition.setPaperSize(self.pageWidth, self.pageHeight)
         self.composition.setPrintResolution(self.pageDpi)
         self.composition.setPrintAsRaster(True)
@@ -185,19 +185,52 @@ class Map():
         myResolution = self.composition.printResolution()
         self.printer.setResolution(myResolution)
 
-    def renderPrintout(self):
-        """Generate the printout for our final map composition.
+    def composeMap(self):
+        """Place all elements on the map ready for printing.
 
         Args:
             None
+
         Returns:
             None
+
+        Raises:
+            Any exceptions raised will be propogated.
+        """
+        self.setupComposition()
+        # Keep track of our vertical positioning as we work our way down
+        # the page placing elements on it.
+        myTopOffset = self.pageMargin
+        self.drawLogo(myTopOffset)
+        myLabelHeight = self.drawTitle(myTopOffset)
+        # Update the map offset for the next row of content
+        myTopOffset += myLabelHeight + self.verticalSpacing
+        myComposerMap = self.drawMap(myTopOffset)
+        self.drawScaleBar(myComposerMap, myTopOffset)
+        # Update the top offset for the next horizontal row of items
+        myTopOffset += self.mapHeight + self.verticalSpacing - 1
+        myImpactTitleHeight = self.drawImpactTitle(myTopOffset)
+        # Update the top offset for the next horizontal row of items
+        if myImpactTitleHeight:
+            myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
+        self.drawLegend(myTopOffset)
+        self.drawImpactTable(myTopOffset)
+        self.drawDisclaimer()
+
+    def renderComposition(self):
+        """Render the map composition to an image and save that to disk.
+
+        Args:
+            None
+
+        Returns:
+            str: Absolute file system path to the rendered image.
+
         Raises:
             None
         """
-        LOGGER.debug('InaSAFE Map renderPrintout called')
-        self.composition.setPlotStyle(QgsComposition.Print)  # or preview
-
+        LOGGER.debug('InaSAFE Map renderComposition called')
+        self.composeMap()
         # NOTE: we ignore self.composition.printAsRaster() and always rasterise
         myWidth = (int)(self.pageDpi * self.pageWidth / 25.4)
         myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
@@ -208,28 +241,57 @@ class Map():
         myImage.fill(0)
         myImagePainter = QtGui.QPainter(myImage)
         mySourceArea = QtCore.QRectF(0, 0, self.pageWidth,
-                                               self.pageHeight)
+                                     self.pageHeight)
         myTargetArea = QtCore.QRectF(0, 0, myWidth, myHeight)
         self.composition.render(myImagePainter, myTargetArea, mySourceArea)
         myImagePainter.end()
-        myImageFile = unique_filename(suffix='.png',dir=temp_dir())
-        myImage.save(myImageFile)
+        myImagePath = unique_filename(prefix='mapRender_',
+                                      suffix='.png',
+                                      dir=temp_dir())
+        myImage.save(myImagePath)
+        return myImagePath
 
+    def renderCompleteReport(self, theFilename):
+        """Generate the printout for our final map + table composition.
 
+        If the layer includes appropriate keywords, the report will consist
+        of a map page and one or more tabular report pages.
+
+        Args:
+            theFilename: str - optional path on the file system to which the
+                pdf should be saved. If None, a generated file name will be
+                used.
+        Returns:
+            str: file name of the output file (equivalent to theFilename if
+                provided.
+        Raises:
+            None
+        """
+        LOGGER.debug('InaSAFE Map renderCompleteReport called')
+        if theFilename is None:
+            myPath = unique_filename(prefix='composerTemplate',
+                                     suffix='.qpt',
+                                     dir=temp_dir('test'))
+        else:
+            myPath = theFilename
+
+        self.composeMap()
+        self.setupPrinter(myPath)
+        myImagePath = self.renderComposition()
         myImageTag = ('<img src="%s"></img>' %
-                      QtCore.QUrl(myImageFile).toLocalFile())
+                      QtCore.QUrl(myImagePath).toLocalFile())
         LOGGER.info('Image tag is %s' % myImageTag)
         #myPainter = QtGui.QPainter(self.printer)
         #myPainter.drawImage(myTargetArea, myImage, myTargetArea)
         #myPainter.end()
         # Now draw any additional tabular data
         #self.printer.newPage()
-        myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
-        # Put the map image before the table
-        myHtml = myImageTag + myHtml
+        if self.layer is not None:
+            myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
+            # Put the map image before the table
+            myHtml = myImageTag + myHtml
         self.htmlToPrinter(myHtml)
-
-
+        return myPath
 
     def drawLogo(self, theTopOffset):
         """Add a picture containing the logo to the map top left corner
@@ -734,40 +796,6 @@ class Map():
                                 )
         myLabel.setFrame(self.showFramesFlag)
         self.composition.addItem(myLabel)
-
-    def makePdf(self, theFilename):
-        """Method to createa  nice little pdf map.
-
-        Args:
-            theFilename - a string containing a filename path with .pdf
-            extension
-        Returns:
-            None
-        Raises:
-            Any exceptions raised by the InaSAFE library will be propogated.
-        """
-        LOGGER.debug('InaSAFE Map makePdf called')
-        self.setupComposition()
-        self.setupPrinter(theFilename)
-        # Keep track of our vertical positioning as we work our way down
-        # the page placing elements on it.
-        myTopOffset = self.pageMargin
-        self.drawLogo(myTopOffset)
-        myLabelHeight = self.drawTitle(myTopOffset)
-        # Update the map offset for the next row of content
-        myTopOffset += myLabelHeight + self.verticalSpacing
-        myComposerMap = self.drawMap(myTopOffset)
-        self.drawScaleBar(myComposerMap, myTopOffset)
-        # Update the top offset for the next horizontal row of items
-        myTopOffset += self.mapHeight + self.verticalSpacing - 1
-        myImpactTitleHeight = self.drawImpactTitle(myTopOffset)
-        # Update the top offset for the next horizontal row of items
-        if myImpactTitleHeight:
-            myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
-        self.drawLegend(myTopOffset)
-        self.drawImpactTable(myTopOffset)
-        self.drawDisclaimer()
-        self.renderPrintout()
 
     def getMapTitle(self):
         """Get the map title from the layer keywords if possible.
