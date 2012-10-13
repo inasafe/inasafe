@@ -50,8 +50,39 @@ class MapTest(unittest.TestCase):
         myRegistry = QgsMapLayerRegistry.instance()
         myRegistry.removeAllMapLayers ()
 
+    def test_printToPdf(self):
+        """Test making a pdf of the map - this is the most typical use of map.
+        """
+        LOGGER.info('Testing printToPdf')
+        myLayer, _ = loadLayer('test_shakeimpact.shp')
+        myCanvasLayer = QgsMapCanvasLayer(myLayer)
+        CANVAS.setLayerSet([myCanvasLayer])
+        myRect = QgsRectangle(106.7894, -6.2308, 106.8004, -6.2264)
+        CANVAS.setExtent(myRect)
+        CANVAS.refresh()
+        myMap = Map(IFACE)
+        myMap.setImpactLayer(myLayer)
+        myMap.composeMap()
+        myPath = unique_filename(prefix='mapPdfTest',
+                                 suffix='.pdf',
+                                 dir=temp_dir('test'))
+        myMap.printToPdf(myPath)
+        LOGGER.debug(myPath)
+        myMessage = 'Rendered output does not exist: %s' % myPath
+        assert os.path.exists(myPath), myMessage
+        # pdf rendering is non deterministic so we can't do a hash check
+        # test_renderComposition renders just the image instead of pdf
+        # so we hash check there and here we just do a basic minimum file
+        # size check.
+        mySize = os.stat(myPath).st_size
+        myExpectedSize = 352798 # as rendered on linux ub 12.04 64
+        myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
+            myExpectedSize, mySize
+        )
+        assert mySize >= myExpectedSize, myMessage
+
     def test_renderComposition(self):
-        """Test making a pdf of the map only."""
+        """Test making an image of the map only."""
         LOGGER.info('Testing renderComposition')
         myLayer, _ = loadLayer('test_shakeimpact.shp')
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
@@ -62,9 +93,10 @@ class MapTest(unittest.TestCase):
         CANVAS.refresh()
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
+        myMap.composeMap()
         myImagePath, myImage, myTargetArea = myMap.renderComposition()
         LOGGER.debug(myImagePath)
-        myMessage = 'Rendered output does not exist'
+
         assert myImage is not None
 
         myDimensions = [myTargetArea.left(),
@@ -77,6 +109,7 @@ class MapTest(unittest.TestCase):
         )
         assert myExpectedDimensions == myDimensions, myMessage
 
+        myMessage = 'Rendered output does not exist'
         assert os.path.exists(myImagePath), myMessage
 
         # .. note:: Template writing is experimental
@@ -88,7 +121,6 @@ class MapTest(unittest.TestCase):
         myExpectedHashes = ['a7e58a5527cbe29ce056ee7b8e88cb6a',  # ub12.04-64
                             '']
         assertHashesForFile(myExpectedHashes, myPath)
-        #QGISAPP.exec_()
 
     def test_getMapTitle(self):
         """Getting the map title from the keywords"""
@@ -136,22 +168,19 @@ class MapTest(unittest.TestCase):
     def test_windowsDrawingArtifacts(self):
         """Test that windows rendering does not make artifacts"""
         # sometimes spurious lines are drawn on the layout
-        myInPath = ':/plugins/inasafe/basic.qpt'
-        myLayer, _ = loadLayer('test_shakeimpact.shp')
-
-        myCanvasLayer = QgsMapCanvasLayer(myLayer)
-        CANVAS.setLayerSet([myCanvasLayer])
+        LOGGER.info('Testing windowsDrawingArtifacts')
+        myPath = unique_filename(prefix='artifacts',
+                                 suffix='.pdf',
+                                 dir=temp_dir('test'))
         myMap = Map(IFACE)
-        myMap.setImpactLayer(myLayer)
-        myMap.setupComposition()
-        myPath = unique_filename(prefix='artifactsTest',
-                                    suffix='.pdf',
-                                    dir=temp_dir('test'))
         setupPrinter(myPath)
-        LOGGER.debug(myPath)
+        myMap.setupComposition()
 
         myPixmap = QtGui.QPixmap(10, 10)
-        myPixmap.fill(QtGui.QColor(250, 250, 250))
+        #myPixmap.fill(QtGui.QColor(250, 250, 250))
+        # Look at the output, you will see antialiasing issues around some
+        # of the boxes drawn...
+        myPixmap.fill(QtGui.QColor(200, 200, 200))
         myFilename = os.path.join(temp_dir(), 'greyBox')
         myPixmap.save(myFilename, 'PNG')
         for i in range(10, 190, 10):
@@ -170,9 +199,12 @@ class MapTest(unittest.TestCase):
             myWidthMM = 1
             myMap.drawPixmap(myPixmap, myWidthMM, i, i + 40)
 
-        myMap.renderComposition()
+
+        myImagePath, _, _ = myMap.renderComposition()
+        LOGGER.debug('Artifacts image path: %s' % myImagePath)
+        LOGGER.debug('Artifacts pdf path: %s' % myPath)
         myUnwantedHash = 'd05e9223d50baf8bb147475aa96d6ba3'
-        myHash = hashForFile(myPath)
+        myHash = hashForFile(myImagePath)
         # when this test no longer matches our broken render hash
         # we know the issue is fixed
         myMessage = 'Windows map render still draws with artifacts.'

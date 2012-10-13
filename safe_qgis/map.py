@@ -36,7 +36,6 @@ from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.exceptions import KeywordNotFoundException
 from safe_qgis.keyword_io import KeywordIO
 from safe_qgis.map_legend import MapLegend
-from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.utilities import setupPrinter, pointsToMM, mmToPoints
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -148,7 +147,6 @@ class Map():
         if myImpactTitleHeight:
             myTopOffset += myImpactTitleHeight + self.verticalSpacing + 2
         self.drawLegend(myTopOffset)
-        self.drawImpactTable(myTopOffset)
         self.drawDisclaimer()
 
     def renderComposition(self):
@@ -168,7 +166,6 @@ class Map():
             None
         """
         LOGGER.debug('InaSAFE Map renderComposition called')
-        self.composeMap()
         # NOTE: we ignore self.composition.printAsRaster() and always rasterise
         myWidth = (int)(self.pageDpi * self.pageWidth / 25.4)
         myHeight = (int)(self.pageDpi * self.pageHeight / 25.4)
@@ -189,11 +186,8 @@ class Map():
         myImage.save(myImagePath)
         return myImagePath, myImage, myTargetArea
 
-    def renderCompleteReport(self, theFilename):
-        """Generate the printout for our final map + table composition.
-
-        If the layer includes appropriate keywords, the report will consist
-        of a map page and one or more tabular report pages.
+    def printToPdf(self, theFilename):
+        """Generate the printout for our final map.
 
         Args:
             theFilename: str - optional path on the file system to which the
@@ -201,11 +195,11 @@ class Map():
                 used.
         Returns:
             str: file name of the output file (equivalent to theFilename if
-                provided.
+                provided).
         Raises:
             None
         """
-        LOGGER.debug('InaSAFE Map renderCompleteReport called')
+        LOGGER.debug('InaSAFE Map printToPdf called')
         if theFilename is None:
             myMapPdfPath = unique_filename(prefix='report',
                                      suffix='.pdf',
@@ -222,15 +216,7 @@ class Map():
         myPainter = QtGui.QPainter(self.printer)
         myPainter.drawImage(myRectangle, myImage, myRectangle)
         myPainter.end()
-
-        # Now draw any additional tabular data
-        #self.printer.newPage()
-        if self.layer is not None:
-            myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
-            # Put the map image before the table
-        myHtmlRenderer = HtmlRenderer(self.pageDpi)
-        myHtmlPdfPath = myHtmlRenderer.htmlToPrinter(myHtml, myTablePath)
-        return myMapPdfPath, myHtmlPdfPath
+        return myMapPdfPath
 
     def drawLogo(self, theTopOffset):
         """Add a picture containing the logo to the map top left corner
@@ -673,47 +659,6 @@ class Map():
                          theTopOffset / myScaleFactor)
         return myItem
 
-    def drawImpactTable(self, theTopOffset):
-        """Render the impact table.
-
-        If anything goes wrong, none will be returned, otherwise the table will
-        be rendered into the composition.
-
-        Args:
-            theTopOffset - vertical offset at which to begin drawing
-        Returns:
-            None
-        Raises:
-            None
-        """
-        LOGGER.debug('InaSAFE Map drawImpactTable called')
-        # Draw the table
-        myTable = QgsComposerPicture(self.composition)
-        myHtmlRenderer = HtmlRenderer(self.pageDpi)
-        try:
-            myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
-            myWidth = 156
-            myImage = myHtmlRenderer.renderHtmlToPixmap(myHtml,
-                                                        theWidthMM=myWidth)
-        except KeywordNotFoundException:
-            return None
-        except Exception:
-            return None
-        if myImage is not None:
-            myTableFile = os.path.join(temp_dir(), 'table.png')
-            myImage.save(myTableFile, 'PNG')
-            myTable.setPictureFile(myTableFile)
-            myScaleFactor = 1
-            myTableHeight = self.pointsToMM(myImage.height()) * myScaleFactor
-            myTableWidth = self.pointsToMM(myImage.width()) * myScaleFactor
-            myLeftOffset = self.pageMargin + self.mapHeight - myTableWidth
-            myTable.setItemPosition(myLeftOffset,
-                                    theTopOffset,
-                                    myTableWidth,
-                                    myTableHeight)
-            myTable.setFrame(False)
-            self.composition.addItem(myTable)
-
     def drawDisclaimer(self):
         """Add a disclaimer to the composition.
 
@@ -810,7 +755,8 @@ class Map():
         self.setupComposition()
 
         myResolution = self.composition.printResolution()
-        self.printer = setupPrinter(theOutputFilePath, theR)
+        self.printer = setupPrinter(theOutputFilePath,
+                                    theResolution=myResolution)
         if self.composition:
             myFile = QtCore.QFile(theTemplateFilePath)
             myDocument = QtXml.QDomDocument()
@@ -819,4 +765,4 @@ class Map():
             if myNodeList.size() > 0:
                 myElement = myNodeList.at(0).toElement()
                 self.composition.readXML(myElement, myDocument)
-        self.renderCompleteReport()
+        self.printToPdf()

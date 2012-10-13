@@ -62,6 +62,7 @@ from safe_qgis.exceptions import (KeywordNotFoundException,
                                   InsufficientParametersException,
                                   HashNotFoundException)
 from safe_qgis.map import Map
+from safe_qgis.html_renderer import HtmlRenderer
 from safe_qgis.utilities import (htmlHeader,
                                  htmlFooter,
                                  setVectorStyle,
@@ -1904,30 +1905,34 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         myMap = Map(self.iface)
-        myFilename = QtGui.QFileDialog.getSaveFileName(self,
+        myMapFilename = str(QtGui.QFileDialog.getSaveFileName(self,
                             self.tr('Write to PDF'),
                             temp_dir() + os.sep + myMap.getMapTitle() + '.pdf',
-                            self.tr('Pdf File (*.pdf)'))
+                            self.tr('Pdf File (*.pdf)')))
         myMap.setImpactLayer(self.iface.activeLayer())
-        self.showBusy(self.tr('Map Creator'),
-                      self.tr('Generating your map as a PDF document...'),
-                      theProgress=20)
+
+        myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
+        myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
+        myHtmlPdfPath = myHtmlRenderer.printImpactTable(
+            theLayer=self.iface.activeLayer(), theFilename=myTableFilename)
+        QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myHtmlPdfPath,
+                                                   QtCore.QUrl.TolerantMode))
         try:
-            myMapReport, myHtmlReport = myMap.renderCompleteReport(myFilename)
+            myMapPdfPath = myMap.printToPdf(myMapFilename)
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Your PDF was created....opening using '
                                   'the default PDF viewer on your system.'
                                   'The generated pdfs were saved as: %s and'
-                                  '%s' % (myMapReport, myHtmlReport)),
+                                  '%s' % (myMapPdfPath, myHtmlPdfPath)),
                           theProgress=80)
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myMapReport,
-                                 QtCore.QUrl.TolerantMode))
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myMapReport,
-                                                       QtCore.QUrl.TolerantMode))
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl('file:///' + myTableFilename,
+                QtCore.QUrl.TolerantMode))
+
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Processing complete.'
                                   'The generated pdfs were saved as: %s and'
-                                  '%s' % (myMapReport, myHtmlReport)),
+                                  '%s' % (myMapPdfPath, myHtmlPdfPath)),
                           theProgress=100)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests

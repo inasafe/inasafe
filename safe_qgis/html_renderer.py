@@ -60,7 +60,7 @@ class HtmlRenderer():
             * theWidthMM- width of the table in mm - will be converted to
               points based on the resolution of our page.
         Returns:
-            A QPixmap
+            QPixmap
         Raises:
             Any exceptions raised by the InaSAFE library will be propagated.
         """
@@ -114,7 +114,7 @@ class HtmlRenderer():
         Raises:
             None
         """
-        LOGGER.info('InaSAFE Map htmlToPrinter called')
+        LOGGER.info('InaSAFE Map printToPdf called')
         myHeader = htmlHeader()
         myFooter = htmlFooter()
         myHtml = myHeader + theHtml + myFooter
@@ -138,7 +138,7 @@ class HtmlRenderer():
         return #self.htmlPrintedFlag
 
 
-    def htmlToPrinter(self, theHtml, theOutputFilePath=None):
+    def printToPdf(self, theHtml, theFilename=None):
         """Render an html snippet into the printer, paginating as needed.
 
         Args:
@@ -146,7 +146,7 @@ class HtmlRenderer():
                 header and footer appended to it in order to make it a valid
                 html document. The header will also apply the bootstrap theme
                 to the document.
-            * theOutputFilePath: str String containing a pdf file path that the
+            * theFilename: str String containing a pdf file path that the
                 output will be written to.
         Returns:
             str: The file path of the output pdf (which is the same as the
@@ -155,20 +155,21 @@ class HtmlRenderer():
         Raises:
             None
         """
-        LOGGER.info('InaSAFE Map htmlToPrinter called')
+        LOGGER.info('InaSAFE Map printToPdf called')
+        if theFilename is None:
+            myHtmlPdfPath = unique_filename(prefix='table',
+                                           suffix='.pdf',
+                                           dir=temp_dir('work'))
+        else:
+            # We need to cast to python string in case we receive a QString
+            myHtmlPdfPath = str(theFilename)
         myHeader = htmlHeader()
         myFooter = htmlFooter()
         myHtml = myHeader + theHtml + myFooter
         self.webView = QtWebKit.QWebView()
-        if theOutputFilePath is None:
-            myFilePath = unique_filename(prefix='table',
-                                         suffix='.pdf',
-                                         dir=temp_dir())
-        else:
-            myFilePath = theOutputFilePath
 
-        self.printer = setupPrinter(myFilePath)
-        self.webView.loadFinished.connect(self.printWebPage)
+        self.printer = setupPrinter(myHtmlPdfPath)
+        self.webView.loadFinished.connect(self.readToPrintSlot)
         self.htmlPrintedFlag = False
 
         # This is just for debugging
@@ -190,12 +191,15 @@ class HtmlRenderer():
             time.sleep(mySleepPeriod)
 
         if not self.htmlPrintedFlag:
+            # Bodge for if signal isnt received after 10s - doesrnt really work
+            # TODO get web page printing in unit test context where there is
+            # no event loop....TS
             LOGGER.error('Failed to make a print out, forcing')
-            self.printWebPage()
+            self.readToPrintSlot()
 
-        return myFilePath
+        return myHtmlPdfPath
 
-    def printWebPage(self):
+    def readToPrintSlot(self):
         """Slot called when the page is loaded and ready for printing.
 
         Args: None
@@ -203,25 +207,29 @@ class HtmlRenderer():
         Raises: None
         """
         self.htmlPrintedFlag = True
-        LOGGER.debug('printWebPage slot called')
+        LOGGER.debug('readToPrintSlot slot called')
         self.webView.print_(self.printer)
         QtCore.QObject.disconnect(self.webView,
                                   QtCore.SIGNAL("loadFinished(bool)"),
-                                  self.printWebPage)
+                                  self.readToPrintSlot)
 
-    def printImpactTable(self, theLayer, theOutputFilePath=None):
+    def printImpactTable(self, theLayer, theFilename=None):
         """High level table generator to print layer keywords.
+
+        It gets the summary and impact table from an QgsMapLayer's keywords and
+        renders to pdf, returning the resulting PDF file path.
 
         Args:
             * theLayer: QgsMapLayer instance (required)
 
         """
-        myFilePath = theOutputFilePath
-        if theOutputFilePath is None:
+        myFilePath = theFilename
+        if theFilename is None:
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
         myKeywordIO = KeywordIO()
-        myHtml = myKeywordIO.readKeywords(theLayer, 'impact_table')
-        myFlag = self.htmlToPrinter(myHtml, myFilePath)
+        myHtml = myKeywordIO.readKeywords(theLayer, 'impact_summary')
+        myHtml += myKeywordIO.readKeywords(theLayer, 'impact_table')
+        myFlag = self.printToPdf(myHtml, myFilePath)
         if not myFlag:
             return None
         else:

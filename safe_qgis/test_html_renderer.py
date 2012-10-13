@@ -35,7 +35,7 @@ class HtmlRendererTest(unittest.TestCase):
 
     def test_htmlToPrinter(self):
         """Test that we can render some html to a printer."""
-        LOGGER.debug('InaSAFE HtmlRenderer testing htmlToPrinter')
+        LOGGER.debug('InaSAFE HtmlRenderer testing printToPdf')
         myHtml = ('<table>'
                   '<thead>'
                   '<tr>'
@@ -56,7 +56,7 @@ class HtmlRendererTest(unittest.TestCase):
                                  suffix='.pdf',
                                  dir=temp_dir('test'))
         LOGGER.debug(myPath)
-        myPath = myRenderer.htmlToPrinter(myHtml, myPath)
+        myPath = myRenderer.printToPdf(myHtml, myPath)
         assert myPath is not None
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
@@ -74,7 +74,7 @@ class HtmlRendererTest(unittest.TestCase):
                                  suffix='.pdf',
                                  dir=temp_dir('test'))
         myPath = myHtmlRenderer.printImpactTable(myLayer,
-                                                 theOutputFilePath=myPath)
+                                                 theFilename=myPath)
         assert myPath is not None
         myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
         assertHashForFile(myExpectedHash, myPath)
