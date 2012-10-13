@@ -1097,7 +1097,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         except:  # pylint: disable=W0702
             myMessage = self.tr('Could not remove the unneded fields')
             LOGGER.debug(myMessage)
-            raise
 
         del toDel, myProvider, myFields
         self.keywordIO.appendKeywords(self.postprocLayer, {'title': lName})

@@ -45,7 +45,6 @@ class AgePostprocessor(AbstractPostprocessor):
             self._raise_error('clear needs to be called before setup')
 
         self.population_total = params['population_total']
-        self._log_message(str(params))
         try:
             #either all 3 ratio are custom set or we use defaults
             self.youth_ratio = params['youth_ratio']
