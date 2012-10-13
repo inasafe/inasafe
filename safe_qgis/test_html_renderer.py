@@ -16,14 +16,15 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
 import unittest
 import logging
 
 from safe_qgis.safe_interface import temp_dir, unique_filename
 from safe_qgis.utilities_test import (getQgisTestApp,
-                                      assertHashForFile,
+                                      assertHashesForFile,
                                       loadLayer)
-from safe_qgis.map import HtmlRenderer
+from safe_qgis.html_renderer import HtmlRenderer
 
 QGISAPP, CANVAS, IFACE, PARENT = getQgisTestApp()
 LOGGER = logging.getLogger('InaSAFE')
@@ -33,33 +34,56 @@ class HtmlRendererTest(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_htmlToPrinter(self):
-        """Test that we can render some html to a printer."""
-        LOGGER.debug('InaSAFE HtmlRenderer testing printToPdf')
+    def sampleHtml(self):
+        """Helper function to generate some sample html."""
         myHtml = ('<table>'
                   '<thead>'
                   '<tr>'
-                  '<th rowspan="2">Wilayah</th>'
-                  '<th colspan="2">Jumlah Penduduk</th>'
-                  '<th rospan="2" colspan="2">Jumlah Penduduk yang Mungkin</th>'
+                  '<th>Wilayah</th>'
+                  '<th>Jumlah Penduduk</th>'
+                  '<th>Jumlah Penduduk yang Mungkin</th>'
+                  '<th>Wilayah</th>'
+                  '<th>Jumlah Penduduk</th>'
+                  '<th>Jumlah Penduduk yang Mungkin</th>'
                   '</tr>')
-        i = 100
+        i = 0
         while i < 100:
             i += 1
-            myHtml+=('<tr>'
-                     '<td></td><td></td><td></td><td></td><td></td><td></td>'
-                     '</tr>')
+            myHtml += ('<tr>'
+                       '<td>%(i)s</td><td>%(i)s</td><td>%(i)s</td>'
+                       '<td>%(i)s</td><td>%(i)s</td><td>%(i)s</td>'
+                       '</tr>') % {'i': i}
         myHtml += '</table>'
+        return myHtml
+
+    def test_printToPdf(self):
+        """Test that we can render some html to a pdf (most common use case).
+        """
+        LOGGER.debug('InaSAFE HtmlRenderer testing printToPdf')
+        myHtml = self.sampleHtml()
         myPageDpi = 300
         myRenderer = HtmlRenderer(myPageDpi)
         myPath = unique_filename(prefix='testHtmlTable',
                                  suffix='.pdf',
                                  dir=temp_dir('test'))
         LOGGER.debug(myPath)
-        myPath = myRenderer.printToPdf(myHtml, myPath)
-        assert myPath is not None
-        myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
-        assertHashForFile(myExpectedHash, myPath)
+        # If it fails myNewPath will come back as None
+        myNewPath = myRenderer.printToPdf(myHtml, myPath)
+        myMessage = 'Rendered output does not exist: %s' % myNewPath
+        assert os.path.exists(myNewPath), myMessage
+        # Also it should use our desired output file name
+        myMessage = 'Incorrect path - got: %s\nExpected: %s\n' % (
+            myNewPath, myPath)
+        assert myNewPath == myPath, myMessage
+        # pdf rendering is non deterministic so we can't do a hash check
+        # test_renderComposition renders just the image instead of pdf
+        # so we hash check there and here we just do a basic minimum file
+        # size check.
+        mySize = os.stat(myNewPath).st_size
+        myExpectedSize = 352798 # as rendered on linux ub 12.04 64
+        myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
+            myExpectedSize, mySize)
+        assert mySize >= myExpectedSize, myMessage
 
     def test_printImpactTable(self):
         """Test that we can render html from impact table keywords."""
@@ -75,9 +99,39 @@ class HtmlRendererTest(unittest.TestCase):
                                  dir=temp_dir('test'))
         myPath = myHtmlRenderer.printImpactTable(myLayer,
                                                  theFilename=myPath)
-        assert myPath is not None
-        myExpectedHash = 'c9164d5c2bb85c6081905456ab827f3e'
-        assertHashForFile(myExpectedHash, myPath)
+        myMessage = 'Rendered output does not exist: %s' % myPath
+        assert os.path.exists(myPath), myMessage
+        # pdf rendering is non deterministic so we can't do a hash check
+        # test_renderComposition renders just the image instead of pdf
+        # so we hash check there and here we just do a basic minimum file
+        # size check.
+        mySize = os.stat(myPath).st_size
+        myExpectedSize = 352798 # as rendered on linux ub 12.04 64
+        myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
+            myExpectedSize, mySize
+            )
+        assert mySize >= myExpectedSize, myMessage
+
+    def test_renderHtmlToPixmap(self):
+        """Test that we can render html to a pixmap."""
+        LOGGER.debug('InaSAFE HtmlRenderer testing renderHtmlToPixmap')
+        myHtml = self.sampleHtml()
+        LOGGER.debug(myHtml)
+        myPageDpi = 300
+        myRenderer = HtmlRenderer(myPageDpi)
+        myPath = unique_filename(prefix='testHtmlToPixmap',
+                                 suffix='.png',
+                                 dir=temp_dir('test'))
+        LOGGER.debug(myPath)
+        myWidth = 250
+        myPixmap = myRenderer.renderHtmlToPixmap(myHtml, myWidth)
+        LOGGER.debug(myPixmap.__class__)
+        myPixmap.save(myPath)
+        myMessage = 'Rendered output does not exist: %s' % myPath
+        assert os.path.exists(myPath), myMessage
+        myExpectedHashes = ['',  # ub12.04-64
+                            '']
+        assertHashesForFile(myExpectedHashes, myPath)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(MapTest, 'test')

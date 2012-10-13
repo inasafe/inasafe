@@ -50,6 +50,18 @@ class HtmlRenderer():
         self.htmlPrintedFlag = False
         self.webView = None
 
+    def tr(self, theString):
+        """We implement this since we do not inherit QObject.
+
+        Args:
+           theString - string for translation.
+        Returns:
+           Translated version of theString.
+        Raises:
+           no exceptions explicitly raised.
+        """
+        return QtCore.QCoreApplication.translate('HtmlRenderer', theString)
+
     def renderHtmlToPixmap(self, theHtml, theWidthMM):
         """Render some HTML to a pixmap.
 
@@ -70,7 +82,7 @@ class HtmlRenderer():
         # resolutions.
         myBaselineDpi = 150
         myFactor = float(self.pageDpi) / myBaselineDpi
-        myWidthPx = mmToPoints(theWidthMM)
+        myWidthPx = mmToPoints(theWidthMM, self.pageDpi)
         myPage = QtWebKit.QWebPage()
         myFrame = myPage.mainFrame()
         myFrame.setTextSizeMultiplier(myFactor)
@@ -137,7 +149,6 @@ class HtmlRenderer():
 
         return #self.htmlPrintedFlag
 
-
     def printToPdf(self, theHtml, theFilename=None):
         """Render an html snippet into the printer, paginating as needed.
 
@@ -166,22 +177,24 @@ class HtmlRenderer():
         myHeader = htmlHeader()
         myFooter = htmlFooter()
         myHtml = myHeader + theHtml + myFooter
-        self.webView = QtWebKit.QWebView()
 
         self.printer = setupPrinter(myHtmlPdfPath)
+
+        self.webView = QtWebKit.QWebView()
         self.webView.loadFinished.connect(self.readToPrintSlot)
+
         self.htmlPrintedFlag = False
 
         # This is just for debugging
-        myHtmlFilePath = unique_filename(suffix='.html', dir=temp_dir())
+        myHtmlFilePath = os.path.splitext(myHtmlPdfPath)[0] + '.html'
+        myHtmlFile = file(myHtmlFilePath, 'wt')
+        myHtmlFile.write(myHtml)
+        myHtmlFile.close()
+        LOGGER.debug('Html written to: %s' % myHtmlFilePath)
 
-        LOGGER.debug('Html written to %s' % myHtmlFilePath)
-        myFile = file(myHtmlFilePath, 'wt')
-        myFile.writelines(myHtml)
-        myFile.close()
         self.webView.load(QtCore.QUrl(myHtmlFilePath))
         #self.webView.setHtml(myHtml)
-        QtCore.QCoreApplication.processEvents()
+        #QtCore.QCoreApplication.processEvents()
         myTimeOut = 10
         myCounter = 0
         mySleepPeriod = 1
@@ -196,7 +209,6 @@ class HtmlRenderer():
             # no event loop....TS
             LOGGER.error('Failed to make a print out, forcing')
             self.readToPrintSlot()
-
         return myHtmlPdfPath
 
     def readToPrintSlot(self):
@@ -216,7 +228,7 @@ class HtmlRenderer():
     def printImpactTable(self, theLayer, theFilename=None):
         """High level table generator to print layer keywords.
 
-        It gets the summary and impact table from an QgsMapLayer's keywords and
+        It gets the summary and impact table from a QgsMapLayer's keywords and
         renders to pdf, returning the resulting PDF file path.
 
         Args:
@@ -226,11 +238,19 @@ class HtmlRenderer():
         myFilePath = theFilename
         if theFilename is None:
             myFilePath = unique_filename(suffix='.pdf', dir=temp_dir())
+
         myKeywordIO = KeywordIO()
-        myHtml = myKeywordIO.readKeywords(theLayer, 'impact_summary')
-        myHtml += myKeywordIO.readKeywords(theLayer, 'impact_table')
-        myFlag = self.printToPdf(myHtml, myFilePath)
-        if not myFlag:
-            return None
+        mySummaryTable = myKeywordIO.readKeywords(theLayer, 'impact_summary')
+        myFullTable = myKeywordIO.readKeywords(theLayer, 'impact_table')
+        if mySummaryTable != myFullTable:
+            myHtml = '<h2>%s</h2>' % self.tr('Summary Table')
+            myHtml += mySummaryTable
+            myHtml += '<h2>%s</h2>' % self.tr('Detailed Table')
+            myHtml += myFullTable
         else:
-            return myFilePath
+            myHtml = myFullTable
+
+        # myNewFilePath should be the same as myFilePath
+        myNewFilePath = self.printToPdf(myHtml, myFilePath)
+        return myNewFilePath
+

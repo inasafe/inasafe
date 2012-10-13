@@ -1905,11 +1905,20 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             Any exceptions raised by the InaSAFE library will be propogated.
         """
         myMap = Map(self.iface)
-        myMapFilename = str(QtGui.QFileDialog.getSaveFileName(self,
-                            self.tr('Write to PDF'),
-                            temp_dir() + os.sep + myMap.getMapTitle() + '.pdf',
-                            self.tr('Pdf File (*.pdf)')))
+        if self.iface.activeLayer() is None:
+            QtGui.QMessageBox.warning(self,
+                                self.tr('InaSAFE'),
+                                self.tr('Please select a valid impact layer'
+                                        ' before trying to print.'))
+            return
         myMap.setImpactLayer(self.iface.activeLayer())
+        LOGGER.debug('Map Title: %s' % myMap.getMapTitle())
+        myMapFilename = QtGui.QFileDialog.getSaveFileName(self,
+                            self.tr('Write to PDF'),
+                            os.path.join(temp_dir(),
+                                         myMap.getMapTitle() + '.pdf'),
+                            self.tr('Pdf File (*.pdf)'))
+        myMapFilename = str(myMapFilename)
 
         myTableFilename = os.path.splitext(myMapFilename)[0] + '_table.pdf'
         myHtmlRenderer = HtmlRenderer(thePageDpi=myMap.pageDpi)
