@@ -5,6 +5,9 @@ from safe.storage.raster import Raster
 from safe.common.utilities import ugettext as tr
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
+from safe.defaults import (DEFAULT_YOUTH_RATIO,
+                           DEFAULT_ADULT_RATIO,
+                           DEFAULT_ELDER_RATIO)
 
 import numpy
 
@@ -88,7 +91,11 @@ class ITBFatalityFunction(FunctionProvider):
                       calculate_displaced_people=True,
                       postprocessors={'Gender': {'on': True},
                                       'Age': {'on': True,
-                                              'params': {}
+                                              'params': {
+                                                  'youth_ratio': DEFAULT_YOUTH_RATIO,
+                                                  'adult_ratio': DEFAULT_ADULT_RATIO,
+                                                  'elder_ratio': DEFAULT_ELDER_RATIO
+                                              }
                                       }
                       }
                       )
