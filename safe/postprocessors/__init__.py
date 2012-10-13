@@ -18,5 +18,4 @@ __date__ = '10/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from gender_postprocessor import GenderPostprocessor
-from age_postprocessor import AgePostprocessor
+from postprocessor_factory import PostprocessorFactory

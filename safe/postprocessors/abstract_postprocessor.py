@@ -25,18 +25,34 @@ from safe.common.exceptions import PostprocessorError
 
 
 class AbstractPostprocessor():
+    """
+    Abstract postprocessor class, do not instantiate directly.
+    but instantiate the PostprocessorFactory class which will take care of
+    setting up many prostprocessors. Alternatively you can as well instantiate
+    directly a sub class of AbstractPostprocessor.
+
+    Each subclass has to overload the process method and call its parent
+    like this: AbstractPostprocessor.process(self)
+    if a postprocessor needs parmeters, then it should override the setup and
+    clear methods as well and call respectively
+    AbstractPostprocessor.setup(self) and AbstractPostprocessor.clear(self).
+
+    for implementation examples see AgePostprocessor wich uses mandatory and
+    optional parameters
+    """
+
     def __init__(self):
         self._results = None
 
-    def setup(self, *args):
-        del args
+    def setup(self, params):
+        del params
         if self._results is not None:
-            self.raise_error('clear needs to be called before setup')
+            self._raise_error('clear needs to be called before setup')
         self._results = {}
 
     def process(self):
         if self._results is None:
-            self.raise_error('setup needs to be called before process')
+            self._raise_error('setup needs to be called before process')
 
     def results(self):
         return self._results
@@ -44,7 +60,7 @@ class AbstractPostprocessor():
     def clear(self):
         self._results = None
 
-    def raise_error(self, message=None):
+    def _raise_error(self, message=None):
         if message is None:
             message = 'Postprocessor error'
         raise PostprocessorError(message)

@@ -21,7 +21,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from safe.postprocessors.abstract_postprocessor import (
     AbstractPostprocessor)
 
-
 class AgePostprocessor(AbstractPostprocessor):
     """
     https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
@@ -30,24 +29,35 @@ class AgePostprocessor(AbstractPostprocessor):
     15-64 years: 65.9% (male 2,234,860,865/female 2,187,838,153)
     65 years and over: 7.9% (male 227,164,176/female 289,048,221) (2011 est.)
     """
-    YOUTH_RATIO = 0.263
-    ADULT_RATIO = 0.659
-    ELDERLY_RATIO = 0.079
+    DEFAULT_YOUTH_RATIO = 0.263
+    DEFAULT_ADULT_RATIO = 0.659
+    DEFAULT_ELDER_RATIO = 0.079
 
     def __init__(self):
         AbstractPostprocessor.__init__(self)
         self.population_total = None
 
-    def setup(self, *args):
-        AbstractPostprocessor.setup(self)
+    def setup(self, params):
+        AbstractPostprocessor.setup(self, None)
         if self.population_total is not None:
-            self.raise_error('clear needs to be called before setup')
-        self.population_total = args[0]
+            self._raise_error('clear needs to be called before setup')
+
+        self.population_total = params['population_total']
+
+        try:
+            #either all 3 ratio are custom set or we use defaults
+            self.youth_ratio = params['youth_ratio']
+            self.adult_ratio = params['adult_ratio']
+            self.elder_ratio = params['elder_ratio']
+        except KeyError:
+            self.youth_ratio = self.DEFAULT_YOUTH_RATIO
+            self.adult_ratio = self.DEFAULT_ADULT_RATIO
+            self.elder_ratio = self.DEFAULT_ELDER_RATIO
 
     def process(self):
         AbstractPostprocessor.process(self)
         if self.population_total is None:
-            self.raise_error('setup needs to be called before process')
+            self._raise_error('setup needs to be called before process')
         self._calculate_youth()
         self._calculate_adult()
         self._calculate_elderly()
@@ -58,18 +68,18 @@ class AgePostprocessor(AbstractPostprocessor):
 
     def _calculate_youth(self):
         myName = self.tr('Youth count')
-        myResult = self.population_total * self.YOUTH_RATIO
+        myResult = self.population_total * self.youth_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_adult(self):
         myName = self.tr('Adult count')
-        myResult = self.population_total * self.ADULT_RATIO
+        myResult = self.population_total * self.adult_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_elderly(self):
         myName = self.tr('Elderly count')
-        myResult = self.population_total * self.ELDERLY_RATIO
+        myResult = self.population_total * self.elder_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)

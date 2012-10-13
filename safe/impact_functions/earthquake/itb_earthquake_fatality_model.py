@@ -86,7 +86,11 @@ class ITBFatalityFunction(FunctionProvider):
                       # Threshold below which layer should be transparent
                       tolerance=0.01,
                       calculate_displaced_people=True,
-                      postprocessors={'Gender': True, 'Age': True}
+                      postprocessors={'Gender': {'on': True},
+                                      'Age': {'on': True,
+                                              'params': {}
+                                      }
+                      }
                       )
     title = tr('Die or be displaced')
 

@@ -80,8 +80,7 @@ from safe_qgis.configurable_impact_functions_dialog import (
    ConfigurableImpactFunctionsDialog)
 from safe_qgis.keywords_dialog import KeywordsDialog
 
-from safe.postprocessors import (AgePostprocessor,
-                                GenderPostprocessor)
+from safe.postprocessors import PostprocessorFactory
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
@@ -91,7 +90,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class Dock(QtGui.QDockWidget, Ui_DockBase):
-    """Dock implementation class for the Risk In A Box plugin."""
+    """Dock implementation class for the inaSAFE plugin."""
 
     def __init__(self, iface):
         """Constructor for the dialog.
@@ -1192,26 +1191,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 #                    '    </tr>')
 
         #instantiate postprocessors if they are requested by the function
-
         try:
-            myEnable = self.functionParams['postprocessors']['Gender']
-            if myEnable:
-                myGenderPostprocessor = eval('Gender'+'Postprocessor()')
-                LOGGER.debug(myGenderPostprocessor)
-            else:
-                myGenderPostprocessor = None
-        except KeyError:
-            myGenderPostprocessor = None
-
-        try:
-            myEnable = self.functionParams['postprocessors']['Age']
-            if myEnable:
-                myAgePostprocessor = AgePostprocessor()
-            else:
-                myAgePostprocessor = None
-        except KeyError:
-            myAgePostprocessor = None
-
+            myRequestedPostprocessors = self.functionParams['postprocessors']
+            myFactory = PostprocessorFactory()
+            myPostprocessors = myFactory.get(myRequestedPostprocessors)
+        except (TypeError, KeyError):
+            # TypeError is for when functionParams is none
+            # KeyError is for when ['postprocessors'] is unavailable
+            myPostprocessors = {}
+        LOGGER.debug('Running this postprocessors: ' + str(myPostprocessors))
 
         myNameFieldIndex = self.postprocLayer.fieldNameIndex(
             myAttribute)
@@ -1219,7 +1207,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         mySumFieldIndex = self.postprocLayer.fieldNameIndex(
             self.getAggregationFieldNameSum())
 
-        if myGenderPostprocessor is not None:
+        if 'Gender' in myPostprocessors:
             myFemRatioIsVariable = False
             try:
                 myFemRatioField = self.postprocAttributes[self.defaults[
@@ -1251,36 +1239,31 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                 # is implemented
                 # mySumFieldIndex is -1 if no aggregation happened (like when
                 # we have vector impact layers
-                aggrSum = attrMap[mySumFieldIndex].toString()
                 LOGGER.debug(mySumFieldIndex)
+                aggrSum = attrMap[mySumFieldIndex].toString()
                 aggrSum = int(round(float(aggrSum)))
+                myParams = {'population_total': aggrSum}
+                for n, p in myPostprocessors.iteritems():
+                    if n == 'Gender':
+                        if myFemRatioIsVariable:
+                            myFemRatio, _ = attrMap[
+                                            myFemRatioFieldIndex].toDouble()
+                        myParams['female_ratio'] = myFemRatio
 
-                if myGenderPostprocessor is not None:
-                    if myFemRatioIsVariable:
-                        myFemRatio, _ = attrMap[myFemRatioFieldIndex].toDouble()
+                    p.setup(myParams)
+                    p.process()
+                    myResults = p.results()
+                    p.clear()
+                    LOGGER.debug(myResults)
 
-                    myGenderPostprocessor.setup(aggrSum, myFemRatio)
-                    myGenderPostprocessor.process()
-                    myGenderResults = myGenderPostprocessor.results()
-                    myGenderPostprocessor.clear()
-                    LOGGER.debug(myGenderResults)
-
-                if myAgePostprocessor is not None:
-                    myAgePostprocessor.setup(aggrSum)
-                    myAgePostprocessor.process()
-                    myAgeResults = myAgePostprocessor.results()
-                    myAgePostprocessor.clear()
-                    LOGGER.debug(myAgeResults)
             except KeyError:
-                LOGGER.debug('No totals availables')
+                LOGGER.debug('No totals availables on vector impact layer')
                 myEngineImpactLayer = self.runner.impactLayer()
                 myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
                 myImpactSummary = self.keywordIO.readKeywords(
-                    myQgisImpactLayer,'impact_summary')
-                from HTMLParser import HTMLParser
+                    myQgisImpactLayer, 'impact_summary')
 
                 LOGGER.debug(myImpactSummary)
-
 
             #TODO Remove
 #            myHTML += ('    <tr>'
@@ -1296,7 +1279,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 #                        '      </td>'
 #                        '      <td>'
 #                        + str(myGenderResults[str(self.tr('Females weekly'
-#                                                ' hygiene packs'))]['value']) +
+#                                                ' hygiene packs'))]['value'])+
 #                        '      </td>'
 #                        '    </tr>')
 #        #close table

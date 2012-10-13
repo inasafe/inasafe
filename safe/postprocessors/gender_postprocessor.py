@@ -28,17 +28,17 @@ class GenderPostprocessor(AbstractPostprocessor):
         self.population_total = None
         self.female_ratio = None
 
-    def setup(self, *args):
-        AbstractPostprocessor.setup(self)
+    def setup(self, params):
+        AbstractPostprocessor.setup(self, None)
         if self.population_total is not None or self.female_ratio is not None:
-            self.raise_error('clear needs to be called before setup')
-        self.population_total = args[0]
-        self.female_ratio = args[1]
+            self._raise_error('clear needs to be called before setup')
+        self.population_total = params['population_total']
+        self.female_ratio = params['female_ratio']
 
     def process(self):
         AbstractPostprocessor.process(self)
         if self.population_total is None or self.female_ratio is None:
-            self.raise_error('setup needs to be called before process')
+            self._raise_error('setup needs to be called before process')
         self._calculate_females()
         self._calculate_female_weekly_hygene_packs()
 
