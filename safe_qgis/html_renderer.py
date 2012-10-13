@@ -161,7 +161,7 @@ class HtmlRenderer():
                 output will be written to.
         Returns:
             str: The file path of the output pdf (which is the same as the
-                theOutputFilePath parameter if it was specified.
+                theFilename parameter if it was specified.
 
         Raises:
             None
@@ -194,8 +194,9 @@ class HtmlRenderer():
 
         self.webView.load(QtCore.QUrl(myHtmlFilePath))
         #self.webView.setHtml(myHtml)
-        #QtCore.QCoreApplication.processEvents()
-        myTimeOut = 10
+        QtCore.QCoreApplication.processEvents()
+
+        myTimeOut = 20
         myCounter = 0
         mySleepPeriod = 1
         while not self.htmlPrintedFlag and myCounter < myTimeOut:
@@ -208,7 +209,7 @@ class HtmlRenderer():
             # TODO get web page printing in unit test context where there is
             # no event loop....TS
             LOGGER.error('Failed to make a print out, forcing')
-            self.readToPrintSlot()
+            #self.readToPrintSlot()
         return myHtmlPdfPath
 
     def readToPrintSlot(self):
@@ -253,4 +254,3 @@ class HtmlRenderer():
         # myNewFilePath should be the same as myFilePath
         myNewFilePath = self.printToPdf(myHtml, myFilePath)
         return myNewFilePath
-
