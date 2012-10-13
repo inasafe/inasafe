@@ -19,6 +19,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import os
+import sys
 import numpy
 import logging
 
@@ -28,7 +29,6 @@ from safe.common.utilities import verify
 from safe.common.dynamic_translations import names as internationalised_titles
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
-from safe.common.utilities import unique_filename
 
 from layer import Layer
 from projection import Projection
@@ -174,13 +174,38 @@ class Vector(Layer):
                        'must be the same')
                 verify(len(geometry) == len(data), msg)
 
-            # Write and read back again to
-            # * Check the integrity of given data
-            # * Ensure everything is the same as when a filename was specified.
-            #   This will e.g. establish extent
-            tmp_filename = unique_filename(suffix='.shp')
-            self.write_to_file(tmp_filename)
-            self.read_from_file(tmp_filename)
+            # Establish extent
+            if len(geometry) == 0:
+                # Degenerate layer
+                self.extent = [0, 0, 0, 0]
+                return
+
+            # Compute bounding box for each geometry type
+            minx = miny = sys.maxint
+            maxx = maxy = -minx
+            if self.is_point_data:
+                A = numpy.array(self.get_geometry())
+                minx = min(A[:, 0])
+                maxx = max(A[:, 0])
+                miny = min(A[:, 1])
+                maxy = max(A[:, 1])
+            elif self.is_line_data:
+                for g in self.get_geometry():
+                    A = numpy.array(g)
+                    minx = min(minx, min(A[:, 0]))
+                    maxx = max(maxx, max(A[:, 0]))
+                    miny = min(miny, min(A[:, 1]))
+                    maxy = max(maxy, max(A[:, 1]))
+            elif self.is_polygon_data:
+                # Do outer ring only
+                for g in self.get_geometry(as_geometry_objects=False):
+                    A = numpy.array(g)
+                    minx = min(minx, min(A[:, 0]))
+                    maxx = max(maxx, max(A[:, 0]))
+                    miny = min(miny, min(A[:, 1]))
+                    maxy = max(maxy, max(A[:, 1]))
+
+            self.extent = [minx, maxx, miny, maxy]
 
     def __str__(self):
         """Render as name, number of features, geometry type

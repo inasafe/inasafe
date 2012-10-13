@@ -1040,21 +1040,21 @@ class Test_Engine(unittest.TestCase):
         for feature in I.get_data():
             if (feature['LONGITUDE'] == 150.1787 and
                 feature['LATITUDE'] == -35.70413):
-                assert numpy.isnan(feature['Tsunami Ma'])
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
             elif (feature['LONGITUDE'] == 150.1793 and
                   feature['LATITUDE'] == -35.70632):
-                assert numpy.isnan(feature['Tsunami Ma'])
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
             elif (feature['LONGITUDE'] == 150.18208 and
                   feature['LATITUDE'] == -35.70996):
-                assert numpy.isnan(feature['Tsunami Ma'])
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
             elif (feature['LONGITUDE'] == 150.18664 and
                   feature['LATITUDE'] == -35.70253):
-                assert numpy.isnan(feature['Tsunami Ma'])
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
             elif (feature['LONGITUDE'] == 150.18487 and
                   feature['LATITUDE'] == -35.70561):
-                assert numpy.isnan(feature['Tsunami Ma'])
+                assert numpy.isnan(feature['Tsunami Max Inundation Geo'])
             else:
-                assert not numpy.isnan(feature['Tsunami Ma'])
+                assert not numpy.isnan(feature['Tsunami Max Inundation Geo'])
 
         # Run main test
         plugin_name = 'Tsunami Building Loss Function'
@@ -2099,7 +2099,7 @@ class Test_Engine(unittest.TestCase):
             msg = 'Did not find new attribute name "%s" in %s' % (name,
                                                                   I_names)
             # FIXME (Ole): Shapefiles cut name down to 10 characters.
-            assert name[:10] in I_names, msg
+            assert name in I_names, msg
 
         # Verify interpolated values with test result
         count = 0
@@ -2144,7 +2144,7 @@ class Test_Engine(unittest.TestCase):
         assert I_attributes[13]['highway'] == 'road'
         assert I_attributes[13]['osm_id'] == 69372744
         assert I_attributes[13]['polygon_id'] == 0
-        assert I_attributes[13]['parent_lin'] == 131
+        assert I_attributes[13]['parent_line_id'] == 131
 
     test_line_interpolation_from_polygons_one_poly.slow = True
 
@@ -2213,7 +2213,7 @@ class Test_Engine(unittest.TestCase):
             msg = 'Did not find new attribute name "%s" in %s' % (name,
                                                                   I_names)
             # FIXME (Ole): Shapefiles cut name down to 10 characters.
-            assert name[:10] in I_names, msg
+            assert name in I_names, msg
 
         # Verify interpolated values with test result
         count = 0
@@ -2261,19 +2261,19 @@ class Test_Engine(unittest.TestCase):
         assert I_attributes[40]['highway'] == 'residential'
         assert I_attributes[40]['osm_id'] == 69373107
         assert I_attributes[40]['polygon_id'] == 111
-        assert I_attributes[40]['parent_lin'] == 54
+        assert I_attributes[40]['parent_line_id'] == 54
 
         assert I_attributes[76]['highway'] == 'secondary'
         assert I_attributes[76]['Category'] == 'High'
         assert I_attributes[76]['osm_id'] == 69370718
         assert I_attributes[76]['polygon_id'] == 374
-        assert I_attributes[76]['parent_lin'] == 1
+        assert I_attributes[76]['parent_line_id'] == 1
 
         assert I_attributes[85]['highway'] == 'secondary'
         assert I_attributes[85]['Category'] == 'Very High'
         assert I_attributes[85]['osm_id'] == 69371482
         assert I_attributes[85]['polygon_id'] == 453
-        assert I_attributes[85]['parent_lin'] == 133
+        assert I_attributes[85]['parent_line_id'] == 133
 
     test_line_interpolation_from_multiple_polygons.slow = True
 

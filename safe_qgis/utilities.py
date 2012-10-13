@@ -542,7 +542,7 @@ class QgsLogHandler(logging.Handler):
             # like line number etc. you can get from the log message.
             QgsMessageLog.logMessage(theRecord.getMessage(), 'InaSAFE', 0)
 
-        except MethodUnavailableError:
+        except (MethodUnavailableError, ImportError):
             pass
 
 

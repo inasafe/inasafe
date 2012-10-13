@@ -171,11 +171,8 @@ class Test_Clipping(unittest.TestCase):
             point_layer = Vector(data=values, geometry=points,
                                  projection=P.get_projection())
 
-            if len(point_layer) == 0:
-                # Degenerate layers have no geometry type
-                assert point_layer.geometry_type is None
-            else:
-                # Normal layers should be points
+            if len(point_layer) > 0:
+                # Geometry is only defined for layers that are not degenerate
                 assert point_layer.is_point_data
 
             polygon_layer = Vector(geometry=[polygon],
