@@ -90,13 +90,13 @@ class ITBFatalityFunction(FunctionProvider):
                       tolerance=0.01,
                       calculate_displaced_people=True,
                       postprocessors={'Gender': {'on': True},
-                                      'Age': {'on': True,
-                                              'params': {
-                                                  'youth_ratio': DEFAULT_YOUTH_RATIO,
-                                                  'adult_ratio': DEFAULT_ADULT_RATIO,
-                                                  'elder_ratio': DEFAULT_ELDER_RATIO
-                                              }
+                              'Age': {'on': True,
+                                      'params': {
+                                          'youth_ratio': DEFAULT_YOUTH_RATIO,
+                                          'adult_ratio': DEFAULT_ADULT_RATIO,
+                                          'elder_ratio': DEFAULT_ELDER_RATIO
                                       }
+                              }
                       }
                       )
     title = tr('Die or be displaced')

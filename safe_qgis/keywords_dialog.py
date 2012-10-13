@@ -24,6 +24,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
 from safe.common.odict import OrderedDict
+from safe.common.exceptions import InaSAFEError
 
 from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
@@ -35,7 +36,7 @@ from safe_qgis.utilities import (getExceptionWithStacktrace,
 
 from safe_qgis.exceptions import (InvalidParameterException,
                                   HashNotFoundException)
-from safe.common.exceptions import InaSAFEError
+
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.

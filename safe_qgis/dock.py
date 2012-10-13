@@ -1062,15 +1062,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             # add th according to the ammount of calculation done by each
             # postprocessor
             for calculationName in resList[0][1]:
-                myHTML += (               '      <th>'
+                myHTML += ('      <th>'
                                           + self.tr(calculationName) +
                                           '      </th>')
                 #close header row
             myHTML += '    </tr>'
             for zoneName, calc in resList:
-                myHTML += '    <tr><td>'+zoneName+'</td> '
+                myHTML += '    <tr><td>' + zoneName + '</td> '
                 for calculationName, calculationData in calc.iteritems():
-                    myHTML += (           '      <td>'
+                    myHTML += ('      <td>'
                                           + str(calculationData['value']) +
                                           '      </td>')
                     #close header row
