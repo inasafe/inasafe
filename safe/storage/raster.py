@@ -97,8 +97,6 @@ class Raster(Layer):
             #              this should be taken care of there
             self.nodata_value = numpy.nan
 
-            # FIXME(Ole): Store data here like we do with vector data
-
     def __str__(self):
         """Render as name and dimensions
         """
