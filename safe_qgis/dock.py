@@ -1012,13 +1012,74 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Args: None
 
-        Returns: a string concatenation of the list elements
+        Returns: a string containing the html in the requested format
         """
-        #FIXME, return a parsed HTML
-        if asOneBigTable:
-            pass
+
         LOGGER.debug(self.postprocOutput)
-        return ' '.join(self.postprocOutput)
+        if asOneBigTable:
+            self._parsePostProcOutputAsOneBigTables()
+        else:
+            return self._parsePostProcOutputAsMultipleTables()
+
+    def _parsePostProcOutputAsOneBigTables(self):
+        """
+        parses the postprocessing output as one table with all postprocessors
+
+        Args: None
+
+        Returns: a string containing the html
+        """
+
+        #FIXME, return a parsed HTML
+        return str(self.postprocOutput)
+
+    def _parsePostProcOutputAsMultipleTables(self):
+        """
+        parses the postprocessing output as one table per postprocessor
+
+        Args: None
+
+        Returns: a string containing the html
+        """
+
+        myHTML = ''
+        for proc, resList in self.postprocOutput.iteritems():
+            myHTML += ('<table class="table table-striped condensed">'
+                       '  <tbody>'
+                       '    <tr>'
+                       '       <td colspan="100%">'
+                       '         <strong>'
+                       + self.tr('Detailed %s report' %
+                                 self.tr(proc)) +
+                       '         </strong>'
+                       '       </td>'
+                       '    </tr>'
+                       '    <tr>'
+                       '      <th width="25%">'
+                       + self.aggrAttrTitle +
+                       '      </th>'
+                )
+            # add th according to the ammount of calculation done by each
+            # postprocessor
+            for calculationName in resList[0][1]:
+                myHTML += (               '      <th>'
+                                          + self.tr(calculationName) +
+                                          '      </th>')
+                #close header row
+            myHTML += '    </tr>'
+            for zoneName, calc in resList:
+                myHTML += '    <tr><td>'+zoneName+'</td> '
+                for calculationName, calculationData in calc.iteritems():
+                    myHTML += (           '      <td>'
+                                          + str(calculationData['value']) +
+                                          '      </td>')
+                    #close header row
+                myHTML += '    </tr>'
+
+            #close table
+            myHTML += ('</tbody></table>')
+
+        return myHTML
 
     def _aggregateResults(self):
         """
@@ -1156,13 +1217,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             myPostprocessors = {}
         LOGGER.debug('Running this postprocessors: ' + str(myPostprocessors))
 
-
         myFeatureNameAttribute = self.postprocAttributes[self.defaults[
                                                          'AGGR_ATTR_KEY']]
         if myFeatureNameAttribute is None:
-            aggrAttrTitle = self.tr('Aggregation unit')
+            self.aggrAttrTitle = self.tr('Aggregation unit')
         else:
-            aggrAttrTitle = myFeatureNameAttribute
+            self.aggrAttrTitle = myFeatureNameAttribute
 
         myNameFieldIndex = self.postprocLayer.fieldNameIndex(
             myFeatureNameAttribute)
@@ -1196,9 +1256,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
             #if a feature has no field called
             if myNameFieldIndex == -1:
-                name = str(feat.id())
+                zoneName = str(feat.id())
             else:
-                name = attrMap[myNameFieldIndex].toString()
+                zoneName = attrMap[myNameFieldIndex].toString()
 
             # FIXME, get rid of this if/else when polygon aggregation
             # is implemented
@@ -1237,11 +1297,10 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     p.clear()
                     LOGGER.debug(myResults)
                     try:
-                        self.postprocOutput[n].append(myResults)
+                        self.postprocOutput[n].append((zoneName, myResults))
                     except KeyError:
                         self.postprocOutput[n] = []
-                        self.postprocOutput[n].append(myResults)
-
+                        self.postprocOutput[n].append((zoneName, myResults))
 
     def _checkPostprocAttributes(self):
         """checks if the postprocessing layer has all attribute
