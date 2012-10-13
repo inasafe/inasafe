@@ -620,8 +620,8 @@ class Map():
         myLegendFile = os.path.join(temp_dir(), 'legend.png')
         self.legend.save(myLegendFile, 'PNG')
         myPicture1.setPictureFile(myLegendFile)
-        myLegendHeight = pointsToMM(self.legend.height())
-        myLegendWidth = pointsToMM(self.legend.width())
+        myLegendHeight = pointsToMM(self.legend.height(), self.pageDpi)
+        myLegendWidth = pointsToMM(self.legend.width(), self.pageDpi)
         myPicture1.setItemPosition(self.pageMargin,
                                    theTopOffset,
                                    myLegendWidth,

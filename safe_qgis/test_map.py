@@ -62,10 +62,22 @@ class MapTest(unittest.TestCase):
         CANVAS.refresh()
         myMap = Map(IFACE)
         myMap.setImpactLayer(myLayer)
-        myPath = myMap.renderComposition()
-        LOGGER.debug(myPath)
+        myImagePath, myImage, myTargetArea = myMap.renderComposition()
+        LOGGER.debug(myImagePath)
         myMessage = 'Rendered output does not exist'
-        assert os.path.exists(myPath), myMessage
+        assert myImage is not None
+
+        myDimensions = [myTargetArea.left(),
+                        myTargetArea.top(),
+                        myTargetArea.bottom(),
+                        myTargetArea.right()]
+        myExpectedDimensions = [0.0, 0.0, 3507.0, 2480.0]
+        myMessage = 'Expected target area to be %s, got %s' % (
+            str(myExpectedDimensions), str(myDimensions)
+        )
+        assert myExpectedDimensions == myDimensions, myMessage
+
+        assert os.path.exists(myImagePath), myMessage
 
         # .. note:: Template writing is experimental
         myPath = unique_filename(prefix='composerTemplate',
@@ -95,7 +107,7 @@ class MapTest(unittest.TestCase):
         # that this test wasnt replicating well
         myLayer, _ = loadLayer('population_padang_1.asc')
         myMap = Map(IFACE)
-        myMap.setImpactLayer(self.layer)
+        myMap.setImpactLayer(myLayer)
         myTitle = myMap.getMapTitle()
         myExpectedTitle = None
         myMessage = 'Expected: %s\nGot:\n %s' % (myExpectedTitle, myTitle)
@@ -124,6 +136,11 @@ class MapTest(unittest.TestCase):
     def test_windowsDrawingArtifacts(self):
         """Test that windows rendering does not make artifacts"""
         # sometimes spurious lines are drawn on the layout
+        myInPath = ':/plugins/inasafe/basic.qpt'
+        myLayer, _ = loadLayer('test_shakeimpact.shp')
+
+        myCanvasLayer = QgsMapCanvasLayer(myLayer)
+        CANVAS.setLayerSet([myCanvasLayer])
         myMap = Map(IFACE)
         myMap.setupComposition()
         myPath = unique_filename(prefix='artifactsTest',
