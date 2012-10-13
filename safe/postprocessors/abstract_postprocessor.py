@@ -24,6 +24,8 @@ from safe.common.utilities import ugettext as tr  # pylint: disable=W0611
 
 from safe.common.exceptions import PostprocessorError
 
+from safe.common.odict import OrderedDict
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -40,7 +42,7 @@ class AbstractPostprocessor():
     clear methods as well and call respectively
     AbstractPostprocessor.setup(self) and AbstractPostprocessor.clear(self).
 
-    for implementation examples see AgePostprocessor wich uses mandatory and
+    for implementation examples see AgePostprocessor which uses mandatory and
     optional parameters
     """
 
@@ -51,7 +53,7 @@ class AbstractPostprocessor():
         del params
         if self._results is not None:
             self._raise_error('clear needs to be called before setup')
-        self._results = {}
+        self._results = OrderedDict()
 
     def process(self):
         if self._results is None:

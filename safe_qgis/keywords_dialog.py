@@ -23,7 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
-from odict import OrderedDict
+from safe.common.odict import OrderedDict
 
 from safe_qgis.keywords_dialog_base import Ui_KeywordsDialogBase
 from safe_qgis.keyword_io import KeywordIO
@@ -39,7 +39,6 @@ from safe.common.exceptions import InaSAFEError
 
 # Don't remove this even if it is flagged as unused by your ide
 # it is needed for qrc:/ url resolution. See Qt Resources docs.
-import safe_qgis.resources  # pylint: disable=W0611
 
 #see if we can import pydev - see development docs for details
 

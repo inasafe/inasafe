@@ -34,7 +34,7 @@ from qgis.core import (QgsRasterLayer,
                        QgsVectorLayer,
                        QgsMapLayerRegistry)
 
-from safe_qgis.odict import OrderedDict
+from safe.common.odict import OrderedDict
 from safe_qgis.utilities_test import (getQgisTestApp,
                                       unitTestDataPath)
 from safe_qgis.safe_interface import readKeywordsFromFile
