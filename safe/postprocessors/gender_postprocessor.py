@@ -39,6 +39,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.process(self)
         if self.population_total is None or self.female_ratio is None:
             self._raise_error('setup needs to be called before process')
+        self._calculate_total()
         self._calculate_females()
         self._calculate_female_weekly_hygene_packs()
 
@@ -46,6 +47,12 @@ class GenderPostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.clear(self)
         self.population_total = None
         self.female_ratio = None
+
+    def _calculate_total(self):
+        myName = self.tr('Total')
+        myResult = self.population_total
+        myResult = int(round(myResult))
+        self._append_result(myName, myResult)
 
     def _calculate_females(self):
         myName = self.tr('Females count')

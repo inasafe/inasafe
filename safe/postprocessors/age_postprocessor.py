@@ -61,13 +61,20 @@ class AgePostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.process(self)
         if self.population_total is None:
             self._raise_error('setup needs to be called before process')
+        self._calculate_total()
         self._calculate_youth()
         self._calculate_adult()
-        self._calculate_elderly()
+        self._calculate_elder()
 
     def clear(self):
         AbstractPostprocessor.clear(self)
         self.population_total = None
+
+    def _calculate_total(self):
+        myName = self.tr('Total')
+        myResult = self.population_total
+        myResult = int(round(myResult))
+        self._append_result(myName, myResult)
 
     def _calculate_youth(self):
         myName = self.tr('Youth count')
@@ -81,7 +88,7 @@ class AgePostprocessor(AbstractPostprocessor):
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
-    def _calculate_elderly(self):
+    def _calculate_elder(self):
         myName = self.tr('Elderly count')
         myResult = self.population_total * self.elder_ratio
         myResult = int(round(myResult))
