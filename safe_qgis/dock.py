@@ -1006,18 +1006,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.keywordIO.clearKeywords(self.postprocLayer)
         self.lastRunnedFunction = myCurrentFunction
 
-    def addPostprocOutput(self, thePostprocessorName, theOutput):
-        """
-        adds text to the postprocOutput
-
-        Args:
-            * output: the output from a postprocessor to add to the global
-            output. It should be valid HTML but no checks are enforced.
-
-        Returns: None
-        """
-        self.postprocOutput[thePostprocessorName] = theOutput
-
     def getPostprocOutput(self, asOneBigTable=False):
         """
         gets the of the postprocOutput
@@ -1029,6 +1017,7 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         #FIXME, return a parsed HTML
         if asOneBigTable:
             pass
+        LOGGER.debug(self.postprocOutput)
         return ' '.join(self.postprocOutput)
 
     def _aggregateResults(self):
@@ -1211,11 +1200,19 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 name = attrMap[myNameFieldIndex].toString()
 
-            try:
-                # FIXME, get rid of this try/except when polygon aggregation
-                # is implemented
-                # mySumFieldIndex is -1 if no aggregation happened (like when
-                # we have vector impact layers
+            # FIXME, get rid of this if/else when polygon aggregation
+            # is implemented
+            # mySumFieldIndex is -1 if no aggregation happened (like when
+            # we have vector impact layers
+            if mySumFieldIndex == -1:
+                #fixme find hack to fix this
+                LOGGER.debug('No totals availables on vector impact layer')
+                myEngineImpactLayer = self.runner.impactLayer()
+                myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+                myImpactSummary = self.keywordIO.readKeywords(
+                    myQgisImpactLayer, 'impact_summary')
+                LOGGER.debug(myImpactSummary)
+            else:
                 aggrSum = attrMap[mySumFieldIndex].toString()
                 aggrSum = int(round(float(aggrSum)))
                 myGeneralParams = {'population_total': aggrSum}
@@ -1239,37 +1236,12 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                     myResults = p.results()
                     p.clear()
                     LOGGER.debug(myResults)
+                    try:
+                        self.postprocOutput[n].append(myResults)
+                    except KeyError:
+                        self.postprocOutput[n] = []
+                        self.postprocOutput[n].append(myResults)
 
-            except KeyError:
-                LOGGER.debug('No totals availables on vector impact layer')
-                myEngineImpactLayer = self.runner.impactLayer()
-                myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
-                myImpactSummary = self.keywordIO.readKeywords(
-                    myQgisImpactLayer, 'impact_summary')
-
-                LOGGER.debug(myImpactSummary)
-
-            #TODO Remove
-#            myHTML += ('    <tr>'
-#                        '      <td>'
-#                        + name +
-#                        '      </td>'
-#                        '      <td>'
-#                        + str(aggrSum) +
-#                        '      </td>'
-#                        '      <td>'
-#                        + str(myGenderResults[str(self.tr('Females count'))][
-#                              'value']) +
-#                        '      </td>'
-#                        '      <td>'
-#                        + str(myGenderResults[str(self.tr('Females weekly'
-#                                                ' hygiene packs'))]['value'])+
-#                        '      </td>'
-#                        '    </tr>')
-#        #close table
-#        myHTML += ('  </tbody>'
-#                   '</table>')
-#        self.addPostprocOutput(myHTML)
 
     def _checkPostprocAttributes(self):
         """checks if the postprocessing layer has all attribute
