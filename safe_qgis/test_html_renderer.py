@@ -80,7 +80,7 @@ class HtmlRendererTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myNewPath).st_size
-        myExpectedSize = 352798 # as rendered on linux ub 12.04 64
+        myExpectedSize = 18708 # as rendered on linux ub 12.04 64
         myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
             myExpectedSize, mySize)
         assert mySize >= myExpectedSize, myMessage
@@ -106,7 +106,7 @@ class HtmlRendererTest(unittest.TestCase):
         # so we hash check there and here we just do a basic minimum file
         # size check.
         mySize = os.stat(myPath).st_size
-        myExpectedSize = 352798 # as rendered on linux ub 12.04 64
+        myExpectedSize = 20936 # as rendered on linux ub 12.04 64
         myMessage = 'Expected rendered map pdf to be at least %s, got %s' % (
             myExpectedSize, mySize
             )
@@ -129,7 +129,7 @@ class HtmlRendererTest(unittest.TestCase):
         myPixmap.save(myPath)
         myMessage = 'Rendered output does not exist: %s' % myPath
         assert os.path.exists(myPath), myMessage
-        myExpectedHashes = ['',  # ub12.04-64
+        myExpectedHashes = ['1b4ef78f93581086af944340a7d1dacc',  # ub12.04-64
                             '']
         assertHashesForFile(myExpectedHashes, myPath)
 

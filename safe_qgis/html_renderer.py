@@ -203,6 +203,7 @@ class HtmlRenderer():
             # Block until the event loop is done printing the page
             myCounter += 1
             time.sleep(mySleepPeriod)
+            QtCore.QCoreApplication.processEvents()
 
         if not self.htmlPrintedFlag:
             # Bodge for if signal isnt received after 10s - doesrnt really work
