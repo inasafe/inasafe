@@ -1913,19 +1913,21 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
                       self.tr('Generating your map as a PDF document...'),
                       theProgress=20)
         try:
-            myMap.renderCompleteReport(myFilename)
+            myMapReport, myHtmlReport = myMap.renderCompleteReport(myFilename)
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Your PDF was created....opening using '
                                   'the default PDF viewer on your system.'
-                                  'The generated pdf is saved as: %s' %
-                                  myFilename),
+                                  'The generated pdfs were saved as: %s and'
+                                  '%s' % (myMapReport, myHtmlReport)),
                           theProgress=80)
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myFilename,
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myMapReport,
                                  QtCore.QUrl.TolerantMode))
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl('file:///' + myMapReport,
+                                                       QtCore.QUrl.TolerantMode))
             self.showBusy(self.tr('Map Creator'),
                           self.tr('Processing complete.'
-                                  'The generated pdf is saved as: %s' %
-                                  myFilename),
+                                  'The generated pdfs were saved as: %s and'
+                                  '%s' % (myMapReport, myHtmlReport)),
                           theProgress=100)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests

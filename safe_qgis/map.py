@@ -158,6 +158,10 @@ class Map():
             None
 
         Returns:
+            tuple:
+                * str: myImagePath - absolute path to png of rendered map
+                * QImage: myImage - in memory copy of rendered map
+                * QRectF: myTargetArea - dimensions of rendered map
             str: Absolute file system path to the rendered image.
 
         Raises:
@@ -203,19 +207,20 @@ class Map():
         """
         LOGGER.debug('InaSAFE Map renderCompleteReport called')
         if theFilename is None:
-            myPath = unique_filename(prefix='report',
+            myMapPdfPath = unique_filename(prefix='report',
                                      suffix='.pdf',
                                      dir=temp_dir('work'))
         else:
-            myPath = theFilename
+            # We need to cast to python string in case we receive a QString
+            myMapPdfPath = str(theFilename)
 
-        myTablePath = os.path.splitext(myPath)[0] + '_table.pdf'
+        myTablePath = os.path.splitext(myMapPdfPath)[0] + '_table.pdf'
 
         self.composeMap()
-        self.printer = setupPrinter(myPath)
-        myImage, myImagePath, myRectangle = self.renderComposition()
+        self.printer = setupPrinter(myMapPdfPath)
+        myImagePath, myImage, myRectangle = self.renderComposition()
         myPainter = QtGui.QPainter(self.printer)
-        myPainter.drawImage(myTargetArea, myImage, myTargetArea)
+        myPainter.drawImage(myRectangle, myImage, myRectangle)
         myPainter.end()
 
         # Now draw any additional tabular data
@@ -223,8 +228,9 @@ class Map():
         if self.layer is not None:
             myHtml = self.keywordIO.readKeywords(self.layer, 'impact_table')
             # Put the map image before the table
-        self.htmlToPrinter(myHtml)
-        return myPath
+        myHtmlRenderer = HtmlRenderer(self.pageDpi)
+        myHtmlPdfPath = myHtmlRenderer.htmlToPrinter(myHtml, myTablePath)
+        return myMapPdfPath, myHtmlPdfPath
 
     def drawLogo(self, theTopOffset):
         """Add a picture containing the logo to the map top left corner

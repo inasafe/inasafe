@@ -142,6 +142,7 @@ class MapTest(unittest.TestCase):
         myCanvasLayer = QgsMapCanvasLayer(myLayer)
         CANVAS.setLayerSet([myCanvasLayer])
         myMap = Map(IFACE)
+        myMap.setImpactLayer(myLayer)
         myMap.setupComposition()
         myPath = unique_filename(prefix='artifactsTest',
                                     suffix='.pdf',
