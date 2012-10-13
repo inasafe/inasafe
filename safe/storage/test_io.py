@@ -416,10 +416,16 @@ class Test_IO(unittest.TestCase):
                          [106.79, -6.23]])
 
         v_ref = Vector(geometry=[P], geometry_type='polygon')
-        x = P[::-1, :]  # Flip Up-Down to get order clockwise
-        y = v_ref.get_geometry()[0]
-        msg = 'Read geometry %s, but expected %s' % (y, x)
-        assert numpy.allclose(x, y), msg
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        for i in range(len(v_ref)):
+            x = v_ref.get_geometry()[i]
+            x = x[::-1, :]  # Flip Up-Down to get order clockwise
+            y = v_file.get_geometry()[i]
+            msg = 'Read geometry %s, but expected %s' % (y, x)
+            assert numpy.allclose(x, y), msg
+        assert v_file == v_ref
+        assert v_ref == v_file
         assert v_ref.is_polygon_data
         assert v_ref.geometry_type == 3
 
@@ -429,18 +435,25 @@ class Test_IO(unittest.TestCase):
                          [106.78, -6.23],
                          [106.79, -6.22],
                          [106.77, -6.21]])
-
         v_ref = Vector(geometry=[P], geometry_type='polygon')
-        x = P[::-1, :]  # Flip Up-Down to get order clockwise
-        y = v_ref.get_geometry()[0]
-        msg = 'Read geometry %s, but expected %s' % (y, x)
-        assert numpy.allclose(x, y), msg
+        v_ref.write_to_file(tmp_filename)
+        v_file = read_layer(tmp_filename)
+        for i in range(len(v_ref)):
+            x = v_ref.get_geometry()[i]
+            x = x[::-1, :]  # Flip Up-Down to get order clockwise
+            y = v_file.get_geometry()[i]
+            msg = 'Read geometry %s, but expected %s' % (y, x)
+            assert numpy.allclose(x, y), msg
 
-        assert v_ref.is_polygon_data
-        assert v_ref.geometry_type == 3
+        assert v_file == v_ref
+        assert v_ref == v_file
+        assert v_file.is_polygon_data
+        assert v_file.geometry_type == 3
 
     def test_vector_class_geometry_types(self):
         """Admissible geometry types work in vector class
+
+        Also check that reported bounding boxes are correct
         """
 
         # So far the admissible classes are Point, Line and Polygon
@@ -500,6 +513,7 @@ class Test_IO(unittest.TestCase):
         v_ref = Vector(geometry=test_data[0])
         assert v_ref.is_point_data
         assert v_ref.geometry_type == 1
+        data_bbox = v_ref.get_bounding_box()
 
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
@@ -507,6 +521,8 @@ class Test_IO(unittest.TestCase):
         assert v_ref == v_file
         assert v_file.is_point_data
         assert v_file.geometry_type == 1
+        assert numpy.allclose(v_file.get_bounding_box(), data_bbox,
+                              rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data[0], geometry_type='point')
         assert v.is_point_data
@@ -520,6 +536,7 @@ class Test_IO(unittest.TestCase):
         v_ref = Vector(geometry=test_data, geometry_type='line')
         assert v_ref.is_line_data
         assert v_ref.geometry_type == 2
+        data_bbox = v_ref.get_bounding_box()
 
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
@@ -527,6 +544,8 @@ class Test_IO(unittest.TestCase):
         assert v_ref == v_file
         assert v_file.is_line_data
         assert v_file.geometry_type == 2
+        assert numpy.allclose(v_file.get_bounding_box(), data_bbox,
+                              rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data, geometry_type=2)
         assert v == v_ref
@@ -535,6 +554,7 @@ class Test_IO(unittest.TestCase):
         v_ref = Vector(geometry=test_data)
         assert v_ref.is_polygon_data
         assert v_ref.geometry_type == 3
+        data_bbox = v_ref.get_bounding_box()
 
         v_ref.write_to_file(tmp_filename)
         v_file = read_layer(tmp_filename)
@@ -542,6 +562,8 @@ class Test_IO(unittest.TestCase):
         assert v_ref == v_file
         assert v_file.is_polygon_data
         assert v_file.geometry_type == 3
+        assert numpy.allclose(v_file.get_bounding_box(), data_bbox,
+                              rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data, geometry_type='polygon')
         assert v == v_ref
@@ -605,6 +627,7 @@ class Test_IO(unittest.TestCase):
 
         v_ref = Vector(geometry=polygons)
         assert v_ref.is_polygon_data
+        data_bbox = v_ref.get_bounding_box()
 
         # Check data from Vector object
         geometry = v_ref.get_geometry(as_geometry_objects=True)
@@ -624,6 +647,8 @@ class Test_IO(unittest.TestCase):
         v_file = read_layer(tmp_filename)
         assert v_file == v_ref
         assert v_file.is_polygon_data
+        assert numpy.allclose(v_file.get_bounding_box(), data_bbox,
+                              rtol=1.0e-12, atol=1.0e-12)
 
         # Check data from file
         geometry = v_file.get_geometry(as_geometry_objects=True)
@@ -1688,11 +1713,12 @@ class Test_IO(unittest.TestCase):
             msg = ('Expected keywords[%s] to be "%s" but '
                    'got "%s"' % (key, keywords[key], val))
 
-            if key in [' preceding_ws', 'with spaces']:
-                # Accept that surrounding whitespace may be stripped
-                assert keywords[key].strip() == val, msg
-            else:
-                assert keywords[key] == val, msg
+            assert keywords[key] == val, msg
+            #if key in [' preceding_ws', 'with spaces']:
+            #    # Accept that surrounding whitespace may be stripped
+            #    assert keywords[key].strip() == val, msg
+            #else:
+            #    assert keywords[key] == val, msg
 
     def test_empty_keywords_file(self):
         """Empty keywords can be handled
