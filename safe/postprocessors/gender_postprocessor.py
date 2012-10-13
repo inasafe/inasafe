@@ -48,14 +48,14 @@ class GenderPostprocessor(AbstractPostprocessor):
         self.female_ratio = None
 
     def _calculate_females(self):
-        myName = str(self.tr('Females count'))
+        myName = self.tr('Females count')
         myResult = self.population_total * self.female_ratio
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_female_weekly_hygene_packs(self):
-        myName = str(self.tr('Females weekly hygene packs'))
-        myMeta = {'description': 'Females hygene packs for weekly use'}
+        myName = self.tr('Females weekly hygiene packs')
+        myMeta = {'description': 'Females hygiene packs for weekly use'}
         #weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
         myResult = self.population_total * self.female_ratio * 0.7937 * (7 / 7)

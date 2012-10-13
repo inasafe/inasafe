@@ -141,7 +141,6 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         self._aggregationPrefix = 'aggr_'
         self.pbnPrint.setEnabled(False)
 
-
         myButton = self.pbnHelp
         QtCore.QObject.connect(myButton, QtCore.SIGNAL('clicked()'),
                                self.showHelp)
@@ -882,7 +881,8 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self.postprocLayer, self.defaults['FEM_RATIO_ATTR_KEY'])
         if (myFemRatioAttr != self.tr('Don\'t use') and
             myFemRatioAttr != self.tr('Use default')):
-            self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']] = myFemRatioAttr
+            self.postprocAttributes[self.defaults['FEM_RATIO_ATTR_KEY']
+                ] = myFemRatioAttr
 
         #start the analysis
         try:
@@ -980,11 +980,11 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             self._aggregateResults()
             self._startPostprocessors()
             QtGui.qApp.restoreOverrideCursor()
-        except Exception, e:
+        except Exception, e:  # pylint: disable=W0703
             QtGui.qApp.restoreOverrideCursor()
             self.hideBusy()
             myContext = self.tr(
-                'An exception occurred when aggregating the results')
+                'An exception occurred when postprocessing the results')
             myMessage = getExceptionWithStacktrace(e, html=True,
                 context=myContext)
             self.displayHtml(myMessage)
@@ -999,18 +999,15 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         Returns: None
         """
 
-        #FIXME (MB) maybe this could be a {} to allow having a parseable
-        # structure where each postprocessor adds a
-        # postprocessorname:'report string' pair
-        self.postprocOutput = []
+        self.postprocOutput = dict()
         self.postprocLayer = self.getPostprocLayer()
-        myCurrentFunction = self.myFunction
+        myCurrentFunction = self.getFunctionID()
         if (self.postprocLayer is not None and
             self.lastRunnedFunction != myCurrentFunction):
             self.keywordIO.clearKeywords(self.postprocLayer)
         self.lastRunnedFunction = myCurrentFunction
 
-    def addPostprocOutput(self, output):
+    def addPostprocOutput(self, thePostprocessorName, theOutput):
         """
         adds text to the postprocOutput
 
@@ -1020,9 +1017,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: None
         """
-        self.postprocOutput.append(str(output))
+        self.postprocOutput[thePostprocessorName] = theOutput
 
-    def getPostprocOutput(self):
+    def getPostprocOutput(self, asOneBigTable=False):
         """
         gets the of the postprocOutput
 
@@ -1030,6 +1027,9 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
 
         Returns: a string concatenation of the list elements
         """
+        #FIXME, return a parsed HTML
+        if asOneBigTable:
+            pass
         return ' '.join(self.postprocOutput)
 
     def _aggregateResults(self):
@@ -1158,45 +1158,60 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
         return
 
     def _startPostprocessors(self):
+        myResults = dict()
         myAttribute = self.postprocAttributes[self.defaults['AGGR_ATTR_KEY']]
         if myAttribute is None:
             aggrAttrTitle = self.tr('Aggregation unit')
         else:
             aggrAttrTitle = myAttribute
 
-        #open table
-        myHTML = ('<table class="table table-striped condensed">'
-                    '  <tbody>'
-                    '    <tr>'
-                    '       <td colspan="100%">'
-                    '         <strong>'
-                    + self.tr('Detailed report') +
-                    '         </strong>'
-                    '       </td>'
-                    '    </tr>'
-                    '    <tr>'
-                    '      <th width="25%">'
-                    + aggrAttrTitle +
-                    '      </th>'
-                    '      <th>'
-                    + self.tr('Sum') +
-                    '      </th>'
-                    '      <th>'
-                    'TOT FEM'
-                    '      </th>'
-                    '      <th>'
-                    'HYGENE PACKS'
-                    '      </th>'
-                    '    </tr>')
+#TODO (MB)  remove
+#        #open table
+#        myHTML = ('<table class="table table-striped condensed">'
+#                    '  <tbody>'
+#                    '    <tr>'
+#                    '       <td colspan="100%">'
+#                    '         <strong>'
+#                    + self.tr('Detailed report') +
+#                    '         </strong>'
+#                    '       </td>'
+#                    '    </tr>'
+#                    '    <tr>'
+#                    '      <th width="25%">'
+#                    + aggrAttrTitle +
+#                    '      </th>'
+#                    '      <th>'
+#                    + self.tr('Sum') +
+#                    '      </th>'
+#                    '      <th>'
+#                    'TOT FEM'
+#                    '      </th>'
+#                    '      <th>'
+#                    'HYGENE PACKS'
+#                    '      </th>'
+#                    '    </tr>')
 
         #instantiate postprocessors if they are requested by the function
-        myGenderPostprocessor = None
-        if 'Gender' in self.functionParams['postprocessors']:
-            myGenderPostprocessor = GenderPostprocessor()
 
-        myAgePostprocessor = None
-        if 'Age' in self.functionParams['postprocessors']:
-            myAgePostprocessor = AgePostprocessor()
+        try:
+            myEnable = self.functionParams['postprocessors']['Gender']
+            if myEnable:
+                myGenderPostprocessor = eval('Gender'+'Postprocessor()')
+                LOGGER.debug(myGenderPostprocessor)
+            else:
+                myGenderPostprocessor = None
+        except KeyError:
+            myGenderPostprocessor = None
+
+        try:
+            myEnable = self.functionParams['postprocessors']['Age']
+            if myEnable:
+                myAgePostprocessor = AgePostprocessor()
+            else:
+                myAgePostprocessor = None
+        except KeyError:
+            myAgePostprocessor = None
+
 
         myNameFieldIndex = self.postprocLayer.fieldNameIndex(
             myAttribute)
@@ -1231,45 +1246,63 @@ class Dock(QtGui.QDockWidget, Ui_DockBase):
             else:
                 name = attrMap[myNameFieldIndex].toString()
 
-            aggrSum = attrMap[mySumFieldIndex].toString()
-            aggrSum = int(round(float(aggrSum)))
+            try:
+                # FIXME, get rid of this try/except when polygon aggregation
+                # is implemented
+                # mySumFieldIndex is -1 if no aggregation happened (like when
+                # we have vector impact layers
+                aggrSum = attrMap[mySumFieldIndex].toString()
+                LOGGER.debug(mySumFieldIndex)
+                aggrSum = int(round(float(aggrSum)))
 
-            if myGenderPostprocessor is not None:
-                if myFemRatioIsVariable:
-                    myFemRatio, _ = attrMap[myFemRatioFieldIndex].toDouble()
+                if myGenderPostprocessor is not None:
+                    if myFemRatioIsVariable:
+                        myFemRatio, _ = attrMap[myFemRatioFieldIndex].toDouble()
 
-                myGenderPostprocessor.setup(aggrSum, myFemRatio)
-                myGenderPostprocessor.process()
-                myGenderResults = myGenderPostprocessor.results()
-                myGenderPostprocessor.clear()
+                    myGenderPostprocessor.setup(aggrSum, myFemRatio)
+                    myGenderPostprocessor.process()
+                    myGenderResults = myGenderPostprocessor.results()
+                    myGenderPostprocessor.clear()
+                    LOGGER.debug(myGenderResults)
 
-            if myAgePostprocessor is not None:
-                myAgePostprocessor.setup(aggrSum)
-                myAgePostprocessor.process()
-                myAgeResults = myAgePostprocessor.results()
-                myAgePostprocessor.clear()
-                LOGGER.debug(myAgeResults)
+                if myAgePostprocessor is not None:
+                    myAgePostprocessor.setup(aggrSum)
+                    myAgePostprocessor.process()
+                    myAgeResults = myAgePostprocessor.results()
+                    myAgePostprocessor.clear()
+                    LOGGER.debug(myAgeResults)
+            except KeyError:
+                LOGGER.debug('No totals availables')
+                myEngineImpactLayer = self.runner.impactLayer()
+                myQgisImpactLayer = self.readImpactLayer(myEngineImpactLayer)
+                myImpactSummary = self.keywordIO.readKeywords(
+                    myQgisImpactLayer,'impact_summary')
+                from HTMLParser import HTMLParser
 
-            #FIXME hardcoded stuff assumes gender is on
-            myHTML += ('    <tr>'
-                        '      <td>'
-                        + name +
-                        '      </td>'
-                        '      <td>'
-                        + str(aggrSum) +
-                        '      </td>'
-                        '      <td>'
-                        + str(myGenderResults[self.tr('Females count')]['value']) +
-                        '      </td>'
-                        '      <td>'
-                        + str(myGenderResults[self.tr('Females weekly hygene packs')
-                              ]['value']) +
-                        '      </td>'
-                        '    </tr>')
-        #close table
-        myHTML += ('  </tbody>'
-                   '</table>')
-        self.addPostprocOutput(myHTML)
+                LOGGER.debug(myImpactSummary)
+
+
+            #TODO Remove
+#            myHTML += ('    <tr>'
+#                        '      <td>'
+#                        + name +
+#                        '      </td>'
+#                        '      <td>'
+#                        + str(aggrSum) +
+#                        '      </td>'
+#                        '      <td>'
+#                        + str(myGenderResults[str(self.tr('Females count'))][
+#                              'value']) +
+#                        '      </td>'
+#                        '      <td>'
+#                        + str(myGenderResults[str(self.tr('Females weekly'
+#                                                ' hygiene packs'))]['value']) +
+#                        '      </td>'
+#                        '    </tr>')
+#        #close table
+#        myHTML += ('  </tbody>'
+#                   '</table>')
+#        self.addPostprocOutput(myHTML)
 
     def _checkPostprocAttributes(self):
         """checks if the postprocessing layer has all attribute

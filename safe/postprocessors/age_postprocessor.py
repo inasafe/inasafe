@@ -57,19 +57,19 @@ class AgePostprocessor(AbstractPostprocessor):
         self.population_total = None
 
     def _calculate_youth(self):
-        myName = str(self.tr('Youth count'))
+        myName = self.tr('Youth count')
         myResult = self.population_total * self.YOUTH_RATIO
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_adult(self):
-        myName = str(self.tr('Adult count'))
+        myName = self.tr('Adult count')
         myResult = self.population_total * self.ADULT_RATIO
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
 
     def _calculate_elderly(self):
-        myName = str(self.tr('Elderly count'))
+        myName = self.tr('Elderly count')
         myResult = self.population_total * self.ELDERLY_RATIO
         myResult = int(round(myResult))
         self._append_result(myName, myResult)
